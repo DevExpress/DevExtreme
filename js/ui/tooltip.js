@@ -2,7 +2,6 @@
 
 /**
  * @name dxTooltip
- * @publicName dxTooltip
  * @inherits dxPopover
  * @module ui/tooltip
  * @export default

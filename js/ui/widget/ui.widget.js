@@ -62,20 +62,17 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
 
 /**
  * @name ui
- * @publicName ui
  * @section utils
  */
 
 /**
 * @name dxItem
-* @publicName dxItem
 * @type object
 * @section uiWidgetMarkupComponents
 */
 
 /**
 * @name Widget
-* @publicName Widget
 * @type object
 * @inherits DOMComponent
 * @module ui/widget/ui.widget
@@ -93,7 +90,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.disabled
-             * @publicName disabled
              * @type boolean
              * @default false
              */
@@ -101,7 +97,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
@@ -109,7 +104,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.hint
-             * @publicName hint
              * @type string
              * @default undefined
              */
@@ -117,7 +111,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.activeStateEnabled
-             * @publicName activeStateEnabled
              * @type boolean
              * @default false
              */
@@ -125,7 +118,6 @@ var Widget = DOMComponent.inherit({
 
             /**
             * @name WidgetOptions.onContentReady
-            * @publicName onContentReady
             * @extends Action
             * @action
             */
@@ -133,7 +125,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default false
              */
@@ -141,7 +132,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.focusStateEnabled
-             * @publicName focusStateEnabled
              * @type boolean
              * @default false
              */
@@ -149,7 +139,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.tabIndex
-             * @publicName tabIndex
              * @type number
              * @default 0
              */
@@ -157,7 +146,6 @@ var Widget = DOMComponent.inherit({
 
             /**
              * @name WidgetOptions.accessKey
-             * @publicName accessKey
              * @type string
              * @default null
              */
@@ -165,7 +153,6 @@ var Widget = DOMComponent.inherit({
 
             /**
             * @name WidgetOptions.onFocusIn
-            * @publicName onFocusIn
             * @extends Action
             * @action
             * @hidden
@@ -174,7 +161,6 @@ var Widget = DOMComponent.inherit({
 
             /**
             * @name WidgetOptions.onFocusOut
-            * @publicName onFocusOut
             * @extends Action
             * @action
             * @hidden
@@ -200,14 +186,12 @@ var Widget = DOMComponent.inherit({
 
             /**
             * @name template
-            * @publicName template
             * @type String|function|Node|jQuery
             * @section Common
             */
 
             /**
             * @name format
-            * @publicName format
             * @type Enums.Format|string|function|Object
             * @type_function_param1 value:number|date
             * @type_function_return string
@@ -216,29 +200,24 @@ var Widget = DOMComponent.inherit({
             */
             /**
             * @name format.type
-            * @publicName type
             * @type Enums.Format
             */
             /**
             * @name format.precision
-            * @publicName precision
             * @type number
             */
             /**
             * @name format.currency
-            * @publicName currency
             * @type String
             */
             /**
             * @name format.formatter
-            * @publicName formatter
             * @type function
             * @type_function_param1 value:number|date
             * @type_function_return string
             */
             /**
             * @name format.parser
-            * @publicName parser
             * @type function
             * @type_function_param1 value:string
             * @type_function_return number|date

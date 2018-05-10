@@ -140,34 +140,29 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.sorting
-             * @publicName sorting
              * @type object
              */
             sorting: {
                 /**
                  * @name GridBaseOptions.sorting.mode
-                 * @publicName mode
                  * @type Enums.GridSortingMode
                  * @default "single"
                  */
                 mode: "single",
                 /**
                  * @name GridBaseOptions.sorting.ascendingText
-                 * @publicName ascendingText
                  * @type string
                  * @default "Sort Ascending"
                  */
                 ascendingText: messageLocalization.format("dxDataGrid-sortingAscendingText"),
                 /**
                  * @name GridBaseOptions.sorting.descendingText
-                 * @publicName descendingText
                  * @type string
                  * @default "Sort Descending"
                  */
                 descendingText: messageLocalization.format("dxDataGrid-sortingDescendingText"),
                 /**
                  * @name GridBaseOptions.sorting.clearText
-                 * @publicName clearText
                  * @type string
                  * @default "Clear Sorting"
                  */

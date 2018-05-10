@@ -208,99 +208,80 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
 
 /**
  * @name LoadOptions
- * @publicName LoadOptions
  * @namespace DevExpress.data
  * @type object
  */
 /**
  * @name LoadOptions.filter
- * @publicName filter
  * @type object
  */
  /**
  * @name LoadOptions.sort
- * @publicName sort
  * @type object
  */
  /**
  * @name LoadOptions.select
- * @publicName select
  * @type object
  */
 /**
  * @name LoadOptions.group
- * @publicName group
  * @type object
  */
  /**
  * @name LoadOptions.skip
- * @publicName skip
  * @type number
  */
  /**
  * @name LoadOptions.skip
- * @publicName skip
  * @type number
  */
  /**
  * @name LoadOptions.take
- * @publicName take
  * @type number
  */
  /**
  * @name LoadOptions.userData
- * @publicName userData
  * @type object
  */
  /**
  * @name LoadOptions.expand
- * @publicName expand
  * @type object
  */
  /**
  * @name LoadOptions.requireTotalCount
- * @publicName requireTotalCount
  * @type boolean
  */
  /**
  * @name LoadOptions.searchValue
- * @publicName searchValue
  * @type any
  */
  /**
  * @name LoadOptions.searchOperation
- * @publicName searchOperation
  * @type string
  */
  /**
  * @name LoadOptions.searchExpr
- * @publicName searchExpr
  * @type getter|Array<getter>
  */
  /**
  * @name LoadOptions.customQueryParams
- * @publicName customQueryParams
  * @type Object
  */
  /**
  * @name LoadOptions.totalSummary
- * @publicName totalSummary
  * @type Object
  */
  /**
  * @name LoadOptions.groupSummary
- * @publicName groupSummary
  * @type Object
  */
  /**
  * @name LoadOptions.requireGroupCount
- * @publicName requireGroupCount
  * @type boolean
  */
 
 /**
 * @name CustomStore
-* @publicName CustomStore
 * @inherits Store
 * @type object
 * @module data/custom_store
@@ -314,7 +295,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.useDefaultSearch
-         * @publicName useDefaultSearch
          * @type boolean
          * @default undefined
          */
@@ -322,7 +302,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.loadMode
-         * @publicName loadMode
          * @type string
          * @default 'processed'
          * @acceptValues 'processed'|'raw'
@@ -331,7 +310,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.cacheRawData
-         * @publicName cacheRawData
          * @type boolean
          * @default true
          */
@@ -339,7 +317,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.load
-         * @publicName load
          * @type function
          * @type_function_param1 options:LoadOptions
          * @type_function_return Promise<any>
@@ -348,7 +325,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.totalCount
-         * @publicName totalCount
          * @type function
          * @type_function_param1 loadOptions:object
          * @type_function_param1_field1 filter:object
@@ -359,7 +335,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.byKey
-         * @publicName byKey
          * @type function
          * @type_function_param1 key:object|string|number
          * @type_function_return Promise<any>
@@ -368,7 +343,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.insert
-         * @publicName insert
          * @type function
          * @type_function_param1 values:object
          * @type_function_return Promise<any>
@@ -377,7 +351,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.update
-         * @publicName update
          * @type function
          * @type_function_param1 key:object|string|number
          * @type_function_param2 values:object
@@ -387,7 +360,6 @@ var CustomStore = Store.inherit({
 
         /**
          * @name CustomStoreOptions.remove
-         * @publicName remove
          * @type function
          * @type_function_param1 key:object|string|number
          * @type_function_return Promise<void>

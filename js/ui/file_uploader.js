@@ -59,7 +59,6 @@ var isFormDataSupported = function() {
 
 /**
 * @name dxFileUploader
-* @publicName dxFileUploader
 * @inherits Editor
 * @module ui/file_uploader
 * @export default
@@ -91,7 +90,6 @@ var FileUploader = Editor.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxFileUploaderOptions.value
-            * @publicName value
             * @type Array<File>
             * @default []
             */
@@ -99,7 +97,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.selectButtonText
-            * @publicName selectButtonText
             * @type string
             * @default "Select File"
             */
@@ -107,7 +104,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadButtonText
-            * @publicName uploadButtonText
             * @type string
             * @default "Upload"
             */
@@ -115,7 +111,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.labelText
-            * @publicName labelText
             * @type string
             * @default "or Drop file here"
             */
@@ -123,7 +118,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.name
-            * @publicName name
             * @type string
             * @default ""
             */
@@ -131,7 +125,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.multiple
-            * @publicName multiple
             * @type boolean
             * @default false
             */
@@ -139,7 +132,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.accept
-            * @publicName accept
             * @type string
             * @default ""
             */
@@ -147,7 +139,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadUrl
-            * @publicName uploadUrl
             * @type string
             * @default "/"
             */
@@ -155,7 +146,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.allowCanceling
-            * @publicName allowCanceling
             * @type boolean
             * @default true
             */
@@ -163,7 +153,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.showFileList
-            * @publicName showFileList
             * @type boolean
             * @default true
             */
@@ -171,7 +160,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.progress
-            * @publicName progress
             * @type number
             * @default 0
             */
@@ -179,7 +167,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.readyToUploadMessage
-            * @publicName readyToUploadMessage
             * @type string
             * @default "Ready to upload"
             */
@@ -187,7 +174,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadedMessage
-            * @publicName uploadedMessage
             * @type string
             * @default "Uploaded"
             */
@@ -195,7 +181,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadFailedMessage
-            * @publicName uploadFailedMessage
             * @type string
             * @default "Upload failed"
             */
@@ -203,7 +188,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadMode
-            * @publicName uploadMode
             * @type Enums.FileUploadMode
             * @default "instantly"
             */
@@ -211,7 +195,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadMethod
-            * @publicName uploadMethod
             * @type Enums.UploadHttpMethod
             * @default "POST"
             */
@@ -219,7 +202,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.uploadHeaders
-            * @publicName uploadHeaders
             * @type object
             * @default {}
             */
@@ -227,7 +209,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.onUploadStarted
-            * @publicName onUploadStarted
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -241,7 +222,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.onUploaded
-            * @publicName onUploaded
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -255,7 +235,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.onProgress
-            * @publicName onProgress
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -272,7 +251,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.onUploadError
-            * @publicName onUploadError
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -286,7 +264,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.onUploadAborted
-            * @publicName onUploadAborted
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -300,7 +277,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.extendSelection
-            * @publicName extendSelection
             * @type boolean
             * @default true
             * @hidden
@@ -309,7 +285,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.validationMessageMode
-            * @publicName validationMessageMode
             * @hidden
             * @inheritdoc
             */
@@ -317,7 +292,6 @@ var FileUploader = Editor.inherit({
 
             /**
             * @name dxFileUploaderOptions.onValueChanged
-            * @publicName onValueChanged
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -346,7 +320,6 @@ var FileUploader = Editor.inherit({
                 options: {
                     /**
                     * @name dxFileUploaderOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

@@ -1741,7 +1741,6 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.onInitNewRow
-             * @publicName onInitNewRow
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1751,7 +1750,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.onRowInserting
-             * @publicName onRowInserting
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1762,7 +1760,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.onRowInserted
-             * @publicName onRowInserted
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1774,7 +1771,6 @@ module.exports = {
 
             /**
              * @name dxDataGridOptions.onEditingStart
-             * @publicName onEditingStart
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1787,7 +1783,6 @@ module.exports = {
 
             /**
              * @name dxTreeListOptions.onEditingStart
-             * @publicName onEditingStart
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1800,7 +1795,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.onRowUpdating
-             * @publicName onRowUpdating
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 oldData:object
@@ -1813,7 +1807,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.onRowUpdated
-             * @publicName onRowUpdated
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1825,7 +1818,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.onRowRemoving
-             * @publicName onRowRemoving
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1837,7 +1829,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.onRowRemoved
-             * @publicName onRowRemoved
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
@@ -1849,132 +1840,112 @@ module.exports = {
 
             /**
              * @name dxDataGridOptions.editing
-             * @publicName editing
              * @type object
              */
             /**
              * @name dxTreeListOptions.editing
-             * @publicName editing
              * @type object
              */
             /**
              * @name GridBaseOptions.editing
-             * @publicName editing
              * @type object
              */
             editing: {
                 /**
                  * @name GridBaseOptions.editing.mode
-                 * @publicName mode
                  * @type Enums.GridEditMode
                  * @default "row"
                  */
                 mode: "row", // "batch"
                 /**
                  * @name GridBaseOptions.editing.allowAdding
-                 * @publicName allowAdding
                  * @type boolean
                  * @default false
                  */
                 allowAdding: false,
                 /**
                  * @name GridBaseOptions.editing.allowUpdating
-                 * @publicName allowUpdating
                  * @type boolean
                  * @default false
                  */
                 allowUpdating: false,
                 /**
                  * @name GridBaseOptions.editing.allowDeleting
-                 * @publicName allowDeleting
                  * @type boolean
                  * @default false
                  */
                 allowDeleting: false,
                 /**
                  * @name GridBaseOptions.editing.useIcons
-                 * @publicName useIcons
                  * @type boolean
                  * @default false
                  */
                 useIcons: false,
                 /**
                  * @name dxDataGridOptions.editing.texts
-                 * @publicName texts
                  * @type object
                  */
                 /**
                  * @name GridBaseOptions.editing.texts
-                 * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
                      * @name GridBaseOptions.editing.texts.editRow
-                     * @publicName editRow
                      * @type string
                      * @default "Edit"
                      */
                     editRow: messageLocalization.format("dxDataGrid-editingEditRow"),
                     /**
                      * @name GridBaseOptions.editing.texts.saveAllChanges
-                     * @publicName saveAllChanges
                      * @type string
                      * @default "Save changes"
                      */
                     saveAllChanges: messageLocalization.format("dxDataGrid-editingSaveAllChanges"),
                     /**
                      * @name GridBaseOptions.editing.texts.saveRowChanges
-                     * @publicName saveRowChanges
                      * @type string
                      * @default "Save"
                      */
                     saveRowChanges: messageLocalization.format("dxDataGrid-editingSaveRowChanges"),
                     /**
                      * @name GridBaseOptions.editing.texts.cancelAllChanges
-                     * @publicName cancelAllChanges
                      * @type string
                      * @default "Discard changes"
                      */
                     cancelAllChanges: messageLocalization.format("dxDataGrid-editingCancelAllChanges"),
                     /**
                      * @name GridBaseOptions.editing.texts.cancelRowChanges
-                     * @publicName cancelRowChanges
                      * @type string
                      * @default "Cancel"
                      */
                     cancelRowChanges: messageLocalization.format("dxDataGrid-editingCancelRowChanges"),
                     /**
                      * @name GridBaseOptions.editing.texts.addRow
-                     * @publicName addRow
                      * @type string
                      * @default "Add a row"
                      */
                     addRow: messageLocalization.format("dxDataGrid-editingAddRow"),
                     /**
                      * @name GridBaseOptions.editing.texts.deleteRow
-                     * @publicName deleteRow
                      * @type string
                      * @default "Delete"
                      */
                     deleteRow: messageLocalization.format("dxDataGrid-editingDeleteRow"),
                     /**
                      * @name GridBaseOptions.editing.texts.undeleteRow
-                     * @publicName undeleteRow
                      * @type string
                      * @default "Undelete"
                      */
                     undeleteRow: messageLocalization.format("dxDataGrid-editingUndeleteRow"),
                     /**
                      * @name GridBaseOptions.editing.texts.confirmDeleteMessage
-                     * @publicName confirmDeleteMessage
                      * @type string
                      * @default "Are you sure you want to delete this record?"
                      */
                     confirmDeleteMessage: messageLocalization.format("dxDataGrid-editingConfirmDeleteMessage"),
                     /**
                      * @name GridBaseOptions.editing.texts.confirmDeleteTitle
-                     * @publicName confirmDeleteTitle
                      * @type string
                      * @default ""
                      */
@@ -1982,7 +1953,6 @@ module.exports = {
                 },
                 /**
                  * @name GridBaseOptions.editing.form
-                 * @publicName form
                  * @type dxFormOptions
                  */
                 form: {
@@ -1991,7 +1961,6 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.editing.popup
-                 * @publicName popup
                  * @type dxPopupOptions
                  */
                 popup: {}

@@ -21,9 +21,8 @@ var CHECKBOX_CLASS = "dx-checkbox",
     CHECKBOX_FEEDBACK_HIDE_TIMEOUT = 100;
 
 /**
-* @name dxcheckbox
+* @name dxCheckBox
 * @isEditor
-* @publicName dxCheckBox
 * @inherits Editor
 * @module ui/check_box
 * @export default
@@ -45,7 +44,6 @@ var CheckBox = Editor.inherit({
 
             /**
              * @name dxCheckBoxOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -54,7 +52,6 @@ var CheckBox = Editor.inherit({
 
             /**
              * @name dxCheckBoxOptions.activeStateEnabled
-             * @publicName activeStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -63,7 +60,6 @@ var CheckBox = Editor.inherit({
 
             /**
              * @name dxCheckBoxOptions.value
-             * @publicName value
              * @type boolean
              * @default false
              */
@@ -71,7 +67,6 @@ var CheckBox = Editor.inherit({
 
             /**
              * @name dxCheckBoxOptions.text
-             * @publicName text
              * @type string
              * @default ""
              */
@@ -81,7 +76,6 @@ var CheckBox = Editor.inherit({
 
             /**
             * @name dxCheckBoxOptions.name
-            * @publicName name
             * @type string
             * @hidden false
             * @inheritdoc
@@ -98,7 +92,6 @@ var CheckBox = Editor.inherit({
                 options: {
                     /**
                     * @name dxCheckBoxOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

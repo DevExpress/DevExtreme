@@ -87,8 +87,7 @@ var GalleryNavButton = Widget.inherit({
 
 
 /**
-* @name dxgallery
-* @publicName dxGallery
+* @name dxGallery
 * @inherits CollectionWidget
 * @module ui/gallery
 * @export default
@@ -101,7 +100,6 @@ var Gallery = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxGalleryOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @type boolean
             * @default false
             */
@@ -109,7 +107,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.animationDuration
-            * @publicName animationDuration
             * @type number
             * @default 400
             */
@@ -117,7 +114,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.animationEnabled
-            * @publicName animationEnabled
             * @type boolean
             * @default true
             */
@@ -125,7 +121,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.loop
-            * @publicName loop
             * @type boolean
             * @default false
             */
@@ -133,7 +128,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.swipeEnabled
-            * @publicName swipeEnabled
             * @type boolean
             * @default true
             */
@@ -141,7 +135,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.indicatorEnabled
-            * @publicName indicatorEnabled
             * @type boolean
             * @default true
             */
@@ -149,23 +142,20 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.showIndicator
-            * @publicName showIndicator
             * @type boolean
             * @default true
             */
             showIndicator: true,
 
             /**
-            * @name dxGalleryOptions.selectedindex
-            * @publicName selectedIndex
+            * @name dxGalleryOptions.selectedIndex
             * @type number
             * @default 0
             */
             selectedIndex: 0,
 
             /**
-            * @name dxGalleryOptions.slideshowdelay
-            * @publicName slideshowDelay
+            * @name dxGalleryOptions.slideshowDelay
             * @type number
             * @default 0
             */
@@ -173,7 +163,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.showNavButtons
-            * @publicName showNavButtons
             * @type boolean
             * @default false
             */
@@ -181,7 +170,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.wrapAround
-            * @publicName wrapAround
             * @type boolean
             * @default false
             */
@@ -189,7 +177,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.initialItemWidth
-            * @publicName initialItemWidth
             * @type number
             * @default undefined
             */
@@ -197,7 +184,6 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.stretchImages
-            * @publicName stretchImages
             * @type boolean
             * @default false
             */
@@ -205,34 +191,29 @@ var Gallery = CollectionWidget.inherit({
 
             /**
             * @name dxGalleryOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @hidden
             */
 
             /**
             * @name dxGalleryOptions.noDataText
-            * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions.selectedItems
-            * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions.selectedItemKeys
-            * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions.keyExpr
-            * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
@@ -255,7 +236,6 @@ var Gallery = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name dxGalleryOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc
@@ -276,23 +256,19 @@ var Gallery = CollectionWidget.inherit({
         this.callBase();
         /**
         * @name dxGalleryItemTemplate
-        * @publicName dxGalleryItemTemplate
         * @inherits CollectionWidgetItemTemplate
         * @type object
         */
         /**
         * @name dxGalleryItemTemplate.imageSrc
-        * @publicName imageSrc
         * @type String
         */
         /**
         * @name dxGalleryItemTemplate.imageAlt
-        * @publicName imageAlt
         * @type String
         */
         /**
         * @name dxGalleryItemTemplate.visible
-        * @publicName visible
         * @hidden
         * @inheritdoc
         */
@@ -1199,7 +1175,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxgallerymethods.goToItem
+    * @name dxGalleryMethods.goToItem
     * @publicName goToItem(itemIndex, animation)
     * @param1 itemIndex:numeric
     * @param2 animation:boolean
@@ -1226,7 +1202,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxgallerymethods.prevItem
+    * @name dxGalleryMethods.prevItem
     * @publicName prevItem(animation)
     * @param1 animation:boolean
     * @return Promise<void>
@@ -1236,7 +1212,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxgallerymethods.nextItem
+    * @name dxGalleryMethods.nextItem
     * @publicName nextItem(animation)
     * @param1 animation:boolean
     * @return Promise<void>

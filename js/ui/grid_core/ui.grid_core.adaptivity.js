@@ -660,14 +660,12 @@ module.exports = {
         return {
             /**
             * @name GridBaseOptions.columnHidingEnabled
-            * @publicName columnHidingEnabled
             * @type boolean
             * @default false
             */
             columnHidingEnabled: false,
             /**
             * @name GridBaseOptions.onAdaptiveDetailRowPreparing
-            * @publicName onAdaptiveDetailRowPreparing
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object

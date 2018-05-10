@@ -4,42 +4,38 @@
  */
 var Layer = {
     /**
-     * @name MapLayerfields.name
-     * @publicName name
+     * @name MapLayerFields.name
      * @type string
      */
     name: undefined,
     /**
-     * @name MapLayerfields.index
-     * @publicName index
+     * @name MapLayerFields.index
      * @type number
      */
     index: undefined,
     /**
-     * @name MapLayerfields.type
-     * @publicName type
+     * @name MapLayerFields.type
      * @type string
      */
     type: undefined,
     /**
-     * @name MapLayerfields.elementType
-     * @publicName elementType
+     * @name MapLayerFields.elementType
      * @type string
      */
     elementType: undefined,
     /**
-     * @name MapLayermethods.getElements
+     * @name MapLayerMethods.getElements
      * @publicName getElements()
      * @return Array<MapLayerElement>
      */
     getElements: function() { },
     /**
-     * @name MapLayermethods.clearSelection
+     * @name MapLayerMethods.clearSelection
      * @publicName clearSelection()
      */
     clearSelection: function() { },
     /**
-    * @name MapLayermethods.getDataSource
+    * @name MapLayerMethods.getDataSource
     * @publicName getDataSource()
     * @return DataSource
     */
@@ -51,45 +47,44 @@ var Layer = {
  */
 var LayerElement = {
     /**
-     * @name MapLayerElementfields.layer
-     * @publicName layer
+     * @name MapLayerElementFields.layer
      * @type object
      */
     layer: undefined,
     /**
-    * @name MapLayerElementmethods.coordinates
+    * @name MapLayerElementMethods.coordinates
     * @publicName coordinates()
     * @return object
     */
     coordinates: function() { },
     /**
-    * @name MapLayerElementmethods.attribute
+    * @name MapLayerElementMethods.attribute
     * @publicName attribute(name)
     * @return any
     * @param1 name:string
     */
     attribute: function() { },
     /**
-    * @name MapLayerElementmethods.attribute
+    * @name MapLayerElementMethods.attribute
     * @publicName attribute(name, value)
     * @param1 name:string
     * @param2 value:any
     */
     attribute: function() { },
     /**
-    * @name MapLayerElementmethods.selected
+    * @name MapLayerElementMethods.selected
     * @publicName selected(state)
     * @param1 state:boolean
     */
     selected: function() { },
     /**
-    * @name MapLayerElementmethods.selected
+    * @name MapLayerElementMethods.selected
     * @publicName selected()
     * @return boolean
     */
     selected: function() { },
     /**
-    * @name MapLayerElementmethods.applySettings
+    * @name MapLayerElementMethods.applySettings
     * @publicName applySettings(settings)
     * @param1 settings:object
     */
@@ -102,39 +97,38 @@ var LayerElement = {
 */
 var AreaObjects = {
     /**
-    * @name areaObjectsfields.type
-    * @publicName type
+    * @name areaObjectsFields.type
     * @type string
-    * @deprecated MapLayerfields.type
+    * @deprecated MapLayerFields.type
     */
     type: null,
     /**
-    * @name areaObjectsmethods.attribute
+    * @name areaObjectsMethods.attribute
     * @publicName attribute(name)
     * @return object | Array<any> | number | string | boolean
     * @param1 name:string
-    * @deprecated MapLayerElementmethods.attribute
+    * @deprecated MapLayerElementMethods.attribute
     */
     attribute: function() { },
     /**
-    * @name areaObjectsmethods.selected
+    * @name areaObjectsMethods.selected
     * @publicName selected(state)
     * @param1 state:boolean
-    * @deprecated MapLayerElementmethods.selected
+    * @deprecated MapLayerElementMethods.selected
     */
     selected: function() { },
     /**
-    * @name areaObjectsmethods.selected
+    * @name areaObjectsMethods.selected
     * @publicName selected()
     * @return boolean
-    * @deprecated MapLayerElementmethods.selected
+    * @deprecated MapLayerElementMethods.selected
     */
     selected: function() { },
     /**
-    * @name areaObjectsmethods.applySettings
+    * @name areaObjectsMethods.applySettings
     * @publicName applySettings(settings)
     * @param1 settings:object
-    * @deprecated MapLayerElementmethods.applySettings
+    * @deprecated MapLayerElementMethods.applySettings
     */
     applySettings: function() { }
 };
@@ -146,72 +140,67 @@ var AreaObjects = {
 */
 var MarkerObjects = {
     /**
-    * @name markerObjectsfields.type
-    * @publicName type
+    * @name markerObjectsFields.type
     * @type string
-    * @deprecated MapLayerfields.type
+    * @deprecated MapLayerFields.type
     */
     type: null,
     /**
-    * @name markerObjectsmethods.attribute
+    * @name markerObjectsMethods.attribute
     * @publicName attribute(name)
     * @return object | Array<any> | number | string | boolean
     * @param1 name:string
-    * @deprecated MapLayerElementmethods.attribute
+    * @deprecated MapLayerElementMethods.attribute
     */
     attribute: function() { },
     /**
-    * @name markerObjectsmethods.selected
+    * @name markerObjectsMethods.selected
     * @publicName selected(state)
     * @param1 state:boolean
-    * @deprecated MapLayerElementmethods.selected
+    * @deprecated MapLayerElementMethods.selected
     */
     selected: function() { },
     /**
-    * @name markerObjectsmethods.selected
+    * @name markerObjectsMethods.selected
     * @publicName selected()
     * @return boolean
-    * @deprecated MapLayerElementmethods.selected
+    * @deprecated MapLayerElementMethods.selected
     */
     selected: function() { },
     /**
-    * @name markerObjectsmethods.applySettings
+    * @name markerObjectsMethods.applySettings
     * @publicName applySettings(settings)
     * @param1 settings:object
-    * @deprecated MapLayerElementmethods.applySettings
+    * @deprecated MapLayerElementMethods.applySettings
     */
     applySettings: function() { },
     /**
-    * @name markerObjectsmethods.coordinates
+    * @name markerObjectsMethods.coordinates
     * @publicName coordinates()
     * @return Array<number>
-    * @deprecated MapLayerElementmethods.coordinates
+    * @deprecated MapLayerElementMethods.coordinates
     */
     coordinates: function() { },
     /**
-    * @name markerObjectsfields.text
-    * @publicName text
+    * @name markerObjectsFields.text
     * @type string
     * @deprecated
     */
     text: null,
     /**
-   * @name markerObjectsfields.value
-   * @publicName value
+   * @name markerObjectsFields.value
    * @type number
    * @deprecated
    */
     value: null,
     /**
-   * @name markerObjectsfields.values
-   * @publicName values
+   * @name markerObjectsFields.values
    * @type Array<number>
    * @deprecated
    */
     values: null,
     /**
-   * @name markerObjectsfields.url
-   * @publicName url
+   * @name markerObjectsFields.url
    * @type string
    * @deprecated
    */

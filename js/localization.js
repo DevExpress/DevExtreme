@@ -8,7 +8,6 @@ require("./localization/currency");
 
 /**
 * @name localization
-* @publicName localization
 */
 
 /**

@@ -52,7 +52,6 @@ ready(function() {
 
 /**
 * @name dxToast
-* @publicName dxToast
 * @inherits dxOverlay
 * @module ui/toast
 * @export default
@@ -63,7 +62,6 @@ var Toast = Overlay.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxToastOptions.message
-            * @publicName message
             * @type string
             * @default ""
             */
@@ -71,15 +69,13 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.type
-            * @publicName type
             * @type Enums.ToastType
             * @default 'info'
             */
             type: "info",
 
             /**
-            * @name dxToastOptions.displaytime
-            * @publicName displayTime
+            * @name dxToastOptions.displayTime
             * @type number
             * @default 2000
             */
@@ -87,7 +83,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.position
-            * @publicName position
             * @type positionConfig|string
             * @default: "bottom center"
             * @inheritdoc
@@ -96,7 +91,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.animation
-            * @publicName animation
             * @type object
             * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
             * @inheritdoc
@@ -104,7 +98,6 @@ var Toast = Overlay.inherit({
             animation: {
                 /**
                 * @name dxToastOptions.animation.show
-                * @publicName show
                 * @type animationConfig
                 * @default { type: "fade", duration: 400, from: 0, to: 1 }
                 */
@@ -116,7 +109,6 @@ var Toast = Overlay.inherit({
                 },
                 /**
                 * @name dxToastOptions.animation.hide
-                * @publicName hide
                 * @type animationConfig
                 * @default { type: "fade", duration: 400, to: 0 }
                 */
@@ -129,7 +121,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.shading
-            * @publicName shading
             * @type boolean
             * @default false
             * @inheritdoc
@@ -138,21 +129,18 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.disabled
-            * @publicName disabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToastOptions.width
-            * @publicName width
             * @default function() {return $(window).width() * 0.8 }
             * @inheritdoc
             */
 
             /**
             * @name dxToastOptions.height
-            * @publicName height
             * @default 'auto'
             * @inheritdoc
             */
@@ -160,7 +148,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.closeOnBackButton
-            * @publicName closeOnBackButton
             * @type boolean
             * @default false
             * @inheritdoc
@@ -169,7 +156,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.closeOnSwipe
-            * @publicName closeOnSwipe
             * @type boolean
             * @default true
             */
@@ -177,7 +163,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.closeOnClick
-            * @publicName closeOnClick
             * @type boolean
             * @default false
             */
@@ -185,7 +170,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.resizeEnabled
-            * @publicName resizeEnabled
             * @hidden
             * @inheritdoc
             */
@@ -193,7 +177,6 @@ var Toast = Overlay.inherit({
 
             /**
             * @name dxToastOptions.dragEnabled
-            * @publicName dragEnabled
             * @hidden
             * @inheritdoc
             */
@@ -209,14 +192,12 @@ var Toast = Overlay.inherit({
                 options: {
                     /**
                     * @name dxToastOptions.position
-                    * @publicName position
                     * @inheritdoc
                     */
                     position: "top center",
 
                     /**
                     * @name dxToastOptions.width
-                    * @publicName width
                     * @inheritdoc
                     */
                     width: function() { return $(window).width(); }
@@ -229,7 +210,6 @@ var Toast = Overlay.inherit({
                 options: {
                    /**
                    * @name dxToastOptions.position
-                   * @publicName position
                    * @default 'bottom right' @for Windows_10_Mobile
                    * @inheritdoc
                    */
@@ -237,7 +217,6 @@ var Toast = Overlay.inherit({
 
                     /**
                     * @name dxToastOptions.width
-                    * @publicName width
                     * @default 'auto' @for Android|Windows_10_Mobile
                     * @inheritdoc
                     */
@@ -249,7 +228,6 @@ var Toast = Overlay.inherit({
                 options: {
                     /**
                     * @name dxToastOptions.closeOnOutsideClick
-                    * @publicName closeOnOutsideClick
                     * @default true @for Android
                     * @inheritdoc
                     */
@@ -259,7 +237,6 @@ var Toast = Overlay.inherit({
 
                     /**
                     * @name dxToastOptions.position
-                    * @publicName position
                     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
                     * @inheritdoc
                     */
@@ -271,7 +248,6 @@ var Toast = Overlay.inherit({
 
                     /**
                     * @name dxToastOptions.animation
-                    * @publicName animation
                     * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Android
                     * @inheritdoc
                     */
@@ -312,7 +288,6 @@ var Toast = Overlay.inherit({
                 options: {
                     /**
                     * @name dxToastOptions.width
-                    * @publicName width
                     * @default function() { return $(window).width(); } @for phones_on_Android|phones_on_Windows_10_Mobile
                     * @inheritdoc
                     */
@@ -320,7 +295,6 @@ var Toast = Overlay.inherit({
 
                     /**
                     * @name dxToastOptions.position
-                    * @publicName position
                     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
                     * @inheritdoc
                     */
@@ -338,21 +312,18 @@ var Toast = Overlay.inherit({
                 options: {
                     /**
                     * @name dxToastOptions.minWidth
-                    * @publicName minWidth
                     * @default 288 @for Material
                     * @inheritdoc
                     */
                     minWidth: 288,
                     /**
                     * @name dxToastOptions.maxWidth
-                    * @publicName maxWidth
                     * @default 568 @for Material
                     * @inheritdoc
                     */
                     maxWidth: 568,
                     /**
                     * @name dxToastOptions.position
-                    * @publicName position
                     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for Material
                     * @inheritdoc
                     */
@@ -363,7 +334,6 @@ var Toast = Overlay.inherit({
                     },
                     /**
                     * @name dxToastOptions.animation
-                    * @publicName animation
                     * @default {show: {type: 'slide', duration: 250, easing: 'cubic-bezier(0.4, 0, 1, 1)', from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 250, easing: 'cubic-bezier(0.4, 0, 1, 1)', to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Material
                     * @inheritdoc
                     */

@@ -1,7 +1,6 @@
 
 /**
  * @name Enums
- * @publicName Enums
  * @type Object
  */
 

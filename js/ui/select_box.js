@@ -30,9 +30,8 @@ var DISABLED_STATE_SELECTOR = ".dx-state-disabled",
     SELECTBOX_POPUP_WRAPPER_CLASS = "dx-selectbox-popup-wrapper";
 
 /**
-* @name dxSelectbox
+* @name dxSelectBox
 * @isEditor
-* @publicName dxSelectBox
 * @inherits dxDropDownList
 * @module ui/select_box
 * @export default
@@ -142,7 +141,6 @@ var SelectBox = DropDownList.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxSelectBoxOptions.placeholder
-            * @publicName placeholder
             * @type string
             * @default "Select"
             */
@@ -150,7 +148,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.fieldTemplate
-            * @publicName fieldTemplate
             * @type template|function
             * @default null
             * @type_function_param1 selectedItem:object
@@ -161,7 +158,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.valueChangeEvent
-            * @publicName valueChangeEvent
             * @type string
             * @default "change"
             */
@@ -169,7 +165,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.acceptCustomValue
-            * @publicName acceptCustomValue
             * @type boolean
             * @default false
             */
@@ -177,7 +172,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.onCustomItemCreating
-            * @publicName onCustomItemCreating
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -194,7 +188,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.showSelectionControls
-            * @publicName showSelectionControls
             * @type boolean
             * @default false
             */
@@ -202,7 +195,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.autocompletionEnabled
-            * @publicName autocompletionEnabled
             * @type boolean
             * @default true
             * @hidden
@@ -211,7 +203,6 @@ var SelectBox = DropDownList.inherit({
 
             /**
             * @name dxSelectBoxOptions.allowClearing
-            * @publicName allowClearing
             * @type boolean
             * @default true
             * @hidden

@@ -1,35 +1,30 @@
 /**
-* @name dxchart
-* @publicName dxChart
+* @name dxChart
 * @inherits BaseChart
 * @module viz/chart
 * @export default
 */
 var dxChart = {
     /**
-    * @name dxchart.options
-    * @publicName Options
+    * @name dxChart.Options
     * @namespace DevExpress.viz.charts
     * @hidden
     */
     /**
-    * @name dxchartoptions.seriestemplate
-    * @publicName seriesTemplate
+    * @name dxChartOptions.seriesTemplate
     * @type object
     * @default undefined
     * @notUsedInTheme
     */
     seriesTemplate: {
         /**
-        * @name dxchartoptions.seriestemplate.nameField
-        * @publicName nameField
+        * @name dxChartOptions.seriesTemplate.nameField
         * @type string
         * @default 'series'
         */
         nameField: 'series',
         /**
-        * @name dxchartoptions.seriestemplate.customizeSeries
-        * @publicName customizeSeries
+        * @name dxChartOptions.seriesTemplate.customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
         * @type_function_return dxChartOptions.series
@@ -37,29 +32,25 @@ var dxChart = {
         customizeSeries: function() { }
     },
     /**
-    * @name dxchartoptions.resolvelabeloverlapping
-    * @publicName resolveLabelOverlapping
+    * @name dxChartOptions.resolveLabelOverlapping
     * @type Enums.ChartResolveLabelOverlapping
     * @default "none"
     */
     resolveLabelOverlapping: "none",
     /**
-    * @name dxchartoptions.seriesSelectionMode
-    * @publicName seriesSelectionMode
+    * @name dxChartOptions.seriesSelectionMode
     * @type Enums.ChartElementSelectionMode
     * @default 'single'
     */
     seriesSelectionMode: 'single',
     /**
-    * @name dxchartoptions.containerbackgroundcolor
-    * @publicName containerBackgroundColor
+    * @name dxChartOptions.containerBackgroundColor
     * @type string
     * @default '#FFFFFF'
     */
     containerBackgroundColor: '#FFFFFF',
     /**
-    * @name dxchartoptions.onseriesclick
-    * @publicName onSeriesClick
+    * @name dxChartOptions.onSeriesClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -71,8 +62,7 @@ var dxChart = {
     */
     onSeriesClick: function() {},
     /**
-    * @name dxchartoptions.onlegendclick
-    * @publicName onLegendClick
+    * @name dxChartOptions.onLegendClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -84,46 +74,40 @@ var dxChart = {
     */
     onLegendClick: function() { },
     /**
-    * @name dxchartoptions.equalbarwidth
-    * @publicName equalBarWidth
+    * @name dxChartOptions.equalBarWidth
     * @type boolean
     * @deprecated dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
     */
     equalBarWidth: true,
     /**
-    * @name dxchartoptions.barwidth
-    * @publicName barWidth
+    * @name dxChartOptions.barWidth
     * @type number
     * @deprecated dxChartSeriesTypes.CommonSeries.barPadding
     */
     barWidth: undefined,
     /**
-    * @name dxchartoptions.bargrouppadding
-    * @publicName barGroupPadding
+    * @name dxChartOptions.barGroupPadding
     * @type number
     * @default 0.3
     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
     */
     barGroupPadding: 0.3,
     /**
-    * @name dxchartoptions.bargroupwidth
-    * @publicName barGroupWidth
+    * @name dxChartOptions.barGroupWidth
     * @type number
     * @default undefined
     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
     */
     barGroupWidth: undefined,
     /**
-    * @name dxchartoptions.negativesaszeroes
-    * @publicName negativesAsZeroes
+    * @name dxChartOptions.negativesAsZeroes
     * @type boolean
     * @default false
     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries
     */
     negativesAsZeroes: false,
     /**
-    * @name dxchartoptions.commonseriessettings
-    * @publicName commonSeriesSettings
+    * @name dxChartOptions.commonSeriesSettings
     * @type object
     * @inherits dxChartSeriesTypes.CommonSeries
     * @hideDefaults true
@@ -131,258 +115,218 @@ var dxChart = {
     */
     commonSeriesSettings: {
         /**
-        * @name dxchartoptions.commonseriessettings.type
-        * @publicName type
+        * @name dxChartOptions.commonSeriesSettings.type
         * @type Enums.SeriesType
         * @default 'line'
         */
         type: 'line',
         /**
-        * @name dxchartoptions.commonseriessettings.line
-        * @publicName line
+        * @name dxChartOptions.commonSeriesSettings.line
         * @type object
         */
         line: {},
         /**
-        * @name dxchartoptions.commonseriessettings.fullstackedline
-        * @publicName fullstackedline
+        * @name dxChartOptions.commonSeriesSettings.fullstackedline
         * @type object
         */
         fullstackedline: {},
         /**
-        * @name dxchartoptions.commonseriessettings.fullstackedspline
-        * @publicName fullstackedspline
+        * @name dxChartOptions.commonSeriesSettings.fullstackedspline
         * @type object
         */
         fullstackedspline: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stackedline
-        * @publicName stackedline
+        * @name dxChartOptions.commonSeriesSettings.stackedline
         * @type object
         */
         stackedline: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stackedspline
-        * @publicName stackedspline
+        * @name dxChartOptions.commonSeriesSettings.stackedspline
         * @type object
         */
         stackedspline: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stepline
-        * @publicName stepline
+        * @name dxChartOptions.commonSeriesSettings.stepline
         * @type object
         */
         stepline: {},
         /**
-        * @name dxchartoptions.commonseriessettings.area
-        * @publicName area
+        * @name dxChartOptions.commonSeriesSettings.area
         * @type object
         */
         area: {},
         /**
-        * @name dxchartoptions.commonseriessettings.fullstackedarea
-        * @publicName fullstackedarea
+        * @name dxChartOptions.commonSeriesSettings.fullstackedarea
         * @type object
         */
         fullstackedarea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.fullstackedsplinearea
-        * @publicName fullstackedsplinearea
+        * @name dxChartOptions.commonSeriesSettings.fullstackedsplinearea
         * @type object
         */
         fullstackedsplinearea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stackedarea
-        * @publicName stackedarea
+        * @name dxChartOptions.commonSeriesSettings.stackedarea
         * @type object
         */
         stackedarea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stackedsplinearea
-        * @publicName stackedsplinearea
+        * @name dxChartOptions.commonSeriesSettings.stackedsplinearea
         * @type object
         */
         stackedsplinearea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.steparea
-        * @publicName steparea
+        * @name dxChartOptions.commonSeriesSettings.steparea
         * @type object
         */
         steparea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.bar
-        * @publicName bar
+        * @name dxChartOptions.commonSeriesSettings.bar
         * @type object
         */
         bar: {},
         /**
-        * @name dxchartoptions.commonseriessettings.fullstackedbar
-        * @publicName fullstackedbar
+        * @name dxChartOptions.commonSeriesSettings.fullstackedbar
         * @type object
         */
         fullstackedbar: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stackedbar
-        * @publicName stackedbar
+        * @name dxChartOptions.commonSeriesSettings.stackedbar
         * @type object
         */
         stackedbar: {},
         /**
-        * @name dxchartoptions.commonseriessettings.spline
-        * @publicName spline
+        * @name dxChartOptions.commonSeriesSettings.spline
         * @type object
         */
         spline: {},
         /**
-        * @name dxchartoptions.commonseriessettings.splinearea
-        * @publicName splinearea
+        * @name dxChartOptions.commonSeriesSettings.splinearea
         * @type object
         */
         splinearea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.scatter
-        * @publicName scatter
+        * @name dxChartOptions.commonSeriesSettings.scatter
         * @type object
         */
         scatter: {},
         /**
-        * @name dxchartoptions.commonseriessettings.candlestick
-        * @publicName candlestick
+        * @name dxChartOptions.commonSeriesSettings.candlestick
         * @type object
         */
         candlestick: {},
         /**
-        * @name dxchartoptions.commonseriessettings.stock
-        * @publicName stock
+        * @name dxChartOptions.commonSeriesSettings.stock
         * @type object
         */
         stock: {},
         /**
-        * @name dxchartoptions.commonseriessettings.rangebar
-        * @publicName rangebar
+        * @name dxChartOptions.commonSeriesSettings.rangebar
         * @type object
         */
         rangebar: {},
         /**
-        * @name dxchartoptions.commonseriessettings.rangearea
-        * @publicName rangearea
+        * @name dxChartOptions.commonSeriesSettings.rangearea
         * @type object
         */
         rangearea: {},
         /**
-        * @name dxchartoptions.commonseriessettings.bubble
-        * @publicName bubble
+        * @name dxChartOptions.commonSeriesSettings.bubble
         * @type object
         */
         bubble: {}
     },
     /**
-    * @name dxchartoptions.defaultpane
-    * @publicName defaultPane
+    * @name dxChartOptions.defaultPane
     * @type string
     * @default undefined
     * @notUsedInTheme
     */
     defaultPane: undefined,
     /**
-    * @name dxchartoptions.adjustonzoom
-    * @publicName adjustOnZoom
+    * @name dxChartOptions.adjustOnZoom
     * @type boolean
     * @default true
     */
     adjustOnZoom: true,
     /**
-    * @name dxchartoptions.rotated
-    * @publicName rotated
+    * @name dxChartOptions.rotated
     * @type boolean
     * @default false
     */
     rotated: false,
     /**
-    * @name dxchartoptions.synchronizemultiaxes
-    * @publicName synchronizeMultiAxes
+    * @name dxChartOptions.synchronizeMultiAxes
     * @type boolean
     * @default true
     */
     synchronizeMultiAxes: true,
     /**
-    * @name dxchartoptions.commonpanesettings
-    * @publicName commonPaneSettings
+    * @name dxChartOptions.commonPaneSettings
     * @type object
     */
     commonPaneSettings: {
         /**
-        * @name dxchartoptions.commonpanesettings.backgroundcolor
-        * @publicName backgroundColor
+        * @name dxChartOptions.commonPaneSettings.backgroundColor
         * @type string
         * @default 'none'
         */
         backgroundColor: 'none',
         /**
-        * @name dxchartoptions.commonpanesettings.border
-        * @publicName border
+        * @name dxChartOptions.commonPaneSettings.border
         * @type object
         */
         border: {
             /**
-            * @name dxchartoptions.commonpanesettings.border.visible
-            * @publicName visible
+            * @name dxChartOptions.commonPaneSettings.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxchartoptions.commonpanesettings.border.top
-            * @publicName top
+            * @name dxChartOptions.commonPaneSettings.border.top
             * @type boolean
             * @default true
             */
             top: true,
             /**
-            * @name dxchartoptions.commonpanesettings.border.bottom
-            * @publicName bottom
+            * @name dxChartOptions.commonPaneSettings.border.bottom
             * @type boolean
             * @default true
             */
             bottom: true,
             /**
-            * @name dxchartoptions.commonpanesettings.border.left
-            * @publicName left
+            * @name dxChartOptions.commonPaneSettings.border.left
             * @type boolean
             * @default true
             */
             left: true,
             /**
-            * @name dxchartoptions.commonpanesettings.border.right
-            * @publicName right
+            * @name dxChartOptions.commonPaneSettings.border.right
             * @type boolean
             * @default true
             */
             right: true,
             /**
-            * @name dxchartoptions.commonpanesettings.border.color
-            * @publicName color
+            * @name dxChartOptions.commonPaneSettings.border.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxchartoptions.commonpanesettings.border.dashstyle
-            * @publicName dashStyle
+            * @name dxChartOptions.commonPaneSettings.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
             dashStyle: 'solid',
             /**
-            * @name dxchartoptions.commonpanesettings.border.width
-            * @publicName width
+            * @name dxChartOptions.commonPaneSettings.border.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.commonpanesettings.border.opacity
-            * @publicName opacity
+            * @name dxChartOptions.commonPaneSettings.border.opacity
             * @type number
             * @default undefined
             */
@@ -390,44 +334,38 @@ var dxChart = {
         }
     },
     /**
-    * @name dxchartoptions.panes
-    * @publicName panes
+    * @name dxChartOptions.panes
     * @type Object|Array<Object>
-    * @inherits dxchartoptions.commonpanesettings
+    * @inherits dxChartOptions.commonPaneSettings
     * @notUsedInTheme
     */
     panes: [{
         /**
-        * @name dxchartoptions.panes.name
-        * @publicName name
+        * @name dxChartOptions.panes.name
         * @type string
         * @default undefined
         */
         name: undefined
     }],
     /**
-    * @name dxchartoptions.dataPrepareSettings
-    * @publicName dataPrepareSettings
+    * @name dxChartOptions.dataPrepareSettings
     * @type object
     */
     dataPrepareSettings: {
         /**
-        * @name dxchartoptions.dataPrepareSettings.checkTypeForAllData
-        * @publicName checkTypeForAllData
+        * @name dxChartOptions.dataPrepareSettings.checkTypeForAllData
         * @type boolean
         * @default false
         */
         checkTypeForAllData: false,
         /**
-        * @name dxchartoptions.dataPrepareSettings.convertToAxisDataType
-        * @publicName convertToAxisDataType
+        * @name dxChartOptions.dataPrepareSettings.convertToAxisDataType
         * @type boolean
         * @default true
         */
         convertToAxisDataType: true,
         /**
-        * @name dxchartoptions.dataPrepareSettings.sortingMethod
-        * @publicName sortingMethod
+        * @name dxChartOptions.dataPrepareSettings.sortingMethod
         * @type boolean|function(a,b)
         * @type_function_param1 a:object
         * @type_function_param2 b:object
@@ -437,193 +375,165 @@ var dxChart = {
         sortingMethod: true
     },
     /**
-    * @name dxchartoptions.scrollbar
-    * @publicName scrollBar
+    * @name dxChartOptions.scrollBar
     * @type object
     */
     scrollBar: {
         /**
-        * @name dxchartoptions.scrollbar.visible
-        * @publicName visible
+        * @name dxChartOptions.scrollBar.visible
         * @type boolean
         * @default false
         */
         visible: false,
         /**
-        * @name dxchartoptions.scrollbar.offset
-        * @publicName offset
+        * @name dxChartOptions.scrollBar.offset
         * @type number
         * @default 5
         */
         offset: 5,
         /**
-        * @name dxchartoptions.scrollbar.color
-        * @publicName color
+        * @name dxChartOptions.scrollBar.color
         * @type string
         * @default 'gray'
         */
         color: "gray",
        /**
-       * @name dxchartoptions.scrollbar.width
-       * @publicName width
+       * @name dxChartOptions.scrollBar.width
        * @type number
        * @default 10
        */
         width: 10,
        /**
-       * @name dxchartoptions.scrollbar.opacity
-       * @publicName opacity
+       * @name dxChartOptions.scrollBar.opacity
        * @type number
        * @default undefined
        */
         opacity: undefined,
         /**
-       * @name dxchartoptions.scrollbar.position
-       * @publicName position
+       * @name dxChartOptions.scrollBar.position
        * @type Enums.Position
        * @default 'top'
        */
         position: 'top'
     },
     /**
-    * @name dxchartoptions.zoomingmode
-    * @publicName zoomingMode
+    * @name dxChartOptions.zoomingMode
     * @type Enums.ChartPointerType
     * @default 'none'
     */
     zoomingMode: 'none',
     /**
-    * @name dxchartoptions.scrollingmode
-    * @publicName scrollingMode
+    * @name dxChartOptions.scrollingMode
     * @type Enums.ChartPointerType
     * @default 'none'
     */
     scrollingMode: 'none',
     /**
-    * @name dxchartoptions.useAggregation
-    * @publicName useAggregation
+    * @name dxChartOptions.useAggregation
     * @type boolean
     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
     */
     useAggregation: false,
     /**
-    * @name dxchartoptions.crosshair
-    * @publicName crosshair
+    * @name dxChartOptions.crosshair
     * @type object
     */
     crosshair: {
         /**
-        * @name dxchartoptions.crosshair.enabled
-        * @publicName enabled
+        * @name dxChartOptions.crosshair.enabled
         * @type boolean
         * @default false
         */
         enabled: false,
         /**
-        * @name dxchartoptions.crosshair.color
-        * @publicName color
+        * @name dxChartOptions.crosshair.color
         * @type string
         * @default '#f05b41'
         */
         color: '#f05b41',
         /**
-        * @name dxchartoptions.crosshair.width
-        * @publicName width
+        * @name dxChartOptions.crosshair.width
         * @type number
         * @default 1
         */
         width: 1,
         /**
-        * @name dxchartoptions.crosshair.dashstyle
-        * @publicName dashStyle
+        * @name dxChartOptions.crosshair.dashStyle
         * @type Enums.DashStyle
         * @default 'solid'
         */
         dashStyle: 'solid',
         /**
-        * @name dxchartoptions.crosshair.opacity
-        * @publicName opacity
+        * @name dxChartOptions.crosshair.opacity
         * @type number
         * @default undefined
         */
         opacity: undefined,
         /**
-        * @name dxchartoptions.crosshair.label
-        * @publicName label
+        * @name dxChartOptions.crosshair.label
         * @type object
         */
         label: {
             /**
-            * @name dxchartoptions.crosshair.label.backgroundcolor
-            * @publicName backgroundColor
+            * @name dxChartOptions.crosshair.label.backgroundColor
             * @type string
             * @default "#f05b41"
             */
             backgroundColor: "#f05b41",
             /**
-             * @name dxchartoptions.crosshair.label.visible
-             * @publicName visible
+             * @name dxChartOptions.crosshair.label.visible
              * @type boolean
              * @default false
              */
             visible: false,
             /**
-             * @name dxchartoptions.crosshair.label.font
-             * @publicName font
+             * @name dxChartOptions.crosshair.label.font
              * @type object
              */
             font: {
                 /**
-                * @name dxchartoptions.crosshair.label.font.family
-                * @publicName family
+                * @name dxChartOptions.crosshair.label.font.family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxchartoptions.crosshair.label.font.weight
-                * @publicName weight
+                * @name dxChartOptions.crosshair.label.font.weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name dxchartoptions.crosshair.label.font.color
-                * @publicName color
+                * @name dxChartOptions.crosshair.label.font.color
                 * @type string
                 * @default '#FFFFFF'
                 */
                 color: '#FFFFFF',
                 /**
-                * @name dxchartoptions.crosshair.label.font.size
-                * @publicName size
+                * @name dxChartOptions.crosshair.label.font.size
                 * @type number|string
                 * @default 12
                 */
                 size: 12,
                 /**
-                * @name dxchartoptions.crosshair.label.font.opacity
-                * @publicName opacity
+                * @name dxChartOptions.crosshair.label.font.opacity
                 * @type number
                 * @default undefined
                 */
                 opacity: undefined
             },
             /**
-           * @name dxchartoptions.crosshair.label.format
-           * @publicName format
+           * @name dxChartOptions.crosshair.label.format
            * @extends CommonVizFormat
            */
             format: '',
             /**
-            * @name dxchartoptions.crosshair.label.precision
-            * @publicName precision
+            * @name dxChartOptions.crosshair.label.precision
             * @extends CommonVizPrecision
             */
             precision: 0,
             /**
-            * @name dxchartoptions.crosshair.label.customizetext
-            * @publicName customizeText
+            * @name dxChartOptions.crosshair.label.customizeText
             * @type function(info)
             * @type_function_param1 info:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -635,123 +545,105 @@ var dxChart = {
             customizeText: undefined
         },
         /**
-        * @name dxchartoptions.crosshair.verticalline
-        * @publicName verticalLine
+        * @name dxChartOptions.crosshair.verticalLine
         * @type object | boolean
         */
         verticalLine: {
             /**
-            * @name dxchartoptions.crosshair.verticalline.visible
-            * @publicName visible
+            * @name dxChartOptions.crosshair.verticalLine.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxchartoptions.crosshair.verticalline.color
-            * @publicName color
+            * @name dxChartOptions.crosshair.verticalLine.color
             * @type string
             * @default "#f05b41"
             */
             color: "#f05b41",
             /**
-            * @name dxchartoptions.crosshair.verticalline.width
-            * @publicName width
+            * @name dxChartOptions.crosshair.verticalLine.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.crosshair.verticalline.dashstyle
-            * @publicName dashStyle
+            * @name dxChartOptions.crosshair.verticalLine.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
             dashStyle: 'solid',
             /**
-            * @name dxchartoptions.crosshair.verticalline.opacity
-            * @publicName opacity
+            * @name dxChartOptions.crosshair.verticalLine.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxchartoptions.crosshair.verticalline.label
-            * @publicName label
+            * @name dxChartOptions.crosshair.verticalLine.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.crosshair.verticalline.label.backgroundcolor
-                * @publicName backgroundColor
+                * @name dxChartOptions.crosshair.verticalLine.label.backgroundColor
                 * @type string
                 * @default "#f05b41"
                 */
                 backgroundColor: "#f05b41",
                 /**
-                 * @name dxchartoptions.crosshair.verticalline.label.visible
-                 * @publicName visible
+                 * @name dxChartOptions.crosshair.verticalLine.label.visible
                  * @type boolean
                  * @default false
                  */
                 visible: false,
                 /**
-                 * @name dxchartoptions.crosshair.verticalline.label.font
-                 * @publicName font
+                 * @name dxChartOptions.crosshair.verticalLine.label.font
                  * @type object
                  */
                 font: {
                     /**
-                    * @name dxchartoptions.crosshair.verticalline.label.font.family
-                    * @publicName family
+                    * @name dxChartOptions.crosshair.verticalLine.label.font.family
                     * @type string
                     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                     */
                     family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                     /**
-                    * @name dxchartoptions.crosshair.verticalline.label.font.weight
-                    * @publicName weight
+                    * @name dxChartOptions.crosshair.verticalLine.label.font.weight
                     * @type number
                     * @default 400
                     */
                     weight: 400,
                     /**
-                    * @name dxchartoptions.crosshair.verticalline.label.font.color
-                    * @publicName color
+                    * @name dxChartOptions.crosshair.verticalLine.label.font.color
                     * @type string
                     * @default '#FFFFFF'
                     */
                     color: '#FFFFFF',
                     /**
-                    * @name dxchartoptions.crosshair.verticalline.label.font.size
-                    * @publicName size
+                    * @name dxChartOptions.crosshair.verticalLine.label.font.size
                     * @type number|string
                     * @default 12
                     */
                     size: 12,
                     /**
-                    * @name dxchartoptions.crosshair.verticalline.label.font.opacity
-                    * @publicName opacity
+                    * @name dxChartOptions.crosshair.verticalLine.label.font.opacity
                     * @type number
                     * @default undefined
                     */
                     opacity: undefined
                 },
                 /**
-                * @name dxchartoptions.crosshair.verticalline.label.format
-                * @publicName format
+                * @name dxChartOptions.crosshair.verticalLine.label.format
                 * @extends CommonVizFormat
                 */
                 format: '',
                 /**
-                * @name dxchartoptions.crosshair.verticalline.label.precision
-                * @publicName precision
+                * @name dxChartOptions.crosshair.verticalLine.label.precision
                 * @extends CommonVizPrecision
                 */
                 precision: 0,
                 /**
-                * @name dxchartoptions.crosshair.verticalline.label.customizetext
-                * @publicName customizeText
+                * @name dxChartOptions.crosshair.verticalLine.label.customizeText
                 * @type function(info)
                 * @type_function_param1 info:object
                 * @type_function_param1_field1 value:Date|Number|string
@@ -764,123 +656,105 @@ var dxChart = {
             }
         },
         /**
-        * @name dxchartoptions.crosshair.horizontalline
-        * @publicName horizontalLine
+        * @name dxChartOptions.crosshair.horizontalLine
         * @type object | boolean
         */
         horizontalLine: {
             /**
-            * @name dxchartoptions.crosshair.horizontalline.visible
-            * @publicName visible
+            * @name dxChartOptions.crosshair.horizontalLine.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxchartoptions.crosshair.horizontalline.color
-            * @publicName color
+            * @name dxChartOptions.crosshair.horizontalLine.color
             * @type string
             * @default "#f05b41"
             */
             color: "#f05b41",
             /**
-            * @name dxchartoptions.crosshair.horizontalline.width
-            * @publicName width
+            * @name dxChartOptions.crosshair.horizontalLine.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.crosshair.horizontalline.dashstyle
-            * @publicName dashStyle
+            * @name dxChartOptions.crosshair.horizontalLine.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
             dashStyle: 'solid',
             /**
-            * @name dxchartoptions.crosshair.horizontalline.opacity
-            * @publicName opacity
+            * @name dxChartOptions.crosshair.horizontalLine.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxchartoptions.crosshair.horizontalline.label
-            * @publicName label
+            * @name dxChartOptions.crosshair.horizontalLine.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.crosshair.horizontalline.label.backgroundcolor
-                * @publicName backgroundColor
+                * @name dxChartOptions.crosshair.horizontalLine.label.backgroundColor
                 * @type string
                 * @default "#f05b41"
                 */
                 backgroundColor: "#f05b41",
                 /**
-                 * @name dxchartoptions.crosshair.horizontalline.label.visible
-                 * @publicName visible
+                 * @name dxChartOptions.crosshair.horizontalLine.label.visible
                  * @type boolean
                  * @default false
                  */
                 visible: false,
                 /**
-                 * @name dxchartoptions.crosshair.horizontalline.label.font
-                 * @publicName font
+                 * @name dxChartOptions.crosshair.horizontalLine.label.font
                  * @type object
                  */
                 font: {
                     /**
-                    * @name dxchartoptions.crosshair.horizontalline.label.font.family
-                    * @publicName family
+                    * @name dxChartOptions.crosshair.horizontalLine.label.font.family
                     * @type string
                     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                     */
                     family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                     /**
-                    * @name dxchartoptions.crosshair.horizontalline.label.font.weight
-                    * @publicName weight
+                    * @name dxChartOptions.crosshair.horizontalLine.label.font.weight
                     * @type number
                     * @default 400
                     */
                     weight: 400,
                     /**
-                    * @name dxchartoptions.crosshair.horizontalline.label.font.color
-                    * @publicName color
+                    * @name dxChartOptions.crosshair.horizontalLine.label.font.color
                     * @type string
                     * @default '#FFFFFF'
                     */
                     color: '#FFFFFF',
                     /**
-                    * @name dxchartoptions.crosshair.horizontalline.label.font.size
-                    * @publicName size
+                    * @name dxChartOptions.crosshair.horizontalLine.label.font.size
                     * @type number|string
                     * @default 12
                     */
                     size: 12,
                     /**
-                    * @name dxchartoptions.crosshair.horizontalline.label.font.opacity
-                    * @publicName opacity
+                    * @name dxChartOptions.crosshair.horizontalLine.label.font.opacity
                     * @type number
                     * @default undefined
                     */
                     opacity: undefined
                 },
                 /**
-                * @name dxchartoptions.crosshair.horizontalline.label.format
-                * @publicName format
+                * @name dxChartOptions.crosshair.horizontalLine.label.format
                 * @extends CommonVizFormat
                 */
                 format: '',
                 /**
-                * @name dxchartoptions.crosshair.horizontalline.label.precision
-                * @publicName precision
+                * @name dxChartOptions.crosshair.horizontalLine.label.precision
                 * @extends CommonVizPrecision
                 */
                 precision: 0,
                 /**
-                * @name dxchartoptions.crosshair.horizontalline.label.customizetext
-                * @publicName customizeText
+                * @name dxChartOptions.crosshair.horizontalLine.label.customizeText
                 * @type function(info)
                 * @type_function_param1 info:object
                 * @type_function_param1_field1 value:Date|Number|string
@@ -895,8 +769,7 @@ var dxChart = {
         }
     },
     /**
-    * @name dxchartoptions.onargumentaxisclick
-    * @publicName onArgumentAxisClick
+    * @name dxChartOptions.onArgumentAxisClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -908,14 +781,12 @@ var dxChart = {
     */
     onArgumentAxisClick: function() { },
     /**
-    * @name dxchartoptions.legend
-    * @publicName legend
+    * @name dxChartOptions.legend
     * @type object
     */
     legend: {
         /**
-        * @name dxchartoptions.legend.customizetext
-        * @publicName customizeText
+        * @name dxChartOptions.legend.customizeText
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
         * @type_function_param1_field1 seriesName:any
@@ -926,8 +797,7 @@ var dxChart = {
         */
         customizeText: undefined,
         /**
-        * @name dxchartoptions.legend.customizehint
-        * @publicName customizeHint
+        * @name dxChartOptions.legend.customizeHint
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
         * @type_function_param1_field1 seriesName:any
@@ -937,148 +807,127 @@ var dxChart = {
         */
         customizeHint: undefined,
         /**
-        * @name dxchartoptions.legend.hovermode
-        * @publicName hoverMode
+        * @name dxChartOptions.legend.hoverMode
         * @type Enums.ChartLegendHoverMode
         * @default 'includePoints'
         */
         hoverMode: 'includePoints',
         /**
-        * @name dxchartoptions.legend.position
-        * @publicName position
+        * @name dxChartOptions.legend.position
         * @type Enums.RelativePosition
         * @default 'outside'
         */
         position: 'outside'
     },
     /**
-    * @name dxchartoptions.commonaxissettings
-    * @publicName commonAxisSettings
+    * @name dxChartOptions.commonAxisSettings
     * @type object
     */
     commonAxisSettings: {
         /**
-        * @name dxchartoptions.commonaxissettings.setticksatunitbeginning
-        * @publicName setTicksAtUnitBeginning
+        * @name dxChartOptions.commonAxisSettings.setTicksAtUnitBeginning
         * @type boolean
         * @default true
         * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**
-        * @name dxchartoptions.commonaxissettings.discreteaxisdivisionMode
-        * @publicName discreteAxisDivisionMode
+        * @name dxChartOptions.commonAxisSettings.discreteAxisDivisionMode
         * @type Enums.DiscreteAxisDivisionMode
         * @default 'betweenLabels'
         */
         discreteAxisDivisionMode: 'betweenLabels',
         /**
-        * @name dxchartoptions.commonaxissettings.visible
-        * @publicName visible
+        * @name dxChartOptions.commonAxisSettings.visible
         * @type boolean
         * @default false
         */
         visible: false,
         /**
-        * @name dxchartoptions.commonaxissettings.color
-        * @publicName color
+        * @name dxChartOptions.commonAxisSettings.color
         * @type string
         * @default '#d3d3d3'
         */
         color: '#d3d3d3',
         /**
-        * @name dxchartoptions.commonaxissettings.width
-        * @publicName width
+        * @name dxChartOptions.commonAxisSettings.width
         * @type number
         * @default 1
         */
         width: 1,
         /**
-        * @name dxchartoptions.commonaxissettings.opacity
-        * @publicName opacity
+        * @name dxChartOptions.commonAxisSettings.opacity
         * @type number
         * @default undefined
         */
         opacity: undefined,
         /**
-        * @name dxchartoptions.commonaxissettings.placeholdersize
-        * @publicName placeholderSize
+        * @name dxChartOptions.commonAxisSettings.placeholderSize
         * @type number
         * @default null
         */
         placeholderSize: null,
         /**
-        * @name dxchartoptions.commonaxissettings.breakStyle
-        * @publicName breakStyle
+        * @name dxChartOptions.commonAxisSettings.breakStyle
         * @type object
         */
         breakStyle: {
             /**
-            * @name dxchartoptions.commonaxissettings.breakStyle.width
-            * @publicName width
+            * @name dxChartOptions.commonAxisSettings.breakStyle.width
             * @type number
             * @default 5
             */
             width: 5,
             /**
-            * @name dxchartoptions.commonaxissettings.breakStyle.color
-            * @publicName color
+            * @name dxChartOptions.commonAxisSettings.breakStyle.color
             * @type string
             * @default "#ababab"
             */
             color: "#ababab",
             /**
-            * @name dxchartoptions.commonaxissettings.breakStyle.line
-            * @publicName line
+            * @name dxChartOptions.commonAxisSettings.breakStyle.line
             * @type Enums.ScaleBreakLineStyle
             * @default "waved"
             */
             line: "waved"
         },
         /**
-        * @name dxchartoptions.commonaxissettings.label
-        * @publicName label
+        * @name dxChartOptions.commonAxisSettings.label
         * @type object
         */
         label: {
             /**
-            * @name dxchartoptions.commonaxissettings.label.alignment
-            * @publicName alignment
+            * @name dxChartOptions.commonAxisSettings.label.alignment
             * @type Enums.HorizontalAlignment
             * @default undefined
             */
             alignment: undefined,
             /**
-            * @name dxchartoptions.commonaxissettings.label.visible
-            * @publicName visible
+            * @name dxChartOptions.commonAxisSettings.label.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxchartoptions.commonaxissettings.label.rotationangle
-            * @publicName rotationAngle
+            * @name dxChartOptions.commonAxisSettings.label.rotationAngle
             * @type number
             * @default 90
             */
             rotationAngle: 90,
             /**
-            * @name dxchartoptions.commonaxissettings.label.staggeringspacing
-            * @publicName staggeringSpacing
+            * @name dxChartOptions.commonAxisSettings.label.staggeringSpacing
             * @type number
             * @default 5
             */
             staggeringSpacing: 5,
             /**
-            * @name dxchartoptions.commonaxissettings.label.displaymode
-            * @publicName displayMode
+            * @name dxChartOptions.commonAxisSettings.label.displayMode
             * @type Enums.ChartLabelDisplayMode
             * @default 'standard'
             */
             displayMode: "standard",
             /**
-            * @name dxchartoptions.commonaxissettings.label.overlappingBehavior
-            * @publicName overlappingBehavior
+            * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior
             * @type string|object
             * @default 'hide'
             * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
@@ -1086,76 +935,66 @@ var dxChart = {
             */
             overlappingBehavior: {
                 /**
-                * @name dxchartoptions.commonaxissettings.label.overlappingBehavior.mode
-                * @publicName mode
+                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.mode
                 * @type string
                 * @default 'hide'
                 * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
                 * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
-                * @deprecated dxchartoptions.commonaxissettings.label.overlappingBehavior
+                * @deprecated dxChartOptions.commonAxisSettings.label.overlappingBehavior
                 */
                 mode: 'hide',
                 /**
-                * @name dxchartoptions.commonaxissettings.label.overlappingBehavior.rotationangle
-                * @publicName rotationAngle
+                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.rotationAngle
                 * @type number
                 * @default 90
-                * @deprecated dxchartoptions.commonaxissettings.label.rotationangle
+                * @deprecated dxChartOptions.commonAxisSettings.label.rotationAngle
                 */
                 rotationAngle: 90,
                 /**
-                * @name dxchartoptions.commonaxissettings.label.overlappingBehavior.staggeringSpacing
-                * @publicName staggeringSpacing
+                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.staggeringSpacing
                 * @type number
                 * @default 5
-                * @deprecated dxchartoptions.commonaxissettings.label.staggeringspacing
+                * @deprecated dxChartOptions.commonAxisSettings.label.staggeringSpacing
                 */
                 staggeringSpacing: 5
             },
             /**
-            * @name dxchartoptions.commonaxissettings.label.indentfromaxis
-            * @publicName indentFromAxis
+            * @name dxChartOptions.commonAxisSettings.label.indentFromAxis
             * @type number
             * @default 10
             */
             indentFromAxis: 10,
             /**
-            * @name dxchartoptions.commonaxissettings.label.font
-            * @publicName font
+            * @name dxChartOptions.commonAxisSettings.label.font
             * @type object
             */
             font: {
                 /**
-                * @name dxchartoptions.commonaxissettings.label.font.family
-                * @publicName family
+                * @name dxChartOptions.commonAxisSettings.label.font.family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxchartoptions.commonaxissettings.label.font.weight
-                * @publicName weight
+                * @name dxChartOptions.commonAxisSettings.label.font.weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name dxchartoptions.commonaxissettings.label.font.color
-                * @publicName color
+                * @name dxChartOptions.commonAxisSettings.label.font.color
                 * @type string
                 * @default '#767676'
                 */
                 color: '#767676',
                 /**
-                * @name dxchartoptions.commonaxissettings.label.font.size
-                * @publicName size
+                * @name dxChartOptions.commonAxisSettings.label.font.size
                 * @type number|string
                 * @default 12
                 */
                 size: 12,
                 /**
-                * @name dxchartoptions.commonaxissettings.label.font.opacity
-                * @publicName opacity
+                * @name dxChartOptions.commonAxisSettings.label.font.opacity
                 * @type number
                 * @default undefined
                 */
@@ -1163,292 +1002,250 @@ var dxChart = {
             }
         },
         /**
-        * @name dxchartoptions.commonaxissettings.grid
-        * @publicName grid
+        * @name dxChartOptions.commonAxisSettings.grid
         * @type object
         */
         grid: {
             /**
-            * @name dxchartoptions.commonaxissettings.grid.visible
-            * @publicName visible
+            * @name dxChartOptions.commonAxisSettings.grid.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxchartoptions.commonaxissettings.grid.color
-            * @publicName color
+            * @name dxChartOptions.commonAxisSettings.grid.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxchartoptions.commonaxissettings.grid.width
-            * @publicName width
+            * @name dxChartOptions.commonAxisSettings.grid.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.commonaxissettings.grid.opacity
-            * @publicName opacity
+            * @name dxChartOptions.commonAxisSettings.grid.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name dxchartoptions.commonaxissettings.minorgrid
-        * @publicName minorGrid
+        * @name dxChartOptions.commonAxisSettings.minorGrid
         * @type object
         */
         minorGrid: {
             /**
-            * @name dxchartoptions.commonaxissettings.minorgrid.visible
-            * @publicName visible
+            * @name dxChartOptions.commonAxisSettings.minorGrid.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxchartoptions.commonaxissettings.minorgrid.color
-            * @publicName color
+            * @name dxChartOptions.commonAxisSettings.minorGrid.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxchartoptions.commonaxissettings.minorgrid.width
-            * @publicName width
+            * @name dxChartOptions.commonAxisSettings.minorGrid.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.commonaxissettings.minorgrid.opacity
-            * @publicName opacity
+            * @name dxChartOptions.commonAxisSettings.minorGrid.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name dxchartoptions.commonaxissettings.tick
-        * @publicName tick
+        * @name dxChartOptions.commonAxisSettings.tick
         * @type object
         */
         tick: {
             /**
-            * @name dxchartoptions.commonaxissettings.tick.visible
-            * @publicName visible
+            * @name dxChartOptions.commonAxisSettings.tick.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxchartoptions.commonaxissettings.tick.color
-            * @publicName color
+            * @name dxChartOptions.commonAxisSettings.tick.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxchartoptions.commonaxissettings.tick.opacity
-            * @publicName opacity
+            * @name dxChartOptions.commonAxisSettings.tick.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxchartoptions.commonaxissettings.tick.width
-            * @publicName width
+            * @name dxChartOptions.commonAxisSettings.tick.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.commonaxissettings.tick.length
-            * @publicName length
+            * @name dxChartOptions.commonAxisSettings.tick.length
             * @type number
             * @default 8
             */
             length: 8
         },
         /**
-       * @name dxchartoptions.commonaxissettings.minortick
-       * @publicName minorTick
+       * @name dxChartOptions.commonAxisSettings.minorTick
        * @type object
        */
         minorTick: {
             /**
-            * @name dxchartoptions.commonaxissettings.minortick.visible
-            * @publicName visible
+            * @name dxChartOptions.commonAxisSettings.minorTick.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxchartoptions.commonaxissettings.minortick.color
-            * @publicName color
+            * @name dxChartOptions.commonAxisSettings.minorTick.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxchartoptions.commonaxissettings.minortick.opacity
-            * @publicName opacity
+            * @name dxChartOptions.commonAxisSettings.minorTick.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxchartoptions.commonaxissettings.minortick.width
-            * @publicName width
+            * @name dxChartOptions.commonAxisSettings.minorTick.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.commonaxissettings.minortick.length
-            * @publicName length
+            * @name dxChartOptions.commonAxisSettings.minorTick.length
             * @type number
             * @default 8
             */
             length: 8,
         },
         /**
-        * @name dxchartoptions.commonaxissettings.title
-        * @publicName title
+        * @name dxChartOptions.commonAxisSettings.title
         * @type object
         */
         title: {
             /**
-            * @name dxchartoptions.commonaxissettings.title.font
-            * @publicName font
+            * @name dxChartOptions.commonAxisSettings.title.font
             * @type object
             */
             font: {
                 /**
-                * @name dxchartoptions.commonaxissettings.title.font.family
-                * @publicName family
+                * @name dxChartOptions.commonAxisSettings.title.font.family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxchartoptions.commonaxissettings.title.font.weight
-                * @publicName weight
+                * @name dxChartOptions.commonAxisSettings.title.font.weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name dxchartoptions.commonaxissettings.title.font.color
-                * @publicName color
+                * @name dxChartOptions.commonAxisSettings.title.font.color
                 * @type string
                 * @default '#767676'
                 */
                 color: '#767676',
                 /**
-                * @name dxchartoptions.commonaxissettings.title.font.size
-                * @publicName size
+                * @name dxChartOptions.commonAxisSettings.title.font.size
                 * @type number|string
                 * @default 16
                 */
                 size: 16,
                 /**
-                * @name dxchartoptions.commonaxissettings.title.font.opacity
-                * @publicName opacity
+                * @name dxChartOptions.commonAxisSettings.title.font.opacity
                 * @type number
                 * @default undefined
                 */
                 opacity: undefined
             },
             /**
-            * @name dxchartoptions.commonaxissettings.title.margin
-            * @publicName margin
+            * @name dxChartOptions.commonAxisSettings.title.margin
             * @type number
             * @default 6
             */
             margin: 6
         },
         /**
-        * @name dxchartoptions.commonaxissettings.stripstyle
-        * @publicName stripStyle
+        * @name dxChartOptions.commonAxisSettings.stripStyle
         * @type object
         */
         stripStyle: {
             /**
-            * @name dxchartoptions.commonaxissettings.stripstyle.paddingleftright
-            * @publicName paddingLeftRight
+            * @name dxChartOptions.commonAxisSettings.stripStyle.paddingLeftRight
             * @type number
             * @default 10
             */
             paddingLeftRight: 10,
             /**
-            * @name dxchartoptions.commonaxissettings.stripstyle.paddingtopbottom
-            * @publicName paddingTopBottom
+            * @name dxChartOptions.commonAxisSettings.stripStyle.paddingTopBottom
             * @type number
             * @default 5
             */
             paddingTopBottom: 5,
             /**
-            * @name dxchartoptions.commonaxissettings.stripstyle.label
-            * @publicName label
+            * @name dxChartOptions.commonAxisSettings.stripStyle.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.commonaxissettings.stripstyle.label.horizontalalignment
-                * @publicName horizontalAlignment
+                * @name dxChartOptions.commonAxisSettings.stripStyle.label.horizontalAlignment
                 * @type Enums.HorizontalAlignment
                 * @default 'left'
                 */
                 horizontalAlignment: 'left',
                 /**
-                * @name dxchartoptions.commonaxissettings.stripstyle.label.verticalalignment
-                * @publicName verticalAlignment
+                * @name dxChartOptions.commonAxisSettings.stripStyle.label.verticalAlignment
                 * @type Enums.VerticalAlignment
                 * @default 'center'
                 */
                 verticalAlignment: 'center',
                 /**
-                * @name dxchartoptions.commonaxissettings.stripstyle.label.font
-                * @publicName font
+                * @name dxChartOptions.commonAxisSettings.stripStyle.label.font
                 * @type object
                 */
                 font: {
                     /**
-                    * @name dxchartoptions.commonaxissettings.stripstyle.label.font.family
-                    * @publicName family
+                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.family
                     * @type string
                     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                     */
                     family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                     /**
-                    * @name dxchartoptions.commonaxissettings.stripstyle.label.font.weight
-                    * @publicName weight
+                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.weight
                     * @type number
                     * @default 400
                     */
                     weight: 400,
                     /**
-                    * @name dxchartoptions.commonaxissettings.stripstyle.label.font.color
-                    * @publicName color
+                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.color
                     * @type string
                     * @default '#767676'
                     */
                     color: '#767676',
                     /**
-                    * @name dxchartoptions.commonaxissettings.stripstyle.label.font.size
-                    * @publicName size
+                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.size
                     * @type number|string
                     * @default 12
                     */
                     size: 12,
                     /**
-                    * @name dxchartoptions.commonaxissettings.stripstyle.label.font.opacity
-                    * @publicName opacity
+                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.opacity
                     * @type number
                     * @default undefined
                     */
@@ -1457,103 +1254,88 @@ var dxChart = {
             }
         },
         /**
-        * @name dxchartoptions.commonaxissettings.constantlinestyle
-        * @publicName constantLineStyle
+        * @name dxChartOptions.commonAxisSettings.constantLineStyle
         * @type object
         */
         constantLineStyle: {
             /**
-            * @name dxchartoptions.commonaxissettings.constantlinestyle.paddingleftright
-            * @publicName paddingLeftRight
+            * @name dxChartOptions.commonAxisSettings.constantLineStyle.paddingLeftRight
             * @type number
             * @default 10
             */
             paddingLeftRight: 10,
             /**
-            * @name dxchartoptions.commonaxissettings.constantlinestyle.paddingtopbottom
-            * @publicName paddingTopBottom
+            * @name dxChartOptions.commonAxisSettings.constantLineStyle.paddingTopBottom
             * @type number
             * @default 10
             */
             paddingTopBottom: 10,
             /**
-            * @name dxchartoptions.commonaxissettings.constantlinestyle.width
-            * @publicName width
+            * @name dxChartOptions.commonAxisSettings.constantLineStyle.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxchartoptions.commonaxissettings.constantlinestyle.dashstyle
-            * @publicName dashStyle
+            * @name dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
             dashStyle: 'solid',
             /**
-            * @name dxchartoptions.commonaxissettings.constantlinestyle.color
-            * @publicName color
+            * @name dxChartOptions.commonAxisSettings.constantLineStyle.color
             * @type string
             * @default '#000000'
             */
             color: '#000000',
             /**
-            * @name dxchartoptions.commonaxissettings.constantlinestyle.label
-            * @publicName label
+            * @name dxChartOptions.commonAxisSettings.constantLineStyle.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.commonaxissettings.constantlinestyle.label.visible
-                * @publicName visible
+                * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.visible
                 * @type boolean
                 * @default true
                 */
                 visible: true,
                 /**
-                * @name dxchartoptions.commonaxissettings.constantlinestyle.label.position
-                * @publicName position
+                * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.position
                 * @type Enums.RelativePosition
                 * @default 'inside'
                 */
                 position: 'inside',
                 /**
-                * @name dxchartoptions.commonaxissettings.constantlinestyle.label.font
-                * @publicName font
+                * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font
                 * @type object
                 */
                 font: {
                     /**
-                    * @name dxchartoptions.commonaxissettings.constantlinestyle.label.font.family
-                    * @publicName family
+                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.family
                     * @type string
                     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                     */
                     family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                     /**
-                    * @name dxchartoptions.commonaxissettings.constantlinestyle.label.font.weight
-                    * @publicName weight
+                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.weight
                     * @type number
                     * @default 400
                     */
                     weight: 400,
                     /**
-                    * @name dxchartoptions.commonaxissettings.constantlinestyle.label.font.color
-                    * @publicName color
+                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.color
                     * @type string
                     * @default '#767676'
                     */
                     color: '#767676',
                     /**
-                    * @name dxchartoptions.commonaxissettings.constantlinestyle.label.font.size
-                    * @publicName size
+                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.size
                     * @type number|string
                     * @default 12
                     */
                     size: 12,
                     /**
-                    * @name dxchartoptions.commonaxissettings.constantlinestyle.label.font.opacity
-                    * @publicName opacity
+                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.opacity
                     * @type number
                     * @default undefined
                     */
@@ -1562,114 +1344,98 @@ var dxChart = {
             }
         },
         /**
-        * @name dxchartoptions.commonaxissettings.minvaluemargin
-        * @publicName minValueMargin
+        * @name dxChartOptions.commonAxisSettings.minValueMargin
         * @type number
         * @default undefined
         */
         minValueMargin: 0,
         /**
-        * @name dxchartoptions.commonaxissettings.maxvaluemargin
-        * @publicName maxValueMargin
+        * @name dxChartOptions.commonAxisSettings.maxValueMargin
         * @type number
         * @default undefined
         */
         maxValueMargin: 0,
         /**
-        * @name dxchartoptions.commonaxissettings.valuemarginsenabled
-        * @publicName valueMarginsEnabled
+        * @name dxChartOptions.commonAxisSettings.valueMarginsEnabled
         * @type boolean
         * @default true
         */
         valueMarginsEnabled: true,
         /**
-        * @name dxchartoptions.commonaxissettings.inverted
-        * @publicName inverted
+        * @name dxChartOptions.commonAxisSettings.inverted
         * @type boolean
         * @default false
         */
         inverted: false,
         /**
-        * @name dxchartoptions.commonaxissettings.allowdecimals
-        * @publicName allowDecimals
+        * @name dxChartOptions.commonAxisSettings.allowDecimals
         * @type boolean
         * @default undefined
         */
         allowDecimals: undefined,
         /**
-        * @name dxchartoptions.commonaxissettings.endontick
-        * @publicName endOnTick
+        * @name dxChartOptions.commonAxisSettings.endOnTick
         * @type boolean
         * @default undefined
         */
         endOnTick: undefined
     },
     /**
-    * @name dxchartoptions.argumentaxis
-    * @publicName argumentAxis
+    * @name dxChartOptions.argumentAxis
     * @type object
-    * @inherits dxchartoptions.commonaxissettings
+    * @inherits dxChartOptions.commonAxisSettings
     */
     argumentAxis: {
         /**
-        * @name dxchartoptions.argumentaxis.tickInterval
-        * @publicName tickInterval
+        * @name dxChartOptions.argumentAxis.tickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
-        * @name dxchartoptions.argumentaxis.minortickinterval
-        * @publicName minorTickInterval
+        * @name dxChartOptions.argumentAxis.minorTickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
         /**
-        * @name dxchartoptions.argumentaxis.minortickcount
-        * @publicName minorTickCount
+        * @name dxChartOptions.argumentAxis.minorTickCount
         * @type number
         * @default undefined
         */
         minorTickCount: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.title
-        * @publicName title
+        * @name dxChartOptions.argumentAxis.title
         * @type string|object
         */
         title: {
             /**
-            * @name dxchartoptions.argumentaxis.title.text
-            * @publicName text
+            * @name dxChartOptions.argumentAxis.title.text
             * @type string
             * @default undefined
             */
             text: undefined
         },
         /**
-        * @name dxchartoptions.argumentaxis.workdaysonly
-        * @publicName workdaysOnly
+        * @name dxChartOptions.argumentAxis.workdaysOnly
         * @type boolean
         * @default false
         */
         workdaysOnly: false,
         /**
-        * @name dxchartoptions.argumentaxis.workweek
-        * @publicName workWeek
+        * @name dxChartOptions.argumentAxis.workWeek
         * @type Array<number>
         * @default [1, 2, 3, 4, 5]
         */
         workWeek: [1, 2, 3, 4, 5],
         /**
-        * @name dxchartoptions.argumentaxis.holidays
-        * @publicName holidays
+        * @name dxChartOptions.argumentAxis.holidays
         * @type Array<Date, string>| Array<number>
         * @default undefined
         */
         holidays: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.breaks
-        * @publicName breaks
+        * @name dxChartOptions.argumentAxis.breaks
         * @type Array<ScaleBreak>
         * @default undefined
         * @inherits ScaleBreak
@@ -1677,35 +1443,30 @@ var dxChart = {
         */
         breaks: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.singleworkdays
-        * @publicName singleWorkdays
+        * @name dxChartOptions.argumentAxis.singleWorkdays
         * @type Array<Date, string>| Array<number>
         * @default undefined
         */
         singleWorkdays: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.aggregationGroupWidth
-        * @publicName aggregationGroupWidth
+        * @name dxChartOptions.argumentAxis.aggregationGroupWidth
         * @type number
         * @default undefined
         */
         aggregationGroupWidth: 10,
         /**
-        * @name dxchartoptions.argumentaxis.aggregationInterval
-        * @publicName aggregationInterval
+        * @name dxChartOptions.argumentAxis.aggregationInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         aggregationInterval: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.label
-        * @publicName label
+        * @name dxChartOptions.argumentAxis.label
         * @type object
         */
         label: {
             /**
-            * @name dxchartoptions.argumentaxis.label.customizetext
-            * @publicName customizeText
+            * @name dxChartOptions.argumentAxis.label.customizeText
             * @type function(argument)
             * @type_function_param1 argument:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -1715,8 +1476,7 @@ var dxChart = {
             */
             customizeText: undefined,
             /**
-            * @name dxchartoptions.argumentaxis.label.customizehint
-            * @publicName customizeHint
+            * @name dxChartOptions.argumentAxis.label.customizeHint
             * @type function(argument)
             * @type_function_param1 argument:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -1725,56 +1485,48 @@ var dxChart = {
             */
             customizeHint: undefined,
             /**
-            * @name dxchartoptions.argumentaxis.label.format
-            * @publicName format
+            * @name dxChartOptions.argumentAxis.label.format
             * @extends CommonVizFormat
             */
             format: '',
             /**
-            * @name dxchartoptions.argumentaxis.label.precision
-            * @publicName precision
+            * @name dxChartOptions.argumentAxis.label.precision
             * @extends CommonVizPrecision
             */
             precision: 0
         },
         /**
-        * @name dxchartoptions.argumentaxis.strips
-        * @publicName strips
+        * @name dxChartOptions.argumentAxis.strips
         * @type Array<Object>
         * @notUsedInTheme
-        * @inherits dxchartoptions.commonaxissettings.stripstyle
+        * @inherits dxChartOptions.commonAxisSettings.stripStyle
         */
         strips: [{
             /**
-            * @name dxchartoptions.argumentaxis.strips.startvalue
-            * @publicName startValue
+            * @name dxChartOptions.argumentAxis.strips.startValue
             * @type number | datetime | string
             * @default undefined
             */
             startValue: undefined,
             /**
-            * @name dxchartoptions.argumentaxis.strips.endvalue
-            * @publicName endValue
+            * @name dxChartOptions.argumentAxis.strips.endValue
             * @type number | datetime | string
             * @default undefined
             */
             endValue: undefined,
             /**
-            * @name dxchartoptions.argumentaxis.strips.color
-            * @publicName color
+            * @name dxChartOptions.argumentAxis.strips.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxchartoptions.argumentaxis.strips.label
-            * @publicName label
+            * @name dxChartOptions.argumentAxis.strips.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.argumentaxis.strips.label.text
-                * @publicName text
+                * @name dxChartOptions.argumentAxis.strips.label.text
                 * @type string
                 * @default undefined
                 */
@@ -1782,27 +1534,23 @@ var dxChart = {
             }
         }],
         /**
-        * @name dxchartoptions.argumentaxis.constantlinestyle
-        * @publicName constantLineStyle
+        * @name dxChartOptions.argumentAxis.constantLineStyle
         * @type object
         */
         constantLineStyle: {
             /**
-            * @name dxchartoptions.argumentaxis.constantlinestyle.label
-            * @publicName label
+            * @name dxChartOptions.argumentAxis.constantLineStyle.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.argumentaxis.constantlinestyle.label.horizontalalignment
-                * @publicName horizontalAlignment
+                * @name dxChartOptions.argumentAxis.constantLineStyle.label.horizontalAlignment
                 * @type Enums.HorizontalAlignment
                 * @default 'right'
                 */
                 horizontalAlignment: 'right',
                 /**
-                * @name dxchartoptions.argumentaxis.constantlinestyle.label.verticalalignment
-                * @publicName verticalAlignment
+                * @name dxChartOptions.argumentAxis.constantLineStyle.label.verticalAlignment
                 * @type Enums.VerticalAlignment
                 * @default 'top'
                 */
@@ -1810,43 +1558,37 @@ var dxChart = {
             }
         },
         /**
-        * @name dxchartoptions.argumentaxis.constantlines
-        * @publicName constantLines
+        * @name dxChartOptions.argumentAxis.constantLines
         * @type Array<Object>
-        * @inherits dxchartoptions.commonaxissettings.constantlinestyle
+        * @inherits dxChartOptions.commonAxisSettings.constantLineStyle
         * @notUsedInTheme
         */
         constantLines: [{
             /**
-            * @name dxchartoptions.argumentaxis.constantlines.value
-            * @publicName value
+            * @name dxChartOptions.argumentAxis.constantLines.value
             * @type number | datetime | string
             * @default undefined
             */
             value: undefined,
             /**
-            * @name dxchartoptions.argumentaxis.constantlines.label
-            * @publicName label
+            * @name dxChartOptions.argumentAxis.constantLines.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.argumentaxis.constantlines.label.text
-                * @publicName text
+                * @name dxChartOptions.argumentAxis.constantLines.label.text
                 * @type string
                 * @default undefined
                 */
                 text: undefined,
                 /**
-                * @name dxchartoptions.argumentaxis.constantlines.label.horizontalalignment
-                * @publicName horizontalAlignment
+                * @name dxChartOptions.argumentAxis.constantLines.label.horizontalAlignment
                 * @type Enums.HorizontalAlignment
                 * @default 'right'
                 */
                 horizontalAlignment: 'right',
                 /**
-                * @name dxchartoptions.argumentaxis.constantlines.label.verticalalignment
-                * @publicName verticalAlignment
+                * @name dxChartOptions.argumentAxis.constantLines.label.verticalAlignment
                 * @type Enums.VerticalAlignment
                 * @default 'top'
                 */
@@ -1854,70 +1596,60 @@ var dxChart = {
             }
         }],
         /**
-        * @name dxchartoptions.argumentaxis.position
-        * @publicName position
+        * @name dxChartOptions.argumentAxis.position
         * @type Enums.Position
         * @default 'bottom'
         */
         position: 'bottom',
         /**
-        * @name dxchartoptions.argumentaxis.min
-        * @publicName min
+        * @name dxChartOptions.argumentAxis.min
         * @type number | datetime | string
         * @default undefined
         */
         min: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.max
-        * @publicName max
+        * @name dxChartOptions.argumentAxis.max
         * @type number | datetime | string
         * @default undefined
         */
         max: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.axisdivisionfactor
-        * @publicName axisDivisionFactor
+        * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
         * @default 70
         */
         axisDivisionFactor: 70,
         /**
-        * @name dxchartoptions.argumentaxis.categories
-        * @publicName categories
+        * @name dxChartOptions.argumentAxis.categories
         * @type Array<number,string,Date>
         */
         categories: [],
         /**
-        * @name dxchartoptions.argumentaxis.type
-        * @publicName type
+        * @name dxChartOptions.argumentAxis.type
         * @type Enums.AxisScaleType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.logarithmbase
-        * @publicName logarithmBase
+        * @name dxChartOptions.argumentAxis.logarithmBase
         * @type number
         * @default 10
         */
         logarithmBase: 10,
         /**
-        * @name dxchartoptions.argumentaxis.argumenttype
-        * @publicName argumentType
+        * @name dxChartOptions.argumentAxis.argumentType
         * @type Enums.ChartDataType
         * @default undefined
         */
         argumentType: undefined,
         /**
-        * @name dxchartoptions.argumentaxis.hovermode
-        * @publicName hoverMode
+        * @name dxChartOptions.argumentAxis.hoverMode
         * @type Enums.ArgumentAxisHoverMode
         * @default 'none'
         */
         hoverMode: 'none',
         /**
-        * @name dxchartoptions.argumentaxis.endontick
-        * @publicName endOnTick
+        * @name dxChartOptions.argumentAxis.endOnTick
         * @type boolean
         * @default false
         * @inheritdoc
@@ -1925,57 +1657,49 @@ var dxChart = {
         endOnTick: false
     },
     /**
-    * @name dxchartoptions.valueaxis
-    * @publicName valueAxis
+    * @name dxChartOptions.valueAxis
     * @type Object|Array<Object>
-    * @inherits dxchartoptions.commonaxissettings
+    * @inherits dxChartOptions.commonAxisSettings
     */
     valueAxis: {
         /**
-        * @name dxchartoptions.valueaxis.showZero
-        * @publicName showZero
+        * @name dxChartOptions.valueAxis.showZero
         * @type boolean
         * @default undefined
         */
         showZero: undefined,
         /**
-        * @name dxchartoptions.valueaxis.synchronizedvalue
-        * @publicName synchronizedValue
+        * @name dxChartOptions.valueAxis.synchronizedValue
         * @type number
         * @default undefined
         */
         synchronizedValue: undefined,
         /**
-        * @name dxchartoptions.valueaxis.multipleaxesspacing
-        * @publicName multipleAxesSpacing
+        * @name dxChartOptions.valueAxis.multipleAxesSpacing
         * @type number
         * @default 5
         */
         multipleAxesSpacing: 5,
         /**
-        * @name dxchartoptions.valueaxis.tickInterval
-        * @publicName tickInterval
+        * @name dxChartOptions.valueAxis.tickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
-        * @name dxchartoptions.valueaxis.minortickinterval
-        * @publicName minorTickInterval
+        * @name dxChartOptions.valueAxis.minorTickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
         /**
-        * @name dxchartoptions.valueaxis.minortickcount
-        * @publicName minorTickCount
+        * @name dxChartOptions.valueAxis.minorTickCount
         * @type number
         * @default undefined
         */
         minorTickCount: undefined,
         /**
-        * @name dxchartoptions.valueaxis.breaks
-        * @publicName breaks
+        * @name dxChartOptions.valueAxis.breaks
         * @type Array<ScaleBreak>
         * @inherits ScaleBreak
         * @default undefined
@@ -1983,50 +1707,43 @@ var dxChart = {
         */
         breaks: undefined,
         /**
-        * @name dxchartoptions.valueaxis.autobreaksenabled
-        * @publicName autoBreaksEnabled
+        * @name dxChartOptions.valueAxis.autoBreaksEnabled
         * @type boolean
         * @default false
         */
         autoBreaksEnabled: false,
         /**
-        * @name dxchartoptions.valueaxis.maxautobreakcount
-        * @publicName maxAutoBreakCount
+        * @name dxChartOptions.valueAxis.maxAutoBreakCount
         * @type numeric
         * @default 4
         */
         maxAutoBreakCount: 4,
         /**
-        * @name dxchartoptions.valueaxis.title
-        * @publicName title
+        * @name dxChartOptions.valueAxis.title
         * @type string|object
         */
         title: {
             /**
-            * @name dxchartoptions.valueaxis.title.text
-            * @publicName text
+            * @name dxChartOptions.valueAxis.title.text
             * @type string
             * @default undefined
             */
             text: undefined
         },
         /**
-        * @name dxchartoptions.valueaxis.name
-        * @publicName name
+        * @name dxChartOptions.valueAxis.name
         * @type string
         * @default undefined
         * @notUsedInTheme
         */
         name: undefined,
         /**
-        * @name dxchartoptions.valueaxis.label
-        * @publicName label
+        * @name dxChartOptions.valueAxis.label
         * @type object
         */
         label: {
             /**
-            * @name dxchartoptions.valueaxis.label.customizetext
-            * @publicName customizeText
+            * @name dxChartOptions.valueAxis.label.customizeText
             * @type function(axisValue)
             * @type_function_param1 axisValue:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -2036,8 +1753,7 @@ var dxChart = {
             */
             customizeText: undefined,
             /**
-            * @name dxchartoptions.valueaxis.label.customizehint
-            * @publicName customizeHint
+            * @name dxChartOptions.valueAxis.label.customizeHint
             * @type function(axisValue)
             * @type_function_param1 axisValue:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -2046,56 +1762,48 @@ var dxChart = {
             */
             customizeHint: undefined,
             /**
-            * @name dxchartoptions.valueaxis.label.format
-            * @publicName format
+            * @name dxChartOptions.valueAxis.label.format
             * @extends CommonVizFormat
             */
             format: '',
             /**
-            * @name dxchartoptions.valueaxis.label.precision
-            * @publicName precision
+            * @name dxChartOptions.valueAxis.label.precision
             * @extends CommonVizPrecision
             */
             precision: 0
         },
         /**
-        * @name dxchartoptions.valueaxis.strips
-        * @publicName strips
+        * @name dxChartOptions.valueAxis.strips
         * @type Array<Object>
         * @notUsedInTheme
-        * @inherits dxchartoptions.commonaxissettings.stripstyle
+        * @inherits dxChartOptions.commonAxisSettings.stripStyle
         */
         strips: [{
             /**
-            * @name dxchartoptions.valueaxis.strips.startvalue
-            * @publicName startValue
+            * @name dxChartOptions.valueAxis.strips.startValue
             * @type number | datetime | string
             * @default undefined
             */
             startValue: undefined,
             /**
-            * @name dxchartoptions.valueaxis.strips.endvalue
-            * @publicName endValue
+            * @name dxChartOptions.valueAxis.strips.endValue
             * @type number | datetime | string
             * @default undefined
             */
             endValue: undefined,
             /**
-            * @name dxchartoptions.valueaxis.strips.color
-            * @publicName color
+            * @name dxChartOptions.valueAxis.strips.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxchartoptions.valueaxis.strips.label
-            * @publicName label
+            * @name dxChartOptions.valueAxis.strips.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.valueaxis.strips.label.text
-                * @publicName text
+                * @name dxChartOptions.valueAxis.strips.label.text
                 * @type string
                 * @default undefined
                 */
@@ -2103,27 +1811,23 @@ var dxChart = {
             }
         }],
         /**
-        * @name dxchartoptions.valueaxis.constantlinestyle
-        * @publicName constantLineStyle
+        * @name dxChartOptions.valueAxis.constantLineStyle
         * @type object
         */
         constantLineStyle: {
             /**
-            * @name dxchartoptions.valueaxis.constantlinestyle.label
-            * @publicName label
+            * @name dxChartOptions.valueAxis.constantLineStyle.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.valueaxis.constantlinestyle.label.horizontalalignment
-                * @publicName horizontalAlignment
+                * @name dxChartOptions.valueAxis.constantLineStyle.label.horizontalAlignment
                 * @type Enums.HorizontalAlignment
                 * @default 'left'
                 */
                 horizontalAlignment: 'left',
                 /**
-                * @name dxchartoptions.valueaxis.constantlinestyle.label.verticalalignment
-                * @publicName verticalAlignment
+                * @name dxChartOptions.valueAxis.constantLineStyle.label.verticalAlignment
                 * @type Enums.VerticalAlignment
                 * @default 'top'
                 */
@@ -2131,43 +1835,37 @@ var dxChart = {
             }
         },
         /**
-        * @name dxchartoptions.valueaxis.constantlines
-        * @publicName constantLines
+        * @name dxChartOptions.valueAxis.constantLines
         * @type Array<Object>
         * @notUsedInTheme
-        * @inherits dxchartoptions.commonaxissettings.constantlinestyle
+        * @inherits dxChartOptions.commonAxisSettings.constantLineStyle
         */
         constantLines: [{
             /**
-            * @name dxchartoptions.valueaxis.constantlines.value
-            * @publicName value
+            * @name dxChartOptions.valueAxis.constantLines.value
             * @type number | datetime | string
             * @default undefined
             */
             value: undefined,
             /**
-            * @name dxchartoptions.valueaxis.constantlines.label
-            * @publicName label
+            * @name dxChartOptions.valueAxis.constantLines.label
             * @type object
             */
             label: {
                 /**
-                * @name dxchartoptions.valueaxis.constantlines.label.text
-                * @publicName text
+                * @name dxChartOptions.valueAxis.constantLines.label.text
                 * @type string
                 * @default undefined
                 */
                 text: undefined,
                 /**
-                * @name dxchartoptions.valueaxis.constantlines.label.horizontalalignment
-                * @publicName horizontalAlignment
+                * @name dxChartOptions.valueAxis.constantLines.label.horizontalAlignment
                 * @type Enums.HorizontalAlignment
                 * @default 'left'
                 */
                 horizontalAlignment: 'left',
                 /**
-                * @name dxchartoptions.valueaxis.constantlines.label.verticalalignment
-                * @publicName verticalAlignment
+                * @name dxChartOptions.valueAxis.constantLines.label.verticalAlignment
                 * @type Enums.VerticalAlignment
                 * @default 'top'
                 */
@@ -2175,70 +1873,60 @@ var dxChart = {
             }
         }],
         /**
-        * @name dxchartoptions.valueaxis.position
-        * @publicName position
+        * @name dxChartOptions.valueAxis.position
         * @type Enums.Position
         * @default 'left'
         */
         position: 'left',
         /**
-        * @name dxchartoptions.valueaxis.min
-        * @publicName min
+        * @name dxChartOptions.valueAxis.min
         * @type number | datetime | string
         * @default undefined
         */
         min: undefined,
         /**
-        * @name dxchartoptions.valueaxis.max
-        * @publicName max
+        * @name dxChartOptions.valueAxis.max
         * @type number | datetime | string
         * @default undefined
         */
         max: undefined,
         /**
-        * @name dxchartoptions.valueaxis.axisdivisionfactor
-        * @publicName axisDivisionFactor
+        * @name dxChartOptions.valueAxis.axisDivisionFactor
         * @type number
         * @default 40
         */
         axisDivisionFactor: 40,
         /**
-        * @name dxchartoptions.valueaxis.categories
-        * @publicName categories
+        * @name dxChartOptions.valueAxis.categories
         * @type Array<number,string,Date>
         */
         categories: [],
         /**
-        * @name dxchartoptions.valueaxis.type
-        * @publicName type
+        * @name dxChartOptions.valueAxis.type
         * @type Enums.AxisScaleType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxchartoptions.valueaxis.logarithmbase
-        * @publicName logarithmBase
+        * @name dxChartOptions.valueAxis.logarithmBase
         * @type number
         * @default 10
         */
         logarithmBase: 10,
         /**
-        * @name dxchartoptions.valueaxis.valuetype
-        * @publicName valueType
+        * @name dxChartOptions.valueAxis.valueType
         * @type Enums.ChartDataType
         * @default undefined
         */
         valueType: undefined,
         /**
-        * @name dxchartoptions.valueaxis.pane
-        * @publicName pane
+        * @name dxChartOptions.valueAxis.pane
         * @type string
         * @default undefined
         */
         pane: undefined,
         /**
-        * @name dxchartoptions.valueaxis.endontick
-        * @publicName endOnTick
+        * @name dxChartOptions.valueAxis.endOnTick
         * @type boolean
         * @default undefined
         * @inheritdoc
@@ -2246,22 +1934,19 @@ var dxChart = {
         endOnTick: undefined
     },
     /**
-    * @name dxchartoptions.tooltip
+    * @name dxChartOptions.tooltip
     * @type object
-    * @publicName tooltip
     * @inheritdoc
     **/
     tooltip: {
         /**
-        * @name dxchartoptions.tooltip.shared
-        * @publicName shared
+        * @name dxChartOptions.tooltip.shared
         * @type boolean
         * @default false
         */
         shared: false,
         /**
-        * @name dxchartoptions.tooltip.location
-        * @publicName location
+        * @name dxChartOptions.tooltip.location
         * @type Enums.ChartTooltipLocation
         * @default 'center'
         * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandlestickSeries
@@ -2269,8 +1954,7 @@ var dxChart = {
         location: 'center'
     },
     /**
-    * @name dxchartoptions.onserieshoverchanged
-    * @publicName onSeriesHoverChanged
+    * @name dxChartOptions.onSeriesHoverChanged
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
@@ -2280,8 +1964,7 @@ var dxChart = {
     */
     onSeriesHoverChanged: function() { },
     /**
-    * @name dxchartoptions.onseriesselectionchanged
-    * @publicName onSeriesSelectionChanged
+    * @name dxChartOptions.onSeriesSelectionChanged
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
@@ -2291,16 +1974,14 @@ var dxChart = {
     */
     onSeriesSelectionChanged: function() { },
     /**
-     * @name dxchartoptions.onzoomstart
-     * @publicName onZoomStart
+     * @name dxChartOptions.onZoomStart
      * @extends Action
      * @notUsedInTheme
      * @action
      */
     onZoomStart: function() { },
     /**
-     * @name dxchartoptions.onzoomend
-     * @publicName onZoomEnd
+     * @name dxChartOptions.onZoomEnd
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -2311,8 +1992,7 @@ var dxChart = {
      */
     onZoomEnd: function() { },
     /**
-    * @name dxchartoptions.series
-    * @publicName series
+    * @name dxChartOptions.series
     * @type Object|Array<Object>
     * @default undefined
     * @inherits dxChartSeriesTypes.CommonSeries
@@ -2322,38 +2002,33 @@ var dxChart = {
     */
     series: [{
         /**
-        * @name dxchartoptions.series.name
-        * @publicName name
+        * @name dxChartOptions.series.name
         * @type string
         * @default undefined
         */
         name: undefined,
         /**
-        * @name dxchartoptions.series.tag
-        * @publicName tag
+        * @name dxChartOptions.series.tag
         * @type any
         * @default undefined
         */
         tag: undefined,
         /**
-        * @name dxchartoptions.series.type
-        * @publicName type
+        * @name dxChartOptions.series.type
         * @type Enums.SeriesType
         * @default 'line'
         */
         type: 'line'
     }],
     /**
-    * @name dxchartoptions.minbubblesize
-    * @publicName minBubbleSize
+    * @name dxChartOptions.minBubbleSize
     * @default 12
     * @type number
     * @propertyOf dxChartSeriesTypes.BubbleSeries
     */
     minBubbleSize: 12,
     /**
-    * @name dxchartoptions.maxbubblesize
-    * @publicName maxBubbleSize
+    * @name dxChartOptions.maxBubbleSize
     * @default 0.2
     * @type number
     * @propertyOf dxChartSeriesTypes.BubbleSeries
@@ -2361,7 +2036,7 @@ var dxChart = {
     maxBubbleSize: 0.2,
 
     /**
-    * @name dxchartmethods.zoomargument
+    * @name dxchartmethods.zoomArgument
     * @publicName zoomArgument(startValue,endValue)
     * @param1 startValue:Number|Date|string
     * @param2 endValue:Number|Date|string
@@ -2370,37 +2045,32 @@ var dxChart = {
 };
 
 /**
-* @name dxpiechart
-* @publicName dxPieChart
+* @name dxPieChart
 * @inherits BaseChart
 * @module viz/pie_chart
 * @export default
 */
 var dxPieChart = {
     /**
-    * @name dxpiechart.options
-    * @publicName Options
+    * @name dxPieChart.Options
     * @namespace DevExpress.viz.charts
     * @hidden
     */
     /**
-    * @name dxpiechartoptions.seriestemplate
-    * @publicName seriesTemplate
+    * @name dxPieChartOptions.seriesTemplate
     * @type object
     * @default undefined
     * @notUsedInTheme
     */
     seriesTemplate: {
         /**
-        * @name dxpiechartoptions.seriestemplate.nameField
-        * @publicName nameField
+        * @name dxPieChartOptions.seriesTemplate.nameField
         * @type string
         * @default 'series'
         */
         nameField: 'series',
         /**
-        * @name dxpiechartoptions.seriestemplate.customizeSeries
-        * @publicName customizeSeries
+        * @name dxPieChartOptions.seriesTemplate.customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
         * @type_function_return dxPieChartOptions.series
@@ -2408,21 +2078,18 @@ var dxPieChart = {
         customizeSeries: function() { }
     },
     /**
-    * @name dxpiechartoptions.legend
-    * @publicName legend
+    * @name dxPieChartOptions.legend
     * @type object
     */
     legend: {
         /**
-        * @name dxpiechartoptions.legend.hovermode
-        * @publicName hoverMode
+        * @name dxPieChartOptions.legend.hoverMode
         * @type Enums.PieChartLegendHoverMode
         * @default 'allArgumentPoints'
         */
         hoverMode: 'allArgumentPoints',
         /**
-        * @name dxpiechartoptions.legend.customizetext
-        * @publicName customizeText
+        * @name dxPieChartOptions.legend.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_param1_field1 pointName:any
@@ -2433,8 +2100,7 @@ var dxPieChart = {
         */
         customizeText: undefined,
         /**
-       * @name dxpiechartoptions.legend.customizehint
-       * @publicName customizeHint
+       * @name dxPieChartOptions.legend.customizeHint
        * @type function(pointInfo)
        * @type_function_param1 pointInfo:object
        * @type_function_param1_field1 pointName:any
@@ -2445,21 +2111,18 @@ var dxPieChart = {
         customizeHint: undefined,
     },
     /**
-    * @name dxpiechartoptions.resolvelabeloverlapping
-    * @publicName resolveLabelOverlapping
+    * @name dxPieChartOptions.resolveLabelOverlapping
     * @type Enums.PieChartResolveLabelOverlapping
     * @default "none"
     */
     resolveLabelOverlapping: "none",
     /**
-    * @name dxpiechartoptions.palette
-    * @publicName palette
+    * @name dxPieChartOptions.palette
     * @extends CommonVizPalette
     */
     palette: [],
     /**
-    * @name dxpiechartoptions.series
-    * @publicName series
+    * @name dxPieChartOptions.series
     * @type Object|Array<Object>
     * @default undefined
     * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
@@ -2468,38 +2131,33 @@ var dxPieChart = {
     */
     series: [{
         /**
-        * @name dxpiechartoptions.series.name
-        * @publicName name
+        * @name dxPieChartOptions.series.name
         * @type string
         * @default undefined
         */
         name: undefined,
         /**
-        * @name dxpiechartoptions.series.tag
-        * @publicName tag
+        * @name dxPieChartOptions.series.tag
         * @type any
         * @default undefined
         */
         tag: undefined,
         /**
-        * @name dxpiechartoptions.series.type
-        * @publicName type
+        * @name dxPieChartOptions.series.type
         * @type Enums.PieChartType
         * @default 'pie'
-        * @deprecated dxpiechartoptions.type
+        * @deprecated dxPieChartOptions.type
         */
         type: 'pie'
     }],
     /**
-    * @name dxpiechartoptions.type
-    * @publicName type
+    * @name dxPieChartOptions.type
     * @type Enums.PieChartType
     * @default 'pie'
     */
     type: 'pie',
     /**
-    * @name dxpiechartoptions.commonseriessettings
-    * @publicName commonSeriesSettings
+    * @name dxPieChartOptions.commonSeriesSettings
     * @type object
     * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
     * @hideDefaults true
@@ -2507,60 +2165,53 @@ var dxPieChart = {
     */
     commonSeriesSettings: {
         /**
-        * @name dxpiechartoptions.commonseriessettings.type
-        * @publicName type
+        * @name dxPieChartOptions.commonSeriesSettings.type
         * @type Enums.PieChartType
         * @default 'pie'
-        * @deprecated dxpiechartoptions.type
+        * @deprecated dxPieChartOptions.type
         */
         type: 'pie'
     },
     /**
-    * @name dxpiechartmethods.getseries
+    * @name dxPieChartMethods.getSeries
     * @publicName getSeries()
     * @return pieChartSeriesObject
-    * @deprecated basechartmethods.getallseries
+    * @deprecated BaseChartMethods.getAllSeries
     */
     getSeries: function() { },
     /**
-    * @name dxpiechartoptions.diameter
-    * @publicName diameter
+    * @name dxPieChartOptions.diameter
     * @type number
     * @default undefined
     */
     diameter: undefined,
     /**
-    * @name dxpiechartoptions.mindiameter
-    * @publicName minDiameter
+    * @name dxPieChartOptions.minDiameter
     * @type number
     * @default 0.5
     */
     minDiameter: 0.5,
     /**
-   * @name dxpiechartoptions.segmentsdirection
-   * @publicName segmentsDirection
+   * @name dxPieChartOptions.segmentsDirection
    * @type Enums.PieChartSegmentsDirection
    * @default 'clockwise'
    */
     segmentsDirection: 'clockwise',
     /**
-    * @name dxpiechartoptions.startangle
-    * @publicName startAngle
+    * @name dxPieChartOptions.startAngle
     * @type number
     * @default 0
     */
     startAngle: 0,
     /**
-    * @name dxpiechartoptions.innerradius
-    * @publicName innerRadius
+    * @name dxPieChartOptions.innerRadius
     * @type number
     * @default 0.5
     * @propertyOf dxChartSeriesTypes.DoughnutSeries
     */
     innerRadius: 0.5,
     /**
-    * @name dxpiechartoptions.onlegendclick
-    * @publicName onLegendClick
+    * @name dxPieChartOptions.onLegendClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -2573,8 +2224,7 @@ var dxPieChart = {
     */
     onLegendClick: function() { },
     /**
-    * @name dxpiechartoptions.sizegroup
-    * @publicName sizeGroup
+    * @name dxPieChartOptions.sizeGroup
     * @type string
     * @default undefined
     */
@@ -2582,37 +2232,32 @@ var dxPieChart = {
 };
 
 /**
-* @name dxpolarchart
-* @publicName dxPolarChart
+* @name dxPolarChart
 * @inherits BaseChart
 * @module viz/polar_chart
 * @export default
 */
 var dxPolarChart = {
     /**
-    * @name dxpolarchart.options
-    * @publicName Options
+    * @name dxPolarChart.Options
     * @namespace DevExpress.viz.charts
     * @hidden
     */
     /**
-    * @name dxpolarchartoptions.seriestemplate
-    * @publicName seriesTemplate
+    * @name dxPolarChartOptions.seriesTemplate
     * @type object
     * @default undefined
     * @notUsedInTheme
     */
     seriesTemplate: {
         /**
-        * @name dxpolarchartoptions.seriestemplate.nameField
-        * @publicName nameField
+        * @name dxPolarChartOptions.seriesTemplate.nameField
         * @type string
         * @default 'series'
         */
         nameField: 'series',
         /**
-        * @name dxpolarchartoptions.seriestemplate.customizeSeries
-        * @publicName customizeSeries
+        * @name dxPolarChartOptions.seriesTemplate.customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
         * @type_function_return dxPolarChartOptions.series
@@ -2620,36 +2265,31 @@ var dxPolarChart = {
         customizeSeries: function() { }
     },
     /**
-     * @name dxpolarchartoptions.usespiderweb
-     * @publicName useSpiderWeb
+     * @name dxPolarChartOptions.useSpiderWeb
      * @type boolean
      * @default false
      */
     useSpiderWeb: false,
     /**
-    * @name dxpolarchartoptions.resolvelabeloverlapping
-    * @publicName resolveLabelOverlapping
+    * @name dxPolarChartOptions.resolveLabelOverlapping
     * @type Enums.PolarChartResolveLabelOverlapping
     * @default "none"
     */
     resolveLabelOverlapping: "none",
     /**
-    * @name dxpolarchartoptions.seriesSelectionMode
-    * @publicName seriesSelectionMode
+    * @name dxPolarChartOptions.seriesSelectionMode
     * @type Enums.ChartElementSelectionMode
     * @default 'single'
     */
     seriesSelectionMode: 'single',
     /**
-    * @name dxpolarchartoptions.containerbackgroundcolor
-    * @publicName containerBackgroundColor
+    * @name dxPolarChartOptions.containerBackgroundColor
     * @type string
     * @default '#FFFFFF'
     */
     containerBackgroundColor: '#FFFFFF',
     /**
-    * @name dxpolarchartoptions.onseriesclick
-    * @publicName onSeriesClick
+    * @name dxPolarChartOptions.onSeriesClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -2661,8 +2301,7 @@ var dxPolarChart = {
     */
     onSeriesClick: function() { },
     /**
-    * @name dxpolarchartoptions.onlegendclick
-    * @publicName onLegendClick
+    * @name dxPolarChartOptions.onLegendClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -2674,46 +2313,40 @@ var dxPolarChart = {
     */
     onLegendClick: function() { },
     /**
-    * @name dxpolarchartoptions.equalbarwidth
-    * @publicName equalBarWidth
+    * @name dxPolarChartOptions.equalBarWidth
     * @type boolean
     * @deprecated dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
     */
     equalBarWidth: true,
     /**
-    * @name dxpolarchartoptions.barwidth
-    * @publicName barWidth
+    * @name dxPolarChartOptions.barWidth
     * @type number
     * @deprecated dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding
     */
     barWidth: undefined,
     /**
-    * @name dxpolarchartoptions.bargrouppadding
-    * @publicName barGroupPadding
+    * @name dxPolarChartOptions.barGroupPadding
     * @type number
     * @default 0.3
     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     barGroupPadding: 0.3,
     /**
-    * @name dxpolarchartoptions.bargroupwidth
-    * @publicName barGroupWidth
+    * @name dxPolarChartOptions.barGroupWidth
     * @type number
     * @default undefined
     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     barGroupWidth: undefined,
     /**
-    * @name dxpolarchartoptions.negativesaszeroes
-    * @publicName negativesAsZeroes
+    * @name dxPolarChartOptions.negativesAsZeroes
     * @type boolean
     * @default false
     * @propertyOf dxChartSeriesTypes.stackedbarpolarseries
     */
     negativesAsZeroes: false,
     /**
-    * @name dxpolarchartoptions.commonseriessettings
-    * @publicName commonSeriesSettings
+    * @name dxPolarChartOptions.commonSeriesSettings
     * @type object
     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
     * @hideDefaults true
@@ -2721,66 +2354,56 @@ var dxPolarChart = {
     */
     commonSeriesSettings: {
         /**
-        * @name dxpolarchartoptions.commonseriessettings.type
-        * @publicName type
+        * @name dxPolarChartOptions.commonSeriesSettings.type
         * @type Enums.PolarChartSeriesType
         * @default 'scatter'
         */
         type: 'scatter',
         /**
-        * @name dxpolarchartoptions.commonseriessettings.line
-        * @publicName line
+        * @name dxPolarChartOptions.commonSeriesSettings.line
         * @type object
         */
         line: {},
         /**
-        * @name dxpolarchartoptions.commonseriessettings.area
-        * @publicName area
+        * @name dxPolarChartOptions.commonSeriesSettings.area
         * @type object
         */
         area: {},
         /**
-        * @name dxpolarchartoptions.commonseriessettings.bar
-        * @publicName bar
+        * @name dxPolarChartOptions.commonSeriesSettings.bar
         * @type object
         */
         bar: {},
         /**
-        * @name dxpolarchartoptions.commonseriessettings.stackedbar
-        * @publicName stackedbar
+        * @name dxPolarChartOptions.commonSeriesSettings.stackedbar
         * @type object
         */
         stackedbar: {},
         /**
-        * @name dxpolarchartoptions.commonseriessettings.scatter
-        * @publicName scatter
+        * @name dxPolarChartOptions.commonSeriesSettings.scatter
         * @type object
         */
         scatter: {}
     },
     /**
-    * @name dxpolarchartoptions.dataPrepareSettings
-    * @publicName dataPrepareSettings
+    * @name dxPolarChartOptions.dataPrepareSettings
     * @type object
     */
     dataPrepareSettings: {
         /**
-        * @name dxpolarchartoptions.dataPrepareSettings.checkTypeForAllData
-        * @publicName checkTypeForAllData
+        * @name dxPolarChartOptions.dataPrepareSettings.checkTypeForAllData
         * @type boolean
         * @default false
         */
         checkTypeForAllData: false,
         /**
-        * @name dxpolarchartoptions.dataPrepareSettings.convertToAxisDataType
-        * @publicName convertToAxisDataType
+        * @name dxPolarChartOptions.dataPrepareSettings.convertToAxisDataType
         * @type boolean
         * @default true
         */
         convertToAxisDataType: true,
         /**
-        * @name dxpolarchartoptions.dataPrepareSettings.sortingMethod
-        * @publicName sortingMethod
+        * @name dxPolarChartOptions.dataPrepareSettings.sortingMethod
         * @type boolean|function(a,b)
         * @type_function_param1 a:object
         * @type_function_param1_field1 arg:Date|Number|string
@@ -2794,8 +2417,7 @@ var dxPolarChart = {
         sortingMethod: true
     },
     /**
-    * @name dxpolarchartoptions.onargumentaxisclick
-    * @publicName onArgumentAxisClick
+    * @name dxPolarChartOptions.onArgumentAxisClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -2807,14 +2429,12 @@ var dxPolarChart = {
     */
     onArgumentAxisClick: function() { },
     /**
-    * @name dxpolarchartoptions.legend
-    * @publicName legend
+    * @name dxPolarChartOptions.legend
     * @type object
     */
     legend: {
         /**
-        * @name dxpolarchartoptions.legend.customizetext
-        * @publicName customizeText
+        * @name dxPolarChartOptions.legend.customizeText
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
         * @type_function_param1_field1 seriesName:any
@@ -2825,8 +2445,7 @@ var dxPolarChart = {
         */
         customizeText: undefined,
         /**
-        * @name dxpolarchartoptions.legend.customizehint
-        * @publicName customizeHint
+        * @name dxPolarChartOptions.legend.customizeHint
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
         * @type_function_param1_field1 seriesName:any
@@ -2836,78 +2455,67 @@ var dxPolarChart = {
         */
         customizeHint: undefined,
         /**
-        * @name dxpolarchartoptions.legend.hovermode
-        * @publicName hoverMode
+        * @name dxPolarChartOptions.legend.hoverMode
         * @type Enums.ChartLegendHoverMode
         * @default 'includePoints'
         */
         hoverMode: 'includePoints'
     },
     /**
-    * @name dxpolarchartoptions.commonaxissettings
-    * @publicName commonAxisSettings
+    * @name dxPolarChartOptions.commonAxisSettings
     * @type object
     */
     commonAxisSettings: {
         /**
-        * @name dxpolarchartoptions.commonaxissettings.setticksatunitbeginning
-        * @publicName setTicksAtUnitBeginning
+        * @name dxPolarChartOptions.commonAxisSettings.setTicksAtUnitBeginning
         * @type boolean
         * @default true
         * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**
-        * @name dxpolarchartoptions.commonaxissettings.discreteaxisdivisionMode
-        * @publicName discreteAxisDivisionMode
+        * @name dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode
         * @type Enums.DiscreteAxisDivisionMode
         * @default 'betweenLabels'
         */
         discreteAxisDivisionMode: 'betweenLabels',
         /**
-        * @name dxpolarchartoptions.commonaxissettings.visible
-        * @publicName visible
+        * @name dxPolarChartOptions.commonAxisSettings.visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name dxpolarchartoptions.commonaxissettings.color
-        * @publicName color
+        * @name dxPolarChartOptions.commonAxisSettings.color
         * @type string
         * @default '#d3d3d3'
         */
         color: '#d3d3d3',
         /**
-        * @name dxpolarchartoptions.commonaxissettings.width
-        * @publicName width
+        * @name dxPolarChartOptions.commonAxisSettings.width
         * @type number
         * @default 1
         */
         width: 1,
         /**
-        * @name dxpolarchartoptions.commonaxissettings.opacity
-        * @publicName opacity
+        * @name dxPolarChartOptions.commonAxisSettings.opacity
         * @type number
         * @default undefined
         */
         opacity: undefined,
         /**
-        * @name dxpolarchartoptions.commonaxissettings.label
-        * @publicName label
+        * @name dxPolarChartOptions.commonAxisSettings.label
         * @type object
         */
         label: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.label.visible
-            * @publicName visible
+            * @name dxPolarChartOptions.commonAxisSettings.label.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.label.overlappingBehavior
-            * @publicName overlappingBehavior
+            * @name dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior
             * @type string
             * @default 'hide'
             * @acceptValues 'hide' | 'none'
@@ -2915,49 +2523,42 @@ var dxPolarChart = {
             */
             overlappingBehavior: 'hide',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.label.indentfromaxis
-            * @publicName indentFromAxis
+            * @name dxPolarChartOptions.commonAxisSettings.label.indentFromAxis
             * @type number
             * @default 5
             */
             indentFromAxis: 5,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.label.font
-            * @publicName font
+            * @name dxPolarChartOptions.commonAxisSettings.label.font
             * @type object
             */
             font: {
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.label.font.family
-                * @publicName family
+                * @name dxPolarChartOptions.commonAxisSettings.label.font.family
                 * @type string
                 * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                 */
                 family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.label.font.weight
-                * @publicName weight
+                * @name dxPolarChartOptions.commonAxisSettings.label.font.weight
                 * @type number
                 * @default 400
                 */
                 weight: 400,
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.label.font.color
-                * @publicName color
+                * @name dxPolarChartOptions.commonAxisSettings.label.font.color
                 * @type string
                 * @default '#767676'
                 */
                 color: '#767676',
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.label.font.size
-                * @publicName size
+                * @name dxPolarChartOptions.commonAxisSettings.label.font.size
                 * @type number|string
                 * @default 12
                 */
                 size: 12,
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.label.font.opacity
-                * @publicName opacity
+                * @name dxPolarChartOptions.commonAxisSettings.label.font.opacity
                 * @type number
                 * @default undefined
                 */
@@ -2965,208 +2566,178 @@ var dxPolarChart = {
             }
         },
         /**
-        * @name dxpolarchartoptions.commonaxissettings.grid
-        * @publicName grid
+        * @name dxPolarChartOptions.commonAxisSettings.grid
         * @type object
         */
         grid: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.grid.visible
-            * @publicName visible
+            * @name dxPolarChartOptions.commonAxisSettings.grid.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.grid.color
-            * @publicName color
+            * @name dxPolarChartOptions.commonAxisSettings.grid.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.grid.width
-            * @publicName width
+            * @name dxPolarChartOptions.commonAxisSettings.grid.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.grid.opacity
-            * @publicName opacity
+            * @name dxPolarChartOptions.commonAxisSettings.grid.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name dxpolarchartoptions.commonaxissettings.minorgrid
-        * @publicName minorGrid
+        * @name dxPolarChartOptions.commonAxisSettings.minorGrid
         * @type object
         */
         minorGrid: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minorgrid.visible
-            * @publicName visible
+            * @name dxPolarChartOptions.commonAxisSettings.minorGrid.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minorgrid.color
-            * @publicName color
+            * @name dxPolarChartOptions.commonAxisSettings.minorGrid.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minorgrid.width
-            * @publicName width
+            * @name dxPolarChartOptions.commonAxisSettings.minorGrid.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minorgrid.opacity
-            * @publicName opacity
+            * @name dxPolarChartOptions.commonAxisSettings.minorGrid.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name dxpolarchartoptions.commonaxissettings.tick
-        * @publicName tick
+        * @name dxPolarChartOptions.commonAxisSettings.tick
         * @type object
         */
         tick: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.tick.visible
-            * @publicName visible
+            * @name dxPolarChartOptions.commonAxisSettings.tick.visible
             * @type boolean
             * @default true
             */
             visible: true,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.tick.color
-            * @publicName color
+            * @name dxPolarChartOptions.commonAxisSettings.tick.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.tick.opacity
-            * @publicName opacity
+            * @name dxPolarChartOptions.commonAxisSettings.tick.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.tick.width
-            * @publicName width
+            * @name dxPolarChartOptions.commonAxisSettings.tick.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.tick.length
-            * @publicName length
+            * @name dxPolarChartOptions.commonAxisSettings.tick.length
             * @type number
             * @default 8
             */
             length: 8
         },
         /**
-       * @name dxpolarchartoptions.commonaxissettings.minortick
-       * @publicName minorTick
+       * @name dxPolarChartOptions.commonAxisSettings.minorTick
        * @type object
        */
         minorTick: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minortick.visible
-            * @publicName visible
+            * @name dxPolarChartOptions.commonAxisSettings.minorTick.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minortick.color
-            * @publicName color
+            * @name dxPolarChartOptions.commonAxisSettings.minorTick.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minortick.opacity
-            * @publicName opacity
+            * @name dxPolarChartOptions.commonAxisSettings.minorTick.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minortick.width
-            * @publicName width
+            * @name dxPolarChartOptions.commonAxisSettings.minorTick.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.minortick.length
-            * @publicName length
+            * @name dxPolarChartOptions.commonAxisSettings.minorTick.length
             * @type number
             * @default 8
             */
             length: 8
         },
         /**
-        * @name dxpolarchartoptions.commonaxissettings.stripstyle
-        * @publicName stripStyle
+        * @name dxPolarChartOptions.commonAxisSettings.stripStyle
         * @type object
         */
         stripStyle: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.stripstyle.label
-            * @publicName label
+            * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label
             * @type object
             */
             label: {
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.stripstyle.label.font
-                * @publicName font
+                * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
                 * @type object
                 */
                 font: {
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.stripstyle.label.font.family
-                    * @publicName family
+                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.family
                     * @type string
                     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                     */
                     family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.stripstyle.label.font.weight
-                    * @publicName weight
+                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.weight
                     * @type number
                     * @default 400
                     */
                     weight: 400,
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.stripstyle.label.font.color
-                    * @publicName color
+                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.color
                     * @type string
                     * @default '#767676'
                     */
                     color: '#767676',
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.stripstyle.label.font.size
-                    * @publicName size
+                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.size
                     * @type number|string
                     * @default 12
                     */
                     size: 12,
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.stripstyle.label.font.opacity
-                    * @publicName opacity
+                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.opacity
                     * @type number
                     * @default undefined
                     */
@@ -3175,82 +2746,70 @@ var dxPolarChart = {
             }
         },
         /**
-        * @name dxpolarchartoptions.commonaxissettings.constantlinestyle
-        * @publicName constantLineStyle
+        * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle
         * @type object
         */
         constantLineStyle: {
             /**
-            * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.width
-            * @publicName width
+            * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.dashstyle
-            * @publicName dashStyle
+            * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
             dashStyle: 'solid',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.color
-            * @publicName color
+            * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.color
             * @type string
             * @default '#000000'
             */
             color: '#000000',
             /**
-            * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label
-            * @publicName label
+            * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label
             * @type object
             */
             label: {
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.visible
-                * @publicName visible
+                * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.visible
                 * @type boolean
                 * @default true
                 */
                 visible: true,
                 /**
-                * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.font
-                * @publicName font
+                * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
                 * @type object
                 */
                 font: {
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.font.family
-                    * @publicName family
+                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.family
                     * @type string
                     * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
                     */
                     family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.font.weight
-                    * @publicName weight
+                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.weight
                     * @type number
                     * @default 400
                     */
                     weight: 400,
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.font.color
-                    * @publicName color
+                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.color
                     * @type string
                     * @default '#767676'
                     */
                     color: '#767676',
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.font.size
-                    * @publicName size
+                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.size
                     * @type number|string
                     * @default 12
                     */
                     size: 12,
                     /**
-                    * @name dxpolarchartoptions.commonaxissettings.constantlinestyle.label.font.opacity
-                    * @publicName opacity
+                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.opacity
                     * @type number
                     * @default undefined
                     */
@@ -3259,92 +2818,79 @@ var dxPolarChart = {
             }
         },
         /**
-        * @name dxpolarchartoptions.commonaxissettings.inverted
-        * @publicName inverted
+        * @name dxPolarChartOptions.commonAxisSettings.inverted
         * @type boolean
         * @default false
         */
         inverted: false,
         /**
-        * @name dxpolarchartoptions.commonaxissettings.allowdecimals
-        * @publicName allowDecimals
+        * @name dxPolarChartOptions.commonAxisSettings.allowDecimals
         * @type boolean
         * @default undefined
         */
         allowDecimals: undefined,
         /**
-        * @name dxpolarchartoptions.commonaxissettings.endontick
-        * @publicName endOnTick
+        * @name dxPolarChartOptions.commonAxisSettings.endOnTick
         * @type boolean
         * @default undefined
         */
         endOnTick: undefined
     },
     /**
-    * @name dxpolarchartoptions.argumentaxis
-    * @publicName argumentAxis
+    * @name dxPolarChartOptions.argumentAxis
     * @type object
-    * @inherits dxpolarchartoptions.commonaxissettings
+    * @inherits dxPolarChartOptions.commonAxisSettings
     */
     argumentAxis: {
         /**
-         * @name dxpolarchartoptions.argumentaxis.startangle
-         * @publicName startAngle
+         * @name dxPolarChartOptions.argumentAxis.startAngle
          * @type number
          * @default 0
          */
         startAngle: 0,
         /**
-         * @name dxpolarchartoptions.argumentaxis.firstpointonstartangle
-         * @publicName firstPointOnStartAngle
+         * @name dxPolarChartOptions.argumentAxis.firstPointOnStartAngle
          * @type boolean
          * @default false
          */
         firstPointOnStartAngle: false,
         /**
-         * @name dxpolarchartoptions.argumentaxis.period
-         * @publicName period
+         * @name dxPolarChartOptions.argumentAxis.period
          * @type number
          * @default undefined
          */
         period: 0,
         /**
-        * @name dxpolarchartoptions.argumentaxis.originvalue
-        * @publicName originValue
+        * @name dxPolarChartOptions.argumentAxis.originValue
         * @type number
         * @default undefined
         */
         originValue: undefined,
         /**
-        * @name dxpolarchartoptions.argumentaxis.tickInterval
-        * @publicName tickInterval
+        * @name dxPolarChartOptions.argumentAxis.tickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
-        * @name dxpolarchartoptions.argumentaxis.minortickinterval
-        * @publicName minorTickInterval
+        * @name dxPolarChartOptions.argumentAxis.minorTickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
         /**
-        * @name dxpolarchartoptions.argumentaxis.minortickcount
-        * @publicName minorTickCount
+        * @name dxPolarChartOptions.argumentAxis.minorTickCount
         * @type number
         * @default undefined
         */
         minorTickCount: undefined,
         /**
-        * @name dxpolarchartoptions.argumentaxis.label
-        * @publicName label
+        * @name dxPolarChartOptions.argumentAxis.label
         * @type object
         */
         label: {
             /**
-            * @name dxpolarchartoptions.argumentaxis.label.customizetext
-            * @publicName customizeText
+            * @name dxPolarChartOptions.argumentAxis.label.customizeText
             * @type function(argument)
             * @type_function_param1 argument:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -3354,8 +2900,7 @@ var dxPolarChart = {
             */
             customizeText: undefined,
             /**
-            * @name dxpolarchartoptions.argumentaxis.label.customizehint
-            * @publicName customizeHint
+            * @name dxPolarChartOptions.argumentAxis.label.customizeHint
             * @type function(argument)
             * @type_function_param1 argument:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -3364,56 +2909,48 @@ var dxPolarChart = {
             */
             customizeHint: undefined,
             /**
-            * @name dxpolarchartoptions.argumentaxis.label.format
-            * @publicName format
+            * @name dxPolarChartOptions.argumentAxis.label.format
             * @extends CommonVizFormat
             */
             format: '',
             /**
-            * @name dxpolarchartoptions.argumentaxis.label.precision
-            * @publicName precision
+            * @name dxPolarChartOptions.argumentAxis.label.precision
             * @extends CommonVizPrecision
             */
             precision: 0
         },
         /**
-        * @name dxpolarchartoptions.argumentaxis.strips
-        * @publicName strips
+        * @name dxPolarChartOptions.argumentAxis.strips
         * @type Array<Object>
         * @notUsedInTheme
-        * @inherits dxpolarchartoptions.commonaxissettings.stripstyle
+        * @inherits dxPolarChartOptions.commonAxisSettings.stripStyle
         */
         strips: [{
             /**
-            * @name dxpolarchartoptions.argumentaxis.strips.startvalue
-            * @publicName startValue
+            * @name dxPolarChartOptions.argumentAxis.strips.startValue
             * @type number | datetime | string
             * @default undefined
             */
             startValue: undefined,
             /**
-            * @name dxpolarchartoptions.argumentaxis.strips.endvalue
-            * @publicName endValue
+            * @name dxPolarChartOptions.argumentAxis.strips.endValue
             * @type number | datetime | string
             * @default undefined
             */
             endValue: undefined,
             /**
-            * @name dxpolarchartoptions.argumentaxis.strips.color
-            * @publicName color
+            * @name dxPolarChartOptions.argumentAxis.strips.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxpolarchartoptions.argumentaxis.strips.label
-            * @publicName label
+            * @name dxPolarChartOptions.argumentAxis.strips.label
             * @type object
             */
             label: {
                 /**
-                * @name dxpolarchartoptions.argumentaxis.strips.label.text
-                * @publicName text
+                * @name dxPolarChartOptions.argumentAxis.strips.label.text
                 * @type string
                 * @default undefined
                 */
@@ -3421,29 +2958,25 @@ var dxPolarChart = {
             }
         }],
         /**
-        * @name dxpolarchartoptions.argumentaxis.constantlines
-        * @publicName constantLines
+        * @name dxPolarChartOptions.argumentAxis.constantLines
         * @type Array<Object>
-        * @inherits dxpolarchartoptions.commonaxissettings.constantlinestyle
+        * @inherits dxPolarChartOptions.commonAxisSettings.constantLineStyle
         * @notUsedInTheme
         */
         constantLines: [{
             /**
-            * @name dxpolarchartoptions.argumentaxis.constantlines.value
-            * @publicName value
+            * @name dxPolarChartOptions.argumentAxis.constantLines.value
             * @type number | datetime | string
             * @default undefined
             */
             value: undefined,
             /**
-            * @name dxpolarchartoptions.argumentaxis.constantlines.label
-            * @publicName label
+            * @name dxPolarChartOptions.argumentAxis.constantLines.label
             * @type object
             */
             label: {
                 /**
-                * @name dxpolarchartoptions.argumentaxis.constantlines.label.text
-                * @publicName text
+                * @name dxPolarChartOptions.argumentAxis.constantLines.label.text
                 * @type string
                 * @default undefined
                 */
@@ -3451,92 +2984,79 @@ var dxPolarChart = {
             }
         }],
         /**
-        * @name dxpolarchartoptions.argumentaxis.axisdivisionfactor
-        * @publicName axisDivisionFactor
+        * @name dxPolarChartOptions.argumentAxis.axisDivisionFactor
         * @type number
         * @default 50
         */
         axisDivisionFactor: 50,
         /**
-        * @name dxpolarchartoptions.argumentaxis.categories
-        * @publicName categories
+        * @name dxPolarChartOptions.argumentAxis.categories
         * @type Array<number,string,Date>
         */
         categories: [],
         /**
-        * @name dxpolarchartoptions.argumentaxis.type
-        * @publicName type
+        * @name dxPolarChartOptions.argumentAxis.type
         * @type Enums.AxisScaleType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxpolarchartoptions.argumentaxis.logarithmbase
-        * @publicName logarithmBase
+        * @name dxPolarChartOptions.argumentAxis.logarithmBase
         * @type number
         * @default 10
         */
         logarithmBase: 10,
         /**
-        * @name dxpolarchartoptions.argumentaxis.argumenttype
-        * @publicName argumentType
+        * @name dxPolarChartOptions.argumentAxis.argumentType
         * @type Enums.ChartDataType
         * @default undefined
         */
         argumentType: undefined,
         /**
-        * @name dxpolarchartoptions.argumentaxis.hovermode
-        * @publicName hoverMode
+        * @name dxPolarChartOptions.argumentAxis.hoverMode
         * @type Enums.ArgumentAxisHoverMode
         * @default 'none'
         */
         hoverMode: 'none'
     },
     /**
-    * @name dxpolarchartoptions.valueaxis
-    * @publicName valueAxis
+    * @name dxPolarChartOptions.valueAxis
     * @type object
-    * @inherits dxpolarchartoptions.commonaxissettings
+    * @inherits dxPolarChartOptions.commonAxisSettings
     */
     valueAxis: {
         /**
-        * @name dxpolarchartoptions.valueaxis.showZero
-        * @publicName showZero
+        * @name dxPolarChartOptions.valueAxis.showZero
         * @type boolean
         * @default undefined
         */
         showZero: undefined,
         /**
-        * @name dxpolarchartoptions.valueaxis.tickInterval
-        * @publicName tickInterval
+        * @name dxPolarChartOptions.valueAxis.tickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
-        * @name dxpolarchartoptions.valueaxis.minortickinterval
-        * @publicName minorTickInterval
+        * @name dxPolarChartOptions.valueAxis.minorTickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
         /**
-        * @name dxpolarchartoptions.valueaxis.minortickcount
-        * @publicName minorTickCount
+        * @name dxPolarChartOptions.valueAxis.minorTickCount
         * @type number
         * @default undefined
         */
         minorTickCount: undefined,
         /**
-        * @name dxpolarchartoptions.valueaxis.tick
-        * @publicName tick
+        * @name dxPolarChartOptions.valueAxis.tick
         * @type object
         * @inheritdoc
         */
         tick: {
             /**
-            * @name dxpolarchartoptions.valueaxis.tick.visible
-            * @publicName visible
+            * @name dxPolarChartOptions.valueAxis.tick.visible
             * @type boolean
             * @default false
             * @inheritdoc
@@ -3544,14 +3064,12 @@ var dxPolarChart = {
             visible: false,
         },
         /**
-        * @name dxpolarchartoptions.valueaxis.label
-        * @publicName label
+        * @name dxPolarChartOptions.valueAxis.label
         * @type object
         */
         label: {
             /**
-            * @name dxpolarchartoptions.valueaxis.label.customizetext
-            * @publicName customizeText
+            * @name dxPolarChartOptions.valueAxis.label.customizeText
             * @type function(axisValue)
             * @type_function_param1 axisValue:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -3561,8 +3079,7 @@ var dxPolarChart = {
             */
             customizeText: undefined,
             /**
-            * @name dxpolarchartoptions.valueaxis.label.customizehint
-            * @publicName customizeHint
+            * @name dxPolarChartOptions.valueAxis.label.customizeHint
             * @type function(axisValue)
             * @type_function_param1 axisValue:object
             * @type_function_param1_field1 value:Date|Number|string
@@ -3571,56 +3088,48 @@ var dxPolarChart = {
             */
             customizeHint: undefined,
             /**
-            * @name dxpolarchartoptions.valueaxis.label.format
-            * @publicName format
+            * @name dxPolarChartOptions.valueAxis.label.format
             * @extends CommonVizFormat
             */
             format: '',
             /**
-            * @name dxpolarchartoptions.valueaxis.label.precision
-            * @publicName precision
+            * @name dxPolarChartOptions.valueAxis.label.precision
             * @extends CommonVizPrecision
             */
             precision: 0
         },
         /**
-        * @name dxpolarchartoptions.valueaxis.strips
-        * @publicName strips
+        * @name dxPolarChartOptions.valueAxis.strips
         * @type Array<Object>
         * @notUsedInTheme
-        * @inherits dxpolarchartoptions.commonaxissettings.stripstyle
+        * @inherits dxPolarChartOptions.commonAxisSettings.stripStyle
         */
         strips: [{
             /**
-            * @name dxpolarchartoptions.valueaxis.strips.startvalue
-            * @publicName startValue
+            * @name dxPolarChartOptions.valueAxis.strips.startValue
             * @type number | datetime | string
             * @default undefined
             */
             startValue: undefined,
             /**
-            * @name dxpolarchartoptions.valueaxis.strips.endvalue
-            * @publicName endValue
+            * @name dxPolarChartOptions.valueAxis.strips.endValue
             * @type number | datetime | string
             * @default undefined
             */
             endValue: undefined,
             /**
-            * @name dxpolarchartoptions.valueaxis.strips.color
-            * @publicName color
+            * @name dxPolarChartOptions.valueAxis.strips.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxpolarchartoptions.valueaxis.strips.label
-            * @publicName label
+            * @name dxPolarChartOptions.valueAxis.strips.label
             * @type object
             */
             label: {
                 /**
-                * @name dxpolarchartoptions.valueaxis.strips.label.text
-                * @publicName text
+                * @name dxPolarChartOptions.valueAxis.strips.label.text
                 * @type string
                 * @default undefined
                 */
@@ -3628,29 +3137,25 @@ var dxPolarChart = {
             }
         }],
         /**
-        * @name dxpolarchartoptions.valueaxis.constantlines
-        * @publicName constantLines
+        * @name dxPolarChartOptions.valueAxis.constantLines
         * @type Array<Object>
         * @notUsedInTheme
-        * @inherits dxpolarchartoptions.commonaxissettings.constantlinestyle
+        * @inherits dxPolarChartOptions.commonAxisSettings.constantLineStyle
         */
         constantLines: [{
             /**
-            * @name dxpolarchartoptions.valueaxis.constantlines.value
-            * @publicName value
+            * @name dxPolarChartOptions.valueAxis.constantLines.value
             * @type number | datetime | string
             * @default undefined
             */
             value: undefined,
             /**
-            * @name dxpolarchartoptions.valueaxis.constantlines.label
-            * @publicName label
+            * @name dxPolarChartOptions.valueAxis.constantLines.label
             * @type object
             */
             label: {
                 /**
-                * @name dxpolarchartoptions.valueaxis.constantlines.label.text
-                * @publicName text
+                * @name dxPolarChartOptions.valueAxis.constantLines.label.text
                 * @type string
                 * @default undefined
                 */
@@ -3658,63 +3163,54 @@ var dxPolarChart = {
             }
         }],
         /**
-        * @name dxpolarchartoptions.valueaxis.minvaluemargin
-        * @publicName minValueMargin
+        * @name dxPolarChartOptions.valueAxis.minValueMargin
         * @type number
         * @default undefined
         */
         minValueMargin: 0,
         /**
-        * @name dxpolarchartoptions.valueaxis.maxvaluemargin
-        * @publicName maxValueMargin
+        * @name dxPolarChartOptions.valueAxis.maxValueMargin
         * @type number
         * @default undefined
         */
         maxValueMargin: 0,
         /**
-        * @name dxpolarchartoptions.valueaxis.valuemarginsenabled
-        * @publicName valueMarginsEnabled
+        * @name dxPolarChartOptions.valueAxis.valueMarginsEnabled
         * @type boolean
         * @default true
         */
         valueMarginsEnabled: true,
         /**
-        * @name dxpolarchartoptions.valueaxis.axisdivisionfactor
-        * @publicName axisDivisionFactor
+        * @name dxPolarChartOptions.valueAxis.axisDivisionFactor
         * @type number
         * @default 30
         */
         axisDivisionFactor: 30,
         /**
-        * @name dxpolarchartoptions.valueaxis.categories
-        * @publicName categories
+        * @name dxPolarChartOptions.valueAxis.categories
         * @type Array<number,string,Date>
         */
         categories: [],
         /**
-        * @name dxpolarchartoptions.valueaxis.type
-        * @publicName type
+        * @name dxPolarChartOptions.valueAxis.type
         * @type Enums.AxisScaleType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxpolarchartoptions.valueaxis.logarithmbase
-        * @publicName logarithmBase
+        * @name dxPolarChartOptions.valueAxis.logarithmBase
         * @type number
         * @default 10
         */
         logarithmBase: 10,
         /**
-        * @name dxpolarchartoptions.valueaxis.valuetype
-        * @publicName valueType
+        * @name dxPolarChartOptions.valueAxis.valueType
         * @type Enums.ChartDataType
         * @default undefined
         */
         valueType: undefined,
          /**
-        * @name dxpolarchartoptions.valueaxis.endontick
-        * @publicName endOnTick
+        * @name dxPolarChartOptions.valueAxis.endOnTick
         * @type boolean
         * @default false
         * @inheritdoc
@@ -3722,23 +3218,20 @@ var dxPolarChart = {
         endOnTick: false
     },
     /**
-    * @name dxpolarchartoptions.tooltip
+    * @name dxPolarChartOptions.tooltip
     * @type object
-    * @publicName tooltip
     * @inheritdoc
     **/
     tooltip: {
         /**
-        * @name dxpolarchartoptions.tooltip.shared
-        * @publicName shared
+        * @name dxPolarChartOptions.tooltip.shared
         * @type boolean
         * @default false
         */
         shared: false
     },
     /**
-    * @name dxpolarchartoptions.onserieshoverchanged
-    * @publicName onSeriesHoverChanged
+    * @name dxPolarChartOptions.onSeriesHoverChanged
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
@@ -3748,8 +3241,7 @@ var dxPolarChart = {
     */
     onSeriesHoverChanged: function() { },
     /**
-    * @name dxpolarchartoptions.onseriesselectionchanged
-    * @publicName onSeriesSelectionChanged
+    * @name dxPolarChartOptions.onSeriesSelectionChanged
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
@@ -3759,8 +3251,7 @@ var dxPolarChart = {
     */
     onSeriesSelectionChanged: function() { },
     /**
-    * @name dxpolarchartoptions.series
-    * @publicName series
+    * @name dxPolarChartOptions.series
     * @type Object|Array<Object>
     * @default undefined
     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
@@ -3770,22 +3261,19 @@ var dxPolarChart = {
     */
     series: [{
         /**
-        * @name dxpolarchartoptions.series.name
-        * @publicName name
+        * @name dxPolarChartOptions.series.name
         * @type string
         * @default undefined
         */
         name: undefined,
         /**
-        * @name dxpolarchartoptions.series.tag
-        * @publicName tag
+        * @name dxPolarChartOptions.series.tag
         * @type any
         * @default undefined
         */
         tag: undefined,
         /**
-        * @name dxpolarchartoptions.series.type
-        * @publicName type
+        * @name dxPolarChartOptions.series.type
         * @type Enums.PolarChartSeriesType
         * @default 'scatter'
         */
@@ -3793,30 +3281,26 @@ var dxPolarChart = {
     }],
 };
 /**
-* @name basechart
-* @publicName BaseChart
+* @name BaseChart
 * @type object
 * @hidden
 * @inherits BaseWidget
 */
 var BaseChart = {
     /**
-    * @name basechart.options
-    * @publicName Options
+    * @name BaseChart.Options
     * @namespace DevExpress.viz.charts
     * @hidden
     */
     /**
-    * @name basechartoptions.ondone
-    * @publicName onDone
+    * @name BaseChartOptions.onDone
     * @extends Action
     * @notUsedInTheme
     * @action
     */
     onDone: function() { },
     /**
-    * @name basechartoptions.ontooltipshown
-    * @publicName onTooltipShown
+    * @name BaseChartOptions.onTooltipShown
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
@@ -3826,8 +3310,7 @@ var BaseChart = {
     */
     onTooltipShown: function() { },
     /**
-    * @name basechartoptions.ontooltiphidden
-    * @publicName onTooltipHidden
+    * @name BaseChartOptions.onTooltipHidden
     * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
@@ -3837,56 +3320,48 @@ var BaseChart = {
     */
     onTooltipHidden: function() { },
     /**
-    * @name basechartoptions.pointSelectionMode
-    * @publicName pointSelectionMode
+    * @name BaseChartOptions.pointSelectionMode
     * @type Enums.ChartElementSelectionMode
     * @default 'single'
     */
     pointSelectionMode: 'single',
     /**
-    * @name basechartoptions.animation
-    * @publicName animation
+    * @name BaseChartOptions.animation
     * @type object|boolean
     */
     animation: {
         /**
-        * @name basechartoptions.animation.enabled
-        * @publicName enabled
+        * @name BaseChartOptions.animation.enabled
         * @type boolean
         * @default true
         */
         enabled: true,
         /**
-        * @name basechartoptions.animation.duration
-        * @publicName duration
+        * @name BaseChartOptions.animation.duration
         * @type number
         * @default 1000
         */
         duration: 1000,
         /**
-        * @name basechartoptions.animation.easing
-        * @publicName easing
+        * @name BaseChartOptions.animation.easing
         * @type Enums.VizAnimationEasing
         * @default 'easeOutCubic'
         */
         easing: 'easeOutCubic',
         /**
-        * @name basechartoptions.animation.maxpointcountsupported
-        * @publicName maxPointCountSupported
+        * @name BaseChartOptions.animation.maxPointCountSupported
         * @type number
         * @default 300
         */
         maxPointCountSupported: 300
     },
     /**
-    * @name basechartoptions.tooltip
-    * @publicName tooltip
+    * @name BaseChartOptions.tooltip
     * @type object
     */
     tooltip: {
        /**
-       * @name basechartoptions.tooltip.customizetooltip
-       * @publicName customizeTooltip
+       * @name BaseChartOptions.tooltip.customizeTooltip
        * @type function(pointInfo)
        * @type_function_param1 pointInfo:object
        * @type_function_return object
@@ -3895,29 +3370,25 @@ var BaseChart = {
        */
         customizeTooltip: undefined,
         /**
-        * @name basechartoptions.tooltip.argumentformat
-        * @publicName argumentFormat
+        * @name BaseChartOptions.tooltip.argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
         /**
-        * @name basechartoptions.tooltip.argumentprecision
-        * @publicName argumentPrecision
+        * @name BaseChartOptions.tooltip.argumentPrecision
         * @extends CommonVizPrecision
         * @deprecated
         */
         argumentPrecision: 0,
         /**
-        * @name basechartoptions.tooltip.percentprecision
-        * @publicName percentPrecision
+        * @name BaseChartOptions.tooltip.percentPrecision
         * @extends CommonVizPrecision
         * @deprecated
         */
         percentPrecision: 0
     },
     /**
-    * @name basechartoptions.onpointclick
-    * @publicName onPointClick
+    * @name BaseChartOptions.onPointClick
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
@@ -3929,8 +3400,7 @@ var BaseChart = {
     */
     onPointClick: function() { },
     /**
-    * @name basechartoptions.onpointselectionchanged
-    * @publicName onPointSelectionChanged
+    * @name BaseChartOptions.onPointSelectionChanged
     * @type function(e)
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
@@ -3941,8 +3411,7 @@ var BaseChart = {
     */
     onPointSelectionChanged: function() { },
     /**
-    * @name basechartoptions.onpointhoverchanged
-    * @publicName onPointHoverChanged
+    * @name BaseChartOptions.onPointHoverChanged
     * @type function(e)
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
@@ -3953,260 +3422,223 @@ var BaseChart = {
     */
     onPointHoverChanged: function() { },
     /**
-    * @name basechartoptions.datasource
-    * @publicName dataSource
+    * @name BaseChartOptions.dataSource
     * @extends CommonVizDataSource
     */
     dataSource: undefined,
     /**
-    * @name basechartoptions.palette
-    * @publicName palette
+    * @name BaseChartOptions.palette
     * @extends CommonVizPalette
     */
     palette: [],
     /**
-    * @name basechartoptions.paletteextensionmode
-    * @publicName paletteExtensionMode
+    * @name BaseChartOptions.paletteExtensionMode
     * @type Enums.VizPaletteExtensionMode
     * @default 'blend'
     */
     paletteExtensionMode: 'blend',
     /**
-    * @name basechartoptions.legend
-    * @publicName legend
+    * @name BaseChartOptions.legend
     * @type object
     */
     legend: {
 
         /**
-        * @name basechartoptions.legend.verticalalignment
-        * @publicName verticalAlignment
+        * @name BaseChartOptions.legend.verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'top'
         */
         verticalAlignment: 'top',
         /**
-        * @name basechartoptions.legend.horizontalalignment
-        * @publicName horizontalAlignment
+        * @name BaseChartOptions.legend.horizontalAlignment
         * @type Enums.HorizontalAlignment
         * @default 'right'
         */
         horizontalAlignment: 'right',
         /**
-        * @name basechartoptions.legend.orientation
-        * @publicName orientation
+        * @name BaseChartOptions.legend.orientation
         * @type Enums.Orientation
         * @default undefined
         */
         orientation: undefined,
         /**
-        * @name basechartoptions.legend.itemtextposition
-        * @publicName itemTextPosition
+        * @name BaseChartOptions.legend.itemTextPosition
         * @type Enums.Position
         * @default undefined
         */
         itemTextPosition: undefined,
         /**
-        * @name basechartoptions.legend.itemsalignment
-        * @publicName itemsAlignment
+        * @name BaseChartOptions.legend.itemsAlignment
         * @type Enums.HorizontalAlignment
         * @default undefined
         */
         itemsAlignment: undefined,
         /**
-        * @name basechartoptions.legend.font
-        * @publicName font
+        * @name BaseChartOptions.legend.font
         * @type object
         */
         font: {
             /**
-            * @name basechartoptions.legend.font.color
-            * @publicName color
+            * @name BaseChartOptions.legend.font.color
             * @type string
             * @default '#767676'
             */
             color: '#767676',
             /**
-            * @name basechartoptions.legend.font.family
-            * @publicName family
+            * @name BaseChartOptions.legend.font.family
             * @type string
             * @default undefined
             */
             family: undefined,
             /**
-            * @name basechartoptions.legend.font.weight
-            * @publicName weight
+            * @name BaseChartOptions.legend.font.weight
             * @type number
             * @default undefined
             */
             weight: undefined,
             /**
-            * @name basechartoptions.legend.font.size
-            * @publicName size
+            * @name BaseChartOptions.legend.font.size
             * @type number|string
             * @default undefined
             */
             size: undefined,
             /**
-            * @name basechartoptions.legend.font.opacity
-            * @publicName opacity
+            * @name BaseChartOptions.legend.font.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name basechartoptions.legend.visible
-        * @publicName visible
+        * @name BaseChartOptions.legend.visible
         * @type boolean
         * @default true
         */
         visible: true,
         /**
-        * @name basechartoptions.legend.margin
-        * @publicName margin
+        * @name BaseChartOptions.legend.margin
         * @type number | object
         * @default 10
         */
         margin: {
             /**
-            * @name basechartoptions.legend.margin.top
-            * @publicName top
+            * @name BaseChartOptions.legend.margin.top
             * @type number
             * @default 10
             */
             top: 10,
             /**
-            * @name basechartoptions.legend.margin.bottom
-            * @publicName bottom
+            * @name BaseChartOptions.legend.margin.bottom
             * @type number
             * @default 10
             */
             bottom: 10,
             /**
-            * @name basechartoptions.legend.margin.left
-            * @publicName left
+            * @name BaseChartOptions.legend.margin.left
             * @type number
             * @default 10
             */
             left: 10,
             /**
-            * @name basechartoptions.legend.margin.right
-            * @publicName right
+            * @name BaseChartOptions.legend.margin.right
             * @type number
             * @default 10
             */
             right: 10
         },
         /**
-        * @name basechartoptions.legend.markersize
-        * @publicName markerSize
+        * @name BaseChartOptions.legend.markerSize
         * @type number
         * @default 20
         */
         markerSize: 20,
         /**
-        * @name basechartoptions.legend.backgroundcolor
-        * @publicName backgroundColor
+        * @name BaseChartOptions.legend.backgroundColor
         * @type string
         * @default undefined
         */
         backgroundColor: undefined,
         /**
-        * @name basechartoptions.legend.border
-        * @publicName border
+        * @name BaseChartOptions.legend.border
         * @type object
         */
         border: {
             /**
-            * @name basechartoptions.legend.border.visible
-            * @publicName visible
+            * @name BaseChartOptions.legend.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name basechartoptions.legend.border.width
-            * @publicName width
+            * @name BaseChartOptions.legend.border.width
             * @type number
             * @default 1
             */
             width: 1,
             /**
-            * @name basechartoptions.legend.border.color
-            * @publicName color
+            * @name BaseChartOptions.legend.border.color
             * @type string
             * @default '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name basechartoptions.legend.border.cornerradius
-            * @publicName cornerRadius
+            * @name BaseChartOptions.legend.border.cornerRadius
             * @type number
             * @default 0
             */
             cornerRadius: 0,
             /**
-            * @name basechartoptions.legend.border.opacity
-            * @publicName opacity
+            * @name BaseChartOptions.legend.border.opacity
             * @type number
             * @default undefined
             */
             opacity: undefined,
             /**
-            * @name basechartoptions.legend.border.dashstyle
-            * @publicName dashStyle
+            * @name BaseChartOptions.legend.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
             dashStyle: 'solid'
         },
         /**
-        * @name basechartoptions.legend.paddingleftright
-        * @publicName paddingLeftRight
+        * @name BaseChartOptions.legend.paddingLeftRight
         * @type number
         * @default 10
         */
         paddingLeftRight: 10,
         /**
-        * @name basechartoptions.legend.paddingtopbottom
-        * @publicName paddingTopBottom
+        * @name BaseChartOptions.legend.paddingTopBottom
         * @type number
         * @default 10
         */
         paddingTopBottom: 10,
         /**
-        * @name basechartoptions.legend.columncount
-        * @publicName columnCount
+        * @name BaseChartOptions.legend.columnCount
         * @type number
         * @default 0
         */
-        columnsCount: 0,
+        columnCount: 0,
         /**
-        * @name basechartoptions.legend.rowcount
-        * @publicName rowCount
+        * @name BaseChartOptions.legend.rowCount
         * @type number
         * @default 0
         */
-        rowsCount: 0,
+        rowCount: 0,
         /**
-        * @name basechartoptions.legend.columnitemspacing
-        * @publicName columnItemSpacing
+        * @name BaseChartOptions.legend.columnItemSpacing
         * @type number
         * @default 20
         */
         columnItemSpacing: 20,
         /**
-        * @name basechartoptions.legend.rowitemspacing
-        * @publicName rowItemSpacing
+        * @name BaseChartOptions.legend.rowItemSpacing
         * @type number
         * @default 8
         */
         rowItemSpacing: 8
     },
     /**
-    * @name basechartoptions.series
-    * @publicName series
+    * @name BaseChartOptions.series
     * @type Object|Array<Object>
     * @default undefined
     * @notUsedInTheme
@@ -4216,116 +3648,105 @@ var BaseChart = {
 
     }],
     /**
-    * @name basechartoptions.customizepoint
-    * @publicName customizePoint
+    * @name BaseChartOptions.customizePoint
     * @type function(pointInfo)
     * @type_function_param1 pointInfo:object
     * @type_function_return dxChartSeriesTypes.CommonSeries.point
     */
     customizePoint: undefined,
     /**
-    * @name basechartoptions.customizelabel
-    * @publicName customizeLabel
+    * @name BaseChartOptions.customizeLabel
     * @type function(pointInfo)
     * @type_function_param1 pointInfo:object
     * @type_function_return dxChartSeriesTypes.CommonSeries.label
     */
     customizeLabel: undefined,
     /**
-    * @name basechartmethods.clearselection
+    * @name BaseChartMethods.clearSelection
     * @publicName clearSelection()
     */
     clearSelection: function() { },
     /**
-    * @name basechartmethods.hideTooltip
+    * @name BaseChartMethods.hideTooltip
     * @publicName hideTooltip()
     */
     hideTooltip: function() { },
     /**
-    * @name basechartmethods.render
+    * @name BaseChartMethods.render
     * @publicName render(renderOptions)
     * @param1 renderOptions:object
     */
     render: function(renderOptions) { },
     /**
-    * @name basechartmethods.getallseries
+    * @name BaseChartMethods.getAllSeries
     * @publicName getAllSeries()
     * @return Array<baseSeriesObject>
     */
     getAllSeries: function() { },
     /**
-    * @name basechartmethods.getseriesbyname
+    * @name BaseChartMethods.getSeriesByName
     * @publicName getSeriesByName(seriesName)
     * @param1 seriesName:any
     * @return chartSeriesObject
     */
     getSeriesByName: function() { },
     /**
-    * @name basechartmethods.getseriesbypos
+    * @name BaseChartMethods.getSeriesByPos
     * @publicName getSeriesByPos(seriesIndex)
     * @param1 seriesIndex:number
     * @return chartSeriesObject
     */
     getSeriesByPos: function() { },
     /**
-    * @name basechartmethods.getdatasource
+    * @name BaseChartMethods.getDataSource
     * @publicName getDataSource()
     * @return DataSource
     */
     getDataSource: function() { },
     /**
-    * @name basechartoptions.adaptiveLayout
-    * @publicName adaptiveLayout
+    * @name BaseChartOptions.adaptiveLayout
     * @type object
     */
     /**
-    * @name dxpiechartoptions.adaptiveLayout
-    * @publicName adaptiveLayout
+    * @name dxPieChartOptions.adaptiveLayout
     * @type object
     */
     /**
-    * @name dxpolarchartoptions.adaptiveLayout
-    * @publicName adaptiveLayout
+    * @name dxPolarChartOptions.adaptiveLayout
     * @type object
     */
     adaptiveLayout: {
         /**
-        * @name basechartoptions.adaptiveLayout.width
-        * @publicName width
+        * @name BaseChartOptions.adaptiveLayout.width
         * @type number
         * @default 80
         */
         /**
-        * @name dxpolarchartoptions.adaptiveLayout.width
-        * @publicName width
+        * @name dxPolarChartOptions.adaptiveLayout.width
         * @type number
         * @default 170
         * @inheritdoc
         */
         width: 80,
         /**
-        * @name basechartoptions.adaptiveLayout.height
-        * @publicName height
+        * @name BaseChartOptions.adaptiveLayout.height
         * @type number
         * @default 80
         */
         /**
-        * @name dxpolarchartoptions.adaptiveLayout.height
-        * @publicName height
+        * @name dxPolarChartOptions.adaptiveLayout.height
         * @type number
         * @default 170
         * @inheritdoc
         */
         height: 80,
         /**
-        * @name basechartoptions.adaptiveLayout.keepLabels
-        * @publicName keepLabels
+        * @name BaseChartOptions.adaptiveLayout.keepLabels
         * @type boolean
         * @default true
         */
         /**
-        * @name dxpiechartoptions.adaptiveLayout.keepLabels
-        * @publicName keepLabels
+        * @name dxPieChartOptions.adaptiveLayout.keepLabels
         * @type boolean
         * @default false
         * @inheritdoc

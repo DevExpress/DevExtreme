@@ -2,7 +2,6 @@
 
 /**
 * @name GridBase
-* @publicName GridBase
 * @inherits Widget, DataHelperMixin
 * @module ui/grid_base
 * @export default
@@ -10,8 +9,7 @@
 */
 
 /**
-* @name dxdataGrid
-* @publicName dxDataGrid
+* @name dxDataGrid
 * @inherits GridBase
 * @module ui/data_grid
 * @export default

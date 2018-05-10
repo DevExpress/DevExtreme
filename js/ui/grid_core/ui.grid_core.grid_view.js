@@ -678,7 +678,6 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.showBorders
-             * @publicName showBorders
              * @type boolean
              * @default false
              */

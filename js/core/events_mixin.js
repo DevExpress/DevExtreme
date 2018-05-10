@@ -6,7 +6,6 @@ var DefaultEventsStrategy = require("./events_strategy"),
 
 /**
  * @name EventsMixin
- * @publicName EventsMixin
  * @module core/events_mixin
  * @export default
  * @hidden

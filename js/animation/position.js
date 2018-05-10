@@ -2,105 +2,87 @@
 
 /**
 * @name positionConfig
-* @publicName positionConfig
 * @namespace DevExpress
 * @type object
 */
 
 /**
 * @name positionConfig.my
-* @publicName my
 * @type Enums.PositionAlignment|object
 */
 /**
 * @name positionConfig.my.x
-* @publicName x
 * @type Enums.HorizontalAlignment
 */
 /**
 * @name positionConfig.my.y
-* @publicName y
 * @type Enums.VerticalAlignment
 */
 
 /**
 * @name positionConfig.at
-* @publicName at
 * @type Enums.PositionAlignment|object
 */
 /**
 * @name positionConfig.at.x
-* @publicName x
 * @type Enums.HorizontalAlignment
 */
 /**
 * @name positionConfig.at.y
-* @publicName y
 * @type Enums.VerticalAlignment
 */
 
 /**
 * @name positionConfig.of
-* @publicName of
 * @type string|Node|jQuery|window
 */
 
 /**
 * @name positionConfig.offset
-* @publicName offset
 * @type string|object
 */
 /**
 * @name positionConfig.offset.x
-* @publicName x
 * @type number
 * @default 0
 */
 /**
 * @name positionConfig.offset.y
-* @publicName y
 * @type number
 * @default 0
 */
 
 /**
 * @name positionConfig.collision
-* @publicName collision
 * @type Enums.PositionResolveCollisionXY|object
 */
 /**
 * @name positionConfig.collision.x
-* @publicName x
 * @type Enums.PositionResolveCollision
 * @default 'none'
 */
 /**
 * @name positionConfig.collision.y
-* @publicName y
 * @type Enums.PositionResolveCollision
 * @default 'none'
 */
 
 /**
 * @name positionConfig.boundary
-* @publicName boundary
 * @type string|Node|jQuery|window
 */
 
 /**
 * @name positionConfig.boundaryOffset
-* @publicName boundaryOffset
 * @type string|object
 */
 /**
 * @name positionConfig.boundaryOffset.x
-* @publicName x
 * @type number
 * @default 0
 */
 /**
 * @name positionConfig.boundaryOffset.y
-* @publicName y
 * @default 0
 * @type number
 */

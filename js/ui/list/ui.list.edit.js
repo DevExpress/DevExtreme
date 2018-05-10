@@ -107,7 +107,6 @@ var ListEdit = ListBase.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxListOptions.showSelectionControls
-            * @publicName showSelectionControls
             * @type boolean
             * @default false
             */
@@ -115,7 +114,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.selectionMode
-            * @publicName selectionMode
             * @type Enums.ListSelectionMode
             * @default 'none'
             */
@@ -123,7 +121,6 @@ var ListEdit = ListBase.inherit({
 
             /**
              * @name dxListOptions.selectAllMode
-             * @publicName selectAllMode
              * @type Enums.SelectAllMode
              * @default 'page'
              */
@@ -131,7 +128,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.onSelectAllValueChanged
-            * @publicName onSelectAllValueChanged
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -142,7 +138,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.selectAllText
-            * @publicName selectAllText
             * @type string
             * @default "Select All"
             * @hidden
@@ -151,18 +146,15 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.menuItems
-            * @publicName menuItems
             * @type Array<Object>
             * @default []
             */
             /**
             * @name dxListOptions.menuItems.text
-            * @publicName text
             * @type string
             */
             /**
             * @name dxListOptions.menuItems.action
-            * @publicName action
             * @type function
             * @type_function_param1 itemElement:dxElement
             * @type_function_param2 itemData:object
@@ -171,7 +163,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.menuMode
-            * @publicName menuMode
             * @type Enums.ListMenuMode
             * @default 'context'
             */
@@ -179,7 +170,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.allowItemDeleting
-            * @publicName allowItemDeleting
             * @type boolean
             * @default false
             */
@@ -187,7 +177,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.itemDeleteMode
-            * @publicName itemDeleteMode
             * @type Enums.ListItemDeleteMode
              * @default 'static'
             */
@@ -195,7 +184,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.allowItemReordering
-            * @publicName allowItemReordering
             * @type boolean
             * @default false
             */
@@ -203,7 +191,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.onItemDeleting
-            * @publicName onItemDeleting
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -218,7 +205,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.onItemDeleted
-            * @publicName onItemDeleted
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -231,7 +217,6 @@ var ListEdit = ListBase.inherit({
 
             /**
             * @name dxListOptions.onItemReordered
-            * @publicName onItemReordered
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -255,14 +240,12 @@ var ListEdit = ListBase.inherit({
                 options: {
                     /**
                     * @name dxListOptions.menuMode
-                    * @publicName menuMode
                     * @default 'slide' @for iOS
                     */
                     menuMode: "slide",
 
                     /**
                     * @name dxListOptions.itemDeleteMode
-                    * @publicName itemDeleteMode
                     * @default 'slideItem' @for iOS
                     */
                     itemDeleteMode: "slideItem"
@@ -273,7 +256,6 @@ var ListEdit = ListBase.inherit({
                 options: {
                     /**
                     * @name dxListOptions.itemDeleteMode
-                    * @publicName itemDeleteMode
                     * @default 'swipe' @for Android
                     */
                     itemDeleteMode: "swipe"
@@ -284,7 +266,6 @@ var ListEdit = ListBase.inherit({
                 options: {
                     /**
                     * @name dxListOptions.itemDeleteMode
-                    * @publicName itemDeleteMode
                     * @default 'context' @for Windows_Mobile
                     */
                     itemDeleteMode: "context"

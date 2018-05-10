@@ -1,8 +1,7 @@
 "use strict";
 
 /**
-* @name dxscrollview
-* @publicName dxScrollView
+* @name dxScrollView
 * @inherits dxScrollable
 * @module ui/scroll_view
 * @export default

@@ -2,7 +2,6 @@
 /**
 * @name dxSlider
 * @isEditor
-* @publicName dxSlider
 * @inherits dxSliderBase
 * @module ui/slider
 * @export default

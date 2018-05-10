@@ -22,9 +22,8 @@ var RTL_DIRECTION_CLASS = "dx-rtl",
     VISIBILITY_CHANGE_EVENTNAMESPACE = "VisibilityChange";
 
 /**
- * @name domcomponent
+ * @name DOMComponent
  * @section uiWidgets
- * @publicName DOMComponent
  * @type object
  * @inherits Component
  * @namespace DevExpress
@@ -36,8 +35,7 @@ var DOMComponent = Component.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name domcomponentoptions.onOptionChanged
-            * @publicName onOptionChanged
+            * @name DOMComponentOptions.onOptionChanged
             * @type function
             * @type_function_param1 e:object
             * @type_function_param1_field4 name:string
@@ -48,16 +46,14 @@ var DOMComponent = Component.inherit({
             * @inheritdoc
             */
             /**
-            * @name domcomponentoptions.onDisposing
-            * @publicName onDisposing
+            * @name DOMComponentOptions.onDisposing
             * @action
             * @extends Action
             * @inheritdoc
             */
 
             /**
-            * @name domcomponentoptions.width
-            * @publicName width
+            * @name DOMComponentOptions.width
             * @type number|string|function
             * @default undefined
             * @type_function_return number|string
@@ -65,8 +61,7 @@ var DOMComponent = Component.inherit({
             width: undefined,
 
             /**
-            * @name domcomponentoptions.height
-            * @publicName height
+            * @name DOMComponentOptions.height
             * @type number|string|function
             * @default undefined
             * @type_function_return number|string
@@ -74,16 +69,14 @@ var DOMComponent = Component.inherit({
             height: undefined,
 
             /**
-            * @name domcomponentoptions.rtlEnabled
-            * @publicName rtlEnabled
+            * @name DOMComponentOptions.rtlEnabled
             * @type boolean
             * @default false
             */
             rtlEnabled: config().rtlEnabled,
 
             /**
-             * @name domcomponentoptions.elementAttr
-             * @publicName elementAttr
+             * @name DOMComponentOptions.elementAttr
              * @type object
              * @default {}
              */
@@ -423,7 +416,7 @@ var DOMComponent = Component.inherit({
     },
 
     /**
-    * @name domcomponentmethods.element
+    * @name DOMComponentMethods.element
     * @publicName element()
     * @return dxElement
     */
@@ -432,7 +425,7 @@ var DOMComponent = Component.inherit({
     },
 
     /**
-    * @name domcomponentmethods.dispose
+    * @name DOMComponentMethods.dispose
     * @publicName dispose()
     */
     dispose: function() {
@@ -446,7 +439,7 @@ var DOMComponent = Component.inherit({
 });
 
 /**
-* @name domcomponentmethods.getInstance
+* @name DOMComponentMethods.getInstance
 * @static
 * @section uiWidgets
 * @publicName getInstance(element)
@@ -458,7 +451,7 @@ DOMComponent.getInstance = function(element) {
 };
 
 /**
-* @name domcomponentmethods.defaultOptions
+* @name DOMComponentMethods.defaultOptions
 * @static
 * @section uiWidgets
 * @publicName defaultOptions(rule)

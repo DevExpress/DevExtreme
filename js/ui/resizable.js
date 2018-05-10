@@ -42,7 +42,6 @@ var SIDE_BORDER_WIDTH_STYLES = {
 };
 /**
 * @name dxResizable
-* @publicName dxResizable
 * @inherits DOMComponent
 * @module ui/resizable
 * @export default
@@ -54,7 +53,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.handles
-            * @publicName handles
             * @type string
             * @default "all"
             * @acceptValues 'top'|'bottom'|'right'|'left'|'all'
@@ -65,7 +63,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.stepPrecision
-            * @publicName stepPrecision
             * @type string
             * @default "simple"
             * @acceptValues 'simple'|'strict'
@@ -77,7 +74,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.minWidth
-            * @publicName minWidth
             * @type number
             * @default 30
             */
@@ -85,7 +81,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.maxWidth
-            * @publicName maxWidth
             * @type number
             * @default Infinity
             */
@@ -93,7 +88,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.minHeight
-            * @publicName minHeight
             * @type number
             * @default 30
             */
@@ -101,7 +95,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.maxHeight
-            * @publicName maxHeight
             * @type number
             * @default Infinity
             */
@@ -109,7 +102,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.onResizeStart
-            * @publicName onResizeStart
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -123,7 +115,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.onResize
-            * @publicName onResize
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -137,7 +128,6 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.onResizeEnd
-            * @publicName onResizeEnd
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -150,13 +140,11 @@ var Resizable = DOMComponent.inherit({
             onResizeEnd: null
             /**
              * @name dxResizableOptions.width
-             * @publicName width
              * @fires dxResizableOptions.onResize
              * @inheritdoc
              */
             /**
              * @name dxResizableOptions.height
-             * @publicName height
              * @fires dxResizableOptions.onResize
              * @inheritdoc
              */

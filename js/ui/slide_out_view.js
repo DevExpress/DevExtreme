@@ -46,7 +46,6 @@ var animation = {
 
 /**
 * @name dxSlideOutView
-* @publicName dxSlideOutView
 * @inherits Widget
 * @module ui/slide_out_view
 * @export default
@@ -58,7 +57,6 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.menuPosition
-            * @publicName menuPosition
             * @type Enums.SlideOutMenuPosition
             * @default "normal"
             */
@@ -66,7 +64,6 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.menuVisible
-            * @publicName menuVisible
             * @type boolean
             * @default false
             */
@@ -74,7 +71,6 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.swipeEnabled
-            * @publicName swipeEnabled
             * @type boolean
             * @default true
             */
@@ -82,7 +78,6 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.menuTemplate
-            * @publicName menuTemplate
             * @type_function_param1 menuElement:dxElement
             * @type template|function
             * @default null
@@ -91,7 +86,6 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.contentTemplate
-            * @publicName contentTemplate
             * @type_function_param1 contentElement:dxElement
             * @type template|function
             * @default "content"
@@ -100,7 +94,6 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.contentOffset
-            * @publicName contentOffset
             * @hidden
             * @inheritdoc
             */
@@ -108,28 +101,24 @@ var SlideOutView = Widget.inherit({
 
             /**
             * @name dxSlideOutViewOptions.onContentReady
-            * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
             * @name dxSlideOutViewOptions.focusStateEnabled
-            * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutViewOptions.accessKey
-            * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutViewOptions.tabIndex
-            * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */

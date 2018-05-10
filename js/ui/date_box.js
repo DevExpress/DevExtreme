@@ -3,7 +3,6 @@
 /**
 * @name dxDateBox
 * @isEditor
-* @publicName dxDateBox
 * @inherits dxDropDownEditor
 * @module ui/date_box
 * @export default

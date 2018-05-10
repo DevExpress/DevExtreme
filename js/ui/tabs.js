@@ -46,7 +46,6 @@ var TABS_CLASS = "dx-tabs",
 
 /**
 * @name dxTabs
-* @publicName dxTabs
 * @inherits CollectionWidget
 * @module ui/tabs
 * @export default
@@ -60,7 +59,6 @@ var Tabs = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
              * @name dxTabsOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -69,7 +67,6 @@ var Tabs = CollectionWidget.inherit({
 
             /**
             * @name dxTabsOptions.showNavButtons
-            * @publicName showNavButtons
             * @type boolean
             * @default true
             */
@@ -77,7 +74,6 @@ var Tabs = CollectionWidget.inherit({
 
             /**
             * @name dxTabsOptions.scrollByContent
-            * @publicName scrollByContent
             * @type boolean
             * @default true
             */
@@ -85,7 +81,6 @@ var Tabs = CollectionWidget.inherit({
 
             /**
             * @name dxTabsOptions.scrollingEnabled
-            * @publicName scrollingEnabled
             * @type boolean
             * @default true
             */
@@ -93,7 +88,6 @@ var Tabs = CollectionWidget.inherit({
 
             /**
             * @name dxTabsOptions.selectionMode
-            * @publicName selectionMode
             * @type Enums.NavSelectionMode
             * @default 'single'
             */
@@ -101,27 +95,23 @@ var Tabs = CollectionWidget.inherit({
 
             /**
             * @name dxTabsOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxTabsOptions.noDataText
-            * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxTabsOptions.selectedItems
-            * @publicName selectedItems
             * @type Array<string,number,Object>
             */
 
             /**
              * @name dxTabsOptions.activeStateEnabled
-             * @publicName activeStateEnabled
              * @default true
              * @inheritdoc
              */
@@ -134,18 +124,15 @@ var Tabs = CollectionWidget.inherit({
             badgeExpr: function(data) { return data ? data.badge : undefined; }
             /**
             * @name dxTabsItemTemplate
-            * @publicName dxTabsItemTemplate
             * @inherits CollectionWidgetItemTemplate
             * @type object
             */
             /**
             * @name dxTabsItemTemplate.icon
-            * @publicName icon
             * @type String
             */
             /**
             * @name dxTabsItemTemplate.badge
-            * @publicName badge
             * @type String
             */
         });
@@ -160,7 +147,6 @@ var Tabs = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name dxTabsOptions.showNavButtons
-                    * @publicName showNavButtons
                     * @default false @for mobile_devices
                     */
                     showNavButtons: false
@@ -171,7 +157,6 @@ var Tabs = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name dxTabsOptions.scrollByContent
-                    * @publicName scrollByContent
                     * @default false @for desktop
                     */
                     scrollByContent: false
@@ -184,7 +169,6 @@ var Tabs = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name dxTabsOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

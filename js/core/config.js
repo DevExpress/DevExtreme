@@ -6,7 +6,6 @@ var extendUtils = require("./utils/extend");
 /**
 * @name globalConfig
 * @section commonObjectStructures
-* @publicName globalConfig
 * @type object
 * @namespace DevExpress
 * @module core/config
@@ -15,14 +14,12 @@ var extendUtils = require("./utils/extend");
 var config = {
     /**
     * @name globalConfig.rtlEnabled
-    * @publicName rtlEnabled
     * @type boolean
     * @default false
     */
     rtlEnabled: false,
     /**
     * @name globalConfig.defaultCurrency
-    * @publicName defaultCurrency
     * @default "USD"
     * @type string
     */
@@ -30,28 +27,24 @@ var config = {
     designMode: false,
     /**
     * @name globalConfig.serverDecimalSeparator
-    * @publicName serverDecimalSeparator
     * @type string
     * @default "."
     */
     serverDecimalSeparator: ".",
     /**
     * @name globalConfig.decimalSeparator
-    * @publicName decimalSeparator
     * @type string
     * @default "."
     */
     decimalSeparator: ".",
     /**
     * @name globalConfig.thousandsSeparator
-    * @publicName thousandsSeparator
     * @type string
     * @default ","
     */
     thousandsSeparator: ",",
     /**
     * @name globalConfig.forceIsoDateParsing
-    * @publicName forceIsoDateParsing
     * @type boolean
     * @default true
     */
@@ -59,7 +52,6 @@ var config = {
     wrapActionsBeforeExecute: true,
     /**
     * @name globalConfig.useJQuery
-    * @publicName useJQuery
     * @type boolean
     * @hidden
     */

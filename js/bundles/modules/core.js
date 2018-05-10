@@ -32,7 +32,6 @@ DevExpress.EventsMixin = require("../../core/events_mixin");
 
 /**
  * @name utils
- * @publicName utils
  * @namespace DevExpress
  */
 DevExpress.utils = {};

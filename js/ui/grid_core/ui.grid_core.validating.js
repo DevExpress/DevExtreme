@@ -254,7 +254,6 @@ module.exports = {
         return {
             /**
             * @name GridBaseOptions.onRowValidating
-            * @publicName onRowValidating
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
@@ -270,7 +269,6 @@ module.exports = {
                 texts: {
                     /**
                      * @name GridBaseOptions.editing.texts.validationCancelChanges
-                     * @publicName validationCancelChanges
                      * @type string
                      * @default "Cancel changes"
                      */

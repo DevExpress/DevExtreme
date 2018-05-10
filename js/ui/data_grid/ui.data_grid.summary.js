@@ -312,57 +312,48 @@ gridCore.registerModule("summary", {
         return {
             /**
              * @name dxDataGridOptions.summary
-             * @publicName summary
              * @type object
              */
             summary: {
                 /**
                  * @name dxDataGridOptions.summary.groupItems
-                 * @publicName groupItems
                  * @type Array<Object>
                  * @default undefined
                  */
                 groupItems: undefined,
                 /**
                  * @name dxDataGridOptions.summary.groupItems.name
-                 * @publicName name
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.column
-                 * @publicName column
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.summaryType
-                 * @publicName summaryType
                  * @type Enums.SummaryType
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.valueFormat
-                 * @publicName valueFormat
                  * @type format
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.precision
-                 * @publicName precision
                  * @type number
                  * @default undefined
                  * @deprecated
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.displayFormat
-                 * @publicName displayFormat
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.customizeText
-                 * @publicName customizeText
                  * @type function(itemInfo)
                  * @type_function_param1 itemInfo:object
                  * @type_function_param1_field1 value:string|number|date
@@ -371,80 +362,67 @@ gridCore.registerModule("summary", {
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.showInGroupFooter
-                 * @publicName showInGroupFooter
                  * @type boolean
                  * @default false
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.alignByColumn
-                 * @publicName alignByColumn
                  * @type boolean
                  * @default false
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.showInColumn
-                 * @publicName showInColumn
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.skipEmptyValues
-                 * @publicName skipEmptyValues
                  * @type boolean
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems
-                 * @publicName totalItems
                  * @type Array<Object>
                  * @default undefined
                  */
                 totalItems: undefined,
                 /**
                  * @name dxDataGridOptions.summary.totalItems.name
-                 * @publicName name
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.column
-                 * @publicName column
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.showInColumn
-                 * @publicName showInColumn
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.summaryType
-                 * @publicName summaryType
                  * @type Enums.SummaryType
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.valueFormat
-                 * @publicName valueFormat
                  * @type format
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.precision
-                 * @publicName precision
                  * @type number
                  * @default undefined
                  * @deprecated
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.displayFormat
-                 * @publicName displayFormat
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.customizeText
-                 * @publicName customizeText
                  * @type function(itemInfo)
                  * @type_function_param1 itemInfo:object
                  * @type_function_param1_field1 value:string|number|date
@@ -453,24 +431,20 @@ gridCore.registerModule("summary", {
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.alignment
-                 * @publicName alignment
                  * @type Enums.HorizontalAlignment
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.cssClass
-                 * @publicName cssClass
                  * @type string
                  * @default undefined
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.skipEmptyValues
-                 * @publicName skipEmptyValues
                  * @type boolean
                  */
                 /**
                  * @name dxDataGridOptions.summary.calculateCustomSummary
-                 * @publicName calculateCustomSummary
                  * @type function(options)
                  * @type_function_param1 options:object
                  * @type_function_param1_field1 component:dxDataGrid
@@ -482,76 +456,65 @@ gridCore.registerModule("summary", {
                 calculateCustomSummary: undefined,
                 /**
                  * @name dxDataGridOptions.summary.skipEmptyValues
-                 * @publicName skipEmptyValues
                  * @type boolean
                  * @default true
                  */
                 skipEmptyValues: true,
                 /**
                  * @name dxDataGridOptions.summary.texts
-                 * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
                      * @name dxDataGridOptions.summary.texts.sum
-                     * @publicName sum
                      * @type string
                      * @default "Sum={0}"
                      */
                     sum: messageLocalization.getFormatter("dxDataGrid-summarySum"),
                     /**
                      * @name dxDataGridOptions.summary.texts.sumOtherColumn
-                     * @publicName sumOtherColumn
                      * @type string
                      * @default "Sum of {1} is {0}"
                      */
                     sumOtherColumn: messageLocalization.getFormatter("dxDataGrid-summarySumOtherColumn"),
                     /**
                      * @name dxDataGridOptions.summary.texts.min
-                     * @publicName min
                      * @type string
                      * @default "Min={0}"
                      */
                     min: messageLocalization.getFormatter("dxDataGrid-summaryMin"),
                     /**
                      * @name dxDataGridOptions.summary.texts.minOtherColumn
-                     * @publicName minOtherColumn
                      * @type string
                      * @default "Min of {1} is {0}"
                      */
                     minOtherColumn: messageLocalization.getFormatter("dxDataGrid-summaryMinOtherColumn"),
                     /**
                      * @name dxDataGridOptions.summary.texts.max
-                     * @publicName max
                      * @type string
                      * @default "Max={0}"
                      */
                     max: messageLocalization.getFormatter("dxDataGrid-summaryMax"),
                     /**
                      * @name dxDataGridOptions.summary.texts.maxOtherColumn
-                     * @publicName maxOtherColumn
                      * @type string
                      * @default "Max of {1} is {0}"
                      */
                     maxOtherColumn: messageLocalization.getFormatter("dxDataGrid-summaryMaxOtherColumn"),
                     /**
                      * @name dxDataGridOptions.summary.texts.avg
-                     * @publicName avg
                      * @type string
                      * @default "Avg={0}"
                      */
                     avg: messageLocalization.getFormatter("dxDataGrid-summaryAvg"),
                     /**
                      * @name dxDataGridOptions.summary.texts.avgOtherColumn
-                     * @publicName avgOtherColumn
                      * @type string
                      * @default "Avg of {1} is {0}"
                      */
                     avgOtherColumn: messageLocalization.getFormatter("dxDataGrid-summaryAvgOtherColumn"),
                     /**
                      * @name dxDataGridOptions.summary.texts.count
-                     * @publicName count
                      * @type string
                      * @default "Count={0}"
                      */
@@ -560,26 +523,22 @@ gridCore.registerModule("summary", {
             },
             /**
              * @name dxDataGridOptions.sortByGroupSummaryInfo
-             * @publicName sortByGroupSummaryInfo
              * @type Array<Object>
              * @default undefined
              */
             sortByGroupSummaryInfo: undefined
             /**
              * @name dxDataGridOptions.sortByGroupSummaryInfo.summaryItem
-             * @publicName summaryItem
              * @type string|number
              * @default undefined
              */
             /**
              * @name dxDataGridOptions.sortByGroupSummaryInfo.groupColumn
-             * @publicName groupColumn
              * @type string
              * @default undefined
              */
             /**
              * @name dxDataGridOptions.sortByGroupSummaryInfo.sortOrder
-             * @publicName sortOrder
              * @type Enums.SortOrder
              * @default undefined
              * @acceptValues undefined

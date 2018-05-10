@@ -229,7 +229,6 @@ module.exports = {
         return {
             /**
               * @name dxDataGridOptions.onEditorPreparing
-              * @publicName onEditorPreparing
               * @type function(e)
               * @type_function_param1 e:object
               * @type_function_param1_field4 parentType:string
@@ -252,7 +251,6 @@ module.exports = {
 
             /**
               * @name dxTreeListOptions.onEditorPreparing
-              * @publicName onEditorPreparing
               * @type function(e)
               * @type_function_param1 e:object
               * @type_function_param1_field4 parentType:string
@@ -275,7 +273,6 @@ module.exports = {
 
             /**
               * @name dxDataGridOptions.onEditorPrepared
-              * @publicName onEditorPrepared
               * @type function(options)
               * @type_function_param1 options:object
               * @type_function_param1_field4 parentType:string
@@ -295,7 +292,6 @@ module.exports = {
 
             /**
               * @name dxTreeListOptions.onEditorPrepared
-              * @publicName onEditorPrepared
               * @type function(options)
               * @type_function_param1 options:object
               * @type_function_param1_field4 parentType:string

@@ -33,7 +33,6 @@ var query = function() {
 };
 /**
 * @name Query
-* @publicName Query
 * @type object
 */
 

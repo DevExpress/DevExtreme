@@ -12,7 +12,6 @@ require("../../integration/knockout");
 /**
 * @name dxCommandContainer
 * @section frameworkMarkupComponents
-* @publicName dxCommandContainer
 * @type object
 * @module framework/html/command_container
 */
@@ -30,7 +29,6 @@ var CommandContainer = MarkupComponent.inherit({
         this.option({
             /**
             * @name dxCommandContaineroptions.id
-            * @publicName id
             * @type string
             * @default null
             */

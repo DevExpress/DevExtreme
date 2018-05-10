@@ -33,7 +33,6 @@ var DX_MENU_CLASS = "dx-menu",
 
 /**
 * @name dxMenuBase
-* @publicName dxMenuBase
 * @type object
 * @inherits HierarchicalCollectionWidget
 * @hidden
@@ -46,14 +45,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.items
-            * @publicName items
             * @type Array<dxMenuBaseItemTemplate>
             */
             items: [],
 
             /**
             * @name dxMenuBaseOptions.cssClass
-            * @publicName cssClass
             * @type string
             * @default ""
             */
@@ -61,7 +58,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
              * @name dxMenuBaseOptions.activeStateEnabled
-             * @publicName activeStateEnabled
              * @type Boolean
              * @default true
              */
@@ -69,14 +65,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.showSubmenuMode
-            * @publicName showSubmenuMode
             * @type Object|Enums.ShowSubmenuMode
             * @default { name: "onHover", delay: { show: 0, hide: 0 } }
             */
             showSubmenuMode: {
                 /**
                 * @name dxMenuBaseOptions.showSubmenuMode.name
-                * @publicName name
                 * @type Enums.ShowSubmenuMode
                 * @default "onHover"
                 */
@@ -84,14 +78,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
                 /**
                 * @name dxMenuBaseOptions.showSubmenuMode.delay
-                * @publicName delay
                 * @type Object|number
                 * @default { show: 50, hide: 300 }
                 */
                 delay: {
                     /**
                     * @name dxMenuBaseOptions.showSubmenuMode.delay.show
-                    * @publicName show
                     * @type number
                     * @default 50
                     */
@@ -99,7 +91,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
                     /**
                     * @name dxMenuBaseOptions.showSubmenuMode.delay.hide
-                    * @publicName hide
                     * @type number
                     * @default 300
                     */
@@ -109,7 +100,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.animation
-            * @publicName animation
             * @type object
             * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
             * @ref
@@ -117,7 +107,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             animation: {
                 /**
                 * @name dxMenuBaseOptions.animation.show
-                * @publicName show
                 * @type animationConfig
                 * @default { type: "fade", from: 0, to: 1, duration: 100 }
                 */
@@ -129,7 +118,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
                 },
                 /**
                 * @name dxMenuBaseOptions.animation.hide
-                * @publicName hide
                 * @type animationConfig
                 * @default { type: "fade", from: 1, to: 0, duration: 100 }
                 */
@@ -143,7 +131,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.selectByClick
-            * @publicName selectByClick
             * @type boolean
             * @default false
             */
@@ -153,7 +140,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.onItemHold
-            * @publicName onItemHold
             * @hidden
             * @action
             * @inheritdoc
@@ -161,35 +147,30 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.itemHoldTimeout
-            * @publicName itemHoldTimeout
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.noDataText
-            * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.selectedIndex
-            * @publicName selectedIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.selectedItemKeys
-            * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.keyExpr
-            * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
@@ -197,34 +178,29 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.parentIdExpr
-            * @publicName parentIdExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseOptions.expandedExpr
-            * @publicName expandedExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMenuBaseItemTemplate
-            * @publicName dxMenuBaseItemTemplate
             * @inherits CollectionWidgetItemTemplate
             * @type object
             */
 
             /**
             * @name dxMenuBaseItemTemplate.beginGroup
-            * @publicName beginGroup
             * @type Boolean
             */
 
             /**
             * @name dxMenuBaseOptions.selectionMode
-            * @publicName selectionMode
             * @type Enums.MenuSelectionMode
             * @default none
              */
@@ -235,57 +211,47 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseItemTemplate.html
-            * @publicName html
             * @type String
             * @hidden
             */
             /**
             * @name dxMenuBaseItemTemplate.disabled
-            * @publicName disabled
             * @type boolean
             * @default false
             */
             /**
             * @name dxMenuBaseItemTemplate.visible
-            * @publicName visible
             * @type boolean
             * @default true
             */
             /**
             * @name dxMenuBaseItemTemplate.icon
-            * @publicName icon
             * @type String
             */
             /**
             * @name dxMenuBaseItemTemplate.text
-            * @publicName text
             * @type String
             */
             /**
              * @name dxMenuBaseItemTemplate.html
-             * @publicName html
              * @type String
              */
             /**
             * @name dxMenuBaseItemTemplate.items
-            * @publicName items
             * @type Array<dxMenuBaseItemTemplate>
             */
             /**
             * @name dxMenuBaseItemTemplate.selectable
-            * @publicName selectable
             * @type boolean
             * @default false
             */
             /**
             * @name dxMenuBaseItemTemplate.selected
-            * @publicName selected
             * @type boolean
             * @default false
             */
             /**
             * @name dxMenuBaseItemTemplate.closeMenuOnClick
-            * @publicName closeMenuOnClick
             * @type boolean
             * @default true
             */

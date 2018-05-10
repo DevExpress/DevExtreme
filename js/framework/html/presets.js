@@ -1,7 +1,6 @@
 "use strict";
 /**
  * @name layoutSets
- * @publicName layoutSets
  * @type Array<string>
  * @namespace DevExpress.framework.html
  * @hidden
@@ -9,7 +8,6 @@
 exports.layoutSets = {};
 /**
  * @name animationSets
- * @publicName animationSets
  * @type Any
  * @namespace DevExpress.framework.html
  * @hidden

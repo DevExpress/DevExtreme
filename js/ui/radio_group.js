@@ -3,7 +3,6 @@
 /**
 * @name dxRadioGroup
 * @isEditor
-* @publicName dxRadioGroup
 * @inherits Editor, DataExpressionMixin
 * @module ui/radio_group
 * @export default

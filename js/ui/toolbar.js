@@ -27,7 +27,6 @@ var TOOLBAR_AUTO_HIDE_ITEM_CLASS = "dx-toolbar-item-auto-hide",
 
 /**
 * @name dxToolbar
-* @publicName dxToolbar
 * @inherits CollectionWidget
 * @module ui/toolbar
 * @export default
@@ -40,7 +39,6 @@ var Toolbar = ToolbarBase.inherit({
 
             /**
             * @name dxToolbarOptions.menuItemTemplate
-            * @publicName menuItemTemplate
             * @type template|function
             * @default "menuItem"
             * @type_function_param1 itemData:object
@@ -52,7 +50,6 @@ var Toolbar = ToolbarBase.inherit({
 
             /**
             * @name dxToolbarOptions.submenuType
-            * @publicName submenuType
             * @type string
             * @default 'dropDownMenu'
             * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
@@ -62,42 +59,36 @@ var Toolbar = ToolbarBase.inherit({
 
             /**
             * @name dxToolbarItemTemplate.location
-            * @publicName location
             * @type Enums.ToolbarItemLocation
             * @default 'center'
             */
 
             /**
             * @name dxToolbarItemTemplate.locateInMenu
-            * @publicName locateInMenu
             * @type Enums.ToolbarItemLocateInMenuMode
             * @default 'never'
             */
 
             /**
             * @name dxToolbarItemTemplate.showText
-            * @publicName showText
             * @type Enums.ToolbarItemShowTextMode
             * @default 'always'
             */
 
             /**
             * @name dxToolbarItemTemplate.menuItemTemplate
-            * @publicName menuItemTemplate
             * @type template|function
             * @type_function_return string|Node|jQuery
             */
 
             /**
             * @name dxToolbarOptions.renderAs
-            * @publicName renderAs
             * @type Enums.ToolbarRenderMode
             * @default 'topToolbar'
             */
 
             /**
             * @name dxToolbarOptions.selectedIndex
-            * @publicName selectedIndex
             * @type number
             * @default -1
             * @hidden
@@ -105,63 +96,54 @@ var Toolbar = ToolbarBase.inherit({
 
             /**
             * @name dxToolbarOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.focusStateEnabled
-            * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.accessKey
-            * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.tabIndex
-            * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItems
-            * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItemKeys
-            * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.keyExpr
-            * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItem
-            * @publicName selectedItem
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.onSelectionChanged
-            * @publicName onSelectionChanged
             * @action
             * @hidden
             * @inheritdoc

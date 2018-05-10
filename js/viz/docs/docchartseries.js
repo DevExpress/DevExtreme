@@ -1,32 +1,27 @@
 /**
 * @name dxChartSeriesTypes
-* @publicName dxChartSeriesTypes
 * @type object
 */
 /**
 * @name dxChartSeriesTypes.CommonSeries
-* @publicName CommonSeries
 * @type object
 * @hidden
 */
 var commonSeries = {
     /**
     * @name dxChartSeriesTypes.CommonSeries.color
-    * @publicName color
     * @type string
     * @default undefined
     */
     color: undefined,
     /**
     * @name dxChartSeriesTypes.CommonSeries.visible
-    * @publicName visible
     * @type boolean
     * @default true
     */
     visible: true,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.innercolor
-    * @publicName innerColor
+    * @name dxChartSeriesTypes.CommonSeries.innerColor
     * @type string
     * @default '#ffffff'
     * @propertyOf dxChartSeriesTypes.CandleStickSeries
@@ -34,7 +29,6 @@ var commonSeries = {
     innerColor: '#ffffff',
     /**
     * @name dxChartSeriesTypes.CommonSeries.opacity
-    * @publicName opacity
     * @type number
     * @default 0.5
     * @propertyOf dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes. StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes. FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries
@@ -42,14 +36,12 @@ var commonSeries = {
     opacity: 0.5,
     /**
     * @name dxChartSeriesTypes.CommonSeries.reduction
-    * @publicName reduction
     * @type object
     * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
     */
     reduction: {
         /**
         * @name dxChartSeriesTypes.CommonSeries.reduction.color
-        * @publicName color
         * @type string
         * @default '#ff0000'
         * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
@@ -57,7 +49,6 @@ var commonSeries = {
         color: '#ff0000',
         /**
         * @name dxChartSeriesTypes.CommonSeries.reduction.level
-        * @publicName level
         * @type Enums.FinancialChartReductionLevel
         * @default 'close'
                 * @propertyOf dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
@@ -66,23 +57,20 @@ var commonSeries = {
     },
     /**
     * @name dxChartSeriesTypes.CommonSeries.width
-    * @publicName width
     * @type number
     * @default 2
     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.CandleStickSeriesSeries,dxChartSeriesTypes.StockSeriesSeries
     */
     width: 2,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.cornerradius
-    * @publicName cornerRadius
+    * @name dxChartSeriesTypes.CommonSeries.cornerRadius
     * @type number
     * @default 0
     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
     */
     cornerRadius: 0,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.dashstyle
-    * @publicName dashStyle
+    * @name dxChartSeriesTypes.CommonSeries.dashStyle
     * @type Enums.DashStyle
     * @default 'solid'
     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
@@ -90,7 +78,6 @@ var commonSeries = {
     dashStyle: 'solid',
     /**
     * @name dxChartSeriesTypes.CommonSeries.stack
-    * @publicName stack
     * @type string
     * @default 'default'
     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries
@@ -98,21 +85,18 @@ var commonSeries = {
     stack: 'default',
     /**
     * @name dxChartSeriesTypes.CommonSeries.pane
-    * @publicName pane
     * @type string
     * @default 'default'
     */
     pane: 'default',
     /**
     * @name dxChartSeriesTypes.CommonSeries.axis
-    * @publicName axis
     * @type string
     * @default undefined
     */
     axis: undefined,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.valuefield
-    * @publicName valueField
+    * @name dxChartSeriesTypes.CommonSeries.valueField
     * @type string
     * @default 'val'
     * @notUsedInTheme
@@ -120,24 +104,21 @@ var commonSeries = {
     */
     valueField: 'val',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.argumentfield
-    * @publicName argumentField
+    * @name dxChartSeriesTypes.CommonSeries.argumentField
     * @type string
     * @default 'arg'
     * @notUsedInTheme
     */
     argumentField: 'arg',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.tagfield
-    * @publicName tagField
+    * @name dxChartSeriesTypes.CommonSeries.tagField
     * @type string
     * @default 'tag'
     * @notUsedInTheme
     */
     tagField: 'tag',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.rangevalue1field
-    * @publicName rangeValue1Field
+    * @name dxChartSeriesTypes.CommonSeries.rangeValue1Field
     * @type string
     * @default 'val1'
     * @notUsedInTheme
@@ -145,8 +126,7 @@ var commonSeries = {
     */
     rangeValue1Field: 'val1',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.rangevalue2field
-    * @publicName rangeValue2Field
+    * @name dxChartSeriesTypes.CommonSeries.rangeValue2Field
     * @type string
     * @default 'val2'
     * @notUsedInTheme
@@ -154,8 +134,7 @@ var commonSeries = {
     */
     rangeValue2Field: 'val2',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.openvaluefield
-    * @publicName openValueField
+    * @name dxChartSeriesTypes.CommonSeries.openValueField
     * @type string
     * @default 'open'
     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
@@ -163,8 +142,7 @@ var commonSeries = {
     */
     openValueField: 'open',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.highvaluefield
-    * @publicName highValueField
+    * @name dxChartSeriesTypes.CommonSeries.highValueField
     * @type string
     * @default 'high'
     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
@@ -172,8 +150,7 @@ var commonSeries = {
     */
     highValueField: 'high',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.lowvaluefield
-    * @publicName lowValueField
+    * @name dxChartSeriesTypes.CommonSeries.lowValueField
     * @type string
     * @default 'low'
     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
@@ -181,8 +158,7 @@ var commonSeries = {
     */
     lowValueField: 'low',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.closevaluefield
-    * @publicName closeValueField
+    * @name dxChartSeriesTypes.CommonSeries.closeValueField
     * @type string
     * @default 'close'
     * @propertyOf dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
@@ -190,8 +166,7 @@ var commonSeries = {
     */
     closeValueField: 'close',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.sizefield
-    * @publicName sizeField
+    * @name dxChartSeriesTypes.CommonSeries.sizeField
     * @type string
     * @default 'size'
     * @propertyOf dxChartSeriesTypes.BubbleSeries
@@ -199,14 +174,12 @@ var commonSeries = {
     sizeField: 'size',
     /**
     * @name dxChartSeriesTypes.CommonSeries.border
-    * @publicName border
     * @type object
     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes. StackeSplinedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
     */
     border: {
         /**
         * @name dxChartSeriesTypes.CommonSeries.border.visible
-        * @publicName visible
         * @type boolean
         * @default false
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes. StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes. FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
@@ -214,7 +187,6 @@ var commonSeries = {
         visible: false,
         /**
         * @name dxChartSeriesTypes.CommonSeries.border.width
-        * @publicName width
         * @type number
         * @default 2
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes. StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
@@ -222,255 +194,220 @@ var commonSeries = {
         width: 2,
         /**
         * @name dxChartSeriesTypes.CommonSeries.border.color
-        * @publicName color
         * @type string
         * @default undefined
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
         */
         color: undefined,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.border.dashstyle
-        * @publicName dashStyle
+        * @name dxChartSeriesTypes.CommonSeries.border.dashStyle
         * @type Enums.DashStyle
         * @default undefined
-            * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
+        * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
         */
         dashStyle: undefined
     },
     /**
-    * @name dxChartSeriesTypes.CommonSeries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.CommonSeries.hoverMode
     * @type Enums.ChartSeriesHoverMode
         */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.CommonSeries.selectionMode
     * @type Enums.ChartSeriesSelectionMode
         */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.CommonSeries.hoverstyle
-    * @publicName hoverStyle
+    * @name dxChartSeriesTypes.CommonSeries.hoverStyle
     * @type object
     */
     hoverStyle: {
         /**
-        * @name dxChartSeriesTypes.CommonSeries.hoverstyle.color
-        * @publicName color
+        * @name dxChartSeriesTypes.CommonSeries.hoverStyle.color
         * @type string
         * @default undefined
         */
         color: undefined,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.hoverstyle.width
-        * @publicName width
+        * @name dxChartSeriesTypes.CommonSeries.hoverStyle.width
         * @type number
         * @default 3
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
         */
         width: 3,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.hoverstyle.dashstyle
-        * @publicName dashStyle
+        * @name dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle
         * @type Enums.DashStyle
         * @default 'solid'
-                * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
+        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
         */
         dashStyle: 'solid',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.hoverstyle.hatching
-        * @publicName hatching
+        * @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching
         * @type object
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.BubbleSeries
         */
         hatching: {
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.hatching.direction
-            * @publicName direction
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction
             * @type Enums.HatchingDirection
             * @default 'right'
             */
             direction: 'right',
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.hatching.width
-            * @publicName width
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.width
             * @type number
             * @default 2
             */
             width: 2,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.hatching.step
-            * @publicName step
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.step
             * @type number
             * @default 6
             */
             step: 6,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.hatching.opacity
-            * @publicName opacity
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity
             * @type number
             * @default 0.75
             */
             opacity: 0.75
         },
         /**
-        * @name dxChartSeriesTypes.CommonSeries.hoverstyle.border
-        * @publicName border
+        * @name dxChartSeriesTypes.CommonSeries.hoverStyle.border
         * @type object
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
         */
         border: {
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.border.visible
-            * @publicName visible
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.border.width
-            * @publicName width
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.border.width
             * @type number
             * @default 3
             */
             width: 3,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.border.color
-            * @publicName color
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.border.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.hoverstyle.border.dashstyle
-            * @publicName dashStyle
+            * @name dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
-                    */
+            */
             dashStyle: 'solid'
         }
     },
     /**
-    * @name dxChartSeriesTypes.CommonSeries.selectionstyle
-    * @publicName selectionStyle
+    * @name dxChartSeriesTypes.CommonSeries.selectionStyle
     * @type object
     */
     selectionStyle: {
         /**
-        * @name dxChartSeriesTypes.CommonSeries.selectionstyle.color
-        * @publicName color
+        * @name dxChartSeriesTypes.CommonSeries.selectionStyle.color
         * @type string
         * @default undefined
         */
         color: undefined,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.selectionstyle.width
-        * @publicName width
+        * @name dxChartSeriesTypes.CommonSeries.selectionStyle.width
         * @type number
         * @default 3
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.StockSeries
         */
         width: 3,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.selectionstyle.dashstyle
-        * @publicName dashStyle
+        * @name dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle
         * @type Enums.DashStyle
         * @default 'solid'
-                * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
+        * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
         */
         dashStyle: 'solid',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.selectionstyle.hatching
-        * @publicName hatching
+        * @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching
         * @type object
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.CandleStickSeries,dxChartSeriesTypes.BubbleSeries
         */
         hatching: {
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.hatching.direction
-            * @publicName direction
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction
             * @type Enums.HatchingDirection
             * @default 'right'
             */
             direction: 'right',
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.hatching.width
-            * @publicName width
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.width
             * @type number
             * @default 2
             */
             width: 2,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.hatching.step
-            * @publicName step
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.step
             * @type number
             * @default 6
             */
             step: 6,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.hatching.opacity
-            * @publicName opacity
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity
             * @type number
             * @default 0.5
             */
             opacity: 0.5
         },
         /**
-        * @name dxChartSeriesTypes.CommonSeries.selectionstyle.border
-        * @publicName border
+        * @name dxChartSeriesTypes.CommonSeries.selectionStyle.border
         * @type object
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
         */
         border: {
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.border.visible
-            * @publicName visible
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.border.width
-            * @publicName width
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.border.width
             * @type number
             * @default 3
             */
             width: 3,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.border.color
-            * @publicName color
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.border.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.selectionstyle.border.dashstyle
-            * @publicName dashStyle
+            * @name dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
-                    */
+            */
             dashStyle: 'solid'
         }
     },
     /**
     * @name dxChartSeriesTypes.CommonSeries.point
-    * @publicName point
     * @type object
     * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
     */
     point: {
         /**
-        * @name dxChartSeriesTypes.CommonSeries.point.hovermode
-        * @publicName hoverMode
+        * @name dxChartSeriesTypes.CommonSeries.point.hoverMode
         * @type Enums.ChartPointInteractionMode
         * @default 'onlyPoint'
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
         */
         hoverMode: 'onlyPoint',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.point.selectionmode
-        * @publicName selectionMode
+        * @name dxChartSeriesTypes.CommonSeries.point.selectionMode
         * @type Enums.ChartPointInteractionMode
         * @default 'onlyPoint'
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -478,7 +415,6 @@ var commonSeries = {
         selectionMode: 'onlyPoint',
         /**
         * @name dxChartSeriesTypes.CommonSeries.point.color
-        * @publicName color
         * @type string
         * @default undefined
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -486,7 +422,6 @@ var commonSeries = {
         color: undefined,
         /**
         * @name dxChartSeriesTypes.CommonSeries.point.visible
-        * @publicName visible
         * @type boolean
         * @default true
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -494,7 +429,6 @@ var commonSeries = {
         visible: true,
         /**
         * @name dxChartSeriesTypes.CommonSeries.point.symbol
-        * @publicName symbol
         * @type Enums.PointSymbol
         * @default 'circle'
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -502,7 +436,6 @@ var commonSeries = {
         symbol: 'circle',
         /**
         * @name dxChartSeriesTypes.CommonSeries.point.image
-        * @publicName image
         * @type string|object
         * @default undefined
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -510,23 +443,20 @@ var commonSeries = {
         image: {
             /**
             * @name dxChartSeriesTypes.CommonSeries.point.image.url
-            * @publicName url
             * @type string|object
             * @default undefined
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             url: {
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.image.url.rangeminpoint
-                * @publicName rangeMinPoint
+                * @name dxChartSeriesTypes.CommonSeries.point.image.url.rangeMinPoint
                 * @type string
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.RangeAreaSeries
                 */
                 rangeMinPoint: undefined,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.image.url.rangemaxpoint
-                * @publicName rangeMaxPoint
+                * @name dxChartSeriesTypes.CommonSeries.point.image.url.rangeMaxPoint
                 * @type string
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.RangeAreaSeries
@@ -535,23 +465,20 @@ var commonSeries = {
             },
             /**
             * @name dxChartSeriesTypes.CommonSeries.point.image.width
-            * @publicName width
             * @type number|object
             * @default 30
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             width: {
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.image.width.rangeminpoint
-                * @publicName rangeMinPoint
+                * @name dxChartSeriesTypes.CommonSeries.point.image.width.rangeMinPoint
                 * @type number
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.RangeAreaSeries
                 */
                 rangeMinPoint: undefined,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.image.width.rangemaxpoint
-                * @publicName rangeMaxPoint
+                * @name dxChartSeriesTypes.CommonSeries.point.image.width.rangeMaxPoint
                 * @type number
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.RangeAreaSeries
@@ -560,23 +487,20 @@ var commonSeries = {
             },
             /**
             * @name dxChartSeriesTypes.CommonSeries.point.image.height
-            * @publicName height
             * @type number|object
             * @default 30
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             height: {
                 /**
-               * @name dxChartSeriesTypes.CommonSeries.point.image.height.rangeminpoint
-               * @publicName rangeMinPoint
+               * @name dxChartSeriesTypes.CommonSeries.point.image.height.rangeMinPoint
                * @type number
                * @default undefined
                * @propertyOf dxChartSeriesTypes.RangeAreaSeries
                */
                 rangeMinPoint: undefined,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.image.height.rangemaxpoint
-                * @publicName rangeMaxPoint
+                * @name dxChartSeriesTypes.CommonSeries.point.image.height.rangeMaxPoint
                 * @type number
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.RangeAreaSeries
@@ -586,14 +510,12 @@ var commonSeries = {
         },
         /**
         * @name dxChartSeriesTypes.CommonSeries.point.border
-        * @publicName border
         * @type object
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
         */
         border: {
             /**
             * @name dxChartSeriesTypes.CommonSeries.point.border.visible
-            * @publicName visible
             * @type boolean
             * @default false
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -601,7 +523,6 @@ var commonSeries = {
             visible: false,
             /**
             * @name dxChartSeriesTypes.CommonSeries.point.border.width
-            * @publicName width
             * @type number
             * @default 1
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -609,7 +530,6 @@ var commonSeries = {
             width: 1,
             /**
             * @name dxChartSeriesTypes.CommonSeries.point.border.color
-            * @publicName color
             * @type string
             * @default undefined
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -618,53 +538,46 @@ var commonSeries = {
         },
         /**
         * @name dxChartSeriesTypes.CommonSeries.point.size
-        * @publicName size
         * @type number
         * @default 12
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
         */
         size: 12,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle
-        * @publicName hoverStyle
+        * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle
         * @type object
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
         */
         hoverStyle: {
             /**
-            * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle.color
-            * @publicName color
+            * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle.color
             * @type string
             * @default undefined
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             color: undefined,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle.border
-            * @publicName border
+            * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle.border
             * @type object
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             border: {
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle.border.visible
-                * @publicName visible
+                * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.visible
                 * @type boolean
                 * @default true
                 * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
                 */
                 visible: true,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle.border.width
-                * @publicName width
+                * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.width
                 * @type number
                 * @default 4
                 * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
                 */
                 width: 4,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle.border.color
-                * @publicName color
+                * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle.border.color
                 * @type string
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -672,8 +585,7 @@ var commonSeries = {
                 color: undefined
             },
             /**
-            * @name dxChartSeriesTypes.CommonSeries.point.hoverstyle.size
-            * @publicName size
+            * @name dxChartSeriesTypes.CommonSeries.point.hoverStyle.size
             * @type number
             * @default undefined
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -681,46 +593,40 @@ var commonSeries = {
             size: undefined
         },
         /**
-        * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle
-        * @publicName selectionStyle
+        * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle
         * @type object
         * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
         */
         selectionStyle: {
             /**
-            * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle.color
-            * @publicName color
+            * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle.color
             * @type string
             * @default undefined
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             color: undefined,
             /**
-            * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle.border
-            * @publicName border
+            * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle.border
             * @type object
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
             */
             border: {
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle.border.visible
-                * @publicName visible
+                * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.visible
                 * @type boolean
                 * @default true
                 * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
                 */
                 visible: true,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle.border.width
-                * @publicName width
+                * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.width
                 * @type number
                 * @default 4
                 * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
                 */
                 width: 4,
                 /**
-                * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle.border.color
-                * @publicName color
+                * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle.border.color
                 * @type string
                 * @default undefined
                 * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -728,8 +634,7 @@ var commonSeries = {
                 color: undefined
             },
             /**
-            * @name dxChartSeriesTypes.CommonSeries.point.selectionstyle.size
-            * @publicName size
+            * @name dxChartSeriesTypes.CommonSeries.point.selectionStyle.size
             * @type number
             * @default undefined
             * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries,dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.ScatterSeries
@@ -738,45 +643,39 @@ var commonSeries = {
         }
     },
     /**
-    * @name dxChartSeriesTypes.CommonSeries.showinlegend
-    * @publicName showInLegend
+    * @name dxChartSeriesTypes.CommonSeries.showInLegend
     * @type boolean
     * @default true
     */
     showInLegend: true,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.maxlabelcount
-    * @publicName maxLabelCount
+    * @name dxChartSeriesTypes.CommonSeries.maxLabelCount
     * @type number
     * @default undefined
     */
     maxLabelCount: undefined,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.minbarsize
-    * @publicName minBarSize
+    * @name dxChartSeriesTypes.CommonSeries.minBarSize
     * @type number
     * @default undefined
     * @propertyOf dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BarSeries
-        */
+    */
     minBarSize: undefined,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.ignoreemptypoints
-    * @publicName ignoreEmptyPoints
+    * @name dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints
     * @type boolean
     * @default false
-        */
+    */
     ignoreEmptyPoints: false,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.barpadding
-    * @publicName barPadding
+    * @name dxChartSeriesTypes.CommonSeries.barPadding
     * @type number
     * @default undefined
     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
     */
     barPadding: undefined,
     /**
-    * @name dxChartSeriesTypes.CommonSeries.barwidth
-    * @publicName barWidth
+    * @name dxChartSeriesTypes.CommonSeries.barWidth
     * @type number
     * @default undefined
     * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
@@ -784,13 +683,11 @@ var commonSeries = {
     barWidth: undefined,
     /**
     * @name dxChartSeriesTypes.CommonSeries.label
-    * @publicName label
     * @type object
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.CommonSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -799,14 +696,12 @@ var commonSeries = {
         customizeText: undefined,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.visible
-        * @publicName visible
         * @type boolean
         * @default false
         */
         visible: false,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.showforzerovalues
-        * @publicName showForZeroValues
+        * @name dxChartSeriesTypes.CommonSeries.label.showForZeroValues
         * @type boolean
         * @default true
         * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
@@ -814,68 +709,58 @@ var commonSeries = {
         showForZeroValues: true,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.alignment
-        * @publicName alignment
         * @type Enums.HorizontalAlignment
         * @default 'center'
-                */
+        */
         alignment: 'center',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.rotationangle
-        * @publicName rotationAngle
+        * @name dxChartSeriesTypes.CommonSeries.label.rotationAngle
         * @type number
         * @default 0
         */
         rotationAngle: 0,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.horizontaloffset
-        * @publicName horizontalOffset
+        * @name dxChartSeriesTypes.CommonSeries.label.horizontalOffset
         * @type number
         * @default 0
         */
         horizontalOffset: 0,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.verticaloffset
-        * @publicName verticalOffset
+        * @name dxChartSeriesTypes.CommonSeries.label.verticalOffset
         * @type number
         * @default 0
         */
         verticalOffset: 0,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.format
-        * @publicName format
         * @extends CommonVizFormat
         */
         format: '',
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.precision
-        * @publicName precision
         * @extends CommonVizPrecision
         */
         precision: 0,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.argumentFormat
-        * @publicName argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.argumentprecision
-        * @publicName argumentPrecision
+        * @name dxChartSeriesTypes.CommonSeries.label.argumentPrecision
         * @extends CommonVizPrecision
         * @deprecated
         */
         argumentPrecision: 0,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.percentprecision
-        * @publicName percentPrecision
+        * @name dxChartSeriesTypes.CommonSeries.label.percentPrecision
         * @extends CommonVizPrecision
         * @deprecated
-        * @propertyOf dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes. FullStackedSplineAreaSeries,dxChartSeriesTypes. FullStackedSplineSeries
+        * @propertyOf dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes. FullStackedSplineAreaSeries,dxChartSeriesTypes. FullStackedLineSeries
         */
         percentPrecision: 0,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.position
-        * @publicName position
         * @type Enums.RelativePosition
         * @default 'outside'
         * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BubbleSeries
@@ -883,83 +768,71 @@ var commonSeries = {
         position: 'outside',
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.font
-        * @publicName font
         * @type object
         */
         font: {
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.family
-            * @publicName family
             * @type string
             * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.weight
-            * @publicName weight
             * @type number
             * @default 400
             */
             weight: 400,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.color
-            * @publicName color
             * @type string
             * @default '#FFFFFF'
             */
             color: '#FFFFFF',
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.size
-            * @publicName size
             * @type number|string
             * @default 14
             */
             size: 14,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.opacity
-            * @publicName opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.backgroundcolor
-        * @publicName backgroundColor
+        * @name dxChartSeriesTypes.CommonSeries.label.backgroundColor
         * @type string
         * @default undefined
         */
         backgroundColor: undefined,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.border
-        * @publicName border
         * @type object
         */
         border: {
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.border.visible
-            * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.border.width
-            * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.border.color
-            * @publicName color
             * @type string
             * @default  '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxChartSeriesTypes.CommonSeries.label.border.dashstyle
-            * @publicName dashStyle
+            * @name dxChartSeriesTypes.CommonSeries.label.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
@@ -967,14 +840,12 @@ var commonSeries = {
         },
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.connector
-        * @publicName connector
         * @type object
         * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
         */
         connector: {
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.connector.visible
-            * @publicName visible
             * @type boolean
             * @default false
             * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
@@ -982,7 +853,6 @@ var commonSeries = {
             visible: false,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.connector.width
-            * @publicName width
             * @type number
             * @default 1
             * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
@@ -990,7 +860,6 @@ var commonSeries = {
             width: 1,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.connector.color
-            * @publicName color
             * @type string
             * @default undefined
             * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.StepLineSeries
@@ -999,71 +868,61 @@ var commonSeries = {
         }
     },
     /**
-    * @name dxChartSeriesTypes.CommonSeries.valueerrorbar
-    * @publicName valueErrorBar
+    * @name dxChartSeriesTypes.CommonSeries.valueErrorBar
     * @type object
     * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.ScatterSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.StepLineSeries
     */
     valueErrorBar: {
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.displaymode
-        * @publicName displayMode
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.displayMode
         * @type Enums.ValueErrorBarDisplayMode
         * @default 'auto'
         */
         displayMode: 'auto',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.lowvaluefield
-        * @publicName lowValueField
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.lowValueField
         * @type string
         * @default undefined
         */
         lowValueField: undefined,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.highvaluefield
-        * @publicName highValueField
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.highValueField
         * @type string
         * @default undefined
         */
         highValueField: undefined,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.type
-        * @publicName type
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.type
         * @type Enums.ValueErrorBarType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.value
-        * @publicName value
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.value
         * @type number
         * @default 1
         */
         value: 1,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.color
-        * @publicName color
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.color
         * @type string
         * @default 'black'
         */
         color: 'black',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.linewidth
-        * @publicName lineWidth
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.lineWidth
         * @type number
         * @default 2
         */
         lineWidth: 2,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.edgelength
-        * @publicName edgeLength
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.edgeLength
         * @type number
         * @default 8
         */
         edgeLength: 8,
         /**
-        * @name dxChartSeriesTypes.CommonSeries.valueerrorbar.opacity
-        * @publicName opacity
+        * @name dxChartSeriesTypes.CommonSeries.valueErrorBar.opacity
         * @type number
         * @default undefined
         */
@@ -1071,26 +930,22 @@ var commonSeries = {
     },
     /**
     * @name dxChartSeriesTypes.CommonSeries.aggregation
-    * @publicName aggregation
     * @type object
     */
     aggregation: {
         /**
         * @name dxChartSeriesTypes.CommonSeries.aggregation.enabled
-        * @publicName enabled
         * @type boolean
         * @default false
         */
         enabled: false,
         /**
         * @name dxChartSeriesTypes.CommonSeries.aggregation.method
-        * @publicName method
         * @type Enums.ChartSeriesAggregationMethod
         */
         method: undefined,
         /**
         * @name dxChartSeriesTypes.CommonSeries.aggregation.calculate
-        * @publicName calculate
         * @type function(aggregationInfo, series)
         * @type_function_param1 aggregationInfo:chartPointAggregationInfoObject
         * @type_function_param2 series:chartSeriesObject
@@ -1102,23 +957,20 @@ var commonSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.areaseries
-* @publicName AreaSeries
+* @name dxChartSeriesTypes.AreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var areaSeries = {
+var AreaSeries = {
     /**
-    * @name dxChartSeriesTypes.areaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.AreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.areaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.AreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1127,15 +979,13 @@ var areaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.areaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.AreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.areaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.AreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -1143,31 +993,27 @@ var areaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.areaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.AreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.areaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.AreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.areaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.AreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.areaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.AreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1176,23 +1022,20 @@ var areaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.barseries
-* @publicName BarSeries
+* @name dxChartSeriesTypes.BarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var barSeries = {
+var BarSeries = {
     /**
-    * @name dxChartSeriesTypes.barseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.BarSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.barseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.BarSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1201,31 +1044,27 @@ var barSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.barseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.BarSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.barseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.BarSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.barseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.BarSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.barseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.BarSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
         */
@@ -1234,30 +1073,26 @@ var barSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.candlestickseries
-* @publicName CandleStickSeries
+* @name dxChartSeriesTypes.CandleStickSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var candlestickSeries = {
+var CandleStickSeries = {
     /**
-    * @name dxChartSeriesTypes.candlestickseries.argumentfield
-    * @publicName argumentField
+    * @name dxChartSeriesTypes.CandleStickSeries.argumentField
     * @type string
     * @default 'date'
     */
     argumentField: 'date',
     /**
-    * @name dxChartSeriesTypes.candlestickseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.CandleStickSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.candlestickseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.CandleStickSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1266,38 +1101,33 @@ var candlestickSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.candlestickseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.CandleStickSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.candlestickseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.CandleStickSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.candlestickseries.hoverstyle
-    * @publicName hoverStyle
+    * @name dxChartSeriesTypes.CandleStickSeries.hoverStyle
     * @type object
     * @inheritdoc
     */
     hoverStyle: {
         /**
-        * @name dxChartSeriesTypes.candlestickseries.hoverstyle.hatching
-        * @publicName hatching
+        * @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching
         * @type object
         * @inheritdoc
         */
         hatching: {
             /**
-            * @name dxChartSeriesTypes.candlestickseries.hoverstyle.hatching.direction
-            * @publicName direction
+            * @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction
             * @default 'none'
             * @type Enums.HatchingDirection
             * @inheritdoc
@@ -1306,22 +1136,19 @@ var candlestickSeries = {
         }
     },
     /**
-    * @name dxChartSeriesTypes.candlestickseries.selectionstyle
-    * @publicName selectionStyle
+    * @name dxChartSeriesTypes.CandleStickSeries.selectionStyle
     * @type object
     * @inheritdoc
     */
     selectionStyle: {
         /**
-        * @name dxChartSeriesTypes.candlestickseries.selectionstyle.hatching
-        * @publicName hatching
+        * @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching
         * @type object
         * @inheritdoc
         */
         hatching: {
             /**
-            * @name dxChartSeriesTypes.candlestickseries.selectionstyle.hatching.direction
-            * @publicName direction
+            * @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction
             * @default 'none'
             * @type Enums.HatchingDirection
             * @inheritdoc
@@ -1330,15 +1157,13 @@ var candlestickSeries = {
         }
     },
     /**
-    * @name dxChartSeriesTypes.candlestickseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.CandleStickSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.candlestickseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.CandleStickSeries.aggregation.method
         * @type Enums.ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
         */
@@ -1347,23 +1172,20 @@ var candlestickSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.fullstackedareaseries
-* @publicName FullStackedAreaSeries
+* @name dxChartSeriesTypes.FullStackedAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var fullstackedareaSeries = {
+var FullStackedAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.fullstackedareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.FullStackedAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.fullstackedareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.FullStackedAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -1371,14 +1193,12 @@ var fullstackedareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.FullStackedAreaSeries.label
     * @type object
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.fullstackedareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1387,31 +1207,27 @@ var fullstackedareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.FullStackedAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.fullstackedareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.FullStackedAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.fullstackedareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.FullStackedAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.fullstackedareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1420,23 +1236,20 @@ var fullstackedareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.fullstackedsplineareaseries
-* @publicName FullStackedSplineAreaSeries
+* @name dxChartSeriesTypes.FullStackedSplineAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var fullstackedsplineareaSeries = {
+var FullStackedSplineAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.fullstackedsplineareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -1444,15 +1257,13 @@ var fullstackedsplineareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.fullstackedsplineareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1461,31 +1272,27 @@ var fullstackedsplineareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.fullstackedsplineareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1494,23 +1301,20 @@ var fullstackedsplineareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.fullstackedbarseries
-* @publicName FullStackedBarSeries
+* @name dxChartSeriesTypes.FullStackedBarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var fullstackedbarSeries = {
+var FullStackedBarSeries = {
     /**
-    * @name dxChartSeriesTypes.fullstackedbarseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.FullStackedBarSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.fullstackedbarseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.FullStackedBarSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1518,8 +1322,7 @@ var fullstackedbarSeries = {
         */
         customizeText: undefined,
         /**
-        * @name dxChartSeriesTypes.fullstackedbarseries.label.position
-        * @publicName position
+        * @name dxChartSeriesTypes.FullStackedBarSeries.label.position
         * @type Enums.RelativePosition
         * @default 'inside'
         * @inheritdoc
@@ -1527,31 +1330,27 @@ var fullstackedbarSeries = {
         position: 'inside'
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedbarseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.FullStackedBarSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.fullstackedbarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.FullStackedBarSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.fullstackedbarseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.FullStackedBarSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.fullstackedbarseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.FullStackedBarSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
         */
@@ -1560,23 +1359,20 @@ var fullstackedbarSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.fullstackedlineseries
-* @publicName FullStackedLineSeries
+* @name dxChartSeriesTypes.FullStackedLineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var fullstackedlineSeries = {
+var FullStackedLineSeries = {
     /**
-    * @name dxChartSeriesTypes.fullstackedlineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.FullStackedLineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.fullstackedlineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.FullStackedLineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1585,31 +1381,27 @@ var fullstackedlineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedlineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.FullStackedLineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.fullstackedlineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.FullStackedLineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.fullstackedlineseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.FullStackedLineSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.fullstackedlineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.FullStackedLineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1618,23 +1410,20 @@ var fullstackedlineSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.fullstackedsplineseries
-* @publicName FullStackedSplineSeries
+* @name dxChartSeriesTypes.FullStackedSplineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var fullstackedsplineSeries = {
+var FullStackedSplineSeries = {
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.FullStackedSplineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.fullstackedsplineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1643,31 +1432,27 @@ var fullstackedsplineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.FullStackedSplineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.FullStackedSplineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.fullstackedsplineseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.FullStackedSplineSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.fullstackedsplineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1677,23 +1462,20 @@ var fullstackedsplineSeries = {
 
 
 /**
-* @name dxChartSeriesTypes.lineseries
-* @publicName LineSeries
+* @name dxChartSeriesTypes.LineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var lineSeries = {
+var LineSeries = {
     /**
-    * @name dxChartSeriesTypes.lineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.LineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.lineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.LineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1702,31 +1484,27 @@ var lineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.lineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.LineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.lineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.LineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-   * @name dxChartSeriesTypes.lineseries.aggregation
-   * @publicName aggregation
+   * @name dxChartSeriesTypes.LineSeries.aggregation
    * @inheritdoc
    * @type object
    */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.lineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.LineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1735,23 +1513,20 @@ var lineSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.rangeareaseries
-* @publicName RangeAreaSeries
+* @name dxChartSeriesTypes.RangeAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var rangeareaSeries = {
+var RangeAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.rangeareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.RangeAreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.rangeareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.RangeAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1760,15 +1535,13 @@ var rangeareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.rangeareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.RangeAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.rangeareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.RangeAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -1776,31 +1549,27 @@ var rangeareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.rangeareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.RangeAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.rangeareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.RangeAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.rangeareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.RangeAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.rangeareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.RangeAreaSeries.aggregation.method
         * @type Enums.ChartRangeSeriesAggregationMethod
         * @default 'range'
         */
@@ -1809,23 +1578,20 @@ var rangeareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.rangebarseries
-* @publicName RangeBarSeries
+* @name dxChartSeriesTypes.RangeBarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var rangebarSeries = {
+var RangeBarSeries = {
     /**
-    * @name dxChartSeriesTypes.rangebarseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.RangeBarSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.rangebarseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.RangeBarSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1834,31 +1600,27 @@ var rangebarSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.rangebarseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.RangeBarSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.rangebarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.RangeBarSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.rangebarseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.RangeBarSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.rangebarseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.RangeBarSeries.aggregation.method
         * @type Enums.ChartRangeSeriesAggregationMethod
         * @default 'range'
         */
@@ -1867,23 +1629,20 @@ var rangebarSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.scatterseries
-* @publicName ScatterSeries
+* @name dxChartSeriesTypes.ScatterSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var scatterSeries = {
+var ScatterSeries = {
     /**
-    * @name dxChartSeriesTypes.scatterseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.ScatterSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.scatterseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.ScatterSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1892,15 +1651,13 @@ var scatterSeries = {
         customizeText: undefined
     },
     /**
-   * @name dxChartSeriesTypes.scatterseries.aggregation
-   * @publicName aggregation
+   * @name dxChartSeriesTypes.ScatterSeries.aggregation
    * @inheritdoc
    * @type object
    */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.scatterseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.ScatterSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1909,23 +1666,20 @@ var scatterSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.splineareaseries
-* @publicName SplineAreaSeries
+* @name dxChartSeriesTypes.SplineAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var splineareaSeries = {
+var SplineAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.splineareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.SplineAreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.splineareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.SplineAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -1934,15 +1688,13 @@ var splineareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.splineareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.SplineAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.splineareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.SplineAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -1950,31 +1702,27 @@ var splineareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.splineareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.SplineAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.splineareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.SplineAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.splineareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.SplineAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.splineareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.SplineAreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -1983,23 +1731,20 @@ var splineareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.splineseries
-* @publicName SplineSeries
+* @name dxChartSeriesTypes.SplineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var splineSeries = {
+var SplineSeries = {
     /**
-    * @name dxChartSeriesTypes.splineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.SplineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.splineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.SplineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2008,31 +1753,27 @@ var splineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.splineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.SplineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.splineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.SplineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.splineseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.SplineSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.splineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.SplineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2041,23 +1782,20 @@ var splineSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stackedareaseries
-* @publicName StackedAreaSeries
+* @name dxChartSeriesTypes.StackedAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stackedareaSeries = {
+var StackedAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.stackedareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StackedAreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stackedareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StackedAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2066,15 +1804,13 @@ var stackedareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.stackedareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.StackedAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.stackedareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.StackedAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -2082,31 +1818,27 @@ var stackedareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.stackedareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StackedAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.stackedareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StackedAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.stackedareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StackedAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stackedareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StackedAreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2115,23 +1847,20 @@ var stackedareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stackedsplineareaseries
-* @publicName StackedSplineAreaSeries
+* @name dxChartSeriesTypes.StackedSplineAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stackedsplineareaSeries = {
+var StackedSplineAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.stackedsplineareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StackedSplineAreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stackedsplineareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2140,15 +1869,13 @@ var stackedsplineareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.stackedsplineareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.StackedSplineAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.stackedsplineareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.StackedSplineAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -2156,31 +1883,27 @@ var stackedsplineareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.stackedsplineareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StackedSplineAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.stackedsplineareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StackedSplineAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.stackedsplineareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StackedSplineAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stackedsplineareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2189,23 +1912,20 @@ var stackedsplineareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stackedbarseries
-* @publicName StackedBarSeries
+* @name dxChartSeriesTypes.StackedBarSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stackedbarSeries = {
+var StackedBarSeries = {
     /**
-    * @name dxChartSeriesTypes.stackedbarseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StackedBarSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stackedbarseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StackedBarSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2213,8 +1933,7 @@ var stackedbarSeries = {
         */
         customizeText: undefined,
         /**
-        * @name dxChartSeriesTypes.stackedbarseries.label.position
-        * @publicName position
+        * @name dxChartSeriesTypes.StackedBarSeries.label.position
         * @type Enums.RelativePosition
         * @default 'inside'
         * @inheritdoc
@@ -2222,31 +1941,27 @@ var stackedbarSeries = {
         position: 'inside'
     },
     /**
-    * @name dxChartSeriesTypes.stackedbarseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StackedBarSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.stackedbarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StackedBarSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.stackedbarseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StackedBarSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stackedbarseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StackedBarSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'sum'
         */
@@ -2255,23 +1970,20 @@ var stackedbarSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stackedlineseries
-* @publicName StackedLineSeries
+* @name dxChartSeriesTypes.StackedLineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stackedlineSeries = {
+var StackedLineSeries = {
     /**
-    * @name dxChartSeriesTypes.stackedlineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StackedLineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stackedlineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StackedLineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2280,31 +1992,27 @@ var stackedlineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.stackedlineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StackedLineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.stackedlineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StackedLineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.stackedlineseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StackedLineSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stackedlineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StackedLineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2313,23 +2021,20 @@ var stackedlineSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stackedsplineseries
-* @publicName StackedSplineSeries
+* @name dxChartSeriesTypes.StackedSplineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stackedsplineSeries = {
+var StackedSplineSeries = {
     /**
-    * @name dxChartSeriesTypes.stackedsplineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StackedSplineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stackedsplineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StackedSplineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2338,31 +2043,27 @@ var stackedsplineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.stackedsplineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StackedSplineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.stackedsplineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StackedSplineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.stackedsplineseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StackedSplineSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stackedsplineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StackedSplineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2371,23 +2072,20 @@ var stackedsplineSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stepareaseries
-* @publicName StepAreaSeries
+* @name dxChartSeriesTypes.StepAreaSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stepareaSeries = {
+var StepAreaSeries = {
     /**
-    * @name dxChartSeriesTypes.stepareaseries.border
-    * @publicName border
+    * @name dxChartSeriesTypes.StepAreaSeries.border
     * @type object
     * @inheritdoc
     */
     border: {
         /**
-        * @name dxChartSeriesTypes.stepareaseries.border.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.StepAreaSeries.border.visible
         * @type boolean
         * @default true
         * @inheritdoc
@@ -2395,15 +2093,13 @@ var stepareaSeries = {
         visible: true
     },
     /**
-    * @name dxChartSeriesTypes.stepareaseries.point
-    * @publicName point
+    * @name dxChartSeriesTypes.StepAreaSeries.point
     * @type object
     * @inheritdoc
     **/
     point: {
         /**
-        * @name dxChartSeriesTypes.stepareaseries.point.visible
-        * @publicName visible
+        * @name dxChartSeriesTypes.StepAreaSeries.point.visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -2411,22 +2107,19 @@ var stepareaSeries = {
         visible: false
     },
     /**
-    * @name dxChartSeriesTypes.stepareaseries.hoverstyle
-    * @publicName hoverStyle
+    * @name dxChartSeriesTypes.StepAreaSeries.hoverStyle
     * @type object
     * @inheritdoc
     */
     hoverStyle: {
         /**
-        * @name dxChartSeriesTypes.stepareaseries.hoverstyle.border
-        * @publicName border
+        * @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border
         * @type object
         * @inheritdoc
         */
         border: {
             /**
-            * @name dxChartSeriesTypes.stepareaseries.hoverstyle.border.visible
-            * @publicName visible
+            * @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible
             * @type boolean
             * @default true
             * @inheritdoc
@@ -2435,15 +2128,13 @@ var stepareaSeries = {
         }
     },
     /**
-    * @name dxChartSeriesTypes.stepareaseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StepAreaSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stepareaseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StepAreaSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2452,22 +2143,19 @@ var stepareaSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.stepareaseries.selectionStyle
-    * @publicName selectionStyle
+    * @name dxChartSeriesTypes.StepAreaSeries.selectionStyle
     * @type object
     * @inheritdoc
     */
     selectionStyle: {
         /**
-        * @name dxChartSeriesTypes.stepareaseries.selectionStyle.border
-        * @publicName border
+        * @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border
         * @type object
         * @inheritdoc
         */
         border: {
             /**
-            * @name dxChartSeriesTypes.stepareaseries.selectionstyle.border.visible
-            * @publicName visible
+            * @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible
             * @type boolean
             * @default false
             * @inheritdoc
@@ -2476,31 +2164,27 @@ var stepareaSeries = {
         }
     },
     /**
-    * @name dxChartSeriesTypes.stepareaseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StepAreaSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.stepareaseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StepAreaSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.stepareaseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StepAreaSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stepareaseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StepAreaSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2509,23 +2193,20 @@ var stepareaSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.steplineseries
-* @publicName StepLineSeries
+* @name dxChartSeriesTypes.StepLineSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var steplineSeries = {
+var StepLineSeries = {
     /**
-    * @name dxChartSeriesTypes.steplineseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StepLineSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.steplineseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StepLineSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2534,31 +2215,27 @@ var steplineSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.steplineseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StepLineSeries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint'|'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxChartSeriesTypes.steplineseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StepLineSeries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
     */
     selectionMode: 'includePoints',
     /**
-    * @name dxChartSeriesTypes.steplineseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.StepLineSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.steplineseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StepLineSeries.aggregation.method
         * @type Enums.ChartSingleValueSeriesAggregationMethod
         * @default 'avg'
         */
@@ -2567,30 +2244,26 @@ var steplineSeries = {
 };
 
 /**
-* @name dxChartSeriesTypes.stockseries
-* @publicName StockSeries
+* @name dxChartSeriesTypes.StockSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var stockSeries = {
+var StockSeries = {
     /**
-    * @name dxChartSeriesTypes.stockseries.argumentfield
-    * @publicName argumentField
+    * @name dxChartSeriesTypes.StockSeries.argumentField
     * @type string
     * @default 'date'
     */
     argumentField: 'date',
     /**
-    * @name dxChartSeriesTypes.stockseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.StockSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.stockseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.StockSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2599,31 +2272,27 @@ var stockSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.stockseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.StockSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.stockseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.StockSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-   * @name dxChartSeriesTypes.stockseries.aggregation
-   * @publicName aggregation
+   * @name dxChartSeriesTypes.StockSeries.aggregation
    * @inheritdoc
    * @type object
    */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.stockseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.StockSeries.aggregation.method
         * @type Enums.ChartFinancialSeriesAggregationMethod
         * @default 'ohlc'
         */
@@ -2631,23 +2300,20 @@ var stockSeries = {
     }
 };
 /**
-* @name dxChartSeriesTypes.bubbleseries
-* @publicName BubbleSeries
+* @name dxChartSeriesTypes.BubbleSeries
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 * @hidePropertyOf
 */
-var bubbleSeries = {
+var BubbleSeries = {
     /**
-    * @name dxChartSeriesTypes.bubbleseries.label
-    * @publicName label
+    * @name dxChartSeriesTypes.BubbleSeries.label
     * @type object
     * @inheritdoc
     */
     label: {
         /**
-        * @name dxChartSeriesTypes.bubbleseries.label.customizetext
-        * @publicName customizeText
+        * @name dxChartSeriesTypes.BubbleSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -2656,31 +2322,27 @@ var bubbleSeries = {
         customizeText: undefined
     },
     /**
-    * @name dxChartSeriesTypes.bubbleseries.hovermode
-    * @publicName hoverMode
+    * @name dxChartSeriesTypes.BubbleSeries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.bubbleseries.selectionmode
-    * @publicName selectionMode
+    * @name dxChartSeriesTypes.BubbleSeries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     selectionMode: 'onlyPoint',
     /**
-    * @name dxChartSeriesTypes.bubbleseries.aggregation
-    * @publicName aggregation
+    * @name dxChartSeriesTypes.BubbleSeries.aggregation
     * @inheritdoc
     * @type object
     */
     aggregation: {
         /**
-        * @name dxChartSeriesTypes.bubbleseries.aggregation.method
-        * @publicName method
+        * @name dxChartSeriesTypes.BubbleSeries.aggregation.method
         * @type Enums.ChartBubbleSeriesAggregationMethod
         * @default 'avg'
         */

@@ -8,8 +8,7 @@ var errors = require("../errors"),
 require("../../integration/knockout");
 
 /**
-* @name dxview
-* @publicName dxView
+* @name dxView
 * @type object
 * @module framework/html/view_engine_components
 */
@@ -19,38 +18,32 @@ var View = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxviewoptions.name
-            * @publicName name
+            * @name dxViewOptions.name
             * @type string
             * @default null
             */
             name: null,
             /**
-            * @name dxviewoptions.title
-            * @publicName title
+            * @name dxViewOptions.title
             * @type string
             * @default null
             */
             title: null
             /**
-            * @name dxviewoptions.disableCache
-            * @publicName disableCache
+            * @name dxViewOptions.disableCache
             * @type Boolean
             */
             /**
-            * @name dxviewoptions.modal
-            * @publicName modal
+            * @name dxViewOptions.modal
             * @type Boolean
             */
             /**
-            * @name dxviewoptions.orientation
-            * @publicName orientation
+            * @name dxViewOptions.orientation
             * @type string
             * @acceptValues 'portrait'|'landscape'
             */
             /**
-             * @name dxviewoptions.pane
-             * @publicName pane
+             * @name dxViewOptions.pane
              * @type string
              * @default 'detail'
              * @acceptValues 'master'|'detail'
@@ -75,8 +68,7 @@ var View = MarkupComponent.inherit({
 });
 
 /**
-* @name dxlayout
-* @publicName dxLayout
+* @name dxLayout
 * @type object
 * @module framework/html/view_engine_components
 */
@@ -86,8 +78,7 @@ var Layout = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxlayoutoptions.name
-            * @publicName name
+            * @name dxLayoutOptions.name
             * @type string
             * @default null
             */
@@ -103,8 +94,7 @@ var Layout = MarkupComponent.inherit({
 
 
 /**
-* @name dxviewPlaceholder
-* @publicName dxViewPlaceholder
+* @name dxViewPlaceholder
 * @type object
 * @module framework/html/view_engine_components
 */
@@ -114,8 +104,7 @@ var ViewPlaceholder = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxviewPlaceholderoptions.viewName
-            * @publicName viewName
+            * @name dxViewPlaceholderOptions.viewName
             * @type string
             * @default null
             */
@@ -148,8 +137,7 @@ var setupTransitionInnerElement = function($element) {
 };
 
 /**
-* @name dxtransition
-* @publicName dxTransition
+* @name dxTransition
 * @type object
 * @module framework/html/view_engine_components
 */
@@ -159,15 +147,13 @@ var Transition = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxtransitionoptions.name
-            * @publicName name
+            * @name dxTransitionOptions.name
             * @type string
             * @default null
             */
             name: null,
             /**
-            * @name dxtransitionoptions.type
-            * @publicName type
+            * @name dxTransitionOptions.type
             * @type string
             * @default undefined
             * @acceptValues 'slide'|'fade'|'overflow'
@@ -175,8 +161,7 @@ var Transition = MarkupComponent.inherit({
             */
             type: undefined,
             /**
-            * @name dxtransitionoptions.animation
-            * @publicName animation
+            * @name dxTransitionOptions.animation
             * @type string
             * @default "slide"
             */
@@ -204,8 +189,7 @@ var Transition = MarkupComponent.inherit({
 });
 
 /**
-* @name dxcontentplaceholder
-* @publicName dxContentPlaceholder
+* @name dxContentPlaceholder
 * @type object
 * @module framework/html/view_engine_components
 */
@@ -215,15 +199,13 @@ var ContentPlaceholder = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxcontentplaceholderoptions.name
-            * @publicName name
+            * @name dxContentPlaceholderOptions.name
             * @type string
             * @default null
             */
             name: null,
             /**
-            * @name dxcontentplaceholderoptions.transition
-            * @publicName transition
+            * @name dxContentPlaceholderOptions.transition
             * @type string
             * @default undefined
             * @acceptValues 'none'|'slide'|'fade'|'overflow'
@@ -231,15 +213,13 @@ var ContentPlaceholder = MarkupComponent.inherit({
             */
             transition: undefined,
             /**
-            * @name dxcontentplaceholderoptions.animation
-            * @publicName animation
+            * @name dxContentPlaceholderOptions.animation
             * @type string
             * @default "slide"
             */
             animation: "none",
             /**
-            * @name dxcontentplaceholderoptions.contentCssPosition
-            * @publicName contentCssPosition
+            * @name dxContentPlaceholderOptions.contentCssPosition
             * @type string
             * @default 'absolute'
             * @acceptValues 'absolute'|'static'
@@ -263,8 +243,7 @@ var ContentPlaceholder = MarkupComponent.inherit({
 });
 
 /**
-* @name dxcontent
-* @publicName dxContent
+* @name dxContent
 * @type object
 * @module framework/html/view_engine_components
 */
@@ -274,8 +253,7 @@ var Content = MarkupComponent.inherit({
 
         this.option({
             /**
-            * @name dxcontentoptions.targetPlaceholder
-            * @publicName targetPlaceholder
+            * @name dxContentOptions.targetPlaceholder
             * @type string
             * @default null
             */

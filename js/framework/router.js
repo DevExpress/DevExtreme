@@ -207,7 +207,6 @@ var Route = Class.inherit({
 
 /**
 * @name Router
-* @publicName Router
 * @type object
 * @module framework/router
 * @export default

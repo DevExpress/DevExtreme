@@ -27,14 +27,12 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.showColumnHeaders
-             * @publicName showColumnHeaders
              * @type boolean
              * @default true
              */
             showColumnHeaders: true,
             /**
             * @name GridBaseOptions.cellHintEnabled
-            * @publicName cellHintEnabled
             * @type boolean
             * @default true
             */

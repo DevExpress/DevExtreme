@@ -112,7 +112,6 @@ ready(function() {
 
 /**
 * @name dxOverlay
-* @publicName dxOverlay
 * @type object
 * @inherits Widget
 * @hidden
@@ -151,7 +150,6 @@ var Overlay = Widget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxOverlayOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
@@ -159,7 +157,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.visible
-            * @publicName visible
             * @type Boolean
             * @default false
             * @fires dxOverlayOptions.onShowing
@@ -169,7 +166,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.deferRendering
-             * @publicName deferRendering
              * @type Boolean
              * @default true
              */
@@ -177,7 +173,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.shading
-            * @publicName shading
             * @type Boolean
             * @default true
             */
@@ -185,7 +180,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.shadingColor
-            * @publicName shadingColor
             * @type string
             * @default ''
             */
@@ -193,7 +187,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.position
-            * @publicName position
             * @default { my: 'center', at: 'center', of: window }
             */
             position: {
@@ -203,7 +196,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.width
-             * @publicName width
              * @type number|string|function
              * @default function() {return $(window).width() * 0.8 }
              * @type_function_return number|string
@@ -212,7 +204,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.minWidth
-             * @publicName minWidth
              * @type number|string|function
              * @default null
              * @type_function_return number|string
@@ -221,7 +212,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.maxWidth
-             * @publicName maxWidth
              * @type number|string|function
              * @default null
              * @type_function_return number|string
@@ -230,7 +220,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.height
-             * @publicName height
              * @type number|string|function
              * @default function() { return $(window).height() * 0.8 }
              * @type_function_return number|string
@@ -239,7 +228,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.minHeight
-             * @publicName minHeight
              * @type number|string|function
              * @default null
              * @type_function_return number|string
@@ -248,7 +236,6 @@ var Overlay = Widget.inherit({
 
             /**
              * @name dxOverlayOptions.maxHeight
-             * @publicName maxHeight
              * @type number|string|function
              * @default null
              * @type_function_return number|string
@@ -257,7 +244,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.animation
-            * @publicName animation
             * @type object
             * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
             * @ref
@@ -265,7 +251,6 @@ var Overlay = Widget.inherit({
             animation: {
                 /**
                 * @name dxOverlayOptions.animation.show
-                * @publicName show
                 * @type animationConfig
                 * @default { type: "pop", duration: 400, from: { scale: 0.55 } }
                 */
@@ -278,7 +263,6 @@ var Overlay = Widget.inherit({
                 },
                 /**
                 * @name dxOverlayOptions.animation.hide
-                * @publicName hide
                 * @type animationConfig
                 * @default { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
                 */
@@ -298,7 +282,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.closeOnOutsideClick
-            * @publicName closeOnOutsideClick
             * @type boolean|function
             * @default false
             * @type_function_param1 event:event
@@ -308,7 +291,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.closeOnBackButton
-            * @publicName closeOnBackButton
             * @type boolean
             * @default true
             */
@@ -316,7 +298,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.onShowing
-            * @publicName onShowing
             * @extends Action
             * @action
             */
@@ -324,7 +305,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.onShown
-            * @publicName onShown
             * @extends Action
             * @action
             */
@@ -332,7 +312,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.onHiding
-            * @publicName onHiding
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -343,7 +322,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.onHidden
-            * @publicName onHidden
             * @extends Action
             * @action
             */
@@ -351,7 +329,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.contentTemplate
-            * @publicName contentTemplate
             * @type template|function
             * @default "content"
             * @type_function_param1 contentElement:dxElement
@@ -361,7 +338,6 @@ var Overlay = Widget.inherit({
 
             /**
             * @name dxOverlayOptions.dragEnabled
-            * @publicName dragEnabled
             * @type boolean
             * @default false
             */
@@ -398,7 +374,6 @@ var Overlay = Widget.inherit({
             options: {
                 /**
                  * @name dxOverlayOptions.animation
-                 * @publicName animation
                  * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} @for Android_below_version_4.2
                  */
                 animation: {
@@ -1533,7 +1508,6 @@ var Overlay = Widget.inherit({
 
 /**
 * @name ui.dxOverlay
-* @publicName dxOverlay
 * @section utils
 */
 /**

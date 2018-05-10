@@ -3,7 +3,6 @@
 /**
 * @name dxColorBox
 * @isEditor
-* @publicName dxColorBox
 * @inherits dxDropDownEditor
 * @module ui/color_box
 * @export default

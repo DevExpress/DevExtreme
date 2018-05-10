@@ -56,7 +56,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return extend(this.callBase(), {
             /**
             * @name dxScrollViewOptions.pullingDownText
-            * @publicName pullingDownText
             * @type string
             * @default "Pull down to refresh..."
             */
@@ -64,7 +63,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
             /**
             * @name dxScrollViewOptions.pulledDownText
-            * @publicName pulledDownText
             * @type string
             * @default "Release to refresh..."
             */
@@ -72,7 +70,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
             /**
             * @name dxScrollViewOptions.refreshingText
-            * @publicName refreshingText
             * @type string
             * @default "Refreshing..."
             */
@@ -80,7 +77,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
             /**
             * @name dxScrollViewOptions.reachBottomText
-            * @publicName reachBottomText
             * @type string
             * @default "Loading..."
             */
@@ -88,7 +84,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
             /**
             * @name dxScrollViewOptions.onPullDown
-            * @publicName onPullDown
             * @extends Action
             * @action
             */
@@ -96,7 +91,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
             /**
             * @name dxScrollViewOptions.onReachBottom
-            * @publicName onReachBottom
             * @extends Action
             * @action
             */
@@ -132,7 +126,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                 options: {
                     /**
                     * @name dxScrollViewOptions.pullingDownText
-                    * @publicName pullingDownText
                     * @type string
                     * @default "" @for Material
                     */
@@ -140,7 +133,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
                     /**
                      * @name dxScrollViewOptions.pulledDownText
-                     * @publicName pulledDownText
                      * @type string
                      * @default "" @for Material
                      */
@@ -148,7 +140,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
                     /**
                      * @name dxScrollViewOptions.refreshingText
-                     * @publicName refreshingText
                      * @type string
                      * @default "" @for Material
                      */
@@ -156,7 +147,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
                     /**
                      * @name dxScrollViewOptions.reachBottomText
-                     * @publicName reachBottomText
                      * @type string
                      * @default "" @for Material
                      */
@@ -344,7 +334,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods.release
+    * @name dxScrollViewMethods.release
     * @publicName release(preventScrollBottom)
     * @param1 preventScrollBottom:boolean
     * @return Promise<void>
@@ -357,7 +347,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods.toggleLoading
+    * @name dxScrollViewMethods.toggleLoading
     * @publicName toggleLoading(showOrHide)
     * @param1 showOrHide:boolean
     * @hidden
@@ -367,7 +357,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods.isFull
+    * @name dxScrollViewMethods.isFull
     * @publicName isFull()
     * @return boolean
     * @hidden
@@ -377,7 +367,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxscrollviewmethods.refresh
+    * @name dxScrollViewMethods.refresh
     * @publicName refresh()
     */
     refresh: function() {

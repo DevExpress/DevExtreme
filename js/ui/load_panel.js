@@ -20,7 +20,6 @@ var LOADPANEL_CLASS = "dx-loadpanel",
 
 /**
 * @name dxLoadPanel
-* @publicName dxLoadPanel
 * @inherits dxOverlay
 * @module ui/load_panel
 * @export default
@@ -37,7 +36,6 @@ var LoadPanel = Overlay.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxLoadPanelOptions.message
-            * @publicName message
             * @type string
             * @default "Loading ..."
             */
@@ -45,7 +43,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.width
-            * @publicName width
             * @inheritdoc
             * @default 222
             */
@@ -53,7 +50,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.height
-            * @publicName height
             * @inheritdoc
             * @default 90
             */
@@ -61,27 +57,23 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.position
-            * @publicName position
             * @type Enums.PositionAlignment|positionConfig|function
             * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions.animation
-            * @publicName animation
             * @type object
             * @default null
             */
             /**
             * @name dxLoadPanelOptions.animation.show
-            * @publicName show
             * @type animationConfig
             * @default null
             * @inheritdoc
             */
             /**
             * @name dxLoadPanelOptions.animation.hide
-            * @publicName hide
             * @type animationConfig
             * @default null
             * @inheritdoc
@@ -90,14 +82,12 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.disabled
-            * @publicName disabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions.showIndicator
-            * @publicName showIndicator
             * @type boolean
             * @default true
             */
@@ -105,7 +95,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.indicatorSrc
-            * @publicName indicatorSrc
             * @type string
             * @default ""
             */
@@ -113,7 +102,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.showPane
-            * @publicName showPane
             * @type boolean
             * @default true
             */
@@ -121,7 +109,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.delay
-            * @publicName delay
             * @type Number
             * @default 0
             */
@@ -129,7 +116,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.closeOnBackButton
-            * @publicName closeOnBackButton
             * @default false
             * @hidden
             * @inheritdoc
@@ -138,7 +124,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.resizeEnabled
-            * @publicName resizeEnabled
             * @hidden
             * @inheritdoc
             */
@@ -146,7 +131,6 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.focusStateEnabled
-            * @publicName focusStateEnabled
             * @type boolean
             * @default false
             */
@@ -154,27 +138,23 @@ var LoadPanel = Overlay.inherit({
 
             /**
             * @name dxLoadPanelOptions.dragEnabled
-            * @publicName dragEnabled
             * @hidden
             * @inheritdoc
             */
             /**
             * @name dxLoadPanelOptions.contentTemplate
-            * @publicName contentTemplate
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions.accessKey
-            * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions.tabIndex
-            * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
@@ -186,7 +166,6 @@ var LoadPanel = Overlay.inherit({
             {
                 /**
                 * @name dxLoadPanelOptions.shadingColor
-                * @publicName shadingColor
                 * @default 'transparent'
                 * @default '' @for Android|iOS|Windows_Mobile
                 * @inheritdoc
@@ -203,14 +182,12 @@ var LoadPanel = Overlay.inherit({
                 options: {
                     /**
                     * @name dxLoadPanelOptions.message
-                    * @publicName message
                     * @default "" @for Material
                     */
                     message: "",
 
                     /**
                     * @name dxLoadPanelOptions.width
-                    * @publicName width
                     * @inheritdoc
                     * @default 60 @for Material
                     */
@@ -218,7 +195,6 @@ var LoadPanel = Overlay.inherit({
 
                     /**
                     * @name dxLoadPanelOptions.height
-                    * @publicName height
                     * @inheritdoc
                     * @default 60 @for Material
                     */
@@ -226,7 +202,6 @@ var LoadPanel = Overlay.inherit({
 
                     /**
                     * @name dxLoadPanelOptions.maxHeight
-                    * @publicName maxHeight
                     * @inheritdoc
                     * @default 60 @for Material
                     */
@@ -234,7 +209,6 @@ var LoadPanel = Overlay.inherit({
 
                     /**
                     * @name dxLoadPanelOptions.maxWidth
-                    * @publicName maxWidth
                     * @inheritdoc
                     * @default 60 @for Material
                     */

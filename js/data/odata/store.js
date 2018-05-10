@@ -44,7 +44,6 @@ function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
 
 /**
 * @name ODataStore
-* @publicName ODataStore
 * @inherits Store
 * @type object
 * @module data/odata/store
@@ -57,12 +56,10 @@ var ODataStore = Store.inherit({
 
         /**
          * @name ODataStoreOptions.url
-         * @publicName url
          * @type string
          */
         /**
          * @name ODataStoreOptions.beforeSend
-         * @publicName beforeSend
          * @type function
          * @type_function_param1 options:object
          * @type_function_param1_field1 url:string
@@ -75,31 +72,26 @@ var ODataStore = Store.inherit({
          */
         /**
          * @name ODataStoreOptions.jsonp
-         * @publicName jsonp
          * @type boolean
          * @default false
          */
         /**
          * @name ODataStoreOptions.version
-         * @publicName version
          * @type number
          * @default 2
          * @acceptValues 2|3|4
          */
         /**
          * @name ODataStoreOptions.withCredentials
-         * @publicName withCredentials
          * @type boolean
          * @default false
          */
         /**
          * @name ODataStoreOptions.deserializeDates
-         * @publicName deserializeDates
          * @type boolean
          */
         /**
          * @name ODataStoreOptions.onLoading
-         * @publicName onLoading
          * @action
          * @inheritdoc
          */
@@ -107,7 +99,6 @@ var ODataStore = Store.inherit({
 
         /**
          * @name ODataStoreOptions.keyType
-         * @publicName keyType
          * @type string|object
          * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
          */
@@ -133,7 +124,6 @@ var ODataStore = Store.inherit({
 
         /**
          * @name ODataStoreOptions.fieldTypes
-         * @publicName fieldTypes
          * @type object
          * @default {}
          */

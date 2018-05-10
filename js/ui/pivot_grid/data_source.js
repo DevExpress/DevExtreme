@@ -598,7 +598,6 @@ module.exports = Class.inherit((function() {
 
     /**
     * @name PivotGridDataSource
-    * @publicName PivotGridDataSource
     * @type object
     * @inherits EventsMixin
     * @namespace DevExpress.data
@@ -617,12 +616,10 @@ module.exports = Class.inherit((function() {
 
             /**
             * @name PivotGridDataSourceOptions.store
-            * @publicName store
             * @type Store|StoreOptions|XmlaStore|XmlaStoreOptions|Array<Object>|Object
             */
             /**
             * @name PivotGridDataSourceOptions.store.type
-            * @publicName type
             * @type Enums.PivotGridStoreType
             */
             that._store = store;
@@ -631,27 +628,23 @@ module.exports = Class.inherit((function() {
 
             /**
              * @name PivotGridDataSourceOptions.onChanged
-             * @publicName onChanged
              * @type function
              * @action
              */
             /**
              * @name PivotGridDataSourceOptions.onLoadingChanged
-             * @publicName onLoadingChanged
              * @type function(isLoading)
              * @type_function_param1 isLoading:boolean
              * @action
              */
             /**
              * @name PivotGridDataSourceOptions.onLoadError
-             * @publicName onLoadError
              * @type function(error)
              * @type_function_param1 error:Object
              * @action
              */
             /**
              * @name PivotGridDataSourceOptions.onFieldsPrepared
-             * @publicName onFieldsPrepared
              * @type function(fields)
              * @type_function_param1 fields:Array<PivotGridDataSourceOptions.fields>
              * @action
@@ -675,7 +668,6 @@ module.exports = Class.inherit((function() {
 
             /**
             * @name PivotGridDataSourceOptions.retrieveFields
-            * @publicName retrieveFields
             * @type boolean
             * @default true
             */
@@ -683,18 +675,15 @@ module.exports = Class.inherit((function() {
 
             /**
             * @name PivotGridDataSourceOptions.filter
-            * @publicName filter
             * @type Filter expression
             */
             /**
             * @name PivotGridDataSourceOptions.remoteOperations
-            * @publicName remoteOperations
             * @type boolean
             * @default false
             */
             /**
             * @name PivotGridDataSourceOptions.fields
-            * @publicName fields
             * @namespace DevExpress.data
             * @type Array<Object>
             * @default undefined
@@ -702,44 +691,37 @@ module.exports = Class.inherit((function() {
             that._fields = options.fields || [];
             /**
             * @name PivotGridDataSourceOptions.fields.index
-            * @publicName index
             * @type number
             * @default undefined
             * @hidden
             */
             /**
             * @name PivotGridDataSourceOptions.fields.dataField
-            * @publicName dataField
             * @type string
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.caption
-            * @publicName caption
             * @type string
             * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions.fields.dataType
-             * @publicName dataType
              * @type Enums.PivotGridDataType
              * @default undefined
              */
             /**
              * @name PivotGridDataSourceOptions.fields.groupInterval
-             * @publicName groupInterval
              * @type Enums.PivotGridGroupInterval|number
              * @default undefined
              */
             /**
              * @name PivotGridDataSourceOptions.fields.summaryType
-             * @publicName summaryType
              * @type Enums.SummaryType
              * @default 'count'
              */
             /**
             * @name PivotGridDataSourceOptions.fields.calculateCustomSummary
-            * @publicName calculateCustomSummary
             * @type function(options)
             * @type_function_param1 options:object
             * @type_function_param1_field1 summaryProcess:string
@@ -748,62 +730,52 @@ module.exports = Class.inherit((function() {
             */
             /**
              * @name PivotGridDataSourceOptions.fields.selector
-             * @publicName selector
              * @type function(data)
              * @default undefined
              */
             /**
             * @name PivotGridDataSourceOptions.fields.area
-            * @publicName area
             * @type Enums.PivotGridArea
             * @default undefined
             * @acceptValues undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.areaIndex
-            * @publicName areaIndex
             * @type number
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.visible
-            * @publicName visible
             * @type boolean
             * @default true
             */
             /**
             * @name PivotGridDataSourceOptions.fields.displayFolder
-            * @publicName displayFolder
             * @type string
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.groupName
-            * @publicName groupName
             * @type string
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.groupIndex
-            * @publicName groupIndex
             * @type number
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.sortOrder
-            * @publicName sortOrder
             * @type Enums.SortOrder
             * @default 'asc'
             */
             /**
             * @name PivotGridDataSourceOptions.fields.sortBy
-            * @publicName sortBy
             * @type Enums.PivotGridSortBy
             * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions.fields.sortingMethod
-             * @publicName sortingMethod
              * @type function(a, b)
              * @type_function_param1 a:object
              * @type_function_param1_field1 value:string|number
@@ -816,50 +788,42 @@ module.exports = Class.inherit((function() {
              */
             /**
              * @name PivotGridDataSourceOptions.fields.sortBySummaryField
-             * @publicName sortBySummaryField
              * @type string
              * @default undefined
              */
             /**
              * @name PivotGridDataSourceOptions.fields.sortBySummaryPath
-             * @publicName sortBySummaryPath
              * @type Array<number,string>
              * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions.fields.filterValues
-             * @publicName filterValues
              * @type Array<any>
              * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions.fields.filterType
-             * @publicName filterType
              * @type Enums.FilterType
              * @default 'include'
             */
             /**
              * @name PivotGridDataSourceOptions.fields.expanded
-             * @publicName expanded
              * @type boolean
              * @default false
             */
             /**
              * @name PivotGridDataSourceOptions.fields.isMeasure
-             * @publicName isMeasure
              * @type boolean
              * @default undefined
             */
 
             /**
              * @name PivotGridDataSourceOptions.fields.format
-             * @publicName format
              * @type format
              * @default ''
              */
             /**
              * @name PivotGridDataSourceOptions.fields.customizeText
-             * @publicName customizeText
              * @type function(cellInfo)
              * @type_function_param1 cellInfo:object
              * @type_function_param1_field1 value:string|number|date
@@ -868,69 +832,58 @@ module.exports = Class.inherit((function() {
              */
             /**
              * @name PivotGridDataSourceOptions.fields.precision
-             * @publicName precision
              * @type number
              * @default undefined
              * @deprecated
              */
             /**
              * @name PivotGridDataSourceOptions.fields.allowSorting
-             * @publicName allowSorting
              * @type boolean
              * @default false
              */
             /**
              * @name PivotGridDataSourceOptions.fields.allowSortingBySummary
-             * @publicName allowSortingBySummary
              * @type boolean
              * @default false
              */
             /**
              * @name PivotGridDataSourceOptions.fields.allowFiltering
-             * @publicName allowFiltering
              * @type boolean
              * @default false
              */
             /**
              * @name PivotGridDataSourceOptions.fields.allowExpandAll
-             * @publicName allowExpandAll
              * @type boolean
              * @default false
              */
             /**
             * @name PivotGridDataSourceOptions.fields.width
-            * @publicName width
             * @type number
             * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions.fields.summaryDisplayMode
-             * @publicName summaryDisplayMode
              * @type Enums.PivotGridSummaryDisplayMode
              * @default undefined
              */
             /**
             * @name PivotGridDataSourceOptions.fields.runningTotal
-            * @publicName runningTotal
             * @type Enums.PivotGridRunningTotalMode
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.wordWrapEnabled
-            * @publicName wordWrapEnabled
             * @type boolean
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.allowCrossGroupCalculation
-            * @publicName allowCrossGroupCalculation
             * @type boolean
             * @default false
             */
 
             /**
             * @name PivotGridDataSourceOptions.fields.calculateSummaryValue
-            * @publicName calculateSummaryValue
             * @type function(e)
             * @type_function_param1 e:dxPivotGridSummaryCell
             * @type_function_return number
@@ -938,42 +891,35 @@ module.exports = Class.inherit((function() {
             */
             /**
             * @name PivotGridDataSourceOptions.fields.showTotals
-            * @publicName showTotals
             * @type boolean
             * @default true
             */
             /**
             * @name PivotGridDataSourceOptions.fields.showGrandTotals
-            * @publicName showGrandTotals
             * @type boolean
             * @default true
             */
             /**
             * @name PivotGridDataSourceOptions.fields.showValues
-            * @publicName showValues
             * @type boolean
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.headerFilter
-            * @publicName headerFilter
             * @type object
             */
             /**
             * @name PivotGridDataSourceOptions.fields.headerFilter.width
-            * @publicName width
             * @type number
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.headerFilter.height
-            * @publicName height
             * @type number
             * @default undefined
             */
             /**
             * @name PivotGridDataSourceOptions.fields.headerFilter.allowSearch
-            * @publicName allowSearch
             * @type boolean
             * @default undefined
             */

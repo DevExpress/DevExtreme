@@ -17,7 +17,6 @@ var RANGE_SLIDER_CLASS = "dx-rangeslider",
 /**
 * @name dxRangeSlider
 * @isEditor
-* @publicName dxRangeSlider
 * @inherits dxSliderBase
 * @module ui/range_slider
 * @export default
@@ -110,7 +109,6 @@ var RangeSlider = Slider.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxRangeSliderOptions.start
-            * @publicName start
             * @type number
             * @default 40
             */
@@ -118,7 +116,6 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions.end
-            * @publicName end
             * @type number
             * @default 60
             */
@@ -127,7 +124,6 @@ var RangeSlider = Slider.inherit({
             /**
             * @name dxRangeSliderOptions.value
             * @type Array<number>
-            * @publicName value
             * @default [40, 60]
             * @inheritdoc
             */
@@ -135,7 +131,6 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions.startName
-            * @publicName startName
             * @type string
             * @default ""
             */
@@ -143,7 +138,6 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions.endName
-            * @publicName endName
             * @type string
             * @default ""
             */
@@ -151,7 +145,6 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions.onValueChanged
-            * @publicName onValueChanged
             * @action
             * @extends Action
             * @type_function_param1_field4 start:number
@@ -162,7 +155,6 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions.name
-            * @publicName name
             * @hidden
             * @inheritdoc
             */

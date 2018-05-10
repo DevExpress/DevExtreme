@@ -2,7 +2,6 @@
 
 /**
 * @name dxPivotGrid
-* @publicName dxPivotGrid
 * @inherits Widget
 * @module ui/pivot_grid
 * @export default

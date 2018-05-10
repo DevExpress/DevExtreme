@@ -4,7 +4,6 @@ var Class = require("./class");
 
 /**
 * @name Guid
-* @publicName Guid
 * @type object
 * @namespace DevExpress.data
 * @module core/guid

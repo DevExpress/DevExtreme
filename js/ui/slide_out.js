@@ -22,8 +22,7 @@ var SLIDEOUT_CLASS = "dx-slideout",
     SLIDEOUT_ITEM_DATA_KEY = "dxSlideoutItemData";
 
 /**
-* @name dxSlideout
-* @publicName dxSlideOut
+* @name dxSlideOut
 * @inherits CollectionWidget
 * @module ui/slide_out
 * @export default
@@ -33,13 +32,11 @@ var SlideOut = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         /**
         * @name dxSlideOutItemTemplate
-        * @publicName dxSlideOutItemTemplate
         * @inherits CollectionWidgetItemTemplate
         * @type object
         */
         /**
-        * @name dxSlideOutItemTemplate.menutemplate
-        * @publicName menuTemplate
+        * @name dxSlideOutItemTemplate.menuTemplate
         * @type template|function
         * @type_function_return string|Node|jQuery
         */
@@ -47,7 +44,6 @@ var SlideOut = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxSlideOutOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @type boolean
             * @default false
             */
@@ -55,7 +51,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.menuItemTemplate
-            * @publicName menuItemTemplate
             * @type template|function
             * @default "menuItem"
             * @type_function_param1 itemData:object
@@ -67,7 +62,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.swipeEnabled
-            * @publicName swipeEnabled
             * @type boolean
             * @default true
             */
@@ -75,7 +69,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.menuVisible
-            * @publicName menuVisible
             * @type boolean
             * @default false
             */
@@ -83,7 +76,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.menuPosition
-            * @publicName menuPosition
             * @type Enums.SlideOutMenuPosition
             * @default "normal"
             */
@@ -92,7 +84,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.menuGrouped
-            * @publicName menuGrouped
             * @type boolean
             * @default false
             */
@@ -100,7 +91,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.menuGroupTemplate
-            * @publicName menuGroupTemplate
             * @type template|function
             * @default "menuGroup"
             * @type_function_param1 groupData:object
@@ -112,7 +102,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.onMenuItemRendered
-            * @publicName onMenuItemRendered
             * @extends Action
             * @action
             */
@@ -120,7 +109,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.onMenuGroupRendered
-            * @publicName onMenuGroupRendered
             * @extends Action
             * @action
             */
@@ -128,7 +116,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.contentTemplate
-            * @publicName contentTemplate
             * @type template|function
             * @default "content"
             * @type_function_param1 container:dxElement
@@ -140,7 +127,6 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
              * @name dxSlideOutOptions.selectedIndex
-             * @publicName selectedIndex
              * @type number
              * @default 0
              */
@@ -150,42 +136,36 @@ var SlideOut = CollectionWidget.inherit({
 
             /**
             * @name dxSlideOutOptions.selectedItems
-            * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.selectedItemKeys
-            * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.keyExpr
-            * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.focusStateEnabled
-            * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.accessKey
-            * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.tabIndex
-            * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
@@ -433,7 +413,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxslideoutmethods.show
+    * @name dxSlideOutMethods.show
     * @publicName showMenu()
     * @return Promise<void>
     */
@@ -442,7 +422,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxslideoutmethods.hide
+    * @name dxSlideOutMethods.hide
     * @publicName hideMenu()
     * @return Promise<void>
     */
@@ -451,7 +431,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     /**
-    * @name dxslideoutmethods.toggleMenuVisibility
+    * @name dxSlideOutMethods.toggleMenuVisibility
     * @publicName toggleMenuVisibility(showing)
     * @param1 showing:boolean
     * @return Promise<void>
@@ -461,14 +441,14 @@ var SlideOut = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxslideoutmethods.registerKeyHandler
+    * @name dxSlideOutMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     * @inheritdoc
     */
 
     /**
-    * @name dxslideoutmethods.focus
+    * @name dxSlideOutMethods.focus
     * @publicName focus()
     * @hidden
     * @inheritdoc

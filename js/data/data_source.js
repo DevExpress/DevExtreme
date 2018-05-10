@@ -2,7 +2,6 @@
 
 /**
 * @name DataSource
-* @publicName DataSource
 * @type object
 * @inherits EventsMixin
 * @module data/data_source

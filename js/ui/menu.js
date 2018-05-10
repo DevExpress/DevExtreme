@@ -2,7 +2,6 @@
 
 /**
 * @name dxMenu
-* @publicName dxMenu
 * @inherits dxMenuBase
 * @module ui/menu
 * @export default

@@ -34,9 +34,8 @@ var KNOWN_UA_TABLE = {
 };
 
 /**
-* @name device
+* @name Device
 * @section commonObjectStructures
-* @publicName Device
 * @type object
 * @namespace DevExpress
 * @module core/devices
@@ -44,64 +43,54 @@ var KNOWN_UA_TABLE = {
 */
 var DEFAULT_DEVICE = {
     /**
-    * @name device.devicetype
-    * @publicName deviceType
+    * @name Device.deviceType
     * @type string
     * @acceptValues 'phone'|'tablet'|'desktop'
     */
     deviceType: "desktop",
     /**
-    * @name device.platform
-    * @publicName platform
+    * @name Device.platform
     * @type string
     * @acceptValues 'android'|'ios'|'win'|'generic'
     */
     platform: "generic",
     /**
-    * @name device.version
-    * @publicName version
+    * @name Device.version
     * @type Array<number>
     */
     version: [],
     /**
-    * @name device.phone
-    * @publicName phone
+    * @name Device.phone
     * @type boolean
     */
     phone: false,
     /**
-    * @name device.tablet
-    * @publicName tablet
+    * @name Device.tablet
     * @type boolean
     */
     tablet: false,
     /**
-    * @name device.android
-    * @publicName android
+    * @name Device.android
     * @type boolean
     */
     android: false,
      /**
-    * @name device.ios
-    * @publicName ios
+    * @name Device.ios
     * @type boolean
     */
     ios: false,
     /**
-    * @name device.win
-    * @publicName win
+    * @name Device.win
     * @type boolean
     */
     win: false,
     /**
-    * @name device.generic
-    * @publicName generic
+    * @name Device.generic
     * @type boolean
     */
     generic: true,
     /**
-    * @name device.grade
-    * @publicName grade
+    * @name Device.grade
     * @type string
     * @acceptValues 'A'|'B'|'C'
     */
@@ -180,15 +169,14 @@ var uaParsers = {
 
 /**
  * @name DevicesObject
- * @section Utils
  * @publicName devices
+ * @section Utils
  * @inherits EventsMixin
  * @namespace DevExpress
  */
 var Devices = Class.inherit({
     /**
     * @name DevicesObjectevents.orientationChanged
-    * @publicName orientationChanged
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 orientation:String
@@ -472,8 +460,7 @@ if(!devices.isForced() && devices.current().platform === "win") {
 }
 
 /**
- * @name devices
- * @publicName devices
+ * @name Devices
  * @type DevicesObject
  * @namespace DevExpress
  * @hidden

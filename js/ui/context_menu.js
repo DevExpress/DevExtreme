@@ -2,7 +2,6 @@
 
 /**
 * @name dxContextMenu
-* @publicName dxContextMenu
 * @inherits dxMenuBase
 * @module ui/context_menu
 * @export default

@@ -33,48 +33,41 @@ module.exports = {
         return {
          /**
          * @name GridBaseOptions.searchPanel
-         * @publicName searchPanel
          * @type object
          */
             searchPanel: {
                 /**
                  * @name GridBaseOptions.searchPanel.visible
-                 * @publicName visible
                  * @type boolean
                  * @default false
                  */
                 visible: false,
                 /**
                  * @name GridBaseOptions.searchPanel.width
-                 * @publicName width
                  * @type number
                  * @default 160
                  */
                 width: 160,
                 /**
                  * @name GridBaseOptions.searchPanel.placeholder
-                 * @publicName placeholder
                  * @type string
                  * @default "Search..."
                  */
                 placeholder: messageLocalization.format("dxDataGrid-searchPanelPlaceholder"),
                 /**
                  * @name GridBaseOptions.searchPanel.highlightSearchText
-                 * @publicName highlightSearchText
                  * @type boolean
                  * @default true
                  */
                 highlightSearchText: true,
                 /**
                  * @name GridBaseOptions.searchPanel.highlightCaseSensitive
-                 * @publicName highlightCaseSensitive
                  * @type boolean
                  * @default false
                  */
                 highlightCaseSensitive: false,
                 /**
                  * @name GridBaseOptions.searchPanel.text
-                 * @publicName text
                  * @type string
                  * @default ""
                  * @fires GridBaseOptions.onOptionChanged
@@ -82,7 +75,6 @@ module.exports = {
                 text: "",
                 /**
                  * @name GridBaseOptions.searchPanel.searchVisibleColumnsOnly
-                 * @publicName searchVisibleColumnsOnly
                  * @type boolean
                  * @default false
                  */

@@ -22,21 +22,18 @@ module.exports = {
             loadingTimeout: 0,
             /**
              * @name GridBaseOptions.dataSource
-             * @publicName dataSource
              * @type string|Array<Object>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
             /**
              * @name GridBaseOptions.cacheEnabled
-             * @publicName cacheEnabled
              * @type boolean
              * @default true
              */
             cacheEnabled: true,
             /**
              * @name GridBaseOptions.onDataErrorOccurred
-             * @publicName onDataErrorOccurred
              * @extends Action
              * @type function(e)
              * @type_function_param1 e:object
@@ -46,85 +43,71 @@ module.exports = {
             onDataErrorOccurred: null,
             /**
              * @name dxDataGridOptions.remoteOperations
-             * @publicName remoteOperations
              * @type boolean|object
              */
             /**
              * @name dxTreeListOptions.remoteOperations
-             * @publicName remoteOperations
              * @type object
              */
             remoteOperations: "auto",
             /**
              * @name dxDataGridOptions.remoteOperations.sorting
-             * @publicName sorting
              * @type boolean
              * @default false
              */
             /**
              * @name dxDataGridOptions.remoteOperations.filtering
-             * @publicName filtering
              * @type boolean
              * @default false
              */
             /**
              * @name dxDataGridOptions.remoteOperations.paging
-             * @publicName paging
              * @type boolean
              * @default false
              */
             /**
              * @name dxDataGridOptions.remoteOperations.grouping
-             * @publicName grouping
              * @type boolean
              * @default false
              */
             /**
              * @name dxDataGridOptions.remoteOperations.groupPaging
-             * @publicName groupPaging
              * @type boolean
              * @default false
              */
             /**
              * @name dxDataGridOptions.remoteOperations.summary
-             * @publicName summary
              * @type boolean
              * @default false
              */
             /**
              * @name dxTreeListOptions.remoteOperations.sorting
-             * @publicName sorting
              * @type boolean
              * @default false
              */
             /**
              * @name dxTreeListOptions.remoteOperations.filtering
-             * @publicName filtering
              * @type boolean
              * @default false
              */
             /**
              * @name dxTreeListOptions.remoteOperations.grouping
-             * @publicName grouping
              * @type boolean
              * @default false
              */
             /**
              * @name GridBaseOptions.paging
-             * @publicName paging
              * @type object
              */
             paging: {
                 /**
                  * @name GridBaseOptions.paging.enabled
-                 * @publicName enabled
                  * @type boolean
                  * @default true
                  */
                 enabled: true,
                 /**
                  * @name GridBaseOptions.paging.pageSize
-                 * @publicName pageSize
                  * @type number
                  * @default 20
                  * @fires GridBaseOptions.onOptionChanged
@@ -132,7 +115,6 @@ module.exports = {
                 pageSize: undefined,
                 /**
                  * @name GridBaseOptions.paging.pageIndex
-                 * @publicName pageIndex
                  * @type number
                  * @default 0
                  * @fires GridBaseOptions.onOptionChanged
@@ -141,7 +123,6 @@ module.exports = {
             }
             /**
              * @name GridBaseOptions.onRowExpanding
-             * @publicName onRowExpanding
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 key:any
@@ -151,7 +132,6 @@ module.exports = {
              */
             /**
              * @name GridBaseOptions.onRowExpanded
-             * @publicName onRowExpanded
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 key:any
@@ -160,7 +140,6 @@ module.exports = {
              */
             /**
              * @name GridBaseOptions.onRowCollapsing
-             * @publicName onRowCollapsing
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 key:any
@@ -170,7 +149,6 @@ module.exports = {
              */
             /**
              * @name GridBaseOptions.onRowCollapsed
-             * @publicName onRowCollapsed
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 key:any

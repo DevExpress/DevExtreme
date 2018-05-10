@@ -21,7 +21,6 @@ var MemoryKeyValueStorage = Class.inherit({
 
 /**
 * @name StateManager
-* @publicName StateManager
 * @type object
 * @module framework/state_manager
 * @export default
@@ -29,7 +28,6 @@ var MemoryKeyValueStorage = Class.inherit({
 var StateManager = Class.inherit({
     /**
     * @name StateManageroptions.storage
-    * @publicName storage
     * @type object
     */
     ctor: function(options) {

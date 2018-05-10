@@ -14,7 +14,6 @@ var $ = require("../../core/renderer"),
 
 /**
 * @name DataExpressionMixin
-* @publicName DataExpressionMixin
 * @module ui/editor/ui.data_expression
 * @inherits DataHelperMixin
 * @export default
@@ -26,14 +25,12 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         return {
             /**
             * @name DataExpressionMixinOptions.items
-            * @publicName items
             * @type Array<any>
             */
             items: [],
 
             /**
             * @name DataExpressionMixinOptions.dataSource
-            * @publicName dataSource
             * @type string|Array<any>|DataSource|DataSourceOptions
             * @default null
             */
@@ -41,7 +38,6 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.itemTemplate
-            * @publicName itemTemplate
             * @type template|function
             * @default "item"
             * @type_function_param1 itemData:object
@@ -53,7 +49,6 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.value
-            * @publicName value
             * @type any
             * @default null
             */
@@ -61,7 +56,6 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.valueExpr
-            * @publicName valueExpr
             * @type string|function
             * @default "this"
             */
@@ -69,7 +63,6 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.displayExpr
-            * @publicName displayExpr
             * @type string|function
             * @default undefined
             */
@@ -250,35 +243,29 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 });
 /**
 * @name DataExpressionMixinItemTemplate
-* @publicName DataExpressionMixinItemTemplate
 * @type object
 */
 /**
 * @name DataExpressionMixinItemTemplate.disabled
-* @publicName disabled
 * @type boolean
 * @default false
 */
 /**
 * @name DataExpressionMixinItemTemplate.visible
-* @publicName visible
 * @type boolean
 * @default true
 */
 /**
 * @name DataExpressionMixinItemTemplate.template
-* @publicName template
 * @type template
 */
 
 /**
 * @name DataExpressionMixinItemTemplate.html
-* @publicName html
 * @type String
 */
 /**
 * @name DataExpressionMixinItemTemplate.text
-* @publicName text
 * @type String
 */
 

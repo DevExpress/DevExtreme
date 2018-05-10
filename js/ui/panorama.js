@@ -499,7 +499,6 @@ var PanoramaThreeAndMoreItemsRenderStrategy = PanoramaItemsRenderStrategy.inheri
 
 /**
 * @name dxPanorama
-* @publicName dxPanorama
 * @inherits CollectionWidget
 * @module ui/panorama
 * @export default
@@ -511,7 +510,6 @@ var Panorama = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxPanoramaOptions.selectedIndex
-            * @publicName selectedIndex
             * @type number
             * @default 0
             */
@@ -519,7 +517,6 @@ var Panorama = CollectionWidget.inherit({
 
             /**
             * @name dxPanoramaOptions.title
-            * @publicName title
             * @type string
             * @default "panorama"
             */
@@ -527,13 +524,11 @@ var Panorama = CollectionWidget.inherit({
 
             /**
             * @name dxPanoramaOptions.backgroundImage
-            * @publicName backgroundImage
             * @type object
             */
             backgroundImage: {
                 /**
                 * @name dxPanoramaOptions.backgroundImage.url
-                * @publicName url
                 * @type string
                 * @default null
                 */
@@ -541,7 +536,6 @@ var Panorama = CollectionWidget.inherit({
 
                 /**
                 * @name dxPanoramaOptions.backgroundImage.width
-                * @publicName width
                 * @type number
                 * @default 0
                 */
@@ -549,7 +543,6 @@ var Panorama = CollectionWidget.inherit({
 
                 /**
                 * @name dxPanoramaOptions.backgroundImage.height
-                * @publicName height
                 * @type number
                 * @default 0
                 */
@@ -558,49 +551,42 @@ var Panorama = CollectionWidget.inherit({
 
             /**
             * @name dxPanoramaOptions.noDataText
-            * @publicName noDataText
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions.selectedItems
-            * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions.selectedItemKeys
-            * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions.keyExpr
-            * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions.accessKey
-            * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions.tabIndex
-            * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions.focusStateEnabled
-            * @publicName focusStateEnabled
             * @type boolean
             * @default false
             */
@@ -1015,18 +1001,15 @@ var Panorama = CollectionWidget.inherit({
 });
 /**
 * @name dxPanoramaItemTemplate
-* @publicName dxPanoramaItemTemplate
 * @inherits CollectionWidgetItemTemplate
 * @type object
 */
 /**
 * @name dxPanoramaItemTemplate.title
-* @publicName title
 * @type String
 */
 /**
 * @name dxPanoramaItemTemplate.visible
-* @publicName visible
 * @hidden
 * @inheritdoc
 */

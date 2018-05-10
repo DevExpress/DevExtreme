@@ -69,7 +69,6 @@ var TextEditorMask = TextEditorBase.inherit({
         return extend(this.callBase(), {
                 /**
                 * @name dxTextEditorOptions.mask
-                * @publicName mask
                 * @type string
                 * @default ""
                 */
@@ -77,7 +76,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
                 /**
                 * @name dxTextEditorOptions.maskChar
-                * @publicName maskChar
                 * @type string
                 * @default "_"
                 */
@@ -85,7 +83,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
                 /**
                 * @name dxTextEditorOptions.maskRules
-                * @publicName maskRules
                 * @type Object
                 * @default "{}"
                 */
@@ -93,7 +90,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
                 /**
                 * @name dxTextEditorOptions.maskInvalidMessage
-                * @publicName maskInvalidMessage
                 * @type string
                 * @default "Value is invalid"
                 */
@@ -101,7 +97,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
                 /**
                 * @name dxTextEditorOptions.useMaskedValue
-                * @publicName useMaskedValue
                 * @type boolean
                 * @default false
                 */
@@ -109,7 +104,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
             /**
              * @name dxTextEditorOptions.showMaskMode
-             * @publicName showMaskMode
              * @type Enums.ShowMaskMode
              * @default "always"
              */

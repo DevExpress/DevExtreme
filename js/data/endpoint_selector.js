@@ -14,7 +14,6 @@ function isLocalHostName(url) {
 
 /**
 * @name EndpointSelector
-* @publicName EndpointSelector
 * @type object
 * @namespace DevExpress
 * @module data/endpoint_selector

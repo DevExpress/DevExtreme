@@ -160,13 +160,11 @@ treeListCore.registerModule("editing", {
             editing: {
                 /**
                  * @name dxTreeListOptions.editing.texts
-                 * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
                      * @name dxTreeListOptions.editing.texts.addRowToNode
-                     * @publicName addRowToNode
                      * @type string
                      * @default "Add"
                      */

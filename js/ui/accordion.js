@@ -33,7 +33,6 @@ var ACCORDION_CLASS = "dx-accordion",
 
 /**
 * @name dxAccordion
-* @publicName dxAccordion
 * @inherits CollectionWidget
 * @module ui/accordion
 * @export default
@@ -47,7 +46,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
              * @name dxAccordionOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -56,7 +54,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.height
-            * @publicName height
             * @type number|string|function
             * @default undefined
             * @type_function_return number|string
@@ -65,7 +62,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.itemTitleTemplate
-            * @publicName itemTitleTemplate
             * @type template|function
             * @default "title"
             * @type_function_param1 itemData:object
@@ -77,7 +73,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.onItemTitleClick
-            * @publicName onItemTitleClick
             * @type function(e)|string
             * @extends Action
             * @type_function_param1 e:object
@@ -90,7 +85,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.selectedIndex
-            * @publicName selectedIndex
             * @type number
             * @default 0
             */
@@ -98,7 +92,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.collapsible
-            * @publicName collapsible
             * @type boolean
             * @default false
             */
@@ -106,7 +99,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.multiple
-            * @publicName multiple
             * @type boolean
             * @default false
             */
@@ -114,7 +106,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.animationDuration
-            * @publicName animationDuration
             * @type number
             * @default 300
             */
@@ -122,7 +113,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.deferRendering
-            * @publicName deferRendering
             * @type boolean
             * @default true
             */
@@ -130,7 +120,6 @@ var Accordion = CollectionWidget.inherit({
 
             /**
             * @name dxAccordionOptions.itemTemplate
-            * @publicName itemTemplate
             * @type template|function
             * @default "item"
             * @type_function_param1 itemData:object
@@ -155,7 +144,6 @@ var Accordion = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name dxAccordionOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc
@@ -175,7 +163,6 @@ var Accordion = CollectionWidget.inherit({
                     },
                      /**
                     * @name dxAccordionOptions.animationDuration
-                    * @publicName animationDuration
                     * @type number
                     * @default 200 @for Material
                     */
@@ -207,18 +194,15 @@ var Accordion = CollectionWidget.inherit({
         this.callBase();
         /**
         * @name dxAccordionItemTemplate
-        * @publicName dxAccordionItemTemplate
         * @inherits CollectionWidgetItemTemplate
         * @type object
         */
         /**
         * @name dxAccordionItemTemplate.title
-        * @publicName title
         * @type String
         */
         /**
         * @name dxAccordionItemTemplate.icon
-        * @publicName icon
         * @type String
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {

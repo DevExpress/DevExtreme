@@ -1,75 +1,64 @@
 /**
-* @name dxtreemap
-* @publicName dxTreeMap
+* @name dxTreeMap
 * @inherits BaseWidget
 * @module viz/tree_map
 * @export default
 */
 var dxTreeMap = {
     /**
-    * @name dxtreemap.options
-    * @publicName Options
+    * @name dxTreeMap.Options
     * @namespace DevExpress.viz.treeMap
     * @hidden
     */
     /**
-    * @name dxtreemapoptions.margin
-    * @publicName margin
+    * @name dxTreeMapOptions.margin
     * @hidden
     * @inheritdoc
     */
     margin: undefined,
     /**
-    * @name dxtreemapoptions.datasource
-    * @publicName dataSource
+    * @name dxTreeMapOptions.dataSource
     * @extends CommonVizDataSource
     */
     dataSource: undefined,
     /**
-    * @name dxtreemapoptions.childrenfield
-    * @publicName childrenField
+    * @name dxTreeMapOptions.childrenField
     * @type string
     * @default 'items'
     */
     childrenField: "items",
     /**
-    * @name dxtreemapoptions.valuefield
-    * @publicName valueField
+    * @name dxTreeMapOptions.valueField
     * @type string
     * @default 'value'
     */
     valueField: "value",
     /**
-    * @name dxtreemapoptions.colorfield
-    * @publicName colorField
+    * @name dxTreeMapOptions.colorField
     * @type string
     * @default 'color'
     */
     colorField: "color",
     /**
-    * @name dxtreemapoptions.labelfield
-    * @publicName labelField
+    * @name dxTreeMapOptions.labelField
     * @type string
     * @default 'name'
     */
     labelField: "name",
     /**
-    * @name dxtreemapoptions.idfield
-    * @publicName idField
+    * @name dxTreeMapOptions.idField
     * @type string
     * @default undefined
     */
     idField: undefined,
     /**
-    * @name dxtreemapoptions.parentfield
-    * @publicName parentField
+    * @name dxTreeMapOptions.parentField
     * @type string
     * @default undefined
     */
     parentField: undefined,
     /**
-    * @name dxtreemapoptions.layoutalgorithm
-    * @publicName layoutAlgorithm
+    * @name dxTreeMapOptions.layoutAlgorithm
     * @type Enums.TreeMapLayoutAlgorithm | function
     * @type_function_param1 e:object
     * @type_function_param1_field1 rect:Array<number>
@@ -79,172 +68,147 @@ var dxTreeMap = {
     */
     layoutAlgorithm: "squarified",
     /**
-    * @name dxtreemapoptions.layoutdirection
-    * @publicName layoutDirection
+    * @name dxTreeMapOptions.layoutDirection
     * @type Enums.TreeMapLayoutDirection
     * @default 'leftTopRightBottom'
     */
     layoutDirection: "leftTopRightBottom",
     /**
-     * @name dxtreemapoptions.resolvelabeloverflow
-     * @publicName resolveLabelOverflow
+     * @name dxTreeMapOptions.resolveLabelOverflow
      * @type Enums.TreeMapResolveLabelOverflow
      * @default 'hide'
      */
     resolveLabelOverflow: 'hide',
     /**
-    * @name dxtreemapoptions.tile
-    * @publicName tile
+    * @name dxTreeMapOptions.tile
     * @type object
     */
     tile: {
         /**
-        * @name dxtreemapoptions.tile.border
-        * @publicName border
+        * @name dxTreeMapOptions.tile.border
         * @type object
         */
         border: {
             /**
-            * @name dxtreemapoptions.tile.border.width
-            * @publicName width
+            * @name dxTreeMapOptions.tile.border.width
             * @type number
             * @default 1
             */
             width: undefined,
             /**
-            * @name dxtreemapoptions.tile.border.color
-            * @publicName color
+            * @name dxTreeMapOptions.tile.border.color
             * @type string
             * @default "#000000"
             */
             color: undefined
         },
         /**
-        * @name dxtreemapoptions.tile.color
-        * @publicName color
+        * @name dxTreeMapOptions.tile.color
         * @type string
         * @default "#$5f8b95"
         */
         color: undefined,
         /**
-        * @name dxtreemapoptions.tile.hoverstyle
-        * @publicName hoverStyle
+        * @name dxTreeMapOptions.tile.hoverStyle
         * @type object
         */
         hoverStyle: {
             /**
-            * @name dxtreemapoptions.tile.hoverstyle.border
-            * @publicName border
+            * @name dxTreeMapOptions.tile.hoverStyle.border
             * @type object
             */
             border: {
                 /**
-                * @name dxtreemapoptions.tile.hoverstyle.border.width
-                * @publicName width
+                * @name dxTreeMapOptions.tile.hoverStyle.border.width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxtreemapoptions.tile.hoverstyle.border.color
-                * @publicName color
+                * @name dxTreeMapOptions.tile.hoverStyle.border.color
                 * @type string
                 * @default undefined
                 */
                 color: undefined
             },
             /**
-            * @name dxtreemapoptions.tile.hoverstyle.color
-            * @publicName color
+            * @name dxTreeMapOptions.tile.hoverStyle.color
             * @type string
             * @default undefined
             */
             color: undefined
         },
         /**
-        * @name dxtreemapoptions.tile.selectionstyle
-        * @publicName selectionStyle
+        * @name dxTreeMapOptions.tile.selectionStyle
         * @type object
         */
         selectionStyle: {
             /**
-            * @name dxtreemapoptions.tile.selectionstyle.border
-            * @publicName border
+            * @name dxTreeMapOptions.tile.selectionStyle.border
             * @type object
             */
             border: {
                 /**
-                * @name dxtreemapoptions.tile.selectionstyle.border.width
-                * @publicName width
+                * @name dxTreeMapOptions.tile.selectionStyle.border.width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxtreemapoptions.tile.selectionstyle.border.color
-                * @publicName color
+                * @name dxTreeMapOptions.tile.selectionStyle.border.color
                 * @type string
                 * @default "#232323"
                 */
                 color: undefined
             },
             /**
-            * @name dxtreemapoptions.tile.selectionstyle.color
-            * @publicName color
+            * @name dxTreeMapOptions.tile.selectionStyle.color
             * @type string
             * @default undefined
             */
             color: undefined
         },
         /**
-        * @name dxtreemapoptions.tile.label
-        * @publicName label
+        * @name dxTreeMapOptions.tile.label
         * @type object
         */
         label: {
             /**
-            * @name dxtreemapoptions.tile.label.visible
-            * @publicName visible
+            * @name dxTreeMapOptions.tile.label.visible
             * @type boolean
             * @defaultValue true
             */
             visible: true,
             /**
-            * @name dxtreemapoptions.tile.label.font
-            * @publicName font
+            * @name dxTreeMapOptions.tile.label.font
             * @type object
             */
             font: {
                 /**
-                * @name dxtreemapoptions.tile.label.font.family
-                * @publicName family
+                * @name dxTreeMapOptions.tile.label.font.family
                 * @extends CommonVizFontFamily
                 */
                 family: undefined,
                 /**
-                * @name dxtreemapoptions.tile.label.font.size
-                * @publicName size
+                * @name dxTreeMapOptions.tile.label.font.size
                 * @type number|string
                 * @default 12
                 */
                 size: undefined,
                 /**
-                * @name dxtreemapoptions.tile.label.font.color
-                * @publicName color
+                * @name dxTreeMapOptions.tile.label.font.color
                 * @type string
                 * @default "#ffffff"
                 */
                 color: undefined,
                 /**
-                * @name dxtreemapoptions.tile.label.font.opacity
-                * @publicName opacity
+                * @name dxTreeMapOptions.tile.label.font.opacity
                 * @type number
                 * @default undefined
                 */
                 opacity: undefined,
                 /**
-                * @name dxtreemapoptions.tile.label.font.weight
-                * @publicName weight
+                * @name dxTreeMapOptions.tile.label.font.weight
                 * @type number
                 * @default 300
                 */
@@ -253,165 +217,141 @@ var dxTreeMap = {
         }
     },
     /**
-    * @name dxtreemapoptions.group
-    * @publicName group
+    * @name dxTreeMapOptions.group
     * @type object
     */
     group: {
         /**
-        * @name dxtreemapoptions.group.headerheight
-        * @publicName headerHeight
+        * @name dxTreeMapOptions.group.headerHeight
         * @type number
         * @default undefined
         */
         headerHeight: undefined,
         /**
-        * @name dxtreemapoptions.group.border
-        * @publicName border
+        * @name dxTreeMapOptions.group.border
         * @type object
         */
         border: {
             /**
-            * @name dxtreemapoptions.group.border.width
-            * @publicName width
+            * @name dxTreeMapOptions.group.border.width
             * @type number
             * @default 1
             */
             width: undefined,
             /**
-            * @name dxtreemapoptions.group.border.color
-            * @publicName color
+            * @name dxTreeMapOptions.group.border.color
             * @type string
             * @default "#d3d3d3"
             */
             color: undefined
         },
         /**
-        * @name dxtreemapoptions.group.color
-        * @publicName color
+        * @name dxTreeMapOptions.group.color
         * @type string
         * @default "#eeeeee"
         */
         color: undefined,
         /**
-        * @name dxtreemapoptions.group.hoverstyle
-        * @publicName hoverStyle
+        * @name dxTreeMapOptions.group.hoverStyle
         * @type object
         */
         hoverStyle: {
             /**
-            * @name dxtreemapoptions.group.hoverstyle.border
-            * @publicName border
+            * @name dxTreeMapOptions.group.hoverStyle.border
             * @type object
             */
             border: {
                 /**
-                * @name dxtreemapoptions.group.hoverstyle.border.width
-                * @publicName width
+                * @name dxTreeMapOptions.group.hoverStyle.border.width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxtreemapoptions.group.hoverstyle.border.color
-                * @publicName color
+                * @name dxTreeMapOptions.group.hoverStyle.border.color
                 * @type string
                 * @default undefined
                 */
                 color: undefined
             },
             /**
-            * @name dxtreemapoptions.group.hoverstyle.color
-            * @publicName color
+            * @name dxTreeMapOptions.group.hoverStyle.color
             * @type string
             * @default undefined
             */
             color: undefined
         },
         /**
-        * @name dxtreemapoptions.group.selectionstyle
-        * @publicName selectionStyle
+        * @name dxTreeMapOptions.group.selectionStyle
         * @type object
         */
         selectionStyle: {
             /**
-            * @name dxtreemapoptions.group.selectionstyle.border
-            * @publicName border
+            * @name dxTreeMapOptions.group.selectionStyle.border
             * @type object
             */
             border: {
                 /**
-                * @name dxtreemapoptions.group.selectionstyle.border.width
-                * @publicName width
+                * @name dxTreeMapOptions.group.selectionStyle.border.width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxtreemapoptions.group.selectionstyle.border.color
-                * @publicName color
+                * @name dxTreeMapOptions.group.selectionStyle.border.color
                 * @type string
                 * @default "#232323"
                 */
                 color: undefined
             },
             /**
-            * @name dxtreemapoptions.group.selectionstyle.color
-            * @publicName color
+            * @name dxTreeMapOptions.group.selectionStyle.color
             * @type string
             * @default undefined
             */
             color: undefined
         },
         /**
-        * @name dxtreemapoptions.group.label
-        * @publicName label
+        * @name dxTreeMapOptions.group.label
         * @type object
         */
         label: {
             /**
-            * @name dxtreemapoptions.group.label.visible
-            * @publicName visible
+            * @name dxTreeMapOptions.group.label.visible
             * @type boolean
             * @default true
             */
             visible: undefined,
             /**
-            * @name dxtreemapoptions.group.label.font
-            * @publicName font
+            * @name dxTreeMapOptions.group.label.font
             * @type object
             */
             font: {
                 /**
-                * @name dxtreemapoptions.group.label.font.family
-                * @publicName family
+                * @name dxTreeMapOptions.group.label.font.family
                 * @extends CommonVizFontFamily
                 */
                 family: undefined,
                 /**
-                * @name dxtreemapoptions.group.label.font.size
-                * @publicName size
+                * @name dxTreeMapOptions.group.label.font.size
                 * @type number|string
                 * @default 12
                 */
                 size: undefined,
                 /**
-                * @name dxtreemapoptions.group.label.font.color
-                * @publicName color
+                * @name dxTreeMapOptions.group.label.font.color
                 * @type string
                 * @default "#767676"
                 */
                 color: undefined,
                 /**
-                * @name dxtreemapoptions.group.label.font.opacity
-                * @publicName opacity
+                * @name dxTreeMapOptions.group.label.font.opacity
                 * @type number
                 * @default undefined
                 */
                 opacity: undefined,
                 /**
-                * @name dxtreemapoptions.group.label.font.weight
-                * @publicName weight
+                * @name dxTreeMapOptions.group.label.font.weight
                 * @type number
                 * @default 600
                 */
@@ -419,99 +359,85 @@ var dxTreeMap = {
             }
         },
         /**
-        * @name dxtreemapoptions.group.hoverenabled
-        * @publicName hoverEnabled
+        * @name dxTreeMapOptions.group.hoverEnabled
         * @type boolean
         * @default undefined
         */
         hoverEnabled: undefined
     },
     /**
-    * @name dxtreemapoptions.colorizer
-    * @publicName colorizer
+    * @name dxTreeMapOptions.colorizer
     * @type object
     */
     colorizer: {
         /**
-        * @name dxtreemapoptions.colorizer.type
-        * @publicName type
+        * @name dxTreeMapOptions.colorizer.type
         * @type Enums.TreeMapColorizerType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxtreemapoptions.colorizer.palette
-        * @publicName palette
+        * @name dxTreeMapOptions.colorizer.palette
         * @extends CommonVizPalette
         */
         palette: undefined,
          /**
-        * @name dxtreemapoptions.colorizer.paletteextensionmode
-        * @publicName paletteExtensionMode
+        * @name dxTreeMapOptions.colorizer.paletteExtensionMode
         * @type Enums.VizPaletteExtensionMode
         * @default 'blend'
         */
         paletteExtensionMode: 'blend',
         /**
-        * @name dxtreemapoptions.colorizer.colorizegroups
-        * @publicName colorizeGroups
+        * @name dxTreeMapOptions.colorizer.colorizeGroups
         * @type boolean
         * @default false
         */
         colorizeGroups: undefined,
         /**
-        * @name dxtreemapoptions.colorizer.range
-        * @publicName range
+        * @name dxTreeMapOptions.colorizer.range
         * @type Array<number>
         * @default undefined
         */
         range: undefined,
         /**
-        * @name dxtreemapoptions.colorizer.colorcodefield
-        * @publicName colorCodeField
+        * @name dxTreeMapOptions.colorizer.colorCodeField
         * @type string
         * @default undefined
         */
         colorCodeField: undefined
     },
     /**
-    * @name dxtreemapoptions.maxdepth
-    * @publicName maxDepth
+    * @name dxTreeMapOptions.maxDepth
     * @type number
     * @default undefined
     */
     maxDepth: undefined,
     /**
-    * @name dxtreemapoptions.interactwithgroup
-    * @publicName interactWithGroup
+    * @name dxTreeMapOptions.interactWithGroup
     * @type boolean
     * @default false
     */
     interactWithGroup: undefined,
     /**
-    * @name dxtreemapoptions.hoverenabled
-    * @publicName hoverEnabled
+    * @name dxTreeMapOptions.hoverEnabled
     * @type boolean
     * @default undefined
     */
     hoverEnabled: undefined,
     /**
-    * @name dxtreemapoptions.selectionmode
-    * @publicName selectionMode
+    * @name dxTreeMapOptions.selectionMode
     * @type Enums.SelectionMode
     * @default undefined
     */
     selectionMode: undefined,
     /**
-    * @name dxtreemapoptions.tooltip
-    * @publicName tooltip
+    * @name dxTreeMapOptions.tooltip
     * @type object
     * @inheritdoc
     */
     tooltip: {
         /**
-        * @name dxtreemapoptions.tooltip.customizetooltip
-        * @publicName customizeTooltip
+        * @name dxTreeMapOptions.tooltip.customizeTooltip
         * @default undefined
         * @type function(info)
         * @type_function_param1 info:object
@@ -523,8 +449,7 @@ var dxTreeMap = {
         customizeTooltip: undefined
     },
     /**
-    * @name dxtreemapoptions.onnodesinitialized
-    * @publicName onNodesInitialized
+    * @name dxTreeMapOptions.onNodesInitialized
     * @extends Action
     * @type function
     * @type_function_param1 e:object
@@ -534,8 +459,7 @@ var dxTreeMap = {
     */
     onNodesInitialized: function() { },
     /**
-    * @name dxtreemapoptions.onnodesrendering
-    * @publicName onNodesRendering
+    * @name dxTreeMapOptions.onNodesRendering
     * @extends Action
     * @type function
     * @type_function_param1 e:object
@@ -545,8 +469,7 @@ var dxTreeMap = {
     */
     onNodesRendering: function() { },
     /**
-    * @name dxtreemapoptions.onclick
-    * @publicName onClick
+    * @name dxTreeMapOptions.onClick
     * @extends Action
     * @type function|string
     * @type_function_param1 e:object
@@ -558,8 +481,7 @@ var dxTreeMap = {
     */
     onClick: function() { },
     /**
-    * @name dxtreemapoptions.onhoverchanged
-    * @publicName onHoverChanged
+    * @name dxTreeMapOptions.onHoverChanged
     * @extends Action
     * @type function
     * @type_function_param1 e:object
@@ -569,8 +491,7 @@ var dxTreeMap = {
     */
     onHoverChanged: function() { },
     /**
-    * @name dxtreemapoptions.onselectionchanged
-    * @publicName onSelectionChanged
+    * @name dxTreeMapOptions.onSelectionChanged
     * @extends Action
     * @type function
     * @type_function_param1 e:object
@@ -580,8 +501,7 @@ var dxTreeMap = {
     */
     onSelectionChanged: function() { },
     /**
-    * @name dxtreemapoptions.ondrill
-    * @publicName onDrill
+    * @name dxTreeMapOptions.onDrill
     * @extends Action
     * @type function
     * @type_function_param1 e:object
@@ -591,39 +511,39 @@ var dxTreeMap = {
     */
     onDrill: function() { },
     /**
-    * @name dxtreemapmethods.getrootnode
+    * @name dxTreeMapMethods.getRootNode
     * @publicName getRootNode()
     * @return dxTreeMapNode
     */
     getRootNode: function() { },
     /**
-    * @name dxtreemapmethods.clearselection
+    * @name dxTreeMapMethods.clearSelection
     * @publicName clearSelection()
     */
     clearSelection: function() { },
     /**
-    * @name dxtreemapmethods.hidetooltip
+    * @name dxTreeMapMethods.hideTooltip
     * @publicName hideTooltip()
     */
     hideTooltip: function() { },
     /**
-    * @name dxtreemapmethods.drillup
+    * @name dxTreeMapMethods.drillUp
     * @publicName drillUp()
     */
     drillUp: function() { },
     /**
-    * @name dxtreemapmethods.resetdrilldown
+    * @name dxTreeMapMethods.resetDrillDown
     * @publicName resetDrillDown()
     */
     resetDrillDown: function() { },
     /**
-    * @name dxtreemapmethods.getcurrentnode
+    * @name dxTreeMapMethods.getCurrentNode
     * @publicName getCurrentNode()
     * @return dxTreeMapNode
     */
     getCurrentNode: function() { },
     /**
-    * @name dxtreemapmethods.getdatasource
+    * @name dxTreeMapMethods.getDataSource
     * @publicName getDataSource()
     * @return DataSource
     */
