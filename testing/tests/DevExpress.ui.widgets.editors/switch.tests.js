@@ -393,6 +393,26 @@ QUnit.test("handle follow of mouse during swipe", function(assert) {
     assert.equal(handleTransform, "translateX(-50%)", "Handle position is right");
 });
 
+QUnit.test("handle should have correct position after swipeend", function(assert) {
+    var $element = this.element;
+    var pointer = this.mouse;
+
+    $element.dxSwitch("option", { value: false });
+
+    var $container = $element.find(".dx-switch-container");
+    var $handle = $element.find(".dx-switch-handle");
+    var $innerWrapper = $element.find(".dx-switch-inner");
+    var offset = ($container.outerWidth(true) - $handle.outerWidth()) / 4;
+
+    pointer.start().down().move(offset, 0).up();
+
+    var innerTransform = $innerWrapper.get(0).style.transform,
+        handleTransform = $handle.get(0).style.transform;
+
+    assert.equal(innerTransform, "translateX(0%)", "Inner position is right");
+    assert.equal(handleTransform, "translateX(-100%)", "Handle position is right");
+});
+
 QUnit.test("click on disabled switch has no effect", function(assert) {
     var element = this.element,
         instance = element.dxSwitch("instance");
