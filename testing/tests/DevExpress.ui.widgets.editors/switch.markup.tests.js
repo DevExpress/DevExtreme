@@ -29,13 +29,13 @@ var SWITCH_CLASS = "dx-switch",
     LABEL_OFF_SELECTOR = "." + LABEL_OFF_CLASS;
 
 var INNER_TRANSFORM_RANGE = {
-        left: "translateX(calc(-50%))",
-        right: "translateX(calc(0%))"
+        left: "translateX(-50%)",
+        right: "translateX(0%)"
     },
 
     HANDLE_TRANSFORM_RANGE = {
-        left: "translateX(calc(0%))",
-        right: "translateX(calc(-100%))"
+        left: "translateX(0%)",
+        right: "translateX(-100%)"
     };
 
 var UIState = function(inner, handle) {

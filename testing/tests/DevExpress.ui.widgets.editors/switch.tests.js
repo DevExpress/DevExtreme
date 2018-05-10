@@ -36,13 +36,13 @@ var SWITCH_CLASS = "dx-switch",
     LABEL_OFF_CLASS = "dx-switch-off",
 
     INNER_TRANSFORM_RANGE = {
-        left: "translateX(calc(-50%))",
-        right: "translateX(calc(0%))"
+        left: "translateX(-50%)",
+        right: "translateX(0%)"
     },
 
     HANDLE_TRANSFORM_RANGE = {
-        left: "translateX(calc(0%))",
-        right: "translateX(calc(-100%))"
+        left: "translateX(0%)",
+        right: "translateX(-100%)"
     };
 
 var UIState = function(inner, handle) {
@@ -389,8 +389,8 @@ QUnit.test("handle follow of mouse during swipe", function(assert) {
     var innerTransform = $innerWrapper.get(0).style.transform,
         handleTransform = $handle.get(0).style.transform;
 
-    assert.equal(innerTransform, "translateX(calc(-25%))", "Inner position is right");
-    assert.equal(handleTransform, "translateX(calc(-50%))", "Handle position is right");
+    assert.equal(innerTransform, "translateX(-25%)", "Inner position is right");
+    assert.equal(handleTransform, "translateX(-50%)", "Handle position is right");
 });
 
 QUnit.test("click on disabled switch has no effect", function(assert) {

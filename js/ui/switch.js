@@ -170,7 +170,7 @@ var Switch = Editor.inherit({
 
     _getCalcOffset: function(value, offset) {
         var ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
-        return "calc(" + 100 * ratio + "%)";
+        return 100 * ratio + "%";
     },
 
     _getHandleOffset: function(value, offset) {
@@ -179,16 +179,16 @@ var Switch = Editor.inherit({
         if(this.option("rtlEnabled")) {
             if(!value) {
                 calcValue = -100 + 100 * (-offset);
-                return "calc(" + calcValue + "%)";
+                return calcValue + "%";
             } else {
-                return "calc(" + 100 * (-offset) + "%)";
+                return 100 * (-offset) + "%";
             }
         } else {
             if(value) {
                 calcValue = -100 + 100 * (-offset);
-                return "calc(" + calcValue + "%)";
+                return calcValue + "%";
             } else {
-                return "calc(" + 100 * (-offset) + "%)";
+                return 100 * (-offset) + "%";
             }
         }
     },
