@@ -64,6 +64,16 @@ var NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
+    _focusInHandler: function(e) {
+        this.callBase(e);
+
+        var caret = this._caret();
+        if(caret.start === caret.end) {
+            this._moveCaretToBoundary(MOVE_BACKWARD, e);
+        }
+    },
+
+
     _focusOutHandler: function(e) {
         if(this._useMaskBehavior()) {
             this._updateFormattedValue();
