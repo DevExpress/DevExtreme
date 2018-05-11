@@ -3,7 +3,7 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
 
-    FONT_FAMILY = "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    FONT_FAMILY = "'Roboto', 'RobotoFallback', 'Helvetica', 'Arial', sans-serif",
 
     LIGHT_TITLE_COLOR = "rgba(0,0,0,0.87)",
     LIGHT_LABEL_COLOR = "rgba(0,0,0,0.54)";
