@@ -918,11 +918,6 @@ exports.DataController = Class.inherit((function() {
         endLoading: function() {
             this._dataSource.endLoading();
         },
-        isEmpty: function() {
-            var dataFields = this._dataSource.getAreaFields("data"),
-                data = this._dataSource.getData();
-            return !dataFields.length || !data.values.length;
-        },
         _update: function() {
             var that = this,
                 dataSource = that._dataSource,
@@ -1201,6 +1196,7 @@ exports.DataController = Class.inherit((function() {
     proxyMethod(members, "collapseHeaderItem");
     proxyMethod(members, "expandHeaderItem");
     proxyMethod(members, "getData");
+    proxyMethod(members, "isEmpty");
 
     return members;
 })());
