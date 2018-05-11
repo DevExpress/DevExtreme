@@ -170,10 +170,10 @@
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
-                    'globalize': '@Url.Content("~/vendor/globalize/globalize")',
-                    'cldr': '@Url.Content("~/vendor/cldr/cldr")',
+                    'globalize': '@Url.Content("~/artifacts/js/globalize")',
+                    'cldr': '@Url.Content("~/artifacts/js/cldr")',
                     'jquery': '@GetJQueryUrl()',
-                    'knockout': '@Url.Content("~/artifacts/js/knockout-latest.debug.js")',
+                    'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
 
@@ -212,7 +212,7 @@
                     }
                 },
                 meta: {
-                    '@Url.Content("~/artifacts/js/knockout-latest.debug.js")': {
+                    '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {
                         format: 'global',
                         deps: ['jquery'],
                         exports: 'ko'
