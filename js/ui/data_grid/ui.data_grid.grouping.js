@@ -631,75 +631,64 @@ gridCore.registerModule("grouping", {
         return {
             /**
              * @name dxDataGridOptions.grouping
-             * @publicName grouping
              * @type object
              */
             grouping: {
                 /**
                  * @name dxDataGridOptions.grouping.autoExpandAll
-                 * @publicName autoExpandAll
                  * @type boolean
                  * @default true
                  */
                 autoExpandAll: true,
                 /**
                  * @name dxDataGridOptions.grouping.allowCollapsing
-                 * @publicName allowCollapsing
                  * @type boolean
                  * @default true
                  */
                 allowCollapsing: true,
                 /**
                  * @name dxDataGridOptions.grouping.contextMenuEnabled
-                 * @publicName contextMenuEnabled
                  * @type boolean
                  * @default false
                  */
                 contextMenuEnabled: false,
                 /**
                  * @name dxDataGridOptions.grouping.expandMode
-                 * @publicName expandMode
                  * @type Enums.GridGroupingExpandMode
                  * @default "buttonClick"
                  */
                 expandMode: "buttonClick",
                 /**
                  * @name dxDataGridOptions.grouping.texts
-                 * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
                     * @name dxDataGridOptions.grouping.texts.groupContinuesMessage
-                    * @publicName groupContinuesMessage
                     * @type string
                     * @default "Continues on the next page"
                     */
                     groupContinuesMessage: messageLocalization.format("dxDataGrid-groupContinuesMessage"),
                     /**
                      * @name dxDataGridOptions.grouping.texts.groupContinuedMessage
-                     * @publicName groupContinuedMessage
                      * @type string
                      * @default "Continued from the previous page"
                      */
                     groupContinuedMessage: messageLocalization.format("dxDataGrid-groupContinuedMessage"),
                     /**
                     * @name dxDataGridOptions.grouping.texts.groupByThisColumn
-                    * @publicName groupByThisColumn
                     * @type string
                     * @default "Group by This Column"
                     */
                     groupByThisColumn: messageLocalization.format("dxDataGrid-groupHeaderText"),
                     /**
                     * @name dxDataGridOptions.grouping.texts.ungroup
-                    * @publicName ungroup
                     * @type string
                     * @default "Ungroup"
                     */
                     ungroup: messageLocalization.format("dxDataGrid-ungroupHeaderText"),
                     /**
                     * @name dxDataGridOptions.grouping.texts.ungroupAll
-                    * @publicName ungroupAll
                     * @type string
                     * @default "Ungroup All"
                     */
@@ -708,27 +697,23 @@ gridCore.registerModule("grouping", {
             },
             /**
             * @name dxDataGridOptions.groupPanel
-            * @publicName groupPanel
             * @type object
             */
             groupPanel: {
                 /**
                  * @name dxDataGridOptions.groupPanel.visible
-                 * @publicName visible
                  * @type boolean|Enums.Mode
                  * @default false
                  */
                 visible: false,
                 /**
                  * @name dxDataGridOptions.groupPanel.emptyPanelText
-                 * @publicName emptyPanelText
                  * @type string
                  * @default "Drag a column header here to group by that column"
                  */
                 emptyPanelText: messageLocalization.format("dxDataGrid-groupPanelEmptyText"),
                 /**
                  * @name dxDataGridOptions.groupPanel.allowColumnDragging
-                 * @publicName allowColumnDragging
                  * @type boolean
                  * @default true
                  */

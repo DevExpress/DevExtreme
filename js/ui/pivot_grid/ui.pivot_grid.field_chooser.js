@@ -98,7 +98,6 @@ var FieldChooser = BaseFieldChooser.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxPivotGridFieldChooserOptions.height
-            * @publicName height
             * @type number|string|function
             * @default 400
             * @type_function_return number|string
@@ -106,14 +105,12 @@ var FieldChooser = BaseFieldChooser.inherit({
             height: 400,
             /**
              * @name dxPivotGridFieldChooserOptions.layout
-             * @publicName layout
              * @type Enums.PivotGridFieldChooserLayout
              * @default 0
              */
             layout: 0,
             /**
              * @name dxPivotGridFieldChooserOptions.dataSource
-             * @publicName dataSource
              * @type PivotGridDataSource
              * @default null
              * @ref
@@ -121,7 +118,6 @@ var FieldChooser = BaseFieldChooser.inherit({
             dataSource: null,
             /**
             * @name dxPivotGridFieldChooserOptions.onContextMenuPreparing
-            * @publicName onContextMenuPreparing
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 items:Array<Object>
@@ -135,48 +131,41 @@ var FieldChooser = BaseFieldChooser.inherit({
             onContextMenuPreparing: null,
             /**
             * @name dxPivotGridFieldChooserOptions.allowSearch
-            * @publicName allowSearch
             * @type boolean
             * @default false
             */
             allowSearch: false,
             /**
              * @name dxPivotGridFieldChooserOptions.texts
-             * @publicName texts
              * @type object
              */
             texts: {
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.columnFields
-                 * @publicName columnFields
                  * @type string
                  * @default 'Column Fields'
                  */
                 columnFields: messageLocalization.format("dxPivotGrid-columnFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.rowFields
-                 * @publicName rowFields
                  * @type string
                  * @default 'Row Fields'
                  */
                 rowFields: messageLocalization.format("dxPivotGrid-rowFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.dataFields
-                 * @publicName dataFields
                  * @type string
                  * @default 'Data Fields'
                  */
                 dataFields: messageLocalization.format("dxPivotGrid-dataFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.filterFields
-                 * @publicName filterFields
                  * @type string
                  * @default 'Filter Fields'
                  */
                 filterFields: messageLocalization.format("dxPivotGrid-filterFields"),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.allFields
-                 * @publicName allFields
                  * @type string
                  * @default 'All Fields'
                  */
@@ -184,59 +173,49 @@ var FieldChooser = BaseFieldChooser.inherit({
             },
             /**
             * @name dxPivotGridFieldChooserOptions.applyChangesMode
-            * @publicName applyChangesMode
             * @type Enums.ApplyChangesMode
             * @default "instantly"
             */
            /**
             * @name dxPivotGridFieldChooserOptions.state
-            * @publicName state
             * @type object
             * @default null
             */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter
-             * @publicName headerFilter
              * @type object
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.width
-             * @publicName width
              * @type number
              * @default 252
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.height
-             * @publicName height
              * @type number
              * @default 325
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.allowSearch
-             * @publicName allowSearch
              * @type boolean
              * @default undefined
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.texts
-             * @publicName texts
              * @type object
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.texts.emptyValue
-             * @publicName emptyValue
              * @type string
              * @default "(Blanks)"
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.texts.ok
-             * @publicName ok
              * @type string
              * @default "Ok"
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.texts.cancel
-             * @publicName cancel
              * @type string
              * @default "Cancel"
              */

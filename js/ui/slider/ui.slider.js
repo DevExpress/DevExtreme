@@ -31,7 +31,6 @@ var SLIDER_CLASS = "dx-slider",
 
 /**
 * @name dxSliderBase
-* @publicName dxSliderBase
 * @inherits dxTrackBar
 * @hidden
 */
@@ -116,7 +115,6 @@ var Slider = TrackBar.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxSliderOptions.value
-            * @publicName value
             * @type number
             * @default 50
             */
@@ -124,7 +122,6 @@ var Slider = TrackBar.inherit({
 
             /**
              * @name dxSliderBaseOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -133,7 +130,6 @@ var Slider = TrackBar.inherit({
 
             /**
             * @name dxSliderBaseOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @type boolean
             * @default true
             * @inheritdoc
@@ -143,7 +139,6 @@ var Slider = TrackBar.inherit({
 
             /**
             * @name dxSliderBaseOptions.step
-            * @publicName step
             * @type number
             * @default 1
             */
@@ -151,7 +146,6 @@ var Slider = TrackBar.inherit({
 
             /**
             * @name dxSliderBaseOptions.showRange
-            * @publicName showRange
             * @type boolean
             * @default true
             */
@@ -159,13 +153,11 @@ var Slider = TrackBar.inherit({
 
             /**
             * @name dxSliderBaseOptions.tooltip
-            * @publicName tooltip
             * @type object
             */
             tooltip: {
                 /**
                 * @name dxSliderBaseOptions.tooltip.enabled
-                * @publicName enabled
                 * @type boolean
                 * @default false
                 */
@@ -173,7 +165,6 @@ var Slider = TrackBar.inherit({
 
                 /**
                 * @name dxSliderBaseOptions.tooltip.format
-                * @publicName format
                 * @type format
                 * @default function(value) { return value }
                 */
@@ -183,7 +174,6 @@ var Slider = TrackBar.inherit({
 
                 /**
                 * @name dxSliderBaseOptions.tooltip.position
-                * @publicName position
                 * @type Enums.VerticalEdge
                 * @default 'top'
                 */
@@ -191,7 +181,6 @@ var Slider = TrackBar.inherit({
 
                 /**
                 * @name dxSliderBaseOptions.tooltip.showMode
-                * @publicName showMode
                 * @type Enums.SliderTooltipShowMode
                 * @default 'onHover'
                 */
@@ -200,13 +189,11 @@ var Slider = TrackBar.inherit({
 
             /**
             * @name dxSliderBaseOptions.label
-            * @publicName label
             * @type object
             */
             label: {
                 /**
                 * @name dxSliderBaseOptions.label.visible
-                * @publicName visible
                 * @type boolean
                 * @default false
                 */
@@ -214,7 +201,6 @@ var Slider = TrackBar.inherit({
 
                 /**
                 * @name dxSliderBaseOptions.label.position
-                * @publicName position
                 * @type Enums.VerticalEdge
                 * @default 'bottom'
                 */
@@ -222,7 +208,6 @@ var Slider = TrackBar.inherit({
 
                 /**
                 * @name dxSliderBaseOptions.label.format
-                * @publicName format
                 * @type format
                 * @default function(value) { return value }
                 */
@@ -233,7 +218,6 @@ var Slider = TrackBar.inherit({
 
             /**
            * @name dxSliderBaseOptions.keyStep
-           * @publicName keyStep
            * @type number
            * @default 1
            */
@@ -243,7 +227,6 @@ var Slider = TrackBar.inherit({
 
             /**
             * @name dxSliderBaseOptions.name
-            * @publicName name
             * @type string
             * @hidden false
             * @inheritdoc
@@ -260,7 +243,6 @@ var Slider = TrackBar.inherit({
                 options: {
                     /**
                     * @name dxSliderBaseOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @default true @for desktop
                     * @inheritdoc
                     */

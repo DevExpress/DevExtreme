@@ -25,7 +25,6 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 showCheckBoxesMode: "always",
                 /**
                  * @name dxTreeListOptions.selection.recursive
-                 * @publicName recursive
                  * @type boolean
                  * @default false
                  */

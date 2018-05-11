@@ -23,7 +23,6 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 
 /**
 * @name Editor
-* @publicName Editor
 * @type object
 * @inherits Widget
 * @module ui/editor/editor
@@ -47,7 +46,6 @@ var Editor = Widget.inherit({
         return extend(this.callBase(), {
             /**
             * @name EditorOptions.value
-            * @publicName value
             * @type any
             * @default null
             * @fires EditorOptions.onValueChanged
@@ -56,7 +54,6 @@ var Editor = Widget.inherit({
 
             /**
             * @name EditorOptions.name
-            * @publicName name
             * @type string
             * @default ""
             * @hidden
@@ -65,7 +62,6 @@ var Editor = Widget.inherit({
 
             /**
             * @name EditorOptions.onValueChanged
-            * @publicName onValueChanged
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -79,7 +75,6 @@ var Editor = Widget.inherit({
 
             /**
              * @name EditorOptions.readOnly
-             * @publicName readOnly
              * @type boolean
              * @default false
              */
@@ -87,7 +82,6 @@ var Editor = Widget.inherit({
 
             /**
             * @name EditorOptions.isValid
-            * @publicName isValid
             * @type boolean
             * @default true
             */
@@ -95,7 +89,6 @@ var Editor = Widget.inherit({
 
             /**
             * @name EditorOptions.validationError
-            * @publicName validationError
             * @type object
             * @ref
             * @default undefined
@@ -104,7 +97,6 @@ var Editor = Widget.inherit({
 
             /**
              * @name EditorOptions.validationMessageMode
-             * @publicName validationMessageMode
              * @type Enums.ValidationMessageMode
              * @default "auto"
              */

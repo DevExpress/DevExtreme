@@ -5,62 +5,58 @@
 */
 var Item = {
     /**
-    * @name dxFunnelItemfields.argument
-    * @publicName argument
+    * @name dxFunnelItemFields.argument
     * @type string|Date|number
     */
     argument: undefined,
     /**
-    * @name dxFunnelItemfields.data
-    * @publicName data
+    * @name dxFunnelItemFields.data
     * @type object
     */
     data: undefined,
     /**
-    * @name dxFunnelItemfields.percent
-    * @publicName percent
+    * @name dxFunnelItemFields.percent
     * @type number
     */
     percent: undefined,
     /**
-    * @name dxFunnelItemfields.value
-    * @publicName value
+    * @name dxFunnelItemFields.value
     * @type number
     */
     value: undefined,
     /**
-    * @name dxFunnelItemmethods.select
+    * @name dxFunnelItemMethods.select
     * @publicName select(state)
     * @param1 state:boolean
     */
     select: function () { },
     /**
-    * @name dxFunnelItemmethods.hover
+    * @name dxFunnelItemMethods.hover
     * @publicName hover(state)
     * @param1 state:boolean
     */
     hover: function () { },
     /**
-    * @name dxFunnelItemmethods.getcolor
+    * @name dxFunnelItemMethods.getColor
     * @publicName getColor()
     * @return string
     */
     getColor: function () { },
     /**
-    * @name dxFunnelItemmethods.ishovered
+    * @name dxFunnelItemMethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function () { },
     /**
-    * @name dxFunnelItemmethods.isselected
+    * @name dxFunnelItemMethods.isSelected
     * @publicName isSelected()
     * @return boolean
     */
     isSelected: function () { },
 
     /**
-    * @name dxFunnelItemmethods.showtooltip
+    * @name dxFunnelItemMethods.showTooltip
     * @publicName showTooltip()
     */
     showTooltip: function(){ }

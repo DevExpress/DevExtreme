@@ -66,7 +66,6 @@ var Form = Widget.inherit({
             formID: "dx-" + new Guid(),
             /**
              * @name dxFormOptions.formData
-             * @publicName formData
              * @type object
              * @default {}
              * @fires dxFormOptions.onFieldDataChanged
@@ -74,7 +73,6 @@ var Form = Widget.inherit({
             formData: {},
             /**
              * @name dxFormOptions.colCount
-             * @publicName colCount
              * @type number|Enums.Mode
              * @default 1
              */
@@ -82,7 +80,6 @@ var Form = Widget.inherit({
 
             /**
             * @name dxFormOptions.screenByWidth
-            * @publicName screenByWidth
             * @type function
             * @default null
             */
@@ -94,37 +91,31 @@ var Form = Widget.inherit({
             */
             /**
             * @name ColCountResponsible
-            * @publicName ColCountResponsible
             * @hidden
             */
             /**
             * @name ColCountResponsible.xs
-            * @publicName xs
             * @type number
             * @default undefined
             */
             /**
             * @name ColCountResponsible.sm
-            * @publicName sm
             * @type number
             * @default undefined
             */
             /**
             * @name ColCountResponsible.md
-            * @publicName md
             * @type number
             * @default undefined
             */
             /**
             * @name ColCountResponsible.lg
-            * @publicName lg
             * @type number
             * @default undefined
             */
 
             /**
             * @name dxFormOptions.colCountByScreen
-            * @publicName colCountByScreen
             * @extends ColCountResponsibleType
             * @inherits ColCountResponsible
             * @default undefined
@@ -133,21 +124,18 @@ var Form = Widget.inherit({
 
             /**
              * @name dxFormOptions.labelLocation
-             * @publicName labelLocation
              * @type Enums.FormLabelLocation
              * @default "left"
              */
             labelLocation: "left",
             /**
              * @name dxFormOptions.readOnly
-             * @publicName readOnly
              * @type boolean
              * @default false
              */
             readOnly: false,
             /**
              * @name dxFormOptions.onFieldDataChanged
-             * @publicName onFieldDataChanged
              * @extends Action
              * @type function(e)
              * @type_function_param1 e:object
@@ -158,14 +146,12 @@ var Form = Widget.inherit({
             onFieldDataChanged: null,
             /**
              * @name dxFormOptions.customizeItem
-             * @publicName customizeItem
              * @type function
              * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
              */
             customizeItem: null,
             /**
              * @name dxFormOptions.onEditorEnterKey
-             * @publicName onEditorEnterKey
              * @extends Action
              * @type function(e)
              * @type_function_param1 e:object
@@ -175,157 +161,134 @@ var Form = Widget.inherit({
             onEditorEnterKey: null,
             /**
              * @name dxFormOptions.minColWidth
-             * @publicName minColWidth
              * @type number
              * @default 200
              */
             minColWidth: 200,
             /**
              * @name dxFormOptions.alignItemLabels
-             * @publicName alignItemLabels
              * @type boolean
              * @default true
              */
             alignItemLabels: true,
             /**
              * @name dxFormOptions.alignItemLabelsInAllGroups
-             * @publicName alignItemLabelsInAllGroups
              * @type boolean
              * @default true
              */
             alignItemLabelsInAllGroups: true,
             /**
              * @name dxFormOptions.showColonAfterLabel
-             * @publicName showColonAfterLabel
              * @type boolean
              * @default true
              */
             showColonAfterLabel: true,
             /**
              * @name dxFormOptions.showRequiredMark
-             * @publicName showRequiredMark
              * @type boolean
              * @default true
              */
             showRequiredMark: true,
             /**
              * @name dxFormOptions.showOptionalMark
-             * @publicName showOptionalMark
              * @type boolean
              * @default false
              */
             showOptionalMark: false,
             /**
              * @name dxFormOptions.requiredMark
-             * @publicName requiredMark
              * @type string
              * @default "*"
              */
             requiredMark: "*",
             /**
              * @name dxFormOptions.optionalMark
-             * @publicName optionalMark
              * @type string
              * @default "optional"
              */
             optionalMark: messageLocalization.format("dxForm-optionalMark"),
             /**
             * @name dxFormOptions.requiredMessage
-            * @publicName requiredMessage
             * @type string
             * @default "{0} is required"
             */
             requiredMessage: messageLocalization.getFormatter("dxForm-requiredMessage"),
             /**
              * @name dxFormOptions.showValidationSummary
-             * @publicName showValidationSummary
              * @type boolean
              * @default false
              */
             showValidationSummary: false,
             /**
              * @name dxFormOptions.items
-             * @publicName items
              * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
              * @default undefined
              */
             items: undefined,
             /**
              * @name dxFormOptions.scrollingEnabled
-             * @publicName scrollingEnabled
              * @type boolean
              * @default false
              */
             scrollingEnabled: false,
             /**
              * @name dxFormOptions.validationGroup
-             * @publicName validationGroup
              * @type string
              * @default undefined
              */
             validationGroup: undefined
             /**
             * @name dxFormSimpleItem
-            * @publicName SimpleItem
+			* @publicName SimpleItem
             * @section FormItems
             * @type object
             */
             /**
              * @name dxFormSimpleItem.dataField
-             * @publicName dataField
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.name
-             * @publicName name
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.editorType
-             * @publicName editorType
              * @type Enums.FormItemEditorType
              */
             /**
              * @name dxFormSimpleItem.editorOptions
-             * @publicName editorOptions
              * @type object
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.colSpan
-             * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.itemType
-             * @publicName itemType
              * @type Enums.FormItemType
              * @default "simple"
              */
             /**
              * @name dxFormSimpleItem.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormSimpleItem.cssClass
-             * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.visibleIndex
-             * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.template
-             * @publicName template
              * @type template|function
              * @type_function_param1 data:object
              * @type_function_param1_field1 component:dxForm
@@ -337,128 +300,108 @@ var Form = Widget.inherit({
              */
             /**
              * @name dxFormSimpleItem.label
-             * @publicName label
              * @type object
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.label.text
-             * @publicName text
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.label.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormSimpleItem.label.showColon
-             * @publicName showColon
              * @type boolean
              * @default from showColonAfterLabel
              */
             /**
              * @name dxFormSimpleItem.label.location
-             * @publicName location
              * @type Enums.FormLabelLocation
              * @default "left"
              */
             /**
              * @name dxFormSimpleItem.label.alignment
-             * @publicName alignment
              * @type Enums.HorizontalAlignment
              * @default "left"
              */
             /**
              * @name dxFormSimpleItem.helpText
-             * @publicName helpText
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.isRequired
-             * @publicName isRequired
              * @type boolean
              * @default undefined
              */
             /**
              * @name dxFormSimpleItem.validationRules
-             * @publicName validationRules
              * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              * @default undefined
              */
             /**
             * @name dxFormGroupItem
-            * @publicName GroupItem
+			* @publicName GroupItem
             * @section FormItems
             * @type object
             */
             /**
              * @name dxFormGroupItem.caption
-             * @publicName caption
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormGroupItem.name
-             * @publicName name
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormGroupItem.colCount
-             * @publicName colCount
              * @type number
              * @default 1
              */
             /**
              * @name dxFormGroupItem.colCountByScreen
-             * @publicName colCountByScreen
              * @extends ColCountResponsibleType
              * @inherits ColCountResponsible
              * @default undefined
              */
             /**
              * @name dxFormGroupItem.itemType
-             * @publicName itemType
              * @type Enums.FormItemType
              * @default "simple"
              */
             /**
              * @name dxFormGroupItem.colSpan
-             * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormGroupItem.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormGroupItem.cssClass
-             * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormGroupItem.visibleIndex
-             * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormGroupItem.alignItemLabels
-             * @publicName alignItemLabels
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormGroupItem.template
-             * @publicName template
              * @type template|function
              * @type_function_param1 data:object
              * @type_function_param1_field1 component:dxForm
@@ -468,116 +411,98 @@ var Form = Widget.inherit({
              */
             /**
              * @name dxFormGroupItem.items
-             * @publicName items
              * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
              * @default undefined
              */
             /**
             * @name dxFormTabbedItem
-            * @publicName TabbedItem
+			* @publicName TabbedItem
             * @section FormItems
             * @type object
             */
             /**
              * @name dxFormTabbedItem.name
-             * @publicName name
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormTabbedItem.itemType
-             * @publicName itemType
              * @type Enums.FormItemType
              * @default "simple"
              */
             /**
              * @name dxFormTabbedItem.cssClass
-             * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.visibleIndex
-             * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabPanelOptions
-             * @publicName tabPanelOptions
              * @type dxTabPanelOptions
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.colSpan
-             * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabs
-             * @publicName tabs
              * @type Array<Object>
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabs.alignItemLabels
-             * @publicName alignItemLabels
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormTabbedItem.tabs.title
-             * @publicName title
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabs.colCount
-             * @publicName colCount
              * @type number
              * @default 1
              */
             /**
              * @name dxFormTabbedItem.tabs.colCountByScreen
-             * @publicName colCountByScreen
              * @extends ColCountResponsibleType
              * @inherits ColCountResponsible
              * @default undefined
             */
             /**
              * @name dxFormTabbedItem.tabs.items
-             * @publicName items
              * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabs.badge
-             * @publicName badge
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabs.disabled
-             * @publicName disabled
              * @type boolean
              * @default false
              */
             /**
              * @name dxFormTabbedItem.tabs.icon
-             * @publicName icon
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormTabbedItem.tabs.tabTemplate
-             * @publicName tabTemplate
              * @type template|function
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
@@ -586,7 +511,6 @@ var Form = Widget.inherit({
              */
             /**
              * @name dxFormTabbedItem.tabs.template
-             * @publicName template
              * @type template|function
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
@@ -595,97 +519,83 @@ var Form = Widget.inherit({
              */
             /**
             * @name dxFormEmptyItem
-            * @publicName EmptyItem
+			* @publicName EmptyItem
             * @section FormItems
             * @type object
             */
             /**
              * @name dxFormEmptyItem.name
-             * @publicName name
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormEmptyItem.colSpan
-             * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormEmptyItem.itemType
-             * @publicName itemType
              * @type Enums.FormItemType
              * @default "simple"
              */
             /**
              * @name dxFormEmptyItem.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormEmptyItem.cssClass
-             * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormEmptyItem.visibleIndex
-             * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
             * @name dxFormButtonItem
-            * @publicName ButtonItem
+			* @publicName ButtonItem
             * @section FormItems
             * @type object
             */
             /**
              * @name dxFormButtonItem.name
-             * @publicName name
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormButtonItem.colSpan
-             * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormButtonItem.itemType
-             * @publicName itemType
              * @type Enums.FormItemType
              * @default "simple"
              */
             /**
              * @name dxFormButtonItem.visible
-             * @publicName visible
              * @type boolean
              * @default true
              */
             /**
              * @name dxFormButtonItem.cssClass
-             * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
              * @name dxFormButtonItem.visibleIndex
-             * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
              * @name dxFormButtonItem.buttonOptions
-             * @publicName buttonOptions
              * @type dxButtonOptions
              * @default undefined
              */
             /**
              * @name dxFormButtonItem.alignment
-             * @publicName alignment
              * @type Enums.HorizontalAlignment
              * @default "right"
              */
@@ -701,14 +611,12 @@ var Form = Widget.inherit({
                 options: {
                     /**
                      * @name dxFormOptions.showColonAfterLabel
-                     * @publicName showColonAfterLabel
                      * @type boolean
                      * @default false @for Material
                      */
                     showColonAfterLabel: false,
                     /**
                      * @name dxFormOptions.labelLocation
-                     * @publicName labelLocation
                      * @type Enums.FormLabelLocation
                      * @default "top" @for Material
                      */

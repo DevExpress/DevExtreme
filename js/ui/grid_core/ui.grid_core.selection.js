@@ -519,44 +519,37 @@ module.exports = {
         return {
         /**
          * @name GridBaseOptions.selection
-         * @publicName selection
          * @type object
          */
         /**
          * @name dxDataGridOptions.selection
-         * @publicName selection
          * @type object
          */
         /**
          * @name dxTreeListOptions.selection
-         * @publicName selection
          * @type object
          */
             selection: {
                 /**
                  * @name GridBaseOptions.selection.mode
-                 * @publicName mode
                  * @type Enums.SelectionMode
                  * @default "none"
                  */
                 mode: "none", // "single", "multiple"
                 /**
                  * @name dxDataGridOptions.selection.showCheckBoxesMode
-                 * @publicName showCheckBoxesMode
                  * @type Enums.GridSelectionShowCheckBoxesMode
                  * @default "onClick"
                  */
                 showCheckBoxesMode: "onClick", // "onLongTap", "always", "none"
                 /**
                  * @name GridBaseOptions.selection.allowSelectAll
-                 * @publicName allowSelectAll
                  * @type boolean
                  * @default true
                  */
                 allowSelectAll: true,
                 /**
                  * @name dxDataGridOptions.selection.selectAllMode
-                 * @publicName selectAllMode
                  * @type Enums.SelectAllMode
                  * @default "allPages"
                  */
@@ -564,7 +557,6 @@ module.exports = {
 
                  /**
                  * @name dxDataGridOptions.selection.maxFilterLengthInRequest
-                 * @publicName maxFilterLengthInRequest
                  * @type number
                  * @hidden
                  * @default 1500
@@ -572,7 +564,6 @@ module.exports = {
                 maxFilterLengthInRequest: 1500,
                  /**
                  * @name dxDataGridOptions.selection.deferred
-                 * @publicName deferred
                  * @type boolean
                  * @default false
                  */
@@ -580,7 +571,6 @@ module.exports = {
             },
             /**
             * @name dxDataGridOptions.selectionFilter
-            * @publicName selectionFilter
             * @type Filter expression
             * @default []
             * @fires dxDataGridOptions.onOptionChanged
@@ -588,7 +578,6 @@ module.exports = {
             selectionFilter: [],
             /**
              * @name GridBaseOptions.onSelectionChanged
-             * @publicName onSelectionChanged
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
@@ -600,7 +589,6 @@ module.exports = {
              */
             /**
              * @name GridBaseOptions.selectedRowKeys
-             * @publicName selectedRowKeys
              * @type Array<any>
              * @fires GridBaseOptions.onSelectionChanged
              */

@@ -371,7 +371,6 @@ devices.changed.add(function() {
 
 /**
  * @name ui.themes
- * @publicName themes
  * @namespace DevExpress.ui
  * @module ui/themes
  * @export default

@@ -8,7 +8,6 @@ var $ = require("../../core/renderer"),
 
 /**
 * @name SearchBoxMixin
-* @publicName SearchBoxMixin
 * @module ui/widget/ui.search_box_mixin
 * @export default
 * @hidden
@@ -19,7 +18,6 @@ module.exports = {
         return extend(this.callBase(), {
             /**
             * @name SearchBoxMixinOptions.searchMode
-            * @publicName searchMode
             * @type Enums.CollectionSearchMode
             * @default 'contains'
             */
@@ -27,7 +25,6 @@ module.exports = {
 
             /**
             * @name SearchBoxMixinOptions.searchExpr
-            * @publicName searchExpr
             * @type getter|Array<getter>
             * @default null
             */
@@ -36,14 +33,12 @@ module.exports = {
             /**
             * @name SearchBoxMixinOptions.searchValue
             * @type String
-            * @publicName searchValue
             * @default ""
             */
             searchValue: "",
 
             /**
             * @name SearchBoxMixinOptions.searchEnabled
-            * @publicName searchEnabled
             * @type boolean
             * @default false
             */
@@ -51,7 +46,6 @@ module.exports = {
 
             /**
              * @name SearchBoxMixinOptions.searchEditorOptions
-             * @publicName searchEditorOptions
              * @type dxTextBoxOptions
              * @default {}
              */
@@ -59,7 +53,6 @@ module.exports = {
 
             /**
             * @name SearchBoxMixinOptions.searchTimeout
-            * @publicName searchTimeout
             * @type number
             * @default undefined
             */

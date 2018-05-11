@@ -32,7 +32,6 @@ var VIEW_PORT_CLASSNAME = "dx-viewport",
 
 /**
 * @name HtmlApplication
-* @publicName HtmlApplication
 * @type object
 * @inherits EventsMixin
 * @namespace DevExpress.framework.html
@@ -43,62 +42,51 @@ var HtmlApplication = Application.inherit({
 
     /**
     * @name HtmlApplicationoptions.namespace
-    * @publicName namespace
     * @type object
     */
     /**
     * @name HtmlApplicationOptions.router
-    * @publicName router
     * @type object
     */
     /**
     * @name HtmlApplicationOptions.stateManager
-    * @publicName stateManager
     * @type object
     */
     /**
     * @name HtmlApplicationOptions.stateStorage
-    * @publicName stateStorage
     * @type object
     */
     /**
     * @name HtmlApplicationoptions.navigation
-    * @publicName navigation
     * @type Array<dxCommand,dxCommandOptions>
     */
     /**
     * @name HtmlApplicationoptions.mode
-    * @publicName mode
     * @type string
     * @default "mobileApp"
     * @acceptValues 'mobileApp'|'webSite'
     */
     /**
     * @name HtmlApplicationoptions.layoutSet
-    * @publicName layoutSet
     * @type string|Array<Object>
     * @default undefined
     */
     /**
     * @name HtmlApplicationoptions.animationSet
-    * @publicName animationSet
     * @type object
     * @default undefined
     */
     /**
     * @name HtmlApplicationoptions.disableViewCache
-    * @publicName disableViewCache
     * @type boolean
     */
     /**
     * @name HtmlApplicationoptions.useViewTitleAsBackText
-    * @publicName useViewTitleAsBackText
     * @type boolean
     * @default false
     */
     /**
     * @name HtmlApplicationoptions.viewPort
-    * @publicName viewPort
     * @type object
     * @type_object_field1 allowZoom:Boolean
     * @type_object_field2 allowPan:Boolean
@@ -106,31 +94,26 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationoptions.navigateToRootViewMode
-    * @publicName navigateToRootViewMode
     * @type string
     * @default "resetHistory"
     * @acceptValues 'keepHistory'|'resetHistory'
     */
     /**
     * @name HtmlApplicationoptions.commandMapping
-    * @publicName commandMapping
     * @type object
     * @default DevExpress.framework.CommandMapping.defaultMapping
     */
     /**
     * @name HtmlApplicationoptions.viewCache
-    * @publicName viewCache
     * @type object
     */
     /**
     * @name HtmlApplicationoptions.viewCacheSize
-    * @publicName viewCacheSize
     * @type Number
     * @default 5
     */
     /**
     * @name HtmlApplicationoptions.templatesVersion
-    * @publicName templatesVersion
     * @type String
     * @default undefined
     */
@@ -280,12 +263,10 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationevents.initialized
-    * @publicName initialized
     * @type classEventType
     */
     /**
     * @name HtmlApplicationevents.navigatingBack
-    * @publicName navigatingBack
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 cancel:Boolean
@@ -293,7 +274,6 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationevents.navigating
-    * @publicName navigating
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 currentUri:string
@@ -303,28 +283,24 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationevents.beforeViewSetup
-    * @publicName beforeViewSetup
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents.afterViewSetup
-    * @publicName afterViewSetup
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents.viewRendered
-    * @publicName viewRendered
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents.viewShowing
-    * @publicName viewShowing
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
@@ -332,7 +308,6 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationevents.viewShown
-    * @publicName viewShown
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
@@ -340,28 +315,24 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationevents.viewHidden
-    * @publicName viewHidden
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents.viewDisposing
-    * @publicName viewDisposing
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents.viewDisposed
-    * @publicName viewDisposed
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents.resolveLayoutController
-    * @publicName resolveLayoutController
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
@@ -370,7 +341,6 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationevents.resolveViewCacheKey
-    * @publicName resolveViewCacheKey
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 key:string
@@ -379,22 +349,18 @@ var HtmlApplication = Application.inherit({
     */
     /**
      * @name HtmlApplicationfields.viewCache
-     * @publicName viewCache
      * @type object
      */
     /**
      * @name HtmlApplicationFields.router
-     * @publicName router
      * @type object
      */
     /**
      * @name HtmlApplicationfields.navigation
-     * @publicName navigation
      * @type Array<dxCommand>
      */
     /**
      * @name HtmlApplicationFields.stateManager
-     * @publicName stateManager
      * @type object
      */
 

@@ -2,7 +2,6 @@
 
 /**
 * @name dxTreeView
-* @publicName dxTreeView
 * @inherits HierarchicalCollectionWidget, SearchBoxMixin
 * @module ui/tree_view
 * @export default

@@ -83,7 +83,6 @@ var getButtonPlace = function(name) {
 
 /**
  * @name dxPopup
- * @publicName dxPopup
  * @inherits dxOverlay
  * @module ui/popup
  * @export default
@@ -94,7 +93,6 @@ var Popup = Overlay.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxPopupOptions.fullScreen
-            * @publicName fullScreen
             * @type boolean
             * @default false
             */
@@ -102,15 +100,13 @@ var Popup = Overlay.inherit({
 
             /**
             * @name dxPopupOptions.title
-            * @publicName title
             * @type string
             * @default ""
             */
             title: "",
 
             /**
-            * @name dxPopupOptions.showtitle
-            * @publicName showTitle
+            * @name dxPopupOptions.showTitle
             * @type boolean
             * @default true
             */
@@ -118,14 +114,12 @@ var Popup = Overlay.inherit({
 
             /**
              * @name dxPopupOptions.container
-             * @publicName container
              * @type string|Node|jQuery
              * @default undefined
              */
 
             /**
             * @name dxPopupOptions.titleTemplate
-            * @publicName titleTemplate
             * @type template|function
             * @default "title"
             * @type_function_param1 titleElement:dxElement
@@ -135,7 +129,6 @@ var Popup = Overlay.inherit({
 
             /**
             * @name dxPopupOptions.onTitleRendered
-            * @publicName onTitleRendered
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -146,7 +139,6 @@ var Popup = Overlay.inherit({
 
             /**
             * @name dxPopupOptions.dragEnabled
-            * @publicName dragEnabled
             * @type boolean
             * @default false
             */
@@ -154,104 +146,87 @@ var Popup = Overlay.inherit({
 
             /**
             * @name dxPopupOptions.position
-            * @publicName position
             * @type Enums.PositionAlignment|positionConfig|function
             * @inheritdoc
             */
 
             /**
              * @name dxPopupOptions.resizeEnabled
-             * @publicName resizeEnabled
              * @type boolean
              * @default false
              */
 
             /**
             * @name dxPopupOptions.onResizeStart
-            * @publicName onResizeStart
             * @extends Action
             * @action
             */
 
             /**
             * @name dxPopupOptions.onResize
-            * @publicName onResize
             * @extends Action
             * @action
             */
 
             /**
             * @name dxPopupOptions.onResizeEnd
-            * @publicName onResizeEnd
             * @extends Action
             * @action
             */
 
             /**
              * @name dxPopupOptions.width
-             * @publicName width
              * @fires dxPopupOptions.onResize
              * @inheritdoc
              */
 
             /**
              * @name dxPopupOptions.height
-             * @publicName height
              * @fires dxPopupOptions.onResize
              * @inheritdoc
              */
 
             /**
             * @name dxPopupOptions.toolbarItems
-            * @publicName toolbarItems
             * @type Array<Object>
             */
             /**
             * @name dxPopupOptions.toolbarItems.toolbar
-            * @publicName toolbar
             * @type Enums.Toolbar
             * @default 'top'
             */
             /**
             * @name dxPopupOptions.toolbarItems.html
-            * @publicName html
             * @type String
             */
             /**
             * @name dxPopupOptions.toolbarItems.text
-            * @publicName text
             * @type String
             */
             /**
             * @name dxPopupOptions.toolbarItems.visible
-            * @publicName visible
             * @type boolean
             * @default true
             */
             /**
             * @name dxPopupOptions.toolbarItems.disabled
-            * @publicName disabled
             * @type boolean
             * @default false
             */
             /**
             * @name dxPopupOptions.toolbarItems.template
-            * @publicName template
             * @type template
             */
             /**
             * @name dxPopupOptions.toolbarItems.widget
-            * @publicName widget
             * @type Enums.ToolbarItemWidget
             */
             /**
             * @name dxPopupOptions.toolbarItems.options
-            * @publicName options
             * @type object
             */
             /**
             * @name dxPopupOptions.toolbarItems.location
-            * @publicName location
             * @type Enums.ToolbarItemLocation
             * @default 'center'
             */
@@ -259,7 +234,6 @@ var Popup = Overlay.inherit({
 
             /**
             * @name dxPopupOptions.showCloseButton
-            * @publicName showCloseButton
             * @type boolean
             * @default false
             */
@@ -289,19 +263,16 @@ var Popup = Overlay.inherit({
                 options: {
                     /**
                     * @name dxPopupOptions.animation
-                    * @publicName animation
                     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} @for iOS
                     * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions.animation.show
-                    * @publicName show
                     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} @for iOS
                     * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions.animation.hide
-                    * @publicName hide
                     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} @for iOS
                     * @inheritdoc
                     */
@@ -319,7 +290,6 @@ var Popup = Overlay.inherit({
                 options: {
                     /**
                     * @name dxPopupOptions.showCloseButton
-                    * @publicName showCloseButton
                     * @default true @for desktop
                     */
                     showCloseButton: true
@@ -332,7 +302,6 @@ var Popup = Overlay.inherit({
                 options: {
                     /**
                     * @name dxPopupOptions.dragEnabled
-                    * @publicName dragEnabled
                     * @default true @for desktop
                     */
                     dragEnabled: true
@@ -345,7 +314,6 @@ var Popup = Overlay.inherit({
                 options: {
                     /**
                     * @name dxPopupOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

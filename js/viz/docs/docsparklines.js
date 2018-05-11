@@ -1,41 +1,35 @@
 /**
-* @name basesparkline
-* @publicName BaseSparkline
+* @name BaseSparkline
 * @type object
 * @hidden
 * @inherits BaseWidget
 */
 var BaseSparkline = {
     /**
-    * @name basesparkline.options
-    * @publicName Options
+    * @name BaseSparkline.Options
     * @namespace DevExpress.viz.sparklines
     * @hidden
     */        
     /**
-    * @name basesparklineoptions.redrawOnResize
-    * @publicName redrawOnResize
+    * @name BaseSparklineOptions.redrawOnResize
     * @hidden
     * @inheritdoc
     */
     redrawOnResize: undefined,
     /**
-    * @name basesparklineoptions.title
-    * @publicName title
+    * @name BaseSparklineOptions.title
     * @hidden
     * @inheritdoc
     */
     title: undefined,
     /**
-    * @name basesparklineoptions.export
-    * @publicName export
+    * @name BaseSparklineOptions.export
     * @hidden
     * @inheritdoc
     */
     "export": undefined,
     /**
-    * @name basesparklineoptions.loadingIndicator
-    * @publicName loadingIndicator
+    * @name BaseSparklineOptions.loadingIndicator
     * @hidden
     * @inheritdoc
     */
@@ -55,38 +49,33 @@ var BaseSparkline = {
     */
     hideLoadingIndicator: function() { },
     /**
-    * @name basesparklineoptions.tooltip
-    * @publicName tooltip
+    * @name BaseSparklineOptions.tooltip
     * @type object
     */
     tooltip: {
         /**
-        * @name basesparklineoptions.tooltip.enabled
+        * @name BaseSparklineOptions.tooltip.enabled
         * @type boolean
-        * @publicName enabled
         * @default true
         * @inheritdoc
         */
         enabled: true,
         /**
-        * @name basesparklineoptions.tooltip.verticalalignment
-        * @publicName verticalAlignment
+        * @name BaseSparklineOptions.tooltip.verticalAlignment
         * @type Enums.VerticalEdge
         * @default undefined
         * @deprecated
         */
         verticalAlignment: 'top',
         /**
-        * @name basesparklineoptions.tooltip.horizontalalignment
-        * @publicName horizontalAlignment
+        * @name BaseSparklineOptions.tooltip.horizontalAlignment
         * @type Enums.HorizontalAlignment
         * @default undefined
         * @deprecated
         */
         horizontalAlignment: 'center',
         /**
-        * @name basesparklineoptions.tooltip.customizetooltip
-        * @publicName customizeTooltip
+        * @name BaseSparklineOptions.tooltip.customizeTooltip
         * @type function(pointsInfo)
         * @type_function_param1 pointsInfo:object
         * @type_function_return object
@@ -96,16 +85,14 @@ var BaseSparkline = {
         customizeTooltip: undefined
     },
     /**
-    * @name basesparklineoptions.ontooltipshown
-    * @publicName onTooltipShown
+    * @name BaseSparklineOptions.onTooltipShown
     * @extends Action
     * @notUsedInTheme
     * @action
     */
     onTooltipShown: function() { },
     /**
-    * @name basesparklineoptions.ontooltiphidden
-    * @publicName onTooltipHidden
+    * @name BaseSparklineOptions.onTooltipHidden
     * @extends Action
     * @notUsedInTheme
     * @action
@@ -115,174 +102,150 @@ var BaseSparkline = {
 
 
 /**
-* @name dxsparkline
-* @publicName dxSparkline
+* @name dxSparkline
 * @inherits BaseSparkline
 * @module viz/sparkline
 * @export default
 */
 var dxSparkline = {
     /**
-    * @name dxsparkline.options
-    * @publicName Options
+    * @name dxSparkline.Options
     * @namespace DevExpress.viz.sparklines
     * @hidden
     */       
     /**
-   * @name dxsparklineoptions.datasource
-   * @publicName dataSource
+   * @name dxSparkLineOptions.dataSource
    * @extends CommonVizDataSource
    */
     dataSource: undefined,
     /**
-	* @name dxsparklineoptions.argumentfield
-	* @publicName argumentField
+	* @name dxSparkLineOptions.argumentField
 	* @type string
 	* @default 'arg'
 	*/
     argumentField: 'arg',
     /**
-	* @name dxsparklineoptions.valuefield
-	* @publicName valueField
+	* @name dxSparkLineOptions.valueField
 	* @type string
 	* @default 'val'
 	*/
     valueField: 'val',
     /**
-    * @name dxsparklineoptions.type
-    * @publicName type
+    * @name dxSparkLineOptions.type
     * @type Enums.SparklineType
     * @default 'line'
     */
     type: 'line',
     /**
-	* @name dxsparklineoptions.linecolor
-	* @publicName lineColor
-	* @type string
-	* @default '#666666'
-	*/
+    * @name dxSparkLineOptions.lineColor
+    * @type string
+    * @default '#666666'
+    */
     lineColor: '#666666',
     /**
-	* @name dxsparklineoptions.linewidth
-	* @publicName lineWidth
-	* @type number
-	* @default 2
-	*/
+    * @name dxSparkLineOptions.lineWidth
+    * @type number
+    * @default 2
+    */
     lineWidth: 2,
     /**
-    * @name dxsparklineoptions.showfirstlast
-    * @publicName showFirstLast
+    * @name dxSparkLineOptions.showFirstLast
     * @type boolean
     * @default true
     */
     showFirstLast: true,
     /**
-    * @name dxsparklineoptions.showminmax
-    * @publicName showMinMax
+    * @name dxSparkLineOptions.showMinMax
     * @type boolean
     * @default false
     */
     showMinMax: false,
     /**
-	* @name dxsparklineoptions.mincolor
-	* @publicName minColor
+	* @name dxSparkLineOptions.minColor
 	* @type string
 	* @default '#e8c267'
 	*/
     minColor: '#e8c267',
     /**
-	* @name dxsparklineoptions.maxcolor
-	* @publicName maxColor
+	* @name dxSparkLineOptions.maxColor
 	* @type string
 	* @default '#e55253'
 	*/
     maxColor: '#e55253',
     /**
-	* @name dxsparklineoptions.firstlastcolor
-	* @publicName firstLastColor
+	* @name dxSparkLineOptions.firstLastColor
 	* @type string
 	* @default '#666666'
 	*/
     firstLastColor: '#666666',
     /**
-	* @name dxsparklineoptions.barpositivecolor
-	* @publicName barPositiveColor
+	* @name dxSparkLineOptions.barPositiveColor
 	* @type string
 	* @default '#a9a9a9'
 	*/
     barPositiveColor: '#a9a9a9',
     /**
-	* @name dxsparklineoptions.barnegativecolor
-	* @publicName barNegativeColor
+	* @name dxSparkLineOptions.barNegativeColor
 	* @type string
 	* @default '#d7d7d7'
 	*/
     barNegativeColor: '#d7d7d7',
     /**
-	* @name dxsparklineoptions.wincolor
-	* @publicName winColor
+	* @name dxSparkLineOptions.winColor
 	* @type string
 	* @default '#a9a9a9'
 	*/
     winColor: '#a9a9a9',
     /**
-	* @name dxsparklineoptions.losscolor
-	* @publicName lossColor
+	* @name dxSparkLineOptions.lossColor
 	* @type string
 	* @default '#d7d7d7'
 	*/
     lossColor: '#d7d7d7',
     /**
-    * @name dxsparklineoptions.pointsymbol
-    * @publicName pointSymbol
+    * @name dxSparkLineOptions.pointSymbol
     * @type Enums.VizPointSymbol
     * @default 'circle'
     */
     pointSymbol: 'circle',
     /**
-    * @name dxsparklineoptions.pointsize
-    * @publicName pointSize
+    * @name dxSparkLineOptions.pointSize
     * @type number
     * @default 4
     */
     pointSize: 4,
     /**
-    * @name dxsparklineoptions.pointcolor
-    * @publicName pointColor
+    * @name dxSparkLineOptions.pointColor
     * @type string
     * @default '#ffffff'
     */
     pointColor: '#ffffff',
     /**
-	* @name dxsparklineoptions.winlossthreshold
-	* @publicName winlossThreshold
+	* @name dxSparkLineOptions.winlossThreshold
 	* @type number
 	* @default 0
 	*/
     winlossThreshold: 0,
     /**
-    * @name dxsparklineoptions.ignoreemptypoints
-    * @publicName ignoreEmptyPoints
+    * @name dxSparkLineOptions.ignoreEmptyPoints
     * @type boolean
     * @default false
     */
     ignoreEmptyPoints: false,
     /**
-    * @name dxsparklineoptions.minvalue
-    * @publicName minValue
+    * @name dxSparkLineOptions.minValue
     * @type number
     * @default undefined
     */
     minValue: undefined,
     /**
-    * @name dxsparklineoptions.maxvalue
-    * @publicName maxValue
+    * @name dxSparkLineOptions.maxValue
     * @type number
     * @default undefined
     */
     maxValue: undefined,
     /**
-    * @name dxsparklinemethods.getdatasource
+    * @name dxSparkLineMethods.getDataSource
     * @publicName getDataSource()
     * @return DataSource
     */
@@ -290,82 +253,71 @@ var dxSparkline = {
 };
 
 /**
-* @name dxbullet
-* @publicName dxBullet
+* @name dxBullet
 * @inherits BaseSparkline
 * @module viz/bullet
 * @export default
 */
 var dxBullet = {
     /**
-    * @name dxbullet.options
-    * @publicName Options
+    * @name dxBullet.Options
     * @namespace DevExpress.viz.sparklines
     * @hidden
     */       
     /**
-    * @name dxbulletoptions.value
-    * @publicName value
+    * @name dxBulletOptions.value
     * @type number
     * @default 0
     * @notUsedInTheme
     */
     value: 0,
     /**
-    * @name dxbulletoptions.target
-    * @publicName target
+    * @name dxBulletOptions.target
     * @type number
     * @default 0
     * @notUsedInTheme
     */
     target: 0,
     /**
-    * @name dxbulletoptions.startscalevalue
-    * @publicName startScaleValue
+    * @name dxBulletOptions.startScaleValue
     * @type number
     * @default 0
     * @notUsedInTheme
     */
     startScaleValue: 0,
     /**
-    * @name dxbulletoptions.endscalevalue
-    * @publicName endScaleValue
+    * @name dxBulletOptions.endScaleValue
     * @type number
     * @default undefined
     * @notUsedInTheme
     */
     endScaleValue: undefined,
     /**
-    * @name dxbulletoptions.color
-    * @publicName color
+    * @name dxBulletOptions.color
     * @type string
     * @default '#e8c267'
     */
     color: '#e8c267',
     /**
-    * @name dxbulletoptions.targetcolor
-    * @publicName targetColor
+    * @name dxBulletOptions.targetColor
     * @type string
     * @default '#666666'
     */
     targetColor: '#666666',
     /**
-    * @name dxbulletoptions.targetwidth
-    * @publicName targetWidth
+    * @name dxBulletOptions.targetWidth
     * @type number
     * @default 4
     */
     targetWidth: 4,
     /**
-    * @name dxbulletoptions.showtarget
-    * @publicName showTarget
+    * @name dxBulletOptions.showTarget
     * @type boolean
     * @default true
     */
     showTarget: true,
     /**
-    * @name dxbulletoptions.showzerolevel
-    * @publicName showZeroLevel
+    * @name dxBulletOptions.showZeroLevel
     * @type boolean
     * @default true
     */

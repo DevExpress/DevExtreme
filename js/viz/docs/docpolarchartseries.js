@@ -1,25 +1,21 @@
 /**
 * @name dxPolarChartSeriesTypes
-* @publicName dxPolarChartSeriesTypes
 * @type object
 */
 /**
 * @name dxPolarChartSeriesTypes.CommonPolarChartSeries
-* @publicName CommonPolarChartSeries
 * @type object
 * @hidden
 */
 var CommonPolarChartSeries = {
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.color
-    * @publicName color
     * @type string
     * @default undefined
     */
     color: undefined,
     /**
      * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.closed
-     * @publicName closed
      * @type boolean
      * @default true
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.linepolarseries
@@ -27,14 +23,12 @@ var CommonPolarChartSeries = {
     closed: true,
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.visible
-    * @publicName visible
     * @type boolean
     * @default true
     */
     visible: true,
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity
-    * @publicName opacity
     * @type number
     * @default 0.5
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries
@@ -42,15 +36,13 @@ var CommonPolarChartSeries = {
     opacity: 0.5,
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.width
-    * @publicName width
     * @type number
     * @default 2
     * @propertyOf dxPolarChartSeriesTypes.linepolarseries
     */
     width: 2,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.dashstyle
-    * @publicName dashStyle
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
     * @type Enums.DashStyle
     * @default 'solid'
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries
@@ -58,7 +50,6 @@ var CommonPolarChartSeries = {
     dashStyle: 'solid',
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.stack
-    * @publicName stack
     * @type string
     * @default 'default'
     * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -66,31 +57,27 @@ var CommonPolarChartSeries = {
     stack: 'default',
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.axis
-    * @publicName axis
     * @type string
     * @default undefined
     * @hidden
     */
     axis: undefined,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valuefield
-    * @publicName valueField
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueField
     * @type string
     * @default 'val'
     * @notUsedInTheme
     */
     valueField: 'val',
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentfield
-    * @publicName argumentField
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField
     * @type string
     * @default 'arg'
     * @notUsedInTheme
     */
     argumentField: 'arg',
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.tagfield
-    * @publicName tagField
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.tagField
     * @type string
     * @default 'tag'
     * @notUsedInTheme
@@ -98,14 +85,12 @@ var CommonPolarChartSeries = {
     tagField: 'tag',
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.border
-    * @publicName border
     * @type object
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     border: {
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible
-        * @publicName visible
         * @type boolean
         * @default false
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -113,7 +98,6 @@ var CommonPolarChartSeries = {
         visible: false,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.border.width
-        * @publicName width
         * @type number
         * @default 2
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -121,15 +105,13 @@ var CommonPolarChartSeries = {
         width: 2,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.border.color
-        * @publicName color
         * @type string
         * @default undefined
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         color: undefined,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashstyle
-        * @publicName dashStyle
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle
         * @type Enums.DashStyle
         * @default undefined
             * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -137,116 +119,100 @@ var CommonPolarChartSeries = {
         dashStyle: undefined
     },
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hovermode
-    * @publicName hoverMode
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode
     * @type Enums.ChartSeriesHoverMode
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
         */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionmode
-    * @publicName selectionMode
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionMode
     * @type Enums.ChartSeriesSelectionMode
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
         */
     selectionMode: 'includePoints',
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle
-    * @publicName hoverStyle
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
     * @type object
     */
     hoverStyle: {
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.color
-        * @publicName color
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.color
         * @type string
         * @default undefined
         */
         color: undefined,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.width
-        * @publicName width
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.width
         * @type number
         * @default 3
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries
         */
         width: 3,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.dashstyle
-        * @publicName dashStyle
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
         * @type Enums.DashStyle
         * @default 'solid'
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries
         */
         dashStyle: 'solid',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.hatching
-        * @publicName hatching
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         hatching: {
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.hatching.direction
-            * @publicName direction
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction
             * @type Enums.HatchingDirection
             * @default 'none'
             */
             direction: 'right',
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.hatching.width
-            * @publicName width
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.width
             * @type number
             * @default 2
             */
             width: 2,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.hatching.step
-            * @publicName step
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.step
             * @type number
             * @default 6
             */
             step: 6,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.hatching.opacity
-            * @publicName opacity
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity
             * @type number
             * @default 0.75
             */
             opacity: 0.75
         },
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.border
-        * @publicName border
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         border: {
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.border.visible
-            * @publicName visible
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.border.width
-            * @publicName width
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.width
             * @type number
             * @default 3
             */
             width: 3,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.border.color
-            * @publicName color
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverstyle.border.dashstyle
-            * @publicName dashStyle
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
                     */
@@ -254,102 +220,88 @@ var CommonPolarChartSeries = {
         }
     },
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle
-    * @publicName selectionStyle
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
     * @type object
     */
     selectionStyle: {
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.color
-        * @publicName color
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.color
         * @type string
         * @default undefined
         */
         color: undefined,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.width
-        * @publicName width
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.width
         * @type number
         * @default 3
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries
         */
         width: 3,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.dashstyle
-        * @publicName dashStyle
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
         * @type Enums.DashStyle
         * @default 'solid'
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries
         */
         dashStyle: 'solid',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.hatching
-        * @publicName hatching
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         hatching: {
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.hatching.direction
-            * @publicName direction
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction
             * @type Enums.HatchingDirection
             * @default 'none'
             */
             direction: 'right',
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.hatching.width
-            * @publicName width
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.width
             * @type number
             * @default 2
             */
             width: 2,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.hatching.step
-            * @publicName step
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.step
             * @type number
             * @default 6
             */
             step: 6,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.hatching.opacity
-            * @publicName opacity
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity
             * @type number
             * @default 0.5
             */
             opacity: 0.5
         },
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.border
-        * @publicName border
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         border: {
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.border.visible
-            * @publicName visible
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.border.width
-            * @publicName width
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.width
             * @type number
             * @default 3
             */
             width: 3,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.border.color
-            * @publicName color
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.color
             * @type string
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionstyle.border.dashstyle
-            * @publicName dashStyle
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
                     */
@@ -358,22 +310,19 @@ var CommonPolarChartSeries = {
     },
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point
-    * @publicName point
     * @type object
     * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
     */
     point: {
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hovermode
-        * @publicName hoverMode
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode
         * @type Enums.ChartPointInteractionMode
                 * @default 'onlyPoint'
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
         */
         hoverMode: 'onlyPoint',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionmode
-        * @publicName selectionMode
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode
         * @type Enums.ChartPointInteractionMode
                 * @default 'onlyPoint'
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -381,7 +330,6 @@ var CommonPolarChartSeries = {
         selectionMode: 'onlyPoint',
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color
-        * @publicName color
         * @type string
         * @default undefined
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -389,7 +337,6 @@ var CommonPolarChartSeries = {
         color: undefined,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible
-        * @publicName visible
         * @type boolean
         * @default true
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -397,7 +344,6 @@ var CommonPolarChartSeries = {
         visible: true,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.symbol
-        * @publicName symbol
         * @type Enums.VizPointSymbol
         * @default 'circle'
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -405,7 +351,6 @@ var CommonPolarChartSeries = {
         symbol: 'circle',
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image
-        * @publicName image
         * @type string|object
         * @default undefined
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -413,7 +358,6 @@ var CommonPolarChartSeries = {
         image: {
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.url
-            * @publicName url
             * @type string
             * @default undefined
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -421,7 +365,6 @@ var CommonPolarChartSeries = {
             url: undefined,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.width
-            * @publicName width
             * @type number
             * @default 30
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -429,7 +372,6 @@ var CommonPolarChartSeries = {
             width: 30,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image.height
-            * @publicName height
             * @type number
             * @default 30
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -438,14 +380,12 @@ var CommonPolarChartSeries = {
         },
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border
-        * @publicName border
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
         */
         border: {
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.visible
-            * @publicName visible
             * @type boolean
             * @default false
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -453,7 +393,6 @@ var CommonPolarChartSeries = {
             visible: false,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.width
-            * @publicName width
             * @type number
             * @default 1
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -461,7 +400,6 @@ var CommonPolarChartSeries = {
             width: 1,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border.color
-            * @publicName color
             * @type string
             * @default undefined
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -470,53 +408,46 @@ var CommonPolarChartSeries = {
         },
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.size
-        * @publicName size
         * @type number
         * @default 12
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
         */
         size: 12,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle
-        * @publicName hoverStyle
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
         */
         hoverStyle: {
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle.color
-            * @publicName color
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.color
             * @type string
             * @default undefined
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
             */
             color: undefined,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle.border
-            * @publicName border
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border
             * @type object
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
             */
             border: {
                 /**
-                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle.border.visible
-                * @publicName visible
+                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.visible
                 * @type boolean
                 * @default true
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
                 */
                 visible: true,
                 /**
-                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle.border.width
-                * @publicName width
+                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.width
                 * @type number
                 * @default 4
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
                 */
                 width: 4,
                 /**
-                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle.border.color
-                * @publicName color
+                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.border.color
                 * @type string
                 * @default undefined
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -524,8 +455,7 @@ var CommonPolarChartSeries = {
                 color: undefined
             },
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverstyle.size
-            * @publicName size
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle.size
             * @type number
             * @default 12
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -533,46 +463,40 @@ var CommonPolarChartSeries = {
             size: 12
         },
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle
-        * @publicName selectionStyle
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
         */
         selectionStyle: {
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle.color
-            * @publicName color
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.color
             * @type string
             * @default undefined
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
             */
             color: undefined,
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle.border
-            * @publicName border
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border
             * @type object
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
             */
             border: {
                 /**
-                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle.border.visible
-                * @publicName visible
+                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.visible
                 * @type boolean
                 * @default true
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
                 */
                 visible: true,
                 /**
-                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle.border.width
-                * @publicName width
+                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.width
                 * @type number
                 * @default 4
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
                 */
                 width: 4,
                 /**
-                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle.border.color
-                * @publicName color
+                * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.border.color
                 * @type string
                 * @default undefined
                 * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -580,8 +504,7 @@ var CommonPolarChartSeries = {
                 color: undefined
             },
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionstyle.size
-            * @publicName size
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle.size
             * @type number
             * @default 12
             * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
@@ -590,45 +513,39 @@ var CommonPolarChartSeries = {
         }
     },
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.showinlegend
-    * @publicName showInLegend
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend
     * @type boolean
     * @default true
     */
     showInLegend: true,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.maxlabelcount
-    * @publicName maxLabelCount
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.maxLabelCount
     * @type number
     * @default undefined
     */
     maxLabelCount: undefined,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.minbarsize
-    * @publicName minBarSize
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize
     * @type number
     * @default undefined
     * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.barpolarseries
         */
     minBarSize: undefined,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreemptypoints
-    * @publicName ignoreEmptyPoints
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
     * @type boolean
     * @default false
         */
     ignoreEmptyPoints: false,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.barpadding
-    * @publicName barPadding
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding
     * @type number
     * @default undefined
     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     barPadding: undefined,
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.barwidth
-    * @publicName barWidth
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth
     * @type number
     * @default undefined
     * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -636,13 +553,11 @@ var CommonPolarChartSeries = {
     barWidth: undefined,
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label
-    * @publicName label
     * @type object
     */
     label: {
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizetext
-        * @publicName customizeText
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
         * @type_function_return string
@@ -651,54 +566,46 @@ var CommonPolarChartSeries = {
         customizeText: undefined,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible
-        * @publicName visible
         * @type boolean
         * @default false
         */
         visible: false,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.showforzerovalues
-        * @publicName showForZeroValues
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.showForZeroValues
         * @type boolean
         * @default true
         * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         showForZeroValues: true,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationangle
-        * @publicName rotationAngle
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationAngle
         * @type number
         * @default 0
         */
         rotationAngle: 0,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format
-        * @publicName format
         * @extends CommonVizFormat
         */
         format: '',
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.precision
-        * @publicName precision
         * @extends CommonVizPrecision
         */
         precision: 0,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat
-        * @publicName argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentprecision
-        * @publicName argumentPrecision
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentPrecision
         * @extends CommonVizPrecision
         * @deprecated
         */
         argumentPrecision: 0,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
-        * @publicName position
         * @type Enums.RelativePosition
         * @default 'outside'
         * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -706,83 +613,71 @@ var CommonPolarChartSeries = {
         position: 'outside',
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font
-        * @publicName font
         * @type object
         */
         font: {
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.family
-            * @publicName family
             * @type string
             * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.weight
-            * @publicName weight
             * @type number
             * @default 400
             */
             weight: 400,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.color
-            * @publicName color
             * @type string
             * @default '#FFFFFF'
             */
             color: '#FFFFFF',
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.size
-            * @publicName size
             * @type number|string
             * @default 14
             */
             size: 14,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.opacity
-            * @publicName opacity
             * @type number
             * @default undefined
             */
             opacity: undefined
         },
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundcolor
-        * @publicName backgroundColor
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor
         * @type string
         * @default undefined
         */
         backgroundColor: undefined,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border
-        * @publicName border
         * @type object
         */
         border: {
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
-            * @publicName visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.width
-            * @publicName width
             * @type number
             * @default 1
             */
             width: 1,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.color
-            * @publicName color
             * @type string
             * @default  '#d3d3d3'
             */
             color: '#d3d3d3',
             /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashstyle
-            * @publicName dashStyle
+            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
             * @type Enums.DashStyle
             * @default 'solid'
             */
@@ -790,14 +685,12 @@ var CommonPolarChartSeries = {
         },
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector
-        * @publicName connector
         * @type object
         * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
         */
         connector: {
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.visible
-            * @publicName visible
             * @type boolean
             * @default false
             * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -805,7 +698,6 @@ var CommonPolarChartSeries = {
             visible: false,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.width
-            * @publicName width
             * @type number
             * @default 1
             * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -813,7 +705,6 @@ var CommonPolarChartSeries = {
             width: 1,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector.color
-            * @publicName color
             * @type string
             * @default undefined
             * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -822,71 +713,61 @@ var CommonPolarChartSeries = {
         }
     },
     /**
-    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar
-    * @publicName valueErrorBar
+    * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar
     * @type object
     * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.scatterpolarseries
     */
     valueErrorBar: {
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.displaymode
-        * @publicName displayMode
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.displayMode
         * @type Enums.ValueErrorBarDisplayMode
         * @default 'auto'
         */
         displayMode: 'auto',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.lowvaluefield
-        * @publicName lowValueField
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lowValueField
         * @type string
         * @default undefined
         */
         lowValueField: undefined,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.highvaluefield
-        * @publicName highValueField
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.highValueField
         * @type string
         * @default undefined
         */
         highValueField: undefined,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.type
-        * @publicName type
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.type
         * @type Enums.ValueErrorBarType
         * @default undefined
         */
         type: undefined,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.value
-        * @publicName value
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.value
         * @type number
         * @default 1
         */
         value: 1,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.color
-        * @publicName color
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.color
         * @type string
         * @default black
         */
         color: 'black',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.linewidth
-        * @publicName lineWidth
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.lineWidth
         * @type number
         * @default 2
         */
         lineWidth: 2,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.edgelength
-        * @publicName edgeLength
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.edgeLength
         * @type number
         * @default 8
         */
         edgeLength: 8,
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueerrorbar.opacity
-        * @publicName opacity
+        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.opacity
         * @type number
         * @default undefined
         */
@@ -904,14 +785,12 @@ var CommonPolarChartSeries = {
 var areaPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.areapolarseries.point
-    * @publicName point
     * @type object
     * @inheritdoc
     */
     point: {
         /**
         * @name dxPolarChartSeriesTypes.areapolarseries.point.visible
-        * @publicName visible
         * @type boolean
         * @default false
         * @inheritdoc
@@ -919,16 +798,14 @@ var areaPolarSeries = {
         visible: false
     },
     /**
-    * @name dxPolarChartSeriesTypes.areapolarseries.hovermode
-    * @publicName hoverMode
+    * @name dxPolarChartSeriesTypes.areapolarseries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
     * @default 'nearestPoint'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxPolarChartSeriesTypes.areapolarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxPolarChartSeriesTypes.areapolarseries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
@@ -945,16 +822,14 @@ var areaPolarSeries = {
 */
 var barPolarSeries = {
     /**
-    * @name dxPolarChartSeriesTypes.barpolarseries.hovermode
-    * @publicName hoverMode
+    * @name dxPolarChartSeriesTypes.barpolarseries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxPolarChartSeriesTypes.barpolarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxPolarChartSeriesTypes.barpolarseries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
@@ -970,16 +845,14 @@ var barPolarSeries = {
 */
 var linePolarSeries = {
     /**
-    * @name dxPolarChartSeriesTypes.linepolarseries.hovermode
-    * @publicName hoverMode
+    * @name dxPolarChartSeriesTypes.linepolarseries.hoverMode
     * @type string
     * @acceptValues 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none'
     * @default 'excludePoints'
     */
     hoverMode: 'nearestPoint',
     /**
-    * @name dxPolarChartSeriesTypes.linepolarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxPolarChartSeriesTypes.linepolarseries.selectionMode
     * @type string
     * @acceptValues 'includePoints' | 'excludePoints' | 'none'
     * @default 'includePoints'
@@ -1005,28 +878,24 @@ var scatterPolarSeries = {};
 var stackedbarPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.stackedbarpolarseries.label
-    * @publicName label
     * @type object
     * @inheritdoc
     */
     /**
     * @name dxPolarChartSeriesTypes.stackedbarpolarseries.label.position
-    * @publicName position
     * @type Enums.RelativePosition
     * @default 'inside'
     * @inheritdoc
     */
     /**
-    * @name dxPolarChartSeriesTypes.stackedbarpolarseries.hovermode
-    * @publicName hoverMode
+    * @name dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
-    * @name dxPolarChartSeriesTypes.stackedbarpolarseries.selectionmode
-    * @publicName selectionMode
+    * @name dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode
     * @type string
     * @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
     * @default 'onlyPoint'

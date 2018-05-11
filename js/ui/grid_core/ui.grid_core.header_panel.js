@@ -132,7 +132,6 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.onToolbarPreparing
-             * @publicName onToolbarPreparing
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 toolbarOptions:dxToolbarOptions

@@ -5,118 +5,114 @@
 */
 var BaseBaseSeries = {
     /**
-    * @name baseSeriesObjectFields.fullstate
-    * @publicName fullState
+    * @name baseSeriesObjectFields.fullState
     * @type number
     */
     fullState: 0,
     /**
-    * @name baseSeriesObjectmethods.clearselection
+    * @name baseSeriesObjectMethods.clearSelection
     * @publicName clearSelection()
     */
     clearSelection: function() { },
     /**
-    * @name baseSeriesObjectmethods.deselectpoint
+    * @name baseSeriesObjectMethods.deselectPoint
     * @publicName deselectPoint(point)
     * @param1 point:basePointObject
     */
     deselectPoint: function() { },
     /**
-    * @name baseSeriesObjectmethods.getcolor
+    * @name baseSeriesObjectMethods.getColor
     * @publicName getColor()
     * @return string
     */
     getColor: function() { },
     /**
-    * @name baseSeriesObjectmethods.getallpoints
+    * @name baseSeriesObjectMethods.getAllPoints
     * @publicName getAllPoints()
     * @return Array<basePointObject>
     */
     getAllPoints: function() { },
     /**
-    * @name baseSeriesObjectmethods.getpointsbyarg
+    * @name baseSeriesObjectMethods.getPointsByArg
     * @publicName getPointsByArg(pointArg)
     * @param1 pointArg:number|string|date
     * @return Array<basePointObject>
     */
     getPointsByArg: function() { },
     /**
-    * @name baseSeriesObjectmethods.getpointbypos
+    * @name baseSeriesObjectMethods.getPointByPos
     * @publicName getPointByPos(positionIndex)
     * @param1 positionIndex:number
     * @return basePointObject
     */
     getPointByPos: function() { },
     /**
-   * @name baseSeriesObjectmethods.getvisiblepoints
+   * @name baseSeriesObjectMethods.getVisiblePoints
    * @publicName getVisiblePoints()
    * @return Array<basePointObject>
    */
     getVisiblePoints: function() { },
     /**
-    * @name baseSeriesObjectmethods.select
+    * @name baseSeriesObjectMethods.select
     * @publicName select()
     */
     select: function() { },
     /**
-    * @name baseSeriesObjectmethods.selectpoint
+    * @name baseSeriesObjectMethods.selectPoint
     * @publicName selectPoint(point)
     * @param1 point:basePointObject
     */
     selectPoint: function () { },
     /**
-    * @name baseSeriesObjectmethods.hover
+    * @name baseSeriesObjectMethods.hover
     * @publicName hover()
     */
     hover: function () { },
     /**
-    * @name baseSeriesObjectmethods.clearHover
+    * @name baseSeriesObjectMethods.clearHover
     * @publicName clearHover()
     */
     clearHover: function () { },
     /**
-    * @name baseSeriesObjectmethods.isSelected
+    * @name baseSeriesObjectMethods.isSelected
     * @publicName isSelected()
     * @return boolean
     */
     isSelected: function() { },
     /**
-    * @name baseSeriesObjectmethods.isHovered
+    * @name baseSeriesObjectMethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function() { },
     /**
-   * @name baseSeriesObjectmethods.isvisible
+   * @name baseSeriesObjectMethods.isVisible
    * @publicName isVisible()
    * @return boolean
    */
     isVisible: function() { },
     /**
     * @name baseSeriesObjectFields.type
-    * @publicName type
     * @type string
     */
     type: null,
     /**
     * @name baseSeriesObjectFields.name
-    * @publicName name
     * @type any
     */
     name: null,
     /**
     * @name baseSeriesObjectFields.tag
-    * @publicName tag
     * @type any
     */
     tag: null,
     /**
-   * @name baseSeriesObjectmethods.show
+   * @name baseSeriesObjectMethods.show
    * @publicName show()
    */
     show: function() { },
     /**
-  * @name baseSeriesObjectmethods.hide
+  * @name baseSeriesObjectMethods.hide
   * @publicName hide()
   */
     hide: function() { }
@@ -130,90 +126,84 @@ var BaseBaseSeries = {
 var BasePoint = {
     /**
     * @name basePointObjectFields.data
-    * @publicName data
     * @type any
     */
     data: {},
     /**
-    * @name basePointObjectFields.fullstate
-    * @publicName fullState
+    * @name basePointObjectFields.fullState
     * @type number
     */
     fullState: 0,
     /**
-    * @name basePointObjectmethods.clearselection
+    * @name basePointObjectMethods.clearSelection
     * @publicName clearSelection()
     */
     clearSelection: function() { },
     /**
     * @name basePointObjectFields.originalArgument
-    * @publicName originalArgument
     * @type string|number|date
     */
     originalArgument: null,
     /**
     * @name basePointObjectFields.originalValue
-    * @publicName originalValue
     * @type string|number|date
     */
     originalValue: null,
     /**
-    * @name basePointObjectmethods.select
+    * @name basePointObjectMethods.select
     * @publicName select()
     */
     select: function () { },
     /**
-    * @name basePointObjectmethods.hover
+    * @name basePointObjectMethods.hover
     * @publicName hover()
     */
     hover: function () { },
     /**
-    * @name basePointObjectmethods.clearHover
+    * @name basePointObjectMethods.clearHover
     * @publicName clearHover()
     */
     clearHover: function() { },
     /**
-   * @name basePointObjectmethods.isSelected
+   * @name basePointObjectMethods.isSelected
    * @publicName isSelected()
    * @return boolean
    */
     isSelected: function() { },
    /**
-   * @name basePointObjectmethods.isHovered
+   * @name basePointObjectMethods.isHovered
    * @publicName isHovered()
    * @return boolean
    */
     isHovered: function() { },
     /**
-    * @name basePointObjectmethods.showTooltip
+    * @name basePointObjectMethods.showTooltip
     * @publicName showTooltip()
     */
     showTooltip: function() { },
     /**
-    * @name basePointObjectmethods.hideTooltip
+    * @name basePointObjectMethods.hideTooltip
     * @publicName hideTooltip()
     */
     hideTooltip: function() { },
     /**
-    * @name basePointObjectmethods.getcolor
+    * @name basePointObjectMethods.getColor
     * @publicName getColor()
     * @return string
     */
     getColor: function() { },
     /**
     * @name basePointObjectFields.series
-    * @publicName series
     * @type object
     */
     series: null,
     /**
     * @name basePointObjectFields.tag
-    * @publicName tag
     * @type any
     */
     tag: null,
     /**
-    * @name basePointObjectmethods.getlabel
+    * @name basePointObjectMethods.getLabel
     * @publicName getLabel()
     * @return baseLabelObject|Array<baseLabelObject>
     */
@@ -226,33 +216,33 @@ var BasePoint = {
 */
 var BaseLabel = {
     /**
-    * @name baseLabelObjectmethods.getboundingrect
+    * @name baseLabelObjectMethods.getBoundingRect
     * @publicName getBoundingRect()
     * @return object
     */
     getBoundingRect: function() { },
     /**
-    * @name baseLabelObjectmethods.hide
+    * @name baseLabelObjectMethods.hide
     * @publicName hide()
     */
     /**
-    * @name baseLabelObjectmethods.hide
+    * @name baseLabelObjectMethods.hide
     * @publicName hide(holdInvisible)
     * @param1 holdInvisible:boolean
     */
     hide: function(holdInvisible) { },
     /**
-    * @name baseLabelObjectmethods.show
+    * @name baseLabelObjectMethods.show
     * @publicName show()
     */
     /**
-    * @name baseLabelObjectmethods.show
+    * @name baseLabelObjectMethods.show
     * @publicName show(holdVisible)
     * @param1 holdVisible:boolean
     */
     show: function(holdVisible) { },
     /**
-    * @name baseLabelObjectmethods.isvisible
+    * @name baseLabelObjectMethods.isVisible
     * @publicName isVisible()
     * @return boolean
     */

@@ -1,9 +1,8 @@
 "use strict";
 
 /**
-* @name dxTextbox
+* @name dxTextBox
 * @isEditor
-* @publicName dxTextBox
 * @inherits dxTextEditor
 * @module ui/text_box
 * @export default

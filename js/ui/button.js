@@ -30,8 +30,7 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_FEEDBACK_HIDE_TIMEOUT = 100;
 
 /**
-* @name dxbutton
-* @publicName dxButton
+* @name dxButton
 * @inherits Widget
 * @module ui/button
 * @export default
@@ -60,7 +59,6 @@ var Button = Widget.inherit({
 
             /**
              * @name dxButtonOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -69,7 +67,6 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.onClick
-            * @publicName onClick
             * @type function(e)|string
             * @extends Action
             * @type_function_param1 e:object
@@ -82,7 +79,6 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.type
-            * @publicName type
             * @type Enums.ButtonType
             * @default 'normal'
             */
@@ -90,7 +86,6 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.text
-            * @publicName text
             * @type string
             * @default ""
             */
@@ -98,15 +93,13 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.icon
-            * @publicName icon
             * @type string
             * @default ""
             */
             icon: "",
 
             /**
-            * @name dxButtonOptions.validationgroup
-            * @publicName validationGroup
+            * @name dxButtonOptions.validationGroup
             * @type string
             * @default undefined
             */
@@ -114,7 +107,6 @@ var Button = Widget.inherit({
 
             /**
              * @name dxButtonOptions.activeStateEnabled
-             * @publicName activeStateEnabled
              * @type boolean
              * @default true
              */
@@ -122,7 +114,6 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.template
-            * @publicName template
             * @type template|function
             * @default "content"
             * @type_function_param1 buttonData:object
@@ -135,7 +126,6 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.useSubmitBehavior
-            * @publicName useSubmitBehavior
             * @type boolean
             * @default false
             */
@@ -144,17 +134,14 @@ var Button = Widget.inherit({
             useInkRipple: false
             /**
             * @name dxButtonDefaultTemplate
-            * @publicName dxButtonDefaultTemplate
             * @type object
             */
             /**
             * @name dxButtonDefaultTemplate.text
-            * @publicName text
             * @type String
             */
             /**
             * @name dxButtonDefaultTemplate.icon
-            * @publicName icon
             * @type String
             */
         });
@@ -169,7 +156,6 @@ var Button = Widget.inherit({
                 options: {
                     /**
                     * @name dxButtonOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

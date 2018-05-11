@@ -3,7 +3,6 @@
 /**
 * @name dxCalendar
 * @isEditor
-* @publicName dxCalendar
 * @inherits Editor
 * @module ui/calendar
 * @export default

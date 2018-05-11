@@ -286,7 +286,6 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.filterValue
-             * @publicName filterValue
              * @type Filter expression
              * @default null
              */
@@ -294,7 +293,6 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.filterSyncEnabled
-             * @publicName filterSyncEnabled
              * @type boolean
              */
             filterSyncEnabled: "auto"

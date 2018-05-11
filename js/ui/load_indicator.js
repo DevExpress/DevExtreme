@@ -21,7 +21,6 @@ var LOADINDICATOR_CLASS = "dx-loadindicator",
 
 /**
 * @name dxLoadIndicator
-* @publicName dxLoadIndicator
 * @inherits Widget
 * @module ui/load_indicator
 * @export default
@@ -31,31 +30,27 @@ var LoadIndicator = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxLoadIndicatoroptions.indicatorsrc
-            * @publicName indicatorSrc
+            * @name dxLoadIndicatorOptions.indicatorSrc
             * @type string
             * @default ""
             */
             indicatorSrc: "",
 
             /**
-            * @name dxLoadIndicatoroptions.disabled
-            * @publicName disabled
+            * @name dxLoadIndicatorOptions.disabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxLoadIndicatoroptions.activeStateEnabled
-            * @publicName activeStateEnabled
+            * @name dxLoadIndicatorOptions.activeStateEnabled
             * @hidden
             * @inheritdoc
             */
             activeStateEnabled: false,
 
             /**
-             * @name dxLoadIndicatoroptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
+             * @name dxLoadIndicatorOptions.hoverStateEnabled
              * @default false
              * @hidden
             * @inheritdoc
@@ -63,22 +58,19 @@ var LoadIndicator = Widget.inherit({
             hoverStateEnabled: false,
 
             /**
-            * @name dxLoadIndicatoroptions.focusStateEnabled
-            * @publicName focusStateEnabled
+            * @name dxLoadIndicatorOptions.focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxLoadIndicatoroptions.accessKey
-            * @publicName accessKey
+            * @name dxLoadIndicatorOptions.accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
-            * @name dxLoadIndicatoroptions.tabIndex
-            * @publicName tabIndex
+            * @name dxLoadIndicatorOptions.tabIndex
             * @hidden
             * @inheritdoc
             */

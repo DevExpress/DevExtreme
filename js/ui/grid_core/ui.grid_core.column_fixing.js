@@ -748,47 +748,40 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.columnFixing
-             * @publicName columnFixing
              * @type object
              */
             columnFixing: {
                 /**
                 * @name GridBaseOptions.columnFixing.enabled
-                * @publicName enabled
                 * @type boolean
                 * @default false
                 */
                 enabled: false,
                 /**
                  * @name GridBaseOptions.columnFixing.texts
-                 * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
                      * @name GridBaseOptions.columnFixing.texts.fix
-                     * @publicName fix
                      * @type string
                      * @default "Fix"
                      */
                     fix: messageLocalization.format("dxDataGrid-columnFixingFix"),
                     /**
                      * @name GridBaseOptions.columnFixing.texts.unfix
-                     * @publicName unfix
                      * @type string
                      * @default "Unfix"
                      */
                     unfix: messageLocalization.format("dxDataGrid-columnFixingUnfix"),
                     /**
                      * @name GridBaseOptions.columnFixing.texts.leftPosition
-                     * @publicName leftPosition
                      * @type string
                      * @default "To the left"
                      */
                     leftPosition: messageLocalization.format("dxDataGrid-columnFixingLeftPosition"),
                     /**
                      * @name GridBaseOptions.columnFixing.texts.rightPosition
-                     * @publicName rightPosition
                      * @type string
                      * @default "To the right"
                      */

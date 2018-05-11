@@ -149,44 +149,37 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.pager
-             * @publicName pager
              * @type object
              */
             pager: {
                 /**
                  * @name GridBaseOptions.pager.visible
-                 * @publicName visible
                  * @type boolean
                  */
                 visible: "auto",
                 /**
                  * @name GridBaseOptions.pager.showPageSizeSelector
-                 * @publicName showPageSizeSelector
                  * @type boolean
                  * @default false
                 */
                 showPageSizeSelector: false,
                 /**
                  * @name GridBaseOptions.pager.allowedPageSizes
-                 * @publicName allowedPageSizes
                  * @type Array<number>
                 */
                 allowedPageSizes: "auto"
                 /**
                  * @name GridBaseOptions.pager.showNavigationButtons
-                 * @publicName showNavigationButtons
                  * @type boolean
                  * @default false
                  */
                 /**
                  * @name GridBaseOptions.pager.showInfo
-                 * @publicName showInfo
                  * @type boolean
                  * @default false
                  */
                 /**
                  * @name GridBaseOptions.pager.infoText
-                 * @publicName infoText
                  * @type string
                  * @default "Page {0} of {1} ({2} items)"
                  */

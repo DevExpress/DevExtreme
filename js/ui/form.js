@@ -2,7 +2,6 @@
 
 /**
  * @name dxForm
- * @publicName dxForm
  * @inherits Widget
  * @module ui/form
  * @export default

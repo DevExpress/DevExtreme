@@ -12,7 +12,6 @@ var support = require("../core/utils/support"),
 
 /**
   * @name ui events.dxpointerdown
-  * @publicName dxpointerdown
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -20,7 +19,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointermove
-  * @publicName dxpointermove
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -28,7 +26,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointerup
-  * @publicName dxpointerup
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -36,7 +33,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointercancel
-  * @publicName dxpointercancel
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -44,7 +40,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointerover
-  * @publicName dxpointerover
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -52,7 +47,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointerout
-  * @publicName dxpointerout
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -60,7 +54,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointerenter
-  * @publicName dxpointerenter
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string
@@ -68,7 +61,6 @@ var support = require("../core/utils/support"),
 */
 /**
   * @name ui events.dxpointerleave
-  * @publicName dxpointerleave
   * @type eventType
   * @type_function_param1 event:event
   * @type_function_param1_field1 pointerType:string

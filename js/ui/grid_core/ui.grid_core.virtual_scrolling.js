@@ -647,21 +647,18 @@ module.exports = {
                 rowPageSize: 5,
                 /**
                  * @name dxDataGridOptions.scrolling.mode
-                 * @publicName mode
                  * @type Enums.GridScrollingMode
                  * @default "standard"
                  */
                 mode: "standard",
                 /**
                  * @name GridBaseOptions.scrolling.preloadEnabled
-                 * @publicName preloadEnabled
                  * @type boolean
                  * @default false
                  */
                 preloadEnabled: false,
                 /**
                  * @name GridBaseOptions.scrolling.rowRenderingMode
-                 * @publicName rowRenderingMode
                  * @type Enums.GridRowRenderingMode
                  * @default "standard"
                  */

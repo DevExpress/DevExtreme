@@ -13,13 +13,11 @@ var renderedCallbacks = Callbacks();
 /**
  * @name dxTemplate
  * @section uiWidgetMarkupComponents
- * @publicName dxTemplate
  * @type object
  */
 
 /**
  * @name dxTemplateOptions.name
- * @publicName name
  * @type string
  */
 

@@ -461,61 +461,52 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.headerFilter
-             * @publicName headerFilter
              * @type object
              */
             headerFilter: {
                 /**
                  * @name GridBaseOptions.headerFilter.visible
-                 * @publicName visible
                  * @type boolean
                  * @default false
                  */
                 visible: false,
                 /**
                  * @name GridBaseOptions.headerFilter.width
-                 * @publicName width
                  * @type number
                  * @default 252
                  */
                 width: 252,
                 /**
                  * @name GridBaseOptions.headerFilter.height
-                 * @publicName height
                  * @type number
                  * @default 325
                  */
                 height: 325,
                 /**
                  * @name GridBaseOptions.headerFilter.allowSearch
-                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
                 allowSearch: false,
                 /**
                  * @name GridBaseOptions.headerFilter.texts
-                 * @publicName texts
                  * @type object
                  */
                 texts: {
                     /**
                      * @name GridBaseOptions.headerFilter.texts.emptyValue
-                     * @publicName emptyValue
                      * @type string
                      * @default "(Blanks)"
                      */
                     emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
                     /**
                      * @name GridBaseOptions.headerFilter.texts.ok
-                     * @publicName ok
                      * @type string
                      * @default "Ok"
                      */
                     ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
                     /**
                      * @name GridBaseOptions.headerFilter.texts.cancel
-                     * @publicName cancel
                      * @type string
                      * @default "Cancel"
                      */

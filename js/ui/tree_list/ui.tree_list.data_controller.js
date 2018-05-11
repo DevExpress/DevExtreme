@@ -233,25 +233,21 @@ treeListCore.registerModule("data", {
         return extend({}, dataControllerModule.defaultOptions(), {
             /**
             * @name dxTreeListOptions.itemsExpr
-            * @publicName itemsExpr
             * @type string|function
             * @default "items"
             */
             itemsExpr: "items",
             /**
             * @name dxTreeListOptions.keyExpr
-            * @publicName keyExpr
             * @type string|function
             * @default "id"
             */
             /**
             * @name dxTreeListOptions.hasItemsExpr
-            * @publicName hasItemsExpr
             * @type string|function
             */
             /**
             * @name dxTreeListOptions.parentIdExpr
-            * @publicName parentIdExpr
             * @type string|function
             * @default "parentId"
             */
@@ -259,20 +255,17 @@ treeListCore.registerModule("data", {
             /**
             * @name dxTreeListOptions.rootValue
             * @type Object
-            * @publicName rootValue
             * @default 0
             */
             rootValue: 0,
             /**
             * @name dxTreeListOptions.dataStructure
-            * @publicName dataStructure
             * @type Enums.TreeListDataStructure
             * @default "plain"
             */
             dataStructure: "plain",
             /**
             * @name dxTreeListOptions.expandedRowKeys
-            * @publicName expandedRowKeys
             * @type Array<any>
             * @default []
             * @fires dxTreeListOptions.onOptionChanged
@@ -281,14 +274,12 @@ treeListCore.registerModule("data", {
             filterMode: "extended",
             /**
             * @name dxTreeListOptions.expandNodesOnFiltering
-            * @publicName expandNodesOnFiltering
             * @type boolean
             * @default true
             */
             expandNodesOnFiltering: true,
             /**
             * @name dxTreeListOptions.autoExpandAll
-            * @publicName autoExpandAll
             * @type boolean
             * @default false
             */
@@ -296,7 +287,6 @@ treeListCore.registerModule("data", {
 
             /**
             * @name dxTreeListOptions.onNodesInitialized
-            * @publicName onNodesInitialized
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 root:dxTreeListNode
@@ -307,13 +297,11 @@ treeListCore.registerModule("data", {
             maxFilterLengthInRequest: 1500,
             /**
              * @name dxTreeListOptions.paging
-             * @publicName paging
              * @type object
              */
             paging: {
                 /**
                  * @name dxTreeListOptions.paging.enabled
-                 * @publicName enabled
                  * @type boolean
                  * @default false
                  * @inheritdoc
@@ -328,41 +316,33 @@ treeListCore.registerModule("data", {
 });
 /**
  * @name dxTreeListNode
- * @publicName dxTreeListNode
  * @type object
  */
 /**
  * @name dxTreeListNode.key
- * @publicName key
  * @type any
  */
 /**
  * @name dxTreeListNode.data
- * @publicName data
  * @type object
  */
 /**
  * @name dxTreeListNode.parent
- * @publicName parent
  * @type dxTreeListNode
  */
 /**
  * @name dxTreeListNode.children
- * @publicName children
  * @type Array<dxTreeListNode>
  */
 /**
  * @name dxTreeListNode.hasChildren
- * @publicName hasChildren
  * @type boolean
  */
 /**
  * @name dxTreeListNode.visible
- * @publicName visible
  * @type boolean
  */
 /**
  * @name dxTreeListNode.level
- * @publicName level
  * @type number
  */

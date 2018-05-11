@@ -91,7 +91,6 @@ var FilterBuilder = Widget.inherit({
         return extend(this.callBase(), {
             /**
               * @name dxFilterBuilderOptions.onEditorPreparing
-              * @publicName onEditorPreparing
               * @type function(e)
               * @type_function_param1 e:object
               * @type_function_param1_field4 value:any
@@ -114,7 +113,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
               * @name dxFilterBuilderOptions.onEditorPrepared
-              * @publicName onEditorPrepared
               * @type function(e)
               * @type_function_param1 e:object
               * @type_function_param1_field4 value:any
@@ -135,20 +133,17 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderOptions.onContentReady
-            * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
             * @name dxFilterBuilderField
-            * @publicName dxFilterBuilderField
             * @type object
             */
 
             /**
             * @name dxFilterBuilderOptions.onValueChanged
-            * @publicName onValueChanged
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -160,21 +155,18 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderOptions.fields
-            * @publicName fields
             * @type Array<dxFilterBuilderField>
             * @default []
             */
             fields: [],
             /**
             * @name dxFilterBuilderField.caption
-            * @publicName caption
             * @type string
             * @default undefined
             */
 
             /**
              * @name dxFilterBuilderField.calculateFilterExpression
-             * @publicName calculateFilterExpression
              * @type function(filterValue, selectedFilterOperation)
              * @type_function_param1 filterValue:any
              * @type_function_param2 selectedFilterOperation:string
@@ -183,69 +175,59 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderField.dataField
-            * @publicName dataField
             * @type string
             * @default undefined
             */
 
             /**
              * @name dxFilterBuilderField.dataType
-             * @publicName dataType
              * @type Enums.FilterBuilderFieldDataType
              * @default "string"
              */
 
             /**
              * @name dxFilterBuilderField.editorOptions
-             * @publicName editorOptions
              * @type object
              */
 
             /**
              * @name dxFilterBuilderField.format
-             * @publicName format
              * @type format
              * @default ""
              */
 
             /**
              * @name dxFilterBuilderField.trueText
-             * @publicName trueText
              * @type string
              * @default "true"
              */
 
             /**
              * @name dxFilterBuilderField.falseText
-             * @publicName falseText
              * @type string
              * @default "false"
              */
 
             /**
              * @name dxFilterBuilderField.lookup
-             * @publicName lookup
              * @type object
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderField.lookup.dataSource
-             * @publicName dataSource
              * @type Array<any>|DataSourceOptions
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderField.lookup.valueExpr
-             * @publicName valueExpr
              * @type string|function(data)
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderField.lookup.displayExpr
-             * @publicName displayExpr
              * @type string|function(data)
              * @type_function_param1 data:object
              * @default undefined
@@ -253,28 +235,24 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderField.lookup.allowClearing
-             * @publicName allowClearing
              * @type boolean
              * @default false
              */
 
             /**
              * @name dxFilterBuilderField.defaultFilterOperation
-             * @publicName defaultFilterOperation
              * @type Enums.FilterBuilderFieldFilterOperations | string
              * @hidden
              */
 
             /**
              * @name dxFilterBuilderField.filterOperations
-             * @publicName filterOperations
              * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderField.customizeText
-             * @publicName customizeText
              * @type function(fieldInfo)
              * @type_function_param1 fieldInfo:object
              * @type_function_param1_field1 value:string|number|date
@@ -284,7 +262,6 @@ var FilterBuilder = Widget.inherit({
 
              /**
              * @name dxFilterBuilderField.editorTemplate
-             * @publicName editorTemplate
              * @type template|function
              * @type_function_param1 conditionInfo:object
              * @type_function_param1_field1 value:string|number|date
@@ -297,7 +274,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderOptions.defaultGroupOperation
-            * @publicName defaultGroupOperation
             * @type string
             * @default "and"
             * @hidden
@@ -306,7 +282,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderOptions.value
-             * @publicName value
              * @type Filter expression
              * @default null
              * @fires dxFilterBuilderOptions.onValueChanged
@@ -315,7 +290,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderOptions.allowHierarchicalFields
-             * @publicName allowHierarchicalFields
              * @type boolean
              * @default false
              */
@@ -323,34 +297,29 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderOptions.groupOperationDescriptions
-             * @publicName groupOperationDescriptions
              * @type object
              */
             groupOperationDescriptions: {
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.and
-                 * @publicName and
                  * @type string
                  * @default "And"
                  */
                 and: messageLocalization.format("dxFilterBuilder-and"),
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.or
-                 * @publicName or
                  * @type string
                  * @default "Or"
                  */
                 or: messageLocalization.format("dxFilterBuilder-or"),
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.notAnd
-                 * @publicName notAnd
                  * @type string
                  * @default "Not And"
                  */
                 notAnd: messageLocalization.format("dxFilterBuilder-notAnd"),
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.notOr
-                 * @publicName notOr
                  * @type string
                  * @default "Not Or"
                  */
@@ -359,7 +328,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderOptions.customOperations
-             * @publicName customOperations
              * @type Array<dxFilterBuilderCustomOperation>
              * @default []
              */
@@ -367,48 +335,41 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderCustomOperation
-             * @publicName dxFilterBuilderCustomOperation
              * @type object
              */
 
             /**
              * @name dxFilterBuilderCustomOperation.name
-             * @publicName name
              * @type string
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderCustomOperation.caption
-             * @publicName caption
              * @type string
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderCustomOperation.icon
-             * @publicName icon
              * @type string
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderCustomOperation.dataTypes
-             * @publicName dataTypes
              * @type Array<Enums.FilterBuilderFieldDataType>
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderCustomOperation.hasValue
-             * @publicName hasValue
              * @type boolean
              * @default true
              */
 
             /**
              * @name dxFilterBuilderCustomOperation.calculateFilterExpression
-             * @publicName calculateFilterExpression
              * @type function(filterValue, field)
              * @type_function_param1 filterValue:any
              * @type_function_param2 field:dxFilterBuilderField
@@ -417,7 +378,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderCustomOperation.editorTemplate
-             * @publicName editorTemplate
              * @type template|function
              * @type_function_param1 conditionInfo:object
              * @type_function_param1_field1 value:string|number|date
@@ -429,7 +389,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderCustomOperation.customizeText
-             * @publicName customizeText
              * @type function(fieldInfo)
              * @type_function_param1 fieldInfo:object
              * @type_function_param1_field1 value:string|number|date
@@ -440,97 +399,83 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderOptions.filterOperationDescriptions
-             * @publicName filterOperationDescriptions
              * @type object
              */
             filterOperationDescriptions: {
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.between
-                 * @publicName between
                  * @type string
                  * @default "Between"
                  */
                 between: messageLocalization.format("dxFilterBuilder-filterOperationBetween"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.equal
-                 * @publicName equal
                  * @type string
                  * @default "Equals"
                  */
                 equal: messageLocalization.format("dxFilterBuilder-filterOperationEquals"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.notEqual
-                 * @publicName notEqual
                  * @type string
                  * @default "Does not equal"
                  */
                 notEqual: messageLocalization.format("dxFilterBuilder-filterOperationNotEquals"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThan
-                 * @publicName lessThan
                  * @type string
                  * @default "Less than"
                  */
                 lessThan: messageLocalization.format("dxFilterBuilder-filterOperationLess"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThanOrEqual
-                 * @publicName lessThanOrEqual
                  * @type string
                  * @default "Less than or equal to"
                  */
                 lessThanOrEqual: messageLocalization.format("dxFilterBuilder-filterOperationLessOrEquals"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThan
-                 * @publicName greaterThan
                  * @type string
                  * @default "Greater than"
                  */
                 greaterThan: messageLocalization.format("dxFilterBuilder-filterOperationGreater"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThanOrEqual
-                 * @publicName greaterThanOrEqual
                  * @type string
                  * @default "Greater than or equal to"
                  */
                 greaterThanOrEqual: messageLocalization.format("dxFilterBuilder-filterOperationGreaterOrEquals"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.startsWith
-                 * @publicName startsWith
                  * @type string
                  * @default "Starts with"
                  */
                 startsWith: messageLocalization.format("dxFilterBuilder-filterOperationStartsWith"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.contains
-                 * @publicName contains
                  * @type string
                  * @default "Contains"
                  */
                 contains: messageLocalization.format("dxFilterBuilder-filterOperationContains"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.notContains
-                 * @publicName notContains
                  * @type string
                  * @default "Does not contain"
                  */
                 notContains: messageLocalization.format("dxFilterBuilder-filterOperationNotContains"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.endsWith
-                 * @publicName endsWith
                  * @type string
                  * @default "Ends with"
                  */
                 endsWith: messageLocalization.format("dxFilterBuilder-filterOperationEndsWith"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.isBlank
-                 * @publicName isBlank
                  * @type string
                  * @default "Is blank"
                  */
                 isBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsBlank"),
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.isNotBlank
-                 * @publicName isNotBlank
                  * @type string
                  * @default "Is not blank"
                  */

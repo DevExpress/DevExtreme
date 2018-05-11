@@ -109,7 +109,6 @@ module.exports = {
         return {
             /**
              * @name dxDataGridOptions.onContextMenuPreparing
-             * @publicName onContextMenuPreparing
              * @type function(e)
              * @type_function_param1 e:Object
              * @type_function_param1_field4 items:Array<Object>
@@ -124,7 +123,6 @@ module.exports = {
              */
             /**
              * @name dxTreeListOptions.onContextMenuPreparing
-             * @publicName onContextMenuPreparing
              * @type function(e)
              * @type_function_param1 e:Object
              * @type_function_param1_field4 items:Array<Object>

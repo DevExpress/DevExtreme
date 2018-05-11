@@ -14,7 +14,6 @@ var DATA_SOURCE_OPTIONS_METHOD = "_dataSourceOptions",
 
 /**
 * @name DataHelperMixin
-* @publicName DataHelperMixin
 * @module data_helper
 * @export default
 * @hidden

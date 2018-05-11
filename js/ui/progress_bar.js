@@ -17,7 +17,6 @@ var PROGRESSBAR_CLASS = "dx-progressbar",
 
 /**
 * @name dxProgressBar
-* @publicName dxProgressBar
 * @inherits dxTrackBar
 * @module ui/progress_bar
 * @export default
@@ -27,7 +26,6 @@ var ProgressBar = TrackBar.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxProgressBarOptions.value
-            * @publicName value
             * @type number
             * @default 0
             */
@@ -35,7 +33,6 @@ var ProgressBar = TrackBar.inherit({
 
             /**
             * @name dxProgressBarOptions.statusFormat
-            * @publicName statusFormat
             * @type string|function
             * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
             * @type_function_param1 ratio:number
@@ -48,7 +45,6 @@ var ProgressBar = TrackBar.inherit({
 
             /**
             * @name dxProgressBarOptions.showStatus
-            * @publicName showStatus
             * @type boolean
             * @default true
             */
@@ -56,7 +52,6 @@ var ProgressBar = TrackBar.inherit({
 
             /**
             * @name dxProgressBarOptions.onComplete
-            * @publicName onComplete
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
@@ -68,7 +63,6 @@ var ProgressBar = TrackBar.inherit({
 
             /**
             * @name dxProgressBarOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @hidden
             * @inheritdoc
             */
@@ -80,21 +74,18 @@ var ProgressBar = TrackBar.inherit({
 
             /**
             * @name dxProgressBarOptions.focusStateEnabled
-            * @publicName focusStateEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxProgressBarOptions.accessKey
-            * @publicName accessKey
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxProgressBarOptions.tabIndex
-            * @publicName tabIndex
             * @hidden
             * @inheritdoc
             */

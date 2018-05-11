@@ -1,6 +1,5 @@
 /**
 * @name viz
-* @publicName viz
 * @namespace DevExpress
 */
 var staticMethods = {
@@ -127,7 +126,6 @@ var staticMethods = {
     refreshPaths: function() { },
     /**
     * @name viz.core
-    * @publicName core
     * @deprecated viz
     * @namespace DevExpress.viz
     * @static
@@ -187,7 +185,6 @@ var staticMethods = {
     },
     /**
     * @name viz.map
-    * @publicName map
     * @static
     */
     map: {

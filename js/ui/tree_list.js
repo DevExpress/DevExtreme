@@ -2,7 +2,6 @@
 
 /**
 * @name dxTreeList
-* @publicName dxTreeList
 * @inherits GridBase
 * @module ui/tree_list
 * @export default

@@ -192,7 +192,6 @@ var ClickEmitter = Emitter.inherit({
 
 /**
   * @name ui events.dxclick
-  * @publicName dxclick
   * @type eventType
   * @type_function_param1 event:event
   * @module events/click

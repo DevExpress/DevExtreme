@@ -26,7 +26,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 gridCore.registerModule("data", {
     /**
     * @name dxDataGridOptions.keyExpr
-    * @publicName keyExpr
     * @type string|Array<string>
     * @default undefined
     */

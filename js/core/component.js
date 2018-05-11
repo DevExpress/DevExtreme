@@ -21,8 +21,7 @@ var cachedGetters = {};
 var cachedSetters = {};
 
 /**
-* @name component
-* @publicName Component
+* @name Component
 * @type object
 * @inherits EventsMixin
 * @module core/component
@@ -49,8 +48,7 @@ var Component = Class.inherit({
     _getDefaultOptions: function() {
         return {
             /**
-            * @name componentOptions.onInitialized
-            * @publicName onInitialized
+            * @name ComponentOptions.onInitialized
             * @type function
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:Component
@@ -60,8 +58,7 @@ var Component = Class.inherit({
             */
             onInitialized: null,
             /**
-            * @name componentOptions.onOptionChanged
-            * @publicName onOptionChanged
+            * @name ComponentOptions.onOptionChanged
             * @type function
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:Component
@@ -73,8 +70,7 @@ var Component = Class.inherit({
             */
             onOptionChanged: null,
             /**
-            * @name componentOptions.onDisposing
-            * @publicName onDisposing
+            * @name ComponentOptions.onDisposing
             * @type function
             * @type_function_param1 e:object
             * @type_function_param1_field1 component:Component

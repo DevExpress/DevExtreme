@@ -48,7 +48,6 @@ var NumberBoxBase = TextEditor.inherit({
         return extend(this.callBase(), {
             /**
              * @name dxNumberBoxOptions.value
-             * @publicName value
              * @type number
              * @default 0
              */
@@ -56,7 +55,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.min
-             * @publicName min
              * @type number
              * @default undefined
              */
@@ -64,7 +62,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.max
-             * @publicName max
              * @type number
              * @default undefined
              */
@@ -72,7 +69,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.step
-             * @publicName step
              * @type number
              * @default 1
              */
@@ -80,7 +76,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.showSpinButtons
-             * @publicName showSpinButtons
              * @type boolean
              * @default false
              */
@@ -88,7 +83,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.useLargeSpinButtons
-             * @publicName useLargeSpinButtons
              * @type boolean
              * @default true
              * @default false @for desktop
@@ -97,7 +91,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.mode
-             * @publicName mode
              * @type Enums.NumberBoxMode
              * @default "text"
              */
@@ -105,7 +98,6 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.invalidValueMessage
-             * @publicName invalidValueMessage
              * @type string
              * @default "Value must be a number"
              */
@@ -113,49 +105,42 @@ var NumberBoxBase = TextEditor.inherit({
 
             /**
              * @name dxNumberBoxOptions.mask
-             * @publicName mask
              * @hidden
              * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskChar
-             * @publicName maskChar
              * @hidden
              * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskRules
-             * @publicName maskRules
              * @hidden
              * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskInvalidMessage
-             * @publicName maskInvalidMessage
              * @hidden
              * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.useMaskedValue
-             * @publicName useMaskedValue
              * @hidden
              * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.showMaskMode
-             * @publicName showMaskMode
              * @hidden
              * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.spellcheck
-             * @publicName spellcheck
              * @hidden
              * @inheritdoc
              */
@@ -179,7 +164,6 @@ var NumberBoxBase = TextEditor.inherit({
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
-                     * @publicName mode
                      * @default 'number' @for mobile_devices
                      */
                     mode: "number"

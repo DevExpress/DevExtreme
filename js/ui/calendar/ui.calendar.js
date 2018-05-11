@@ -54,7 +54,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.hoverStateEnabled
-            * @publicName hoverStateEnabled
             * @type boolean
             * @default true
             * @inheritdoc
@@ -63,7 +62,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @type boolean
             * @default true
             * @inheritdoc
@@ -72,7 +70,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.currentDate
-            * @publicName currentDate
             * @type Date
             * @hidden
             * @default new Date()
@@ -81,7 +78,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.value
-            * @publicName value
             * @type Date|number|string
             * @default null
             */
@@ -89,7 +85,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.dateSerializationFormat
-            * @publicName dateSerializationFormat
             * @type string
             * @default undefined
             */
@@ -97,7 +92,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.min
-            * @publicName min
             * @type Date|number|string
             * @default new Date(1000, 0)
             */
@@ -105,7 +99,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.max
-            * @publicName max
             * @type Date|number|string
             * @default new Date(3000, 0)
             */
@@ -113,7 +106,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.firstDayOfWeek
-            * @publicName firstDayOfWeek
             * @type Enums.FirstDayOfWeek
             * @default undefined
             */
@@ -121,7 +113,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.zoomLevel
-            * @publicName zoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
             */
@@ -129,7 +120,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.maxZoomLevel
-            * @publicName maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
             */
@@ -137,7 +127,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.minZoomLevel
-            * @publicName minZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'century'
             */
@@ -145,7 +134,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.showTodayButton
-            * @publicName showTodayButton
             * @type boolean
             * @default false
             */
@@ -153,7 +141,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.cellTemplate
-            * @publicName cellTemplate
             * @type template|function
             * @default "cell"
             * @type_function_param1 itemData:object
@@ -168,7 +155,6 @@ var Calendar = Editor.inherit({
 
             /**
              * @name dxCalendarOptions.disabledDates
-             * @publicName disabledDates
              * @type Array<Date>|function(data)
              * @default null
              * @type_function_param1 data:object
@@ -187,7 +173,6 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.name
-            * @publicName name
             * @type string
             * @hidden false
             * @inheritdoc
@@ -195,29 +180,24 @@ var Calendar = Editor.inherit({
 
             /**
             * @name dxCalendarOptions.onContentReady
-            * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
             * @name dxCalendarCellTemplate
-            * @publicName dxCalendarCellTemplate
             * @type object
             */
             /**
             * @name dxCalendarCellTemplate.text
-            * @publicName text
             * @type String
             */
             /**
             * @name dxCalendarCellTemplate.date
-            * @publicName date
             * @type Date
             */
             /**
             * @name dxCalendarCellTemplate.view
-            * @publicName view
             * @type String
             * @acceptValues 'month'|'year'|'decade'|'century'
             */
@@ -233,7 +213,6 @@ var Calendar = Editor.inherit({
                 options: {
                     /**
                     * @name dxCalendarOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

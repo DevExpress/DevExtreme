@@ -32,69 +32,58 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 
 /**
 * @name animationConfig
-* @publicName animationConfig
 * @namespace DevExpress
 * @type object
 */
 /**
 * @name animationConfig.start
-* @publicName start
 * @type function
 * @type_function_param1 $element:dxElement
 * @type_function_param2 config:object
 */
 /**
 * @name animationConfig.complete
-* @publicName complete
 * @type function
 * @type_function_param1 $element:dxElement
 * @type_function_param2 config:object
 */
 /**
 * @name animationConfig.delay
-* @publicName delay
 * @type number
 * @default 0
 */
 /**
 * @name animationConfig.staggerDelay
-* @publicName staggerDelay
 * @type number
 * @default undefined
 */
 /**
 * @name animationConfig.duration
-* @publicName duration
 * @type number
 * @default 400
 */
 /**
 * @name animationConfig.easing
-* @publicName easing
 * @type string
 * @default 'ease'
 */
 /**
 * @name animationConfig.type
-* @publicName type
 * @type Enums.AnimationType
 * @default 'custom'
 */
 /**
 * @name animationConfig.direction
-* @publicName direction
 * @type Enums.Direction
 * @default undefined
 */
 /**
 * @name animationConfig.from
-* @publicName from
 * @type number|string|object
 * @default {}
 */
 /**
 * @name animationConfig.to
-* @publicName to
 * @type number|string|object
 * @default {}
 */
@@ -881,7 +870,6 @@ var stop = function(element, jumpToEnd) {
 
 /**
 * @name fx
-* @publicName fx
 * @section utils
 * @module animation/fx
 * @namespace DevExpress

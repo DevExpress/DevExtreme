@@ -370,7 +370,6 @@ var interpretLightJsonFormat = function(obj) {
 
 /**
 * @name EdmLiteral
-* @publicName EdmLiteral
 * @type object
 * @namespace DevExpress.data
 * @module data/odata/utils

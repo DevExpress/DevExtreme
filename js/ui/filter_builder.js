@@ -1,8 +1,7 @@
 "use strict";
 
 /**
-* @name dxfilterbuilder
-* @publicName dxFilterBuilder
+* @name dxFilterBuilder
 * @inherits Widget
 * @module ui/filter_builder
 * @export default

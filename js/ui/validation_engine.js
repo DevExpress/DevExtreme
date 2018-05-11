@@ -38,19 +38,16 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
     NAME: "required",
 
     /**
-     * @name requiredRule.type
-     * @publicName type
+     * @name RequiredRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name requiredRule.trim
-     * @publicName trim
+     * @name RequiredRule.trim
      * @type boolean
      * @default true
      */
     /**
-     * @name requiredRule.message
-     * @publicName message
+     * @name RequiredRule.message
      * @type string
      * @default 'Required'
      */
@@ -72,13 +69,11 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
     NAME: "numeric",
 
     /**
-     * @name numericRule.type
-     * @publicName type
+     * @name NumericRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name numericRule.message
-     * @publicName message
+     * @name NumericRule.message
      * @type string
      * @default 'Value should be a number'
      */
@@ -99,29 +94,24 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
     NAME: "range",
 
     /**
-     * @name rangeRule.type
-     * @publicName type
+     * @name RangeRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name rangeRule.min
-     * @publicName min
+     * @name RangeRule.min
      * @type datetime|number
      */
     /**
-     * @name rangeRule.max
-     * @publicName max
+     * @name RangeRule.max
      * @type datetime|number
      */
     /**
-     * @name rangeRule.message
-     * @publicName message
+     * @name RangeRule.message
      * @type string
      * @default 'Value is out of range'
      */
     /**
-     * @name rangeRule.reevaluate
-     * @publicName reevaluate
+     * @name RangeRule.reevaluate
      * @type boolean
      * @default false
      */
@@ -160,29 +150,24 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
     NAME: "stringLength",
 
     /**
-     * @name stringLengthRule.type
-     * @publicName type
+     * @name StringLengthRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name stringLengthRule.min
-     * @publicName min
+     * @name StringLengthRule.min
      * @type number
      */
     /**
-     * @name stringLengthRule.max
-     * @publicName max
+     * @name StringLengthRule.max
      * @type number
      */
     /**
-     * @name stringLengthRule.trim
-     * @publicName trim
+     * @name StringLengthRule.trim
      * @type boolean
      * @default true
      */
     /**
-     * @name stringLengthRule.message
-     * @publicName message
+     * @name StringLengthRule.message
      * @type string
      * @default 'The length of the value is not correct'
      */
@@ -201,13 +186,11 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
     NAME: "custom",
 
     /**
-     * @name customRule.type
-     * @publicName type
+     * @name CustomRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name customRule.validationCallback
-     * @publicName validationCallback
+     * @name CustomRule.validationCallback
      * @type function
      * @type_function_return boolean
      * @type_function_param1 options:object
@@ -217,14 +200,12 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @type_function_param1_field4 data:object
      */
     /**
-     * @name customRule.message
-     * @publicName message
+     * @name CustomRule.message
      * @type string
      * @default 'Value is invalid'
      */
     /**
-     * @name customRule.reevaluate
-     * @publicName reevaluate
+     * @name CustomRule.reevaluate
      * @type boolean
      * @default false
      */
@@ -250,31 +231,26 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
     NAME: "compare",
 
     /**
-     * @name compareRule.type
-     * @publicName type
+     * @name CompareRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name compareRule.comparisonTarget
-     * @publicName comparisonTarget
+     * @name CompareRule.comparisonTarget
      * @type function
      * @type_function_return object
      */
     /**
-     * @name compareRule.comparisonType
-     * @publicName comparisonType
+     * @name CompareRule.comparisonType
      * @type Enums.ComparisonOperator
      * @default '=='
      */
     /**
-     * @name compareRule.message
-     * @publicName message
+     * @name CompareRule.message
      * @type string
      * @default 'Values do not match'
      */
     /**
-     * @name compareRule.reevaluate
-     * @publicName reevaluate
+     * @name CompareRule.reevaluate
      * @type boolean
      * @default true
      */
@@ -314,18 +290,15 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
     NAME: "pattern",
 
     /**
-     * @name patternRule.type
-     * @publicName type
+     * @name PatternRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name patternRule.pattern
-     * @publicName pattern
+     * @name PatternRule.pattern
      * @type regexp|string
      */
     /**
-     * @name patternRule.message
-     * @publicName message
+     * @name PatternRule.message
      * @type string
      * @default 'Value does not match pattern'
      */
@@ -345,13 +318,11 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
     NAME: "email",
 
     /**
-     * @name emailRule.type
-     * @publicName type
+     * @name EmailRule.type
      * @type Enums.ValidationRuleType
      */
     /**
-     * @name emailRule.message
-     * @publicName message
+     * @name EmailRule.message
      * @type string
      * @default 'Email is invalid'
      */
@@ -370,64 +341,56 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
 
 var rulesValidators = {
     /**
-     * @name requiredRule
-     * @publicName RequiredRule
+     * @name RequiredRule
      * @section dxValidator
      * @type object
      */
     "required": new RequiredRuleValidator(),
 
     /**
-     * @name numericRule
-     * @publicName NumericRule
+     * @name NumericRule
      * @section dxValidator
      * @type object
      */
     "numeric": new NumericRuleValidator(),
 
     /**
-     * @name rangeRule
-     * @publicName RangeRule
+     * @name RangeRule
      * @section dxValidator
      * @type object
      */
     "range": new RangeRuleValidator(),
 
     /**
-     * @name stringLengthRule
-     * @publicName StringLengthRule
+     * @name StringLengthRule
      * @section dxValidator
      * @type object
      */
     "stringLength": new StringLengthRuleValidator(),
 
     /**
-     * @name customRule
-     * @publicName CustomRule
+     * @name CustomRule
      * @section dxValidator
      * @type object
      */
     "custom": new CustomRuleValidator(),
 
     /**
-     * @name compareRule
-     * @publicName CompareRule
+     * @name CompareRule
      * @section dxValidator
      * @type object
      */
     "compare": new CompareRuleValidator(),
 
     /**
-     * @name patternRule
-     * @publicName PatternRule
+     * @name PatternRule
      * @section dxValidator
      * @type object
      */
     "pattern": new PatternRuleValidator(),
 
     /**
-     * @name emailRule
-     * @publicName EmailRule
+     * @name EmailRule
      * @section dxValidator
      * @type object
      */
@@ -443,25 +406,21 @@ var GroupConfig = Class.inherit({
     validate: function() {
         /**
          * @name dxValidationGroupResult
-         * @publicName dxValidationGroupResult
          * @type Object
          */
         var result = {
             /**
              * @name dxValidationGroupResult.isValid
-             * @publicName isValid
              * @type boolean
              */
             isValid: true,
             /**
              * @name dxValidationGroupResult.brokenRules
-             * @publicName brokenRules
              * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              */
             brokenRules: [],
             /**
              * @name dxValidationGroupResult.validators
-             * @publicName validators
              * @type Array<Object>
              */
             validators: []
@@ -496,7 +455,6 @@ var GroupConfig = Class.inherit({
 /**
  * @name validationEngine
  * @section Core
- * @publicName validationEngine
  * @namespace DevExpress
  * @module ui/validation_engine
  * @export default
@@ -570,32 +528,27 @@ var ValidationEngine = {
     validate: function(value, rules, name) {
         /**
          * @name dxValidatorResult
-         * @publicName dxValidatorResult
          * @type Object
          */
         var result = {
                 name: name,
                 /**
                  * @name dxValidatorResult.value
-                 * @publicName value
                  * @type any
                  */
                 value: value,
                 /**
                  * @name dxValidatorResult.brokenRule
-                 * @publicName brokenRule
                  * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
                  */
                 brokenRule: null,
                 /**
                  * @name dxValidatorResult.isValid
-                 * @publicName isValid
                  * @type boolean
                  */
                 isValid: true,
                 /**
                  * @name dxValidatorResult.validationRules
-                 * @publicName validationRules
                  * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
                  */
                 validationRules: rules

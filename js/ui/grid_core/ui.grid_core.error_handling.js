@@ -114,7 +114,6 @@ module.exports = {
         return {
             /**
             * @name GridBaseOptions.errorRowEnabled
-            * @publicName errorRowEnabled
             * @type boolean
             * @default true
             */

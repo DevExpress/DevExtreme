@@ -204,63 +204,53 @@ var DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.store.type
-        * @publicName type
         * @type Enums.DataSourceStoreType
         */
 
         /**
         * @name DataSourceOptions.store
-        * @publicName store
         * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
 
         /**
         * @name DataSourceOptions.sort
-        * @publicName sort
         * @type Sort expression
         */
 
         /**
         * @name DataSourceOptions.filter
-        * @publicName filter
         * @type Filter expression
         */
 
         /**
         * @name DataSourceOptions.group
-        * @publicName group
         * @type Group expression
         */
 
         /**
         * @name DataSourceOptions.select
-        * @publicName select
         * @type Select expression
         */
 
         /**
         * @name DataSourceOptions.expand
-        * @publicName expand
         * @type Array<string>|string
         */
 
         /**
         * @name DataSourceOptions.customQueryParams
-        * @publicName customQueryParams
         * @type Object
         */
 
         /**
         * @name DataSourceOptions.requireTotalCount
-        * @publicName requireTotalCount
         * @type Boolean
         */
         this._storeLoadOptions = this._extractLoadOptions(options);
 
         /**
         * @name DataSourceOptions.map
-        * @publicName map
         * @type function
         * @type_function_param1 dataItem:object
         * @type_function_return object
@@ -269,7 +259,6 @@ var DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.postProcess
-        * @publicName postProcess
         * @type function
         * @type_function_param1 data:Array<any>
         * @type_function_return Array<any>
@@ -280,7 +269,6 @@ var DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.pageSize
-        * @publicName pageSize
         * @type number
         * @default 20
         */
@@ -291,7 +279,6 @@ var DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.searchValue
-        * @publicName searchValue
         * @type any
         * @default null
         */
@@ -299,7 +286,6 @@ var DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.searchOperation
-        * @publicName searchOperation
         * @type string
         * @default "contains"
         */
@@ -307,14 +293,12 @@ var DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.searchExpr
-        * @publicName searchExpr
         * @type getter|Array<getter>
         */
         this._searchExpr = options.searchExpr;
 
         /**
         * @name DataSourceOptions.paginate
-        * @publicName paginate
         * @type Boolean
         * @default undefined
         */
@@ -324,7 +308,6 @@ var DataSource = Class.inherit({
             [
                 /**
                  * @name DataSourceOptions.onChanged
-                 * @publicName onChanged
                  * @type function
                  * @action
                  */
@@ -332,7 +315,6 @@ var DataSource = Class.inherit({
 
                 /**
                  * @name DataSourceOptions.onLoadError
-                 * @publicName onLoadError
                  * @type function
                  * @type_function_param1 error:Object
                  * @type_function_param1_field1 message:string
@@ -342,7 +324,6 @@ var DataSource = Class.inherit({
 
                 /**
                  * @name DataSourceOptions.onLoadingChanged
-                 * @publicName onLoadingChanged
                  * @type function
                  * @type_function_param1 isLoading:boolean
                  * @action

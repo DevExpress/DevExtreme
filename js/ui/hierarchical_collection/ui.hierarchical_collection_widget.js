@@ -16,7 +16,6 @@ var DISABLED_STATE_CLASS = "dx-state-disabled";
 
 /**
 * @name HierarchicalCollectionWidget
-* @publicName HierarchicalCollectionWidget
 * @type object
 * @inherits CollectionWidget
 * @module ui/hierarchical_collection/ui.hierarchical_collection_widget
@@ -29,7 +28,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name HierarchicalCollectionWidgetOptions.keyExpr
-            * @publicName keyExpr
             * @type string|function
             * @default 'id'
             */
@@ -37,7 +35,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
             /**
             * @name HierarchicalCollectionWidgetOptions.displayExpr
-            * @publicName displayExpr
             * @type string|function
             * @default 'text'
             */
@@ -45,7 +42,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
             /**
             * @name HierarchicalCollectionWidgetOptions.selectedExpr
-            * @publicName selectedExpr
             * @type string|function
             * @default 'selected'
             */
@@ -53,7 +49,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
             /**
             * @name HierarchicalCollectionWidgetOptions.disabledExpr
-            * @publicName disabledExpr
             * @type string|function
             * @default 'disabled'
             */
@@ -61,7 +56,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
             /**
             * @name HierarchicalCollectionWidgetOptions.itemsExpr
-            * @publicName itemsExpr
             * @type string|function
             * @default 'items'
             */
@@ -69,7 +63,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
             /**
              * @name HierarchicalCollectionWidgetOptions.hoverStateEnabled
-             * @publicName hoverStateEnabled
              * @type boolean
              * @default true
              * @inheritdoc
@@ -90,7 +83,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name HierarchicalCollectionWidgetOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc

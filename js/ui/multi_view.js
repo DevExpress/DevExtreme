@@ -55,7 +55,6 @@ var animation = {
 
 /**
 * @name dxMultiView
-* @publicName dxMultiView
 * @inherits CollectionWidget
 * @module ui/multi_view
 * @export default
@@ -75,23 +74,20 @@ var MultiView = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxMultiViewOptions.selectedIndex
-            * @publicName selectedIndex
             * @type number
             * @default 0
             */
             selectedIndex: 0,
 
             /**
-            * @name dxMultiViewOptions.swipeenabled
-            * @publicName swipeEnabled
+            * @name dxMultiViewOptions.swipeEnabled
             * @type boolean
             * @default true
             */
             swipeEnabled: true,
 
             /**
-            * @name dxMultiViewOptions.animationenabled
-            * @publicName animationEnabled
+            * @name dxMultiViewOptions.animationEnabled
             * @type boolean
             * @default true
             */
@@ -99,7 +95,6 @@ var MultiView = CollectionWidget.inherit({
 
             /**
             * @name dxMultiViewOptions.loop
-            * @publicName loop
             * @type boolean
             * @default false
             */
@@ -107,7 +102,6 @@ var MultiView = CollectionWidget.inherit({
 
             /**
             * @name dxMultiViewOptions.deferRendering
-            * @publicName deferRendering
             * @type boolean
             * @default true
             */
@@ -115,21 +109,18 @@ var MultiView = CollectionWidget.inherit({
 
             /**
             * @name dxMultiViewOptions.selectedItems
-            * @publicName selectedItems
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMultiViewOptions.selectedItemKeys
-            * @publicName selectedItemKeys
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxMultiViewOptions.keyExpr
-            * @publicName keyExpr
             * @hidden
             * @inheritdoc
             */
@@ -152,7 +143,6 @@ var MultiView = CollectionWidget.inherit({
                 options: {
                     /**
                     * @name dxMultiViewOptions.focusStateEnabled
-                    * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
                     * @inheritdoc
@@ -464,13 +454,11 @@ var MultiView = CollectionWidget.inherit({
 });
 /**
 * @name dxMultiViewItemTemplate
-* @publicName dxMultiViewItemTemplate
 * @inherits CollectionWidgetItemTemplate
 * @type object
 */
 /**
 * @name dxMultiViewItemTemplate.visible
-* @publicName visible
 * @hidden
 * @inheritdoc
 */

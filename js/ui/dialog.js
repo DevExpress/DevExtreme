@@ -86,7 +86,6 @@ exports.title = "";
 
 /**
  * @name ui.dialog
- * @publicName dialog
  * @namespace DevExpress.ui
  */
 

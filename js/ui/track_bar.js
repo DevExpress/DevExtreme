@@ -14,7 +14,6 @@ var TRACKBAR_CLASS = "dx-trackbar",
 
 /**
 * @name dxTrackBar
-* @publicName dxTrackBar
 * @inherits Editor
 * @hidden
 */
@@ -23,7 +22,6 @@ var TrackBar = Editor.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxTrackBarOptions.min
-            * @publicName min
             * @type number
             * @default 0
             */
@@ -31,7 +29,6 @@ var TrackBar = Editor.inherit({
 
             /**
             * @name dxTrackBarOptions.max
-            * @publicName max
             * @type number
             * @default 100
             */

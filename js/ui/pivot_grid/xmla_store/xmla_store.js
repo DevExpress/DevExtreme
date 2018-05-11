@@ -801,7 +801,6 @@ exports.XmlaStore = Class.inherit((function() {
 
 /**
 * @name XmlaStore
-* @publicName XmlaStore
 * @type object
 * @namespace DevExpress.data
 * @module ui/pivot_grid/xmla_store
@@ -814,25 +813,21 @@ exports.XmlaStore = Class.inherit((function() {
 
         /**
         * @name XmlaStoreOptions.url
-        * @publicName url
         * @type string
         */
 
         /**
         * @name XmlaStoreOptions.catalog
-        * @publicName catalog
         * @type string
         */
 
         /**
         * @name XmlaStoreOptions.cube
-        * @publicName cube
         * @type string
         */
 
         /**
          * @name XmlaStoreOptions.beforeSend
-         * @publicName beforeSend
          * @type function
          * @type_function_param1 options:object
          * @type_function_param1_field1 url:string

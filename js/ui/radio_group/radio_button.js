@@ -18,7 +18,6 @@ var RADIO_BUTTON_CLASS = "dx-radiobutton",
 
 /**
 * @name dxRadioButton
-* @publicName dxRadioButton
 * @inherits CollectionWidget
 * @hidden
 */

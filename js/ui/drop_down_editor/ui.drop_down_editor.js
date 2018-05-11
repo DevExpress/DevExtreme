@@ -34,7 +34,6 @@ var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
 
 /**
 * @name dxDropDownEditor
-* @publicName dxDropDownEditor
 * @inherits dxTextBox
 * @module ui/drop_down_editor/ui.drop_down_editor
 * @export default
@@ -109,7 +108,6 @@ var DropDownEditor = TextBox.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxDropDownEditorOptions.value
-            * @publicName value
             * @type any
             * @default null
             */
@@ -117,7 +115,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.onOpened
-            * @publicName onOpened
             * @extends Action
             * @action
             */
@@ -125,7 +122,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.onClosed
-            * @publicName onClosed
             * @extends Action
             * @action
             */
@@ -133,7 +129,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.opened
-            * @publicName opened
             * @type boolean
             * @default false
             * @fires dxDropDownEditorOptions.onOpened
@@ -143,7 +138,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.acceptCustomValue
-            * @publicName acceptCustomValue
             * @type boolean
             * @default true
             */
@@ -151,7 +145,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.applyValueMode
-            * @publicName applyValueMode
             * @type Enums.EditorApplyValueMode
             * @default "instantly"
             */
@@ -159,7 +152,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.deferRendering
-            * @publicName deferRendering
             * @type boolean
             * @default true
             */
@@ -167,7 +159,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.activeStateEnabled
-            * @publicName activeStateEnabled
             * @type boolean
             * @default true
             * @inheritdoc
@@ -176,7 +167,6 @@ var DropDownEditor = TextBox.inherit({
 
             /**
              * @name dxDropDownEditorOptions.dropDownButtonTemplate
-             * @publicName dropDownButtonTemplate
              * @type template|function
              * @default "dropDownButton"
              * @type_function_param1 buttonData:object
@@ -202,49 +192,42 @@ var DropDownEditor = TextBox.inherit({
 
             /**
             * @name dxDropDownEditorOptions.mask
-            * @publicName mask
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskChar
-            * @publicName maskChar
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskRules
-            * @publicName maskRules
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskInvalidMessage
-            * @publicName maskInvalidMessage
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.useMaskedValue
-            * @publicName useMaskedValue
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.mode
-            * @publicName mode
             * @hidden
             * @inheritdoc
             */
 
             /**
              * @name dxDropDownEditorOptions.showMaskMode
-             * @publicName showMaskMode
              * @hidden
              * @inheritdoc
              */

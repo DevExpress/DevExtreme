@@ -395,55 +395,47 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.columnChooser
-             * @publicName columnChooser
              * @type object
              */
             columnChooser: {
                 /**
                  * @name GridBaseOptions.columnChooser.enabled
-                 * @publicName enabled
                  * @type boolean
                  * @default false
                  */
                 enabled: false,
                 /**
                  * @name GridBaseOptions.columnChooser.allowSearch
-                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
                 allowSearch: false,
                 /**
                  * @name GridBaseOptions.columnChooser.mode
-                 * @publicName mode
                  * @type Enums.GridColumnChooserMode
                  * @default "dragAndDrop"
                  */
                 mode: "dragAndDrop",
                 /**
                  * @name GridBaseOptions.columnChooser.width
-                 * @publicName width
                  * @type number
                  * @default 250
                  */
                 width: 250,
                 /**
                  * @name GridBaseOptions.columnChooser.height
-                 * @publicName height
                  * @type number
                  * @default 260
                  */
                 height: 260,
                 /**
                  * @name GridBaseOptions.columnChooser.title
-                 * @publicName title
                  * @type string
                  * @default "Column Chooser"
                  */
                 title: messageLocalization.format("dxDataGrid-columnChooserTitle"),
                 /**
                  * @name GridBaseOptions.columnChooser.emptyPanelText
-                 * @publicName emptyPanelText
                  * @type string
                  * @default "Drag a column here to hide it"
                  */

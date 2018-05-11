@@ -91,7 +91,6 @@ var localStoreBackends = {
 
 /**
 * @name LocalStore
-* @publicName LocalStore
 * @inherits ArrayStore
 * @type object
 * @module data/local_store
@@ -102,7 +101,6 @@ var LocalStore = ArrayStore.inherit({
     ctor: function(options) {
         /**
          * @name LocalStoreOptions.name
-         * @publicName name
          * @type string
          */
         if(typeof options === "string") {
@@ -115,13 +113,11 @@ var LocalStore = ArrayStore.inherit({
 
         /**
          * @name LocalStoreOptions.immediate
-         * @publicName immediate
          * @type boolean
          * @default false
          */
         /**
          * @name LocalStoreOptions.flushInterval
-         * @publicName flushInterval
          * @type number
          * @default 10000
          */

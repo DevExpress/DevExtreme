@@ -3,7 +3,6 @@
 /**
 * @name dxNumberBox
 * @isEditor
-* @publicName dxNumberBox
 * @inherits dxTextEditor
 * @module ui/number_box
 * @export default

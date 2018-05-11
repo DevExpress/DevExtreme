@@ -69,27 +69,23 @@ module.exports = {
         return {
             /**
          * @name GridBaseOptions.stateStoring
-         * @publicName stateStoring
          * @type object
          */
             stateStoring: {
                 /**
                  * @name GridBaseOptions.stateStoring.enabled
-                 * @publicName enabled
                  * @type boolean
                  * @default false
                  */
                 enabled: false,
                 /**
                  * @name GridBaseOptions.stateStoring.storageKey
-                 * @publicName storageKey
                  * @type string
                  * @default null
                  */
                 storageKey: null,
                 /**
                  * @name GridBaseOptions.stateStoring.type
-                 * @publicName type
                  * @type Enums.StateStoringType
                  * @default "localStorage"
                  */
@@ -97,7 +93,6 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.stateStoring.customLoad
-                 * @publicName customLoad
                  * @type function()
                  * @type_function_return Promise<Object>
                  */
@@ -105,7 +100,6 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.stateStoring.customSave
-                 * @publicName customSave
                  * @type function(gridState)
                  * @type_function_param1 gridState:object
                  */
@@ -113,7 +107,6 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.stateStoring.savingTimeout
-                 * @publicName savingTimeout
                  * @type number
                  * @default 2000
                  */

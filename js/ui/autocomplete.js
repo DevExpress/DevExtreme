@@ -14,7 +14,6 @@ var AUTOCOMPLETE_CLASS = "dx-autocomplete",
 /**
 * @name dxAutocomplete
 * @isEditor
-* @publicName dxAutocomplete
 * @inherits dxDropDownList
 * @module ui/autocomplete
 * @export default
@@ -60,14 +59,12 @@ var Autocomplete = DropDownList.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxAutocompleteOptions.value
-            * @publicName value
             * @type string
             * @default null
             */
 
             /**
             * @name dxAutocompleteOptions.minSearchLength
-            * @publicName minSearchLength
             * @type number
             * @default 1
             */
@@ -75,7 +72,6 @@ var Autocomplete = DropDownList.inherit({
 
             /**
             * @name dxAutocompleteOptions.maxItemCount
-            * @publicName maxItemCount
             * @type number
             * @default 10
             */
@@ -83,7 +79,6 @@ var Autocomplete = DropDownList.inherit({
 
             /**
             * @name dxAutocompleteOptions.noDataText
-            * @publicName noDataText
             * @type string
             * @default ""
             * @hidden
@@ -95,27 +90,23 @@ var Autocomplete = DropDownList.inherit({
 
             /**
             * @name dxAutocompleteOptions.displayExpr
-            * @publicName displayExpr
             * @hidden
             */
 
             /**
             * @name dxAutocompleteOptions.acceptCustomValue
-            * @publicName acceptCustomValue
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions.searchEnabled
-            * @publicName searchEnabled
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions.showDataBeforeSearch
-            * @publicName showDataBeforeSearch
             * @hidden
             * @inheritdoc
             */

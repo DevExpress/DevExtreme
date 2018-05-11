@@ -34,7 +34,6 @@ var WIDGET_CLASS = "dx-widget",
 
 /**
 * @name dxDeferRendering
-* @publicName dxDeferRendering
 * @inherits Widget
 * @module ui/defer_rendering
 * @export default
@@ -45,42 +44,36 @@ var DeferRendering = Widget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxDeferRenderingOptions.showLoadIndicator
-            * @publicName showLoadIndicator
             * @type bool
             * @default false
             */
             showLoadIndicator: false,
             /**
             * @name dxDeferRenderingOptions.renderWhen
-            * @publicName renderWhen
             * @type Promise<void> | bool
             * @default undefined
             */
             renderWhen: undefined,
             /**
             * @name dxDeferRenderingOptions.animation
-            * @publicName animation
             * @type animationConfig
             * @default undefined
             */
             animation: undefined,
             /**
             * @name dxDeferRenderingOptions.staggerItemSelector
-            * @publicName staggerItemSelector
             * @type string
             * @default undefined
             */
             staggerItemSelector: undefined,
             /**
             * @name dxDeferRenderingOptions.onRendered
-            * @publicName onRendered
             * @extends Action
             * @action
             */
             onRendered: null,
             /**
             * @name dxDeferRenderingOptions.onShown
-            * @publicName onShown
             * @extends Action
             * @action
             */

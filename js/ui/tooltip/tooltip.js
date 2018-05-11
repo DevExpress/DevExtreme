@@ -13,7 +13,6 @@ var Tooltip = Popover.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxTooltipOptions.toolbarItems
-            * @publicName toolbarItems
             * @hidden
             * @inheritdoc
             */
@@ -21,15 +20,13 @@ var Tooltip = Popover.inherit({
 
             /**
             * @name dxTooltipOptions.showCloseButton
-            * @publicName showCloseButton
             * @hidden
             * @inheritdoc
             */
             showCloseButton: false,
 
             /**
-            * @name dxTooltipOptions.showtitle
-            * @publicName showTitle
+            * @name dxTooltipOptions.showTitle
             * @hidden
             * @inheritdoc
             */
@@ -37,7 +34,6 @@ var Tooltip = Popover.inherit({
 
             /**
             * @name dxTooltipOptions.title
-            * @publicName title
             * @hidden
             * @inheritdoc
             */
@@ -45,7 +41,6 @@ var Tooltip = Popover.inherit({
 
             /**
             * @name dxTooltipOptions.titleTemplate
-            * @publicName titleTemplate
             * @hidden
             * @inheritdoc
             */
@@ -53,7 +48,6 @@ var Tooltip = Popover.inherit({
 
             /**
             * @name dxTooltipOptions.onTitleRendered
-            * @publicName onTitleRendered
             * @hidden
             * @inheritdoc
             */

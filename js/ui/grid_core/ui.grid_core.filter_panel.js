@@ -218,14 +218,12 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.filterPanel
-             * @publicName filterPanel
              * @type object
              * @default {}
              */
             filterPanel: {
                 /**
                  * @name GridBaseOptions.filterPanel.visible
-                 * @publicName visible
                  * @type boolean
                  * @default false
                  */
@@ -233,7 +231,6 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.filterPanel.filterEnabled
-                 * @publicName filterEnabled
                  * @type boolean
                  * @default true
                  */
@@ -241,7 +238,6 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.filterPanel.customizeText
-                 * @publicName customizeText
                  * @type function
                  * @type_function_param1 e:object
                  * @type_function_param1_field1 component:Component
@@ -252,14 +248,12 @@ module.exports = {
 
                 /**
                  * @name GridBaseOptions.filterPanel.texts
-                 * @publicName texts
                  * @type object
                  * @default {}
                  */
                 texts: {
                     /**
                      * @name GridBaseOptions.filterPanel.texts.createFilter
-                     * @publicName createFilter
                      * @type string
                      * @default "Create Filter"
                      */
@@ -267,7 +261,6 @@ module.exports = {
 
                     /**
                      * @name GridBaseOptions.filterPanel.texts.clearFilter
-                     * @publicName clearFilter
                      * @type string
                      * @default "Clear"
                      */
@@ -275,7 +268,6 @@ module.exports = {
 
                     /**
                      * @name GridBaseOptions.filterPanel.texts.filterEnabledHint
-                     * @publicName filterEnabledHint
                      * @type string
                      * @default "Enable the filter"
                      */

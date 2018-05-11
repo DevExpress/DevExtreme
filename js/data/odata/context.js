@@ -15,7 +15,6 @@ require("./query_adapter");
 
 /**
 * @name ODataContext
-* @publicName ODataContext
 * @type object
 * @module data/odata/context
 * @export default
@@ -27,12 +26,10 @@ var ODataContext = Class.inherit({
 
         /**
          * @name ODataContextOptions.url
-         * @publicName url
          * @type string
          */
         /**
          * @name ODataContextOptions.beforeSend
-         * @publicName beforeSend
          * @type function
          * @type_function_param1 options:object
          * @type_function_param1_field1 url:string
@@ -45,40 +42,34 @@ var ODataContext = Class.inherit({
          */
         /**
          * @name ODataContextOptions.jsonp
-         * @publicName jsonp
          * @type boolean
          * @default false
          */
         /**
          * @name ODataContextOptions.version
-         * @publicName version
          * @type number
          * @default 2
          * @acceptValues 2|3|4
          */
         /**
          * @name ODataContextOptions.withCredentials
-         * @publicName withCredentials
          * @type boolean
          * @default false
          */
         /**
          * @name ODataContextOptions.deserializeDates
-         * @publicName deserializeDates
          * @type boolean
          */
         that._extractServiceOptions(options);
 
         /**
          * @name ODataContextOptions.errorHandler
-         * @publicName errorHandler
          * @type function
          */
         that._errorHandler = options.errorHandler;
 
         /**
          * @name ODataContextOptions.entities
-         * @publicName entities
          * @type object
          */
         each(options.entities || [], function(entityAlias, entityOptions) {

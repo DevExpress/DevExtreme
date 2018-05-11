@@ -15,7 +15,6 @@ var Class = require("../core/class"),
 
 /**
 * @name Store
-* @publicName Store
 * @type object
 * @inherits EventsMixin
 * @hidden
@@ -32,7 +31,6 @@ var Store = Class.inherit({
             [
                 /**
                  * @name StoreOptions.onLoaded
-                 * @publicName onLoaded
                  * @type function
                  * @type_function_param1 result:Array<any>
                  * @action
@@ -41,7 +39,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onLoading
-                 * @publicName onLoading
                  * @type function
                  * @type_function_param1 loadOptions:LoadOptions
                  * @action
@@ -50,7 +47,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onInserted
-                 * @publicName onInserted
                  * @type function
                  * @type_function_param1 values:object
                  * @type_function_param2 key:object|string|number
@@ -60,7 +56,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onInserting
-                 * @publicName onInserting
                  * @type function
                  * @type_function_param1 values:object
                  * @action
@@ -69,7 +64,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onUpdated
-                 * @publicName onUpdated
                  * @type function
                  * @type_function_param1 key:object|string|number
                  * @type_function_param2 values:object
@@ -79,7 +73,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onUpdating
-                 * @publicName onUpdating
                  * @type function
                  * @type_function_param1 key:object|string|number
                  * @type_function_param2 values:object
@@ -89,7 +82,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onRemoved
-                 * @publicName onRemoved
                  * @type function
                  * @type_function_param1 key:object|string|number
                  * @action
@@ -98,7 +90,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onRemoving
-                 * @publicName onRemoving
                  * @type function
                  * @type_function_param1 key:object|string|number
                  * @action
@@ -107,7 +98,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onModified
-                 * @publicName onModified
                  * @type function
                  * @action
                  */
@@ -115,7 +105,6 @@ var Store = Class.inherit({
 
                 /**
                  * @name StoreOptions.onModifying
-                 * @publicName onModifying
                  * @type function
                  * @action
                  */
@@ -129,14 +118,12 @@ var Store = Class.inherit({
 
         /**
          * @name StoreOptions.key
-         * @publicName key
          * @type string|Array<string>
          */
         this._key = options.key;
 
         /**
          * @name StoreOptions.errorHandler
-         * @publicName errorHandler
          * @type function
          */
         this._errorHandler = options.errorHandler;

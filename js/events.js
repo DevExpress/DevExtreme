@@ -4,7 +4,6 @@ var eventsEngine = require("./events/core/events_engine");
 
 /**
 * @name events
-* @publicName events
 */
 
 /**
@@ -90,7 +89,6 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 
 /**
 * @name dxEvent
-* @publicName dxEvent
 * @section commonObjectStructures
 */
 
@@ -135,38 +133,32 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 
 /**
 * @name dxEventFields.target
-* @publicName target
 * @type Node
 */
 
 /**
 * @name dxEventFields.currentTarget
-* @publicName currentTarget
 * @type Node
 */
 
 /**
 * @name dxEventFields.delegateTarget
-* @publicName delegateTarget
 * @type Node
 */
 
 /**
 * @name dxEventFields.data
-* @publicName data
 * @type object
 */
 
 /**
 * @name event
-* @publicName event
 * @type dxEvent|jQuery.Event
 * @hidden
 */
 
 /**
 * @name events.Event
-* @publicName Event
 * @type function
 * @param1 source:string|event
 * @param2 config:object

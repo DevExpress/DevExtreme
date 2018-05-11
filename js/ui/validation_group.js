@@ -10,7 +10,6 @@ var $ = require("../core/renderer"),
 var VALIDATION_ENGINE_CLASS = "dx-validationgroup";
 /**
  * @name dxValidationGroup
- * @publicName dxValidationGroup
  * @inherits DOMComponent
  * @module ui/validation_group
  * @export default
@@ -21,7 +20,6 @@ var ValidationGroup = DOMComponent.inherit({
 
         /**
         * @name dxValidationGroupOptions.rtlEnabled
-        * @publicName rtlEnabled
         * @hidden
         * @inheritdoc
         */

@@ -78,7 +78,6 @@ var DataGrid = Widget.inherit({
                 options: {
                     /**
                     * @name GridBaseOptions.showRowLines
-                    * @publicName showRowLines
                     * @type boolean
                     * @default true @for iOS
                     */
@@ -92,21 +91,18 @@ var DataGrid = Widget.inherit({
                 options: {
                     /**
                     * @name GridBaseOptions.showRowLines
-                    * @publicName showRowLines
                     * @type boolean
                     * @default true @for Material
                     */
                     showRowLines: true,
                     /**
                     * @name GridBaseOptions.showColumnLines
-                    * @publicName showColumnLines
                     * @type boolean
                     * @default false @for Material
                     */
                     showColumnLines: false,
                     /**
                      * @name GridBaseOptions.headerFilter.height
-                     * @publicName height
                      * @type number
                      * @default 315 @for Material
                      */
@@ -115,7 +111,6 @@ var DataGrid = Widget.inherit({
                     },
                     /**
                      * @name GridBaseOptions.editing.useIcons
-                     * @publicName useIcons
                      * @type boolean
                      * @default true @for Material
                      */

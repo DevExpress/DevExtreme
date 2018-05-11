@@ -230,7 +230,6 @@ var isUnaryOperation = function(crit) {
 
 /**
 * @name Utils
-* @publicName Utils
 */
 var utils = {
     XHR_ERROR_UNLOAD: XHR_ERROR_UNLOAD,

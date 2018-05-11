@@ -82,7 +82,6 @@ var ColorBox = DropDownEditor.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxColorBoxOptions.editAlphaChannel
-            * @publicName editAlphaChannel
             * @type boolean
             * @default false
             */
@@ -90,28 +89,24 @@ var ColorBox = DropDownEditor.inherit({
 
             /**
             * @name dxColorBoxOptions.applyButtonText
-            * @publicName applyButtonText
             * @type string
             * @default "OK"
             */
 
             /**
             * @name dxColorBoxOptions.onContentReady
-            * @publicName onContentReady
             * @hidden true
             * @action
             */
 
             /**
             * @name dxColorBoxOptions.cancelButtonText
-            * @publicName cancelButtonText
             * @type string
             * @default "Cancel"
             */
 
             /**
             * @name dxColorBoxOptions.applyValueMode
-            * @publicName applyValueMode
             * @type Enums.EditorApplyValueMode
             * @default "useButtons"
             * @inheritdoc
@@ -120,7 +115,6 @@ var ColorBox = DropDownEditor.inherit({
 
             /**
             * @name dxColorBoxOptions.keyStep
-            * @publicName keyStep
             * @type number
             * @default 1
             */
@@ -128,7 +122,6 @@ var ColorBox = DropDownEditor.inherit({
 
             /**
              * @name dxColorBoxOptions.fieldTemplate
-             * @publicName fieldTemplate
              * @type template|function
              * @default null
              * @type_function_param1 value:string
@@ -145,35 +138,30 @@ var ColorBox = DropDownEditor.inherit({
 
             /**
             * @name dxColorBoxOptions.value
-            * @publicName value
             * @type string
             * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.maxLength
-            * @publicName maxLength
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.showClearButton
-            * @publicName showClearButton
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.valueChangeEvent
-            * @publicName valueChangeEvent
             * @hidden
             * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions.spellcheck
-            * @publicName spellcheck
             * @hidden
             * @inheritdoc
             */

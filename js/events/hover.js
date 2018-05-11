@@ -94,7 +94,6 @@ var HoverEnd = Hover.inherit({
 
 /**
  * @name ui events.dxhoverstart
- * @publicName dxhoverstart
  * @type eventType
  * @type_function_param1 event:event
  * @module events/hover
@@ -102,7 +101,6 @@ var HoverEnd = Hover.inherit({
 
 /**
  * @name ui events.dxhoverend
- * @publicName dxhoverend
  * @type eventType
  * @type_function_param1 event:event
  * @module events/hover

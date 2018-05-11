@@ -56,7 +56,6 @@ var ContextMenu = Class.inherit({
 
 /**
   * @name ui events.dxcontextmenu
-  * @publicName dxcontextmenu
   * @type eventType
   * @type_function_param1 event:event
   * @module events/contextmenu

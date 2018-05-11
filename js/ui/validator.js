@@ -15,7 +15,6 @@ var VALIDATOR_CLASS = "dx-validator";
 
 /**
 * @name dxValidator
-* @publicName dxValidator
 * @inherits DOMComponent
 * @module ui/validator
 * @export default
@@ -25,61 +24,50 @@ var Validator = DOMComponent.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxValidatorOptions.validationRules
-            * @publicName validationRules
             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
             */
             validationRules: []
             /**
             * @name dxValidatorOptions.validationGroup
-            * @publicName validationGroup
             * @type string
             * @ref
             */
             /**
             * @name dxValidatorOptions.name
-            * @publicName name
             * @type string
             */
 
             /**
             * @name dxValidatorOptions.adapter
-            * @publicName adapter
             * @type Object
             */
             /**
             * @name dxValidatorOptions.adapter.getValue
-            * @publicName getValue
             * @type function
             */
             /**
             * @name dxValidatorOptions.adapter.validationRequestsCallbacks
-            * @publicName validationRequestsCallbacks
             * @type Array<function> | jquery.callbacks
             */
             /**
             * @name dxValidatorOptions.adapter.applyValidationResults
-            * @publicName applyValidationResults
             * @type function
             */
             /**
             * @name dxValidatorOptions.adapter.reset
-            * @publicName reset
             * @type function
             */
             /**
             * @name dxValidatorOptions.adapter.focus
-            * @publicName focus
             * @type function
             */
             /**
             * @name dxValidatorOptions.adapter.bypass
-            * @publicName bypass
             * @type function
             */
 
             /**
             * @name dxValidatorOptions.onValidated
-            * @publicName onValidated
             * @type function(validatedInfo)
             * @type_function_param1 validatedInfo:Object
             * @type_function_param1_field1 name:string
@@ -92,7 +80,6 @@ var Validator = DOMComponent.inherit({
 
             /**
             * @name dxValidatorOptions.rtlEnabled
-            * @publicName rtlEnabled
             * @hidden
             * @inheritdoc
             */

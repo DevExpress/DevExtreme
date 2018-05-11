@@ -36,7 +36,6 @@ var rejectedPromise = function() {
 
 /**
 * @name ArrayStore
-* @publicName ArrayStore
 * @inherits Store
 * @type object
 * @module data/array_store
@@ -59,7 +58,6 @@ var ArrayStore = Store.inherit({
 
         /**
          * @name ArrayStoreOptions.data
-         * @publicName data
          * @type Array<any>
          */
         this._array = initialArray || [];

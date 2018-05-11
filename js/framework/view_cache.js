@@ -7,7 +7,6 @@ var inArray = require("../core/utils/array").inArray,
 
 /**
 * @name ViewCache
-* @publicName ViewCache
 * @type object
 * @inherits EventsMixin
 * @module framework/view_cache
@@ -16,7 +15,6 @@ var inArray = require("../core/utils/array").inArray,
 var ViewCache = Class.inherit({
     /**
      * @name ViewCacheevents.viewRemoved
-     * @publicName viewRemoved
      * @type classEventType
      * @type_function_param1 e:object
      * @type_function_param1_field1 viewInfo:object

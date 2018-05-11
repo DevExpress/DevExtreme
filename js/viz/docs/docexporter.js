@@ -1,50 +1,43 @@
 /**
-* @name dxexporter
-* @publicName dxExporter
+* @name dxExporter
 * @type object
 * @inherits Component
 * @deprecated
 */
 var dxExporter = {
     /**
-    * @name dxexporteroptions.sourceContainer
-    * @publicName sourceContainer
+    * @name dxExporterOptions.sourceContainer
     * @type string
     * @default undefined
     */
     sourceContainer: undefined,
     /**
-    * @name dxexporteroptions.fileName
-    * @publicName fileName
+    * @name dxExporterOptions.fileName
     * @type string
     * @default 'file'
     */
     fileName: 'file',
     /**
-    * @name dxexporteroptions.serverUrl
-    * @publicName serverUrl
+    * @name dxExporterOptions.serverUrl
     * @type string
     * @default undefined
     */
     serverUrl: undefined,
     /**
-    * @name dxexporteroptions.exportFormat
-    * @publicName exportFormat
+    * @name dxExporterOptions.exportFormat
     * @type Array<string>
     * @default ['PDF', 'PNG', 'SVG']
     * @acceptValues 'PNG'|'JPEG'|'GIF'|'PDF'|'SVG'
     */
     exportFormat: ['PDF', 'PNG', 'SVG'],
     /**
-    * @name dxexporteroptions.printingEnabled
-    * @publicName printingEnabled
+    * @name dxExporterOptions.printingEnabled
     * @type boolean
     * @default true
     */
     printingEnabled: true,
     /**
-    * @name dxexporteroptions.showMenu
-    * @publicName showMenu
+    * @name dxExporterOptions.showMenu
     * @type boolean
     * @default true
     */

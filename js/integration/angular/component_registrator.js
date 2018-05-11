@@ -36,8 +36,7 @@ var safeApply = function(func, scope) {
 };
 
 /**
- * @name domcomponentoptions.bindingOptions
- * @publicName bindingOptions
+ * @name DOMComponentOptions.bindingOptions
  * @type object
  * @default {}
  */
