@@ -2333,14 +2333,15 @@ var Scheduler = Widget.inherit({
 
     _makeDateAsRecurrenceException: function(exceptionDate, targetAppointment) {
         var startDate = this._getStartDate(targetAppointment, true),
-            exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate),
+            startDateTimeZone = this.fire("getField", "startDateTimeZone", targetAppointment),
+            exceptionByDate = this._getRecurrenceExceptionDate(exceptionDate, startDate, startDateTimeZone),
             recurrenceException = this.fire("getField", "recurrenceException", targetAppointment);
 
         return recurrenceException ? recurrenceException + "," + exceptionByDate : exceptionByDate;
     },
 
-    _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate) {
-        var startDate = this.fire("convertDateByTimezoneBack", targetStartDate);
+    _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate, startDateTimeZone) {
+        var startDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
         exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
 
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmss");
