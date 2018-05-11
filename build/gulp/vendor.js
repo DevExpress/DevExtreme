@@ -5,7 +5,6 @@
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const merge = require('merge-stream');
-const context = require('./context.js');
 const compressionPipes = require('./compression-pipes.js');
 
 const PACKAGES_SOURCE = './node_modules';
@@ -48,23 +47,17 @@ const VENDORS = [
 gulp.task('vendor', function() {
     return merge.apply(this, VENDORS.map(function(vendor) {
         let sourceConfig = vendor.base ? { base: PACKAGES_SOURCE + vendor.base } : null;
-        let source = gulp.src(PACKAGES_SOURCE + vendor.path, sourceConfig);
-        let stream = merge(source.pipe(gulp.dest(DESTINATION_PATH)));
+        let stream = gulp.src(PACKAGES_SOURCE + vendor.path, sourceConfig).pipe(gulp.dest(DESTINATION_PATH));
 
-        if(context.uglify) {
-            if(vendor.noUglyFile) {
-                stream.add(source
-                    .pipe(compressionPipes.minify())
-                    .pipe(rename({ suffix: '.min' }))
-                    .pipe(gulp.dest(DESTINATION_PATH))
-                );
-            } else {
-                let path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
-                let minSource = gulp.src(path, sourceConfig);
-                stream.add(minSource.pipe(gulp.dest(DESTINATION_PATH)));
-            }
+        if(vendor.noUglyFile) {
+            return stream
+                .pipe(compressionPipes.minify())
+                .pipe(rename({ suffix: '.min' }))
+                .pipe(gulp.dest(DESTINATION_PATH));
         }
 
-        return stream;
+        let path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
+
+        return merge(stream, gulp.src(path, sourceConfig).pipe(gulp.dest(DESTINATION_PATH)));
     }));
 });
