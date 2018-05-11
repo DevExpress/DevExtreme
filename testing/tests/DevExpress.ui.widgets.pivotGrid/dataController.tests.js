@@ -84,9 +84,6 @@ QUnit.test("DataSource with empty data", function(assert) {
                 { area: "column", width: 100 },
                 { area: "data", caption: 'Sum', format: 'fixedPoint' }
             ],
-            rows: Array[0],
-            columns: Array[0],
-            values: Array[0],
             grandTotalRowIndex: 0,
             grandTotalColumnIndex: 0
         }
