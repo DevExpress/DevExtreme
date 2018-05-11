@@ -79,14 +79,14 @@
 }
 
 .dx-switch-inner {
-    width: 100%;
+    width: 200%;
     height: 100%;
 }
 
 .dx-switch-on,
 .dx-switch-off {
+    flex-shrink: 0;
     float: left;
-    margin-left: -@MATERIAL_SWITCH_RADIUS;
     padding: 4px 0;
     width: 50%;
     height: @MATERIAL_SWITCH_HEIGHT;
@@ -97,7 +97,6 @@
 
 .dx-switch-on {
     background: transparent;
-    width: 100%;
 }
 
 .dx-switch-off {
@@ -107,9 +106,11 @@
 }
 
 .dx-switch-handle {
+    flex-basis: @MATERIAL_SWITCH_HEIGHT;
+    flex-shrink: 0;
+
     position: relative;
     float: left;
-    margin-left: -@MATERIAL_SWITCH_RADIUS;
     width: @MATERIAL_SWITCH_HEIGHT;
     height: @MATERIAL_SWITCH_HEIGHT;
     background-color: @switch-handle-off-bg;
