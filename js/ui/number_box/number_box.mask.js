@@ -69,7 +69,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var caret = this._caret();
         if(caret.start === caret.end) {
-            this._moveCaretToBoundary(MOVE_FORWARD, e);
+            this._moveCaretToBoundary(MOVE_BACKWARD, e);
         }
     },
 
