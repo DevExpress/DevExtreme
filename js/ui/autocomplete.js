@@ -230,14 +230,6 @@ var Autocomplete = DropDownList.inherit({
         return "input keyup";
     },
 
-    _searchHandler: function(e) {
-        if(this._isControlKey(e.key)) {
-            return;
-        }
-
-        this.callBase(e);
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "maxItemCount":
