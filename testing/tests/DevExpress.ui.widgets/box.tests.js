@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     Box = require("ui/box"),
     domUtils = require("core/utils/dom"),
+    browser = require("core/utils/browser"),
     registerComponent = require("core/component_registrator");
 
 require("common.css!");
@@ -68,14 +69,16 @@ QUnit.test("render", function(assert) {
     assert.equal($items.eq(1).text(), "2", "second item rendered");
 });
 
-QUnit.test("render the box item content with flexBasis equal zero pixel", function(assert) {
-    var $box = $("#box").dxBox({
-        items: [1],
-        _layoutStrategy: "flex"
-    });
+if(!(browser.msie && parseInt(browser.version) < 11)) {
+    QUnit.test("render the box item content with flexBasis equal zero pixel", function(assert) {
+        var $box = $("#box").dxBox({
+            items: [1],
+            _layoutStrategy: "flex"
+        });
 
-    assert.equal($box.find("." + BOX_ITEM_CLASS + "-content").css("flexBasis"), "0px");
-});
+        assert.equal($box.find("." + BOX_ITEM_CLASS + "-content").css("flexBasis"), "0px");
+    });
+}
 
 QUnit.test("strategy class", function(assert) {
     var $box = $("#box").dxBox({
