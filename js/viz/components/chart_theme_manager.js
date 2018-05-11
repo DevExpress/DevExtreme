@@ -143,7 +143,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
 
             settings = extend(true, { aggregation: {} }, themeCommonSettings, themeCommonSettings[type], userCommonSettings, userCommonSettings[type], userOptions);
 
-            settings.aggregation.enabled = normalizeAggregationEnabled(settings.aggregation, that.getOptions("useAggregation"));
+            settings.aggregation.enabled = widgetType === "chart" && normalizeAggregationEnabled(settings.aggregation, that.getOptions("useAggregation"));
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;

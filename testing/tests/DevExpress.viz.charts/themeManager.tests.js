@@ -780,15 +780,44 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.resolveLabelsOverlapping, true);
     });
 
-    QUnit.test("Merge useAggregation with series.aggregation.enabled", function(assert) {
+    QUnit.test("Merge useAggregation with series.aggregation.enabled (undefined)", function(assert) {
         var themeManager = createThemeManager({
             useAggregation: true
-        });
+        }, "chart");
         themeManager.setTheme({});
         var theme = themeManager.getOptions("series", {});
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, true);
+    });
+
+    QUnit.test("Merge useAggregation with series.aggregation.enabled (defined)", function(assert) {
+        var themeManager = createThemeManager({
+            useAggregation: false
+        }, "chart");
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("series", { aggregation: { enabled: true } });
+
+        assert.ok(theme);
+        assert.equal(theme.aggregation.enabled, true);
+    });
+
+    QUnit.test("Merge series.aggregation.enabled whith chart type (pie)", function(assert) {
+        var themeManager = createThemeManager({}, "pie");
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("series", { aggregation: { enabled: true } });
+
+        assert.ok(theme);
+        assert.equal(theme.aggregation.enabled, false);
+    });
+
+    QUnit.test("Merge series.aggregation.enabled whith chart type (polar)", function(assert) {
+        var themeManager = createThemeManager({}, "polar");
+        themeManager.setTheme({});
+        var theme = themeManager.getOptions("series", { aggregation: { enabled: true } });
+
+        assert.ok(theme);
+        assert.equal(theme.aggregation.enabled, false);
     });
 
     QUnit.test("Get seriesTemplate. Option is not set", function(assert) {
