@@ -1319,6 +1319,11 @@ module.exports = Class.inherit((function() {
             }
         },
 
+        isEmpty: function() {
+            var dataFields = this.getAreaFields("data"),
+                data = this.getData();
+            return !dataFields.length || !data.values.length;
+        },
 
         _update: function(deferred) {
             var that = this,
@@ -1330,12 +1335,12 @@ module.exports = Class.inherit((function() {
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
                     that._sort(descriptions, loadedData, expressionsUsed);
-                    summaryDisplayModes.applyDisplaySummaryMode(descriptions, loadedData);
+                    !that.isEmpty() && summaryDisplayModes.applyDisplaySummaryMode(descriptions, loadedData);
                 }
 
                 that._sort(descriptions, loadedData);
 
-                isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
+                !that.isEmpty() && isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 when(deferred).done(function() {

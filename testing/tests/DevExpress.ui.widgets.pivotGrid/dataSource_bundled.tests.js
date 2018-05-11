@@ -3988,6 +3988,64 @@ if(window.INTRANET) {
 }
 
 
+QUnit.test("Do not perform summary calculation if dataSource is empty", function(assert) {
+    var def = $.Deferred();
+
+    this.testStore.load.returns(def);
+
+    var dataSource = createDataSource({
+        fields: [
+            {
+                dataField: "ShipCountry", area: "column", sortOrder: "desc", sortingMethod: function(a, b) {
+                    return b.index - a.index;
+                }
+            },
+            { dataField: "ShipVia", area: "row" },
+            { summaryType: 'count', area: "data", calculateSummaryValue: function() { } }
+        ],
+        store: this.testStore
+    });
+
+    def.resolve({
+        rows: [{ value: "1", index: 1 }],
+        columns: [{ value: "1", index: 1 }],
+        values: [],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    });
+
+    assert.ok(dataSource.isEmpty());
+});
+
+QUnit.test("Do not perform running total calculation if dataSource is empty", function(assert) {
+    var def = $.Deferred();
+
+    this.testStore.load.returns(def);
+
+    var dataSource = createDataSource({
+        fields: [
+            {
+                dataField: "ShipCountry", area: "column", sortOrder: "desc", sortingMethod: function(a, b) {
+                    return b.index - a.index;
+                }
+            },
+            { dataField: "ShipVia", area: "row" },
+            { summaryType: 'count', area: "data", runningTotal: "row" }
+        ],
+        store: this.testStore
+    });
+
+    def.resolve({
+        rows: [{ value: "1", index: 1 }],
+        columns: [{ value: "1", index: 1 }],
+        values: [],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    });
+
+    assert.ok(dataSource.isEmpty());
+});
+
 QUnit.module("Sorting", defaultEnvironment);
 
 QUnit.test("Sort data", function(assert) {
