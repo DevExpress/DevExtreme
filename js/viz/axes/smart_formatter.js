@@ -2,7 +2,7 @@
 
 import _format from "../core/format";
 import formatHelper from "../../format_helper";
-import { isDefined, isFunction, isExponential } from "../../core/utils/type";
+import { isDefined, isFunction, isExponential, isObject } from "../../core/utils/type";
 import dateUtils from "../../core/utils/date";
 import { adjust, getPrecision, getExponent } from "../../core/utils/math";
 import { getAdjustedLog10 as log10 } from "../core/utils";
@@ -306,13 +306,25 @@ function formatDateRange(startValue, endValue, tickInterval) {
     return values.join(", ");
 }
 
+function processDateInterval(interval) {
+    if(isObject(interval)) {
+        const dateUnits = Object.keys(interval);
+        const sum = dateUnits.reduce((sum, k) => interval[k] + sum, 0);
+        if(sum === 1) {
+            const dateUnit = dateUnits.filter(k => interval[k] === 1)[0];
+            return dateUnit.slice(0, dateUnit.length - 1);
+        }
+    }
+    return interval;
+}
+
 export function formatRange(startValue, endValue, tickInterval, { dataType, type, logarithmBase }) {
     if(type === "discrete") {
         return "";
     }
 
     if(dataType === "datetime") {
-        return formatDateRange(startValue, endValue, tickInterval);
+        return formatDateRange(startValue, endValue, processDateInterval(tickInterval));
     }
 
     const formatOptions = {

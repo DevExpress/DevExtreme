@@ -1435,11 +1435,16 @@ QUnit.test("interval is equal difference unit", function(assert) {
     assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 3, 1), "month"), "March 2018", "Month interval");
     assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 2, 2), "day"), "3/1/2018", "Day interval");
     assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1, 10), new Date(2018, 2, 1, 11), "hour"), "3/1/2018 10:00 AM", "hour interval");
+
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 2, 2), { days: 1 }), "3/1/2018", "Day interval. interval is object");
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 2, 3), { days: 2 }), "March 2018, 1 - 3", "Day interval. interval is object");
 });
 
 QUnit.test("interval is equal difference unit. IntervalEnd has next high unit", function(assert) {
     assert.strictEqual(this.axis.formatRange(new Date(2017, 11, 1), new Date(2018, 0, 1), "month"), "December 2017", "Month interval");
     assert.strictEqual(this.axis.formatRange(new Date(2017, 11, 1, 23), new Date(2017, 11, 2), "hour"), "12/1/2017 11:00 PM", "hour interval");
+
+    assert.strictEqual(this.axis.formatRange(new Date(2018, 2, 1), new Date(2018, 2, 2, 1), { days: 1, hours: 1 }), "March 2018, 1 12:00 AM - 2 1:00 AM", "Day interval and hour");
 });
 
 QUnit.test("Not unit interval", function(assert) {
