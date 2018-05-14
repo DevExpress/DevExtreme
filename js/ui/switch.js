@@ -177,28 +177,21 @@ var Switch = Editor.inherit({
         this._renderValue();
     },
 
-    _getCalcOffset: function(value, offset) {
+    _getInnerOffset: function(value, offset) {
         var ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
         return 100 * ratio + "%";
     },
 
     _getHandleOffset: function(value, offset) {
-        var calcValue;
-
         if(this.option("rtlEnabled")) {
-            if(!value) {
-                calcValue = -100 + 100 * (-offset);
-                return calcValue + "%";
-            } else {
-                return 100 * (-offset) + "%";
-            }
+            value = !value;
+        }
+
+        if(value) {
+            var calcValue = -100 + 100 * (-offset);
+            return calcValue + "%";
         } else {
-            if(value) {
-                calcValue = -100 + 100 * (-offset);
-                return calcValue + "%";
-            } else {
-                return 100 * (-offset) + "%";
-            }
+            return 100 * (-offset) + "%";
         }
     },
 
@@ -300,7 +293,7 @@ var Switch = Editor.inherit({
     },
 
     _renderPosition: function(state, swipeOffset) {
-        var innerOffset = this._getCalcOffset(state, swipeOffset),
+        var innerOffset = this._getInnerOffset(state, swipeOffset),
             handleOffset = this._getHandleOffset(state, swipeOffset);
 
         if(this.option("_animateHandle")) {
@@ -349,8 +342,8 @@ var Switch = Editor.inherit({
 
         this._animating = true;
 
-        var fromInnerOffset = this._getCalcOffset(startValue, 0),
-            toInnerOffset = this._getCalcOffset(endValue, 0),
+        var fromInnerOffset = this._getInnerOffset(startValue, 0),
+            toInnerOffset = this._getInnerOffset(endValue, 0),
             fromHandleOffset = this._getHandleOffset(startValue, 0),
             toHandleOffset = this._getHandleOffset(endValue, 0);
 
@@ -409,7 +402,7 @@ var Switch = Editor.inherit({
             toInnerConfig = {},
             toHandleConfig = {};
 
-        var innerOffset = this._getCalcOffset(that.option("value"), e.event.targetOffset),
+        var innerOffset = this._getInnerOffset(that.option("value"), e.event.targetOffset),
             handleOffset = this._getHandleOffset(that.option("value"), e.event.targetOffset);
 
         toInnerConfig["transform"] = " translateX(" + innerOffset + ")";
