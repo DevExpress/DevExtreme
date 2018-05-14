@@ -368,7 +368,7 @@ var Switch = Editor.inherit({
         fx.animate(this._$handle, {
             from: fromHandleConfig,
             to: toHandlerConfig,
-            duration: 0,
+            duration: SWITCH_ANIMATION_DURATION,
         });
 
         fx.animate(this._$switchInner, {
@@ -415,7 +415,7 @@ var Switch = Editor.inherit({
 
         fx.animate(this._$handle, {
             to: toHandleConfig,
-            duration: 0,
+            duration: SWITCH_ANIMATION_DURATION,
         });
 
         fx.animate(this._$switchInner, {
