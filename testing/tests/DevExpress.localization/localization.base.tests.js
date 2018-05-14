@@ -463,7 +463,7 @@ QUnit.test("parse with shortDate format (T478962, T511282)", function(assert) {
 });
 
 QUnit.test("date parser should not parse primitive numbers", function(assert) {
-    assert.equal(localization.parseDate("2"), undefined);
+    assert.equal(localization.parse("2"), undefined);
 });
 
 QUnit.test("firstDayOfWeekIndex", function(assert) {
