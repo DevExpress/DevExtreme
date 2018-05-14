@@ -579,7 +579,10 @@ module.exports = (function() {
         },
 
         createObjectWithChanges: function(target, changes) {
-            var result = target ? Object.create(target) : { };
+            var result = target ? Object.create(Object.getPrototypeOf(target)) : {},
+                targetWithoutPrototype = Object.assign({}, target);
+
+            objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, false, true);
             return objectUtils.deepExtendArraySafe(result, changes, false, true);
         },
 

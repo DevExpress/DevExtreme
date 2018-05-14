@@ -8457,6 +8457,42 @@ QUnit.testInActiveWindow("Revert to an old value when the revert button is click
     assert.equal($revertButton.length, 0, "revert button is not shown");
 });
 
+// T633351
+QUnit.testInActiveWindow("Revert to an old value when the revert button and nested dataObject modified", function(assert) {
+    // arrange
+    var testElement = $('#container'),
+        $input;
+
+    this.options.dataSource.store = [ { A: { name: "Alex" }, lastName: "Smith" }];
+
+    this.rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            allowUpdating: true,
+            mode: "batch"
+        },
+        columns: [ { dataField: "A.name", dataType: "string" }, "lastName"]
+    });
+
+    // act
+    this.editCell(0, 0);
+    $input = testElement.find("input").first();
+    $input.val("Ben");
+    $($input).trigger('change');
+    this.closeEditCell();
+
+    this.clock.tick();
+
+    // assert
+    assert.equal($input[0].value, "Ben", "new value");
+
+    // act, assert
+    this.editingController.cancelEditData();
+
+    assert.equal(testElement.find(".dx-data-row td").eq(0).text(), "Alex", "old value");
+});
+
 QUnit.test("Revert button is not shown when the height light css class is not applied", function(assert) {
     // arrange
     var testElement = $('#container'),
