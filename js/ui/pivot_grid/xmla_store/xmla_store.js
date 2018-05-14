@@ -710,14 +710,19 @@ exports.XmlaStore = Class.inherit((function() {
         return dataSource;
     }
 
-    function parseDiscoverRowSet(xml, schema, dimensions) {
+    function parseDiscoverRowSet(xml, schema, dimensions, translatedDisplayFolder) {
         var result = [],
             isMeasure = schema === "MEASURE",
             displayFolderField = isMeasure ? "MEASUREGROUP_NAME" : schema + "_DISPLAY_FOLDER";
 
         each(xml.getElementsByTagName("row"), function(_, row) {
             var hierarchyName = schema === "LEVEL" ? getFirstChildText(row, "HIERARCHY_UNIQUE_NAME") : undefined,
-                levelNumber = getFirstChildText(row, "LEVEL_NUMBER");
+                levelNumber = getFirstChildText(row, "LEVEL_NUMBER"),
+                displayFolder = getFirstChildText(row, displayFolderField);
+
+            if(isMeasure) {
+                displayFolder = translatedDisplayFolder[displayFolder] || displayFolder;
+            }
 
             if((levelNumber !== "0" || getFirstChildText(row, schema + "_IS_VISIBLE") !== "true") && (getFirstChildText(row, "DIMENSION_TYPE") !== MD_DIMTYPE_MEASURE)) {
                 var dimension = isMeasure ? MEASURE_DEMENSION_KEY : getFirstChildText(row, "DIMENSION_UNIQUE_NAME"),
@@ -729,7 +734,7 @@ exports.XmlaStore = Class.inherit((function() {
                     caption: getFirstChildText(row, schema + "_CAPTION"),
                     hierarchyName: hierarchyName,
                     groupName: hierarchyName,
-                    displayFolder: getFirstChildText(row, displayFolderField),
+                    displayFolder: displayFolder,
                     isMeasure: isMeasure,
                     isDefault: !!dimensions.defaultHierarchies[dataField]
                 });
@@ -737,6 +742,14 @@ exports.XmlaStore = Class.inherit((function() {
         });
 
         return result;
+    }
+
+    function parseMeasureGroupDiscoverRowSet(xml) {
+        var measureGroups = {};
+        each(xml.getElementsByTagName("row"), function(_, row) {
+            measureGroups[getFirstChildText(row, "MEASUREGROUP_NAME")] = getFirstChildText(row, "MEASUREGROUP_CAPTION");
+        });
+        return measureGroups;
     }
 
     function parseDimensionsDiscoverRowSet(xml) {
@@ -798,49 +811,49 @@ exports.XmlaStore = Class.inherit((function() {
         return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()));
     }
 
-/**
-* @name XmlaStore
+    /**
+    * @name XmlaStore
 * @publicName XmlaStore
-* @type object
-* @namespace DevExpress.data
-* @module ui/pivot_grid/xmla_store
-* @export default
-*/
+    * @type object
+    * @namespace DevExpress.data
+    * @module ui/pivot_grid/xmla_store
+    * @export default
+    */
 
     return {
         ctor: function(options) {
             this._options = options;
 
-        /**
+            /**
         * @name XmlaStoreOptions_url
         * @publicName url
-        * @type string
-        */
+            * @type string
+            */
 
-        /**
+            /**
         * @name XmlaStoreOptions_catalog
         * @publicName catalog
-        * @type string
-        */
+            * @type string
+            */
 
-        /**
+            /**
         * @name XmlaStoreOptions_cube
         * @publicName cube
-        * @type string
-        */
+            * @type string
+            */
 
-        /**
+            /**
          * @name XmlaStoreOptions_beforeSend
          * @publicName beforeSend
-         * @type function
-         * @type_function_param1 options:object
-         * @type_function_param1_field1 url:string
-         * @type_function_param1_field2 method:string
-         * @type_function_param1_field3 headers:object
-         * @type_function_param1_field4 xhrFields:object
-         * @type_function_param1_field5 data:string
-         * @type_function_param1_field6 dataType:string
-         */
+             * @type function
+             * @type_function_param1 options:object
+             * @type_function_param1_field1 url:string
+             * @type_function_param1_field2 method:string
+             * @type_function_param1_field3 headers:object
+             * @type_function_param1_field4 xhrFields:object
+             * @type_function_param1_field5 data:string
+             * @type_function_param1_field6 dataType:string
+             */
         },
 
         getFields: function() {
@@ -850,15 +863,17 @@ exports.XmlaStore = Class.inherit((function() {
                 localeIdProperty = getLocaleIdProperty(),
                 dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_DIMENSIONS", localeIdProperty)),
                 measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES", localeIdProperty)),
+                measureGroupsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASUREGROUPS", localeIdProperty)),
                 hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES", localeIdProperty)),
                 levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS", localeIdProperty)),
                 result = new Deferred();
 
-            when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
+            when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest, measureGroupsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse, measureGroupsResponse) {
                 var dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse),
                     hierarchies = parseDiscoverRowSet(hierarchiesResponse, "HIERARCHY", dimensions),
                     levels = parseDiscoverRowSet(levelsResponse, "LEVEL", dimensions),
-                    fields = parseDiscoverRowSet(measuresResponse, "MEASURE", dimensions).concat(hierarchies),
+                    measureGroups = parseMeasureGroupDiscoverRowSet(measureGroupsResponse),
+                    fields = parseDiscoverRowSet(measuresResponse, "MEASURE", dimensions, measureGroups).concat(hierarchies),
                     levelsByHierarchy = {};
 
                 each(levels, function(_, level) {
