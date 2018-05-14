@@ -55,6 +55,21 @@ QUnit.test("Scheduler agenda should have a right css class", function(assert) {
     assert.ok($element.hasClass("dx-scheduler-agenda"), "SchedulerAgenda has 'dx-scheduler-agenda' css class");
 });
 
+QUnit.test("Scheduler agenda should not have vertical-grouped class", function(assert) {
+    this.createInstance({
+        groupOrientation: "vertical",
+        crossScrollingEnabled: true,
+        groups: [
+            { name: "roomId", items: [{ id: 1, text: "r1" }, { id: 2, text: "r2" }] },
+            { name: "ownerId", items: [{ id: 1, text: "o1" }, { id: 2, text: "o2" }, { id: 2, text: "o3" }] }
+        ]
+    }, 6);
+
+    var $element = this.instance.$element();
+
+    assert.notOk($element.hasClass("dx-scheduler-work-space-vertical-grouped"), "SchedulerAgenda hasn't 'dx-scheduler-work-space-vertical-grouped' css class");
+});
+
 QUnit.test("the getStartViewDate method", function(assert) {
     this.createInstance({
         currentDate: new Date(2016, 1, 17),
