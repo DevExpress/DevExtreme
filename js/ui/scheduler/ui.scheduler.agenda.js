@@ -78,6 +78,10 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         return false;
     },
 
+    _isVerticalGroupedWorkSpace: function() {
+        return false;
+    },
+
     _getElementClass: function() {
         return AGENDA_CLASS;
     },
