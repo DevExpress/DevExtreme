@@ -1246,3 +1246,42 @@ QUnit.test("Load pageSize from state when it is zero", function(assert) {
     // assert
     assert.strictEqual(this.dataController.pageSize(), 0, "pageSize");
 });
+
+// T619069
+QUnit.test("The filter should be cleared after resetting the grid's state", function(assert) {
+    // arrange
+    this.setupDataGridModules({
+        loadingTimeout: null,
+        filterRow: {
+            visible: true
+        },
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return {
+                    columns: [{ dataField: "id", filterValue: 2 }]
+                };
+            },
+            customSave: function() {
+            }
+        },
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        },
+        paging: {
+            pageSize: 5
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 1, "item count");
+    assert.deepEqual(this.dataController.getCombinedFilter(true), ["id", "=", 2], "filter");
+
+    // act
+    this.state({});
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 3, "item count");
+    assert.strictEqual(this.dataController.getCombinedFilter(true), undefined, "no filter");
+});
