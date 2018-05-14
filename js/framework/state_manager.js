@@ -24,6 +24,7 @@ var MemoryKeyValueStorage = Class.inherit({
 * @type object
 * @module framework/state_manager
 * @export default
+* @deprecated
 */
 var StateManager = Class.inherit({
     /**

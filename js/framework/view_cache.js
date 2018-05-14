@@ -11,6 +11,7 @@ var inArray = require("../core/utils/array").inArray,
 * @inherits EventsMixin
 * @module framework/view_cache
 * @export default
+* @deprecated
 */
 var ViewCache = Class.inherit({
     /**

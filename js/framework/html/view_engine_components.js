@@ -11,6 +11,7 @@ require("../../integration/knockout");
 * @name dxView
 * @type object
 * @module framework/html/view_engine_components
+* @deprecated
 */
 var View = MarkupComponent.inherit({
     _setDefaultOptions: function() {
@@ -71,6 +72,7 @@ var View = MarkupComponent.inherit({
 * @name dxLayout
 * @type object
 * @module framework/html/view_engine_components
+* @deprecated
 */
 var Layout = MarkupComponent.inherit({
     _setDefaultOptions: function() {
@@ -97,6 +99,7 @@ var Layout = MarkupComponent.inherit({
 * @name dxViewPlaceholder
 * @type object
 * @module framework/html/view_engine_components
+* @deprecated
 */
 var ViewPlaceholder = MarkupComponent.inherit({
     _setDefaultOptions: function() {
@@ -140,6 +143,7 @@ var setupTransitionInnerElement = function($element) {
 * @name dxTransition
 * @type object
 * @module framework/html/view_engine_components
+* @deprecated
 */
 var Transition = MarkupComponent.inherit({
     _setDefaultOptions: function() {
@@ -192,6 +196,7 @@ var Transition = MarkupComponent.inherit({
 * @name dxContentPlaceholder
 * @type object
 * @module framework/html/view_engine_components
+* @deprecated
 */
 var ContentPlaceholder = MarkupComponent.inherit({
     _setDefaultOptions: function() {
@@ -246,6 +251,7 @@ var ContentPlaceholder = MarkupComponent.inherit({
 * @name dxContent
 * @type object
 * @module framework/html/view_engine_components
+* @deprecated
 */
 var Content = MarkupComponent.inherit({
     _setDefaultOptions: function() {
