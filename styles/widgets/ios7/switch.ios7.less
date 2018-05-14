@@ -92,7 +92,8 @@
 .dx-rtl {
     .dx-switch-handle {
         left: auto;
-        right: 0;
+        right: 50%;
+        margin-right: -@IOS7_SWITCH_HANDLE_SIZE;
         .transition(~"margin-right .24s ease 0s, right .24s ease 0s, width .14s ease .1s, transform .14s ease .1s");
 
         .dx-state-active& {
@@ -102,8 +103,6 @@
 
     .dx-switch-on-value& {
         .dx-switch-handle {
-            left: auto;
-            right: 100%;
             margin-left: 0;
             margin-right: 0 - @IOS7_SWITCH_BORDER_WIDTH - @IOS7_SWITCH_HANDLE_SIZE;
 

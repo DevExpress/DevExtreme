@@ -1,7 +1,6 @@
 .dx-size-default() {
     @MATERIAL_SWITCH_HEIGHT: 20px;
     @MATERIAL_SWITCH_WIDTH: 36px;
-    @MATERIAL_SWITCH_RADIUS: @MATERIAL_SWITCH_HEIGHT / 2;
     @MATERIAL_SWITCH_HANDLE_WIDTH: 14px;
     @MATERIAL_SWITCH_HANDLE_OFFSET: 2px;
     @MATERIAL_SWITCH_HANDLE_SHADOW: 0 1px 4px 0 rgba(0, 0, 0, .2);
@@ -162,7 +161,7 @@
     .dx-switch-handle {
         float: right;
         margin-left: 0;
-        margin-right: -@MATERIAL_SWITCH_RADIUS;
+        margin-right: -@MATERIAL_SWITCH_HEIGHT;
     }
 
     .dx-switch-container {
