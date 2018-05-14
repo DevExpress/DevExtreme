@@ -382,13 +382,13 @@ QUnit.test("T437211: Custom dxDateBox value formatter is not called if the same 
     $input.val("");
     $input.val("1/01/2016");
     $input.change();
-    assert.equal(expectedDisplayValue, instance.option("text"), "input value was formatted");
+    assert.equal(instance.option("text"), expectedDisplayValue, "input value was formatted");
 
     $input.val("");
     $input.val("1/01/2016");
     $input.change();
 
-    assert.equal(expectedDisplayValue, instance.option("text"), "input value was formatted");
+    assert.equal(instance.option("text"), expectedDisplayValue, "input value was formatted");
 });
 
 

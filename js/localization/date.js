@@ -146,7 +146,7 @@ var dateLocalization = dependencyInjector({
         }
 
         if(!format) {
-            return new Date(text);
+            return this.parse(text, "shortdate");
         }
 
         if(format.parser) {
