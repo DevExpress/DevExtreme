@@ -358,6 +358,27 @@ QUnit.test("click during animation hasn't any effects", function(assert) {
     }
 });
 
+QUnit.test("switch should have right class before animation", function(assert) {
+    var originalAnimation = fx.animate;
+    var clock = sinon.useFakeTimers();
+    try {
+        var element = this.element,
+            instance = element.dxSwitch("instance");
+
+        instance.option("value", false);
+
+        fx.animate = function($element, config) {
+            assert.ok(element.hasClass(SWITCH_ON_VALUE_CLASS), "Switch has correct class");
+        };
+
+        this.element.trigger("dxclick");
+        clock.tick(150);
+    } finally {
+        fx.animate = originalAnimation;
+        clock.restore();
+    }
+});
+
 QUnit.test("widget should be active while handle is swiped", function(assert) {
     var $element = this.element,
         pointer = this.mouse,

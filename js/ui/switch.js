@@ -365,6 +365,8 @@ var Switch = Editor.inherit({
         fromHandleConfig["transform"] = " translateX(" + fromHandleOffset + ")";
         toHandlerConfig["transform"] = " translateX(" + toHandleOffset + ")";
 
+        this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, endValue);
+
         fx.animate(this._$handle, {
             from: fromHandleConfig,
             to: toHandlerConfig,
