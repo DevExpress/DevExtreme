@@ -473,6 +473,8 @@ var Switch = Editor.inherit({
                 this._renderValue();
                 this.callBase(args);
                 break;
+            case "_animateHandle":
+                break;
             default:
                 this.callBase(args);
         }
