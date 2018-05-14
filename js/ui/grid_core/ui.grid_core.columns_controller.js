@@ -1054,12 +1054,6 @@ module.exports = {
                     }
 
                     assignColumns(that, resultColumns);
-                    if(that._dataSourceApplied && that._dataSource) {
-                        updateIndexes(that);
-                        that._dataSource.group(that.getGroupDataSourceParameters());
-                        that._dataSource.sort(that.getSortDataSourceParameters());
-                        that._dataSource.load();
-                    }
                 }
             };
 
@@ -2575,6 +2569,7 @@ module.exports = {
                     that._columnsUserState = state;
                     that._ignoreColumnOptionNames = ignoreColumnOptionNames;
                     that._hasUserState = !!state;
+                    updateColumnChanges(that, "filtering");
                     that.init();
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {

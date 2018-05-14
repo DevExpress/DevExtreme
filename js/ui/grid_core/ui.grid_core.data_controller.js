@@ -363,7 +363,8 @@ module.exports = {
                         changeTypes = e.changeTypes,
                         optionNames = e.optionNames,
                         filterValue,
-                        filterValues;
+                        filterValues,
+                        filterApplied;
 
                     // B255430
                     var updateItemsHandler = function() {
@@ -385,6 +386,7 @@ module.exports = {
 
                             if(Array.isArray(filterValues) || e.columnIndex === undefined || typeUtils.isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
                                 that._applyFilter();
+                                filterApplied = true;
                             }
                         }
 
@@ -397,8 +399,12 @@ module.exports = {
                             var column = that._columnsController.columnOption(e.columnIndex);
                             if(column && (typeUtils.isDefined(column.filterValue) || typeUtils.isDefined(column.filterValues))) {
                                 that._applyFilter();
+                                filterApplied = true;
                             }
                         }
+                    }
+                    if(!filterApplied && changeTypes.filtering) {
+                        that.reload();
                     }
                 },
                 _handleDataChanged: function(e) {
