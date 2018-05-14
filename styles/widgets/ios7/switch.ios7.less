@@ -15,6 +15,12 @@
     display: none;
 }
 
+.dx-switch-inner {
+    width: 200%;
+    height: 100%;
+    display: flex;
+}
+
 .dx-switch-container {
     position: relative;
     overflow: visible;
@@ -40,11 +46,13 @@
 }
 
 .dx-switch-handle {
+    flex-basis: @IOS7_SWITCH_HANDLE_SIZE;
+    flex-shrink: 0;
     width: @IOS7_SWITCH_HANDLE_SIZE;
     height: @IOS7_SWITCH_HANDLE_SIZE;
     position: absolute;
     top: @IOS7_SWITCH_BORDER_WIDTH;
-    left: 0;
+    left: 50%;
     margin-left: @IOS7_SWITCH_BORDER_WIDTH;
     bottom: @IOS7_SWITCH_BORDER_WIDTH;
     .border-radius(@IOS7_SWITCH_RADIUS);
@@ -71,8 +79,7 @@
     }
 
     .dx-switch-handle {
-        left: 100%;
-        margin-left: 0 - @IOS7_SWITCH_BORDER_WIDTH - @IOS7_SWITCH_HANDLE_SIZE;
+        margin-left: 0 - @IOS7_SWITCH_BORDER_WIDTH;
 
         .dx-state-active& {
             .translate(@IOS7_SWITCH_HANDLE_SIZE - @IOS7_SWITCH_ACTIVE_HANDLE_SIZE);

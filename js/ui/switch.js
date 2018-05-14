@@ -102,7 +102,8 @@ var Switch = Editor.inherit({
             */
             value: false,
 
-            useInkRipple: false
+            useInkRipple: false,
+            _animateHandle: true
 
             /**
             * @name dxSwitchOptions.name
@@ -138,7 +139,15 @@ var Switch = Editor.inherit({
                 options: {
                     useInkRipple: true
                 }
-            }
+            },
+            {
+                device: function(device) {
+                    return /ios7/.test(themes.current());
+                },
+                options: {
+                    _animateHandle: false
+                }
+            },
         ]);
     },
 
@@ -294,8 +303,10 @@ var Switch = Editor.inherit({
         var innerOffset = this._getCalcOffset(state, swipeOffset),
             handleOffset = this._getHandleOffset(state, swipeOffset);
 
-        this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
-        this._$handle.css("transform", " translateX(" + handleOffset + ")");
+        if(this.option("_animateHandle")) {
+            this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
+            this._$handle.css("transform", " translateX(" + handleOffset + ")");
+        }
     },
 
     _validateValue: function() {
