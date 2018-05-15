@@ -358,7 +358,7 @@ QUnit.test("tag template option should work", function(assert) {
             opened: true,
             value: [1, 2],
             tagTemplate: function(tagData, tagElement) {
-                return "<div class='custom-item'><div class='product-name'>!" + tagData.text + "</div>";
+                return "<div class='custom-item'><div class='product-name'>!" + tagData + "</div>";
             }
         }),
         $tagContainer = $element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
