@@ -710,14 +710,19 @@ exports.XmlaStore = Class.inherit((function() {
         return dataSource;
     }
 
-    function parseDiscoverRowSet(xml, schema, dimensions) {
+    function parseDiscoverRowSet(xml, schema, dimensions, translatedDisplayFolders) {
         var result = [],
             isMeasure = schema === "MEASURE",
             displayFolderField = isMeasure ? "MEASUREGROUP_NAME" : schema + "_DISPLAY_FOLDER";
 
         each(xml.getElementsByTagName("row"), function(_, row) {
             var hierarchyName = schema === "LEVEL" ? getFirstChildText(row, "HIERARCHY_UNIQUE_NAME") : undefined,
-                levelNumber = getFirstChildText(row, "LEVEL_NUMBER");
+                levelNumber = getFirstChildText(row, "LEVEL_NUMBER"),
+                displayFolder = getFirstChildText(row, displayFolderField);
+
+            if(isMeasure) {
+                displayFolder = translatedDisplayFolders[displayFolder] || displayFolder;
+            }
 
             if((levelNumber !== "0" || getFirstChildText(row, schema + "_IS_VISIBLE") !== "true") && (getFirstChildText(row, "DIMENSION_TYPE") !== MD_DIMTYPE_MEASURE)) {
                 var dimension = isMeasure ? MEASURE_DEMENSION_KEY : getFirstChildText(row, "DIMENSION_UNIQUE_NAME"),
@@ -729,7 +734,7 @@ exports.XmlaStore = Class.inherit((function() {
                     caption: getFirstChildText(row, schema + "_CAPTION"),
                     hierarchyName: hierarchyName,
                     groupName: hierarchyName,
-                    displayFolder: getFirstChildText(row, displayFolderField),
+                    displayFolder: displayFolder,
                     isMeasure: isMeasure,
                     isDefault: !!dimensions.defaultHierarchies[dataField]
                 });
@@ -737,6 +742,14 @@ exports.XmlaStore = Class.inherit((function() {
         });
 
         return result;
+    }
+
+    function parseMeasureGroupDiscoverRowSet(xml) {
+        var measureGroups = {};
+        each(xml.getElementsByTagName("row"), function(_, row) {
+            measureGroups[getFirstChildText(row, "MEASUREGROUP_NAME")] = getFirstChildText(row, "MEASUREGROUP_CAPTION");
+        });
+        return measureGroups;
     }
 
     function parseDimensionsDiscoverRowSet(xml) {
@@ -798,14 +811,14 @@ exports.XmlaStore = Class.inherit((function() {
         return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()));
     }
 
-/**
-* @name XmlaStore
-* @publicName XmlaStore
-* @type object
-* @namespace DevExpress.data
-* @module ui/pivot_grid/xmla_store
-* @export default
-*/
+    /**
+    * @name XmlaStore
+    * @publicName XmlaStore
+    * @type object
+    * @namespace DevExpress.data
+    * @module ui/pivot_grid/xmla_store
+    * @export default
+    */
 
     return {
         ctor: function(options) {
@@ -854,26 +867,30 @@ exports.XmlaStore = Class.inherit((function() {
                 levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS", localeIdProperty)),
                 result = new Deferred();
 
-            when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
-                var dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse),
-                    hierarchies = parseDiscoverRowSet(hierarchiesResponse, "HIERARCHY", dimensions),
-                    levels = parseDiscoverRowSet(levelsResponse, "LEVEL", dimensions),
-                    fields = parseDiscoverRowSet(measuresResponse, "MEASURE", dimensions).concat(hierarchies),
-                    levelsByHierarchy = {};
 
-                each(levels, function(_, level) {
-                    levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName] || [];
-                    levelsByHierarchy[level.hierarchyName].push(level);
-                });
+            when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).then(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
+                execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASUREGROUPS", localeIdProperty)).done(function(measureGroupsResponse) {
+                    var dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse),
+                        hierarchies = parseDiscoverRowSet(hierarchiesResponse, "HIERARCHY", dimensions),
+                        levels = parseDiscoverRowSet(levelsResponse, "LEVEL", dimensions),
+                        measureGroups = parseMeasureGroupDiscoverRowSet(measureGroupsResponse),
+                        fields = parseDiscoverRowSet(measuresResponse, "MEASURE", dimensions, measureGroups).concat(hierarchies),
+                        levelsByHierarchy = {};
 
-                each(hierarchies, function(_, hierarchy) {
-                    if(levelsByHierarchy[hierarchy.dataField] && levelsByHierarchy[hierarchy.dataField].length > 1) {
-                        hierarchy.groupName = hierarchy.hierarchyName = hierarchy.dataField;
+                    each(levels, function(_, level) {
+                        levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName] || [];
+                        levelsByHierarchy[level.hierarchyName].push(level);
+                    });
 
-                        fields.push.apply(fields, levelsByHierarchy[hierarchy.hierarchyName]);
-                    }
-                });
-                result.resolve(fields);
+                    each(hierarchies, function(_, hierarchy) {
+                        if(levelsByHierarchy[hierarchy.dataField] && levelsByHierarchy[hierarchy.dataField].length > 1) {
+                            hierarchy.groupName = hierarchy.hierarchyName = hierarchy.dataField;
+
+                            fields.push.apply(fields, levelsByHierarchy[hierarchy.hierarchyName]);
+                        }
+                    });
+                    result.resolve(fields);
+                }).fail(result.reject);
             }).fail(result.reject);
 
             return result;

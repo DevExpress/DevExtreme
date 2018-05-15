@@ -2347,6 +2347,18 @@ QUnit.test("current day is moved to a next day while it is less a max date when 
     assert.ok(this.calendar.option("currentDate") <= this.calendar.option("max"));
 });
 
+QUnit.test("current day is moved to the next day when it is more a min date when all days are disabled", function(assert) {
+    this.reinit({
+        min: new Date(2018, 0, 10),
+        value: new Date(2018, 1, 2),
+        disabledDates: function() { return true; }
+    });
+
+    $("." + CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS).click();
+
+    assert.ok(this.calendar.option("currentDate") >= this.calendar.option("min"));
+});
+
 
 QUnit.module("Current date", {
     beforeEach: function() {
