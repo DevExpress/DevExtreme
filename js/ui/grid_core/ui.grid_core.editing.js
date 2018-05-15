@@ -1545,6 +1545,9 @@ var EditingController = modules.ViewController.inherit((function() {
                             if(column.formItem) {
                                 extend(item, column.formItem);
                             }
+                            if(item.isRequired === undefined && column.validationRules) {
+                                item.isRequired = column.validationRules.some(function(rule) { return rule.type === "required"; });
+                            }
 
                             var itemVisible = typeUtils.isDefined(item.visible) ? item.visible : true;
                             if(!that._firstFormItem && itemVisible) {
