@@ -16,7 +16,7 @@ require("generic_light.css!");
 
 require("ui/data_grid/ui.data_grid");
 
-require("../../../vendor/template-engines/hogan-2.0.0.js");
+window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
