@@ -10,6 +10,7 @@ var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     config = require("core/config"),
+    errors = require("ui/widget/ui.errors"),
     ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("ui/data_grid/ui.data_grid");
@@ -1418,6 +1419,41 @@ QUnit.test("Initialize Lookup column with paging", function(assert) {
     assert.equal(lookup.dataType, 'string', 'lookup type');
     assert.deepEqual(lookup.items, this.options.columns[1].lookup.dataSource.store, 'lookup items');
     assert.equal(lookup.calculateCellValue(1), 'Category 1', 'lookup calculateCellValue');
+});
+
+// T630253
+QUnit.test("Initialize Lookup column with dataSource instance", function(assert) {
+    var array = [
+        { name: 'Alex', age: 15, category_id: 1 },
+        { name: 'Dan', age: 19, category_id: 2 }
+    ];
+    var dataSource = new DataSource(array);
+    dataSource.load();
+
+    this.applyOptions({
+        columns: ["name", {
+            dataField: "category_id", lookup: {
+                dataSource: new DataSource([]),
+                valueExpr: 'id',
+                displayExpr: 'category_name'
+            }
+        }]
+    });
+
+    sinon.spy(errors, "log");
+
+    // act
+    this.columnsController.applyDataSource(dataSource);
+
+    // assert
+    var lookupColumn = this.columnsController.getVisibleColumns()[1];
+
+    assert.equal(lookupColumn.dataField, 'category_id', 'column dataField');
+    assert.equal(lookupColumn.lookup.calculateCellValue(1), undefined, 'lookup calculateCellValue');
+
+    assert.equal(errors.log.callCount, 1, "one error is occured");
+    assert.equal(errors.log.lastCall.args[0], "E1016", "Error code");
+    errors.log.restore();
 });
 
 // T329343
