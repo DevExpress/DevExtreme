@@ -33,6 +33,7 @@
 }
 
 .dx-switch-on, .dx-switch-off {
+    flex-shrink: 0;
     float: left;
     width: 50%;
     height: 100%;
@@ -44,7 +45,7 @@
 
     &:after {
         position: absolute;
-        right: 10px;
+        right: 0;
         top: 3px;
         bottom: 3px;
         width: 50%;
@@ -112,9 +113,10 @@
 }
 
 .dx-switch-handle {
+    flex-basis: 10px;
+    flex-shrink: 0;
     position: relative;
     float: left;
-    margin-left: -10px;
     width: 10px;
     height: @SWITCH_HEIGHT;
     background: @WIN8_BASE_TEXT;
@@ -127,7 +129,7 @@
     }
 
     .dx-switch-off {
-        padding: 8px 0px 8px 15px;
+        padding: 8px 0px 8px 5px;
 
         &:after {
             right: 0px;
@@ -137,7 +139,7 @@
 
     .dx-switch-on {
         &:after {
-            left: 10px;
+            left: 0px;
             float: right;
         }
 

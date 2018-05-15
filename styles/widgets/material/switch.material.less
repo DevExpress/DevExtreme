@@ -1,7 +1,6 @@
 .dx-size-default() {
     @MATERIAL_SWITCH_HEIGHT: 20px;
     @MATERIAL_SWITCH_WIDTH: 36px;
-    @MATERIAL_SWITCH_RADIUS: @MATERIAL_SWITCH_HEIGHT / 2;
     @MATERIAL_SWITCH_HANDLE_WIDTH: 14px;
     @MATERIAL_SWITCH_HANDLE_OFFSET: 2px;
     @MATERIAL_SWITCH_HANDLE_SHADOW: 0 1px 4px 0 rgba(0, 0, 0, .2);
@@ -79,14 +78,14 @@
 }
 
 .dx-switch-inner {
-    width: 100%;
+    width: 200%;
     height: 100%;
 }
 
 .dx-switch-on,
 .dx-switch-off {
+    flex-shrink: 0;
     float: left;
-    margin-left: -@MATERIAL_SWITCH_RADIUS;
     padding: 4px 0;
     width: 50%;
     height: @MATERIAL_SWITCH_HEIGHT;
@@ -97,7 +96,6 @@
 
 .dx-switch-on {
     background: transparent;
-    width: 100%;
 }
 
 .dx-switch-off {
@@ -107,9 +105,11 @@
 }
 
 .dx-switch-handle {
+    flex-basis: @MATERIAL_SWITCH_HEIGHT;
+    flex-shrink: 0;
+
     position: relative;
     float: left;
-    margin-left: -@MATERIAL_SWITCH_RADIUS;
     width: @MATERIAL_SWITCH_HEIGHT;
     height: @MATERIAL_SWITCH_HEIGHT;
     background-color: @switch-handle-off-bg;
@@ -161,7 +161,7 @@
     .dx-switch-handle {
         float: right;
         margin-left: 0;
-        margin-right: -@MATERIAL_SWITCH_RADIUS;
+        margin-right: -@MATERIAL_SWITCH_HEIGHT;
     }
 
     .dx-switch-container {

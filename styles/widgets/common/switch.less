@@ -19,6 +19,10 @@
     }
 }
 
+.dx-switch-inner {
+    display: flex;
+}
+
 .dx-switch-container {
     display: inline-block;
     overflow: hidden;
@@ -33,8 +37,39 @@
     }
 }
 
+.dx-switch-inner {
+    .transform(~"translateX(-50%)");
+}
+
+.dx-switch-handle {
+    .transform(~"translateX(0%)");
+}
+
+.dx-switch-on-value {
+    .dx-switch-inner {
+        .transform(~"translateX(0%)");
+    }
+
+    .dx-switch-handle {
+        .transform(~"translateX(-100%)");
+    }
+}
 .dx-rtl {
     &.dx-switch-wrapper, .dx-switch-wrapper {
         text-align: right;
+    }
+
+    .dx-switch-inner {
+        .transform(~"translateX(50%)");
+    }
+
+    .dx-switch-handle {
+        .transform(~"translateX(-100%)");
+    }
+
+    &.dx-switch-on-value {
+        .dx-switch-handle {
+            .transform(~"translateX(0%)");
+        }
     }
 }
