@@ -1131,6 +1131,20 @@ QUnit.test("tag template should get item in arguments even if the 'displayExpr' 
     });
 });
 
+QUnit.test("displayExpr as function should work", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: "Item 1", id: 1 }],
+            displayExpr: function(item) {
+                return item.name;
+            },
+            valueExpr: "id",
+            value: [1]
+        }),
+        $tags = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tags.text(), "Item 1", "tags are correct");
+});
+
 QUnit.test("tag template should be applied correctly after item selection (T589269)", function(assert) {
     var items = [{ id: 1, text: "one" }, { id: 2, text: "two" }];
 
