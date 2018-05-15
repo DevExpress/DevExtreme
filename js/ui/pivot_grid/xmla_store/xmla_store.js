@@ -711,7 +711,7 @@ exports.XmlaStore = Class.inherit((function() {
         return dataSource;
     }
 
-    function parseDiscoverRowSet(xml, schema, dimensions, translatedDisplayFolder) {
+    function parseDiscoverRowSet(xml, schema, dimensions, translatedDisplayFolders) {
         var result = [],
             isMeasure = schema === "MEASURE",
             displayFolderField = isMeasure ? "MEASUREGROUP_NAME" : schema + "_DISPLAY_FOLDER";
@@ -722,7 +722,7 @@ exports.XmlaStore = Class.inherit((function() {
                 displayFolder = getFirstChildText(row, displayFolderField);
 
             if(isMeasure) {
-                displayFolder = translatedDisplayFolder[displayFolder] || displayFolder;
+                displayFolder = translatedDisplayFolders[displayFolder] || displayFolder;
             }
 
             if((levelNumber !== "0" || getFirstChildText(row, schema + "_IS_VISIBLE") !== "true") && (getFirstChildText(row, "DIMENSION_TYPE") !== MD_DIMTYPE_MEASURE)) {
