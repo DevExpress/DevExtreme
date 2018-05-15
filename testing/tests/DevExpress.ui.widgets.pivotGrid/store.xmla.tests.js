@@ -1936,7 +1936,7 @@ define(function(require) {
             catalog: "catalog"
         })).getFields()
             .done(function(data) {
-                assert.ok(!data.length);
+                assert.equal(data.length, 0);
             }).fail(getFailCallBack(assert))
             .always(done);
     });
