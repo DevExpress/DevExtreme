@@ -2699,7 +2699,7 @@ module.exports = {
                                     if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
-                                    if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
+                                    if(typeUtils.isPlainObject(dataSource) || Array.isArray(dataSource)) {
                                         if(that.valueExpr) {
                                             dataSourceOptions = normalizeDataSourceOptions(dataSource);
                                             dataSourceOptions.paginate = false;
