@@ -1,18 +1,24 @@
 "use strict";
 
+SystemJS.config({
+    map: {
+        'jqueryify': SystemJS.map.jquery
+    }
+});
+
 define(function(require) {
     var $ = require("jquery"),
         Template = require("ui/widget/jquery.template"),
         setTemplateEngine = require("ui/set_template_engine"),
         errors = require("core/errors");
 
-    window.doT = require("../../../vendor/template-engines/doT.min.js");
-    require("../../../vendor/template-engines/handlebars.min.js");
-    require("../../../vendor/template-engines/hogan-2.0.0.js");
-    require("../../../vendor/template-engines/jquery.tmpl.min.js");
-    require("../../../vendor/template-engines/jsrender.min.js");
-    window.Mustache = require("../../../vendor/template-engines/mustache.min.js");
-    window._ = require("../../../vendor/template-engines/underscore-min.js");
+    window.doT = require("../../../node_modules/dot/doT.min.js");
+    window.Handlebars = require("../../../node_modules/handlebars/dist/handlebars.min.js");
+    window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
+    require("../../../node_modules/jquery.tmpl/index.js");
+    require("../../../node_modules/jsrender/jsrender.min.js");
+    window.Mustache = require("../../../node_modules/mustache/mustache.min.js");
+    window._ = require("../../../node_modules/underscore/underscore-min.js");
 
     if(QUnit.urlParams["nojquery"]) {
         return;
