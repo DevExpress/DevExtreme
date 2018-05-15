@@ -1470,6 +1470,34 @@ QUnit.test("Initialize Lookup column with dataSource instance", function(assert)
     errors.log.restore();
 });
 
+QUnit.test("Initialize Lookup column with Store instance", function(assert) {
+    var array = [
+        { name: 'Alex', age: 15, category_id: 1 },
+        { name: 'Dan', age: 19, category_id: 2 }
+    ];
+    var dataSource = new DataSource(array);
+    dataSource.load();
+
+    this.applyOptions({
+        columns: ["name", {
+            dataField: "category_id", lookup: {
+                dataSource: new ArrayStore([{ id: 1, category_name: "Category 1" }]),
+                valueExpr: 'id',
+                displayExpr: 'category_name'
+            }
+        }]
+    });
+
+    // act
+    this.columnsController.applyDataSource(dataSource);
+
+    // assert
+    var lookupColumn = this.columnsController.getVisibleColumns()[1];
+
+    assert.equal(lookupColumn.dataField, 'category_id', 'column dataField');
+    assert.equal(lookupColumn.lookup.calculateCellValue(1), "Category 1", 'lookup calculateCellValue works');
+});
+
 // T329343
 QUnit.test("Initialize Lookup column by columnOption", function(assert) {
     var array = [
