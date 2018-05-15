@@ -1,8 +1,6 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
@@ -238,7 +236,7 @@ var Switch = Editor.inherit({
     },
 
     _getItemSizeFunc: function() {
-        return this._$switchContainer.outerWidth(true) - parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
+        return this._$switchContainer.get(0).getBoundingClientRect().width - this._$handle.get(0).getBoundingClientRect().width;
     },
 
     _renderSubmitElement: function() {
