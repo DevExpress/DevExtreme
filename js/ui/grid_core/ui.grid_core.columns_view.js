@@ -661,6 +661,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
             $cols = $tableElement.find("col");
+            $cols.each(function() {
+                this.style.width = "";
+            });
             columns = columns || this.getColumns(null, $tableElement);
 
             for(i = 0; i < columns.length; i++) {
