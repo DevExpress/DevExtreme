@@ -720,6 +720,19 @@ QUnit.test("displayExpr change at runtime", function(assert) {
     assert.equal($tag.text(), "one", "tag render displayValue");
 });
 
+QUnit.test("displayExpr as function should work", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: "Item 1", id: 1 }],
+            displayExpr: function(item) {
+                return item.name;
+            },
+            valueExpr: "id",
+            value: [1]
+        }),
+        $tags = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tags.text(), "Item 1", "tags are correct");
+});
 
 QUnit.module("the 'onValueChanged' option", moduleSetup);
 
@@ -1126,7 +1139,7 @@ QUnit.test("tag template should get item in arguments even if the 'displayExpr' 
         displayExpr: "text",
         value: [items[1]],
         tagTemplate: function(tagData, tagElement) {
-            assert.deepEqual(tagData, items[1], "correct data is passed");
+            assert.deepEqual(tagData, items[1].text, "correct data is passed");
         }
     });
 });
@@ -1140,7 +1153,7 @@ QUnit.test("tag template should be applied correctly after item selection (T5892
             valueExpr: "id",
             opened: true,
             tagTemplate: function(tagData, tagElement) {
-                return "<div class='custom-item'><div class='product-name'>" + tagData.text + "</div>";
+                return "<div class='custom-item'><div class='product-name'>" + tagData + "</div>";
             }
         }),
         list = $element.dxTagBox("instance")._list,
