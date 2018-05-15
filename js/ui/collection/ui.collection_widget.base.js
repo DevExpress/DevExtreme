@@ -870,13 +870,15 @@ var CollectionWidget = Widget.inherit({
         this._attachItemClickEvent(itemData, $itemFrame);
         var $itemContent = this._getItemContent($itemFrame);
 
-        var renderContentPromise = this._renderItemContent({
-            index: index,
-            itemData: itemData,
-            container: getPublicElement($itemContent),
-            contentClass: this._itemContentClass(),
-            defaultTemplateName: this.option("itemTemplate")
-        });
+        var pageSize = (this._dataSource && this._dataSource.pageSize()) || 0,
+            pageIndex = (this._dataSource && this._dataSource.pageIndex()) || 0,
+            renderContentPromise = this._renderItemContent({
+                index: pageIndex * pageSize + index,
+                itemData: itemData,
+                container: getPublicElement($itemContent),
+                contentClass: this._itemContentClass(),
+                defaultTemplateName: this.option("itemTemplate")
+            });
 
         var that = this;
         when(renderContentPromise).done(function($itemContent) {

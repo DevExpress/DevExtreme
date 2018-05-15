@@ -416,6 +416,28 @@ QUnit.test("'itemTemplate' as script element (no root element) with string rende
     }
 });
 
+QUnit.test("itemTemplate should get correct index for second page", function(assert) {
+    var itemTemplateMethod = sinon.spy(),
+        $element = $("#cmp"),
+        ds = new DataSource({
+            store: new ArrayStore({
+                key: "id",
+                data: [{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]
+            }),
+            pageSize: 1
+        });
+
+    new TestComponent($element, {
+        dataSource: ds,
+        itemTemplate: itemTemplateMethod
+    });
+
+    ds.pageIndex(1);
+    ds.load();
+
+    assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
+});
+
 QUnit.test("No data text message - no items and source", function(assert) {
     var component = new TestComponent("#cmp", {});
     assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
