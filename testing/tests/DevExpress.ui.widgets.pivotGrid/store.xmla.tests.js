@@ -3709,10 +3709,9 @@ QUnit.test("Parse time type cell data", function(assert) {
 QUnit.test("Language Id passed to discover query", function(assert) {
     this.store.getFields();
 
-    assert.equal($(this.getRequest(0)).find("LocaleIdentifier").text(), languageId);
-    assert.equal($(this.getRequest(1)).find("LocaleIdentifier").text(), languageId);
-    assert.equal($(this.getRequest(2)).find("LocaleIdentifier").text(), languageId);
-    assert.equal($(this.getRequest(3)).find("LocaleIdentifier").text(), languageId);
+    this.sendRequest.getCalls().forEach(function(call) {
+        assert.equal($(call.args[0].data).find("LocaleIdentifier").text(), languageId);
+    });
 });
 
 QUnit.test("Language Id passed to execute query", function(assert) {
