@@ -1791,7 +1791,7 @@ QUnit.test("Discover. Incorrect dataSource catalog", function(assert) {
         .getFields()
 
         .done(function(data) {
-            assert.ok(!data.length);
+            assert.equal(data.length, 0);
         }).fail(getFailCallBack(assert))
         .always(done);
 });
