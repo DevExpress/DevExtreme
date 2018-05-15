@@ -16,8 +16,9 @@ var watchChanges = (function() {
         globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
             fieldsDispose && fieldsDispose();
 
+            callback(dataWithRawFields);
+
             if(isPrimitive(dataWithRawFields)) {
-                callback(dataWithRawFields);
                 return;
             }
 
