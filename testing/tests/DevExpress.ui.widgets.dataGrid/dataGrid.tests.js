@@ -783,6 +783,64 @@ QUnit.test("Editing should work with classes as data objects contains readonly p
     assert.deepEqual(rows[0].values, [0, "test"]);
 });
 
+// T613804
+QUnit.test("calculateCellValue for edited cell fires twice and at the second time contains full data row as an argument", function(assert) {
+    // arrange
+    function DataItem(id, text) {
+        this.id = id;
+        this.text = text;
+    }
+    Object.defineProperty(DataItem.prototype, "ID", {
+        configurable: true,
+        enumerable: true,
+        get: function() { return this.id; }
+    });
+    Object.defineProperty(DataItem.prototype, "Text", {
+        configurable: true,
+        enumerable: false,
+        get: function() { return this.text; },
+        set: function(value) { this.text = value; }
+    });
+    var dataItem0 = new DataItem(0, "text0"),
+        clock = sinon.useFakeTimers(),
+        counter = 0,
+        modifiedData,
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columns: [
+                "ID",
+                {
+                    dataField: "Text",
+                    calculateCellValue: function(data) {
+                        if(data.Text === "test") {
+                            ++counter;
+                            modifiedData = data;
+                        }
+                    }
+                }
+            ],
+            dataSource: {
+                store: [ dataItem0 ]
+            },
+            editing: { allowUpdating: true, mode: "batch" }
+        }).dxDataGrid("instance");
+
+    // act
+    dataGrid.cellValue(0, 1, "test");
+    dataGrid.closeEditCell();
+
+    clock.tick();
+
+    // assert
+    assert.equal(counter, 2);
+    assert.equal(dataItem0.Text, "text0");
+    assert.equal(modifiedData.ID, 0);
+    assert.equal(modifiedData.Text, "test");
+    assert.ok(modifiedData instanceof DataItem, "modifiedData is instance of DataItem");
+
+    clock.restore();
+});
+
 QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
