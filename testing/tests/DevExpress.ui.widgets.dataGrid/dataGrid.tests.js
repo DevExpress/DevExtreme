@@ -45,8 +45,8 @@ QUnit.testStart(function() {
 require("common.css!");
 require("generic_light.css!");
 
-require("../../../vendor/template-engines/underscore-min.js");
-require("../../../vendor/template-engines/jsrender.min.js");
+require("../../../node_modules/underscore/underscore-min.js");
+require("../../../node_modules/jsrender/jsrender.min.js");
 
 var DataGrid = require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
