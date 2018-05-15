@@ -859,32 +859,34 @@ exports.XmlaStore = Class.inherit((function() {
                 localeIdProperty = getLocaleIdProperty(),
                 dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_DIMENSIONS", localeIdProperty)),
                 measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES", localeIdProperty)),
-                measureGroupsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASUREGROUPS", localeIdProperty)),
                 hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES", localeIdProperty)),
                 levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS", localeIdProperty)),
                 result = new Deferred();
 
-            when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest, measureGroupsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse, measureGroupsResponse) {
-                var dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse),
-                    hierarchies = parseDiscoverRowSet(hierarchiesResponse, "HIERARCHY", dimensions),
-                    levels = parseDiscoverRowSet(levelsResponse, "LEVEL", dimensions),
-                    measureGroups = parseMeasureGroupDiscoverRowSet(measureGroupsResponse),
-                    fields = parseDiscoverRowSet(measuresResponse, "MEASURE", dimensions, measureGroups).concat(hierarchies),
-                    levelsByHierarchy = {};
 
-                each(levels, function(_, level) {
-                    levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName] || [];
-                    levelsByHierarchy[level.hierarchyName].push(level);
-                });
+            when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).then(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
+                execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASUREGROUPS", localeIdProperty)).done(function(measureGroupsResponse) {
+                    var dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse),
+                        hierarchies = parseDiscoverRowSet(hierarchiesResponse, "HIERARCHY", dimensions),
+                        levels = parseDiscoverRowSet(levelsResponse, "LEVEL", dimensions),
+                        measureGroups = parseMeasureGroupDiscoverRowSet(measureGroupsResponse),
+                        fields = parseDiscoverRowSet(measuresResponse, "MEASURE", dimensions, measureGroups).concat(hierarchies),
+                        levelsByHierarchy = {};
 
-                each(hierarchies, function(_, hierarchy) {
-                    if(levelsByHierarchy[hierarchy.dataField] && levelsByHierarchy[hierarchy.dataField].length > 1) {
-                        hierarchy.groupName = hierarchy.hierarchyName = hierarchy.dataField;
+                    each(levels, function(_, level) {
+                        levelsByHierarchy[level.hierarchyName] = levelsByHierarchy[level.hierarchyName] || [];
+                        levelsByHierarchy[level.hierarchyName].push(level);
+                    });
 
-                        fields.push.apply(fields, levelsByHierarchy[hierarchy.hierarchyName]);
-                    }
-                });
-                result.resolve(fields);
+                    each(hierarchies, function(_, hierarchy) {
+                        if(levelsByHierarchy[hierarchy.dataField] && levelsByHierarchy[hierarchy.dataField].length > 1) {
+                            hierarchy.groupName = hierarchy.hierarchyName = hierarchy.dataField;
+
+                            fields.push.apply(fields, levelsByHierarchy[hierarchy.hierarchyName]);
+                        }
+                    });
+                    result.resolve(fields);
+                }).fail(result.reject);
             }).fail(result.reject);
 
             return result;
