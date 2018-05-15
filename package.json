@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^2.0.34",
-    "angular": "^1.6.8",
+    "angular": "1.7.0",
     "bootstrap": "^3.3.7",
     "cldr-core": "latest",
     "del": "^2.2.2",
