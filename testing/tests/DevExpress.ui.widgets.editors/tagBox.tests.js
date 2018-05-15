@@ -1205,7 +1205,9 @@ QUnit.test("user can return default tag template from the custom function", func
             valueExpr: "id",
             displayExpr: "text",
             value: [1],
-            tagTemplate: "tag"
+            tagTemplate: function() {
+                return "tag";
+            }
         }),
         $tags = $element.find("." + TAGBOX_TAG_CLASS);
 
