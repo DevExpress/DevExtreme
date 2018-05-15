@@ -236,7 +236,7 @@ var Switch = Editor.inherit({
     },
 
     _getItemSizeFunc: function() {
-        return this._$switchContainer.get(0).getBoundingClientRect().width - this._$handle.get(0).getBoundingClientRect().width;
+        return this._$switchContainer.outerWidth(true) - this._$handle.get(0).getBoundingClientRect().width;
     },
 
     _renderSubmitElement: function() {
