@@ -690,9 +690,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
             $cols = $tableElement.find("col");
-            if(!legacyRendering) {
-                styleUtils.setWidth($cols, "auto");
-            }
+            styleUtils.setWidth($cols, "auto");
             columns = columns || this.getColumns(null, $tableElement);
             for(i = 0; i < columns.length; i++) {
                 if(!legacyRendering && columnAutoWidth && !fixed) {
