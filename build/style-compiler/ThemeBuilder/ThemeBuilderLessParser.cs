@@ -93,7 +93,7 @@ namespace StyleCompiler.ThemeBuilder
 
         public static string MinifyLess(string less)
         {
-            less = Regex.Replace(less, "(?<!(url\\s*\\([^\\)\\n]*))//.*", "");
+            less = Regex.Replace(less, "(?<!(url\\s*\\([^\\)\\n]*))(?<!(http[s]?:))//.*", "");
             less = less.Replace("\"", "'");
             less = Regex.Replace(less, "([\\n\\r])", "");
             less = Regex.Replace(less, "\\/\\*(.*?)\\*\\/", "");
