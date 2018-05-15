@@ -5813,6 +5813,48 @@ QUnit.test('Render rows at end when infinite scrolling', function(assert) {
     assert.ok(content.children().eq(0).find('.dx-freespace-row').eq(0).is(":visible"), 'freespace row is visible');
 });
 
+// T630906
+QUnit.test('Render rows at end when infinite scrolling for specific row height', function(assert) {
+    // arrange
+    var options = {
+            items: [
+                { values: [1] },
+                { values: [2] },
+                { values: [3] }
+            ],
+            virtualItemsCount: {
+                begin: 10,
+                end: 7
+            }
+        },
+        dataController = new MockDataController(options),
+        rowsView = this.createRowsView(options.items, dataController),
+        testElement = $('#container');
+
+    // act
+    this.options.scrolling = {
+        useNative: false,
+        timeout: 0,
+        mode: 'infinite'
+    };
+    rowsView._rowHeight = 130;
+    rowsView.render(testElement);
+    rowsView.height(90);
+    rowsView.resize();
+
+    var rowHeight = rowsView._rowHeight;
+    var lastItemIndex;
+
+    dataController.setViewportItemIndex = function(itemIndex) {
+        lastItemIndex = itemIndex;
+    };
+
+    // act
+    rowsView.scrollTo({ y: (rowHeight * 5) - 1 });
+    // assert
+    assert.equal(lastItemIndex, 5, "itemIndex");
+});
+
 // B254821
 QUnit.test('Selection with virtual scrolling after scroll to second page', function(assert) {
     // arrange

@@ -373,7 +373,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._viewportItemIndex = itemIndex;
 
             if(pageSize && (virtualMode || appendMode) && totalItemsCount >= 0) {
-                if(that._viewportSize && itemIndex + that._viewportSize >= totalItemsCount) {
+                if(that._viewportSize >= 0 && itemIndex + that._viewportSize >= totalItemsCount) {
                     if(that._dataSource.hasKnownLastPage()) {
                         newPageIndex = pageCount - 1;
                         lastPageSize = totalItemsCount % pageSize;
