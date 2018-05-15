@@ -22,6 +22,7 @@ require("../integration/knockout");
 * @type_function_param1_field2 model:object
 * @type_function_param1_field3 jQueryEvent:jQuery.Event:deprecated(event)
 * @type_function_param1_field4 event:event
+* @deprecated
 */
 
 /**
@@ -30,6 +31,7 @@ require("../integration/knockout");
 * @type object
 * @module framework/command
 * @export default
+* @deprecated
 */
 var Command = DOMComponent.inherit({
     ctor: function(element, options) {
