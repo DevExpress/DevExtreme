@@ -728,7 +728,14 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
         for(i = 0; i < checkedDates.length; i++) {
             result.push(checkedDates[i]);
         }
-        date = dateUtils.addInterval(date, rule.interval);
+
+        var interval = rule.interval;
+
+        if(Object.keys(interval)[0] === "days") {
+            interval = { weeks: 1 };
+        }
+
+        date = dateUtils.addInterval(date, interval);
     }
 
     return result;
