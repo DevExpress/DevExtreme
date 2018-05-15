@@ -9237,6 +9237,43 @@ QUnit.test("Not create validator for group column with validationRules when edit
     assert.ok(!$rowElement.children(".dx-datagrid-group-space").hasClass("dx-validator"), "no validator in group space cell");
 });
 
+// T631975
+QUnit.test("Required mark should be rendered for column with validationRules when edit mode is 'form'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = that.rowsView,
+        $rowElement,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "lastName",
+            formItem: {
+                isRequired: false
+            },
+            validationRules: [{ type: "required" }]
+        }]
+    });
+
+    // act
+    that.editRow(1);
+
+    // assert
+    $rowElement = $testElement.find("tbody > tr").eq(1);
+    assert.ok($rowElement.hasClass("dx-datagrid-edit-form"), "has edit form");
+    assert.equal($rowElement.find(".dx-validator").length, 2, "validator count");
+    assert.equal($rowElement.find(".dx-field-item").eq(0).find(".dx-field-item-required-mark").length, 1, "required mark in first item");
+    assert.equal($rowElement.find(".dx-field-item").eq(1).find(".dx-field-item-required-mark").length, 0, "no required mark in second item");
+});
+
 // T472946
 QUnit.test("Inserting row - Editor should not be validated when edit mode is 'form'", function(assert) {
     // arrange
