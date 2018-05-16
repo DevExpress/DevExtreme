@@ -5713,7 +5713,7 @@ QUnit.test('Render rows at end when virtual scrolling enabled and rowTemplate is
     };
 
     rowsView.render(testElement);
-    rowsView.height(90);
+    rowsView.height(80);
     rowsView.resize();
 
     var newItems = [
