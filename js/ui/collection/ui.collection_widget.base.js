@@ -259,7 +259,6 @@ var CollectionWidget = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this._expectNextPageLoading();
         this._cleanRenderedItems();
         this._refreshDataSource();
     },

@@ -431,13 +431,12 @@ QUnit.test("itemTemplate should get correct index for second page", function(ass
             pageSize: 1
         });
 
-    new TestComponent($element, {
+    var component = new TestComponent($element, {
         dataSource: ds,
         itemTemplate: itemTemplateMethod
     });
 
-    ds.pageIndex(1);
-    ds.load();
+    component._nextPage();
 
     assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
 });
