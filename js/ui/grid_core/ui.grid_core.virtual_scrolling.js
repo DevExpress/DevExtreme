@@ -560,7 +560,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 that._updateContentPosition();
 
                 viewportHeight = that._hasHeight ? that.element().outerHeight() : $(window).outerHeight();
-                that._dataController.viewportSize(Math.round(viewportHeight / that._rowHeight));
+                that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
             }
         },
 
