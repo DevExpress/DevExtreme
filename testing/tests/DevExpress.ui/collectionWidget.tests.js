@@ -436,7 +436,7 @@ QUnit.test("itemTemplate should get correct index for second page", function(ass
         itemTemplate: itemTemplateMethod
     });
 
-    component._nextPage();
+    component._loadNextPage();
 
     assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
 });

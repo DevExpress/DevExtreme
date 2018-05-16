@@ -266,10 +266,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._editStrategy = new Strategy(this);
     },
 
-    _forgetNextPageLoading: function() {
-        this.callBase();
-    },
-
     _getSelectedItemIndices: function(keys) {
         var that = this,
             indices = [];
@@ -890,6 +886,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             $destinationItem[strategy.itemPlacementFunc(movingIndex, destinationIndex)]($movingItem);
 
             strategy.moveItemAtIndexToIndex(movingIndex, destinationIndex);
+            this._updateIndicesAfterIndex(movingIndex);
             that.option("selectedItems", that._getItemsByKeys(that._selection.getSelectedItemKeys(), that._selection.getSelectedItems()));
 
             if(changingOption === "items") {
