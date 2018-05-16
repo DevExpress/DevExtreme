@@ -14,7 +14,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date");
 
 require("ui/data_grid/ui.data_grid");
-require("../../../vendor/template-engines/hogan-2.0.0.js");
+window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
 setTemplateEngine("hogan");
 
 $("body").addClass("dx-viewport");
