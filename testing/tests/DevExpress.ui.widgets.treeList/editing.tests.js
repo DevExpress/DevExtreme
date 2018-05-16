@@ -671,3 +671,35 @@ QUnit.test("Edit row with useIcons is true", function(assert) {
     assert.strictEqual($editCellElement.find(".dx-icon-add").attr("title"), "Add", "title of the icon add");
     assert.strictEqual($editCellElement.find(".dx-icon-add").text(), "", "text of the icon add");
 });
+
+// T633865
+QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as functions", function(assert) {
+    // arrange
+    var $rowElements,
+        $testElement = $('#treeList');
+
+    this.options.rootValue = 0;
+    this.options.dataSource = this.options.dataSource.store.data;
+    this.options.keyExpr = function(data) { return data["id"]; };
+    this.options.parentIdExpr = function(data, value) {
+        if(arguments.length === 1) {
+            return data["parentId"];
+        }
+        data["parentId"] = value;
+    };
+    this.options.editing = {
+        mode: "cell",
+        allowAdding: true
+    };
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // act
+    this.addRow();
+
+    // assert
+    $rowElements = $testElement.find("tbody > .dx-data-row");
+    assert.equal($rowElements.length, 2, "count data row");
+    assert.ok($rowElements.first().hasClass("dx-row-inserted"), "insert row");
+    assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
+});
