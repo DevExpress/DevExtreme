@@ -354,10 +354,9 @@ var BaseRenderingStrategy = Class.inherit({
                     intersectPositionCount = indexes.length;
                 }
             } else {
-                var removeIndex = this._findIndexByKey(stack, "i", "j", current.i, current.j),
-                resultItem = stack[removeIndex];
+                var removeIndex = this._findIndexByKey(stack, "i", "j", current.i, current.j), resultItem = stack[removeIndex];
                 stack.splice(removeIndex, 1);
-                if(resultItem.length !== 0){
+                if(resultItem.length !== 0) {
                     indexes[resultItem.index] = false;
                     intersectPositions.push(resultItem);
                 }
