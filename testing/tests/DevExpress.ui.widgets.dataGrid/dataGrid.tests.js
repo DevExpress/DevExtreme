@@ -1174,6 +1174,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     // assert
     rowHeight = rowsView._rowHeight;
     assert.ok(rowHeight > 50, "rowHeight > 50");
+    assert.strictEqual(instance.getVisibleRows().length, 6, "row count");
 
     setTimeout(function() {
         // arrange
@@ -2913,9 +2914,9 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(visibleRows.length, 12, "visible row count");
     assert.equal(visibleRows[0].key, 3, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 12, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
 
     clock.restore();
 });
@@ -2979,9 +2980,9 @@ QUnit.test("visible items should be rendered if virtual scrolling and preload ar
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 14, "visible row count");
+    assert.equal(visibleRows.length, 15, "visible row count");
     assert.equal(visibleRows[0].key, 1, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 15, "last visible row key");
 
     clock.restore();
 });
