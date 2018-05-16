@@ -48,6 +48,10 @@ var TestComponent = CollectionWidget.inherit({
         return this.$element();
     },
 
+    _allowDynamicItemsAppend: function() {
+        return true;
+    },
+
     _createActionByOption: function(optionName, config) {
         this.__actionConfigs[optionName] = config;
         return this.callBase.apply(this, arguments);
@@ -436,6 +440,22 @@ QUnit.test("itemTemplate should get correct index for second page", function(ass
     ds.load();
 
     assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
+});
+
+QUnit.test("data item indices should be recalculated after item delete", function(assert) {
+    var component = new TestComponent($("#cmp"), {
+        items: ["Item 1", "Item 2", "Item 3"]
+    });
+
+    component.deleteItem(component.itemElements().eq(0));
+
+    var $itemElements = component.itemElements();
+
+    assert.equal($itemElements.eq(0).data("dxItemIndex"), 0, "second item became first");
+    assert.equal($itemElements.eq(0).data("123"), "Item 2", "first item text is correct");
+
+    assert.equal($itemElements.eq(1).data("dxItemIndex"), 1, "third item became second");
+    assert.equal($itemElements.eq(1).data("123"), "Item 3", "second item text is correct");
 });
 
 QUnit.test("No data text message - no items and source", function(assert) {

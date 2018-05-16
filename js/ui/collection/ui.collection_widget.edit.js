@@ -724,6 +724,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._selection.deselect([key]);
     },
 
+    _updateIndicesAfterIndex: function(index) {
+        var itemElements = this._itemElements();
+        for(var i = index + 1; i < itemElements.length; i++) {
+            $(itemElements[i]).data(this._itemIndexKey(), i - 1);
+        }
+    },
+
     _simulateOptionChange: function(optionName) {
         var optionValue = this.option(optionName);
 
@@ -823,6 +830,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 var deletedActionArgs = that._extendActionArgs($item);
                 that._deleteItemFromDS($item).done(function() {
                     that._updateSelectionAfterDelete(index);
+                    that._updateIndicesAfterIndex(index);
                     that._editStrategy.deleteItemAtIndex(index);
                     that._simulateOptionChange(changingOption);
                     that._itemEventHandler($item, "onItemDeleted", deletedActionArgs, {

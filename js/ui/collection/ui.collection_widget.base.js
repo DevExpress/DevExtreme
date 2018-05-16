@@ -259,6 +259,7 @@ var CollectionWidget = Widget.inherit({
     _init: function() {
         this.callBase();
 
+        this._expectNextPageLoading();
         this._cleanRenderedItems();
         this._refreshDataSource();
     },
@@ -863,6 +864,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
+        index = this._renderedItemsCount + index;
+
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
@@ -870,15 +873,13 @@ var CollectionWidget = Widget.inherit({
         this._attachItemClickEvent(itemData, $itemFrame);
         var $itemContent = this._getItemContent($itemFrame);
 
-        var pageSize = (this._dataSource && this._dataSource.pageSize()) || 0,
-            pageIndex = (this._dataSource && this._dataSource.pageIndex()) || 0,
-            renderContentPromise = this._renderItemContent({
-                index: pageIndex * pageSize + index,
-                itemData: itemData,
-                container: getPublicElement($itemContent),
-                contentClass: this._itemContentClass(),
-                defaultTemplateName: this.option("itemTemplate")
-            });
+        var renderContentPromise = this._renderItemContent({
+            index: index,
+            itemData: itemData,
+            container: getPublicElement($itemContent),
+            contentClass: this._itemContentClass(),
+            defaultTemplateName: this.option("itemTemplate")
+        });
 
         var that = this;
         when(renderContentPromise).done(function($itemContent) {
