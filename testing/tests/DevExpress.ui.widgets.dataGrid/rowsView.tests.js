@@ -5821,11 +5821,7 @@ QUnit.test('Render rows at end when infinite scrolling for specific row height',
                 { values: [1] },
                 { values: [2] },
                 { values: [3] }
-            ],
-            virtualItemsCount: {
-                begin: 10,
-                end: 7
-            }
+            ]
         },
         dataController = new MockDataController(options),
         rowsView = this.createRowsView(options.items, dataController),
@@ -5837,22 +5833,13 @@ QUnit.test('Render rows at end when infinite scrolling for specific row height',
         timeout: 0,
         mode: 'infinite'
     };
-    rowsView._rowHeight = 130;
+
     rowsView.render(testElement);
-    rowsView.height(90);
+    rowsView.height(15);
     rowsView.resize();
 
-    var rowHeight = rowsView._rowHeight;
-    var lastItemIndex;
-
-    dataController.setViewportItemIndex = function(itemIndex) {
-        lastItemIndex = itemIndex;
-    };
-
-    // act
-    rowsView.scrollTo({ y: (rowHeight * 5) - 1 });
     // assert
-    assert.equal(lastItemIndex, 5, "itemIndex");
+    assert.equal(dataController.viewportSize(), 1, "viewportSize");
 });
 
 // B254821

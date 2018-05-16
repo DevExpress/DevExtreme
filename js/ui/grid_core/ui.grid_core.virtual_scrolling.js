@@ -482,9 +482,9 @@ var VirtualScrollingRowsViewExtender = (function() {
 
 
             if(virtualItemsCount && scrollTop >= beginHeight && scrollTop <= beginHeight + that._contentTableHeight) {
-                that._dataController.setViewportItemIndex(Math.ceil(virtualItemsCount.begin + (scrollTop - beginHeight) / rowHeight));
+                that._dataController.setViewportItemIndex(virtualItemsCount.begin + (scrollTop - beginHeight) / rowHeight);
             } else {
-                that._dataController.setViewportItemIndex(Math.ceil(scrollTop / (rowHeight * heightRatio)));
+                that._dataController.setViewportItemIndex(scrollTop / (rowHeight * heightRatio));
             }
         },
 
