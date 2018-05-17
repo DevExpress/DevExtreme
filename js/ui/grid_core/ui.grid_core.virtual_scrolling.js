@@ -782,6 +782,7 @@ module.exports = {
                         }
                     },
                     _updateItemsCore: function(change) {
+                        var delta = this.getRowIndexDelta();
                         this.callBase.apply(this, arguments);
                         var rowsScrollController = this._rowsScrollController;
 
@@ -806,7 +807,13 @@ module.exports = {
                                             visibleItems.splice(rowIndex, 1);
                                         }
                                     });
+                                } else {
+                                    visibleItems.forEach((item, index) => {
+                                        visibleItems[index] = this._items[index + delta] || visibleItems[index];
+                                    });
+                                    change.items = visibleItems;
                                 }
+
                                 visibleItems.forEach((item, index) => {
                                     item.rowIndex = index;
                                 });
@@ -851,12 +858,14 @@ module.exports = {
                         return this._visibleItems || this._items;
                     },
                     getRowIndexDelta: function() {
-                        var visibleItems = this._visibleItems;
+                        var visibleItems = this._visibleItems,
+                            delta = 0;
 
-                        if(visibleItems) {
-                            return visibleItems && visibleItems[0] && this._items.indexOf(visibleItems[0]) || 0;
+                        if(visibleItems && visibleItems[0]) {
+                            delta = this._items.indexOf(visibleItems[0]);
                         }
-                        return 0;
+
+                        return delta < 0 ? 0 : delta;
                     },
                     getRowIndexOffset: function() {
                         var offset = 0,
