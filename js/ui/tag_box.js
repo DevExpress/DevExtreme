@@ -467,10 +467,6 @@ var TagBox = SelectBox.inherit({
         });
     },
 
-    _initDataExpressions: function() {
-        this.callBase();
-    },
-
     _multiTagPreparingHandler: function(args) {
         var selectedCount = this._getValue().length;
 
