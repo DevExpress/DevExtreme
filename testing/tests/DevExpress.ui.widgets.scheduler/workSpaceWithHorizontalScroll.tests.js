@@ -260,7 +260,7 @@ QUnit.test("SideBar scrollable should contain timePanel and groupTable, groupOri
         scrollableContent = sidebarScrollable.$content();
 
     assert.equal(scrollableContent.find(".dx-scheduler-time-panel").length, 1, "Time panel exists");
-    assert.equal(scrollableContent.find(".dx-scheduler-work-space-horizontal-group-table").length, 1, "Group table exists");
+    assert.equal(scrollableContent.find(".dx-scheduler-work-space-vertical-group-table").length, 1, "Group table exists");
 });
 
 QUnit.test("the 'getCellIndexByCoordinates' method should return a right result, groupOrientation = vertical", function(assert) {

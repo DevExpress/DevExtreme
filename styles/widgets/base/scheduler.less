@@ -331,7 +331,7 @@
 
 .dx-scheduler-vertical-group-table-mixin() {
     .set-size(@size) {
-        .dx-scheduler-work-space-horizontal-group-table {
+        .dx-scheduler-work-space-vertical-group-table {
             width: @size;
         }
 
@@ -2363,7 +2363,7 @@
     .dx-scheduler-work-space-vertical-grouped {
         .dx-scheduler-vertical-group-table-mixin();
 
-        .dx-scheduler-work-space-horizontal-group-table {
+        .dx-scheduler-work-space-vertical-group-table {
             float: left;
             height: 100%;
             min-height: 100px;
@@ -2511,7 +2511,7 @@
     }
 
     .dx-rtl {
-        .dx-scheduler-work-space-horizontal-group-table {
+        .dx-scheduler-work-space-vertical-group-table {
             border-right: none;
             border-left: @SCHEDULER_BASE_BORDER;
         }
@@ -2555,7 +2555,7 @@
             margin-left: 0;
         }
 
-        .dx-scheduler-work-space-horizontal-group-table,
+        .dx-scheduler-work-space-vertical-group-table,
         .dx-scheduler-time-panel {
             float: right;
         }
