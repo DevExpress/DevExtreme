@@ -654,6 +654,7 @@ var TagBox = SelectBox.inherit({
 
     _clearTextValue: function() {
         this._input().val("");
+        this._toggleEmptinessEventHandler();
     },
 
     _focusInHandler: function(e) {

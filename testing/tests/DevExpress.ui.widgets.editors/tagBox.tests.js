@@ -1100,6 +1100,20 @@ QUnit.test("placeholder is hidden after tag is removed if the search value is ex
     assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
+QUnit.test("placeholder should be restored after focusout in Angular", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3],
+            searchEnabled: true
+        }),
+        $placeholder = $tagBox.find(".dx-placeholder"),
+        $input = $tagBox.find(".dx-texteditor-input");
+
+    keyboardMock($input).type("5");
+    $input.trigger("blur");
+    $input.trigger("focusout");
+
+    assert.ok($placeholder.is(":visible"), "placeholder is visible");
+});
 
 QUnit.module("tag template", moduleSetup);
 
