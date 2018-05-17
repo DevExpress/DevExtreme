@@ -11,7 +11,7 @@ var $ = require("jquery"),
     viewPortChanged = viewPort.changeCallback,
     resizeCallbacks = require("core/utils/resize_callbacks"),
     config = require("core/config"),
-    errors = require("core/errors");
+    errors = require("ui/widget/ui.errors");
 
 var userAgents = {
     iphone_6: "Mozilla/5.0 (iPhone; CPU OS 6_0_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25",

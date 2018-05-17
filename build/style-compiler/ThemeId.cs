@@ -18,7 +18,7 @@ namespace StyleCompiler
         {
             get
             {
-                var result = Theme + "-" + ColorScheme;
+                var result = Theme + "-" + ColorScheme.Replace(".", "-");
                 if (!LessRegistry.IsDefaultSizeScheme(SizeScheme))
                     result += "-" + SizeScheme;
                 return result;

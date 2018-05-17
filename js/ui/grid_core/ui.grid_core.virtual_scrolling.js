@@ -232,7 +232,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         "getVirtualContentSize",
         "setContentSize", "setViewportPosition",
         "getViewportItemIndex", "setViewportItemIndex",
-        "viewportSize", "viewportItemSize",
+        "viewportSize", "viewportItemSize", "getItemSize",
         "pageIndex", "beginPageIndex", "endPageIndex",
         "loadIfNeed"
     ].forEach(function(name) {
@@ -274,7 +274,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 scrollPosition;
 
             if(isVirtualMode(that) || isAppendMode(that)) {
-                scrollPosition = pageIndex * that._rowHeight * pageSize;
+                scrollPosition = pageIndex * pageSize * dataController.getItemSize();
             } else {
                 scrollPosition = 0;
             }
@@ -293,7 +293,11 @@ var VirtualScrollingRowsViewExtender = (function() {
             if(dataSource && e) {
                 var itemCount = e.items ? e.items.length : 20;
                 var viewportSize = that._dataController.viewportSize() || 20;
-                dataSource._renderTime = (new Date() - startRenderDate) * viewportSize / itemCount;
+                if(isVirtualRowRendering(that)) {
+                    dataSource._renderTime = (new Date() - startRenderDate) * viewportSize / itemCount;
+                } else {
+                    dataSource._renderTime = (new Date() - startRenderDate);
+                }
             }
         },
 
@@ -886,12 +890,16 @@ module.exports = {
                         return dataSource && dataSource.viewportItemSize.apply(dataSource, arguments);
                     },
                     setViewportPosition: function() {
-                        var rowsScrollController = this._rowsScrollController;
+                        var rowsScrollController = this._rowsScrollController,
+                            dataSource = this._dataSource;
 
-                        rowsScrollController && rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments);
-
-                        var dataSource = this._dataSource;
-                        return dataSource && dataSource.setViewportPosition.apply(dataSource, arguments);
+                        if(rowsScrollController) {
+                            rowsScrollController.setViewportPosition.apply(rowsScrollController, arguments).done(function() {
+                                dataSource && dataSource.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
+                            });
+                        } else {
+                            dataSource && dataSource.setViewportPosition.apply(dataSource, arguments);
+                        }
                     },
                     setContentSize: function(sizes) {
                         var rowsScrollController = this._rowsScrollController;
@@ -899,9 +907,18 @@ module.exports = {
 
                         rowsScrollController && rowsScrollController.setContentSize(sizes);
 
-                        var delta = this.getRowIndexDelta();
                         var dataSource = this._dataSource;
-                        return dataSource && dataSource.setContentSize(sizes, delta);
+                        return dataSource && dataSource.setContentSize(sizes);
+                    },
+                    getItemSize: function() {
+                        var rowsScrollController = this._rowsScrollController;
+
+                        if(rowsScrollController) {
+                            return rowsScrollController.getItemSize.apply(rowsScrollController, arguments);
+                        }
+
+                        var dataSource = this._dataSource;
+                        return dataSource && dataSource.getItemSize.apply(dataSource, arguments);
                     },
                     getContentOffset: function() {
                         var rowsScrollController = this._rowsScrollController;

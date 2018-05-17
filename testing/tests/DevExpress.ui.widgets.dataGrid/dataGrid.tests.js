@@ -5251,6 +5251,28 @@ QUnit.test("rtlEnabled change", function(assert) {
     assert.ok($(dataGrid.$element()).hasClass("dx-rtl"), "dx-rtl class added");
 });
 
+// T628787
+QUnit.test("rtlEnabled change after scroll", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: [{}, {}, {}, {}],
+        columns: ["test"],
+        height: 50,
+        loadingTimeout: undefined,
+        scrolling: {
+            useNative: false
+        }
+    });
+
+    dataGrid.getScrollable().scrollTo(10);
+
+    // act
+    dataGrid.option("rtlEnabled", true);
+
+    // assert
+    assert.ok($(dataGrid.$element()).hasClass("dx-rtl"), "dx-rtl class added");
+});
+
 // T288385
 QUnit.test("disabled change", function(assert) {
     // arrange, act
@@ -7373,6 +7395,174 @@ QUnit.test("synchronous render and asynchronous updateDimensions during paging i
     // assert
     assert.equal(resizingController.updateDimensions.callCount, 1, "updateDimensions is called with timeout");
     assert.equal(contentReadyCount, 1, "contentReady is called with timeout");
+});
+
+
+var createLargeDataSource = function(count) {
+    return {
+        load: function(options) {
+            var items = [];
+            for(var i = options.skip; i < options.skip + options.take && i < count; i++) {
+                items.push({ id: i + 1 });
+            }
+            return $.Deferred().resolve({ data: items, totalCount: count });
+        }
+    };
+};
+
+
+QUnit.test("scroll position should not be changed after change sorting if row count is large and virtual scrolling is enabled", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: createLargeDataSource(1000000),
+        remoteOperations: true,
+        height: 500,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.clock.tick(300);
+
+    dataGrid.pageIndex(1000);
+    this.clock.tick(300);
+    var scrollTop = dataGrid.getScrollable().scrollTop();
+
+    // act
+    dataGrid.columnOption("id", "sortOrder", "desc");
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 20 * 1000 + 1, "first visible row is correct");
+    assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, "scroll top is not changed");
+});
+
+QUnit.test("scroll to next page several times should works correctly if virtual scrolling is enabled", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: createLargeDataSource(1000000),
+        remoteOperations: true,
+        showColumnHeaders: false,
+        height: 500,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.clock.tick(300);
+
+    var scrollable = dataGrid.getScrollable();
+
+    for(var pos = 101; pos <= 2501; pos += 100) {
+        scrollable.scrollTo(pos);
+        this.clock.tick(300);
+    }
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row is correct");
+    assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
+});
+
+QUnit.test("scroll to far should works correctly if rendering time is large and virtual scrolling and rendering are enabled", function(assert) {
+    // arrange, act
+    var clock = this.clock,
+        dataGrid = createDataGrid({
+            dataSource: createLargeDataSource(1000),
+            remoteOperations: true,
+            height: 500,
+            onRowPrepared: function(e) {
+                $(e.rowElement).css("height", 50);
+                clock.tick(50);
+            },
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual",
+                useNative: false
+            }
+        });
+
+    clock.tick(300);
+
+    // act
+    dataGrid.getScrollable().scrollTo(2500);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, "first visible row is correct");
+
+    // act
+    clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row is correct");
+});
+
+QUnit.test("scroll should be asynchronous if row rendering time is middle and virtual scrolling is enabled", function(assert) {
+    // arrange, act
+    var clock = this.clock,
+        dataGrid = createDataGrid({
+            dataSource: createLargeDataSource(1000),
+            remoteOperations: true,
+            height: 500,
+            onRowPrepared: function(e) {
+                $(e.rowElement).css("height", 50);
+                clock.tick(5);
+            },
+            scrolling: {
+                mode: "virtual",
+                useNative: false
+            }
+        });
+
+    clock.tick(300);
+
+    // act
+    dataGrid.getScrollable().scrollTo(5000);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, "first visible row is not changed");
+
+    // act
+    clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 101, "first visible row is correct");
+});
+
+QUnit.test("scroll should be synchronous if row rendering time is middle and virtual scrolling and rendering are enabled", function(assert) {
+    // arrange, act
+    var clock = this.clock,
+        dataGrid = createDataGrid({
+            dataSource: createLargeDataSource(1000),
+            remoteOperations: true,
+            height: 500,
+            onRowPrepared: function(e) {
+                $(e.rowElement).css("height", 50);
+                clock.tick(5);
+            },
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual",
+                useNative: false
+            }
+        });
+
+    clock.tick(300);
+
+    // act
+    dataGrid.getScrollable().scrollTo(5000);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 101, "first visible row is changed");
 });
 
 // T551304

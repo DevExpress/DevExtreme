@@ -63,8 +63,11 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             }
         }
 
-        var newFirstIndex = rowCount * firstColumn + firstRow,
-            newLastIndex = rowCount * lastColumn + lastRow;
+        var lastCellGroup = this.getCellData($last).groups,
+            indexesDifference = this.option("showAllDayPanel") && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
+
+        var newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference,
+            newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
 
         if(newFirstIndex > newLastIndex) {
             var buffer = newFirstIndex;

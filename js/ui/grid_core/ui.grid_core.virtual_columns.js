@@ -8,12 +8,13 @@ var DEFAULT_COLUMN_WIDTH = 50;
 var VirtualScrollingRowsViewExtender = {
     _handleScroll: function(e) {
         var that = this,
+            scrollable = this.getScrollable(),
             left = e.scrollOffset.left;
 
         that.callBase.apply(that, arguments);
 
-        if(that.option("rtlEnabled")) {
-            left = e.component.$content().width() - e.component.$element().width() - left;
+        if(that.option("rtlEnabled") && scrollable) {
+            left = scrollable.$content().width() - scrollable.$element().width() - left;
         }
 
         that._columnsController.setScrollPosition(left);
@@ -110,7 +111,7 @@ var ColumnsControllerExtender = (function() {
 
                 that._changedTimeout = setTimeout(function() {
                     that._setScrollPositionCore(position);
-                }, Math.max(renderingThreshold, 100 || that.option("scrolling.timeout")));
+                }, that.option("scrolling.timeout"));
             } else {
                 that._setScrollPositionCore(position);
             }
@@ -230,7 +231,7 @@ module.exports = {
                  */
                 columnRenderingMode: "standard",
                 columnPageSize: 5,
-                columnRenderingThreshold: 500
+                columnRenderingThreshold: 300
             }
         };
     },

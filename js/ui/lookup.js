@@ -18,7 +18,8 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     Popover = require("./popover"),
     TextBox = require("./text_box"),
-    ChildDefaultTemplate = require("./widget/child_default_template");
+    ChildDefaultTemplate = require("./widget/child_default_template"),
+    translator = require("../animation/translator");
 
 var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_SEARCH_CLASS = "dx-lookup-search",
@@ -38,6 +39,12 @@ var POPUP_OPTION_MAP = {
     "popupWidth": "width",
     "popupHeight": "height"
 };
+
+
+var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+
+var MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
+var MATERIAL_LOOKUP_LIST_PADDING = 8;
 
 
 /**
@@ -377,7 +384,7 @@ var Lookup = DropDownList.inherit({
             * @default false
             * @inheritdoc
             */
-            focusStateEnabled: false
+            focusStateEnabled: false,
 
             /**
             * @name dxLookupOptions.onValueChanged
@@ -503,7 +510,6 @@ var Lookup = DropDownList.inherit({
             * @hidden
             * @inheritdoc
             */
-
             /**
             * @name dxLookupOptions.applyValueMode
             * @publicName applyValueMode
@@ -511,6 +517,8 @@ var Lookup = DropDownList.inherit({
             * @hidden false
             * @inheritdoc
             */
+
+            _scrollToSelectedItemEnabled: false
         });
     },
 
@@ -623,6 +631,71 @@ var Lookup = DropDownList.inherit({
                 options: {
                     useInkRipple: true
                 }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+
+                    /**
+                    * @name dxLookupOptions.usePopover
+                    * @publicName usePopover
+                    * @type boolean
+                    * @default false @for Material
+                    */
+                    usePopover: false,
+
+                    /**
+                    * @name dxLookupOptions.closeOnOutsideClick
+                    * @publicName closeOnOutsideClick
+                    * @type boolean|function
+                    * @default true @for Material
+                    * @type_function_return boolean
+                    */
+                    closeOnOutsideClick: true,
+
+                    popupWidth: (function() { return $(this.element()).outerWidth(); }).bind(this),
+                    popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
+
+                    /**
+                    * @name dxLookupOptions.searchEnabled
+                    * @publicName searchEnabled
+                    * @type boolean
+                    * @default false @for Material
+                    */
+                    searchEnabled: false,
+
+                    /**
+                    * @name dxLookupOptions.showCancelButton
+                    * @publicName showCancelButton
+                    * @type boolean
+                    * @default false @for Material
+                    */
+                    showCancelButton: false,
+
+                    /**
+                    * @name dxLookupOptions.showPopupTitle
+                    * @publicName showPopupTitle
+                    * @type boolean
+                    * @default false @for Material
+                    */
+                    showPopupTitle: false,
+
+                    /**
+                    * @name dxLookupOptions.position
+                    * @publicName position
+                    * @type positionConfig
+                    * @default { my: 'left top', at: 'left top', of: lookupContainer } @for Material
+                    */
+                    position: {
+                        my: "left top",
+                        at: "left top",
+                        of: this.element()
+                    },
+
+                    _scrollToSelectedItemEnabled: true
+                }
             }
         ]);
     },
@@ -693,6 +766,14 @@ var Lookup = DropDownList.inherit({
         this._inkRipple = inkRipple.render();
     },
 
+    _toggleOpenState: function() {
+        this.callBase();
+
+        if(this.option("_scrollToSelectedItemEnabled")) {
+            this._setPopupPosition();
+        }
+    },
+
     _toggleActiveState: function($element, value, e) {
         this.callBase.apply(this, arguments);
 
@@ -751,6 +832,7 @@ var Lookup = DropDownList.inherit({
         }
 
         this.callBase.apply(this, arguments);
+
         if(this.option("cleanSearchOnOpening")) {
             if(this.option("searchEnabled") && this._searchBox.option("value")) {
                 this._searchBox.option("value", "");
@@ -758,8 +840,51 @@ var Lookup = DropDownList.inherit({
             }
             this._list && this._list.option("focusedElement", null);
         }
+    },
 
-        this._attachSearchChildProcessor();
+    _scrollToSelectedItem: function() {
+        var selectedIndex = this._list.option("selectedIndex"),
+            listItems = this._list.option("items"),
+            itemsCount = listItems.length;
+
+        if(itemsCount !== 0) {
+            if(this._list.option("grouped")) {
+                this._list.scrollToItem({ group: itemsCount - 1, item: listItems[itemsCount - 1].items.length - 1 });
+            } else {
+                this._list.scrollToItem(itemsCount - 1);
+            }
+
+            this._list.scrollToItem(selectedIndex);
+        }
+    },
+
+    _setPopupPosition: function() {
+        var selectedIndex = this._list.option("selectedIndex");
+        if(selectedIndex === -1) return;
+
+        var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
+            differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
+            popupContentParent = $(this._popup.content()).parent(),
+            differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top,
+            lookupTop = $(this.element()).offset().top,
+            popupOffsetY = differenceOfHeights;
+
+        if(lookupTop > differenceOfOffsets) {
+            popupOffsetY += differenceOfOffsets;
+        } else {
+            this._scrollToSelectedItem();
+        }
+
+        var position = translator.locate(popupContentParent);
+
+        translator.move(popupContentParent, {
+            left: 0,
+            top: position.top - popupOffsetY
+        });
+    },
+
+    _getPopupHeight: function(listItemsCount) {
+        return (this._list && this._list.itemElements()) ? (this._list.itemElements().height() * listItemsCount) + MATERIAL_LOOKUP_LIST_PADDING * 2 : "auto";
     },
 
     _renderPopup: function() {
@@ -802,6 +927,14 @@ var Lookup = DropDownList.inherit({
     _popupHidingHandler: function() {
         this.callBase();
         this.option("focusStateEnabled") && this.focus();
+    },
+
+    _popupHiddenHandler: function() {
+        this.callBase();
+
+        if(this.option("_scrollToSelectedItemEnabled")) {
+            translator.resetPosition($(this._popup.content()).parent());
+        }
     },
 
     _preventFocusOnPopup: commonUtils.noop,
@@ -1192,6 +1325,7 @@ var Lookup = DropDownList.inherit({
                 this._setListOption("pageLoadMode", this.option("pageLoadMode"));
                 break;
             case "cleanSearchOnOpening":
+            case "_scrollToSelectedItemEnabled":
                 break;
             default:
                 this.callBase.apply(this, arguments);

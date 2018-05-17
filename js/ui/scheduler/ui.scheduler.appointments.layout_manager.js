@@ -32,7 +32,7 @@ var AppointmentLayoutManager = Class.inherit({
 
     getGroupOrientation: function(options) {
         if(this.instance._workSpace) {
-            options.callback(this.instance._workSpace.option("groupOrientation"));
+            options.callback(this.instance._workSpace._getRealGroupOrientation());
         }
     },
 

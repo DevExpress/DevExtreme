@@ -923,6 +923,80 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.option("filterValue"), ["field", "=", 1]);
     });
 
+    QUnit.test("Load filterValues of columns from state when filterSyncEnabled = true & filterValue is undefined", function(assert) {
+        // arrange, act
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: true,
+            columns: ["field", "field2"],
+            filterValue: null,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        columns: [{
+                            dataField: "field",
+                            filterValue: 2,
+                            selectedFilterOperation: ">"
+                        }, {
+                            dataField: "field2",
+                            filterValues: [2, 3],
+                            filterType: "exclude"
+                        }]
+                    };
+                },
+                customSave: function() {
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.columnOption("field", "filterValue"), 2);
+        assert.strictEqual(dataGrid.columnOption("field", "selectedFilterOperation"), ">");
+        assert.deepEqual(dataGrid.columnOption("field2", "filterValues"), [2, 3]);
+        assert.strictEqual(dataGrid.columnOption("field2", "filterType"), "exclude");
+        assert.deepEqual(dataGrid.option("filterValue"), [["field", ">", 2], "and", ["field2", "noneof", [2, 3]]]);
+    });
+
+    QUnit.test("Load filterValues of columns from state when filterSyncEnabled = false & filterValue is undefined", function(assert) {
+        // arrange, act
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: false,
+            columns: ["field", "field2"],
+            filterValue: null,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        columns: [{
+                            dataField: "field",
+                            filterValue: 2,
+                            selectedFilterOperation: ">"
+                        }, {
+                            dataField: "field2",
+                            filterValues: [2, 3],
+                            filterType: "exclude"
+                        }]
+                    };
+                },
+                customSave: function() {
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.columnOption("field", "filterValue"), 2);
+        assert.strictEqual(dataGrid.columnOption("field", "selectedFilterOperation"), ">");
+        assert.deepEqual(dataGrid.columnOption("field2", "filterValues"), [2, 3]);
+        assert.strictEqual(dataGrid.columnOption("field2", "filterType"), "exclude");
+        assert.deepEqual(dataGrid.option("filterValue"), null);
+    });
+
     QUnit.test("Update state when applying filterValue", function(assert) {
         var customSaveSpy = sinon.spy(),
             dataGrid = this.initDataGrid({
@@ -943,7 +1017,7 @@ QUnit.module("Real dataGrid", {
     });
 });
 
-QUnit.module("Custom operations texts", {
+QUnit.module("Custom operations", {
     beforeEach: function() {
         this.getAnyOfOperation = function(field, dataSource) {
             var dataGrid = $("#container").dxDataGrid({
@@ -1147,5 +1221,24 @@ QUnit.module("Custom operations texts", {
 
         // assert
         assert.equal(result, "100 - 200");
+    });
+
+    QUnit.test("anyof editor", function(assert) {
+        // arrange
+        var result,
+            $container = $("<div>"),
+            field = {
+                dataField: "field",
+            },
+            anyOfOperation = this.getAnyOfOperation(field);
+
+        // act
+        result = anyOfOperation.editorTemplate({
+            value: [1],
+            field: field
+        }, $container);
+
+        // assert
+        assert.equal($container.text(), "1");
     });
 });

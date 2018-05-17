@@ -1926,6 +1926,47 @@ QUnit.testStart(function() {
         $($table).trigger($.Event("dxpointerup", { target: cell, which: 1 }));
     });
 
+    QUnit.test("Multiple selected cells should have focused class in vertical grouped Workspace Week", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+                focusStateEnabled: true,
+                currentDate: new Date(2018, 4, 21),
+                groupOrientation: "vertical",
+                endDayHour: 2
+            }),
+            instance = $element.dxSchedulerWorkSpaceWeek("instance");
+
+        stubInvokeMethod(instance);
+
+        instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var cells = $element.find("." + CELL_CLASS),
+            cell = cells.eq(14).get(0),
+            $table = $element.find(".dx-scheduler-date-table");
+
+        pointerMock(cells.eq(0)).start().click();
+
+        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(0).get(0), which: 1, pointerType: "mouse" }));
+
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+
+        assert.equal(cells.filter(".dx-state-focused").length, 3, "right quantity of focused cells");
+        assert.ok(cells.eq(0).hasClass("dx-state-focused"), "right first focused cell");
+        assert.ok(cells.eq(14).hasClass("dx-state-focused"), "right last focused cell");
+
+        $($element).trigger("focusout");
+        cell = cells.eq(42).get(0);
+
+        pointerMock(cells.eq(28)).start().click();
+
+        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(28).get(0), which: 1, pointerType: "mouse" }));
+
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+
+        assert.equal(cells.filter(".dx-state-focused").length, 3, "right quantity of focused cells");
+        assert.ok(cells.eq(28).hasClass("dx-state-focused"), "right first focused cell");
+        assert.ok(cells.eq(42).hasClass("dx-state-focused"), "right last focused cell");
+    });
+
     QUnit.test("Workspace with groups should allow select cells within one group via mouse", function(assert) {
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
                 focusStateEnabled: true,

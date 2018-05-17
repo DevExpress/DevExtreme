@@ -208,7 +208,7 @@ var Widget = DOMComponent.inherit({
             /**
             * @name format
             * @publicName format
-            * @type Enums.Format|function|Object
+            * @type Enums.Format|string|function|Object
             * @type_function_param1 value:number|date
             * @type_function_return string
             * @default undefined

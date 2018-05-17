@@ -611,6 +611,28 @@ testComponentDefaults(Lookup,
     }
 );
 
+testComponentDefaults(Lookup,
+    {},
+    {
+        usePopover: false,
+        closeOnOutsideClick: true,
+        searchEnabled: false,
+        showCancelButton: false,
+        showPopupTitle: false,
+        position: {
+            my: "left top",
+            at: "left top"
+        }
+    },
+    function() {
+        this.originalCurrentTheme = themes.current();
+        themes.current("material.blue.light");
+    },
+    function() {
+        themes.current(this.originalCurrentTheme);
+    }
+);
+
 
 testComponentDefaults(Popup,
     {},

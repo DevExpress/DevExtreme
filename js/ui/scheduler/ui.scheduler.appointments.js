@@ -565,6 +565,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
             area: this._calculateResizableArea(itemSetting, appointmentData),
             onResizeStart: (function(e) {
                 this._$currentAppointment = $(e.element);
+
+                if(this.invoke("needRecalculateResizableArea")) {
+                    var updatedArea = this._calculateResizableArea(this._$currentAppointment.data("dxAppointmentSettings"), this._$currentAppointment.data("dxItemData"));
+
+                    e.component.option("area", updatedArea);
+                    e.component._renderDragOffsets(e.event);
+                }
+
                 this._initialSize = { width: e.width, height: e.height };
                 this._initialCoordinates = translator.locate(this._$currentAppointment);
             }).bind(this),

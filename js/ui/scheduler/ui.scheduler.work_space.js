@@ -426,19 +426,23 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._cleanWorkSpace();
                 break;
             case "groups":
-                if(this._isVerticalGroupedWorkSpace()) {
-                    this._createAllDayPanelElements();
-                }
-                this._cleanWorkSpace();
+                this._cleanView();
+                this._removeAllDayElements();
+                this._initGrouping();
+                this.repaint();
                 break;
             case "groupOrientation":
                 this._initGroupedStrategy();
                 this._createAllDayPanelElements();
+                this._removeAllDayElements();
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
                 if(this._isVerticalGroupedWorkSpace()) {
-                    this._cleanWorkSpace();
+                    this._cleanView();
+                    this._removeAllDayElements();
+                    this._initGrouping();
+                    this.repaint();
                 } else {
                     this._toggleAllDayVisibility();
                 }
@@ -491,28 +495,36 @@ var SchedulerWorkSpace = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this._initGroupedStrategy();
-
+        this._initGrouping();
         this._toggleHorizontalScrollClass();
         this._toggleWorkSpaceCountClass();
         this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
-        this._toggleGroupingDirectionClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
+    },
 
-        this._initWorkSpaceUnits();
-
-        this._initDateTableScrollable();
-
-        this._createWorkSpaceElements();
+    _initGrouping: function() {
+        this._initGroupedStrategy();
+        this._toggleGroupingDirectionClass();
     },
 
     _initGroupedStrategy: function() {
-        var Strategy = this.option("groupOrientation") === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+        var strategyName = this.option("groups").length ? this.option("groupOrientation") : this._getDefaultGroupStrategy();
+
+        var Strategy = strategyName === "vertical" ? VerticalGroupedStrategy : HorizontalGroupedStrategy;
+
         this._groupedStrategy = new Strategy(this);
+    },
+
+    _getDefaultGroupStrategy: function() {
+        return "horizontal";
+    },
+
+    _isVerticalGroupedWorkSpace: function() {
+        return !!this.option("groups").length && this.option("groupOrientation") === "vertical";
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -544,11 +556,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleGroupingDirectionClass: function() {
-        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace() && this.option("groups"));
+        this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
     },
 
-    _isVerticalGroupedWorkSpace: function() {
-        return this.option("groupOrientation") === "vertical";
+    _getRealGroupOrientation: function() {
+        return this._isVerticalGroupedWorkSpace() ? "vertical" : "horizontal";
     },
 
     _getTimePanelClass: function() {
@@ -879,6 +891,12 @@ var SchedulerWorkSpace = Widget.inherit({
     _getCellCount: noop,
 
     _initMarkup: function() {
+        this._initWorkSpaceUnits();
+
+        this._initDateTableScrollable();
+
+        this._createWorkSpaceElements();
+
         this.callBase();
 
         if(!this.option("crossScrollingEnabled")) {
@@ -964,7 +982,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getGroupIndexByResourceId: function(id) {
         var groups = this.option("groups"),
             groupKey = Object.keys(id)[0],
-            groupValue = Object.values(id)[0],
+            groupValue = id[groupKey],
             tree = this.invoke("createResourcesTree", groups),
             index = 0;
 
@@ -1206,7 +1224,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _makeGroupRows: function(groups) {
-        var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+        var tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
                 groupRowClass: this._getGroupRowClass(),
@@ -1652,6 +1670,11 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
+    _removeAllDayElements: function() {
+        this._$allDayTable && this._$allDayTable.remove();
+        this._$allDayTitle && this._$allDayTitle.remove();
+    },
+
     _cleanView: function() {
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
@@ -1660,6 +1683,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._shader && this._shader.clean();
         this._$timePanel.empty();
         this._$allDayTable && this._$allDayTable.empty();
+        this._$allDayTitle && this._$allDayTitle.empty();
         this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
@@ -1702,7 +1726,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getGroupTableWidth: function() {
-        return this._$groupTable && this._$groupTable.get(0).getBoundingClientRect().width;
+        return this._$groupTable && this._$groupTable.outerWidth();
     },
 
     getWorkSpaceLeftOffset: function() {
@@ -2212,6 +2236,10 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         return result;
+    },
+
+    needRecalculateResizableArea: function() {
+        return this._isVerticalGroupedWorkSpace() && this.getScrollable().scrollTop() !== 0;
     },
 
     getCellDataByCoordinates: function(coordinates, allDay) {

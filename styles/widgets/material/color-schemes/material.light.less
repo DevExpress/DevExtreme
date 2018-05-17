@@ -5,7 +5,7 @@
 * @type text
 * @group base.typography
 */
-@base-font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+@base-font-family: "Roboto", "RobotoFallback", "Helvetica", "Arial", sans-serif;
 
 /**
 * @name 50. Background color
@@ -232,14 +232,6 @@
 * @group editors.radiogroup
 */
 @radiogroup-bg: @base-element-bg;
-
-/**
-* @name 50. Focused state border color
-* @type color
-* @group editors.radiogroup
-* @paletteColorOpacity 1
-*/
-@radiobutton-focused-border-color: @base-focus-color;
 
 @radiobutton-invalid-focused-border-color: @base-invalid-color;
 @radiobutton-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -546,7 +538,7 @@
 @gallery-nav-arrow-color: @base-inverted-icon-color;
 @gallery-navbutton-color: fade(@base-text-color, 54%);
 /**
-* @name 30. Navigation button color
+* @name 30. Hovered navigation button color
 * @type color
 * @group gallery
 */
@@ -560,7 +552,7 @@
 
 // List
 /**
-* @name 20. Item border color
+* @name 20. Group border color
 * @type color
 * @group list
 */
@@ -1071,11 +1063,7 @@
 * @paletteColorOpacity 1
 */
 @datagrid-selection-bg: darken(@datagrid-base-background-color, 4%);
-/**
-* @name 81. Selected row border color
-* @type color
-* @group datagrid
-*/
+
 @datagrid-row-selected-border-color: @datagrid-border-color;
 /**
 * @name 82. Selected row text color
@@ -1084,7 +1072,7 @@
 */
 @datagrid-row-selected-color: @datagrid-base-color;
 /**
-* @name 90. Hovered row background color
+* @name 90. Hovered header row background color
 * @type color
 * @group datagrid
 * @paletteColorOpacity .15
@@ -1106,7 +1094,7 @@
 @datagrid-menu-icon-color: lighten(@base-icon-color, 33.7%);
 
 /**
-* @name 71. Modified data border color
+* @name 71. Modified data background color
 * @type color
 * @group datagrid
 */
@@ -1151,11 +1139,11 @@
 */
 @datagrid-search-color: @base-inverted-text-color;
 /**
-* @name 151. Spin icon color
+* @name 151. Chevron icon color
 * @type color
 * @group datagrid
 */
-@datagrid-spin-icon-color: lighten(@base-icon-color, 38.5%);
+@datagrid-chevron-icon-color: lighten(@base-icon-color, 38.5%);
 
 /**
 * @name 160. Highlighted text background color
@@ -1173,14 +1161,14 @@
 @datagrid-row-error-color: @base-inverted-text-color;
 
 /**
-* @name 180. Error row background color
+* @name 175. Error row background color
 * @type color
 * @group datagrid
 */
 @datagrid-row-error-bg: mix(@base-invalid-color, @datagrid-base-background-color, 60%);
 
 /**
-* @name 40. Link color
+* @name 40. Command button color
 * @type color
 * @group datagrid
 * @paletteColorOpacity 1
@@ -1220,7 +1208,7 @@
 @datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
 
 /**
-* @name 170. Summary item color
+* @name 178. Summary item color
 * @type color
 * @group datagrid
 */
@@ -1299,11 +1287,7 @@
 * @paletteColorOpacity 1
 */
 @treelist-selection-bg: darken(@treelist-base-background-color, 4%);
-/**
-* @name 81. Selected row border color
-* @type color
-* @group treelist
-*/
+
 @treelist-row-selected-border-color: @treelist-border-color;
 /**
 * @name 82. Selected row text color
@@ -1334,7 +1318,7 @@
 @treelist-menu-icon-color: lighten(@base-icon-color, 33.7%);
 
 /**
-* @name 71. Modified data border color
+* @name 71. Modified data background color
 * @type color
 * @group treelist
 */
@@ -1365,17 +1349,17 @@
 */
 @treelist-search-color: @base-inverted-text-color;
 /**
-* @name 151. Spin icon color
+* @name 151. Chevron icon color
 * @type color
 * @group treelist
 */
-@treelist-spin-icon-color: lighten(@base-icon-color, 38.5%);
+@treelist-chevron-icon-color: lighten(@base-icon-color, 38.5%);
 /**
-* @name 152. Selection spin icon color
+* @name 152. Selection chevron icon color
 * @type color
 * @group treelist
 */
-@treelist-selection-spin-icon-color: @treelist-spin-icon-color;
+@treelist-selection-chevron-icon-color: @treelist-chevron-icon-color;
 
 /**
 * @name 160. Highlighted text background color
@@ -1407,7 +1391,7 @@
 @treelist-filter-panel-color: @base-accent;
 
 /**
-* @name 40. Link color
+* @name 40. Command button color
 * @type color
 * @group treelist
 * @paletteColorOpacity 1
@@ -1459,14 +1443,14 @@
 /**
 * @name 180. Filter row background color
 * @type color
-* @group datagrid
+* @group treelist
 */
 @treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
 
 /**
 * @name 190. Active header filter icon color
 * @type color
-* @group datagrid
+* @group treelist
 */
 @treelist-active-header-filter-icon-color: @base-accent;
 @treelist-text-stub-background-image-path: url(images/widgets/material/color-schemes/light/grid/text-stub.png);
@@ -1535,11 +1519,11 @@
 
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
 /**
-* @name 70. Spin icon color
+* @name 70. Chevron icon color
 * @type color
 * @group pivotgrid
 */
-@pivotgrid-spin-icon-color: @PIVOTGRID_AREA_COLOR;
+@pivotgrid-chevron-icon-color: @PIVOTGRID_AREA_COLOR;
 
 //
 //dxScheduler
@@ -1765,27 +1749,9 @@
 * @group editors.calendar
 */
 @calendar-cell-active-bg: fade(darken(@calendar-bg, 62.5%), 20%);
-/**
-* @name 25. Header border color
-* @type color
-* @group editors.calendar
-*/
-@calendar-border-color: @base-border-color;
 
-/**
-* @name 90. Date navigator border color
-* @type color
-* @group editors.calendar
-*/
-@calendar-navigator-border-color: @base-border-color;
 @calendar-navigator-border-radius: @button-border-radius;
 
-/**
-* @name 100. Hovered state date navigator border color
-* @type color
-* @group editors.calendar
-*/
-@calendar-navigator-hover-border-color: darken(@base-border-color, 12%);
 @calendar-cell-contoured-border-radius: 50%;
 
 @calendar-invalid-focused-border-color: @base-invalid-color;
@@ -1816,19 +1782,7 @@
 @tooltip-bg: #616161;
 @tooltip-border-radius: @base-border-radius;
 
-/**
-* @name 10. Active spin buttons color
-* @type color
-* @group editors.numberbox
-*/
-
-/**
-* @name 20. Hovered spin buttons border color
-* @type color
-* @group editors.numberbox
-*/
-
-
+// NumberBox
 @numberbox-spin-container-border-radius: @base-border-radius;
 @numberbox-spin-icon-border-radius: @base-border-radius-small;
 /**

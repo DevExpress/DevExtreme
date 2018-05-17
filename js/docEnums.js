@@ -52,6 +52,7 @@
  * @member 'win8.white' @deprecated 'generic.light'
  * @member 'win10.black' @deprecated 'generic.dark'
  * @member 'win10.white' @deprecated 'generic.light'
+ * @member 'android5.light' @deprecated 'material.blue.light'
  */
 
 /**

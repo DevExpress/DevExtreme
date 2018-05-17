@@ -35,8 +35,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._$focusedCell;
     },
 
+    _getDefaultGroupStrategy: function() {
+        return "vertical";
+    },
+
     _toggleGroupingDirectionClass: function() {
-        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace() && this.option("groups"));
+        this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
     },
 
     _getDefaultOptions: function() {
@@ -174,7 +178,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _isHorizontalGroupedWorkSpace: function() {
-        return this.option("groupOrientation") === "horizontal";
+        return !!this.option("groups").length && this.option("groupOrientation") === "horizontal";
     },
 
     _getGroupHeaderContainer: function() {

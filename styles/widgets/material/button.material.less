@@ -121,30 +121,6 @@
 
     &.dx-state-focused {
         background-color: @focused-background-color;
-
-        &:not(.dx-state-active){
-            &:before {
-                content: " ";
-                position: absolute;
-                width: 80%;
-                padding: 50% 0;
-                top: 50%;
-                left: 0;
-                margin: -50% 10%;
-                border-radius: 50%;
-                background: fade(#fff, 20%);
-                transform: scale(1);
-                will-change: transform;
-                animation-direction: alternate;
-                animation-name: focus;
-                animation-duration: 1s;
-                animation-timing-function: linear;
-                animation-iteration-count: infinite;
-                animation-fill-mode: backwards;
-                backface-visibility: hidden;
-            }
-        }
-
         .box-shadow(@focused-shadow-color);
     }
 
