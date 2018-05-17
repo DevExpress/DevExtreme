@@ -1032,8 +1032,6 @@
             border-top: @SCHEDULER_BASE_BORDER;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-
         }
 
         &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
@@ -1056,8 +1054,6 @@
             padding: 0 10px 0 5px;
             height: auto;
             .dx-scheduler-group-header-content {
-                overflow: hidden;
-
                 div {
                     white-space: normal;
                     line-height: normal;
@@ -1067,8 +1063,6 @@
 
         .dx-scheduler-group-row {
             display: flex;
-            flex-grow: 1;
-            position: relative;
         }
 
         .dx-scheduler-group-header {
@@ -1085,7 +1079,6 @@
         overflow: visible;
         margin: auto;
         flex-grow: 1;
-        flex-basis: 0;
     }
 
     .dx-scheduler-group-header-content div div {
