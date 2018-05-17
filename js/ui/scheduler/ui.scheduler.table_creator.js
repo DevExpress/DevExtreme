@@ -284,11 +284,6 @@ var SchedulerTableCreator = {
                     var ratio = 100 / rowCount;
                     row.css("height", ratio + "%");
                 }
-
-                // if(rowspan === 2 && rowCount) {
-                //     var ratio1 = (100 / rowCount) * 2;
-                //     row.css("flex-basis", ratio1 + "%");
-                // }
             }
         }
 
