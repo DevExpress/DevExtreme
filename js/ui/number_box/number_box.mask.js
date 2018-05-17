@@ -588,6 +588,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._lastKey;
         delete this._parsedValue;
         delete this._isDirty;
+        delete this._focusOutOccurs;
+        clearTimeout(this._ieCaretTimeout);
         delete this._ieCaretTimeout;
     },
 
