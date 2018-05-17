@@ -316,7 +316,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             groupHeaderRowClass: this._getGroupRowClass(),
             groupHeaderClass: this._getGroupHeaderClass(),
             groupHeaderContentClass: this._getGroupHeaderContentClass()
-        }, undefined, this.option("resourceCellTemplate"));
+        }, undefined, this.option("resourceCellTemplate"), this._getTotalRowCount(this._getGroupCount()));
     },
 
     _setGroupHeaderCellsHeight: function() {
@@ -328,10 +328,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             return;
         }
 
-        var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
-        cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
+        // var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
+        // cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
 
-        this._getGroupHeaderCellsContent().css("height", cellHeight);
+        // this._getGroupHeaderCellsContent().css("height", cellHeight);
     },
 
     _ensureGroupHeaderCellsHeight: function(cellHeight) {

@@ -121,11 +121,11 @@ var SchedulerTableCreator = {
         return templateCallbacks;
     },
 
-    makeGroupedTable: function(type, groups, cssClasses, cellCount, cellTemplate) {
+    makeGroupedTable: function(type, groups, cssClasses, cellCount, cellTemplate, rowCount) {
         var rows = [];
 
         if(type === this.VERTICAL) {
-            rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate);
+            rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
         } else {
             rows = this._makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate);
         }
@@ -239,7 +239,7 @@ var SchedulerTableCreator = {
 
     },
 
-    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate) {
+    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate, rowCount) {
         var cellTemplates = [],
             repeatCount = 1,
             arr = [],
@@ -279,6 +279,16 @@ var SchedulerTableCreator = {
                     row = rows[currentRowIndex];
 
                 row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
+
+                if(rowspan === 1 && rowCount) {
+                    var ratio = 100 / rowCount;
+                    row.css("flex-basis", ratio + "%");
+                }
+
+                // if(rowspan === 2 && rowCount) {
+                //     var ratio1 = (100 / rowCount) * 2;
+                //     row.css("flex-basis", ratio1 + "%");
+                // }
             }
         }
 

@@ -1030,12 +1030,21 @@
             border-spacing: 0;
             border-collapse: separate;
             border-top: @SCHEDULER_BASE_BORDER;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
         }
 
         &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
             .dx-scheduler-group-header:last-child {
                 font-weight: normal;
                 text-align: left;
+            }
+
+            .dx-scheduler-group-header:only-child {
+                position: relative;
+                left: 80px;
             }
         }
 
@@ -1050,14 +1059,42 @@
                 overflow: hidden;
 
                 div {
-                    position: relative;
+                    /*position: relative;
                     top: 50%;
-                    .transform(translate(0,-50%));
+                    .transform(translate(0,-50%));*/
                     white-space: normal;
                     line-height: normal;
                 }
             }
         }
+
+            .dx-scheduler-group-row {
+        flex-grow: 1;
+        //display: table;
+
+        &:after {
+            display: inline-block !important;
+            height: 100%;
+            vertical-align: middle;
+            content: "";
+        }
+    }
+
+    .dx-scheduler-group-header {
+        //display: block;
+    }
+
+    .dx-scheduler-group-header-content {
+        display: flex;
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+
+    .dx-scheduler-group-header-content div {
+        display: flex;
+        flex-grow: 0;
+    }
+
 
         .dx-scheduler-date-table,
         .dx-scheduler-date-table-scrollable .dx-scrollable-content,
