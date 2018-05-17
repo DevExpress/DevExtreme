@@ -73,9 +73,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         if(browser.msie) {
-            this._ieCaretTimeout = setTimeout(function() {
-                this._moveCaretToBoundary(MOVE_BACKWARD, e);
-            }.bind(this));
+            clearTimeout(this._ieCaretTimeout);
+            this._ieCaretTimeout = setTimeout(this._moveCaretToBoundary.bind(this, MOVE_BACKWARD, e));
         } else {
             this._moveCaretToBoundary(MOVE_BACKWARD, e);
         }
@@ -589,8 +588,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._parsedValue;
         delete this._isDirty;
         delete this._focusOutOccurs;
-        clearTimeout(this._ieCaretTimeout);
         delete this._ieCaretTimeout;
+    },
+
+    _dispose: function() {
+        clearTimeout(this._ieCaretTimeout);
+        this.callBase();
     },
 
     _clean: function() {
