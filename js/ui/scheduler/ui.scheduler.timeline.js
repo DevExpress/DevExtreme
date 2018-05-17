@@ -272,7 +272,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _visibilityChanged: function(visible) {
-        this._setGroupHeaderCellsHeight();
         this.callBase(visible);
     },
 
@@ -290,8 +289,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         this._$sidebarTable.height(height);
         this._$dateTable.height(height);
-
-        this._setGroupHeaderCellsHeight();
     },
 
     _getWorkSpaceMinHeight: function() {
