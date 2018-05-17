@@ -1241,4 +1241,27 @@ QUnit.module("Custom operations", {
         // assert
         assert.equal($container.text(), "1");
     });
+
+    QUnit.test("anyof popup always has left alignment", function(assert) {
+        // arrange
+        var $container = $("#container"),
+            popupPosition,
+            editorTemplate,
+            left = {
+                dataField: "field",
+                alignment: "left"
+            };
+
+        // act
+        editorTemplate = this.getAnyOfOperation(left).editorTemplate({
+            value: [1],
+            field: left
+        }, $container);
+
+        popupPosition = editorTemplate.find(".dx-overlay").dxPopup("instance").option("position");
+
+        // assert
+        assert.equal(popupPosition.my, "left top");
+        assert.equal(popupPosition.at, "left bottom");
+    });
 });
