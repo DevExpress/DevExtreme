@@ -76,7 +76,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(browser.msie) {
             this._ieCaretTimeout = setTimeout(function() {
                 this._moveCaretToBoundary(MOVE_BACKWARD, e);
-            }.bind(this))
+            }.bind(this));
         } else {
             this._moveCaretToBoundary(MOVE_BACKWARD, e);
         }
