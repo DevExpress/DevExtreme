@@ -2,10 +2,11 @@
 @{
     var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
     var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
+    var isFrameworkTest = Model.ScriptVirtualPath.Contains("DevExpress.framework");
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
-        || Model.ScriptVirtualPath.Contains("DevExpress.framework")
+        || isFrameworkTest
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
     string GetJQueryUrl() {
@@ -279,6 +280,11 @@
             if(@Json.Serialize(isServerSideTest) && (isNotWebkitBrowser || isOldJQuery)) {
                 return;
             }
+
+            if(@Json.Serialize(isFrameworkTest) && @Json.Serialize(Model.JQueryVersion) === "1") {
+                return;
+            }
+
             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
         })
         .then(function() {
