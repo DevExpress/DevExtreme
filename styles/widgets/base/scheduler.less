@@ -1059,43 +1059,30 @@
                 overflow: hidden;
 
                 div {
-                    /*position: relative;
-                    top: 50%;
-                    .transform(translate(0,-50%));*/
                     white-space: normal;
                     line-height: normal;
                 }
             }
         }
 
-            .dx-scheduler-group-row {
-                display: flex;
-                flex-grow: 1;
-                position: relative;
+        .dx-scheduler-group-row {
+            display: flex;
+            flex-grow: 1;
+            position: relative;
+        }
 
-                /*&:after {
-                    display: inline-block !important;
-                    height: 100%;
-                    width: 100%;
-                    vertical-align: middle;
-                    content: "";
-                }*/
-                //flex-basis: 0;
-        //display: table;
-    }
-
-    .dx-scheduler-group-header {
-        display: flex;
-        width: 100%;
-        &[rowspan='2'], &[rowspan='3'] {
-            .dx-scheduler-group-header-content div {
-                margin-top: 50%;
+        .dx-scheduler-group-header {
+            display: flex;
+            width: 100%;
+            &[rowspan='2'], &[rowspan='3'] {
+                .dx-scheduler-group-header-content div {
+                    margin-top: 50%;
+                }
             }
         }
-    }
 
     .dx-scheduler-group-header-content {
-        //display: flex;
+        overflow: visible;
         margin: auto;
         flex-grow: 1;
         flex-basis: 0;
