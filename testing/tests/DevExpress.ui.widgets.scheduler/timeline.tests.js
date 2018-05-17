@@ -310,21 +310,6 @@ QUnit.test("Ensure cell min height is equal to cell height(T389468)", function(a
     }
 });
 
-QUnit.test("Ensure cell min height is equal to cell height if crossScrollingEnabled = true", function(assert) {
-    this.instance.option({
-        groups: [
-            { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }
-        ],
-        height: 400,
-        crossScrollingEnabled: true
-    });
-
-    var recalculateGroupHeader = sinon.spy(this.instance, "_setGroupHeaderCellsHeight");
-    resizeCallbacks.fire();
-
-    assert.ok(recalculateGroupHeader.called, "Group header was recalculated");
-});
-
 QUnit.module("Timeline Day", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay().dxSchedulerTimelineDay("instance");
