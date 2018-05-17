@@ -1004,6 +1004,10 @@
     }
 
     .dx-scheduler-timeline {
+        .dx-scheduler-fixed-appointments {
+            left: 0;
+        }
+
         .dx-scheduler-header-row,
         .dx-scheduler-date-table .dx-scheduler-date-table-row {
             &:before {
@@ -1034,6 +1038,10 @@
             flex-direction: column;
         }
 
+        .dx-scheduler-group-row {
+            display: flex;
+        }
+
         &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
             .dx-scheduler-group-header:last-child {
                 font-weight: normal;
@@ -1046,28 +1054,12 @@
             }
         }
 
-        .dx-scheduler-fixed-appointments {
-            left: 0;
-        }
-
         .dx-scheduler-group-header {
             padding: 0 10px 0 5px;
             height: auto;
-            .dx-scheduler-group-header-content {
-                div {
-                    white-space: normal;
-                    line-height: normal;
-                }
-            }
-        }
-
-        .dx-scheduler-group-row {
-            display: flex;
-        }
-
-        .dx-scheduler-group-header {
             display: flex;
             width: 100%;
+            
             &[rowspan='2'], &[rowspan='3'] {
                 .dx-scheduler-group-header-content div {
                     margin-top: 50%;
@@ -1075,16 +1067,23 @@
             }
         }
 
-    .dx-scheduler-group-header-content {
-        overflow: visible;
-        margin: auto;
-        flex-grow: 1;
-    }
+        
+        .dx-scheduler-group-header-content {
+            overflow: visible;
+            margin: auto;
+            flex-grow: 1;
 
-    .dx-scheduler-group-header-content div div {
-        display: flex;
-        flex-grow: 0;
-    }
+            div {
+                white-space: normal;
+                line-height: normal;
+            }
+        }
+ 
+
+        .dx-scheduler-group-header-content div div {
+            display: flex;
+            flex-grow: 0;
+        }
 
 
         .dx-scheduler-date-table,

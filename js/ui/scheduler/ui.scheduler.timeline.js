@@ -205,8 +205,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._shader = new HorizontalShader();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
-
-        this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);
     },
 
