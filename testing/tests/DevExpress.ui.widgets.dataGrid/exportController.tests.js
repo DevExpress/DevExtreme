@@ -1744,7 +1744,7 @@ QUnit.test("Summary align by column", function(assert) {
     that.clock.tick();
 
     // assert
-    assert.deepEqual(_sourceItems[1].values, ["test 1", 101, undefined, [{
+    assert.deepEqual(_sourceItems[1].values, [101, [{
         alignByColumn: true,
         column: "Price",
         summaryType: "max",
@@ -1806,7 +1806,7 @@ QUnit.test("Summary align by column when summary items are contains in one cell"
     that.clock.tick();
 
     // assert
-    assert.deepEqual(_sourceItems[0].values, ["test 1", undefined, [
+    assert.deepEqual(_sourceItems[0].values, ["test 1", [
         {
             alignByColumn: true,
             column: "Price",
@@ -1821,7 +1821,7 @@ QUnit.test("Summary align by column when summary items are contains in one cell"
             summaryType: "min",
             value: 0.03
         }
-    ]]);
+    ], undefined]);
 });
 
 QUnit.test("Headers is not visible", function(assert) {
@@ -2986,7 +2986,7 @@ QUnit.test("Customize a data and a columns before exporting", function(assert) {
                 for(var i = 0; i < data.length; i++) {
                     var item = data[i];
                     if(item.rowType === "data") {
-                        item.values[2] = "TEST " + item.values[2] * 10;
+                        item.values[1] = "TEST " + item.values[1] * 10;
                     }
                 }
             },
@@ -3016,10 +3016,10 @@ QUnit.test("Customize a data and a columns before exporting", function(assert) {
         exportedItems = dataProvider._options.items;
 
     assert.equal(exportedColumns[2].width, 333, "third exported column's width");
-    assert.equal(exportedItems[1].values[2], "TEST 30", "2 exported item of data");
-    assert.equal(exportedItems[2].values[2], "TEST 30", "3 exported item of data");
-    assert.equal(exportedItems[3].values[2], "TEST 30", "4 exported item of data");
-    assert.equal(exportedItems[4].values[2], "TEST 30", "5 exported item of data");
+    assert.equal(exportedItems[1].values[1], "TEST 30", "2 exported item of data");
+    assert.equal(exportedItems[2].values[1], "TEST 30", "3 exported item of data");
+    assert.equal(exportedItems[3].values[1], "TEST 30", "4 exported item of data");
+    assert.equal(exportedItems[4].values[1], "TEST 30", "5 exported item of data");
 
     assert.ok(columns[2].width !== 333, "third column's width");
     assert.equal(items[1].values[2], "3", "2 item of data");
