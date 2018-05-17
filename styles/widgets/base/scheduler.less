@@ -1004,6 +1004,10 @@
     }
 
     .dx-scheduler-timeline {
+        .dx-scheduler-fixed-appointments {
+            left: 0;
+        }
+
         .dx-scheduler-header-row,
         .dx-scheduler-date-table .dx-scheduler-date-table-row {
             &:before {
@@ -1030,6 +1034,12 @@
             border-spacing: 0;
             border-collapse: separate;
             border-top: @SCHEDULER_BASE_BORDER;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dx-scheduler-group-row {
+            display: flex;
         }
 
         &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
@@ -1037,28 +1047,39 @@
                 font-weight: normal;
                 text-align: left;
             }
-        }
 
-        .dx-scheduler-fixed-appointments {
-            left: 0;
+            .dx-scheduler-group-header:only-child {
+                position: relative;
+                left: 80px;
+                width: 80px;
+            }
         }
 
         .dx-scheduler-group-header {
             padding: 0 10px 0 5px;
             height: auto;
-            .dx-scheduler-group-header-content {
-                overflow: hidden;
-
-                div {
-                    position: relative;
-                    top: 50%;
-                    .transform(translate(0,-50%));
-                    white-space: normal;
-                    line-height: normal;
+            display: flex;
+            width: 100%;
+            
+            &[rowspan='2'], &[rowspan='3'] {
+                .dx-scheduler-group-header-content div {
+                    margin-top: 50%;
                 }
             }
         }
 
+        
+        .dx-scheduler-group-header-content {
+            overflow: visible;
+            margin: auto;
+            flex-grow: 1;
+            
+            div {
+                white-space: normal;
+                line-height: normal;
+            }
+        }
+ 
         .dx-scheduler-date-table,
         .dx-scheduler-date-table-scrollable .dx-scrollable-content,
         .dx-scheduler-sidebar-scrollable .dx-scrollable-content,

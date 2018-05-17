@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
-    windowUtils = require("../../core/utils/window"),
     dateUtils = require("../../core/utils/date"),
     tableCreator = require("./ui.scheduler.table_creator"),
     HorizontalShader = require("./ui.scheduler.current_time_shader.horizontal");
@@ -206,8 +205,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._shader = new HorizontalShader();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
-
-        this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);
     },
 
@@ -275,7 +272,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _visibilityChanged: function(visible) {
-        this._setGroupHeaderCellsHeight();
         this.callBase(visible);
     },
 
@@ -293,8 +289,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         this._$sidebarTable.height(height);
         this._$dateTable.height(height);
-
-        this._setGroupHeaderCellsHeight();
     },
 
     _getWorkSpaceMinHeight: function() {
@@ -316,22 +310,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             groupHeaderRowClass: this._getGroupRowClass(),
             groupHeaderClass: this._getGroupHeaderClass(),
             groupHeaderContentClass: this._getGroupHeaderContentClass()
-        }, undefined, this.option("resourceCellTemplate"));
-    },
-
-    _setGroupHeaderCellsHeight: function() {
-        if(!windowUtils.hasWindow()) {
-            return;
-        }
-
-        if(this._isHorizontalGroupedWorkSpace()) {
-            return;
-        }
-
-        var cellHeight = this.getCellHeight() - DATE_TABLE_CELL_BORDER * 2;
-        cellHeight = this._ensureGroupHeaderCellsHeight(cellHeight);
-
-        this._getGroupHeaderCellsContent().css("height", cellHeight);
+        }, undefined, this.option("resourceCellTemplate"), this._getTotalRowCount(this._getGroupCount()));
     },
 
     _ensureGroupHeaderCellsHeight: function(cellHeight) {
