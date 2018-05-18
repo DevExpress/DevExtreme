@@ -201,11 +201,9 @@ var Accordion = CollectionWidget.inherit({
         * @type String
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
-            var $templateContainer = themes.isMaterial() ?
-                $("<div>")
+            var $templateContainer = $("<div>")
                     .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS)
-                    .appendTo($container) :
-                $container;
+                    .appendTo($container);
 
             if(isPlainObject(data)) {
                 if(data.title) {
