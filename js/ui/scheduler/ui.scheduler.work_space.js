@@ -1872,9 +1872,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        var height = this._$dateTable.outerHeight();
+        var height = this._$dateTable.get(0).getBoundingClientRect().height;
 
-        this._$groupTable.height(height);
+        this._$groupTable.outerHeight(height);
     },
 
     _getDateTableBorder: function() {
