@@ -33,7 +33,7 @@ var $ = require("../../core/renderer"),
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
     VERTICAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-vertical-grouped",
-    WORKSPACE_HORIZONTAL_GROUP_TABLE_CLASS = "dx-scheduler-work-space-horizontal-group-table",
+    WORKSPACE_VERTICAL_GROUP_TABLE_CLASS = "dx-scheduler-work-space-vertical-group-table",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
@@ -612,7 +612,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._$dateTable = $("<table>");
 
-        this._$groupTable = $("<table>").addClass(WORKSPACE_HORIZONTAL_GROUP_TABLE_CLASS);
+        this._$groupTable = $("<table>").addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
     },
 
     _initAllDayPanelElements: function() {
@@ -1227,12 +1227,14 @@ var SchedulerWorkSpace = Widget.inherit({
         var tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
+                groupHeaderRowClass: this._getGroupRowClass(),
                 groupRowClass: this._getGroupRowClass(),
                 groupHeaderClass: this._getGroupHeaderClass(),
                 groupHeaderContentClass: this._getGroupHeaderContentClass()
             },
             this._getCellCount() || 1,
-            this.option("resourceCellTemplate")
+            this.option("resourceCellTemplate"),
+            this._getGroupCount()
         );
     },
 
@@ -1870,11 +1872,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        var cellHeight = this.getCellHeight(),
-            allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? this.getAllDayHeight() : 0,
-            dateTableHeight = cellHeight * this._getRowCount() - this._getDateTableBorderOffset();
+        var height = this._$dateTable.get(0).getBoundingClientRect().height;
 
-        this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
+        this._$groupTable.outerHeight(height);
     },
 
     _getDateTableBorder: function() {
