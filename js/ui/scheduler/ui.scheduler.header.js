@@ -226,8 +226,8 @@ var SchedulerHeader = Widget.inherit({
         if(!isDefined(this._$viewSwitcherLabel)) {
             return;
         }
-
-        var currentViewText = messageLocalization.format("dxScheduler-switcher" + camelize(this._getCurrentViewType(), true));
+        var currentView = this.option("currentView"),
+            currentViewText = this._getItemText(currentView);
 
         this._$viewSwitcherLabel.text(currentViewText);
     },
