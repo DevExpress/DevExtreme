@@ -9583,6 +9583,8 @@ QUnit.test("SelectAll when allowSelectAll is false", function(assert) {
 
 // T628315
 QUnit.test("Click near selectAll doesn't generate infinite loop", function(assert) {
+    var clock = sinon.useFakeTimers();
+
     // arrange, act
     var dataGrid = createDataGrid({
         selection: { mode: "multiple" },
@@ -9593,10 +9595,14 @@ QUnit.test("Click near selectAll doesn't generate infinite loop", function(asser
     var $selectAllElement = $(dataGrid.element()).find(".dx-header-row .dx-command-select");
     $selectAllElement.click();
 
+    clock.tick();
+
     // assert
     assert.equal(dataGrid.getSelectedRowKeys().length, 1);
     assert.equal($selectAllElement.find(".dx-datagrid-text-content").length, 0);
     assert.ok($($selectAllElement.find(".dx-select-checkbox").hasClass("dx-checkbox-selected")));
+
+    clock.restore();
 });
 
 QUnit.module("Modules", {
