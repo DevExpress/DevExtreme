@@ -1227,12 +1227,14 @@ var SchedulerWorkSpace = Widget.inherit({
         var tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
         return tableCreator.makeGroupedTable(tableCreatorStrategy,
             groups, {
+                groupHeaderRowClass: this._getGroupRowClass(),
                 groupRowClass: this._getGroupRowClass(),
                 groupHeaderClass: this._getGroupHeaderClass(),
                 groupHeaderContentClass: this._getGroupHeaderContentClass()
             },
             this._getCellCount() || 1,
-            this.option("resourceCellTemplate")
+            this.option("resourceCellTemplate"),
+            this._getGroupCount()
         );
     },
 
@@ -1870,11 +1872,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
-        var cellHeight = this.getCellHeight(),
-            allDayRowHeight = this.option("showAllDayPanel") && this.supportAllDayRow() ? this.getAllDayHeight() : 0,
-            dateTableHeight = cellHeight * this._getRowCount() - this._getDateTableBorderOffset();
+        var height = this._$dateTable.outerHeight();
 
-        this._getGroupHeaderCellsContent().css("height", dateTableHeight + allDayRowHeight);
+        this._$groupTable.height(height);
     },
 
     _getDateTableBorder: function() {

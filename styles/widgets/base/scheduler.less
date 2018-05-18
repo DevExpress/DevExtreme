@@ -2370,23 +2370,42 @@
             border-right: @SCHEDULER_BASE_BORDER;
             border-top: @SCHEDULER_BASE_BORDER;
             border-collapse: collapse;
+
+            display: flex;
+            flex-direction: column;
         }
-    
+        
+        .dx-scheduler-group-row {
+            display: flex;
+         }	
+
+        .dx-scheduler-group-row:before {
+            display: none;
+        }
+
         .dx-scheduler-group-header {
             height: auto;
             text-align: center;
             border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             padding: 0;
 
-            .dx-scheduler-group-header-content {
-                padding-top: @SCHEDULER_VERTICAL_GROUP_HEADER_CONTENT_TOP_OFFSET;
+            display: flex;
+            overflow: hidden;	            
+            width: 100%;
+        }
 
-                div {
-                    white-space: normal;
-                    line-height: normal;
-                }
+        .dx-scheduler-group-header-content {
+            padding-top: @SCHEDULER_VERTICAL_GROUP_HEADER_CONTENT_TOP_OFFSET;
+            
+            overflow: visible;
+            flex-grow: 1;
+
+            div {
+                white-space: normal;
+                line-height: normal;
             }
         }
+
         .dx-scheduler-header-panel {
             border-bottom: 1px solid @SCHEDULER_BASE_BORDER_COLOR;
         }
