@@ -3030,6 +3030,46 @@ QUnit.test("editing should starts correctly if scrolling mode is virtual", funct
     clock.restore();
 });
 
+QUnit.test("selection should works correctly if row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 50; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        selection: {
+            mode: "multiple"
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.selectRows([12], true);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows[0].key, 6, "first visible row key");
+    assert.equal(visibleRows[6].key, 12, "selected row key");
+    assert.equal(visibleRows[6].isSelected, true, "isSelected for selected row");
+    assert.ok($(dataGrid.getRowElement(6)).hasClass("dx-selection"), "dx-selection class is added");
+});
+
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
     // arrange
     var array = [];
