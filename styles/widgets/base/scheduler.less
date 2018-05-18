@@ -1038,12 +1038,12 @@
             border-spacing: 0;
             border-collapse: separate;
             border-top: @SCHEDULER_BASE_BORDER;
-            display: flex;
-            flex-direction: column;
+
+            .flex-container(column, nowrap);
         }
 
         .dx-scheduler-group-row {
-            display: flex;
+            .flex-container(row, nowrap);
         }
 
         &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
@@ -1060,14 +1060,15 @@
         }
 
         .dx-scheduler-group-header {
+            .flex-container(row, nowrap);
+            
             padding: 0 10px 0 5px;
             height: auto;
-            display: flex;
             width: 100%;
             
             &[rowspan='2'], &[rowspan='3'] {
                 .dx-scheduler-group-header-content div {
-                    margin-top: 50%;
+                    margin-top: 200%;
                 }
             }
         }
@@ -2375,12 +2376,11 @@
             border-top: @SCHEDULER_BASE_BORDER;
             border-collapse: collapse;
 
-            display: flex;
-            flex-direction: column;
+            .flex-container(column, nowrap);
         }
         
         .dx-scheduler-group-row {
-            display: flex;
+            .flex-container(row, nowrap);
          }	
 
         .dx-scheduler-group-row:before {
@@ -2401,12 +2401,12 @@
         }
 
         .dx-scheduler-group-header {
+            .flex-container(row, nowrap);
+
             height: auto;
             text-align: center;
             border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             padding: 0;
-
-            display: flex;
             overflow: hidden;	            
             width: 100%;
 
@@ -2549,7 +2549,13 @@
                 padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
                 margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
             }
+
+            .dx-scheduler-sidebar-scrollable {
+                padding-bottom: @SCHEDULER_HEADER_PANEL_OFFSET;
+                margin-bottom: -@SCHEDULER_HEADER_PANEL_OFFSET;
+            }
         }
+        
         .dx-scheduler-work-space-day {
             .dx-scheduler-date-table-scrollable {
                 padding-bottom: 0;
