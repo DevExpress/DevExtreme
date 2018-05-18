@@ -32,6 +32,7 @@
 
 @SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH: 70px;
 @SCHEDULER_RECURRENCE_SELECTBOX_WIDTH: 120px;
+@SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 70px;
 
 @SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 250px;
 @SCHEDULER_APPOINTMENT_TOOLTIP_BUTTONS_GAP: 10px;
@@ -1937,13 +1938,10 @@
             position: relative;
             padding-left: 0;
             padding-right: 0;
+            margin-top: 20px;
 
             .dx-field-item-label {
                 vertical-align: top;
-
-                &.dx-field-item-label-location-top {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
 
                 &.dx-field-item-label-location-right {
                     padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
@@ -1984,11 +1982,7 @@
 
             &.dx-label-v-align {
                 &:before {
-                    top: 70px;
-                }
-
-                .dx-recurrence-editor {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
+                    top: @SCHEDULER_RECURRENCE_LINE_TOP_POSITION;
                 }
             }
 
@@ -2770,7 +2764,6 @@
                 &.dx-field-item-label-location-left,
                 &.dx-field-item-label-location-top {
                     padding-left: 10px;
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
                 }
 
                 &.dx-field-item-label-location-right {
