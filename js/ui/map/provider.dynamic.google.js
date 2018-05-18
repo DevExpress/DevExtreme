@@ -183,20 +183,22 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _init: function() {
         return new Promise(function(resolve) {
-            var controls = this._option("controls");
+            this._resolveLocation(this._option("center")).then(function(center) {
+                var controls = this._option("controls");
 
-            this._map = new google.maps.Map(this._$container[0], {
-                zoom: this._option("zoom"),
-                center: this._option("center"),
-                panControl: controls,
-                zoomControl: controls,
-                mapTypeControl: controls,
-                streetViewControl: controls
-            });
+                this._map = new google.maps.Map(this._$container[0], {
+                    zoom: this._option("zoom"),
+                    center: center,
+                    panControl: controls,
+                    zoomControl: controls,
+                    mapTypeControl: controls,
+                    streetViewControl: controls
+                });
 
-            var listener = google.maps.event.addListener(this._map, 'idle', function() {
-                resolve(listener);
-            });
+                var listener = google.maps.event.addListener(this._map, 'idle', function() {
+                    resolve(listener);
+                });
+            }.bind(this));
         }.bind(this)).then(function(listener) {
             google.maps.event.removeListener(listener);
         });
