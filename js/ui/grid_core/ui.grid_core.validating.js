@@ -57,7 +57,18 @@ var ValidatingController = modules.Controller.inherit((function() {
                     newData: editData.data,
                     oldData: editData.oldData,
                     errorText: null
-                };
+                },
+                brokenRulesMessages = [];
+
+            each(brokenRules, function(_, brokenRule) {
+                var isInvisibleColumnBrokenRule = brokenRule.column && !brokenRule.column.visible && brokenRule.validator._findGroup().key === editData.key;
+                if(isInvisibleColumnBrokenRule && (editData.type === "insert" || editData.data.hasOwnProperty(brokenRule.column.dataField))) {
+                    brokenRulesMessages.push(brokenRule.message);
+                }
+            });
+            if(brokenRulesMessages.length > 0) {
+                parameters.errorText = brokenRulesMessages.join(", ");
+            }
 
             that.executeAction("onRowValidating", parameters);
 
@@ -86,7 +97,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                     if(editData.type && editData.type !== "remove") {
                         validationResult = that.validateGroup(editData);
                         if(!validationResult.isValid) {
-                            each(validationResult.brokenRules, function() {
+                            each(validationResult.brokenRules, function(_, brokenRule) {
                                 var value = this.validator.option("adapter").getValue();
                                 if(value === undefined) {
                                     value = null;
@@ -402,20 +413,42 @@ module.exports = {
                 },
 
                 _afterInsertRow: function(options) {
+                    this._createInvisibleColumnValidators([options]);
+
+                    this.callBase(options);
+                },
+
+                _createInvisibleColumnValidators: function(options) {
                     var validatingController = this.getController("validating"),
-                        invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; });
+                        invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
+                        invisibleColumnValidators = [];
+
+                    this._removeInvisibleColumnValidators();
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
                         each(invisibleColumns, function(_, column) {
-                            validatingController.createValidator({
-                                column: column,
-                                key: options.key,
-                                value: column.calculateCellValue(options.data)
+                            options.forEach(function(option) {
+                                if(option.type === "insert" || option.data && option.data.hasOwnProperty(column.dataField) && option.data[column.dataField] !== null) {
+                                    invisibleColumnValidators.push(validatingController.createValidator({
+                                        column: column,
+                                        key: option.key,
+                                        value: option.data[column.dataField]
+                                    }));
+                                }
                             });
                         });
+                        validatingController.invisibleColumnValidators = invisibleColumnValidators;
                     }
+                },
 
-                    this.callBase(options);
+                _removeInvisibleColumnValidators: function() {
+                    var validatingController = this.getController("validating"),
+                        invisibleColumnValidators = validatingController.invisibleColumnValidators || [];
+
+                    each(invisibleColumnValidators, function(_, validator) {
+                        validator && validator._dispose();
+                    });
+                    validatingController.invisibleColumnValidators = [];
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
@@ -434,6 +467,7 @@ module.exports = {
 
                         result = result || !isValid;
                     } else {
+                        that._createInvisibleColumnValidators(this._editData);
                         isFullValid = validatingController.validate(true);
                         that._updateRowAndPageIndices();
 
