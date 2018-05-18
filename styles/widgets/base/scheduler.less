@@ -2383,6 +2383,19 @@
             display: none;
         }
 
+        &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
+            .dx-scheduler-group-header:last-child {
+                font-weight: normal;
+                text-align: left;
+            }
+
+            .dx-scheduler-group-header:only-child {
+                position: relative;
+                left: 75px;
+                width: 75px;
+            }
+        }
+
         .dx-scheduler-group-header {
             height: auto;
             text-align: center;
@@ -2392,6 +2405,16 @@
             display: flex;
             overflow: hidden;	            
             width: 100%;
+
+            border-right: none;
+
+            &[rowspan='2'], &[rowspan='3'] {
+                border-bottom: none;
+
+                .dx-scheduler-group-header-content div {
+                    margin-top: 200%;
+                }
+            }
         }
 
         .dx-scheduler-group-header-content {
