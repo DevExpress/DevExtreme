@@ -3,6 +3,7 @@
 var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     isNumeric = require("../../core/utils/type").isNumeric,
+    browser = require("../../core/utils/browser"),
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
     inRange = require("../../core/utils/math").inRange,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
@@ -68,7 +69,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this.callBase(e);
 
         var caret = this._caret();
-        if(caret.start === caret.end) {
+        if(caret.start !== caret.end) {
+            return;
+        }
+
+        if(browser.msie) {
+            this._ieCaretTimeout = setTimeout(function() {
+                this._moveCaretToBoundary(MOVE_BACKWARD, e);
+            }.bind(this));
+        } else {
             this._moveCaretToBoundary(MOVE_BACKWARD, e);
         }
     },
@@ -576,6 +585,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._lastKey;
         delete this._parsedValue;
         delete this._isDirty;
+        clearTimeout(this._ieCaretTimeout);
+        delete this._ieCaretTimeout;
     },
 
     _clean: function() {

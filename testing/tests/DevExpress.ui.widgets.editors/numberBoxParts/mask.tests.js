@@ -20,9 +20,14 @@ var moduleConfig = {
             value: "",
             useMaskBehavior: true
         });
+        this.clock = sinon.useFakeTimers();
         this.input = this.$element.find(".dx-texteditor-input");
         this.instance = this.$element.dxNumberBox("instance");
         this.keyboard = keyboardMock(this.input, true);
+    },
+
+    afterEach: function() {
+        this.clock.restore();
     }
 };
 
@@ -1326,6 +1331,7 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
     });
 
     this.input.focus();
+    this.clock.tick();
 
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
 });
