@@ -156,11 +156,6 @@ var Accordion = CollectionWidget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    itemTitleTemplate: function(data) {
-                        return $("<div>")
-                            .text(data.title)
-                            .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS);
-                    },
                      /**
                     * @name dxAccordionOptions.animationDuration
                     * @type number
@@ -206,14 +201,17 @@ var Accordion = CollectionWidget.inherit({
         * @type String
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
+            var $templateContainer = $("<div>")
+                    .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS)
+                    .appendTo($container);
+
             if(isPlainObject(data)) {
                 if(data.title) {
-                    $container.text(data.title);
+                    $templateContainer.text(data.title);
                 }
-
-                $container.append(iconUtils.getImageContainer(data.icon));
+                $templateContainer.append(iconUtils.getImageContainer(data.icon));
             } else {
-                $container.text(String(data));
+                $templateContainer.text(String(data));
             }
         }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
     },
