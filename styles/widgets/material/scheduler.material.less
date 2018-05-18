@@ -27,6 +27,8 @@
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET: 8px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_HEADER_HEIGHT: 22px;
     @MATERIAL_SCHEDULER_WORKSPACE_MONTH_TIMELINE__TIME_HEIGHT: 34px;
+
+    @MATERIAL_SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 84px;
 }
 
 .dx-size-compact() {
@@ -683,6 +685,12 @@
     .dx-scheduler-recurrence-rule-item {
         &:before {
             background-color: @scheduler-recurence-editor-bg;
+        }
+
+        &.dx-label-v-align {
+            &:before {
+                top: @MATERIAL_SCHEDULER_RECURRENCE_LINE_TOP_POSITION;
+            }
         }
 
         &.dx-scheduler-recurrence-rule-item-opened {
