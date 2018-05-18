@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     stringUtils = require("../../core/utils/string"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
+    extendFromObject = require("../../core/utils/extend").extendFromObject,
     toComparable = require("../../core/utils/data").toComparable,
     LoadPanel = require("../load_panel"),
     dataUtils = require("../../data/utils"),
@@ -407,7 +408,7 @@ module.exports = (function() {
 
         createObjectWithChanges: function(target, changes) {
             var result = target ? Object.create(Object.getPrototypeOf(target)) : {},
-                targetWithoutPrototype = Object.assign({}, target);
+                targetWithoutPrototype = extendFromObject({}, target);
 
             objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, false, true);
             return objectUtils.deepExtendArraySafe(result, changes, false, true);
