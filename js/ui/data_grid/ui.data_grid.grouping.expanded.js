@@ -319,6 +319,9 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                 }
             }
         },
+        _isGroupItemCountable: function(item) {
+            return false;
+        },
         updateTotalItemsCount: function() {
             var itemsCountCorrection = 0;
 

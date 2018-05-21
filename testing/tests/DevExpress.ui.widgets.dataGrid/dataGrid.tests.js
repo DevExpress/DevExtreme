@@ -4732,6 +4732,39 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
     }
 });
 
+// T634232
+QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling mode is infinite", function(assert) {
+    var data = [];
+
+    for(var i = 0; i < 60; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    var dataGrid = createDataGrid({
+        height: 300,
+        loadingTimeout: undefined,
+        dataSource: {
+            store: data,
+            group: "id"
+        },
+        remoteOperations: { paging: true, filtering: true, sorting: true },
+        scrolling: {
+            timeout: 0,
+            mode: "infinite",
+            useNative: false
+        }
+    });
+
+    dataGrid.getScrollable().scrollTo({ y: 1500 });
+    dataGrid.getScrollable().scrollTo({ y: 3000 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 120);
+    assert.strictEqual(dataGrid.getVisibleRows()[0].data.key, 1);
+    assert.strictEqual(dataGrid.getVisibleRows()[40].data.key, 21);
+    assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
