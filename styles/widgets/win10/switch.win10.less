@@ -18,7 +18,7 @@
 
 .dx-switch-inner {
     height: 100%;
-    width: 100%;
+    width: 200%;
 }
 
 .dx-switch-on, .dx-switch-off {
@@ -26,6 +26,7 @@
 }
 
 .dx-switch-handle {
+    left: 50%;
     height: @WIN10_SWITCH_HANDLE_SIZE;
     width: @WIN10_SWITCH_HANDLE_SIZE;
     position: relative;
@@ -33,6 +34,9 @@
 
     .dx-rtl & {
         float: left;
+        left: 0;
+        right: 50%;
+        margin-right: -@WIN10_SWITCH_HANDLE_SIZE;
     }
 
     &:before {

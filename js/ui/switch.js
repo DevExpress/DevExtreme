@@ -1,8 +1,6 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
@@ -96,7 +94,8 @@ var Switch = Editor.inherit({
             */
             value: false,
 
-            useInkRipple: false
+            useInkRipple: false,
+            _animateHandle: true
 
             /**
             * @name dxSwitchOptions.name
@@ -130,7 +129,15 @@ var Switch = Editor.inherit({
                 options: {
                     useInkRipple: true
                 }
-            }
+            },
+            {
+                device: function(device) {
+                    return /ios7/.test(themes.current());
+                },
+                options: {
+                    _animateHandle: false
+                }
+            },
         ]);
     },
 
@@ -154,34 +161,28 @@ var Switch = Editor.inherit({
         this._renderSwipeable();
 
         this.callBase();
-    },
 
-    _render: function() {
         this._renderSwitchInner();
         this._renderLabels();
-
-        this._renderHandleWidth();
         this._renderValue();
-
-        this.callBase();
     },
 
-    _renderHandleWidth: function() {
-        this._handleWidth = parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
+    _getInnerOffset: function(value, offset) {
+        var ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
+        return 100 * ratio + "%";
     },
 
-    _getCalcOffset: function(value, offset) {
-        var ratio = offset - Number(!value);
-        return "calc(" + 100 * ratio + "% + " + -this._getHandleWidth() * ratio + "px)";
-    },
+    _getHandleOffset: function(value, offset) {
+        if(this.option("rtlEnabled")) {
+            value = !value;
+        }
 
-    _getHandleWidth: function() {
-        !this._handleWidth && this._renderHandleWidth();
-        return this._handleWidth;
-    },
-
-    _getPixelOffset: function(value, offset) {
-        return this._getMarginBound() * (offset - Number(!value));
+        if(value) {
+            var calcValue = -100 + 100 * (-offset);
+            return calcValue + "%";
+        } else {
+            return 100 * (-offset) + "%";
+        }
     },
 
     _renderSwitchInner: function() {
@@ -222,8 +223,12 @@ var Switch = Editor.inherit({
             onStart: this._swipeStartHandler.bind(this),
             onUpdated: this._swipeUpdateHandler.bind(this),
             onEnd: this._swipeEndHandler.bind(this),
-            itemSizeFunc: this._getMarginBound.bind(this)
+            itemSizeFunc: this._getItemSizeFunc.bind(this)
         });
+    },
+
+    _getItemSizeFunc: function() {
+        return this._$switchContainer.outerWidth(true) - this._$handle.get(0).getBoundingClientRect().width;
     },
 
     _renderSubmitElement: function() {
@@ -273,31 +278,18 @@ var Switch = Editor.inherit({
         this._renderInkWave(this._$handle, e, value, 1);
     },
 
-    _getMarginBound: function() {
-        if(!this._marginBound) {
-            this._marginBound = this._$switchContainer.outerWidth(true) - this._getHandleWidth();
-        }
-        return this._marginBound;
-    },
-
-    _marginDirection: function() {
-        return this.option("rtlEnabled") ? "Right" : "Left";
-    },
-
     _offsetDirection: function() {
         return this.option("rtlEnabled") ? -1 : 1;
     },
 
     _renderPosition: function(state, swipeOffset) {
-        if(!windowUtils.hasWindow()) {
-            return;
+        var innerOffset = this._getInnerOffset(state, swipeOffset),
+            handleOffset = this._getHandleOffset(state, swipeOffset);
+
+        if(this.option("_animateHandle")) {
+            this._$switchInner.css("transform", " translateX(" + innerOffset + ")");
+            this._$handle.css("transform", " translateX(" + handleOffset + ")");
         }
-
-        var marginDirection = this._marginDirection(),
-            resetMarginDirection = marginDirection === "Left" ? "Right" : "Left";
-
-        this._$switchInner.css("margin" + marginDirection, this._getCalcOffset(state, swipeOffset));
-        this._$switchInner.css("margin" + resetMarginDirection, 0);
     },
 
     _validateValue: function() {
@@ -340,19 +332,33 @@ var Switch = Editor.inherit({
 
         this._animating = true;
 
-        var that = this,
-            marginDirection = this._marginDirection(),
-            resetMarginDirection = marginDirection === "Left" ? "Right" : "Left",
-            fromConfig = {},
-            toConfig = {};
+        var fromInnerOffset = this._getInnerOffset(startValue, 0),
+            toInnerOffset = this._getInnerOffset(endValue, 0),
+            fromHandleOffset = this._getHandleOffset(startValue, 0),
+            toHandleOffset = this._getHandleOffset(endValue, 0);
 
-        this._$switchInner.css("margin" + resetMarginDirection, 0);
-        fromConfig["margin" + marginDirection] = this._getCalcOffset(startValue, 0);
-        toConfig["margin" + marginDirection] = this._getCalcOffset(endValue, 0);
+        var that = this,
+            fromInnerConfig = {},
+            toInnerConfig = {},
+            fromHandleConfig = {},
+            toHandlerConfig = {};
+
+        fromInnerConfig["transform"] = " translateX(" + fromInnerOffset + ")";
+        toInnerConfig["transform"] = " translateX(" + toInnerOffset + ")";
+        fromHandleConfig["transform"] = " translateX(" + fromHandleOffset + ")";
+        toHandlerConfig["transform"] = " translateX(" + toHandleOffset + ")";
+
+        this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, endValue);
+
+        fx.animate(this._$handle, {
+            from: fromHandleConfig,
+            to: toHandlerConfig,
+            duration: SWITCH_ANIMATION_DURATION,
+        });
 
         fx.animate(this._$switchInner, {
-            from: fromConfig,
-            to: toConfig,
+            from: fromInnerConfig,
+            to: toInnerConfig,
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._animating = false;
@@ -377,18 +383,28 @@ var Switch = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._renderPosition(this.option("value"), this._offsetDirection() * e.event.offset);
+        this._renderPosition(this.option("value"), e.event.offset);
     },
 
     _swipeEndHandler: function(e) {
         var that = this,
             offsetDirection = this._offsetDirection(),
-            toConfig = {};
+            toInnerConfig = {},
+            toHandleConfig = {};
 
-        toConfig["margin" + this._marginDirection()] = this._getCalcOffset(that.option("value"), offsetDirection * e.event.targetOffset);
+        var innerOffset = this._getInnerOffset(that.option("value"), e.event.targetOffset),
+            handleOffset = this._getHandleOffset(that.option("value"), e.event.targetOffset);
+
+        toInnerConfig["transform"] = " translateX(" + innerOffset + ")";
+        toHandleConfig["transform"] = " translateX(" + handleOffset + ")";
+
+        fx.animate(this._$handle, {
+            to: toHandleConfig,
+            duration: SWITCH_ANIMATION_DURATION,
+        });
 
         fx.animate(this._$switchInner, {
-            to: toConfig,
+            to: toInnerConfig,
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._swiping = false;
@@ -441,6 +457,8 @@ var Switch = Editor.inherit({
             case "value":
                 this._renderValue();
                 this.callBase(args);
+                break;
+            case "_animateHandle":
                 break;
             default:
                 this.callBase(args);

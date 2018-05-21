@@ -2,10 +2,11 @@
 @{
     var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
     var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
+    var isFrameworkTest = Model.ScriptVirtualPath.Contains("DevExpress.framework");
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
-        || Model.ScriptVirtualPath.Contains("DevExpress.framework")
+        || isFrameworkTest
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
     string GetJQueryUrl() {
@@ -13,8 +14,8 @@
             return Url.Content("~/testing/helpers/noJQuery.js");
 
         switch(Model.JQueryVersion) {
-            case "1": return Url.Content("~/vendor/jquery/jquery-1.12.3.js");
-            case "2": return Url.Content("~/vendor/jquery/jquery-2.2.3.js");
+            case "1": return Url.Content("~/node_modules/jquery.1/node_modules/jquery/dist/jquery.js");
+            case "2": return Url.Content("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js");
         }
         return Url.Content("~/artifacts/js/jquery.js");
     }
@@ -143,10 +144,10 @@
         })();
     </script>
 
-    <script src="@Url.ContentWithCacheBuster("~/vendor/jquery/jquery-2.2.3.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/vendor/sinon/sinon.js")"></script>
-    <script src="@Url.ContentWithCacheBuster("~/vendor/sinon/sinon-timers-ie.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon-timers-ie.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script>
@@ -279,6 +280,11 @@
             if(@Json.Serialize(isServerSideTest) && (isNotWebkitBrowser || isOldJQuery)) {
                 return;
             }
+
+            if(@Json.Serialize(isFrameworkTest) && @Json.Serialize(Model.JQueryVersion) === "1") {
+                return;
+            }
+
             return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
         })
         .then(function() {

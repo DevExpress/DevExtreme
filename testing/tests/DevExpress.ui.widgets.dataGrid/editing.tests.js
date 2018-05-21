@@ -8503,6 +8503,42 @@ QUnit.testInActiveWindow("Revert to an old value when the revert button is click
     assert.equal($revertButton.length, 0, "revert button is not shown");
 });
 
+// T633351
+QUnit.testInActiveWindow("Revert to an old value when the revert button and nested dataObject modified", function(assert) {
+    // arrange
+    var testElement = $('#container'),
+        $input;
+
+    this.options.dataSource.store = [ { A: { name: "Alex" }, lastName: "Smith" }];
+
+    this.rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            allowUpdating: true,
+            mode: "batch"
+        },
+        columns: [ { dataField: "A.name", dataType: "string" }, "lastName"]
+    });
+
+    // act
+    this.editCell(0, 0);
+    $input = testElement.find("input").first();
+    $input.val("Ben");
+    $($input).trigger('change');
+    this.closeEditCell();
+
+    this.clock.tick();
+
+    // assert
+    assert.equal($input[0].value, "Ben", "new value");
+
+    // act, assert
+    this.editingController.cancelEditData();
+
+    assert.equal(testElement.find(".dx-data-row td").eq(0).text(), "Alex", "old value");
+});
+
 QUnit.test("Revert button is not shown when the height light css class is not applied", function(assert) {
     // arrange
     var testElement = $('#container'),
@@ -9199,6 +9235,43 @@ QUnit.test("Not create validator for group column with validationRules when edit
     assert.ok($rowElement.hasClass("dx-datagrid-edit-form"), "has edit form");
     assert.equal($rowElement.find(".dx-validator").length, 2, "count cell with validation");
     assert.ok(!$rowElement.children(".dx-datagrid-group-space").hasClass("dx-validator"), "no validator in group space cell");
+});
+
+// T631975
+QUnit.test("Required mark should be rendered for column with validationRules when edit mode is 'form'", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = that.rowsView,
+        $rowElement,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "lastName",
+            formItem: {
+                isRequired: false
+            },
+            validationRules: [{ type: "required" }]
+        }]
+    });
+
+    // act
+    that.editRow(1);
+
+    // assert
+    $rowElement = $testElement.find("tbody > tr").eq(1);
+    assert.ok($rowElement.hasClass("dx-datagrid-edit-form"), "has edit form");
+    assert.equal($rowElement.find(".dx-validator").length, 2, "validator count");
+    assert.equal($rowElement.find(".dx-field-item").eq(0).find(".dx-field-item-required-mark").length, 1, "required mark in first item");
+    assert.equal($rowElement.find(".dx-field-item").eq(1).find(".dx-field-item-required-mark").length, 0, "no required mark in second item");
 });
 
 // T472946
@@ -10007,7 +10080,7 @@ QUnit.test("Uploading items when virtual scrolling after insert row", function(a
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10041,7 +10114,7 @@ QUnit.test("Change page index when virtual scrolling after insert row", function
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10084,7 +10157,7 @@ QUnit.test("Uploading items when infinite scrolling after insert row", function(
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10116,7 +10189,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     this.setupDataGrid();
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10127,7 +10200,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     // assert
     items = this.dataController.items();
-    assert.equal(this.dataController.pageIndex(), 23, "page index");
+    assert.equal(this.dataController.pageIndex(), 24, "page index");
     assert.equal(items.length, 8, "count items");
 
     // act
@@ -10164,7 +10237,7 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10485,7 +10558,7 @@ QUnit.test("Edit row after the infinite scrolling when there is inserted row", f
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert

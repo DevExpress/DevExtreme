@@ -14,6 +14,7 @@ require("../../integration/knockout");
 * @section frameworkMarkupComponents
 * @type object
 * @module framework/html/command_container
+* @deprecated
 */
 var CommandContainer = MarkupComponent.inherit({
     ctor: function(element, options) {

@@ -8,7 +8,6 @@ var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
     noop = commonUtils.noop,
     isDefined = require("../core/utils/type").isDefined,
-    arrayUtils = require("../core/utils/array"),
     typeUtils = require("../core/utils/type"),
     windowUtils = require("../core/utils/window"),
     iteratorUtils = require("../core/utils/iterator"),
@@ -1288,6 +1287,23 @@ var TagBox = SelectBox.inherit({
         delete this._tagTemplate;
     },
 
+    _removeDuplicates: function(from, what) {
+        var that = this,
+            result = [];
+
+        each(from, function(_, value) {
+            var filteredItems = what.filter(function(item) {
+                return that._valueGetter(value) === that._valueGetter(item);
+            });
+
+            if(!filteredItems.length) {
+                result.push(value);
+            }
+        });
+
+        return result;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "onSelectAllValueChanged":
@@ -1334,8 +1350,8 @@ var TagBox = SelectBox.inherit({
             case "selectedItem":
                 break;
             case "selectedItems":
-                var addedItems = arrayUtils.removeDuplicates(args.value, args.previousValue),
-                    removedItems = arrayUtils.removeDuplicates(args.previousValue, args.value);
+                var addedItems = this._removeDuplicates(args.value, args.previousValue),
+                    removedItems = this._removeDuplicates(args.previousValue, args.value);
 
                 this._selectionChangedAction({
                     addedItems: addedItems,

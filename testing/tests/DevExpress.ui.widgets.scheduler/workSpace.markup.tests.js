@@ -27,7 +27,7 @@ const WORKSPACE_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_CLASS = "dx-scheduler-date-table",
     ALL_DAY_TITLE_CLASS = "dx-scheduler-all-day-title",
 
-    HORIZONTAL_GROUP_TABLE_CLASS = "dx-scheduler-work-space-horizontal-group-table",
+    VERTICAL_GROUP_TABLE_CLASS = "dx-scheduler-work-space-vertical-group-table",
 
     CELL_CLASS = "dx-scheduler-date-table-cell",
     HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
@@ -553,7 +553,7 @@ QUnit.module("Workspace Day markup with vertical grouping", dayWithGroupingModul
     QUnit.test("Date table should have right group header", (assert) => {
         const $element = this.instance.$element();
 
-        assert.equal($element.find("." + HORIZONTAL_GROUP_TABLE_CLASS).length, 1, "Group header is rendered");
+        assert.equal($element.find("." + VERTICAL_GROUP_TABLE_CLASS).length, 1, "Group header is rendered");
     });
 
     QUnit.test("Date table should have right group header cells count", (assert) => {
@@ -1423,7 +1423,7 @@ QUnit.module("Workspace Month markup with vertical grouping", monthWithGroupingM
     QUnit.test("Date table should have right group header", (assert) => {
         const $element = this.instance.$element();
 
-        assert.equal($element.find("." + HORIZONTAL_GROUP_TABLE_CLASS).length, 1, "Group header is rendered");
+        assert.equal($element.find("." + VERTICAL_GROUP_TABLE_CLASS).length, 1, "Group header is rendered");
     });
 
     QUnit.test("Date table should have right group header cells count", (assert) => {

@@ -35,29 +35,24 @@ var DATAGRID_EXPORT_MENU_CLASS = "dx-datagrid-export-menu",
 exports.DataProvider = Class.inherit({
     _getGroupValue: function(item) {
         var groupColumn = this._options.groupColumns[item.groupIndex],
-            value = dataGridCore.getDisplayValue(groupColumn, item.values[item.groupIndex], item.data, item.rowType),
-            result = groupColumn.caption + ": " + dataGridCore.formatValue(value, groupColumn),
-            visibleIndex;
+            value = dataGridCore.getDisplayValue(groupColumn, item.key[item.groupIndex], item.data, item.rowType),
+            result = groupColumn.caption + ": " + dataGridCore.formatValue(value, groupColumn);
 
-        visibleIndex = this._options.getVisibleIndex(groupColumn.index);
-        if(item.summaryCells && item.summaryCells.length && item.summaryCells[visibleIndex].length) {
-            result += " " + dataGridCore.getGroupRowSummaryText(item.summaryCells[visibleIndex], this._options.summaryTexts);
+        var summaryCells = item.summaryCells;
+        if(summaryCells && summaryCells[0] && summaryCells[0].length) {
+            result += " " + dataGridCore.getGroupRowSummaryText(summaryCells[0], this._options.summaryTexts);
         }
 
         return result;
     },
 
     _correctCellIndex: function(cellIndex) {
-        var startIndex = this._options.startValueIndex,
-            endIndex = this._options.endValueIndex;
-
-        return cellIndex <= endIndex ? startIndex + cellIndex : null;
+        return cellIndex;
     },
 
     _initOptions: function() {
         var exportController = this._exportController,
             groupColumns = exportController._columnsController.getGroupColumns(),
-            startEndIndexes = exportController._getStartEndValueIndexes(exportController._columnsController.getVisibleColumns()),
             excelWrapTextEnabled = exportController.option("export.excelWrapTextEnabled");
 
         this._options = {
@@ -65,8 +60,6 @@ exports.DataProvider = Class.inherit({
             groupColumns: groupColumns,
             items: !!exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
             getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
-            startValueIndex: startEndIndexes.startIndex,
-            endValueIndex: startEndIndexes.endIndex,
             isHeadersVisible: exportController.option("showColumnHeaders"),
             summaryTexts: exportController.option("summary.texts"),
             customizeExportData: exportController.option("customizeExportData"),
@@ -77,7 +70,6 @@ exports.DataProvider = Class.inherit({
 
     ctor: function(exportController) {
         this._exportController = exportController;
-
     },
 
     getStyles: function() {
@@ -431,29 +423,44 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
     _processUnExportedItems: function(items) {
         var columns = this._columnsController.getVisibleColumns(),
+            groupColumns = this._columnsController.getGroupColumns(),
             item,
             column,
             values,
+            summaryCells,
             i,
             j;
 
         for(i = 0; i < items.length; i++) {
             item = items[i];
             values = [];
-
-            if(item.rowType === "group") {
-                continue;
-            }
+            summaryCells = [];
 
             for(j = 0; j < columns.length; j++) {
                 column = columns[j];
-                if((isDefined(column.command) || column.allowExporting) && item.values) {
-                    values.push(item.values[j]);
+                if(!column.command && (column.allowExporting || item.rowType === "group")) {
+                    if(item.values) {
+                        if(item.rowType === "group" && !values.length) {
+                            values.push(item.key[item.groupIndex]);
+                        } else {
+                            values.push(item.values[j]);
+                        }
+                    }
+                    if(item.summaryCells) {
+                        if(item.rowType === "group" && !summaryCells.length) {
+                            summaryCells.push(item.summaryCells[j - groupColumns.length + item.groupIndex]);
+                        } else {
+                            summaryCells.push(item.summaryCells[j]);
+                        }
+                    }
                 }
             }
 
             if(values.length) {
                 item.values = values;
+            }
+            if(summaryCells.length) {
+                item.summaryCells = summaryCells;
             }
         }
     },
@@ -500,32 +507,6 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             selectedRowData = selectionController.getSelectedRowsData();
 
         return this._getAllItems(selectedRowData);
-    },
-
-    _getStartEndValueIndexes: function(visibleColumns) {
-        var i,
-            startIndex,
-            endIndex,
-            visibleColumnsLength = visibleColumns.length;
-
-        for(i = 0; i < visibleColumnsLength; i++) {
-            if(!isDefined(visibleColumns[i].command)) {
-                startIndex = i;
-                break;
-            }
-        }
-
-        for(i = visibleColumnsLength - 1; i >= 0; i--) {
-            if(!isDefined(visibleColumns[i].command)) {
-                endIndex = i;
-                break;
-            }
-        }
-
-        return {
-            startIndex: startIndex,
-            endIndex: endIndex
-        };
     },
 
     init: function() {

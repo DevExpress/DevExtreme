@@ -179,6 +179,11 @@
     "name": "localization",
     "exports": {
       "loadMessages": "localization.loadMessages",
+      "formatMessage": "localization.formatMessage",
+      "formatNumber": "localization.formatNumber",
+      "parseNumber": "localization.parseNumber",
+      "formatDate": "localization.formatDate",
+      "parseDate": "localization.parseDate",
       "locale": "localization.locale"
     }
   },

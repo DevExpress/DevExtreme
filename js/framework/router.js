@@ -210,6 +210,7 @@ var Route = Class.inherit({
 * @type object
 * @module framework/router
 * @export default
+* @deprecated
 */
 var Router = Class.inherit({
     ctor: function() {

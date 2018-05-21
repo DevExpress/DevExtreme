@@ -288,15 +288,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return position;
     },
 
-    scrollToTime: noop,
-
-    _setHorizontalGroupHeaderCellsHeight: function() {
-        if(this._needCreateCrossScrolling()) {
-            this.callBase();
-        } else {
-            return;
-        }
-    }
+    scrollToTime: noop
 });
 
 registerComponent("dxSchedulerWorkSpaceMonth", SchedulerWorkSpaceMonth);

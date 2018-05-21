@@ -177,7 +177,7 @@ QUnit.test("View switcher label should be rendered correctly when views contains
         name: "TestDay"
     });
 
-    assert.equal($switcherLabel.text(), "Day", "ViewSwitcher label was rendered correctly");
+    assert.equal($switcherLabel.text(), "TestDay", "ViewSwitcher label was rendered correctly");
 });
 
 QUnit.test("currentView option should be passed correctly to the navigator", function(assert) {

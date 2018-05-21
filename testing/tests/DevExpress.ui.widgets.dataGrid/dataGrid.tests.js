@@ -45,8 +45,8 @@ QUnit.testStart(function() {
 require("common.css!");
 require("generic_light.css!");
 
-require("../../../vendor/template-engines/underscore-min.js");
-require("../../../vendor/template-engines/jsrender.min.js");
+require("../../../node_modules/underscore/underscore-min.js");
+require("../../../node_modules/jsrender/jsrender.min.js");
 
 var DataGrid = require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
@@ -783,6 +783,64 @@ QUnit.test("Editing should work with classes as data objects contains readonly p
     assert.deepEqual(rows[0].values, [0, "test"]);
 });
 
+// T613804
+QUnit.test("calculateCellValue for edited cell fires twice and at the second time contains full data row as an argument", function(assert) {
+    // arrange
+    function DataItem(id, text) {
+        this.id = id;
+        this.text = text;
+    }
+    Object.defineProperty(DataItem.prototype, "ID", {
+        configurable: true,
+        enumerable: true,
+        get: function() { return this.id; }
+    });
+    Object.defineProperty(DataItem.prototype, "Text", {
+        configurable: true,
+        enumerable: false,
+        get: function() { return this.text; },
+        set: function(value) { this.text = value; }
+    });
+    var dataItem0 = new DataItem(0, "text0"),
+        clock = sinon.useFakeTimers(),
+        counter = 0,
+        modifiedData,
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columns: [
+                "ID",
+                {
+                    dataField: "Text",
+                    calculateCellValue: function(data) {
+                        if(data.Text === "test") {
+                            ++counter;
+                            modifiedData = data;
+                        }
+                    }
+                }
+            ],
+            dataSource: {
+                store: [ dataItem0 ]
+            },
+            editing: { allowUpdating: true, mode: "batch" }
+        }).dxDataGrid("instance");
+
+    // act
+    dataGrid.cellValue(0, 1, "test");
+    dataGrid.closeEditCell();
+
+    clock.tick();
+
+    // assert
+    assert.equal(counter, 2);
+    assert.equal(dataItem0.Text, "text0");
+    assert.equal(modifiedData.ID, 0);
+    assert.equal(modifiedData.Text, "test");
+    assert.ok(modifiedData instanceof DataItem, "modifiedData is instance of DataItem");
+
+    clock.restore();
+});
+
 QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
@@ -1116,6 +1174,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     // assert
     rowHeight = rowsView._rowHeight;
     assert.ok(rowHeight > 50, "rowHeight > 50");
+    assert.strictEqual(instance.getVisibleRows().length, 6, "row count");
 
     setTimeout(function() {
         // arrange
@@ -2855,9 +2914,9 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(visibleRows.length, 12, "visible row count");
     assert.equal(visibleRows[0].key, 3, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 12, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
 
     clock.restore();
 });
@@ -2921,9 +2980,9 @@ QUnit.test("visible items should be rendered if virtual scrolling and preload ar
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 14, "visible row count");
+    assert.equal(visibleRows.length, 15, "visible row count");
     assert.equal(visibleRows[0].key, 1, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 15, "last visible row key");
 
     clock.restore();
 });
@@ -2969,6 +3028,46 @@ QUnit.test("editing should starts correctly if scrolling mode is virtual", funct
     assert.equal($(dataGrid.getRowElement(1, 0)).find(".dx-texteditor").length, 1, "row has editor");
 
     clock.restore();
+});
+
+QUnit.test("selection should works correctly if row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 50; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        selection: {
+            mode: "multiple"
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.selectRows([12], true);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows[0].key, 6, "first visible row key");
+    assert.equal(visibleRows[6].key, 12, "selected row key");
+    assert.equal(visibleRows[6].isSelected, true, "isSelected for selected row");
+    assert.ok($(dataGrid.getRowElement(6)).hasClass("dx-selection"), "dx-selection class is added");
 });
 
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
@@ -9532,12 +9631,12 @@ QUnit.test("Click near selectAll doesn't generate infinite loop", function(asser
     });
 
     var $selectAllElement = $(dataGrid.element()).find(".dx-header-row .dx-command-select");
-    $selectAllElement.click();
+    $selectAllElement.trigger("dxclick");
 
     // assert
     assert.equal(dataGrid.getSelectedRowKeys().length, 1);
     assert.equal($selectAllElement.find(".dx-datagrid-text-content").length, 0);
-    assert.ok($($selectAllElement.find(".dx-select-checkbox").hasClass("dx-checkbox-selected")));
+    assert.ok($($selectAllElement).find(".dx-select-checkbox").hasClass("dx-checkbox-checked"));
 });
 
 QUnit.module("Modules", {

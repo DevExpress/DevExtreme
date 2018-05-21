@@ -347,39 +347,45 @@ var Calendar = Editor.inherit({
 
     _moveCurrentDate: function(offset, baseDate) {
         var currentDate = baseDate || new Date(this.option("currentDate")),
-            newDate = new Date(currentDate),
             maxDate = this.option("max"),
-            zoomLevel = this.option("zoomLevel");
+            minDate = this.option("min"),
+            zoomLevel = this.option("zoomLevel"),
+            isAvailableDateFound = false,
+            newDate;
 
-        switch(zoomLevel) {
-            case "month":
-                newDate.setDate(currentDate.getDate() + offset);
-                break;
-            case "year":
-                newDate.setMonth(currentDate.getMonth() + offset);
-                break;
-            case "decade":
-                newDate.setFullYear(currentDate.getFullYear() + offset);
-                break;
-            case "century":
-                newDate.setFullYear(currentDate.getFullYear() + 10 * offset);
-                break;
-        }
-
-        var offsetCorrection = 2 * offset / Math.abs(offset);
-
-        if(Math.abs(offset) > 1 && !dateUtils.sameView(zoomLevel, currentDate, newDate)) {
-            if(zoomLevel === "decade") {
-                newDate.setFullYear(currentDate.getFullYear() + offset - offsetCorrection);
+        while(!isAvailableDateFound) {
+            newDate = new Date(currentDate);
+            switch(zoomLevel) {
+                case "month":
+                    newDate.setDate(currentDate.getDate() + offset);
+                    break;
+                case "year":
+                    newDate.setMonth(currentDate.getMonth() + offset);
+                    break;
+                case "decade":
+                    newDate.setFullYear(currentDate.getFullYear() + offset);
+                    break;
+                case "century":
+                    newDate.setFullYear(currentDate.getFullYear() + 10 * offset);
+                    break;
             }
-            if(zoomLevel === "century") {
-                newDate.setFullYear(currentDate.getFullYear() + 10 * (offset - offsetCorrection));
-            }
-        }
 
-        if(this._view.isDateDisabled(newDate) && newDate <= new Date(maxDate)) {
-            this._moveCurrentDate(offset, newDate);
-            return;
+            var offsetCorrection = 2 * offset / Math.abs(offset);
+
+            if(Math.abs(offset) > 1 && !dateUtils.sameView(zoomLevel, currentDate, newDate)) {
+                if(zoomLevel === "decade") {
+                    newDate.setFullYear(currentDate.getFullYear() + offset - offsetCorrection);
+                }
+                if(zoomLevel === "century") {
+                    newDate.setFullYear(currentDate.getFullYear() + 10 * (offset - offsetCorrection));
+                }
+            }
+
+            if(this._view.isDateDisabled(newDate) && newDate <= new Date(maxDate) && newDate >= new Date(minDate)) {
+                currentDate = newDate;
+            } else {
+                isAvailableDateFound = true;
+            }
         }
 
         this.option("currentDate", newDate);

@@ -293,6 +293,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                 if(options.isFilterBuilder) {
                     options.dataSource.filter = null;
+                    options.alignment = "right";
                 }
 
                 that._headerFilterView.showHeaderFilterMenu(options.columnElement, options);

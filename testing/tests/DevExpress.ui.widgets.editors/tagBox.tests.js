@@ -3194,6 +3194,89 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems
     assert.deepEqual(spy.args[3][0].removedItems, [], "not items in the 'removedItems' argument after item is selected");
 });
 
+function createCustomStore(data, key) {
+    var arrayStore1 = new ArrayStore(data),
+        arrayStore2 = new ArrayStore({
+            data: data.map(function(item) {
+                return $.extend({}, item);
+            }),
+            key: key
+        });
+
+    return new CustomStore({
+        load: function(options) {
+            return arrayStore1.load(options);
+        },
+        byKey: function(key) {
+            return arrayStore2.byKey(key);
+        },
+        key: key
+    });
+}
+
+QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' when a remote store is used", function(assert) {
+    var data = [
+        {
+            "id": 1,
+            "title": "item 1"
+        },
+        {
+            "id": 2,
+            "title": "item 2"
+        },
+        {
+            "id": 3,
+            "title": "item 3"
+        }],
+        spy = sinon.spy(),
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: createCustomStore(data, "id"),
+            showSelectionControls: true,
+            applyValueMode: "useButtons",
+            value: [1, 2],
+            displayExpr: "id",
+            valueExpr: "id",
+            opened: true,
+            onSelectionChanged: spy
+        }).dxTagBox("instance"),
+        $listItems = tagBox._list.$element().find(".dx-list-item");
+
+    $($listItems.eq(2)).trigger("dxclick");
+    $(".dx-button.dx-popup-done").trigger("dxclick");
+
+    assert.deepEqual(spy.args[1][0].addedItems, [data[2]], "the 'addedItems' argument");
+    assert.equal(spy.args[1][0].removedItems.length, 0, "the 'removedItems' argument");
+});
+
+QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' when a remote store is used", function(assert) {
+    var data = [
+        {
+            "id": 1,
+            "title": "item 1"
+        },
+        {
+            "id": 2,
+            "title": "item 2"
+        },
+        {
+            "id": 3,
+            "title": "item 3"
+        }],
+        spy = sinon.spy(),
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: createCustomStore(data, "id"),
+            value: [1, 2, 3],
+            displayExpr: "id",
+            valueExpr: "id",
+            onSelectionChanged: spy
+        }).dxTagBox("instance"),
+        $removeButtons = tagBox.$element().find(".dx-tag-remove-button");
+
+    $($removeButtons.eq(2)).trigger("dxclick");
+
+    assert.deepEqual(spy.args[1][0].removedItems, [data[2]], "the 'removedItems' argument");
+    assert.equal(spy.args[1][0].addedItems.length, 0, "the 'addedItems' argument");
+});
 
 QUnit.module("the 'fieldTemplate' option", moduleSetup);
 

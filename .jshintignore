@@ -1,4 +1,4 @@
 artifacts/*
 js/viz/docs/*
 node_modules/*
-vendor/*
+testing/helpers/sinon/*

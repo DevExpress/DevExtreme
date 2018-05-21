@@ -37,6 +37,7 @@ var VIEW_PORT_CLASSNAME = "dx-viewport",
 * @namespace DevExpress.framework.html
 * @module framework/html/html_application
 * @export default
+* @deprecated
 */
 var HtmlApplication = Application.inherit({
 
