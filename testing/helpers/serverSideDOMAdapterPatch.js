@@ -73,6 +73,6 @@ exports.set = function() {
         }
     });
 
-    // Ready callbacks should be fired by the integrqtion
+    // Ready callbacks should be fired by the integration
     readyCallbacks.fire();
 };

@@ -1,6 +1,7 @@
 "use strict";
 
 var domAdapter = require("../dom_adapter");
+var injector = require("./dependency_injector");
 var windowUtils = require("./window");
 var callOnce = require("./call_once");
 var callbacks = [];
@@ -35,4 +36,4 @@ var readyCallbacks = {
     }
 };
 
-module.exports = readyCallbacks;
+module.exports = injector(readyCallbacks);
