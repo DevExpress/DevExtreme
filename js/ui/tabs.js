@@ -35,6 +35,9 @@ var TABS_CLASS = "dx-tabs",
 
     TABS_ITEM_DATA_KEY = "dxTabData",
 
+    BUTTON_NEXT_ICON = "chevronnext",
+    BUTTON_PREV_ICON = "chevronprev",
+
     FEEDBACK_HIDE_TIMEOUT = 100,
     FEEDBACK_DURATION_INTERVAL = 5,
     FEEDBACK_SCROLL_TIMEOUT = 300,
@@ -375,13 +378,14 @@ var Tabs = CollectionWidget.inherit({
 
         if(!this.option("showNavButtons")) return;
 
-        this._leftButton = this._createNavButton(-TAB_OFFSET, "chevronprev");
+        var rtlEnabled = this.option("rtlEnabled");
+        this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
 
         var $leftButton = this._leftButton.$element();
         $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
         this.$element().prepend($leftButton);
 
-        this._rightButton = this._createNavButton(TAB_OFFSET, "chevronnext");
+        this._rightButton = this._createNavButton(TAB_OFFSET, rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON);
 
         var $rightButton = this._rightButton.$element();
         $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
