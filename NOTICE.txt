@@ -1,5 +1,17 @@
 The following open source libraries are used and included within this product:
 
+cldr-core
+Copyright (c) 1991-2017 Unicode, Inc
+http://unicode.org/copyright.html
+
+cldr-dates-full
+Copyright (c) 1991-2017 Unicode, Inc
+http://unicode.org/copyright.html
+
+cldr-numbers-full
+Copyright (c) 1991-2017 Unicode, Inc
+http://unicode.org/copyright.html
+
 JSZip JavaScript Library (Open Source - MIT License)
 Copyright (c) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
 https://stuk.github.io/jszip/
