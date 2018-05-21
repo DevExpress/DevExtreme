@@ -41,6 +41,8 @@ var TABS_ITEM_CLASS = "dx-tab",
     TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
     TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left",
     TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right",
+    BUTTON_NEXT_ICON = "chevronnext",
+    BUTTON_PREV_ICON = "chevronprev",
     TAB_OFFSET = 30;
 
 var toSelector = function(cssClass) {
@@ -653,21 +655,6 @@ QUnit.test("dxTabs should contains 'dx-tabs-wrapper' class", function(assert) {
     assert.ok($element.children("." + TABS_WRAPPER_CLASS).length, "dxTabs contains 'dx-tabs-wrapper' class");
 });
 
-QUnit.test("tabs should be scrolled to the right position on init in RTL mode", function(assert) {
-    var $element = $("#scrollableTabs").dxTabs({
-        items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }],
-        showNavButtons: true,
-        wordWrap: false,
-        scrollingEnabled: true,
-        rtlEnabled: true,
-        width: 100
-    });
-
-    var scrollable = $element.find(".dx-scrollable").dxScrollable("instance");
-
-    assert.equal(scrollable.scrollLeft(), Math.round(scrollable.scrollWidth() - scrollable.clientWidth()), "items are scrolled");
-});
-
 QUnit.test("tabs should not be refreshed after dimension changed", function(assert) {
     var $element = $("#scrollableTabs").dxTabs({
             items: [{ text: "item 1" }, { text: "item 2" }],
@@ -834,4 +821,57 @@ QUnit.test("template should be rendered correctly with imageSrc", function(asser
     var $content = this.prepareItemTest({ iconSrc: "test.jpg" });
 
     assert.equal($content.filter(".dx-icon").attr("src"), "test.jpg");
+});
+
+
+QUnit.module("RTL");
+QUnit.test("nav buttons should have correct icons on init", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+        items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }],
+        showNavButtons: true,
+        wordWrap: false,
+        scrollingEnabled: true,
+        rtlEnabled: true,
+        width: 100
+    });
+
+    var leftButtonIcon = $element.find("." + TABS_LEFT_NAV_BUTTON_CLASS).dxButton("option", "icon"),
+        rightButtonIcon = $element.find("." + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton("option", "icon");
+
+    assert.equal(leftButtonIcon, BUTTON_NEXT_ICON, "Left button icon is OK");
+    assert.equal(rightButtonIcon, BUTTON_PREV_ICON, "Right button icon is OK");
+});
+
+QUnit.test("nav buttons should have correct icons after rtlEnabled changed", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+        items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }],
+        showNavButtons: true,
+        wordWrap: false,
+        scrollingEnabled: true,
+        rtlEnabled: true,
+        width: 100
+    });
+
+    $element.dxTabs("option", "rtlEnabled", false);
+
+    var leftButtonIcon = $element.find("." + TABS_LEFT_NAV_BUTTON_CLASS).dxButton("option", "icon"),
+        rightButtonIcon = $element.find("." + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton("option", "icon");
+
+    assert.equal(leftButtonIcon, BUTTON_PREV_ICON, "Left button icon is OK");
+    assert.equal(rightButtonIcon, BUTTON_NEXT_ICON, "Right button icon is OK");
+});
+
+QUnit.test("tabs should be scrolled to the right position on init in RTL mode", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+        items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }],
+        showNavButtons: true,
+        wordWrap: false,
+        scrollingEnabled: true,
+        rtlEnabled: true,
+        width: 100
+    });
+
+    var scrollable = $element.find(".dx-scrollable").dxScrollable("instance");
+
+    assert.equal(scrollable.scrollLeft(), Math.round(scrollable.scrollWidth() - scrollable.clientWidth()), "items are scrolled");
 });
