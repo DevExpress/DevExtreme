@@ -6851,8 +6851,7 @@ QUnit.test("Save edit data when edit mode batch and set validate in column", fun
     assert.ok(!cells.eq(4).children().first().hasClass("dx-highlight-outline"), "not has highlight");
 });
 
-// T620368
-QUnit.test("Save hidden column edit data when edit mode batch and column validation", function(assert) {
+QUnit.test("Save hidden column edit data when edit mode batch and column validation (T620368)", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -6923,6 +6922,7 @@ QUnit.test("Save hidden column edit data when edit mode batch and column validat
     assert.equal(errorRows.length, 2, "2 error rows");
     assert.equal(rowsView.element().find("tr:nth-child(2).dx-error-row .dx-error-message").text(), firstErrorRowMessage, "after save 1st error row text are equals to the previous one");
     assert.equal(rowsView.element().find("tr:nth-child(4).dx-error-row .dx-error-message").text(), secondErrorRowMessage, "after save 1st error row text are equals to the previous one");
+    assert.equal(rowsView.getController("validating").invisibleColumnValidators.length, 0);
 });
 
 QUnit.test("Save edit data for inserted row when set validate in column and edit mode batch", function(assert) {
@@ -6980,6 +6980,52 @@ QUnit.test("Save edit data for inserted row when set validate in column and edit
     assert.strictEqual(cells.eq(11).text(), "Test", "text cell 12");
     assert.ok(!cells.eq(11).hasClass("dx-datagrid-invalid"), "success validation");
     assert.ok(!cells.eq(11).children().first().hasClass("dx-highlight-outline"), "not has highlight");
+});
+
+QUnit.test('Save edit data for removed row when set validate in hidden column and edit mode batch (T620368)', function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        inputElement;
+
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true,
+            allowDeleting: true
+        },
+        columns: [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "lastName",
+            validationRules: [{ type: "required" }]
+        }, "age"]
+    });
+
+    rowsView.render(testElement);
+
+    // act
+    that.editCell(0, 0);
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    that.editCell(0, 1);
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    rowsView.component.columnOption("name", "visible", false);
+    rowsView.component.columnOption("lastName", "visible", false);
+
+    // act
+    that.deleteRow(0);
+    that.saveEditData();
+
+    // assert
+    assert.equal(rowsView.getController("validating").invisibleColumnValidators.length, 0, "invisible column validators were removed");
 });
 
 // T420231

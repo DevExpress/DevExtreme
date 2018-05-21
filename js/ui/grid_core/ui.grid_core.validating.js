@@ -424,8 +424,6 @@ module.exports = {
                         invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
                         invisibleColumnValidators = [];
 
-                    this._removeInvisibleColumnValidators();
-
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
                         each(invisibleColumns, function(_, column) {
                             options.forEach(function(option) {
@@ -442,12 +440,12 @@ module.exports = {
                     }
                 },
 
-                _removeInvisibleColumnValidators: function() {
+                _removeInvisibleColumnValidators: function(index) {
                     var validatingController = this.getController("validating"),
                         invisibleColumnValidators = validatingController.invisibleColumnValidators || [];
 
                     each(invisibleColumnValidators, function(_, validator) {
-                        validator && validator._dispose();
+                        validator && validator._dispose(index);
                     });
                     validatingController.invisibleColumnValidators = [];
                 },
@@ -532,6 +530,7 @@ module.exports = {
                     if(!editData.isValid && editData.errorText && rowIndex >= 0) {
                         $popupContent = this.getPopupContent();
                         errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex, $popupContent);
+                        this._removeInvisibleColumnValidators();
                     }
                 },
 
