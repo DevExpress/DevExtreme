@@ -382,7 +382,8 @@ QUnit.test("exportFromMarkup method. Set options", function(assert) {
             backgroundColor: "#00ff00",
             onFileSaving: "file saving callback",
             onExporting: "exporting callback",
-            onExported: "exported callback"
+            onExported: "exported callback",
+            forceProxy: true
         },
         markup = "testMarkup";
 
@@ -399,6 +400,7 @@ QUnit.test("exportFromMarkup method. Set options", function(assert) {
         width: 600,
         height: 400,
         margin: 0,
+        forceProxy: true,
         backgroundColor: "#00ff00",
         onFileSaving: "file saving callback",
         onExporting: "exporting callback",

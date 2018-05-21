@@ -136,14 +136,16 @@ exports.fileSaver = {
         }
     },
 
-    saveAs: function(fileName, format, data, proxyURL, linkClick) {
+    saveAs: function(fileName, format, data, proxyURL, linkClick, forceProxy) {
         fileName += "." + FILE_EXTESIONS[format];
 
         /* if(commonUtils.isDefined(window.cordova)) {
             return this._cordovaDownloader(fileName, this._getDataUri(format, data), linkClick);
         } */
 
-        if(typeUtils.isFunction(window.Blob)) {
+        if(forceProxy) {
+            this._saveByProxy(proxyURL, fileName, format, data);
+        } else if(typeUtils.isFunction(window.Blob)) {
             this._saveBlobAs(fileName, format, data);
         } else {
             if(typeUtils.isDefined(proxyURL) && !typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {

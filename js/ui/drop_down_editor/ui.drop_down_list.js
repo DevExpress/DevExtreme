@@ -287,6 +287,14 @@ var DropDownList = DropDownEditor.inherit({
         this._setListDataSource();
         this._validateSearchMode();
         this._clearSelectedItem();
+        this._initItems();
+    },
+
+    _initItems: function() {
+        var items = this.option().items;
+        if(items && !items.length && this._dataSource) {
+            this.option().items = this._dataSource.items();
+        }
     },
 
     _initActions: function() {

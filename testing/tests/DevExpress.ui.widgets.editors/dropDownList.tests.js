@@ -663,6 +663,49 @@ QUnit.test("value option should be case-sensitive", function(assert) {
     assert.equal($element.find("input").val(), "First");
 });
 
+QUnit.test("set items on init when items of a data source are loaded", function(assert) {
+    var arrayStore = new ArrayStore({
+            data: [{ id: 1, text: "first" }, { id: 2, text: "second" }],
+            key: "id"
+        }),
+        customStore = new CustomStore({
+            load: function(options) {
+                return arrayStore.load(options);
+            },
+
+            byKey: function(key) {
+                return arrayStore.byKey(key);
+            },
+
+            key: "id"
+        }),
+        dataSource = new DataSource({
+            store: customStore
+        });
+
+    var createDropDownList = function() {
+        return $("<div/>")
+            .appendTo($("#dropDownList"))
+            .dxDropDownList({
+                dataSource: dataSource,
+                displayExpr: "text",
+                valueExpr: "id",
+                opened: true,
+                value: 1
+            }).dxDropDownList("instance");
+    };
+
+    createDropDownList();
+    $("#dropDownList").empty();
+
+    var spy = sinon.spy(customStore, "byKey"),
+        instance = createDropDownList(),
+        $listItem = $(instance._$list.find(LIST_ITEM_SELECTOR).eq(1));
+
+    $listItem.trigger("dxclick");
+
+    assert.equal(spy.callCount, 0, "byKey is not called when items are loaded");
+});
 
 QUnit.module("selectedItem", moduleConfig);
 
