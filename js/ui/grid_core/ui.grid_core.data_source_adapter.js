@@ -173,12 +173,10 @@ module.exports = gridCore.Controller.inherit((function() {
             that._customizeRemoteOperations(options, isReload, operationTypes);
 
             if(!options.isCustomLoading) {
-                var isRefreshing = that._isRefreshing;
-
-                options.lastLoadOptions = loadOptions;
+                that._lastLoadOptions = loadOptions;
                 that._isRefreshing = true;
 
-                when(isRefreshing || that.refresh(options, isReload, operationTypes)).done(function() {
+                when(that.refresh(options, isReload, operationTypes)).done(function() {
                     if(that._lastOperationId === options.operationId) {
                         that.load();
                     }
@@ -231,10 +229,6 @@ module.exports = gridCore.Controller.inherit((function() {
             if(!loadOptions) {
                 this._dataSource.cancel(options.operationId);
                 return;
-            }
-
-            if(options.lastLoadOptions) {
-                this._lastLoadOptions = options.lastLoadOptions;
             }
 
             if(localPaging) {
