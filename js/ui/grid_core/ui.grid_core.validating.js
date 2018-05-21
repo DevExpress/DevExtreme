@@ -56,19 +56,8 @@ var ValidatingController = modules.Controller.inherit((function() {
                     key: editData.key,
                     newData: editData.data,
                     oldData: editData.oldData,
-                    errorText: null
-                },
-                brokenRulesMessages = [];
-
-            each(brokenRules, function(_, brokenRule) {
-                var isInvisibleColumnBrokenRule = brokenRule.column && !brokenRule.column.visible && brokenRule.validator._findGroup().key === editData.key;
-                if(isInvisibleColumnBrokenRule && (editData.type === "insert" || editData.data.hasOwnProperty(brokenRule.column.dataField))) {
-                    brokenRulesMessages.push(brokenRule.message);
-                }
-            });
-            if(brokenRulesMessages.length > 0) {
-                parameters.errorText = brokenRulesMessages.join(", ");
-            }
+                    errorText: this.getHiddenValidatorsErrorText(brokenRules)
+                };
 
             that.executeAction("onRowValidating", parameters);
 
@@ -76,6 +65,17 @@ var ValidatingController = modules.Controller.inherit((function() {
             editData.errorText = parameters.errorText;
 
             return parameters;
+        },
+
+        getHiddenValidatorsErrorText: function(brokenRules) {
+            var brokenRulesMessages = [];
+
+            each(brokenRules, function(_, brokenRule) {
+                if(!brokenRule.validator.$element().parent().length) {
+                    brokenRulesMessages.push(brokenRule.message);
+                }
+            });
+            return brokenRulesMessages.join(", ");
         },
 
         validate: function(isFull) {
@@ -97,7 +97,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                     if(editData.type && editData.type !== "remove") {
                         validationResult = that.validateGroup(editData);
                         if(!validationResult.isValid) {
-                            each(validationResult.brokenRules, function(_, brokenRule) {
+                            each(validationResult.brokenRules, function() {
                                 var value = this.validator.option("adapter").getValue();
                                 if(value === undefined) {
                                     value = null;
@@ -152,24 +152,6 @@ var ValidatingController = modules.Controller.inherit((function() {
 
         getValidator: function() {
             return this._currentCellValidator;
-        },
-
-        removeValidators: function(editIndex) {
-            var that = this,
-                editingController = that._editingController;
-
-            each(editingController._editData, function(index, editData) {
-                var validateGroup = ValidationEngine.getGroupConfig(editData);
-
-                if(!typeUtils.isDefined(editIndex) || editIndex === index) {
-                    if(validateGroup) {
-                        for(var i = 0; i < validateGroup.validators.length; i++) {
-                            validateGroup.validators[i]._dispose();
-                            i--;
-                        }
-                    }
-                }
-            });
         },
 
         createValidator: function(parameters, $container) {
@@ -412,43 +394,36 @@ module.exports = {
                     that.callBase.apply(that, arguments);
                 },
 
-                _afterInsertRow: function(options) {
-                    this._createInvisibleColumnValidators([options]);
-
-                    this.callBase(options);
-                },
-
-                _createInvisibleColumnValidators: function(options) {
+                _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController("validating"),
                         invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
                         invisibleColumnValidators = [];
 
-                    this._removeInvisibleColumnValidators();
-
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
                         each(invisibleColumns, function(_, column) {
-                            options.forEach(function(option) {
-                                if(option.type === "insert" || option.data && option.data.hasOwnProperty(column.dataField) && option.data[column.dataField] !== null) {
-                                    invisibleColumnValidators.push(validatingController.createValidator({
+                            editData.forEach(function(options) {
+                                var data;
+                                if(options.type === "insert") {
+                                    data = options.data;
+                                } else if(options.type === "update") {
+                                    data = gridCoreUtils.createObjectWithChanges(options.oldData, options.data);
+                                }
+                                if(data) {
+                                    var validator = validatingController.createValidator({
                                         column: column,
-                                        key: option.key,
-                                        value: option.data[column.dataField]
-                                    }));
+                                        key: options.key,
+                                        value: column.calculateCellValue(data)
+                                    });
+                                    if(validator) {
+                                        invisibleColumnValidators.push(validator);
+                                    }
                                 }
                             });
                         });
-                        validatingController.invisibleColumnValidators = invisibleColumnValidators;
                     }
-                },
-
-                _removeInvisibleColumnValidators: function() {
-                    var validatingController = this.getController("validating"),
-                        invisibleColumnValidators = validatingController.invisibleColumnValidators || [];
-
-                    each(invisibleColumnValidators, function(_, validator) {
-                        validator && validator._dispose();
-                    });
-                    validatingController.invisibleColumnValidators = [];
+                    return function() {
+                        invisibleColumnValidators.forEach(function(validator) { validator._dispose(); });
+                    };
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
@@ -460,15 +435,11 @@ module.exports = {
 
                     if(editData) {
                         isValid = editData.type === "remove" || editData.isValid;
-
-                        if(isValid) {
-                            validatingController.removeValidators(editIndex);
-                        }
-
                         result = result || !isValid;
                     } else {
-                        that._createInvisibleColumnValidators(this._editData);
+                        var disposeValidators = that._createInvisibleColumnValidators(this._editData);
                         isFullValid = validatingController.validate(true);
+                        disposeValidators();
                         that._updateRowAndPageIndices();
 
                         switch(that.getEditMode()) {
@@ -512,14 +483,6 @@ module.exports = {
                     each(that._editData, function(_, editData) {
                         that._showErrorRow(editData);
                     });
-                },
-
-                _beforeCancelEditData: function() {
-                    var validatingController = this.getController("validating");
-
-                    validatingController.removeValidators();
-
-                    this.callBase();
                 },
 
                 _showErrorRow: function(editData) {
