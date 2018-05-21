@@ -229,3 +229,16 @@ QUnit.test("SaveBlobAs is called after saveAs", function(assert) {
     // assert
     assert.ok(isSaveBlobAs);
 });
+
+QUnit.test("Force using proxy", function(assert) {
+    sinon.stub(eventsEngine, "trigger");
+    try {
+        // act
+        fileSaver.saveAs("test", "EXCEl", undefined, "http://localhost/", undefined, true);
+
+        // assert
+        assert.deepEqual(eventsEngine.trigger.lastCall.args[1], "submit");
+    } finally {
+        eventsEngine.trigger.restore();
+    }
+});
