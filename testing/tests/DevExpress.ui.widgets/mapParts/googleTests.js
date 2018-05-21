@@ -132,14 +132,31 @@ QUnit.test("map ready action", function(assert) {
     });
 });
 
-QUnit.test("map initilize with default center", function(assert) {
+QUnit.test("initialize map with a default center", function(assert) {
     var done = assert.async();
 
     $("#map").dxMap({
         provider: "google",
         onReady: function(e) {
-            var map = e.component._provider._map;
-            assert.deepEqual(map.get("options").center, { lat: 0, lng: 0 }, "center option of google map");
+            var map = e.component._provider._map,
+                centerLatLng = map.get("options").center;
+            assert.deepEqual({ lat: centerLatLng.lat(), lng: centerLatLng.lng() }, { lat: 0, lng: 0 }, "center option of google map");
+
+            done();
+        }
+    });
+});
+
+QUnit.test("initialize map with a custom center", function(assert) {
+    var done = assert.async();
+
+    $("#map").dxMap({
+        provider: "google",
+        center: "Antarctica",
+        onReady: function(e) {
+            var map = e.component._provider._map,
+                centerLatLng = map.get("options").center;
+            assert.deepEqual({ lat: centerLatLng.lat(), lng: centerLatLng.lng() }, { lat: -1.12345, lng: -1.12345 }, "center option of google map");
 
             done();
         }
