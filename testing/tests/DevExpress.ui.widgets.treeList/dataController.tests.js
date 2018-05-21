@@ -740,32 +740,6 @@ QUnit.test("Initialize from dataSource with hierarchical structure when 'parentI
     assert.equal(items[3].node.parent.key, items[1].key, "fourth item has parentKey");
 });
 
-// T622381
-QUnit.test("Nodes should be expanded after refresh method is called at boot time (when autoExpandAll is true)", function(assert) {
-    // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'SubCategory1', phone: '98-75-21', id: 2, parentId: 1 },
-            { name: 'SubCategory2', phone: '55-66-77', id: 3, parentId: 2 },
-        ],
-        clock = sinon.useFakeTimers();
-
-    try {
-        this.applyOptions({ autoExpandAll: true, dataSource: array, loadingTimeout: 30 });
-
-        // act
-        this.refresh();
-        clock.tick(60);
-
-        // assert
-        items = this.dataController.items();
-        assert.strictEqual(items.length, 3, "item count");
-    } finally {
-        clock.restore();
-    }
-});
-
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Expand node (plain structure)", function(assert) {
