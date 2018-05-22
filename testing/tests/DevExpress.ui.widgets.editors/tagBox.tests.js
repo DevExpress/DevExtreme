@@ -1100,6 +1100,20 @@ QUnit.test("placeholder is hidden after tag is removed if the search value is ex
     assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
+QUnit.test("placeholder should be restored after focusout in Angular", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3],
+            searchEnabled: true
+        }),
+        $placeholder = $tagBox.find(".dx-placeholder"),
+        $input = $tagBox.find(".dx-texteditor-input");
+
+    keyboardMock($input).type("5");
+    $input.trigger("blur");
+    $input.trigger("focusout");
+
+    assert.ok($placeholder.is(":visible"), "placeholder is visible");
+});
 
 QUnit.module("tag template", moduleSetup);
 
@@ -1129,6 +1143,20 @@ QUnit.test("tag template should get item in arguments even if the 'displayExpr' 
             assert.deepEqual(tagData, items[1], "correct data is passed");
         }
     });
+});
+
+QUnit.test("displayExpr as function should work", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: "Item 1", id: 1 }],
+            displayExpr: function(item) {
+                return item.name;
+            },
+            valueExpr: "id",
+            value: [1]
+        }),
+        $tags = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tags.text(), "Item 1", "tags are correct");
 });
 
 QUnit.test("tag template should be applied correctly after item selection (T589269)", function(assert) {

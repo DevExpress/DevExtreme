@@ -657,7 +657,7 @@ exports.imageCreator = {
             data = new Deferred();
 
         when(imageData).done(function(binaryData) {
-            imageData = isFunction(window.Blob) ?
+            imageData = isFunction(window.Blob) && !options.forceProxy ?
                that._getBlob(binaryData, mimeType) :
                that._getBase64(binaryData);
 

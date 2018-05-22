@@ -30,7 +30,7 @@ exports.export = function(data, options, getData) {
             }
 
             if(!eventArgs.cancel) {
-                fileSaver.saveAs(eventArgs.fileName, options.format, blob, options.proxyUrl);
+                fileSaver.saveAs(eventArgs.fileName, options.format, blob, options.proxyUrl, undefined, options.forceProxy);
             }
         });
     }
