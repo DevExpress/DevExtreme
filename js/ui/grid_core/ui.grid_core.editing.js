@@ -694,9 +694,6 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _removeEditDataItem: function(index) {
             this._editData.splice(index, 1);
-            if(this._removeInvisibleColumnValidators) {
-                this._removeInvisibleColumnValidators(index);
-            }
         },
 
         /**
