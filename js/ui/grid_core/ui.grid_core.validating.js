@@ -55,7 +55,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                     key: editData.key,
                     newData: editData.data,
                     oldData: editData.oldData,
-                    errorText: null
+                    errorText: this.getHiddenValidatorsErrorText(brokenRules)
                 };
 
             that.executeAction("onRowValidating", parameters);
@@ -64,6 +64,17 @@ var ValidatingController = modules.Controller.inherit((function() {
             editData.errorText = parameters.errorText;
 
             return parameters;
+        },
+
+        getHiddenValidatorsErrorText: function(brokenRules) {
+            var brokenRulesMessages = [];
+
+            each(brokenRules, function(_, brokenRule) {
+                if(!brokenRule.validator.$element().parent().length) {
+                    brokenRulesMessages.push(brokenRule.message);
+                }
+            });
+            return brokenRulesMessages.join(", ");
         },
 
         validate: function(isFull) {
@@ -142,24 +153,6 @@ var ValidatingController = modules.Controller.inherit((function() {
             return this._currentCellValidator;
         },
 
-        removeValidators: function(editIndex) {
-            var that = this,
-                editingController = that._editingController;
-
-            each(editingController._editData, function(index, editData) {
-                var validateGroup = ValidationEngine.getGroupConfig(editData);
-
-                if(!typeUtils.isDefined(editIndex) || editIndex === index) {
-                    if(validateGroup) {
-                        for(var i = 0; i < validateGroup.validators.length; i++) {
-                            validateGroup.validators[i]._dispose();
-                            i--;
-                        }
-                    }
-                }
-            });
-        },
-
         createValidator: function(parameters, $container) {
             var that = this,
                 editingController = that._editingController,
@@ -214,7 +207,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 var useDefaultValidator = $container && $container.hasClass("dx-widget");
                 $container && $container.addClass(that.addWidgetPrefix(VALIDATOR_CLASS));
 
-                var validator = new Validator($container || {}, {
+                var validator = new Validator($container || $("<div>"), {
                     name: column.caption,
                     validationRules: extend(true, [], column.validationRules),
                     validationGroup: editData,
@@ -402,21 +395,36 @@ module.exports = {
                     that.callBase.apply(that, arguments);
                 },
 
-                _afterInsertRow: function(options) {
+                _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController("validating"),
-                        invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; });
+                        invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
+                        invisibleColumnValidators = [];
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
                         each(invisibleColumns, function(_, column) {
-                            validatingController.createValidator({
-                                column: column,
-                                key: options.key,
-                                value: column.calculateCellValue(options.data)
+                            editData.forEach(function(options) {
+                                var data;
+                                if(options.type === "insert") {
+                                    data = options.data;
+                                } else if(options.type === "update") {
+                                    data = gridCoreUtils.createObjectWithChanges(options.oldData, options.data);
+                                }
+                                if(data) {
+                                    var validator = validatingController.createValidator({
+                                        column: column,
+                                        key: options.key,
+                                        value: column.calculateCellValue(data)
+                                    });
+                                    if(validator) {
+                                        invisibleColumnValidators.push(validator);
+                                    }
+                                }
                             });
                         });
                     }
-
-                    this.callBase(options);
+                    return function() {
+                        invisibleColumnValidators.forEach(function(validator) { validator._dispose(); });
+                    };
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
@@ -429,13 +437,11 @@ module.exports = {
                     if(editData) {
                         isValid = editData.type === "remove" || editData.isValid;
 
-                        if(isValid) {
-                            validatingController.removeValidators(editIndex);
-                        }
-
                         result = result || !isValid;
                     } else {
+                        var disposeValidators = that._createInvisibleColumnValidators(this._editData);
                         isFullValid = validatingController.validate(true);
+                        disposeValidators();
                         that._updateRowAndPageIndices();
 
                         switch(that.getEditMode()) {
@@ -479,14 +485,6 @@ module.exports = {
                     each(that._editData, function(_, editData) {
                         that._showErrorRow(editData);
                     });
-                },
-
-                _beforeCancelEditData: function() {
-                    var validatingController = this.getController("validating");
-
-                    validatingController.removeValidators();
-
-                    this.callBase();
                 },
 
                 _showErrorRow: function(editData) {

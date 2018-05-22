@@ -6851,6 +6851,79 @@ QUnit.test("Save edit data when edit mode batch and set validate in column", fun
     assert.ok(!cells.eq(4).children().first().hasClass("dx-highlight-outline"), "not has highlight");
 });
 
+QUnit.test("Save hidden column edit data when edit mode batch and column validation (T620368)", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        errorRows,
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        scrolling: {
+            mode: "standard"
+        },
+        editing: {
+            mode: "batch"
+        },
+        columns: [
+            {
+                dataField: 'name',
+                validationRules: [{ type: "required" }] },
+            {
+                dataField: 'age',
+                validationRules: [{ type: "range", min: 1, max: 100 }]
+            },
+            "lastName"
+        ]
+    });
+
+    // act
+    that.editCell(0, 0);
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    that.editCell(0, 1);
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    that.editCell(1, 1);
+    inputElement = getInputElements(testElement).first();
+    inputElement.val(101);
+    inputElement.trigger('change');
+
+    rowsView.component.columnOption("name", "visible", false);
+    rowsView.component.columnOption("age", "visible", false);
+
+    that.saveEditData();
+
+    errorRows = rowsView.element().find(".dx-error-row");
+
+    // assert, act
+    assert.equal(errorRows.length, 2, "2 error rows");
+
+    var $firstErrorRow = rowsView.element().find("tr:nth-child(2)"),
+        $secondErrorRow = rowsView.element().find("tr:nth-child(4)"),
+        firstErrorRowMessage = $firstErrorRow.find(".dx-error-message").text(),
+        secondErrorRowMessage = $secondErrorRow.find(".dx-error-message").text();
+
+    assert.ok($firstErrorRow.hasClass("dx-error-row"), "1st error row is for the 1st data row");
+    assert.ok($secondErrorRow.hasClass("dx-error-row"), "2nd error row is for the 2nd data row");
+
+    // act
+    that.saveEditData();
+    errorRows = rowsView.element().find(".dx-error-row");
+
+    // assert
+    assert.equal(errorRows.length, 2, "2 error rows");
+    assert.equal(rowsView.element().find("tr:nth-child(2).dx-error-row .dx-error-message").text(), firstErrorRowMessage, "after save 1st error row text are equals to the previous one");
+    assert.equal(rowsView.element().find("tr:nth-child(4).dx-error-row .dx-error-message").text(), secondErrorRowMessage, "after save 1st error row text are equals to the previous one");
+});
+
 QUnit.test("Save edit data for inserted row when set validate in column and edit mode batch", function(assert) {
     // arrange
     var that = this,
@@ -7070,7 +7143,8 @@ QUnit.test("Insert row with set validate in columns, edit mode batch and hidden 
     // assert
     assert.ok(!cells.eq(1).hasClass("dx-datagrid-invalid"), "success validation");
     assert.ok(cells.parent().hasClass("dx-row-inserted"), "not save the edit data");
-    assert.equal(testElement.find('tbody > tr').length, 5, "count rows");
+    assert.equal(testElement.find('tbody > tr:nth-child(2).dx-error-row').length, 1, "error row count");
+    assert.equal(testElement.find('tbody > tr:not(.dx-error-row)').length, 5, "count rows");
 });
 
 QUnit.test("Button inside the selectBox is not clicked", function(assert) {
@@ -7479,7 +7553,7 @@ QUnit.test("Insert row with set validate in columns, edit mode row and hidden co
     assert.equal(getInputElements(testElement).length, 2, "has input");
     assert.ok(!cells.eq(1).hasClass("dx-datagrid-invalid"), "success validation");
     assert.ok(cells.parent().hasClass("dx-row-inserted"), "not save the edit data");
-    assert.equal(testElement.find('tbody > tr').length, 5, "count rows");
+    assert.equal(testElement.find('tbody > tr:not(.dx-error-row)').length, 5, "count rows");
 });
 
 QUnit.test("Show tooltip on focus with set validate in column and edit mode batch", function(assert) {

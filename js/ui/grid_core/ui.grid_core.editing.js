@@ -692,6 +692,10 @@ var EditingController = modules.ViewController.inherit((function() {
             };
         },
 
+        _removeEditDataItem: function(index) {
+            this._editData.splice(index, 1);
+        },
+
         /**
          * @name GridBaseMethods_editCell
          * @publicName editCell(rowIndex, visibleColumnIndex)
@@ -871,7 +875,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                     if(editIndex >= 0) {
                         if(that._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
-                            that._editData.splice(editIndex, 1);
+                            that._removeEditDataItem(editIndex);
                         } else {
                             that._editData[editIndex].type = DATA_EDIT_DATA_REMOVE_TYPE;
                         }
@@ -921,7 +925,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     editData = that._editData[editIndex];
 
                     if(typeUtils.isEmptyObject(editData.data)) {
-                        that._editData.splice(editIndex, 1);
+                        that._removeEditDataItem(editIndex);
                     } else {
                         editData.type = DATA_EDIT_DATA_UPDATE_TYPE;
                     }
@@ -1039,7 +1043,7 @@ var EditingController = modules.ViewController.inherit((function() {
                             break;
                         }
                     } else if(!cancel || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
-                        that._editData.splice(editIndex, 1);
+                        that._removeEditDataItem(editIndex);
                         hasSavedData = !cancel;
                     }
                 }
