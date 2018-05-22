@@ -32,6 +32,7 @@ require("generic_light.css!");
 
 require("ui/data_grid/ui.data_grid");
 require("ui/autocomplete");
+require("ui/color_box");
 
 var fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
@@ -2653,6 +2654,31 @@ if(browser.msie && parseInt(browser.version) <= 11) {
         assert.equal(resultValue, undefined);
     });
 }
+
+// T620297
+QUnit.test("The text of the colorBox should not be overlaps in a grid cell", function(assert) {
+    // arrange
+    var DEFAULT_COLORBOX_INPUT_PADDING_LEFT = "40px";
+
+    var rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    this.columns.length = 0;
+    this.columns.push({ allowEditing: true, dataField: "color", showEditorAlways: true });
+    this.dataControllerOptions.items = [{ key: "test1", data: { name: "test1", color: "#2D4372" }, values: ["#2D4372"], rowType: "data" }];
+    this.options.onEditorPreparing = function(e) {
+        if(e.dataField === "color") {
+            e.editorName = "dxColorBox";
+        }
+    };
+    this.editorFactoryController.init();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-colorbox-input").css("paddingLeft"), DEFAULT_COLORBOX_INPUT_PADDING_LEFT, "padding left");
+});
 
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
