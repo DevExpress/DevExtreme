@@ -858,6 +858,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
+        index = this._renderedItemsCount + index;
+
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);

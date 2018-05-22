@@ -384,6 +384,17 @@
     height: 100%;
 }
 
+.dx-scheduler-view-switcher.dx-tabs.dx-tabs-expanded {
+    .dx-tab-selected:before {
+        position: absolute;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        content: '';
+        right: 0;
+    }
+}
+
 .dx-scheduler-view-switcher.dx-tabs {
     max-width: 52%;
     min-width: @SCHEDULER_NAVIGATOR_CAPTION_WIDTH * 0.4;
@@ -402,15 +413,6 @@
 
     .dx-tab {
         width: @SCHEDULER_SWITCHER_TAB_WIDTH;
-
-        &.dx-tab-selected:before {
-            position: absolute;
-            bottom: -2px;
-            width: 100%;
-            height: 2px;
-            content: '';
-            right: 0;
-        }
 
         &.dx-state-focused:after {
             border-bottom: none;
@@ -1755,7 +1757,6 @@
         .dx-field-item-label {
             vertical-align: top;
 
-            &.dx-field-item-label-location-left,
             &.dx-field-item-label-location-top {
                 padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
             }

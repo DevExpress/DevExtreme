@@ -27,6 +27,7 @@ var $ = require("../../core/renderer"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
+    Store = require("../../data/abstract_store"),
     DataSourceModule = require("../../data/data_source/data_source"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
@@ -503,11 +504,11 @@ module.exports = {
             /**
              * @name GridBaseColumn_lookup_dataSource
              * @publicName dataSource
-             * @type Array<any>|DataSourceOptions|function(options)
+             * @type Array<any>|DataSourceOptions|Store|function(options)
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @type_function_return Array<any>|DataSourceOptions
+             * @type_function_return Array<any>|DataSourceOptions|Store
              * @default undefined
              */
             /**
@@ -2701,7 +2702,7 @@ module.exports = {
                                     if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
-                                    if(typeUtils.isPlainObject(dataSource) || Array.isArray(dataSource)) {
+                                    if(typeUtils.isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
                                         if(that.valueExpr) {
                                             dataSourceOptions = normalizeDataSourceOptions(dataSource);
                                             dataSourceOptions.paginate = false;

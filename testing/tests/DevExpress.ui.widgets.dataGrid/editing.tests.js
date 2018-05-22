@@ -10034,7 +10034,7 @@ QUnit.test("Uploading items when virtual scrolling after insert row", function(a
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10068,7 +10068,7 @@ QUnit.test("Change page index when virtual scrolling after insert row", function
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10111,7 +10111,7 @@ QUnit.test("Uploading items when infinite scrolling after insert row", function(
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10143,7 +10143,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     this.setupDataGrid();
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10154,7 +10154,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     // assert
     items = this.dataController.items();
-    assert.equal(this.dataController.pageIndex(), 23, "page index");
+    assert.equal(this.dataController.pageIndex(), 24, "page index");
     assert.equal(items.length, 8, "count items");
 
     // act
@@ -10191,7 +10191,7 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert
@@ -10512,7 +10512,7 @@ QUnit.test("Edit row after the infinite scrolling when there is inserted row", f
     this.setupDataGrid();
 
     this.rowsView.render(testElement);
-    this.rowsView.height(150);
+    this.rowsView.height(130);
     this.rowsView.resize();
 
     // assert

@@ -355,6 +355,46 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when has scroll
 });
 
 // T418037
+QUnit.test("ColumnHeadersView - set column width for fixed table when has scroll after no scroll", function(assert) {
+    // arrange
+    var that = this,
+        $colElements,
+        $testElement = $("#container").width(300);
+
+    $.map(that.columns, function(column) {
+        column.width = 50;
+        return column;
+    });
+
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+
+    // act
+    that.columnHeadersView.setColumnWidths([50, 50, 50, "auto", 50]);
+    that.columnHeadersView.setColumnWidths([50, 150, 50, 50, 50]);
+
+    // assert
+    assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
+    assert.ok($testElement.find(".dx-datagrid-headers").children(".dx-datagrid-content-fixed").length, "has fix content");
+
+    $colElements = $testElement.find(".dx-datagrid-headers").children(":not(.dx-datagrid-content-fixed)").find("table").find("col");
+    assert.equal($colElements.length, 5, "count col in main table");
+    assert.equal($colElements[0].style.width, "50px", "width of the first col");
+    assert.equal($colElements[1].style.width, "150px", "width of the second col");
+    assert.equal($colElements[2].style.width, "50px", "width of the third col");
+    assert.equal($colElements[3].style.width, "50px", "width of the fourth col");
+    assert.equal($colElements[4].style.width, "50px", "width of the fifth col");
+
+    $colElements = $testElement.find(".dx-datagrid-headers").children(".dx-datagrid-content-fixed").find("table").find("col");
+    assert.equal($colElements.length, 5, "count col in fixed table");
+    assert.equal($colElements[0].style.width, "50px", "width of the first col");
+    assert.equal($colElements[1].style.width, "", "width of the second col");
+    assert.equal($colElements[2].style.width, "", "width of the third col");
+    assert.equal($colElements[3].style.width, "", "width of the fourth col");
+    assert.equal($colElements[4].style.width, "50px", "width of the fifth col");
+});
+
+// T418037
 QUnit.test("RowsView - set column width for fixed table when no scroll", function(assert) {
     // arrange
     var that = this,

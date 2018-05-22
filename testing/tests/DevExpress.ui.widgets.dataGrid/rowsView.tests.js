@@ -5713,7 +5713,7 @@ QUnit.test('Render rows at end when virtual scrolling enabled and rowTemplate is
     };
 
     rowsView.render(testElement);
-    rowsView.height(90);
+    rowsView.height(80);
     rowsView.resize();
 
     var newItems = [
@@ -5811,6 +5811,35 @@ QUnit.test('Render rows at end when infinite scrolling', function(assert) {
     // assert
     assert.equal(content.children().eq(0).find('.dx-freespace-row').length, 1, 'only one freespace-row exists');
     assert.ok(content.children().eq(0).find('.dx-freespace-row').eq(0).is(":visible"), 'freespace row is visible');
+});
+
+// T630906
+QUnit.test('Render rows at end when infinite scrolling for specific row height', function(assert) {
+    // arrange
+    var options = {
+            items: [
+                { values: [1] },
+                { values: [2] },
+                { values: [3] }
+            ]
+        },
+        dataController = new MockDataController(options),
+        rowsView = this.createRowsView(options.items, dataController),
+        testElement = $('#container');
+
+    // act
+    this.options.scrolling = {
+        useNative: false,
+        timeout: 0,
+        mode: 'infinite'
+    };
+
+    rowsView.render(testElement);
+    rowsView.height(15);
+    rowsView.resize();
+
+    // assert
+    assert.equal(dataController.viewportSize(), 1, "viewportSize");
 });
 
 // B254821

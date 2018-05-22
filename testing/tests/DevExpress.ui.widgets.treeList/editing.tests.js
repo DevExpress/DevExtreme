@@ -645,3 +645,35 @@ QUnit.test("Edit batch - removed row should not have add link", function(assert)
     assert.equal($commandEditCellElement.length, 1, "has command edit cell");
     assert.equal($commandEditCellElement.find(".dx-link-add").length, 0, "link add isn't rendered");
 });
+
+// T633865
+QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as functions", function(assert) {
+    // arrange
+    var $rowElements,
+        $testElement = $('#treeList');
+
+    this.options.rootValue = 0;
+    this.options.dataSource = this.options.dataSource.store.data;
+    this.options.keyExpr = function(data) { return data["id"]; };
+    this.options.parentIdExpr = function(data, value) {
+        if(arguments.length === 1) {
+            return data["parentId"];
+        }
+        data["parentId"] = value;
+    };
+    this.options.editing = {
+        mode: "cell",
+        allowAdding: true
+    };
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // act
+    this.addRow();
+
+    // assert
+    $rowElements = $testElement.find("tbody > .dx-data-row");
+    assert.equal($rowElements.length, 2, "count data row");
+    assert.ok($rowElements.first().hasClass("dx-row-inserted"), "insert row");
+    assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
+});

@@ -41,6 +41,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         _createKeySetter: function() {
             var keyExpr = this.getKeyExpr();
 
+            if(typeUtils.isFunction(keyExpr)) {
+                return keyExpr;
+            }
+
             return dataCoreUtils.compileSetter(keyExpr);
         },
 
@@ -49,7 +53,13 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         },
 
         createParentIdSetter: function() {
-            return dataCoreUtils.compileSetter(this.option("parentIdExpr"));
+            var parentIdExpr = this.option("parentIdExpr");
+
+            if(typeUtils.isFunction(parentIdExpr)) {
+                return parentIdExpr;
+            }
+
+            return dataCoreUtils.compileSetter(parentIdExpr);
         },
 
         _createItemsGetter: function() {
