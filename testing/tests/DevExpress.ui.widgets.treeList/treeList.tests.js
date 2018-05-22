@@ -410,7 +410,7 @@ QUnit.test("Items should be collapsed after clearing filter, autoExpandAll = fal
     });
 
     this.clock.tick();
-    assert.equal(treeList.$element().find(".dx-data-row").length, 2, "filtered rows are rendered");
+    assert.equal(treeList.$element().find(".dx-data-row").length, 3, "filtered rows are rendered");
 
     // act
     treeList.clearFilter();
