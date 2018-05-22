@@ -226,7 +226,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             if(this.option("autoExpandAll")) {
                 options.remoteOperations.sorting = false;
                 options.remoteOperations.filtering = false;
-                if(isReload && !this._lastLoadOptions && !options.isCustomLoading) {
+                if((!this._lastLoadOptions || operationTypes.filtering && !options.storeLoadOptions.filter) && !options.isCustomLoading) {
                     expandVisibleNodes = true;
                 }
             }
@@ -237,9 +237,12 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 if(!options.cachedStoreData) {
                     this._hasItemsMap = {};
                 }
-                if(this.option("expandNodesOnFiltering") && (isReload || operationTypes.filtering)) {
-                    if(options.storeLoadOptions.filter || (operationTypes.filtering && this.option("autoExpandAll"))) {
+
+                if(this.option("expandNodesOnFiltering") && (operationTypes.filtering || options.storeLoadOptions.filter)) {
+                    if(options.storeLoadOptions.filter) {
                         expandVisibleNodes = true;
+                    } else {
+                        options.collapseVisibleNodes = true;
                     }
                 }
             }
@@ -436,7 +439,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 this._fillNodes(this._rootNode.children, options, expandedRowKeys);
 
                 this._isNodesInitializing = true;
-                if(expandedRowKeys.length) {
+                if(options.collapseVisibleNodes || expandedRowKeys.length) {
                     this.option("expandedRowKeys", expandedRowKeys);
                 }
                 this.executeAction("onNodesInitialized", { root: this._rootNode });
