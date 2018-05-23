@@ -63,7 +63,7 @@ var FilterBuilderView = modules.View.inherit({
         fields = fields.filter(function(item) {
             return item.allowFiltering;
         }).map(function(item) {
-            var column = extend({}, item, { filterOperations: null });
+            var column = extend({}, item);
             return column;
         });
 
