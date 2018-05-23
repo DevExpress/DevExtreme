@@ -18,16 +18,15 @@ var createConfig = function(outputFile, mode) {
 
     if(webpack.version >= "4.0.0") {
         config.mode = mode;
-    } else {
-        if(mode === "production") {
-            try {
-                config.plugins = (config.plugins || []).concat([
-                    new webpack.optimize.UglifyJsPlugin({
-                        compress: { warnings: false }
-                    })
-                ]);
-            } catch(e) {}
-        }
+    } else if(mode === "production") {
+        // Note: webpack 4.0.0 doesn't have field 'version'. It appears in 4.0.1
+        try {
+            config.plugins = (config.plugins || []).concat([
+                new webpack.optimize.UglifyJsPlugin({
+                    compress: { warnings: false }
+                })
+            ]);
+        } catch(e) {}
     }
     config.context = process.cwd();
     config.entry = "./" + bundle + ".config.js";
