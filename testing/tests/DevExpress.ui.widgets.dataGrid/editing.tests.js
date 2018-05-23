@@ -11683,8 +11683,8 @@ QUnit.test("Switch editing modes between popup and form", function(assert) {
             $editingForm = editPopupInstance.$content().find(".dx-form");
 
         // assert
-        assert.equal($editPopup.length, 1, "There is one editing popup");
-        assert.equal($editingForm.length, 1, "There is one editing popup");
+        assert.equal($editPopup.length, 1, "There is one popup");
+        assert.equal($editingForm.length, 1, "There is a form inside the popup");
     } finally {
         fx.off = false;
     }
