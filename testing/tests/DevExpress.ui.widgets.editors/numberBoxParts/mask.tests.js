@@ -607,6 +607,13 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
 });
 
+QUnit.test("onValueChanged should have change event as a parameter", function(assert) {
+    var valueChangedHandler = sinon.spy();
+    this.instance.option("onValueChanged", valueChangedHandler);
+
+    this.keyboard.type("123").press("enter");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
+});
 
 QUnit.module("format: incomplete value", moduleConfig);
 
