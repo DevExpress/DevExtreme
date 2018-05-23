@@ -4,7 +4,8 @@
 "use strict";
 
 var path = require("path"),
-    webpack = require("webpack");
+    webpack = require("webpack"),
+    webpackVersion = require("webpack/package.json").version;
 
 var outputDir = process.cwd(),
     sourcesDir = path.join(__dirname, ".."),
@@ -13,9 +14,18 @@ var outputDir = process.cwd(),
 bundle = bundle.replace(/.config.js$/, "");
 
 var baseConfig = require("./webpack.config.js");
-var createConfig = function(outputFile) {
+var createConfig = function(outputFile, mode) {
     var config = Object.create(baseConfig);
 
+    if(webpackVersion.split(".")[0] >= 4) {
+        config.mode = mode;
+    } else if(mode === "production") {
+        config.plugins = (config.plugins || []).concat([
+            new webpack.optimize.UglifyJsPlugin({
+                compress: { warnings: false }
+            })
+        ]);
+    }
     config.context = process.cwd();
     config.entry = "./" + bundle + ".config.js";
     config.output = {
@@ -34,16 +44,8 @@ var createConfig = function(outputFile) {
 
 console.log("bundling using '" + bundle + ".config.js'...");
 webpack([
-    createConfig(bundle + ".debug.js"),
-    (function() {
-	    var config = createConfig(bundle + ".js");
-	    config.plugins = (config.plugins || []).concat([
-		    new webpack.optimize.UglifyJsPlugin({
-		        compress: { warnings: false }
-		    })
-    ]);
-	    return config;
-    })()
+    createConfig(bundle + ".debug.js", "development"),
+    createConfig(bundle + ".js", "production")
 ], function(err, stats) {
     if(err) {
         throw err;
