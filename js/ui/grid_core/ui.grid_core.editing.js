@@ -1616,6 +1616,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _createLink: function(container, text, methodName, options, useIcon) {
             var that = this,
                 $link = $("<a>")
+                .attr("href", "#")
                     .addClass(LINK_CLASS)
                     .addClass(EDIT_LINK_CLASS[methodName]);
 
