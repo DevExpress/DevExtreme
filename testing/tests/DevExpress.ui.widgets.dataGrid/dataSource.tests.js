@@ -894,7 +894,7 @@ QUnit.test("grouping with pageSize more items count", function(assert) {
         key: 2, items: [{ field1: 2, field2: 4, field3: 6 }]
     }]);
 
-    assert.equal(source.itemsCount(), 6);
+    assert.equal(source.itemsCount(), 4);
 });
 
 // T105748
@@ -939,7 +939,7 @@ QUnit.test("grouping with sorting", function(assert) {
             { field1: 2, field2: 3, field3: 11 }
         ]
     }]);
-    assert.equal(source.itemsCount(), 13);
+    assert.equal(source.itemsCount(), 11);
 });
 
 QUnit.test("grouping with pageSize less items count", function(assert) {
@@ -957,7 +957,7 @@ QUnit.test("grouping with pageSize less items count", function(assert) {
             { field1: 1, field2: 2, field3: 4 }
         ]
     }]);
-    assert.equal(source.itemsCount(), 3);
+    assert.equal(source.itemsCount(), 2);
 });
 
 QUnit.test("grouping with pageSize less items count. Continue group parameter", function(assert) {
@@ -977,7 +977,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter", 
     }, {
         key: 2, items: [{ field1: 2, field2: 4, field3: 6 }]
     }]);
-    assert.equal(source.itemsCount(), 4, 'items count with continue group');
+    assert.equal(source.itemsCount(), 2, 'items count with continue group');
 });
 
 QUnit.test("grouping with pageSize less items count. Continue group parameter when virtual scrolling", function(assert) {
@@ -998,7 +998,7 @@ QUnit.test("grouping with pageSize less items count. Continue group parameter wh
     }, {
         key: 2, items: [{ field1: 2, field2: 4, field3: 6 }]
     }]);
-    assert.equal(source.itemsCount(), 3, 'items count without continue group');
+    assert.equal(source.itemsCount(), 2, 'items count without continue group');
 });
 
 QUnit.test("collapse group on first page after loading second page", function(assert) {
@@ -1013,7 +1013,7 @@ QUnit.test("collapse group on first page after loading second page", function(as
     source.load();
 
     // assert
-    assert.equal(source.itemsCount(), 6);
+    assert.equal(source.itemsCount(), 4);
 
     // act
     source.changeRowExpand([1]);
@@ -1026,7 +1026,7 @@ QUnit.test("collapse group on first page after loading second page", function(as
     }, {
         key: 2, items: [{ field1: 2, field2: 4, field3: 6 }]
     }]);
-    assert.equal(source.itemsCount(), 3, 'items count without continue group');
+    assert.equal(source.itemsCount(), 2, 'items count without continue group');
 });
 
 
@@ -1045,7 +1045,7 @@ QUnit.test("changed callback fired after changeRowExpand", function(assert) {
     source.load();
     source.changed.add(function() {
         // assert
-        assert.equal(source.itemsCount(), 5);
+        assert.equal(source.itemsCount(), 3);
         assert.deepEqual(source.items(), [{
             key: 1, items: null,
         }, {
@@ -1201,7 +1201,7 @@ QUnit.test("grouping without paginate. Collapse group", function(assert) {
     }, {
         key: 2, items: [{ field1: 2, field2: 4, field3: 6 }]
     }]);
-    assert.equal(source.itemsCount(), 3);
+    assert.equal(source.itemsCount(), 2);
 });
 
 QUnit.test("grouping without paginate. Expand group after collapse", function(assert) {
@@ -1390,7 +1390,7 @@ QUnit.test("grouping with paginate. Collapse group when dataSource has filter 2"
     }, {
         key: 2, items: [{ field1: 2, field2: 4, field3: 6 }, { field1: 2, field2: 4, field3: 7 }]
     }]);
-    assert.equal(source.itemsCount(), 4);
+    assert.equal(source.itemsCount(), 3);
 });
 
 QUnit.test("grouping with paginate. Expand group after collapse", function(assert) {
@@ -1668,7 +1668,7 @@ QUnit.test("hide collapsed group when after filtering group has no elements", fu
             { field1: 2, field2: 4, field3: 6 }
         ]
     }], 'items');
-    assert.equal(source.itemsCount(), 2, 'visible items count');
+    assert.equal(source.itemsCount(), 1, 'visible items count');
 });
 
 QUnit.test("collapseAll when no grouped columns", function(assert) {
@@ -2010,7 +2010,7 @@ QUnit.test("change group order when remote data", function(assert) {
             }
         ]
     }]);
-    assert.equal(source.itemsCount(), 6);
+    assert.equal(source.itemsCount(), 3);
 });
 
 
