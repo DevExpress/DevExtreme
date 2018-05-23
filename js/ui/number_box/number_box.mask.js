@@ -557,6 +557,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(e);
         }
 
+        this._saveValueChangeEvent(e);
+
         this._lastKey = null;
 
         this._adjustParsedValue();
