@@ -562,7 +562,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
 
             if(column.filterOperations && column.filterOperations.length) {
-                result = iteratorUtils.map(column.filterOperations, function(value) {
+                let availableFilterOperations = column.filterOperations.filter(function(value) {
+                    return isDefined(OPERATION_DESCRIPTORS[value]);
+                });
+                result = iteratorUtils.map(availableFilterOperations, function(value) {
                     var descriptionName = OPERATION_DESCRIPTORS[value];
 
                     return {

@@ -105,6 +105,30 @@ QUnit.test('Draw filterRow with operation choosers', function(assert) {
     assert.equal($filterMenuItems.length, 3, '2 filter operation items for first column');
 });
 
+QUnit.test('Hide items without descriptions', function(assert) {
+    // arrange
+    var $testElement = $('#container'),
+        $filterMenu,
+        $filterMenuItems,
+        rootMenuItem,
+        $cell;
+
+    $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>', 'isblank'] }]);
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    $filterMenu = $(this.columnHeadersView.element().find('.dx-menu').first());
+    rootMenuItem = $filterMenu.find(".dx-menu-item");
+    $(rootMenuItem).trigger("dxclick");
+
+    $cell = $filterMenu.parent();
+    $filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
+
+    // assert
+    assert.equal($filterMenuItems.length, 3, '2 filter operation items for first column');
+});
+
 QUnit.test('FilterRow with cssClass', function(assert) {
     // arrange
     var testElement = $('#container'),
