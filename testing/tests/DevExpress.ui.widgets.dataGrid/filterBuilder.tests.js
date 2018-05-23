@@ -106,4 +106,17 @@ QUnit.module("Common", {
         // assert
         assert.ok($(".dx-popup-content .dx-scrollview-content").length);
     });
+
+    // T637302
+    QUnit.test("operation of the number datatype can be used in the string datatype if it contains in the array of filterOperations", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ dataField: "field", filterOperations: [">"] }],
+            filterValue: ["field", ">", "a"],
+            filterBuilderPopup: { visible: true },
+        });
+
+        // assert
+        assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
 });
