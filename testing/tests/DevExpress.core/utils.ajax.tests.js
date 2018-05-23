@@ -662,6 +662,15 @@ QUnit.test("special values in data", function(assert) {
     assert.ok(url.indexOf("c=NaN") > -1);
 });
 
+QUnit.test("empty data", function(assert) {
+    ajax.sendRequest({
+        url: "any",
+        data: {}
+    });
+
+    assert.equal(this.requests[0].url, "any");
+});
+
 QUnit.module("sendRequest async tests");
 
 QUnit.test("Handle error", function(assert) {
