@@ -560,8 +560,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._adjustParsedValue();
         this.option("value", this._parsedValue);
-
-        this._saveValueChangeEvent(undefined);
     },
 
     _optionChanged: function(args) {
