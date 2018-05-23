@@ -330,7 +330,8 @@ QUnit.test('editing with allowUpdating true', function(assert) {
     rowsView.render(testElement);
 
     // assert
-    this.find(testElement.find('tbody > tr').first(), '.dx-link:contains(Edit)');
+    var $link = this.find(testElement.find('tbody > tr').first(), '.dx-link:contains(Edit)');
+    assert.equal($link.attr("href"), "#", "href is defined"); // T622126
 });
 
 QUnit.test('no Edit link when editing with allowUpdating true and mode is batch', function(assert) {
