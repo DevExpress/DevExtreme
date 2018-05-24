@@ -291,6 +291,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             case "layout":
             case "texts":
             case "allowSearch":
+            case "searchTimeout":
                 that._invalidate();
                 break;
             case "onContextMenuPreparing":
