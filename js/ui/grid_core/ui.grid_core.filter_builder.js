@@ -64,6 +64,7 @@ var FilterBuilderView = modules.View.inherit({
             return item.allowFiltering;
         }).map(function(item) {
             var column = extend({}, item);
+            ["anyof", "noneof"].forEach(item => !column.filterOperations.includes(item) && column.filterOperations.push(item));
             return column;
         });
 
