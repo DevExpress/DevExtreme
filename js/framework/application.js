@@ -67,6 +67,7 @@ var Application = Class.inherit({
 
         this._isNavigating = false;
         this._viewLinksHash = {};
+        this._removedViewInfo = null;
 
         Action.registerExecutor(createActionExecutors(this));
 
@@ -253,15 +254,25 @@ var Application = Class.inherit({
     _disposeRemovedViews: function() {
         var that = this,
             args;
+
+        var disposeView = function(viewInfo) {
+            args = { viewInfo: viewInfo };
+            that._processEvent("viewDisposing", args, viewInfo.model);
+            that._disposeView(viewInfo);
+            that._processEvent("viewDisposed", args, viewInfo.model);
+        };
+
         iteratorUtils.each(that._viewLinksHash, function(key, link) {
             if(!link.linkCount) {
-                args = { viewInfo: link.viewInfo };
-                that._processEvent("viewDisposing", args, args.viewInfo.model);
-                that._disposeView(link.viewInfo);
-                that._processEvent("viewDisposed", args, args.viewInfo.model);
+                disposeView(link.viewInfo);
                 delete that._viewLinksHash[key];
             }
         });
+
+        if(this._removedViewInfo) {
+            disposeView(this._removedViewInfo);
+            this._removedViewInfo = null;
+        }
     },
 
     _onViewHidden: function(viewInfo) {
@@ -445,15 +456,25 @@ var Application = Class.inherit({
     _showViewImpl: abstract,
 
     _obtainViewLink: function(viewInfo) {
-        var key = viewInfo.key;
+        var key = viewInfo.key,
+            hash = this._viewLinksHash[key];
 
-        if(!this._viewLinksHash[key]) {
+        var createViewLinkHash = function() {
             this._viewLinksHash[key] = {
                 viewInfo: viewInfo,
                 linkCount: 1
             };
+        }.bind(this);
+
+        if(!hash) {
+            createViewLinkHash();
         } else {
-            this._viewLinksHash[key].linkCount++;
+            if(hash.viewInfo !== viewInfo) {
+                this._removedViewInfo = hash.viewInfo;
+                createViewLinkHash();
+            } else {
+                this._viewLinksHash[key].linkCount++;
+            }
         }
     },
 
