@@ -11693,6 +11693,50 @@ QUnit.test("getCellElement for a hidden column", function(assert) {
     assert.deepEqual($(this.getCellElement(0, "room"))[0], $editorElements[3], "editor of a hidden column");
 });
 
+QUnit.test("Switch editing modes between popup and form", function(assert) {
+    fx.off = true;
+    try {
+        var that = this;
+        that.setupModules(that);
+
+        that.$element = function() {
+            return $('#container');
+        };
+
+        var rowsView = that.rowsView,
+            testElement = $('#container');
+
+        that.options.onInitNewRow = function(params) {
+            that.options.editing.mode = "popup";
+            that.dataController.updateItems();
+            that.columnOption("phone", { allowEditing: false });
+        };
+        that.editingController.optionChanged({ name: "onInitNewRow" });
+        rowsView.render(testElement);
+
+        // act
+        that.editRow(0);
+        that.clock.tick();
+
+        // assert
+        assert.equal(testElement.find(".dx-datagrid-edit-form").length, 1, "form is rendered");
+
+        // act
+        that.addRow();
+        that.clock.tick();
+
+        var $editPopup = testElement.find(".dx-datagrid-edit-popup"),
+            editPopupInstance = $editPopup.dxPopup("instance"),
+            $editingForm = editPopupInstance.$content().find(".dx-form");
+
+        // assert
+        assert.equal($editPopup.length, 1, "There is one popup");
+        assert.equal($editingForm.length, 1, "There is a form inside the popup");
+    } finally {
+        fx.off = false;
+    }
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
