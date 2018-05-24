@@ -23,13 +23,15 @@ var FILTER_PANEL_CLASS = "filter-panel",
 var FILTER_PANEL_TARGET = "filterPanel";
 
 var FilterPanelView = modules.View.inherit({
-    _renderCore: function() {
-        if(this.option("filterPanel.visible")) {
-            this._renderPanelElement();
-        }
+    isVisible: function() {
+        return this.option("filterPanel.visible") && this.getController("data").dataSource();
     },
 
-    _renderPanelElement: function() {
+    init: function() {
+        this.getController("data").dataSourceChanged.add(() => this.render());
+    },
+
+    _renderCore: function() {
         var that = this,
             $element = that.element(),
             $leftContainer;

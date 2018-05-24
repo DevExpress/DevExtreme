@@ -3,6 +3,7 @@
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    DataSource = require("data/data_source/data_source").DataSource,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
@@ -430,5 +431,37 @@ QUnit.module("Filter Panel", {
         this.clock.tick();
 
         assert.notOk(customSaveSpy.lastCall.args[0].filterPanel.filterEnabled);
+    });
+
+    // T636976
+    QUnit.test("Will not throw 'Cannot set property paginate of undefined' if dataSource is not set", function(assert) {
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true
+            },
+            dataSource: null,
+            filterValue: ["SaleAmount", "anyof", [["SaleAmount", "<", 3000]]],
+            columns: [{
+                dataField: "SaleAmount",
+                dataType: "number",
+                format: "currency",
+                headerFilter: {
+                    dataSource: [{
+                        text: "Less than $3000",
+                        value: ["SaleAmount", "<", 3000]
+                    }]
+                }
+            }]
+        });
+
+        // assert
+        assert.notOk(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
+
+        // act
+        this.dataController.setDataSource(new DataSource([]));
+        this.dataController.dataSourceChanged.fire();
+
+        // assert
+        assert.ok(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
     });
 });
