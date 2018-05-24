@@ -1113,7 +1113,7 @@ function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
 
     scaleOptions.argumentType = scaleOptions.valueType;
     scaleOptions.visible = isCompactMode;
-    scaleOptions.minorTick.showCalculatedTicks = scaleOptions.isHorizontal = true;
+    scaleOptions.isHorizontal = true;
     scaleOptions.calculateMinors = true;
 
     scaleOptions.semiDiscreteInterval = scaleOptions.minRange;

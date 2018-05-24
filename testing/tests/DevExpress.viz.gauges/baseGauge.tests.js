@@ -323,19 +323,6 @@ QUnit.test("T305684. Subtitle is single text", function(assert) {
     assert.deepEqual(this.title.update.getCall(0).args[0], { text: "Test", subtitle: { text: "Test2" } });
 });
 
-QUnit.test("T305684. Deprecated subtitle", function(assert) {
-    this.createGauge({
-        subtitle: "Test3",
-        title: {
-            text: "Test",
-            subtitle: "Test2"
-        }
-    });
-    vizMocks.forceThemeOptions(this.themeManager);
-
-    assert.deepEqual(this.title.update.getCall(0).args[0], { text: "Test", subtitle: { text: "Test3" } });
-});
-
 QUnit.test("Title is not rendered when text is empty", function(assert) {
     this.title._boundingRect = null;
     this.createGauge({});

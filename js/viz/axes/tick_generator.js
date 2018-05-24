@@ -588,7 +588,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     }
 
     function generateMajorTicks(ticks, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks) {
-        if(customTicks.majors && !options.showCalculatedTicks) { // DEPRECATED IN 15_2
+        if(customTicks.majors) {
             ticks.breaks = breaks;
             return ticks;
         }
@@ -628,7 +628,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         if(!options.calculateMinors) {
             return ticks;
         }
-        if(customTicks.minors && !options.showMinorCalculatedTicks) { // DEPRECATED IN 15_2
+        if(customTicks.minors) {
             return ticks;
         }
 

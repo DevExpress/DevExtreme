@@ -64,10 +64,7 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
 
         generateExtraTick: options.generateExtraTick,
 
-        minTickInterval: options.minTickInterval,
-
-        showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
-        showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
+        minTickInterval: options.minTickInterval
     });
 }
 

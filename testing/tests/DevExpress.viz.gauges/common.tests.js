@@ -213,24 +213,22 @@ QUnit.test("Scale is rendered", function(assert) {
         scale: {
             startValue: 10,
             endValue: 20,
-            majorTick: {
+            customTicks: [1, 2, 3],
+            tick: {
                 length: 8,
-                customTickValues: [1, 2, 3],
                 color: "#123456",
                 width: 2,
-                visible: true,
-                tickInterval: 4,
-                showCalculatedTicks: true
+                visible: true
             },
+            tickInterval: 4,
+            customMinorTicks: [4, 5, 6],
             minorTick: {
                 length: 8,
-                customTickValues: [4, 5, 6],
                 color: "#654321",
                 width: 1,
-                visible: false,
-                tickInterval: 2,
-                showCalculatedTicks: false
+                visible: false
             },
+            minorTickInterval: 2,
             hideFirstTick: true,
             hideFirstLabel: false,
             hideLastTick: true,
@@ -264,31 +262,14 @@ QUnit.test("Scale is rendered", function(assert) {
             indentFromAxis: 0,
             indentFromTick: 10,
             overlappingBehavior: {
-                hideFirstLabel: false,
-                hideFirstOrLast: undefined,
-                hideFirstTick: true,
-                hideLastLabel: false,
-                hideLastTick: true,
                 mode: "hide"
             }
-        },
-        majorTick: {
-            color: "#123456",
-            customTickValues: [1, 2, 3],
-            length: 8,
-            showCalculatedTicks: true,
-            tickInterval: 4,
-            visible: true,
-            width: 2
         },
         max: 20,
         min: 10,
         minorTick: {
             color: "#654321",
-            customTickValues: [4, 5, 6],
             length: 8,
-            showCalculatedTicks: false,
-            tickInterval: 2,
             visible: false,
             width: 1
         },
@@ -296,10 +277,7 @@ QUnit.test("Scale is rendered", function(assert) {
         startValue: 10,
         tick: {
             color: "#123456",
-            customTickValues: [1, 2, 3],
             length: 8,
-            showCalculatedTicks: true,
-            tickInterval: 4,
             visible: true,
             width: 2
         },
@@ -346,67 +324,6 @@ QUnit.test("hideFirstOrLast option in label option", function(assert) {
     assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.hideFirstOrLast, "hideFirstOrLast");
 });
 
-// Deprecated in 17.1 start
-QUnit.test("hideFirstOrLast in overlappingBehavior option", function(assert) {
-    this.createTestGauge({
-        scale: {
-            label: {
-                overlappingBehavior: {
-                    hideFirstOrLast: "hideFirstOrLast"
-                }
-            }
-        }
-    });
-
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.hideFirstOrLast, "hideFirstOrLast");
-});
-
-QUnit.test("useAutoArrangement is true in overlappingBehavior option", function(assert) {
-    this.createTestGauge({
-        scale: {
-            label: {
-                overlappingBehavior: {
-                    useAutoArrangement: true,
-                }
-            }
-        }
-    });
-
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.mode, "hide");
-});
-
-QUnit.test("useAutoArrangement is false in overlappingBehavior option", function(assert) {
-    this.createTestGauge({
-        scale: {
-            label: {
-                overlappingBehavior: {
-                    useAutoArrangement: false,
-                }
-            }
-        }
-    });
-
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.mode, "none");
-});
-
-QUnit.test("useTickAutoArrangement in majorTicks", function(assert) {
-    this.createTestGauge({
-        scale: {
-            majorTick: {
-                useTickAutoArrangement: false,
-            },
-            label: {
-                overlappingBehavior: {
-                    useAutoArrangement: true
-                }
-            }
-        }
-    });
-
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.mode, "none");
-});
-// Deprecated in 17.1 end
-
 QUnit.test("Use range colors for scale", function(assert) {
     var gauge = this.createTestGauge({
         scale: {
@@ -428,57 +345,6 @@ QUnit.test("Use range colors for scale", function(assert) {
 
     assert.equal(gauge._rangeContainer.getColorForValue.callCount, 1, "ranges");
     assert.deepEqual(gauge._rangeContainer.getColorForValue.getCall(0).args[0], "test", "args");
-});
-
-QUnit.test("Chack deprecated option showCalculatedTicks with majorTick and minorTick objects. True and without customTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createTestGauge({
-        scale: {
-            majorTick: {
-                length: 5,
-                showCalculatedTicks: true
-            },
-            minorTick: {
-                showCalculatedTicks: true
-            }
-        }
-    });
-
-    assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].tick.showCalculatedTicks, false, "showCalculatedTicks");
-    assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].minorTick.showCalculatedTicks, false, "showCalculatedTicks");
-});
-
-QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. Undefined and with customTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createTestGauge({
-        scale: {
-            majorTick: {
-                length: 5
-            },
-            customTicks: [1, 2],
-            customMinorTicks: [1, 2]
-        }
-    });
-
-    assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].tick.showCalculatedTicks, true, "showCalculatedTicks");
-    assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].minorTick.showCalculatedTicks, true, "showCalculatedTicks");
-});
-
-QUnit.test("Chack deprecated option showCalculatedTicks with majorTick object. False and with customTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createTestGauge({
-        scale: {
-            majorTick: {
-                length: 5,
-                showCalculatedTicks: false
-            },
-            minorTick: {
-                showCalculatedTicks: false
-            },
-            customTicks: [1, 2],
-            customMinorTicks: [1, 2]
-        }
-    });
-
-    assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].tick.showCalculatedTicks, false, "showCalculatedTicks");
-    assert.strictEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].minorTick.showCalculatedTicks, false, "showCalculatedTicks");
 });
 
 QUnit.test("Range container is rendered", function(assert) {
@@ -1191,9 +1057,7 @@ QUnit.test("More ranges in range container (direct assignment)", function(assert
 QUnit.test("Less custom tick values for scale", function(assert) {
     var gauge = this.createTestGauge({
         scale: {
-            majorTick: {
-                customTickValues: [10, 20, 30]
-            },
+            customTicks: [10, 20, 30],
             minorTick: {
                 customTickValues: [40, 50, 60]
             }
@@ -1202,10 +1066,8 @@ QUnit.test("Less custom tick values for scale", function(assert) {
     gauge.option({
         scale: {
             startValue: 50,
-            majorTick: {
-                tickInterval: 9,
-                customTickValues: [11, 21]
-            },
+            tickInterval: 9,
+            customTicks: [11, 21],
             minorTick: {
                 tickInterval: 4,
                 customTickValues: [41, 51]
@@ -1213,10 +1075,7 @@ QUnit.test("Less custom tick values for scale", function(assert) {
         }
     });
 
-    assert.deepEqual(gauge.option("scale").majorTick, {
-        tickInterval: 9,
-        customTickValues: [11, 21]
-    });
+    assert.deepEqual(gauge.option("scale").customTicks, [11, 21]);
     assert.deepEqual(gauge.option("scale").minorTick, {
         tickInterval: 4,
         customTickValues: [41, 51]
