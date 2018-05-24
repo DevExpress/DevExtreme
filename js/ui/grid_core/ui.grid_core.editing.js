@@ -116,6 +116,7 @@ var EditingController = modules.ViewController.inherit((function() {
             that._columnsController = that.getController("columns");
             that._dataController = that.getController("data");
             that._rowsView = that.getView("rowsView");
+            that._editForm = null;
 
             if(!that._dataChangedHandler) {
                 that._dataChangedHandler = that._handleDataChanged.bind(that);
@@ -506,6 +507,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that._initNewRow(param, insertKey);
 
+            editMode = getEditMode(that);
             if(editMode !== EDIT_MODE_BATCH) {
                 that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
             }
