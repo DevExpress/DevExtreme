@@ -1013,6 +1013,27 @@ QUnit.test("changing onItemRendered should not fire refresh", function(assert) {
     assert.ok(!itemsReRendered, "items does not refreshed");
 });
 
+QUnit.test("user defined selectedItem with null value should be more important than default selected index", function(assert) {
+    var TestCollection = CollectionWidget.inherit({
+        NAME: "TestCollection",
+        _getDefaultOptions: function() {
+            return $.extend(this.callBase(), {
+                selectedIndex: 0
+            });
+        }
+    });
+
+    var instance = new TestCollection($("#cmp"), {
+        items: [1, 2, 3],
+        selectionMode: "multiple",
+        selectedItem: null
+    });
+
+    assert.equal(instance.option("selectedIndex"), -1, "selectedIndex is correct");
+    assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys are correct");
+    assert.equal($("#cmp").find(".dx-item-selected").length, 0, "there is no selected item");
+});
+
 
 QUnit.module("items via markup", {
     beforeEach: function() {

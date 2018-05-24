@@ -384,16 +384,16 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _chooseSelectOption: function() {
         var optionName = "selectedIndex";
 
-        var arrayOptionsDefined = function(optionName) {
+        var isOptionDefined = function(optionName) {
             var length = this.option(optionName).length;
-            return length || (!length && optionName in this._userOptions);
+            return length || optionName in this._userOptions;
         }.bind(this);
 
-        if(arrayOptionsDefined("selectedItems")) {
+        if(isOptionDefined("selectedItems")) {
             optionName = "selectedItems";
-        } else if(isDefined(this.option("selectedItem"))) {
+        } else if(isOptionDefined("selectedItem")) {
             optionName = "selectedItem";
-        } else if(arrayOptionsDefined("selectedItemKeys")) {
+        } else if(isOptionDefined("selectedItemKeys")) {
             optionName = "selectedItemKeys";
         }
 
