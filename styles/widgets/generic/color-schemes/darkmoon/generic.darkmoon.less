@@ -310,6 +310,12 @@
 */
 @accordion-color: @base-text-color;
 /**
+* @name 51. Background color
+* @type color
+* @group navigations.accordion
+*/
+@accordion-background-color: @base-bg;
+/**
 * @name 60. Item title text color
 * @type color
 * @group navigations.accordion
@@ -326,7 +332,7 @@
 * @type color
 * @group navigations.accordion
 */
-@accordion-title-active-bg: fade(lighten(@base-bg, 62.5%), 20%);
+@accordion-title-active-bg: fade(lighten(@accordion-background-color, 62.5%), 20%);
 /**
 * @name 90. Item title hovered state background color
 * @type color
