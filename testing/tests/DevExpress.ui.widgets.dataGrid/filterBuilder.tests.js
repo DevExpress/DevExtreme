@@ -119,4 +119,16 @@ QUnit.module("Common", {
         // assert
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
     });
+
+    QUnit.test("the 'any of' operation is available in filterBuilderPopup", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ dataField: "field", filterOperations: [">"] }],
+            filterValue: ["field", "anyof", ["a"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        // assert
+        assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
 });

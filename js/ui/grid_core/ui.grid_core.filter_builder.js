@@ -60,10 +60,10 @@ var FilterBuilderView = modules.View.inherit({
             fields = this.getController("columns").getColumns(),
             customOperations = this.getController("filterSync").getCustomFilterOperations();
 
-        fields = fields.filter(function(item) {
-            return item.allowFiltering;
-        }).map(function(item) {
-            var column = extend({}, item);
+        fields = fields.filter(item => item.allowFiltering && item.filterOperations)
+        .map(item => {
+            var column = extend(true, {}, item);
+            ["anyof", "noneof"].forEach(item => !column.filterOperations.includes(item) && column.filterOperations.push(item));
             return column;
         });
 
