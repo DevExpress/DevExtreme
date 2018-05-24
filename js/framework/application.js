@@ -67,7 +67,7 @@ var Application = Class.inherit({
 
         this._isNavigating = false;
         this._viewLinksHash = {};
-        this._removedViewInfo = null;
+        this._removedViewInfos = [];
 
         Action.registerExecutor(createActionExecutors(this));
 
@@ -269,10 +269,10 @@ var Application = Class.inherit({
             }
         });
 
-        if(this._removedViewInfo) {
-            disposeView(this._removedViewInfo);
-            this._removedViewInfo = null;
-        }
+        this._removedViewInfos.forEach(function(viewInfo) {
+            disposeView(viewInfo);
+        });
+        this._removedViewInfos = [];
     },
 
     _onViewHidden: function(viewInfo) {
@@ -470,7 +470,7 @@ var Application = Class.inherit({
             createViewLinkHash();
         } else {
             if(hash.viewInfo !== viewInfo) {
-                this._removedViewInfo = hash.viewInfo;
+                this._removedViewInfos.push(hash.viewInfo);
                 createViewLinkHash();
             } else {
                 this._viewLinksHash[key].linkCount++;
