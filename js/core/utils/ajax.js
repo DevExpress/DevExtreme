@@ -211,7 +211,9 @@ var getRequestOptions = function(options, headers) {
         }
 
         if(getMethod(options) === "GET") {
-            url += (url.indexOf("?") > -1 ? "&" : "?") + params;
+            if(params !== "") {
+                url += (url.indexOf("?") > -1 ? "&" : "?") + params;
+            }
             params = null;
         } else if(headers["Content-Type"] && headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1) {
             params = params.replace(/%20/g, "+");
