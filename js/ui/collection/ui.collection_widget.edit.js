@@ -385,7 +385,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         var optionName = "selectedIndex";
 
         var isOptionDefined = function(optionName) {
-            var length = this.option(optionName).length;
+            var optionValue = this.option(optionName),
+                length = isDefined(optionValue) && optionValue.length;
             return length || optionName in this._userOptions;
         }.bind(this);
 
