@@ -220,6 +220,7 @@ exports.HeaderFilterView = modules.View.inherit({
             $content = that._popupContainer.$content(),
             widgetOptions = {
                 searchEnabled: isSearchEnabled(that, options),
+                searchTimeout: that.option("headerFilter.searchTimeout"),
                 dataSource: options.dataSource,
                 onContentReady: function() {
                     that.renderCompleted.fire();
