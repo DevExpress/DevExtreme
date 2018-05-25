@@ -252,27 +252,26 @@ var Application = Class.inherit({
     },
 
     _disposeRemovedViews: function() {
-        var that = this,
-            args;
-
-        var disposeView = function(viewInfo) {
-            args = { viewInfo: viewInfo };
-            that._processEvent("viewDisposing", args, viewInfo.model);
-            that._disposeView(viewInfo);
-            that._processEvent("viewDisposed", args, viewInfo.model);
-        };
+        var that = this;
 
         iteratorUtils.each(that._viewLinksHash, function(key, link) {
             if(!link.linkCount) {
-                disposeView(link.viewInfo);
+                that._disposeRemovedView(link.viewInfo);
                 delete that._viewLinksHash[key];
             }
         });
 
         this._removedViewInfos.forEach(function(viewInfo) {
-            disposeView(viewInfo);
+            that._disposeRemovedView(viewInfo);
         });
         this._removedViewInfos = [];
+    },
+
+    _disposeRemovedView: function(viewInfo) {
+        var args = { viewInfo: viewInfo };
+        this._processEvent("viewDisposing", args, viewInfo.model);
+        this._disposeView(viewInfo);
+        this._processEvent("viewDisposed", args, viewInfo.model);
     },
 
     _onViewHidden: function(viewInfo) {
@@ -457,24 +456,19 @@ var Application = Class.inherit({
 
     _obtainViewLink: function(viewInfo) {
         var key = viewInfo.key,
-            hash = this._viewLinksHash[key];
+            viewLink = this._viewLinksHash[key];
 
-        var createViewLinkHash = function() {
+        if(!viewLink) {
             this._viewLinksHash[key] = {
                 viewInfo: viewInfo,
                 linkCount: 1
             };
-        }.bind(this);
-
-        if(!hash) {
-            createViewLinkHash();
         } else {
-            if(hash.viewInfo !== viewInfo) {
-                this._removedViewInfos.push(hash.viewInfo);
-                createViewLinkHash();
-            } else {
-                this._viewLinksHash[key].linkCount++;
+            if(viewLink.viewInfo !== viewInfo) {
+                this._removedViewInfos.push(viewLink.viewInfo);
+                viewLink.viewInfo = viewInfo;
             }
+            this._viewLinksHash[key].linkCount++;
         }
     },
 
