@@ -480,11 +480,20 @@ module.exports = {
                 },
 
                 _afterSaveEditData: function() {
-                    var that = this;
+                    var that = this,
+                        $firstErrorRow;
 
                     each(that._editData, function(_, editData) {
-                        that._showErrorRow(editData);
+                        var $errorRow = that._showErrorRow(editData);
+                        $firstErrorRow = $firstErrorRow || $errorRow;
                     });
+                    if($firstErrorRow) {
+                        var scrollable = this._rowsView.getScrollable();
+                        if(scrollable) {
+                            scrollable.update();
+                            scrollable.scrollToElement($firstErrorRow);
+                        }
+                    }
                 },
 
                 _showErrorRow: function(editData) {
@@ -495,7 +504,7 @@ module.exports = {
 
                     if(!editData.isValid && editData.errorText && rowIndex >= 0) {
                         $popupContent = this.getPopupContent();
-                        errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex, $popupContent);
+                        return errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex, $popupContent);
                     }
                 },
 

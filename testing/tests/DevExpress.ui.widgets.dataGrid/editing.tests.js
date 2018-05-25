@@ -10368,6 +10368,48 @@ QUnit.test("Validation show only one message for editing cell in virtual mode", 
     assert.equal(testElement.find(".dx-error-row").length, 1);
 });
 
+// T635322
+QUnit.test("Error row should be visible after editing", function(assert) {
+    // arrange
+    var testElement = $("#container");
+
+    this.options.scrolling = {
+        useNative: false
+    };
+
+    this.options.errorRowEnabled = true;
+
+    this.options.onRowValidating = function(e) {
+        e.isValid = false;
+        e.errorText = "Test";
+    };
+
+    this.options.dataSource = generateDataSource(10, 2);
+    this.options.paging.pageSize = 10;
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true
+    };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(50);
+    this.rowsView.resize();
+
+    this.rowsView.scrollTo({ y: 100 });
+    var scrollTop = this.rowsView.getScrollable().scrollTop();
+
+    // act
+    this.editCell(9, 0);
+    testElement.find("input").val("test");
+    testElement.find("input").trigger("change");
+    this.saveEditData();
+
+    // assert
+    assert.equal(testElement.find(".dx-error-row").length, 1, "error row is rendered");
+    assert.ok(this.rowsView.getScrollable().scrollTop() > scrollTop, "scroll top is changed");
+});
+
 // T538954
 QUnit.test("Position of the inserted row if masterDetail is used", function(assert) {
     // arrange
