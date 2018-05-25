@@ -490,6 +490,12 @@ module.exports = {
                  */
                 allowSearch: false,
                 /**
+                 * @name GridBaseOptions.headerFilter.searchTimeout
+                 * @type number
+                 * @default 500
+                 */
+                searchTimeout: 500,
+                /**
                  * @name GridBaseOptions.headerFilter.texts
                  * @type object
                  */

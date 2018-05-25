@@ -136,6 +136,12 @@ var FieldChooser = BaseFieldChooser.inherit({
             */
             allowSearch: false,
             /**
+            * @name dxPivotGridFieldChooserOptions.searchTimeout
+            * @type number
+            * @default 500
+            */
+            searchTimeout: 500,
+            /**
              * @name dxPivotGridFieldChooserOptions.texts
              * @type object
              */
@@ -199,6 +205,11 @@ var FieldChooser = BaseFieldChooser.inherit({
              * @name dxPivotGridFieldChooserOptions.headerFilter.allowSearch
              * @type boolean
              * @default undefined
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions.headerFilter.searchTimeout
+             * @type number
+             * @default 500
              */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.texts
@@ -280,6 +291,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             case "layout":
             case "texts":
             case "allowSearch":
+            case "searchTimeout":
                 that._invalidate();
                 break;
             case "onContextMenuPreparing":
@@ -506,6 +518,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 dataSource: that._createFieldsDataSource(dataSource),
                 showCheckBoxesMode: 'normal',
                 searchEnabled: that.option("allowSearch"),
+                searchTimeout: that.option("searchTimeout"),
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     if(itemData.icon) {
                         iconUtils.getImageContainer(itemData.icon).appendTo(itemElement);
