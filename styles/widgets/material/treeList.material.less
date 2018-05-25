@@ -9,6 +9,7 @@
 .dx-treelist-rowsview {
     .dx-treelist-empty-space {
         position: relative;
+        top: -2px;
         display: inline-block;
         color: @treelist-chevron-icon-color;
         .dx-icon-chevronup;
@@ -81,7 +82,7 @@
 }
 
 .dx-treelist-icon-container {
-    max-height: @MATERIAL_BASE_ICON_SIZE;
+    max-height: @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT;
 
     &.dx-editor-inline-block {
         position: relative;
@@ -102,7 +103,7 @@
     .dx-checkbox {
         left: 0px;
         margin-left: @TREELIST_CHECKBOX_PADDING_LEFT;
-        top: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING + (@MATERIAL_BASE_ICON_SIZE - @MATERIAL_GRID_BASE_CHECKBOX_SIZE)/2;
+        top: (@MATERIAL_GRID_BASE_HEADER_HEIGHT - @MATERIAL_GRID_BASE_CHECKBOX_SIZE)/2;
     }
 }
 

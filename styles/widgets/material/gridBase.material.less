@@ -1,8 +1,9 @@
 .dx-size-default() {
     @MATERIAL_GRID_BASE_CELL_HEIGHT: 48px;
     @MATERIAL_GRID_BASE_HEADER_HEIGHT: 56px;
-    @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT: 24px;
-    @MATERIAL_GRID_BASE_CELL_FONT_SIZE: 13px;
+    @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT: 16px;
+    @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT: 20px;
+    @MATERIAL_GRID_BASE_CELL_FONT_SIZE: 14px;
     @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE: 12px;
 
     @MATERIAL_GRID_BASE_CHECKBOX_SIZE: 18px;
@@ -52,7 +53,7 @@
     @MATERIAL_GRID_BASE_FOOTER_FONT_SIZE: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
     @MATERIAL_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: @MATERIAL_GRID_BASE_CHECKBOX_SIZE + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + @MATERIAL_GRID_BASE_CELL_FIRST_COLUMN_PADDING;
     @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: @MATERIAL_BASE_ICON_SIZE;
-    @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: round((@MATERIAL_GRID_BASE_CELL_HEIGHT - @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT)/2);
+    @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: round((@MATERIAL_GRID_BASE_CELL_HEIGHT - @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT)/2);
 
     .dx-set-checkbox-border-color-as-background() when (@MATERIAL_COLOR_POSTFIX = ".contrast") {
         .dx-selection .dx-checkbox-icon {
@@ -237,13 +238,13 @@
             padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
             padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
             font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+            line-height: @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT;
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
             > td, > td.dx-cell-modified:not(.dx-field-item-content), > td.dx-@{widgetName}-invalid:not(.dx-field-item-content) {
                 padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                 padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-                line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
                 vertical-align: middle;
 
                 &:first-of-type {
@@ -466,7 +467,7 @@
         .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-        padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+        padding: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING;
         background-color: ~"@{@{widgetName}-header-drag-bg}";
         line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
         font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
