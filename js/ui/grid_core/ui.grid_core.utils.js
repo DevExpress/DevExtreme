@@ -495,7 +495,7 @@ module.exports = (function() {
                 groupInterval = column.headerFilter && column.headerFilter.groupInterval,
                 interval = groupInterval === "quarter" ? "month" : groupInterval;
 
-            if(isDateType(column.dataType)) {
+            if(isDateType(column.dataType) && groupInterval !== null) {
                 result = column.dataType === "datetime" ? DEFAULT_DATETIME_INTERVAL : DEFAULT_DATE_INTERVAL;
                 index = inArray(interval, dateIntervals);
 
