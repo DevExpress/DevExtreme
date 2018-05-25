@@ -299,6 +299,10 @@ var EditingController = modules.ViewController.inherit((function() {
             return item && item.key;
         },
 
+        getEditRowIndex: function() {
+            return this._getVisibleEditRowIndex();
+        },
+
         getEditFormRowIndex: function() {
             var editMode = getEditMode(this);
 
@@ -396,7 +400,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that);
                 editData = that._editData[editIndex];
                 data = editData.data;
-                item.isEditing = options.rowIndex === that._getVisibleEditRowIndex();
+
+                item.isEditing = false;
 
                 switch(editData.type) {
                     case DATA_EDIT_DATA_INSERT_TYPE:
@@ -1997,11 +2002,14 @@ module.exports = {
                     this.callBase(change);
 
                     var editingController = this._editingController,
-                        editFormRowIndex = editingController.getEditMode() === EDIT_MODE_FORM && editingController.getEditFormRowIndex(),
-                        editFormItem = this.items()[editFormRowIndex];
+                        editRowIndex = editingController.getEditRowIndex(),
+                        editItem = this.items()[editRowIndex];
 
-                    if(editFormItem) {
-                        editFormItem.rowType = "detail";
+                    if(editItem) {
+                        editItem.isEditing = true;
+                        if(editingController.getEditMode() === EDIT_MODE_FORM) {
+                            editItem.rowType = "detail";
+                        }
                     }
                 },
                 _processItems: function(items, changeType) {
