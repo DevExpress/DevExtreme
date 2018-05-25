@@ -650,6 +650,7 @@ QUnit.test("create field chooser with search", function(assert) {
             },
             fieldChooser: {
                 allowSearch: true,
+                searchTimeout: 300
             }
         }, assert),
         fieldChooserPopup = pivotGrid.getFieldChooserPopup();
@@ -667,6 +668,7 @@ QUnit.test("create field chooser with search", function(assert) {
     // assert
     assert.ok(fieldChooser.option("allowSearch"), 'fieldChooser with search');
     assert.ok(treeViewInstance.option("searchEnabled"), 'treeview with search');
+    assert.ok(treeViewInstance.option("searchTimeout"), 300, 'searchTimeout is assigned');
 });
 
 QUnit.test("clear selection and filtering in field chooser treeview on popup hidding", function(assert) {
@@ -693,6 +695,29 @@ QUnit.test("clear selection and filtering in field chooser treeview on popup hid
 
     // assert
     assert.ok(resetTreeView.calledOnce, 'resetTreeView was called');
+});
+
+QUnit.test("Field panel headerFilter with search", function(assert) {
+    createPivotGrid({
+        dataSource: this.dataSource,
+        allowFiltering: true,
+        headerFilter: {
+            allowSearch: true,
+            searchTimeout: 300
+        },
+        fieldPanel: {
+            visible: true
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    $("#pivotGrid").find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    // assert
+    assert.ok($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter has searchBox");
+    assert.equal($(".dx-header-filter-menu").find(".dx-list").dxList("instance").option("searchTimeout"), 300, "search timeout is assinged");
 });
 
 QUnit.test("Field panel should be updated on change headerFilter at runtime", function(assert) {

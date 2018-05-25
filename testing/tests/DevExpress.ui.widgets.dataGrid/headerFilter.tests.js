@@ -1660,6 +1660,7 @@ QUnit.test("Show header filter with search bar", function(assert) {
         testElement = $("#container");
 
     that.options.headerFilter.allowSearch = true;
+    that.options.headerFilter.searchTimeout = 300;
 
     // act
     that.setupDataGrid();
@@ -1673,6 +1674,7 @@ QUnit.test("Show header filter with search bar", function(assert) {
     // assert
     assert.ok(list.option("searchEnabled"), "list with search bar");
     assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
+    assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
 });
 
 QUnit.test("Show header filter when column with dataType date with search bar", function(assert) {
@@ -1683,6 +1685,7 @@ QUnit.test("Show header filter when column with dataType date with search bar", 
         testElement = $("#container");
 
     that.options.headerFilter.allowSearch = true;
+    that.options.headerFilter.searchTimeout = 300;
     that.columns[0].dataType = "date";
 
     // act
@@ -1696,6 +1699,7 @@ QUnit.test("Show header filter when column with dataType date with search bar", 
 
     // assert
     assert.ok(treeView.option("searchEnabled"), "treeView with search bar");
+    assert.equal(treeView.option("searchTimeout"), 300, "search timeout is assigned");
 });
 
 QUnit.test("HeaderFilter should be without search bar when column allowSearch is disabled", function(assert) {

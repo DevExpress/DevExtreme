@@ -241,6 +241,13 @@ var PivotGrid = Widget.inherit({
                  */
                 allowSearch: false,
                 /**
+                 * @name dxPivotGridOptions_fieldChooser_searchTimeout
+                 * @publicName searchTimeout
+                 * @type number
+                 * @default searchTimeout
+                 */
+                searchTimeout: 500,
+                /**
                  * @name dxPivotGridOptions_fieldChooser_layout
                  * @publicName layout
                  * @type Enums.PivotGridFieldChooserLayout
@@ -836,6 +843,13 @@ var PivotGrid = Widget.inherit({
                  * @default false
                  */
                 allowSearch: false,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_searchTimeout
+                 * @publicName searchTimeout
+                 * @type number
+                 * @default searchTimeout
+                 */
+                searchTimeout: 500,
                 /**
                  * @name dxPivotGridOptions_headerFilter_texts
                  * @publicName texts

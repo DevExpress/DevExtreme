@@ -546,6 +546,7 @@ QUnit.test("Enable search", function(assert) {
     this.setTestElement(testElement);
 
     this.options.columnChooser.allowSearch = true;
+    this.options.columnChooser.searchTimeout = 300;
 
     // act
     this.renderColumnChooser();
@@ -556,6 +557,7 @@ QUnit.test("Enable search", function(assert) {
     // assert
     treeView = $overlayWrapper.find(".dx-treeview").dxTreeView("instance");
     assert.ok(treeView.option("searchEnabled"));
+    assert.equal(treeView.option("searchTimeout"), 300, "search timeout is assigned");
 });
 
 if(device.deviceType === "desktop") {

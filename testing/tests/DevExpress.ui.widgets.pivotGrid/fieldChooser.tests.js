@@ -1451,7 +1451,7 @@ QUnit.test("The 'contentReady' event fires after all data is loaded", function(a
 });
 
 QUnit.test("Enable search", function(assert) {
-    this.setup({}, { allowSearch: true });
+    this.setup({}, { allowSearch: true, searchTimeout: 300 });
 
     var treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
     assert.ok(treeview.option("searchEnabled"), "treeview with search");
@@ -1459,6 +1459,7 @@ QUnit.test("Enable search", function(assert) {
     this.fieldChooser.option("allowSearch", false);
     treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
     assert.ok(!treeview.option("searchEnabled"), "treeview without search");
+    assert.equal(treeview.option("searchTimeout"), 300, "search timeout is assinged");
 });
 
 QUnit.test("resetTreeView works correct", function(assert) {
@@ -1847,7 +1848,8 @@ QUnit.test("Show search box in headerFilter", function(assert) {
 
     this.setup(dataSourceOptions, {
         headerFilter: {
-            allowSearch: true
+            allowSearch: true,
+            searchTimeout: 300
         }
     });
 
@@ -1864,6 +1866,7 @@ QUnit.test("Show search box in headerFilter", function(assert) {
     // assert
     list = $(".dx-list").dxList("instance");
     assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchTimeout"), 300, "search timeout is assinged");
     assert.equal(list.option("searchExpr"), "text", "expr is correct");
 });
 
