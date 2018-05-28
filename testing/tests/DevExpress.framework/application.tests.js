@@ -1267,6 +1267,49 @@ QUnit.test("resolveViewCacheKey (T292466)", function(assert) {
     assert.equal(viewShownLog[5].params.id, "2");
 });
 
+QUnit.test("view should be disposed on navigation when cache is cleared (T628302)", function(assert) {
+    var log = [],
+        app = new frameworkMocks.MockApplication({
+            router: this.router
+        });
+
+    app.on("resolveViewCacheKey", function(args) {
+        args.key = args.routeData.view;
+    });
+
+    app.on("viewShown", function(e) {
+        log.push({
+            event: "viewShown",
+            args: e
+        });
+    });
+    app.on("viewDisposed", function(e) {
+        log.push({
+            event: "viewDisposed",
+            args: e
+        });
+    });
+
+    app.init();
+
+    app.navigate("view1", { root: true });
+    app.navigate("view2");
+    app.viewCache.clear();
+    app.navigate("view1");
+
+    assert.equal(log.length, 5);
+    assert.equal(log[0].event, "viewShown");
+    assert.equal(log[0].args.viewInfo.uri, "view1");
+    assert.equal(log[1].event, "viewShown");
+    assert.equal(log[1].args.viewInfo.uri, "view2");
+    assert.equal(log[2].event, "viewShown");
+    assert.equal(log[2].args.viewInfo.uri, "view1");
+    assert.equal(log[3].event, "viewDisposed");
+    assert.equal(log[3].args.viewInfo.uri, "view2");
+    assert.equal(log[4].event, "viewDisposed");
+    assert.equal(log[4].args.viewInfo.uri, "view1");
+});
+
 
 QUnit.module("Application (async tests)");
 

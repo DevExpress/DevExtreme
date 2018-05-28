@@ -66,6 +66,7 @@ var Application = Class.inherit({
 
         this._isNavigating = false;
         this._viewLinksHash = {};
+        this._removedViewInfos = [];
 
         Action.registerExecutor(createActionExecutors(this));
 
@@ -250,17 +251,26 @@ var Application = Class.inherit({
     },
 
     _disposeRemovedViews: function() {
-        var that = this,
-            args;
+        var that = this;
+
         iteratorUtils.each(that._viewLinksHash, function(key, link) {
             if(!link.linkCount) {
-                args = { viewInfo: link.viewInfo };
-                that._processEvent("viewDisposing", args, args.viewInfo.model);
-                that._disposeView(link.viewInfo);
-                that._processEvent("viewDisposed", args, args.viewInfo.model);
+                that._disposeRemovedView(link.viewInfo);
                 delete that._viewLinksHash[key];
             }
         });
+
+        this._removedViewInfos.forEach(function(viewInfo) {
+            that._disposeRemovedView(viewInfo);
+        });
+        this._removedViewInfos = [];
+    },
+
+    _disposeRemovedView: function(viewInfo) {
+        var args = { viewInfo: viewInfo };
+        this._processEvent("viewDisposing", args, viewInfo.model);
+        this._disposeView(viewInfo);
+        this._processEvent("viewDisposed", args, viewInfo.model);
     },
 
     _onViewHidden: function(viewInfo) {
@@ -444,14 +454,19 @@ var Application = Class.inherit({
     _showViewImpl: abstract,
 
     _obtainViewLink: function(viewInfo) {
-        var key = viewInfo.key;
+        var key = viewInfo.key,
+            viewLink = this._viewLinksHash[key];
 
-        if(!this._viewLinksHash[key]) {
+        if(!viewLink) {
             this._viewLinksHash[key] = {
                 viewInfo: viewInfo,
                 linkCount: 1
             };
         } else {
+            if(viewLink.viewInfo !== viewInfo) {
+                this._removedViewInfos.push(viewLink.viewInfo);
+                viewLink.viewInfo = viewInfo;
+            }
             this._viewLinksHash[key].linkCount++;
         }
     },
