@@ -382,3 +382,21 @@ QUnit.test("Calendar popover has dx-scheduler-navigator-calendar-popover class",
 
     assert.ok(popover.hasClass("dx-scheduler-navigator-calendar-popover"), "Calendar popover has dx-scheduler-navigator-calendar-popover class");
 });
+
+QUnit.test("Click on the 'next' button should update currentDate correctly when intervalCount, month view, currentDate > 1", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 3, 21),
+        currentView: "month",
+        views: [{
+            type: "month",
+            intervalCount: 2
+        }] });
+
+    var $element = this.instance.$element(),
+        $caption = $element.find(".dx-scheduler-navigator-caption");
+
+    $($element.find(".dx-scheduler-navigator-next")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2018, 5, 21), "New date is correct");
+    assert.equal($caption.text(), "Jun-Jul 2018", "Caption is correct");
+});
