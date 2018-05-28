@@ -3,8 +3,8 @@
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
     dateUtils = require("../../core/utils/date");
 
-// var MAX_APPOINTMENT_HEIGHT = 100,
-//     BOTTOM_CELL_GAP = 20,
+var MAX_APPOINTMENT_HEIGHT = 100,
+    BOTTOM_CELL_GAP = 20;
 
 var toMs = dateUtils.dateToMilliseconds;
 
@@ -54,9 +54,29 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
-        var config = this._calculateGeometryConfig(coordinates);
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
+        if(overlappingMode) {
+            var config = this._calculateGeometryConfig(coordinates);
+
+            return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
+        } else {
+            var cellHeight = (this._defaultHeight || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
+                height = cellHeight / coordinates.count;
+
+            if(height > MAX_APPOINTMENT_HEIGHT) {
+                height = MAX_APPOINTMENT_HEIGHT;
+            }
+
+            var top = coordinates.top + coordinates.index * height;
+
+            return {
+                height: height,
+                width: coordinates.width,
+                top: top,
+                left: coordinates.left
+            };
+        }
     },
 
     _getOffsets: function() {
