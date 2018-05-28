@@ -6915,6 +6915,40 @@ QUnit.test("insert row when master detail autoExpandAll is active", function(ass
     assert.ok(rows.eq(2).hasClass("dx-master-detail-row"), "Third row is master-detail-row");
 });
 
+// T636146
+QUnit.test("onRowInserted should be called if dataSource is reassigned in loadingChanged", function(assert) {
+    var rowInsertedArgs = [];
+    var dataSource = [{ id: 1 }, { id: 2 }];
+    var isLoadingOccurs;
+    var dataGrid = createDataGrid({
+        keyExpr: "id",
+        dataSource: dataSource,
+        onRowInserted: function(e) {
+            rowInsertedArgs.push(e);
+        }
+    });
+
+    this.clock.tick(0);
+
+    dataGrid.addRow();
+    dataGrid.cellValue(0, 0, 3);
+    dataGrid.getDataSource().on("loadingChanged", function(isLoading) {
+        if(isLoading && !isLoadingOccurs) {
+            dataGrid.option("dataSource", dataGrid.option("dataSource"));
+            isLoadingOccurs = true;
+        }
+    });
+
+    // act
+    dataGrid.saveEditData();
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(isLoadingOccurs, true, "loadingChanged is occurs");
+    assert.equal(rowInsertedArgs.length, 1, "rowInserted is called");
+    assert.deepEqual(rowInsertedArgs[0].data, { id: 3 }, "rowInserted data arg");
+});
+
 QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers();
