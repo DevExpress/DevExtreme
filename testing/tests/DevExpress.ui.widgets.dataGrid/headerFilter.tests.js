@@ -3292,6 +3292,45 @@ QUnit.test("Header filter with group interval 'quarter' for column with dataType
     assert.deepEqual(that.columnsController.getVisibleColumns()[0].filterValues, ["1992/4"], "filter values of the first column");
 });
 
+// T636103
+QUnit.test("Header filter with custom data source and group interval null for column with dataType 'date'", function(assert) {
+    // arrange
+    var that = this,
+        $listItems,
+        listInstance,
+        $popupContent,
+        testElement = $("#container");
+
+    that.options.dataSource = [{ Test1: new Date(1992, 7, 6), Test2: "value1" }];
+    that.options.columns[0].headerFilter = {
+        groupInterval: null,
+        dataSource: [
+            { text: "2018-01", value: new Date(2018, 0, 1) },
+            { text: "2018-02", value: new Date(2018, 1, 1) }
+        ]
+    };
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+
+    // assert
+    assert.equal(testElement.find(".dx-header-filter-menu").length, 1, "has header filter menu");
+
+    // act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+
+    listInstance = that.headerFilterView.getListContainer(),
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
+    $listItems = $popupContent.find(".dx-list-item");
+
+    // assert
+    assert.equal(listInstance.NAME, "dxList", "dxList");
+    assert.equal($listItems.length, 2, "count item");
+    assert.strictEqual($listItems.first().text(), "2018-01", "text of the first item");
+    assert.strictEqual($listItems.last().text(), "2018-02", "text of the second item");
+});
+
 QUnit.test("Header filter with group interval for column with dataType 'number'", function(assert) {
     // arrange
     var that = this,
