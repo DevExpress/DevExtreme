@@ -1099,6 +1099,8 @@ var EditingController = modules.ViewController.inherit((function() {
                         that._removeEditDataItem(editIndex);
                         hasSavedData = !cancel;
                     }
+                } else {
+                    hasSavedData = true;
                 }
             }
             return hasSavedData;
@@ -1156,6 +1158,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 return result.resolve().promise();
             }
 
+            editData = that._editData.slice(0);
+
             if(!that._saveEditDataCore(deferreds, results) && editMode === EDIT_MODE_CELL) {
                 that._focusEditingCell();
             }
@@ -1166,8 +1170,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataSource && dataSource.beginLoading();
 
                 when.apply($, deferreds).done(function() {
-                    editData = that._editData.slice(0);
-
                     if(that._processSaveEditDataResult(results)) {
                         resetEditIndices(that);
 
