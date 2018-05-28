@@ -1095,6 +1095,7 @@ QUnit.test("Four rival appointments should have correct positions", function(ass
         {
             currentDate: new Date(2015, 1, 9),
             currentView: "timelineDay",
+            maxAppointmentsPerCell: null,
             height: 500,
             dataSource: items,
             startDayHour: 1

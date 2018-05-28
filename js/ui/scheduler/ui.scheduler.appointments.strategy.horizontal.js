@@ -87,9 +87,13 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _checkLongCompactAppointment: function(item, result) {
-        this._splitLongCompactAppointment(item, result);
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        return result;
+        if(overlappingMode) {
+            this._splitLongCompactAppointment(item, result);
+
+            return result;
+        }
     },
 
     _getCompactLeftCoordinate: function(itemLeft, index) {
@@ -101,23 +105,6 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _getMaxHeight: function() {
         return this._defaultHeight || this.getAppointmentMinSize();
     },
-    // _customizeAppointmentGeometry: function(coordinates) {
-    //     var cellHeight = (this._defaultHeight || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
-    //         height = cellHeight / coordinates.count;
-
-    //     if(height > MAX_APPOINTMENT_HEIGHT) {
-    //         height = MAX_APPOINTMENT_HEIGHT;
-    //     }
-
-    //     var top = coordinates.top + coordinates.index * height;
-
-    //     return {
-    //         height: height,
-    //         width: coordinates.width,
-    //         top: top,
-    //         left: coordinates.left
-    //     };
-    // },
 
     _correctRtlCoordinatesParts: function(coordinates, width) {
         for(var i = 1; i < coordinates.length; i++) {
