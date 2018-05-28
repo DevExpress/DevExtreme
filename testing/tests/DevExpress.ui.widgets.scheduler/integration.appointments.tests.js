@@ -1241,6 +1241,46 @@ QUnit.test("Add new appointment", function(assert) {
     }
 });
 
+QUnit.test("Appointments should be rendered correctly when resourses store is asynchronous", function(assert) {
+    var appointments = [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
+    ];
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["month"],
+        dataSource: appointments,
+        width: 840,
+        currentView: "month",
+        firstDayOfWeek: 1,
+        groups: ["roomId"],
+        resources: [
+            {
+                field: "roomId",
+                allowMultiple: true,
+                dataSource: new DataSource({
+                    store: new CustomStore({
+                        load: function() {
+                            var d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([
+                                    { id: 1, text: "Room 1", color: "#ff0000" },
+                                    { id: 2, text: "Room 2", color: "#0000ff" }
+                                ]);
+                            }, 300);
+
+                            return d.promise();
+                        }
+                    })
+                })
+            }
+        ]
+    });
+
+    this.clock.tick(300);
+    assert.deepEqual(this.instance.$element().find("." + APPOINTMENT_CLASS).length, 2, "Appointments are rendered");
+});
+
 QUnit.test("Add new appointment with delay(T381444)", function(assert) {
     var done = assert.async(),
         data = [],

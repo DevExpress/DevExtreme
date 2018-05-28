@@ -1707,9 +1707,7 @@ var Scheduler = Widget.inherit({
                 allDayContainer: $allDayContainer
             });
 
-            this._readyToRenderAppointments = true;
             this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
-
             this._filterAppointmentsByDate();
             this._reloadDataSource();
         }).bind(this));
@@ -1721,6 +1719,8 @@ var Scheduler = Widget.inherit({
         this.callBase();
 
         this._toggleSmallClass();
+
+        this._readyToRenderAppointments = true;
     },
 
     _renderHeader: function() {
