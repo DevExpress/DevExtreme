@@ -20,7 +20,7 @@ var createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 var setupModule = function() {
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter']);
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail']);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -5779,6 +5779,30 @@ QUnit.test("Cancel Inserting Row after change page", function(assert) {
     assert.equal(this.dataController.items().length, 1);
 
     assert.deepEqual(this.dataController.items()[0].data, array[2]);
+});
+
+QUnit.test("Edit row after detail row", function(assert) {
+    var array = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+    ];
+
+    var dataSource = createDataSource(array, { key: 'id' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.expandRow(1);
+    // act
+    this.editRow(2);
+
+    // assert
+    assert.ok(this.editingController.isEditing());
+    assert.equal(this.dataController.items().length, 4);
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail", "row 1 is detail");
+    assert.strictEqual(this.dataController.items()[2].rowType, "data", "row 2 is data");
+    assert.strictEqual(this.dataController.items()[2].isEditing, true, "isEditing is correct for row 2");
 });
 
 QUnit.module("Error handling", {
