@@ -210,7 +210,7 @@ QUnit.test("Command column accessibility structure", function(assert) {
 
     // assert
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
-    assert.notOk($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"));
+    assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
 });
 
 // T388508
