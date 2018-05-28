@@ -141,6 +141,42 @@ QUnit.test("Multiple click on the 'next' button should update currentDate correc
     assert.equal($caption.text(), "Jan-Feb 2018", "Caption is correct");
 });
 
+QUnit.test("Multiple click on the 'next' button should update currentDate correctly when intervalCount & startDate, month view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 4, 21),
+        currentView: "month",
+        views: [{
+            type: "month",
+            intervalCount: 2,
+            startDate: new Date(2018, 4, 21)
+        }] });
+    var $element = this.instance.$element(),
+        $caption = $element.find(".dx-scheduler-navigator-caption");
+
+    $($element.find(".dx-scheduler-navigator-next")).trigger("dxclick").trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2018, 8, 1), "New date is correct");
+    assert.equal($caption.text(), "Sep-Oct 2018", "Caption is correct");
+});
+
+QUnit.test("Multiple click on the 'previous' button should update currentDate correctly when intervalCount & startDate, month view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 4, 21),
+        currentView: "month",
+        views: [{
+            type: "month",
+            intervalCount: 2,
+            startDate: new Date(2018, 4, 21)
+        }] });
+    var $element = this.instance.$element(),
+        $caption = $element.find(".dx-scheduler-navigator-caption");
+
+    $($element.find(".dx-scheduler-navigator-previous")).trigger("dxclick").trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2018, 0, 1), "New date is correct");
+    assert.equal($caption.text(), "Jan-Feb 2018", "Caption is correct");
+});
+
 QUnit.test("Multiple click on the 'next' and 'previous' button should update currentDate correctly, month view", function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 4, 1),
