@@ -106,6 +106,9 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._defaultHeight || this.getAppointmentMinSize();
     },
 
+    _getAppointmentCount: function() {
+        return this._getMaxAppointmentCountPerCell();
+    },
     _correctRtlCoordinatesParts: function(coordinates, width) {
         for(var i = 1; i < coordinates.length; i++) {
             coordinates[i].left -= width;

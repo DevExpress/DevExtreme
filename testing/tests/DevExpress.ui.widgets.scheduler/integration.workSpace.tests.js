@@ -1,6 +1,8 @@
 "use strict";
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    themes = require("ui/themes"),
+    dateLocalization = require("localization/date");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -1607,3 +1609,33 @@ QUnit.test("SelectedCellData option should make cell in focused state", function
     assert.ok($($cells.eq(0)).hasClass("dx-state-focused", "correct cell is focused"));
 });
 
+QUnit.test("Scheduler timeline workweek should contain two spans in header panel cell in Material theme", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    this.createInstance({
+        views: [ "week" ],
+        currentDate: new Date(2015, 9, 29),
+        firstDayOfWeek: 1,
+        startDayHour: 4,
+        endDayHour: 5,
+        currentView: "week"
+    });
+
+    var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
+        $firstRowCells = $rows.first().find("th"),
+        startDate = 26;
+
+    var formatWeekdayAndDay = function(date) {
+        return dateLocalization.getDayNames("abbreviated")[date.getDay()] + " " + dateLocalization.format(date, "day");
+    };
+
+    for(var i = 0; i < 5; i++) {
+        var $cell = $firstRowCells.eq(i);
+        assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
+        assert.equal($cell.find("span").length, 2, "Cell contains two spans in material theme");
+        assert.ok($cell.find("span").first().hasClass("dx-scheduler-header-panel-cell-date"), "first span has correct class");
+        assert.ok($cell.find("span").last().hasClass("dx-scheduler-header-panel-cell-date"), "second span has correct class");
+    }
+    themes.isMaterial = origIsMaterial;
+});
