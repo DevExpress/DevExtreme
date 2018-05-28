@@ -374,3 +374,21 @@ QUnit.test("Next button shouldn't be disabled if current date is previous day be
 
     assert.notOk(nextButton.option("disabled"), "next button isn't disabled");
 });
+
+QUnit.test("Click on the 'next' button should update currentDate correctly when intervalCount, month view, currentDate > 1", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 3, 21),
+        currentView: "month",
+        views: [{
+            type: "month",
+            intervalCount: 2
+        }] });
+
+    var $element = this.instance.$element(),
+        $caption = $element.find(".dx-scheduler-navigator-caption");
+
+    $($element.find(".dx-scheduler-navigator-next")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2018, 5, 21), "New date is correct");
+    assert.equal($caption.text(), "Jun-Jul 2018", "Caption is correct");
+});
