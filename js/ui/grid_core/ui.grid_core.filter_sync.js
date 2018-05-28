@@ -127,9 +127,23 @@ var FilterSyncController = modules.Controller.inherit((function() {
             this._skipSyncColumnOptions = false;
         },
 
+        _initSync: function() {
+            if(!this.option("filterValue")) {
+                let columns = this.getController("columns").getColumns(),
+                    filterValue = this.getFilterValueFromColumns(columns);
+                this.option("filterValue", filterValue);
+            }
+            this.syncFilterValue();
+        },
+
         init: function() {
-            if(this.getController("data").skipCalculateColumnFilters()) {
-                this.syncFilterValue();
+            let dataController = this.getController("data");
+            if(dataController.isFilterSyncActive()) {
+                if(this.getController("columns").isAllDataTypesDefined()) {
+                    this._initSync();
+                } else {
+                    dataController.dataSourceChanged.add(() => this._initSync());
+                }
             }
         },
 
@@ -151,13 +165,12 @@ var FilterSyncController = modules.Controller.inherit((function() {
             }
         },
 
-        getFilterValueFromState: function(state) {
-            if(state.filterValue || !this.option("filterSyncEnabled")) {
-                return state.filterValue || null;
+        getFilterValueFromColumns: function(columns) {
+            if(!this.getController("data").isFilterSyncActive()) {
+                return null;
             }
 
-            var filterValue = ["and"],
-                columns = state.columns;
+            var filterValue = ["and"];
 
             columns && columns.forEach(column => {
                 let headerFilter = getConditionFromHeaderFilter(column),
@@ -189,9 +202,14 @@ var FilterSyncController = modules.Controller.inherit((function() {
 })());
 
 var DataControllerFilterSyncExtender = {
-    skipCalculateColumnFilters: function() {
+
+    isFilterSyncActive: function() {
         var filterSyncEnabledValue = this.option("filterSyncEnabled");
         return filterSyncEnabledValue === "auto" ? this.option("filterPanel.visible") : filterSyncEnabledValue;
+    },
+
+    skipCalculateColumnFilters: function() {
+        return isDefined(this.option("filterValue")) && this.isFilterSyncActive();
     },
 
     _calculateAdditionalFilter: function() {
@@ -205,7 +223,7 @@ var DataControllerFilterSyncExtender = {
             columns = that.getController("columns").getColumns(),
             filterValue = that.option("filterValue");
 
-        if(that.skipCalculateColumnFilters()) {
+        if(that.isFilterSyncActive()) {
             var currentColumn = that.getController("headerFilter").getCurrentColumn();
             if(currentColumn && filterValue) {
                 filterValue = utils.removeFieldConditionsFromFilter(filterValue, currentColumn.dataField);
@@ -229,14 +247,14 @@ var DataControllerFilterSyncExtender = {
         switch(args.name) {
             case "filterValue":
                 this._applyFilter();
-                this.skipCalculateColumnFilters() && this.getController("filterSync").syncFilterValue();
+                this.isFilterSyncActive() && this.getController("filterSync").syncFilterValue();
                 args.handled = true;
                 break;
             case "filterSyncEnabled":
                 args.handled = true;
                 break;
             case "columns":
-                if(this.skipCalculateColumnFilters()) {
+                if(this.isFilterSyncActive()) {
                     let columnInfo = this._parseColumnInfo(args.fullName),
                         column,
                         filterSyncController = this.getController("filterSync");
@@ -261,7 +279,7 @@ var DataControllerFilterSyncExtender = {
 
 var ColumnHeadersViewFilterSyncExtender = {
     _isHeaderFilterEmpty: function(column) {
-        if(this.getController("data").skipCalculateColumnFilters()) {
+        if(this.getController("data").isFilterSyncActive()) {
             return !utils.filterHasField(this.option("filterValue"), column.dataField);
         }
 
@@ -269,7 +287,7 @@ var ColumnHeadersViewFilterSyncExtender = {
     },
 
     _needUpdateFilterIndicators: function() {
-        return !this.getController("data").skipCalculateColumnFilters();
+        return !this.getController("data").isFilterSyncActive();
     },
 
     optionChanged: function(args) {
