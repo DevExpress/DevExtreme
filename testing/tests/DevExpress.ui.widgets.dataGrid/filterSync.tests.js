@@ -541,22 +541,6 @@ QUnit.module("Sync on initialization", {
         assert.equal(this.columnsController.columnOption("field", "filterValue"), undefined);
     });
 
-    QUnit.test("sync filterValues if filterValue == null and column contain number values", function(assert) {
-        // act
-        this.setupDataGrid({
-            filterValue: null,
-            filterSyncEnabled: true,
-            columns: [{
-                dataField: "field",
-                dataType: "number",
-                filterValue: 2
-            }]
-        });
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "=", 2], "filterValue");
-    });
-
     QUnit.test("clearing of filterValue if filterValue != null", function(assert) {
         // act
         this.setupDataGrid({
