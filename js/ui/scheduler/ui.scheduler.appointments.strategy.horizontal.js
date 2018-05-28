@@ -3,10 +3,10 @@
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
     dateUtils = require("../../core/utils/date");
 
-var MAX_APPOINTMENT_HEIGHT = 100,
-    BOTTOM_CELL_GAP = 20,
+// var MAX_APPOINTMENT_HEIGHT = 100,
+//     BOTTOM_CELL_GAP = 20,
 
-    toMs = dateUtils.dateToMilliseconds;
+var toMs = dateUtils.dateToMilliseconds;
 
 var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _needVerifyItemSize: function() {
@@ -54,22 +54,50 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
-        var cellHeight = (this._defaultHeight || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
-            height = cellHeight / coordinates.count;
+        var config = this._calculateGeometryConfig(coordinates);
 
-        if(height > MAX_APPOINTMENT_HEIGHT) {
-            height = MAX_APPOINTMENT_HEIGHT;
-        }
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
+    },
 
-        var top = coordinates.top + coordinates.index * height;
-
+    _getOffsets: function() {
         return {
-            height: height,
-            width: coordinates.width,
-            top: top,
-            left: coordinates.left
+            unlimited: 0,
+            auto: 0
         };
     },
+
+    _checkLongCompactAppointment: function(item, result) {
+        this._splitLongCompactAppointment(item, result);
+
+        return result;
+    },
+
+    _getCompactLeftCoordinate: function(itemLeft, index) {
+        var cellWidth = this._defaultWidth || this.getAppointmentMinSize();
+
+        return itemLeft + cellWidth * index;
+    },
+
+    _getMaxHeight: function() {
+        return this._defaultHeight || this.getAppointmentMinSize();
+    },
+    // _customizeAppointmentGeometry: function(coordinates) {
+    //     var cellHeight = (this._defaultHeight || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
+    //         height = cellHeight / coordinates.count;
+
+    //     if(height > MAX_APPOINTMENT_HEIGHT) {
+    //         height = MAX_APPOINTMENT_HEIGHT;
+    //     }
+
+    //     var top = coordinates.top + coordinates.index * height;
+
+    //     return {
+    //         height: height,
+    //         width: coordinates.width,
+    //         top: top,
+    //         left: coordinates.left
+    //     };
+    // },
 
     _correctRtlCoordinatesParts: function(coordinates, width) {
         for(var i = 1; i < coordinates.length; i++) {
