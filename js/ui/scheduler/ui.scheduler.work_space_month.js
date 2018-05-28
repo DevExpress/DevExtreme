@@ -253,6 +253,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return position;
     },
 
+    _getHeaderDate: function() {
+        return this._getViewStartByOptions();
+    },
+
     scrollToTime: noop
 });
 

@@ -840,6 +840,10 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
+    _getHeaderDate: function() {
+        return this.getStartViewDate();
+    },
+
     _getStartViewDate: function() {
         return this.option("startDate");
     },
