@@ -106,7 +106,7 @@ QUnit.test("Click on the 'next' button should update currentDate correctly, when
 
     $(this.instance.$element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
 
-    assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 8, 28), "New date is correct");
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 8, 1), "New date is correct");
 });
 
 QUnit.test("Multiple click on the 'next' button should update currentDate correctly when intervalCount, month view", function(assert) {
@@ -202,7 +202,7 @@ QUnit.test("Click on the 'previous' button should update currentDate correctly, 
 
     $(this.instance.$element().find(".dx-scheduler-navigator-previous")).trigger("dxclick");
 
-    assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 2, 28), "New date is correct");
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 2, 1), "New date is correct");
 });
 
 QUnit.test("Caption should be updated when currentDate is changed", function(assert) {
