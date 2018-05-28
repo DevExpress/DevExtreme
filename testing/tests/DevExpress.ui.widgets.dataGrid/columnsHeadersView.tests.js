@@ -515,6 +515,29 @@ QUnit.test('Draw filterRow', function(assert) {
     assert.equal(inputs.eq(1).css("textAlign"), "right", "right alignment");
 });
 
+QUnit.test('filterRow accessibility structure', function(assert) {
+    // arrange
+    var testElement = $('#container');
+
+    $.extend(this.columns, [
+        { caption: 'Column 1', allowFiltering: true },
+        { caption: 'Column 2', allowFiltering: true }
+    ]);
+
+    this.options.filterRow = { visible: true };
+
+    // act
+    this.columnHeadersView.render(testElement);
+
+    // assert
+    $(".dx-datagrid-filter-row td").each((index, element) => {
+        var $element = $(element);
+        assert.equal($element.attr("aria-colindex"), index + 1);
+        assert.equal($element.attr("role"), "gridcell");
+        assert.equal($element.attr("aria-selected"), "false");
+    });
+});
+
 QUnit.test('Invalidate instead of render when filterRow and sorting option is changed', function(assert) {
     // arrange
     var testElement = $('#container'),

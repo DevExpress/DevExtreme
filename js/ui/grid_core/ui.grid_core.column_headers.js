@@ -139,14 +139,16 @@ module.exports = {
 
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
-
-                        if(!isDefined(options.column.command)) {
-                            this.setAria("role", "columnheader", $cell);
-                            this.setAria("colindex", options.column.index + 1, $cell);
-                        }
                     }
 
                     return $cell;
+                },
+
+                _setCellAriaAttributes: function($cell, cellOptions) {
+                    this.callBase($cell, cellOptions);
+                    if(cellOptions.rowType === "header") {
+                        this.setAria("role", "columnheader", $cell);
+                    }
                 },
 
                 _createRow: function(row) {
