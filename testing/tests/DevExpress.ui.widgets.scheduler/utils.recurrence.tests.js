@@ -76,6 +76,12 @@ QUnit.test('getDatesByRecurrence should handle strings with DAILY & BYDAY=SU rul
     assert.deepEqual(dates, [new Date(2015, 4, 24), new Date(2015, 4, 31), new Date(2015, 5, 7)], 'dates are right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings with WEEKLY & BYDAY=SU rules and start in Sunday', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=SU', start: new Date(2018, 4, 27), min: new Date(2018, 4, 27), max: new Date(2018, 5, 11) });
+
+    assert.deepEqual(dates, [new Date(2018, 4, 27), new Date(2018, 5, 3), new Date(2018, 5, 10)], 'dates are right');
+});
+
 QUnit.test('getDatesByRecurrence should handle strings with DAILY & BYDAY=MO rules and WKST=WE', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;WKST=WE;BYDAY=MO', start: new Date(2015, 4, 18), min: new Date(2015, 4, 18), max: new Date(2015, 5, 7) });
 
