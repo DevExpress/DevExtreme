@@ -55,7 +55,7 @@ var dateSetterMap = {
     "byday": function(date, byDay, weekStart, frequency) {
         var dayOfWeek = byDay;
 
-        if(frequency === "DAILY" && byDay === 0) {
+        if((frequency === "DAILY" || frequency === "WEEKLY") && byDay === 0) {
             dayOfWeek = 7;
         }
 
