@@ -94,6 +94,21 @@ QUnit.test("Click on the 'previous' button should update firstViewDate of worksp
     assert.deepEqual(workspace._firstViewDate, new Date(2017, 3, 27, 8, 0), "New date is correct");
 });
 
+QUnit.test("Caption should be correct when intervalCount & startDate are set, month view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 4, 21),
+        currentView: "month",
+        views: [{
+            type: "month",
+            intervalCount: 2,
+            startDate: new Date(2018, 4, 21)
+        }] });
+
+    var $caption = this.instance.$element().find(".dx-scheduler-navigator-caption");
+
+    assert.equal($caption.text(), "May-Jun 2018", "Caption is correct");
+});
+
 QUnit.test("Click on the 'next' button should update currentDate correctly, when intervalCount & startDate, month view", function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 5, 9),
