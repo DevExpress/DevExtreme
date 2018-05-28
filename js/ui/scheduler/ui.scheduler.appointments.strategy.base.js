@@ -354,14 +354,12 @@ var BaseRenderingStrategy = Class.inherit({
                     intersectPositionCount = indexes.length;
                 }
             } else {
-                var removeIndex = this._findIndexByKey(stack, "i", "j", current.i, current.j),
-                    resultItem = stack[removeIndex];
-
+                var removeIndex = this._findIndexByKey(stack, "i", "j", current.i, current.j), resultItem = stack[removeIndex];
                 stack.splice(removeIndex, 1);
-
-                indexes[resultItem.index] = false;
-                intersectPositions.push(resultItem);
-
+                if(resultItem.length !== 0) {
+                    indexes[resultItem.index] = false;
+                    intersectPositions.push(resultItem);
+                }
                 if(!stack.length) {
                     indexes = [];
                     for(var k = 0; k < intersectPositions.length; k++) {
