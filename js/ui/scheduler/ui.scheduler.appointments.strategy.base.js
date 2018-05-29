@@ -673,6 +673,10 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultHeight: function() {
+        return this._getAppointmentHeightByTheme();
+    },
+
+    _getAppointmentHeightByTheme: function() {
         return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
     },
 
