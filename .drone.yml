@@ -8,7 +8,7 @@ clone:
 pipeline:
 
   build:
-    image: devexpress/devextreme-build:18_1
+    image: devexpress/devextreme-build:2018-05-29-v6
     environment:
       - HEADLESS=true
     commands:

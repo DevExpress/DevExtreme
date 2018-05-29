@@ -16,11 +16,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
-RUN npm i -g npm@4
-RUN npm cache clean
+RUN npm i -g npm@5
+RUN npm cache clean --force
 RUN npm set progress=false
 RUN npm set loglevel=error
-RUN npm set depth=0
 RUN npm set unsafe-perm=true
 RUN npm set fetch-retries 5
 
@@ -28,11 +27,11 @@ RUN npm set fetch-retries 5
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list
 RUN apt-get update
-RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.0.2
+RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.1.200
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
 # Chrome, see https://stackoverflow.com/a/36906724
-RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_62.0.3202.75.deb > chrome.deb
+RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_66.0.3359.181.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
 RUN rm -rf /opt/google/chrome/swiftshader
