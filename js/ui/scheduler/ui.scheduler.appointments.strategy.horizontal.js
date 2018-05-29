@@ -109,6 +109,14 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _getAppointmentCount: function() {
         return this._getMaxAppointmentCountPerCell();
     },
+
+    _getAppointmentDefaultHeight: function() {
+        var defaultHeight = this.callBase(),
+            cellHeight = this.instance.fire("getCellHeight");
+
+        return Math.max(defaultHeight, (cellHeight - this._getAppointmentDefaultOffset()) / 3);
+    },
+
     _correctRtlCoordinatesParts: function(coordinates, width) {
         for(var i = 1; i < coordinates.length; i++) {
             coordinates[i].left -= width;
