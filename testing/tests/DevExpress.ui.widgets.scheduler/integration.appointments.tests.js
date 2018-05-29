@@ -5592,7 +5592,7 @@ QUnit.test("Rival appointments from one group should be rendered correctly in ve
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        maxAppointmentsPerCell: null
     });
 
     var defaultWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), "_getAppointmentMaxWidth").returns(50);
