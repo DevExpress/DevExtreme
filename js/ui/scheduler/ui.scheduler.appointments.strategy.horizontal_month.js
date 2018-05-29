@@ -2,13 +2,17 @@
 
 var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
-    HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
+    HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line"),
+    themes = require("../themes");
 
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_APPOINTMENT_MIN_OFFSET = 26,
     MONTH_APPOINTMENT_MAX_OFFSET = 30,
     MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36,
     MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
+
+var APPOINTMENT_DEFAULT_HEIGHT = 20,
+    COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 
@@ -80,6 +84,14 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         });
 
         return this._maxFullWeekAppointmentWidth;
+    },
+
+    _isCompactTheme: function() {
+        return (themes.current() || "").split(".")[2] === "compact";
+    },
+
+    _getAppointmentDefaultHeight: function() {
+        return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
     },
 
     // _getCompactLeftCoordinate: function(itemLeft, index) {
