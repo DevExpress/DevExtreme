@@ -2247,3 +2247,129 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
 
     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
 });
+
+
+QUnit.module("Appointment overlapping, vertical view", moduleOptions);
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'numeric' mode", function(assert) {
+    var items = [
+        { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+        { text: "Task 5", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
+        { text: "Task 6", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 3
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
+        tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+
+    for(var i = 0; i < 2; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth();
+
+        assert.roughEqual(appointmentWidth, (tableCellWidth - 26) / 3, 1.5, "appointment is full-size");
+    }
+
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        groupedAppointments = dropDownMenu.option("items"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1 more", "DropDown menu has correct text");
+});
+
+// QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode", function(assert) {
+//     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
+//         { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+//         { text: "Task 3", startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
+//         { text: "Task 4", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+//         { text: "Task 5", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
+//         { text: "Task 6", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
+
+//     this.createInstance(
+//         {
+//             currentDate: new Date(2015, 2, 4),
+//             currentView: "timelineWeek",
+//             views: [{
+//                 type: "timelineWeek",
+//                 maxAppointmentsPerCell: 'auto'
+//             }],
+//             height: 600,
+//             dataSource: items
+//         }
+//     );
+
+//     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
+//         tableCellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+//     for(var i = 0; i < 5; i++) {
+//         var appointmentHeight = $appointment.eq(i).outerHeight();
+
+//         assert.roughEqual(appointmentHeight, (tableCellHeight - 26) / 3, 1.5, "appointment is full-size");
+//     }
+
+//     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+//         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+//         groupedAppointments = dropDownMenu.option("items"),
+//         dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+//     assert.equal($dropDownMenu.length, 4, "ddAppointment is rendered");
+
+//     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+//     assert.equal(dropDownMenuText, "1 more", "DropDown menu has correct text");
+// });
+
+// QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
+//     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
+//         { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+//         { text: "Task 3", startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
+//         { text: "Task 4", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+//         { text: "Task 5", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
+//         { text: "Task 6", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
+
+//     this.createInstance(
+//         {
+//             currentDate: new Date(2015, 2, 4),
+//             currentView: "timelineWeek",
+//             views: [{
+//                 type: "timelineWeek",
+//                 maxAppointmentsPerCell: 'unlimited'
+//             }],
+//             height: 600,
+//             dataSource: [items[0]]
+//         }
+//     );
+
+//     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
+//         tableCellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+//     var appointmentHeight = $appointment.eq(0).outerHeight();
+//     assert.roughEqual(appointmentHeight, tableCellHeight, 1.5, "appointment is full-size");
+
+//     this.instance.option('dataSource', items);
+//     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
+//     tableCellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+//     for(var i = 0; i < 5; i++) {
+//         appointmentHeight = $appointment.eq(i).outerHeight();
+
+//         assert.roughEqual(appointmentHeight, tableCellHeight / 4, 1.5, "appointment is full-size");
+//     }
+
+//     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+
+//     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
+// });
