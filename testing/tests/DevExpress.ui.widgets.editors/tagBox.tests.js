@@ -3668,6 +3668,8 @@ QUnit.module("applyValueMode = 'useButtons'", {
         };
     },
     beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
         this._init({
             applyValueMode: "useButtons",
             items: [1, 2, 3],
@@ -3680,6 +3682,8 @@ QUnit.module("applyValueMode = 'useButtons'", {
     },
     afterEach: function() {
         this.$element.remove();
+        this.clock.restore();
+        fx.off = false;
     }
 });
 
@@ -3946,6 +3950,45 @@ QUnit.test("value should keep initial tag order with object items and 'this' val
     $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
 
     assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
+});
+
+QUnit.testInActiveWindow("tags are rendered correctly when minSearchLength is used", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: [
+            {
+                Id: 0,
+                Name: "AAA"
+            },
+            {
+                Id: 1,
+                Name: "BBB"
+            }
+        ],
+        displayExpr: "Name",
+        valueExpr: "Id",
+        applyValueMode: "useButtons",
+        minSearchLength: 3,
+        showSelectionControls: true,
+        searchEnabled: true
+    });
+    this.clock.tick(TIME_TO_WAIT);
+
+    var $input = $tagBox.find("input");
+    var keyboard = keyboardMock($input);
+
+    keyboard.type("aaa");
+    this.clock.tick(TIME_TO_WAIT);
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    $(".dx-popup-done").trigger("dxclick");
+
+    keyboard.type("bbb");
+    this.clock.tick(TIME_TO_WAIT);
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    $(".dx-popup-done").trigger("dxclick");
+
+    assert.deepEqual($tagBox.dxTagBox("instance").option("value"), [0, 1], "value of TagBox");
 });
 
 
