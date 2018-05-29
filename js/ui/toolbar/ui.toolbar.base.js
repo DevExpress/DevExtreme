@@ -52,6 +52,10 @@ var ToolbarBase = CollectionWidget.inherit({
                 if(data.html) {
                     $container.html(data.html);
                 }
+
+                if(data.widget === "dxButton") {
+                    data.options = extend(data.options, { style: this.option("buttonsStyle") });
+                }
             } else {
                 $container.text(String(data));
             }

@@ -8,7 +8,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
     resizeCallbacks = require("core/utils/resize_callbacks"),
-    pointerMock = require("../../helpers/pointerMock.js");
+    pointerMock = require("../../helpers/pointerMock.js"),
+    themes = require("ui/themes");
 
 require("common.css!");
 require("ui/button");
@@ -131,6 +132,46 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
         margin = element.find("." + TOOLBAR_CLASS + "-center").get(0).style.margin;
 
     assert.equal(margin, "0px auto", "aligned by center");
+});
+
+QUnit.test("Buttons has 'text' style in Material theme by default", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+    var element = this.element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    type: 'default',
+                    text: 'Back'
+                }
+            }]
+        }),
+        button = element.find(".dx-button");
+
+    assert.ok(button.hasClass("dx-button-flat"));
+
+    element.dxToolbar("instance").option("buttonsStyle", null);
+    button = element.find(".dx-button");
+
+    assert.notOk(button.hasClass("dx-button-flat"));
+    themes.isMaterial = origIsMaterial;
+});
+
+QUnit.test("Buttons has default style in generic theme", function(assert) {
+    var element = this.element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    type: 'default',
+                    text: 'Back'
+                }
+            }]
+        }),
+        button = element.find(".dx-button");
+
+    assert.notOk(button.hasClass("dx-button-flat"));
 });
 
 
