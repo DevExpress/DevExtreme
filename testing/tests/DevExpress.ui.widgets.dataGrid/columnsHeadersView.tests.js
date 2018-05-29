@@ -1,20 +1,21 @@
 "use strict";
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-var $ = require("jquery"),
-    dataUtils = require("core/element_data"),
-    setTemplateEngine = require("ui/set_template_engine"),
-    typeUtils = require("core/utils/type"),
-    config = require("core/config"),
-    devices = require("core/devices"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    dateLocalization = require("localization/date");
+import $ from "jquery";
+import dataUtils from "core/element_data";
+import setTemplateEngine from "ui/set_template_engine";
+import typeUtils from "core/utils/type";
+import config from "core/config";
+import devices from "core/devices";
+import { DataSource } from "data/data_source/data_source";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import dateLocalization from "localization/date";
 
-require("ui/data_grid/ui.data_grid");
-window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
+import "ui/data_grid/ui.data_grid";
+import HoganModule from "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
+window.Hogan = HoganModule;
 setTemplateEngine("hogan");
 
 $("body").addClass("dx-viewport");
