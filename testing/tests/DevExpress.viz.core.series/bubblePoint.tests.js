@@ -238,55 +238,23 @@ QUnit.test("Get tooltip coordinates, height less than min bubble height. Locatio
     var cc = point.getTooltipParams('center');
 
     assert.equal(cc.x, 430);
-    assert.equal(cc.y, 245);
-    assert.equal(cc.offset, 0);
+    assert.equal(cc.y, 250);
+    assert.equal(cc.offset, 5);
 });
 
-QUnit.test("Get tooltip coordinates, height less than min bubble height. Location is center. Rotated", function(assert) {
-    this.options.rotated = true;
+QUnit.test("Get tooltip coordinates. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
     point.x = 430;
     point.y = 250;
     point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 10, width: 10 }; };
-
-    var cc = point.getTooltipParams('center');
-
-    assert.equal(cc.x, 430);
-    assert.equal(cc.y, 245);
-    assert.equal(cc.offset, 0);
-});
-
-QUnit.test("Get tooltip coordinates, height less than min bubble height. Location is edge", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-
-    point.x = 430;
-    point.y = 250;
-    point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 10 }; };
+    point.graphic.getBBox = function() { return { height: 24 }; };
 
     var cc = point.getTooltipParams('edge');
 
     assert.equal(cc.x, 430);
-    assert.equal(cc.y, 245);
-    assert.equal(cc.offset, 0);
-});
-
-QUnit.test("Get tooltip coordinates, height less than min bubble height. Location is edge. Rotated", function(assert) {
-    this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options);
-
-    point.x = 430;
-    point.y = 250;
-    point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 10, width: 10 }; };
-
-    var cc = point.getTooltipParams('edge');
-
-    assert.equal(cc.x, 430);
-    assert.equal(cc.y, 245);
-    assert.equal(cc.offset, 0);
+    assert.equal(cc.y, 250);
+    assert.equal(cc.offset, 12);
 });
 
 QUnit.test("Get tooltip coordinates, height more than min bubble height. Location is center", function(assert) {
@@ -298,68 +266,6 @@ QUnit.test("Get tooltip coordinates, height more than min bubble height. Locatio
     point.graphic.getBBox = function() { return { height: 30 }; };
 
     var cc = point.getTooltipParams('center');
-
-    assert.equal(cc.x, 430);
-    assert.equal(cc.y, 250);
-    assert.equal(cc.offset, 0);
-});
-
-QUnit.test("Get tooltip coordinates, height more than min bubble height. Location is center. Rotated", function(assert) {
-    this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options);
-
-    point.x = 430;
-    point.y = 250;
-    point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 30, width: 10 }; };
-
-    var cc = point.getTooltipParams('center');
-
-    assert.equal(cc.x, 430);
-    assert.equal(cc.y, 250);
-    assert.equal(cc.offset, 0);
-});
-
-QUnit.test("Get tooltip coordinates, height more than min bubble height. Location is edge", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-
-    point.x = 430;
-    point.y = 250;
-    point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 30 }; };
-
-    var cc = point.getTooltipParams('edge');
-
-    assert.equal(cc.x, 430);
-    assert.equal(cc.y, 235);
-    assert.equal(cc.offset, 0);
-});
-
-QUnit.test("Get tooltip coordinates, height more than min bubble height. Location is edge. Rotated", function(assert) {
-    this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options);
-
-    point.x = 430;
-    point.y = 250;
-    point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 30, width: 10 }; };
-
-    var cc = point.getTooltipParams('edge');
-
-    assert.equal(cc.x, 430);
-    assert.equal(cc.y, 235);
-    assert.equal(cc.offset, 0);
-});
-
-QUnit.test("Get tooltip coordinates, height more than min bubble height. Location is invalid", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-
-    point.x = 430;
-    point.y = 250;
-    point.draw(this.renderer, this.groups);
-    point.graphic.getBBox = function() { return { height: 30 }; };
-
-    var cc = point.getTooltipParams('abc');
 
     assert.equal(cc.x, 430);
     assert.equal(cc.y, 250);
