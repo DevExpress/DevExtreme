@@ -32,8 +32,8 @@ module.exports = _extend({}, symbolPoint, {
         height = graphic.getBBox().height;
         return {
             x: that.x,
-            y: (height < MIN_BUBBLE_HEIGHT) || (location === 'edge') ? this.y - height / 2 : this.y,
-            offset: 0
+            y: that.y,
+            offset: (height < MIN_BUBBLE_HEIGHT) || (location === 'edge') ? height / 2 : 0
         };
     },
 
