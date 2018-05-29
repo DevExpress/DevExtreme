@@ -145,18 +145,108 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _checkLongCompactAppointment: function(item, result) {
         if(item.allDay) {
             this._splitLongCompactAppointment(item, result);
+        } else {
+            this._splitLongVerticalCompactAppointment(item, result);
         }
 
         return result;
     },
 
-    _getSimpleAppointmentGeometry: function(coordinates) {
-        var width = this._getAppointmentMaxWidth() / coordinates.count,
-            height = coordinates.height,
-            top = coordinates.top,
-            left = coordinates.left + (coordinates.index * width);
+    _splitLongVerticalCompactAppointment: function(item, result) {
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+        var compactCount = 0;
 
-        return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
+        if(appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
+            item.isCompact = true;
+            compactCount = this._getCompactAppointmentParts(item.width);
+            for(var k = 1; k < compactCount; k++) {
+                var compactPart = extend(true, {}, item);
+                compactPart.left = this._getCompactLeftCoordinate(item.left, k);
+                compactPart.cellIndex = compactPart.cellIndex + k;
+                compactPart.sortedIndex = null;
+                result.push(compactPart);
+            }
+        }
+        return result;
+    },
+
+    _getSimpleAppointmentGeometry: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+
+        if(overlappingMode) {
+            var config = this._calculateVerticalGeometryConfig(coordinates);
+
+            return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
+        } else {
+            var width = this._getAppointmentMaxWidth() / coordinates.count,
+                height = coordinates.height,
+                top = coordinates.top,
+                left = coordinates.left + (coordinates.index * width);
+
+            return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
+        }
+    },
+
+    _customizeVerticalCoordinates: function(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
+        var index = coordinates.index,
+            appointmentWidth = width / appointmentCountPerCell,
+            height = coordinates.height,
+            appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth),
+            top = coordinates.top,
+            compactAppointmentDefaultSize,
+            compactAppointmentDefaultOffset;
+
+        if(coordinates.isCompact) {
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            top = coordinates.top + compactAppointmentDefaultOffset;
+            appointmentLeft = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            appointmentWidth = compactAppointmentDefaultSize;
+            width = compactAppointmentDefaultSize;
+
+            this._markAppointmentAsVirtual(coordinates, isAllDay);
+        }
+
+        return {
+            height: height,
+            width: appointmentWidth,
+            top: top,
+            left: appointmentLeft,
+            empty: this._isAppointmentEmpty(height, width)
+        };
+    },
+
+    _calculateVerticalGeometryConfig: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            offsets = this._getOffsets(),
+            appointmentDefaultOffset = this._getAppointmentDefaultOffset();
+
+        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
+        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
+        var maxWidth = this._getMaxWidth();
+
+        if(!appointmentCountPerCell) {
+            appointmentCountPerCell = coordinates.count;
+            ratio = (maxWidth - offsets.unlimited) / maxWidth;
+        }
+
+        var topOffset = (1 - ratio) * maxWidth;
+        if(overlappingMode === "auto" || isNumeric(overlappingMode)) {
+            ratio = 1;
+            maxWidth = maxWidth - appointmentDefaultOffset;
+            // topOffset = appointmentDefaultOffset;
+            topOffset = 0;
+        }
+
+        return {
+            width: ratio * maxWidth,
+            appointmentCountPerCell: appointmentCountPerCell,
+            offset: topOffset
+        };
+    },
+
+    _getMaxWidth: function() {
+        return this._defaultWidth || this.invoke("getCellWidth");
     },
 
     isAllDay: function(appointmentData) {
