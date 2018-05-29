@@ -56,7 +56,9 @@ function createResizeHandler(callback) {
 }
 
 function defaultOnIncidentOccurred(e) {
-    _log.apply(null, [e.target.id].concat(e.target.args || []));
+    if(!e.component.hasEvent("incidentOccurred")) {
+        _log.apply(null, [e.target.id].concat(e.target.args || []));
+    }
 }
 
 // TODO: Such ugly declaration is because of jshint
