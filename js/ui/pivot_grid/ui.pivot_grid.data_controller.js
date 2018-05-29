@@ -393,9 +393,14 @@ exports.DataController = Class.inherit((function() {
         var removeHiddenItems = function(headerItems) {
             foreachTree([{ children: headerItems }], function(items, index) {
                 var item = items[0],
-                    parentChildren = (items[1] ? items[1].children : headerItems) || [];
+                    parentChildren = (items[1] ? items[1].children : headerItems) || [],
+                    isEmpty = item.isEmpty;
 
-                if(item && !item.children && (item.isEmpty && item.isEmpty.length ? item.isEmpty[0] : item.isEmpty)) {
+                if(isEmpty && isEmpty.length) {
+                    isEmpty = item.isEmpty.filter(function(isEmpty) { return isEmpty; }).length === isEmpty.length;
+                }
+
+                if(item && !item.children && isEmpty) {
                     parentChildren.splice(index, 1);
                     removeEmptyParent(items, 1);
                 }

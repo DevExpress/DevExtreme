@@ -3162,6 +3162,60 @@ QUnit.test("Hide values on data column field level when showTotals is true. One 
         ]]);
 });
 
+QUnit.test("Not hide row with not empty second cell", function(assert) {
+    var dataController = new DataController({
+        hideEmptySummaryCells: true,
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { area: "column" },
+                { area: "data" },
+                { area: "data" }
+            ],
+            "rows": [
+                { "value": "Los Angeles", "index": 2, "text": "Los Angeles", "isEmpty": [true, false] },
+                { "value": "New York", "index": 1, "text": "New York", "isEmpty": [false, false] }
+            ],
+            "columns": [
+                { "value": 1, "index": 1, "text": "January", "isEmpty": [false, false] },
+                { "value": 2, "index": 2, "text": "February", "isEmpty": [true, false] }
+            ],
+            "values": [
+                [[1740, 2], [1740, 1], [null, 1]],
+                [[1740, 1], [1740, 1], [null]],
+                [[null, 1], [null], [null, 1]]
+            ],
+            grandTotalColumnIndex: 0,
+            grandTotalRowIndex: 0
+        }
+    });
+
+    assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
+        [
+            { "columnType": "D", "rowType": "D", "text": "" },
+            { "columnType": "D", "rowType": "D", "text": "" },
+            { "columnType": "D", "rowType": "D", "text": "1" },
+            { "columnType": "GT", "rowType": "D", "text": "" },
+            { "columnType": "GT", "rowType": "D", "text": "1" }
+        ],
+        [
+            { "columnType": "D", "rowType": "D", "text": "1740" },
+            { "columnType": "D", "rowType": "D", "text": "1" },
+            { "columnType": "D", "rowType": "D", "text": "" },
+            { "columnType": "GT", "rowType": "D", "text": "1740" },
+            { "columnType": "GT", "rowType": "D", "text": "1" }
+        ],
+        [
+            { "columnType": "D", "rowType": "GT", "text": "1740" },
+            { "columnType": "D", "rowType": "GT", "text": "1" },
+            { "columnType": "D", "rowType": "GT", "text": "1" },
+            { "columnType": "GT", "rowType": "GT", "text": "1740" },
+            { "columnType": "GT", "rowType": "GT", "text": "2" }
+        ]
+    ], "cells info");
+});
+
+
 QUnit.test("Hide totals on data column field level when showValues is true. One data field", function(assert) {
     var dataController = new DataController({
         showRowTotals: true,
