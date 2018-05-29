@@ -5,7 +5,6 @@ var $ = require("../core/renderer"),
     navigator = windowUtils.getNavigator(),
     support = require("../core/utils/support"),
     themes = require("./themes"),
-    browser = require("../core/utils/browser"),
     extend = require("../core/utils/extend").extend,
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
@@ -92,7 +91,7 @@ var LoadIndicator = Widget.inherit({
                 device: function() {
                     var realDevice = devices.real(),
                         obsoleteAndroid = realDevice.platform === "android" && !(/chrome/i.test(navigator.userAgent));
-                    return (browser.msie && browser.version < 10 || obsoleteAndroid);
+                    return obsoleteAndroid;
                 },
                 options: {
                     viaImage: true

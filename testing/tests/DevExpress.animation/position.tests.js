@@ -703,11 +703,6 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
     });
 
     QUnit.test("coordinates should not be rounded if option precise is true in calculatePosition method", function(assert) {
-        if(browser.msie && browser.version.split(".")[0] === "9") {
-            assert.expect(0);
-            return;
-        }
-
         var $where = $("#where").css({ top: 0, left: 0 });
         translator.move($where, { top: 0.5, left: 0.5 });
         var location = translator.locate($where);
@@ -755,11 +750,6 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
     });
 
     QUnit.test("coordinates should not be rounded if option precise is true in position method", function(assert) {
-        if(browser.msie && browser.version.split(".")[0] === "9") {
-            assert.expect(0);
-            return;
-        }
-
         var $where = $("#where").css({ top: 0, left: 0 }),
             $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -778,11 +768,6 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
     });
 
     QUnit.test("coordinates should be rounded if option precise is false in position method", function(assert) {
-        if(browser.msie && browser.version.split(".")[0] === "9") {
-            assert.expect(0);
-            return;
-        }
-
         var $where = $("#where").css({ top: 0, left: 0 }),
             $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -801,11 +786,6 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
     });
 
     QUnit.test("coordinates should be rounded by default in position method", function(assert) {
-        if(browser.msie && browser.version.split(".")[0] === "9") {
-            assert.expect(0);
-            return;
-        }
-
         var $where = $("#where").css({ top: 0, left: 0 }),
             $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -823,11 +803,6 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
     });
 
     QUnit.test("coordinates should not be rounded if option precise is true in calculatePosition used in position method as params", function(assert) {
-        if(browser.msie && browser.version.split(".")[0] === "9") {
-            assert.expect(0);
-            return;
-        }
-
         var $where = $("#where").css({ top: 0, left: 0 }),
             $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });
@@ -847,11 +822,6 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
     });
 
     QUnit.test("coordinates should be rounded if option precise is false in calculatePosition used in position method as params", function(assert) {
-        if(browser.msie && browser.version.split(".")[0] === "9") {
-            assert.expect(0);
-            return;
-        }
-
         var $where = $("#where").css({ top: 0, left: 0 }),
             $what = $("#what").css({ "margin-top": 0.5, "margin-left": 0.5 });
         translator.move($where, { top: 0.5, left: 0.5 });

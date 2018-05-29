@@ -5,7 +5,6 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
-    browser = require("core/utils/browser"),
     devices = require("core/devices"),
     config = require("core/config"),
     messageLocalization = require("localization/message"),
@@ -1530,8 +1529,6 @@ QUnit.module("native pullDown strategy", {
     }
 });
 
-var transformNotSupported = browser.msie && browser.version === 9;
-
 QUnit.test("markup", function(assert) {
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
@@ -1546,11 +1543,6 @@ QUnit.test("markup", function(assert) {
 });
 
 QUnit.test("pull down element position", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "pullDown",
@@ -1568,11 +1560,6 @@ QUnit.test("pull down element position", function(assert) {
 });
 
 QUnit.test("pull down element position after dynamic action specification", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "pullDown"
@@ -1645,11 +1632,6 @@ QUnit.test("scrollTop method should have correct position after scroll event", f
 });
 
 QUnit.test("pulled down adds ready state", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "pullDown",
@@ -1675,11 +1657,6 @@ QUnit.test("pulled down adds ready state", function(assert) {
 });
 
 QUnit.test("onPullDown action", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "pullDown",
@@ -1714,11 +1691,6 @@ QUnit.test("onPullDown action", function(assert) {
 });
 
 QUnit.test("release", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     devices.real({ platform: this._originalPlatform });
 
     var $scrollView = $("#scrollView").dxScrollView({
@@ -1757,11 +1729,6 @@ QUnit.test("release", function(assert) {
 });
 
 QUnit.test("onReachBottom", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     assert.expect(1);
 
     var $scrollView = $($("#scrollView").dxScrollView({
@@ -1781,11 +1748,6 @@ QUnit.test("onReachBottom", function(assert) {
 });
 
 QUnit.test("release fires update", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var updated = 0;
 
     var $scrollView = $("#scrollView").dxScrollView({
@@ -1807,7 +1769,7 @@ QUnit.test("release fires update", function(assert) {
 });
 
 QUnit.test("scroll fires with correctly arguments", function(assert) {
-    if(transformNotSupported || this._originalPlatform === "android" && devices.real().version[0] < 4) {
+    if(this._originalPlatform === "android" && devices.real().version[0] < 4) {
         assert.expect(0);
         return;
     }
@@ -2130,7 +2092,7 @@ QUnit.test("release fires update", function(assert) {
 });
 
 QUnit.test("scroll fires with correctly arguments", function(assert) {
-    if(transformNotSupported || this._originalPlatform === "android" && devices.real().version[0] < 4) {
+    if(this._originalPlatform === "android" && devices.real().version[0] < 4) {
         assert.expect(0);
         return;
     }
@@ -2211,11 +2173,6 @@ QUnit.module("native slideDown strategy", {
 });
 
 QUnit.test("markup", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "slideDown",
@@ -2233,11 +2190,6 @@ QUnit.test("markup", function(assert) {
 });
 
 QUnit.test("onReachBottom", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     assert.expect(1);
 
     var scrollView = $("#scrollView").dxScrollView({
@@ -2255,11 +2207,6 @@ QUnit.test("onReachBottom", function(assert) {
 });
 
 QUnit.test("reach bottom element toggle", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
-
     var $scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "slideDown"
@@ -2275,10 +2222,6 @@ QUnit.test("reach bottom element toggle", function(assert) {
 });
 
 QUnit.test("release fires update", function(assert) {
-    if(transformNotSupported) {
-        assert.expect(0);
-        return;
-    }
     var updated = 0;
 
     var $scrollView = $("#scrollView").dxScrollView({
@@ -2300,7 +2243,7 @@ QUnit.test("release fires update", function(assert) {
 });
 
 QUnit.test("scroll fires with correctly arguments", function(assert) {
-    if(transformNotSupported || this._originalPlatform === "android" && devices.real().version[0] < 4) {
+    if(this._originalPlatform === "android" && devices.real().version[0] < 4) {
         assert.expect(0);
         return;
     }
