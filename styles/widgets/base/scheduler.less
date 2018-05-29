@@ -375,8 +375,19 @@
                 left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px;
             }
 
-             .dx-scheduler-header-scrollable.dx-scrollable {
+            .dx-scheduler-header-scrollable.dx-scrollable {
                 margin: 0 0 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px;
+            }
+
+            &.dx-rtl {
+                .dx-scheduler-date-table-scrollable {
+                    margin-left: 0;
+                    margin-right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px;
+                }
+
+                .dx-scheduler-header-scrollable.dx-scrollable {
+                    margin: 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px 0 0;
+                }
             }
         }
         
@@ -680,7 +691,7 @@
                 .dx-icon-spinleft;
 
                     &:before {
-                    margin-right: @SCHEDULER_TIME_INDICATOR_LEFT;
+                    margin-right: -@SCHEDULER_TIME_INDICATOR_LEFT;
                 }
             }
 
@@ -1276,6 +1287,7 @@
                     border-right: @SCHEDULER_ACCENT_BORDER;
 
                     .dx-rtl & {
+                        border-right: @SCHEDULER_BASE_BORDER;
                         border-left: @SCHEDULER_ACCENT_BORDER;
                     }
                 }
