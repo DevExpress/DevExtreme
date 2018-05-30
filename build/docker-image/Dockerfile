@@ -1,4 +1,4 @@
-FROM ubuntu:16.04 as builder
+FROM ubuntu:18.04 as builder
 
 # Setup APT
 RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/dx-no-recommends
@@ -11,7 +11,7 @@ RUN apt-get purge -y --allow-remove-essential init systemd
 RUN apt-get install -y ca-certificates curl
 
 # Build-time utils
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core localepurge
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core gnupg localepurge
 
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
@@ -25,7 +25,7 @@ RUN npm set fetch-retries 5
 
 # .NET Core
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
-RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list
+RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list
 RUN apt-get update
 RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.1.200
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
@@ -55,8 +55,16 @@ RUN localepurge
 # Ensure UTC
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
+# Fix fonts
+# https://bugs.launchpad.net/bugs/1769654
+# https://steemit.com/linux/@arrowj/fixing-font-rendering-issues-in-ubuntu-bionic-beaver-lts
+RUN curl -L http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-liberation/fonts-liberation_1.07.4-1_all.deb > liberation.deb
+RUN curl -L http://archive.ubuntu.com/ubuntu/pool/main/f/freetype/libfreetype6_2.8-0.2ubuntu2.1_amd64.deb > freetype.deb
+RUN dpkg -i freetype.deb liberation.deb
+RUN rm freetype.deb liberation.deb
+
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https gdebi-core localepurge
+RUN apt-get purge -y apt-transport-https gdebi-core gnupg localepurge
 
 # Clean APT
 RUN apt-get autoremove -y --purge
