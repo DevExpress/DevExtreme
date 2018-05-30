@@ -57,7 +57,7 @@ var FilterBuilderView = modules.View.inherit({
     _getPopupContentTemplate: function(contentElement) {
         var $contentElement = $(contentElement),
             $filterBuilderContainer = $("<div>").appendTo($contentElement),
-            fields = this.getController("columns").getColumns(),
+            fields = this.getController("columns").getFilteringColumns(),
             customOperations = this.getController("filterSync").getCustomFilterOperations();
 
         fields = fields.filter(item => item.allowFiltering && item.filterOperations)
