@@ -31,5 +31,5 @@ script:
     -e TARGET=$TARGET
     -e CONSTEL=$CONSTEL
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:18_1
+    docker.io/devexpress/devextreme-build:18_2
     ./docker-ci.sh
