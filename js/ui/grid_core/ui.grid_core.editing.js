@@ -23,7 +23,8 @@ var $ = require("../../core/renderer"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
-    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe;
+    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
+    commonUtils = require("../../core/utils/common");
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -749,7 +750,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
 
                     if(that._prepareEditCell(params, item, columnIndex, editRowIndex)) {
-                        that._repaintEditCell(column, oldColumn, oldEditRowIndex);
+                        commonUtils.deferRender(function() {
+                            that._repaintEditCell(column, oldColumn, oldEditRowIndex);
+                        });
                     }
 
                 });
