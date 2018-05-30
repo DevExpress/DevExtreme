@@ -77,13 +77,6 @@ QUnit.test("disabled", function(assert) {
     assert.ok(this.element.hasClass("dx-state-disabled"));
 });
 
-QUnit.test("style", function(assert) {
-    this.instance.option("style", "text");
-    assert.ok(this.element.hasClass("dx-button-flat"));
-    this.instance.option("style", null);
-    assert.notOk(this.element.hasClass("dx-button-flat"));
-});
-
 QUnit.test("T325811 - 'text' option change should not lead to widget clearing", function(assert) {
     var $testElement = $("<div>").appendTo(this.element);
     assert.ok($testElement.parent().hasClass("dx-button"), "test element is in button");

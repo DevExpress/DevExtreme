@@ -143,18 +143,25 @@ QUnit.test("Buttons has 'text' style in Material theme by default", function(ass
                 widget: 'dxButton',
                 options: {
                     type: 'default',
+                    text: 'Back',
+                    elementAttr: { class: 'custom-class' }
+                }
+            }, {
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    type: 'default',
                     text: 'Back'
                 }
             }]
         }),
-        button = element.find(".dx-button");
+        button1 = element.find(".dx-button").first(),
+        button2 = element.find(".dx-button").last();
 
-    assert.ok(button.hasClass("dx-button-flat"));
+    assert.ok(button1.hasClass("dx-button-flat"));
+    assert.ok(button1.hasClass("custom-class"));
+    assert.ok(button2.hasClass("dx-button-flat"));
 
-    element.dxToolbar("instance").option("buttonsStyle", null);
-    button = element.find(".dx-button");
-
-    assert.notOk(button.hasClass("dx-button-flat"));
     themes.isMaterial = origIsMaterial;
 });
 

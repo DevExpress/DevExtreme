@@ -20,7 +20,6 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
-    BUTTON_STYLE_TEXT = "dx-button-flat",
 
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
@@ -132,8 +131,7 @@ var Button = Widget.inherit({
             */
             useSubmitBehavior: false,
 
-            useInkRipple: false,
-            style: null
+            useInkRipple: false
 
             /**
             * @name dxButtonDefaultTemplate
@@ -200,7 +198,6 @@ var Button = Widget.inherit({
         this._renderType();
 
         this.option("useInkRipple") && this._renderInkRipple();
-        this.option("style") && this._addStyleClass();
         this._renderClick();
 
         this.setAria("role", "button");
@@ -275,16 +272,6 @@ var Button = Widget.inherit({
 
         if(this.option("useSubmitBehavior")) {
             this._renderSubmitInput();
-        }
-    },
-
-    _addStyleClass: function() {
-        var style = this.option("style");
-        var $element = this.$element();
-
-        $element.removeClass(BUTTON_STYLE_TEXT);
-        if(style === "text") {
-            $element.addClass(BUTTON_STYLE_TEXT);
         }
     },
 
@@ -409,9 +396,6 @@ var Button = Widget.inherit({
                 break;
             case "useSubmitBehavior":
                 this._invalidate();
-                break;
-            case "style":
-                this._addStyleClass();
                 break;
             default:
                 this.callBase(args);
