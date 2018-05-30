@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
+    browser = require("../../core/utils/browser"),
     extend = require("../../core/utils/extend").extend,
     equalByValue = commonUtils.equalByValue,
     Guid = require("../../core/guid"),
@@ -930,8 +931,19 @@ module.exports = {
                     return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
+                _updateScrollableForIE: function() {
+                    var that = this;
+
+                    if(browser.msie && parseInt(browser.version) <= 11) {
+                        setTimeout(function() {
+                            that.getView("rowsView")._updateScrollable();
+                        });
+                    }
+                },
+
                 _correctColumnWidths: function(resultWidths, visibleColumns) {
                     var adaptiveController = this._adaptiveColumnsController,
+                        columnAutoWidth = this.option("columnAutoWidth"),
                         oldHiddenColumns = adaptiveController.getHiddenColumns(),
                         hiddenColumns,
                         hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
@@ -945,6 +957,10 @@ module.exports = {
                     }
 
                     !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
+
+                    if(columnAutoWidth && hidingColumnsQueue.length && !hiddenColumns.length) {
+                        this._updateScrollableForIE();
+                    }
 
                     return this.callBase.apply(this, arguments);
                 },
