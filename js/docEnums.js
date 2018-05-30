@@ -416,6 +416,16 @@
  */
 
 /**
+ * @typedef {string} Enums.SankeyLabelOverlappingBehavior
+ * @enum {'ellipsis'|'hide'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.SankeyColorMode
+ * @enum {'node'|'none'}
+ */
+
+/**
  * @typedef {string} Enums.ListSelectionMode
  * @enum {'all'|'multiple'|'none'|'single'}
  */

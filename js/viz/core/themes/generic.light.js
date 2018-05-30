@@ -1557,6 +1557,104 @@ registerTheme({
                 opacity: 0.5
             }
         }
+    },
+    sankey: {
+        hoverEnabled: true,
+        align: "center",
+        adaptiveLayout: {
+            width: 80,
+            height: 80,
+            keepLabels: true
+        },
+        label: {
+            visible: true,
+            horizontalOffset: 5,
+            verticalOffset: 0,
+            overlappingBehavior: "ellipsis",
+            stroke: "#000000",
+            "stroke-width": 1,
+            "stroke-opacity": 0.3,
+            colorMode: "none",
+            font: {
+                color: "#ffffff"
+            },
+            customizeText: function(info) {
+                return info.title;
+            },
+            shadow: {
+                opacity: 0.8,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 1,
+                color: "#000000"
+            }
+        },
+        error: {
+            stroke: "#000000",
+            "stroke-width": 1,
+            "stroke-opacity": 0.3,
+            font: {
+                color: "#ff3300",
+                weight: 300
+            },
+        },
+        title: {
+            margin: 10,
+            font: {
+                size: 28,
+                weight: 200
+            },
+            subtitle: {
+                font: {
+                    size: 16
+                }
+            }
+        },
+        tooltip: {
+            enabled: true,
+            customizeTooltip: function(info) {
+                return info.type === 'link' ? { html: `<strong>${info.from} > ${info.to}</strong><br/>Weight: ${info.weight}` } : { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
+            },
+        },
+        nodes: {
+            padding: 30,
+            width: 15,
+            opacity: 1,
+            border: {
+                color: BLACK,
+                width: 1,
+                visible: false
+            },
+            hoverStyle: {
+                hatching: {
+                    opacity: 0.75,
+                    step: 6,
+                    width: 2,
+                    direction: RIGHT
+                },
+                border: {}
+            },
+        },
+        links: {
+            color: BLACK,
+            colorMode: "none",
+            opacity: 0.3,
+            border: {
+                color: BLACK,
+                width: 1,
+                visible: false
+            },
+            hoverStyle: {
+                opacity: 0.5,
+                hatching: {
+                    opacity: 0.75,
+                    step: 6,
+                    width: 2,
+                    direction: RIGHT
+                },
+                border: {}
+            },
+        }
     }
 });
 

@@ -103,6 +103,7 @@ function patchTheme(theme) {
         gauge: { scale: { tick: {}, minorTick: {}, label: { font: {} } } },
         barGauge: {},
         funnel: {},
+        sankey: {},
         map: { background: {} },
         treeMap: { tile: { selectionStyle: { border: {} } }, group: { border: {}, selectionStyle: { border: {} }, label: { font: {} } } },
         rangeSelector: { scale: { tick: {}, minorTick: {}, label: { font: {} } }, chart: {} },
@@ -118,12 +119,12 @@ function patchTheme(theme) {
     mergeScalar(theme.legend.font, "color", null, theme.secondaryTitleColor);
     mergeScalar(theme.legend.border, "color", null, theme.axisColor);
     patchAxes(theme);
-    _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector", "sparkline", "bullet"], function(_, section) {
+    _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector", "sparkline", "bullet", "sankey"], function(_, section) {
         mergeScalar(theme[section], "redrawOnResize", theme);
         mergeScalar(theme[section], "containerBackgroundColor", null, theme.backgroundColor);
         mergeObject(theme[section], "tooltip", theme);
     });
-    _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector"], function(_, section) {
+    _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector", "sankey"], function(_, section) {
         mergeObject(theme[section], "loadingIndicator", theme);
         mergeObject(theme[section], "export", theme);
         mergeObject(theme[section], "legend", theme);
