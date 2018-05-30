@@ -30,6 +30,12 @@ RUN apt-get update
 RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.1.200
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
+# Slim
+RUN rm -r /usr/share/dotnet/sdk/*/FSharp
+RUN rm -r /usr/share/dotnet/store/*
+RUN find /usr/share/dotnet -type f -name '*.resources.dll' -delete
+RUN find /usr/share/dotnet -type f -wholename '**/runtimes/win*/**' -delete
+
 # Chrome, see https://stackoverflow.com/a/36906724
 RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_66.0.3359.181.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
