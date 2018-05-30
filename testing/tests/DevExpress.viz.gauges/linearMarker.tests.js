@@ -211,8 +211,10 @@ QUnit.module('TextCloudMarker', {
             verticalOffset: 4,
             color: 'black',
             text: {
-                format: 'fixedPoint',
-                precision: 1,
+                format: {
+                    type: 'fixedPoint',
+                    precision: 1
+                },
                 font: { color: 'someColor', size: 'someSize' }
             },
             currentValue: 25

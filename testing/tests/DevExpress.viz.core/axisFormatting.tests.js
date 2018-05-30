@@ -1051,8 +1051,7 @@ QUnit.module("Custom formatting. Tick labels", environment);
 QUnit.test("Currency format", function(assert) {
     this.createAxis({
         label: {
-            format: "currency",
-            precision: 3,
+            format: { type: "currency", precision: 3 },
             visible: true
         }
     });
@@ -1073,7 +1072,6 @@ QUnit.test("Date format with custom", function(assert) {
     this.createAxis({
         label: {
             format: "month",
-            precision: 2,
             visible: true
         }
     });

@@ -528,11 +528,6 @@ var dxChart = {
            */
             format: '',
             /**
-            * @name dxChartOptions.crosshair.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0,
-            /**
             * @name dxChartOptions.crosshair.label.customizeText
             * @type function(info)
             * @type_function_param1 info:object
@@ -637,11 +632,6 @@ var dxChart = {
                 * @extends CommonVizFormat
                 */
                 format: '',
-                /**
-                * @name dxChartOptions.crosshair.verticalLine.label.precision
-                * @extends CommonVizPrecision
-                */
-                precision: 0,
                 /**
                 * @name dxChartOptions.crosshair.verticalLine.label.customizeText
                 * @type function(info)
@@ -748,11 +738,6 @@ var dxChart = {
                 * @extends CommonVizFormat
                 */
                 format: '',
-                /**
-                * @name dxChartOptions.crosshair.horizontalLine.label.precision
-                * @extends CommonVizPrecision
-                */
-                precision: 0,
                 /**
                 * @name dxChartOptions.crosshair.horizontalLine.label.customizeText
                 * @type function(info)
@@ -1488,12 +1473,7 @@ var dxChart = {
             * @name dxChartOptions.argumentAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxChartOptions.argumentAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxChartOptions.argumentAxis.strips
@@ -1765,12 +1745,7 @@ var dxChart = {
             * @name dxChartOptions.valueAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxChartOptions.valueAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxChartOptions.valueAxis.strips
@@ -2912,12 +2887,7 @@ var dxPolarChart = {
             * @name dxPolarChartOptions.argumentAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxPolarChartOptions.argumentAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxPolarChartOptions.argumentAxis.strips
@@ -3091,12 +3061,7 @@ var dxPolarChart = {
             * @name dxPolarChartOptions.valueAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxPolarChartOptions.valueAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxPolarChartOptions.valueAxis.strips
@@ -3373,19 +3338,7 @@ var BaseChart = {
         * @name BaseChartOptions.tooltip.argumentFormat
         * @extends CommonVizFormat
         */
-        argumentFormat: '',
-        /**
-        * @name BaseChartOptions.tooltip.argumentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        argumentPrecision: 0,
-        /**
-        * @name BaseChartOptions.tooltip.percentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        percentPrecision: 0
+        argumentFormat: ''
     },
     /**
     * @name BaseChartOptions.onPointClick

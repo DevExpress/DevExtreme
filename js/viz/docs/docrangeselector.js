@@ -233,11 +233,6 @@ var dxRangeSelector = {
             */
             format: undefined,
             /**
-            * @name dxRangeSelectorOptions.scale.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: undefined,
-            /**
             * @name dxRangeSelectorOptions.scale.label.customizeText
             * @type function(scaleValue)
             * @type_function_param1 scaleValue:object
@@ -453,11 +448,6 @@ var dxRangeSelector = {
         * @extends CommonVizFormat
         */
         format: undefined,
-        /**
-        * @name dxRangeSelectorOptions.sliderMarker.precision
-        * @extends CommonVizPrecision
-        */
-        precision: undefined,
         /**
         * @name dxRangeSelectorOptions.sliderMarker.customizeText
         * @type function(scaleValue)

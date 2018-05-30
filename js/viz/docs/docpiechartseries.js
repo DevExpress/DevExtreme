@@ -325,27 +325,10 @@ var commonPieChartSeries = {
         */
         format: '',
         /**
-        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.precision
-        * @extends CommonVizPrecision
-        */
-        precision: 0,
-        /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
-        /**
-        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        argumentPrecision: 0,
-        /**
-        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.percentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        percentPrecision: 0,
         /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.position
         * @type Enums.PieChartLabelPosition

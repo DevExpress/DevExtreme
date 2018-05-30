@@ -782,13 +782,7 @@ var dxVectorMap = {
         * @hidden
         * @inheritdoc
         */
-        format: undefined,
-        /**
-        * @name dxVectorMapOptions.tooltip.precision
-        * @hidden
-        * @inheritdoc
-        */
-        precision: undefined
+        format: undefined
     },
     /**
     * @name dxVectorMapOptions.onTooltipShown

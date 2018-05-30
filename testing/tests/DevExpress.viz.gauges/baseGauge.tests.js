@@ -448,7 +448,7 @@ QUnit.test("no options", function(assert) {
 });
 
 QUnit.test("format and precision", function(assert) {
-    assert.strictEqual(formatValue(0.135467, { format: "fixedPoint", precision: 2 }), "0.14");
+    assert.strictEqual(formatValue(0.135467, { format: { type: "fixedPoint", precision: 2 } }), "0.14");
 });
 
 QUnit.test("customizeText", function(assert) {
@@ -463,7 +463,7 @@ QUnit.test("customizeText is not a function", function(assert) {
 
 QUnit.test("format, precision and customizeText", function(assert) {
     assert.deepEqual(formatValue(0.135467, {
-        format: "fixedPoint", precision: 2,
+        format: { type: "fixedPoint", precision: 2 },
         customizeText: function() { return this.value.toString() + "###" + this.valueText; }
     }), "0.135467###0.14");
 });

@@ -4,13 +4,12 @@ var typeUtils = require("./core/utils/type"),
     dateUtils = require("./core/utils/date"),
     numberLocalization = require("./localization/number"),
     dateLocalization = require("./localization/date"),
-    dependencyInjector = require("./core/utils/dependency_injector"),
-    logger = require("./core/utils/console").logger;
+    dependencyInjector = require("./core/utils/dependency_injector");
 
 require("./localization/currency");
 
 module.exports = dependencyInjector({
-    format: function(value, format, precision) {
+    format: function(value, format) {
         var formatIsValid = typeUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || typeUtils.isFunction(format),
             valueIsValid = typeUtils.isNumeric(value) || typeUtils.isDate(value);
 
@@ -23,15 +22,8 @@ module.exports = dependencyInjector({
             return format(value);
         }
 
-        if(precision !== undefined) {
-            logger.warn("Option 'precision' is deprecated. Use field 'precision' of a format object instead.");
-        }
-
         if(typeUtils.isString(format)) {
-            format = {
-                type: format,
-                precision: precision
-            };
+            format = { type: format };
         }
 
         if(typeUtils.isNumeric(value)) {

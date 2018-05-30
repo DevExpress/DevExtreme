@@ -217,12 +217,12 @@ var dxBaseGauge = BaseWidget.inherit({
 
 exports.dxBaseGauge = dxBaseGauge;
 
-var _format = require("../core/format");
+var _format = require("../../format_helper").format;
 
 //  TODO: find a better place for it
 var formatValue = function(value, options, extra) {
     options = options || {};
-    var text = _format(value, options),
+    var text = _format(value, options.format),
         formatObject;
     if(typeof options.customizeText === "function") {
         formatObject = _extend({ value: value, valueText: text }, extra);

@@ -132,8 +132,6 @@ var dxBarGauge = dxBaseGauge.inherit({
             labelOptions = _extend(true, {}, that._themeManager.theme().label, labelOptions);
             context.formatOptions = {
                 format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
-                // DEPRECATED_16_1
-                precision: labelOptions.precision,
                 customizeText: labelOptions.customizeText
             };
             context.textOptions = { align: "center" };

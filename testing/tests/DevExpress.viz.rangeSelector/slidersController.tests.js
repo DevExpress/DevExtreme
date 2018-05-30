@@ -173,7 +173,7 @@ QUnit.test("Slider marker settings", function(assert) {
 QUnit.test("Slider text formatting", function(assert) {
     this.update({
         sliderMarker: {
-            format: "fixedPoint", precision: 3,
+            format: { type: "fixedPoint", precision: 3 },
             customizeText: function(arg) {
                 return arg.valueText + "###";
             }

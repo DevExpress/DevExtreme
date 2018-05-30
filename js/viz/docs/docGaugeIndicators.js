@@ -52,12 +52,6 @@ var CommonIndicator = {
         */
         format: undefined,
         /**
-        * @name CommonIndicator.text.precision
-        * @extends CommonVizPrecision
-        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-        */
-        precision: undefined,
-        /**
         * @name CommonIndicator.text.customizeText
         * @type function(indicatedValue)
         * @type_function_param1 indicatedValue:object

@@ -10,7 +10,7 @@ var domAdapter = require("../../core/dom_adapter"),
     extend = require("../../core/utils/extend").extend,
     HALF_ARROW_WIDTH = 10,
     vizUtils = require("./utils"),
-    _format = require("./format"),
+    _format = require("../../format_helper").format,
     mathCeil = Math.ceil,
     mathMax = Math.max,
     mathMin = Math.min;
@@ -19,15 +19,14 @@ function hideElement($element) {
     $element.css({ left: "-9999px" }).detach();
 }
 
-// DEPRECATED_16_1 (precision part)
 function getSpecialFormatOptions(options, specialFormat) {
     var result = options;
     switch(specialFormat) {
         case "argument":
-            result = { format: options.argumentFormat, precision: options.argumentPrecision };
+            result = { format: options.argumentFormat };
             break;
         case "percent":
-            result = { format: { type: "percent", precision: (options.format && options.format.percentPrecision) || options.percentPrecision } };
+            result = { format: { type: "percent", precision: options.format && options.format.percentPrecision } };
             break;
     }
     return result;
@@ -281,7 +280,7 @@ Tooltip.prototype = {
 
     formatValue: function(value, _specialFormat) {
         var options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
-        return _format(value, options);
+        return _format(value, options.format);
     },
 
     getLocation: function() {

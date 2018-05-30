@@ -181,11 +181,6 @@ var BaseGauge = {
             */
             format: '',
             /**
-            * @name BaseGaugeOptions.scale.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 2,
-            /**
             * @name BaseGaugeOptions.scale.label.customizeText
             * @type function(scaleValue)
             * @type_function_param1 scaleValue:object
@@ -734,11 +729,6 @@ var dxBarGauge = {
         * @extends CommonVizFormat
         */
         format: undefined,
-        /**
-        * @name dxBarGaugeOptions.label.precision
-        * @extends CommonVizPrecision
-        */
-        precision: undefined,
         /**
         * @name dxBarGaugeOptions.label.customizeText
         * @type function(barValue)

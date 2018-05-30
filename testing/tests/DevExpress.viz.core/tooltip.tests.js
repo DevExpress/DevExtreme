@@ -491,7 +491,7 @@ QUnit.test("formatValue. Default format", function(assert) {
 QUnit.test("formatValue. Custom format", function(assert) {
     var tooltip = new Tooltip({ eventTrigger: {} });
     tooltip.setOptions($.extend(this.options,
-        { format: "currency", precision: 3, percentPrecision: 4, argumentFormat: "percent", argumentPrecision: 1 }));
+        { format: { type: "currency", precision: 3, percentPrecision: 4 }, argumentFormat: { type: "percent", precision: 1 } }));
 
     assert.equal(tooltip.formatValue(30), "$30.000");
     assert.equal(tooltip.formatValue(0.1, "argument"), "10.0%");

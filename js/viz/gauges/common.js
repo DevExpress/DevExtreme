@@ -231,7 +231,7 @@ exports.dxGauge = dxBaseGauge.inherit({
         var that = this;
         settings.currentValue = settings.baseValue = _isFinite(that._translator.translate(settings.baseValue)) ? _Number(settings.baseValue) : that._baseValue;
         settings.vertical = that._area.vertical;
-        if(settings.text && !settings.text.format && !settings.text.precision) {
+        if(settings.text && !settings.text.format) {
             settings.text.format = that._defaultFormatOptions;
         }
     },
