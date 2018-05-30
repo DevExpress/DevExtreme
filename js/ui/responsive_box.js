@@ -237,6 +237,15 @@ var ResponsiveBox = CollectionWidget.inherit({
         this._linkNodeToItem();
     },
 
+    _itemOptionChanged: function(item) {
+        var $item = this._findItemElementByItem(item);
+        if(!$item.length) {
+            return;
+        }
+
+        this._refreshItem($item, item);
+    },
+
     _setScreenSize: function() {
         var currentScreen = this._getCurrentScreen();
 
