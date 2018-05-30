@@ -4765,6 +4765,37 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
 });
 
+// T621703
+QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var $cellElement,
+            dataGrid = createDataGrid({
+                dataSource: [{ firstName: "Andrey", lastName: "Prohorov" }],
+                editing: {
+                    mode: "cell",
+                    allowUpdating: true
+                },
+                onContentReady: function(e) {
+                    // act
+                    e.component.editCell(0, 1);
+                }
+            });
+
+        clock.tick();
+
+        // assert
+        $cellElement = $(dataGrid.getCellElement(0, 1));
+        assert.ok($cellElement.hasClass("dx-editor-cell"), "cell has editor");
+        assert.ok($cellElement.find(".dx-texteditor-input").is(":focus"), "cell editor is focused");
+    } finally {
+        clock.restore();
+    }
+});
+
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
