@@ -1085,22 +1085,22 @@ var EditingController = modules.ViewController.inherit((function() {
                 cancel = arg === "cancel";
                 editIndex = getIndexByKey(results[i].key, that._editData);
                 editData = that._editData[editIndex];
+                isError = arg && arg instanceof Error;
 
-                if(editData) {
-                    isError = arg && arg instanceof Error;
-                    if(isError) {
+                if(isError) {
+                    if(editData) {
                         editData.error = arg;
-                        $popupContent = that.getPopupContent();
-                        dataController.dataErrorOccurred.fire(arg, $popupContent);
-                        if(editMode !== EDIT_MODE_BATCH) {
-                            break;
-                        }
-                    } else if(!cancel || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
-                        that._removeEditDataItem(editIndex);
-                        hasSavedData = !cancel;
                     }
-                } else {
-                    hasSavedData = true;
+                    $popupContent = that.getPopupContent();
+                    dataController.dataErrorOccurred.fire(arg, $popupContent);
+                    if(editMode !== EDIT_MODE_BATCH) {
+                        break;
+                    }
+                } else if(!cancel || !editData || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
+                    if(editIndex >= 0) {
+                        that._removeEditDataItem(editIndex);
+                    }
+                    hasSavedData = !cancel;
                 }
             }
             return hasSavedData;
