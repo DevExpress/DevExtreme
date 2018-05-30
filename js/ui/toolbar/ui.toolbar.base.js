@@ -54,9 +54,9 @@ var ToolbarBase = CollectionWidget.inherit({
                     $container.html(data.html);
                 }
 
-                if(data.widget === "dxButton") {
+                if(data.widget === "dxButton" && this.option("_useFlatButtons")) {
                     if(data.options) {
-                        var buttonContainerClass = this.option("_useFlatButtons") ? BUTTON_FLAT_CLASS : "";
+                        var buttonContainerClass = BUTTON_FLAT_CLASS;
                         if(data.options.elementAttr && data.options.elementAttr.class) {
                             buttonContainerClass += (" " + data.options.elementAttr.class);
                         }
