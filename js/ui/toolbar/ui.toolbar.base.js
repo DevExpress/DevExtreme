@@ -54,11 +54,15 @@ var ToolbarBase = CollectionWidget.inherit({
                     $container.html(data.html);
                 }
 
-                if(data.widget === "dxButton" && this.option("_useFlatButtons")) {
+                if(data.widget === "dxButton") {
                     if(data.options) {
-                        var buttonContainerClass = BUTTON_FLAT_CLASS;
-                        if(data.options.elementAttr && data.options.elementAttr.class) {
-                            buttonContainerClass += (" " + data.options.elementAttr.class);
+                        var buttonContainerClass = this.option("_useFlatButtons") ? BUTTON_FLAT_CLASS : "";
+                        if(data.options.elementAttr) {
+                            var customClass = data.options.elementAttr.class;
+                            if(customClass) {
+                                customClass = customClass.replace(BUTTON_FLAT_CLASS, "");
+                                buttonContainerClass += (" " + customClass);
+                            }
                         }
 
                         data.options = extend(data.options, { elementAttr: { class: buttonContainerClass } });
