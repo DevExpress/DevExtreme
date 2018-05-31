@@ -1055,10 +1055,7 @@ QUnit.test("More ranges in range container (direct assignment)", function(assert
 QUnit.test("Less custom tick values for scale", function(assert) {
     var gauge = this.createTestGauge({
         scale: {
-            customTicks: [10, 20, 30],
-            minorTick: {
-                customTickValues: [40, 50, 60]
-            }
+            customTicks: [10, 20, 30]
         }
     });
     gauge.option({
@@ -1067,67 +1064,41 @@ QUnit.test("Less custom tick values for scale", function(assert) {
             tickInterval: 9,
             customTicks: [11, 21],
             minorTick: {
-                tickInterval: 4,
-                customTickValues: [41, 51]
+                tickInterval: 4
             }
         }
     });
 
     assert.deepEqual(gauge.option("scale").customTicks, [11, 21]);
-    assert.deepEqual(gauge.option("scale").minorTick, {
-        tickInterval: 4,
-        customTickValues: [41, 51]
-    });
+    assert.strictEqual(gauge.option("scale").minorTick.tickInterval, 4);
 });
 
 //  B232788
 QUnit.test("More custom tick values for scale", function(assert) {
     var gauge = this.createTestGauge({
         scale: {
-            majorTick: {
-                customTickValues: [10, 20, 30]
-            },
-            minorTick: {
-                customTickValues: [40, 50, 60]
-            }
         }
     });
     gauge.option({
         scale: {
             endValue: 50,
             majorTick: {
-                tickInterval: 9,
-                customTickValues: [11, 21, 31, 41]
+                tickInterval: 9
             },
             minorTick: {
-                tickInterval: 4,
-                customTickValues: [41, 51, 61, 71]
+                tickInterval: 4
             }
         }
     });
 
-    assert.deepEqual(gauge.option("scale").majorTick, {
-        tickInterval: 9,
-        customTickValues: [11, 21, 31, 41]
-    });
+    assert.strictEqual(gauge.option("scale").majorTick.tickInterval, 9);
 
-    assert.deepEqual(gauge.option("scale").minorTick, {
-        tickInterval: 4,
-        customTickValues: [41, 51, 61, 71]
-    });
+    assert.strictEqual(gauge.option("scale").minorTick.tickInterval, 4);
 });
 
 //  B232788
 QUnit.test("Custom tick values in scale are not changed", function(assert) {
     var gauge = this.createTestGauge({
-        scale: {
-            majorTick: {
-                customTickValues: [10, 20, 30]
-            },
-            minorTick: {
-                customTickValues: [40, 50, 60]
-            }
-        }
     });
     gauge.option({
         scale: {
@@ -1140,61 +1111,9 @@ QUnit.test("Custom tick values in scale are not changed", function(assert) {
         }
     });
 
-    assert.deepEqual(gauge.option("scale").majorTick, {
-        tickInterval: 9,
-        customTickValues: [10, 20, 30]
-    });
+    assert.strictEqual(gauge.option("scale").majorTick.tickInterval, 9);
 
-    assert.deepEqual(gauge.option("scale").minorTick, {
-        tickInterval: 4,
-        customTickValues: [40, 50, 60]
-    });
-});
-
-//  B232788
-QUnit.test("Less custom tick values for scale (direct assignment)", function(assert) {
-    var gauge = this.createTestGauge({
-        scale: {
-            majorTick: {
-                customTickValues: [10, 20, 30]
-            },
-            minorTick: {
-                customTickValues: [40, 50, 60]
-            }
-        }
-    });
-    gauge.option("scale.majorTick.customTickValues", [11, 21]);
-    gauge.option("scale.minorTick.customTickValues", [41, 51]);
-
-    assert.deepEqual(gauge.option("scale").majorTick, {
-        customTickValues: [11, 21]
-    });
-    assert.deepEqual(gauge.option("scale").minorTick, {
-        customTickValues: [41, 51]
-    });
-});
-
-//  B232788
-QUnit.test("More custom tick values for scale (direct assignment)", function(assert) {
-    var gauge = this.createTestGauge({
-        scale: {
-            majorTick: {
-                customTickValues: [10, 20, 30]
-            },
-            minorTick: {
-                customTickValues: [40, 50, 60]
-            }
-        }
-    });
-    gauge.option("scale.majorTick.customTickValues", [11, 21, 31, 41]);
-    gauge.option("scale.minorTick.customTickValues", [41, 51, 61, 71]);
-
-    assert.deepEqual(gauge.option("scale").majorTick, {
-        customTickValues: [11, 21, 31, 41]
-    });
-    assert.deepEqual(gauge.option("scale").minorTick, {
-        customTickValues: [41, 51, 61, 71]
-    });
+    assert.strictEqual(gauge.option("scale").minorTick.tickInterval, 4);
 });
 
 QUnit.test("Animation", function(assert) {
