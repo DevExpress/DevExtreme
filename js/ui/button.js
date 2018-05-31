@@ -132,6 +132,7 @@ var Button = Widget.inherit({
             useSubmitBehavior: false,
 
             useInkRipple: false
+
             /**
             * @name dxButtonDefaultTemplate
             * @type object
