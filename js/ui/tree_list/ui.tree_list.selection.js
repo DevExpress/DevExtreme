@@ -486,7 +486,31 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         }
                     }
                     return selectedRowKeys;
-                }
+                },
+
+                /**
+                * @name dxTreeListMethods.getSelectedRowsData
+                * @publicName getSelectedRowsData()
+                * @return Array<any>
+                */
+                /**
+                * @name dxTreeListMethods.getSelectedRowsData
+                * @publicName getSelectedRowsData(mode)
+                * @param1 mode:string
+                * @return Array<any>
+                */
+                getSelectedRowsData: function(mode) {
+                    var that = this,
+                        selectedKeys = this.getSelectedRowKeys(mode) || [],
+                        nodes = [];
+
+                    selectedKeys.forEach(function(key) {
+                        var node = that.getController("data").getNodeByKey(key);
+                        node && nodes.push(node);
+                    });
+
+                    return nodes;
+                },
             }
         },
         views: {
