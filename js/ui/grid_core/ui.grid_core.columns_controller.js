@@ -1600,7 +1600,7 @@ module.exports = {
 
                 },
                 getFilteringColumns: function(rowIndex) {
-                    return this.getColumns().filter(item => item.dataField);
+                    return this.getColumns().filter(item => item.dataField && item.allowFiltering);
                 },
                 _getFixedColumnsCore: function() {
                     var that = this,
