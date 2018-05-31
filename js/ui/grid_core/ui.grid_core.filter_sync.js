@@ -110,7 +110,7 @@ var FilterSyncController = modules.Controller.inherit((function() {
         syncFilterValue: function() {
             var that = this,
                 columnsController = that.getController("columns"),
-                columns = columnsController.getColumns();
+                columns = columnsController.getFilteringColumns();
 
             this._skipSyncColumnOptions = true;
             columns.forEach(function(column) {
@@ -129,7 +129,7 @@ var FilterSyncController = modules.Controller.inherit((function() {
 
         _initSync: function() {
             if(!this.option("filterValue")) {
-                let columns = this.getController("columns").getColumns(),
+                let columns = this.getController("columns").getFilteringColumns(),
                     filterValue = this.getFilterValueFromColumns(columns);
                 this.option("filterValue", filterValue);
             }
@@ -220,7 +220,7 @@ var DataControllerFilterSyncExtender = {
         }
 
         var filters = [that.callBase()],
-            columns = that.getController("columns").getColumns(),
+            columns = that.getController("columns").getFilteringColumns(),
             filterValue = that.option("filterValue");
 
         if(that.isFilterSyncActive()) {
@@ -238,9 +238,9 @@ var DataControllerFilterSyncExtender = {
         return gridCoreUtils.combineFilters(filters);
     },
 
-    _parseColumnInfo: function(fullName) {
-        var matched = fullName.match(/columns\[([0-9]*)\]\.(.*)/);
-        return matched ? { index: matched[1], changedField: matched[2] } : null;
+    _parseColumnPropertyName: function(fullName) {
+        var matched = fullName.match(/.*\.(.*)/);
+        return matched[1];
     },
 
     optionChanged: function(args) {
@@ -255,16 +255,14 @@ var DataControllerFilterSyncExtender = {
                 break;
             case "columns":
                 if(this.isFilterSyncActive()) {
-                    let columnInfo = this._parseColumnInfo(args.fullName),
-                        column,
+                    let column = this.getController("columns").getColumnByPath(args.fullName),
                         filterSyncController = this.getController("filterSync");
-                    if(columnInfo && !filterSyncController._skipSyncColumnOptions) {
+                    if(column && !filterSyncController._skipSyncColumnOptions) {
+                        let propertyName = this._parseColumnPropertyName(args.fullName);
                         filterSyncController._skipSyncColumnOptions = true;
-                        if(["filterValues", "filterType"].indexOf(columnInfo.changedField) !== -1) {
-                            column = this.getController("columns").getColumns()[columnInfo.index];
+                        if(["filterValues", "filterType"].indexOf(propertyName) > -1) {
                             filterSyncController.syncHeaderFilter(column);
-                        } else if(["filterValue", "selectedFilterOperation"].indexOf(columnInfo.changedField) !== -1) {
-                            column = this.getController("columns").getColumns()[columnInfo.index];
+                        } else if(["filterValue", "selectedFilterOperation"].indexOf(propertyName) > -1) {
                             filterSyncController.syncFilterRow(column, column.filterValue);
                         }
                         filterSyncController._skipSyncColumnOptions = false;
