@@ -9667,6 +9667,64 @@ QUnit.test("Check table params with columnWidth auto", function(assert) {
     assert.ok(secondColumnWidth > 2 * firstColumnWidth, "second column width more then first");
 });
 
+QUnit.test("Group cell should not have width style", function(assert) {
+    var dataSource = [
+        { firstName: "Alex", lastName: "Black", room: 903 },
+        { firstName: "Alex", lastName: "White", room: 904 }
+    ];
+
+    // act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "firstName",
+            groupIndex: 0,
+            width: 100,
+        }, {
+            dataField: "lastName",
+            width: 150
+        }, "room"]
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "", "width style is not defined for group cell");
+    assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "150px", "width style is defined for data cell");
+});
+
+QUnit.test("Detail cell should not have width style", function(assert) {
+    var dataSource = [
+        { id: 1, firstName: "Alex", lastName: "Black", room: 903 },
+        { id: 2, firstName: "Alex", lastName: "White", room: 904 }
+    ];
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        keyExpr: "id",
+        columnAutoWidth: true,
+        masterDetail: {
+            enabled: true
+        },
+        columns: [{
+            dataField: "firstName",
+            width: 100,
+        }, {
+            dataField: "lastName",
+            width: 150
+        }, "room"]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.expandRow(1);
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "100px", "width style is defined for data cell");
+    assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "", "width style is not defined for detail cell");
+});
+
 QUnit.test("Check table params with set width", function(assert) {
     var dataSource = {
         store: [{ firstField: "Alex_", lastField: "Ziborov_", room: 903 },
