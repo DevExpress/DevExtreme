@@ -860,18 +860,19 @@ QUnit.test("getSelectedRowsData with mode parameter calls getSelectedRowKeys", f
 QUnit.test("getSelectedRowsData with mode parameter when key has no data", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
-        $testElement = $('#treeList');
+        $testElement = $('#treeList'),
+        data = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+        ];
 
     this.options.dataSource = {
         load: function() {
             var d = $.Deferred();
 
             setTimeout(function() {
-                d.resolve([
-                    { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-                    { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-                    { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
-                ]);
+                d.resolve(data);
             }, 100);
 
             return d.promise();
@@ -887,6 +888,7 @@ QUnit.test("getSelectedRowsData with mode parameter when key has no data", funct
 
     clock.tick(100);
     assert.equal(this.getSelectedRowsData("all").length, 3, "all 3 nodes are selected");
+    assert.deepEqual(this.getSelectedRowsData("all"), data, "getSelectedRowKeys is called");
 
     clock.restore();
 });
