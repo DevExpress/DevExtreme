@@ -884,11 +884,11 @@ QUnit.test("getSelectedRowsData with mode parameter when key has no data", funct
     this.rowsView.render($testElement);
 
     // act, assert
-    assert.deepEqual(this.getSelectedRowsData("all"), [], "getSelectedRowKeys is called");
+    assert.deepEqual(this.getSelectedRowsData("all"), [], "empty data");
 
     clock.tick(100);
     assert.equal(this.getSelectedRowsData("all").length, 3, "all 3 nodes are selected");
-    assert.deepEqual(this.getSelectedRowsData("all"), data, "getSelectedRowKeys is called");
+    assert.deepEqual(this.getSelectedRowsData("all"), data, "correct data");
 
     clock.restore();
 });
