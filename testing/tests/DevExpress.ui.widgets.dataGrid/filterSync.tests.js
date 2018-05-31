@@ -162,6 +162,40 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), undefined);
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), undefined);
     });
+
+    // T639390
+    QUnit.test("sync banded columns", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            columns: [{
+                caption: "Banded column",
+                columns: [{
+                    caption: "Banded column item",
+                    dataField: "field",
+                    dataType: "string",
+                    filterOperations: ["contains", "="],
+                    filterValues: ["2", "3"],
+                    filterType: "include"
+                }]
+            }, {
+                caption: "Banded column 2",
+                columns: [{
+                    caption: "Inner banded column",
+                    columns: [{
+                        caption: "Banded column item 2",
+                        dataField: "field2",
+                        filterOperations: ["contains", "="],
+                        dataType: "string",
+                        filterValue: "1",
+                        selectedFilterOperation: "="
+                    }]
+                }]
+            }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), [["field", "anyof", ["2", "3"]], "and", ["field2", "=", "1"]]);
+    });
 });
 
 QUnit.module("getCombinedFilter", {
