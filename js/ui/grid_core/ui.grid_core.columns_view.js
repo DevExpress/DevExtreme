@@ -139,7 +139,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
         }
 
-        if(!this.option("legacyRendering") && this.option("columnAutoWidth")) {
+        if(column.colspan > 1) {
+            $cell.attr("colSpan", column.colspan);
+        } else if(!this.option("legacyRendering") && this.option("columnAutoWidth")) {
             if(column.width || column.minWidth) {
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
             }
@@ -147,8 +149,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 cell.style.width = cell.style.maxWidth = getWidthStyle(column.width);
             }
         }
-
-        column.colspan > 1 && $cell.attr("colSpan", column.colspan);
 
         return $cell;
     },
@@ -200,7 +200,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     $row = $cell.parent(),
                     isDataRow = $row.hasClass("dx-data-row"),
                     isHeaderRow = $row.hasClass("dx-header-row"),
-                    isGroupRow = $row.hasClass("dx-group-row"),
+                    isGroupRow = $row.hasClass(GROUP_ROW_CLASS),
                     isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS),
                     isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS)),
                     visibleColumns = that._columnsController.getVisibleColumns(),
@@ -705,7 +705,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        var $rows = $rows || $tableElement.children().children(".dx-row");
+                        var $rows = $rows || $tableElement.children().children(".dx-row").not("." + GROUP_ROW_CLASS).not("." + DETAIL_ROW_CLASS);
                         for(var rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
                             var cell = $rows[rowIndex].cells[i];
                             if(cell) {
