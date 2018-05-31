@@ -3,7 +3,7 @@
 var noop = require("../../core/utils/common").noop,
     NodeItem = require("./NodeItem"),
     LinkItem = require("./LinkItem"),
-    sankey = require("./layout");
+    defaultLayoutBuilder = require("./layout");
 
 var _overlap = function(box1, box2) {
     return box1.x < box2.x && box2.x < box1.x + box1.width && box1.y < box2.y && box2.y < box1.y + box1.height;
@@ -177,6 +177,7 @@ var dxSankey = require("../core/base_widget").inherit({
             availableRect = this._rect,
             nodeOptions = that._getOption('nodes'),
             sortData = that._getOption('sortData'),
+            layoutBuilder = that._getOption('layoutBuilder', true) || defaultLayoutBuilder,
             palette = that._themeManager.createPalette(that._getOption("palette", true), {
                 useHighlight: true,
                 extensionMode: that._getOption("paletteExtensionMode", true)
@@ -187,13 +188,13 @@ var dxSankey = require("../core/base_widget").inherit({
                 width: availableRect[2] - availableRect[0],
                 height: availableRect[3] - availableRect[1]
             },
-            layout = sankey.computeLayout(data, sortData,
+            layout = layoutBuilder.computeLayout(data, sortData,
                 {
                     availableRect: rect,
                     nodePadding: nodeOptions.padding,
                     nodeWidth: nodeOptions.width,
                     nodeAlign: that._getOption('align', true)
-                }, that._incidentOccurred
+                }, that._getOption('onIncidentOccurred', true) || that._incidentOccurred
             );
         that._layoutMap = layout;
 
@@ -203,7 +204,7 @@ var dxSankey = require("../core/base_widget").inherit({
                 linkOptions = that._getOption("links"),
                 totalNodesNum = layout.nodes
                     .map((item) => { return item.length; })
-                    .reduce((previousValue, currentValue, index, array) => { return previousValue + currentValue; });
+                    .reduce((previousValue, currentValue, index, array) => { return previousValue + currentValue; }, 0);
 
             that._nodes = [];
             that._links = [];
@@ -228,6 +229,7 @@ var dxSankey = require("../core/base_widget").inherit({
             layout.links.forEach((link) => {
                 var linkItem = new LinkItem(that, {
                     d: link.d,
+                    boundingRect: link._boundingRect,
                     color: linkOptions.colorMode === 'node' ? nodeColors[link._from._name] : linkOptions.color,
                     options: linkOptions,
                     connection: {
