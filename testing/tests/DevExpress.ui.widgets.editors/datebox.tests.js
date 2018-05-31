@@ -1391,11 +1391,11 @@ QUnit.test("default", function(assert) {
 });
 
 QUnit.test("constructor", function(assert) {
-    var $element = $("#dateBox").dxDateBox({ pickerType: "calendar", width: 1234 }),
+    var $element = $("#dateBox").dxDateBox({ pickerType: "calendar", width: 258 }),
         instance = $element.dxDateBox("instance");
 
-    assert.strictEqual(instance.option("width"), 1234);
-    assert.strictEqual($element.outerWidth(), 1234, "outer width of the element must be equal to custom width");
+    assert.strictEqual(instance.option("width"), 258);
+    assert.strictEqual($element.outerWidth(), 258, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("root with custom width", function(assert) {
