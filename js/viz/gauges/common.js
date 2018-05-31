@@ -5,7 +5,6 @@ var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     _isDefined = typeUtils.isDefined,
-    _isString = typeUtils.isString,
     _isArray = Array.isArray,
     _isNumber = typeUtils.isNumeric,
     rangeModule = require("../translators/range"),
@@ -175,12 +174,7 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _prepareScaleSettings: function() {
         var that = this,
-            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), that.option("scale")),
-            overlappingBehavior = scaleOptions.label.overlappingBehavior;
-
-        if(_isString(overlappingBehavior)) {
-            overlappingBehavior = { mode: overlappingBehavior };
-        }
+            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), that.option("scale"));
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;
@@ -193,7 +187,6 @@ exports.dxGauge = dxBaseGauge.inherit({
                 return that._rangeContainer.getColorForValue(this.value);
             };
         }
-        scaleOptions.label.overlappingBehavior = overlappingBehavior;
 
         return scaleOptions;
     },

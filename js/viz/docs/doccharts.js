@@ -913,36 +913,11 @@ var dxChart = {
             displayMode: "standard",
             /**
             * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior
-            * @type string|object
+            * @type string
             * @default 'hide'
             * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
-            * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
             */
-            overlappingBehavior: {
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.mode
-                * @type string
-                * @default 'hide'
-                * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
-                * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
-                * @deprecated dxChartOptions.commonAxisSettings.label.overlappingBehavior
-                */
-                mode: 'hide',
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.rotationAngle
-                * @type number
-                * @default 90
-                * @deprecated dxChartOptions.commonAxisSettings.label.rotationAngle
-                */
-                rotationAngle: 90,
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.staggeringSpacing
-                * @type number
-                * @default 5
-                * @deprecated dxChartOptions.commonAxisSettings.label.staggeringSpacing
-                */
-                staggeringSpacing: 5
-            },
+            overlappingBehavior: "hide",
             /**
             * @name dxChartOptions.commonAxisSettings.label.indentFromAxis
             * @type number
@@ -2494,7 +2469,6 @@ var dxPolarChart = {
             * @type string
             * @default 'hide'
             * @acceptValues 'hide' | 'none'
-            * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
             */
             overlappingBehavior: 'hide',
             /**

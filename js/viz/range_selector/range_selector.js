@@ -892,9 +892,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         this._axis.updateOptions(extend({}, scaleOptions, {
             isHorizontal: true,
-            label: {
-                overlappingBehavior: {}
-            }
+            label: {}
         }));
 
         seriesDataSource.isShowChart() && this._axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
@@ -1098,11 +1096,6 @@ each(["selectedRangeColor", "containerBackgroundColor", "sliderMarker", "sliderH
 // AxisWrapper
 
 function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
-    scaleOptions.label.overlappingBehavior = {
-        mode: _isDefined(scaleOptions.useTicksAutoArrangement) ?
-            (scaleOptions.useTicksAutoArrangement ? "hide" : "none") : scaleOptions.label.overlappingBehavior
-    };
-
     scaleOptions.marker.label.font = scaleOptions.label.font;
 
     scaleOptions.color = scaleOptions.marker.color = scaleOptions.tick.color;

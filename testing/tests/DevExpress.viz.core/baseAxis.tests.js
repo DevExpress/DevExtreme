@@ -52,7 +52,6 @@ var environment = {
             isHorizontal: true,
             label: {
                 visible: true,
-                overlappingBehavior: {}
             }
         };
         this.axis.updateOptions($.extend(true, defaultOptions, options));
@@ -246,8 +245,7 @@ QUnit.test("Get options", function(assert) {
         hoverMode: "none",
         label: {
             minSpacing: 5,
-            visible: true,
-            overlappingBehavior: {}
+            visible: true
         },
         position: "bottom",
         grid: {},
@@ -499,7 +497,6 @@ QUnit.test("Min and max for customizeText", function(assert) {
             customizeText: function() {
                 return "min:" + this.min + " max:" + this.max;
             },
-            overlappingBehavior: {},
             visible: true
         }
     });
@@ -520,7 +517,6 @@ QUnit.test("Customize color", function(assert) {
             customizeColor: function() {
                 return this.value > 1 ? "red" : "blue";
             },
-            overlappingBehavior: {},
             visible: true
         }
     });
@@ -997,8 +993,7 @@ QUnit.module("Data margins calculations", {
             dataType: "numeric",
             isHorizontal: true,
             label: {
-                visible: true,
-                overlappingBehavior: {}
+                visible: true
             }
         }, options));
 
@@ -2366,8 +2361,7 @@ QUnit.module("Data margins calculations after zooming", {
             dataType: "numeric",
             isHorizontal: true,
             label: {
-                visible: true,
-                overlappingBehavior: {}
+                visible: true
             }
         }, options));
 

@@ -75,7 +75,7 @@ var environment = {
             endOnTick: undefined,
             crosshairMargin: 0,
             label: {
-                visible: false, indentFromAxis: 10, overlappingBehavior: { mode: "hide" }
+                visible: false, indentFromAxis: 10, overlappingBehavior: "hide"
             },
             isHorizontal: options.isHorizontal !== undefined ? options.isHorizontal : true,
             grid: {},
@@ -316,27 +316,6 @@ QUnit.test("forceTickInterval true. User's tickIntervsal 1, calculated tickInter
         allowDecimals: true,
         forceUserTickInterval: true,
         tickInterval: 1
-    });
-
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(300));
-
-    assert.deepEqual(this.axis._tickInterval, 1);
-});
-
-QUnit.test("DEPRECATED. overlappingBehavior = ignore. User's tickIntervsal 1, calculated tickInterval 2 - return user tickInterval", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true,
-        forceUserTickInterval: false,
-        tickInterval: 1,
-        label: {
-            overlappingBehavior: { mode: "ignore" }
-        }
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });

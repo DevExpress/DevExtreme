@@ -261,9 +261,7 @@ QUnit.test("Scale is rendered", function(assert) {
         label: {
             indentFromAxis: 0,
             indentFromTick: 10,
-            overlappingBehavior: {
-                mode: "hide"
-            }
+            overlappingBehavior: "hide"
         },
         max: 20,
         min: 10,
@@ -299,7 +297,7 @@ QUnit.test("overlappingBehavior option is hide", function(assert) {
             }
         }
     });
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.mode, "hide");
+    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior, "hide");
 });
 
 QUnit.test("overlappingBehavior option is none", function(assert) {
@@ -310,7 +308,7 @@ QUnit.test("overlappingBehavior option is none", function(assert) {
             }
         }
     });
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior.mode, "none");
+    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0].label.overlappingBehavior, "none");
 });
 
 QUnit.test("hideFirstOrLast option in label option", function(assert) {

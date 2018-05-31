@@ -118,7 +118,7 @@ var environment = {
         this.axis.updateOptions($.extend(true, {
             crosshairMargin: 0,
             label: {
-                visible: false, indentFromAxis: 10, overlappingBehavior: { mode: "ignore" }
+                visible: false, indentFromAxis: 10, overlappingBehavior: "ignore"
             },
             isHorizontal: options.isHorizontal !== undefined ? options.isHorizontal : true,
             grid: {},
@@ -936,74 +936,6 @@ QUnit.test("Vertical. Ticks (major and minor) are outside canvas (on zoom) - do 
     this.axis.draw(this.canvas);
 
     assert.strictEqual(this.renderer.stub("path").callCount, 0);
-});
-
-// DEPRECATED IN 15_2
-QUnit.test("hideFirstTick", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        label: {
-            overlappingBehavior: { hideFirstTick: true }
-        },
-        tick: {
-            visible: true,
-            color: "#123456",
-            opacity: 0.3,
-            width: 5,
-            length: 10
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    var path = this.renderer.path;
-    assert.deepEqual(path.callCount, 2);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [50, 70 - 5, 50, 70 + 5] });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [70, 70 - 5, 70, 70 + 5] });
-});
-
-// DEPRECATED IN 15_2
-QUnit.test("hideLastTick", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        label: {
-            overlappingBehavior: { hideLastTick: true }
-        },
-        tick: {
-            visible: true,
-            color: "#123456",
-            opacity: 0.3,
-            width: 5,
-            length: 10
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    var path = this.renderer.path;
-    assert.deepEqual(path.callCount, 2);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 70 - 5, 30, 70 + 5] });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 70 - 5, 50, 70 + 5] });
 });
 
 QUnit.module("XY linear axis. Draw. Check tick marks. Boundary ticks", environment);
@@ -2274,72 +2206,6 @@ QUnit.test("Labels are outside canvas (on zoom) - do not draw outside labels", f
     this.axis.draw(this.canvas);
 
     assert.equal(this.renderer.stub("text").callCount, 0);
-});
-
-// DEPRECATED IN 15_2
-QUnit.test("hideFirstLabel", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        label: {
-            visible: true,
-            indentFromAxis: 10,
-            alignment: "left",
-            overlappingBehavior: { hideFirstLabel: true }
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    var text = this.renderer.text;
-    assert.deepEqual(text.callCount, 2);
-    assert.deepEqual(text.getCall(0).args, ["2"]);
-    assert.deepEqual(text.getCall(1).args, ["3"]);
-
-    assert.deepEqual(text.getCall(0).returnValue.attr.getCall(1).args[0], { x: 50, y: 70 });
-    assert.deepEqual(text.getCall(1).returnValue.attr.getCall(1).args[0], { x: 70, y: 70 });
-});
-
-// DEPRECATED IN 15_2
-QUnit.test("hideLastLabel", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        label: {
-            visible: true,
-            indentFromAxis: 10,
-            alignment: "left",
-            overlappingBehavior: { hideLastLabel: true }
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    var text = this.renderer.text;
-    assert.deepEqual(text.callCount, 2);
-    assert.deepEqual(text.getCall(0).args, ["1"]);
-    assert.deepEqual(text.getCall(1).args, ["2"]);
-
-    assert.deepEqual(text.getCall(0).returnValue.attr.getCall(1).args[0], { x: 30, y: 70 });
-    assert.deepEqual(text.getCall(1).returnValue.attr.getCall(1).args[0], { x: 50, y: 70 });
 });
 
 QUnit.module("XY linear axis. Draw. Check constant lines", environment);
@@ -8205,7 +8071,7 @@ QUnit.test("Axis has labels - hideOuterElements removes labels and throws incide
             text: "text"
         },
         label: {
-            visible: true, overlappingBehavior: {}
+            visible: true
         }
     });
     this.axis.draw(this.canvas);
@@ -8229,7 +8095,7 @@ QUnit.test("Axis has outside constantLines - hideOuterElements removes only outs
     this.createAxis({ incidentOccurred: spy });
     this.updateOptions({
         label: {
-            visible: false, overlappingBehavior: {}
+            visible: false
         },
         constantLines: [{
             value: 0,
@@ -8290,7 +8156,7 @@ QUnit.test("Axis has no visible labels nor outside constantLines - hideOuterElem
             text: "text",
         },
         label: {
-            visible: false, overlappingBehavior: {}
+            visible: false
         },
         constantLines: [{
             value: 0,
@@ -8323,7 +8189,7 @@ QUnit.test("Axis has stubData - hideOuterElements does nothing", function(assert
             text: "text"
         },
         label: {
-            visible: true, overlappingBehavior: {}
+            visible: true
         }
     });
     this.axis.setBusinessRange({ stubData: true });

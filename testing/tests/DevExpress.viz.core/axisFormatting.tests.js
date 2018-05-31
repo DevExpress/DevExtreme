@@ -72,7 +72,7 @@ var environment = {
         this.axis.updateOptions($.extend(true, {
             crosshairMargin: 0,
             label: {
-                visible: false, indentFromAxis: 10, overlappingBehavior: { mode: "none" }
+                visible: false, indentFromAxis: 10, overlappingBehavior: "none"
             },
             isHorizontal: options.isHorizontal !== undefined ? options.isHorizontal : true,
             grid: {},
