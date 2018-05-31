@@ -197,7 +197,7 @@ function scrollHasExtremePosition(scrollThreshold, isMax) {
         distanceToExtremum;
 
     if(isDiscreteAxis) {
-        return axisExtremum.valueOf() === scrollExtremum.valueOf();
+        return !isDefined(scrollExtremum) || axisExtremum.valueOf() === scrollExtremum.valueOf();
     } else {
         if(businessRange.axisType === "logarithmic") {
             axisExtremum = vizUtils.getLog(axisExtremum, businessRange.base);

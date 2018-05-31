@@ -171,14 +171,13 @@ var getHandlersController = function(element, eventName) {
 
             var firstHandlerForTheType = eventData.handleObjects.length === 1;
             var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
-            var nativeHandler = getNativeHandler(eventName);
 
             if(shouldAddNativeListener) {
-                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, nativeHandler ]);
+                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
             }
 
             if(shouldAddNativeListener) {
-                eventData.nativeHandler = nativeHandler;
+                eventData.nativeHandler = getNativeHandler(eventName);
                 eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
             }
 
