@@ -1464,21 +1464,6 @@ testComponentDefaults(NumberBox,
 
 testComponentDefaults(FileUploader,
     { },
-    { uploadMode: "useForm", useNativeInputClick: true },
-    function() {
-        this._origMSIE = browser.msie;
-        this._origMSIEVersion = browser.version;
-        browser.msie = true;
-        browser.version = 10;
-    },
-    function() {
-        browser.msie = this._origMSIE;
-        browser.version = this._origMSIEVersion;
-    }
-);
-
-testComponentDefaults(FileUploader,
-    { },
     { _uploadButtonType: "default" },
     function() {
         this.originalCurrentTheme = themes.current();

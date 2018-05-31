@@ -342,15 +342,6 @@ var FileUploader = Editor.inherit({
             },
             {
                 device: function() {
-                    return browser.msie && browser.version <= 10;
-                },
-                options: {
-                    uploadMode: "useForm",
-                    useNativeInputClick: true
-                }
-            },
-            {
-                device: function() {
                     return devices.real().platform !== "generic";
                 },
                 options: {

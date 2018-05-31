@@ -35,9 +35,7 @@ require("ui/data_grid/ui.data_grid");
 require("ui/lookup");
 var TextArea = require("ui/text_area");
 
-var pointerMock = require("../../helpers/pointerMock.js"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    dragEvents = require("events/drag"),
+var executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     dateLocalization = require("localization/date"),
     browser = require("core/utils/browser"),
     devices = require("core/devices"),
@@ -1586,86 +1584,3 @@ QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
     assert.ok($cell.find("textarea").length, "has lookup field");
     assert.ok($cell.hasClass("dx-focused"), "cell is focused");
 });
-
-if(devices.real().deviceType === "desktop" && browser.msie && parseInt(browser.version) <= 10) {
-    QUnit.module('Event Proxying in IE', {
-        beforeEach: function() {
-
-            $("#container").css("position", "relative");
-
-            $("<div id='content'>").css({
-                width: 100,
-                height: 100
-            }).appendTo("#container");
-
-            $("<div>").addClass("dx-pointer-events-target").css({
-                left: 0,
-                top: 0,
-                width: 100,
-                height: 100,
-                position: "absolute"
-            }).appendTo("#container");
-
-            this.$element = function() {
-                return $("#container");
-            };
-            setupDataGridModules(this, ['editorFactory']);
-
-            $("#qunit-fixture").addClass("qunit-fixture-static");
-            this.clock = sinon.useFakeTimers();
-        },
-        afterEach: function() {
-            $("#qunit-fixture").removeClass("qunit-fixture-static");
-            this.clock.restore();
-            this.dispose();
-        }
-    });
-
-    QUnit.test('Proxy click event', function(assert) {
-        // arrange
-
-        var clickCount = 0;
-
-        $("#content").on("dxclick", function() {
-            clickCount++;
-        });
-
-        var $target = $(".dx-pointer-events-target");
-
-        var pointer = pointerMock($target);
-
-        // act
-        pointer.start().down().up();
-
-        // assert
-        assert.equal(clickCount, 1, 'click count');
-    });
-
-    // T269605
-    QUnit.test('Proxy drag event', function(assert) {
-        // arrange
-        var clickCount = 0;
-        var dragStartCount = 0;
-        var dragCount = 0;
-        var dragEndCount = 0;
-
-        $("#content")
-            .on("dxclick", function() { clickCount++; })
-            .on(dragEvents.start, function() { dragStartCount++; })
-            .on(dragEvents.move, function() { dragCount++; })
-            .on(dragEvents.end, function() { dragEndCount++; });
-
-        var $target = $(".dx-pointer-events-target");
-
-        var pointer = pointerMock($target);
-
-        // act
-        pointer.start().down().move(10).up();
-
-        // assert
-        assert.equal(clickCount, 0, 'click count');
-        assert.equal(dragStartCount, 1, 'drag start count');
-        assert.equal(dragCount, 1, 'drag count');
-        assert.equal(dragEndCount, 1, 'drag end count');
-    });
-}
