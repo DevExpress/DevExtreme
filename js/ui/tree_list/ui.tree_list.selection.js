@@ -501,11 +501,12 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 */
                 getSelectedRowsData: function(mode) {
                     var that = this,
+                        dataController = that._dataController,
                         selectedKeys = this.getSelectedRowKeys(mode) || [],
                         selectedRowsData = [];
 
                     selectedKeys.forEach(function(key) {
-                        var node = that.getController("data").getNodeByKey(key);
+                        var node = dataController.getNodeByKey(key);
                         node && selectedRowsData.push(node.data);
                     });
 
