@@ -547,3 +547,18 @@ QUnit.test("responsive box should work correctly after item option changing", fu
     responsiveBox.option("items[0].visible", false);
     assert.ok($("#responsiveBox").find(".dx-item").eq(0).hasClass("dx-state-invisible"), "responsive box works correctly");
 });
+
+QUnit.test("responsive box should render layout correctly after item option changing", function(assert) {
+    var responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        rows: [{}],
+        cols: [{}],
+        _layoutStrategy: "flex",
+        items: [{ location: { col: 0, row: 0 }, html: "<div class='test'>" }]
+    }).dxResponsiveBox("instance");
+
+    responsiveBox.option("items[0].visible", false);
+    responsiveBox.option("items[0].visible", true);
+
+    assert.equal($("#responsiveBox").find(".dx-item").eq(0).get(0).style.display, "flex", "Layout is correct");
+    assert.equal($("#responsiveBox").find(".dx-item").eq(0).get(0).style.flex, "1 1 auto", "Layout is correct");
+});
