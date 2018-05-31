@@ -134,7 +134,32 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
     assert.equal(margin, "0px auto", "aligned by center");
 });
 
-QUnit.test("Buttons has 'text' style in Material theme by default", function(assert) {
+QUnit.test("_useFlatButtons change dx-button-flat class in runtime in Material", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+    var element = this.element.dxToolbar({
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    type: 'default',
+                    text: 'Back'
+                }
+            }]
+        }),
+        button = element.find(".dx-button").first();
+
+    assert.ok(button.hasClass("dx-button-flat"));
+
+    element.dxToolbar("instance").option("_useFlatButtons", false);
+    button = element.find(".dx-button").first();
+
+    assert.notOk(button.hasClass("dx-button-flat"));
+
+    themes.isMaterial = origIsMaterial;
+});
+
+QUnit.test("Button save elementAttr.class class on container in Material", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
     var element = this.element.dxToolbar({
@@ -144,31 +169,15 @@ QUnit.test("Buttons has 'text' style in Material theme by default", function(ass
                 options: {
                     type: 'default',
                     text: 'Back',
-                    elementAttr: { class: 'custom-class' }
-                }
-            }, {
-                location: 'before',
-                widget: 'dxButton',
-                options: {
-                    type: 'default',
-                    text: 'Back'
+                    elementAttr: { class: 'custom-class1 custom-class2' }
                 }
             }]
         }),
-        button1 = element.find(".dx-button").first(),
-        button2 = element.find(".dx-button").last();
+        button = element.find(".dx-button").first();
 
-    assert.ok(button1.hasClass("dx-button-flat"));
-    assert.ok(button1.hasClass("custom-class"));
-    assert.ok(button2.hasClass("dx-button-flat"));
-
-    element.dxToolbar("instance").option("_useFlatButtons", false);
-    button1 = element.find(".dx-button").first();
-    button2 = element.find(".dx-button").last();
-
-    assert.notOk(button1.hasClass("dx-button-flat"));
-    assert.ok(button1.hasClass("custom-class"));
-    assert.notOk(button2.hasClass("dx-button-flat"));
+    assert.ok(button.hasClass("dx-button-flat"));
+    assert.ok(button.hasClass("custom-class1"));
+    assert.ok(button.hasClass("custom-class2"));
 
     themes.isMaterial = origIsMaterial;
 });
