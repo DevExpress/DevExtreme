@@ -556,7 +556,6 @@ QUnit.test("responsive box should render layout correctly after item option chan
         items: [{ location: { col: 0, row: 0 }, html: "<div class='test'>" }]
     }).dxResponsiveBox("instance");
 
-
     responsiveBox.option("items[0].visible", false);
     responsiveBox.option("items[0].visible", true);
 
