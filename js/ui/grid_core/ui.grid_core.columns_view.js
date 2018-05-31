@@ -140,7 +140,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         if(column.colspan > 1) {
-            column.colspan > 1 && $cell.attr("colSpan", column.colspan);
+            $cell.attr("colSpan", column.colspan);
         } else if(!this.option("legacyRendering") && this.option("columnAutoWidth")) {
             if(column.width || column.minWidth) {
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
