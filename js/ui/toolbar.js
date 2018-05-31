@@ -149,7 +149,7 @@ var Toolbar = ToolbarBase.inherit({
             * @inheritdoc
             */
 
-            _useFlatButtons: false
+            useFlatButtons: false
         });
 
     },
@@ -193,7 +193,7 @@ var Toolbar = ToolbarBase.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    _useFlatButtons: true
+                    useFlatButtons: true
                 }
             }
         ]);
@@ -389,7 +389,7 @@ var Toolbar = ToolbarBase.inherit({
 
         switch(name) {
             case "submenuType":
-            case "_useFlatButtons":
+            case "useFlatButtons":
                 this._invalidate();
                 break;
             case "visible":

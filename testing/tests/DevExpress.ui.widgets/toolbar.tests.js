@@ -134,7 +134,7 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
     assert.equal(margin, "0px auto", "aligned by center");
 });
 
-QUnit.test("_useFlatButtons change dx-button-flat class in runtime in Material", function(assert) {
+QUnit.test("useFlatButtons change dx-button-flat class in runtime in Material", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
     var element = this.element.dxToolbar({
@@ -151,7 +151,7 @@ QUnit.test("_useFlatButtons change dx-button-flat class in runtime in Material",
 
     assert.ok(button.hasClass("dx-button-flat"));
 
-    element.dxToolbar("instance").option("_useFlatButtons", false);
+    element.dxToolbar("instance").option("useFlatButtons", false);
     button = element.find(".dx-button").first();
 
     assert.notOk(button.hasClass("dx-button-flat"));
