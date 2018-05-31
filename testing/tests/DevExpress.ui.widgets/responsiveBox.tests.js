@@ -4,6 +4,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     errors = require("ui/widget/ui.errors"),
     registerComponent = require("core/component_registrator"),
+    browser = require("core/utils/browser"),
     Widget = require("ui/widget/ui.widget"),
     ResponsiveBox = require("ui/responsive_box"),
     responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js");
@@ -687,6 +688,10 @@ QUnit.test("responsive box should work correctly after item option changing", fu
 });
 
 QUnit.test("responsive box should render layout correctly after item option changing", function(assert) {
+    if(browser.msie && browser.version < 11) {
+        assert.ok(true, "test does not actual for IE 9, 10");
+        return;
+    }
     var responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],
