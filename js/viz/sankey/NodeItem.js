@@ -32,7 +32,8 @@ function compileLabelAttrs(labelOptions, filter, node) {
 }
 
 function NodeItem(widget, params) {
-    var that = this;
+    var that = this,
+        widgetOffset = widget._renderer.getRootOffset();
 
     that.code = 0;
     that.widget = widget;
@@ -41,9 +42,11 @@ function NodeItem(widget, params) {
     that.options = params.options;
     that.rect = params.rect;
     that.title = params.rect._name;
-
+    that.coords = {
+        x: params.rect.x + params.rect.width / 2 + widgetOffset.left,
+        y: params.rect.y + params.rect.height / 2 + widgetOffset.top
+    };
     that.id = params.id;
-
     that.linksIn = params.linksIn;
     that.linksOut = params.linksOut;
 
@@ -113,10 +116,7 @@ NodeItem.prototype = {
             title: this.title,
             weightIn: this.linksIn.reduce(function(previousValue, currentValue, index, array) { return previousValue + currentValue.weight; }, 0),
             weightOut: this.linksOut.reduce(function(previousValue, currentValue, index, array) { return previousValue + currentValue.weight; }, 0)
-        }, {
-            x: coords[0],
-            y: coords[1]
-        });
+        }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
     },
 
     getLabelAttributes: function(labelSettings, filter, diagramRect) {

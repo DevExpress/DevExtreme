@@ -201,6 +201,12 @@ let layout = {
         paths.forEach(link => {
             let path = {
                 d: this._spline(link.from, link.to),
+                _boundingRect: {
+                    x: link.from.x + link.from.width,
+                    y: Math.min(link.from.y, link.to.y),
+                    width: link.to.x - (link.from.x + link.from.width),
+                    height: Math.max(link.from.x + link.from.height, link.to.y + link.to.height) - Math.min(link.from.y, link.to.y)
+                },
                 _weight: link.from.weight,
                 _from: link.from.node,
                 _to: link.to.node

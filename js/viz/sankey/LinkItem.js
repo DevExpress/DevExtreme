@@ -13,7 +13,8 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
 }
 
 function LinkItem(widget, params) {
-    var that = this;
+    var that = this,
+        widgetOffset = widget._renderer.getRootOffset();
 
     that.code = 0;
     that.widget = widget;
@@ -22,6 +23,11 @@ function LinkItem(widget, params) {
     that.connection = params.connection;
     that.d = params.d;
     that.options = params.options;
+    that.boundingRect = params.boundingRect,
+    that.coords = {
+        x: params.boundingRect.x + params.boundingRect.width / 2 + widgetOffset.left,
+        y: params.boundingRect.y + params.boundingRect.height / 2 + widgetOffset.top
+    };
 
     that.states = {
         normal: compileAttrs(that.color, that.options, that.options),
@@ -100,10 +106,7 @@ LinkItem.prototype = {
             title: null,
             weightIn: null,
             weightOut: null
-        }, {
-            x: coords[0],
-            y: coords[1]
-        });
+        }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
     }
 };
 
