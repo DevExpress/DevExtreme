@@ -256,8 +256,8 @@ var subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getDeltaTime(e, initialSize, itemData);
     },
 
-    getCompactAppointmentGroupMaxWidth: function() {
-        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount);
+    getCompactAppointmentGroupMaxWidth: function(isAllDay) {
+        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount, isAllDay);
     },
 
     getStartDate: function(appointmentData, skipNormalize) {

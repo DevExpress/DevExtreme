@@ -6,6 +6,7 @@ var noop = require("../../core/utils/common").noop,
     errors = require("../widget/ui.errors"),
     dateUtils = require("../../core/utils/date"),
     isNumeric = require("../../core/utils/type").isNumeric,
+    typeUtils = require("../../core/utils/type"),
     themes = require("../themes");
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -539,9 +540,13 @@ var BaseRenderingStrategy = Class.inherit({
         }
     },
 
-    getCompactAppointmentGroupMaxWidth: function() {
-        var widthInPercents = 75;
-        return widthInPercents * this.getDefaultCellWidth() / 100;
+    getCompactAppointmentGroupMaxWidth: function(intervalCount, isAllDay) {
+        if(isAllDay || !typeUtils.isDefined(isAllDay)) {
+            var widthInPercents = 75;
+            return widthInPercents * this.getDefaultCellWidth() / 100;
+        } else {
+            return 23;
+        }
     },
 
     getDefaultCellWidth: function() {
