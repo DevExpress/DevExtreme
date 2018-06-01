@@ -61,7 +61,6 @@ QUnit.test("default selected range", function(assert) {
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 2);
     assert.strictEqual(options.endValue, 50);
-    assert.strictEqual(options.majorTickInterval, 2);
 });
 
 QUnit.test("format when tickInterval is not defined", function(assert) {
