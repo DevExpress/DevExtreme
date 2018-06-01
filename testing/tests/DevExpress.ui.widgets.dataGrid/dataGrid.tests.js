@@ -8251,7 +8251,9 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
             enabled: true,
             template: function(container) {
                 $("<div>").dxDataGrid({
-                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+                    width: 500,
+                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+                    columns: [{ dataField: "id", width: 1000 }]
                 }).appendTo(container);
             }
         }
@@ -8270,6 +8272,8 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
     assert.ok($rows.eq(1).hasClass("dx-master-detail-row"), "second row is master detail");
     assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
+    // T641332
+    assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
 });
 
 // T607490
