@@ -833,6 +833,71 @@ QUnit.test("getSelectedRowKeys with 'excludeRecursive' parameter", function(asse
     assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [2, 4, 6], "all selected items");
 });
 
+QUnit.test("getSelectedRowsData with mode parameter calls getSelectedRowKeys", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+    ];
+    this.options.expandedRowKeys = [1];
+    this.options.selectedRowKeys = [3];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // act
+    this.selectionController.getSelectedRowKeys = sinon.spy();
+    this.getSelectedRowsData("all");
+
+    // assert
+    assert.equal(this.selectionController.getSelectedRowKeys.callCount, 1, "getSelectedRowKeys is called");
+    assert.equal(this.selectionController.getSelectedRowKeys.args[0], "all", "getSelectedRowKeys is called with a mode parameter");
+});
+
+
+QUnit.test("getSelectedRowsData with mode parameter when key has no data", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        $testElement = $('#treeList'),
+        data = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+        ];
+
+    this.options.dataSource = {
+        load: function() {
+            var d = $.Deferred();
+
+            setTimeout(function() {
+                d.resolve(data);
+            }, 100);
+
+            return d.promise();
+        }
+    };
+    this.options.expandedRowKeys = [1];
+    this.options.selectedRowKeys = [1];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // assert
+    assert.deepEqual(this.getSelectedRowsData("leavesOnly"), [], "empty data");
+
+    // act
+    clock.tick(100);
+
+    // assert
+    assert.equal(this.getSelectedRowsData("leavesOnly").length, 2, "2 nodes are returned");
+    assert.deepEqual(this.getSelectedRowsData("leavesOnly")[0], data[1], "first child");
+    assert.deepEqual(this.getSelectedRowsData("leavesOnly")[1], data[2], "second child");
+
+    clock.restore();
+});
+
+
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
    // arrange
     var clock = sinon.useFakeTimers(),
