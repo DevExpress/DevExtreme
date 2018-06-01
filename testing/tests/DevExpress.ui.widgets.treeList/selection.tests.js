@@ -853,12 +853,12 @@ QUnit.test("getSelectedRowsData with mode parameter calls getSelectedRowKeys", f
 
     // assert
     assert.equal(this.selectionController.getSelectedRowKeys.callCount, 1, "getSelectedRowKeys is called");
-    assert.equal(this.selectionController.getSelectedRowKeys.args[0], "all", "getSelectedRowKeys is called with a mode parametr");
+    assert.equal(this.selectionController.getSelectedRowKeys.args[0], "all", "getSelectedRowKeys is called with a mode parameter");
 });
 
 
 QUnit.test("getSelectedRowsData with mode parameter when key has no data", function(assert) {
-    // arrange
+    // arrange, act
     var clock = sinon.useFakeTimers(),
         $testElement = $('#treeList'),
         data = [
@@ -883,12 +883,16 @@ QUnit.test("getSelectedRowsData with mode parameter when key has no data", funct
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-    // act, assert
-    assert.deepEqual(this.getSelectedRowsData("all"), [], "empty data");
+    // assert
+    assert.deepEqual(this.getSelectedRowsData("leavesOnly"), [], "empty data");
 
+    // act
     clock.tick(100);
-    assert.equal(this.getSelectedRowsData("all").length, 3, "all 3 nodes are selected");
-    assert.deepEqual(this.getSelectedRowsData("all"), data, "correct data");
+
+    // assert
+    assert.equal(this.getSelectedRowsData("leavesOnly").length, 2, "2 nodes are returned");
+    assert.deepEqual(this.getSelectedRowsData("leavesOnly")[0], data[1], "first child");
+    assert.deepEqual(this.getSelectedRowsData("leavesOnly")[1], data[2], "second child");
 
     clock.restore();
 });
