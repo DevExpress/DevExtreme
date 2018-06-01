@@ -4,6 +4,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     dateUtils = require("../../core/utils/date");
 
 var MAX_APPOINTMENT_HEIGHT = 100,
+    DEFAULT_APPOINTMENT_HEIGHT = 60,
     DROP_DOWN_BUTTON_OFFSET = 2,
     BOTTOM_CELL_GAP = 20;
 
@@ -112,10 +113,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentDefaultHeight: function() {
-        var defaultHeight = this.callBase(),
-            cellHeight = this.instance.fire("getCellHeight");
-
-        return Math.max(defaultHeight, (cellHeight - this._getAppointmentDefaultOffset()) / 3);
+        return DEFAULT_APPOINTMENT_HEIGHT;
     },
 
     _correctRtlCoordinatesParts: function(coordinates, width) {
