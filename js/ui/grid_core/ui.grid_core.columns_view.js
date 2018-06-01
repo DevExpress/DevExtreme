@@ -660,7 +660,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if($tableElement && $tableElement.length && widths) {
             columnIndex = 0;
-            $cols = $tableElement.find("col");
+            $cols = $tableElement.children("colgroup").children("col");
             $cols.each(function() {
                 this.style.width = "";
             });
