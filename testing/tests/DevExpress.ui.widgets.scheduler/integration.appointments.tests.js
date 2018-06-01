@@ -4855,6 +4855,30 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
     assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, "Task has a right width");
 });
 
+QUnit.test("DropDown appointment button should have correct width on timeline view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["timelineDay"],
+        width: 850,
+        maxAppointmentsPerCell: 2,
+        currentView: "timelineDay"
+    });
+
+    this.instance.option("dataSource", [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
+    ]);
+
+    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 4, 1.5, "DropDown button has correct width");
+});
+
 QUnit.test("Appointment should have right width in workspace with timezone", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
     try {

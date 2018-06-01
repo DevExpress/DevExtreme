@@ -4,6 +4,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     dateUtils = require("../../core/utils/date");
 
 var MAX_APPOINTMENT_HEIGHT = 100,
+    DROP_DOWN_BUTTON_OFFSET = 2,
     BOTTOM_CELL_GAP = 20;
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -140,6 +141,10 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         });
 
         return result;
+    },
+
+    getCompactAppointmentGroupMaxWidth: function() {
+        return this.getDefaultCellWidth() - DROP_DOWN_BUTTON_OFFSET * 2;
     },
 
     getDeltaTime: function(args, initialSize) {
