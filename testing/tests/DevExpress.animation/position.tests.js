@@ -10,14 +10,17 @@ var $ = require("jquery"),
 
 var testPosition = function(name, fixtureName, params, expectedLeft, expectedTop, debug) {
     QUnit.test(name, function(assert) {
+        if(!expectedLeft && !expectedTop) {
+            assert.expect(0);
+        }
         fixtures[fixtureName].create();
         try {
             if(debug);
             setupPosition.apply(this, params);
             var what = $(params[0]),
                 pos = what.position();
-            assert.equal(pos.left, expectedLeft);
-            assert.equal(pos.top, expectedTop);
+            expectedLeft && assert.equal(pos.left, expectedLeft);
+            expectedTop && assert.equal(pos.top, expectedTop);
 
         } finally {
             fixtures[fixtureName].drop();
@@ -63,6 +66,12 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
             fixtures.simple.drop();
         }
     });
+
+    testPosition(
+        "non-exist target",
+        "simple",
+        ["#what", { of: "#non-exist" }]
+    );
 
     testPosition(
         "defaults",
