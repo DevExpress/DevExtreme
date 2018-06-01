@@ -194,7 +194,7 @@ var dxSankey = require("../core/base_widget").inherit({
                     nodePadding: nodeOptions.padding,
                     nodeWidth: nodeOptions.width,
                     nodeAlign: that._getOption('align', true)
-                }, that._getOption('onIncidentOccurred', true) || that._incidentOccurred
+                }, that._incidentOccurred
             );
         that._layoutMap = layout;
 
