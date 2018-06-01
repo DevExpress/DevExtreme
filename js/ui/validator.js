@@ -9,7 +9,8 @@ var dataUtils = require("../core/element_data"),
     ValidationMixin = require("./validation/validation_mixin"),
     ValidationEngine = require("./validation_engine"),
     DefaultAdapter = require("./validation/default_adapter"),
-    registerComponent = require("../core/component_registrator");
+    registerComponent = require("../core/component_registrator"),
+    each = require("../core/utils/iterator").each;
 
 var VALIDATOR_CLASS = "dx-validator";
 
@@ -217,9 +218,10 @@ var Validator = DOMComponent.inherit({
         }
     },
 
-    _dispose: function() {
-        this.callBase();
-        delete this.isBeingReset;
+    _resetValidationState: function() {
+        each(this.option("validationRules"), function(_, rule) {
+            delete rule.isValid;
+        });
     },
 
     /**
@@ -246,7 +248,7 @@ var Validator = DOMComponent.inherit({
             currentError.validator = this;
             result = { isValid: false, brokenRule: currentError };
         } else {
-            result = ValidationEngine.validate(value, rules, name, that.isBeingReset);
+            result = ValidationEngine.validate(value, rules, name);
         }
 
         this._applyValidationResult(result, adapter);
@@ -268,10 +270,9 @@ var Validator = DOMComponent.inherit({
                 brokenRule: null
             };
 
-        this.isBeingReset = true;
         adapter.reset();
+        this._resetValidationState();
         this._applyValidationResult(result, adapter);
-        this.isBeingReset = false;
     },
 
     _applyValidationResult: function(result, adapter) {
