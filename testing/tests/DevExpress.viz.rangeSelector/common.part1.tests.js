@@ -41,20 +41,6 @@ QUnit.test("one category", function(assert) {
     assert.strictEqual(options.endValue, "q1", "end value");
 });
 
-QUnit.test("deprecated options", function(assert) {
-    this.createWidget({
-        scale: {
-            tickInterval: "tick-interval",
-            minorTick: { visible: true },
-            showMinorTicks: "show-minor-ticks"
-        }
-    });
-
-    var options = this.axis.updateOptions.lastCall.args[0];
-    assert.deepEqual(options.tickInterval, "tick-interval", "tickInterval");
-    assert.strictEqual(options.minorTick.visible, "show-minor-ticks", "minorTick.visible");
-});
-
 QUnit.test("Pass containerBackgroundColor to scale", function(assert) {
     this.createWidget({
         containerBackgroundColor: "red"
@@ -68,8 +54,7 @@ QUnit.test("default selected range", function(assert) {
     this.createWidget({
         scale: {
             startValue: 2,
-            endValue: 50,
-            majorTickInterval: 2
+            endValue: 50
         }
     });
 
@@ -79,12 +64,12 @@ QUnit.test("default selected range", function(assert) {
     assert.strictEqual(options.majorTickInterval, 2);
 });
 
-QUnit.test("format when majorTickInterval is not defined", function(assert) {
+QUnit.test("format when tickInterval is not defined", function(assert) {
     this.createWidget({
         scale: {
             startValue: new Date(2010, 2, 23),
             endValue: new Date(2010, 5, 10),
-            majorTickInterval: null,
+            tickInterval: null,
             marker: {
                 visible: true
             }
@@ -105,7 +90,7 @@ QUnit.test("no format value with empty data", function(assert) {
                 }
             },
             minorTickInterval: "month",
-            majorTickInterval: "month",
+            tickInterval: "month",
         },
         sliderMarker: {
             format: {
@@ -125,7 +110,7 @@ QUnit.test("rangeSelector info callback on small tick interval", function(assert
         scale: {
             startValue: 0,
             endValue: 10000,
-            majorTickInterval: 1
+            tickInterval: 1
         }
     });
 
@@ -137,7 +122,7 @@ QUnit.test("initialize with numeric inverted scale", function(assert) {
         scale: {
             startValue: 50,
             endValue: 2,
-            majorTickInterval: 2
+            tickInterval: 2
         }
     });
 
@@ -210,24 +195,6 @@ QUnit.test("correct sliders place holder size by values", function(assert) {
     });
 
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
-// T153827
-QUnit.test("correct sliders place holder size by values (with set placeholderSize)", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderSize: {
-                width: 10
-            }
-        },
-        scale: {
-            startValue: 0,
-            endValue: 500000,
-            minorTickInterval: 2000
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 290, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("Tracker creation", function(assert) {

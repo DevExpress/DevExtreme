@@ -942,21 +942,6 @@ QUnit.test("Categories", function(assert) {
     assert.deepEqual(this.notifications, [["c", "d"]], "notification");
 });
 
-QUnit.test("Notifications on moving, deprecated callSelectedRangeChanged option", function(assert) {
-    this.update({
-        behavior: { callSelectedRangeChanged: "OnMoving", snapToTicks: true },
-        fullTicks: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
-    });
-    this.setRange(11, 15);
-
-    var handler = this.controller.beginSelectedAreaMoving(1200);
-    handler(1340);
-    handler(1560);
-    handler.complete();
-
-    assert.deepEqual(this.notifications, [[12, 16], [14, 18]], "notifications");
-});
-
 QUnit.test("Notifications on moving, callValueChanged", function(assert) {
     this.update({
         behavior: { callValueChanged: "OnMoving", snapToTicks: true },
@@ -1059,23 +1044,6 @@ QUnit.test("Categories and snapping to axis ticks", function(assert) {
     handler.complete();
 
     this.check(assert, ["P", "F"], [1400, 3000]);
-});
-
-QUnit.test("Notifications on moving, deprecated callSelectedRangeChanged option", function(assert) {
-    this.update({
-        behavior: { callSelectedRangeChanged: "OnMoving", snapToTicks: true },
-        fullTicks: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
-    });
-    this.setRange(11, 15);
-
-    var handler = this.controller.beginSliderMoving(1, 1600);
-    handler(1700);
-    handler(2150);
-    handler.complete();
-
-    this.checkSliderMoves(assert, 1, [1600, 2050]);
-    this.check(assert, [11, 20], [1100, 2000]);
-    assert.deepEqual(this.notifications, [[11, 16], [11, 20]], "notification");
 });
 
 QUnit.test("Notifications on moving, callValueChanged option", function(assert) {
@@ -1245,21 +1213,6 @@ QUnit.test("Categories 2", function(assert) {
 
     this.checkSliderAnimated(assert, 0, 1400);
     this.check(assert, ["b", "d"], [1400, 2600]);
-});
-
-QUnit.test("Notifications on moving, deprecated callSelectedRangeChanged option", function(assert) {
-    this.update({
-        behavior: { callSelectedRangeChanged: "OnMoving", snapToTicks: true },
-        fullTicks: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
-    });
-    this.setRange(11, 13);
-
-    var handler = this.controller.placeSliderAndBeginMoving(1450, 2150);
-    handler(1550);
-    handler.complete();
-
-    this.check(assert, [14, 16], [1400, 1600]);
-    assert.deepEqual(this.notifications, [[14, 22], [14, 16]]);
 });
 
 QUnit.test("Notifications on moving, callValueChanged option", function(assert) {
