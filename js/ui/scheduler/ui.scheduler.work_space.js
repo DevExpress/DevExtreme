@@ -2368,6 +2368,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
+    _supportCompactDropDownAppointments: function() {
+        return true;
+    },
+
     _formatWeekday: function(date) {
         return formatWeekday(date);
     },

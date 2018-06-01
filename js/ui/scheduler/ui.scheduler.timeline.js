@@ -483,6 +483,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return isUpdateNeeded;
     },
 
+    _supportCompactDropDownAppointments: function() {
+        return false;
+    },
+
     scrollToTime: function(hours, minutes, date) {
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable(),

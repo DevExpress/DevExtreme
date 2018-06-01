@@ -400,6 +400,10 @@ var subscribes = {
         this._dropDownAppointments.render(options, this);
     },
 
+    supportCompactDropDownAppointments: function() {
+        return this._workSpace._supportCompactDropDownAppointments();
+    },
+
     getGroupCount: function(options) {
         var groupCount = this._workSpace._getGroupCount();
         options.callback(groupCount);
