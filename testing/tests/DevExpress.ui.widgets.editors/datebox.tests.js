@@ -397,6 +397,45 @@ QUnit.test("T437211: Custom dxDateBox value formatter is not called if the same 
     assert.equal(instance.option("text"), expectedDisplayValue, "input value was formatted");
 });
 
+QUnit.test("onPopupInitialized handler calls with the calendar picker type", function(assert) {
+    assert.expect(1);
+
+    $("#dateBoxWithPicker").dxDateBox({
+        pickerType: "calendar",
+        onPopupInitialized: function(e) {
+            assert.equal(e.popup.NAME, "dxPopup", "initialized event is fired for popup");
+        },
+        opened: true
+    });
+
+});
+
+QUnit.test("onPopupInitialized handler calls with the rollers picker type", function(assert) {
+    assert.expect(1);
+
+    $("#dateBoxWithPicker").dxDateBox({
+        pickerType: "rollers",
+        onPopupInitialized: function(e) {
+            assert.equal(e.popup.NAME, "dxPopup", "initialized event is fired for popup");
+        },
+        opened: true
+    });
+
+});
+
+QUnit.test("onPopupInitialized handler calls with the list picker type", function(assert) {
+    assert.expect(1);
+
+    $("#dateBoxWithPicker").dxDateBox({
+        pickerType: "list",
+        onPopupInitialized: function(e) {
+            assert.equal(e.popup.NAME, "dxPopup", "initialized event is fired for popup");
+        },
+        opened: true
+    });
+
+});
+
 
 QUnit.module("hidden input");
 
