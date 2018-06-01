@@ -27,10 +27,16 @@ require("ui/validator");
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="parent-div"></div>\
+        '<style>\
+            #containerWithWidth {\
+                width: 100px;\
+            }\
+        </style>\
+        <div id="parent-div"></div>\
         <div id="dateBox"></div>\
         <div id="dateBoxWithPicker"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="containerWithWidth"><div id="innerDateBox"></div></div';
 
     $("#qunit-fixture").html(markup);
 });
@@ -1301,6 +1307,14 @@ QUnit.test("component should have special css class when the user set the width 
     assert.ok($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has class");
 });
 
+QUnit.test("widget shouldn't be wider than a container", function(assert) {
+    var $element = $("#innerDateBox").dxDateBox(),
+        instance = $element.dxDateBox("instance");
+
+    assert.strictEqual(instance.option("width"), undefined);
+    assert.ok($element.outerWidth() <= 100, "outer width of the element must be less or equal to a container width");
+});
+
 QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", function(assert) {
     var $parent = $("#parent-div");
     $parent.css("width", 200);
@@ -1377,11 +1391,11 @@ QUnit.test("default", function(assert) {
 });
 
 QUnit.test("constructor", function(assert) {
-    var $element = $("#dateBox").dxDateBox({ pickerType: "calendar", width: 1234 }),
+    var $element = $("#dateBox").dxDateBox({ pickerType: "calendar", width: 258 }),
         instance = $element.dxDateBox("instance");
 
-    assert.strictEqual(instance.option("width"), 1234);
-    assert.strictEqual($element.outerWidth(), 1234, "outer width of the element must be equal to custom width");
+    assert.strictEqual(instance.option("width"), 258);
+    assert.strictEqual($element.outerWidth(), 258, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("root with custom width", function(assert) {
@@ -1395,7 +1409,7 @@ QUnit.test("root with custom width", function(assert) {
 QUnit.test("change width", function(assert) {
     var $element = $("#dateBox").dxDateBox({ pickerType: "calendar" }),
         instance = $element.dxDateBox("instance"),
-        customWidth = 1234;
+        customWidth = 258;
 
     instance.option("width", customWidth);
 
