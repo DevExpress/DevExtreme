@@ -569,6 +569,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 this._renderFormatter();
                 this._renderValue();
                 break;
+            case "min":
+            case "max":
+                this._adjustParsedValue();
+                this.callBase(args);
+                break;
             default:
                 this.callBase(args);
         }
