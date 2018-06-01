@@ -98,16 +98,10 @@ QUnit.test("Trigger error on invalid source data", function(assert) {
             onIncidentOccurred: spy
         });
         assert.ok(spy.called);
-        assert.equal(spy.getCall(0).args[0], "E2402");
+        assert.equal(spy.getCall(0).args[0].target.id, "E2402");
+        assert.equal(spy.getCall(0).args[0].target.type, "error");
+        assert.equal(spy.getCall(0).args[0].target.widget, "dxSankey");
     });
-
-    // TODO: understand wht Funnel provides additional params in call as follows
-    /*
-    assert.equal(spy.getCall(0).args[0].target.id, "E2402");
-    assert.equal(spy.getCall(0).args[0].target.text, "Provided data can not be displayed");
-    assert.equal(spy.getCall(0).args[0].target.type, "error");
-    assert.equal(spy.getCall(0).args[0].target.widget, "dxSankey");
-    */
 });
 
 QUnit.test("Trigger \"cycle detected\" error on invalid source data", function(assert) {
@@ -125,7 +119,9 @@ QUnit.test("Trigger \"cycle detected\" error on invalid source data", function(a
             onIncidentOccurred: spy
         });
         assert.ok(spy.called);
-        assert.equal(spy.getCall(0).args[0], "E2401");
+        assert.equal(spy.getCall(0).args[0].target.id, "E2401");
+        assert.equal(spy.getCall(0).args[0].target.type, "error");
+        assert.equal(spy.getCall(0).args[0].target.widget, "dxSankey");
     });
 });
 

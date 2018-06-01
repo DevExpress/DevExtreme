@@ -9,7 +9,7 @@ require("viz/themes");
 
 dxSankey.addPlugin(require("viz/core/tooltip").plugin);
 
-let layoutBuilder = require("viz/sankey/layout"),
+var layoutBuilder = require("viz/sankey/layout"),
     spiesLayoutBuilder = {
         computeLayout: sinon.spy(layoutBuilder, 'computeLayout')
     };
