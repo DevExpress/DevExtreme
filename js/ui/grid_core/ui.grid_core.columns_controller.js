@@ -1095,28 +1095,6 @@ module.exports = {
                 }
             };
 
-            var getColumnByPath = function(that, path, columns) {
-                var column,
-                    columnIndexes = [];
-
-                path.replace(regExp, function(_, columnIndex) {
-                    columnIndexes.push(parseInt(columnIndex));
-                    return "";
-                });
-
-                if(columnIndexes.length) {
-                    if(columns) {
-                        column = columnIndexes.reduce(function(prevColumn, index) {
-                            return prevColumn ? prevColumn.columns[index] : columns[index];
-                        }, 0);
-                    } else {
-                        column = getColumnByIndexes(that, columnIndexes);
-                    }
-                }
-
-                return column;
-            };
-
             var fireOptionChanged = function(that, options) {
                 var value = options.value,
                     optionName = options.optionName,
@@ -1171,7 +1149,7 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = getColumnByPath(that, fullOptionName, columns);
+                            column = that.getColumnByPath(fullOptionName, columns);
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1387,6 +1365,29 @@ module.exports = {
                     return ["columnsChanged"];
                 },
 
+                getColumnByPath: function(path, columns) {
+                    var that = this,
+                        column,
+                        columnIndexes = [];
+
+                    path.replace(regExp, function(_, columnIndex) {
+                        columnIndexes.push(parseInt(columnIndex));
+                        return "";
+                    });
+
+                    if(columnIndexes.length) {
+                        if(columns) {
+                            column = columnIndexes.reduce(function(prevColumn, index) {
+                                return prevColumn ? prevColumn.columns[index] : columns[index];
+                            }, 0);
+                        } else {
+                            column = getColumnByIndexes(that, columnIndexes);
+                        }
+                    }
+
+                    return column;
+                },
+
                 optionChanged: function(args) {
                     switch(args.name) {
                         case "adaptColumnWidthByRatio":
@@ -1432,7 +1433,7 @@ module.exports = {
 
                 _columnOptionChanged: function(args) {
                     var columnOptionValue = {},
-                        column = getColumnByPath(this, args.fullName),
+                        column = this.getColumnByPath(args.fullName),
                         columnOptionName = args.fullName.replace(regExp, "");
 
                     if(column) {
@@ -1597,6 +1598,9 @@ module.exports = {
 
                     return this._fixedColumns[rowIndex] || [];
 
+                },
+                getFilteringColumns: function(rowIndex) {
+                    return this.getColumns().filter(item => item.dataField && item.allowFiltering);
                 },
                 _getFixedColumnsCore: function() {
                     var that = this,
