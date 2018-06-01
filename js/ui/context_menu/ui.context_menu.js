@@ -833,8 +833,6 @@ var ContextMenu = MenuBase.inherit((function() {
                 if(this._shownSubmenus && this._shownSubmenus.length > 0) {
                     if(this._shownSubmenus[0].is($submenu)) {
                         this._hideSubmenu($submenu); // close to parent?
-                    } else {
-                        // this._hideAllShownSubmenus();
                     }
                 }
                 this._showSubmenu($itemElement);
