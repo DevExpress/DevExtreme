@@ -547,7 +547,7 @@ var ValidationEngine = {
         }
     },
 
-    validate: function(value, rules, name) {
+    validate: function(value, rules, name, isBeingReset) {
         var result = {
                 name: name,
                 value: value,
@@ -572,21 +572,23 @@ var ValidationEngine = {
                 }
 
                 rule.value = value;
-                ruleValidationResult = ruleValidator.validate(value, rule);
-                rule.isValid = ruleValidationResult;
 
-                if(!ruleValidationResult) {
-                    result.isValid = false;
+                if(!isBeingReset) {
+                    ruleValidationResult = ruleValidator.validate(value, rule);
+                    rule.isValid = ruleValidationResult;
 
-                    that._setDefaultMessage(rule, ruleValidator, name);
+                    if(!ruleValidationResult) {
+                        result.isValid = false;
 
-                    result.brokenRule = rule;
+                        that._setDefaultMessage(rule, ruleValidator, name);
+
+                        result.brokenRule = rule;
+                    }
+
+                    if(!rule.isValid) {
+                        return false;
+                    }
                 }
-
-                if(!rule.isValid) {
-                    return false;
-                }
-
             } else {
                 throw errors.Error("E0100");
             }

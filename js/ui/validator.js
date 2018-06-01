@@ -217,6 +217,11 @@ var Validator = DOMComponent.inherit({
         }
     },
 
+    _dispose: function() {
+        this.callBase();
+        delete this.isBeingReset;
+    },
+
     /**
     * @name dxValidatorMethods_validate
     * @publicName validate()
@@ -241,7 +246,7 @@ var Validator = DOMComponent.inherit({
             currentError.validator = this;
             result = { isValid: false, brokenRule: currentError };
         } else {
-            result = ValidationEngine.validate(value, rules, name);
+            result = ValidationEngine.validate(value, rules, name, that.isBeingReset);
         }
 
         this._applyValidationResult(result, adapter);
@@ -262,8 +267,11 @@ var Validator = DOMComponent.inherit({
                 isValid: true,
                 brokenRule: null
             };
+
+        this.isBeingReset = true;
         adapter.reset();
         this._applyValidationResult(result, adapter);
+        this.isBeingReset = false;
     },
 
     _applyValidationResult: function(result, adapter) {
