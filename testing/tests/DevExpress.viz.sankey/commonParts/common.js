@@ -2,11 +2,10 @@
 
 var $ = require("jquery"),
     vizMocks = require("../../../helpers/vizMocks.js"),
-    rendererModule = require("viz/core/renderers/renderer");
+    rendererModule = require("viz/core/renderers/renderer"),
+    dxSankey = require("viz/sankey/sankey");
 
-var dxSankey = require("viz/sankey/sankey");
 require("viz/themes");
-
 dxSankey.addPlugin(require("viz/core/tooltip").plugin);
 
 var layoutBuilder = require("viz/sankey/layout"),

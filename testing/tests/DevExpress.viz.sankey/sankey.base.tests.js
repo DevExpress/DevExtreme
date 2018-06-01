@@ -41,7 +41,7 @@ QUnit.test("Default size", function(assert) {
 
 QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
     var sankey = createSankey({
-        dataSource: common.testData.valid
+        dataSource: [['A', 'Z', 1]]
     });
 
     // TODO: fix this test
