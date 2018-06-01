@@ -205,6 +205,9 @@ var SchedulerAppointmentForm = {
                         eventsEngine.on($editorLabel, clickEvent.name, function() {
                             args.component.toggle();
                         });
+                    },
+                    onValueChanged: function(args) {
+                        schedulerInst.fire("recurrenceEditorVisibilityChanged", !!(args.value));
                     }
                 },
                 cssClass: RECURRENCE_EDITOR_ITEM_CLASS,
