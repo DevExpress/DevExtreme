@@ -1279,6 +1279,33 @@ QUnit.test("context menu should hide after click on item without children", func
     assert.notOk(instance.option("visible"), "menu was hidden");
 });
 
+QUnit.test("submenu shouldn't be hidden after click on item with children (T640708)", function(assert) {
+    var contextMenuItems = [
+        {
+            text: 'item',
+            items: [
+                { text: 'item1',
+                    items: [
+                    { text: 'item1.1' },
+                    { text: 'item1.2' }] },
+                    { text: 'item1.3' }]
+        }
+    ];
+
+    var instance = new ContextMenu(this.$element, {
+            dataSource: contextMenuItems,
+            visible: true
+        }),
+        $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
+
+    $($items.eq(0)).trigger("dxclick");
+    $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
+    $($items.eq(1)).trigger("dxclick");
+    $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
+
+    assert.equal(getVisibleSubmenuCount(instance), 3, "All submenus is visible");
+});
+
 QUnit.test("context menu should not hide after click when item.closeMenuOnClick is false", function(assert) {
     var instance = new ContextMenu(this.$element, {
             items: [{ text: "a", closeMenuOnClick: false }],
