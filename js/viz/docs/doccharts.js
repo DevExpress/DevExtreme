@@ -2084,14 +2084,7 @@ var dxPieChart = {
         * @type any
         * @default undefined
         */
-        tag: undefined,
-        /**
-        * @name dxPieChartOptions.series.type
-        * @type Enums.PieChartType
-        * @default 'pie'
-        * @deprecated dxPieChartOptions.type
-        */
-        type: 'pie'
+        tag: undefined
     }],
     /**
     * @name dxPieChartOptions.type
@@ -2099,29 +2092,6 @@ var dxPieChart = {
     * @default 'pie'
     */
     type: 'pie',
-    /**
-    * @name dxPieChartOptions.commonSeriesSettings
-    * @type object
-    * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-    * @hideDefaults true
-    * @inheritAll
-    */
-    commonSeriesSettings: {
-        /**
-        * @name dxPieChartOptions.commonSeriesSettings.type
-        * @type Enums.PieChartType
-        * @default 'pie'
-        * @deprecated dxPieChartOptions.type
-        */
-        type: 'pie'
-    },
-    /**
-    * @name dxPieChartMethods.getSeries
-    * @publicName getSeries()
-    * @return pieChartSeriesObject
-    * @deprecated BaseChartMethods.getAllSeries
-    */
-    getSeries: function() { },
     /**
     * @name dxPieChartOptions.diameter
     * @type number

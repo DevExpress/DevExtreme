@@ -444,9 +444,8 @@ var environment = {
         // act
         var chart = createPieChart.call(this, {
             dataSource: this.dataSource,
-            series: {
-                type: "pie"
-            }
+            type: "pie",
+            series: {}
         });
         // assert
         assert.ok(chart.series);
@@ -470,9 +469,8 @@ var environment = {
         // act
         var chart = this.createPieChart({
             dataSource: dataSourceTemplate,
-            series: {
-                type: "pie"
-            }
+            type: "pie",
+            series: {}
         });
 
         // assert
@@ -499,9 +497,8 @@ var environment = {
         // act
         var chart = this.createPieChart({
             dataSource: dataSourceTemplate,
-            series: {
-                type: "pie"
-            }
+            type: "pie",
+            series: {}
         });
         series = chart.series[0];
         series.pointsWereArranged = false;
@@ -518,11 +515,9 @@ var environment = {
         assert.ok(renderMethod.calledOnce);
         assert.ok(chart._renderer.stopAllAnimations.called);
         assert.deepEqual(renderMethod.lastCall.args[0], { force: true }, "chart re-rendered");
-
-
     });
 
-    QUnit.test("dxChart with single series, series type is unknown in option series", function(assert) {
+    QUnit.test("dxChart with single series, series type is unknown", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
         chartMocks.seriesMockData.series.push(stubSeries);
@@ -531,9 +526,8 @@ var environment = {
         // act
         var chart = this.createPieChart({
                 dataSource: dataSourceTemplate,
-                series: {
-                    type: "unknown"
-                }
+                type: "unknown",
+                series: {}
             }), idError;
         // assert
         assert.ok(chart.series);
@@ -552,7 +546,6 @@ var environment = {
 
         this.themeManager.getOptions.withArgs("series").resetBehavior();
         this.themeManager.getOptions.withArgs("series").returns({
-            type: "pie",
             seriesTheme: true
         });
         this.themeManager.getOptions.withArgs("pieSegment").resetBehavior();
@@ -564,9 +557,8 @@ var environment = {
         // act
         var chart = this.createPieChart({
             dataSource: this.dataSource,
-            series: {
-                type: "pie"
-            }
+            series: {},
+            type: "pie"
         });
         // assert
         assert.ok(chart.series);
@@ -587,9 +579,8 @@ var environment = {
             dataSource: this.dataSource,
             customizePoint: "custompoint",
             customizeLabel: "customlabel",
-            series: {
-                type: "pie"
-            }
+            series: {},
+            type: "pie"
         });
         points = chart.series[0].getPoints();
         points[1].value = points[0].value + points[1].value;
@@ -985,9 +976,8 @@ var environment = {
         // act
         this.createPieChart({
             dataSource: this.dataSource,
-            series: {
-                type: "pie"
-            }
+            series: {},
+            type: "pie"
         });
 
         var legend = commons.getLegendStub();
@@ -1891,14 +1881,14 @@ var environment = {
         assert.ok(commons.getTrackerStub(true).stub("clearSelection").called, "Selection should be cleared through tracker");
     });
 
-    QUnit.test("dxChart - get series", function(assert) {
+    QUnit.test("dxChart - get all series", function(assert) {
         // arrange
         var chart = this.createPieChart({
             // fake data comes from creation
             series: { name: "Pie series" }
         });
         // act
-        var series = chart.getSeries();
+        var series = chart.getAllSeries()[0];
         // assert
         assert.ok(series, "Result is defined");
         assert.equal(series.name, "Pie series");
@@ -1911,8 +1901,9 @@ var environment = {
         createPieChartWithLabels: function(BBox) {
             this.createFakeSeriesWithLabels(BBox);
             return this.createPieChart({
+                type: "mockType",
                 resolveLabelOverlapping: "hide",
-                series: [{ type: "mockType" }]
+                series: [{}]
             });
         }
     }));
@@ -1942,7 +1933,8 @@ var environment = {
             this.createFakeSeriesWithLabels(BBox, position);
             this.pieChart = this.createPieChart({
                 resolveLabelOverlapping: "shift",
-                series: [{ type: "mockType" }],
+                type: "mockType",
+                series: [{}],
                 segmentsDirection: segmentsDirection
             });
             return this.pieChart;
@@ -2071,7 +2063,8 @@ var environment = {
             this.createFakeSeriesWithLabels(BBox2, position);
             this.pieChart = this.createPieChart({
                 resolveLabelOverlapping: "shift",
-                series: [{ type: "pie" }, { type: "pie" }]
+                type: "pie",
+                series: [{}, {}]
             });
             return this.pieChart;
         }
