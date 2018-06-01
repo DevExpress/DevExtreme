@@ -363,6 +363,30 @@ QUnit.test("value should be fitted into min and max range on change", function(a
     assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
 });
 
+QUnit.test("changing min limit should lead to value change in masked numberbox", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        value: 5,
+        min: 1
+    });
+
+    this.instance.option("min", 6);
+    assert.equal(this.instance.option("value"), 6, "value has been updated");
+    assert.equal(this.input.val(), "$ 6", "text has been updated");
+});
+
+QUnit.test("changing max limit should lead to value change in masked numberbox", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        value: 5,
+        max: 6
+    });
+
+    this.instance.option("max", 4);
+    assert.equal(this.instance.option("value"), 4, "value has been updated");
+    assert.equal(this.input.val(), "$ 4", "text has been updated");
+});
+
 QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
     this.instance.option({
         min: 0,

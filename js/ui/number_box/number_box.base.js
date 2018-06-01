@@ -589,9 +589,12 @@ var NumberBoxBase = TextEditor.inherit({
                 this._resumeValueChangeAction();
                 break;
             case "step":
+                this._renderProps();
+                break;
             case "min":
             case "max":
                 this._renderProps();
+                this.option("value", this._parseValue(this.option("value")));
                 break;
             case "showSpinButtons":
                 this._renderInputAddons();
