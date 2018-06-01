@@ -810,13 +810,6 @@ var dxChart = {
     */
     commonAxisSettings: {
         /**
-        * @name dxChartOptions.commonAxisSettings.setTicksAtUnitBeginning
-        * @type boolean
-        * @default true
-        * @deprecated
-        */
-        setTicksAtUnitBeginning: true,
-        /**
         * @name dxChartOptions.commonAxisSettings.discreteAxisDivisionMode
         * @type Enums.DiscreteAxisDivisionMode
         * @default 'betweenLabels'
@@ -2416,13 +2409,6 @@ var dxPolarChart = {
     * @type object
     */
     commonAxisSettings: {
-        /**
-        * @name dxPolarChartOptions.commonAxisSettings.setTicksAtUnitBeginning
-        * @type boolean
-        * @default true
-        * @deprecated
-        */
-        setTicksAtUnitBeginning: true,
         /**
         * @name dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode
         * @type Enums.DiscreteAxisDivisionMode

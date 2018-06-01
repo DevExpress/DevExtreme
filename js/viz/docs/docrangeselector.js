@@ -128,13 +128,6 @@ var dxRangeSelector = {
         */
         tickInterval: {},
         /**
-        * @name dxRangeSelectorOptions.scale.setTicksAtUnitBeginning
-        * @type boolean
-        * @default true
-        * @deprecated
-        */
-        setTicksAtUnitBeginning: true,
-        /**
         * @name dxRangeSelectorOptions.scale.placeholderHeight
         * @type number
         * @default undefined
