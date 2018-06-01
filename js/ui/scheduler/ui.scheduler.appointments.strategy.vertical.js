@@ -234,7 +234,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         if(overlappingMode === "auto" || isNumeric(overlappingMode)) {
             ratio = 1;
             maxWidth = maxWidth - appointmentDefaultOffset;
-            // topOffset = appointmentDefaultOffset;
             topOffset = 0;
         }
 
