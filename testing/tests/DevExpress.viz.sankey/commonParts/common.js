@@ -10,7 +10,8 @@ dxSankey.addPlugin(require("viz/core/tooltip").plugin);
 
 var layoutBuilder = require("viz/sankey/layout"),
     spiesLayoutBuilder = {
-        computeLayout: sinon.spy(layoutBuilder, 'computeLayout')
+        computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
+        _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
     };
 
 $("#qunit-fixture").append('<div id="test-container"></div>');

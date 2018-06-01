@@ -44,7 +44,6 @@ QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
         dataSource: [['A', 'Z', 1]]
     });
 
-    // TODO: fix this test
     sankey.getAllItems().links[0].showTooltip();
     sankey.hideTooltip();
 
@@ -362,14 +361,46 @@ QUnit.test("Some links configuration with big dataSource", function(assert) {
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[45]._weight, 3);
 });
 
+QUnit.test("Passing default align option", function(assert) {
+    createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: [
+            ['A', 'Z', 1]
+        ]
+    });
+    assert.equal(spiesLayoutBuilder._computeNodes.getCall(0).args[1].nodeAlign, 'center');
+});
+
+QUnit.test("Passing string align option", function(assert) {
+    createSankey({
+        layoutBuilder: layoutBuilder,
+        align: 'bottom',
+        dataSource: [
+            ['A', 'Z', 1]
+        ]
+    });
+    assert.equal(spiesLayoutBuilder._computeNodes.getCall(0).args[1].nodeAlign, 'bottom');
+});
+
+QUnit.test("Passing array align option", function(assert) {
+    createSankey({
+        layoutBuilder: layoutBuilder,
+        align: ['top', 'bottom'],
+        dataSource: [
+            ['A', 'Z', 1]
+        ]
+    });
+    assert.deepEqual(spiesLayoutBuilder._computeNodes.getCall(0).args[1].nodeAlign, ['top', 'bottom']);
+});
+
 // + TODO: test for options.sortData being applied
-// TODO: tests from local sankey files
+// + TODO: tests from local sankey files
 // + TODO: tests for number of cascades and number of nodes
 // + TODO: tests for number of links
 // + TODO: tests for computing the input weights, output weights
 // + test for links
 // TODO: test for color from options
-// TODO: test align by default, if <String>, if <Array> (passing params to layoutBuilder)
+// + TODO: test passing  align by default, if <String>, if <Array> (passing params to layoutBuilder)
 // TODO: a few test of coordinates of nodes
 
 // Drawing tests
