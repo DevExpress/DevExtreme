@@ -2,7 +2,7 @@
 
 var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
-    SchedulerRecurrenceEditor = require("ui/scheduler/ui.scheduler.recurrence_editor"),
+    RecurrenceEditor = require("ui/scheduler/ui.scheduler.recurrence_editor"),
     recurrenceUtils = require("ui/scheduler/utils.recurrence"),
     dateLocalization = require("localization/date");
 
@@ -31,14 +31,14 @@ QUnit.testStart(function() {
 QUnit.module("Recurrence editor - rendering", {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = new SchedulerRecurrenceEditor($("#recurrence-editor"), options);
+            this.instance = new RecurrenceEditor($("#recurrence-editor"), options);
         };
     }
 });
 
 QUnit.test("Recurrence editor should be initialized", function(assert) {
     this.createInstance();
-    assert.ok(this.instance instanceof SchedulerRecurrenceEditor, "dxSchedulerRecurrenceEditor was initialized");
+    assert.ok(this.instance instanceof RecurrenceEditor, "dxRecurrenceEditor was initialized");
 
     assert.ok(this.instance.$element().hasClass("dx-recurrence-editor"));
 });
@@ -146,7 +146,7 @@ QUnit.test("Recurrence editor container should be visible after appropriate valu
 QUnit.module("Recurrence editor - freq editor", {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = new SchedulerRecurrenceEditor($("#recurrence-editor"), options);
+            this.instance = new RecurrenceEditor($("#recurrence-editor"), options);
         };
     }
 });
@@ -233,7 +233,7 @@ QUnit.test("Recurrence editor should correctly process values to the freq radioG
 QUnit.module("Recurrence editor - interval editor", {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = new SchedulerRecurrenceEditor($("#recurrence-editor"), options);
+            this.instance = new RecurrenceEditor($("#recurrence-editor"), options);
         };
     }
 });
@@ -289,7 +289,7 @@ QUnit.test("Recurrence repeat-interval editor should have correct aria-described
 QUnit.module("Recurrence editor - repeat-end editor", {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = new SchedulerRecurrenceEditor($("#recurrence-editor"), options);
+            this.instance = new RecurrenceEditor($("#recurrence-editor"), options);
         };
     }
 });
@@ -510,7 +510,7 @@ QUnit.test("Recurrence repeat-end editor should have correct aria-describedby at
 QUnit.module("Recurrence editor - repeat-on editor", {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = new SchedulerRecurrenceEditor($("#recurrence-editor"), options);
+            this.instance = new RecurrenceEditor($("#recurrence-editor"), options);
         };
     }
 });
@@ -808,7 +808,7 @@ QUnit.test("Parts of recurrence editor should have right readonly option", funct
 QUnit.module("Recurrence editor - firstDayOfWeek option", {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = new SchedulerRecurrenceEditor($("#recurrence-editor"), options);
+            this.instance = new RecurrenceEditor($("#recurrence-editor"), options);
         };
     }
 });
