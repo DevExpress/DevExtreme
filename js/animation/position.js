@@ -317,7 +317,7 @@ var calculatePosition = function(what, options) {
 
     var my = normalizeAlign(options.my),
         at = normalizeAlign(options.at),
-        of = options.of || window,
+        of = ($(options.of).length && options.of) || window,
         offset = normalizeOffset(options.offset),
         collision = normalizeCollision(options.collision),
         boundary = options.boundary,

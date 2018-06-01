@@ -122,6 +122,15 @@ QUnit.test("keep user defined position.of", function(assert) {
     assert.equal(instance.option("position.of"), "body");
 });
 
+QUnit.test("widget should be rendered with non-existing target in position", function(assert) {
+    assert.expect(0);
+
+    $("#loadPanel").dxLoadPanel({
+        visible: true,
+        position: { of: "#non-exist" }
+    }).dxLoadPanel("instance");
+});
+
 
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
