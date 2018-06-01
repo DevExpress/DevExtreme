@@ -3692,8 +3692,8 @@ QUnit.test("Width of column in master detail are not changed when it is changed 
     assert.equal($colgroup.length, 2);
     assert.equal($cols1[0].style.width, "100px", "col1 of parent");
     assert.equal($cols1[1].style.width, "100px", "col2 of parent");
-    assert.equal($cols2[0].style.width, "auto", "col1 of master");
-    assert.equal($cols2[1].style.width, "auto", "col2 of master");
+    assert.equal($cols2[0].style.width, "", "col1 of master");
+    assert.equal($cols2[1].style.width, "", "col2 of master");
 
     detailDataGrid.dispose();
 });
