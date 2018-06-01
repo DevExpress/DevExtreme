@@ -10,7 +10,7 @@ let routines = {
         if(callback) {
             callback_function = callback;
         }
-        for(let i = 0; i < arr.length; i++) { if(arr[i] > m) m = callback_function(arr[i]); }
+        for(let i = 0; i < arr.length; i++) { if(callback_function(arr[i]) > m) m = callback_function(arr[i]); }
         return m;
     }
 };
@@ -100,7 +100,7 @@ let struct = {
 
     computeLongestPaths(links/* , sortedVertices*/) {
         // calculates longets paths for all vertices
-        // method expects sorted vertices array in this._sortedList
+        // method expects sorted vertices array to be in this._sortedList
         let sortedVertices = this._sortedList;
         sortedVertices.forEach(vertex => {
             let averts = getReverseAdjacentVertices(links, vertex.name); // neigbours who INCOME to the vertex
@@ -122,5 +122,8 @@ let struct = {
 
 module.exports = {
     struct: struct,
-    routines: routines
+    routines: routines,
+    getVertices: getVertices,
+    getAdjacentVertices: getAdjacentVertices,
+    getReverseAdjacentVertices: getReverseAdjacentVertices
 };
