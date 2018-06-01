@@ -62,6 +62,12 @@ var LoadPanel = Overlay.inherit({
             */
 
             /**
+            * @name dxLoadPanelOptions.container
+            * @type string|Node|jQuery
+            * @default undefined
+            */
+
+            /**
             * @name dxLoadPanelOptions.animation
             * @type object
             * @default null
