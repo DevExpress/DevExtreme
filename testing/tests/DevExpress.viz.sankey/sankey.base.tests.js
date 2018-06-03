@@ -40,6 +40,7 @@ QUnit.test("Default size", function(assert) {
 
     assert.deepEqual(sankey.getSize(), { width: 400, height: 400 });
 });
+
 /*
 QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
     var sankey = createSankey({
@@ -58,6 +59,7 @@ QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
     assert.ok(sankey);
 });
 */
+
 QUnit.module("DataSource processing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -449,17 +451,6 @@ QUnit.test("Returning correct nodes[].linksIn and nodes[].linksOut data in getAl
     });
 });
 
-// + TODO: test for options.sortData being applied
-// + TODO: tests from local sankey files
-// + TODO: tests for number of cascades and number of nodes
-// + TODO: tests for number of links
-// + TODO: tests for computing the input weights, output weights
-// + test for links
-// + TODO: test for layout data presence in links (field connection), and nodes fields LinksIn, LinksOut
-// TODO: test for color from options
-// + TODO: test passing  align by default, if <String>, if <Array> (passing params to layoutBuilder)
-// TODO: a few test of coordinates of nodes
-
 // Drawing tests
 
 QUnit.module("Drawing", $.extend({}, environment, {
@@ -535,7 +526,7 @@ QUnit.test("Resize", function(assert) {
     assert.equal(nodes[1].attr.firstCall.args[0].x, 900 - 15, 'Node repositioned');
 });
 
-QUnit.test("palette", function(assert) {
+QUnit.test("Palette", function(assert) {
     sinon.spy(paletteModule, "Palette");
 
     createSankey({
@@ -585,4 +576,208 @@ QUnit.test("Sankey fires once drawn event if asynchronus dataSource ", function(
     d.resolve([['A', 'Z', 1], ['B', 'Z', 1]]);
 
     assert.equal(drawn.callCount, 2);
+});
+
+
+QUnit.module("Align options applying", environment);
+
+QUnit.test("Largest cascade occupies full chart height", function(assert) {
+    var sankey = createSankey({
+            dataSource: common.testData.simpleData
+        }),
+        size = sankey.getSize(),
+        nodes = sankey.getAllItems().nodes,
+        cascadeHeight = 0;
+
+    ['A', 'B', 'C'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.title === nodeName; });
+        cascadeHeight += node.rect.height + (nodeName !== 'C' ? 30 : 0);
+    });
+
+    assert.equal(cascadeHeight, size.height, 'Biggest cascade takes full height of chart');
+});
+
+QUnit.test("Default align option", function(assert) {
+    var sankey = createSankey({
+            dataSource: common.testData.simpleData
+        }),
+        size = sankey.getSize(),
+        nodes = sankey.getAllItems().nodes;
+
+    ['M', 'Y'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.title === nodeName; });
+        assert.equal(node.rect.y + node.rect.height / 2, size.height / 2, nodeName + ' aligned to middle');
+    });
+});
+
+QUnit.test("Align option as <String>", function(assert) {
+    var sankey = createSankey({
+            dataSource: common.testData.simpleData,
+            align: 'bottom'
+        }),
+        size = sankey.getSize(),
+        nodes = sankey.getAllItems().nodes;
+
+    ['C', 'M', 'Y'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.title === nodeName; });
+        assert.equal(node.rect.y + node.rect.height, size.height, nodeName + ' aligned to bottom');
+    });
+});
+
+QUnit.test("Align option as <Array>", function(assert) {
+    var sankey = createSankey({
+            dataSource: common.testData.simpleData,
+            align: ['top', 'top', 'top']
+        }),
+        nodes = sankey.getAllItems().nodes;
+
+    ['A', 'M', 'Y'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.title === nodeName; });
+        assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
+    });
+
+});
+
+QUnit.module("Update options", environment);
+
+QUnit.test("Update styles of nodes", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1]]
+    });
+
+    sankey.option({ nodes: { border: { visible: true, width: 3, color: "red", opacity: 0.1 } } });
+
+    var nodes = this.nodes();
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["stroke-width"], 3);
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["stroke-opacity"], 0.1);
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["stroke"], "red");
+
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 3);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.1);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke"], "red");
+});
+
+QUnit.test("Update styles of links", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1]]
+    });
+
+    sankey.option({ links: { border: { visible: true, width: 2, color: "green", opacity: 0.2 } } });
+
+    var links = this.links();
+    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke-width"], 2, 'stroke-width applied');
+    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke-opacity"], 0.2, 'stroke-opacity applied');
+    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke"], "green", 'stroke applied');
+});
+
+QUnit.test("Update color of nodes", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1]]
+    });
+
+    sankey.option({ nodes: { color: "green" } });
+
+    var nodes = this.nodes();
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["fill"], "green", 'fill applied');
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["fill"], "green", 'fill applied');
+});
+
+QUnit.test("Update color of links", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1]]
+    });
+
+    sankey.option({ links: { color: "gray" } });
+
+    var links = this.links();
+    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["fill"], "gray", 'fill applied');
+});
+
+QUnit.test("Update palette", function(assert) {
+    sinon.spy(paletteModule, "Palette");
+
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1]],
+        palette: ["red", "blue"]
+    });
+
+    sankey.option({ palette: ["green", "orange"] });
+
+    var nodes = this.nodes();
+
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, "green");
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "orange");
+});
+
+QUnit.test("Update paletteExtenstionMode", function(assert) {
+    var sankey = createSankey({
+        algorithm: "stub",
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        palette: ["green", "red"]
+    });
+
+    sankey.option({ paletteExtensionMode: "alternate" });
+
+    var nodes = this.nodes();
+
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, "green");
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "red");
+    assert.deepEqual(nodes[2].smartAttr.lastCall.args[0].fill, "#32b232");
+});
+
+QUnit.test("SortData option", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        sortData: { A: 1, B: 2 }
+    });
+
+    sankey.option({ sortData: { A: 2, B: 1 } });
+    var nodesSorted = sankey.getAllItems().nodes;
+
+    assert.equal(nodesSorted[0].title, 'B');
+    assert.equal(nodesSorted[1].title, 'A');
+});
+
+QUnit.test("Align option updated as <String>", function(assert) {
+    var sankey = createSankey({
+            dataSource: common.testData.simpleData,
+            align: 'top'
+        }),
+        size = sankey.getSize();
+
+    sankey.option({ align: 'bottom' });
+    var nodes = sankey.getAllItems().nodes;
+
+    ['C', 'M', 'Y'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.title === nodeName; });
+        assert.equal(node.rect.y + node.rect.height, size.height, 'aligned to bottom');
+    });
+});
+
+QUnit.test("Align option updated as <Array>", function(assert) {
+    var sankey = createSankey({
+        dataSource: common.testData.simpleData,
+        align: 'bottom'
+    });
+
+    sankey.option({ align: ['top', 'top', 'top'] });
+    var nodes = sankey.getAllItems().nodes;
+
+    ['A', 'M', 'Y'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.title === nodeName; });
+        assert.equal(node.rect.y, 0, 'aligned to top');
+    });
+});
+
+QUnit.test("Redrawn on nodes.padding option updated", function(assert) {
+    var drawn = sinon.spy(),
+        sankey = createSankey({
+            dataSource: common.testData.simpleData,
+            onDrawn: drawn
+        });
+
+    sankey.option({ nodes: { padding: 50 } });
+
+    assert.equal(drawn.callCount, 2, 'Drawn twice');
+    assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[2].nodePadding, 50, 'New node padding applied');
 });
