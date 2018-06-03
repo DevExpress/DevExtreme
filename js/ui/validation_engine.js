@@ -572,6 +572,7 @@ var ValidationEngine = {
                 }
 
                 rule.value = value;
+
                 ruleValidationResult = ruleValidator.validate(value, rule);
                 rule.isValid = ruleValidationResult;
 
@@ -586,7 +587,6 @@ var ValidationEngine = {
                 if(!rule.isValid) {
                     return false;
                 }
-
             } else {
                 throw errors.Error("E0100");
             }
