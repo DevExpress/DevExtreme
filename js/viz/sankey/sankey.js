@@ -19,7 +19,9 @@ var dxSankey = require("../core/base_widget").inherit({
     _optionChangesMap: {
         dataSource: "DATA_SOURCE",
         sortData: "DATA_SOURCE",
-        align: "DATA_SOURCE"
+        align: "DATA_SOURCE",
+        nodes: "BUILD_LAYOUT",
+        links: "BUILD_LAYOUT"
     },
 
     _themeDependentChanges: ['BUILD_LAYOUT'],

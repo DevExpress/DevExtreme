@@ -6,6 +6,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
     return {
         fill: itemOptions.colorMode === 'node' ? color : itemOptions.color || color,
         'stroke-width': itemOptions.border.visible ? itemOptions.border.width : 0,
+        'stroke-opacity': itemOptions.border.visible ? itemOptions.border.opacity : 0,
         stroke: itemOptions.border.visible ? itemOptions.border.color : '#000000',
         opacity: itemOptions.opacity || itemBaseOptions.opacity,
         hatching: itemOptions.hatching
