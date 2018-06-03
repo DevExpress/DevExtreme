@@ -393,12 +393,67 @@ QUnit.test("Passing array align option", function(assert) {
     assert.deepEqual(spiesLayoutBuilder._computeNodes.getCall(0).args[1].nodeAlign, ['top', 'bottom']);
 });
 
+QUnit.module("Returning correct layout data", $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        for(let spyKey of Object.keys(spiesLayoutBuilder)) {
+            spiesLayoutBuilder[spyKey].reset();
+        }
+    }
+}));
+
+QUnit.test("Returning all nodes and links data in getAllItems", function(assert) {
+    var sankey = createSankey({
+            layoutBuilder: layoutBuilder,
+            dataSource: common.testData.countriesData
+        }),
+        items = sankey.getAllItems();
+
+    assert.ok(items.hasOwnProperty('links'));
+    assert.ok(items.hasOwnProperty('nodes'));
+    assert.equal(items.links.length, 46);
+    assert.equal(items.nodes.length, 16);
+});
+
+QUnit.test("Returning correct links[].connection data in getAllItems", function(assert) {
+    var sankey = createSankey({
+            layoutBuilder: layoutBuilder,
+            dataSource: common.testData.simpleData
+        }),
+        items = sankey.getAllItems();
+
+    assert.equal(items.links.length, common.testData.simpleData.length);
+    common.testData.simpleData.forEach(function(linkData) {
+        var output = items.links.find(function(i) {
+            return i.connection.from === linkData[0] && i.connection.to === linkData[1] && i.connection.weight === linkData[2];
+        });
+        assert.ok(typeof output !== 'undefined');
+    });
+});
+
+QUnit.test("Returning correct nodes[].linksIn and nodes[].linksOut data in getAllItems", function(assert) {
+    var sankey = createSankey({
+            layoutBuilder: layoutBuilder,
+            dataSource: common.testData.simpleData
+        }),
+        items = sankey.getAllItems(),
+        expected = { 'A': [0, 1], 'B': [0, 2], 'C': [0, 1], 'M': [2, 1], Y: [3, 0] };
+
+    assert.equal(items.nodes.length, 5);
+    ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
+        var node = items.nodes.find(function(node) { return node.title === nodeName; });
+        assert.equal(node.linksIn.length, expected[nodeName][0]);
+        assert.equal(node.linksOut.length, expected[nodeName][1]);
+    });
+});
+
 // + TODO: test for options.sortData being applied
 // + TODO: tests from local sankey files
 // + TODO: tests for number of cascades and number of nodes
 // + TODO: tests for number of links
 // + TODO: tests for computing the input weights, output weights
 // + test for links
+// + TODO: test for layout data presence in links (field connection), and nodes fields LinksIn, LinksOut
 // TODO: test for color from options
 // + TODO: test passing  align by default, if <String>, if <Array> (passing params to layoutBuilder)
 // TODO: a few test of coordinates of nodes

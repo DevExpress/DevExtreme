@@ -100,6 +100,9 @@ var testData = {
         ['Morocco', 'China', 5],
         ['Morocco', 'India', 1],
         ['Morocco', 'Japan', 3]
+    ],
+    simpleData: [
+        ['A', 'Y', 1], ['B', 'Y', 2], ['B', 'M', 4], ['C', 'M', 1], ['M', 'Y', 5]
     ]
 };
 module.exports.createSankey = createSankey;
