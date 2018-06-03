@@ -7,7 +7,7 @@ var $ = require("jquery"),
     spiesLayoutBuilder = common.spiesLayoutBuilder,
     environment = common.environment,
     rendererModule = require("viz/core/renderers/renderer"),
-    // paletteModule = require("viz/palette"),
+    paletteModule = require("viz/palette"),
     themeModule = require("viz/themes");
 
 themeModule.registerTheme({
@@ -516,5 +516,73 @@ QUnit.test("Draw Nodes", function(assert) {
         var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
         assert.deepEqual(node.attr.firstCall.args[0], expected[nodeName], 'Node ' + nodeName + ': params match');
     });
+});
 
+QUnit.test("Resize", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1]],
+    });
+    this.nodesGroup().clear.reset();
+
+    sankey.option("size", { width: 900, height: 600 });
+
+    var nodes = this.nodes();
+
+    assert.equal(nodes.length, 2);
+    assert.equal(this.nodesGroup().clear.callCount, 1, 'Cleared on resize');
+    assert.equal(nodes[0].attr.firstCall.args[0].height, 600, 'Node resized');
+    assert.equal(nodes[1].attr.firstCall.args[0].height, 600, 'Node resized');
+    assert.equal(nodes[1].attr.firstCall.args[0].x, 900 - 15, 'Node repositioned');
+});
+
+QUnit.test("palette", function(assert) {
+    sinon.spy(paletteModule, "Palette");
+
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        palette: ["green", "red"],
+        paletteExtensionMode: "blend"
+    });
+
+    var nodes = this.nodes();
+
+    assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, "green");
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "red");
+    assert.deepEqual(nodes[2].smartAttr.lastCall.args[0].fill, "#804000");
+
+    assert.deepEqual(paletteModule.Palette.lastCall.args[1], {
+        useHighlight: true,
+        extensionMode: "blend"
+    }, "useHighlight");
+
+    // teardown
+    paletteModule.Palette.restore();
+});
+
+QUnit.test("Sankey fires drawn event", function(assert) {
+    var drawn = sinon.spy();
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        onDrawn: drawn
+    });
+
+    assert.equal(drawn.callCount, 1);
+});
+
+QUnit.test("Sankey fires once drawn event if asynchronus dataSource ", function(assert) {
+    var drawn = sinon.spy(),
+        d = $.Deferred();
+
+    createSankey({
+        dataSource: {
+            load: function() {
+                return d;
+            }
+        },
+        onDrawn: drawn
+    });
+
+    d.resolve([['A', 'Z', 1], ['B', 'Z', 1]]);
+
+    assert.equal(drawn.callCount, 2);
 });
