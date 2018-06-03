@@ -29,7 +29,9 @@ QUnit.test("Create empty widget", function(assert) {
 
     assert.ok(sankey);
     assert.equal(rendererModule.Renderer.firstCall.args[0].cssClass, "dxs dxs-sankey", "rootClass prefix rootClass");
-    assert.equal(this.itemsGroup().append.lastCall.args[0], this.renderer.root, "items group added to root");
+    assert.equal(this.linksGroup().append.lastCall.args[0], this.renderer.root, "links group added to root");
+    assert.equal(this.nodesGroup().append.lastCall.args[0], this.renderer.root, "nodes group added to root");
+    assert.equal(this.labelsGroup().append.lastCall.args[0], this.renderer.root, "labels group added to root");
 });
 
 QUnit.test("Default size", function(assert) {
@@ -38,7 +40,7 @@ QUnit.test("Default size", function(assert) {
 
     assert.deepEqual(sankey.getSize(), { width: 400, height: 400 });
 });
-
+/*
 QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1]]
@@ -55,7 +57,7 @@ QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
 
     assert.ok(sankey);
 });
-
+*/
 QUnit.module("DataSource processing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -459,3 +461,60 @@ QUnit.test("Returning correct nodes[].linksIn and nodes[].linksOut data in getAl
 // TODO: a few test of coordinates of nodes
 
 // Drawing tests
+
+QUnit.module("Drawing", $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        $("#test-container").css({
+            width: 1000,
+            height: 400
+        });
+    }
+}));
+
+QUnit.test("Draw Links", function(assert) {
+    createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: common.testData.simpleData
+    });
+
+    var links = this.links();
+    assert.equal(links.length, 5);
+    assert.equal(this.linksGroup().clear.callCount, 1);
+
+    assert.equal(this.renderer.path.args[0][1], "area");
+    assert.equal(this.renderer.path.args[1][1], "area");
+    assert.equal(this.renderer.path.args[2][1], "area");
+    assert.equal(this.renderer.path.args[3][1], "area");
+    assert.equal(this.renderer.path.args[4][1], "area");
+
+    assert.equal(links[0].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 72.5 C 694 72.5 306 42.5 15 42.5 Z');
+    assert.equal(links[1].attr.firstCall.args[0].d, 'M 15 72.5 C 306 72.5 694 72.5 985 72.5 L 985 157.5 C 694 157.5 306 157.5 15 157.5 Z');
+    assert.equal(links[2].attr.firstCall.args[0].d, 'M 15 157.5 C 156 157.5 344 93.75 485 93.75 L 485 263.75 C 344 263.75 156 327.5 15 327.5 Z');
+    assert.equal(links[3].attr.firstCall.args[0].d, 'M 15 357.5 C 156 357.5 344 263.75 485 263.75 L 485 306.25 C 344 306.25 156 400 15 400 Z');
+    assert.equal(links[4].attr.firstCall.args[0].d, 'M 500 93.75 C 645.5 93.75 839.5 157.5 985 157.5 L 985 370 C 839.5 370 645.5 306.25 500 306.25 Z');
+});
+
+QUnit.test("Draw Nodes", function(assert) {
+    createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: common.testData.simpleData
+    });
+
+    var nodes = this.nodes(),
+        expected = {
+            A: { x: 0, y: 0, height: 42.5, width: 15, _name: 'A' },
+            B: { x: 0, y: 72.5, height: 255, width: 15, _name: 'B' },
+            C: { x: 0, y: 357.5, height: 42.5, width: 15, _name: 'C' },
+            M: { x: 485, y: 93.75, height: 212.5, width: 15, _name: 'M' },
+            Y: { x: 985, y: 30, height: 340, width: 15, _name: 'Y' }
+        };
+    assert.equal(nodes.length, 5, 'Number of nodes');
+    assert.equal(this.nodesGroup().clear.callCount, 1, 'Existing nodes cleared');
+
+    ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
+        var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
+        assert.deepEqual(node.attr.firstCall.args[0], expected[nodeName], 'Node ' + nodeName + ': params match');
+    });
+
+});

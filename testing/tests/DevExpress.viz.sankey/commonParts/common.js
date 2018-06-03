@@ -2,11 +2,10 @@
 
 var $ = require("jquery"),
     vizMocks = require("../../../helpers/vizMocks.js"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    dxSankey = require("viz/sankey/sankey");
+    rendererModule = require("viz/core/renderers/renderer");
 
+require("viz/sankey/sankey");
 require("viz/themes");
-dxSankey.addPlugin(require("viz/core/tooltip").plugin);
 
 var layoutBuilder = require("viz/sankey/layout"),
     spiesLayoutBuilder = {
@@ -28,7 +27,9 @@ var environment = {
         var that = this;
         this.renderer = new vizMocks.Renderer();
 
-        this.itemGroupNumber = 0;
+        this.linksGroupIndex = 0;
+        this.nodesGroupIndex = 1;
+        this.labelsGroupIndex = 2;
 
         sinon.stub(rendererModule, "Renderer", function() {
             return that.renderer;
@@ -39,19 +40,43 @@ var environment = {
         rendererModule.Renderer.restore();
     },
 
-    itemsGroup: function() {
-        return this.renderer.g.getCall(this.itemGroupNumber).returnValue;
+    linksGroup: function() {
+        return this.renderer.g.getCall(this.linksGroupIndex).returnValue;
     },
 
-    items: function() {
-        return this.itemsGroup().children;
+    links: function() {
+        return this.linksGroup().children;
     },
 
-    item: function(index) {
-        return this.items[index];
+    link: function(index) {
+        return this.links[index];
+    },
+
+    nodesGroup: function() {
+        return this.renderer.g.getCall(this.nodesGroupIndex).returnValue;
+    },
+
+    nodes: function() {
+        return this.nodesGroup().children;
+    },
+
+    node: function(index) {
+        return this.nodes[index];
+    },
+
+    labelsGroup: function() {
+        return this.renderer.g.getCall(this.labelsGroupIndex).returnValue;
+    },
+
+    labels: function() {
+        return this.labelsGroup().children;
+    },
+
+    label: function(index) {
+        return this.labels[index];
     }
 };
-// TODO: do we need module.exports.testData?
+
 var testData = {
     countriesData: [
         ['Brazil', 'Portugal', 5],
