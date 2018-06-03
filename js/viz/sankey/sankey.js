@@ -21,7 +21,9 @@ var dxSankey = require("../core/base_widget").inherit({
         sortData: "DATA_SOURCE",
         align: "DATA_SOURCE",
         nodes: "BUILD_LAYOUT",
-        links: "BUILD_LAYOUT"
+        links: "BUILD_LAYOUT",
+        palette: "BUILD_LAYOUT",
+        paletteExtensionMode: "BUILD_LAYOUT"
     },
 
     _themeDependentChanges: ['BUILD_LAYOUT'],
