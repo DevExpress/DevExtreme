@@ -850,7 +850,11 @@ QUnit.test("Arrange", function(assert) {
 QUnit.test("Arrange / value", function(assert) {
     var elements = $.map([2.3, 5, 2, 8, 4.4], function(val) {
         return {
-            proxy: { attribute: sinon.spy(), value: val },
+            proxy: {
+                attribute: sinon.spy(function() {
+                    return val;
+                }), value: val
+            },
             _settings: {}
         };
     });
@@ -896,7 +900,7 @@ QUnit.test("Update grouping", function(assert) {
     assert.deepEqual(proxy.attribute.getCall(0).args, ["data-field"], "data field 1");
     proxy.attribute.returns(null);
     proxy.value = "test-2";
-    assert.strictEqual(callback(proxy), "test-2", "callback return value 2");
+    assert.strictEqual(callback(proxy), null, "callback return value 2");
     assert.deepEqual(proxy.attribute.getCall(1).args, ["data-field"], "data field 2");
 });
 
@@ -952,15 +956,18 @@ QUnit.test("Refresh", function(assert) {
 });
 
 QUnit.test("Refresh / values", function(assert) {
-    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() },
-        stub = sinon.spy();
+    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
     this.context.settings = { dataField: "data-field" };
 
     pointPieStrategy.refresh(this.context, figure, "test-data",
-        { attribute: stub, values: [1, 2, 3] },
+        {
+            attribute: function() {
+                return this.values;
+            },
+            values: [1, 2, 3]
+        },
         { _colors: ["c1", "c2", "c3"], size: 8 });
 
-    assert.deepEqual(stub.lastCall.args, ["data-field"], "attribute");
     assert.strictEqual(this.renderer.arc.callCount, 3, "count");
     assert.deepEqual(this.renderer.arc.getCall(0).args, [0, 0, 0, 4, 90, 150], "arc 1 is created");
     assert.deepEqual(this.renderer.arc.getCall(0).returnValue.attr.lastCall.args, [{ "stroke-linejoin": "round", fill: "c1" }], "arc 1 settings");
@@ -1056,7 +1063,7 @@ QUnit.test("Arrange", function(assert) {
 
     pointPieStrategy.arrange(this.context, [
         { proxy: { attribute: sinon.stub().returns([1, 2]) } },
-        { proxy: { attribute: sinon.spy(), values: [1, 2, 3] } },
+        { proxy: { attribute: sinon.stub().returns([1, 2, 3]) } },
         { proxy: { attribute: sinon.stub().returns([1]) } }
     ]);
 
@@ -1102,7 +1109,9 @@ QUnit.test("Refresh", function(assert) {
 
 QUnit.test("Refresh / url", function(assert) {
     var figure = { image: new vizMocks.Element() },
-        stub = sinon.spy();
+        stub = sinon.spy(function() {
+            return this.url;
+        });
     this.context.settings = { dataField: "data-field" };
 
     pointImageStrategy.refresh(this.context, figure, null, { attribute: stub, url: "test-url" });
