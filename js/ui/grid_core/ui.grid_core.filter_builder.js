@@ -57,7 +57,7 @@ var FilterBuilderView = modules.View.inherit({
     _getFilterBuilderFields: function() {
         return this.getController("columns").getColumns().map(item => {
             let column = extend(true, {}, item);
-            column.filterOperations = column.filterOperations !== column.defaultFilterOperations ? column.filterOperations : null;
+            column.filterOperations = item.filterOperations !== item.defaultFilterOperations ? column.filterOperations : null;
             return column;
         });
     },

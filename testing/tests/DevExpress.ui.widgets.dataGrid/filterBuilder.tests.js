@@ -131,7 +131,7 @@ QUnit.module("Common", {
                 filterBuilderPopup: { visible: true },
             });
         }, function(e) {
-            return e.message === `E1048 - The "anyof" operation is not found in the filterOperations array. See:\nhttp://js.devexpress.com/error/18_1/E1048`;
+            return /E1048/.test(e.message);
         });
     });
 
@@ -158,6 +158,18 @@ QUnit.module("Common", {
 
         // assert
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
+    QUnit.test("the 'any of' operation is available in filterBuilderPopup if filterOperations is instance of defaultFilterOperations", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ dataField: "field", dataType: "string", defaultFilterOperations: ["="] }],
+            filterValue: ["field", "anyof", ["a"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
     });
 
     // T640912
