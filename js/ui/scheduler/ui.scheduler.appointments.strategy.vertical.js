@@ -8,6 +8,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
+    APPOINTMENT_DEFAULT_WIDTH = 65,
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
@@ -153,7 +154,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _splitLongVerticalCompactAppointment: function(item, result) {
-        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCellByType(false);
         var compactCount = 0;
 
         if(appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
@@ -318,8 +319,15 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         if(this.instance._groupOrientation === "vertical") {
             return this.callBase();
         } else {
-            return this.instance.option("_appointmentCountPerCell");
+            return {
+                allDay: this.instance.option("_appointmentCountPerCell"),
+                simple: this._calculateDynamicAppointmentCountPerCell()
+            };
         }
+    },
+
+    _calculateDynamicAppointmentCountPerCell: function() {
+        return Math.floor(this._getAppointmentMaxWidth() / APPOINTMENT_DEFAULT_WIDTH);
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
@@ -342,7 +350,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentCount: function(overlappingMode, coordinates) {
-        return overlappingMode !== "auto" && (coordinates.count === 1 && !isNumeric(overlappingMode)) ? coordinates.count : this._getMaxAppointmentCountPerCell();
+        return overlappingMode !== "auto" && (coordinates.count === 1 && !isNumeric(overlappingMode)) ? coordinates.count : this._getMaxAppointmentCountPerCellByType(false);
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {

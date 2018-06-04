@@ -529,7 +529,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _markAppointmentAsVirtual: function(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCell();
+        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType();
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
@@ -537,6 +537,16 @@ var BaseRenderingStrategy = Class.inherit({
                 index: coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex,
                 isAllDay: isAllDay
             };
+        }
+    },
+
+    _getMaxAppointmentCountPerCellByType: function(isAllDay) {
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+
+        if(typeUtils.isObject(appointmentCountPerCell)) {
+            return isAllDay ? this._getMaxAppointmentCountPerCell().allDay : this._getMaxAppointmentCountPerCell().simple;
+        } else {
+            return appointmentCountPerCell;
         }
     },
 
