@@ -4919,6 +4919,25 @@ QUnit.test("DropDown appointment button should have correct width on timeline vi
     assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 4, 1.5, "DropDown button has correct width");
 });
 
+QUnit.test("dropDown appointment should not compact class on vertical view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: ["week"],
+        currentView: "week",
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    this.instance.option("dataSource", [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
+    ]);
+
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.ok($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+});
+
 QUnit.test("Appointment should have right width in workspace with timezone", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
     try {
