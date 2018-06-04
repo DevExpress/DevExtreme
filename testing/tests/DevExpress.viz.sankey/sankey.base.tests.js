@@ -41,7 +41,6 @@ QUnit.test("Default size", function(assert) {
     assert.deepEqual(sankey.getSize(), { width: 400, height: 400 });
 });
 
-/*
 QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1]]
@@ -58,7 +57,6 @@ QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
 
     assert.ok(sankey);
 });
-*/
 
 QUnit.module("DataSource processing", $.extend({}, environment, {
     beforeEach: function() {
