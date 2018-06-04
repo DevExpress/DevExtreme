@@ -108,8 +108,8 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._defaultHeight || this.getAppointmentMinSize();
     },
 
-    _getAppointmentCount: function() {
-        return this._getMaxAppointmentCountPerCell();
+    _getAppointmentCount: function(overlappingMode, coordinates) {
+        return this._getMaxAppointmentCountPerCellByType(false);
     },
 
     _getAppointmentDefaultHeight: function() {

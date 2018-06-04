@@ -342,7 +342,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         var config = this.callBase(coordinates);
-        if(coordinates.count <= this._getDynamicAppointmentCountPerCell()) {
+
+        if(coordinates.count <= this._getDynamicAppointmentCountPerCell().allDay) {
             config.offset = 0;
         }
 
@@ -350,7 +351,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentCount: function(overlappingMode, coordinates) {
-        return overlappingMode !== "auto" && (coordinates.count === 1 && !isNumeric(overlappingMode)) ? coordinates.count : this._getMaxAppointmentCountPerCellByType(false);
+        return overlappingMode !== "auto" && (coordinates.count === 1 && !isNumeric(overlappingMode)) ? coordinates.count : this._getMaxAppointmentCountPerCellByType(coordinates.allDay);
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
