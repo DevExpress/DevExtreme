@@ -317,7 +317,10 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getDynamicAppointmentCountPerCell: function() {
         if(this.instance._groupOrientation === "vertical") {
-            return this.callBase();
+            return {
+                allDay: this.callBase(),
+                simple: this._calculateDynamicAppointmentCountPerCell()
+            };
         } else {
             return {
                 allDay: this.instance.option("_appointmentCountPerCell"),
