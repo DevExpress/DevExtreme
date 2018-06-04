@@ -2455,6 +2455,27 @@ QUnit.test("scroll to to the next page after expand", function(assert) {
     assert.deepEqual(this.changedArgs[0].removeCount, 22, "remove count should include expanded rows");
 });
 
+// T641290
+QUnit.test("Search should work correctly when rowRenderingMode is set to 'virtual'", function(assert) {
+    // arrange, act
+    this.options.searchPanel = { text: "test" };
+    this.dataController.optionChanged({ fullName: "searchPanel.text", value: "test" });
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 0, "item count");
+    assert.strictEqual(this.dataController.pageCount(), 1, "page count");
+
+    // act
+    this.options.searchPanel = { text: "" };
+    this.dataController.optionChanged({ fullName: "searchPanel.text", value: "" });
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 15, "item count");
+    assert.strictEqual(this.dataController.pageCount(), 5, "page count");
+});
+
 // =================================
 // scrollingDataSource tests
 
