@@ -1533,6 +1533,55 @@ QUnit.test("Calculate correct an average width of column when some columns has p
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
 });
 
+QUnit.test("Columns should hide consistently if percentage width (T640539)", function(assert) {
+    // arrange
+    $(".dx-datagrid").width(700);
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", phone: "+1123456789" },
+        { firstName: 'Super', lastName: "Star", phone: "+1987654321" }];
+    this.columns = [
+        { dataField: 'firstName', index: 0, width: "30%" },
+        { dataField: 'lastName', index: 1, hidingPriority: 1 },
+        { dataField: 'phone', index: 2, width: "50%", hidingPriority: 2 }];
+
+    setupDataGrid(this);
+
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
+    assert.equal($(".dx-datagrid-hidden-column").length, 2, "hidden columns count");
+    assert.equal($(".dx-data-row td:nth-child(2).dx-datagrid-hidden-column").length, 2, "2nd column is hidden");
+});
+
+QUnit.test("Check all columns hiden if percentage width (T640539)", function(assert) {
+    // arrange
+    $(".dx-datagrid").width(450);
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", phone: "+1123456789" },
+        { firstName: 'Super', lastName: "Star", phone: "+1987654321" }];
+    this.columns = [
+        { dataField: 'firstName', index: 0, width: "30%" },
+        { dataField: 'lastName', index: 1, hidingPriority: 1 },
+        { dataField: 'phone', index: 2, width: "50%", hidingPriority: 2 }];
+
+    setupDataGrid(this);
+
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
+    assert.equal($(".dx-datagrid-hidden-column").length, 4, "hidden columns count");
+    assert.equal($(".dx-data-row td:nth-child(2).dx-datagrid-hidden-column").length, 2, "2nd column is hidden");
+    assert.equal($(".dx-data-row td:nth-child(3).dx-datagrid-hidden-column").length, 2, "3rd column is hidden");
+});
+
 QUnit.test("Apply a hidden css class on cell prepared event of rows view", function(assert) {
     // arrange
     $(".dx-datagrid").width(200);
