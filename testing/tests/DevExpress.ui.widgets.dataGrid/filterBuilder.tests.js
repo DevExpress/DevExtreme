@@ -120,16 +120,65 @@ QUnit.module("Common", {
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
     });
 
-    QUnit.test("the 'any of' operation is available in filterBuilderPopup", function(assert) {
+    QUnit.test("the 'any of' operation should throw an exception if filterOperations does not contain it", function(assert) {
+        var that = this;
+        assert.throws(function() {
+            that.initFilterBuilderView({
+                headerFilter: { visible: true },
+                filterSyncEnabled: true,
+                columns: [{ dataField: "field", dataType: "string", filterOperations: [">"], allowFiltering: true }],
+                filterValue: ["field", "anyof", ["a"]],
+                filterBuilderPopup: { visible: true },
+            });
+        }, function(e) {
+            return /E1048/.test(e.message);
+        });
+    });
+
+    QUnit.test("the 'any of' operation is available in filterBuilderPopup if filterOperations contains it", function(assert) {
         // arrange, act
         this.initFilterBuilderView({
-            columns: [{ dataField: "field", filterOperations: [">"] }],
+            columns: [{ dataField: "field", filterOperations: [">", "anyof"] }],
             filterValue: ["field", "anyof", ["a"]],
             filterBuilderPopup: { visible: true },
         });
 
         // assert
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
+
+    QUnit.test("the 'any of' operation is available in filterBuilderPopup if filterOperations are not set", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ dataField: "field" }],
+            filterValue: ["field", "anyof", ["a"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        // assert
+        assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
+    // T640912
+    QUnit.test("the customOperation is available in built-in filterBuilder using dataTypes array", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ dataField: "field" }],
+            filterValue: ["field", "weekends"],
+            filterBuilderPopup: { visible: true },
+            filterBuilder: {
+                customOperations: [{
+                    name: "weekends",
+                    caption: "Weekends",
+                    dataTypes: ["string"],
+                    hasValue: false
+                }]
+            }
+        });
+
+        // assert
+        assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").text(), "Weekends");
     });
 
     // T639390
