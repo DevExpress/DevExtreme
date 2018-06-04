@@ -126,9 +126,6 @@ registerTheme({
         },
         "layer:marker:bubble": {
             color: ACCENT_COLOR
-        },
-        legend: {
-            markerColor: ACCENT_COLOR
         }
     },
     bullet: {

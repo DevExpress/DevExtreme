@@ -256,9 +256,6 @@ registerTheme({
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
-        legend: {
-            markerColor: MARKER_COLOR
-        },
         controlBar: {
             borderColor: WHITE,
             color: BLACK,
