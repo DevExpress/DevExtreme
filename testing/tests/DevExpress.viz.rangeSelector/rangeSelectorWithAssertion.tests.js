@@ -74,14 +74,14 @@ QUnit.module("selectedRange", function(hook) {
 
     QUnit.test("Reset selected range", function(assert) {
         this.rangeSelector.option("selectedRange", { startValue: 3, endValue: 6 });
-        this.rangeSelector.resetSelectedRange();
+        this.rangeSelector.setValue([]);
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: 1, endValue: 11 });
     });
 
-    QUnit.test("Reset selected range", function(assert) {
+    QUnit.test("Reset selected range. incidentOccurred is not called", function(assert) {
         var incidentOccurred = sinon.spy();
         this.rangeSelector.option({ onIncidentOccurred: incidentOccurred });
-        this.rangeSelector.resetSelectedRange();
+        this.rangeSelector.setValue([]);
 
         assert.equal(incidentOccurred.callCount, 0);
     });
@@ -478,7 +478,7 @@ QUnit.module("Value", function(hook) {
 
     QUnit.test("Reset selected range", function(assert) {
         this.rangeSelector.option("value", [3, 5]);
-        this.rangeSelector.resetSelectedRange();
+        this.rangeSelector.setValue([]);
         assert.deepEqual(this.rangeSelector.getValue(), [1, 11]);
     });
 
