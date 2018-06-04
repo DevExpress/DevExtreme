@@ -99,7 +99,7 @@ LinkItem.prototype = {
     },
 
     showTooltip: function(coords) {
-        this.widget._getOption("hoverEnabled", true) && this.widget._tooltip.show({
+        this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'link',
             from: this.connection.from,
             to: this.connection.to,

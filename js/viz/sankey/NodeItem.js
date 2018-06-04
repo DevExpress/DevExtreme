@@ -5,7 +5,7 @@ var states = ["normal", "hover"];
 function compileAttrs(color, itemOptions, itemBaseOptions) {
     return {
         fill: itemOptions.color || color,
-        'stroke-width': itemOptions.border.visible ? itemOptions.border.width : 0,
+        'stroke-width': itemOptions.border.visible ? itemOptions.border.width : (itemBaseOptions.border.visible ? itemBaseOptions.border.width : 0),
         stroke: itemOptions.border.color || itemBaseOptions.border.color,
         'stroke-opacity': itemOptions.border.visible ? itemOptions.border.opacity || itemBaseOptions.border.opacity : 0,
         opacity: itemOptions.opacity || itemBaseOptions.opacity,
@@ -110,7 +110,7 @@ NodeItem.prototype = {
     },
 
     showTooltip: function(coords) {
-        this.widget._getOption("hoverEnabled", true) && this.widget._tooltip.show({
+        this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'node',
             from: null,
             to: null,
