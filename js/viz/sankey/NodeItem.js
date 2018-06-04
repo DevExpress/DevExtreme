@@ -6,7 +6,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
     return {
         fill: itemOptions.color || color,
         'stroke-width': itemOptions.border.visible ? itemOptions.border.width : 0,
-        stroke: itemOptions.border.visible ? itemOptions.border.color || itemBaseOptions.border.color : '#000000',
+        stroke: itemOptions.border.color || itemBaseOptions.border.color,
         'stroke-opacity': itemOptions.border.visible ? itemOptions.border.opacity || itemBaseOptions.border.opacity : 0,
         opacity: itemOptions.opacity || itemBaseOptions.opacity,
         hatching: itemOptions.hatching
@@ -84,7 +84,9 @@ NodeItem.prototype = {
             this.widget._links.forEach(function(link) {
                 link.isAdjacentNodeHovered() && link.adjacentNodeHover(false);
             });
-            this.widget._tooltip.hide();
+            if(this.widget._tooltip) {
+                this.widget._tooltip.hide();
+            }
         }
 
         this.widget._applyNodesAppearance();

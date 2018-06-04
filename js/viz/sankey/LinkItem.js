@@ -61,7 +61,7 @@ LinkItem.prototype = {
             this.code &= ~code;
         }
 
-        if(!state) {
+        if(!state && this.widget._tooltip) {
             this.widget._tooltip.hide();
         }
 
