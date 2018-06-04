@@ -595,6 +595,10 @@ var subscribes = {
         return this.getMaxAppointmentsPerCell();
     },
 
+    forceMaxAppointmentPerCell: function() {
+        return this.forceMaxAppointmentPerCell();
+    },
+
     agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {
         var $appts = this.getAppointmentsInstance()._itemElements(),
             total = 0;

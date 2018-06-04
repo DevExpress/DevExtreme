@@ -2137,6 +2137,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
+                forceMaxAppointmentPerCell: true,
                 maxAppointmentsPerCell: 2
             }],
             height: 500,
@@ -2179,7 +2180,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
-                maxAppointmentsPerCell: 'auto'
+                maxAppointmentsPerCell: 'auto',
+                forceMaxAppointmentPerCell: true
             }],
             height: 400,
             dataSource: items
@@ -2220,7 +2222,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
-                maxAppointmentsPerCell: 'unlimited'
+                maxAppointmentsPerCell: 'unlimited',
+                forceMaxAppointmentPerCell: true
             }],
             height: 600,
             dataSource: [items[0]]
@@ -2264,7 +2267,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 3
+                maxAppointmentsPerCell: 3,
+                forceMaxAppointmentPerCell: true
             }],
             height: 500,
             dataSource: items
@@ -2304,7 +2308,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'auto'
+                maxAppointmentsPerCell: 'auto',
+                forceMaxAppointmentPerCell: true
             }],
             height: 600,
             width: 1200,
@@ -2362,7 +2367,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'unlimited'
+                maxAppointmentsPerCell: 'unlimited',
+                forceMaxAppointmentPerCell: true
             }],
             height: 600,
             dataSource: items

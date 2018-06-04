@@ -2004,6 +2004,10 @@ var Scheduler = Widget.inherit({
         return this._getCurrentViewOption("maxAppointmentsPerCell");
     },
 
+    forceMaxAppointmentPerCell: function() {
+        return this._getCurrentViewOption("forceMaxAppointmentPerCell");
+    },
+
     _createPopup: function(appointmentData, processTimeZone) {
         this._$popup = $("<div>")
                 .addClass(APPOINTMENT_POPUP_CLASS)

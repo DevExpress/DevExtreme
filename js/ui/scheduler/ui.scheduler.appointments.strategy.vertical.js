@@ -152,7 +152,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _getVerticalAppointmentGeometry: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        if(overlappingMode) {
+        if(overlappingMode && this.instance.fire("forceMaxAppointmentPerCell")) {
             var config = this._calculateVerticalGeometryConfig(coordinates);
 
             return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
