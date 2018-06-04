@@ -1083,11 +1083,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         }
     },
 
-    // The following method is not documented (and should not be) and used only in Dashboard (without the argument)
-    resetSelectedRange: function() {
-        this.setValue([]);
-    },
-
     _setContentSize: function() {
         this.__isResizing = this._changes.count() === 2;
         this.callBase.apply(this, arguments);
