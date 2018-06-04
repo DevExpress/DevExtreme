@@ -131,7 +131,7 @@ QUnit.module("Common", {
                 filterBuilderPopup: { visible: true },
             });
         }, function(e) {
-            return e.message === `E1048 - The "anyof" operation is not found in the filterOperations array. See:\nhttp://js.devexpress.com/error/18_1/E1048`;
+            return /E1048/.test(e.message);
         });
     });
 
