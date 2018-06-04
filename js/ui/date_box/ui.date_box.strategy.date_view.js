@@ -25,10 +25,11 @@ var DateViewStrategy = DateBoxStrategy.inherit({
         return displayFormat || dateUtils.FORMATS_MAP[this.dateBox.option("type")];
     },
 
-    popupConfig: function() {
+    popupConfig: function(config) {
         return {
             showTitle: true,
             toolbarItems: this.dateBox._popupToolbarItemsConfig(),
+            onInitialized: config.onInitialized,
 
             defaultOptionsRules: [
                 {

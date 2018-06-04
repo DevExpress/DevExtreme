@@ -949,6 +949,26 @@ QUnit.test("min/max: value changes when min wasn't set", function(assert) {
     assert.equal($input.val(), 100);
 });
 
+QUnit.test("changing min limit should lead to value change in base numberbox", function(assert) {
+    this.instance.option({
+        value: 5,
+        min: 1
+    });
+
+    this.instance.option("min", 6);
+    assert.equal(this.instance.option("value"), 6, "value has been updated");
+});
+
+QUnit.test("changing max limit should lead to value change in base numberbox", function(assert) {
+    this.instance.option({
+        value: 5,
+        max: 6
+    });
+
+    this.instance.option("max", 4);
+    assert.equal(this.instance.option("value"), 4, "value has been updated");
+});
+
 QUnit.test("min/max: value changes to limited value with number mode", function(assert) {
     this.instance.option({
         mode: "number",

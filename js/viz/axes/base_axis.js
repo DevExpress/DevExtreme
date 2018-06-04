@@ -1184,8 +1184,8 @@ Axis.prototype = {
             marginOptions = that._marginOptions,
             viewPort = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
             zoomArgs = that._zoomArgs,
-            minVisible = zoomArgs && zoomArgs.min || viewPort.minVisible,
-            maxVisible = zoomArgs && zoomArgs.max || viewPort.maxVisible,
+            minVisible = zoomArgs && isDefined(zoomArgs.min) ? zoomArgs.min : viewPort.minVisible,
+            maxVisible = zoomArgs && isDefined(zoomArgs.max) ? zoomArgs.max : viewPort.maxVisible,
             ticks = [];
 
         let aggregationInterval = options.aggregationInterval;

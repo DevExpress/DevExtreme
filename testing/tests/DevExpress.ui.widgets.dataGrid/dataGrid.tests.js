@@ -5247,6 +5247,37 @@ QUnit.test("Runtime operation should be asynchronously", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-data-row").length, 1, "filtered data rows are rendered");
 });
 
+// T621703
+QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var $cellElement,
+            dataGrid = createDataGrid({
+                dataSource: [{ firstName: "Andrey", lastName: "Prohorov" }],
+                editing: {
+                    mode: "cell",
+                    allowUpdating: true
+                },
+                onContentReady: function(e) {
+                    // act
+                    e.component.editCell(0, 1);
+                }
+            });
+
+        clock.tick();
+
+        // assert
+        $cellElement = $(dataGrid.getCellElement(0, 1));
+        assert.ok($cellElement.hasClass("dx-editor-cell"), "cell has editor");
+        assert.ok($cellElement.find(".dx-texteditor-input").is(":focus"), "cell editor is focused");
+    } finally {
+        clock.restore();
+    }
+});
+
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -6933,6 +6964,40 @@ QUnit.test("insert row when master detail autoExpandAll is active", function(ass
     assert.ok(rows.eq(2).hasClass("dx-master-detail-row"), "Third row is master-detail-row");
 });
 
+// T636146
+QUnit.test("onRowInserted should be called if dataSource is reassigned in loadingChanged", function(assert) {
+    var rowInsertedArgs = [];
+    var dataSource = [{ id: 1 }, { id: 2 }];
+    var isLoadingOccurs;
+    var dataGrid = createDataGrid({
+        keyExpr: "id",
+        dataSource: dataSource,
+        onRowInserted: function(e) {
+            rowInsertedArgs.push(e);
+        }
+    });
+
+    this.clock.tick(0);
+
+    dataGrid.addRow();
+    dataGrid.cellValue(0, 0, 3);
+    dataGrid.getDataSource().on("loadingChanged", function(isLoading) {
+        if(isLoading && !isLoadingOccurs) {
+            dataGrid.option("dataSource", dataGrid.option("dataSource"));
+            isLoadingOccurs = true;
+        }
+    });
+
+    // act
+    dataGrid.saveEditData();
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(isLoadingOccurs, true, "loadingChanged is occurs");
+    assert.equal(rowInsertedArgs.length, 1, "rowInserted is called");
+    assert.deepEqual(rowInsertedArgs[0].data, { id: 3 }, "rowInserted data arg");
+});
+
 QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers();
@@ -8251,7 +8316,9 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
             enabled: true,
             template: function(container) {
                 $("<div>").dxDataGrid({
-                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+                    width: 500,
+                    dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+                    columns: [{ dataField: "id", width: 1000 }]
                 }).appendTo(container);
             }
         }
@@ -8270,6 +8337,8 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
     assert.ok($rows.eq(1).hasClass("dx-master-detail-row"), "second row is master detail");
     assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
+    // T641332
+    assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
 });
 
 // T607490
@@ -8663,6 +8732,32 @@ QUnit.test("update focus border on resize", function(assert) {
     assert.ok(oldFocusWidth > 0, "old focus width");
     assert.ok(newFocusWidth > 0, "new focus width");
     assert.ok(newFocusWidth < oldFocusWidth, "new focus width less than old focus width");
+});
+
+QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+            filterRow: { visible: true },
+            editing: { allowAdding: true },
+            columns: [
+                { dataField: "field1" },
+                { dataField: "field2" }
+            ],
+            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+        }),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    this.clock.tick();
+
+    var filterEditor = $(dataGrid.$element()).find(".dx-editor-cell").first();
+    navigationController._focus(filterEditor);
+    filterEditor.find("input").val("1").trigger("change");
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
+    assert.ok(dataGrid.$element().find(".dx-editor-cell").is(":focus"), "filter cell has focus after filter applyed");
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
@@ -9574,6 +9669,64 @@ QUnit.test("Check table params with columnWidth auto", function(assert) {
     var secondColumnWidth = $($("#dataGrid").find(".dx-datagrid-headers").find("td")[1]).width();
 
     assert.ok(secondColumnWidth > 2 * firstColumnWidth, "second column width more then first");
+});
+
+QUnit.test("Group cell should not have width style", function(assert) {
+    var dataSource = [
+        { firstName: "Alex", lastName: "Black", room: 903 },
+        { firstName: "Alex", lastName: "White", room: 904 }
+    ];
+
+    // act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "firstName",
+            groupIndex: 0,
+            width: 100,
+        }, {
+            dataField: "lastName",
+            width: 150
+        }, "room"]
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "", "width style is not defined for group cell");
+    assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "150px", "width style is defined for data cell");
+});
+
+QUnit.test("Detail cell should not have width style", function(assert) {
+    var dataSource = [
+        { id: 1, firstName: "Alex", lastName: "Black", room: 903 },
+        { id: 2, firstName: "Alex", lastName: "White", room: 904 }
+    ];
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        keyExpr: "id",
+        columnAutoWidth: true,
+        masterDetail: {
+            enabled: true
+        },
+        columns: [{
+            dataField: "firstName",
+            width: 100,
+        }, {
+            dataField: "lastName",
+            width: 150
+        }, "room"]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.expandRow(1);
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "100px", "width style is defined for data cell");
+    assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "", "width style is not defined for detail cell");
 });
 
 QUnit.test("Check table params with set width", function(assert) {

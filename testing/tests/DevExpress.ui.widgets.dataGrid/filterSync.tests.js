@@ -26,7 +26,7 @@ QUnit.module("Sync with FilterValue", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = $.extend({
-                columns: [{ dataField: "field" }],
+                columns: [{ dataField: "field", dataType: "number" }],
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
@@ -39,8 +39,7 @@ QUnit.module("Sync with FilterValue", {
     QUnit.test("equals", function(assert) {
         // arrange, act
         this.setupDataGrid({
-            filterValue: ["field", "=", 2],
-            columns: [{ dataField: "field" }]
+            filterValue: ["field", "=", 2]
         });
 
         // assert
@@ -111,7 +110,7 @@ QUnit.module("Sync with FilterValue", {
         // arrange, act
         this.setupDataGrid({
             filterValue: ["field", "<>", 2],
-            columns: [{ dataField: "field", filterValue: 1, filterValues: [1, 3] }],
+            columns: [{ dataField: "field", dataType: "number", filterValue: 1, filterValues: [1, 3] }],
         });
 
         // assert
@@ -126,7 +125,7 @@ QUnit.module("Sync with FilterValue", {
         // arrange, act
         this.setupDataGrid({
             filterValue: ["field", "=", 2],
-            columns: [{ dataField: "field", filterValues: [1, 3], headerFilter: { groupInterval: 10 } }],
+            columns: [{ dataField: "field", dataType: "number", filterValues: [1, 3], headerFilter: { groupInterval: 10 } }],
         });
 
         // assert
@@ -140,7 +139,7 @@ QUnit.module("Sync with FilterValue", {
         // arrange, act
         this.setupDataGrid({
             filterValue: ["field", "=", 2],
-            columns: [{ dataField: "field", filterValues: [1, 3], headerFilter: { dataSource: [10] } }],
+            columns: [{ dataField: "field", dataType: "number", filterValues: [1, 3], headerFilter: { dataSource: [10] } }],
         });
 
         // assert
@@ -150,18 +149,52 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), "=");
     });
 
-    QUnit.test("clear header filter & filterrow on initialization if filterValue = null", function(assert) {
+    QUnit.test("sync header filter & filterrow on initialization if filterValue = null", function(assert) {
         // arrange, act
         this.setupDataGrid({
-            columns: [{ dataField: "field", filterValues: ["2", "3"], filterType: "include", filterValue: "1", selectedFilterOperation: "=" }],
+            columns: [{ dataField: "field", dataType: "number", filterValues: ["2", "3"], filterType: "include", filterValue: "1", selectedFilterOperation: "=" }],
         });
 
         // assert
-        assert.deepEqual(this.option("filterValue"), null);
+        assert.deepEqual(this.option("filterValue"), [["field", "anyof", ["2", "3"]], "and", ["field", "=", "1"]]);
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), undefined);
         assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "include");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), undefined);
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), undefined);
+    });
+
+    // T639390
+    QUnit.test("sync banded columns", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            columns: [{
+                caption: "Banded column",
+                columns: [{
+                    caption: "Banded column item",
+                    dataField: "field",
+                    dataType: "string",
+                    filterOperations: ["contains", "="],
+                    filterValues: ["2", "3"],
+                    filterType: "include"
+                }]
+            }, {
+                caption: "Banded column 2",
+                columns: [{
+                    caption: "Inner banded column",
+                    columns: [{
+                        caption: "Banded column item 2",
+                        dataField: "field2",
+                        filterOperations: ["contains", "="],
+                        dataType: "string",
+                        filterValue: "1",
+                        selectedFilterOperation: "="
+                    }]
+                }]
+            }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), [["field", "anyof", ["2", "3"]], "and", ["field2", "=", "1"]]);
     });
 });
 
@@ -305,7 +338,7 @@ QUnit.module("getCombinedFilter", {
         this.setupDataGrid({
             dataSource: [],
             filterSyncEnabled: true,
-            columns: [{ dataField: "field", filterType: "exclude" }],
+            columns: [{ dataField: "field", dataType: "number", filterType: "exclude" }],
             filterValue: ["field", "noneof", ["1", "2"]]
         });
 
@@ -497,7 +530,7 @@ QUnit.module("Sync on initialization", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = options;
-            setupDataGridModules(this, ["columns", "data", "filterSync"], {
+            setupDataGridModules(this, ["columns", "data", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
                 initViews: false
             });
         };
@@ -505,35 +538,74 @@ QUnit.module("Sync on initialization", {
     afterEach: function() {
     }
 }, function() {
-    QUnit.test("clearing of filterValue", function(assert) {
-        // act
-        this.setupDataGrid({
-            filterValue: null,
-            filterSyncEnabled: true,
-            columns: [{
-                dataField: "Test",
-                filterValue: "1"
-            }]
-        });
-
-        // assert
-        assert.deepEqual(this.option("filterValue"), null, "filterValue");
-        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), undefined);
-    });
-
-    QUnit.test("clearing of filterValues", function(assert) {
+    QUnit.test("sync filterValue if filterValue == null", function(assert) {
         // act
         this.setupDataGrid({
             filterValue: null,
             filterSyncEnabled: true,
             columns: [{
                 dataField: "field",
+                dataType: "string",
+                selectedFilterOperation: "=",
+                filterValue: "1"
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "=", "1" ], "filterValue");
+        assert.equal(this.columnsController.columnOption("field", "filterValue"), "1");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["1"]);
+    });
+
+    QUnit.test("sync filterValues if filterValue == null", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: null,
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "field",
+                dataType: "string",
                 filterValues: ["2", "3"]
             }]
         });
 
         // assert
-        assert.deepEqual(this.option("filterValue"), null, "filterValue");
+        assert.deepEqual(this.option("filterValue"), ["field", "anyof", [ "2", "3"]], "filterValue");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["2", "3"]);
+        assert.equal(this.columnsController.columnOption("field", "filterValue"), undefined);
+    });
+
+    QUnit.test("clearing of filterValue if filterValue != null", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: [],
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "field",
+                dataType: "string",
+                filterValue: "1"
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), [], "filterValue");
+        assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), undefined);
+    });
+
+    QUnit.test("clearing of filterValues if filterValue != null", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: [],
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "field",
+                dataType: "string",
+                filterValues: ["2", "3"]
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), [], "filterValue");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), undefined);
     });
 
@@ -543,6 +615,7 @@ QUnit.module("Sync on initialization", {
             filterValue: null,
             columns: [{
                 dataField: "field",
+                dataType: "string",
                 filterValue: "1",
                 filterValues: ["2", "3"]
             }]
@@ -552,6 +625,35 @@ QUnit.module("Sync on initialization", {
         assert.equal(this.option("filterValue"), null, "filterValue");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), "1");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["2", "3"]);
+    });
+
+    QUnit.test("default filter operation depends on dataType of data if column.dataType is not set", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: null,
+            dataSource: [{ stringField: "test", numberField: 1 }],
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "stringField",
+                filterValue: "1",
+                filterValues: ["2", "3"]
+            }, {
+                dataField: "numberField",
+                filterValue: "1",
+                filterValues: ["2", "3"]
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), [
+            ["stringField", "anyof", ["2", "3"]],
+            "and",
+            ["stringField", "contains", "1"],
+            "and",
+            ["numberField", "anyof", ["2", "3"]],
+            "and",
+            ["numberField", "=", "1"]
+        ]);
     });
 });
 
@@ -568,7 +670,7 @@ QUnit.module("Real dataGrid", {
                 headerFilter: {
                     visible: true
                 },
-                columns: [{ dataField: "field", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }]
+                columns: [{ dataField: "field", dataType: "number", filterValues: [1], filterType: "exclude", filterValue: 2, selectedFilterOperation: "=" }]
             }, options)).dxDataGrid("instance");
             return this.dataGrid;
         };

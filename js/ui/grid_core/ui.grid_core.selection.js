@@ -447,11 +447,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
          * @publicName getSelectedRowsData()
          * @return Array<any> | Promise<any>
          */
-        /**
-         * @name dxTreeListMethods.getSelectedRowsData
-         * @publicName getSelectedRowsData()
-         * @return Array<any>
-         */
         getSelectedRowsData: function() {
             return this._selection.getSelectedItems();
         },

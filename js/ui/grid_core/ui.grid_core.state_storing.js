@@ -194,7 +194,7 @@ module.exports = {
 
                     that.option("searchPanel.text", searchText || "");
 
-                    that.option("filterValue", filterSyncController ? filterSyncController.getFilterValueFromState(state) : state.filterValue || null);
+                    that.option("filterValue", state.filterValue || (filterSyncController ? filterSyncController.getFilterValueFromColumns(state.columns) : null));
 
                     that.option("filterPanel.filterEnabled", state.filterPanel ? state.filterPanel.filterEnabled : true);
 
