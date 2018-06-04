@@ -741,41 +741,6 @@ QUnit.test('horizontal - bottom', function(assert) {
     }, 'range 5');
 });
 
-QUnit.test('horizontal - middle', function(assert) {
-    this.options.verticalOrientation = 'middle';
-    var rangeContainer = this.rangeContainer;
-    rangeContainer.render(this.options).resize(this.layout);
-
-    assert.ok(rangeContainer._renderer, '_renderer');
-    assert.ok(rangeContainer._container, '_container');
-
-    assert.ok(rangeContainer._root, '_root');
-    assert.deepEqual(rangeContainer._root._stored_settings, { 'class': 'dxg-range-container' }, '_root settings');
-
-    assert.strictEqual(rangeContainer._root.children.length, 5, 'ranges count');
-
-    assert.deepEqual(rangeContainer._root.children[0]._stored_settings, {
-        points: [210, 25.5, 210, 14.5, 225, 13.75, 225, 26.25], fill: 'c1', 'class': 'dxg-range dxg-range-0',
-        type: 'area'
-    }, 'range 1');
-    assert.deepEqual(rangeContainer._root.children[1]._stored_settings, {
-        points: [225, 26.25, 225, 13.75, 250, 12.5, 250, 27.5], fill: 'c2', 'class': 'dxg-range dxg-range-1',
-        type: 'area'
-    }, 'range 2');
-    assert.deepEqual(rangeContainer._root.children[2]._stored_settings, {
-        points: [250, 27.5, 250, 12.5, 290, 10.5, 290, 29.5], fill: 'c3', 'class': 'dxg-range dxg-range-2',
-        type: 'area'
-    }, 'range 3');
-    assert.deepEqual(rangeContainer._root.children[3]._stored_settings, {
-        points: [200, 25, 200, 15, 210, 14.5, 210, 25.5], fill: 'bcolor', 'class': 'dxg-range dxg-background-range',
-        type: 'area'
-    }, 'range 4');
-    assert.deepEqual(rangeContainer._root.children[4]._stored_settings, {
-        points: [290, 29.5, 290, 10.5, 300, 10, 300, 30], fill: 'bcolor', 'class': 'dxg-range dxg-background-range',
-        type: 'area'
-    }, 'range 5');
-});
-
 QUnit.test('vertical - left', function(assert) {
     this.options.vertical = true;
     this.options.horizontalOrientation = 'left';
@@ -892,9 +857,6 @@ QUnit.test('measure', function(assert) {
 
     this.options.verticalOrientation = 'bottom';
     assert.deepEqual(rangeContainer.render(this.options).measure(this.layout), { min: 20, max: 40 }, 'horizontal, bottom');
-
-    this.options.verticalOrientation = 'middle';
-    assert.deepEqual(rangeContainer.render(this.options).measure(this.layout), { min: 10, max: 30 }, 'horizontal, middle');
 
     this.options.vertical = true;
 
