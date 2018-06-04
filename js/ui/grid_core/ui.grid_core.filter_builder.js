@@ -1,12 +1,12 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    modules = require("./ui.grid_core.modules"),
-    extend = require("../../core/utils/extend").extend,
-    FilterBuilder = require("./../filter_builder"),
-    messageLocalization = require("../../localization/message"),
-    ScrollView = require("./../scroll_view"),
-    Popup = require("./../popup");
+import $ from "../../core/renderer";
+import modules from "./ui.grid_core.modules";
+import { extend } from "../../core/utils/extend";
+import FilterBuilder from "./../filter_builder";
+import messageLocalization from "../../localization/message";
+import ScrollView from "./../scroll_view";
+import Popup from "./../popup";
 
 var FilterBuilderView = modules.View.inherit({
     _renderCore: function() {
@@ -54,24 +54,23 @@ var FilterBuilderView = modules.View.inherit({
         }));
     },
 
-    _getPopupContentTemplate: function(contentElement) {
-        var $contentElement = $(contentElement),
-            $filterBuilderContainer = $("<div>").appendTo($contentElement),
-            fields = this.getController("columns").getFilteringColumns(),
-            customOperations = this.getController("filterSync").getCustomFilterOperations();
-
-        fields = fields.filter(item => item.filterOperations)
-        .map(item => {
-            var column = extend(true, {}, item);
-            ["anyof", "noneof"].forEach(item => column.filterOperations.indexOf(item) === -1 && column.filterOperations.push(item));
+    _getFilterBuilderFields: function() {
+        return this.getController("columns").getColumns().map(item => {
+            let column = extend(true, {}, item);
+            column.filterOperations = column.filterOperations !== column.defaultFilterOperations ? column.filterOperations : null;
             return column;
         });
+    },
+
+    _getPopupContentTemplate: function(contentElement) {
+        var $contentElement = $(contentElement),
+            $filterBuilderContainer = $("<div>").appendTo($(contentElement));
 
         this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
             value: this.option("filterValue"),
-            fields: fields
+            fields: this._getFilterBuilderFields(),
         }, this.option("filterBuilder"), {
-            customOperations: customOperations
+            customOperations: this.getController("filterSync").getCustomFilterOperations()
         }));
 
         this._createComponent($contentElement, ScrollView, { direction: "both" });
