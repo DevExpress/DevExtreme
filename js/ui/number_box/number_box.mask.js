@@ -80,7 +80,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-
     _focusOutHandler: function(e) {
         this._focusOutOccurs = true;
         if(this._useMaskBehavior()) {
@@ -92,6 +91,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _updateFormattedValue: function() {
+        this._parsedValue = this._tryParse(this._getInputVal(), this._caret(), "");
         this._adjustParsedValue();
         this._setTextByParsedValue();
 
