@@ -680,11 +680,11 @@ QUnit.test("incomplete values should be limited by max precision", function(asse
         value: null
     });
 
-    this.keyboard.type("0.000");
-    assert.equal(this.input.val(), "$ 0.000 kg", "value is incomplete");
+    this.keyboard.type("0.00");
+    assert.equal(this.input.val(), "$ 0.00 kg", "value is incomplete");
 
-    this.keyboard.press("enter");
-    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted on enter");
+    this.keyboard.type("0");
+    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted when max precision reached");
 });
 
 QUnit.test("value can be incomplete after removing via backspace", function(assert) {
@@ -897,10 +897,7 @@ QUnit.test("last non required zero should not be typed", function(assert) {
     this.instance.option("format", "#.##");
     this.keyboard.type("1.50");
 
-    assert.equal(this.input.val(), "1.50", "zero type was not prevented");
-
-    this.keyboard.press("enter");
-    assert.equal(this.input.val(), "1.5", "value was reformatted on value change");
+    assert.equal(this.input.val(), "1.5", "value was reformatted");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {
