@@ -302,8 +302,6 @@ QUnit.test('Prepare options when all options are custom', function(assert) {
                 arrowLength: 10,
                 enabled: false, // false
                 text: 'test',
-                verticalAlignment: 'bottom', // 'bottom'
-                horizontalAlignment: 'right',
                 format: 'fixedPoint', // 'currency', 'fixedPoint', 'decimal', 'exponential', 'largeNumber', 'thousands', 'millions', 'billions', 'trillions'
                 precision: 2,
                 color: '#FF00FF',

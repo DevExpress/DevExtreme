@@ -328,54 +328,22 @@ Tooltip.prototype = {
             y3,
             y2 = contentHeight + arrowLength,
             hp = "center",
-            vp = "bottom",
-            hasDeprecatedPosition;
+            vp = "bottom";
 
         y1 = y3 = contentHeight;
 
-        switch(options.verticalAlignment) { // deprecated since 15.1
-            case "top":
-                vp = "bottom";
-                hasDeprecatedPosition = true;
-                break;
-            case "bottom":
-                vp = "top";
-                hasDeprecatedPosition = true;
-                break;
+        if(tTop > cTop && tBottom > cBottom) {
+            vp = "out";
+        } else if(tTop > cTop) {
+            vp = "top";
         }
 
-        if(!hasDeprecatedPosition) {
-            if(tTop > cTop && tBottom > cBottom) {
-                vp = "out";
-            } else if(tTop > cTop) {
-                vp = "top";
-            }
-        }
-        hasDeprecatedPosition = false;
-
-        switch(options.horizontalAlignment) { // deprecated since 15.1
-            case "left":
-                hp = "right";
-                hasDeprecatedPosition = true;
-                break;
-            case "center":
-                hp = "center";
-                hasDeprecatedPosition = true;
-                break;
-            case "right":
-                hp = "left";
-                hasDeprecatedPosition = true;
-                break;
-        }
-
-        if(!hasDeprecatedPosition) {
-            if(tLeft > cLeft && tRight > cRight) {
-                hp = "out";
-            } else if(tHalfLeft > cLeft && tRight < cRight) {
-                hp = "left";
-            } else if(tHalfRight > cRight && tLeft < cLeft) {
-                hp = "right";
-            }
+        if(tLeft > cLeft && tRight > cRight) {
+            hp = "out";
+        } else if(tHalfLeft > cLeft && tRight < cRight) {
+            hp = "left";
+        } else if(tHalfRight > cRight && tLeft < cLeft) {
+            hp = "right";
         }
 
         if(hp === "out") {

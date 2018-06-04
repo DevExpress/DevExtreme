@@ -9,7 +9,7 @@ var BaseSparkline = {
     * @name BaseSparkline.Options
     * @namespace DevExpress.viz.sparklines
     * @hidden
-    */        
+    */
     /**
     * @name BaseSparklineOptions.redrawOnResize
     * @hidden
@@ -61,20 +61,6 @@ var BaseSparkline = {
         */
         enabled: true,
         /**
-        * @name BaseSparklineOptions.tooltip.verticalAlignment
-        * @type Enums.VerticalEdge
-        * @default undefined
-        * @deprecated
-        */
-        verticalAlignment: 'top',
-        /**
-        * @name BaseSparklineOptions.tooltip.horizontalAlignment
-        * @type Enums.HorizontalAlignment
-        * @default undefined
-        * @deprecated
-        */
-        horizontalAlignment: 'center',
-        /**
         * @name BaseSparklineOptions.tooltip.customizeTooltip
         * @type function(pointsInfo)
         * @type_function_param1 pointsInfo:object
@@ -112,7 +98,7 @@ var dxSparkline = {
     * @name dxSparkline.Options
     * @namespace DevExpress.viz.sparklines
     * @hidden
-    */       
+    */
     /**
    * @name dxSparkLineOptions.dataSource
    * @extends CommonVizDataSource
@@ -263,7 +249,7 @@ var dxBullet = {
     * @name dxBullet.Options
     * @namespace DevExpress.viz.sparklines
     * @hidden
-    */       
+    */
     /**
     * @name dxBulletOptions.value
     * @type number

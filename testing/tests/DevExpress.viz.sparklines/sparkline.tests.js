@@ -699,8 +699,6 @@ QUnit.begin(function() {
                     paddingTopBottom: 10,
                     arrowLength: 10,
                     enabled: false,
-                    verticalAlignment: 'top',
-                    horizontalAlignment: 'center',
                     format: 'fixedPoint',
                     precision: 2,
                     color: 'gold',
