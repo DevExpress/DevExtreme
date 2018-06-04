@@ -37,7 +37,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         if(allDay) {
             result = this._getAllDayAppointmentGeometry(coordinates);
         } else {
-            result = this._getSimpleAppointmentGeometry(coordinates);
+            result = this._getVerticalAppointmentGeometry(coordinates);
         }
 
         return this.callBase(result);
@@ -149,7 +149,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return result;
     },
 
-    _getSimpleAppointmentGeometry: function(coordinates) {
+    _getVerticalAppointmentGeometry: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
         if(overlappingMode) {

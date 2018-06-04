@@ -551,6 +551,14 @@ var Scheduler = Widget.inherit({
             maxAppointmentsPerCell: "auto",
 
                 /**
+                * @hidden
+                * @name dxSchedulerOptions.forceMaxAppointmentPerCell
+                * @type Date
+                * @default false
+                */
+            forceMaxAppointmentPerCell: false,
+
+                /**
                 * @name dxSchedulerOptions.selectedCellData
                 * @readonly
                 * @type Array<any>
