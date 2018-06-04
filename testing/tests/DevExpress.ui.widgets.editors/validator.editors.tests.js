@@ -201,3 +201,27 @@ QUnit.test("Disabled editor should bypass validation", function(assert) {
 
     assert.strictEqual(result, true, "Disabled editor should bypass validation");
 });
+
+QUnit.test("Reset value of custom validation rule when the required rule is defined before it", function(assert) {
+    // arrange
+    var editor = this.fixture.createEditor(),
+        spy = sinon.spy(function() { return false; }),
+        validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                { type: "required" },
+                {
+                    type: "custom",
+                    validationCallback: spy
+                }
+            ]
+        });
+
+    // act
+    editor.option("value", "test");
+    validator.reset();
+    editor.option("value", "test");
+
+    // assert
+    assert.equal(spy.callCount, 2, "The validationCallback is called after reset");
+});
