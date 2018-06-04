@@ -715,14 +715,15 @@ module.exports = {
                                 return that.isLoading();
                             },
                             pageCount: function() {
-                                return Math.ceil(this.totalItemsCount() / this.pageSize());
+                                var pageCount = Math.ceil(this.totalItemsCount() / this.pageSize());
+                                return pageCount ? pageCount : 1;
                             },
                             load: function() {
                                 if(that._rowsScrollController.pageIndex() >= this.pageCount()) {
                                     that._rowsScrollController.pageIndex(this.pageCount() - 1);
                                 }
 
-                                if(!that._rowsScrollController._dataSource.items().length) return;
+                                if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
                                 that._rowsScrollController.handleDataChanged(function(change) {
                                     change = change || {};
                                     change.changeType = change.changeType || "refresh";
