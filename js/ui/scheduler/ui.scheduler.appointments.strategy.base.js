@@ -19,7 +19,9 @@ var APPOINTMENT_MIN_SIZE = 2,
     APPOINTMENT_DEFAULT_WIDTH = 40,
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
-    COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
+    COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
+
+    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 23;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
@@ -555,7 +557,7 @@ var BaseRenderingStrategy = Class.inherit({
             var widthInPercents = 75;
             return widthInPercents * this.getDefaultCellWidth() / 100;
         } else {
-            return 23;
+            return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
         }
     },
 
