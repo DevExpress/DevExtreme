@@ -2972,6 +2972,101 @@ QUnit.test("Load collapsed groups, expand second level item, expand third level 
     assert.equal(dataSource.totalItemsCount(), 16, "total items count");
 });
 
+// T623492
+QUnit.test("Change page several times after expand groups if data is grouped by two fields", function(assert) {
+    var array = [];
+    var i, j;
+    for(i = 0; i < 4; i++) {
+        for(j = 0; j < 6; j++) {
+            array.push({ group1: i, group2: 0, id: i * 9 + j + 1 });
+        }
+        for(j = 0; j < 3; j++) {
+            array.push({ group1: i, group2: 1, id: i * 9 + j + 7 });
+        }
+    }
+
+    var dataSource = this.createDataSource({
+        store: array,
+        group: ["group1", "group2"],
+        pageSize: 20,
+        scrolling: { mode: 'virtual' }
+    });
+
+    dataSource.load();
+
+    // act
+    dataSource.changeRowExpand([0]);
+    dataSource.load();
+    dataSource.changeRowExpand([0, 0]);
+    dataSource.load();
+    dataSource.changeRowExpand([0, 1]);
+    dataSource.load();
+    dataSource.changeRowExpand([1]);
+    dataSource.load();
+    dataSource.changeRowExpand([1, 0]);
+    dataSource.load();
+
+    dataSource.pageIndex(1);
+    dataSource.load();
+
+    dataSource.changeRowExpand([1, 1]);
+    dataSource.load();
+    dataSource.changeRowExpand([2]);
+    dataSource.load();
+    dataSource.changeRowExpand([2, 0]);
+    dataSource.load();
+    dataSource.changeRowExpand([2, 1]);
+    dataSource.load();
+    dataSource.changeRowExpand([3]);
+    dataSource.load();
+    dataSource.changeRowExpand([3, 0]);
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items().length, 4, "first level group count");
+
+    assert.deepEqual(dataSource.items()[2].key, 3, "prev last group key");
+    assert.deepEqual(dataSource.items()[2].items, [{
+        "key": 0,
+        "isContinuationOnNextPage": true,
+        "items": [{
+            "group1": 3,
+            "group2": 0,
+            "id": 28
+        }, {
+            "group1": 3,
+            "group2": 0,
+            "id": 29
+        }],
+    }], "prev last group items");
+
+    assert.deepEqual(dataSource.items()[3].key, 3, "last group key");
+    assert.deepEqual(dataSource.items()[3].items, [{
+        "key": 0,
+        "isContinuation": true,
+        "items": [{
+            "group1": 3,
+            "group2": 0,
+            "id": 30
+        }, {
+            "group1": 3,
+            "group2": 0,
+            "id": 31
+        }, {
+            "group1": 3,
+            "group2": 0,
+            "id": 32
+        }, {
+            "group1": 3,
+            "group2": 0,
+            "id": 33
+        }]
+    }, {
+        "key": 1,
+        "items": null
+    }], "last group items");
+});
+
 QUnit.test("Expand third level group", function(assert) {
     var array = [
         /* 1 */
