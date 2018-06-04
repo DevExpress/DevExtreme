@@ -22,6 +22,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container",
     TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
     TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS,
+    BUTTON_FLAT_CLASS = "dx-button-flat",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
@@ -51,6 +52,21 @@ var ToolbarBase = CollectionWidget.inherit({
 
                 if(data.html) {
                     $container.html(data.html);
+                }
+
+                if(data.widget === "dxButton") {
+                    if(data.options) {
+                        var buttonContainerClass = this.option("useFlatButtons") ? BUTTON_FLAT_CLASS : "";
+                        if(data.options.elementAttr) {
+                            var customClass = data.options.elementAttr.class;
+                            if(customClass) {
+                                customClass = customClass.replace(BUTTON_FLAT_CLASS, "");
+                                buttonContainerClass += (" " + customClass);
+                            }
+                        }
+
+                        data.options = extend(data.options, { elementAttr: { class: buttonContainerClass } });
+                    }
                 }
             } else {
                 $container.text(String(data));

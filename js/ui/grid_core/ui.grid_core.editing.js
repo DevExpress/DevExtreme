@@ -25,7 +25,8 @@ var $ = require("../../core/renderer"),
     holdEvent = require("../../events/hold"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+    Deferred = deferredUtils.Deferred,
+    commonUtils = require("../../core/utils/common");
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -346,6 +347,10 @@ var EditingController = modules.ViewController.inherit((function() {
             return item && item.key;
         },
 
+        getEditRowIndex: function() {
+            return this._getVisibleEditRowIndex();
+        },
+
         getEditFormRowIndex: function() {
             var editMode = getEditMode(this);
 
@@ -443,7 +448,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that);
                 editData = that._editData[editIndex];
                 data = editData.data;
-                item.isEditing = options.rowIndex === that._getVisibleEditRowIndex();
+
+                item.isEditing = false;
 
                 switch(editData.type) {
                     case DATA_EDIT_DATA_INSERT_TYPE:
@@ -790,7 +796,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
 
                     if(that._prepareEditCell(params, item, columnIndex, editRowIndex)) {
-                        that._repaintEditCell(column, oldColumn, oldEditRowIndex);
+                        commonUtils.deferRender(function() {
+                            that._repaintEditCell(column, oldColumn, oldEditRowIndex);
+                        });
                     }
 
                 });
@@ -1080,20 +1088,22 @@ var EditingController = modules.ViewController.inherit((function() {
                 cancel = arg === "cancel";
                 editIndex = getIndexByKey(results[i].key, that._editData);
                 editData = that._editData[editIndex];
+                isError = arg && arg instanceof Error;
 
-                if(editData) {
-                    isError = arg && arg instanceof Error;
-                    if(isError) {
+                if(isError) {
+                    if(editData) {
                         editData.error = arg;
-                        $popupContent = that.getPopupContent();
-                        dataController.dataErrorOccurred.fire(arg, $popupContent);
-                        if(editMode !== EDIT_MODE_BATCH) {
-                            break;
-                        }
-                    } else if(!cancel || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
-                        that._removeEditDataItem(editIndex);
-                        hasSavedData = !cancel;
                     }
+                    $popupContent = that.getPopupContent();
+                    dataController.dataErrorOccurred.fire(arg, $popupContent);
+                    if(editMode !== EDIT_MODE_BATCH) {
+                        break;
+                    }
+                } else if(!cancel || !editData || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
+                    if(editIndex >= 0) {
+                        that._removeEditDataItem(editIndex);
+                    }
+                    hasSavedData = !cancel;
                 }
             }
             return hasSavedData;
@@ -1151,6 +1161,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 return result.resolve().promise();
             }
 
+            editData = that._editData.slice(0);
+
             if(!that._saveEditDataCore(deferreds, results) && editMode === EDIT_MODE_CELL) {
                 that._focusEditingCell();
             }
@@ -1161,8 +1173,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataSource && dataSource.beginLoading();
 
                 when.apply($, deferreds).done(function() {
-                    editData = that._editData.slice(0);
-
                     if(that._processSaveEditDataResult(results)) {
                         resetEditIndices(that);
 
@@ -2015,11 +2025,14 @@ module.exports = {
                     this.callBase(change);
 
                     var editingController = this._editingController,
-                        editFormRowIndex = editingController.getEditMode() === EDIT_MODE_FORM && editingController.getEditFormRowIndex(),
-                        editFormItem = this.items()[editFormRowIndex];
+                        editRowIndex = editingController.getEditRowIndex(),
+                        editItem = this.items()[editRowIndex];
 
-                    if(editFormItem) {
-                        editFormItem.rowType = "detail";
+                    if(editItem) {
+                        editItem.isEditing = true;
+                        if(editingController.getEditMode() === EDIT_MODE_FORM) {
+                            editItem.rowType = "detail";
+                        }
                     }
                 },
                 _processItems: function(items, changeType) {

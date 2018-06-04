@@ -34,13 +34,16 @@ var processColumnsForCompare = function(columns, parameterNames, ignoreParameter
                 if($.isFunction(this[propertyName])) {
                     delete this[propertyName];
                 }
-                if(propertyName === 'filterOperations' ||
-                    propertyName === 'showInColumnChooser' ||
-                    propertyName === 'userDataType' ||
-                    propertyName === 'defaultFilterOperation' ||
-                    propertyName === 'visibleIndex' ||
-                    propertyName === 'serializationFormat' ||
-                    propertyName === 'resizedCallbacks') {
+                if([
+                    "filterOperations",
+                    "showInColumnChooser",
+                    "userDataType",
+                    "defaultFilterOperation",
+                    "defaultFilterOperations",
+                    "visibleIndex",
+                    "serializationFormat",
+                    "resizedCallbacks"
+                ].indexOf(propertyName) !== -1) {
                     delete this[propertyName];
                 }
             }

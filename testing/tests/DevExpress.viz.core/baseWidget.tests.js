@@ -985,6 +985,18 @@ QUnit.test('default method use console.warn', function(assert) {
     assert.ok(this.error.calledOnce);
 });
 
+QUnit.test('suppress default method if there is onIncidentOccurred subscription', function(assert) {
+    this.createWidget();
+
+    var onIncidentOccurred = sinon.spy();
+    this.widget.on("incidentOccurred", onIncidentOccurred);
+
+    this.triggerIncident('E100');
+
+    assert.ok(!this.error.called);
+    assert.ok(onIncidentOccurred.calledOnce);
+});
+
 QUnit.test('call with some arguments', function(assert) {
     var onIncidentOccurred = sinon.spy();
     this.createWidget({ onIncidentOccurred: onIncidentOccurred });

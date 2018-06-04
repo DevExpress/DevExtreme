@@ -188,6 +188,12 @@
             min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + 2 * @GENERIC_GRID_BASE_CELL_PADDING
         }
 
+        .dx-numberbox.dx-show-clear-button.dx-texteditor-empty:not(.dx-invalid) {
+            .dx-texteditor-input {
+                padding-right: @GENERIC_GRID_BASE_CELL_PADDING;
+            }
+        }
+
         .dx-lookup {
             height: auto;
         }

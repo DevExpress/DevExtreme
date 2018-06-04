@@ -7,7 +7,9 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../core/utils/deferred").when;
+    when = require("../../core/utils/deferred").when,
+    domAdapter = require("../../core/dom_adapter"),
+    browser = require("../../core/utils/browser");
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",
@@ -183,6 +185,7 @@ var ResizingController = modules.ViewController.inherit({
             resetBestFitMode,
             isColumnWidthsCorrected = false,
             resultWidths = [],
+            focusedElement,
             normalizeWidthsByExpandColumns = function() {
                 var expandColumnWidth;
 
@@ -216,6 +219,7 @@ var ResizingController = modules.ViewController.inherit({
         that._setVisibleWidths(visibleColumns, []);
 
         if(needBestFit) {
+            focusedElement = domAdapter.getActiveElement();
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
@@ -245,6 +249,9 @@ var ResizingController = modules.ViewController.inherit({
             if(resetBestFitMode) {
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
+                if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
+                    browser.msie ? setTimeout(function() { focusedElement.focus(); }) : focusedElement.focus();
+                }
             }
 
             isColumnWidthsCorrected = that._correctColumnWidths(resultWidths, visibleColumns);

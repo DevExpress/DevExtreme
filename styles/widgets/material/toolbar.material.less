@@ -120,8 +120,11 @@
 
     .dx-toolbar-item-content,
     .dx-toolbar-button {
-        > .dx-button {
-            .dx-button-flat-styling(@base-icon-color);
+        > .dx-button.dx-button-normal {
+            .dx-icon {
+                color: @base-icon-color;
+            }
+            color: @base-icon-color;
         }
     }
 }

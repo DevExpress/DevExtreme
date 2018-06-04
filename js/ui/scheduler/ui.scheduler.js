@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     errors = require("../widget/ui.errors"),
+    windowUtils = require("../../core/utils/window"),
     dialog = require("../dialog"),
     recurrenceUtils = require("./utils.recurrence"),
     domUtils = require("../../core/utils/dom"),
@@ -1519,27 +1520,29 @@ var Scheduler = Widget.inherit({
     },
 
     _dataSourceChangedHandler: function(result) {
-        this._workSpaceRecalculation.done((function() {
-            this._filteredItems = this.fire("prerenderFilter");
-            this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
+        if(this._readyToRenderAppointments) {
+            this._workSpaceRecalculation.done((function() {
+                this._filteredItems = this.fire("prerenderFilter");
+                this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
 
-            if(this._isAgenda()) {
-                this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
-            }
+                if(this._isAgenda()) {
+                    this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
+                }
 
-            if(this._filteredItems.length && this._isVisible()) {
-                this._appointments.option("items", this._getAppointmentsToRepaint());
+                if(this._filteredItems.length && this._isVisible()) {
+                    this._appointments.option("items", this._getAppointmentsToRepaint());
 
-                delete this.instance._updatedAppointment;
-            } else {
-                this._appointments.option("items", []);
-            }
-            if(this._isAgenda()) {
-                this._workSpace._renderView();
-                    // TODO: remove rows calculation from this callback
-                this._dataSourceLoadedCallback.fireWith(this, [result]);
-            }
-        }).bind(this));
+                    delete this.instance._updatedAppointment;
+                } else {
+                    this._appointments.option("items", []);
+                }
+                if(this._isAgenda()) {
+                    this._workSpace._renderView();
+                        // TODO: remove rows calculation from this callback
+                    this._dataSourceLoadedCallback.fireWith(this, [result]);
+                }
+            }).bind(this));
+        }
     },
 
     _getAppointmentsToRepaint: function() {
@@ -1706,21 +1709,17 @@ var Scheduler = Widget.inherit({
                 fixedContainer: $fixedContainer,
                 allDayContainer: $allDayContainer
             });
-
+            this._readyToRenderAppointments = windowUtils.hasWindow();
+            this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
             this._filterAppointmentsByDate();
             this._reloadDataSource();
         }).bind(this));
-
-        this._readyToRenderAppointments = false;
     },
 
     _render: function() {
         this.callBase();
 
         this._toggleSmallClass();
-
-        this._readyToRenderAppointments = true;
-        this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
     },
 
     _renderHeader: function() {

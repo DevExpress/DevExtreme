@@ -88,6 +88,7 @@ var ActionSheet = CollectionWidget.inherit({
             * @name dxActionSheetOptions.visible
             * @type boolean
             * @default false
+            * @fires dxActionSheetOptions.onOptionChanged
             */
             visible: false,
 

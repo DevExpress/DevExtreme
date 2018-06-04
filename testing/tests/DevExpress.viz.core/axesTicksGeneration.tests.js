@@ -1145,7 +1145,7 @@ QUnit.test("getAggregationInfo. get tick from minVisible - tickInterval if tickI
     assert.deepEqual(aggregationInfo.ticks, [-5, 0, 5, 10]);
 });
 
-QUnit.test("getAggregationInfo with zooming", function(assert) {
+QUnit.test("getAggregationInfo with zooming. min is 0", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -1153,16 +1153,36 @@ QUnit.test("getAggregationInfo with zooming", function(assert) {
         aggregationGroupWidth: 10
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 10, addRange: sinon.stub().returnsThis() });
-    this.axis.zoom(3, 5);
+    this.axis.setBusinessRange({ min: -50, max: 50, addRange: sinon.stub().returnsThis() });
+    this.axis.zoom(0, 5);
     this.axis.createTicks(canvas(170));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.strictEqual(aggregationInfo.interval, 0.2);
+    assert.strictEqual(aggregationInfo.interval, 0.5);
     assert.strictEqual(aggregationInfo.ticks.length, 32);
-    assert.strictEqual(aggregationInfo.ticks[0], 1);
-    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 7.2);
+    assert.strictEqual(aggregationInfo.ticks[0], -5);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 10.5);
+});
+
+QUnit.test("getAggregationInfo with zooming. max is 0", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        aggregationGroupWidth: 10
+    });
+
+    this.axis.setBusinessRange({ min: -50, max: 50, addRange: sinon.stub().returnsThis() });
+    this.axis.zoom(-5, 0);
+    this.axis.createTicks(canvas(170));
+
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
+
+    assert.strictEqual(aggregationInfo.interval, 0.5);
+    assert.strictEqual(aggregationInfo.ticks.length, 32);
+    assert.strictEqual(aggregationInfo.ticks[0], -10);
+    assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 5.5);
 });
 
 QUnit.test("getAggregationInfo with min/max", function(assert) {

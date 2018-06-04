@@ -349,7 +349,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _releaseFocusedCell: function($cell) {
         $cell = $cell || $(this._focusedCells);
 
-        if(isDefined($cell)) {
+        if(isDefined($cell) && $cell.length) {
             this._toggleFocusClass(false, $cell);
             this._toggleFocusedCellClass(false, $cell);
             this.setAria("label", undefined, $cell);
@@ -973,7 +973,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
             if(isDefined($cell)) {
                 this._toggleFocusClass(true, $cell);
-                cells.push($cell);
+                cells.push($cell.get(0));
             }
         }
         this._focusedCells = cells;

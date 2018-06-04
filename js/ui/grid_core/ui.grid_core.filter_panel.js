@@ -207,7 +207,7 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             options = {
                 customOperations: customOperations,
-                columns: that.getController("columns").getColumns(),
+                columns: that.getController("columns").getFilteringColumns(),
                 filterOperationDescriptions: that.option("filterBuilder.filterOperationDescriptions"),
                 groupOperationDescriptions: that.option("filterBuilder.groupOperationDescriptions")
             };

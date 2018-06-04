@@ -1609,6 +1609,22 @@ QUnit.test("SelectedCellData option should make cell in focused state", function
     assert.ok($($cells.eq(0)).hasClass("dx-state-focused", "correct cell is focused"));
 });
 
+QUnit.test("Focused cells cash should be correct (T640466)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+        currentDate: new Date(2018, 3, 11),
+        height: 600
+    });
+    var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell"),
+        workSpace = this.instance.getWorkSpace();
+
+    assert.deepEqual(workSpace._focusedCells[0], $cells.eq(0).get(0), "Cashed cells is correct");
+});
+
 QUnit.test("Scheduler timeline workweek should contain two spans in header panel cell in Material theme", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
