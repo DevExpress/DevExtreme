@@ -1212,8 +1212,7 @@ registerTheme({
                 visible: true
             },
             paddingLeftRight: 16,
-            paddingTopBottom: 12,
-            markerColor: "#ba4d51"
+            paddingTopBottom: 12
         },
         controlBar: {
             borderColor: "#5d5d5d",
