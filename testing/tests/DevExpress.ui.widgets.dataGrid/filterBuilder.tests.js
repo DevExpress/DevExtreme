@@ -160,6 +160,18 @@ QUnit.module("Common", {
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
     });
 
+    QUnit.test("the 'any of' operation is available in filterBuilderPopup if filterOperations is instance of defaultFilterOperations", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ dataField: "field", dataType: "string", defaultFilterOperations: ["="] }],
+            filterValue: ["field", "anyof", ["a"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
     // T640912
     QUnit.test("the customOperation is available in built-in filterBuilder using dataTypes array", function(assert) {
         // arrange, act
