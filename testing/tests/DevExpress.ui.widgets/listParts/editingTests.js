@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    typeUtils = require("core/utils/type"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -534,10 +535,7 @@ QUnit.test("reorderItem method should return a Promise", function(assert) {
         firstItemText = $items.eq(0).text(),
         secondItemText = $items.eq(1).text();
 
-    promise.then(function() {
-        assert.ok(true, "promise resolved");
-    });
-
+    assert.ok(typeUtils.isPromise(promise), "method returns a promise");
     assert.equal(firstItemText, "2");
     assert.equal(secondItemText, "1");
 });
