@@ -332,10 +332,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var floatLength = textParts[1].length,
             precision = this._getPrecisionLimits(this._getFormatPattern(), text),
             isPrecisionInRange = inRange(floatLength, precision.min, precision.max),
-            maxPrecisionReached = precision.max === floatLength,
             endsWithZero = textParts[1].charAt(floatLength - 1) === "0";
 
-        return isPrecisionInRange && ((endsWithZero && !maxPrecisionReached) || !floatLength);
+        return isPrecisionInRange && (endsWithZero || !floatLength);
     },
 
     _isValueInRange: function(value) {

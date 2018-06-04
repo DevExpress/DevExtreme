@@ -680,11 +680,11 @@ QUnit.test("incomplete values should be limited by max precision", function(asse
         value: null
     });
 
-    this.keyboard.type("0.00");
-    assert.equal(this.input.val(), "$ 0.00 kg", "value is incomplete");
+    this.keyboard.type("0.000");
+    assert.equal(this.input.val(), "$ 0.000 kg", "value is incomplete");
 
-    this.keyboard.type("0");
-    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted when max precision reached");
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "$ 0 kg", "value was reformatted on enter");
 });
 
 QUnit.test("value can be incomplete after removing via backspace", function(assert) {
@@ -774,9 +774,23 @@ QUnit.test("incomplete values should be reformatted on enter", function(assert) 
     assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
+QUnit.test("incomplete value should be reformatted on enter after paste", function(assert) {
+    this.instance.option("value", null);
+    this.input.val("123.");
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
 QUnit.testInActiveWindow("incomplete values should be reformatted on focusout", function(assert) {
     this.instance.option("value", 123);
     this.keyboard.caret(3).type(".").blur();
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.test("incomplete value should be reformatted on focusout after paste", function(assert) {
+    this.instance.option("value", null);
+    this.input.val("123.");
+    this.input.trigger("focusout");
     assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
@@ -897,7 +911,10 @@ QUnit.test("last non required zero should not be typed", function(assert) {
     this.instance.option("format", "#.##");
     this.keyboard.type("1.50");
 
-    assert.equal(this.input.val(), "1.5", "value was reformatted");
+    assert.equal(this.input.val(), "1.50", "zero type was not prevented");
+
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "1.5", "value was reformatted on value change");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {
