@@ -20,8 +20,7 @@ var WHITE = "#ffffff",
     OUTSIDE = "outside",
 
     themeModule = require("../../themes"),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias;
+    registerTheme = themeModule.registerTheme;
 
 registerTheme({
     name: "generic.light",
@@ -1559,5 +1558,3 @@ registerTheme({
     }
 });
 
-// DEPRECATED_15_1 / "desktop" name
-registerThemeAlias("desktop.light", "generic.light");

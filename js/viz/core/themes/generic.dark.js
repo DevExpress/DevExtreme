@@ -2,7 +2,6 @@
 
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
 
     WHITE = "#ffffff",
     BLACK = "#000000",
@@ -221,5 +220,3 @@ registerTheme({
     }
 }, "generic.light");
 
-// DEPRECATED_15_1 / "desktop" name
-registerThemeAlias("desktop.dark", "generic.dark");

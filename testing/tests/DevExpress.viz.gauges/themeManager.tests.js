@@ -11,7 +11,7 @@ QUnit.test('Instance type', function(assert) {
     assert.ok(themeManager instanceof ThemeManager);
 });
 
-QUnit.test('Theme - desktop', function(assert) {
+QUnit.test('Theme - generic', function(assert) {
     var themeManager = new ThemeManager();
     themeManager.setCallback(noop);
     themeManager.setTheme();
@@ -28,10 +28,10 @@ QUnit.test('Theme - desktop', function(assert) {
     assert.ok(theme._linear, '_linear');
 });
 
-QUnit.test('Theme - desktop-dark', function(assert) {
+QUnit.test('Theme - generic-dark', function(assert) {
     var themeManager = new ThemeManager();
     themeManager.setCallback(noop);
-    themeManager.setTheme('desktop.dark');
+    themeManager.setTheme('generic.dark');
     var theme = themeManager.theme();
     assert.strictEqual(themeManager.themeName(), 'generic.dark', 'theme name');
     assert.ok(theme.title, 'title');

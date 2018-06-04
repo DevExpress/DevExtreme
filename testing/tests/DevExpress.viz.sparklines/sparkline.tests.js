@@ -800,11 +800,11 @@ QUnit.begin(function() {
 
     QUnit.test('Dark theme', function(assert) {
         var sparkline = this.createSparkline({
-            theme: 'desktop.dark'
+            theme: 'generic.dark'
         });
 
         delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, { theme: 'desktop.dark' }), 'All options should be correct');
+        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, { theme: 'generic.dark' }), 'All options should be correct');
     });
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
