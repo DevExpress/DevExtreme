@@ -144,30 +144,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _checkLongCompactAppointment: function(item, result) {
-        if(item.allDay) {
-            this._splitLongCompactAppointment(item, result);
-        } else {
-            this._splitLongVerticalCompactAppointment(item, result);
-        }
+        this._splitLongCompactAppointment(item, result);
 
-        return result;
-    },
-
-    _splitLongVerticalCompactAppointment: function(item, result) {
-        var appointmentCountPerCell = this._getMaxAppointmentCountPerCellByType(false);
-        var compactCount = 0;
-
-        if(appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
-            item.isCompact = true;
-            compactCount = this._getCompactAppointmentParts(item.width);
-            for(var k = 1; k < compactCount; k++) {
-                var compactPart = extend(true, {}, item);
-                compactPart.left = this._getCompactLeftCoordinate(item.left, k);
-                compactPart.cellIndex = compactPart.cellIndex + k;
-                compactPart.sortedIndex = null;
-                result.push(compactPart);
-            }
-        }
         return result;
     },
 
