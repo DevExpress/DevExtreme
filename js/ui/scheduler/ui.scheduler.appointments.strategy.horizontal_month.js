@@ -86,21 +86,11 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return this._getAppointmentHeightByTheme();
     },
 
-    // _getCompactLeftCoordinate: function(itemLeft, index) {
-    //     var cellWidth = this._defaultWidth || this.getAppointmentMinSize();
-
-    //     return itemLeft + cellWidth * index;
-    // },
-
     _checkLongCompactAppointment: function(item, result) {
         this._splitLongCompactAppointment(item, result);
 
         return result;
     },
-
-    // _getMaxHeight: function() {
-    //     return this._defaultHeight || this.getAppointmentMinSize();
-    // },
 
     createTaskPositionMap: function(items) {
         return this.callBase(items, true);
@@ -115,10 +105,6 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
         return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     },
-
-    // _getAppointmentCount: function() {
-    //     return this._getMaxAppointmentCountPerCell();
-    // },
 
     _getDefaultRatio: function() {
         return MONTH_APPOINTMENT_HEIGHT_RATIO;
