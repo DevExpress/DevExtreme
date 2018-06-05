@@ -285,7 +285,7 @@
     }
 }
 
-.dx-scheduler-header-panel {
+.dx-scheduler-header-panel{
     .dx-scheduler-group-row {
         &:not(:first-child) {
             border-bottom: @SCHEDULER_BASE_BORDER;
@@ -295,12 +295,18 @@
                 color: @SCHEDULER_PANEL_TEXT_COLOR;
             }
         }
+    }
 
-        .dx-scheduler-group-header {
-            font-weight: bold;
-            font-size: 18px;
-            color: @scheduler-group-header-color;
-        }
+    .dx-scheduler-group-header {
+        font-size: 18px;
+    }
+}
+
+.dx-scheduler-header-panel,
+.dx-scheduler-work-space-vertical-group-table {
+    .dx-scheduler-group-header {
+        font-weight: bold;
+        color: @scheduler-group-header-color;
     }
 }
 

@@ -9,7 +9,8 @@ var dataUtils = require("../core/element_data"),
     ValidationMixin = require("./validation/validation_mixin"),
     ValidationEngine = require("./validation_engine"),
     DefaultAdapter = require("./validation/default_adapter"),
-    registerComponent = require("../core/component_registrator");
+    registerComponent = require("../core/component_registrator"),
+    each = require("../core/utils/iterator").each;
 
 var VALIDATOR_CLASS = "dx-validator";
 
@@ -204,6 +205,11 @@ var Validator = DOMComponent.inherit({
         }
     },
 
+    _resetValidationState: function() {
+        each(this.option("validationRules"), function(_, rule) {
+            delete rule.isValid;
+        });
+    },
 
     /**
     * @name dxValidatorMethods.validate
@@ -251,7 +257,9 @@ var Validator = DOMComponent.inherit({
                 isValid: true,
                 brokenRule: null
             };
+
         adapter.reset();
+        this._resetValidationState();
         this._applyValidationResult(result, adapter);
     },
 

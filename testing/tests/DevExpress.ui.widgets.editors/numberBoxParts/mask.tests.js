@@ -798,9 +798,23 @@ QUnit.test("incomplete values should be reformatted on enter", function(assert) 
     assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
+QUnit.test("incomplete value should be reformatted on enter after paste", function(assert) {
+    this.instance.option("value", null);
+    this.input.val("123.");
+    this.keyboard.press("enter");
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
 QUnit.testInActiveWindow("incomplete values should be reformatted on focusout", function(assert) {
     this.instance.option("value", 123);
     this.keyboard.caret(3).type(".").blur();
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.test("incomplete value should be reformatted on focusout after paste", function(assert) {
+    this.instance.option("value", null);
+    this.input.val("123.");
+    this.input.trigger("focusout");
     assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
