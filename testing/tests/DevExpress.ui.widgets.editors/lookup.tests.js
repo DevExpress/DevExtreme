@@ -1359,22 +1359,18 @@ QUnit.test("The search field should be insert before list", function(assert) {
 });
 
 QUnit.test("Check popup position for Material theme when fullScreen option is true ", function(assert) {
-    var origIsMaterial = themes.isMaterial;
-    themes.isMaterial = function() { return true; };
+    var isMaterialStub = sinon.stub(themes, "isMaterial");
 
-    var $lookup = $("<div>").prependTo("body");
+    isMaterialStub.returns(true);
 
-    try {
+    var lookup = $("#lookup").dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], fullScreen: true }).dxLookup("instance");
 
-        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], fullScreen: true }).dxLookup("instance");
+    $(lookup.field()).trigger("dxclick");
+    assert.equal($(lookup.content()).parent().position().top, 0, "popup doesn't have offset top");
+    assert.equal($(lookup.content()).parent().position().left, 0, "popup doesn't have offset left");
 
-        $(lookup.field()).trigger("dxclick");
-        assert.equal($(lookup.content()).parent().position().top, 0, "popup doesn't have offset top");
-        assert.equal($(lookup.content()).parent().position().left, 0, "popup doesn't have offset left");
-    } finally {
-        $lookup.remove();
-        themes.isMaterial = origIsMaterial;
-    }
+    lookup.close();
+    isMaterialStub.restore();
 });
 
 
