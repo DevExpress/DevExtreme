@@ -256,8 +256,8 @@ var subscribes = {
         return this.getLayoutManager().getRenderingStrategyInstance().getDeltaTime(e, initialSize, itemData);
     },
 
-    getCompactAppointmentGroupMaxWidth: function() {
-        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount);
+    getCompactAppointmentGroupMaxWidth: function(isAllDay) {
+        return this.getLayoutManager().getRenderingStrategyInstance().getCompactAppointmentGroupMaxWidth(this._getViewCountConfig().intervalCount, isAllDay);
     },
 
     getStartDate: function(appointmentData, skipNormalize) {
@@ -398,6 +398,10 @@ var subscribes = {
 
     renderDropDownAppointments: function(options) {
         this._dropDownAppointments.render(options, this);
+    },
+
+    supportCompactDropDownAppointments: function() {
+        return this._workSpace._supportCompactDropDownAppointments();
     },
 
     getGroupCount: function(options) {
@@ -589,6 +593,10 @@ var subscribes = {
 
     getMaxAppointmentsPerCell: function() {
         return this.getMaxAppointmentsPerCell();
+    },
+
+    forceMaxAppointmentPerCell: function() {
+        return this.forceMaxAppointmentPerCell();
     },
 
     agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {
