@@ -660,6 +660,7 @@ QUnit.test("FieldPanel inherits visible option", function(assert) {
 
     // assert
     assert.notOk(fieldPanelInstance.option("visible"), 'fieldPanel in invisible');
+    assert.ok(pivotGrid.$element().hasClass("dx-state-invisible"), "pivot grid saves invisible styles");
 });
 
 QUnit.test("create field chooser with search", function(assert) {
