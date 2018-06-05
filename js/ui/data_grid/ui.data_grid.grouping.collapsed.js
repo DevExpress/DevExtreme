@@ -88,7 +88,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         }
     };
 
-    var updateGroupInfos = function(that, options, items, loadedGroupCount, groupIndex, path) {
+    var updateGroupInfos = function(that, options, items, loadedGroupCount, groupIndex, path, parentIndex) {
         var item,
             groupCount = options.group ? options.group.length : 0,
             isLastGroupLevel = groupCount === loadedGroupCount,
@@ -101,7 +101,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         groupIndex = groupIndex || 0;
         path = path || [];
 
-        if(remotePaging) {
+        if(remotePaging && !parentIndex) {
             offset = groupIndex === 0 ? options.skip || 0 : options.skips[groupIndex - 1] || 0;
         }
 
@@ -118,7 +118,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
                 updateGroupInfoItem(that, item, isLastGroupLevel, path, offset + i);
 
-                count = item.items ? updateGroupInfos(that, options, item.items, loadedGroupCount, groupIndex + 1, path) : item.count || -1;
+                count = item.items ? updateGroupInfos(that, options, item.items, loadedGroupCount, groupIndex + 1, path, i) : item.count || -1;
                 if(count < 0) {
                     return -1;
                 }
