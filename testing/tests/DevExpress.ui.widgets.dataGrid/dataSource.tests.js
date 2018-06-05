@@ -1245,6 +1245,24 @@ QUnit.test("grouping with paginate. Collapse group", function(assert) {
     }]);
 });
 
+// T635726
+QUnit.test("expand group item if group level is collapsed", function(assert) {
+    var source = this.createDataSource({
+        group: [{ selector: "field1", isExpanded: false }]
+    });
+
+    source.load();
+
+    source.changeRowExpand([2]);
+    source.load();
+
+    assert.deepEqual(source.items(), [{
+        key: 1, items: null
+    }, {
+        key: 2, items: [{ field1: 2, field2: 4, field3: 6 }]
+    }]);
+});
+
 QUnit.test("grouping with paginate. Collapse group when remote sorting and local sorting are different", function(assert) {
     var arrayStore = new ArrayStore([
             { field1: "ES", field2: 1 },
