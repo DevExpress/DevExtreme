@@ -713,13 +713,17 @@
     .dx-scheduler-timeline-work-week {
         .dx-scheduler-header-panel {
             .flex-container(row, nowrap);
+
+            thead {
+                width: 100%;
+            }
         }
 
         .dx-scheduler-header-row {
             .flex-container(row, nowrap);
         }
 
-        .dx-scheduler-header-panel-week-cell {
+        .dx-scheduler-header-panel-cell  {
             flex-grow: 1;
             flex-basis: 0;
             justify-content: center;
