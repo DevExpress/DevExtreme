@@ -1369,7 +1369,6 @@ QUnit.test("Check popup position for Material theme when fullScreen option is tr
         $(lookup.field()).trigger("dxclick");
         assert.equal($(lookup.content()).parent().position().top, 0, "popup doesn't have offset top");
         assert.equal($(lookup.content()).parent().position().left, 0, "popup doesn't have offset left");
-        lookup.close();
     } finally {
         isMaterialStub.restore();
     }
