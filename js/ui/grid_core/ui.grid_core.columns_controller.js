@@ -35,7 +35,8 @@ var $ = require("../../core/renderer"),
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
-    COMMAND_EXPAND_CLASS = "dx-command-expand";
+    COMMAND_EXPAND_CLASS = "dx-command-expand",
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
@@ -1936,10 +1937,10 @@ module.exports = {
                             var targetColumn = that._columns[toIndex];
 
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-                                options.visibleIndex = undefined;
+                                options.visibleIndex = MAX_SAFE_INTEGER;
                             } else {
                                 if(column.fixed ^ targetColumn.fixed) {
-                                    options.visibleIndex = undefined;
+                                    options.visibleIndex = MAX_SAFE_INTEGER;
                                 } else {
                                     options.visibleIndex = targetColumn.visibleIndex;
                                 }
