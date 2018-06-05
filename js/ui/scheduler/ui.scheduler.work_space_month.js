@@ -292,6 +292,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return this._getViewStartByOptions();
     },
 
+    _supportCompactDropDownAppointments: function() {
+        return false;
+    },
+
     scrollToTime: noop
 });
 

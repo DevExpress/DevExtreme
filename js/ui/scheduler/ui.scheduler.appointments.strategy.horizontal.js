@@ -4,9 +4,11 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     dateUtils = require("../../core/utils/date");
 
 var MAX_APPOINTMENT_HEIGHT = 100,
-    BOTTOM_CELL_GAP = 20,
+    DEFAULT_APPOINTMENT_HEIGHT = 60,
+    DROP_DOWN_BUTTON_OFFSET = 2,
+    BOTTOM_CELL_GAP = 20;
 
-    toMs = dateUtils.dateToMilliseconds;
+var toMs = dateUtils.dateToMilliseconds;
 
 var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _needVerifyItemSize: function() {
@@ -54,21 +56,64 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
-        var cellHeight = (this._defaultHeight || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
-            height = cellHeight / coordinates.count;
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        if(height > MAX_APPOINTMENT_HEIGHT) {
-            height = MAX_APPOINTMENT_HEIGHT;
+        if(overlappingMode && this.instance.fire("forceMaxAppointmentPerCell")) {
+            var config = this._calculateGeometryConfig(coordinates);
+
+            return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
+        } else {
+            var cellHeight = (this._defaultHeight || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
+                height = cellHeight / coordinates.count;
+
+            if(height > MAX_APPOINTMENT_HEIGHT) {
+                height = MAX_APPOINTMENT_HEIGHT;
+            }
+
+            var top = coordinates.top + coordinates.index * height;
+
+            return {
+                height: height,
+                width: coordinates.width,
+                top: top,
+                left: coordinates.left
+            };
         }
+    },
 
-        var top = coordinates.top + coordinates.index * height;
-
+    _getOffsets: function() {
         return {
-            height: height,
-            width: coordinates.width,
-            top: top,
-            left: coordinates.left
+            unlimited: 0,
+            auto: 0
         };
+    },
+
+    _checkLongCompactAppointment: function(item, result) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+
+        if(overlappingMode && this.instance.fire("forceMaxAppointmentPerCell")) {
+            this._splitLongCompactAppointment(item, result);
+
+            return result;
+        }
+    },
+
+    _getCompactLeftCoordinate: function(itemLeft, index) {
+        var cellWidth = this._defaultWidth || this.getAppointmentMinSize();
+
+        return itemLeft + cellWidth * index;
+    },
+
+    _getMaxHeight: function() {
+        return this._defaultHeight || this.getAppointmentMinSize();
+    },
+
+    _getAppointmentCount: function(overlappingMode, coordinates) {
+        return this._getMaxAppointmentCountPerCellByType(false);
+    },
+
+    _getAppointmentDefaultHeight: function() {
+        return DEFAULT_APPOINTMENT_HEIGHT;
     },
 
     _correctRtlCoordinatesParts: function(coordinates, width) {
@@ -94,6 +139,10 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         });
 
         return result;
+    },
+
+    getCompactAppointmentGroupMaxWidth: function() {
+        return this.getDefaultCellWidth() - DROP_DOWN_BUTTON_OFFSET * 2;
     },
 
     getDeltaTime: function(args, initialSize) {
