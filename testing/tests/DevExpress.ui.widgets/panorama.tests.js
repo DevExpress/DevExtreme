@@ -58,8 +58,8 @@ var position = function($element) {
 
 var backgroundPosition = function($element) {
     return parseInt($element.css("backgroundPosition").split(" ")[0], 10);
-    // TODO: use when jQuery solve bug in ie10
-    // return parseInt($element.css("background-position-x"), 10);
+    // TODO: use when jQuery solve bug in ie11
+    // return parseInt($element.css("backgroundPositionX"), 10);
 };
 
 var moveBackground = function($element, position) {

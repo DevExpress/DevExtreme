@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     clickEvent = require("../../events/click"),
-    contextMenuEvent = require("../../events/contextmenu"),
     pointerEvents = require("../../events/pointer"),
     positionUtils = require("../../animation/position"),
     eventUtils = require("../../events/utils"),
@@ -175,8 +174,7 @@ var EditorFactory = modules.ViewController.inherit({
 
     _attachContainerEventHandlers: function() {
         var that = this,
-            $container = that.component && that.component.$element(),
-            isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
+            $container = that.component && that.component.$element();
 
         if($container) {
             // T179518
@@ -185,9 +183,6 @@ var EditorFactory = modules.ViewController.inherit({
                     that._updateFocusHandler(e);
                 }
             });
-
-            // T112103, T110581, T174768, T551322
-            isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
         }
     },
 

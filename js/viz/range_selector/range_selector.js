@@ -660,7 +660,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         // TODO: Move it to the SlidersEventManager
         root.css({
-            "touch-action": "pan-y", "-ms-touch-action": "pan-y"
+            "touch-action": "pan-y"
         });
 
         // RangeContainer

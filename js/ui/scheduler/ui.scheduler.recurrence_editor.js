@@ -18,7 +18,6 @@ var $ = require("../../core/renderer"),
     NumberBox = require("../number_box"),
     SelectBox = require("../select_box"),
     DateBox = require("../date_box"),
-    publisherMixin = require("./ui.scheduler.publisher_mixin"),
     messageLocalization = require("../../localization/message"),
     dateLocalization = require("../../localization/date"),
     dateUtils = require("../../core/utils/date");
@@ -194,11 +193,9 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _renderContainerVisibility: function(value) {
         if(value) {
             this._$container.show();
-            this.notifyObserver("recurrenceEditorVisibilityChanged", { visible: true });
             domUtils.triggerShownEvent(this._$container);
         } else {
             this._$container.hide();
-            this.notifyObserver("recurrenceEditorVisibilityChanged", { visible: false });
         }
     },
 
@@ -895,7 +892,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             this._switchEditor.setAria(arguments[0], arguments[1]);
         }
     }
-}).include(publisherMixin);
+});
 
 registerComponent("dxSchedulerRecurrenceEditor", SchedulerRecurrenceEditor);
 

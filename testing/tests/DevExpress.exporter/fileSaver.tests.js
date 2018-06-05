@@ -9,37 +9,6 @@ var $ = require("jquery"),
 
 QUnit.module("saveAs");
 
-QUnit.test("IE9 do not save without proxy", function(assert) {
-    if(!browser.msie || parseInt(browser.version) >= 10) {
-        assert.ok(true, "This test only for IE version below 10");
-        return;
-    }
-
-    // arrange
-    var fileSaved = false,
-        warningSend = null,
-        _errorsLog = errors.log,
-        _saveBlobAs = fileSaver._saveBlobAs,
-        _saveByProxy = fileSaver._saveByProxy,
-        _saveBase64As = fileSaver._saveBase64As;
-
-    // act
-    errors.log = function(errorCode) { warningSend = errorCode; return; };
-    fileSaver._saveBlobAs = fileSaver._saveBase64As = fileSaver._saveByProxy = function() { fileSaved = true; return; };
-
-    fileSaver.saveAs("test", "EXCEL", null, undefined);
-
-    // assert
-    assert.ok(!fileSaved, "File wasn't load");
-    assert.equal(warningSend, "E1034", "Warning E1034 was sent");
-
-    errors.log = _errorsLog;
-    fileSaver._saveBlobAs = _saveBlobAs;
-    fileSaver._saveByProxy = _saveByProxy;
-    fileSaver._saveBase64As = _saveBase64As;
-
-});
-
 QUnit.test("exportLinkElement generate", function(assert) {
     if(!typeUtils.isFunction(window.Blob)) {
         assert.ok(true, "This browser doesn't support Blob function");
@@ -113,26 +82,6 @@ QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
         }
     } else {
         assert.ok(true, "This test is for not IE browsers");
-    }
-});
-
-
-QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
-    // act
-    if(browser.msie && parseInt(browser.version) < 10) {
-        var _formDownloader = fileSaver._linkDownloader,
-            isCalled;
-
-        fileSaver._formDownloader = function() { isCalled = "proxyForm"; };
-
-        fileSaver.saveAs("test", "EXCEL", [], "testUrl");
-
-        // assert
-        assert.ok(isCalled);
-
-        fileSaver._linkDownloader = _formDownloader;
-    } else {
-        assert.ok(true, "Test for ie<10");
     }
 });
 

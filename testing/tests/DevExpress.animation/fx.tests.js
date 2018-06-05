@@ -18,14 +18,12 @@ QUnit.testStart(function() {
                 -webkit-transition-property: all;\
                 transition-property: all;\
                 -moz-transform: translate3d(0px,0px,0px);\
-                -ms-transform: translate3d(0px,0px,0px);\
                 -o-transform: translate3d(0px,0px,0px);\
                 -webkit-transform: translate3d(0px,0px,0px);\
                 transform: translate3d(0px,0px,0px);\
             }\
             .my-animation.my-animation-active {\
                 -moz-transform: translate3d(1000px,0px,0px);\
-                -ms-transform: translate3d(1000px,0px,0px);\
                 -o-transform: translate3d(1000px,0px,0px);\
                 -webkit-transform: translate3d(1000px,0px,0px);\
                 transform: translate3d(1000px,0px,0px);\

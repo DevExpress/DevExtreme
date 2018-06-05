@@ -8,7 +8,6 @@ var $ = require("../core/renderer"),
     navigator = windowUtils.getNavigator(),
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../ui/widget/ui.errors"),
-    browser = require("../core/utils/browser"),
     typeUtils = require("../core/utils/type"),
 
     FILE_EXTESIONS = {
@@ -152,8 +151,6 @@ exports.fileSaver = {
                 this._saveByProxy(proxyURL, fileName, format, data);
             } else {
                 if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log("E1034");
-
-                if(browser.msie && parseInt(browser.version) < 10) return;
 
                 this._linkDownloader(fileName, this._getDataUri(format, data), linkClick);
             }

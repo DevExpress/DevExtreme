@@ -183,19 +183,6 @@ var browser, focused;
         }
     };
 
-    if(browser.msie && parseInt(browser.version) < 10) {
-        $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
-            27: "Esc",
-            32: "Spacebar",
-            37: "Left",
-            38: "Up",
-            39: "Right",
-            40: "Down",
-            45: "Ins",
-            46: "Del"
-        });
-    }
-
     if(browser.msie) {
         $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
             109: "Subtract"
