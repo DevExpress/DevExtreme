@@ -405,9 +405,13 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 percentWidths,
                 $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
-                getVisibleContentColumns = function() {
-                    return visibleColumns.filter(item => !item.command && !this._hiddenColumns.find(i => i.dataField === item.dataField));
-                }.bind(this),
+                getVisibleContentColumns = function(hiddenColumns) {
+                    return visibleColumns.filter(function(item) {
+                        return !item.command && (!hiddenColumns || !hiddenColumns.find(function(column) {
+                            return column.dataField === item.dataField;
+                        }));
+                    });
+                },
                 visibleContentColumns = getVisibleContentColumns(),
                 contentColumnsCount = visibleContentColumns.length,
                 columnsCanFit,
@@ -453,7 +457,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     that._addCssClassToColumn(that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
                     resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
                     this._hiddenColumns.push(column);
-                    visibleContentColumns = getVisibleContentColumns();
+                    visibleContentColumns = getVisibleContentColumns(this._hiddenColumns);
                 }
             }
             while(needHideColumn && visibleContentColumns.length > 1 && hiddenQueue.length);
