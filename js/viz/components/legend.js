@@ -403,8 +403,7 @@ extend(legendPrototype, {
             renderer = that._renderer,
             bBox,
             maxBBoxHeight = 0,
-            // "markerType" is not documented but lived long enough so should be considered deprecated.
-            createMarker = getMarkerCreator(options.markerShape || options.markerType /* DEPRECATED_16_1 */);
+            createMarker = getMarkerCreator(options.markerShape);
 
         that._markersId = {};
 
