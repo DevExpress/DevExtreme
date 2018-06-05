@@ -1632,7 +1632,7 @@ registerTheme({
                     width: 2,
                     direction: RIGHT
                 },
-                border: {}
+                border: { }
             },
         },
         links: {

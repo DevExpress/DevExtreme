@@ -1,14 +1,23 @@
 "use strict";
 
-var states = ["normal", "hover"];
+var states = ["normal", "hover"],
+    isDefined = require("../../core/utils/type").isDefined;
 
 function compileAttrs(color, itemOptions, itemBaseOptions) {
+
+    let border = itemOptions.border,
+        baseBorder = itemBaseOptions.border,
+        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
+        borderWidth = isDefined(border.width) ? border.width : baseBorder.width,
+        borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1),
+        opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1);
+
     return {
         fill: itemOptions.color || color,
-        'stroke-width': itemOptions.border.visible ? itemOptions.border.width : (itemBaseOptions.border.visible ? itemBaseOptions.border.width : 0),
+        'stroke-width': borderVisible ? borderWidth : 0, // itemOptions.border.visible ? itemOptions.border.width || itemBaseOptions.border.width : 0,
         stroke: itemOptions.border.color || itemBaseOptions.border.color,
-        'stroke-opacity': itemOptions.border.visible ? itemOptions.border.opacity || itemBaseOptions.border.opacity : 0,
-        opacity: itemOptions.opacity || itemBaseOptions.opacity,
+        'stroke-opacity': borderOpacity, // itemOptions.border.visible ? itemOptions.border.opacity || itemBaseOptions.border.opacity : 0,
+        opacity: opacity,
         hatching: itemOptions.hatching
     };
 }

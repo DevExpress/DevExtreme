@@ -196,7 +196,8 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
                 border: {
                     visible: true,
                     color: "#ffffff",
-                    width: 2
+                    width: 2,
+                    opacity: 0.4
                 }
             }
         }),
@@ -205,9 +206,53 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
     node.hover(true);
 
     var nodes = this.nodes();
+
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "#234234");
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.4);
 });
+
+QUnit.test("Border for hoverStyle can be disabled", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            nodes: {
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                },
+                hoverStyle: {
+                    border: {
+                        visible: false
+                    }
+                }
+            }
+        }),
+        node = sankey.getAllItems().nodes[1];
+
+    node.hover(true);
+
+    var nodes = this.nodes();
+
+    assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+});
+
+QUnit.test("hover changed event", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        node = sankey.getAllItems().nodes[0];
+
+    node.hover(true);
+
+    assert.ok(hoverChanged.calledOnce);
+    assert.strictEqual(hoverChanged.lastCall.args[0].item, node);
+});
+
+
+// TODO: opacity tests
 // TODO: a few test of coordinates of nodes with different width and padding of nodes
 // TODO: node.padding option in SVG applied and updated
