@@ -1580,7 +1580,8 @@ var PivotGrid = Widget.inherit({
             dataSource: that.getDataSource(),
             encodeHtml: that.option("encodeHtml"),
             allowFieldDragging: that.option("fieldPanel.allowFieldDragging"),
-            headerFilter: that.option("headerFilter")
+            headerFilter: that.option("headerFilter"),
+            visible: that.option("visible")
         });
 
         dataArea = that._renderDataArea(dataAreaElement);
