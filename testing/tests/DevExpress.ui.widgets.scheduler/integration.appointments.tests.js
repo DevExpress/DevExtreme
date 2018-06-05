@@ -4895,6 +4895,49 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
     assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, "Task has a right width");
 });
 
+QUnit.test("DropDown appointment button should have correct width on timeline view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: [{ type: "timelineDay", name: "timelineDay", forceMaxAppointmentPerCell: true }],
+        width: 850,
+        maxAppointmentsPerCell: 2,
+        currentView: "timelineDay"
+    });
+
+    this.instance.option("dataSource", [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
+    ]);
+
+    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 4, 1.5, "DropDown button has correct width");
+});
+
+QUnit.test("dropDown appointment should not compact class on vertical view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: [{ type: "week", name: "week", forceMaxAppointmentPerCell: true }],
+        currentView: "week",
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    this.instance.option("dataSource", [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
+    ]);
+
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.ok($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+});
+
 QUnit.test("Appointment should have right width in workspace with timezone", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
     try {
@@ -5632,7 +5675,7 @@ QUnit.test("Rival appointments from one group should be rendered correctly in ve
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        maxAppointmentsPerCell: null
     });
 
     var defaultWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), "_getAppointmentMaxWidth").returns(50);

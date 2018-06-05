@@ -16,6 +16,7 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when;
 
 var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
+    COMPACT_DROPDOWN_APPOINTMENTS_CLASS = DROPDOWN_APPOINTMENTS_CLASS + "-compact",
     DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content",
     DROPDOWN_APPOINTMENT_CLASS = "dx-scheduler-dropdown-appointment",
     DROPDOWN_APPOINTMENT_TITLE_CLASS = "dx-scheduler-dropdown-appointment-title",
@@ -38,12 +39,19 @@ var SIDE_BORDER_COLOR_STYLES = {
 var dropDownAppointments = Class.inherit({
     render: function(options, instance) {
         var coordinates = options.coordinates,
-            items = options.items;
+            items = options.items,
+            buttonWidth = options.buttonWidth,
+            offset = 0;
 
         this.instance = instance;
 
         var $menu = $("<div>").addClass(DROPDOWN_APPOINTMENTS_CLASS)
             .appendTo(options.$container);
+
+        if(options.isCompact) {
+            $menu.addClass(COMPACT_DROPDOWN_APPOINTMENTS_CLASS);
+            offset = this.instance.fire("getCellWidth") - buttonWidth - 5;
+        }
 
         this._createAppointmentClickAction();
 
@@ -51,8 +59,8 @@ var dropDownAppointments = Class.inherit({
             $element: $menu,
             items: items,
             itemTemplate: options.itemTemplate,
-            buttonWidth: options.buttonWidth
-        });
+            buttonWidth: buttonWidth
+        }, options.isCompact);
 
         var deferredButtonColor = options.buttonColor,
             deferredItemsColors = options.items.colors;
@@ -65,7 +73,7 @@ var dropDownAppointments = Class.inherit({
 
         translator.move($menu, {
             top: coordinates.top,
-            left: coordinates.left
+            left: coordinates.left + offset
         });
 
         return $menu;
@@ -102,9 +110,11 @@ var dropDownAppointments = Class.inherit({
         }).bind(this));
     },
 
-    _createButtonTemplate: function(appointmentCount) {
+    _createButtonTemplate: function(appointmentCount, isCompact) {
+        var text = isCompact ? appointmentCount : messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount);
+
         return $("<div>").append(
-            [$("<span>").text(messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount))]
+            [$("<span>").text(text)]
         ).addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
     },
 
@@ -123,7 +133,7 @@ var dropDownAppointments = Class.inherit({
             ).bind(this)
         });
     },
-    _createDropDownMenu: function(config) {
+    _createDropDownMenu: function(config, isCompact) {
         var $menu = config.$element,
             items = config.items,
             that = this;
@@ -139,7 +149,7 @@ var dropDownAppointments = Class.inherit({
                 popupHeight: "auto",
                 popupMaxHeight: 200,
                 items: items.data,
-                buttonTemplate: this._createButtonTemplate(items.data.length),
+                buttonTemplate: this._createButtonTemplate(items.data.length, isCompact),
                 buttonWidth: config.buttonWidth,
                 closeOnClick: false,
                 onItemClick: function(args) {

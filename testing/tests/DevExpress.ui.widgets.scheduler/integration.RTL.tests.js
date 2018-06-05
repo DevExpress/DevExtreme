@@ -24,7 +24,7 @@ QUnit.module("Integration: RTL", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600, maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
         this.getAppointmentColor = function($task) {
             return new Color($task.css("backgroundColor")).toHex();
