@@ -18,7 +18,7 @@ var _parseScalar = require("../core/utils").parseScalar,
     nextDataKey = 1,
 
     RE_STARTS_LAYERS = /^layers/,
-    RE_ENDS_DATA_SOURCE = /\.(dataSource)$/;
+    RE_ENDS_DATA_SOURCE = /\.dataSource$/;
 
 require("./projection");
 

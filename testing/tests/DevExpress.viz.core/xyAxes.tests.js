@@ -1952,20 +1952,6 @@ QUnit.test("horizontal axis", function(assert) {
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("horizontal axis. deprecated ignore mode", function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 4 },
-            { x: 15, y: 0, width: 10, height: 4 },
-            { x: 20, y: 0, width: 20, height: 4 },
-            { x: 45, y: 0, width: 10, height: 4 },
-            { x: 60, y: 0, width: 10, height: 4 }
-    ];
-    this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "ignore" } });
-
-    assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, []);
-});
 
 QUnit.test("vertical axis", function(assert) {
     this.translator.translate.withArgs(1).returns(50);
@@ -1983,27 +1969,6 @@ QUnit.test("vertical axis", function(assert) {
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "none" } });
-
-    assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, []);
-});
-
-QUnit.test("vertical axis. deprecated ignore mode", function(assert) {
-    this.translator.translate.withArgs(1).returns(50);
-    this.translator.translate.withArgs(3).returns(40);
-    this.translator.translate.withArgs(5).returns(30);
-    this.translator.translate.withArgs(7).returns(20);
-    this.translator.translate.withArgs(9).returns(10);
-    var markersBBoxes = [
-            { x: 0, y: 60, height: 10, width: 4 },
-            { x: 0, y: 45, height: 10, width: 4 },
-            { x: 0, y: 20, height: 30, width: 4 },
-            { x: 0, y: 15, height: 10, width: 4 },
-            { x: 0, y: 0, height: 10, width: 4 }
-    ];
-    this.options.isHorizontal = false;
-    this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "ignore" } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
