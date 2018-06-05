@@ -95,7 +95,7 @@ var showWave = function(args, config) {
     args.hidingTimeout && clearTimeout(args.hidingTimeout);
     hideSelectedWave($wave);
     $wave.css(getWaveStyleConfig(args, config));
-    setTimeout(showingWaveHandler.bind(this, args, $wave), 0);
+    args.showingTimeout = setTimeout(showingWaveHandler.bind(this, args, $wave), 0);
 };
 
 var showingWaveHandler = function(args, $wave) {
@@ -121,6 +121,8 @@ var hideSelectedWave = function($wave) {
 };
 
 var hideWave = function(args, config) {
+    args.showingTimeout && clearTimeout(args.showingTimeout);
+
     var $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX),
         durations = args.durations,
         durationCss = durations.hidingScale + "ms, " + durations.hidingOpacity + "ms";
