@@ -158,9 +158,6 @@ QUnit.test("set range by dataSource", function(assert) {
 QUnit.test("set range by dataSource. discrete data", function(assert) {
     this.createWidget({
         dataSource: this.dataSource,
-        scale: {
-            tickInterval: 10
-        },
         chart: {
             series: [
                 { argumentField: "x", valueField: "y1" },
