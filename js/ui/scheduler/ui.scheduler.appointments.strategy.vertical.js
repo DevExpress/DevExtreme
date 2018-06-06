@@ -227,14 +227,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._defaultWidth || this.invoke("getCellWidth");
     },
 
-    _getMaxAppointmentCountPerCell: function() {
-        if(this.instance.fire("forceMaxAppointmentPerCell")) {
-            return this.callBase();
-        }
-
-        return undefined;
-    },
-
     isAllDay: function(appointmentData) {
         var allDay = this.instance.fire("getField", "allDay", appointmentData);
 
@@ -310,7 +302,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         } else {
             return {
                 allDay: this.instance.option("_appointmentCountPerCell"),
-                simple: this._calculateDynamicAppointmentCountPerCell()
+                simple: this.instance.fire("forceMaxAppointmentPerCell") ? this._calculateDynamicAppointmentCountPerCell() : undefined
             };
         }
     },
