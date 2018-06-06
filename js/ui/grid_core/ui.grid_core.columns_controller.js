@@ -504,6 +504,11 @@ module.exports = {
              * @default false
              */
             /**
+             * @name GridBaseColumn.headerFilter.searchMode
+             * @type Enums.CollectionSearchMode
+             * @default 'contains'
+             */
+            /**
              * @name GridBaseColumn.headerFilter.width
              * @type number
              * @default undefined

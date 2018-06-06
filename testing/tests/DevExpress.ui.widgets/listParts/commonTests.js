@@ -980,6 +980,19 @@ QUnit.test("searchMode", function(assert) {
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation of dataSource");
 });
 
+QUnit.test("searchMode equals", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 11, 111],
+            searchExpr: "this",
+            searchMode: "equals",
+            searchValue: "1"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [1], "items");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "=", "search operation of dataSource");
+});
+
 QUnit.test("searchExpr", function(assert) {
     var $element = $("#list").dxList({
             dataSource: [
