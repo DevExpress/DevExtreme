@@ -2388,3 +2388,26 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
 
     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
 });
+
+QUnit.test("Appointments should not have specific class if forceMaxAppointmentPerCell=false", function(assert) {
+    var items = [
+        { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) }];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            width: 600,
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'auto',
+                forceMaxAppointmentPerCell: false
+            }],
+            height: 600,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+    assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+});
