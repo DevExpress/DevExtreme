@@ -705,7 +705,7 @@ var Lookup = DropDownList.inherit({
     _toggleOpenState: function() {
         this.callBase();
 
-        if(this.option("_scrollToSelectedItemEnabled")) {
+        if(!this.option("fullScreen") && this.option("_scrollToSelectedItemEnabled")) {
             this._setPopupPosition();
         }
     },
