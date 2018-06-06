@@ -2312,7 +2312,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
                 forceMaxAppointmentPerCell: true
             }],
             height: 600,
-            width: 1200,
+            width: 1500,
             dataSource: items
         }
     );
@@ -2336,7 +2336,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
 
-    this.instance.option("width", 900);
+    this.instance.option("width", 1000);
 
     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
@@ -2397,7 +2397,7 @@ QUnit.test("Appointments should not have specific class if forceMaxAppointmentPe
         {
             currentDate: new Date(2015, 2, 4),
             currentView: "week",
-            width: 600,
+            width: 800,
             views: [{
                 type: "week",
                 maxAppointmentsPerCell: 'auto',
