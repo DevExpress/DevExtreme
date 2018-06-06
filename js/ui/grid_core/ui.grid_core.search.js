@@ -281,7 +281,7 @@ module.exports = {
                         if(!$parent.length) {
                             $parent = $("<div>").append(cellElement);
                         } else if(column) {
-                            findCondition = `td:nth-child(${column.index + 1})`;
+                            findCondition = `td:nth-child(${column.visibleIndex + 1})`;
                         }
 
                         var $items = $parent.find(findCondition).filter(function(index, element) {
