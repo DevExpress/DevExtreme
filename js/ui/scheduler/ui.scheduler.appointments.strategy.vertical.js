@@ -227,6 +227,14 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return this._defaultWidth || this.invoke("getCellWidth");
     },
 
+    _getMaxAppointmentCountPerCell: function() {
+        if(this.instance.fire("forceMaxAppointmentPerCell")) {
+            return this.callBase();
+        }
+
+        return undefined;
+    },
+
     isAllDay: function(appointmentData) {
         var allDay = this.instance.fire("getField", "allDay", appointmentData);
 
