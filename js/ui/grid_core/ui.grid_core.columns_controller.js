@@ -307,12 +307,6 @@ module.exports = {
              * @type_function_return string
              */
             /**
-             * @name dxDataGridColumn.precision
-             * @type number
-             * @default undefined
-             * @deprecated
-             */
-            /**
              * @name GridBaseColumn.filterOperations
              * @type Array<string>
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"

@@ -513,7 +513,6 @@ exports.DataController = Class.inherit((function() {
                        */
                         value: cellValue,
                         format: dataField.format,
-                        precision: dataField.precision,
                         dataType: dataField.dataType,
 
                         /**

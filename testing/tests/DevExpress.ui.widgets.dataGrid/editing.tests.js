@@ -4497,7 +4497,7 @@ QUnit.test('Column currency format after editing', function(assert) {
         allowUpdating: true
     };
 
-    that.options.columns = ["name", { dataField: 'age', format: "currency", precision: 3 }];
+    that.options.columns = ["name", { dataField: 'age', format: { type: "currency", precision: 3 } }];
 
     rowsView.render(testElement);
 

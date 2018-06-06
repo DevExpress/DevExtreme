@@ -538,7 +538,6 @@ QUnit.test("onCellClick event", function(assert) {
         dataIndex: 1,
         dataType: undefined,
         format: "percent",
-        precision: undefined,
         text: '90%',
         value: 0.9
     }, 'first cell click arguments');
@@ -550,7 +549,6 @@ QUnit.test("onCellClick event", function(assert) {
         dataIndex: 0,
         dataType: undefined,
         format: "currency",
-        precision: undefined,
         text: '$17',
         value: 17
     }, 'second cell click arguments');
@@ -590,7 +588,6 @@ QUnit.test("onCellClick event after resize", function(assert) {
         dataIndex: 1,
         dataType: undefined,
         format: "percent",
-        precision: undefined,
         text: '90%',
         value: 0.9
     }, 'first cell click arguments');
@@ -602,7 +599,6 @@ QUnit.test("onCellClick event after resize", function(assert) {
         dataIndex: 0,
         dataType: undefined,
         format: "currency",
-        precision: undefined,
         text: '$17',
         value: 17
     }, 'second cell click arguments');
@@ -1244,7 +1240,6 @@ QUnit.test("onCellPrepared event", function(assert) {
             dataIndex: 0,
             dataType: undefined,
             format: "currency",
-            precision: undefined,
             columnPath: ["2010", "1"],
             rowPath: ["B"],
             columnType: 'D',
@@ -1326,7 +1321,6 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
             dataIndex: 0,
             dataType: undefined,
             format: "currency",
-            precision: undefined,
             columnPath: ["2010", "1"],
             rowPath: ["B"],
             columnType: 'D',
@@ -1427,7 +1421,6 @@ QUnit.test("contextMenu", function(assert) {
         dataIndex: 1,
         dataType: undefined,
         format: "percent",
-        precision: undefined,
         text: '90%',
         value: 0.9
     }, 'first cell contextmenu cell arguments');

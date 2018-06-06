@@ -228,8 +228,7 @@ QUnit.test("getAllItems", function(assert) {
         text: "10%",
         value: 0.1,
         colspan: 1,
-        rowspan: 1,
-        precision: undefined
+        rowspan: 1
     }, "Data Item object has correct content");
     assert.deepEqual(this.items[0][0], {
         colspan: 2,
@@ -577,7 +576,7 @@ QUnit.test("Data format", function(assert) {
             [{ text: "row1" }, { dataIndex: 0 }, { dataIndex: 1 }]
         ],
         dataFields: [
-            { format: "fixedPoint", precision: 0 },
+            { format: { type: "fixedPoint", precision: 0 } },
             { format: "currency" }
         ]
     });
@@ -586,8 +585,7 @@ QUnit.test("Data format", function(assert) {
 
     var styles = dataProvider.getStyles();
 
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].format, "fixedPoint");
-    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].precision, 0);
+    assert.deepEqual(styles[dataProvider.getStyleId(1, 1)].format, { type: "fixedPoint", precision: 0 });
     assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].dataType, "number");
     assert.strictEqual(styles[dataProvider.getStyleId(1, 2)].format, "currency");
     assert.strictEqual(styles[dataProvider.getStyleId(1, 2)].precision, undefined);

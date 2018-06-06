@@ -496,7 +496,7 @@ QUnit.test("Numeric intervals. Without custom customizeText callback", function(
 });
 
 QUnit.test("Numeric intervals. With format and without custom customizeText callback", function(assert) {
-    var field = { dataField: "Freight", dataType: "number", groupInterval: 100, format: "currency", precision: 2 };
+    var field = { dataField: "Freight", dataType: "number", groupInterval: 100, format: { type: "currency", precision: 2 } };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
@@ -510,13 +510,13 @@ QUnit.test("Numeric intervals. With format and without custom customizeText call
             valueText: "$0"
         }), "$0 - $100");
 
-        assert.deepEqual(formatHelper.format.lastCall.args, [100, "currency", 2]);
+        assert.deepEqual(formatHelper.format.lastCall.args, [100, { type: "currency", precision: 2 }]);
 
         assert.strictEqual(field.customizeText({
             value: 0,
             valueText: ""
         }), "", "first value not formatting");
-        assert.deepEqual(formatHelper.format.lastCall.args, [100, "currency", 2]);
+        assert.deepEqual(formatHelper.format.lastCall.args, [100, { type: "currency", precision: 2 }]);
 
         formatHelper.format.returns("");
 
