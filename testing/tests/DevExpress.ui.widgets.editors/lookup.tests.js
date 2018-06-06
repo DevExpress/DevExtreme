@@ -1358,6 +1358,22 @@ QUnit.test("The search field should be insert before list", function(assert) {
     assert.ok(listIndex > searchIndex, "list placed after search field");
 });
 
+QUnit.test("Check popup position for Material theme when fullScreen option is true ", function(assert) {
+    var isMaterialStub = sinon.stub(themes, "isMaterial");
+
+    isMaterialStub.returns(true);
+
+    try {
+        var lookup = $("#lookup").dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], fullScreen: true }).dxLookup("instance");
+
+        $(lookup.field()).trigger("dxclick");
+        assert.equal($(lookup.content()).parent().position().top, 0, "popup doesn't have offset top");
+        assert.equal($(lookup.content()).parent().position().left, 0, "popup doesn't have offset left");
+    } finally {
+        isMaterialStub.restore();
+    }
+});
+
 
 QUnit.module("hidden input");
 
