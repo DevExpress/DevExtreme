@@ -394,6 +394,14 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
     },
 
+    getVisibleContentColumns: function(visibleColumns, hiddenColumns) {
+        return visibleColumns.filter(function(item) {
+            return !item.command && (!hiddenColumns || hiddenColumns.filter(function(column) {
+                return column.dataField === item.dataField;
+            }).length === 0);
+        });
+    },
+
     hideRedundantColumns: function(resultWidths, visibleColumns, hiddenQueue) {
         var that = this,
             visibleColumn;
@@ -405,14 +413,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 percentWidths,
                 $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
-                getVisibleContentColumns = function(hiddenColumns) {
-                    return visibleColumns.filter(function(item) {
-                        return !item.command && (!hiddenColumns || !hiddenColumns.find(function(column) {
-                            return column.dataField === item.dataField;
-                        }));
-                    });
-                },
-                visibleContentColumns = getVisibleContentColumns(),
+                visibleContentColumns = that.getVisibleContentColumns(visibleColumns),
                 contentColumnsCount = visibleContentColumns.length,
                 columnsCanFit,
                 i,
@@ -457,7 +458,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     that._addCssClassToColumn(that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
                     resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
                     this._hiddenColumns.push(column);
-                    visibleContentColumns = getVisibleContentColumns(this._hiddenColumns);
+                    visibleContentColumns = that.getVisibleContentColumns(visibleColumns, this._hiddenColumns);
                 }
             }
             while(needHideColumn && visibleContentColumns.length > 1 && hiddenQueue.length);
