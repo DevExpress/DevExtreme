@@ -1,13 +1,8 @@
 "use strict";
 
-var // $ = require("jquery"),
-    common = require("./commonParts/common.js"),
+var common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
-    // layoutBuilder = common.layoutBuilder,
-    // spiesLayoutBuilder = common.spiesLayoutBuilder,
     environment = common.environment,
-    // rendererModule = require("viz/core/renderers/renderer"),
-    // paletteModule = require("viz/palette"),
     themeModule = require("viz/themes");
 
 themeModule.registerTheme({
@@ -252,7 +247,120 @@ QUnit.test("hover changed event", function(assert) {
     assert.strictEqual(hoverChanged.lastCall.args[0].item, node);
 });
 
+QUnit.test("hover changed event after hover second item", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        node = sankey.getAllItems().nodes[0];
 
-// TODO: opacity tests
-// TODO: a few test of coordinates of nodes with different width and padding of nodes
-// TODO: node.padding option in SVG applied and updated
+    node.hover(true);
+    hoverChanged.reset();
+
+    sankey.getAllItems().nodes[1].hover(true);
+
+    assert.equal(hoverChanged.callCount, 2);
+});
+
+QUnit.test("Hover item two times, hover changed event should fire only one time", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        node = sankey.getAllItems().nodes[0];
+
+    node.hover(true);
+    node.hover(true);
+
+    assert.equal(hoverChanged.callCount, 1);
+});
+
+QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fire", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        node = sankey.getAllItems().nodes[0];
+
+    node.hover(false);
+
+    assert.equal(hoverChanged.callCount, 0);
+});
+
+QUnit.test("disable hover", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            hoverEnabled: false
+        }),
+        nodes = sankey.getAllItems().nodes;
+
+    nodes[0].hover(true);
+
+    assert.ok(!nodes[0].isHovered());
+});
+
+
+QUnit.test("isHovered method", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1]]
+        }),
+        nodes = sankey.getAllItems().nodes;
+
+    nodes[1].hover(true);
+
+    assert.ok(nodes[1].isHovered());
+    assert.ok(!nodes[0].isHovered());
+});
+
+QUnit.test("Default nodes.padding option", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+    });
+    var nodes = this.nodes(),
+        nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
+        nodeB = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
+        yA = nodeA.attr.firstCall.args[0].y,
+        heightA = nodeA.attr.firstCall.args[0].height,
+        yB = nodeB.attr.firstCall.args[0].y;
+
+    assert.equal(yB - (yA + heightA), 30);
+});
+
+QUnit.test("Applying nodes.padding option", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        nodes: {
+            padding: 10
+        }
+    });
+    var nodes = this.nodes(),
+        nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
+        nodeB = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
+        yA = nodeA.attr.firstCall.args[0].y,
+        heightA = nodeA.attr.firstCall.args[0].height,
+        yB = nodeB.attr.firstCall.args[0].y;
+
+    assert.equal(yB - (yA + heightA), 10);
+});
+
+QUnit.test("Updating nodes.padding option", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        nodes: {
+            padding: 10
+        }
+    });
+    sankey.option({ nodes: { padding: 50 } });
+
+    var nodes = this.nodes(),
+        nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
+        nodeB = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
+        yA = nodeA.attr.firstCall.args[0].y,
+        heightA = nodeA.attr.firstCall.args[0].height,
+        yB = nodeB.attr.firstCall.args[0].y;
+
+    assert.equal(yB - (yA + heightA), 50);
+});
