@@ -831,7 +831,7 @@ QUnit.test("Date format with formatter", function(assert) {
         }
     };
     // act
-    this.excelCreator._appendFormat(format, undefined, "date");
+    this.excelCreator._appendFormat(format, "date");
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 1);
@@ -840,11 +840,11 @@ QUnit.test("Date format with formatter", function(assert) {
 
 QUnit.test("Percent format", function(assert) {
     // act
-    this.excelCreator._appendFormat("percent", 3);
-    this.excelCreator._appendFormat("percent", 0);
-    this.excelCreator._appendFormat("percent");
-    this.excelCreator._appendFormat("percent", 1);
-    this.excelCreator._appendFormat("percent", 6);
+    this.excelCreator._appendFormat({ type: "percent", precision: 3 });
+    this.excelCreator._appendFormat({ type: "percent", precision: 0 });
+    this.excelCreator._appendFormat({ type: "percent" });
+    this.excelCreator._appendFormat({ type: "percent", precision: 1 });
+    this.excelCreator._appendFormat({ type: "percent", precision: 6 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
@@ -856,12 +856,12 @@ QUnit.test("Percent format", function(assert) {
 
 QUnit.test("FixedPoint format", function(assert) {
     // act
-    this.excelCreator._appendFormat("fixedPoint", 3);
+    this.excelCreator._appendFormat({ type: "fixedPoint", precision: 3 });
     this.excelCreator._appendFormat({ type: "fixedPoint", precision: 2 }, 3);
-    this.excelCreator._appendFormat("fixedPoint", 0);
-    this.excelCreator._appendFormat("fixedPoint");
-    this.excelCreator._appendFormat("fixedPoint", 1);
-    this.excelCreator._appendFormat("fixedPoint", 4);
+    this.excelCreator._appendFormat({ type: "fixedPoint", precision: 0 });
+    this.excelCreator._appendFormat({ type: "fixedPoint" });
+    this.excelCreator._appendFormat({ type: "fixedPoint", precision: 1 });
+    this.excelCreator._appendFormat({ type: "fixedPoint", precision: 4 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 5);
@@ -874,11 +874,11 @@ QUnit.test("FixedPoint format", function(assert) {
 
 QUnit.test("Decimal format", function(assert) {
     // act
-    this.excelCreator._appendFormat("decimal", 2);
-    this.excelCreator._appendFormat("decimal", 0);
-    this.excelCreator._appendFormat("decimal");
-    this.excelCreator._appendFormat("decimal", 1);
-    this.excelCreator._appendFormat("decimal", 7);
+    this.excelCreator._appendFormat({ type: "decimal", precision: 2 });
+    this.excelCreator._appendFormat({ type: "decimal", precision: 0 });
+    this.excelCreator._appendFormat({ type: "decimal" });
+    this.excelCreator._appendFormat({ type: "decimal", precision: 1 });
+    this.excelCreator._appendFormat({ type: "decimal", precision: 7 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
@@ -890,11 +890,11 @@ QUnit.test("Decimal format", function(assert) {
 
 QUnit.test("Exponential format", function(assert) {
     // act
-    this.excelCreator._appendFormat("exponential", 2);
-    this.excelCreator._appendFormat("exponential", 0);
-    this.excelCreator._appendFormat("exponential");
-    this.excelCreator._appendFormat("exponential", 1);
-    this.excelCreator._appendFormat("exponential", 3);
+    this.excelCreator._appendFormat({ type: "exponential", precision: 2 });
+    this.excelCreator._appendFormat({ type: "exponential", precision: 0 });
+    this.excelCreator._appendFormat({ type: "exponential" });
+    this.excelCreator._appendFormat({ type: "exponential", precision: 1 });
+    this.excelCreator._appendFormat({ type: "exponential", precision: 3 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
@@ -906,12 +906,12 @@ QUnit.test("Exponential format", function(assert) {
 
 QUnit.test("Currency format_en local", function(assert) {
     // act
-    this.excelCreator._appendFormat("currency", 2);
+    this.excelCreator._appendFormat({ type: "currency", precision: 2 });
     this.excelCreator._appendFormat({ type: "currency", precision: 4, currency: "RUS" });
-    this.excelCreator._appendFormat("currency", 0);
-    this.excelCreator._appendFormat("currency");
-    this.excelCreator._appendFormat("currency", 1);
-    this.excelCreator._appendFormat("currency", 5);
+    this.excelCreator._appendFormat({ type: "currency", precision: 0 });
+    this.excelCreator._appendFormat({ type: "currency" });
+    this.excelCreator._appendFormat({ type: "currency", precision: 1 });
+    this.excelCreator._appendFormat({ type: "currency", precision: 5 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 5);
@@ -924,8 +924,8 @@ QUnit.test("Currency format_en local", function(assert) {
 
 QUnit.test("LargeNumber format", function(assert) {
     // act
-    this.excelCreator._appendFormat("largeNumber", 2);
-    this.excelCreator._appendFormat("largeNumber", 0);
+    this.excelCreator._appendFormat({ type: "largeNumber", precision: 2 });
+    this.excelCreator._appendFormat({ type: "largeNumber", precision: 0 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 0);
@@ -933,11 +933,11 @@ QUnit.test("LargeNumber format", function(assert) {
 
 QUnit.test("Thousands format", function(assert) {
     // act
-    this.excelCreator._appendFormat("thousands", 2);
-    this.excelCreator._appendFormat("thousands", 0);
-    this.excelCreator._appendFormat("thousands");
-    this.excelCreator._appendFormat("thousands", 1);
-    this.excelCreator._appendFormat("thousands", 3);
+    this.excelCreator._appendFormat({ type: "thousands", precision: 2 });
+    this.excelCreator._appendFormat({ type: "thousands", precision: 0 });
+    this.excelCreator._appendFormat({ type: "thousands" });
+    this.excelCreator._appendFormat({ type: "thousands", precision: 1 });
+    this.excelCreator._appendFormat({ type: "thousands", precision: 3 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
@@ -949,11 +949,11 @@ QUnit.test("Thousands format", function(assert) {
 
 QUnit.test("Millions format", function(assert) {
     // act
-    this.excelCreator._appendFormat("millions", 2);
-    this.excelCreator._appendFormat("millions", 0);
-    this.excelCreator._appendFormat("millions");
-    this.excelCreator._appendFormat("millions", 1);
-    this.excelCreator._appendFormat("millions", 3);
+    this.excelCreator._appendFormat({ type: "millions", precision: 2 });
+    this.excelCreator._appendFormat({ type: "millions", precision: 0 });
+    this.excelCreator._appendFormat({ type: "millions" });
+    this.excelCreator._appendFormat({ type: "millions", precision: 1 });
+    this.excelCreator._appendFormat({ type: "millions", precision: 3 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
@@ -965,11 +965,11 @@ QUnit.test("Millions format", function(assert) {
 
 QUnit.test("Billions format", function(assert) {
     // act
-    this.excelCreator._appendFormat("billions", 2);
-    this.excelCreator._appendFormat("billions", 0);
-    this.excelCreator._appendFormat("billions");
-    this.excelCreator._appendFormat("billions", 1);
-    this.excelCreator._appendFormat("billions", 3);
+    this.excelCreator._appendFormat({ type: "billions", precision: 2 });
+    this.excelCreator._appendFormat({ type: "billions", precision: 0 });
+    this.excelCreator._appendFormat({ type: "billions" });
+    this.excelCreator._appendFormat({ type: "billions", precision: 1 });
+    this.excelCreator._appendFormat({ type: "billions", precision: 3 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
@@ -981,11 +981,11 @@ QUnit.test("Billions format", function(assert) {
 
 QUnit.test("Trillions format", function(assert) {
     // act
-    this.excelCreator._appendFormat("trillions", 2);
-    this.excelCreator._appendFormat("trillions", 0);
-    this.excelCreator._appendFormat("trillions");
-    this.excelCreator._appendFormat("trillions", 1);
-    this.excelCreator._appendFormat("trillions", 3);
+    this.excelCreator._appendFormat({ type: "trillions", precision: 2 });
+    this.excelCreator._appendFormat({ type: "trillions", precision: 0 });
+    this.excelCreator._appendFormat({ type: "trillions" });
+    this.excelCreator._appendFormat({ type: "trillions", precision: 1 });
+    this.excelCreator._appendFormat({ type: "trillions", precision: 3 });
 
     // assert
     assert.equal(this.excelCreator._styleFormat.length, 4);
