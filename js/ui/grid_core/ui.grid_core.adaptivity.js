@@ -424,7 +424,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
                 getVisibleContentColumns = function() {
-                    return visibleColumns.filter(item => !item.command && !this._hiddenColumns.find(i => i.dataField === item.dataField));
+                    return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.dataField === item.dataField).length === 0);
                 }.bind(this),
                 visibleContentColumns = getVisibleContentColumns(),
                 contentColumnsCount = visibleContentColumns.length,
