@@ -138,6 +138,10 @@ module.exports = {
         this.callBase(e, isFocused);
     },
 
+    getOperationBySearchMode: function(searchMode) {
+        return searchMode === "equals" ? "=" : searchMode;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "searchEnabled":
@@ -151,7 +155,7 @@ module.exports = {
                     errors.log("W1009");
                     return;
                 }
-                this._dataSource[args.name === "searchMode" ? "searchOperation" : args.name](args.value);
+                this._dataSource[args.name === "searchMode" ? "searchOperation" : args.name](this.getOperationBySearchMode(args.value));
                 this._dataSource.load();
                 break;
             case "searchTimeout":
