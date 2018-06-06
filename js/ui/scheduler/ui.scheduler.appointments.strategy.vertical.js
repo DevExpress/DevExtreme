@@ -302,7 +302,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         } else {
             return {
                 allDay: this.instance.option("_appointmentCountPerCell"),
-                simple: this._calculateDynamicAppointmentCountPerCell()
+                simple: this.instance.fire("forceMaxAppointmentPerCell") ? this._calculateDynamicAppointmentCountPerCell() : undefined
             };
         }
     },
