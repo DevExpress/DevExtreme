@@ -17,7 +17,8 @@ themeModule.registerTheme({
                 color: "black"
             }
         }
-    } }, "generic.light");
+    }
+}, "generic.light");
 
 
 QUnit.module("Items: links", environment);
@@ -36,3 +37,17 @@ QUnit.test("Creation", function(assert) {
     assert.equal(links[1].connection.to, 'Z');
     assert.equal(links[1].connection.weight, 1);
 });
+
+QUnit.test("Color from options applied to all nodes", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        links: {
+            color: '#aabbcc'
+        }
+    });
+    var links = this.links();
+
+    assert.deepEqual(links[0].smartAttr.lastCall.args[0].fill, "#aabbcc");
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0].fill, "#aabbcc");
+});
+
