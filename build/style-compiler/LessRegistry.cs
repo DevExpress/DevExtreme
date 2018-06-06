@@ -10,22 +10,18 @@ namespace StyleCompiler
     {
 
         public const string
-            PUBLIC_NAME_DEFAULT = "DevExtreme",
-            PUBLIC_NAME_EXPORTER = "DevExtreme Exporter";
+            PUBLIC_NAME_DEFAULT = "DevExtreme";
 
         public const string
             MODULE_FRAMEWORK = "framework",
-            MODULE_WIDGETS_BASE = "widgets-base",
-            MODULE_TMP_WIDGETS_FOR_EXPORTER = "tmp-widgets-for-exporter",
-            MODULE_TMP_EXPORTER = "tmp-exporter";
+            MODULE_WIDGETS_BASE = "widgets-base";
 
         public const string
             EULA_DEVEXTREME = "https://js.devexpress.com/Licensing/";
 
         public const string
             CSS_DISTRIBUTION_DEFAULT = "",
-            CSS_DISTRIBUTION_SPA = "spa",
-            CSS_DISTRIBUTION_EXPORTER = "exporter";
+            CSS_DISTRIBUTION_SPA = "spa";
 
         public const string
             THEME_GENERIC = "generic",
@@ -79,20 +75,6 @@ namespace StyleCompiler
                     LicenseInfo = EULA_DEVEXTREME,
                     Modules = new[] { MODULE_FRAMEWORK },
                     UseCommonPostfix = false
-                }
-            },
-            {
-#warning TODO deprecated in 16.1
-                CSS_DISTRIBUTION_EXPORTER,
-                new CssDistributionInfo {
-                    PublicName = PUBLIC_NAME_EXPORTER,
-                    LicenseInfo = EULA_DEVEXTREME,
-                    Modules = new[] { MODULE_TMP_WIDGETS_FOR_EXPORTER, MODULE_TMP_EXPORTER },
-                    SupportedThemes = new[] { THEME_GENERIC },
-                    ExcludedColorSchemes = new[] { COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_GREENMIST },
-                    SupportedSizeSchemes = new Dictionary<string,string[]> {
-                        { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT } }
-                    }
                 }
             }
         };
@@ -267,59 +249,6 @@ namespace StyleCompiler
                             ColorSchemeNames = i.ColorSchemeNames,
                             LessFiles = GenerateWidgetsLessFileList(i.Name)
                         }).ToArray()
-                    }
-                }
-            },
-
-
-#warning TODO deprecated in 16.1
-            {
-                MODULE_TMP_WIDGETS_FOR_EXPORTER,
-                new ModuleInfo {
-                    StyleInfo = new ModuleStyleInfo {
-                        LessRoot = "widgets",
-                        CommonLessFiles = new[] {
-                            "../../mixins.less",
-                            "menuBase.less",
-                            "contextMenu.less",
-                            "menu.less",
-                            "overlay.less",
-                            "widget.less"
-                        },
-                        Themes = new[] {
-                            new ModuleStyleThemeInfo {
-                                Name = THEME_GENERIC,
-                                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CONTRAST },
-                                LessFiles = new[] {
-                                    "../../mixins.less",
-                                    "../base/icons.less",
-                                    "common.generic.less",
-                                    "icons.generic.less",
-                                    "menuBase.generic.less",
-                                    "contextMenu.generic.less",
-                                    "menu.generic.less"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                MODULE_TMP_EXPORTER,
-                new ModuleInfo {
-                    LicenseInfo = EULA_DEVEXTREME,
-                    StyleInfo = new ModuleStyleInfo {
-                        LessRoot = "exporter",
-                        CommonLessFiles = new string[] { },
-                        Themes = new[]{
-                            new ModuleStyleThemeInfo {
-                                Name = THEME_GENERIC,
-                                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CONTRAST },
-                                LessFiles = new [] {
-                                    "exporter.generic.less"
-                                }
-                            }
-                        }
                     }
                 }
             }
