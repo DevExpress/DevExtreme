@@ -2312,7 +2312,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
                 forceMaxAppointmentPerCell: true
             }],
             height: 600,
-            width: 1200,
+            width: 1500,
             dataSource: items
         }
     );
@@ -2336,7 +2336,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
 
-    this.instance.option("width", 900);
+    this.instance.option("width", 1000);
 
     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
@@ -2387,4 +2387,27 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
 
     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
+});
+
+QUnit.test("Appointments should not have specific class if forceMaxAppointmentPerCell=false", function(assert) {
+    var items = [
+        { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) }];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            width: 800,
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'auto',
+                forceMaxAppointmentPerCell: false
+            }],
+            height: 600,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+    assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
 });

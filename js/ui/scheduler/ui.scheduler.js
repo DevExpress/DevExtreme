@@ -303,7 +303,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @hidden
                 * @name dxSchedulerOptions.views.forceMaxAppointmentPerCell
-                * @type Date
+                * @type boolean
                 * @default false
                 */
 
