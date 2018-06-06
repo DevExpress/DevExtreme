@@ -466,11 +466,7 @@ QUnit.test("Scheduler timeline week header cells should have right width", funct
 QUnit.test("Scheduler timeline week header cells should have right width if crossScrollingEnabled = true", function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 9, 29),
-        crossScrollingEnabled: true,
-        startDayHour: 8,
-        endDayHour: 14,
-        width: 600,
-        hoursInterval: 1
+        crossScrollingEnabled: true
     });
 
     resizeCallbacks.fire();
@@ -482,7 +478,7 @@ QUnit.test("Scheduler timeline week header cells should have right width if cros
         $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0),
         $dateTableCell = $element.find(".dx-scheduler-date-table-cell").eq(0);
 
-    assert.roughEqual($firstHeaderCell.outerWidth(), 6 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
     assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.outerWidth(), 1.5, "Last row cell has correct width");
 });
 
