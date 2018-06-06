@@ -263,7 +263,8 @@ module.exports = {
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
                         $parent,
-                        searchText = that.option("searchPanel.text");
+                        searchText = that.option("searchPanel.text"),
+                        findCondition = "*";
 
                     if(searchText && that.option("searchPanel.highlightSearchText")) {
                         var normalizeString = that.option("searchPanel.highlightCaseSensitive") ? function(str) { return str; } : function(str) { return str.toLowerCase(); };
@@ -279,9 +280,11 @@ module.exports = {
                         $parent = cellElement.parent();
                         if(!$parent.length) {
                             $parent = $("<div>").append(cellElement);
+                        } else if(column) {
+                            findCondition = `td:nth-child(${column.index + 1})`;
                         }
 
-                        var $items = $parent.find("*").filter(function(index, element) {
+                        var $items = $parent.find(findCondition).filter(function(index, element) {
                             var $contents = $(element).contents();
                             for(var i = 0; i < $contents.length; i++) {
                                 var node = $contents.get(i);
