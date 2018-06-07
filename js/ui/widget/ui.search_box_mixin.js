@@ -155,7 +155,11 @@ module.exports = {
                     errors.log("W1009");
                     return;
                 }
-                this._dataSource[args.name === "searchMode" ? "searchOperation" : args.name](this.getOperationBySearchMode(args.value));
+                if(args.name === "searchMode") {
+                    this._dataSource.searchOperation(this.getOperationBySearchMode(args.value));
+                } else {
+                    this._dataSource[args.name](args.value);
+                }
                 this._dataSource.load();
                 break;
             case "searchTimeout":
