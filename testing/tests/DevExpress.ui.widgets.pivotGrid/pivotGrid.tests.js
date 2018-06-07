@@ -10,6 +10,9 @@ QUnit.testStart(function() {
     .container-height-200px {\
         height: 200px;\
     }\
+    .container-display-none {\
+        display: none;\
+    }\
 </style>\
 <div id="pivotGrid"></div>\
 <div class="dx-pivotgrid">\
@@ -225,10 +228,8 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
         pivotGrid = createPivotGrid({
             height: 200,
             dataSource: [{ sum: 100 }],
-
         }, assert);
 
-    assert.ok(pivotGrid._loadPanel.option("visible"), 'loadPanel should be visible');
     // act
     $pivotGridElement.show();
 
@@ -242,7 +243,21 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
 
     assert.ok($noDataElement.is(":visible"));
     assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + dataAreaCell.outerHeight()) - (noDataElementOffset.top + $noDataElement.height()), 2.5, "no data element position");
+});
 
+QUnit.test("Not render pivot grid to invisible container", function(assert) {
+    // arrange
+    var onContentReadyCallback = sinon.stub();
+    this.testOptions.onContentReady = onContentReadyCallback;
+    this.testOptions.scrolling = { mode: "virtual" };
+    this.testOptions.height = 300;
+
+    // act
+    $("#pivotGrid").addClass("container-display-none");
+    createPivotGrid(this.testOptions, assert);
+
+    // assert
+    assert.equal(onContentReadyCallback.callCount, 1, "contentReady calls");
 });
 
 QUnit.test("Create PivotGrid with Data", function(assert) {
