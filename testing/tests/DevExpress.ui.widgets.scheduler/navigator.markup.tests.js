@@ -256,4 +256,15 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         this.instance.option("step", "week");
         assert.equal(button.option("text"), "23 Feb-1 Mar 2015", "Step is week: Caption is OK");
     });
+
+    QUnit.test("Caption should be OK for agenda view, different months", (assert) => {
+        var $element = this.instance.$element(),
+            button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+            date = new Date(2015, 2, 29);
+
+        this.instance.option("date", date);
+
+        this.instance.option("step", "agenda");
+        assert.equal(button.option("text"), "29 Mar-4 Apr 2015", "Step is week: Caption is OK");
+    });
 });
