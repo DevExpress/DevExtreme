@@ -90,6 +90,7 @@ Legend.prototype = _extend(require("../../core/utils/object").clone(_BaseLegend.
     locate: _BaseLegend.prototype.shift,
 
     _updateData: function(data) {
+        this._options.defaultColor = data && data.defaultColor;
         this.update(data ? buildData(data.partition, data.values, this._dataName) : [], this._options);
         this.updateLayout();
     },

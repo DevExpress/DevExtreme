@@ -2,7 +2,7 @@
 
 import $ from "jquery";
 import Color from "color";
-import { registerPalette, getPalette, Palette, DiscretePalette, _DEBUG_palettes, currentPalette, GradientPalette } from "viz/palette";
+import { registerPalette, getPalette, Palette, DiscretePalette, _DEBUG_palettes, currentPalette, GradientPalette, getAccentColor } from "viz/palette";
 
 import errors from "core/errors";
 
@@ -10,6 +10,7 @@ var environment = {
     beforeEach: function() {
         this.registerPalette = registerPalette;
         this.getPalette = getPalette;
+        this.getAccentColor = getAccentColor;
         this.Palette = Palette;
         this.DiscretePalette = DiscretePalette;
         this.palettes = _DEBUG_palettes;
@@ -32,7 +33,7 @@ QUnit.test('Register palette', function(assert) {
     this.registerPalette('Custom Palette', ['red', 'green', 'blue']);
 
     // assert
-    assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['red', 'green', 'blue'] });
+    assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['red', 'green', 'blue'], accentColor: "red" });
 });
 
 QUnit.test('Register palette (new style)', function(assert) {
@@ -45,7 +46,8 @@ QUnit.test('Register palette (new style)', function(assert) {
     assert.deepEqual(this.palettes['custom palette'], {
         simpleSet: ['c1', 'c2', 'c3'],
         indicatingSet: ['d1', 'd2'],
-        gradientSet: ['g1', 'g2']
+        gradientSet: ['g1', 'g2'],
+        accentColor: "c1"
     });
 });
 
@@ -55,7 +57,7 @@ QUnit.test('Register palette with same name', function(assert) {
     this.registerPalette('Custom Palette', ['black', 'grey']);
 
     // assert
-    assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['black', 'grey'] });
+    assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['black', 'grey'], accentColor: "black" });
 });
 
 QUnit.test('Register palette with same name (new style)', function(assert) {
@@ -74,7 +76,8 @@ QUnit.test('Register palette with same name (new style)', function(assert) {
     assert.deepEqual(this.palettes['custom palette'], {
         simpleSet: ['c4', 'c5'],
         indicatingSet: ['d4', 'd5'],
-        gradientSet: ['g1', 'g2']
+        gradientSet: ['g1', 'g2'],
+        accentColor: "c4"
     });
 });
 
@@ -95,7 +98,8 @@ QUnit.test('Register not valid palette over palette', function(assert) {
     assert.deepEqual(this.palettes['custom palette'], {
         simpleSet: ['c1', 'c2', 'c3'],
         indicatingSet: ['d1', 'd2'],
-        gradientSet: ['g1', 'g2']
+        gradientSet: ['g1', 'g2'],
+        accentColor: "c1"
     });
 });
 
@@ -136,6 +140,40 @@ QUnit.test('Get palette by name and theme', function(assert) {
 
 QUnit.test('Get palette by array', function(assert) {
     assert.deepEqual(this.getPalette(['a1', 'a2', 'a3']), ['a1', 'a2', 'a3']);
+});
+
+QUnit.module('getAccentColor', environment);
+
+QUnit.test('By given palette name', function(assert) {
+    this.registerPalette('Custom Palette', {
+        simpleSet: ['c1', 'c2', 'c3'],
+        indicatingSet: ['d1', 'd2'],
+        accentColor: "e1"
+    });
+
+    assert.deepEqual(this.getAccentColor('Custom Palette'), 'e1');
+});
+
+QUnit.test('No palette, use theme default', function(assert) {
+    this.registerPalette('Theme Palette', {
+        simpleSet: ['c1', 'c2', 'c3'],
+        indicatingSet: ['d1', 'd2'],
+        accentColor: "e1"
+    });
+
+    assert.deepEqual(this.getAccentColor(undefined, 'Theme Palette'), 'e1');
+});
+
+QUnit.test('By given palette name, palette does not contain accent color - return first simple color', function(assert) {
+    this.registerPalette('Custom Palette', {
+        simpleSet: ['c1', 'c2', 'c3'],
+        indicatingSet: ['d1', 'd2']
+    });
+    assert.deepEqual(this.getAccentColor('Custom Palette'), 'c1');
+});
+
+QUnit.test('Palette is array of colors - return first color', function(assert) {
+    assert.deepEqual(this.getAccentColor(["c1", "c2"]), 'c1');
 });
 
 QUnit.module("Palette", $.extend({}, environment, {

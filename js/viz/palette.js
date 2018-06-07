@@ -17,14 +17,16 @@ const DEFAULT_PALETTE = "material";
 const officePalette = {
     simpleSet: ["#5f8b95", "#ba4d51", "#af8a53", "#955f71", "#859666", "#7e688c"],
     indicatingSet: ["#a3b97c", "#e1b676", "#ec7f83"],
-    gradientSet: ["#5f8b95", "#ba4d51"]
+    gradientSet: ["#5f8b95", "#ba4d51"],
+    accentColor: "#ba4d51"
 };
 
 const palettes = {
     [DEFAULT_PALETTE]: {
         simpleSet: ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8"],
         indicatingSet: ["#97c95c", "#ffc720", "#f5564a"],
-        gradientSet: ["#1db2f5", "#97c95c"]
+        gradientSet: ["#1db2f5", "#97c95c"],
+        accentColor: "#1db2f5"
     },
 
     "default": officePalette, // deprecated in 18.1
@@ -34,70 +36,83 @@ const palettes = {
     "harmony light": {
         simpleSet: ["#fcb65e", "#679ec5", "#ad79ce", "#7abd5c", "#e18e92", "#b6d623", "#b7abea", "#85dbd5"],
         indicatingSet: ["#b6d623", "#fcb65e", "#e18e92"],
-        gradientSet: ["#7abd5c", "#fcb65e"]
+        gradientSet: ["#7abd5c", "#fcb65e"],
+        accentColor: "#679ec5"
     },
     "soft pastel": {
         simpleSet: ["#60a69f", "#78b6d9", "#6682bb", "#a37182", "#eeba69", "#90ba58", "#456c68", "#7565a4"],
         indicatingSet: ["#90ba58", "#eeba69", "#a37182"],
-        gradientSet: ["#78b6d9", "#eeba69"]
+        gradientSet: ["#78b6d9", "#eeba69"],
+        accentColor: "#60a69f"
     },
 
     "pastel": {
         simpleSet: ["#bb7862", "#70b3a1", "#bb626a", "#057d85", "#ab394b", "#dac599", "#153459", "#b1d2c6"],
         indicatingSet: ["#70b3a1", "#dac599", "#bb626a"],
-        gradientSet: ["#bb7862", "#70b3a1"]
+        gradientSet: ["#bb7862", "#70b3a1"],
+        accentColor: "#bb7862"
     },
     "bright": {
         simpleSet: ["#70c92f", "#f8ca00", "#bd1550", "#e97f02", "#9d419c", "#7e4452", "#9ab57e", "#36a3a6"],
         indicatingSet: ["#70c92f", "#f8ca00", "#bd1550"],
-        gradientSet: ["#e97f02", "#f8ca00"]
+        gradientSet: ["#e97f02", "#f8ca00"],
+        accentColor: "#e97f02"
     },
     "soft": {
         simpleSet: ["#cbc87b", "#9ab57e", "#e55253", "#7e4452", "#e8c267", "#565077", "#6babac", "#ad6082"],
         indicatingSet: ["#9ab57e", "#e8c267", "#e55253"],
-        gradientSet: ["#9ab57e", "#e8c267"]
+        gradientSet: ["#9ab57e", "#e8c267"],
+        accentColor: "#565077"
     },
     "ocean": {
         simpleSet: ["#75c099", "#acc371", "#378a8a", "#5fa26a", "#064970", "#38c5d2", "#00a7c6", "#6f84bb"],
         indicatingSet: ["#c8e394", "#7bc59d", "#397c8b"],
-        gradientSet: ["#acc371", "#38c5d2"]
+        gradientSet: ["#acc371", "#38c5d2"],
+        accentColor: "#378a8a"
     },
     "vintage": {
         simpleSet: ["#dea484", "#efc59c", "#cb715e", "#eb9692", "#a85c4c", "#f2c0b5", "#c96374", "#dd956c"],
         indicatingSet: ["#ffe5c6", "#f4bb9d", "#e57660"],
-        gradientSet: ["#efc59c", "#cb715e"]
+        gradientSet: ["#efc59c", "#cb715e"],
+        accentColor: "#cb715e"
     },
     "violet": {
         simpleSet: ["#d1a1d1", "#eeacc5", "#7b5685", "#7e7cad", "#a13d73", "#5b41ab", "#e287e2", "#689cc1"],
         indicatingSet: ["#d8e2f6", "#d0b2da", "#d56a8a"],
-        gradientSet: ["#eeacc5", "#7b5685"]
+        gradientSet: ["#eeacc5", "#7b5685"],
+        accentColor: "#7b5685"
     },
 
     // generic color schemes related palettes
     "carmine": {
         simpleSet: ["#fb7764", "#73d47f", "#fed85e", "#d47683", "#dde392", "#757ab2"],
         indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
-        gradientSet: ["#fb7764", "#73d47f"]
+        gradientSet: ["#fb7764", "#73d47f"],
+        accentColor: "#f05b41"
     },
     "dark moon": {
         simpleSet: ["#4ddac1", "#f4c99a", "#80dd9b", "#f998b3", "#4aaaa0", "#a5aef1"],
         indicatingSet: ["#59d8a4", "#f0ad4e", "#f9517e"],
-        gradientSet: ["#4ddac1", "#f4c99a"]
+        gradientSet: ["#4ddac1", "#f4c99a"],
+        accentColor: "#3debd3"
     },
     "soft blue": {
         simpleSet: ["#7ab8eb", "#97da97", "#facb86", "#e78683", "#839bda", "#4db7be"],
         indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
-        gradientSet: ["#7ab8eb", "#97da97"]
+        gradientSet: ["#7ab8eb", "#97da97"],
+        accentColor: "#7ab8eb"
     },
     "dark violet": {
         simpleSet: ["#9c63ff", "#64c064", "#eead51", "#d2504b", "#4b6bbf", "#2da7b0"],
         indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
-        gradientSet: ["#9c63ff", "#64c064"]
+        gradientSet: ["#9c63ff", "#64c064"],
+        accentColor: "#9c63ff"
     },
     "green mist": {
         simpleSet: ["#3cbab2", "#8ed962", "#5b9d95", "#efcc7c", "#f1929f", "#4d8dab"],
         indicatingSet: ["#72d63c", "#ffc852", "#f74a5e"],
-        gradientSet: ["#3cbab2", "#8ed962"]
+        gradientSet: ["#3cbab2", "#8ed962"],
+        accentColor: "#3cbab2"
     }
 };
 
@@ -113,9 +128,11 @@ export function currentPalette(name) {
 }
 
 export function getPalette(palette, parameters) {
-    var result,
-        type = parameters && parameters.type;
+    parameters = parameters || {};
+    palette = selectPaletteOnSeniority(palette, parameters.themeDefault);
 
+    var result,
+        type = parameters.type;
     if(_isArray(palette)) {
         return palette.slice(0);
     } else {
@@ -140,11 +157,20 @@ export function registerPalette(name, palette) {
         item.simpleSet = _isArray(palette.simpleSet) ? palette.simpleSet.slice(0) : undefined;
         item.indicatingSet = _isArray(palette.indicatingSet) ? palette.indicatingSet.slice(0) : undefined;
         item.gradientSet = _isArray(palette.gradientSet) ? palette.gradientSet.slice(0) : undefined;
+        item.accentColor = palette.accentColor;
+    }
+    if(!item.accentColor) {
+        item.accentColor = item.simpleSet && item.simpleSet[0];
     }
     if(item.simpleSet || item.indicatingSet || item.gradientSet) {
         paletteName = normalizeEnum(name);
         extend((palettes[paletteName] = palettes[paletteName] || {}), item);
     }
+}
+
+export function getAccentColor(palette, themeDefault) {
+    palette = getPalette(palette, { themeDefault });
+    return palette.accentColor || palette[0];
 }
 
 function RingBuf(buf) {
@@ -351,8 +377,7 @@ export function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
     var extensionMode = (parameters.extensionMode || "").toLowerCase(),
-        keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette),
-        colors = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
+        colors = getPalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
 
     if(extensionMode === "alternate") {
         this._extensionStrategy = AlternateColors(colors, parameters);
@@ -407,8 +432,7 @@ function getLightness(color) {
 }
 
 export function DiscretePalette(source, size, themeDefaultPalette) {
-    var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
-        palette = size > 0 ? createDiscreteColors(getPalette(keyPalette, { type: "gradientSet" }), size) : [];
+    var palette = size > 0 ? createDiscreteColors(getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
     this.getColor = function(index) {
         return palette[index] || null;
     };
@@ -443,8 +467,7 @@ function createDiscreteColors(source, count) {
 
 export function GradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
-    var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
-        palette = getPalette(keyPalette, { type: "gradientSet" }),
+    var palette = getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
         color1 = new _Color(palette[0]),
         color2 = new _Color(palette[1]);
     this.getColor = function(ratio) {

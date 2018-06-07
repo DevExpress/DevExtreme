@@ -37,12 +37,14 @@ var environment = {
         this.themeManager.setCallback(this.callback);
         this.Palette = sinon.stub(paletteModule, "Palette");
         this.DiscretePalette = sinon.stub(paletteModule, "DiscretePalette");
+        this.getAccentColor = sinon.stub(paletteModule, "getAccentColor");
     },
 
     afterEach: function() {
         this.themeManager.dispose();
         this.Palette.restore();
         this.DiscretePalette.restore();
+        this.getAccentColor.restore();
     }
 };
 
@@ -476,4 +478,14 @@ QUnit.test("Create discrete palette. Palette and default palette", function(asse
     assert.ok(this.DiscretePalette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
     assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13, "some-default-palette"]);
+});
+
+QUnit.test("Get palette's accent color", function(assert) {
+    this.getAccentColor.returns("accent color");
+    this.themeManager.setTheme("custom-default-palette");
+
+    var color = this.themeManager.getAccentColor('paletteName');
+
+    assert.equal(color, "accent color");
+    assert.deepEqual(this.getAccentColor.lastCall.args, ['paletteName', "some-default-palette"]);
 });

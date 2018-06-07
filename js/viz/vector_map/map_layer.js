@@ -248,7 +248,9 @@ var emptyStrategy = {
 
     arrange: _noop,
 
-    updateGrouping: _noop
+    updateGrouping: _noop,
+
+    getDefaultColor: _noop
 };
 
 var strategiesByType = {};
@@ -292,7 +294,9 @@ strategiesByType[TYPE_AREA] = {
 
     updateGrouping: function(context) {
         groupByColor(context);
-    }
+    },
+
+    getDefaultColor: _noop
 };
 
 strategiesByType[TYPE_LINE] = {
@@ -334,7 +338,9 @@ strategiesByType[TYPE_LINE] = {
 
     updateGrouping: function(context) {
         groupByColor(context);
-    }
+    },
+
+    getDefaultColor: _noop
 };
 
 strategiesByType[TYPE_MARKER] = {
@@ -375,6 +381,10 @@ strategiesByType[TYPE_MARKER] = {
     updateGrouping: function(context) {
         groupByColor(context);
         groupBySize(context);
+    },
+
+    getDefaultColor: function(ctx, palette) {
+        return ctx.params.themeManager.getAccentColor(palette);
     }
 };
 
@@ -747,8 +757,10 @@ function combineSettings(common, partial) {
     return obj;
 }
 
-function processCommonSettings(type, options, themeManager) {
-    var settings = combineSettings(themeManager.theme("layer:" + type) || { label: {} }, options),
+function processCommonSettings(context, options) {
+    var themeManager = context.params.themeManager,
+        strategy = context.str,
+        settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme("layer:" + strategy.fullType)), options),
         colors,
         i,
         palette;
@@ -776,7 +788,7 @@ var performGrouping = function(context, partition, settingField, dataField, valu
             partition: partition,
             values: values
         };
-        context.params.dataExchanger.set(context.name, settingField, { partition: partition, values: values });
+        context.params.dataExchanger.set(context.name, settingField, { partition: partition, values: values, defaultColor: context.settings.color });
     }
 };
 
@@ -976,7 +988,7 @@ MapLayer.prototype = _extend({
             that.proxy.type = context.str.type;
             that.proxy.elementType = context.str.elementType;
         }
-        context.settings = processCommonSettings(context.str.fullType, that._options, that._params.themeManager);
+        context.settings = processCommonSettings(context, that._options);
         context.hasSeparateLabel = !!(context.settings.label.enabled && context.str.hasLabelsGroup);
         context.hover = !!_parseScalar(context.settings.hoverEnabled, true);
         // There is intentionally no attempt to preserve previous selection (or part of it)
