@@ -174,6 +174,10 @@ gridCore.registerModule("stateStoring", {
                         if(dataController.isLoaded()) {
                             that.setLoading(false);
                             that.renderNoDataText();
+                            if(!dataController.getDataSource()) {
+                                var columnHeadersView = that.component.getView("columnHeadersView");
+                                columnHeadersView && columnHeadersView.render();
+                            }
                         }
                     });
                 }
