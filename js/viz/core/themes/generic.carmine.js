@@ -110,14 +110,6 @@ registerTheme({
             }
         }
     },
-    map: {
-        "layer:marker:dot": {
-            color: ACCENT_COLOR
-        },
-        "layer:marker:bubble": {
-            color: ACCENT_COLOR
-        }
-    },
     bullet: {
         color: ACCENT_COLOR
     }
