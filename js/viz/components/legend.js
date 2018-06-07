@@ -415,7 +415,7 @@ extend(legendPrototype, {
                 normalState = stateOfDataItem.normal,
                 normalStateFill = normalState.fill,
                 marker = createMarker(renderer, markerSize)
-                    .attr({ fill: normalStateFill || options.markerColor, opacity: normalState.opacity })
+                    .attr({ fill: normalStateFill || options.markerColor || options.defaultColor, opacity: normalState.opacity })
                     .append(group),
                 label = that._createLabel(dataItem, group),
                 states = {

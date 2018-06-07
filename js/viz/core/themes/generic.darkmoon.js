@@ -111,15 +111,6 @@ registerTheme({
         "layer:area": {
             color: "#97a3b6",
             borderColor: BACKGROUND_COLOR
-        },
-        "layer:marker:dot": {
-            color: ACCENT_COLOR
-        },
-        "layer:marker:bubble": {
-            color: ACCENT_COLOR
-        },
-        legend: {
-            markerColor: ACCENT_COLOR
         }
     },
     rangeSelector: {
