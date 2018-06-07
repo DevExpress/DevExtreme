@@ -1,6 +1,7 @@
 "use strict";
 
-var escapeRegExp = require("../../core/utils/common").escapeRegExp;
+var escapeRegExp = require("../../core/utils/common").escapeRegExp,
+    noop = require("../../core/utils/common").noop;
 
 var FORMAT_TYPES = {
     "3": "abbreviated",
@@ -114,6 +115,19 @@ var PATTERN_PARSERS = {
 
 var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
 
+var PATTERN_GETTERS = {
+    y: "getFullYear",
+    M: "getMonth",
+    L: "getMonth",
+    a: "getHours",
+    d: "getDate",
+    H: "getHours",
+    h: "getHours",
+    m: "getMinutes",
+    s: "getSeconds",
+    S: "getMilliseconds"
+};
+
 var PATTERN_SETTERS = {
     y: "setFullYear",
     M: "setMonth",
@@ -190,9 +204,22 @@ var getRegExpInfo = function(format, dateParts) {
     };
 };
 
+var getPatternSetter = function(patternChar) {
+    return PATTERN_SETTERS[patternChar] || noop;
+};
+
+var getPatternGetter = function(patternChar) {
+    var unsupportedCharGetter = function() {
+        return patternChar;
+    };
+
+    return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
+};
+
+
 var setPatternPart = function(date, pattern, text, dateParts) {
     var patternChar = pattern[0],
-        partSetter = PATTERN_SETTERS[patternChar],
+        partSetter = getPatternSetter(patternChar),
         partParser = PATTERN_PARSERS[patternChar];
 
     if(partSetter && partParser) {
@@ -267,3 +294,5 @@ var getParser = function(format, dateParts) {
 
 exports.getParser = getParser;
 exports.getRegExpInfo = getRegExpInfo;
+exports.getPatternSetter = getPatternSetter;
+exports.getPatternGetter = getPatternGetter;

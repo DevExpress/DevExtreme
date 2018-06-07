@@ -3,24 +3,42 @@
 var dateParser = require("../../localization/ldml/date.parser"),
     escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
-var getSelectionByPosition = function(text, format, position) {
+var renderDateParts = function(text, format) {
     var regExpInfo = dateParser.getRegExpInfo(format),
         result = regExpInfo.regexp.exec(text);
 
-    var start = 0, end = 0;
+    var start = 0, end = 0, sections = [];
     for(var i = 1; i < result.length; i++) {
         start = end;
         end = start + result[i].length;
 
-        var isStubPattern = regExpInfo.patterns[i - 1] === escapeRegExp(result[i]),
-            caretInGroup = end >= position;
+        var pattern = regExpInfo.patterns[i - 1];
 
-        if(!isStubPattern && caretInGroup) {
-            return { start: start, end: end };
+        sections.push({
+            index: i - 1,
+            isStub: pattern === escapeRegExp(result[i]),
+            caret: { start: start, end: end },
+            pattern: pattern,
+            text: result[i],
+            setter: dateParser.getPatternSetter(pattern[0]),
+            getter: dateParser.getPatternGetter(pattern[0])
+        });
+    }
+
+    return sections;
+};
+
+var getDatePartIndexByPosition = function(dateParts, position) {
+    for(var i = 0; i < dateParts.length; i++) {
+        var caretInGroup = dateParts[i].caret.end >= position;
+
+        if(!dateParts[i].isStub && caretInGroup) {
+            return i;
         }
     }
 
-    return { start: 0, end: 0 };
+    return null;
 };
 
-exports.getSelectionByPosition = getSelectionByPosition;
+exports.getDatePartIndexByPosition = getDatePartIndexByPosition;
+exports.renderDateParts = renderDateParts;
