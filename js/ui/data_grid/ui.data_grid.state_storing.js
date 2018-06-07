@@ -171,13 +171,11 @@ gridCore.registerModule("stateStoring", {
                     that.callBase();
 
                     dataController.stateLoaded.add(function() {
-                        if(dataController.isLoaded()) {
+                        if(dataController.isLoaded() && !dataController.getDataSource()) {
                             that.setLoading(false);
                             that.renderNoDataText();
-                            if(!dataController.getDataSource()) {
-                                var columnHeadersView = that.component.getView("columnHeadersView");
-                                columnHeadersView && columnHeadersView.render();
-                            }
+                            var columnHeadersView = that.component.getView("columnHeadersView");
+                            columnHeadersView && columnHeadersView.render();
                         }
                     });
                 }
