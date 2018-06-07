@@ -94,7 +94,7 @@ QUnit.test("Phantom appointment should be rendered after tooltip item dragStart"
     assert.ok(renderStub.calledOnce, "Item was rendered");
 });
 
-QUnit.test("Phantom appointment position should be correctled after dragStart", function(assert) {
+QUnit.test("Phantom appointment position should be correct after dragStart", function(assert) {
     this.createInstance();
 
     var $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments"),
@@ -109,6 +109,7 @@ QUnit.test("Phantom appointment position should be correctled after dragStart", 
         menuPosition = translator.locate($dropDown);
 
     assert.roughEqual(phantomPosition.left, menuPosition.left, 1.5, "Phantom left is OK");
+    assert.roughEqual(phantomPosition.top, menuPosition.top, 1.5, "Phantom top is OK");
 
     pointer.dragEnd();
 });
@@ -216,4 +217,37 @@ QUnit.test("Recurrence appointment dragging should work correctly", function(ass
     pointer.drag(0, -100).dragEnd();
 
     assert.deepEqual(stub.getCall(0).args[2], new Date(2015, 1, 9, 0), "_checkRecurringAppointment has a right exceptionDate");
+});
+
+QUnit.test("Phantom appointment should have correct template", function(assert) {
+    var instance = $("#scheduler").dxScheduler({
+        editing: true,
+        height: 600,
+        views: [{ type: "timelineDay", forceMaxAppointmentPerCell: true, maxAppointmentsPerCell: 1 }],
+        currentView: "timelineDay",
+        dataSource: [{
+            text: "Task 1",
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        },
+        {
+            text: "Task 2",
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        }],
+        currentDate: new Date(2015, 1, 9)
+    }).dxScheduler("instance");
+
+    var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
+    dropDown.open();
+
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
+
+    var pointer = pointerMock($ddAppointment).start().dragStart(),
+        $phantomAppointment = instance.$element().find(".dx-scheduler-appointment").eq(0);
+
+    assert.equal($phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "1:00 AM", "Appointment start is correct");
+    assert.equal($phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "2:00 AM", "Appointment edn is correct");
+
+    pointer.dragEnd();
 });
