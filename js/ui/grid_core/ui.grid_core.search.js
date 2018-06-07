@@ -260,70 +260,86 @@ module.exports = {
                     this._searchParams = [];
                 },
 
+                getFormattedSearchText: function(column, searchText) {
+                    var value = parseValue(column, searchText),
+                        formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, "search");
+                    return gridCoreUtils.formatValue(value, formatOptions);
+                },
+
+                normalizeString: function(str) {
+                    if(!this.option("searchPanel.highlightCaseSensitive")) {
+                        str = str.toLowerCase();
+                    }
+                    return str ? str : "";
+                },
+
+                findHighlightingItems: function(column, cellElement, searchText) {
+                    var that = this,
+                        $parent = cellElement.parent(),
+                        $items,
+                        normalizedSearchText = this.normalizeString(searchText);
+
+                    if(!$parent.length) {
+                        $parent = $("<div>").append(cellElement);
+                    } else if(column) {
+                        var columnIndex = that._columnsController.getVisibleIndex(column.index);
+                        $items = $parent.children("td").eq(columnIndex);
+                    }
+                    $items = $items || $parent.find("*");
+
+                    $items = $items.filter(function(index, element) {
+                        var $contents = $(element).contents();
+                        for(var i = 0; i < $contents.length; i++) {
+                            var node = $contents.get(i);
+                            if(node.nodeType === 3) {
+                                return that.normalizeString(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
+                            }
+                            return false;
+                        }
+                    });
+
+                    return $items;
+                },
+
+                processHighlightTextRecursive: function($content, searchText) {
+                    var that = this,
+                        $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
+                        text = $content.text(),
+                        firstContentElement = $content[0],
+                        index = that.normalizeString(text).indexOf(that.normalizeString(searchText));
+
+                    if(index >= 0) {
+                        if(firstContentElement.textContent) {
+                            firstContentElement.textContent = text.substr(0, index);
+                        } else {
+                            firstContentElement.nodeValue = text.substr(0, index);
+                        }
+                        $content.after($searchTextSpan.text(text.substr(index, searchText.length)));
+
+                        $content = $(domAdapter.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
+
+                        return that.processHighlightTextRecursive($content, searchText);
+                    }
+                },
+
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
-                        $parent,
-                        searchText = that.option("searchPanel.text"),
-                        findCondition = "*";
+                        searchText = that.option("searchPanel.text");
+
+                    if(isEquals && column) {
+                        searchText = that.getFormattedSearchText(column, searchText);
+                    }
 
                     if(searchText && that.option("searchPanel.highlightSearchText")) {
-                        var normalizeString = that.option("searchPanel.highlightCaseSensitive") ? function(str) { return str; } : function(str) { return str.toLowerCase(); };
-
-                        if(isEquals && column) {
-                            var value = parseValue(column, searchText),
-                                formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, "search");
-
-                            searchText = gridCoreUtils.formatValue(value, formatOptions);
-                            if(!searchText) return;
-                        }
-
-                        $parent = cellElement.parent();
-                        if(!$parent.length) {
-                            $parent = $("<div>").append(cellElement);
-                        } else if(column) {
-                            findCondition = `td:nth-child(${column.visibleIndex + 1})`;
-                        }
-
-                        var $items = $parent.find(findCondition).filter(function(index, element) {
-                            var $contents = $(element).contents();
-                            for(var i = 0; i < $contents.length; i++) {
-                                var node = $contents.get(i);
-                                if(node.nodeType === 3) {
-                                    return (node.textContent || node.nodeValue || "").toLowerCase().indexOf(searchText.toLowerCase()) > -1;
-                                }
-
-                                return false;
-                            }
-                        });
-
-                        each($items, function(index, element) {
+                        var highlightingItems = that.findHighlightingItems(column, cellElement, searchText);
+                        each(highlightingItems, function(index, element) {
                             each($(element).contents(), function(index, content) {
-                                if(content.nodeType !== 3) return;
-
-                                var highlightSearchTextInTextNode = function($content, searchText) {
-                                    var $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
-                                        text = $content.text(),
-                                        index = normalizeString(text).indexOf(normalizeString(searchText));
-
-                                    if(index >= 0) {
-                                        if($content[0].textContent) {
-                                            $content[0].textContent = text.substr(0, index);
-                                        } else {
-                                            $content[0].nodeValue = text.substr(0, index);
-                                        }
-                                        $content.after($searchTextSpan.text(text.substr(index, searchText.length)));
-
-                                        $content = $(domAdapter.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
-                                        return highlightSearchTextInTextNode($content, searchText);
-                                    }
-                                };
-
                                 if(isEquals) {
-                                    if(normalizeString($(content).text()) === normalizeString(searchText)) {
+                                    if(that.normalizeString($(content).text()) === that.normalizeString(searchText)) {
                                         $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
                                     }
                                 } else {
-                                    highlightSearchTextInTextNode($(content), searchText);
+                                    that.processHighlightTextRecursive($(content), searchText);
                                 }
                             });
                         });
