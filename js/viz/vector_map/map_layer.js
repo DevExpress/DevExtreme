@@ -760,7 +760,7 @@ function combineSettings(common, partial) {
 function processCommonSettings(context, options) {
     var themeManager = context.params.themeManager,
         strategy = context.str,
-        settings = combineSettings(_extend({}, themeManager.theme("layer:" + strategy.fullType) || { label: {} }, { color: strategy.getDefaultColor(context, options.palette) }), options),
+        settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme("layer:" + strategy.fullType)), options),
         colors,
         i,
         palette;

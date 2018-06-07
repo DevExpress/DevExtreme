@@ -1176,7 +1176,6 @@ registerTheme({
         "layer:marker:dot": {
             borderWidth: 2,
             borderColor: WHITE,
-            color: "#ba4d51",
             size: 8,
             selectedStep: 2,
             backStep: 18,
@@ -1187,7 +1186,6 @@ registerTheme({
         "layer:marker:bubble": {
             minSize: 20,
             maxSize: 50,
-            color: "#ba4d51",
             hoveredBorderWidth: 1,
             hoveredBorderColor: GREY_GREEN,
             selectedBorderWidth: 2,

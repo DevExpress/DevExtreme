@@ -918,3 +918,24 @@ QUnit.test("Color is specified - take specified color", function(assert) {
     }, "settings");
     assert.equal(stubSelectStrategy.lastCall.returnValue.getDefaultColor.called, true);
 });
+
+QUnit.test("Color specified in theme - take theme's color", function(assert) {
+    stubSelectStrategy.lastCall.returnValue.fullType = "test-type-1";
+    stubSelectStrategy.lastCall.returnValue.getDefaultColor.returns("default color");
+    this.themeManager.theme = sinon.stub().returns({
+        color: "theme color"
+    });
+
+    this.layer.setOptions({
+        palette: "test-palette"
+    });
+
+    assert.deepEqual(this.context.settings, {
+        color: "theme color",
+        label: {
+            font: {}
+        },
+        palette: "test-palette"
+    }, "settings");
+    assert.deepEqual(stubSelectStrategy.lastCall.returnValue.getDefaultColor.lastCall.args, [this.context, "test-palette"]);
+});
