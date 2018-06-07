@@ -7,12 +7,6 @@ QUnit.testStart(function() {
     .dx-scrollable-content {\
         padding: 0 !important;\
     }\
-    .container-height-200px {\
-        height: 200px;\
-    }\
-    .container-display-none {\
-        display: none;\
-    }\
 </style>\
 <div id="pivotGrid"></div>\
 <div class="dx-pivotgrid">\
@@ -224,7 +218,7 @@ QUnit.test("Empty store", function(assert) {
 });
 
 QUnit.test("No data when pivot grid rendered to invisible container", function(assert) {
-    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+    var $pivotGridElement = $("#pivotGrid").hide().height("200px"),
         pivotGrid = createPivotGrid({
             height: 200,
             dataSource: [{ sum: 100 }],
@@ -253,7 +247,7 @@ QUnit.test("Not render pivot grid to invisible container", function(assert) {
     this.testOptions.height = 300;
 
     // act
-    $("#pivotGrid").addClass("container-display-none");
+    $("#pivotGrid").hide();
     createPivotGrid(this.testOptions, assert);
 
     // assert
@@ -1879,7 +1873,7 @@ QUnit.test("Render to invisible container", function(assert) {
     var $pivotGridElement = $("#pivotGrid")
         .hide()
         .width(2000)
-        .addClass("container-height-200px"),
+        .height("200px"),
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     $pivotGridElement.show();
