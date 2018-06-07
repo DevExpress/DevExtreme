@@ -25,9 +25,8 @@ var dxExporter = {
     serverUrl: undefined,
     /**
     * @name dxExporterOptions.exportFormat
-    * @type Array<string>
+    * @type Array<Enums.ExportFormat>
     * @default ['PDF', 'PNG', 'SVG']
-    * @acceptValues 'PNG'|'JPEG'|'GIF'|'PDF'|'SVG'
     */
     exportFormat: ['PDF', 'PNG', 'SVG'],
     /**
