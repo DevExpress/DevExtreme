@@ -91,7 +91,11 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 displayValue = value;
             }
 
-            item = typeUtils.isObject(item) ? item : {};
+            if(!typeUtils.isObject(item)) {
+                item = {};
+            } else if(item === value) {
+                item = extend({}, item);
+            }
 
             path.push(value);
 
