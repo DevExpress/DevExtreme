@@ -31,7 +31,7 @@ var ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
 
         if(this._dataSource) {
             value && value.length && this._dataSource.searchValue(value);
-            mode.length && this._dataSource.searchOperation(mode);
+            mode.length && this._dataSource.searchOperation(searchBoxMixin.getOperationBySearchMode(mode));
             expr && this._dataSource.searchExpr(expr);
         }
     }

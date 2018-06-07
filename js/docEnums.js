@@ -437,7 +437,7 @@
 
 /**
  * @typedef {string} Enums.CollectionSearchMode
- * @enum {'contains'|'startswith'}
+ * @enum {'contains'|'startswith'|'equals'}
  */
 
 /**
