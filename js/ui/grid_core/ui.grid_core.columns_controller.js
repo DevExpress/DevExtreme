@@ -958,6 +958,9 @@ module.exports = {
                                 column[fieldName] = userStateColumn[fieldName];
                             }
                         } else {
+                            if(fieldName === "selectedFilterOperation" && userStateColumn[fieldName]) {
+                                column.defaultSelectedFilterOperation = column[fieldName] || null;
+                            }
                             column[fieldName] = userStateColumn[fieldName];
                         }
                     }
@@ -2668,7 +2671,7 @@ module.exports = {
                     if(columnOptions.dataType) {
                         calculatedColumnOptions.userDataType = columnOptions.dataType;
                     }
-                    if(columnOptions.selectedFilterOperation) {
+                    if(columnOptions.selectedFilterOperation && !("defaultSelectedFilterOperation" in calculatedColumnOptions)) {
                         calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
                     }
                     if(columnOptions.lookup) {
