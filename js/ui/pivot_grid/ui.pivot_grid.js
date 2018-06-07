@@ -1845,6 +1845,11 @@ var PivotGrid = Widget.inherit({
 
             totalHeight = getArraySum(resultHeights);
 
+            if(!totalWidth || !totalHeight) {
+                d.resolve();
+                return;
+            }
+
             rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
             elementWidth = that.$element().width();
@@ -1861,7 +1866,6 @@ var PivotGrid = Widget.inherit({
             }
 
             commonUtils.deferRender(function() {
-
                 columnsArea.tableElement().append(dataArea.headElement());
 
                 rowFieldsHeader.tableElement().append(rowsArea.headElement());
@@ -1952,7 +1956,6 @@ var PivotGrid = Widget.inherit({
 
                 that._updateLoading();
                 that._renderNoDataText(dataAreaCell);
-
 
                 ///#DEBUG
                 that._testResultWidths = resultWidths;
