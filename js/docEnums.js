@@ -809,3 +809,8 @@
  * @typedef {string} Enums.PivotGridStoreType
  * @enum {'array'|'local'|'odata'|'xmla'}
  */
+
+/**
+ * @typedef {string} Enums.ExportFormat
+ * @enum {'GIF'|'JPEG'|'PDF'|'PNG'|'SVG'}
+ */
