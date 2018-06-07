@@ -5,7 +5,8 @@ var $ = require("jquery"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
     ArrayStore = require("data/array_store"),
-    Promise = require("core/polyfills/promise");
+    Promise = require("core/polyfills/promise"),
+    fx = require("animation/fx");
 
 require("ui/data_grid/ui.data_grid");
 require("common.css!");
@@ -458,7 +459,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'filterRow', 'headerFilter', 'search', 'pager', 'selection'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'filterRow', 'headerFilter', 'search', 'pager', 'selection'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -1312,4 +1313,59 @@ QUnit.test("Render columns when the stateStoring.enabled=true and dataSource is 
     this.columnHeadersView.render($testElement);
     deferred.resolve({ columns: columns });
     assert.equal(this.columnHeadersView.element().find("col").length, 2);
+});
+
+// T629814
+QUnit.test("Selected filter operation should be reset to the default state after resetting the filter value", function(assert) {
+    // arrange
+    fx.off = true;
+
+    try {
+        var filterMenu,
+            filterMenuItem;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.setupDataGridModules({
+            loadingTimeout: undefined,
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return {
+                        columns: [{ dataField: "id", filterValue: 2, selectedFilterOperation: "startswith" }]
+                    };
+                },
+                customSave: function(state) {
+                },
+                savingTimeout: 0
+            },
+            filterRow: {
+                visible: true
+            },
+            dataSource: {
+                store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+            },
+            customizeColumns: function() {}
+        });
+
+        this.gridView.render(this.$element());
+        this.clock.tick();
+
+        filterMenu = this.$element().find('.dx-menu .dx-menu-item').first();
+        $(filterMenu).trigger("dxclick");  // open filter menu
+        filterMenuItem = $("body").find('.dx-overlay-content').first().find('.dx-menu-item').last();
+
+        // act
+        filterMenuItem.trigger('dxclick'); // Reset filter
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(this.columnOption("id", "filterValue"), null, "filterValue");
+        assert.strictEqual(this.columnOption("id", "selectedFilterOperation"), null, "selectedFilterOperation");
+    } finally {
+        fx.off = false;
+    }
 });
