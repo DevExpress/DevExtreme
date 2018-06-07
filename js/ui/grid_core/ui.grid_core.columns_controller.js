@@ -36,7 +36,7 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand",
-    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
