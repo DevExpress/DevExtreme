@@ -1276,6 +1276,34 @@ QUnit.test("The filter should be cleared after resetting the grid's state", func
     assert.strictEqual(this.dataController.getCombinedFilter(true), undefined, "no filter");
 });
 
+// T630977
+QUnit.test("Render columns when the stateStoring.enabled=true and dataSource is not defined", function(assert) {
+    var $testElement = $("#container"),
+        deferred = $.Deferred(),
+        columns = [{
+            dataField: "field1",
+            dataType: "string"
+        }, {
+            dataField: "field2",
+            dataType: "string"
+        }];
+    // arrange
+    this.setupDataGridModules({
+        columns: columns,
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+                return deferred.promise();
+            }
+        }
+    });
+
+    this.columnHeadersView.render($testElement);
+    deferred.resolve({ columns: columns });
+    assert.equal(this.columnHeadersView.element().find("col").length, 2);
+});
+
 // T629814
 QUnit.test("Selected filter operation should be reset to the default state after resetting the filter value", function(assert) {
     // arrange

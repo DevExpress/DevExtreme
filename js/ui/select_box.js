@@ -818,11 +818,10 @@ var SelectBox = DropDownList.inherit({
         }
 
         var inputElement = $input.get(0),
-            displayValue = this._displayGetter(item);
+            displayValue = this._displayGetter(item).toString();
 
         inputElement.value = displayValue;
-        inputElement.selectionStart = valueLength;
-        inputElement.selectionEnd = displayValue.length;
+        this._caret({ start: valueLength, end: displayValue.length });
     },
 
     _cleanInputSelection: function() {

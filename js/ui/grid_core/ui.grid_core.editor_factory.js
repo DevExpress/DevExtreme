@@ -233,7 +233,7 @@ module.exports = {
               * @type_function_param1 e:object
               * @type_function_param1_field4 parentType:string
               * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue):any
+              * @type_function_param1_field6 setValue(newValue, newText):any
               * @type_function_param1_field7 updateValueTimeout:number
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
@@ -256,7 +256,7 @@ module.exports = {
               * @type_function_param1 e:object
               * @type_function_param1_field4 parentType:string
               * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue):any
+              * @type_function_param1_field6 setValue(newValue, newText):any
               * @type_function_param1_field7 updateValueTimeout:number
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
@@ -279,7 +279,7 @@ module.exports = {
               * @type_function_param1 options:object
               * @type_function_param1_field4 parentType:string
               * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue):any
+              * @type_function_param1_field6 setValue(newValue, newText):any
               * @type_function_param1_field7 updateValueTimeout:number
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
@@ -299,7 +299,7 @@ module.exports = {
               * @type_function_param1 options:object
               * @type_function_param1_field4 parentType:string
               * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue):any
+              * @type_function_param1_field6 setValue(newValue, newText):any
               * @type_function_param1_field7 updateValueTimeout:number
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean

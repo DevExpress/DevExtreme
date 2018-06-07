@@ -2755,6 +2755,19 @@ QUnit.test("search timeout should be cleared if new search have been initiated",
     }
 });
 
+QUnit.test("caret should be at the end of the input if search is used with 'startswith' mode and items are numbers", function(assert) {
+    this.reinit({
+        dataSource: [1, 2, 3],
+        value: null,
+        searchTimeout: 0,
+        searchMode: 'startswith',
+        searchEnabled: true
+    });
+
+    this.keyboard.type("1");
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is good");
+});
+
 QUnit.test("search value should not be substituted if the 'autocompletionEnabled' is false", function(assert) {
     this.reinit({
         items: [this.item],
