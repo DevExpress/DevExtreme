@@ -1,15 +1,17 @@
 "use strict";
 
+var MASK_EVENT_NAMESPACE = "dateBoxMask";
+
 var eventsUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
     eventsEngine = require("../../events/core/events_engine"),
-    // formatter = require("../../core/utils/date_serialization").serializeDate,
+    dateParts = require("./ui.date_box.mask.parts"),
     DateBoxBase = require("./ui.date_box.base");
 
 var DateBoxMask = DateBoxBase.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            useMaskBehavior: true
+            useMaskBehavior: false
         });
     },
 
@@ -17,16 +19,22 @@ var DateBoxMask = DateBoxBase.inherit({
         this.callBase();
 
         if(this.option("useMaskBehavior")) {
+            this._detachMaskEvents();
             this._attachMaskEvents();
         }
     },
 
-    _attachMaskEvents: function() {
-        eventsEngine.on(this.element(), eventsUtils.addNamespace("click", this.NAME), this._maskClickHandler.bind(this));
+    _detachMaskEvents: function() {
+        eventsEngine.off(this._input(), "." + MASK_EVENT_NAMESPACE);
     },
 
-    _maskClickHandler: function(e) {
+    _attachMaskEvents: function() {
+        eventsEngine.on(this._input(), eventsUtils.addNamespace("click", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+    },
 
+    _maskClickHandler: function() {
+        var selection = dateParts.getSelectionByPosition(this.option("text"), this.option("displayFormat"), this._caret().start);
+        this._caret(selection);
     }
 });
 

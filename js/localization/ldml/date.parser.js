@@ -159,8 +159,6 @@ var getRegExpInfo = function(format, dateParts) {
         isEscaping,
         patterns = [];
 
-    format = escapeRegExp(format);
-
     for(var i = 0; i < format.length; i++) {
         var char = format[i],
             isEscapeChar = char === "'",
@@ -181,7 +179,9 @@ var getRegExpInfo = function(format, dateParts) {
             regexpText += "(" + regexpPart(count, dateParts) + ")";
             i += count - 1;
         } else {
-            regexpText += char;
+            char = escapeRegExp(char);
+            patterns.push(char);
+            regexpText += "(" + char + ")";
         }
     }
     return {
@@ -266,3 +266,4 @@ var getParser = function(format, dateParts) {
 };
 
 exports.getParser = getParser;
+exports.getRegExpInfo = getRegExpInfo;
