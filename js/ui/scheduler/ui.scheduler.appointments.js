@@ -348,6 +348,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var startDate = model.settings ? new Date(this.invoke("getField", "startDate", model.settings)) : data.startDate,
             endDate = model.settings ? new Date(this.invoke("getField", "endDate", model.settings)) : data.endDate;
 
+        if(isNaN(startDate) || isNaN(endDate)) {
+            startDate = data.startDate;
+            endDate = data.endDate;
+        }
 
         $("<div>")
             .text(this._createAppointmentTitle(data))
