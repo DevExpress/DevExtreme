@@ -1,44 +1,26 @@
 "use strict";
 
-var dateParts = {
-    "day": {
-        select: function(value, pattern) {
+var dateParser = require("../../localization/ldml/date.parser"),
+    escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
-        },
+var getSelectionByPosition = function(text, format, position) {
+    var regExpInfo = dateParser.getRegExpInfo(format),
+        result = regExpInfo.regexp.exec(text);
 
-        add: function(value, count) {
-            var current = value.getDay();
-            return new Date(value.setDate(current + count));
-        }
-    },
+    var start = 0, end = 0;
+    for(var i = 1; i < result.length; i++) {
+        start = end;
+        end = start + result[i].length;
 
-    "month": {
-        add: function(value, count) {
-            var current = value.getMonth();
-            return new Date(value.setMonth(current + count));
-        }
-    },
+        var isStubPattern = regExpInfo.patterns[i - 1] === escapeRegExp(result[i]),
+            caretInGroup = end >= position;
 
-    "year": {
-        add: function(value, count) {
-            var current = value.getFullYear();
-            return new Date(value.setFullYear(current + count));
-        }
-    },
-
-    "hour": {
-        add: function(value, count) {
-            var current = value.getHour();
-            return new Date(value.getHour(current + count));
-        }
-    },
-
-    "minute": {
-        add: function(value, count) {
-            var current = value.getMinute();
-            return new Date(value.getMinute(current + count));
+        if(!isStubPattern && caretInGroup) {
+            return { start: start, end: end };
         }
     }
+
+    return { start: 0, end: 0 };
 };
 
-exports.dateParts = dateParts;
+exports.getSelectionByPosition = getSelectionByPosition;
