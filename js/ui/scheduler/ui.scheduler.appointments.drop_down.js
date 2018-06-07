@@ -216,10 +216,11 @@ var dropDownAppointments = Class.inherit({
 
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, appointmentData.settings[0].startDate) : $items[0];
 
-        var menuPosition = translator.locate($menu);
+        var menuPosition = translator.locate($menu),
+            itemPosition = translator.locate(this._$draggedItem);
 
         this._startPosition = {
-            top: e.offsetY,
+            top: itemPosition.top,
             left: menuPosition.left
         };
 
