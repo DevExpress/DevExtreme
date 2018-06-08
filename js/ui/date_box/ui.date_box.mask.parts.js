@@ -1,10 +1,11 @@
 "use strict";
 
 var dateParser = require("../../localization/ldml/date.parser"),
+    dateLocalization = require("../../localization/date"),
     escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
 var renderDateParts = function(text, format) {
-    var regExpInfo = dateParser.getRegExpInfo(format),
+    var regExpInfo = dateParser.getRegExpInfo(format, dateLocalization),
         result = regExpInfo.regexp.exec(text);
 
     var start = 0, end = 0, sections = [];
