@@ -2178,6 +2178,26 @@ QUnit.test("Render empty item", function(assert) {
     assert.equal($testContainer.find("." + internals.FIELD_EMPTY_ITEM_CLASS).length, 1);
 });
 
+QUnit.test("Templates of form's items render with deferring_T638831", function(assert) {
+    // arrange, act
+    var spy;
+
+    $("#container").dxLayoutManager({
+        onInitialized: function(e) {
+            spy = sinon.spy(e.component, "_renderTemplates");
+        },
+        items: [{
+            dataField: "StartDate",
+            editorType: "dxDateBox"
+        }]
+    });
+
+    // assert
+    var templatesInfo = spy.args[0][0];
+    assert.ok(templatesInfo[0].container.hasClass("dx-field-item"), "template container of field item");
+    assert.equal(templatesInfo[0].formItem.dataField, "StartDate", "correct a form item for template");
+});
+
 function triggerKeyUp($element, keyCode) {
     var e = $.Event("keyup");
     e.which = keyCode;
