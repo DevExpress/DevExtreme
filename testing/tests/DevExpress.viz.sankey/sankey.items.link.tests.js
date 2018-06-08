@@ -112,3 +112,184 @@ QUnit.test("Hover style", function(assert) {
         width: 2
     });
 });
+
+QUnit.test("Sankey does not fire drawn event on link hover", function(assert) {
+    var drawn = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            onDrawn: drawn
+        });
+
+    drawn.reset();
+
+    sankey.getAllItems().links[0].hover(true);
+
+    assert.equal(drawn.callCount, 0);
+});
+
+QUnit.test("Clear hover of item", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            links: {
+                color: '#111111',
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                },
+                hoverStyle: {
+                    border: {
+                        visible: true,
+                        color: "#123123",
+                        width: 3
+                    },
+                    hatching: {
+                        direction: "left"
+                    }
+                }
+            }
+        }),
+        link = sankey.getAllItems().links[1];
+
+    link.hover(true);
+    link.hover(false);
+
+    var links = this.links();
+
+    assert.equal(links[1].smartAttr.lastCall.args[0].fill, "#111111");
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+    assert.ok(!links[1].smartAttr.lastCall.args[0].hatching);
+});
+
+QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            links: {
+                color: '#234234',
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2,
+                    opacity: 0.4
+                }
+            }
+        }),
+        link = sankey.getAllItems().links[1];
+
+    link.hover(true);
+
+    var links = this.links();
+
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0].fill, "#234234");
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.4);
+});
+
+QUnit.test("Border for hoverStyle can be disabled", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            links: {
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                },
+                hoverStyle: {
+                    border: {
+                        visible: false
+                    }
+                }
+            }
+        }),
+        link = sankey.getAllItems().links[1];
+
+    link.hover(true);
+
+    var links = this.links();
+
+    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+});
+
+QUnit.test("hover changed event", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        link = sankey.getAllItems().links[0];
+
+    link.hover(true);
+
+    assert.ok(hoverChanged.calledOnce);
+    assert.strictEqual(hoverChanged.lastCall.args[0].item, link);
+});
+
+QUnit.test("hover changed event after hover second item", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        link = sankey.getAllItems().links[0];
+
+    link.hover(true);
+    hoverChanged.reset();
+
+    sankey.getAllItems().links[1].hover(true);
+
+    assert.equal(hoverChanged.callCount, 2);
+});
+
+QUnit.test("Hover item two times, hover changed event should fire only one time", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        link = sankey.getAllItems().links[0];
+
+    link.hover(true);
+    link.hover(true);
+
+    assert.equal(hoverChanged.callCount, 1);
+});
+
+QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fire", function(assert) {
+    var hoverChanged = sinon.spy(),
+        sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            onHoverChanged: hoverChanged
+        }),
+        link = sankey.getAllItems().links[0];
+
+    link.hover(false);
+
+    assert.equal(hoverChanged.callCount, 0);
+});
+
+QUnit.test("disable hover", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1]],
+            hoverEnabled: false
+        }),
+        links = sankey.getAllItems().links;
+
+    links[0].hover(true);
+
+    assert.ok(!links[0].isHovered());
+});
+
+
+QUnit.test("isHovered method", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
+        }),
+        links = sankey.getAllItems().links;
+
+    links[1].hover(true);
+
+    assert.ok(links[1].isHovered());
+    assert.ok(!links[0].isHovered());
+});
