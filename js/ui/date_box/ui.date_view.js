@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     dateLocalization = require("../../localization/date");
 
 var DATEVIEW_CLASS = "dx-dateview",
+    DATEVIEW_COMPACT_CLASS = "dx-dateview-compact",
     DATEVIEW_WRAPPER_CLASS = "dx-dateview-wrapper",
     DATEVIEW_ROLLER_CONTAINER_CLASS = "dx-dateview-rollers",
     DATEVIEW_ROLLER_CLASS = "dx-dateviewroller";
@@ -51,7 +52,8 @@ var DateView = Editor.inherit({
             maxDate: uiDateUtils.MAX_DATEVIEW_DEFAULT_DATE,
             type: TYPE.date,
             value: new Date(),
-            showNames: false
+            showNames: false,
+            applyCompactClass: false
         });
     },
 
@@ -64,6 +66,14 @@ var DateView = Editor.inherit({
                 options: {
                     showNames: true
                 }
+            },
+            {
+                device: function(device) {
+                    return device.deviceType !== "desktop";
+                },
+                options: {
+                    applyCompactClass: true
+                }
             }
         ]);
     },
@@ -72,12 +82,17 @@ var DateView = Editor.inherit({
         this.callBase();
         this.$element().addClass(DATEVIEW_CLASS);
         this._toggleFormatClasses(this.option("type"));
+        this._toggleCompactClass();
     },
 
     _toggleFormatClasses: function(currentFormat, previousFormat) {
         this.$element().addClass(DATEVIEW_CLASS + "-" + currentFormat);
 
         previousFormat && this.$element().removeClass(DATEVIEW_CLASS + "-" + previousFormat);
+    },
+
+    _toggleCompactClass: function() {
+        this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, this.option("applyCompactClass"));
     },
 
     _wrapper: function() {
