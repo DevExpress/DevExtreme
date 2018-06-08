@@ -260,24 +260,24 @@ module.exports = {
                     this._searchParams = [];
                 },
 
-                getFormattedSearchText: function(column, searchText) {
+                _getFormattedSearchText: function(column, searchText) {
                     var value = parseValue(column, searchText),
                         formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, "search");
                     return gridCoreUtils.formatValue(value, formatOptions);
                 },
 
-                normalizeString: function(str) {
+                _normalizeString: function(str) {
                     if(!this.option("searchPanel.highlightCaseSensitive")) {
                         str = str.toLowerCase();
                     }
                     return str ? str : "";
                 },
 
-                findHighlightingItems: function(column, cellElement, searchText) {
+                _findHighlightingItems: function(column, cellElement, searchText) {
                     var that = this,
                         $parent = cellElement.parent(),
                         $items,
-                        normalizedSearchText = this.normalizeString(searchText);
+                        normalizedSearchText = this._normalizeString(searchText);
 
                     if(!$parent.length) {
                         $parent = $("<div>").append(cellElement);
@@ -292,7 +292,7 @@ module.exports = {
                         for(var i = 0; i < $contents.length; i++) {
                             var node = $contents.get(i);
                             if(node.nodeType === 3) {
-                                return that.normalizeString(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
+                                return that._normalizeString(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
                             }
                             return false;
                         }
@@ -301,12 +301,12 @@ module.exports = {
                     return $items;
                 },
 
-                processHighlightTextRecursive: function($content, searchText) {
+                _highlightSearchTextCore: function($content, searchText) {
                     var that = this,
                         $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
                         text = $content.text(),
                         firstContentElement = $content[0],
-                        index = that.normalizeString(text).indexOf(that.normalizeString(searchText));
+                        index = that._normalizeString(text).indexOf(that._normalizeString(searchText));
 
                     if(index >= 0) {
                         if(firstContentElement.textContent) {
@@ -318,7 +318,7 @@ module.exports = {
 
                         $content = $(domAdapter.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
 
-                        return that.processHighlightTextRecursive($content, searchText);
+                        return that._highlightSearchTextCore($content, searchText);
                     }
                 },
 
@@ -327,19 +327,19 @@ module.exports = {
                         searchText = that.option("searchPanel.text");
 
                     if(isEquals && column) {
-                        searchText = that.getFormattedSearchText(column, searchText);
+                        searchText = that._getFormattedSearchText(column, searchText);
                     }
 
                     if(searchText && that.option("searchPanel.highlightSearchText")) {
-                        var highlightingItems = that.findHighlightingItems(column, cellElement, searchText);
+                        var highlightingItems = that._findHighlightingItems(column, cellElement, searchText);
                         each(highlightingItems, function(index, element) {
                             each($(element).contents(), function(index, content) {
                                 if(isEquals) {
-                                    if(that.normalizeString($(content).text()) === that.normalizeString(searchText)) {
+                                    if(that._normalizeString($(content).text()) === that._normalizeString(searchText)) {
                                         $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
                                     }
                                 } else {
-                                    that.processHighlightTextRecursive($(content), searchText);
+                                    that._highlightSearchTextCore($(content), searchText);
                                 }
                             });
                         });
