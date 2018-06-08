@@ -53,6 +53,13 @@ treeListCore.registerModulesOrder([
     "export",
     "gridView"]);
 
+/**
+* @name dxTreeListMethods.registerKeyHandler
+* @publicName registerKeyHandler(key, handler)
+* @hidden
+* @inheritdoc
+*/
+
 var TreeList = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
 
