@@ -1,6 +1,8 @@
 "use strict";
 
-var MASK_EVENT_NAMESPACE = "dateBoxMask";
+var MASK_EVENT_NAMESPACE = "dateBoxMask",
+    FORWARD = 1,
+    BACKWARD = -1;
 
 var eventsUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
@@ -19,10 +21,11 @@ var DateBoxMask = DateBoxBase.inherit({
         var that = this;
 
         return extend(this.callBase(), {
-            leftArrow: that._prevPart.bind(that),
-            rightArrow: that._nextPart.bind(that),
-            upArrow: that._incrementPart.bind(that),
-            downArrow: that._decrementPart.bind(that)
+            enter: that._fireChangeEvent.bind(this),
+            leftArrow: that._toggleActivePart.bind(that, BACKWARD),
+            rightArrow: that._toggleActivePart.bind(that, FORWARD),
+            upArrow: that._partIncrease.bind(that, FORWARD),
+            downArrow: that._partIncrease.bind(that, BACKWARD)
         });
     },
 
@@ -40,7 +43,7 @@ var DateBoxMask = DateBoxBase.inherit({
             this._attachMaskEvents();
             this._renderDateParts();
             this._activePartIndex = 0;
-            this._maskValue = this.dateOption("value");
+            this._maskValue = new Date(this.dateOption("value"));
         }
     },
 
@@ -58,15 +61,16 @@ var DateBoxMask = DateBoxBase.inherit({
         eventsEngine.on(this._input(), eventsUtils.addNamespace("click", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
     },
 
-    _toggleActivePart: function(step) {
+    _toggleActivePart: function(step, e) {
         var index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            this._toggleActivePart(step < 0 ? step - 1 : step + 1);
+            this._toggleActivePart(step < 0 ? step - 1 : step + 1, e);
             return;
         }
 
         this._activePartIndex = index;
         this._caret(this._getActivePartProp("caret"));
+        e && e.preventDefault();
     },
 
     _getActivePartProp: function(property) {
@@ -77,16 +81,16 @@ var DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
-    _partIncrease: function(step) {
+    _partIncrease: function(step, e) {
         var getter = this._getActivePartProp("getter"),
             setter = this._getActivePartProp("setter"),
             newValue = this._maskValue[getter]() + step;
 
         this._maskValue[setter](newValue);
+        this._renderDisplayText(this._getDisplayedText(this._maskValue));
 
-        // console.log(this._maskValue);
-        // console.log(this.option("value"));
-        // todo: update text in the input and rerender date parts here
+        this._renderDateParts();
+        e && e.preventDefault();
     },
 
     _maskClickHandler: function() {
@@ -94,24 +98,25 @@ var DateBoxMask = DateBoxBase.inherit({
         this._caret(this._getActivePartProp("caret"));
     },
 
-    _nextPart: function(e) {
-        this._toggleActivePart(1);
-        e && e.preventDefault();
+    _isValueDirty: function() {
+        var value = this.dateOption("value");
+        return this._maskValue.getTime() !== value.getTime();
     },
 
-    _prevPart: function(e) {
-        this._toggleActivePart(-1);
-        e && e.preventDefault();
+    _fireChangeEvent: function() {
+        if(this._isValueDirty()) {
+            eventsEngine.trigger(this._input(), "change");
+        }
     },
 
-    _incrementPart: function(e) {
-        this._partIncrease(1);
-        e && e.preventDefault();
+    _focusOutHandler: function(e) {
+        this.callBase(e);
+        this._fireChangeEvent();
     },
 
-    _decrementPart: function(e) {
-        this._partIncrease(-1);
-        e && e.preventDefault();
+    _valueChangeEventHandler: function(e) {
+        this.callBase(e);
+        this.option("value", this._maskValue);
     },
 
     _optionChanged: function(args) {
