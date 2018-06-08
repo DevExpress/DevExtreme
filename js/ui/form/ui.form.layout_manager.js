@@ -317,7 +317,8 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderResponsiveBox: function() {
-        var that = this;
+        var that = this,
+            templatesInfo = [];
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
@@ -329,7 +330,8 @@ var LayoutManager = Widget.inherit({
             layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
-            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount));
+            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
+            that._renderTemplates(templatesInfo);
         }
     },
 
@@ -364,14 +366,14 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderTemplates: function(templatesInfo) {
-        templatesInfo.forEach((function(info) {
-            this._renderTemplate(info.container, info.formItem);
-        }).bind(this));
+        var that = this;
+        each(templatesInfo, function(index, info) {
+            that._renderTemplate(info.container, info.formItem);
+        });
     },
 
-    _getResponsiveBoxConfig: function(layoutItems, colCount) {
+    _getResponsiveBoxConfig: function(layoutItems, colCount, templatesInfo) {
         var that = this,
-            templatesInfo = [],
             colCountByScreen = that.option("colCountByScreen"),
             xsColCount = colCountByScreen && colCountByScreen.xs;
 
@@ -388,7 +390,6 @@ var LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
-                that._renderTemplates(templatesInfo);
                 if(that.option("onLayoutChanged")) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
