@@ -53,13 +53,6 @@ gridCore.registerModulesOrder([
     "export",
     "gridView"]);
 
-/**
-* @name dxDataGridMethods.registerKeyHandler
-* @publicName registerKeyHandler(key, handler)
-* @hidden
-* @inheritdoc
-*/
-
 var DataGrid = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
 
