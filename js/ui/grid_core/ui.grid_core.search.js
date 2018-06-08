@@ -266,18 +266,19 @@ module.exports = {
                     return gridCoreUtils.formatValue(value, formatOptions);
                 },
 
-                _normalizeString: function(str) {
-                    if(!this.option("searchPanel.highlightCaseSensitive")) {
-                        str = str.toLowerCase();
-                    }
-                    return str ? str : "";
+                _getStringNormalizer: function() {
+                    var isCaseSensitive = this.option("searchPanel.highlightCaseSensitive");
+                    return function(str) {
+                        return isCaseSensitive ? str : str.toLowerCase();
+                    };
                 },
 
-                _findHighlightingItems: function(column, cellElement, searchText) {
+                _findHighlightingTextNodes: function(column, cellElement, searchText) {
                     var that = this,
                         $parent = cellElement.parent(),
                         $items,
-                        normalizedSearchText = this._normalizeString(searchText);
+                        stringNormalizer = this._getStringNormalizer(),
+                        normalizedSearchText = stringNormalizer(searchText);
 
                     if(!$parent.length) {
                         $parent = $("<div>").append(cellElement);
@@ -292,7 +293,7 @@ module.exports = {
                         for(var i = 0; i < $contents.length; i++) {
                             var node = $contents.get(i);
                             if(node.nodeType === 3) {
-                                return that._normalizeString(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
+                                return stringNormalizer(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
                             }
                             return false;
                         }
@@ -301,12 +302,13 @@ module.exports = {
                     return $items;
                 },
 
-                _highlightSearchTextCore: function($content, searchText) {
+                _highlightSearchTextCore: function($textNode, searchText) {
                     var that = this,
                         $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
-                        text = $content.text(),
-                        firstContentElement = $content[0],
-                        index = that._normalizeString(text).indexOf(that._normalizeString(searchText));
+                        text = $textNode.text(),
+                        firstContentElement = $textNode[0],
+                        stringNormalizer = this._getStringNormalizer(),
+                        index = stringNormalizer(text).indexOf(stringNormalizer(searchText));
 
                     if(index >= 0) {
                         if(firstContentElement.textContent) {
@@ -314,16 +316,17 @@ module.exports = {
                         } else {
                             firstContentElement.nodeValue = text.substr(0, index);
                         }
-                        $content.after($searchTextSpan.text(text.substr(index, searchText.length)));
+                        $textNode.after($searchTextSpan.text(text.substr(index, searchText.length)));
 
-                        $content = $(domAdapter.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
+                        $textNode = $(domAdapter.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
 
-                        return that._highlightSearchTextCore($content, searchText);
+                        return that._highlightSearchTextCore($textNode, searchText);
                     }
                 },
 
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
+                        stringNormalizer = this._getStringNormalizer(),
                         searchText = that.option("searchPanel.text");
 
                     if(isEquals && column) {
@@ -331,15 +334,15 @@ module.exports = {
                     }
 
                     if(searchText && that.option("searchPanel.highlightSearchText")) {
-                        var highlightingItems = that._findHighlightingItems(column, cellElement, searchText);
-                        each(highlightingItems, function(index, element) {
-                            each($(element).contents(), function(index, content) {
+                        var textNodes = that._findHighlightingTextNodes(column, cellElement, searchText);
+                        each(textNodes, function(index, element) {
+                            each($(element).contents(), function(index, textNode) {
                                 if(isEquals) {
-                                    if(that._normalizeString($(content).text()) === that._normalizeString(searchText)) {
-                                        $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
+                                    if(stringNormalizer($(textNode).text()) === stringNormalizer(searchText)) {
+                                        $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(textNode).text()));
                                     }
                                 } else {
-                                    that._highlightSearchTextCore($(content), searchText);
+                                    that._highlightSearchTextCore($(textNode), searchText);
                                 }
                             });
                         });
