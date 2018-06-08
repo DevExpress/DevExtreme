@@ -194,8 +194,11 @@ var ActionSheet = CollectionWidget.inherit({
         /**
         * @name dxActionSheetItemTemplate.onClick
         * @type function(e)|string
-        * @extends Action
+        * @default null
         * @type_function_param1 e:object
+        * @type_function_param1_field1 component:dxActionSheet
+        * @type_function_param1_field2 element:dxElement
+        * @type_function_param1_field3 model:object
         * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
         * @type_function_param1_field5 event:event
         */
