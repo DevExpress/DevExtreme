@@ -116,6 +116,7 @@ var PATTERN_PARSERS = {
 var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
 
 var PATTERN_GETTERS = {
+    E: "getDate",
     y: "getFullYear",
     M: "getMonth",
     L: "getMonth",
@@ -129,6 +130,7 @@ var PATTERN_GETTERS = {
 };
 
 var PATTERN_SETTERS = {
+    E: "setDate",
     y: "setFullYear",
     M: "setMonth",
     L: "setMonth",

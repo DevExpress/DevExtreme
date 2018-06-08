@@ -81,6 +81,11 @@ var DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
+    _renderDisplayText: function(text) {
+        this.callBase(text);
+        this.option("text", text);
+    },
+
     _partIncrease: function(step, e) {
         var getter = this._getActivePartProp("getter"),
             setter = this._getActivePartProp("setter"),
