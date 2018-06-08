@@ -14,9 +14,9 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
 
     return {
         fill: itemOptions.color || color,
-        'stroke-width': borderVisible ? borderWidth : 0, // itemOptions.border.visible ? itemOptions.border.width || itemBaseOptions.border.width : 0,
+        'stroke-width': borderVisible ? borderWidth : 0,
         stroke: itemOptions.border.color || itemBaseOptions.border.color,
-        'stroke-opacity': borderOpacity, // itemOptions.border.visible ? itemOptions.border.opacity || itemBaseOptions.border.opacity : 0,
+        'stroke-opacity': borderOpacity,
         opacity: opacity,
         hatching: itemOptions.hatching
     };

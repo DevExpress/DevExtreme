@@ -1,14 +1,23 @@
 "use strict";
 
-var states = ["normal", "adjacentNodeHover", "hover"];
+var states = ["normal", "adjacentNodeHover", "hover"],
+    isDefined = require("../../core/utils/type").isDefined;
 
 function compileAttrs(color, itemOptions, itemBaseOptions) {
+
+    let border = itemOptions.border,
+        baseBorder = itemBaseOptions.border,
+        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
+        borderWidth = isDefined(border.width) ? border.width : baseBorder.width,
+        borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1),
+        opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1);
+
     return {
         fill: itemOptions.colorMode === 'node' ? color : itemOptions.color || color,
-        'stroke-width': itemOptions.border.visible ? itemOptions.border.width : 0,
-        'stroke-opacity': itemOptions.border.visible ? itemOptions.border.opacity : 0,
-        stroke: itemOptions.border.visible ? itemOptions.border.color : '#000000',
-        opacity: itemOptions.opacity || itemBaseOptions.opacity,
+        'stroke-width': borderVisible ? borderWidth : 0,
+        stroke: itemOptions.border.color || itemBaseOptions.border.color,
+        'stroke-opacity': borderOpacity,
+        opacity: opacity,
         hatching: itemOptions.hatching
     };
 }
