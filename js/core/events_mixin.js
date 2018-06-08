@@ -38,13 +38,13 @@ module.exports = {
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
-     * @return object
+     * @return this
      */
     /**
      * @name EventsMixinMethods.on
      * @publicName on(events)
      * @param1 events:object
-     * @return object
+     * @return this
      */
     on: function(eventName, eventHandler) {
         if(isPlainObject(eventName)) {
@@ -60,14 +60,14 @@ module.exports = {
      * @name EventsMixinMethods.off
      * @publicName off(eventName)
      * @param1 eventName:string
-     * @return object
+     * @return this
      */
     /**
      * @name EventsMixinMethods.off
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
-     * @return object
+     * @return this
      */
     off: function(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
