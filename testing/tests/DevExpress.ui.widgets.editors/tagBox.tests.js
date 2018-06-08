@@ -3952,6 +3952,80 @@ QUnit.test("value should keep initial tag order with object items and 'this' val
     assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
 });
 
+QUnit.test("Value should keep initial order if tags aren't changed", function(assert) {
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "tags order is correct");
+
+    this.instance.option("opened", true);
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "tags order is correct");
+});
+
+QUnit.test("Value should correctly update if items count isn't changed", function(assert) {
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $($listItems.eq(2)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[1], items[2]], "tags order is correct");
+
+    this.instance.option("opened", true);
+    $($listItems.eq(1)).trigger("dxclick");
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[2], items[0]], "tags order is correct");
+});
+
+QUnit.test("Object value should keep initial order if tags aren't changed", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "id",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[0].id, items[1].id], "tags order is correct");
+
+    this.instance.option("opened", true);
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[0].id, items[1].id], "tags order is correct");
+});
+
+QUnit.test("Value should correctly update if valueExpr is 'this' and value is object", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "this",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "tags order is correct");
+
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+    assert.deepEqual(this.instance.option("value"), [items[0], items[1]], "tags order is correct");
+});
+
 QUnit.testInActiveWindow("tags are rendered correctly when minSearchLength is used", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
         dataSource: [

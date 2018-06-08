@@ -1245,10 +1245,11 @@ var TagBox = SelectBox.inherit({
 
     _getSortedListValues: function() {
         var listValues = this._getListValues(),
-            currentValue = this.option("value"),
-            sortFunction = function(item1, item2) { return currentValue.indexOf(item2) - currentValue.indexOf(item1); };
+            currentValue = this.option("value") || [],
+            existedItems = currentValue.filter(item => listValues.indexOf(item) !== -1),
+            newItems = listValues.filter(item => currentValue.indexOf(item) === -1);
 
-        return currentValue ? listValues.sort(sortFunction) : listValues;
+        return existedItems.concat(newItems);
     },
 
     _getListValues: function() {
