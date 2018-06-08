@@ -58,10 +58,11 @@ var DateBoxMask = DateBoxBase.inherit({
         eventsEngine.on(this._input(), eventsUtils.addNamespace("click", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
     },
 
-    _setActivePart: function(index) {
-        index = fitIntoRange(index, 0, this._dateParts.length - 1);
+    _toggleActivePart: function(step) {
+        var index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            this._setActivePart(index + 1);
+            this._toggleActivePart(step < 0 ? step - 1 : step + 1);
+            return;
         }
 
         this._activePartIndex = index;
@@ -83,6 +84,8 @@ var DateBoxMask = DateBoxBase.inherit({
 
         this._maskValue[setter](newValue);
 
+        // console.log(this._maskValue);
+        // console.log(this.option("value"));
         // todo: update text in the input and rerender date parts here
     },
 
@@ -92,12 +95,12 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _nextPart: function(e) {
-        this._setActivePart(this._activePartIndex + 1);
+        this._toggleActivePart(1);
         e && e.preventDefault();
     },
 
     _prevPart: function(e) {
-        this._setActivePart(this._activePartIndex - 1);
+        this._toggleActivePart(-1);
         e && e.preventDefault();
     },
 
@@ -122,6 +125,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _clean: function() {
+        this.callBase();
         delete this._dateParts;
         delete this._activePartIndex;
         delete this._maskValue;
