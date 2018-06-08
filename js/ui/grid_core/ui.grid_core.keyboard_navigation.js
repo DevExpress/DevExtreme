@@ -972,6 +972,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     }
 });
 
+/**
+* @name GridBaseMethods.registerKeyHandler
+* @publicName registerKeyHandler(key, handler)
+* @hidden
+* @inheritdoc
+*/
+
 module.exports = {
     defaultOptions: function() {
         return {
