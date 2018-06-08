@@ -350,8 +350,28 @@ var LayoutManager = Widget.inherit({
         this._refresh();
     },
 
+    _renderTemplate: function($container, item) {
+        switch(item.itemType) {
+            case "empty":
+                this._renderEmptyItem($container);
+                break;
+            case "button":
+                this._renderButtonItem(item, $container);
+                break;
+            default:
+                this._renderFieldItem(item, $container);
+        }
+    },
+
+    _renderTemplates: function(templatesInfo) {
+        templatesInfo.forEach((function(info) {
+            this._renderTemplate(info.container, info.formItem);
+        }).bind(this));
+    },
+
     _getResponsiveBoxConfig: function(layoutItems, colCount) {
         var that = this,
+            templatesInfo = [],
             colCountByScreen = that.option("colCountByScreen"),
             xsColCount = colCountByScreen && colCountByScreen.xs;
 
@@ -368,6 +388,7 @@ var LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
+                that._renderTemplates(templatesInfo);
                 if(that.option("onLayoutChanged")) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
@@ -384,6 +405,11 @@ var LayoutManager = Widget.inherit({
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
 
+                templatesInfo.push({
+                    container: $fieldItem,
+                    formItem: item
+                });
+
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
@@ -394,17 +420,6 @@ var LayoutManager = Widget.inherit({
                 }
                 if((e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount)) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
-                }
-
-                switch(item.itemType) {
-                    case "empty":
-                        that._renderEmptyItem($fieldItem);
-                        break;
-                    case "button":
-                        that._renderButtonItem(item, $fieldItem);
-                        break;
-                    default:
-                        that._renderFieldItem(item, $fieldItem);
                 }
             },
             cols: that._generateRatio(colCount),
