@@ -25,7 +25,8 @@ var TYPE = {
 var ROLLER_TYPE = {
     year: 'year',
     month: 'month',
-    day: 'day'
+    day: 'day',
+    hours: 'hours'
 };
 
 var DateView = Editor.inherit({
@@ -271,6 +272,22 @@ var DateView = Editor.inherit({
         }
     },
 
+    _refreshHourRoller: function() {
+        var hourRoller = this._rollers[ROLLER_TYPE.hours];
+
+        if(hourRoller) {
+            this._createRollerConfig(ROLLER_TYPE.hours);
+            var hoursRollerConfig = this._rollerConfigs[ROLLER_TYPE.hours];
+
+            if(hoursRollerConfig.displayItems.toString() !== hourRoller.option("items").toString()) {
+                hourRoller.option({
+                    items: hoursRollerConfig.displayItems,
+                    selectedIndex: hoursRollerConfig.selectedIndex
+                });
+            }
+        }
+    },
+
     _getCurrentDate: function() {
         var curDate = this._valueOption(),
             minDate = this.option("minDate"),
@@ -294,6 +311,8 @@ var DateView = Editor.inherit({
             minMonth = minYear && curDate.getMonth() === minDate.getMonth(),
             maxYear = dateUtils.sameYear(curDate, maxDate),
             maxMonth = maxYear && curDate.getMonth() === maxDate.getMonth(),
+            minHour = minMonth && curDate.getDate() === minDate.getDate(),
+            maxHour = maxMonth && curDate.getDate() === maxDate.getDate(),
 
             componentInfo = uiDateUtils.DATE_COMPONENTS_INFO[componentName],
             startValue = componentInfo.startValue,
@@ -324,6 +343,11 @@ var DateView = Editor.inherit({
             }
         }
 
+        if(componentName === ROLLER_TYPE.hours) {
+            startValue = minHour ? minDate.getHours() : startValue;
+            endValue = maxHour ? maxDate.getHours() : endValue;
+        }
+
         return {
             startValue: startValue,
             endValue: endValue
@@ -333,6 +357,7 @@ var DateView = Editor.inherit({
     _refreshRollers: function() {
         this._refreshMonthRoller();
         this._refreshDayRoller();
+        this._refreshHourRoller();
     },
 
     _optionChanged: function(args) {

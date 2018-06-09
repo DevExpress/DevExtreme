@@ -338,6 +338,32 @@ QUnit.test("check state rollers", function(assert) {
     assert.equal(rollers.year.option("selectedIndex"), date.getFullYear() - minDate.getFullYear());
 });
 
+QUnit.test("min and max date should take hours into account", function(assert) {
+    var value = new Date(2000, 5, 5, 10, 0, 0),
+        min = new Date(2000, 5, 4, 8, 0, 0),
+        max = new Date(2000, 5, 6, 12, 0, 0);
+
+    this.instance.option({ type: "datetime", value: value, minDate: min, maxDate: max });
+
+    var rollers = this.instance._rollers,
+        hourItems = rollers.hours.option("items");
+
+    assert.equal(hourItems[0], 0, "hours start from 0 in middle day");
+    assert.equal(hourItems[hourItems.length - 1], 23, "hours end at 23 in middle day");
+
+    this.instance.option("value", new Date(2000, 5, 6, 11, 0, 0));
+    hourItems = rollers.hours.option("items");
+
+    assert.equal(hourItems[0], 0, "hours start from 0 in last day");
+    assert.equal(hourItems[hourItems.length - 1], 12, "hours end at 12 in last day");
+
+    this.instance.option("value", new Date(2000, 5, 4, 11, 0, 0));
+    hourItems = rollers.hours.option("items");
+
+    assert.equal(hourItems[0], 8, "hours start from 8 in first day");
+    assert.equal(hourItems[hourItems.length - 1], 23, "hours end at 23 in first day");
+});
+
 // T584111
 QUnit.test("rollers are able to select a date in January when the min and max options allow choosing a date in the subsequent year", function(assert) {
     this.instance.option({
