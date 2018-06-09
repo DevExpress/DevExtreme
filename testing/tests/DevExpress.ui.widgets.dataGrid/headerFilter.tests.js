@@ -1663,6 +1663,34 @@ QUnit.test("Show header filter with search bar", function(assert) {
     assert.ok(list.option("searchEnabled"), "list with search bar");
     assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
     assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
+    assert.equal(list.option("searchMode"), "", "search mode is default");
+});
+
+QUnit.test("Show header filter with search bar with searchMode equals", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent,
+        list,
+        testElement = $("#container");
+
+    that.options.headerFilter.allowSearch = true;
+    that.options.headerFilter.searchTimeout = 300;
+    that.columns[0].headerFilter = { searchMode: "equals" };
+
+    // act
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
+    list = $popupContent.find(".dx-list").dxList("instance");
+
+    // assert
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
+    assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
+    assert.equal(list.option("searchMode"), "equals", "search mode is assigned");
 });
 
 QUnit.test("Show header filter when column with dataType date with search bar", function(assert) {
@@ -1688,6 +1716,7 @@ QUnit.test("Show header filter when column with dataType date with search bar", 
     // assert
     assert.ok(treeView.option("searchEnabled"), "treeView with search bar");
     assert.equal(treeView.option("searchTimeout"), 300, "search timeout is assigned");
+    assert.equal(treeView.option("searchMode"), "", "search mode is default");
 });
 
 QUnit.test("HeaderFilter should be without search bar when column allowSearch is disabled", function(assert) {
@@ -1922,6 +1951,57 @@ QUnit.test("Search by custom column", function(assert) {
     assert.strictEqual(listItems.length, 1, "list item's count");
     assert.strictEqual(listItems.text(), "test2", "correct item's text");
 });
+
+// T629003
+QUnit.test("No exceptions on an attempt to filter a lookup column when valueExpr is not specified", function(assert) {
+    // arrange
+    try {
+        var that = this,
+            $testElement = $("#container"),
+            $popupContent,
+            headerFilterDataSource = [
+                { value: 1, text: "test1" },
+                { value: 2, text: "test2" }
+            ];
+
+        that.columns[0].lookup = {
+            displayExpr: "text",
+            dataSource: headerFilterDataSource
+        };
+        that.items = [{ Test1: 1, Test2: "test2" }, { Test1: 2, Test2: "test4" }];
+
+        that.setupDataGrid();
+        that.columnHeadersView.render($testElement);
+        that.headerFilterView.render($testElement);
+        that.headerFilterController.showHeaderFilterMenu(0);
+
+        // assert
+        assert.deepEqual(that.headerFilterView.getListContainer().option("items"), [
+            {
+                "text": "(Blanks)",
+                "value": null
+            },
+            {
+                "text": "test1",
+                "value": headerFilterDataSource[0]
+            },
+            {
+                "text": "test2",
+                "value": headerFilterDataSource[1]
+            }], "list items");
+
+        $popupContent = that.headerFilterView.getPopupContainer().$content();
+
+        // act
+        $($popupContent.find(".dx-list-item").last()).trigger("dxclick");
+
+        // assert
+        assert.ok($popupContent.find(".dx-list-item").last().find(".dx-checkbox-checked").length, "checkbox checked");
+    } catch(e) {
+        assert.ok(false, "the error is thrown");
+    }
+});
+
 
 QUnit.module("Header Filter with real columnsController", {
     beforeEach: function() {

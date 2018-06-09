@@ -2471,8 +2471,8 @@ QUnit.test("Change field when fields not loaded", function(assert) {
             { dataField: "[Product].[Subcategory]", area: "column", areaIndex: 1 },
             { dataField: "[Ship Date].[Calendar Year]", area: "row", areaIndex: 0 },
             { dataField: "[Measures].[Customer Count]", area: "data", areaIndex: 0 },
-            { dataField: "date", area: "row" },
-            { dataField: "date", area: "column", groupInterval: "year" }
+            { dataField: "date", area: "row", areaIndex: 1 },
+            { dataField: "date", area: "column", groupInterval: "year", areaIndex: 2 }
             ],
             store: this.testStore,
             retrieveFields: true

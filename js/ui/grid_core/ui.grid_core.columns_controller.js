@@ -35,7 +35,8 @@ var $ = require("../../core/renderer"),
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
-    COMMAND_EXPAND_CLASS = "dx-command-expand";
+    COMMAND_EXPAND_CLASS = "dx-command-expand",
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
@@ -503,6 +504,11 @@ module.exports = {
              * @default false
              */
             /**
+             * @name GridBaseColumn.headerFilter.searchMode
+             * @type Enums.CollectionSearchMode
+             * @default 'contains'
+             */
+            /**
              * @name GridBaseColumn.headerFilter.width
              * @type number
              * @default undefined
@@ -957,6 +963,9 @@ module.exports = {
                                 column[fieldName] = userStateColumn[fieldName];
                             }
                         } else {
+                            if(fieldName === "selectedFilterOperation" && userStateColumn[fieldName]) {
+                                column.defaultSelectedFilterOperation = column[fieldName] || null;
+                            }
                             column[fieldName] = userStateColumn[fieldName];
                         }
                     }
@@ -1936,10 +1945,10 @@ module.exports = {
                             var targetColumn = that._columns[toIndex];
 
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-                                options.visibleIndex = undefined;
+                                options.visibleIndex = MAX_SAFE_INTEGER;
                             } else {
                                 if(column.fixed ^ targetColumn.fixed) {
-                                    options.visibleIndex = undefined;
+                                    options.visibleIndex = MAX_SAFE_INTEGER;
                                 } else {
                                     options.visibleIndex = targetColumn.visibleIndex;
                                 }
@@ -2667,7 +2676,7 @@ module.exports = {
                     if(columnOptions.dataType) {
                         calculatedColumnOptions.userDataType = columnOptions.dataType;
                     }
-                    if(columnOptions.selectedFilterOperation) {
+                    if(columnOptions.selectedFilterOperation && !("defaultSelectedFilterOperation" in calculatedColumnOptions)) {
                         calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
                     }
                     if(columnOptions.lookup) {

@@ -350,7 +350,7 @@ var BaseWidget = {
         printingEnabled: true,
         /**
         * @name BaseWidgetOptions.export.formats
-        * @type Array<string>
+        * @type Array<Enums.ExportFormat>
         * @default ['PNG', 'PDF', 'JPEG', 'SVG', 'GIF']
         */
         formats: ['PNG', 'PDF', 'JPEG', 'SVG', 'GIF'],

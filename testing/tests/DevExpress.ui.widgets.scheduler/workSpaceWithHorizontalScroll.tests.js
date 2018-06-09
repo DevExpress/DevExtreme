@@ -271,7 +271,7 @@ QUnit.test("the 'getCellIndexByCoordinates' method should return a right result,
 
     var index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
 
-    assert.equal(index, 8, "Index is OK");
+    assert.equal(index, 7, "Index is OK");
 });
 
 QUnit.test("Header panel and date table should have a correct width, groupOrientation = vertical", function(assert) {

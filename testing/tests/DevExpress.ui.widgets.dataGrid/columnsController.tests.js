@@ -116,10 +116,25 @@ QUnit.test("Initialize from options with field names and visible indexes", funct
     var visibleColumns = this.columnsController.getVisibleColumns();
 
     assert.strictEqual(visibleColumns.length, 4);
+    assert.strictEqual(visibleColumns[0].dataField, "TestField3");
+    assert.strictEqual(visibleColumns[1].dataField, "TestField2");
+    assert.strictEqual(visibleColumns[2].dataField, "TestField4");
+    assert.strictEqual(visibleColumns[3].dataField, "TestField1");
+});
+
+// T637671
+QUnit.test("Initialize from options if visible index is specified for a single column", function(assert) {
+    this.applyOptions({
+        columns: [{ dataField: 'TestField1', visibleIndex: 2 }, { dataField: 'TestField2' }, { dataField: 'TestField3' }, { dataField: 'TestField4' }]
+    });
+
+    var visibleColumns = this.columnsController.getVisibleColumns();
+
+    assert.strictEqual(visibleColumns.length, 4);
     assert.strictEqual(visibleColumns[0].dataField, "TestField2");
-    assert.strictEqual(visibleColumns[1].dataField, "TestField4");
+    assert.strictEqual(visibleColumns[1].dataField, "TestField3");
     assert.strictEqual(visibleColumns[2].dataField, "TestField1");
-    assert.strictEqual(visibleColumns[3].dataField, "TestField3");
+    assert.strictEqual(visibleColumns[3].dataField, "TestField4");
 });
 
 QUnit.test("Boolean column initialize with correct 'showEditorAlways' option", function(assert) {
@@ -193,18 +208,18 @@ QUnit.test("Initialization group indexes", function(assert) {
     var columns = this.getColumns();
 
     assert.strictEqual(columns.length, 7);
-    assert.strictEqual(columns[0].groupIndex, 2, 'group index normalized from 6 to first groupIndex when not used');
+    assert.strictEqual(columns[0].groupIndex, 4, 'group index normalized from 6 to first groupIndex when not used');
     assert.strictEqual(columns[1].groupIndex, undefined, 'group index -1 reset to undefined');
     assert.strictEqual(columns[2].groupIndex, undefined, 'group index not defined');
-    assert.strictEqual(columns[3].groupIndex, 3, 'grouped parameter transform to groupIndex after columns with original groupIndex');
-    assert.strictEqual(columns[4].groupIndex, 0, 'group index 1 normalized to 0');
-    assert.strictEqual(columns[5].groupIndex, 4, 'grouped parameter transform to groupIndex in order of defined columns');
-    assert.strictEqual(columns[6].groupIndex, 1, 'group index normalized to groupIndex in order of defined columns');
+    assert.strictEqual(columns[3].groupIndex, 0, 'grouped parameter transform to first unused groupIndex');
+    assert.strictEqual(columns[4].groupIndex, 1, 'group index 1 normalized to 1');
+    assert.strictEqual(columns[5].groupIndex, 3, 'grouped parameter transform to groupIndex in order of defined columns');
+    assert.strictEqual(columns[6].groupIndex, 2, 'group index normalized to groupIndex in order of defined columns');
 });
 
 QUnit.test("Initialization sort indexes", function(assert) {
     this.applyOptions({
-        columns: [{ dataField: 'TestField1', groupIndex: 6, sortIndex: 1, sortOrder: 'asc' }, { dataField: 'TestField2', sortIndex: -1, sortOrder: 'desc' }, { dataField: 'TestField3', sortIndex: 0, sortOrder: 'asc' }, { dataField: 'TestField4', sortIndex: 5, sortOrder: 'desc' }, { dataField: 'TestField5', sortIndex: 0, sortOrder: 'asc' }, { dataField: 'TestField6' }, { dataField: 'TestField7', sortOrder: 'desc' }]
+        columns: [{ dataField: 'TestField1', groupIndex: 6, sortIndex: 1, sortOrder: 'asc' }, { dataField: 'TestField2', sortIndex: -1, sortOrder: 'desc' }, { dataField: 'TestField3', sortIndex: 0, sortOrder: 'asc' }, { dataField: 'TestField4', sortIndex: 2, sortOrder: 'desc' }, { dataField: 'TestField5', sortIndex: 0, sortOrder: 'asc' }, { dataField: 'TestField6' }, { dataField: 'TestField7', sortOrder: 'desc' }]
     });
 
     assert.ok(this.columnsController.isInitialized());
@@ -214,7 +229,7 @@ QUnit.test("Initialization sort indexes", function(assert) {
     assert.strictEqual(columns[0].sortIndex, 2, 'sort index normalized from 1 to 2 because two columns with sort index 0 exists');
     assert.strictEqual(columns[1].sortIndex, 4, 'sort index -1 normalized to 4 (first sortIndex when not used) because sortOrder is defined');
     assert.strictEqual(columns[2].sortIndex, 0, 'sort index 0');
-    assert.strictEqual(columns[3].sortIndex, 3, 'sort index 5 normalized to 3 (first sortIndex when not used)');
+    assert.strictEqual(columns[3].sortIndex, 3, 'sort index 2 normalized to 3 (first sortIndex when not used)');
     assert.strictEqual(columns[4].sortIndex, 1, 'sort index 0 normalized to 1 because column with sort index 0 exists already');
     assert.strictEqual(columns[5].sortIndex, undefined, 'no sortIndex because no sortOrder');
     assert.strictEqual(columns[6].sortIndex, 5, 'sort index set ot first sortIndex when not used because sortOrder is defined');
@@ -6543,7 +6558,7 @@ QUnit.test('Apply user state for dynamically added column', function(assert) {
         // assert
     assert.equal(columns.length, 2);
     assert.deepEqual(columns[0], { "dataField": "TestField1", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test1", "selectedFilterOperation": "startswith", index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
-    assert.deepEqual(columns[1], { "dataField": "TestField2", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test2", "selectedFilterOperation": "=", index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', showEditorAlways: false, added: { dataField: "TestField2", dataType: "string" } });
+    assert.deepEqual(columns[1], { "dataField": "TestField2", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test2", "selectedFilterOperation": "=", index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: null, showEditorAlways: false, added: { dataField: "TestField2", dataType: "string" } });
 });
 
 QUnit.test('Apply user state for dynamically added band column', function(assert) {
@@ -6735,8 +6750,8 @@ QUnit.test("Apply user state columns are generated by dataSource", function(asse
     var columns = this.getColumns();
 
     // assert
-    assert.deepEqual(columns[0], { "dataField": "name", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test1", "selectedFilterOperation": "startswith", alignment: 'left', index: 0, caption: 'Name', dataType: 'string', showEditorAlways: false });
-    assert.deepEqual(columns[1], { "dataField": "age", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test2", "selectedFilterOperation": "=", alignment: 'right', index: 1, caption: 'Age', dataType: 'number', showEditorAlways: false });
+    assert.deepEqual(columns[0], { "dataField": "name", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test1", "selectedFilterOperation": "startswith", alignment: 'left', index: 0, caption: 'Name', dataType: 'string', defaultSelectedFilterOperation: null, showEditorAlways: false });
+    assert.deepEqual(columns[1], { "dataField": "age", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test2", "selectedFilterOperation": "=", alignment: 'right', index: 1, caption: 'Age', dataType: 'number', defaultSelectedFilterOperation: null, showEditorAlways: false });
     assert.deepEqual(this.getColumns(["visibleIndex"]), [{ visibleIndex: 1 }, { visibleIndex: 0 }]);
 });
 

@@ -619,3 +619,13 @@ QUnit.test("Remove nodata message after clear searchValue", function(assert) {
 
     assert.notOk(noData.length, "no data is removed");
 });
+
+QUnit.test("searchMode equals", function(assert) {
+    var $treeView = initTree({
+        searchValue: "1",
+        searchMode: "equals",
+        items: [{ id: 1, text: "1" }, { id: 2, text: "11" }, { id: 3, text: "111" }]
+    });
+
+    assert.equal($treeView.find(".dx-item").length, 1, "one item is rendered");
+});

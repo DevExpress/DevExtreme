@@ -1601,14 +1601,14 @@ QUnit.module("Layout manager", () => {
                 dataField: "name",
                 editorType: "dxTextBox"
             }, {
-                visibleIndex: 1,
+                visibleIndex: 0,
                 dataField: "age",
                 editorType: "dxTextBox"
             }, {
                 dataField: "gender",
                 editorType: "dxTextBox"
             }, {
-                visibleIndex: 2,
+                visibleIndex: 1,
                 dataField: "hasAuto",
                 editorType: "dxTextBox"
             }]

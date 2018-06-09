@@ -59,7 +59,7 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
 
     each(items, function(index, item) {
         index = item[indexParameterName];
-        if(isDefined(index)) {
+        if(index >= 0) {
             indexedItems[index] = indexedItems[index] || [];
 
             if(item === currentItem) {
@@ -67,9 +67,22 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
             } else {
                 indexedItems[index].push(item);
             }
-            delete item[indexParameterName];
+        } else {
+            item[indexParameterName] = undefined;
         }
     });
+
+    each(items, function() {
+        if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
+            while(indexedItems[parameterIndex]) {
+                parameterIndex++;
+            }
+            indexedItems[parameterIndex] = [this];
+            parameterIndex++;
+        }
+    });
+
+    parameterIndex = 0;
 
     objectUtils.orderEach(indexedItems, function(index, items) {
         each(items, function() {
@@ -77,12 +90,6 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
                 this[indexParameterName] = parameterIndex++;
             }
         });
-    });
-
-    each(items, function() {
-        if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
-            this[indexParameterName] = parameterIndex++;
-        }
     });
 
     return parameterIndex;

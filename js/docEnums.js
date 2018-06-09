@@ -437,7 +437,7 @@
 
 /**
  * @typedef {string} Enums.CollectionSearchMode
- * @enum {'contains'|'startswith'}
+ * @enum {'contains'|'startswith'|'equals'}
  */
 
 /**
@@ -808,4 +808,9 @@
  /**
  * @typedef {string} Enums.PivotGridStoreType
  * @enum {'array'|'local'|'odata'|'xmla'}
+ */
+
+/**
+ * @typedef {string} Enums.ExportFormat
+ * @enum {'GIF'|'JPEG'|'PDF'|'PNG'|'SVG'}
  */

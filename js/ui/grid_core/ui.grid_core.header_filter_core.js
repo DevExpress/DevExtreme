@@ -223,6 +223,7 @@ exports.HeaderFilterView = modules.View.inherit({
             widgetOptions = {
                 searchEnabled: isSearchEnabled(that, options),
                 searchTimeout: that.option("headerFilter.searchTimeout"),
+                searchMode: options.headerFilter && options.headerFilter.searchMode || "",
                 dataSource: options.dataSource,
                 onContentReady: function() {
                     that.renderCompleted.fire();

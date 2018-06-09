@@ -17,7 +17,6 @@ gulp.task('clean', function(callback) {
 
 require('./build/gulp/bundler-config');
 require('./build/gulp/js-bundles');
-require('./build/gulp/legacy-exporter');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
 require('./build/gulp/aspnet');
@@ -36,7 +35,6 @@ gulp.task('default', function(callback) {
         [
             'js-bundles-debug',
             'js-bundles-prod',
-            'legacy-exporter',
             'vectormap',
             'aspnet',
             'vendor',

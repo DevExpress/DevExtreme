@@ -39,7 +39,8 @@ QUnit.begin(function() {
             updateGrouping: sinon.spy(),
             type: "test-type",
             elementType: "test-element-type",
-            fullType: "test-full-type"
+            fullType: "test-full-type",
+            getDefaultColor: sinon.stub()
         };
     });
     mapLayerModule._TESTS_stub_selectStrategy(stubSelectStrategy);
@@ -881,3 +882,60 @@ QUnit.test("Palette", function(assert) {
     assert.deepEqual(this.context.settings._colors, ["A", "B", "C", "D"], "colors");
 });
 
+QUnit.test("Color is not specified - take strategy's default color", function(assert) {
+    stubSelectStrategy.lastCall.returnValue.fullType = "test-type-1";
+    stubSelectStrategy.lastCall.returnValue.getDefaultColor.returns("default color");
+
+    this.layer.setOptions({
+        palette: "test-palette"
+    });
+
+    assert.deepEqual(this.context.settings, {
+        color: "default color",
+        label: {
+            font: {}
+        },
+        palette: "test-palette"
+    }, "settings");
+    assert.deepEqual(stubSelectStrategy.lastCall.returnValue.getDefaultColor.lastCall.args, [this.context, "test-palette"]);
+});
+
+QUnit.test("Color is specified - take specified color", function(assert) {
+    stubSelectStrategy.lastCall.returnValue.fullType = "test-type-1";
+    stubSelectStrategy.lastCall.returnValue.getDefaultColor.returns("default color");
+
+    this.layer.setOptions({
+        palette: "test-palette",
+        color: "specific color"
+    });
+
+    assert.deepEqual(this.context.settings, {
+        color: "specific color",
+        label: {
+            font: {}
+        },
+        palette: "test-palette"
+    }, "settings");
+    assert.equal(stubSelectStrategy.lastCall.returnValue.getDefaultColor.called, true);
+});
+
+QUnit.test("Color specified in theme - take theme's color", function(assert) {
+    stubSelectStrategy.lastCall.returnValue.fullType = "test-type-1";
+    stubSelectStrategy.lastCall.returnValue.getDefaultColor.returns("default color");
+    this.themeManager.theme = sinon.stub().returns({
+        color: "theme color"
+    });
+
+    this.layer.setOptions({
+        palette: "test-palette"
+    });
+
+    assert.deepEqual(this.context.settings, {
+        color: "theme color",
+        label: {
+            font: {}
+        },
+        palette: "test-palette"
+    }, "settings");
+    assert.deepEqual(stubSelectStrategy.lastCall.returnValue.getDefaultColor.lastCall.args, [this.context, "test-palette"]);
+});
