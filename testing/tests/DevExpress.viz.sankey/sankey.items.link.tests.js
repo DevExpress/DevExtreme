@@ -1,7 +1,3 @@
-// TODO: Drawing link exactly between to rectangles
-// TODO: links colorMode
-// TODO: test of style when adjacent node hovered
-
 "use strict";
 
 var common = require("./commonParts/common.js"),
@@ -293,3 +289,69 @@ QUnit.test("isHovered method", function(assert) {
     assert.ok(links[1].isHovered());
     assert.ok(!links[0].isHovered());
 });
+
+QUnit.test("links colorMode", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            links: {
+                colorMode: 'node'
+            }
+        }),
+        nodes = this.nodes();
+
+    sankey.getAllItems().links.forEach(function(linkItem) {
+        var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.from; });
+        assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
+    });
+});
+
+QUnit.test("links colorMode with fixed color of nodes", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        nodes: {
+            color: '#aabbcc'
+        },
+        links: {
+            colorMode: 'node'
+        }
+    });
+    var links = this.links();
+
+    assert.equal(links[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
+    assert.equal(links[1].smartAttr.firstCall.args[0].fill, '#aabbcc');
+});
+
+QUnit.test("links style when adjacent node is hovered", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1], ['C', 'Z', 1]],
+            nodes: {
+                color: '#aabbcc'
+            },
+            links: {
+                color: '#112233',
+                hoverStyle: {
+                    color: '#ffeedd'
+                }
+            }
+        }),
+        links = this.links();
+
+    sankey.getAllItems().nodes[0].hover(true);
+    assert.equal(links[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#112233');
+    assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#112233');
+
+    sankey.getAllItems().nodes[0].hover(false);
+    sankey.getAllItems().nodes[1].hover(true);
+    assert.equal(links[0].smartAttr.lastCall.args[0].fill, '#112233');
+    assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#112233');
+
+    sankey.getAllItems().nodes[1].hover(false);
+    sankey.getAllItems().nodes[3].hover(true);
+    assert.equal(links[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#ffeedd');
+});
+
+// TODO: Drawing link exactly between to rectangles
