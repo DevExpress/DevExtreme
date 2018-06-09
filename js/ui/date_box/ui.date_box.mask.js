@@ -22,7 +22,8 @@ var DateBoxMask = DateBoxBase.inherit({
         var that = this;
 
         return extend(this.callBase(), {
-            enter: that._fireChangeEvent.bind(this),
+            escape: that._revertChanges.bind(that),
+            enter: that._fireChangeEvent.bind(that),
             leftArrow: that._toggleActivePart.bind(that, BACKWARD),
             rightArrow: that._toggleActivePart.bind(that, FORWARD),
             upArrow: that._partIncrease.bind(that, FORWARD),
@@ -81,6 +82,12 @@ var DateBoxMask = DateBoxBase.inherit({
         }
 
         return this._dateParts[this._activePartIndex][property];
+    },
+
+    _revertChanges: function() {
+        this._maskValue = this.dateOption("value");
+        this._renderDisplayText(this._getDisplayedText(this._maskValue));
+        this._renderDateParts();
     },
 
     _renderDisplayText: function(text) {
