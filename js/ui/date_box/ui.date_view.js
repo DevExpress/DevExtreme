@@ -233,56 +233,25 @@ var DateView = Editor.inherit({
         }
 
         if(roller.type === ROLLER_TYPE.year) {
-            this._refreshMonthRoller();
-            this._refreshDayRoller();
+            this._refreshRollers();
         }
 
         if(roller.type === ROLLER_TYPE.month) {
-            this._refreshDayRoller();
+            this._refreshRoller(ROLLER_TYPE.day);
+            this._refreshRoller(ROLLER_TYPE.hours);
         }
     },
 
-    _refreshMonthRoller: function() {
-        var monthRoller = this._rollers[ROLLER_TYPE.month];
+    _refreshRoller: function(rollerType) {
+        var roller = this._rollers[rollerType];
 
-        if(monthRoller) {
-            this._createRollerConfig(ROLLER_TYPE.month);
-            var monthRollerConfig = this._rollerConfigs[ROLLER_TYPE.month];
-
-            if(monthRollerConfig.displayItems.toString() !== monthRoller.option("items").toString()) {
-                monthRoller.option({
-                    items: monthRollerConfig.displayItems,
-                    selectedIndex: monthRollerConfig.selectedIndex
-                });
-            }
-        }
-    },
-
-    _refreshDayRoller: function() {
-        var dayRoller = this._rollers[ROLLER_TYPE.day];
-
-        if(dayRoller) {
-            this._createRollerConfig(ROLLER_TYPE.day);
-            var dayRollerConfig = this._rollerConfigs[ROLLER_TYPE.day];
-
-            dayRoller.option({
-                items: dayRollerConfig.displayItems,
-                selectedIndex: dayRollerConfig.selectedIndex
-            });
-        }
-    },
-
-    _refreshHourRoller: function() {
-        var hourRoller = this._rollers[ROLLER_TYPE.hours];
-
-        if(hourRoller) {
-            this._createRollerConfig(ROLLER_TYPE.hours);
-            var hoursRollerConfig = this._rollerConfigs[ROLLER_TYPE.hours];
-
-            if(hoursRollerConfig.displayItems.toString() !== hourRoller.option("items").toString()) {
-                hourRoller.option({
-                    items: hoursRollerConfig.displayItems,
-                    selectedIndex: hoursRollerConfig.selectedIndex
+        if(roller) {
+            this._createRollerConfig(rollerType);
+            var rollerConfig = this._rollerConfigs[rollerType];
+            if(rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== roller.option("items").toString()) {
+                roller.option({
+                    items: rollerConfig.displayItems,
+                    selectedIndex: rollerConfig.selectedIndex
                 });
             }
         }
@@ -355,9 +324,9 @@ var DateView = Editor.inherit({
     },
 
     _refreshRollers: function() {
-        this._refreshMonthRoller();
-        this._refreshDayRoller();
-        this._refreshHourRoller();
+        this._refreshRoller(ROLLER_TYPE.month);
+        this._refreshRoller(ROLLER_TYPE.day);
+        this._refreshRoller(ROLLER_TYPE.hours);
     },
 
     _optionChanged: function(args) {
