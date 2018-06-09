@@ -44,7 +44,9 @@ var dxSankey = require("../core/base_widget").inherit({
 
         this._groupLinks = this._renderer.g().append(this._renderer.root);
         this._groupNodes = this._renderer.g().append(this._renderer.root);
-        this._groupLabels = this._renderer.g().append(this._renderer.root);
+        this._groupLabels = this._renderer.g().attr({
+            class: this._rootClassPrefix + "-labels"
+        }).append(this._renderer.root);
         this._groupErrors = this._renderer.g().append(this._renderer.root);
 
         this._drawLabels = true;
@@ -322,8 +324,8 @@ var dxSankey = require("../core/base_widget").inherit({
         if(textData) {
             node.label = this._renderer.text(textData)
                 .attr(settings.attr)
-                .css(settings.css)
-                .append(this._groupLabels);
+                .css(settings.css);
+            node.label.append(this._groupLabels);
 
             var bBox = node.label.getBBox();
             node.label.attr({ y: 2 * settings.attr.y - bBox.y - bBox.height / 2 + labelOptions.verticalOffset });
@@ -361,7 +363,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
     _themeSection: "sankey",
-    _fontFields: [ "loadingIndicator.font", "error.font", "export.font", "label.font", "title.font", "tooltip.font", "title.subtitle.font"]
+    _fontFields: ["loadingIndicator.font", "error.font", "export.font", "label.font", "title.font", "tooltip.font", "title.subtitle.font"]
 });
 
 require("../../core/component_registrator")("dxSankey", dxSankey);
