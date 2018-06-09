@@ -703,17 +703,13 @@ var CollectionWidget = Widget.inherit({
         this._prepareContent();
     },
 
-    _prepareContent: function() {
-        var that = this;
+    _prepareContent: commonUtils.deferRenderer(function() {
+        this._renderContentImpl();
+    }),
 
-        commonUtils.deferRender(function() {
-            that._renderContentImpl();
-        });
-    },
-
-    _renderContent: function() {
+    _renderContent: commonUtils.deferRenderer(function() {
         this._fireContentReadyAction();
-    },
+    }),
 
     _render: function() {
         this.callBase();
