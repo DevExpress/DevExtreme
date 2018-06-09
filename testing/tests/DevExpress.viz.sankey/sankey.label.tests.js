@@ -949,6 +949,8 @@ QUnit.test("Show hidden labels", function(assert) {
     assert.equal(this.labels().length, 3);
 });
 // TODO: test overlap function in sankey
+// attributes.attr['text-anchor'] = 'end' if the label is in last cascade
+
 /*
 QUnit.test("Apply label ellipsis and correct label coordinates", function(assert) {
     stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
