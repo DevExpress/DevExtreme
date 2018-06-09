@@ -24,7 +24,8 @@ var TYPE = {
 var ROLLER_TYPE = {
     year: 'year',
     month: 'month',
-    day: 'day'
+    day: 'day',
+    hours: 'hours'
 };
 
 var DateView = Editor.inherit({
@@ -217,42 +218,27 @@ var DateView = Editor.inherit({
         }
 
         if(roller.type === ROLLER_TYPE.year) {
-            this._refreshMonthRoller();
-            this._refreshDayRoller();
+            this._refreshRollers();
         }
 
         if(roller.type === ROLLER_TYPE.month) {
-            this._refreshDayRoller();
+            this._refreshRoller(ROLLER_TYPE.day);
+            this._refreshRoller(ROLLER_TYPE.hours);
         }
     },
 
-    _refreshMonthRoller: function() {
-        var monthRoller = this._rollers[ROLLER_TYPE.month];
+    _refreshRoller: function(rollerType) {
+        var roller = this._rollers[rollerType];
 
-        if(monthRoller) {
-            this._createRollerConfig(ROLLER_TYPE.month);
-            var monthRollerConfig = this._rollerConfigs[ROLLER_TYPE.month];
-
-            if(monthRollerConfig.displayItems.toString() !== monthRoller.option("items").toString()) {
-                monthRoller.option({
-                    items: monthRollerConfig.displayItems,
-                    selectedIndex: monthRollerConfig.selectedIndex
+        if(roller) {
+            this._createRollerConfig(rollerType);
+            var rollerConfig = this._rollerConfigs[rollerType];
+            if(rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== roller.option("items").toString()) {
+                roller.option({
+                    items: rollerConfig.displayItems,
+                    selectedIndex: rollerConfig.selectedIndex
                 });
             }
-        }
-    },
-
-    _refreshDayRoller: function() {
-        var dayRoller = this._rollers[ROLLER_TYPE.day];
-
-        if(dayRoller) {
-            this._createRollerConfig(ROLLER_TYPE.day);
-            var dayRollerConfig = this._rollerConfigs[ROLLER_TYPE.day];
-
-            dayRoller.option({
-                items: dayRollerConfig.displayItems,
-                selectedIndex: dayRollerConfig.selectedIndex
-            });
         }
     },
 
@@ -279,6 +265,8 @@ var DateView = Editor.inherit({
             minMonth = minYear && curDate.getMonth() === minDate.getMonth(),
             maxYear = dateUtils.sameYear(curDate, maxDate),
             maxMonth = maxYear && curDate.getMonth() === maxDate.getMonth(),
+            minHour = minMonth && curDate.getDate() === minDate.getDate(),
+            maxHour = maxMonth && curDate.getDate() === maxDate.getDate(),
 
             componentInfo = uiDateUtils.DATE_COMPONENTS_INFO[componentName],
             startValue = componentInfo.startValue,
@@ -309,6 +297,11 @@ var DateView = Editor.inherit({
             }
         }
 
+        if(componentName === ROLLER_TYPE.hours) {
+            startValue = minHour ? minDate.getHours() : startValue;
+            endValue = maxHour ? maxDate.getHours() : endValue;
+        }
+
         return {
             startValue: startValue,
             endValue: endValue
@@ -316,8 +309,9 @@ var DateView = Editor.inherit({
     },
 
     _refreshRollers: function() {
-        this._refreshMonthRoller();
-        this._refreshDayRoller();
+        this._refreshRoller(ROLLER_TYPE.month);
+        this._refreshRoller(ROLLER_TYPE.day);
+        this._refreshRoller(ROLLER_TYPE.hours);
     },
 
     _optionChanged: function(args) {
