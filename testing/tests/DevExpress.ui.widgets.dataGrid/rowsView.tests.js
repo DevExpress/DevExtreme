@@ -571,6 +571,53 @@ QUnit.test('Highlight searchText with customizeText', function(assert) {
     assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 3');
 });
 
+QUnit.test('Highlight searchText for different data types (T636268)', function(assert) {
+    this.items = [
+        { data: { name: 'test1', id: 11, date: new Date(2001, 0, 1) }, values: ['test1', 11, '1/01/2001'], rowType: 'data', dataIndex: 0 },
+        { data: { name: 'test2', id: 21, date: new Date(2002, 1, 2) }, values: ['test2', 21, '2/02/2002'], rowType: 'data', dataIndex: 1 },
+        { data: { name: 'test3', id: 31, date: new Date(2003, 2, 3) }, values: ['test3', 31, '3/03/2003'], rowType: 'data', dataIndex: 2 }];
+
+    var columns = [
+        { allowFiltering: true, dataType: "string",
+            cellTemplate: function(container, options) {
+                $("<span>test</span>").appendTo(container);
+            }
+        },
+        { allowFiltering: true, dataType: "number" },
+        { allowFiltering: true, dataType: "date" }],
+        dataController = new MockDataController({ items: this.items }),
+        rowsView = this.createRowsView(this.items, dataController, columns),
+        $testElement = $('#container'),
+        searchTextClass = "dx-datagrid-search-text",
+        cells;
+
+    // act
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "1"
+    };
+
+    rowsView.render($testElement);
+    cells = $testElement.find('td');
+
+    // assert
+    assert.ok(cells.length > 3, 'Correct number of cells');
+    assert.equal(getNormalizeMarkup(cells.eq(0)), '<span>test</span>', 'cell 0');
+    assert.equal(getNormalizeMarkup(cells.eq(1)), "11", 'cell 1');
+    assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
+
+    // act
+    this.options.searchPanel = { highlightSearchText: true, text: "11" };
+
+    rowsView.render($testElement);
+    cells = $testElement.find('td');
+
+    // assert
+    assert.equal(getNormalizeMarkup(cells.eq(0)), '<span>test</span>', 'cell 0');
+    assert.equal(getNormalizeMarkup(cells.eq(1)), "<span class=" + searchTextClass + ">11</span>", "cell 1");
+    assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
+});
+
 function getNormalizeMarkup($element) {
     var quoteRE = new RegExp('\"', 'g'),
         spanRE = new RegExp('span', 'gi');
