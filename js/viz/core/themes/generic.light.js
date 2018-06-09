@@ -1573,13 +1573,12 @@ registerTheme({
             overlappingBehavior: "ellipsis",
             colorMode: "none",
             font: {
-                color: "#ffffff"
+                color: WHITE
             },
             border: {
                 visible: false,
                 width: 1,
-                color: LIGHT_GREY,
-                dashStyle: SOLID
+                color: WHITE
             },
             customizeText: function(info) {
                 return info.title;
@@ -1589,11 +1588,11 @@ registerTheme({
                 offsetX: 0,
                 offsetY: 1,
                 blur: 1,
-                color: "#000000"
+                color: BLACK
             }
         },
         error: {
-            stroke: "#000000",
+            stroke: WHITE,
             "stroke-width": 1,
             "stroke-opacity": 0.3,
             font: {
