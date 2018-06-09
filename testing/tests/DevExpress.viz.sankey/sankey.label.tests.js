@@ -1,10 +1,11 @@
 "use strict";
 
-var common = require("./commonParts/common.js"),
+var $ = require("jquery"),
+    common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
     environment = common.environment;
 
-QUnit.module("Initialization", environment);
+QUnit.module("Node labels", environment);
 
 QUnit.test("Create label group on initialization", function(assert) {
     createSankey({});
@@ -851,28 +852,23 @@ QUnit.test("change label option", function(assert) {
     var label = labelModule.Label.getCall(1).returnValue;
     assert.deepEqual(label.shift.args[0], [392.5, 175]);
 });
+*/
 
-QUnit.module("Adaptive layout", $.extend({}, labelEnvironment, {
+
+QUnit.module("Node labels. Adaptive layout", $.extend({}, environment, {
     beforeEach: function() {
-        labelEnvironment.beforeEach.call(this);
-
-        stubAlgorithm.getFigures.returns([
-            [0, 0, 1, 1], [0, 0, 1, 1]
-        ]);
-
+        environment.beforeEach.call(this);
         $("#test-container").css({
-            width: 240
+            width: 300
         });
     }
 }));
 
-QUnit.test("Hide labels", function(assert) {
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 2 }],
+QUnit.test("Shown labels if container size bigger than adaptiveLayout", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         label: {
-            visible: true,
-            position: "outside"
+            visible: true
         },
         adaptiveLayout: {
             width: 150,
@@ -880,83 +876,80 @@ QUnit.test("Hide labels", function(assert) {
         }
     });
 
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 240, 600]);
-    assert.ok(labelModule.Label.getCall(0).returnValue.draw.calledWith(false));
-    assert.ok(labelModule.Label.getCall(1).returnValue.draw.calledWith(false));
-    assert.deepEqual(labelModule.Label.getCall(0).returnValue.draw.firstCall.args, [true]);
+    assert.ok(this.labelsGroup().clear.called);
+    assert.equal(this.labels().length, this.nodes().length);
 });
 
-QUnit.test("Show hidden labels", function(assert) {
-    var funnel = createFunnel({
-            algorithm: "stub",
-            dataSource: [{ value: 1 }, { value: 2 }],
-            label: {
-                visible: true,
-                position: "outside"
-            },
-            adaptiveLayout: {
-                width: 150,
-                keepLabels: false
-            }
-        }),
-        label = labelModule.Label.getCall(0).returnValue;
+QUnit.test("Hide labels if container size smaller than adaptiveLayout", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            visible: true
+        },
+        adaptiveLayout: {
+            width: 600,
+            keepLabels: false
+        }
+    });
 
-    label.resetEllipsis.reset();
-    label.draw.reset();
+    assert.ok(this.labelsGroup().clear.called);
+    assert.equal(this.labels().length, 0);
+});
 
-    funnel.option({
+QUnit.test("Show labels if keepLabels is true and container size is smaller than adaptiveLayout", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            visible: true
+        },
+        adaptiveLayout: {
+            width: 600,
+            keepLabels: true
+        }
+    });
+
+    assert.equal(this.labels().length, 3);
+});
+
+QUnit.test("Show labels if keepLabels is true and widget size is smaller than adaptiveLayout", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            visible: true
+        },
+        adaptiveLayout: {
+            width: 300,
+            keepLabels: true
+        },
         size: {
             width: 400
         }
     });
 
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 295, 600]);
-    assert.ok(!label.draw.calledWith(false));
-    assert.deepEqual(label.draw.lastCall.args, [true]);
-    assert.ok(label.resetEllipsis.called);
+    assert.equal(this.labels().length, 3);
 });
 
-QUnit.test("Do not hide labels if keepLabels true", function(assert) {
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 2 }],
+QUnit.test("Show hidden labels", function(assert) {
+    var sankey = createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         label: {
-            visible: true,
-            position: "outside"
+            visible: true
         },
         adaptiveLayout: {
-            width: 150,
-            keepLabels: true
+            width: 500,
+            keepLabels: false
         }
     });
 
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 150, 600]);
-    assert.ok(!labelModule.Label.getCall(0).returnValue.draw.calledWith(false));
-    assert.ok(!labelModule.Label.getCall(1).returnValue.draw.calledWith(false));
-});
-
-QUnit.test("Do not hide labels if keepLabels true. Container width less than adaptiveLayout", function(assert) {
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 2 }],
-        label: {
-            visible: true,
-            position: "outside"
-        },
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
+    sankey.option({
         size: {
-            width: 140
+            width: 600
         }
     });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 140, 600]);
-    assert.ok(!labelModule.Label.getCall(0).returnValue.draw.calledWith(false));
-    assert.ok(!labelModule.Label.getCall(1).returnValue.draw.calledWith(false));
+    assert.equal(this.labels().length, 3);
 });
-
+// TODO: test overlap function in sankey
+/*
 QUnit.test("Apply label ellipsis and correct label coordinates", function(assert) {
     stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
 
