@@ -7,9 +7,6 @@ QUnit.testStart(function() {
     .dx-scrollable-content {\
         padding: 0 !important;\
     }\
-    .container-height-200px {\
-        height: 200px;\
-    }\
 </style>\
 <div id="pivotGrid"></div>\
 <div class="dx-pivotgrid">\
@@ -221,14 +218,12 @@ QUnit.test("Empty store", function(assert) {
 });
 
 QUnit.test("No data when pivot grid rendered to invisible container", function(assert) {
-    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+    var $pivotGridElement = $("#pivotGrid").hide().height("200px"),
         pivotGrid = createPivotGrid({
             height: 200,
             dataSource: [{ sum: 100 }],
-
         }, assert);
 
-    assert.ok(pivotGrid._loadPanel.option("visible"), 'loadPanel should be visible');
     // act
     $pivotGridElement.show();
 
@@ -242,7 +237,21 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
 
     assert.ok($noDataElement.is(":visible"));
     assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + dataAreaCell.outerHeight()) - (noDataElementOffset.top + $noDataElement.height()), 2.5, "no data element position");
+});
 
+QUnit.test("Not render pivot grid to invisible container", function(assert) {
+    // arrange
+    var onContentReadyCallback = sinon.stub();
+    this.testOptions.onContentReady = onContentReadyCallback;
+    this.testOptions.scrolling = { mode: "virtual" };
+    this.testOptions.height = 300;
+
+    // act
+    $("#pivotGrid").hide();
+    createPivotGrid(this.testOptions, assert);
+
+    // assert
+    assert.equal(onContentReadyCallback.callCount, 1, "contentReady calls");
 });
 
 QUnit.test("Create PivotGrid with Data", function(assert) {
@@ -1864,7 +1873,7 @@ QUnit.test("Render to invisible container", function(assert) {
     var $pivotGridElement = $("#pivotGrid")
         .hide()
         .width(2000)
-        .addClass("container-height-200px"),
+        .height("200px"),
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     $pivotGridElement.show();

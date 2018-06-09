@@ -123,17 +123,6 @@ registerTheme({
             opacity: 0.5
         }
     },
-    map: {
-        "layer:marker:dot": {
-            color: ACCENT_COLOR
-        },
-        "layer:marker:bubble": {
-            color: ACCENT_COLOR
-        },
-        legend: {
-            markerColor: ACCENT_COLOR
-        }
-    },
     bullet: {
         color: ACCENT_COLOR
     }

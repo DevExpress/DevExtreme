@@ -2162,6 +2162,13 @@ QUnit.testStart(function() {
         assert.equal(index, 7, "Index is OK");
     });
 
+    QUnit.test("Week view, fractional value", function(assert) {
+        this.createInstance("Week", { width: 800, height: 800 });
+        var index = this.instance.getCellIndexByCoordinates({ left: 160.4, top: 55 });
+
+        assert.equal(index, 7, "Index is OK");
+    });
+
     QUnit.test("Week view: rtl mode", function(assert) {
         this.createInstance("Week", { width: 800, height: 800, rtlEnabled: true }, true);
         var index = this.instance.getCellIndexByCoordinates({ left: 411, top: 50 });

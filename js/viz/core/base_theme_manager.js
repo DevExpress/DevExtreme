@@ -102,6 +102,10 @@ exports.BaseThemeManager = Class.inherit({// TODO: test hack
         return new paletteModule.GradientPalette(palette, this._defaultPalette);
     },
 
+    getAccentColor: function(palette) {
+        return paletteModule.getAccentColor(palette, this._defaultPalette);
+    },
+
     _initializeTheme: function() {
         var that = this;
         _each(that._fontFields || [], function(_, path) {

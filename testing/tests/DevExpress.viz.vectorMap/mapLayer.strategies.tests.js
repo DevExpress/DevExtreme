@@ -251,6 +251,9 @@ QUnit.test("Perform grouping", function(assert) {
             params: {
                 dataExchanger: { set: set }
             },
+            settings: {
+                color: "default color"
+            },
             grouping: {}
         },
         stub = sinon.stub().returns("test-data");
@@ -267,7 +270,8 @@ QUnit.test("Perform grouping", function(assert) {
     assert.deepEqual(valuesCallback.lastCall.args, [3], "values callback");
     assert.deepEqual(set.lastCall.args, ["test-name", "test-field-1", {
         partition: [1, 2, 3, 4],
-        values: "test-values"
+        values: "test-values",
+        defaultColor: "default color"
     }], "data is set 1");
     assert.deepEqual(callback({ attribute: stub }, "test-arg"), "test-data", "value callback");
     assert.deepEqual(stub.lastCall.args, ["test-arg"], "attribute");
@@ -286,7 +290,8 @@ QUnit.test("Perform grouping", function(assert) {
     assert.deepEqual(valuesCallback.lastCall.args, [2], "values callback");
     assert.deepEqual(set.lastCall.args, ["test-name", "test-field-2", {
         partition: [1, 2, 3],
-        values: "test-values"
+        values: "test-values",
+        defaultColor: "default color"
     }], "data is set 2");
 
     valuesCallback.reset();
@@ -481,24 +486,15 @@ QUnit.test("Update grouping", function(assert) {
     assert.deepEqual(stubGroupByColor.lastCall.args, [this.context], "group by color");
 });
 
-QUnit.module("Point strategy", environment);
+QUnit.test("GetDefaultColor - returns nothing", function(assert) {
+    this.context.params = {
+        themeManager: { getAccentColor: sinon.stub().returns("default color") }
+    };
 
-QUnit.test("Get label offset", function(assert) {
-    assert.deepEqual(pointDotStrategy.getLabelOffset({ size: [20, 10] }, { size: 5 }), [15, 0]);
-});
+    var result = areaStrategyPolygon.getDefaultColor(this.context, "test palette");
 
-QUnit.test("Has labels group", function(assert) {
-    assert.strictEqual(pointDotStrategy.hasLabelsGroup, false);
-});
-
-QUnit.test("Update grouping", function(assert) {
-    stubPerformGrouping.reset();
-    stubGroupByColor.reset();
-
-    pointDotStrategy.updateGrouping(this.context);
-
-    assert.deepEqual(stubGroupByColor.lastCall.args, [this.context], "group by color");
-    assert.deepEqual(stubGroupBySize.lastCall.args, [this.context], "group by size");
+    assert.strictEqual(result, undefined);
+    assert.strictEqual(this.context.params.themeManager.getAccentColor.callCount, 0);
 });
 
 QUnit.module("Line strategy", environment);
@@ -587,6 +583,17 @@ QUnit.test("Update grouping", function(assert) {
     assert.deepEqual(stubGroupByColor.lastCall.args, [this.context], "group by color");
 });
 
+QUnit.test("GetDefaultColor - returns nothing", function(assert) {
+    this.context.params = {
+        themeManager: { getAccentColor: sinon.stub().returns("default color") }
+    };
+
+    var result = lineStrategyLineString.getDefaultColor(this.context, "test palette");
+
+    assert.strictEqual(result, undefined);
+    assert.strictEqual(this.context.params.themeManager.getAccentColor.callCount, 0);
+});
+
 QUnit.module("Point strategy", environment);
 
 QUnit.test("Get label offset", function(assert) {
@@ -605,6 +612,20 @@ QUnit.test("Update grouping", function(assert) {
 
     assert.deepEqual(stubGroupByColor.lastCall.args, [this.context], "group by color");
     assert.deepEqual(stubGroupBySize.lastCall.args, [this.context], "group by size");
+});
+
+QUnit.test("Get default color", function(assert) {
+    var getAccentColor = sinon.stub().returns("default color"),
+        context = {
+            params: {
+                themeManager: { getAccentColor: getAccentColor }
+            }
+        };
+
+    var result = pointDotStrategy.getDefaultColor(context, "test palette");
+
+    assert.equal(result, "default color");
+    assert.deepEqual(context.params.themeManager.getAccentColor.lastCall.args, ["test palette"]);
 });
 
 QUnit.module("Point dot strategy", environment);
@@ -832,6 +853,9 @@ QUnit.test("Arrange", function(assert) {
         };
     });
     this.context.settings = { minSize: 10, maxSize: 20, dataField: "data-field" };
+    this.context.params = {
+        dataExchanger: { set: sinon.spy() }
+    };
 
     pointBubbleStrategy.arrange(this.context, elements);
 
@@ -855,6 +879,9 @@ QUnit.test("Arrange / value", function(assert) {
         };
     });
     this.context.settings = { minSize: 10, maxSize: 20, dataField: "data-field" };
+    this.context.params = {
+        dataExchanger: { set: sinon.spy() }
+    };
 
     pointBubbleStrategy.arrange(this.context, elements);
 
@@ -870,13 +897,26 @@ QUnit.test("Arrange / value", function(assert) {
     assert.deepEqual(elements[4].proxy.attribute.lastCall.args, ["data-field"], "attribute 5");
 });
 
-
 QUnit.test("Arrange with grouping", function(assert) {
     this.context.settings = { sizeGroups: [1, 2] };
+    this.context.params = {
+        dataExchanger: { set: sinon.spy() }
+    };
 
     pointBubbleStrategy.arrange(this.context, []);
 
     assert.ok(true);
+});
+
+QUnit.test("GetDefaultColor - use theme manager to get palette's accent color", function(assert) {
+    this.context.params = {
+        themeManager: { getAccentColor: sinon.stub().returns("default color") }
+    };
+
+    var result = pointBubbleStrategy.getDefaultColor(this.context, "test palette");
+
+    assert.equal(result, "default color");
+    assert.deepEqual(this.context.params.themeManager.getAccentColor.lastCall.args, ["test palette"]);
 });
 
 QUnit.test("Update grouping", function(assert) {

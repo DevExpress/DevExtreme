@@ -238,6 +238,39 @@ QUnit.module("dateView", {
     }
 });
 
+QUnit.test("DateView should have compact class on mobile device", function(assert) {
+    var currentDevice = devices.current();
+    devices.current({ platform: "android", deviceType: "phone" });
+
+    try {
+        var date = new Date(2013, 7, 31);
+
+        var $element = $("#customDateView").dxDateView({
+            visible: true,
+            value: date
+        });
+        assert.ok($element.hasClass(DATEVIEW_CLASS + "-compact"), "DateView isn't compact");
+    } finally {
+        devices.current(currentDevice);
+    }
+});
+
+QUnit.test("DateView should not have compact class on desktop", function(assert) {
+    var currentDevice = devices.current();
+    devices.current({ platform: "generic", deviceType: "desktop" });
+
+    try {
+        var date = new Date(2013, 7, 31);
+
+        var $element = $("#customDateView").dxDateView({
+            visible: true,
+            value: date
+        });
+        assert.notOk($element.hasClass(DATEVIEW_CLASS + "-compact"), "DateView isn't compact");
+    } finally {
+        devices.current(currentDevice);
+    }
+});
 QUnit.test("default value set correctly", function(assert) {
     var value = new Date(2015, 5, 5, 5, 5);
 
@@ -739,3 +772,4 @@ QUnit.test("time component should be preserved after value is changed by rollers
         assert.equal(newValue.getMilliseconds(), date.getMilliseconds(), "milliseconds component is correct");
     }
 });
+

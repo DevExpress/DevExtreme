@@ -973,9 +973,9 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.markerColor
         * @type string
-        * @default "#ba4d51"
+        * @default undefined
         */
-        markerColor: "#ba4d51",
+        markerColor: undefined,
         /**
         * @name dxVectorMapOptions.legends.markerShape
         * @type Enums.VectorMapMarkerShape
