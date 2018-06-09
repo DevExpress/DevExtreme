@@ -586,7 +586,7 @@
         }
 
         .dx-selection, .dx-selection.dx-row:hover {
-            & > td {
+            td {
                 background-color: ~"@{@{widgetName}-selection-background}";
 
                 &.dx-@{widgetName}-group-space {
@@ -594,7 +594,7 @@
                 }
             }
 
-            & > td.dx-focused {
+            td.dx-focused {
                 background-color: ~"@{@{widgetName}-base-background-color}";
             }
 
@@ -602,7 +602,7 @@
                 border-bottom: 1px solid ~"@{@{widgetName}-selection-background}";
             }
 
-            &.dx-row > td.dx-pointer-events-none {
+            &.dx-row  td.dx-pointer-events-none {
                 border-bottom-color: transparent;
             }
         }
@@ -774,7 +774,7 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection, .dx-selection.dx-row:hover {
-                & > td:not(.dx-focused) {
+                td:not(.dx-focused) {
                     &.dx-@{widgetName}-group-space {
                         border-left-color: ~"@{@{widgetName}-selection-background}";
                     }

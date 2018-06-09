@@ -723,7 +723,7 @@
 
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
-            & > td {
+            td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
                 color: ~"@{@{widgetName}-row-selected-color}";
 
@@ -737,22 +737,22 @@
                 }
             }
 
-            & > td.dx-focused {
+            td.dx-focused {
                 background-color: ~"@{@{widgetName}-base-background-color}";
                 color: ~"@{@{widgetName}-base-color}";
             }
 
-            &:not(.dx-row-lines) > td {
-                border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
-                border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
+            &:not(.dx-row-lines) td {
+                border-bottom-color: ~"@{@{widgetName}-selection-bg}";
+                border-top-color: ~"@{@{widgetName}-selection-bg}";
             }
 
-            &.dx-column-lines > td {
+            &.dx-column-lines td {
                 border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
                 border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
             }
 
-            &.dx-row-lines > td {
+            &.dx-row-lines td {
                 border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
             }
         }
@@ -860,13 +860,13 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection.dx-row, .dx-selection.dx-row:hover {
-                & > td:not(.dx-focused) {
+                td:not(.dx-focused) {
                     &.dx-@{widgetName}-group-space {
                         border-left-color: ~"@{@{widgetName}-selection-bg}";
                     }
                 }
 
-                & > td {
+                td {
                     border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
 
                     &.dx-pointer-events-none {
