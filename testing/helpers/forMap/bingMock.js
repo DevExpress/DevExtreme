@@ -290,6 +290,9 @@ Microsoft.Maps = {
             if(entity instanceof Microsoft.Maps.Pushpin) {
                 Microsoft.pushpinRemoved = true;
             }
+            if(entity instanceof Microsoft.Maps.Infobox) {
+                Microsoft.infoboxRemoved = true;
+            }
         };
         this.removeAt = function() {};// (index:number)
         this.setOptions = function() {};// (options:EntityCollectionOptions)
