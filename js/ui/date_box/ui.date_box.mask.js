@@ -5,6 +5,7 @@ var MASK_EVENT_NAMESPACE = "dateBoxMask",
     BACKWARD = -1;
 
 var eventsUtils = require("../../events/utils"),
+    isFunction = require("../../core/utils/type").isFunction,
     extend = require("../../core/utils/extend").extend,
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
     eventsEngine = require("../../events/core/events_engine"),
@@ -40,15 +41,16 @@ var DateBoxMask = DateBoxBase.inherit({
         this._detachMaskEvents();
 
         if(this.option("useMaskBehavior")) {
+            this._activePartIndex = 0;
             this._attachMaskEvents();
             this._renderDateParts();
-            this._activePartIndex = 0;
             this._maskValue = new Date(this.dateOption("value"));
         }
     },
 
     _renderDateParts: function() {
         this._dateParts = dateParts.renderDateParts(this.option("text"), this.option("displayFormat"));
+        this._toggleActivePart(0);
         var caret = this._getActivePartProp("caret");
         caret && this._caret(caret);
     },
@@ -64,7 +66,7 @@ var DateBoxMask = DateBoxBase.inherit({
     _toggleActivePart: function(step, e) {
         var index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            this._toggleActivePart(step < 0 ? step - 1 : step + 1, e);
+            this._toggleActivePart(step >= 0 ? step + 1 : step - 1, e);
             return;
         }
 
@@ -89,9 +91,9 @@ var DateBoxMask = DateBoxBase.inherit({
     _partIncrease: function(step, e) {
         var getter = this._getActivePartProp("getter"),
             setter = this._getActivePartProp("setter"),
-            newValue = this._maskValue[getter]() + step;
+            newValue = step + (isFunction(getter) ? getter(this._maskValue) : this._maskValue[getter]());
 
-        this._maskValue[setter](newValue);
+        isFunction(setter) ? setter(this._maskValue, newValue) : this._maskValue[setter](newValue);
         this._renderDisplayText(this._getDisplayedText(this._maskValue));
 
         this._renderDateParts();
