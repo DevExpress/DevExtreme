@@ -125,7 +125,9 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _focusOutHandler: function(e) {
         this.callBase(e);
-        this._fireChangeEvent();
+        if(this.option("useMaskBehavior")) {
+            this._fireChangeEvent();
+        }
     },
 
     _valueChangeEventHandler: function(e) {
