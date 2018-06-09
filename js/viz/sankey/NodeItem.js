@@ -29,13 +29,19 @@ function compileLabelAttrs(labelOptions, filter, node) {
         labelOptions.font.color = node.color;
     }
 
+    var borderVisible = isDefined(labelOptions.border.visible) ? labelOptions.border.visible : false,
+        borderWidth = isDefined(labelOptions.border.width) ? labelOptions.border.width : 0,
+        borderColor = isDefined(labelOptions.border.color) ? labelOptions.border.color : labelOptions.font.color,
+        borderOpacity = isDefined(labelOptions.border.opacity) ? labelOptions.border.opacity : 1,
+        attr = {
+            filter: filter,
+            stroke: borderColor,
+            "stroke-width": borderVisible ? borderWidth : 0,
+            "stroke-opacity": borderOpacity
+        };
+
     return {
-        attr: labelOptions["stroke-width"] ? {
-            stroke: labelOptions.stroke,
-            "stroke-width": labelOptions["stroke-width"],
-            "stroke-opacity": labelOptions["stroke-opacity"],
-            filter: filter
-        } : {},
+        attr: attr,
         css: _patchFontOptions(labelOptions.font)
     };
 }

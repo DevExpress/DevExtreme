@@ -1571,12 +1571,15 @@ registerTheme({
             horizontalOffset: 5,
             verticalOffset: 0,
             overlappingBehavior: "ellipsis",
-            stroke: "#000000",
-            "stroke-width": 1,
-            "stroke-opacity": 0.3,
             colorMode: "none",
             font: {
                 color: "#ffffff"
+            },
+            border: {
+                visible: false,
+                width: 1,
+                color: LIGHT_GREY,
+                dashStyle: SOLID
             },
             customizeText: function(info) {
                 return info.title;
