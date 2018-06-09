@@ -6,7 +6,7 @@ var noop = require("../../core/utils/common").noop,
     defaultLayoutBuilder = require("./layout");
 
 var _overlap = function(box1, box2) {
-    return box1.x < box2.x && box2.x < box1.x + box1.width && box1.y < box2.y && box2.y < box1.y + box1.height;
+    return box1.x <= box2.x && box2.x <= box1.x + box1.width && box1.y <= box2.y && box2.y <= box1.y + box1.height;
 };
 
 var dxSankey = require("../core/base_widget").inherit({
@@ -298,7 +298,6 @@ var dxSankey = require("../core/base_widget").inherit({
 
             // test and handle labels overlapping here
             if(labelOptions.overlappingBehavior !== 'none') {
-
                 that._nodes.forEach(function(thisNode) {
                     var thisBox = thisNode.label.getBBox();
                     that._nodes.forEach(function(otherNode) {
