@@ -1238,7 +1238,7 @@ var TagBox = SelectBox.inherit({
     _getSortedListValues: function() {
         var listValues = this._getListValues(),
             currentValue = this.option("value") || [],
-            existedItems = currentValue.filter(item => listValues.indexOf(item) !== -1),
+            existedItems = listValues.length ? currentValue.filter(item => listValues.indexOf(item) !== -1) : [],
             newItems = existedItems.length ? listValues.filter(item => currentValue.indexOf(item) === -1) : listValues;
 
         return existedItems.concat(newItems);
