@@ -308,6 +308,7 @@ var Button = Widget.inherit({
 
         this._$submitInput = $("<input>")
             .attr("type", "submit")
+            .attr("tabindex", -1)
             .addClass("dx-button-submit-input")
             .appendTo(this._$content);
 

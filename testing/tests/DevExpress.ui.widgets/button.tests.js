@@ -85,6 +85,13 @@ QUnit.test("icon must rendered after change type of button on 'back'", function(
     assert.ok(element.hasClass(BUTTON_BACK_CLASS), "button has correct type class after change type");
 });
 
+QUnit.test("submit element should have tabindex attribute", function(assert) {
+    var $element = $("#button").dxButton({ useSubmitBehavior: true }),
+        $submitElement = $element.find("input");
+
+    assert.equal($submitElement.attr("tabindex"), -1, "submit input is not focusable");
+});
+
 QUnit.test("class is not removed after change type", function(assert) {
     var $element = $("#button").dxButton({});
 
