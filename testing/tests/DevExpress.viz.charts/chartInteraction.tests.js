@@ -191,7 +191,8 @@ QUnit.test("useSpiderWeb option changing", function(assert) {
 
     polar.option("useSpiderWeb", true);
 
-    assert.ok(initialSeries !== polar.getAllSeries()[0]);
+    assert.ok(polar.getAllSeries()[0].getOptions().spiderWidget);
+    assert.ok(initialSeries === polar.getAllSeries()[0]);
 });
 
 QUnit.module("series API", {

@@ -1700,7 +1700,7 @@ var environment = {
         chart.option({ innerRadius: 0.8 });
 
         // assert
-        assert.ok(chart.seriesDisposed, "Series should be disposed");
+        assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.deepEqual(commons.getTrackerStub(true).stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
         assert.equal(chart.series.length, 1, "series length");
         assert.equal(chart.series[0].options.name, "First series", "series name");
@@ -1726,7 +1726,7 @@ var environment = {
         chart.option({ startAngle: 20 });
 
         // assert
-        assert.ok(chart.seriesDisposed, "Series should be disposed");
+        assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.deepEqual(commons.getTrackerStub(true).stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
         assert.equal(chart.series.length, 1, "series length");
         assert.equal(chart.series[0].options.name, "First series", "series name");
@@ -1752,7 +1752,7 @@ var environment = {
         chart.option({ segmentsDirection: "anticlockwise" });
 
         // assert
-        assert.ok(chart.seriesDisposed, "Series should be disposed");
+        assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.deepEqual(commons.getTrackerStub(true).stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
         assert.equal(chart.series.length, 1, "series length");
         assert.equal(chart.series[0].options.name, "First series", "series name");

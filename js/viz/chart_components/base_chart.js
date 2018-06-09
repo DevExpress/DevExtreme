@@ -385,8 +385,8 @@ var BaseChart = BaseWidget.inherit({
         return this._themeManager.getOptions("adaptiveLayout");
     },
 
-    _reinit: function() {
-        var that = this;
+    _reinit() {
+        const that = this;
         // _skipRender = !that._initialized;
 
         _setCanvasValues(that._canvas);
@@ -398,7 +398,7 @@ var BaseChart = BaseWidget.inherit({
         that._skipRender = true;        // T273635, T351032
         // }
         that._updateDataSource();
-        if(!that.series) {
+        if(!that.series || that.needToPopulateSeries) {
             that._dataSpecificInit(false);
         }
         // if (!_skipRender) {
@@ -894,11 +894,24 @@ var BaseChart = BaseWidget.inherit({
         };
     },
 
-    _disposeSeries: function() {
-        var that = this;
-        _each(that.series || [], function(_, series) { series.dispose(); });
-        that.series = null;
+    _disposeSeries(seriesIndex) {
+        const that = this;
+        if(that.series) {
+            if(_isDefined(seriesIndex)) {
+                that.series[seriesIndex].dispose();
+                that.series.splice(seriesIndex, 1);
+            } else {
+                _each(that.series, (_, s) => s.dispose());
+                that.series.length = 0;
+            }
+        }
+        if(!that.series || !that.series.length) {
+            that.series = [];
+        }
+    },
 
+    _disposeSeriesFamilies() {
+        const that = this;
         _each(that.seriesFamilies || [], function(_, family) { family.dispose(); });
         that.seriesFamilies = null;
         that._needHandleRenderComplete = true;
@@ -1005,7 +1018,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _refreshSeries: function(actionName) {
-        this._disposeSeries();
+        this.needToPopulateSeries = true;
         this._processRefreshData(actionName);
     },
 
@@ -1055,9 +1068,11 @@ var BaseChart = BaseWidget.inherit({
         this.series.forEach(s => this._processSingleSeries(s), this);
     },
 
-    _dataSpecificInit: function(needRedraw) {
-        var that = this;
-        that.series = that.series || that._populateSeries();
+    _dataSpecificInit(needRedraw) {
+        const that = this;
+        if(!that.series || that.needToPopulateSeries) {
+            that.series = that._populateSeries();
+        }
         that._repopulateSeries();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange(true);
@@ -1164,36 +1179,25 @@ var BaseChart = BaseWidget.inherit({
         return _isDefined(this.option("dataSource")) && this._dataIsLoaded();
     },
 
-    _populateSeries: function(data) {
-        var that = this,
-            themeManager = that._themeManager,
-            seriesTemplate = themeManager.getOptions("seriesTemplate"),
-            seriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data || []) : that.option("series"),
-            allSeriesOptions = (_isArray(seriesOptions) ? seriesOptions : (seriesOptions ? [seriesOptions] : [])),
-            extraOptions = that._getExtraOptions(),
-            particularSeriesOptions,
-            particularSeries,
-            seriesTheme,
-            i,
-            seriesVisibilityChanged = function() {
-                that._specialProcessSeries();
-                that._populateBusinessRange(false);
-                that._renderer.stopAllAnimations(true);
-                that._updateLegend();
-                that._doRender({ force: true });
-            },
-            eventPipe;
-
-        that._disposeSeries();
-        that.series = [];
-        themeManager.resetPalette();
-        eventPipe = function(data) {
-            that.series.forEach(function(currentSeries) {
-                currentSeries.notify(data);
-            });
+    _populateSeriesOptions(data) {
+        const that = this;
+        const themeManager = that._themeManager;
+        const seriesTemplate = themeManager.getOptions("seriesTemplate");
+        const seriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data || []) : that.option("series");
+        const allSeriesOptions = (_isArray(seriesOptions) ? seriesOptions : (seriesOptions ? [seriesOptions] : []));
+        const extraOptions = that._getExtraOptions();
+        let particularSeriesOptions;
+        let seriesTheme;
+        let seriesThemes = [];
+        const seriesVisibilityChanged = () => {
+            that._specialProcessSeries();
+            that._populateBusinessRange(false);
+            that._renderer.stopAllAnimations(true);
+            that._updateLegend();
+            that._doRender({ force: true });
         };
 
-        for(i = 0; i < allSeriesOptions.length; i++) {
+        for(let i = 0; i < allSeriesOptions.length; i++) {
             particularSeriesOptions = _extend(true, {}, allSeriesOptions[i], extraOptions);
 
             if(!particularSeriesOptions.name) {
@@ -1208,28 +1212,89 @@ var BaseChart = BaseWidget.inherit({
 
             seriesTheme = themeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
 
-            if(!that._checkPaneName(seriesTheme)) {
-                continue;
+            if(that._checkPaneName(seriesTheme)) {
+                seriesThemes.push(seriesTheme);
             }
+        }
 
-            particularSeries = new seriesModule.Series({
-                renderer: that._renderer,
-                seriesGroup: that._seriesGroup,
-                labelsGroup: that._labelsGroup,
-                eventTrigger: that._eventTrigger,
+        return seriesThemes;
+    },
+
+    _populateSeries(data) {
+        const that = this;
+        const seriesBasis = [];
+        let seriesThemes = that._populateSeriesOptions(data);
+        let particularSeries;
+        let changedStateSeriesCount = 0;
+
+        that.needToPopulateSeries = false;
+
+        _each(seriesThemes, (_, theme) => {
+            const curSeries = that.series && that.series.filter(s => s.name === theme.name)[0];
+            if(curSeries && curSeries.type === theme.type) {
+                seriesBasis.push({ series: curSeries, options: theme });
+            } else {
+                seriesBasis.push({ options: theme });
+                changedStateSeriesCount++;
+            }
+        });
+
+        that._eachSeriesReverse((index, series) => {
+            if(!seriesBasis.some(s => series === s.series)) {
+                that._disposeSeries(index);
+                changedStateSeriesCount++;
+            }
+        });
+        that.series = [];
+
+        changedStateSeriesCount > 0 && that._disposeSeriesFamilies();
+        that._themeManager.resetPalette();
+        const eventPipe = function(data) {
+            that.series.forEach(function(currentSeries) {
+                currentSeries.notify(data);
+            });
+        };
+
+        _each(seriesBasis, (_, basis) => {
+            let seriesTheme = basis.options;
+            let renderSettings = {
                 commonSeriesModes: that._getSelectionModes(),
-                eventPipe: eventPipe,
                 argumentAxis: that._getArgumentAxis(),
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
-            }, seriesTheme);
-
+            };
+            if(basis.series) {
+                particularSeries = basis.series;
+                particularSeries.updateOptions(seriesTheme, renderSettings);
+            } else {
+                particularSeries = new seriesModule.Series(_extend({
+                    renderer: that._renderer,
+                    seriesGroup: that._seriesGroup,
+                    labelsGroup: that._labelsGroup,
+                    eventTrigger: that._eventTrigger,
+                    eventPipe: eventPipe
+                }, renderSettings), seriesTheme);
+            }
             if(!particularSeries.isUpdated) {
                 that._incidentOccurred("E2101", [seriesTheme.type]);
             } else {
                 particularSeries.index = that.series.length;
                 that.series.push(particularSeries);
             }
+        });
+
+        return that.series;
+    },
+
+    _eachSeriesReverse(callback) {
+        const that = this;
+        if(!that.series) return;
+
+        for(let i = that.series.length - 1; i >= 0; i--) {
+            if(callback.call(that.series[i], i, that.series[i]) === false) {
+                break;
+            }
         }
+
         return that.series;
     },
 

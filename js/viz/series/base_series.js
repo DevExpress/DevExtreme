@@ -154,13 +154,9 @@ function Series(settings, options) {
     that._group = settings.renderer.g().attr({ "class": "dxc-series" });
     that._eventTrigger = settings.eventTrigger;
     that._eventPipe = settings.eventPipe;
-    that._seriesModes = settings.commonSeriesModes;
-    that._valueAxis = settings.valueAxis;
 
-    that.axis = that._valueAxis && that._valueAxis.name;
-    that._argumentAxis = settings.argumentAxis;
     that._legendCallback = _noop;
-    that.updateOptions(options);
+    that.updateOptions(options, settings);
 }
 
 function getData(pointData) {
@@ -276,11 +272,11 @@ Series.prototype = {
         }
     },
 
-    updateOptions: function(newOptions) {
-        var that = this,
-            widgetType = newOptions.widgetType,
-            oldType = that.type,
-            newType = newOptions.type;
+    updateOptions(newOptions, settings) {
+        const that = this;
+        const widgetType = newOptions.widgetType;
+        const oldType = that.type;
+        const newType = newOptions.type;
 
         that.type = newType && _normalizeEnum(newType.toString());
 
@@ -294,6 +290,8 @@ Series.prototype = {
             that._firstDrawing = true;
             that._resetType(oldType, widgetType);
             that._setType(that.type, widgetType);
+        } else {
+            that._defineDrawingState();
         }
 
         that._options = newOptions;
@@ -306,6 +304,13 @@ Series.prototype = {
 
         that.tag = newOptions.tag;
 
+        if(settings) {
+            that._seriesModes = settings.commonSeriesModes || that._seriesModes;
+            that._valueAxis = settings.valueAxis || that._valueAxis;
+            that.axis = that._valueAxis && that._valueAxis.name;
+            that._argumentAxis = settings.argumentAxis || that._argumentAxis;
+        }
+
         that._createStyles(newOptions);
 
         that._stackName = null;
@@ -315,6 +320,10 @@ Series.prototype = {
         that._visible = newOptions.visible;
         that.isUpdated = true;
         that._createGroups();
+    },
+
+    _defineDrawingState() {
+        this._firstDrawing = true;
     },
 
     _disposePoints: function(points) {

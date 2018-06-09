@@ -346,7 +346,7 @@ var dxPieChart = BaseChart.inherit({
         this._center = center;
     },
 
-    _disposeSeries: function() {
+    _disposeSeries(seriesIndex) {
         this.callBase.apply(this, arguments);
         this._abstractSeries = null;
     },

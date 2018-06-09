@@ -310,6 +310,7 @@ export const insertMockFactory = function insertMockFactory() {
         seriesMockData.args.push(arguments);
         if(seriesMockData.series.length > seriesMockData.currentSeries) {
             var series = seriesMockData.series[seriesMockData.currentSeries++];
+            series.name = series.name || options.name;
             series.type = options.type;
             series.axis = options.axis;
             series.pane = options.pane;
@@ -523,6 +524,15 @@ export const MockSeries = function MockSeries(options) {
         },
         updateData: function(data) { this.dataReinitialized = true; this.reinitializedData = data; },
         setOptions: function(data) { $.extend(true, options, data || {}); },
+        updateOptions: function(options, settings) {
+            $.extend(true, this.options, options || {});
+            this.type = options.type;
+            this.pane = options.pane;
+            this.renderSettings.commonSeriesModes = settings.commonSeriesModes || this.renderSettings.commonSeriesModes;
+            this._valueAxis = settings.valueAxis || this._valueAxis;
+            this.axis = this._valueAxis && this._valueAxis.name;
+            this._argumentAxis = settings.argumentAxis || this._argumentAxis;
+        },
         arrangePoints: function() {
             this.pointsWereArranged = true;
             this.arrangePointsArgs = $.makeArray(arguments);
