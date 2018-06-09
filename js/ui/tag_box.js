@@ -1247,7 +1247,7 @@ var TagBox = SelectBox.inherit({
         var listValues = this._getListValues(),
             currentValue = this.option("value") || [],
             existedItems = currentValue.filter(function(item) { return listValues.indexOf(item) !== -1; }),
-            newItems = listValues.filter(function(item) { return currentValue.indexOf(item) === -1; });
+            newItems = existedItems.length ? listValues.filter(function(item) { return currentValue.indexOf(item) === -1; }) : listValues;
 
         return existedItems.concat(newItems);
     },
