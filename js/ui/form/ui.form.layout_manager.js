@@ -331,7 +331,9 @@ var LayoutManager = Widget.inherit({
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
-            that._renderTemplates(templatesInfo);
+            if(!windowUtils.hasWindow()) {
+                that._renderTemplates(templatesInfo);
+            }
         }
     },
 
@@ -390,6 +392,9 @@ var LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
+                if(windowUtils.hasWindow()) {
+                    that._renderTemplates(templatesInfo);
+                }
                 if(that.option("onLayoutChanged")) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
