@@ -948,9 +948,45 @@ QUnit.test("Show hidden labels", function(assert) {
     });
     assert.equal(this.labels().length, 3);
 });
+
+QUnit.test("Labels customize text", function(assert) {
+
+    var customizeText = function(node) {
+        return 'test text ' + node.title;
+    };
+
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            customizeText: customizeText
+        }
+    });
+
+    assert.equal(this.renderer.text.getCall(0).args[0], 'test text A');
+    assert.equal(this.renderer.text.getCall(1).args[0], 'test text B');
+    assert.equal(this.renderer.text.getCall(2).args[0], 'test text Z');
+});
+
+QUnit.test("Labels alignment", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+    });
+
+    var labels = this.labels(),
+        nodes = this.nodes();
+
+    assert.equal(labels[0].attr.firstCall.args[0]["text-anchor"], 'start');
+    assert.equal(labels[1].attr.firstCall.args[0]["text-anchor"], 'start');
+    assert.equal(labels[2].attr.firstCall.args[0]["text-anchor"], 'end');
+
+    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.firstCall.args[0].x);
+    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.firstCall.args[0].x);
+    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x);
+});
+
 // TODO: test overlap function in sankey
-// TODO: attributes.attr['text-anchor'] = 'end' if the label is in last cascade
 // TODO: aplying offsets for labels
+
 /*
 QUnit.test("Apply label ellipsis and correct label coordinates", function(assert) {
     stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
