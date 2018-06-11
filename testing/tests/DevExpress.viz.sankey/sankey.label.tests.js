@@ -984,7 +984,6 @@ QUnit.test("Labels alignment", function(assert) {
     assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x);
 });
 
-// TODO: test overlap function in sankey
 // TODO: aplying offsets for labels
 
 /*

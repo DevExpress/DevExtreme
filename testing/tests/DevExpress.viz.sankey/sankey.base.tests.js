@@ -779,3 +779,27 @@ QUnit.test("Redrawn on nodes.padding option updated", function(assert) {
     assert.equal(drawn.callCount, 2, 'Drawn twice');
     assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[2].nodePadding, 50, 'New node padding applied');
 });
+
+QUnit.test("layout.overlap utility method", function(assert) {
+
+    assert.equal(layoutBuilder.overlap(
+        { x: 10, y: 10, width: 10, height: 15 },
+        { x: 50, y: 50, width: 20, height: 25 }
+    ), false);
+
+    assert.equal(layoutBuilder.overlap(
+        { x: 10, y: 10, width: 20, height: 10 },
+        { x: 15, y: 15, width: 10, height: 10 }
+    ), true);
+
+    assert.equal(layoutBuilder.overlap(
+        { x: 10, y: 10, width: 20, height: 10 },
+        { x: 30, y: 10, width: 10, height: 10 }
+    ), true);
+
+    assert.equal(layoutBuilder.overlap( // touching on y-axis is not overlapping
+        { x: 10, y: 10, width: 20, height: 10 },
+        { x: 10, y: 30, width: 10, height: 10 }
+    ), false);
+
+});
