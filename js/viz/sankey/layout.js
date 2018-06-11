@@ -250,8 +250,12 @@ let layout = {
             result.error = validateResult;
         }
         return result;
-    }
+    },
 
+    overlap: function(box1, box2) {
+        return !(box2.x > box1.x + box1.width || box2.x + box2.width < box1.x ||
+            box2.y >= box1.y + box1.height || box2.y + box2.height <= box1.y);
+    }
 };
 
 module.exports = layout;

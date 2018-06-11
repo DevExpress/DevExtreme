@@ -5,10 +5,6 @@ var noop = require("../../core/utils/common").noop,
     LinkItem = require("./LinkItem"),
     defaultLayoutBuilder = require("./layout");
 
-var _overlap = function(box1, box2) {
-    return box1.x <= box2.x && box2.x <= box1.x + box1.width && box1.y <= box2.y && box2.y <= box1.y + box1.height;
-};
-
 var dxSankey = require("../core/base_widget").inherit({
     _rootClass: "dxs-sankey",
 
@@ -302,7 +298,7 @@ var dxSankey = require("../core/base_widget").inherit({
                     var thisBox = thisNode.label.getBBox();
                     that._nodes.forEach(function(otherNode) {
                         var otherBox = otherNode.label.getBBox();
-                        if(thisNode.id !== otherNode.id && _overlap(thisBox, otherBox)) {
+                        if(thisNode.id !== otherNode.id && defaultLayoutBuilder.overlap(thisBox, otherBox)) {
                             if(labelOptions.overlappingBehavior === 'ellipsis') {
                                 thisNode.label.applyEllipsis(otherBox.x - thisBox.x);
                             } else if(labelOptions.overlappingBehavior === 'hide') {
