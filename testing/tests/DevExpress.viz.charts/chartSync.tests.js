@@ -820,8 +820,8 @@ var environment = {
         // assert
         testEverythingWasDrawn(assert, chart, { firstDraw: false, withNewData: true });
 
-        assert.ok(chart.seriesDisposed, "Series should be disposed");
-        assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
+        assert.ok(!chart.seriesDisposed, "Series should not be disposed");
+        assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
         assert.ok(chart.seriesFamilies[0].adjustedValues, "SeriesFamilies should adjust series values");
         assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
         assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
@@ -941,8 +941,8 @@ var environment = {
         // assert
         assert.ok(paneClipRect.stub("dispose").called, "Pane clip rect should be removed");
         assert.ok(getTrackerStub().stub("update").calledTwice, "Tracker should be initialized");
-        assert.ok(chart.seriesDisposed, "Series should be disposed");
-        assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
+        assert.ok(!chart.seriesDisposed, "Series should not be disposed");
+        assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
         assert.ok(chart.seriesFamilies[0].adjustedValues, "SeriesFamilies should adjust series values");
         assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
         assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");

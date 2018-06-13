@@ -100,7 +100,9 @@ var baseBarSeriesMethods = {
         return options;
     },
 
-    _defaultAggregator: "sum"
+    _defaultAggregator: "sum",
+
+    _defineDrawingState() {}
 };
 
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
