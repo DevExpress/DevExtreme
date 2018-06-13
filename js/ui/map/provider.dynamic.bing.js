@@ -326,7 +326,7 @@ var BingProvider = DynamicProvider.inherit({
     _destroyMarker: function(marker) {
         this._map.entities.remove(marker.marker);
         if(marker.infobox) {
-            this._map.entities.remove(marker.infobox);
+            marker.infobox.setMap(null);
         }
         if(marker.handler) {
             Microsoft.Maps.Events.removeHandler(marker.handler);
