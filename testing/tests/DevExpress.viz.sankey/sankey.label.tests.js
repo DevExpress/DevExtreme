@@ -3,7 +3,8 @@
 var $ = require("jquery"),
     common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
-    environment = common.environment;
+    environment = common.environment,
+    vizMocks = require("../../helpers/vizMocks.js");
 
 QUnit.module("Node labels", environment);
 
@@ -123,6 +124,70 @@ QUnit.test("Label color if colorMode is 'node'", function(assert) {
     assert.equal(nodes[2].attr.lastCall.args[0].fill, labels[2].css.firstCall.args[0].fill);
 });
 
+QUnit.test("Labels customize text", function(assert) {
+
+    var customizeText = function(node) {
+        return 'test text ' + node.title;
+    };
+
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            customizeText: customizeText
+        }
+    });
+
+    assert.equal(this.renderer.text.getCall(0).args[0], 'test text A');
+    assert.equal(this.renderer.text.getCall(1).args[0], 'test text B');
+    assert.equal(this.renderer.text.getCall(2).args[0], 'test text Z');
+});
+
+QUnit.test("Labels alignment through cascades", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+    });
+
+    var labels = this.labels(),
+        nodes = this.nodes();
+
+    assert.equal(labels[0].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
+    assert.equal(labels[1].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
+    assert.equal(labels[2].attr.firstCall.args[0]["text-anchor"], 'end', 'Alignment in last cascade');
+
+    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.firstCall.args[0].x, 'First cascade');
+    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.firstCall.args[0].x, 'First cascade');
+    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x, 'Last cascade');
+});
+
+QUnit.test("Labels offsets", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            horizontalOffset: 0,
+            verticalOffset: 0
+        }
+    });
+
+    var x = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
+        y = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; });
+
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            horizontalOffset: 20,
+            verticalOffset: 30
+        }
+    });
+
+    var xOffset = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
+        yOffset = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; }),
+        xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]],
+        yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
+
+    assert.deepEqual(xDifference, [20, 20, -20], 'horizontal offset applied'); // labels in last cascade are moved to other side (-10)
+    assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
+});
+
 QUnit.module("Node labels. Adaptive layout", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -216,222 +281,3 @@ QUnit.test("Show hidden labels", function(assert) {
     });
     assert.equal(this.labels().length, 3);
 });
-
-QUnit.test("Labels customize text", function(assert) {
-
-    var customizeText = function(node) {
-        return 'test text ' + node.title;
-    };
-
-    createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        label: {
-            customizeText: customizeText
-        }
-    });
-
-    assert.equal(this.renderer.text.getCall(0).args[0], 'test text A');
-    assert.equal(this.renderer.text.getCall(1).args[0], 'test text B');
-    assert.equal(this.renderer.text.getCall(2).args[0], 'test text Z');
-});
-
-QUnit.test("Labels alignment through cascades", function(assert) {
-    createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-    });
-
-    var labels = this.labels(),
-        nodes = this.nodes();
-
-    assert.equal(labels[0].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
-    assert.equal(labels[1].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
-    assert.equal(labels[2].attr.firstCall.args[0]["text-anchor"], 'end', 'Alignment in last cascade');
-
-    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.firstCall.args[0].x, 'First cascade');
-    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.firstCall.args[0].x, 'First cascade');
-    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x, 'Last cascade');
-});
-
-QUnit.test("Labels offsets", function(assert) {
-    createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        label: {
-            horizontalOffset: 0,
-            verticalOffset: 0
-        }
-    });
-
-    var x = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
-        y = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; });
-
-    createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        label: {
-            horizontalOffset: 20,
-            verticalOffset: 30
-        }
-    });
-
-    var xOffset = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
-        yOffset = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; }),
-        xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]],
-        yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
-
-    assert.deepEqual(xDifference, [20, 20, -20], 'horizontal offset applied'); // labels in last cascade are moved to other side (-10)
-    assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
-});
-
-/*
-QUnit.test("Apply label ellipsis and correct label coordinates", function(assert) {
-    stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 2 }],
-        label: {
-            visible: true,
-            position: "columns"
-        },
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
-        size: {
-            width: 180
-        }
-    });
-
-    assert.equal(labelModule.Label.getCall(0).returnValue.fit.lastCall.args[0], 45);
-    assert.ok(!labelModule.Label.getCall(1).returnValue.stub("fit").called);
-});
-
-QUnit.test("Apply label ellipsis and correct label coordinates. Right horizontalAlignment", function(assert) {
-
-    stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 1 }],
-        label: {
-            visible: true,
-            position: "columns",
-            horizontalAlignment: "right"
-        },
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
-        size: {
-            width: 180
-        }
-    });
-
-    assert.equal(labelModule.Label.getCall(0).returnValue.fit.lastCall.args[0], 45);
-    assert.ok(!labelModule.Label.getCall(1).returnValue.stub("fit").called);
-});
-
-QUnit.test("Correct label pos if label out from left", function(assert) {
-
-    stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 1 }],
-        label: {
-            visible: true,
-            position: "columns",
-            horizontalAlignment: "left"
-        },
-        rtlEnabled: true,
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
-        size: {
-            width: 180
-        }
-    });
-
-    var label = labelModule.Label.getCall(0).returnValue;
-
-    assert.equal(label.shift.lastCall.args[0], 0);
-});
-
-QUnit.test("Correct label pos if label out from right", function(assert) {
-
-    stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 1 }],
-        label: {
-            visible: true,
-            position: "columns",
-            horizontalAlignment: "right"
-        },
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
-        size: {
-            width: 180
-        }
-    });
-
-    var label = labelModule.Label.getCall(0).returnValue;
-
-    assert.equal(label.shift.lastCall.args[0], 80);
-});
-
-QUnit.test("Correct label pos if label out from top", function(assert) {
-
-    stubAlgorithm.getFigures.returns([[0, 0, 1, 0, 1, 0.1, 0, 0.1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }],
-        label: {
-            visible: true,
-            position: "inside"
-        },
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
-        size: {
-            width: 180,
-            height: 50,
-        }
-    });
-
-    var label = labelModule.Label.getCall(0).returnValue;
-
-    assert.equal(label.shift.lastCall.args[1], 0);
-});
-
-QUnit.test("Correct label pos if label out from top", function(assert) {
-
-    stubAlgorithm.getFigures.returns([[0, 0.9, 1, 0.9, 1, 1, 0, 1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }],
-        label: {
-            visible: true,
-            position: "inside"
-        },
-        adaptiveLayout: {
-            width: 150,
-            keepLabels: true
-        },
-        size: {
-            width: 180,
-            height: 50,
-        }
-    });
-
-    var label = labelModule.Label.getCall(0).returnValue;
-
-    assert.equal(label.shift.lastCall.args[1], 40);
-});
-*/
