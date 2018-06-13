@@ -192,7 +192,8 @@
 
     .dx-scheduler-work-space.dx-scheduler-timeline.dx-scheduler-timeline-week &,
     .dx-scheduler-work-space.dx-scheduler-timeline.dx-scheduler-timeline-work-week & {
-        &:not(.dx-scheduler-header-panel-week-cell){
+        &:not(.dx-scheduler-header-panel-week-cell) {
+            justify-content: left;
             height: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_TIMELINE__TIME_HEIGHT;
             font-size: @MATERIAL_SCHEDULER_TIME_PANEL_FONT_SIZE;
             padding-left: @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN;
@@ -202,7 +203,6 @@
     }
 
     &.dx-scheduler-header-panel-week-cell {
-        justify-content: left;
         border-bottom: @SCHEDULER_BASE_BORDER;
         flex-flow: column;
         justify-content: flex-end;
