@@ -139,7 +139,7 @@ NodeItem.prototype = {
     getLabelAttributes: function(labelSettings, filter, diagramRect) {
         var attributes = compileLabelAttrs(labelSettings, filter, this);
 
-        if(this.rect.x + this.rect.width + labelSettings.horizontalOffset > diagramRect[2] - diagramRect[1]) {
+        if(this.rect.x + this.rect.width + labelSettings.horizontalOffset >= diagramRect[2] - diagramRect[1]) {
             attributes.attr.x = this.rect.x - labelSettings.horizontalOffset;
             attributes.attr['text-anchor'] = 'end';
         } else {
