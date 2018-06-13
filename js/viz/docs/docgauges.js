@@ -170,9 +170,8 @@ var BaseGauge = {
             useRangeColors: false,
             /**
             * @name BaseGaugeOptions.scale.label.overlappingBehavior
-            * @type string
+            * @type Enums.ScaleLabelOverlappingBehavior
             * @default 'hide'
-            * @acceptValues 'hide' | 'none'
             */
             overlappingBehavior: "hide",
             /**
@@ -425,13 +424,7 @@ var dxCircularGauge = {
             * @type Enums.GaugeOverlappingBehavior
             * @default 'last'
             */
-            hideFirstOrLast: "last",
-            /**
-            * @name dxCircularGaugeOptions.scale.label.overlappingBehavior
-            * @type Enums.ScaleLabelOverlappingBehavior
-            * @inheritdoc
-            */
-            overlappingBehavior: "hide"
+            hideFirstOrLast: "last"
         }
     },
     /**
@@ -535,13 +528,7 @@ var dxLinearGauge = {
             * @type number
             * @default -10
             */
-            indentFromTick: -10,
-            /**
-            * @name dxLinearGaugeOptions.scale.label.overlappingBehavior
-            * @type Enums.ScaleLabelOverlappingBehavior
-            * @inheritdoc
-            */
-            overlappingBehavior: "hide"
+            indentFromTick: -10
         }
     },
     /**
