@@ -313,7 +313,7 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.tooltip.customizeTooltip
         * @type function(info)
-        * @type_function_param1 info:areaObjects|markerObjects
+        * @type_function_param1 info:MapLayerElement
         * @type_function_return object
         * @default undefined
         * @notUsedInTheme
