@@ -2788,6 +2788,9 @@ QUnit.test("Fix horizontal scroll position after scroll when rtl is enabled", fu
         fieldChooser: {
             enabled: false
         },
+        scrolling: {
+            useNative: false
+        },
         dataSource: this.dataSource
     }, assert);
     this.clock.tick();
