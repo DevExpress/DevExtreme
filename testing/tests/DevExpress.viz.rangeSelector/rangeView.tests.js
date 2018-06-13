@@ -1,9 +1,10 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    translator2DModule = require("viz/translators/translator2d"),
-    rangeViewModule = require("viz/range_selector/range_view");
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import translator2DModule from "viz/translators/translator2d";
+import rangeViewModule from "viz/range_selector/range_view";
+import { MockAxis } from "../../helpers/chartMocks.js";
 
 QUnit.module("RangeView", {
     beforeEach: function() {
@@ -56,27 +57,26 @@ QUnit.test("Rect and image are not created because of 'visible' option", functio
 });
 
 QUnit.test("Chart view", function(assert) {
-    var valueAxis = {
-            setBusinessRange: sinon.stub(),
-            updateCanvas: sinon.stub()
-        },
+    var valueAxis = new MockAxis({ renderer: this.renderer }),
         series = [{
-            _extGroups: {}, draw: sinon.spy(),
+            _extGroups: {},
+            draw: sinon.spy(),
             getValueAxis: function() {
                 return valueAxis;
             }
-        },
-        {
+        }, {
             _extGroups: {},
             draw: sinon.spy()
         }],
+        range = { val: { range: "bound-range", sortCategories: sinon.spy() } },
         seriesDataSource = {
             isShowChart: function() { return true; },
             getSeries: function() { return series; },
-            getBoundRange: function() { return { val: "bound-range" }; },
+            getBoundRange: function() { return range; },
             adjustSeriesDimensions: sinon.spy()
         },
         root = this.root;
+    valueAxis.updateOptions({ categoriesSortingMethod: "some sorter method" });
 
     this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas, false, "animation-enabled", seriesDataSource);
 
@@ -89,7 +89,8 @@ QUnit.test("Chart view", function(assert) {
     assert.ok(seriesDataSource.adjustSeriesDimensions.called, "series dimensions");
     assert.ok(seriesDataSource.adjustSeriesDimensions.lastCall.calledAfter(valueAxis.updateCanvas.lastCall));
 
-    assert.strictEqual(valueAxis.setBusinessRange.lastCall.args[0], "bound-range");
+    assert.deepEqual(range.val.sortCategories.lastCall.args, ["some sorter method"]);
+    assert.strictEqual(valueAxis.setBusinessRange.lastCall.args[0], range.val);
 
     $.each(series, function(i, item) {
         assert.strictEqual(item._extGroups.seriesGroup, root.children[2], "series group - " + i);

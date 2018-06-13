@@ -1934,6 +1934,10 @@ Axis.prototype = {
 
     drawScaleBreaks: _noop,
 
+    getCategoriesSorter() {
+        return this._options.categoriesSortingMethod;
+    },
+
     ///#DEBUG
     _getTickMarkPoints: _noop,
     _validateOverlappingMode: _noop,
