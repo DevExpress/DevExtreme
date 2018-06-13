@@ -604,9 +604,11 @@
                 border-bottom: 1px solid ~"@{@{widgetName}-selection-background}";
             }
 
-            &.dx-row > td, &.dx-row > tr > td {
-                &.dx-pointer-events-none {
-                    border-bottom-color: transparent;
+            &.dx-row {
+                & > td, & > tr > td {
+                    &.dx-pointer-events-none {
+                        border-bottom-color: transparent;
+                    }
                 }
             }
         }
