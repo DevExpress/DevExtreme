@@ -103,14 +103,6 @@ QUnit.test('setOptions', function(assert) {
     assert.deepEqual(this.updateLayout.lastCall.args, [], 'layout');
 });
 
-QUnit.test('setOptions / deprecated', function(assert) {
-    this.options.source = "areacolorgroups";
-    this.legend.setOptions(this.options);
-
-    assert.deepEqual(this.bind.lastCall.args, ['areas', 'color', this.bind.lastCall.args[2]], 'bind');
-    assert.deepEqual(this.updateLayout.lastCall.args, [], 'layout');
-});
-
 QUnit.test('setOptions / reset', function(assert) {
     this.legend.setOptions(this.options);
     this.options.source = { layer: "test-source-2", grouping: "test-field-2" };

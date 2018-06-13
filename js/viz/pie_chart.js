@@ -1,7 +1,6 @@
 "use strict";
 
-var errors = require("../core/errors"),
-    seriesConsts = require("./components/consts"),
+var seriesConsts = require("./components/consts"),
     vizUtils = require("./core/utils"),
     extend = require("../core/utils/extend").extend,
     isNumeric = require("../core/utils/type").isNumeric,
@@ -45,16 +44,6 @@ function correctPercentValue(value) {
 }
 
 var dxPieChart = BaseChart.inherit({
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        _extend(this._deprecatedOptions, {
-            "series.innerRadius": { since: "15.2", message: "Use the 'innerRadius' option instead" },
-            "series.startAngle": { since: "15.2", message: "Use the 'startAngle' option instead" },
-            "series.segmentsDirection": { since: "15.2", message: "Use the 'segmentsDirection' option instead" },
-            "series.type": { since: "15.2", message: "Use the 'type' option instead" }
-        });
-    },
-
     _chartType: "pie",
 
     _layoutManagerOptions: function() {
@@ -360,12 +349,6 @@ var dxPieChart = BaseChart.inherit({
     _disposeSeries: function() {
         this.callBase.apply(this, arguments);
         this._abstractSeries = null;
-    },
-
-    // DEPRECATED_15_2
-    getSeries: function() {
-        errors.log("W0002", "dxPieChart", "getSeries", "15.2", "Use the 'getAllSeries' method instead");
-        return this.series[0];
     },
 
     _legendDataField: "point",

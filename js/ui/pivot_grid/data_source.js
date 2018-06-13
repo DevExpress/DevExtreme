@@ -831,12 +831,6 @@ module.exports = Class.inherit((function() {
              * @type_function_return string
              */
             /**
-             * @name PivotGridDataSourceOptions.fields.precision
-             * @type number
-             * @default undefined
-             * @deprecated
-             */
-            /**
              * @name PivotGridDataSourceOptions.fields.allowSorting
              * @type boolean
              * @default false

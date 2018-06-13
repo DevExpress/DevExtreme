@@ -115,7 +115,7 @@ exports.findField = function(fields, id) {
 exports.formatValue = function(value, options) {
     var formatObject = {
         value: value,
-        valueText: formatHelper.format(value, options.format, options.precision) || ''
+        valueText: formatHelper.format(value, options.format) || ''
     };
     return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
 };
@@ -287,7 +287,7 @@ exports.setDefaultFieldValueFormatting = function(field) {
         if(groupInterval && !field.customizeText) {
             setFieldProperty(field, "customizeText", function(formatObject) {
                 var secondValue = formatObject.value + groupInterval,
-                    secondValueText = formatHelper.format(secondValue, field.format, field.precision);
+                    secondValueText = formatHelper.format(secondValue, field.format);
 
                 return formatObject.valueText && secondValueText ? formatObject.valueText + " - " + secondValueText : "";
             });

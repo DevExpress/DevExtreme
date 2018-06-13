@@ -60,13 +60,6 @@ var dxRangeSelector = {
         */
         endValue: undefined,
         /**
-        * @name dxRangeSelectorOptions.scale.showMinorTicks
-        * @type boolean
-        * @default true
-        * @deprecated dxRangeSelectorOptions.scale.minortick.visible
-        */
-        showMinorTicks: true,
-        /**
         * @name dxRangeSelectorOptions.scale.minorTickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
@@ -129,75 +122,11 @@ var dxRangeSelector = {
             line: "waved"
         },
         /**
-        * @name dxRangeSelectorOptions.scale.majorTickInterval
-        * @type number|object|Enums.VizTimeInterval
-        * @default undefined
-        * @deprecated dxRangeSelectorOptions.scale.tickInterval
-        */
-        majorTickInterval: {
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.years
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            years: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.months
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            months: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.days
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            days: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.hours
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            hours: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.minutes
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            minutes: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.seconds
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            seconds: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.majorTickInterval.milliseconds
-            * @type number
-            * @deprecated dxRangeSelectorOptions.scale.tickInterval
-            */
-            milliseconds: undefined
-        },
-        /**
         * @name dxRangeSelectorOptions.scale.tickInterval
         * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
-        /**
-        * @name dxRangeSelectorOptions.scale.useTicksAutoArrangement
-        * @type boolean
-        * @default true
-        * @deprecated dxRangeSelectorOptions.scale.label.overlappingBehavior
-        */
-        useTicksAutoArrangement: true,
-        /**
-        * @name dxRangeSelectorOptions.scale.setTicksAtUnitBeginning
-        * @type boolean
-        * @default true
-        * @deprecated
-        */
-        setTicksAtUnitBeginning: true,
         /**
         * @name dxRangeSelectorOptions.scale.placeholderHeight
         * @type number
@@ -232,11 +161,6 @@ var dxRangeSelector = {
             * @extends CommonVizFormat
             */
             format: undefined,
-            /**
-            * @name dxRangeSelectorOptions.scale.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: undefined,
             /**
             * @name dxRangeSelectorOptions.scale.label.customizeText
             * @type function(scaleValue)
@@ -454,11 +378,6 @@ var dxRangeSelector = {
         */
         format: undefined,
         /**
-        * @name dxRangeSelectorOptions.sliderMarker.precision
-        * @extends CommonVizPrecision
-        */
-        precision: undefined,
-        /**
         * @name dxRangeSelectorOptions.sliderMarker.customizeText
         * @type function(scaleValue)
         * @type_function_param1 scaleValue:object
@@ -468,13 +387,6 @@ var dxRangeSelector = {
         * @notUsedInTheme
         */
         customizeText: undefined,
-        /**
-        * @name dxRangeSelectorOptions.sliderMarker.padding
-        * @type number
-        * @default 6
-        * @deprecated
-        */
-        padding: 6,
         /**
         * @name dxRangeSelectorOptions.sliderMarker.paddingTopBottom
         * @type number
@@ -499,39 +411,6 @@ var dxRangeSelector = {
         * @default 'red'
         */
         invalidRangeColor: 'red',
-        /**
-        * @name dxRangeSelectorOptions.sliderMarker.placeholderSize
-        * @type number|object
-        * @default undefined
-        * @deprecated
-        */
-        placeholderSize: {
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.placeholderSize.width
-            * @type number|object
-            * @default undefined
-            */
-            width: {
-                /**
-                * @name dxRangeSelectorOptions.sliderMarker.placeholderSize.width.left
-                * @type number
-                * @default undefined
-                */
-                left: undefined,
-                /**
-                * @name dxRangeSelectorOptions.sliderMarker.placeholderSize.width.right
-                * @type number
-                * @default undefined
-                */
-                right: undefined
-            },
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.placeholderSize.height
-            * @type number
-            * @default undefined
-            */
-            height: undefined
-        },
         /**
         * @name dxRangeSelectorOptions.sliderMarker.placeholderHeight
         * @type number
@@ -619,25 +498,6 @@ var dxRangeSelector = {
         opacity: 0.75
     },
     /**
-    * @name dxRangeSelectorOptions.selectedRange
-    * @type object
-    * @deprecated dxRangeSelectorOptions.value
-    */
-    selectedRange: {
-        /**
-        * @name dxRangeSelectorOptions.selectedRange.startValue
-        * @type number|date|string
-        * @notUsedInTheme
-        */
-        startValue: undefined,
-        /**
-        * @name dxRangeSelectorOptions.selectedRange.endValue
-        * @type number|date|string
-        * @notUsedInTheme
-        */
-        endValue: undefined
-    },
-    /**
     *@name dxRangeSelectorOptions.value
     * @type Array<number,string,Date>
     * @fires dxRangeSelectorOptions.onValueChanged
@@ -705,13 +565,6 @@ var dxRangeSelector = {
         * @default true
         */
         allowSlidersSwap: true,
-        /**
-        * @name dxRangeSelectorOptions.behavior.callSelectedRangeChanged
-        * @type Enums.ValueChangedCallMode
-        * @default 'onMovingComplete'
-        * @deprecated dxRangeSelectorOptions.behavior.callValueChanged
-        */
-        callSelectedRangeChanged: "onMovingComplete",
         /**
         * @name dxRangeSelectorOptions.behavior.callValueChanged
         * @type Enums.ValueChangedCallMode
@@ -945,19 +798,6 @@ var dxRangeSelector = {
     */
     dataSourceField: undefined,
     /**
-    * @name dxRangeSelectorOptions.onSelectedRangeChanged
-    * @extends Action
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 startValue:Date|Number
-    * @type_function_param1_field5 endValue:Date|Number
-    * @default null
-    * @deprecated dxRangeSelectorOptions.onValueChanged
-    * @notUsedInTheme
-    * @action
-    */
-    onSelectedRangeChanged: null,
-    /**
     * @name dxRangeSelectorOptions.onValueChanged
     * @extends Action
     * @type function(e)
@@ -975,22 +815,6 @@ var dxRangeSelector = {
     * @default '#FFFFFF'
     */
     containerBackgroundColor: '#FFFFFF',
-    /**
-    * @name dxRangeSelectorMethods.getSelectedRange
-    * @publicName getSelectedRange()
-    * @return object
-    * @deprecated dxRangeSelectorMethods.getValue
-    */
-    getSelectedRange: function() { },
-    /**
-    * @name dxRangeSelectorMethods.setSelectedRange
-    * @publicName setSelectedRange(selectedRange)
-    * @param1 selectedRange:object
-    * @param1_field1 startValue:Date|Number|String
-    * @param1_field2 endValue:Date|Number|String
-    * @deprecated dxRangeSelectorMethods.setValue
-    */
-    setSelectedRange: function() { },
     /**
     * @name dxRangeSelectorMethods.setValue
     * @publicName setValue(value)

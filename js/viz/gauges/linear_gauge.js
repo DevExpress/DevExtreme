@@ -43,7 +43,7 @@ var dxLinearGauge = dxGauge.inherit({
             tickCorrection;
 
         if(scaleOptions.isHorizontal) {
-            orientation = isIndentPositive ? { center: 0.5, middle: 0.5 /* DEPRECATED_15_2 */, top: 0, bottom: 1 } : { center: 0.5, middle: 0.5 /* DEPRECATED_15_2 */, top: 1, bottom: 0 };
+            orientation = isIndentPositive ? { center: 0.5, top: 0, bottom: 1 } : { center: 0.5, top: 1, bottom: 0 };
             tickCorrection = length * (orientation[scaleOptions.verticalOrientation]);
             textCorrection = textParams.y;
         } else {
@@ -106,7 +106,7 @@ var dxLinearGauge = dxGauge.inherit({
             if(options.verticalOrientation === "top") {
                 coefs.inner = 1;
                 coefs.outer = 0;
-            } else if(options.verticalOrientation === "center" || options.verticalOrientation === "middle" /* DEPRECATED_15_2 */) {
+            } else if(options.verticalOrientation === "center") {
                 coefs.inner = coefs.outer = 0.5;
             }
         }

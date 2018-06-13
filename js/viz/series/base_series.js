@@ -97,9 +97,6 @@ function getLabelOptions(labelOptions, defaultColor) {
         alignment: opt.alignment,
         format: opt.format,
         argumentFormat: opt.argumentFormat,
-        precision: opt.precision,   // DEPRECATED_16_1
-        argumentPrecision: opt.argumentPrecision,   // DEPRECTATED_16_1
-        percentPrecision: opt.percentPrecision, // DEPRECATED_16_1
         customizeText: typeUtils.isFunction(opt.customizeText) ? opt.customizeText : undefined,
         attributes: { font: labelFont },
         visible: labelFont.size !== 0 ? opt.visible : false,

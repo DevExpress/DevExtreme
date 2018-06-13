@@ -45,12 +45,12 @@ function getThemeInfo(themeName, splitter) {
 }
 
 function registerThemeName(themeName, targetThemeName) {
-    var themeInfo = getThemeInfo(themeName, '.') || /* DEPRECATED_15_1 */getThemeInfo(themeName, '-') || { name: themeName },
+    var themeInfo = getThemeInfo(themeName, '.') || { name: themeName },
         name = themeInfo.name,
         scheme = themeInfo.scheme;
     if(scheme) {
         themesMapping[name] = themesMapping[name] || targetThemeName;
-        themesMapping[name + '.' + scheme] = /* DEPRECATED_15_1 */themesMapping[name + '-' + scheme] = targetThemeName;
+        themesMapping[name + '.' + scheme] = targetThemeName;
     } else {
         themesMapping[name] = targetThemeName;
     }

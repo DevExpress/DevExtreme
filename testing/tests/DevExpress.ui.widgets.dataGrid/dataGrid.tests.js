@@ -10327,7 +10327,7 @@ QUnit.test("Empty value for dateTime formatting", function(assert) {
 });
 
 QUnit.test("Number formatting", function(assert) {
-    assert.equal(gridCore.formatValue(215.66, { format: 'fixedPoint', precision: 1 }), '215.7');
+    assert.equal(gridCore.formatValue(215.66, { format: { type: 'fixedPoint', precision: 1 } }), '215.7');
     assert.equal(gridCore.formatValue(150.26, {}), '150.26');
 });
 
@@ -10337,13 +10337,13 @@ QUnit.test("Date formatting", function(assert) {
 
 QUnit.test("CustomizeText formatting", function(assert) {
     assert.equal(gridCore.formatValue(215.66, {
-        format: 'fixedPoint', precision: 1,
+        format: { type: 'fixedPoint', precision: 1 },
         customizeText: function(options) {
             return options.valueText + ' rub';
         }
     }), '215.7 rub');
     assert.equal(gridCore.formatValue(215.66, {
-        format: 'fixedPoint', precision: 1,
+        format: { type: 'fixedPoint', precision: 1 },
         customizeText: function(options) {
             return Math.round(options.value) + ' rub';
         }

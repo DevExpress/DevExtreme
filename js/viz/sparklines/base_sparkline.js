@@ -67,15 +67,6 @@ function createAxis(isHorizontal) {
 }
 
 var BaseSparkline = BaseWidget.inherit({
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        _extend(this._deprecatedOptions, {
-            "tooltip.verticalAlignment": { since: "15.1", message: "Now tooltips are aligned automatically" },
-            "tooltip.horizontalAlignment": { since: "15.1", message: "Now tooltips are aligned automatically" }
-        });
-    },
-
     _getLayoutItems: _noop,
     _useLinks: false,
 

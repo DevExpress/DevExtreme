@@ -69,7 +69,7 @@ QUnit.test("Default label format", function(assert) {
 });
 
 QUnit.test("Custom label format", function(assert) {
-    assert.equal(this.format({ argument: "1", value: 5 }, { format: "currency", precision: 2 }), "$5.00");
+    assert.equal(this.format({ argument: "1", value: 5 }, { format: { type: "currency", precision: 2 } }), "$5.00");
 });
 
 QUnit.test("Label format object", function(assert) {
@@ -1279,10 +1279,8 @@ QUnit.module("Format label", $.extend({}, environment, {
             horizontalOffset: 0,
             verticalOffset: 0,
             visible: true,
-            format: "fixedPoint",
-            argumentFormat: "fixedPoint",
-            precision: 2,
-            argumentPrecision: 2,
+            format: { type: "fixedPoint", precision: 2 },
+            argumentFormat: { type: "fixedPoint", precision: 2 },
             background: {
                 fill: "red"
             },
@@ -1300,10 +1298,8 @@ QUnit.module("Format label", $.extend({}, environment, {
 
 QUnit.test("Fixed point", function(assert) {
     var customizeTextSpy = sinon.spy();
-    this.options.format = "fixedPoint";
-    this.options.argumentFormat = "fixedPoint";
-    this.options.precision = 2;
-    this.options.argumentPrecision = 2;
+    this.options.format = { type: "fixedPoint", precision: 2 };
+    this.options.argumentFormat = { type: "fixedPoint", precision: 2 };
     this.options.customizeText = customizeTextSpy;
     var label = this.createLabel();
 

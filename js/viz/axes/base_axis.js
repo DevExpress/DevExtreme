@@ -64,10 +64,7 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
 
         generateExtraTick: options.generateExtraTick,
 
-        minTickInterval: options.minTickInterval,
-
-        showCalculatedTicks: options.tick.showCalculatedTicks, // DEPRECATED IN 15_2
-        showMinorCalculatedTicks: options.minorTick.showCalculatedTicks // DEPRECATED IN 15_2
+        minTickInterval: options.minTickInterval
     });
 }
 
@@ -1154,7 +1151,7 @@ Axis.prototype = {
             },
             that._getScreenDelta(),
             that._translator.getBusinessRange().stubData ? null : options.tickInterval,
-            options.label.overlappingBehavior.mode === "ignore" ? true : options.forceUserTickInterval,
+            options.label.overlappingBehavior === "ignore" ? true : options.forceUserTickInterval,
             {
                 majors: customTicks,
                 minors: customMinorTicks
@@ -1282,8 +1279,6 @@ Axis.prototype = {
         that._majorTicks = ticks.ticks.map(createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks)));
         that._minorTicks = minors.map(createMinorTick(that, renderer));
         that._correctedBreaks = ticks.breaks;
-
-        that.correctTicksOnDeprecated();
 
         that._reinitTranslator(range);
     },
@@ -1453,20 +1448,6 @@ Axis.prototype = {
         }
 
         return range;
-    },
-
-    // DEPRECATED IN 15_2
-    correctTicksOnDeprecated: function() {
-        var behavior = this._options.label.overlappingBehavior,
-            majorTicks = this._majorTicks,
-            length = majorTicks.length;
-
-        if(length) {
-            majorTicks[0].withoutLabel = behavior.hideFirstLabel;
-            majorTicks[length - 1].withoutLabel = behavior.hideLastLabel;
-            majorTicks[0].withoutPath = behavior.hideFirstTick;
-            majorTicks[length - 1].withoutPath = behavior.hideLastTick;
-        }
     },
 
     draw: function(canvas, borderOptions) {
@@ -1776,13 +1757,11 @@ Axis.prototype = {
         var that = this,
             labelOpt = that._options.label,
             displayMode = that._validateDisplayMode(labelOpt.displayMode),
-            overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior.mode, displayMode),
-            rotationAngle = labelOpt.overlappingBehavior.rotationAngle, // DEPRECATED 17_1
-            staggeringSpacing = labelOpt.overlappingBehavior.staggeringSpacing, // DEPRECATED 17_1
+            overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior, displayMode),
             ignoreOverlapping = overlappingMode === "none" || overlappingMode === "ignore",
             behavior = {
-                rotationAngle: isDefined(rotationAngle) ? rotationAngle : labelOpt.rotationAngle,
-                staggeringSpacing: isDefined(staggeringSpacing) ? staggeringSpacing : labelOpt.staggeringSpacing
+                rotationAngle: labelOpt.rotationAngle,
+                staggeringSpacing: labelOpt.staggeringSpacing
             },
             notRecastStep,
             boxes = that._majorTicks.map(function(tick) { return tick.labelBBox; }),

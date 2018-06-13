@@ -174,22 +174,6 @@ var TestPointerElement = TestElement.inherit({
         assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 15, "indent");
     });
 
-    QUnit.test("Ticks indent with negative value. Horizontal. Middle vertical orientation of ticks", function(assert) {
-        new dxLinearGauge(this.container, {
-            geometry: {
-                orientation: "horizontal"
-            },
-            scale: {
-                verticalOrientation: "middle",
-                label: {
-                    indentFromTick: -10
-                }
-            }
-        });
-
-        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 12.5, "indent");
-    });
-
     QUnit.test("Ticks indent with negative value. Horizontal. Bottom vertical orientation of ticks", function(assert) {
         new dxLinearGauge(this.container, {
             geometry: {
@@ -329,42 +313,6 @@ var TestPointerElement = TestElement.inherit({
             width: 800
         }, "new canvas for scale");
 
-    });
-
-    QUnit.test("Scale vertical orientation = middle", function(assert) {
-        new dxLinearGauge(this.container, {
-            geometry: {
-                orientation: "horizontal"
-            },
-            scale: {
-                size: 10,
-                verticalOrientation: "middle"
-            },
-            rangeContainer: {
-                offset: 20,
-                size: 8
-            },
-            valueIndicator: {
-                offset: 30,
-                size: 16
-            },
-            subvalueIndicator: {
-                offset: -5,
-                size: 12,
-                indent: 17
-            }
-        });
-        var scale = axisModule.Axis.getCall(0).returnValue;
-
-        assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -295 }], "scale shifting");
-        assert.deepEqual(scale.draw.lastCall.args[0], {
-            bottom: 0,
-            height: 600,
-            left: 15,
-            right: 15,
-            top: 0,
-            width: 800
-        }, "new canvas for scale");
     });
 
     QUnit.test("Scale vertical orientation = top", function(assert) {

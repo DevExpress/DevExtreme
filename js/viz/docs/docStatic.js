@@ -125,65 +125,6 @@ var staticMethods = {
     */
     refreshPaths: function() { },
     /**
-    * @name viz.core
-    * @deprecated viz
-    * @namespace DevExpress.viz
-    * @static
-    */
-    core: {
-        /**
-        * @name viz.coremethods.currentTheme
-        * @publicName currentTheme(theme)
-        * @param1 theme:string
-        * @deprecated vizmethods.currentTheme
-        * @static
-        */
-        /**
-        * @name viz.coremethods.currentTheme
-        * @publicName currentTheme(platform, colorScheme)
-        * @param1 platform:string
-        * @param2 colorScheme:string
-        * @deprecated vizmethods.currentTheme
-        * @static
-        */
-        currentTheme: function() { },
-        /**
-        * @name viz.coremethods.registerTheme
-        * @publicName registerTheme(customTheme, baseTheme)
-        * @param1 customTheme:object
-        * @param2 baseTheme:string
-        * @deprecated vizmethods.registerTheme
-        * @static
-        */
-        registerTheme: function() { },
-        /**
-        * @name viz.coremethods.currentPalette
-        * @publicName currentPalette(paletteName)
-        * @param1 paletteName:string
-        * @deprecated vizmethods.currentPalette
-        * @static
-        */
-        currentPalette: function() { },
-        /**
-        * @name viz.coremethods.getPalette
-        * @publicName getPalette(paletteName)
-        * @param1 paletteName:string
-        * @return object
-        * @deprecated vizmethods.getPalette
-        * @static
-        */
-        getPalette: function() { },
-        /**
-        * @name viz.coremethods.registerPalette
-        * @publicName registerPalette(paletteName, palette)
-        * @param1 paletteName:string
-        * @param2 palette:object
-        * @deprecated vizmethods.registerPalette
-        * @static
-        */
-        registerPalette: function() { }
-    },
-    /**
     * @name viz.map
     * @static
     */

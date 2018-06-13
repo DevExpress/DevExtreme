@@ -1543,7 +1543,7 @@ function createThemeManager(options, themeGroupName) {
                         rtl: false
                     }
                 }
-            }, "desktop");
+            }, "generic");
         }
     });
 
@@ -1581,7 +1581,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "desktop");
+        }, "generic");
 
         // act
         var options = { theme: 'rtlTheme1' },
@@ -1606,7 +1606,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "desktop");
+        }, "generic");
 
         // act
         var options = { theme: 'rtlTheme1', rtlEnabled: false },
@@ -1631,7 +1631,7 @@ function createThemeManager(options, themeGroupName) {
                     }
                 }
             }
-        }, "desktop");
+        }, "generic");
 
         var themeManager = createThemeManager({ theme: 'rtlTheme' });
         themeManager.setTheme('rtlTheme1');
@@ -1682,7 +1682,7 @@ function createThemeManager(options, themeGroupName) {
                 valueAxisTheme: true
             }
         }
-    }, "desktop");
+    }, "generic");
 
     QUnit.module("getOptions", {
         beforeEach: function() {

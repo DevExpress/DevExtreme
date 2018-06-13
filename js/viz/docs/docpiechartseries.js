@@ -267,28 +267,6 @@ var commonPieChartSeries = {
     */
     maxLabelCount: undefined,
     /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.segmentsDirection
-    * @type Enums.PieChartSegmentsDirection
-    * @default 'clockwise'
-    * @deprecated dxPieChartOptions.segmentsDirection
-    */
-    segmentsDirection: 'clockwise',
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.startAngle
-    * @type number
-    * @default 0
-    * @deprecated dxPieChartOptions.startAngle
-    */
-    startAngle: 0,
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.innerRadius
-    * @type number
-    * @default 0.5
-    * @propertyOf dxPieChartSeriesTypes.DoughnutSeries
-    * @deprecated dxPieChartOptions.innerRadius
-    */
-    innerRadius: 0.5,
-    /**
     * @name dxPieChartSeriesTypes.CommonPieChartSeries.label
     * @type object
     */
@@ -325,27 +303,10 @@ var commonPieChartSeries = {
         */
         format: '',
         /**
-        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.precision
-        * @extends CommonVizPrecision
-        */
-        precision: 0,
-        /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
-        /**
-        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.argumentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        argumentPrecision: 0,
-        /**
-        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.percentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        percentPrecision: 0,
         /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.position
         * @type Enums.PieChartLabelPosition

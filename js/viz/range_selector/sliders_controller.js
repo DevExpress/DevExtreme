@@ -105,7 +105,6 @@ SlidersController.prototype = {
 
     update: function(verticalRange, behavior, isCompactMode, sliderHandleOptions, sliderMarkerOptions, shutterOptions, rangeBounds, fullTicks, selectedRangeColor) {
         var that = this,
-            callValueChanged = behavior.callValueChanged || behavior.callSelectedRangeChanged,
             screenRange = that._params.translator.getScreenRange();
 
         that._verticalRange = verticalRange;
@@ -127,7 +126,7 @@ SlidersController.prototype = {
         that._shutterOffset = sliderHandleOptions.width / 2;
         that._updateSelectedView(shutterOptions, selectedRangeColor);
 
-        that._isOnMoving = _normalizeEnum(callValueChanged) === "onmoving";
+        that._isOnMoving = _normalizeEnum(behavior.callValueChanged) === "onmoving";
 
         that._updateSelectedRange();
         // This is placing sliders and shutter into initial position. They all will be animated from that position when "setSelectedRange" is called.

@@ -1,8 +1,6 @@
 "use strict";
 
-var noop = require("../../core/utils/common").noop,
-    _parseScalar = require("../core/utils").parseScalar,
-    extend = require("../../core/utils/extend").extend,
+var _parseScalar = require("../core/utils").parseScalar,
     projectionModule = require("./projection.main"),
     controlBarModule = require("./control_bar"),
     gestureHandlerModule = require("./gesture_handler"),
@@ -13,8 +11,6 @@ var noop = require("../../core/utils/common").noop,
     layoutModule = require("./layout"),
     mapLayerModule = require("./map_layer"),
     tooltipViewerModule = require("./tooltip_viewer"),
-    _noop = noop,
-    _extend = extend,
 
     DEFAULT_WIDTH = 800,
     DEFAULT_HEIGHT = 400,
@@ -22,7 +18,7 @@ var noop = require("../../core/utils/common").noop,
     nextDataKey = 1,
 
     RE_STARTS_LAYERS = /^layers/,
-    RE_ENDS_DATA_SOURCE = /\.(dataSource|data)$/;   // DEPRECATED_15_2 ("|data)")
+    RE_ENDS_DATA_SOURCE = /\.dataSource$/;
 
 require("./projection");
 
@@ -35,37 +31,8 @@ var dxVectorMap = require("../core/base_widget").inherit({
         "onClick": { name: "click" },
         "onCenterChanged": { name: "centerChanged" },
         "onZoomFactorChanged": { name: "zoomFactorChanged" },
-        // DEPRECATED_15_2
-        "onAreaClick": { name: "areaClick" },
-        // DEPRECATED_15_2
-        "onAreaHoverChanged": { name: "areaHoverChanged" },
-        // DEPRECATED_15_2
-        "onAreaSelectionChanged": { name: "areaSelectionChanged" },
-        // DEPRECATED_15_2
-        "onMarkerClick": { name: "markerClick" },
-        // DEPRECATED_15_2
-        "onMarkerHoverChanged": { name: "markerHoverChanged" },
-        // DEPRECATED_15_2
-        "onMarkerSelectionChanged": { name: "markerSelectionChanged" },
         "onHoverChanged": { name: "hoverChanged" },
         "onSelectionChanged": { name: "selectionChanged" }
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase.apply(this, arguments);
-        _extend(this._deprecatedOptions, {
-            "areaSettings": { since: "15.2", message: "Use the 'layers' option instead" },
-            "markerSettings": { since: "15.2", message: "Use the 'layers' option instead" },
-            "mapData": { since: "15.2", message: "Use the 'layers' option instead" },
-            "markers": { since: "15.2", message: "Use the 'layers' option instead" },
-            "onAreaClick": { since: "15.2", message: "Use the 'onClick' option instead" },
-            "onMarkerClick": { since: "15.2", message: "Use the 'onClick' option instead" },
-            "onAreaHoverChanged": { since: "15.2", message: "Use the 'onHoverChanged' option instead" },
-            "onMarkerHoverChanged": { since: "15.2", message: "Use the 'onHoverChanged' option instead" },
-            "onAreaSelectionChanged": { since: "15.2", message: "Use the 'onSelectionChanged' option instead" },
-            "onMarkerSelectionChanged": { since: "15.2", message: "Use the 'onSelectionChanged' option instead" },
-            "layers.data": { since: "15.2", message: "Use the 'layers.dataSource' option instead" }
-        });
     },
 
     _rootClassPrefix: "dxm",
@@ -90,10 +57,6 @@ var dxVectorMap = require("../core/base_widget").inherit({
             notifyDirty: that._notifyDirty,
             notifyReady: that._notifyReady
         });
-        // DEPRECATED_15_2
-        if(that._options.layers === undefined && (that._options.mapData || that._options.markers)) {
-            applyDeprecatedMode(that);
-        }
     },
 
     _initLegendsControl: function() {
@@ -224,19 +187,9 @@ var dxVectorMap = require("../core/base_widget").inherit({
             if(RE_STARTS_LAYERS.test(name)) {
                 if(currentValue.dataSource && nextValue.dataSource && currentValue !== nextValue) {
                     currentValue.dataSource = null;
-                } else if(currentValue.data && nextValue.data && currentValue !== nextValue) {     // DEPRECATED_15_2
-                    currentValue.data = null;
                 } else if(RE_ENDS_DATA_SOURCE.test(name)) {
                     this.option(name, null);
                 }
-            }
-            // DEPRECATED_15_2
-            if(name === "mapData") {
-                this._options.mapData = null;
-            }
-            // DEPRECATED_15_2
-            if(name === "markers") {
-                this._options.markers = null;
             }
         }
     },
@@ -250,10 +203,6 @@ var dxVectorMap = require("../core/base_widget").inherit({
     _optionChangesMap: {
         background: "BACKGROUND",
         layers: "LAYERS",
-        areaSettings: "LAYERS",       // DEPRECATED_15_2
-        markerSettings: "LAYERS",     // DEPRECATED_15_2
-        mapData: "LAYERS",            // DEPRECATED_15_2
-        markers: "LAYERS",            // DEPRECATED_15_2
         controlBar: "CONTROL_BAR",
         legends: "LEGENDS",
         touchEnabled: "TRACKER",
@@ -389,18 +338,6 @@ var dxVectorMap = require("../core/base_widget").inherit({
         return this;
     },
 
-    // DEPRECATED_15_2
-    getAreas: _noop,
-
-    // DEPRECATED_15_2
-    getMarkers: _noop,
-
-    // DEPRECATED_15_2
-    clearAreaSelection: _noop,
-
-    // DEPRECATED_15_2
-    clearMarkerSelection: _noop,
-
     center: function(value) {
         var that = this;
         if(value === undefined) {
@@ -436,59 +373,6 @@ var dxVectorMap = require("../core/base_widget").inherit({
         return this._projection.fromScreenPoint(coordinates);
     }
 });
-
-// DEPRECATED_15_2
-function applyDeprecatedMode(map) {
-    var log = require("../../core/errors").log;
-
-    map._setLayerCollectionOptions = function() {
-        var options = this._options,
-            mapData = options.mapData,
-            markers = options.markers;
-        mapData = mapData && mapData.features ? _extend({}, mapData) : mapData;
-        markers = markers && markers.features ? _extend({}, markers) : markers;
-        this._layerCollection.setOptions([
-            _extend({}, options.areaSettings, { name: "areas", _deprecated: true, dataSource: mapData, type: "area" }),
-            _extend({}, options.markerSettings, { name: "markers", _deprecated: true, dataSource: markers, type: "marker", elementType: options.markerSettings && options.markerSettings.type })
-        ]);
-    };
-    map.getAreas = function() {
-        log("W0002", this.NAME, "getAreas", "15.2", "Use the 'getLayerByName('areas').getElements()' instead");
-        return this.getLayerByName("areas").getElements();
-    };
-    map.getMarkers = function() {
-        log("W0002", this.NAME, "getMarkers", "15.2", "Use the 'getLayerByName('markers').getElements()' instead");
-        return this.getLayerByName("markers").getElements();
-    };
-    map.clearAreaSelection = function(_noEvent) {
-        log("W0002", this.NAME, "clearAreaSelection", "15.2", "Use the 'getLayerByName('areas').clearSelection()' instead");
-        this.getLayerByName("areas").clearSelection(_noEvent);
-        return this;
-    };
-    map.clearMarkerSelection = function(_noEvent) {
-        log("W0002", this.NAME, "clearMarkerSelection", "15.2", "Use the 'getLayerByName('markers').clearSelection()' instead");
-        this.getLayerByName("markers").clearSelection(_noEvent);
-        return this;
-    };
-    var clickMap = { areas: "areaClick", markers: "markerClick" },
-        hoverChangedMap = { areas: "areaHoverChanged", markers: "markerHoverChanged" },
-        selectionChangedMap = { areas: "areaSelectionChanged", markers: "markerSelectionChanged" };
-    map.on("click", function(e) {
-        if(e.target) {
-            this._eventTrigger(clickMap[e.target.layer.name], e);
-        }
-    });
-    map.on("hoverChanged", function(e) {
-        if(e.target) {
-            this._eventTrigger(hoverChangedMap[e.target.layer.name], e);
-        }
-    });
-    map.on("selectionChanged", function(e) {
-        if(e.target) {
-            this._eventTrigger(selectionChangedMap[e.target.layer.name], e);
-        }
-    });
-}
 
 require("../../core/component_registrator")("dxVectorMap", dxVectorMap);
 

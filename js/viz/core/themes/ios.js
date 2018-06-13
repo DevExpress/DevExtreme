@@ -61,5 +61,3 @@ themeModule.registerTheme({
         }
     }
 }, "generic.light");
-
-themeModule.registerThemeAlias("ios", IOS7_DEFAULT);
