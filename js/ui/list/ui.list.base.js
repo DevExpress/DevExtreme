@@ -850,6 +850,7 @@ var ListBase = CollectionWidget.inherit({
                 that._inkRipple.showWave(config);
             }
         } else {
+            clearTimeout(this._inkRippleTimer);
             this._inkRipple.hideWave(config);
         }
     },
