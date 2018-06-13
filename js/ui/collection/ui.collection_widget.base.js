@@ -707,9 +707,9 @@ var CollectionWidget = Widget.inherit({
         this._renderContentImpl();
     }),
 
-    _renderContent: commonUtils.deferRenderer(function() {
+    _renderContent: function() {
         this._fireContentReadyAction();
-    }),
+    },
 
     _render: function() {
         this.callBase();
