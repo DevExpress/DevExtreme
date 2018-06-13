@@ -306,8 +306,12 @@ Microsoft.Maps = {
 
         this.open = function() {};
         this.close = function() {};
-        this.setMap = function() {
-            Microsoft.infoboxAddedToMap = true;
+        this.setMap = function(map) {
+            if(!map) {
+                Microsoft.infoboxRemoved = true;
+            } else {
+                Microsoft.infoboxAddedToMap = true;
+            }
         };
         this.getContent = function() {};
         this.getPosition = function() {};
