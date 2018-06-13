@@ -2788,12 +2788,14 @@ QUnit.test("Fix horizontal scroll position after scroll when rtl is enabled", fu
         fieldChooser: {
             enabled: false
         },
+        scrolling: {
+            useNative: false
+        },
         dataSource: this.dataSource
     }, assert);
     this.clock.tick();
 
     var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
-    dataAreaScrollable.option("useNative", false);
 
     var assertFunction = function(e) {
         if(e.scrollOffset.top === 10) {
