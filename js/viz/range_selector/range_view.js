@@ -1,17 +1,12 @@
 "use strict";
 // TODO: Move it inside the "SeriesDataSource"
-function drawSeriesView(root, seriesDataSource, translator, canvas, isAnimationEnabled) {
-    var seriesList = seriesDataSource.getSeries(),
-        series,
-        i,
-        ii = seriesList.length,
-        valueAxis;
-
+function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
+    let seriesList = seriesDataSource.getSeries();
     if(!seriesList.length) {
         return;
     }
 
-    valueAxis = seriesList[0].getValueAxis();
+    let valueAxis = seriesList[0].getValueAxis();
 
     valueAxis.updateCanvas({
         top: canvas.top,
@@ -19,13 +14,14 @@ function drawSeriesView(root, seriesDataSource, translator, canvas, isAnimationE
         height: canvas.height + canvas.top
     });
     seriesDataSource.adjustSeriesDimensions();
-    valueAxis.setBusinessRange(seriesDataSource.getBoundRange().val);
+    let valueRange = seriesDataSource.getBoundRange().val;
+    valueRange.sortCategories(valueAxis.getCategoriesSorter());
+    valueAxis.setBusinessRange(valueRange);
 
-    for(i = 0; i < ii; ++i) {
-        series = seriesList[i];
+    seriesList.forEach(series => {
         series._extGroups.seriesGroup = series._extGroups.labelsGroup = root;
         series.draw(isAnimationEnabled);
-    }
+    });
 }
 
 function merge(a, b) {
@@ -68,7 +64,7 @@ RangeView.prototype = {
             }
             if(seriesDataSource && seriesDataSource.isShowChart()) {
                 seriesGroup = renderer.g().attr({ "class": "dxrs-series-group" }).append(root);
-                drawSeriesView(seriesGroup, seriesDataSource, this._params.translator, canvas, isAnimationEnabled);
+                drawSeriesView(seriesGroup, seriesDataSource, canvas, isAnimationEnabled);
             }
         }
     }

@@ -272,7 +272,6 @@ QUnit.test("Set types", function(assert) {
     assert.equal(this.axis.getOptions().valueType, "someType");
 });
 
-
 QUnit.test("Update translator on setTypes pass old business range and canvas", function(assert) {
     this.updateOptions();
 
@@ -333,6 +332,16 @@ QUnit.test("Logarithmic axis. calculateInterval - returns difference of logarith
     });
 
     assert.equal(this.axis.calculateInterval(32, 0.25), 7);
+});
+
+QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", function(assert) {
+    this.updateOptions({
+        categoriesSortingMethod: "sorting method"
+    });
+
+    var sort = this.axis.getCategoriesSorter();
+
+    assert.equal(sort, "sorting method");
 });
 
 QUnit.module("Get range data", {
