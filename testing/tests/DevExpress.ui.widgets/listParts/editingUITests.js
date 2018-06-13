@@ -807,6 +807,33 @@ QUnit.test("button should have no inkRipple after fast swipe for Material theme"
     themes.current = origCurrent;
 });
 
+QUnit.test("inkRipple feedback should not be broken if swipe in opposite direction", function(assert) {
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem",
+        useInkRipple: true
+    }));
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        $item = $items.eq(0),
+        clock = sinon.useFakeTimers(),
+        pointer = pointerMock($item);
+
+    pointer.start().swipeStart().swipe(0.01);
+    clock.tick(50);
+    pointer.start("touch").up();
+    clock.tick(50);
+    pointer.start("touch").down();
+    clock.tick(100);
+    var inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+
+    assert.ok(inkRippleShowingWave.length === 1, "inkripple feedback works right after swipe in opposite direction");
+
+    pointer.start("touch").up();
+    clock.restore();
+});
+
 QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) {
     var $list = $($("#templated-list").dxList({
         items: ["0"],
