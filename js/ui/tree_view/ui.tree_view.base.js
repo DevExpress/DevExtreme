@@ -584,14 +584,15 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._treeViewLoadIndicator;
     },
 
-    _dataSourceLoadingChangedHandler: function(isLoading) {
+    _dataSourceCustomizeStoreLoadOptions: function(options) {
         var resultFilter;
-
         if(this._isVirtualMode()) {
             resultFilter = this._combineFilter();
-            this._dataSource.filter(resultFilter);
+            options.storeLoadOptions.filter = resultFilter;
         }
+    },
 
+    _dataSourceLoadingChangedHandler: function(isLoading) {
         if(isLoading && !this._dataSource.isLoaded()) {
             this.option("items", []);
 
@@ -600,10 +601,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._createTreeViewLoadIndicator().appendTo($wrapper);
 
             this.itemsContainer().append($wrapper);
-
-            if(this._isVirtualMode() && this._dataSource.filter() !== resultFilter) {
-                this._dataSource.filter([]);
-            }
         } else {
             this._removeTreeViewLoadIndicator();
         }
@@ -1083,7 +1080,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         that._filter.internal = [that.option("parentIdExpr"), node.internalFields.key];
-        that._dataSource.filter(that._combineFilter());
 
         return that._dataSource.load().done(function(newItems) {
             if(!that._areNodesExists(newItems)) {

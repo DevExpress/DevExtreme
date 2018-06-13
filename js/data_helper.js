@@ -8,6 +8,7 @@ var DATA_SOURCE_OPTIONS_METHOD = "_dataSourceOptions",
     DATA_SOURCE_CHANGED_METHOD = "_dataSourceChangedHandler",
     DATA_SOURCE_LOAD_ERROR_METHOD = "_dataSourceLoadErrorHandler",
     DATA_SOURCE_LOADING_CHANGED_METHOD = "_dataSourceLoadingChangedHandler",
+    DATA_SOURCE_CUSTOMIZE_STORE_LOAD_OPTIONS_METHOD = "_dataSourceCustomizeStoreLoadOptions",
     DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = "_dataSourceFromUrlLoadMode",
     SPECIFIC_DATA_SOURCE_OPTION = "_getSpecificDataSourceOption";
 
@@ -70,6 +71,10 @@ var DataHelperMixin = {
             this._addDataSourceLoadingChangedHandler();
         }
 
+        if(DATA_SOURCE_CUSTOMIZE_STORE_LOAD_OPTIONS_METHOD in this) {
+            this._addDataSourceCustomizeStoreLoadOptionsHandler();
+        }
+
         this._addReadyWatcher();
     },
 
@@ -95,6 +100,11 @@ var DataHelperMixin = {
     _addDataSourceLoadingChangedHandler: function() {
         this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD].bind(this);
         this._dataSource.on("loadingChanged", this._proxiedDataSourceLoadingChangedHandler);
+    },
+
+    _addDataSourceCustomizeStoreLoadOptionsHandler: function() {
+        this._proxiedDataSourceCustomizeStoreLoadOptionsHandler = this[DATA_SOURCE_CUSTOMIZE_STORE_LOAD_OPTIONS_METHOD].bind(this);
+        this._dataSource.on("customizeStoreLoadOptions", this._proxiedDataSourceCustomizeStoreLoadOptionsHandler);
     },
 
     _loadDataSource: function() {
@@ -130,6 +140,7 @@ var DataHelperMixin = {
                 this._proxiedDataSourceChangedHandler && this._dataSource.off("changed", this._proxiedDataSourceChangedHandler);
                 this._proxiedDataSourceLoadErrorHandler && this._dataSource.off("loadError", this._proxiedDataSourceLoadErrorHandler);
                 this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off("loadingChanged", this._proxiedDataSourceLoadingChangedHandler);
+                this._proxiedDataSourceCustomizeStoreLoadOptionsHandler && this._dataSource.off("customizeStoreLoadOptions", this._proxiedDataSourceCustomizeStoreLoadOptionsHandler);
             } else {
                 this._dataSource.dispose();
             }

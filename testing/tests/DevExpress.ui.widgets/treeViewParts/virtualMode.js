@@ -932,11 +932,17 @@ QUnit.test("Internal filter in virtual mode should be correct after datasource r
             virtualModeEnabled: true
         });
 
+    var filter;
+
+    ds.store().on("loading", function(options) {
+        filter = options.filter;
+    });
+
     ds.reload();
 
-    assert.deepEqual(ds.filter(), ["parentId", 0], "duplicate filters should not be added");
+    assert.deepEqual(filter, ["parentId", 0], "duplicate filters should not be added");
     treeView.expandItem(1);
-    assert.deepEqual(ds.filter(), ["parentId", 1], "duplicate filters should not be added");
+    assert.deepEqual(filter, ["parentId", 1], "duplicate filters should not be added");
 });
 
 QUnit.test("Internal simple filter in virtual mode should be merged correctly after datasource reloading", function(assert) {
@@ -958,9 +964,16 @@ QUnit.test("Internal simple filter in virtual mode should be merged correctly af
         virtualModeEnabled: true
     });
 
+    var filter;
+
+    ds.store().on("loading", function(options) {
+        filter = options.filter;
+    });
+
     ds.reload();
 
-    assert.deepEqual(ds.filter(), [["category", 2], ["parentId", 0]], "duplicate filters should not be added");
+    assert.deepEqual(filter, [["category", 2], ["parentId", 0]], "duplicate filters should not be added");
+    assert.deepEqual(ds.filter(), ["category", 2], "duplicate filters should not be added");
 });
 
 QUnit.test("Internal complex filter in virtual mode should be merged correctly after datasource reloading", function(assert) {
@@ -982,9 +995,16 @@ QUnit.test("Internal complex filter in virtual mode should be merged correctly a
         virtualModeEnabled: true
     });
 
+    var filter;
+
+    ds.store().on("loading", function(options) {
+        filter = options.filter;
+    });
+
     ds.reload();
 
-    assert.deepEqual(ds.filter(), [[['category', 2], "or", ['category', "=", 1]], ["parentId", 0]], "duplicate filters should not be added");
+    assert.deepEqual(filter, [[['category', 2], "or", ['category', "=", 1]], ["parentId", 0]], "duplicate filters should not be added");
+    assert.deepEqual(ds.filter(), [['category', 2], "or", ['category', "=", 1]], "duplicate filters should not be added");
 });
 
 QUnit.test("Items should update when dataSource changed", function(assert) {
