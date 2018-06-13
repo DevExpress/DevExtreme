@@ -252,7 +252,34 @@ QUnit.test("Labels alignment through cascades", function(assert) {
     assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x, 'Last cascade');
 });
 
-// TODO: aplying offsets for labels
+QUnit.test("Labels offsets", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            horizontalOffset: 0,
+            verticalOffset: 0
+        }
+    });
+
+    var x = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
+        y = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; });
+
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        label: {
+            horizontalOffset: 20,
+            verticalOffset: 30
+        }
+    });
+
+    var xOffset = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
+        yOffset = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; }),
+        xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]],
+        yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
+
+    assert.deepEqual(xDifference, [20, 20, -20], 'horizontal offset applied'); // labels in last cascade are moved to other side (-10)
+    assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
+});
 
 /*
 QUnit.test("Apply label ellipsis and correct label coordinates", function(assert) {
