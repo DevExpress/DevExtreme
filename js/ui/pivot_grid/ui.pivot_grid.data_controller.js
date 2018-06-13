@@ -589,9 +589,6 @@ exports.DataController = Class.inherit((function() {
                 pageCount: function() {
                     return math.ceil(this.totalItemsCount() / this.pageSize());
                 },
-                updateLoading: function() {
-
-                },
                 itemsCount: function() {
                     if(this.pageIndex() < this.pageCount() - 1) {
                         return this.pageSize();
