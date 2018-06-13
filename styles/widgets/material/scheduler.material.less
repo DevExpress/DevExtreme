@@ -299,8 +299,11 @@
     .dx-scheduler-date-table-cell {
         font-size: @MATERIAL_SCHEDULER_MONTH_DATE_TEXT_SIZE;
         text-align: left;
-        padding: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET;
         height: 100px;
+
+        > div {
+            padding: @MATERIAL_SCHEDULER_WORKSPACE_MONTH_CELL_LEFT_OFFSET;
+        }
 
         .dx-rtl & {
             text-align: right;
