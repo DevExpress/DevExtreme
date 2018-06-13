@@ -478,6 +478,26 @@ QUnit.test("Appointments on Day view should have a right height and position if 
     assert.equal($appointment.outerHeight(), cellHeight, "Appointment has a right height");
 });
 
+QUnit.test("Appointments on Day view should have a right position if widget is small", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            startDate: new Date(2016, 9, 6, 1),
+            endDate: new Date(2016, 9, 6, 3),
+            text: "new Date sample"
+        }],
+        currentDate: new Date(2016, 9, 6),
+        views: ["week"],
+        width: 350,
+        currentView: "week",
+        cellDuration: 60
+    });
+    var $element = this.instance.$element(),
+        $appointment = $element.find("." + APPOINTMENT_CLASS),
+        cellWidth = $element.find("." + DATE_TABLE_CELL_CLASS).first().outerWidth();
+
+    assert.roughEqual($appointment.position().left, cellWidth * 4 + 50, 2, "Appointment has a right left position");
+});
+
 QUnit.test("Appointment with resources should have a right height and position if it ends on the next day", function(assert) {
     this.createInstance({
         dataSource: [{
