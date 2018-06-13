@@ -102,6 +102,10 @@ exports.environment = {
             endOnTick: false
         });
 
+        that.themeManager.stub("theme").withArgs("chart").returns({
+            valueAxis: {}
+        });
+
         return that.$container.dxRangeSelector(options).dxRangeSelector("instance");
     }
 };

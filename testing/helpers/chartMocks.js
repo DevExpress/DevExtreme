@@ -996,6 +996,9 @@ export const MockAxis = function(renderOptions) {
         },
         isZoomed: function() {
             return true;
+        },
+        getCategoriesSorter: function() {
+            return this._options.categoriesSortingMethod;
         }
     };
 };
