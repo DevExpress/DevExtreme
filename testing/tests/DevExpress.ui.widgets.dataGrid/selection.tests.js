@@ -3389,7 +3389,7 @@ QUnit.test("selecting of row when rowTemplate contains several tr tags", functio
     });
 
     var ACTIVE_ID = "#Dan";
-    testElement.find(ACTIVE_ID).click();
+    testElement.find(ACTIVE_ID).trigger("dxclick");
 
     // assert
     var selectedRows = testElement.find(".dx-selection");
