@@ -815,7 +815,7 @@
 
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
-            & > td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
                 color: ~"@{@{widgetName}-row-selected-color}";
 
@@ -943,13 +943,13 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection.dx-row, .dx-selection.dx-row:hover {
-                & > td:not(.dx-focused) {
-                    &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-selection-bg}";
+                & > td, & > tr > td {
+                    &:not(.dx-focused) {
+                        &.dx-@{widgetName}-group-space {
+                            border-left-color: ~"@{@{widgetName}-selection-bg}";
+                        }
                     }
-                }
 
-                & > td {
                     border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
 
                     &.dx-pointer-events-none {
