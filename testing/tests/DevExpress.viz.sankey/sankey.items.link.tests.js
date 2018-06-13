@@ -353,5 +353,3 @@ QUnit.test("links style when adjacent node is hovered", function(assert) {
     assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#ffeedd');
     assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#ffeedd');
 });
-
-// TODO: Drawing link exactly between to rectangles
