@@ -2093,6 +2093,14 @@ var dxPieChart = {
     */
     type: 'pie',
     /**
+    * @name dxPieChartOptions.commonSeriesSettings
+    * @type object
+    * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+    * @hideDefaults true
+    * @inheritAll
+    */
+    commonSeriesSettings: { },
+    /**
     * @name dxPieChartOptions.diameter
     * @type number
     * @default undefined
