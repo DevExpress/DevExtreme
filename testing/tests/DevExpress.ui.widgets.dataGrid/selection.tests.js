@@ -3378,7 +3378,6 @@ QUnit.test("selecting of row when rowTemplate contains several tr tags", functio
     this.options.selection = { mode: "single" };
     this.options.rowTemplate = function(container, options) {
         var data = options.data;
-
         $(container).append("<tbody class='dx-row'><tr><td id='" + data.name + "'>" + data.name + "</td></tr><tr><td>" + data.age + "</td></tr></tbody>");
     };
     this.rowsView.render(testElement);
