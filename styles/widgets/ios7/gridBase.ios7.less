@@ -588,7 +588,7 @@
         }
 
         .dx-selection, .dx-selection.dx-row:hover {
-            & > td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-background}";
 
                 &.dx-editor-cell {
@@ -689,9 +689,11 @@
 
         .dx-data-row.dx-state-hover {
             &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-                & > td:not(.dx-focused) {
-                    &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-hover-background}";
+                & > td, & > tr > td {
+                    &:not(.dx-focused) {
+                        &.dx-@{widgetName}-group-space {
+                            border-left-color: ~"@{@{widgetName}-hover-background}";
+                        }
                     }
                 }
             }
@@ -718,9 +720,11 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection, .dx-selection.dx-row:hover {
-                & > td:not(.dx-focused) {
-                    &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-selection-background}";
+                & > td, & > th > td {
+                    &:not(.dx-focused) {
+                        &.dx-@{widgetName}-group-space {
+                            border-left-color: ~"@{@{widgetName}-selection-background}";
+                        }
                     }
                 }
             }

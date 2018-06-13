@@ -553,7 +553,7 @@
             .text-shadow(none);
             color: ~"@{@{widgetName}-selection-color}";
 
-            & > td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-background}";
 
                 &.dx-@{widgetName}-group-space {
@@ -697,9 +697,11 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection, .dx-selection.dx-row:hover {
-                & > td:not(.dx-focused) {
-                    &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-selection-background}";
+                & > td, tr > td {
+                    &:not(.dx-focused) {
+                        &.dx-@{widgetName}-group-space {
+                            border-left-color: ~"@{@{widgetName}-selection-background}";
+                        }
                     }
                 }
             }
