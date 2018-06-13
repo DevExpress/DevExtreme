@@ -2300,8 +2300,10 @@ QUnit.test("change sortOrder of group", function(assert) {
     source.load();
     source.group([{ selector: 'field1', desc: true }, 'field2']);
 
-    source.loadingChanged.add(function() {
-        loadingChangedCount++;
+    source.loadingChanged.add(function(isLoading) {
+        if(isLoading) {
+            loadingChangedCount++;
+        }
     });
     source.reload();
 
@@ -2324,7 +2326,7 @@ QUnit.test("change sortOrder of group", function(assert) {
         ]
     }]);
     // T197066
-    assert.equal(loadingChangedCount, 2, 'first - update collapsed group info, second - load data');
+    assert.equal(loadingChangedCount, 3, 'first - update collapsed group count, second - update collapsed group offset, third - load data');
     assert.ok(!source.isLoading(), 'load completed');
 });
 

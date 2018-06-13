@@ -786,13 +786,13 @@ var DataSource = Class.inherit({
             return that._loadFromStore(loadOperation, d);
         }
 
-        this._scheduleLoadCallbacks(d);
-        this._scheduleFailCallbacks(d);
-        this._scheduleChangedCallbacks(d);
-
         loadOperation = this._createLoadOperation(d);
 
         this.fireEvent("customizeStoreLoadOptions", [loadOperation]);
+
+        this._scheduleLoadCallbacks(d);
+        this._scheduleFailCallbacks(d);
+        this._scheduleChangedCallbacks(d);
 
         this._loadQueue.add(function() {
             if(typeof loadOperation.delay === "number") {
