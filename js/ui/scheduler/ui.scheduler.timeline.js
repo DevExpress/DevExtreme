@@ -293,7 +293,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceMinHeight: function() {
         var minHeight = this._getWorkSpaceHeight(),
-            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight();
+            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight() - 3;
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
