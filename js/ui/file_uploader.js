@@ -848,7 +848,7 @@ var FileUploader = Editor.inherit({
             return;
         }
 
-        this._dragEventsCount = 0;
+        this._dragEventsTargets = [];
 
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragenter", this.NAME), this._dragEnterHandler.bind(this));
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragover", this.NAME), this._dragOverHandler.bind(this));
@@ -869,7 +869,8 @@ var FileUploader = Editor.inherit({
             e.preventDefault();
         }
 
-        this._dragEventsCount++;
+        this._updateEventTargets(e);
+
         this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
     },
 
@@ -884,15 +885,26 @@ var FileUploader = Editor.inherit({
             e.preventDefault();
         }
 
-        this._dragEventsCount--;
+        this._updateEventTargets(e);
 
-        if(this._dragEventsCount <= 0) {
+        if(!this._dragEventsTargets.length) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
     },
 
+    _updateEventTargets: function(e) {
+        var targetIndex = this._dragEventsTargets.indexOf(e.target),
+            isTargetExists = targetIndex !== -1;
+
+        if(e.type === "dragenter") {
+            !isTargetExists && this._dragEventsTargets.push(e.target);
+        } else {
+            isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
+        }
+    },
+
     _dropHandler: function(e) {
-        this._dragEventsCount = 0;
+        this._dragEventsTargets = [];
         this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
 
         if(this._useInputForDrop()) {
