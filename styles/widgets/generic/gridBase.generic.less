@@ -723,7 +723,7 @@
 
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
-            td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
                 color: ~"@{@{widgetName}-row-selected-color}";
 
@@ -735,25 +735,30 @@
                     border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
                     border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
                 }
-            }
 
-            td.dx-focused {
-                background-color: ~"@{@{widgetName}-base-background-color}";
-                color: ~"@{@{widgetName}-base-color}";
+                &.dx-focused {
+                    background-color: ~"@{@{widgetName}-base-background-color}";
+                    color: ~"@{@{widgetName}-base-color}";
+                }
             }
-
-            &:not(.dx-row-lines) td {
-                border-bottom-color: ~"@{@{widgetName}-selection-bg}";
-                border-top-color: ~"@{@{widgetName}-selection-bg}";
+            &:not(.dx-row-lines) {
+                & > td, & > tr > td {
+                    border-bottom-color: ~"@{@{widgetName}-selection-bg}";
+                    border-top-color: ~"@{@{widgetName}-selection-bg}";
+                }
             }
 
             &.dx-column-lines td {
-                border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
-                border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
+                & > td, & > tr > td {
+                    border-left-color: ~"@{@{widgetName}-row-selected-border-color}";
+                    border-right-color: ~"@{@{widgetName}-row-selected-border-color}";
+                }
             }
 
-            &.dx-row-lines td {
-                border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
+            &.dx-row-lines {
+                & > td, & > tr > td {
+                    border-bottom-color: ~"@{@{widgetName}-row-selected-border-color}";
+                }
             }
         }
 

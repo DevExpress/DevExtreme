@@ -210,12 +210,8 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _closeEditItem: function($targetElement) {
-            var $targetCell = $targetElement.closest("." + ROW_CLASS + "> td");
-            if(!$targetCell.length) {
-                $targetCell = $targetElement.closest("." + ROW_CLASS + "> th > td");
-            }
-
             var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
+                $targetCell = $targetElement.closest("." + ROW_CLASS + " > td, ." + ROW_CLASS + " > th > td"),
                 columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
                 rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
                 visibleColumns = this._columnsController.getVisibleColumns(),

@@ -564,7 +564,7 @@
             .text-shadow(none);
             color: ~"@{@{widgetName}-selection-color}";
 
-            & td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-background}";
 
                 &.dx-@{widgetName}-group-space {
@@ -572,22 +572,22 @@
                 }
             }
 
-            & .dx-editor-inline-block {
+            & > .dx-editor-inline-block {
                 background-color: ~"@{@{widgetName}-selection-background}";
             }
 
 
-            & .dx-@{widgetName}-readonly .dx-texteditor {
+            & > .dx-@{widgetName}-readonly .dx-texteditor {
                 .dx-texteditor-input {
                     background-color: ~"@{@{widgetName}-selection-background}";
                 }
             }
 
-            & td.dx-focused {
+            & > td.dx-focused {
                 background-color: transparent;
             }
 
-            & .dx-@{widgetName}-readonly:not(.dx-focused) .dx-texteditor {
+            & > .dx-@{widgetName}-readonly:not(.dx-focused) .dx-texteditor {
                 .dx-texteditor-input {
                     background-color: transparent;
                 }
@@ -708,9 +708,11 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection, .dx-selection.dx-row:hover {
-                & td:not(.dx-focused) {
-                    &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-selection-background}";
+                & > td, th > td {
+                    &:not(.dx-focused) {
+                        &.dx-@{widgetName}-group-space {
+                            border-left-color: ~"@{@{widgetName}-selection-background}";
+                        }
                     }
                 }
             }
