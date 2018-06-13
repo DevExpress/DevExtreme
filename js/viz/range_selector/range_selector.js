@@ -989,6 +989,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         valueAxis.updateOptions({
             isHorizontal: false,
             label: {},
+            categoriesSortingMethod: that._getOption("chart").valueAxis.categoriesSortingMethod
         });
 
         if(dataSource || (chartOptions && chartOptions.series)) {

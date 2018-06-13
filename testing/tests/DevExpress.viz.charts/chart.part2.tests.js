@@ -462,6 +462,84 @@ QUnit.test("Series is not discrete, argument axis has empty categories, category
     assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, []);
 });
 
+QUnit.test("Value axis categories sorting. Numeric - sort by default in ascending order", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "numeric", categories: [2, 4, 3, 1] } } }));
+
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 2 }, { arg: 2, val: 4 }, { arg: 3, val: 3 }, { arg: 4, val: 1 }],
+        series: [{ type: "line" }],
+        valueAxis: {}
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, [1, 2, 3, 4]);
+});
+
+QUnit.test("Value axis categories sorting. Datetime - sort by default in ascending order", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "datetime", categories: [new Date(2018, 1, 2), new Date(2018, 1, 4), new Date(2018, 1, 3), new Date(2018, 1, 1)] } } }));
+
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: new Date(2018, 1, 2) }, { arg: 2, val: new Date(2018, 1, 4) }, { arg: 3, val: new Date(2018, 1, 3) }, { arg: 4, val: new Date(2018, 1, 1) }],
+        series: [{ type: "line" }],
+        valueAxis: {}
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4)]);
+});
+
+QUnit.test("Value axis categories sorting. String - do not sort by default", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "string", categories: ["2", "4", "3", "1"] } } }));
+
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
+        series: [{ type: "line" }],
+        valueAxis: {}
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
+});
+
+QUnit.test("Value axis categories sorting. categoriesSortingMethod = false, numeric - do not sort", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "numeric", categories: [2, 4, 3, 1] } } }));
+
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 2 }, { arg: 2, val: 4 }, { arg: 3, val: 3 }, { arg: 4, val: 1 }],
+        series: [{ type: "line" }],
+        valueAxis: {
+            categoriesSortingMethod: false
+        }
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, [2, 4, 3, 1]);
+});
+
+QUnit.test("Value axis categories sorting. categoriesSortingMethod = true, string - do not sort", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "string", categories: ["2", "4", "3", "1"] } } }));
+
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
+        series: [{ type: "line" }],
+        valueAxis: {
+            categoriesSortingMethod: true
+        }
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
+});
+
+QUnit.test("Value axis categories sorting. categoriesSortingMethod = callback, string - sort using callback", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "string", categories: ["2", "4", "3", "1"] } } }));
+
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
+        series: [{ type: "line" }],
+        valueAxis: {
+            categoriesSortingMethod: (a, b) => +b - +a
+        }
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, ["4", "3", "2", "1"]);
+});
+
 var assertRange = commonMethodsForTests.assertRange;
 
 // /////////////////////////////////////////////////////
