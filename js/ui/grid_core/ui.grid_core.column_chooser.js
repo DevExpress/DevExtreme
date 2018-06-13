@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    commonUtils = require("../../core/utils/common"),
     modules = require("./ui.grid_core.modules"),
     columnsView = require("./ui.grid_core.columns_view"),
     noop = require("../../core/utils/common").noop,
@@ -202,12 +203,14 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         }
 
         treeViewConfig.onContentReady = function(e) {
-            if(scrollTop) {
-                var scrollable = $(e.element).find(".dx-scrollable").data("dxScrollable");
-                scrollable && scrollable.scrollTo({ y: scrollTop });
-            }
+            commonUtils.deferUpdate(function() {
+                if(scrollTop) {
+                    var scrollable = $(e.element).find(".dx-scrollable").data("dxScrollable");
+                    scrollable && scrollable.scrollTo({ y: scrollTop });
+                }
 
-            that.renderCompleted.fire();
+                that.renderCompleted.fire();
+            });
         };
 
 

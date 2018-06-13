@@ -317,7 +317,8 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderResponsiveBox: function() {
-        var that = this;
+        var that = this,
+            templatesInfo = [];
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
@@ -329,7 +330,10 @@ var LayoutManager = Widget.inherit({
             layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
-            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount));
+            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
+            if(!windowUtils.hasWindow()) {
+                that._renderTemplates(templatesInfo);
+            }
         }
     },
 
@@ -350,7 +354,27 @@ var LayoutManager = Widget.inherit({
         this._refresh();
     },
 
-    _getResponsiveBoxConfig: function(layoutItems, colCount) {
+    _renderTemplate: function($container, item) {
+        switch(item.itemType) {
+            case "empty":
+                this._renderEmptyItem($container);
+                break;
+            case "button":
+                this._renderButtonItem(item, $container);
+                break;
+            default:
+                this._renderFieldItem(item, $container);
+        }
+    },
+
+    _renderTemplates: function(templatesInfo) {
+        var that = this;
+        each(templatesInfo, function(index, info) {
+            that._renderTemplate(info.container, info.formItem);
+        });
+    },
+
+    _getResponsiveBoxConfig: function(layoutItems, colCount, templatesInfo) {
         var that = this,
             colCountByScreen = that.option("colCountByScreen"),
             xsColCount = colCountByScreen && colCountByScreen.xs;
@@ -368,6 +392,9 @@ var LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
+                if(windowUtils.hasWindow()) {
+                    that._renderTemplates(templatesInfo);
+                }
                 if(that.option("onLayoutChanged")) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
@@ -384,6 +411,11 @@ var LayoutManager = Widget.inherit({
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
 
+                templatesInfo.push({
+                    container: $fieldItem,
+                    formItem: item
+                });
+
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
@@ -394,17 +426,6 @@ var LayoutManager = Widget.inherit({
                 }
                 if((e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount)) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
-                }
-
-                switch(item.itemType) {
-                    case "empty":
-                        that._renderEmptyItem($fieldItem);
-                        break;
-                    case "button":
-                        that._renderButtonItem(item, $fieldItem);
-                        break;
-                    default:
-                        that._renderFieldItem(item, $fieldItem);
                 }
             },
             cols: that._generateRatio(colCount),

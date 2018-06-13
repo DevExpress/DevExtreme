@@ -469,9 +469,9 @@ var Widget = DOMComponent.inherit({
 
     _renderContentImpl: commonUtils.noop,
 
-    _fireContentReadyAction: function() {
+    _fireContentReadyAction: commonUtils.deferRenderer(function() {
         this._contentReadyAction();
-    },
+    }),
 
     _dispose: function() {
         this._cleanTemplates();
