@@ -942,7 +942,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 });
 
 /**
-* @name GridBaseMethods.registerKeyHandler
+* @name GridBaseMethods_registerKeyHandler
 * @publicName registerKeyHandler(key, handler)
 * @hidden
 * @inheritdoc
