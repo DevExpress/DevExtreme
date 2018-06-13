@@ -266,7 +266,6 @@ exports.VirtualScrollController = Class.inherit((function() {
         } else {
             that._dataSource.viewportItems(items);
         }
-        dataSource.updateLoading();
         that._lastPageIndex = that.pageIndex();
         that._isDelayChanged = isDelayChanged;
 
@@ -520,7 +519,6 @@ exports.VirtualScrollController = Class.inherit((function() {
                 if(pageIndexForLoad >= 0) {
                     result = loadCore(this, pageIndexForLoad);
                 }
-                dataSource.updateLoading();
             } else {
                 result = dataSource.load();
             }

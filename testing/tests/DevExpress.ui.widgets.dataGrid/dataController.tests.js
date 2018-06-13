@@ -3047,6 +3047,63 @@ QUnit.test("Start loading after changeRowExpand when virtual scrolling enabled",
     assert.ok(!isLoading, 'loading ended');
 });
 
+QUnit.test("loadingChanged should not be fired during scroll", function(assert) {
+    var array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
+    var loadingStates = [];
+
+    this.options.loadingTimeout = 0;
+
+    this.setupDataSource({
+        data: array,
+        pageSize: 3
+    });
+
+    var dataController = this.dataController;
+
+    dataController.load();
+    dataController.viewportSize(3);
+    this.clock.tick();
+
+    dataController.loadingChanged.add(function(state) {
+        loadingStates.push(state);
+    });
+
+    // act
+    dataController.setViewportItemIndex(5);
+    this.clock.tick();
+
+    assert.deepEqual(loadingStates, [], 'loading changerd is not fired');
+});
+
+QUnit.test("loadingChanged should be fired on sorting", function(assert) {
+    var array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
+    var loadingStates = [];
+
+    this.options.loadingTimeout = 0;
+
+    this.setupDataSource({
+        data: array,
+        pageSize: 3
+    });
+
+    var dataController = this.dataController;
+
+    dataController.load();
+    dataController.viewportSize(3);
+    this.clock.tick();
+
+    dataController.loadingChanged.add(function(state) {
+        loadingStates.push(state);
+    });
+
+    // act
+    this.dataSource.sort("value");
+    this.dataSource.load();
+    this.clock.tick();
+
+    assert.deepEqual(loadingStates, [true, false, true, false], 'two loadings are completed');
+});
+
 // T122785
 QUnit.test("not update pageSize on viewportSize", function(assert) {
     var changedArgs = [];
