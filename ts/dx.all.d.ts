@@ -2815,6 +2815,7 @@ declare module DevExpress.ui {
     export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: dxLoadPanelAnimation;
+        /** Specifies the container in which to place the widget. */
         container?: string | Element | JQuery;
         /** The delay in milliseconds after which the load panel is displayed. */
         delay?: number;
@@ -4154,6 +4155,7 @@ declare module DevExpress.ui {
         getSelectedRowKeys(mode: string): Array<any>;
         /** Gets the data objects of the rows selected explicitly via the API or via a click or tap. */
         getSelectedRowsData(): Array<any>;
+        /** Gets the selected rows' data objects. */
         getSelectedRowsData(mode: string): Array<any>;
         /** Gets all visible columns. */
         getVisibleColumns(): Array<dxTreeListColumn>;
