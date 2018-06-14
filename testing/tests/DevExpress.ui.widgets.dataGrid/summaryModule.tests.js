@@ -777,8 +777,11 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
                     column: "regDate",
                     valueFormat: "longDate",
                     summaryType: "max"
+                },
+                {
+                    column: "regDate",
+                    summaryType: "count"
                 }
-
             ]
         }
     });
@@ -793,6 +796,7 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
     assert.equal($summary.eq(4).text(), "Avg: 173,836.71", "names count");
     assert.equal($summary.eq(5).text(), "Max: 5/18/2014", "date max default valueFormat");
     assert.equal($summary.eq(6).text(), "Max: Sunday, May 18, 2014", "date max custom valueFormat");
+    assert.equal($summary.eq(7).text(), "Count: 7");
 });
 
 // T348335
