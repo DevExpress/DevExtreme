@@ -1414,7 +1414,7 @@ declare module DevExpress.framework {
         /** The identifier of the command. */
         id?: string;
         /** Specifies an action performed when the execute() method of the command is called. */
-        onExecute?: Function | string | any;
+        onExecute?: ((e: { component?: dxCommand, element?: DevExpress.core.dxElement, model?: any }) => any) | string | any;
         /** Specifies whether the current command is rendered when a view is being rendered or after a view is shown. */
         renderStage?: 'onViewShown' | 'onViewRendering';
         /** Specifies the title of the widget associated with this command. */
