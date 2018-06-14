@@ -600,7 +600,7 @@ QUnit.module("Filter value", function() {
         var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         $valueButton.trigger("dxclick");
 
-        var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
+        var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input.dx-texteditor-input");
         assert.ok($input.is(":focus"));
 
         var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
