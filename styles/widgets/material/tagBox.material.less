@@ -97,13 +97,13 @@
     &:before {
         display: block;
         position: absolute;
-        top: 50%;
-        left: 49%;
-        width: 18px;
-        height: 18px;
-        margin-left: -9px;
-        margin-top: -9px;
-        line-height: 19px;
+        top: 51%;
+        left: 48%;
+        width: 16px;
+        height: 16px;
+        margin-left: -8px;
+        margin-top: -8px;
+        line-height: 16px;
         color: @tagbox-tag-bg;
         background-color: @tagbox-tag-button-remove-bg;
         .border-radius(50%);
@@ -117,12 +117,11 @@
     &:hover {
         .dx-tag-content {
             background-color: @tagbox-tag-hover-bg;
-            color: @base-bg
+            color: @tagbox-tag-active-color;
         }
 
         .dx-tag-remove-button:before {
             color: @tagbox-tag-hover-bg;
-            background-color: @base-bg;
         }
     }
 }
@@ -130,19 +129,7 @@
 .dx-tag.dx-state-focused {
     .dx-tag-content {
         background-color: @tagbox-tag-focused-bg;
-        color: @tagbox-tag-focused-color;
-    }
-
-    .dx-tag-remove-button {
-        &:before, &:after {
-            background-color: @tagbox-tag-focused-button-remove-bg;
-        }
-
-        &:active {
-            &:before, &:after {
-                background: @tagbox-tag-button-remove-active-bg;
-            }
-        }
+        color: @tagbox-tag-active-color;
     }
 }
 
