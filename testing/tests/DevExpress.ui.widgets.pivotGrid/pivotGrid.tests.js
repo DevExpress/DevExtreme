@@ -2841,7 +2841,7 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         dataAreaScrollable.off("scroll", scrollAssert);
 
         // assert
-        assert.ok(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.equal(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
@@ -2854,6 +2854,48 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
 
     // act
     dataAreaScrollable.scrollBy({ left: -10 });
+});
+
+
+QUnit.test("Fix horizontal scroll position after scroll when rtl is enabled", function(assert) {
+    var done = assert.async();
+
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        width: 500,
+        height: 150,
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            useNative: false
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+
+    var assertFunction = function(e) {
+        if(e.scrollOffset.top === 10) {
+            assert.equal(dataAreaScrollable.scrollLeft(), 100);
+            dataAreaScrollable.off("scroll", assertFunction);
+            done();
+        }
+    };
+
+    var scrollAssert = function() {
+        dataAreaScrollable.off("scroll", scrollAssert);
+        dataAreaScrollable.on("scroll", assertFunction);
+
+        // act
+        dataAreaScrollable.scrollTo({ top: 10 });
+        assert.equal(dataAreaScrollable.scrollLeft(), 100);
+    };
+
+    dataAreaScrollable.on("scroll", scrollAssert);
+
+    dataAreaScrollable.scrollTo({ left: 100 });
 });
 
 QUnit.test("Virtual scrolling if height is not defined", function(assert) {

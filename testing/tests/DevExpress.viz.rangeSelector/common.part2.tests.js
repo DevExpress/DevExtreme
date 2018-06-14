@@ -75,6 +75,9 @@ QUnit.test("Pass axes to seriesDataSource", function(assert) {
             series: {
                 argumentField: "x",
                 valueField: "y1"
+            },
+            valueAxis: {
+                categoriesSortingMethod: "categories sorting method"
             }
         }
     });
@@ -84,7 +87,8 @@ QUnit.test("Pass axes to seriesDataSource", function(assert) {
     assert.strictEqual(series.getArgumentAxis(), rangeSelector._axis, "argument axis passed to series");
     assert.deepEqual(valueAxis.updateOptions.lastCall.args[0], {
         isHorizontal: false,
-        label: {}
+        label: {},
+        categoriesSortingMethod: "categories sorting method"
     }, "valueAxis options");
 
     assert.strictEqual(axisModule.Axis.secondCall.args[0].renderer, this.renderer);

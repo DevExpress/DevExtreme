@@ -336,7 +336,7 @@ var DOMComponent = Component.inherit({
     * @type function
     * @default null
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:DOMComponent
+    * @type_function_param1_field1 component:this
     * @type_function_param1_field2 element:dxElement
     * @type_function_param1_field3 model:object
     **/

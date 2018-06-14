@@ -852,7 +852,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getRowElements: function(tableElement) {
         tableElement = tableElement || this._getTableElement();
-        return tableElement && tableElement.children("tbody").children("." + ROW_CLASS) || $();
+        return tableElement && tableElement.find("> tbody > " + "." + ROW_CLASS + ", > tbody." + ROW_CLASS) || $();
     },
 
     getRowIndex: function($row) {

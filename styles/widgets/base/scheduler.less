@@ -723,8 +723,9 @@
             .flex-container(row, nowrap);
         }
 
-        .dx-scheduler-header-panel-cell  {
+        .dx-scheduler-header-panel-week-cell {
             flex-grow: 1;
+            flex-basis: 0;
             justify-content: center;
 
             .flex-container(row, nowrap);
@@ -1659,10 +1660,8 @@
         float: left;
         margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH;
 
-        .dx-scheduler-work-space:not(.dx-scheduler-timeline) {
-            .dx-scheduler-small & {
-                margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
-            }
+        .dx-scheduler-small & {
+            margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
         }
 
         .dx-scheduler-date-table-row {

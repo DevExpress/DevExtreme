@@ -253,6 +253,24 @@ QUnit.test("Validator should be able to bypass validation", function(assert) {
     assert.ok(!result.brokenRule, "brokenRule is null");
 });
 
+QUnit.test("Validation rules are not modified after validate", function(assert) {
+    var value = "",
+        name = "Login",
+        handler = sinon.stub();
+
+
+    var validator = this.fixture.createValidator({
+        name: name,
+        onValidated: handler,
+        validationRules: [{ type: 'required' }]
+    });
+    this.fixture.stubAdapter.getValue.returns(value);
+
+    validator.validate();
+
+    assert.deepEqual(validator.option("validationRules"), [{ type: 'required' }]);
+});
+
 
 QUnit.module("Registration in groups", {
     beforeEach: function() {
@@ -326,7 +344,6 @@ QUnit.module("Events", {
 QUnit.test("Validated event should fire", function(assert) {
     var value = "",
         name = "Login",
-        validationRules = [{ type: 'required' }],
         expectedFailedValidationRule = { type: 'required', isValid: false, message: "Login is required", validator: {}, value: value },
         handler = sinon.stub();
 
@@ -334,7 +351,7 @@ QUnit.test("Validated event should fire", function(assert) {
     var validator = this.fixture.createValidator({
         name: name,
         onValidated: handler,
-        validationRules: validationRules
+        validationRules: [{ type: 'required' }]
     });
     expectedFailedValidationRule.validator = validator;
     this.fixture.stubAdapter.getValue.returns(value);
@@ -348,7 +365,13 @@ QUnit.test("Validated event should fire", function(assert) {
     assert.equal(params.value, value, "Correct value was passed");
     assert.equal(params.name, name, "Name of Validator should be passed");
     assert.strictEqual(params.isValid, false, "isValid was passed");
-    assert.deepEqual(params.validationRules, validationRules, "Correct rules were passed");
+    assert.deepEqual(params.validationRules, [{
+        isValid: false,
+        message: "Login is required",
+        type: "required",
+        validator: validator,
+        value: value
+    }], "Correct rules were passed");
     assert.deepEqual(params.brokenRule, expectedFailedValidationRule, "Failed rules were passed");
 });
 

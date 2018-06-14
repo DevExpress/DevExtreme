@@ -373,7 +373,7 @@ QUnit.test("invalid type of dataSource arguments (rangeSelector show stubData)",
 });
 
 QUnit.test("invalid type of dataSource arguments and set valid values of start and end", function(assert) {
-    var year = new Date().getYear() - 1;
+    var year = new Date().getFullYear() - 1;
     this.createWidget({
         dataSource: this.invalidDataSource,
         scale: {
