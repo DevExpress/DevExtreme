@@ -947,13 +947,16 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateTable();
 
-        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
+        this._updateGroupTableHeight();
 
         this._shader = new VerticalShader();
     },
 
+    _updateGroupTableHeight: function() {
+        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
+            this._setHorizontalGroupHeaderCellsHeight();
+        }
+    },
 
     _renderDateTimeIndication: noop,
     _setIndicationUpdateInterval: noop,
