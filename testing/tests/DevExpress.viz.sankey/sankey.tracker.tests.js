@@ -35,8 +35,8 @@ QUnit.test("Set data for items", function(assert) {
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
     });
 
-    var nodes = this.nodes();
-    var links = this.links();
+    var nodes = this.nodes(),
+        links = this.links();
 
     assert.equal(nodes.length, 3);
     assert.equal(links.length, 2);
