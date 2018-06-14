@@ -33,14 +33,7 @@
 * @type text
 * @group base.common
 */
-@base-border-radius: 2px;
-
-/**
-* @name 124. Small border radius
-* @type text
-* @group base.common
-*/
-@base-border-radius-small: @base-border-radius - 1px;
+@base-border-radius: 4px;
 
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
@@ -492,7 +485,7 @@
 */
 @checkbox-invalid-focused-border-color: @base-invalid-color;
 
-@checkbox-icon-border-radius: @base-border-radius;
+@checkbox-icon-border-radius: @base-border-radius - 2;
 
 // Fileuploader
 /**
@@ -1790,8 +1783,6 @@
 @tooltip-border-radius: @base-border-radius;
 
 // NumberBox
-@numberbox-spin-container-border-radius: @base-border-radius;
-@numberbox-spin-icon-border-radius: @base-border-radius-small;
 /**
 * @name 30. Spin icon color
 * @type color
