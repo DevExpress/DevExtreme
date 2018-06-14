@@ -1655,3 +1655,20 @@ QUnit.test("Scheduler timeline workweek should contain two spans in header panel
     }
     themes.isMaterial = origIsMaterial;
 });
+
+QUnit.test("Vertical scrollable should work after switching currentDate if allDayPanel and crossScrollingEnabled are turned on", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["day"],
+        currentView: "day",
+        showAllDayPanel: true,
+        crossScrollingEnabled: true,
+        currentDate: new Date(2018, 5, 14),
+        height: 600
+    });
+
+    this.instance.option("currentDate", new Date(2018, 5, 15));
+    var $scroll = this.instance.$element().find(".dx-scrollbar-vertical").eq(1);
+
+    assert.notEqual($scroll.css("display"), "none", "ok");
+});
