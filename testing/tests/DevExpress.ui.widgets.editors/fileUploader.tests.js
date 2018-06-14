@@ -346,6 +346,21 @@ QUnit.test("drag event should handle on inputWrapper element if 'useDragOver' is
     assert.ok($fileUploader.hasClass("dx-fileuploader-dragover"), "drag event was handled for input wrapper element");
 });
 
+QUnit.test("'dragover' class should be removed on 'dragleave' event after several 'dragenter' events", function(assert) {
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            useDragOver: true,
+            uploadMode: "instantly"
+        }),
+        $inputWrapper = $fileUploader.find(".dx-fileuploader-input-wrapper");
+
+    $inputWrapper
+        .trigger("dragenter")
+        .trigger("dragenter")
+        .trigger("dragleave");
+
+    assert.notOk($fileUploader.hasClass("dx-fileuploader-dragover"), "FileUploader hasn't the dragover class");
+});
+
 QUnit.test("T286111 - input click should not be prevented if the 'useNativeInputClick' option is set to true", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({ uploadMode: "useButtons", useNativeInputClick: true }),
         $input = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS),
