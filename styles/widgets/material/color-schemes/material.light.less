@@ -562,7 +562,7 @@
 * @type color
 * @group list
 */
-@list-group-header-bg: fade(darken(@base-bg, 6.5%), 5%);
+@list-group-header-bg: fade(@base-bg, 0);
 /**
 * @name 10. Item text color
 * @type color
@@ -574,7 +574,13 @@
 * @type color
 * @group list
 */
-@list-group-color: rgba(0, 0, 0, 0.54);
+@list-group-color: @base-text-color;
+/**
+* @name 25. Expanded group header text color
+* @type color
+* @group list
+*/
+@list-expanded-group-color: @base-accent;
 /**
 * @name 30. Hovered item background color
 * @type color
@@ -600,6 +606,7 @@
 @list-item-color: @base-text-color;
 @list-item-hover-color: @list-item-color;
 @list-item-selected-color: fade(@base-text-color, 100%);
+@list-header-indicator-color: @base-icon-color;
 
 /**
 * @name 40. Active state item background color
