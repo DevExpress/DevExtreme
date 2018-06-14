@@ -3,8 +3,7 @@
 var $ = require("jquery"),
     common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
-    environment = common.environment,
-    vizMocks = require("../../helpers/vizMocks.js");
+    environment = common.environment;
 
 QUnit.module("Node labels", environment);
 
