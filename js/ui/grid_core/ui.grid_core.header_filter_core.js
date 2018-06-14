@@ -157,7 +157,12 @@ exports.HeaderFilterView = modules.View.inherit({
             return DEFAULT_SEARCH_EXPRESSION;
         }
 
-        return lookup ? (lookup.displayExpr || "this") : (options.dataField || options.selector);
+        return lookup ? (lookup.displayExpr || "this") :
+        (
+            options.hasCustomCalculateCellValue
+                ? options.calculateCellValue
+                : (options.dataField || options.selector)
+        );
     },
 
     _cleanPopupContent: function() {

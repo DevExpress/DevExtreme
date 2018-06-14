@@ -251,6 +251,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     groupInterval = gridCoreUtils.getGroupInterval(column);
 
                 var options = extend(column, {
+                    hasCustomCalculateCellValue: column.calculateCellValue !== column.defaultCalculateCellValue,
                     type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
                     apply: function() {
                         that._columnsController.columnOption(columnIndex, {
