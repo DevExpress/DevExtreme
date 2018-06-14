@@ -533,7 +533,7 @@ QUnit.test("Value axis categories sorting. categoriesSortingMethod = callback, s
         dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
         series: [{ type: "line" }],
         valueAxis: {
-            categoriesSortingMethod: (a, b) => +b - +a
+            categoriesSortingMethod: function(a, b) { return +b - +a; }
         }
     });
 
