@@ -98,7 +98,7 @@ let struct = {
         vertices[vertex].color = BLACK;
     },
 
-    computeLongestPaths(links/* , sortedVertices*/) {
+    computeLongestPaths(links) {
         // calculates longets paths for all vertices
         // method expects sorted vertices array to be in this._sortedList
         let sortedVertices = this._sortedList;
