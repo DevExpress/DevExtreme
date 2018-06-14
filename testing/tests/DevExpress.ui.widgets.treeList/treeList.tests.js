@@ -787,3 +787,59 @@ QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong select
     this.clock.tick(30);
     assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [2], "dataSource is reloaded");
 });
+
+
+QUnit.module("Expand/Collapse rows");
+
+// T627926
+QUnit.test("Nodes should not be shifted after expanding node on last page", function(assert) {
+    // arrange
+    var done = assert.async(),
+        topVisibleRowData,
+        treeList = createTreeList({
+            height: 120,
+            loadingTimeout: undefined,
+            paging: {
+                enabled: true,
+                pageSize: 2
+            },
+            scrolling: {
+                mode: "virtual"
+            },
+            expandedRowKeys: [1],
+            dataSource: [
+                { name: 'Category1', id: 1 },
+                    { name: 'SubCategory1', id: 2, parentId: 1 },
+                    { name: 'SubCategory2', id: 3, parentId: 1 },
+                { name: 'Category2', id: 4 },
+                { name: 'Category3', id: 5 },
+                { name: 'Category4', id: 6 },
+                { name: 'Category7', id: 7 },
+                { name: 'Category5', id: 8 },
+                    { name: 'SubCategory3', id: 9, parentId: 8 },
+                        { name: 'SubCategory5', id: 12, parentId: 9 },
+                    { name: 'SubCategory4', id: 10, parentId: 8 },
+                { name: 'Category6', id: 11 }
+            ]
+        });
+
+    treeList.getScrollable().scrollTo({ y: 300 }); // scroll to the last page
+
+    setTimeout(function() {
+        topVisibleRowData = treeList.getTopVisibleRowData();
+
+        // assert
+        assert.strictEqual(treeList.pageIndex(), 4, "page index");
+        assert.strictEqual(treeList.pageCount(), 5, "page count");
+
+        // act
+        treeList.expandRow(8);
+        treeList.expandRow(9);
+
+        // assert
+        assert.strictEqual(treeList.pageIndex(), 3, "page index");
+        assert.strictEqual(treeList.pageCount(), 6, "page count");
+        assert.deepEqual(treeList.getTopVisibleRowData(), topVisibleRowData, "top visible row data has not changed");
+        done();
+    }, 100);
+});

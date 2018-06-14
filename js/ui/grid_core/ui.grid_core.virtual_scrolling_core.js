@@ -438,7 +438,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         getViewportItemIndex: function() {
             return this._viewportItemIndex;
         },
-        setViewportItemIndex: function(itemIndex) {
+        setViewportItemIndex: function(itemIndex, skipLastPageNormalization) {
             var that = this,
                 pageSize = that._dataSource.pageSize(),
                 pageCount = that._dataSource.pageCount(),
@@ -453,7 +453,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._viewportItemIndex = itemIndex;
 
             if(pageSize && (virtualMode || appendMode) && totalItemsCount >= 0) {
-                if(that._viewportSize && itemIndex + that._viewportSize >= totalItemsCount) {
+                if(that._viewportSize && (itemIndex + that._viewportSize) >= totalItemsCount && !skipLastPageNormalization) {
                     if(that._dataSource.hasKnownLastPage()) {
                         newPageIndex = pageCount - 1;
                         lastPageSize = totalItemsCount % pageSize;
