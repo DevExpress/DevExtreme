@@ -51,7 +51,7 @@ var Component = Class.inherit({
             * @name ComponentOptions.onInitialized
             * @type function
             * @type_function_param1 e:object
-            * @type_function_param1_field1 component:Component
+            * @type_function_param1_field1 component:this
             * @type_function_param1_field2 element:dxElement
             * @default null
             * @action
@@ -61,7 +61,7 @@ var Component = Class.inherit({
             * @name ComponentOptions.onOptionChanged
             * @type function
             * @type_function_param1 e:object
-            * @type_function_param1_field1 component:Component
+            * @type_function_param1_field1 component:this
             * @type_function_param1_field4 name:string
             * @type_function_param1_field5 fullName:string
             * @type_function_param1_field6 value:any
@@ -73,7 +73,7 @@ var Component = Class.inherit({
             * @name ComponentOptions.onDisposing
             * @type function
             * @type_function_param1 e:object
-            * @type_function_param1_field1 component:Component
+            * @type_function_param1_field1 component:this
             * @default null
             * @action
             */
@@ -258,7 +258,7 @@ var Component = Class.inherit({
     /**
      * @name componentmethods.instance
      * @publicName instance()
-     * @return Component
+     * @return this
      */
     instance: function() {
         return this;

@@ -60,7 +60,11 @@ var Command = DOMComponent.inherit({
             /**
             * @name dxCommandOptions.onExecute
             * @type function|string|object
-            * @extends Action
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:dxCommand
+            * @type_function_param1_field2 element:dxElement
+            * @type_function_param1_field3 model:object
             */
             onExecute: null,
             /**
