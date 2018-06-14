@@ -1,8 +1,8 @@
 "use strict";
 
 var noop = require("../../core/utils/common").noop,
-    NodeItem = require("./NodeItem"),
-    LinkItem = require("./LinkItem"),
+    NodeItem = require("./node_item"),
+    LinkItem = require("./link_item"),
     defaultLayoutBuilder = require("./layout");
 
 var dxSankey = require("../core/base_widget").inherit({
