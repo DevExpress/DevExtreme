@@ -154,7 +154,7 @@ QUnit.performanceTest("dxScheduler month view should force minimum relayout coun
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 8);
 });
 
 QUnit.performanceTest("dxScheduler timelineDay view should force minimum relayout count on creation with appointments", function(assert) {
@@ -169,7 +169,7 @@ QUnit.performanceTest("dxScheduler timelineDay view should force minimum relayou
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("dxScheduler timelineWeek view should force minimum relayout count on creation with appointments", function(assert) {
@@ -184,7 +184,7 @@ QUnit.performanceTest("dxScheduler timelineWeek view should force minimum relayo
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("dxScheduler timelineWorkWeek view should force minimum relayout count on creation with appointments", function(assert) {
