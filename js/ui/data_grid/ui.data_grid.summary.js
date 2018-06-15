@@ -643,9 +643,15 @@ gridCore.registerModule("summary", {
 
                                 aggregate = aggregates[summaryIndex];
                                 if(aggregate === aggregate) {
+                                    var valueFormat;
+                                    if(typeUtils.isDefined(summaryItem.valueFormat)) {
+                                        valueFormat = summaryItem.valueFormat;
+                                    } else if(summaryItem.summaryType !== "count") {
+                                        valueFormat = gridCore.getFormatByDataType(column && column.dataType);
+                                    }
                                     summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
                                         value: typeUtils.isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
-                                        valueFormat: !typeUtils.isDefined(summaryItem.valueFormat) ? gridCore.getFormatByDataType(column && column.dataType) : summaryItem.valueFormat,
+                                        valueFormat: valueFormat,
                                         columnCaption: (column && column.index !== columnIndex) ? column.caption : undefined
                                     }));
                                 }
