@@ -269,22 +269,18 @@ QUnit.test("Header filter with custom dataSource if column with lookup", functio
 QUnit.module("Header Filter", {
     beforeEach: function() {
         this.items = [];
-        var defaultCalculateCellValue1 = function(data) {
-                return data.Test1;
-            },
-            defaultCalculateCellValue2 = function(data) {
-                return data.Test2;
-            };
         this.columns = [{
             dataField: "Test1",
             allowHeaderFiltering: true,
-            calculateCellValue: defaultCalculateCellValue1,
-            defaultCalculateCellValue: defaultCalculateCellValue1
+            calculateCellValue: function(data) {
+                return data.Test1;
+            }
         }, {
             dataField: "Test2",
             allowHeaderFiltering: true,
-            calculateCellValue: defaultCalculateCellValue2,
-            defaultCalculateCellValue: defaultCalculateCellValue2
+            calculateCellValue: function(data) {
+                return data.Test2;
+            }
         }];
         this.options = {
             headerFilter: {
@@ -1681,7 +1677,7 @@ QUnit.test("Show header filter with search bar", function(assert) {
 
     // assert
     assert.ok(list.option("searchEnabled"), "list with search bar");
-    assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
+    assert.ok($.isFunction(list.option("searchExpr")), "expr is correct");
     assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
 });
 
