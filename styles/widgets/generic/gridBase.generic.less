@@ -126,7 +126,7 @@
         line-height: inherit;
 
         .dx-row-alt {
-            & > td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
             }
 
@@ -745,6 +745,12 @@
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
+                }
+                & > tr:first-child > td {
+                    border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
+                }
+                & > tr:last-child > td {
+                    border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                 }
             }
 
