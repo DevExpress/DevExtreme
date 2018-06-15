@@ -6,8 +6,6 @@ var $ = require("../../core/renderer"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
     EditDecorator = require("./ui.list.edit.decorator"),
     Overlay = require("../overlay"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
     ListBase = require("./ui.list.base");
 
 var CONTEXTMENU_CLASS = "dx-list-context-menu",
