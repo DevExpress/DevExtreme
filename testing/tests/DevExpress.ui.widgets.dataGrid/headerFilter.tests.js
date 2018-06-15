@@ -1692,7 +1692,7 @@ QUnit.test("Show header filter with search bar with searchMode equals", function
 
     // assert
     assert.ok(list.option("searchEnabled"), "list with search bar");
-    assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
+    assert.ok($.isFunction(list.option("searchExpr")), "expr is correct");
     assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
     assert.equal(list.option("searchMode"), "equals", "search mode is assigned");
 });
