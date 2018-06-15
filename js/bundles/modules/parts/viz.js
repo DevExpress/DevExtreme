@@ -46,16 +46,6 @@ viz.dxTreeMap = require("../../../viz/tree_map");
 viz.dxFunnel = require("../../../viz/funnel");
 
 /// BUNDLER_PARTS_END
-// DEPRECATED_15_1 start
-var core = {};
-viz.core = core;
-
-core.currentTheme = require("../../../viz/themes").currentTheme;
-core.registerTheme = require("../../../viz/themes").registerTheme;
-core.currentPalette = require("../../../viz/palette").currentPalette;
-core.getPalette = require("../../../viz/palette").getPalette;
-core.registerPalette = require("../../../viz/palette").registerPalette;
-// DEPRECATED_15_1 end
 
 viz.BaseWidget = require("../../../viz/core/base_widget");
 

@@ -158,9 +158,6 @@ QUnit.test("set range by dataSource", function(assert) {
 QUnit.test("set range by dataSource. discrete data", function(assert) {
     this.createWidget({
         dataSource: this.dataSource,
-        scale: {
-            majorTickInterval: 10
-        },
         chart: {
             series: [
                 { argumentField: "x", valueField: "y1" },
@@ -373,7 +370,7 @@ QUnit.test("invalid type of dataSource arguments (rangeSelector show stubData)",
 });
 
 QUnit.test("invalid type of dataSource arguments and set valid values of start and end", function(assert) {
-    var year = new Date().getYear() - 1;
+    var year = new Date().getFullYear() - 1;
     this.createWidget({
         dataSource: this.invalidDataSource,
         scale: {
@@ -1163,35 +1160,6 @@ QUnit.test("During indents estimation, format semidiscrete scale labels the same
     assert.strictEqual(this.renderer.text.getCall(2).args[0], "8");
 });
 
-QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderSize: {
-                width: {
-                    left: 15
-                    // right - auto
-                },
-                height: 10
-            }
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 15, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
-// T252890
-QUnit.test("sliderMarker's placeholderSize width only", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderSize: {
-                width: 60
-            }
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 60, top: 0, width: 240, height: 24, right: 0, bottom: 0 });
-});
-
 QUnit.test("range container canvas with set indents. indents > scale's labels", function(assert) {
     this.createWidget({
         indent: {
@@ -1212,26 +1180,6 @@ QUnit.test("range container canvas with set indents. indents < scale's labels", 
     });
 
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 7, top: 0, width: 293, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("range container canvas with set indents & sliderMarker.placeholderSize", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderSize: {
-                width: {
-                    left: 20,
-                    right: 20
-                },
-                height: 20
-            }
-        },
-        indent: {
-            left: 10,
-            right: 15
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 20, width: 285, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("T556656. range container canvas with set indents. width is 0", function(assert) {
@@ -1257,53 +1205,6 @@ QUnit.test("range container canvas with set sliderMarker.placeHolderHeight", fun
     });
 
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("range container canvas. set sliderMarker.placeHolderHeight with set placeholderSize.height", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderHeight: 10,
-            placeholderSize: {
-                height: 13
-            }
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("rangeContainer canvas if sliderMarker placeholderSize as number is defined", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderSize: 10
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 290, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("rangeContainer canvas for invisible sliderMarker if placeholderSize is defined", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            visible: false,
-            placeholderSize: 10
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 290, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("rangeContainer canvas if sliderMarker placeholderSize.width as number is defined", function(assert) {
-    this.createWidget({
-        sliderMarker: {
-            placeholderSize: {
-                width: 20,
-                height: 10
-            }
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 20, top: 10, width: 280, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker not visible and scale label visible", function(assert) {

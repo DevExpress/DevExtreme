@@ -220,7 +220,7 @@ module.exports = (function() {
         },
 
         formatValue: function(value, options) {
-            var valueText = formatHelper.format(value, options.format, options.precision) || (value && value.toString()) || "",
+            var valueText = formatHelper.format(value, options.format) || (value && value.toString()) || "",
                 formatObject = {
                     value: value,
                     valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
@@ -234,7 +234,6 @@ module.exports = (function() {
         getFormatOptionsByColumn: function(column, target) {
             return {
                 format: column.format,
-                precision: column.precision,
                 getDisplayFormat: column.getDisplayFormat,
                 customizeText: column.customizeText,
                 target: target,
@@ -271,7 +270,6 @@ module.exports = (function() {
 
             return this.formatValue(summaryItem.value, {
                 format: summaryItem.valueFormat,
-                precision: summaryItem.precision,
                 getDisplayFormat: function(valueText) {
                     return displayFormat ? stringUtils.format(displayFormat, valueText, summaryItem.columnCaption) : valueText;
                 },

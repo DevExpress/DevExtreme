@@ -807,6 +807,33 @@ QUnit.test("button should have no inkRipple after fast swipe for Material theme"
     themes.current = origCurrent;
 });
 
+QUnit.test("inkRipple feedback should not be broken if swipe in opposite direction", function(assert) {
+    var $list = $($("#templated-list").dxList({
+        items: ["0"],
+        allowItemDeleting: true,
+        itemDeleteMode: "slideItem",
+        useInkRipple: true
+    }));
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        $item = $items.eq(0),
+        clock = sinon.useFakeTimers(),
+        pointer = pointerMock($item);
+
+    pointer.start().swipeStart().swipe(0.01);
+    clock.tick(50);
+    pointer.start("touch").up();
+    clock.tick(50);
+    pointer.start("touch").down();
+    clock.tick(100);
+    var inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+
+    assert.ok(inkRippleShowingWave.length === 1, "inkripple feedback works right after swipe in opposite direction");
+
+    pointer.start("touch").up();
+    clock.restore();
+});
+
 QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) {
     var $list = $($("#templated-list").dxList({
         items: ["0"],
@@ -1306,6 +1333,31 @@ QUnit.test("item should be deleted from menu", function(assert) {
     $deleteMenuItem.trigger("dxclick");
 });
 
+QUnit.test("contextMenu item should have correct position after page scrolling", function(assert) {
+    var originalPageX = window.pageXOffset,
+        originalPageY = window.pageYOffset;
+
+    $("#templated-list").css("padding-top", 500);
+
+    var $list = $($("#templated-list").dxList({
+            items: [0, 1, 2],
+            allowItemDeleting: true,
+            itemDeleteMode: "context"
+        })),
+        list = $list.dxList("instance");
+
+    window.pageXOffset = 200;
+    window.pageYOffset = 400;
+
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
+        menu = $menu.dxOverlay("instance");
+
+    assert.deepEqual(menu.option("position").offset, { h: -200, v: -400 }, "Menu has correct position offset");
+
+    window.pageXOffset = originalPageX;
+    window.pageYOffset = originalPageY;
+});
 
 QUnit.module("context menu decorator", {
     beforeEach: function() {

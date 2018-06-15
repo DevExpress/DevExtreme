@@ -535,57 +535,6 @@ QUnit.test("Create with customization", function(assert) {
     });
 });
 
-QUnit.test("Create with customization (deprecated)", function(assert) {
-    var customize = sinon.stub();
-    $.each(this.data.features, function(i) {
-        customize.onCall(i).returns({ tag: "option-" + i, isSelected: i % 2 });
-    });
-    this.layer.setOptions({ customize: customize, _deprecated: true, dataSource: this.data });
-    var proxies = $.map(StubMapLayerElement.items, function(item) { return item.proxy; });
-
-    $.each(StubMapLayerElement.items, function(i, item) {
-        assert.deepEqual(customize.getCall(i).args, [proxies[i]], "callback args - " + i);
-        assert.strictEqual(customize.getCall(i).thisValue, proxies[i], "callback context - " + i);
-        assert.ok(customize.getCall(i).calledBefore(item.project.lastCall), "callback is called before item - " + i);
-        assert.deepEqual(item.proxy.applySettings.lastCall.args, [{ tag: "option-" + i, isSelected: i % 2 }], "settings - " + i);
-        if(i % 2) {
-            assert.deepEqual(item.proxy.selected.lastCall.args, [true], "selected - " + i);
-        } else {
-            assert.strictEqual(item.proxy.stub("selected").lastCall, null, "selected - " + i);
-        }
-    });
-});
-
-// T312554
-QUnit.test("Additional area data fields (deprecated)", function(assert) {
-    this.context.name = "areas";
-    this.layer.setOptions({ _deprecated: true, dataSource: this.data });
-
-    $.each(StubMapLayerElement.items, function(i, item) {
-        assert.strictEqual(item.proxy.type, "area", "item type - " + i);
-    });
-});
-
-// T312554
-QUnit.test("Additional marker data fields (deprecated)", function(assert) {
-    this.context.name = "markers";
-    $.each(this.data.features, function(i, feature) {
-        feature.text = "feature-" + i;
-        feature.url = "url-" + i;
-        feature.value = i;
-        feature.values = [i, i];
-    });
-    this.layer.setOptions({ _deprecated: true, dataSource: this.data });
-
-    $.each(StubMapLayerElement.items, function(i, item) {
-        assert.strictEqual(item.proxy.type, "marker", "item type - " + i);
-        assert.strictEqual(item.proxy.text, "feature-" + i, "item text - " + i);
-        assert.strictEqual(item.proxy.url, "url-" + i, "item value - " + i);
-        assert.strictEqual(item.proxy.value, i, "item values - " + i);
-        assert.deepEqual(item.proxy.values, [i, i], "item url - " + i);
-    });
-});
-
 QUnit.test("Selection restoring", function(assert) {
     var context = this.context;
     this.layer.setOptions({

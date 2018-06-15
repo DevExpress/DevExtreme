@@ -96,38 +96,3 @@ QUnit.test("There is no error when 'dataSource' is an empty array and scale is d
     assert.deepEqual(this.$container.dxRangeSelector("instance").getValue(), [undefined, undefined]);
     assert.strictEqual(this.axis.setBusinessRange.lastCall.args[0].stubData, true);
 });
-
-// DEPRECATED IN 17.1 START
-QUnit.test("useTicksAutoArrangement is true", function(assert) {
-    this.$container.dxRangeSelector({
-        scale: {
-            startValue: 0,
-            endValue: 100,
-            useTicksAutoArrangement: true
-        }
-    });
-    assert.equal(this.axis.updateOptions.lastCall.args[0].label.overlappingBehavior.mode, "hide");
-});
-
-QUnit.test("useTicksAutoArrangement is false", function(assert) {
-    this.$container.dxRangeSelector({
-        scale: {
-            startValue: 0,
-            endValue: 100,
-            useTicksAutoArrangement: false
-        }
-    });
-    assert.equal(this.axis.updateOptions.lastCall.args[0].label.overlappingBehavior.mode, "none");
-});
-// DEPRECATED IN 17.1 END
-
-QUnit.test("overlappingBehavior is set", function(assert) {
-    this.$container.dxRangeSelector({
-        scale: {
-            startValue: 0,
-            endValue: 100,
-            label: { overlappingBehavior: "hide" }
-        }
-    });
-    assert.equal(this.axis.updateOptions.lastCall.args[0].label.overlappingBehavior.mode, "hide");
-});

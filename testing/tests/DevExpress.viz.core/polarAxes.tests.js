@@ -58,7 +58,6 @@ var environment = {
             visible: false,
             tick: { color: "red", width: 1, visible: false, opacity: 1, length: 8 },
             label: {
-                overlappingBehavior: {},
                 visible: true,
                 alignment: "center",
                 font: {
@@ -567,7 +566,7 @@ QUnit.module("Circular axis", $.extend({}, environment, {
         this.options.min = 0;
         this.options.max = 5000;
         this.options.label = {
-            overlappingBehavior: { mode: "ignore" },
+            overlappingBehavior: "ignore",
             visible: false,
             alignment: "center",
             font: {
@@ -1056,7 +1055,6 @@ QUnit.module("Linear Axis", $.extend({}, environment, {
         this.options.min = 0;
         this.options.max = 1000;
         this.options.label = {
-            overlappingBehavior: {},
             visible: true,
             alignment: "center",
             font: {
@@ -1158,13 +1156,13 @@ QUnit.test("create constant lines with label", function(assert) {
 });
 
 QUnit.test("axisDivisionMode is betweenLabels", function(assert) {
-    this.createDrawnAxis({ categories: ["one", "two", "three", "four", "five"], discreteAxisDivisionMode: "betweenLabels", tick: { visible: true }, label: { overlappingBehavior: { mode: "ignore" } } });
+    this.createDrawnAxis({ categories: ["one", "two", "three", "four", "five"], discreteAxisDivisionMode: "betweenLabels", tick: { visible: true }, label: { overlappingBehavior: "ignore" } });
 
     assert.deepEqual(this.translator.translate.getCall(0).args[1], 1);
 });
 
 QUnit.test("draw labels", function(assert) {
-    this.createDrawnAxis({ label: { overlappingBehavior: { mode: "ignore" } } });
+    this.createDrawnAxis({ label: { overlappingBehavior: "ignore" } });
 
     assert.equal(this.renderer.text.callCount, 3);
     for(var i = 1; i < this.renderer.text.callCount; i++) {
@@ -1175,7 +1173,7 @@ QUnit.test("draw labels", function(assert) {
 });
 
 QUnit.test("adjust labels", function(assert) {
-    this.createDrawnAxis({ label: { overlappingBehavior: { mode: "ignore" } } });
+    this.createDrawnAxis({ label: { overlappingBehavior: "ignore" } });
     var text = this.renderer.text;
 
     assert.equal(text.callCount, 3);
@@ -1187,7 +1185,7 @@ QUnit.test("adjust labels", function(assert) {
 });
 
 QUnit.test("draw grid", function(assert) {
-    this.createDrawnAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: { mode: "ignore" } } });
+    this.createDrawnAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
 
     assert.equal(this.renderer.circle.callCount, 3);
     for(var i = 0; i < this.renderer.circle.callCount; i++) {
@@ -1206,7 +1204,7 @@ QUnit.test("draw grid", function(assert) {
 
 QUnit.test("draw spider grid", function(assert) {
     this.renderSettings.drawingType = "linearSpider";
-    var axis = this.createSimpleAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: { mode: "ignore" } } });
+    var axis = this.createSimpleAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
 
     axis.setSpiderTicks([{ coords: { angle: -90 } }, { coords: { angle: 90 } }, { coords: { angle: 0 } }]);
     axis.draw(this.canvas);
@@ -1282,7 +1280,7 @@ QUnit.module("Label overlapping, circular axis", $.extend({}, environment, {
         this.options.startAngle = 0;
         this.options.endAngle = 90;
         this.options.label = {
-            overlappingBehavior: { mode: "hide" },
+            overlappingBehavior: "hide",
             visible: true,
             indentFromAxis: 0,
             alignment: "center"
@@ -1393,7 +1391,7 @@ QUnit.test("Incorrect mode for this axis (rotate)", function(assert) {
         { x: 100, y: 2, width: 20, height: 10 },
         { x: 125, y: 2, width: 20, height: 10 }
     ];
-    this.options.label.overlappingBehavior = { mode: "rotate" };
+    this.options.label.overlappingBehavior = "rotate";
     this.options.label.rotationAngle = 30;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();
@@ -1416,7 +1414,7 @@ QUnit.test("Incorrect mode for this axis (rotate)", function(assert) {
 
 QUnit.test("First and last labels are overlap, hideFirstOrLast = first", function(assert) {
     this.options.label.indentFromAxis = 80;
-    this.options.label.overlappingBehavior.hideFirstOrLast = "first";
+    this.options.label.hideFirstOrLast = "first";
     var markersBBoxes = [
         { x: 0, y: 2, width: 20, height: 10 },
         { x: 25, y: 2, width: 20, height: 8 },
@@ -1441,7 +1439,7 @@ QUnit.test("First and last labels are overlap, hideFirstOrLast = first", functio
 
 QUnit.test("First and last labels are not overlap, hideFirstOrLast = first", function(assert) {
     this.options.label.indentFromAxis = 80;
-    this.options.label.overlappingBehavior.hideFirstOrLast = "first";
+    this.options.label.hideFirstOrLast = "first";
     var markersBBoxes = [
         { x: 0, y: 2, width: 10, height: 10 },
         { x: 35, y: 2, width: 20, height: 8 },
@@ -1461,7 +1459,7 @@ QUnit.test("First and last labels are not overlap, hideFirstOrLast = first", fun
 
 QUnit.test("First and last labels are overlap, hideFirstOrLast = first, close to each other", function(assert) {
     this.options.label.indentFromAxis = 80;
-    this.options.label.overlappingBehavior.hideFirstOrLast = "first";
+    this.options.label.hideFirstOrLast = "first";
     var markersBBoxes = [
         { x: 0, y: 2, width: 20, height: 10 },
         { x: 25, y: 2, width: 20, height: 8 },
@@ -1485,7 +1483,7 @@ QUnit.test("First and last labels are overlap, hideFirstOrLast = first, close to
 });
 
 QUnit.test("T498373. hideFirstOrLast = first. Single label", function(assert) {
-    this.options.label.overlappingBehavior.hideFirstOrLast = "first";
+    this.options.label.hideFirstOrLast = "first";
     this.generatedTicks = [2];
 
     var markersBBoxes = [
@@ -1501,7 +1499,7 @@ QUnit.test("T498373. hideFirstOrLast = first. Single label", function(assert) {
 });
 
 QUnit.test("T498699. hideFirstOrLast = first. Two labels", function(assert) {
-    this.options.label.overlappingBehavior.hideFirstOrLast = "first";
+    this.options.label.hideFirstOrLast = "first";
     this.generatedTicks = [0, 2];
 
     var markersBBoxes = [
@@ -1520,7 +1518,7 @@ QUnit.test("T498699. hideFirstOrLast = first. Two labels", function(assert) {
 });
 
 QUnit.test("T498699. hideFirstOrLast = last. Two labels", function(assert) {
-    this.options.label.overlappingBehavior.hideFirstOrLast = "last";
+    this.options.label.hideFirstOrLast = "last";
     this.generatedTicks = [0, 2];
 
     var markersBBoxes = [
@@ -1540,7 +1538,7 @@ QUnit.test("T498699. hideFirstOrLast = last. Two labels", function(assert) {
 
 QUnit.test("First and last labels are overlap, hideFirstOrLast = last", function(assert) {
     this.options.label.indentFromAxis = 80;
-    this.options.label.overlappingBehavior.hideFirstOrLast = "last";
+    this.options.label.hideFirstOrLast = "last";
     var markersBBoxes = [
         { x: 0, y: 2, width: 20, height: 10 },
         { x: 25, y: 2, width: 20, height: 8 },
@@ -1565,7 +1563,7 @@ QUnit.test("First and last labels are overlap, hideFirstOrLast = last", function
 
 QUnit.test("First and last unhidden labels are overlap, hideFirstOrLast = last, labels overlap", function(assert) {
     this.options.label.indentFromAxis = 10;
-    this.options.label.overlappingBehavior.hideFirstOrLast = "last";
+    this.options.label.hideFirstOrLast = "last";
     var markersBBoxes = [
         { x: 0, y: 2, width: 20, height: 10 },
         { x: 25, y: 2, width: 20, height: 8 },
@@ -1620,7 +1618,7 @@ QUnit.test("'none' mode", function(assert) {
         { x: 100, y: 2, width: 20, height: 10 },
         { x: 125, y: 2, width: 20, height: 10 }
     ];
-    this.options.label.overlappingBehavior = { mode: "none" };
+    this.options.label.overlappingBehavior = "none";
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();
 
@@ -1644,7 +1642,7 @@ QUnit.test("deprecated 'ignore' mode", function(assert) {
         { x: 100, y: 2, width: 20, height: 10 },
         { x: 125, y: 2, width: 20, height: 10 }
     ];
-    this.options.label.overlappingBehavior = { mode: "ignore" };
+    this.options.label.overlappingBehavior = "ignore";
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();
 
@@ -1721,7 +1719,7 @@ QUnit.module("Label overlapping, linear axis", $.extend({}, environment, {
         this.options.startAngle = 0;
         this.options.endAngle = 90;
         that.options.label = {
-            overlappingBehavior: { mode: "hide" },
+            overlappingBehavior: "hide",
             visible: true,
             alignment: "center"
         };
@@ -1880,7 +1878,7 @@ QUnit.test("'none' mode", function(assert) {
         { x: 1, y: 2, width: 20, height: 10 },
         { x: 1, y: 2, width: 20, height: 10 }
     ];
-    this.options.label.overlappingBehavior = { mode: "none" };
+    this.options.label.overlappingBehavior = "none";
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();
 
@@ -1904,7 +1902,7 @@ QUnit.test("deprecated 'ignore' mode", function(assert) {
         { x: 1, y: 2, width: 20, height: 10 },
         { x: 1, y: 2, width: 20, height: 10 }
     ];
-    this.options.label.overlappingBehavior = { mode: "ignore" };
+    this.options.label.overlappingBehavior = "ignore";
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();
 

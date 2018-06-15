@@ -11,14 +11,6 @@ var BaseWidget = {
     * @default undefined
     */
 
-    // DEPRECATED_16_1
-    /**
-    * @pseudo CommonVizPrecision
-    * @type number
-    * @default undefined
-    * @deprecated
-    */
-
     /**
     * @pseudo CommonVizFontFamily
     * @type string
@@ -424,11 +416,6 @@ var BaseWidget = {
         * @extends CommonVizFormat
         */
         format: undefined,
-        /**
-        * @name BaseWidgetOptions.tooltip.precision
-        * @extends CommonVizPrecision
-        */
-        precision: undefined,
         /**
         * @name BaseWidgetOptions.tooltip.color
         * @type string

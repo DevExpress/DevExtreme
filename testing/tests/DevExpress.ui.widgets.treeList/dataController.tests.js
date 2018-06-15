@@ -1026,6 +1026,51 @@ QUnit.test("Cancel collapse row on a collapsing event", function(assert) {
     assert.equal(items.length, 2, "count item");
 });
 
+// T627926
+QUnit.test("Page index should be correct after expanding node when the page is last", function(assert) {
+    // arrange
+    var array = [
+            { name: 'Category1', id: 1 },
+                { name: 'SubCategory1', id: 2, parentId: 1 },
+                { name: 'SubCategory2', id: 3, parentId: 1 },
+            { name: 'Category2', id: 4 },
+                { name: 'SubCategory3', id: 5, parentId: 4 },
+                { name: 'SubCategory4', id: 6, parentId: 4 },
+            { name: 'Category3', id: 7 },
+            { name: 'Category4', id: 8 }
+        ],
+        dataSource = createDataSource(array);
+
+    this.applyOptions({
+        paging: {
+            enabled: true,
+            pageSize: 2,
+            pageIndex: 3
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        expandedRowKeys: [1],
+        dataSource: dataSource
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageIndex(), 3, "page index");
+    assert.strictEqual(this.dataController.pageCount(), 3, "page count");
+
+    // arrange
+    this.dataController._dataSource.getViewportItemIndex = function() {
+        return 3;
+    };
+
+    // act
+    this.expandRow(4);
+
+    // assert
+    assert.strictEqual(this.dataController.pageIndex(), 1, "page index");
+    assert.strictEqual(this.dataController.pageCount(), 4, "page count");
+});
+
 
 QUnit.module("Sorting", { beforeEach: function() {
     this.items = [

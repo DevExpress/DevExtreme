@@ -5,7 +5,6 @@ var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     _isDefined = typeUtils.isDefined,
-    _isString = typeUtils.isString,
     _isArray = Array.isArray,
     _isNumber = typeUtils.isNumeric,
     rangeModule = require("../translators/range"),
@@ -175,47 +174,7 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _prepareScaleSettings: function() {
         var that = this,
-            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), that.option("scale")),
-            scaleMajorTick = scaleOptions.majorTick,
-            scaleMinorTick = scaleOptions.minorTick,
-            overlappingBehavior = scaleOptions.label.overlappingBehavior,
-            useAutoArrangement = overlappingBehavior.useAutoArrangement;
-
-        if(_isString(overlappingBehavior)) {
-            overlappingBehavior = { mode: overlappingBehavior };
-        }
-        // DEPRECATED IN 15_2 start
-        if(scaleMajorTick) {
-            scaleOptions.tick = _extend(scaleOptions.tick, scaleMajorTick);
-            useAutoArrangement = _isDefined(scaleMajorTick.useTickAutoArrangement) ? scaleMajorTick.useTickAutoArrangement : useAutoArrangement;
-            scaleMajorTick.tickInterval !== undefined && (scaleOptions.tickInterval = scaleMajorTick.tickInterval);
-            scaleMajorTick.customTickValues !== undefined && (scaleOptions.customTicks = scaleMajorTick.customTickValues);
-            if(scaleOptions.customTicks) {
-                scaleOptions.tick.showCalculatedTicks = scaleMajorTick.showCalculatedTicks !== undefined ? scaleMajorTick.showCalculatedTicks : true;
-            } else {
-                scaleOptions.tick.showCalculatedTicks = false;
-            }
-        }
-
-        overlappingBehavior.hideFirstTick = scaleOptions.hideFirstTick;
-        overlappingBehavior.hideFirstLabel = scaleOptions.hideFirstLabel;
-        overlappingBehavior.hideLastTick = scaleOptions.hideLastTick;
-        overlappingBehavior.hideLastLabel = scaleOptions.hideLastLabel;
-        if(!_isDefined(overlappingBehavior.hideFirstOrLast)) {
-            overlappingBehavior.hideFirstOrLast = scaleOptions.label.hideFirstOrLast;
-        }
-        if(_isDefined(useAutoArrangement)) {
-            overlappingBehavior.mode = useAutoArrangement ? "hide" : "none";
-        }
-
-        scaleMinorTick.customTickValues !== undefined && (scaleOptions.customMinorTicks = scaleOptions.minorTick.customTickValues);
-        scaleMinorTick.tickInterval !== undefined && (scaleOptions.minorTickInterval = scaleOptions.minorTick.tickInterval);
-        if(scaleOptions.customMinorTicks) {
-            scaleMinorTick.showCalculatedTicks = scaleMinorTick.showCalculatedTicks !== undefined ? scaleMinorTick.showCalculatedTicks : true;
-        } else {
-            scaleMinorTick.showCalculatedTicks = false;
-        }
-        // DEPRECATED IN 15_2 end
+            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), that.option("scale"));
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;
@@ -228,7 +187,6 @@ exports.dxGauge = dxBaseGauge.inherit({
                 return that._rangeContainer.getColorForValue(this.value);
             };
         }
-        scaleOptions.label.overlappingBehavior = overlappingBehavior;
 
         return scaleOptions;
     },
@@ -266,7 +224,7 @@ exports.dxGauge = dxBaseGauge.inherit({
         var that = this;
         settings.currentValue = settings.baseValue = _isFinite(that._translator.translate(settings.baseValue)) ? _Number(settings.baseValue) : that._baseValue;
         settings.vertical = that._area.vertical;
-        if(settings.text && !settings.text.format && !settings.text.precision) {
+        if(settings.text && !settings.text.format) {
             settings.text.format = that._defaultFormatOptions;
         }
     },

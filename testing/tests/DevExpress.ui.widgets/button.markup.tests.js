@@ -55,6 +55,13 @@ QUnit.test("init with options", function(assert) {
     assert.ok(element.hasClass(BUTTON_HAS_TEXT_CLASS), "button with text has text class");
 });
 
+QUnit.test("submit element should have tabindex attribute", function(assert) {
+    var $element = $("#button").dxButton({ useSubmitBehavior: true }),
+        $submitElement = $element.find("input");
+
+    assert.equal($submitElement.attr("tabindex"), -1, "submit input is not focusable");
+});
+
 QUnit.test("class added from type (back)", function(assert) {
     var element = $("#button").dxButton({
             type: "back"

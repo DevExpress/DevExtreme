@@ -80,20 +80,6 @@ QUnit.test("Layer collection - object option", function(assert) {
     assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [{ tag: "layer", dataSource: "data" }], "options are passed");
 });
 
-// DEPRECATED_15_2
-QUnit.test("Layer collection - deprecated", function(assert) {
-    this.createMap({
-        areaSettings: { tag: "area" },
-        markerSettings: { tag: "marker" },
-        mapData: "map-data",
-        markers: "markers"
-    });
-
-    assert.deepEqual(this.layerCollection.setOptions.firstCall.args, [[{ name: "areas", type: "area", _deprecated: true, dataSource: "map-data", tag: "area" }, { name: "markers", type: "marker", _deprecated: true, dataSource: "markers", tag: "marker" }]], "options are passed");
-    assert.ok(this.renderer.lock.getCall(0).calledBefore(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
-    assert.ok(this.renderer.unlock.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
-});
-
 QUnit.test('Projection', function(assert) {
     var spy = sinon.spy(projectionModule, "Projection");
 
@@ -342,62 +328,6 @@ QUnit.test('clearSelection', function(assert) {
     assert.deepEqual(spy3.lastCall.args, [arg]);
 });
 
-// DEPRECATED_15_2
-QUnit.test("getAreas", function(assert) {
-    this.createMap({
-        mapData: []
-    });
-    sinon.stub(this.map, "getLayerByName").withArgs("areas").returns({
-        getElements: sinon.stub().returns({ tag: "elements" })
-    });
-
-    assert.deepEqual(this.map.getAreas(), { tag: "elements" });
-});
-
-// DEPRECATED_15_2
-QUnit.test('getMarkers', function(assert) {
-    this.createMap({
-        markers: []
-    });
-    sinon.stub(this.map, "getLayerByName").withArgs("markers").returns({
-        getElements: sinon.stub().returns({ tag: "elements" })
-    });
-
-    assert.deepEqual(this.map.getMarkers(), { tag: "elements" });
-});
-
-// DEPRECATED_15_2
-QUnit.test('clearAreaSelection', function(assert) {
-    this.createMap({
-        mapData: []
-    });
-    var arg = { tag: "arg" },
-        spy = sinon.spy();
-    sinon.stub(this.map, "getLayerByName").withArgs("areas").returns({
-        clearSelection: spy
-    });
-
-    this.map.clearAreaSelection(arg);
-
-    assert.deepEqual(spy.lastCall.args, [arg]);
-});
-
-// DEPRECATED_15_2
-QUnit.test('clearMarkerSelection', function(assert) {
-    this.createMap({
-        markers: []
-    });
-    var arg = { tag: "arg" },
-        spy = sinon.spy();
-    sinon.stub(this.map, "getLayerByName").withArgs("markers").returns({
-        clearSelection: spy
-    });
-
-    this.map.clearMarkerSelection(arg);
-
-    assert.deepEqual(spy.lastCall.args, [arg]);
-});
-
 QUnit.test('center - getter', function(assert) {
     this.createMap();
     this.projection.stub('getCenter').returns('test-center');
@@ -496,26 +426,6 @@ QUnit.test("'layers' option", function(assert) {
     assert.strictEqual(this.invalidate.lastCall, null, "not invalidated");
 });
 
-// DEPRECATED_15_2
-QUnit.test('"mapData" option', function(assert) {
-    this.createMap({ mapData: [] });
-
-    this.map.option('mapData', "map-data");
-
-    assert.deepEqual(this.layerCollection.setOptions.lastCall.args, [[{ name: "areas", type: "area", _deprecated: true, dataSource: "map-data" }, { name: "markers", type: "marker", _deprecated: true }]], "layer collection");
-    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
-});
-
-// DEPRECATED_15_2
-QUnit.test('"markers" option', function(assert) {
-    this.createMap({ markers: [] });
-
-    this.map.option('markers', "markers");
-
-    assert.deepEqual(this.layerCollection.setOptions.lastCall.args, [[{ name: "areas", type: "area", _deprecated: true }, { name: "markers", type: "marker", _deprecated: true, dataSource: "markers" }]], "layer collection");
-    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
-});
-
 QUnit.test('"maxZoomFactor" option', function(assert) {
     this.createMap();
 
@@ -551,26 +461,6 @@ QUnit.test('"background" option', function(assert) {
 
     assert.deepEqual(this.layerCollection.setBackgroundOptions.lastCall.args, [{ borderWidth: 10, borderColor: 'blue', color: 'green' }], "options");
     assert.strictEqual(this.invalidate.lastCall, null, "not invalidated");
-});
-
-// DEPRECATED_15_2
-QUnit.test('"areaSettings" option', function(assert) {
-    this.createMap({ mapData: [] });
-
-    this.map.option('areaSettings', { tag: 'area-option' });
-
-    assert.deepEqual(this.layerCollection.setOptions.lastCall.args, [[{ name: "areas", type: "area", _deprecated: true, tag: "area-option", dataSource: [] }, { name: "markers", type: "marker", _deprecated: true }]], "layer collection");
-    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
-});
-
-// DEPRECATED_15_2
-QUnit.test('"markerSettings" option', function(assert) {
-    this.createMap({ markers: [] });
-
-    this.map.option('markerSettings', { tag: 'marker-option' });
-
-    assert.deepEqual(this.layerCollection.setOptions.lastCall.args, [[{ name: "areas", type: "area", _deprecated: true }, { name: "markers", type: "marker", _deprecated: true, tag: "marker-option", dataSource: [] }]], "layer collection");
-    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
 });
 
 QUnit.test('"legends" options', function(assert) {
@@ -809,28 +699,6 @@ QUnit.test("'layers[i]' option - same instance", function(assert) {
         a: "layer-2", b: "layer-2-2",
         dataSource: { tag2: "data-2-2" }
     }]);
-});
-
-// DEPRECATED_15_2
-QUnit.test("'mapData' option", function(assert) {
-    this.createMap({
-        mapData: { tag1: "data-1" }
-    });
-
-    this.map.option("mapData", { tag2: "data-2" });
-
-    assert.deepEqual(this.map.option("mapData"), { tag2: "data-2" });
-});
-
-// DEPRECATED_15_2
-QUnit.test("'markers' option", function(assert) {
-    this.createMap({
-        markers: { tag1: "data-1" }
-    });
-
-    this.map.option("markers", { tag2: "data-2" });
-
-    assert.deepEqual(this.map.option("markers"), { tag2: "data-2" });
 });
 
 QUnit.module('Map - life cycle', commons.environment);

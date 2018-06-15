@@ -3370,6 +3370,34 @@ QUnit.test("updateSelection with invalid itemIndexes", function(assert) {
     assert.equal(testElement.find('.dx-checkbox-checked').length, 0);
 });
 
+// T642034
+QUnit.test("selecting of row when rowTemplate contains several tr tags", function(assert) {
+    var testElement = $('#container');
+
+    this.setup();
+    this.options.selection = { mode: "single" };
+    this.options.rowTemplate = function(container, options) {
+        var data = options.data;
+        $(container).append("<tbody class='dx-row'><tr><td id='" + data.name + "'>" + data.name + "</td></tr><tr><td>" + data.age + "</td></tr></tbody>");
+    };
+    this.rowsView.render(testElement);
+
+    // act
+    this.dataController.updateItems({
+        changeType: 'updateSelection',
+        itemIndexes: [1]
+    });
+
+    var ACTIVE_ID = "#Dan";
+    testElement.find(ACTIVE_ID).trigger("dxclick");
+
+    // assert
+    var selectedRows = testElement.find(".dx-selection");
+    assert.equal(selectedRows.length, 1);
+    assert.equal(selectedRows[0].tagName.toLowerCase(), "tbody");
+    assert.ok(selectedRows.has(ACTIVE_ID));
+});
+
 // T152315
 QUnit.test("Selection state refreshing on dataController change", function(assert) {
     // arrange

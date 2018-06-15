@@ -429,19 +429,6 @@ QUnit.test("Empty option", function(assert) {
     assert.deepEqual(map.getLayers(), []);
 });
 
-// DEPRECATED_15_2
-QUnit.test("Deprecated options", function(assert) {
-    var map = $("#container").dxVectorMap({
-        mapData: [],
-        markers: []
-    }).dxVectorMap("instance");
-
-    var layers = map.getLayers();
-    assert.strictEqual(layers.length, 2, "count");
-    assert.strictEqual(layers[0].name, "areas", "layer 1 name");
-    assert.strictEqual(layers[1].name, "markers", "layer 2 name");
-});
-
 QUnit.test("Change option - increase layers count", function(assert) {
     var map = this.createLayers([
         { name: "layer-1" },

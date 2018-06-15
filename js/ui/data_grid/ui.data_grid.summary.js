@@ -342,12 +342,6 @@ gridCore.registerModule("summary", {
                  * @default undefined
                  */
                 /**
-                 * @name dxDataGridOptions.summary.groupItems.precision
-                 * @type number
-                 * @default undefined
-                 * @deprecated
-                 */
-                /**
                  * @name dxDataGridOptions.summary.groupItems.displayFormat
                  * @type string
                  * @default undefined
@@ -409,12 +403,6 @@ gridCore.registerModule("summary", {
                  * @name dxDataGridOptions.summary.totalItems.valueFormat
                  * @type format
                  * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.precision
-                 * @type number
-                 * @default undefined
-                 * @deprecated
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.displayFormat

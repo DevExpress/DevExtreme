@@ -586,7 +586,7 @@
         }
 
         .dx-selection, .dx-selection.dx-row:hover {
-            & > td {
+            & > td, & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-background}";
 
                 &.dx-@{widgetName}-group-space {
@@ -594,16 +594,22 @@
                 }
             }
 
-            & > td.dx-focused {
-                background-color: ~"@{@{widgetName}-base-background-color}";
+            & > td, & > tr > td {
+                &.dx-focused {
+                    background-color: ~"@{@{widgetName}-base-background-color}";
+                }
             }
 
             &:not(.dx-row-lines) > td {
                 border-bottom: 1px solid ~"@{@{widgetName}-selection-background}";
             }
 
-            &.dx-row > td.dx-pointer-events-none {
-                border-bottom-color: transparent;
+            &.dx-row {
+                & > td, & > tr > td {
+                    &.dx-pointer-events-none {
+                        border-bottom-color: transparent;
+                    }
+                }
             }
         }
 
@@ -774,9 +780,11 @@
 
         .dx-@{widgetName}-rowsview {
             .dx-selection, .dx-selection.dx-row:hover {
-                & > td:not(.dx-focused) {
-                    &.dx-@{widgetName}-group-space {
-                        border-left-color: ~"@{@{widgetName}-selection-background}";
+                & > td, & > th > td {
+                    &:not(.dx-focused) {
+                        &.dx-@{widgetName}-group-space {
+                            border-left-color: ~"@{@{widgetName}-selection-background}";
+                        }
                     }
                 }
             }

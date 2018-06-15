@@ -528,11 +528,6 @@ var dxChart = {
            */
             format: '',
             /**
-            * @name dxChartOptions.crosshair.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0,
-            /**
             * @name dxChartOptions.crosshair.label.customizeText
             * @type function(info)
             * @type_function_param1 info:object
@@ -637,11 +632,6 @@ var dxChart = {
                 * @extends CommonVizFormat
                 */
                 format: '',
-                /**
-                * @name dxChartOptions.crosshair.verticalLine.label.precision
-                * @extends CommonVizPrecision
-                */
-                precision: 0,
                 /**
                 * @name dxChartOptions.crosshair.verticalLine.label.customizeText
                 * @type function(info)
@@ -749,11 +739,6 @@ var dxChart = {
                 */
                 format: '',
                 /**
-                * @name dxChartOptions.crosshair.horizontalLine.label.precision
-                * @extends CommonVizPrecision
-                */
-                precision: 0,
-                /**
                 * @name dxChartOptions.crosshair.horizontalLine.label.customizeText
                 * @type function(info)
                 * @type_function_param1 info:object
@@ -824,13 +809,6 @@ var dxChart = {
     * @type object
     */
     commonAxisSettings: {
-        /**
-        * @name dxChartOptions.commonAxisSettings.setTicksAtUnitBeginning
-        * @type boolean
-        * @default true
-        * @deprecated
-        */
-        setTicksAtUnitBeginning: true,
         /**
         * @name dxChartOptions.commonAxisSettings.discreteAxisDivisionMode
         * @type Enums.DiscreteAxisDivisionMode
@@ -928,36 +906,11 @@ var dxChart = {
             displayMode: "standard",
             /**
             * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior
-            * @type string|object
+            * @type string
             * @default 'hide'
             * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
-            * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
             */
-            overlappingBehavior: {
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.mode
-                * @type string
-                * @default 'hide'
-                * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
-                * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
-                * @deprecated dxChartOptions.commonAxisSettings.label.overlappingBehavior
-                */
-                mode: 'hide',
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.rotationAngle
-                * @type number
-                * @default 90
-                * @deprecated dxChartOptions.commonAxisSettings.label.rotationAngle
-                */
-                rotationAngle: 90,
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior.staggeringSpacing
-                * @type number
-                * @default 5
-                * @deprecated dxChartOptions.commonAxisSettings.label.staggeringSpacing
-                */
-                staggeringSpacing: 5
-            },
+            overlappingBehavior: "hide",
             /**
             * @name dxChartOptions.commonAxisSettings.label.indentFromAxis
             * @type number
@@ -1488,12 +1441,7 @@ var dxChart = {
             * @name dxChartOptions.argumentAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxChartOptions.argumentAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxChartOptions.argumentAxis.strips
@@ -1765,12 +1713,7 @@ var dxChart = {
             * @name dxChartOptions.valueAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxChartOptions.valueAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxChartOptions.valueAxis.strips
@@ -2141,14 +2084,7 @@ var dxPieChart = {
         * @type any
         * @default undefined
         */
-        tag: undefined,
-        /**
-        * @name dxPieChartOptions.series.type
-        * @type Enums.PieChartType
-        * @default 'pie'
-        * @deprecated dxPieChartOptions.type
-        */
-        type: 'pie'
+        tag: undefined
     }],
     /**
     * @name dxPieChartOptions.type
@@ -2163,22 +2099,7 @@ var dxPieChart = {
     * @hideDefaults true
     * @inheritAll
     */
-    commonSeriesSettings: {
-        /**
-        * @name dxPieChartOptions.commonSeriesSettings.type
-        * @type Enums.PieChartType
-        * @default 'pie'
-        * @deprecated dxPieChartOptions.type
-        */
-        type: 'pie'
-    },
-    /**
-    * @name dxPieChartMethods.getSeries
-    * @publicName getSeries()
-    * @return pieChartSeriesObject
-    * @deprecated BaseChartMethods.getAllSeries
-    */
-    getSeries: function() { },
+    commonSeriesSettings: { },
     /**
     * @name dxPieChartOptions.diameter
     * @type number
@@ -2467,13 +2388,6 @@ var dxPolarChart = {
     */
     commonAxisSettings: {
         /**
-        * @name dxPolarChartOptions.commonAxisSettings.setTicksAtUnitBeginning
-        * @type boolean
-        * @default true
-        * @deprecated
-        */
-        setTicksAtUnitBeginning: true,
-        /**
         * @name dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode
         * @type Enums.DiscreteAxisDivisionMode
         * @default 'betweenLabels'
@@ -2519,7 +2433,6 @@ var dxPolarChart = {
             * @type string
             * @default 'hide'
             * @acceptValues 'hide' | 'none'
-            * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
             */
             overlappingBehavior: 'hide',
             /**
@@ -2912,12 +2825,7 @@ var dxPolarChart = {
             * @name dxPolarChartOptions.argumentAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxPolarChartOptions.argumentAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxPolarChartOptions.argumentAxis.strips
@@ -3091,12 +2999,7 @@ var dxPolarChart = {
             * @name dxPolarChartOptions.valueAxis.label.format
             * @extends CommonVizFormat
             */
-            format: '',
-            /**
-            * @name dxPolarChartOptions.valueAxis.label.precision
-            * @extends CommonVizPrecision
-            */
-            precision: 0
+            format: ''
         },
         /**
         * @name dxPolarChartOptions.valueAxis.strips
@@ -3373,19 +3276,7 @@ var BaseChart = {
         * @name BaseChartOptions.tooltip.argumentFormat
         * @extends CommonVizFormat
         */
-        argumentFormat: '',
-        /**
-        * @name BaseChartOptions.tooltip.argumentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        argumentPrecision: 0,
-        /**
-        * @name BaseChartOptions.tooltip.percentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        percentPrecision: 0
+        argumentFormat: ''
     },
     /**
     * @name BaseChartOptions.onPointClick

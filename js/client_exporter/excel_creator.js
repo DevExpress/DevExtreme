@@ -87,10 +87,10 @@ exports.ExcelCreator = Class.inherit({
         return VALID_TYPES[dataType] || "s";
     },
 
-    _formatObjectConverter: function(format, precision, dataType) {
+    _formatObjectConverter: function(format, dataType) {
         var result = {
             format: format,
-            precision: precision,
+            precision: format && format.precision,
             dataType: dataType
         };
 
@@ -104,16 +104,15 @@ exports.ExcelCreator = Class.inherit({
         return result;
     },
 
-    _appendFormat: function(format, precision, dataType) {
+    _appendFormat: function(format, dataType) {
         var currency,
-            newFormat = this._formatObjectConverter(format, precision, dataType);
+            newFormat = this._formatObjectConverter(format, dataType);
 
         format = newFormat.format;
-        precision = newFormat.precision;
         currency = newFormat.currency;
         dataType = newFormat.dataType;
 
-        format = excelFormatConverter.convertFormat(format, precision, dataType, currency);
+        format = excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
         if(format) {
             if(inArray(format, this._styleFormat) === -1) {
                 this._styleFormat.push(format);
@@ -242,7 +241,7 @@ exports.ExcelCreator = Class.inherit({
             that._styleArray.push({
                 bold: !!style.bold,
                 alignment: style.alignment || "left",
-                formatID: that._appendFormat(style.format, style.precision, style.dataType),
+                formatID: that._appendFormat(style.format, style.dataType),
                 wrapText: style.wrapText
             });
         });

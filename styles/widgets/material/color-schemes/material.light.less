@@ -33,14 +33,7 @@
 * @type text
 * @group base.common
 */
-@base-border-radius: 2px;
-
-/**
-* @name 124. Small border radius
-* @type text
-* @group base.common
-*/
-@base-border-radius-small: @base-border-radius - 1px;
+@base-border-radius: 4px;
 
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
@@ -492,7 +485,7 @@
 */
 @checkbox-invalid-focused-border-color: @base-invalid-color;
 
-@checkbox-icon-border-radius: @base-border-radius;
+@checkbox-icon-border-radius: @base-border-radius - 2;
 
 // Fileuploader
 /**
@@ -752,13 +745,19 @@
 * @paletteColorOpacity 0.3
 */
 @tagbox-tag-bg: darken(@base-bg, 12%);
-@tagbox-tag-hover-bg: darken(@base-bg, 54%);
+@tagbox-tag-hover-bg: darken(@base-bg, 15%);
 /**
 * @name 40. Tag text color
 * @type color
 * @group editors.tagbox
 */
-@tagbox-tag-color: @base-text-color;
+@tagbox-tag-color: fade(@base-text-color, 60%);
+/**
+* @name 45. Tag active text color
+* @type color
+* @group editors.tagbox
+*/
+@tagbox-tag-active-color: @base-text-color;
 @tagbox-tag-border-radius: 16px;
 
 /**
@@ -767,13 +766,8 @@
 * @group editors.tagbox
 * @paletteColorOpacity 1
 */
-@tagbox-tag-button-remove-bg: rgba(0, 0, 0, .24);
-@tagbox-tag-button-remove-active-bg: lighten(@tagbox-tag-button-remove-bg, 20%);
-
+@tagbox-tag-button-remove-bg: rgba(0, 0, 0, .36);
 @tagbox-tag-focused-bg: darken(@base-bg, 32%);
-@tagbox-tag-focused-color: @base-bg;
-@tagbox-tag-focused-button-remove-bg: @tagbox-tag-button-remove-bg;
-
 @tagbox-select-all-border-color: @base-border-color;
 
 // NavBar
@@ -1789,8 +1783,6 @@
 @tooltip-border-radius: @base-border-radius;
 
 // NumberBox
-@numberbox-spin-container-border-radius: @base-border-radius;
-@numberbox-spin-icon-border-radius: @base-border-radius-small;
 /**
 * @name 30. Spin icon color
 * @type color

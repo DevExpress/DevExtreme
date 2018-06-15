@@ -148,7 +148,6 @@ exports.DataProvider = Class.inherit({
                 dataFields.forEach(function(dataField) {
                     that._styles.push(extend({}, dataItemStyle, {
                         format: dataField.format,
-                        precision: dataField.precision,
                         dataType: getCellDataType(dataField)
                     }));
                 });

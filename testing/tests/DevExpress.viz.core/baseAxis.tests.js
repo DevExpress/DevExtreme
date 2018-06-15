@@ -52,7 +52,6 @@ var environment = {
             isHorizontal: true,
             label: {
                 visible: true,
-                overlappingBehavior: {}
             }
         };
         this.axis.updateOptions($.extend(true, defaultOptions, options));
@@ -246,8 +245,7 @@ QUnit.test("Get options", function(assert) {
         hoverMode: "none",
         label: {
             minSpacing: 5,
-            visible: true,
-            overlappingBehavior: {}
+            visible: true
         },
         position: "bottom",
         grid: {},
@@ -273,7 +271,6 @@ QUnit.test("Set types", function(assert) {
     assert.equal(this.axis.getOptions().type, "someAxisType");
     assert.equal(this.axis.getOptions().valueType, "someType");
 });
-
 
 QUnit.test("Update translator on setTypes pass old business range and canvas", function(assert) {
     this.updateOptions();
@@ -335,6 +332,16 @@ QUnit.test("Logarithmic axis. calculateInterval - returns difference of logarith
     });
 
     assert.equal(this.axis.calculateInterval(32, 0.25), 7);
+});
+
+QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", function(assert) {
+    this.updateOptions({
+        categoriesSortingMethod: "sorting method"
+    });
+
+    var sort = this.axis.getCategoriesSorter();
+
+    assert.equal(sort, "sorting method");
 });
 
 QUnit.module("Get range data", {
@@ -499,7 +506,6 @@ QUnit.test("Min and max for customizeText", function(assert) {
             customizeText: function() {
                 return "min:" + this.min + " max:" + this.max;
             },
-            overlappingBehavior: {},
             visible: true
         }
     });
@@ -520,7 +526,6 @@ QUnit.test("Customize color", function(assert) {
             customizeColor: function() {
                 return this.value > 1 ? "red" : "blue";
             },
-            overlappingBehavior: {},
             visible: true
         }
     });
@@ -997,8 +1002,7 @@ QUnit.module("Data margins calculations", {
             dataType: "numeric",
             isHorizontal: true,
             label: {
-                visible: true,
-                overlappingBehavior: {}
+                visible: true
             }
         }, options));
 
@@ -2366,8 +2370,7 @@ QUnit.module("Data margins calculations after zooming", {
             dataType: "numeric",
             isHorizontal: true,
             label: {
-                visible: true,
-                overlappingBehavior: {}
+                visible: true
             }
         }, options));
 

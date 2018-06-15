@@ -737,28 +737,10 @@ var commonSeries = {
         */
         format: '',
         /**
-        * @name dxChartSeriesTypes.CommonSeries.label.precision
-        * @extends CommonVizPrecision
-        */
-        precision: 0,
-        /**
         * @name dxChartSeriesTypes.CommonSeries.label.argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
-        /**
-        * @name dxChartSeriesTypes.CommonSeries.label.argumentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        argumentPrecision: 0,
-        /**
-        * @name dxChartSeriesTypes.CommonSeries.label.percentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        * @propertyOf dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes. FullStackedSplineAreaSeries,dxChartSeriesTypes. FullStackedLineSeries
-        */
-        percentPrecision: 0,
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.position
         * @type Enums.RelativePosition

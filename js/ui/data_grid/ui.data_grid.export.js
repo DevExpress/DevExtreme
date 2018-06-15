@@ -88,7 +88,6 @@ exports.DataProvider = Class.inherit({
                 // column styles
                 alignment: column.alignment || "left",
                 format: column.format,
-                precision: column.precision,
                 wrapText: wrapTextEnabled,
                 dataType: column.dataType
             });

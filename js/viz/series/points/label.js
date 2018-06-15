@@ -1,6 +1,6 @@
 "use strict";
 
-var _format = require("../../core/format"),
+var _format = require("../../../format_helper").format,
     vizUtils = require("../../core/utils"),
     each = require("../../../core/utils/iterator").each,
     extend = require("../../../core/utils/extend").extend,
@@ -224,28 +224,30 @@ function checkConnector(connector) {
 }
 
 function formatText(data, options) {
-    data.valueText = _format(data.value, options);
-    data.argumentText = _format(data.argument, { format: options.argumentFormat, precision: options.argumentPrecision /* DEPRECATED_16_1 */ });
+    const format = options.format;
+
+    data.valueText = _format(data.value, format);
+    data.argumentText = _format(data.argument, options.argumentFormat);
     if(data.percent !== undefined) {
-        data.percentText = _format(data.percent, { format: { type: "percent", precision: (options.format && options.format.percentPrecision) || options.percentPrecision /* DEPRECATED_16_1 */ } });
+        data.percentText = _format(data.percent, { type: "percent", precision: (format && format.percentPrecision) });
     }
     if(data.total !== undefined) {
-        data.totalText = _format(data.total, options);
+        data.totalText = _format(data.total, format);
     }
     if(data.openValue !== undefined) {
-        data.openValueText = _format(data.openValue, options);
+        data.openValueText = _format(data.openValue, format);
     }
     if(data.closeValue !== undefined) {
-        data.closeValueText = _format(data.closeValue, options);
+        data.closeValueText = _format(data.closeValue, format);
     }
     if(data.lowValue !== undefined) {
-        data.lowValueText = _format(data.lowValue, options);
+        data.lowValueText = _format(data.lowValue, format);
     }
     if(data.highValue !== undefined) {
-        data.highValueText = _format(data.highValue, options);
+        data.highValueText = _format(data.highValue, format);
     }
     if(data.reductionValue !== undefined) {
-        data.reductionValueText = _format(data.reductionValue, options);
+        data.reductionValueText = _format(data.reductionValue, format);
     }
 
     return options.customizeText ? options.customizeText.call(data, data) : data.valueText;

@@ -20,8 +20,7 @@ var WHITE = "#ffffff",
     OUTSIDE = "outside",
 
     themeModule = require("../../themes"),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias;
+    registerTheme = themeModule.registerTheme;
 
 registerTheme({
     name: "generic.light",
@@ -1014,7 +1013,6 @@ registerTheme({
             color: BLACK,
             opacity: 0.1,
             showCustomBoundaryTicks: true,
-            showMinorTicks: true, // DEPRECATED IN 15_2
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",
@@ -1087,7 +1085,7 @@ registerTheme({
             moveSelectedRangeByClick: true,
             manualRangeSelectionEnabled: true,
             allowSlidersSwap: true,
-            callSelectedRangeChanged: "onMovingComplete"
+            callValueChanged: "onMovingComplete"
         },
         redrawOnResize: true,
         chart: {
@@ -1557,5 +1555,3 @@ registerTheme({
     }
 });
 
-// DEPRECATED_15_1 / "desktop" name
-registerThemeAlias("desktop.light", "generic.light");

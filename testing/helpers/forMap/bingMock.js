@@ -290,9 +290,6 @@ Microsoft.Maps = {
             if(entity instanceof Microsoft.Maps.Pushpin) {
                 Microsoft.pushpinRemoved = true;
             }
-            if(entity instanceof Microsoft.Maps.Infobox) {
-                Microsoft.infoboxRemoved = true;
-            }
         };
         this.removeAt = function() {};// (index:number)
         this.setOptions = function() {};// (options:EntityCollectionOptions)
@@ -306,8 +303,12 @@ Microsoft.Maps = {
 
         this.open = function() {};
         this.close = function() {};
-        this.setMap = function() {
-            Microsoft.infoboxAddedToMap = true;
+        this.setMap = function(map) {
+            if(!map) {
+                Microsoft.infoboxRemoved = true;
+            } else {
+                Microsoft.infoboxAddedToMap = true;
+            }
         };
         this.getContent = function() {};
         this.getPosition = function() {};

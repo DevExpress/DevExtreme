@@ -30,8 +30,8 @@ QUnit.module('Numeric and dateTime formats', {
 QUnit.test('Currency numeric formats', function(assert) {
     // assert
     assert.equal(formatHelper.format(1204, 'currency'), '$1,204');
-    assert.equal(formatHelper.format(1204, 'cuRRency', 2), '$1,204.00');
-    assert.equal(formatHelper.format(-1204, 'currency', 2), '($1,204.00)');
+    assert.equal(formatHelper.format(1204, { type: 'cuRRency', precision: 2 }), '$1,204.00');
+    assert.equal(formatHelper.format(-1204, { type: 'currency', precision: 2 }), '($1,204.00)');
 });
 QUnit.test('currency RUB large number format with different locales', function(assert) {
     var currentCultureName = Globalize.locale().locale;
@@ -47,17 +47,17 @@ QUnit.test('currency RUB large number format with different locales', function(a
 });
 QUnit.test('Fixed point numeric formats', function(assert) {
     // assert
-    assert.equal(formatHelper.format(23.04059872, 'fIxedPoint', 4), '23.0406');
+    assert.equal(formatHelper.format(23.04059872, { type: 'fIxedPoint', precision: 4 }), '23.0406');
 });
 QUnit.test('Percent numeric formats', function(assert) {
     // assert
     assert.equal(formatHelper.format(0.45, 'percEnt'), '45%');
-    assert.equal(formatHelper.format(0.45, 'peRcent', 2), '45.00%');
+    assert.equal(formatHelper.format(0.45, { type: 'peRcent', precision: 2 }), '45.00%');
 });
 QUnit.test('Decimal numeric formats', function(assert) {
     // assert
     assert.equal(formatHelper.format(437, 'decimAl'), '437');
-    assert.equal(formatHelper.format(437, 'deCimal', 5), '00437');
+    assert.equal(formatHelper.format(437, { type: 'deCimal', precision: 5 }), '00437');
 });
 QUnit.test('Long date format', function(assert) {
     // assert
@@ -150,8 +150,8 @@ QUnit.test('Choose call format method by the value type', function(assert) {
     // assert
     assert.equal(formatHelper.format(new Date(2005, 0, 1), 'loNGDate'), 'Saturday, January 1, 2005');
     assert.equal(formatHelper.format(new Date(2005, 0, 1), 'SHORTDate'), '1/1/2005');
-    assert.equal(formatHelper.format(12.098, 'fixEDPoint', 2), '12.10');
-    assert.equal(formatHelper.format(12.098, 'cuRRency', 1), '$12.1');
+    assert.equal(formatHelper.format(12.098, { type: 'fixEDPoint', precision: 2 }), '12.10');
+    assert.equal(formatHelper.format(12.098, { type: 'cuRRency', precision: 1 }), '$12.1');
     assert.equal(formatHelper.format('InvalidValue'), 'InvalidValue');
 });
 QUnit.test('Millisecond date time interval format', function(assert) {
@@ -315,51 +315,51 @@ QUnit.test('large number auto format precision', function(assert) {
     // act, assert
     assert.strictEqual(formatHelper.format(0.01, 'fixedPoint LARGENumber'), '0');
     assert.strictEqual(formatHelper.format(10.23, 'fixedPoint largeNumber'), '10');
-    assert.strictEqual(formatHelper.format(123, 'fixedPoint largeNumber', 1), '123.0');
-    assert.strictEqual(formatHelper.format(12345, 'fixedPoint largeNUMBER', 2), '12.35K');
-    assert.strictEqual(formatHelper.format(12345, 'fixedPoint largeNumber', 5), '12.34500K');
+    assert.strictEqual(formatHelper.format(123, { type: 'fixedPoint largeNumber', precision: 1 }), '123.0');
+    assert.strictEqual(formatHelper.format(12345, { type: 'fixedPoint largeNUMBER', precision: 2 }), '12.35K');
+    assert.strictEqual(formatHelper.format(12345, { type: 'fixedPoint largeNumber', precision: 5 }), '12.34500K');
 });
 
 QUnit.test('large number auto format small numbers', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(0.01, 'fixedPoint largeNumber', 2), '0.01');
-    assert.strictEqual(formatHelper.format(999, 'fixedPoint largeNumber', 2), '999.00');
-    assert.strictEqual(formatHelper.format(999.9, 'fixedPoint largeNumber', 0), '1,000');
-    assert.strictEqual(formatHelper.format(1000, 'fixedPoint largeNumber', 0), '1K');
+    assert.strictEqual(formatHelper.format(0.01, { type: 'fixedPoint largeNumber', precision: 2 }), '0.01');
+    assert.strictEqual(formatHelper.format(999, { type: 'fixedPoint largeNumber', precision: 2 }), '999.00');
+    assert.strictEqual(formatHelper.format(999.9, { type: 'fixedPoint largeNumber', precision: 0 }), '1,000');
+    assert.strictEqual(formatHelper.format(1000, { type: 'fixedPoint largeNumber', precision: 0 }), '1K');
 });
 
 QUnit.test('large number auto format powers', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(1234.56, 'fixedPoint largeNumber', 2), '1.23K');
-    assert.strictEqual(formatHelper.format(12345.67, 'fixedPoint largeNumber', 2), '12.35K');
-    assert.strictEqual(formatHelper.format(123400000, 'fixedPoint largeNumber', 2), '123.40M');
-    assert.strictEqual(formatHelper.format(1234000000, 'fixedPoint largeNumber', 2), '1.23B');
-    assert.strictEqual(formatHelper.format(12340000000000, 'fixedPoint largeNumber', 2), '12.34T');
-    assert.strictEqual(formatHelper.format(12340000000000000, 'fixedPoint largeNumber', 2), '12,340.00T');
+    assert.strictEqual(formatHelper.format(1234.56, { type: 'fixedPoint largeNumber', precision: 2 }), '1.23K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'fixedPoint largeNumber', precision: 2 }), '12.35K');
+    assert.strictEqual(formatHelper.format(123400000, { type: 'fixedPoint largeNumber', precision: 2 }), '123.40M');
+    assert.strictEqual(formatHelper.format(1234000000, { type: 'fixedPoint largeNumber', precision: 2 }), '1.23B');
+    assert.strictEqual(formatHelper.format(12340000000000, { type: 'fixedPoint largeNumber', precision: 2 }), '12.34T');
+    assert.strictEqual(formatHelper.format(12340000000000000, { type: 'fixedPoint largeNumber', precision: 2 }), '12,340.00T');
 });
 
 QUnit.test('large number format powers', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(12345.67, 'fixedPoint', 2), '12,345.67');
-    assert.strictEqual(formatHelper.format(12345.67, 'fixedPoint largeNumber', 2), '12.35K');
-    assert.strictEqual(formatHelper.format(12345.67, 'fixedPoint thousands', 2), '12.35K');
-    assert.strictEqual(formatHelper.format(12345.67, 'fixedPoint miLLions', 3), '0.012M');
-    assert.strictEqual(formatHelper.format(12345.67, 'fixedPoint biLLions', 7), '0.0000123B');
-    assert.strictEqual(formatHelper.format(12345670, 'fixedPoint triLLions', 7), '0.0000123T');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'fixedPoint', precision: 2 }), '12,345.67');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'fixedPoint largeNumber', precision: 2 }), '12.35K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'fixedPoint thousands', precision: 2 }), '12.35K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'fixedPoint miLLions', precision: 3 }), '0.012M');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'fixedPoint biLLions', precision: 7 }), '0.0000123B');
+    assert.strictEqual(formatHelper.format(12345670, { type: 'fixedPoint triLLions', precision: 7 }), '0.0000123T');
 });
 
 QUnit.test('currency large number format', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(12345.67, 'currency largeNumber', 2), '$12.35K');
-    assert.strictEqual(formatHelper.format(12345.67, 'currency thoUSands', 2), '$12.35K');
-    assert.strictEqual(formatHelper.format(12345.67, 'currency miLLions', 3), '$0.012M');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'currency largeNumber', precision: 2 }), '$12.35K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'currency thoUSands', precision: 2 }), '$12.35K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'currency miLLions', precision: 3 }), '$0.012M');
 });
 
 QUnit.test('large number format without number type', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(12345.67, 'largeNumber', 2), '12.35K');
-    assert.strictEqual(formatHelper.format(12345.67, 'thousands', 2), '12.35K');
-    assert.strictEqual(formatHelper.format(12345.67, 'millions', 3), '0.012M');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'largeNumber', precision: 2 }), '12.35K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'thousands', precision: 2 }), '12.35K');
+    assert.strictEqual(formatHelper.format(12345.67, { type: 'millions', precision: 3 }), '0.012M');
 });
 
 QUnit.test('Empty format for number', function(assert) {
@@ -370,37 +370,37 @@ QUnit.test('Empty format for number', function(assert) {
 
 QUnit.test('exponential number type pow', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(5, 'exponEntial', 2), '5.00E+0');
-    assert.strictEqual(formatHelper.format(0.0081, 'exponential', 2), '8.10E-3');
-    assert.strictEqual(formatHelper.format(-12345.67, 'exponential', 2), '-1.23E+4');
-    assert.strictEqual(formatHelper.format(500000001, 'exponential', 2), '5.00E+8');
-    assert.strictEqual(formatHelper.format(1.56662165464E+99, 'exponential', 2), '1.57E+99');
-    assert.strictEqual(formatHelper.format(1.56662165464E-99, 'exponential', 2), '1.57E-99');
+    assert.strictEqual(formatHelper.format(5, { type: 'exponEntial', precision: 2 }), '5.00E+0');
+    assert.strictEqual(formatHelper.format(0.0081, { type: 'exponential', precision: 2 }), '8.10E-3');
+    assert.strictEqual(formatHelper.format(-12345.67, { type: 'exponential', precision: 2 }), '-1.23E+4');
+    assert.strictEqual(formatHelper.format(500000001, { type: 'exponential', precision: 2 }), '5.00E+8');
+    assert.strictEqual(formatHelper.format(1.56662165464E+99, { type: 'exponential', precision: 2 }), '1.57E+99');
+    assert.strictEqual(formatHelper.format(1.56662165464E-99, { type: 'exponential', precision: 2 }), '1.57E-99');
 });
 
 QUnit.test('exponential number type precision', function(assert) {
     // act, assert
     assert.strictEqual(formatHelper.format(1234, 'exponential'), '1.2E+3');
-    assert.strictEqual(formatHelper.format(5, 'exponential', 0), '5E+0');
-    assert.strictEqual(formatHelper.format(0.0081, 'exponential', 1), '8.1E-3');
-    assert.strictEqual(formatHelper.format(-12345.67, 'exponential', 2), '-1.23E+4');
-    assert.strictEqual(formatHelper.format(500000001, 'exponential', 3), '5.000E+8');
-    assert.strictEqual(formatHelper.format(-123456789, 'exponential', 8), '-1.23456789E+8');
+    assert.strictEqual(formatHelper.format(5, { type: 'exponential', precision: 0 }), '5E+0');
+    assert.strictEqual(formatHelper.format(0.0081, { type: 'exponential', precision: 1 }), '8.1E-3');
+    assert.strictEqual(formatHelper.format(-12345.67, { type: 'exponential', precision: 2 }), '-1.23E+4');
+    assert.strictEqual(formatHelper.format(500000001, { type: 'exponential', precision: 3 }), '5.000E+8');
+    assert.strictEqual(formatHelper.format(-123456789, { type: 'exponential', precision: 8 }), '-1.23456789E+8');
 });
 
 QUnit.test('exponential number type round', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(0.00999, 'exponential', 0), '1E-2');
-    assert.strictEqual(formatHelper.format(0.00999, 'exponential', 2), '9.99E-3');
-    assert.strictEqual(formatHelper.format(999, 'exponential', 1), '1.0E+3');
+    assert.strictEqual(formatHelper.format(0.00999, { type: 'exponential', precision: 0 }), '1E-2');
+    assert.strictEqual(formatHelper.format(0.00999, { type: 'exponential', precision: 2 }), '9.99E-3');
+    assert.strictEqual(formatHelper.format(999, { type: 'exponential', precision: 1 }), '1.0E+3');
 });
 
 
 QUnit.test('exponential number type positive and negative number', function(assert) {
     // act, assert
-    assert.strictEqual(formatHelper.format(0, 'exponential', 2), '0.00E+0');
-    assert.strictEqual(formatHelper.format(1234, 'exponential', 2), '1.23E+3');
-    assert.strictEqual(formatHelper.format(-1234, 'exponential', 2), '-1.23E+3');
+    assert.strictEqual(formatHelper.format(0, { type: 'exponential', precision: 2 }), '0.00E+0');
+    assert.strictEqual(formatHelper.format(1234, { type: 'exponential', precision: 2 }), '1.23E+3');
+    assert.strictEqual(formatHelper.format(-1234, { type: 'exponential', precision: 2 }), '-1.23E+3');
 });
 
 
@@ -422,7 +422,7 @@ QUnit.test("not execute formatNumberEx for NaN value", function(assert) {
 QUnit.test('Case insensitive currency', function(assert) {
     // assert
     assert.equal(formatHelper.format(1204, 'currency'), '$1,204');
-    assert.equal(formatHelper.format(1204, 'cuRrency', 2), '$1,204.00');
+    assert.equal(formatHelper.format(1204, { type: 'cuRrency', precision: 2 }), '$1,204.00');
 });
 
 QUnit.test("not execute formatNumberEx for string with set format", function(assert) {
