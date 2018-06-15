@@ -384,7 +384,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 var top = dataController.getContentOffset("begin"),
                     bottom = dataController.getContentOffset("end"),
                     $tables = that.getTableElements(),
-                    getBody = $element => $element.prop("tagName") === "TBODY" ? $element : $element.children("tbody");
+                    getBody = $element => $element.children("tbody");
 
                 $tables.each(function() {
                     getBody($(this)).children(".dx-virtual-row").remove();
