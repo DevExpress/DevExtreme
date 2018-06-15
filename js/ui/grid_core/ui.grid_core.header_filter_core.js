@@ -157,7 +157,20 @@ exports.HeaderFilterView = modules.View.inherit({
             return DEFAULT_SEARCH_EXPRESSION;
         }
 
-        return lookup ? (lookup.displayExpr || "this") : (options.dataField || options.selector);
+        if(lookup) {
+            return lookup.displayExpr || "this";
+        }
+
+        if(options.dataSource) {
+            var group = options.dataSource.group;
+            if(Array.isArray(group) && group.length > 0) {
+                return group[0].selector;
+            } else if(isFunction(group)) {
+                return group;
+            }
+        }
+
+        return (options.dataField || options.selector);
     },
 
     _cleanPopupContent: function() {

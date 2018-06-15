@@ -270,11 +270,15 @@ QUnit.module("Header Filter", {
     beforeEach: function() {
         this.items = [];
         this.columns = [{
-            dataField: "Test1", allowHeaderFiltering: true, calculateCellValue: function(data) {
+            dataField: "Test1",
+            allowHeaderFiltering: true,
+            calculateCellValue: function(data) {
                 return data.Test1;
             }
         }, {
-            dataField: "Test2", allowHeaderFiltering: true, calculateCellValue: function(data) {
+            dataField: "Test2",
+            allowHeaderFiltering: true,
+            calculateCellValue: function(data) {
                 return data.Test2;
             }
         }];
@@ -1673,7 +1677,7 @@ QUnit.test("Show header filter with search bar", function(assert) {
 
     // assert
     assert.ok(list.option("searchEnabled"), "list with search bar");
-    assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
+    assert.ok($.isFunction(list.option("searchExpr")), "expr is correct");
     assert.equal(list.option("searchTimeout"), 300, "search timeout is assigned");
 });
 
@@ -1933,6 +1937,45 @@ QUnit.test("Search by custom column", function(assert) {
     listItems = list.$element().find(".dx-list-item");
     assert.strictEqual(listItems.length, 1, "list item's count");
     assert.strictEqual(listItems.text(), "test2", "correct item's text");
+});
+
+// T643528
+QUnit.test("Search by value from calculateCellValue", function(assert) {
+    // arrange
+    var that = this,
+        list,
+        listItems,
+        testElement = $("#container"),
+        $popupContent;
+
+    that.options.headerFilter.allowSearch = true;
+    that.columns = [{
+        dataField: "Test1",
+        selector: function(data) {
+            return data.Test1;
+        },
+        calculateCellValue: function(data) {
+            return data.Test2 + data.Test1;
+        }
+    }];
+
+    that.items = [{ Test1: 111, Test2: "test2" }, { Test1: 2, Test2: "test4" }];
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
+    list = $popupContent.find(".dx-list").dxList("instance");
+
+    // act
+    list.option("searchValue", "test2111");
+
+    // assert
+    listItems = list.$element().find(".dx-list-item");
+    assert.strictEqual(listItems.length, 1, "list item's count");
+    assert.strictEqual(listItems.text(), "test2111", "correct item's text");
 });
 
 // T629003
