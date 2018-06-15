@@ -6,6 +6,8 @@ var $ = require("../../core/renderer"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
     EditDecorator = require("./ui.list.edit.decorator"),
     Overlay = require("../overlay"),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     ListBase = require("./ui.list.base");
 
 var CONTEXTMENU_CLASS = "dx-list-context-menu",
@@ -96,11 +98,15 @@ registerDecorator(
         handleContextMenu: function($itemElement) {
             this._$itemWithMenu = $itemElement;
 
+            var scrollTop = window.pageYOffset,
+                scrollLeft = window.pageXOffset;
+
             this._menu.option({
                 position: {
                     my: "top",
                     at: "bottom",
                     of: $itemElement,
+                    offset: { h: -scrollLeft, v: -scrollTop },
                     collision: "flip"
                 }
             });
