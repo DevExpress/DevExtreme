@@ -943,9 +943,9 @@ var SchedulerWorkSpace = Widget.inherit({
             }
         }
 
-        this._renderAllDayPanel();
-
         this._renderDateTable();
+
+        this._renderAllDayPanel();
 
         this._updateGroupTableHeight();
 
