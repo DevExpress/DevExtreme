@@ -1333,32 +1333,6 @@ QUnit.test("item should be deleted from menu", function(assert) {
     $deleteMenuItem.trigger("dxclick");
 });
 
-QUnit.test("contextMenu item should have correct position after page scrolling", function(assert) {
-    var originalPageX = window.pageXOffset,
-        originalPageY = window.pageYOffset;
-
-    $("#templated-list").css("padding-top", 500);
-
-    var $list = $($("#templated-list").dxList({
-            items: [0, 1, 2],
-            allowItemDeleting: true,
-            itemDeleteMode: "context"
-        })),
-        list = $list.dxList("instance");
-
-    window.pageXOffset = 200;
-    window.pageYOffset = 400;
-
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
-    var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
-        menu = $menu.dxOverlay("instance");
-
-    assert.deepEqual(menu.option("position").offset, { h: -200, v: -400 }, "Menu has correct position offset");
-
-    window.pageXOffset = originalPageX;
-    window.pageYOffset = originalPageY;
-});
-
 QUnit.module("context menu decorator", {
     beforeEach: function() {
         fx.off = true;
