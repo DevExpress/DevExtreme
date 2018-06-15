@@ -95,7 +95,7 @@ registerDecorator(
             this._list.deleteItem(this._$itemWithMenu);
         },
 
-        handleContextMenu: function($itemElement, e) {
+        handleContextMenu: function($itemElement) {
             this._$itemWithMenu = $itemElement;
 
             var scrollTop = window.pageYOffset,
