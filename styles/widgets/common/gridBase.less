@@ -145,8 +145,10 @@
             }
         }
 
-        .dx-row > td {
-            padding: @GRID_CELL_PADDING;
+        .dx-row {
+            & > td, & > tr > td {
+                padding: @GRID_CELL_PADDING;
+            }
         }
 
         .dx-error-row {
@@ -297,8 +299,10 @@
         width: 0 !important;
     }
 
-    .dx-row > td {
-        border: none;
+    .dx-row {
+        & > td, & > tr > td {
+            border: none;
+        }
     }
 
     .dx-@{widgetName}-content .dx-@{widgetName}-table {
@@ -339,19 +343,21 @@
             float: none;
         }
 
-        .dx-row > td {
-            vertical-align: top;
+        .dx-row {
+            & > td, & > tr > td {
+                vertical-align: top;
 
-            &:first-child {
-                border-left: 0px;
-            }
+                &:first-child {
+                    border-left: 0px;
+                }
 
-            &.dx-@{widgetName}-group-space {
-                border-right: none;
-                vertical-align: middle;
+                &.dx-@{widgetName}-group-space {
+                    border-right: none;
+                    vertical-align: middle;
 
-                & + td {
-                    border-left: none;
+                    & + td {
+                        border-left: none;
+                    }
                 }
             }
         }
@@ -709,15 +715,17 @@
             outline: 0;
         }
 
-        .dx-row > td {
-            overflow: hidden;
-            -o-text-overflow: ellipsis;
-            text-overflow: ellipsis;
+        .dx-row {
+            & > td, & > tr > td {
+                overflow: hidden;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+            }
         }
 
         .dx-row.dx-row-lines:first-child {
             border-top: none;
-            & > td {
+            & > td, & > tr > td {
                 border-top: none;
             }
         }
