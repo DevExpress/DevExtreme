@@ -3,7 +3,6 @@
 var proto = require("./sankey").prototype,
     Tracker = require("../components/tracker").Tracker,
     DATA_KEY_BASE = "__sankey_data_",
-    isDefined = require("../../core/utils/type").isDefined,
     dataKeyModifier = 0;
 
 proto._eventsMap.onItemClick = { name: "itemClick" };
@@ -12,32 +11,14 @@ exports.plugin = {
     name: "tracker",
     init: function() {
         var that = this,
-            dataKey = DATA_KEY_BASE + dataKeyModifier++,
-            getProxyData = function(e) {
-                var rootOffset = that._renderer.getRootOffset(),
-                    x = Math.floor(e.pageX - rootOffset.left),
-                    y = Math.floor(e.pageY - rootOffset.top);
-
-                return that._hitTestTargets(x, y);
-            };
+            dataKey = DATA_KEY_BASE + dataKeyModifier++;
 
         that._tracker = new Tracker({
             widget: that,
             root: that._renderer.root,
-            getData: function(e, tooltipData) {
-                var target = e.target,
-                    data = target[dataKey],
-                    proxyData;
-                if(isDefined(data)) {
-                    return data;
-                }
-                proxyData = getProxyData(e);
-
-                if(tooltipData && proxyData && proxyData.type !== "inside-label") {
-                    return;
-                }
-
-                return proxyData && proxyData.id;
+            getData: function(e) {
+                var target = e.target;
+                return target[dataKey];
             },
             getNode: function(index) {
                 if(index < that._nodes.length) {
