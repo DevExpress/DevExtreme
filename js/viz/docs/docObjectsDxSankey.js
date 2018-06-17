@@ -5,37 +5,34 @@
 */
 var NodeItem = {
     /**
-    * @name dxSankeyNodeItemfields_title
-    * @publicName title
+    * @name dxSankeyNodeItemfields.title
     * @type string
     */
     title: undefined,
     /**
-    * @name dxSankeyNodeItemfields_linksIn
-    * @publicName linksIn
+    * @name dxSankeyNodeItemfields.linksIn
     * @type Array<Object>
     */
     linksIn: undefined,
     /**
-    * @name dxSankeyNodeItemfields_linksOut
-    * @publicName linksOut
+    * @name dxSankeyNodeItemfields.linksOut
     * @type Array<Object>
     */
     linksOut: undefined,
     /**
-    * @name dxSankeyNodeItemmethods_hover
+    * @name dxSankeyNodeItemmethods.hover
     * @publicName hover(state)
     * @param1 state:boolean
     */
     hover: function () { },
     /**
-    * @name dxSankeyNodeItemmethods_ishovered
+    * @name dxSankeyNodeItemmethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function () { },
     /**
-    * @name dxSankeyNodeItemmethods_showtooltip
+    * @name dxSankeyNodeItemmethods.showtTooltip
     * @publicName showTooltip()
     */
     showTooltip: function(){ }
@@ -47,37 +44,36 @@ var NodeItem = {
 */
 var LinkItem = {
     /**
-    * @name dxSankeyLinkItemfields_connection
-    * @publicName connection
+    * @name dxSankeyLinkItemfields.connection
     * @type Object
     */
     connection: undefined,
     /**
-    * @name dxSankeyLinkItemmethods_hover
+    * @name dxSankeyLinkItemmethods.hover
     * @publicName hover(state)
     * @param1 state:boolean
     */
     hover: function () { },
     /**
-    * @name dxSankeyLinkItemmethods_adjacentnodehover
+    * @name dxSankeyLinkItemmethods.adjacentNodeHover
     * @publicName adjacentNodeHover(state)
     * @param1 state:boolean
     */
     adjacentNodeHover: function () { },
     /**
-    * @name dxSankeyLinkItemmethods_ishovered
+    * @name dxSankeyLinkItemmethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function () { },
     /**
-    * @name dxSankeyLinkItemmethods_isadjacentnodehovered
+    * @name dxSankeyLinkItemmethods.isAdjacentNodeHovered
     * @publicName isAdjacentNodeHovered()
     * @return boolean
     */
     isAdjacentNodeHovered: function () { },
     /**
-    * @name dxSankeyLinkItemmethods_showtooltip
+    * @name dxSankeyLinkItemmethods.showTooltip
     * @publicName showTooltip()
     */
     showTooltip: function(){ }
@@ -89,14 +85,12 @@ var LinkItem = {
 */
 var SankeyItems = {
     /**
-    * @name dxSankeyItemsfields_nodes
-    * @publicName nodes
+    * @name dxSankeyItemsfields.nodes
     * @type Array<dxSankeyNodeItem>
     */
     nodes: undefined,
     /**
-    * @name dxSankeyItemsfields_links
-    * @publicName links
+    * @name dxSankeyItemsfields.links
     * @type Array<dxSankeyLinksItem>
     */
     links: undefined

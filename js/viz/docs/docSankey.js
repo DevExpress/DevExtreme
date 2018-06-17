@@ -478,6 +478,7 @@ var dxSankey = {
     onHoverChanged: function() { },
     /**
     * @name dxSankeyMethods.getAllItems
+    * @publicName getAllItems()
     * @return dxSankeyItems
     */
     getAllItems: function () { }
