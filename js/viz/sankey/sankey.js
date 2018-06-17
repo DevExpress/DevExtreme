@@ -323,7 +323,7 @@ var dxSankey = require("../core/base_widget").inherit({
             node.label.append(this._groupLabels);
 
             var bBox = node.label.getBBox();
-            node.label.attr({ y: 2 * settings.attr.y - bBox.y - bBox.height / 2 + labelOptions.verticalOffset });
+            node.label.attr({ y: 2 * settings.attr.y - bBox.y - Math.round(bBox.height / 2) + labelOptions.verticalOffset });
 
             if(bBox.width > availableLabelWidth) {
                 node.label.applyEllipsis(availableLabelWidth);

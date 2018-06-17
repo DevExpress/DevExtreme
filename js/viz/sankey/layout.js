@@ -137,6 +137,7 @@ let layout = {
             } else if(cascadeAlign === 'center') {
                 y = 0.5 * (options.height - cascadeHeight);
             }
+            y = Math.round(y);
 
             Object.keys(cascade).forEach(nodeTitle => {
                 cascade[nodeTitle].sort = this._sort && this._sort.hasOwnProperty(nodeTitle) ? this._sort[nodeTitle] : 1;
@@ -144,8 +145,8 @@ let layout = {
 
             Object.keys(cascade).sort((a, b) => { return cascade[a].sort - cascade[b].sort; }).forEach(nodeTitle => {
                 let node = cascade[nodeTitle],
-                    height = heightAvailable * node.maxWeight / maxWeight,
-                    x = cascadeIdx * options.width / (cascades.length - 1) - (cascadeIdx === 0 ? 0 : options.nodeWidth),
+                    height = Math.floor(heightAvailable * node.maxWeight / maxWeight),
+                    x = Math.round(cascadeIdx * options.width / (cascades.length - 1)) - (cascadeIdx === 0 ? 0 : options.nodeWidth),
                     rect = {};
 
                 rect._name = nodeTitle;
@@ -186,13 +187,16 @@ let layout = {
         links.forEach(link => {
             let rectFrom = this._findRectByName(rects, link[0]),
                 rectTo = this._findRectByName(rects, link[1]),
-                height = link[2] / this._weightPerPixel,
+                height = Math.round(link[2] / this._weightPerPixel),
                 yOffsetFrom = yOffsets[link[0]].out,
-                yOffsetTo = yOffsets[link[1]].in;
+                yOffsetTo = yOffsets[link[1]].in,
+                // heights of left and right parts of the link must fit the nodes on it's left and right
+                heightFrom = (yOffsets[link[0]].out + height > rectFrom.height) ? rectFrom.height - yOffsets[link[0]].out : height,
+                heightTo = (yOffsets[link[1]].in + height > rectTo.height) ? rectTo.height - yOffsets[link[1]].in : height;
 
             paths.push({
-                from: { x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: height, node: rectFrom, weight: link[2] },
-                to: { x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: height, node: rectTo }
+                from: { x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: heightFrom, node: rectFrom, weight: link[2] },
+                to: { x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: heightTo, node: rectTo }
             });
             yOffsets[link[0]].out += height;
             yOffsets[link[1]].in += height;
