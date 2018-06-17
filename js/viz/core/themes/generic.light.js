@@ -1573,7 +1573,8 @@ registerTheme({
             overlappingBehavior: "ellipsis",
             colorMode: "none",
             font: {
-                color: WHITE
+                color: WHITE,
+                weight: 300
             },
             border: {
                 visible: false,
