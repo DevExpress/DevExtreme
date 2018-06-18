@@ -107,7 +107,7 @@ function createThemeManager(options, themeGroupName) {
             alignment: "center",
             font: {
                 color: '#ffffff',
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
                 weight: 400,
                 size: 12,
                 cursor: 'default'
@@ -199,7 +199,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(theme.label, {
             font: {
                 color: '#ffffff',
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
                 weight: 400,
                 size: 12,
                 cursor: 'default'
@@ -336,7 +336,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(theme.label, {
             font: {
                 color: '#ffffff',
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
                 weight: 400,
                 size: 12,
                 cursor: 'default'
@@ -1810,7 +1810,7 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(themeManager.getOptions("crosshair").label.font, {
             color: "#ffffff",
             cursor: "default",
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
             size: 12,
             weight: 400
         });
