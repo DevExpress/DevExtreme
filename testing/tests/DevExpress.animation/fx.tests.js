@@ -99,6 +99,41 @@ QUnit.test("basic animation", function(assert) {
     this.clock.tick(20);
 });
 
+QUnit.test("basic animation when window was scrolled", function(assert) {
+    assert.expect(2);
+
+    var $wrapper = $("<div>").appendTo("body");
+    $wrapper.css({ height: "150%", width: "150%", position: "absolute", top: "0", left: "0" });
+
+    var $element = $("<div>").appendTo("body");
+    $element.css({ height: 50, width: 50, top: "200px", background: 'blue' });
+
+    var done = assert.async();
+
+    window.scrollBy(200, 200);
+
+    this.animate($element, {
+        type: 'slide',
+        to: {
+            position: {
+                my: "left",
+                at: "left",
+                of: $wrapper
+            }
+        },
+        duration: 200,
+        complete: function() {
+            assert.roughEqual($element.get(0).getBoundingClientRect().top, 563, 1.5, "position after animation is correct");
+            assert.roughEqual($element.get(0).getBoundingClientRect().left, -392, 1, "position after animation is correct");
+            done();
+        }
+    });
+    this.clock.tick(250);
+
+    $wrapper.remove();
+    $element.remove();
+});
+
 QUnit.test("draw callback", function(assert) {
     var $element = $("#test"),
         done = assert.async();
