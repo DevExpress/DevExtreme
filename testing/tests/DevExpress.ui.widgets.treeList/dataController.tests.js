@@ -2339,3 +2339,48 @@ QUnit.test("loadOptions.parendIds should be correct when expanding several nodes
     assert.equal(items.length, 3, "item count");
     assert.deepEqual(loadOptions[2].parentIds, [2], "parentIds");
 });
+
+QUnit.module("Filtering", { beforeEach: function() {
+    this.items = [
+        { id: 1, parentId: 0, name: "Name 3", age: 19 },
+        { id: 2, parentId: 0, name: "Name 1", age: 19 },
+        { id: 3, parentId: 0, name: "Name 2", age: 18 },
+        { id: 4, parentId: 1, name: "Name 6", age: 16 },
+        { id: 5, parentId: 1, name: "Name 5", age: 15 },
+        { id: 6, parentId: 1, name: "Name 4", age: 15 }
+    ];
+
+    this.setupTreeList = function(options) {
+        if(!("loadingTimeout" in options)) {
+            options.loadingTimeout = null;
+        }
+        setupTreeListModules(this, ["data", "columns", "search"], {
+            initDefaultOptions: true,
+            options: options
+        });
+    };
+}, afterEach: teardownModule });
+
+QUnit.test("Search should work correctly with hierarchical structure", function(assert) {
+    // arrange
+    var items;
+
+    // act
+    this.setupTreeList({
+        itemsExpr: "items",
+        dataStructure: "tree",
+        dataSource: [
+            { name: "Alex", items: [{ name: "Bob" }] },
+            { name: "Tom", items: [{ name: "John" }] }
+        ],
+        searchPanel: {
+            text: "Bob"
+        }
+    });
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 2, "item count");
+    assert.deepEqual(items[0].data, { "id": 1, "name": "Alex", "parentId": 0 }, "first item");
+    assert.deepEqual(items[1].data, { "id": 2, "name": "Bob", "parentId": 1 }, "second item");
+});
