@@ -23,7 +23,13 @@ var BaseWidget = {
     /**
     * @pseudo CommonVizFontFamily
     * @type string
-    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
+    */
+
+    /**
+    * @pseudo CommonVizLightFontFamily
+    * @type string
+    * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
     */
 
     /**
@@ -278,10 +284,9 @@ var BaseWidget = {
             /**
             * @name BaseWidgetOptions_title_font_family
             * @publicName family
-            * @type string
-            * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana"
+            * @extends CommonVizLightFontFamily
             */
-            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name BaseWidgetOptions_title_font_weight
             * @publicName weight
@@ -340,10 +345,9 @@ var BaseWidget = {
                 /**
                 * @name BaseWidgetOptions_title_subtitle_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana"
+                * @extends CommonVizLightFontFamily
                 */
-                family: "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name BaseWidgetOptions_title_subtitle_font_weight
                 * @publicName weight
@@ -574,10 +578,9 @@ var BaseWidget = {
             /**
             * @name BaseWidgetOptions_tooltip_font_family
             * @publicName family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name BaseWidgetOptions_tooltip_font_weight
             * @publicName weight
@@ -693,8 +696,7 @@ var BaseWidget = {
             /**
             * @name BaseWidgetOptions_loadingindicator_font_family
             * @publicName family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**
