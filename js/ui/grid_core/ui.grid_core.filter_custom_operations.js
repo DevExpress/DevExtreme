@@ -3,6 +3,7 @@
 import { renderValueText } from "../filter_builder/filter_builder";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     messageLocalization = require("../../localization/message"),
     extend = require("../../core/utils/extend").extend,
     DataSourceModule = require("../../data/data_source/data_source"),
@@ -93,7 +94,7 @@ function baseOperation(grid) {
                     headerFilterController.hideHeaderFilterMenu();
                 },
                 onHidden: function() {
-                    $("body").trigger("dxpointerdown");
+                    eventsEngine.trigger($("body"), "dxpointerdown");
                 },
                 isFilterBuilder: true
             });
