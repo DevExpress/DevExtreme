@@ -3,6 +3,7 @@
 import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
+import fx from "animation/fx";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
 
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
@@ -263,5 +264,38 @@ QUnit.module("Common", {
 
         assert.deepEqual(filterBuilderFields.length, 1);
         assert.deepEqual(filterBuilderFields[0].dataField, "field");
+    });
+});
+
+QUnit.module("Real dataGrid", {
+    beforeEach: function() {
+        this.initDataGrid = function(options) {
+            this.dataGrid = $("#container").dxDataGrid($.extend({
+                dataSource: [{}]
+            }, options)).dxDataGrid("instance");
+            return this.dataGrid;
+        };
+
+        fx.off = true;
+    },
+    afterEach: function() {
+        this.dataGrid.dispose();
+        fx.off = false;
+    }
+}, function() {
+    // T646013
+    QUnit.test("the 'any of' doesn't throw exception when popup is hiding (without jQuery)", function(assert) {
+        // arrange, act
+        this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "string", defaultFilterOperations: ["anyof"] }],
+            filterValue: ["field", "anyof", ["text"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        $(".dx-popup-content .dx-filterbuilder-item-value-text").trigger("dxclick");
+        $(".dx-header-filter-menu.dx-popup").dxPopup("instance").hide();
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder-item-value-text").text(), "text");
     });
 });
