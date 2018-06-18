@@ -320,10 +320,9 @@ var commonPieChartSeries = {
         font: {
             /**
             * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.font.weight
             * @type number

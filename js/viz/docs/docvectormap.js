@@ -226,10 +226,9 @@ var dxVectorMap = {
             font: {
                 /**
                 * @name dxVectorMapOptions.layers.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxVectorMapOptions.layers.label.font.weight
                 * @type number
@@ -440,8 +439,7 @@ var dxVectorMap = {
             color: '#2b2b2b',
             /**
             * @name dxVectorMapOptions.legends.font.family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

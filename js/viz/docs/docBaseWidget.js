@@ -14,7 +14,13 @@ var BaseWidget = {
     /**
     * @pseudo CommonVizFontFamily
     * @type string
-    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
+    */
+
+    /**
+    * @pseudo CommonVizLightFontFamily
+    * @type string
+    * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
     */
 
     /**
@@ -239,10 +245,9 @@ var BaseWidget = {
         font: {
             /**
             * @name BaseWidgetOptions.title.font.family
-            * @type string
-            * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana"
+            * @extends CommonVizLightFontFamily
             */
-            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name BaseWidgetOptions.title.font.weight
             * @type number
@@ -292,10 +297,9 @@ var BaseWidget = {
             font: {
                 /**
                 * @name BaseWidgetOptions.title.subtitle.font.family
-                * @type string
-                * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana"
+                * @extends CommonVizLightFontFamily
                 */
-                family: "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name BaseWidgetOptions.title.subtitle.font.weight
                 * @type number
@@ -495,10 +499,9 @@ var BaseWidget = {
             size: 12,
             /**
             * @name BaseWidgetOptions.tooltip.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name BaseWidgetOptions.tooltip.font.weight
             * @type number
@@ -597,8 +600,7 @@ var BaseWidget = {
         font: {
             /**
             * @name BaseWidgetOptions.loadingIndicator.font.family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

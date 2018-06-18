@@ -214,10 +214,9 @@ var BaseGauge = {
                 size: 12,
                 /**
                 * @name BaseGaugeOptions.scale.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name BaseGaugeOptions.scale.label.font.weight
                 * @type number
@@ -745,10 +744,9 @@ var dxBarGauge = {
             size: 16,
             /**
             * @name dxBarGaugeOptions.label.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxBarGaugeOptions.label.font.weight
             * @type number
