@@ -1604,6 +1604,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 var e = params.event;
 
                 e.stopPropagation();
+                e.preventDefault();
                 setTimeout(function() {
                     options.row && that[methodName](options.row.rowIndex);
                 });
