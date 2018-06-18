@@ -1628,7 +1628,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _createLink: function(container, text, methodName, options, useIcon) {
             var that = this,
                 $link = $("<a>")
-                .attr("href", "#")
+                    .attr("href", "#")
                     .addClass(LINK_CLASS)
                     .addClass(EDIT_LINK_CLASS[methodName]);
 
@@ -1644,6 +1644,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 var e = params.event;
 
                 e.stopPropagation();
+                e.preventDefault();
                 setTimeout(function() {
                     options.row && that[methodName](options.row.rowIndex);
                 });

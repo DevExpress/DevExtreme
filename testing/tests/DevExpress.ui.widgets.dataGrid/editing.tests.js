@@ -304,8 +304,10 @@ QUnit.module('Editing', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var event = $.Event("dxclick");
+            $($targetElement).trigger(event);
             this.clock.tick();
+            return event;
         };
         this.keyboardNavigationController._focusedView = this.rowsView;
     },
@@ -755,7 +757,7 @@ QUnit.test('Edit Row', function(assert) {
     rowsView.render(testElement);
 
     // act
-    this.click(testElement.find('tbody > tr').first(), '.dx-link:contains(Edit)');
+    var event = this.click(testElement.find('tbody > tr').first(), '.dx-link:contains(Edit)');
     this.clock.tick();
 
     // assert
@@ -768,6 +770,8 @@ QUnit.test('Edit Row', function(assert) {
         },
         "focus position"
     );
+    assert.ok(event.isDefaultPrevented(), "default is prevented"); // T643785
+    assert.ok(event.isPropagationStopped(), "propagation is stopped");
 });
 
 QUnit.test('Edit Row and focus not first input', function(assert) {
