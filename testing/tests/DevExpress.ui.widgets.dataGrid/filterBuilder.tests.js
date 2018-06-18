@@ -276,10 +276,12 @@ QUnit.module("Real dataGrid", {
             return this.dataGrid;
         };
 
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
         this.dataGrid.dispose();
+        this.clock.restore();
         fx.off = false;
     }
 }, function() {
@@ -293,6 +295,7 @@ QUnit.module("Real dataGrid", {
         });
 
         $(".dx-popup-content .dx-filterbuilder-item-value-text").trigger("dxclick");
+        this.clock.tick();
         $(".dx-header-filter-menu.dx-popup").dxPopup("instance").hide();
 
         // assert
