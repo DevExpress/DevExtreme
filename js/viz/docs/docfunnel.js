@@ -280,8 +280,7 @@ var dxFunnel = {
             color: '#767676',
             /**
             * @name dxFunnelOptions.label.font.family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**
@@ -466,8 +465,7 @@ var dxFunnel = {
             color: '#767676',
             /**
             * @name dxFunnelOptions.legend.font.family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

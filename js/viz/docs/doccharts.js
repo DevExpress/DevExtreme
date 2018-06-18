@@ -493,10 +493,9 @@ var dxChart = {
             font: {
                 /**
                 * @name dxChartOptions.crosshair.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxChartOptions.crosshair.label.font.weight
                 * @type number
@@ -603,10 +602,9 @@ var dxChart = {
                 font: {
                     /**
                     * @name dxChartOptions.crosshair.verticalLine.label.font.family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxChartOptions.crosshair.verticalLine.label.font.weight
                     * @type number
@@ -714,10 +712,9 @@ var dxChart = {
                 font: {
                     /**
                     * @name dxChartOptions.crosshair.horizontalLine.label.font.family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxChartOptions.crosshair.horizontalLine.label.font.weight
                     * @type number
@@ -971,10 +968,9 @@ var dxChart = {
             font: {
                 /**
                 * @name dxChartOptions.commonAxisSettings.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxChartOptions.commonAxisSettings.label.font.weight
                 * @type number
@@ -1145,10 +1141,9 @@ var dxChart = {
             font: {
                 /**
                 * @name dxChartOptions.commonAxisSettings.title.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxChartOptions.commonAxisSettings.title.font.weight
                 * @type number
@@ -1222,10 +1217,9 @@ var dxChart = {
                 font: {
                     /**
                     * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.weight
                     * @type number
@@ -1312,10 +1306,9 @@ var dxChart = {
                 font: {
                     /**
                     * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.weight
                     * @type number
@@ -2535,10 +2528,9 @@ var dxPolarChart = {
             font: {
                 /**
                 * @name dxPolarChartOptions.commonAxisSettings.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxPolarChartOptions.commonAxisSettings.label.font.weight
                 * @type number
@@ -2714,10 +2706,9 @@ var dxPolarChart = {
                 font: {
                     /**
                     * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.weight
                     * @type number
@@ -2786,10 +2777,9 @@ var dxPolarChart = {
                 font: {
                     /**
                     * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.weight
                     * @type number
@@ -3486,8 +3476,7 @@ var BaseChart = {
             color: '#767676',
             /**
             * @name BaseChartOptions.legend.font.family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

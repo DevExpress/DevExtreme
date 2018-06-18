@@ -773,10 +773,9 @@ var commonSeries = {
         font: {
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxChartSeriesTypes.CommonSeries.label.font.weight
             * @type number

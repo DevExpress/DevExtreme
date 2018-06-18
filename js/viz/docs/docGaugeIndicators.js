@@ -91,11 +91,10 @@ var CommonIndicator = {
             size: 14,
             /**
             * @name CommonIndicator.text.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name CommonIndicator.text.font.weight
             * @type number
