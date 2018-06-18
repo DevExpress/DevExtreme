@@ -96,15 +96,11 @@ registerDecorator(
         handleContextMenu: function($itemElement) {
             this._$itemWithMenu = $itemElement;
 
-            var scrollTop = window.pageYOffset,
-                scrollLeft = window.pageXOffset;
-
             this._menu.option({
                 position: {
                     my: "top",
                     at: "bottom",
                     of: $itemElement,
-                    offset: { h: -scrollLeft, v: -scrollTop },
                     collision: "flip"
                 }
             });

@@ -831,6 +831,10 @@ var executeAnimation = function(animation) {
 };
 
 var setupPosition = function($element, config) {
+    var win = $(window),
+        left = win.scrollLeft(),
+        top = win.scrollTop();
+
     if(!config || !config.position) {
         return;
     }
@@ -840,8 +844,8 @@ var setupPosition = function($element, config) {
         currentPosition = $element.position();
 
     extend(config, {
-        left: position.h.location - offset.left + currentPosition.left,
-        top: position.v.location - offset.top + currentPosition.top
+        left: position.h.location - offset.left + currentPosition.left - left,
+        top: position.v.location - offset.top + currentPosition.top - top
     });
 
     delete config.position;
