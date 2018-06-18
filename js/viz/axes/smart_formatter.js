@@ -221,10 +221,12 @@ export function smartFormatter(tick, options) {
                 }
             }
 
-            format = {
-                type: typeFormat,
-                precision: precision
-            };
+            if(typeFormat !== undefined || precision !== undefined) {
+                format = {
+                    type: typeFormat,
+                    precision: precision
+                };
+            }
         } else {
             typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
             if(options.showTransition && ticks.length) {
