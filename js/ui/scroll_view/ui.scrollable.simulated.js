@@ -5,8 +5,6 @@ var $ = require("../../core/renderer"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
     iteratorUtils = require("../../core/utils/iterator"),
     translator = require("../../animation/translator"),
     Class = require("../../core/class"),
@@ -191,7 +189,7 @@ var Scroller = Class.inherit({
 
     _getScaleRatio: function() {
         var element = this._$element.get(0),
-            ratio = windowUtils.hasWindow && math.round(element.getBoundingClientRect()[this._dimension]) / this._getComputedDimension(element, this._dimension) || 1;
+            ratio = math.round(element.getBoundingClientRect()[this._dimension]) / this._getComputedDimension(element, this._dimension) || 1;
 
         return ratio;
     },
