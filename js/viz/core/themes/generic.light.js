@@ -28,7 +28,7 @@ registerTheme({
     isDefault: true,
     font: {
         color: SECONDARY_TITLE_COLOR,
-        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
         weight: 400,
         size: 12,
         cursor: "default"
@@ -43,7 +43,7 @@ registerTheme({
         backgroundColor: WHITE,
         font: {
             size: 28,
-            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
             weight: 200
         },
         subtitle: {

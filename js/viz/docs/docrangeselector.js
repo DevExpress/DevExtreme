@@ -272,10 +272,9 @@ var dxRangeSelector = {
                 size: 11,
                 /**
                 * @name dxRangeSelectorOptions.scale.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxRangeSelectorOptions.scale.label.font.weight
                 * @type number
@@ -558,10 +557,9 @@ var dxRangeSelector = {
             size: 14,
             /**
             * @name dxRangeSelectorOptions.sliderMarker.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxRangeSelectorOptions.sliderMarker.font.weight
             * @type number
