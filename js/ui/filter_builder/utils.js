@@ -661,7 +661,7 @@ function isValidCondition(condition, field) {
 
 function setFocusToBody() {
     var doc = domAdapter.getDocument();
-    if(doc && doc.activeElement && doc.activeElement.nodeName.toLowerCase() !== "body") {
+    if(doc && doc.activeElement && doc.activeElement.nodeName && doc.activeElement.nodeName.toLowerCase() !== "body") {
         doc.activeElement.blur();
     }
 }
