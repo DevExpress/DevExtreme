@@ -119,6 +119,18 @@ QUnit.test("tooltip should be hidden if target parent was changed (scroll on new
     assert.equal(this.tooltipHiddenSpy.calledOnce, true);
 });
 
+QUnit.test("target scroll subscriptions should be unsubscribed for current chart", function(assert) {
+    this.createChart();
+    var chart = $("<div></div>").appendTo(".parentContainer").dxChart({}).dxChart("instance");
+    this.showTooltip();
+
+    // act
+    chart.dispose();
+    $(".tooltipInteraction .parentContainer").triggerHandler("scroll");
+
+    assert.equal(this.tooltipHiddenSpy.calledOnce, true);
+});
+
 QUnit.module("Misc");
 
 // T351032
