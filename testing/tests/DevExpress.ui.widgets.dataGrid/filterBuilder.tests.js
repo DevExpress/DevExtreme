@@ -295,6 +295,7 @@ QUnit.module("Real dataGrid", {
         });
 
         $(".dx-popup-content .dx-filterbuilder-item-value-text").trigger("dxclick");
+        this.clock.tick();
         $(".dx-header-filter-menu.dx-popup").dxPopup("instance").hide();
 
         // assert
