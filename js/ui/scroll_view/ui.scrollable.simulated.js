@@ -182,8 +182,32 @@ var Scroller = Class.inherit({
 
     _moveContent: function() {
         var location = this._location;
-        this._$container[this._scrollProp](-location);
+
+        this._$container[this._scrollProp](-location / this._getScaleRatio());
         this._moveContentByTranslator(location);
+    },
+
+    _getScaleRatio: function() {
+        var element = this._$element.get(0),
+            ratio = math.round(element.getBoundingClientRect()[this._dimension]) / this._getComputedDimension(element, this._dimension) || 1;
+
+        return ratio;
+    },
+
+    _getComputedDimension: function(element, dimension) {
+        var computedStyles = window.getComputedStyle(element),
+            bordersWidth = 0,
+            paddingsWidth = 0,
+            computedDimension = parseFloat(computedStyles[dimension]);
+
+        if(computedStyles.boxSizing === "content-box") {
+            bordersWidth = dimension === "width" ? parseInt(computedStyles.borderRightWidth) + parseInt(computedStyles.borderLeftWidth) :
+                parseInt(computedStyles.borderTopWidth) + parseInt(computedStyles.borderBottomWidth);
+            paddingsWidth = dimension === "width" ? parseInt(computedStyles.paddingLeft) + parseInt(computedStyles.paddingRight) :
+                parseInt(computedStyles.paddingTop) + parseInt(computedStyles.paddingBottom);
+        }
+
+        return math.round(computedDimension + bordersWidth + paddingsWidth);
     },
 
     _moveContentByTranslator: function(location) {
@@ -420,7 +444,8 @@ var Scroller = Class.inherit({
         commonUtils.deferRender(function() {
             that._scrollbar.option({
                 containerSize: containerSize,
-                contentSize: contentSize
+                contentSize: contentSize,
+                scaleRatio: that._getScaleRatio()
             });
         });
     }),
@@ -459,7 +484,8 @@ var Scroller = Class.inherit({
             contentSize = this._$content[this._dimension]();
 
         if(!isOverflowHidden) {
-            var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)];
+            var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
+
             contentSize = math.max(containerScrollSize, contentSize);
         }
 
