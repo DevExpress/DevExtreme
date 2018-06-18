@@ -102,11 +102,16 @@ QUnit.test("basic animation", function(assert) {
 QUnit.test("basic animation when window was scrolled", function(assert) {
     assert.expect(2);
 
+    var $container = $("#container");
+
     var $wrapper = $("<div>").appendTo("body");
     $wrapper.css({ height: "150%", width: "150%", position: "absolute", top: "0", left: "0" });
 
     var $element = $("<div>").appendTo("body");
     $element.css({ height: 50, width: 50, top: "200px", background: 'blue' });
+
+    var initialTopPosition = $element.get(0).getBoundingClientRect().top,
+        initialLeftPosition = $element.get(0).getBoundingClientRect().left;
 
     var done = assert.async();
 
@@ -114,17 +119,15 @@ QUnit.test("basic animation when window was scrolled", function(assert) {
 
     this.animate($element, {
         type: 'slide',
-        to: {
-            position: {
-                my: "left",
-                at: "left",
-                of: $wrapper
-            }
+        position: {
+            my: "right",
+            at: "right",
+            of: $container
         },
         duration: 200,
         complete: function() {
-            assert.roughEqual($element.get(0).getBoundingClientRect().top, 563, 1.5, "position after animation is correct");
-            assert.roughEqual($element.get(0).getBoundingClientRect().left, -392, 1, "position after animation is correct");
+            assert.roughEqual($element.get(0).getBoundingClientRect().top, initialTopPosition - 200, 1.5, "position after animation is correct");
+            assert.roughEqual($element.get(0).getBoundingClientRect().left, initialLeftPosition - 200, 1, "position after animation is correct");
             done();
         }
     });
