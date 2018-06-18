@@ -202,6 +202,10 @@
                     font-size: @MATERIAL_BASE_ICON_SIZE;
                 }
             }
+
+            .dx-list-group-header {
+                color: @list-group-color;
+            }
         }
 
         .dx-list-item {
@@ -219,11 +223,13 @@
         font-weight: normal;
         padding: @MATERIAL_LIST_GROUP_HEADER_VERTICAL_PADDING @item_horizontal_padding;
         background: @list-group-header-bg;
-        color: @list-group-color;
+        color: @list-expanded-group-color;
         border-top: @MATERIAL_LIST_ITEM_BORDER;
         border-top-color: transparent;
+        font-size: @MATERIAL_LIST_MAIN_FONT_SIZE;
 
         .dx-list-group-header-indicator {
+            color: @list-header-indicator-color;
             .dx-list-collapsible-groups & {
                 .dx-icon-chevronup;
                 font-size: @MATERIAL_BASE_ICON_SIZE;
