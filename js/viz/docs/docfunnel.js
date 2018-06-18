@@ -321,8 +321,7 @@ var dxFunnel = {
             /**
             * @name dxFunneloptions_label_font_family
             * @publicName family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**
@@ -537,8 +536,7 @@ var dxFunnel = {
             /**
             * @name dxFunneloptions_legend_font_family
             * @publicName family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

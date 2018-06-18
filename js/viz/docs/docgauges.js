@@ -87,11 +87,10 @@ var baseGauge = {
             /**
             * @name basegaugeoptions_subtitle_font_family
             * @publicName family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             * @deprecated BaseWidgetOptions_title_subtitle_font_family
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name basegaugeoptions_subtitle_font_weight
             * @publicName weight
@@ -475,10 +474,9 @@ var baseGauge = {
                 /**
                 * @name basegaugeoptions_scale_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name basegaugeoptions_scale_label_font_weight
                 * @publicName weight
@@ -1131,10 +1129,9 @@ var dxBarGauge = {
             /**
             * @name dxbargaugeoptions_label_font_family
             * @publicName family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxbargaugeoptions_label_font_weight
             * @publicName weight

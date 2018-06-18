@@ -560,10 +560,9 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_crosshair_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxchartoptions_crosshair_label_font_weight
                 * @publicName weight
@@ -688,10 +687,9 @@ var dxChart = {
                     /**
                     * @name dxchartoptions_crosshair_verticalline_label_font_family
                     * @publicName family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxchartoptions_crosshair_verticalline_label_font_weight
                     * @publicName weight
@@ -817,10 +815,9 @@ var dxChart = {
                     /**
                     * @name dxchartoptions_crosshair_horizontalline_label_font_family
                     * @publicName family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxchartoptions_crosshair_horizontalline_label_font_weight
                     * @publicName weight
@@ -1112,10 +1109,9 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_commonaxissettings_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxchartoptions_commonaxissettings_label_font_weight
                 * @publicName weight
@@ -1315,10 +1311,9 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_commonaxissettings_title_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxchartoptions_commonaxissettings_title_font_weight
                 * @publicName weight
@@ -1405,10 +1400,9 @@ var dxChart = {
                     /**
                     * @name dxchartoptions_commonaxissettings_stripstyle_label_font_family
                     * @publicName family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxchartoptions_commonaxissettings_stripstyle_label_font_weight
                     * @publicName weight
@@ -1510,10 +1504,9 @@ var dxChart = {
                     /**
                     * @name dxchartoptions_commonaxissettings_constantlinestyle_label_font_family
                     * @publicName family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxchartoptions_commonaxissettings_constantlinestyle_label_font_weight
                     * @publicName weight
@@ -2884,10 +2877,9 @@ var dxPolarChart = {
                 /**
                 * @name dxpolarchartoptions_commonaxissettings_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxpolarchartoptions_commonaxissettings_label_font_weight
                 * @publicName weight
@@ -3093,10 +3085,9 @@ var dxPolarChart = {
                     /**
                     * @name dxpolarchartoptions_commonaxissettings_stripstyle_label_font_family
                     * @publicName family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxpolarchartoptions_commonaxissettings_stripstyle_label_font_weight
                     * @publicName weight
@@ -3177,10 +3168,9 @@ var dxPolarChart = {
                     /**
                     * @name dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_family
                     * @publicName family
-                    * @type string
-                    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                    * @extends CommonVizFontFamily
                     */
-                    family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                    family: undefined,
                     /**
                     * @name dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_weight
                     * @publicName weight
@@ -3976,8 +3966,7 @@ var BaseChart = {
             /**
             * @name basechartoptions_legend_font_family
             * @publicName family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

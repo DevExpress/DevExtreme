@@ -35,9 +35,9 @@ QUnit.test("default theme fonts", function(assert) {
     var theme = themeManager.theme();
     // assert
     assert.equal(theme.scale.label.font.size, 11);
-    assert.equal(theme.scale.label.font.family, "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana");
+    assert.equal(theme.scale.label.font.family, "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif");
     assert.equal(theme.sliderMarker.font.size, 11);
-    assert.equal(theme.sliderMarker.font.family, "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana");
+    assert.equal(theme.sliderMarker.font.family, "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif");
 
     assert.deepEqual(theme.loadingIndicator.font, themeModule.themes["generic.light"].font);
 });

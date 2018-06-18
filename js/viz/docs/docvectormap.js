@@ -273,10 +273,9 @@ var dxVectorMap = {
                 /**
                 * @name dxvectormapoptions_layers_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxvectormapoptions_layers_label_font_weight
                 * @publicName weight
@@ -474,11 +473,10 @@ var dxVectorMap = {
                 /**
                 * @name dxvectormapoptions_areaSettings_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 * @deprecated dxvectormapoptions_layers_label_font_family
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxvectormapoptions_areaSettings_label_font_weight
                 * @publicName weight
@@ -758,11 +756,10 @@ var dxVectorMap = {
                 /**
                 * @name dxvectormapoptions_markerSettings_label_font_family
                 * @publicName family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 * @deprecated dxvectormapoptions_layers_label_font_family
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxvectormapoptions_markerSettings_label_font_weight
                 * @publicName weight
@@ -1041,8 +1038,7 @@ var dxVectorMap = {
             /**
             * @name dxvectormapoptions_legends_font_family
             * @publicName family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**

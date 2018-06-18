@@ -697,10 +697,9 @@ var CommonPolarChartSeries = {
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_family
             * @publicName family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_weight
             * @publicName weight
