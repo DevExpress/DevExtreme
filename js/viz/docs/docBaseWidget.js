@@ -18,6 +18,12 @@ var BaseWidget = {
     */
 
     /**
+    * @pseudo CommonVizLightFontFamily
+    * @type string
+    * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
+    */
+
+    /**
     * @pseudo CommonVizDataSource
     * @type Array<any>|DataSource|DataSourceOptions|string
     * @notUsedInTheme
@@ -239,9 +245,9 @@ var BaseWidget = {
         font: {
             /**
             * @name BaseWidgetOptions.title.font.family
-            * @extends CommonVizFontFamily
+            * @extends CommonVizLightFontFamily
             */
-           family: undefined,
+            family: undefined,
             /**
             * @name BaseWidgetOptions.title.font.weight
             * @type number
@@ -291,10 +297,9 @@ var BaseWidget = {
             font: {
                 /**
                 * @name BaseWidgetOptions.title.subtitle.font.family
-                * @type string
-                * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana, sans-serif"
+                * @extends CommonVizLightFontFamily
                 */
-                family: "'Segoe UI Light', 'Helvetica Neue Light', 'Trebuchet MS', Verdana, sans-serif",
+                family: undefined,
                 /**
                 * @name BaseWidgetOptions.title.subtitle.font.weight
                 * @type number
