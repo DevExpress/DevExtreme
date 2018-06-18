@@ -1,18 +1,18 @@
 "use strict";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+
+const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 QUnit.testStart(function() {
-    var markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
+    var markup = `<div>
+        <div class="dx-datagrid">
+            <div id="container"></div>
+        </div>
+    </div>`;
 
     $("#qunit-fixture").html(markup);
 });
@@ -221,5 +221,47 @@ QUnit.module("Common", {
 
         // assert
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
+    // T646561
+    QUnit.test("the field mustn't be in filterBuilder if allowFiltering = false", function(assert) {
+        let filterBuilderFields;
+        this.initFilterBuilderView({
+            columns: [
+                { dataField: "field" },
+                { dataField: "hiddenField", allowFiltering: false }
+            ],
+            filterBuilder: {
+                onInitialized: (e) => {
+                    filterBuilderFields = e.component.option("fields");
+                }
+            },
+            filterBuilderPopup: { visible: true },
+        });
+
+
+        assert.deepEqual(filterBuilderFields.length, 1);
+        assert.deepEqual(filterBuilderFields[0].dataField, "field");
+    });
+
+    // T642913
+    QUnit.test("the field mustn't be in filterBuilder if this does not contain dataField", function(assert) {
+        let filterBuilderFields;
+        this.initFilterBuilderView({
+            columns: [
+                { caption: "field text" },
+                { dataField: "field" }
+            ],
+            filterBuilder: {
+                onInitialized: (e) => {
+                    filterBuilderFields = e.component.option("fields");
+                }
+            },
+            filterBuilderPopup: { visible: true },
+        });
+
+
+        assert.deepEqual(filterBuilderFields.length, 1);
+        assert.deepEqual(filterBuilderFields[0].dataField, "field");
     });
 });
