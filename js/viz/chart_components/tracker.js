@@ -97,17 +97,22 @@ var baseTrackerPrototype = {
         this._prepare();
     },
 
-    updateSeries: function(series) {
-        var that = this;
+    updateSeries(series) {
+        const that = this;
+        const noHoveredSeries = !(series && series.some(s => s === that.hoveredSeries) || that._hoveredPoint && that._hoveredPoint.series);
 
         if(that._storedSeries !== series) {
             that._storedSeries = series || [];
+        }
+
+        if(noHoveredSeries) {
             that._clean();
+            that._renderer.initHatching();
         } else {
             that._hideTooltip(that.pointAtShownTooltip);
             that._clearHover();
-            that.clearSelection();
         }
+        that.clearSelection();
     },
 
     setCanvases: function(mainCanvas, paneCanvases) {
@@ -180,12 +185,14 @@ var baseTrackerPrototype = {
         }
     },
 
-    clearSelection: function() {
-        this._storedSeries.forEach(function(series) {
-            series.clearSelection();
-            series.getPoints().forEach(function(point) {
-                point.clearSelection();
-            });
+    clearSelection() {
+        this._storedSeries.forEach(series => {
+            if(series) {
+                series.clearSelection();
+                series.getPoints().forEach(point => {
+                    point.clearSelection();
+                });
+            }
         });
     },
 

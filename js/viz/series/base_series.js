@@ -297,8 +297,6 @@ Series.prototype = {
         that._options = newOptions;
         that._pointOptions = null;
 
-        that._renderer.initHatching();
-
         that.name = newOptions.name;
         that.pane = newOptions.pane;
 
