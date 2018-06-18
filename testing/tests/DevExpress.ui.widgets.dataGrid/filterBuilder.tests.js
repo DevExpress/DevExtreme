@@ -276,10 +276,12 @@ QUnit.module("Real dataGrid", {
             return this.dataGrid;
         };
 
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
         this.dataGrid.dispose();
+        this.clock.restore();
         fx.off = false;
     }
 }, function() {
