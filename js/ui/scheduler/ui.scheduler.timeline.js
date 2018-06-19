@@ -200,7 +200,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _renderDateHeader: function() {
         var $headerRow = this.callBase();
 
-
         if(this._needRenderWeekHeader()) {
             var firstViewDate = new Date(this._firstViewDate),
                 $cells = [],
