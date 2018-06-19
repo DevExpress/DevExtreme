@@ -2569,7 +2569,7 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
     this.clock.tick();
 
     instance.registerKeyHandler("tab", function(e) {
-        $element.find("[tabIndex]").not(":focus").first().focus();
+        $element.find("[tabIndex]:not(:focus)").first().focus();
     });
 
     $element.trigger($.Event("keydown", { which: 9 }));
