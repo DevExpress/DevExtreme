@@ -8757,7 +8757,7 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
 
     // assert
     assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
-    assert.ok(dataGrid.$element().find(".dx-editor-cell").is(":focus"), "filter cell has focus after filter applyed");
+    assert.ok(dataGrid.$element().find(".dx-editor-cell:focus").length, "filter cell has focus after filter applyed");
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
