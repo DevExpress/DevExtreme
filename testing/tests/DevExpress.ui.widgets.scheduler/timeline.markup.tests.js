@@ -371,6 +371,43 @@ QUnit.module("TimelineDay with intervalCount markup", timelineDayModuleConfig, (
         this.instance.option("intervalCount", 4);
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 19, 23, 59)], "Range is OK");
     });
+
+    QUnit.test("Scheduler timeline day header cells should have right class", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 29),
+            intervalCount: 2
+        });
+        let $element = this.instance.$element(),
+            $firstRow = $element.find(".dx-scheduler-header-row").first();
+
+        assert.equal($firstRow.find(".dx-scheduler-header-panel-week-cell").length, 2, "First row cells count and class is ok");
+    });
+
+    QUnit.test("Scheduler timeline day should contain two rows in header panel, if intervalCount is set", (assert) => {
+        this.instance.option({
+            currentDate: new Date(2015, 9, 29),
+            firstDayOfWeek: 1,
+            startDayHour: 4,
+            endDayHour: 5,
+            intervalCount: 1
+        });
+
+        assert.equal(this.instance.$element().find(".dx-scheduler-header-row").length, 1, "There is 1 row in header panel");
+
+        this.instance.option("intervalCount", 2);
+
+        let $rows = this.instance.$element().find(".dx-scheduler-header-row"),
+            $firstRowCells = $rows.first().find(".dx-scheduler-header-panel-cell"),
+            startDate = 29;
+
+        assert.equal($rows.length, 2, "There are 2 rows in header panel");
+
+        for(var i = 0; i < 2; i++) {
+            var $cell = $firstRowCells.eq(i);
+            assert.equal($cell.text(), formatWeekdayAndDay(new Date(2015, 9, startDate + i)), "Cell text is OK");
+            assert.equal($cell.attr("colspan"), 2, "Cell colspan is OK");
+        }
+    });
 });
 
 timelineDayModuleConfig = {
