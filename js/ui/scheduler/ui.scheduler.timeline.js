@@ -237,6 +237,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
     },
 
+    _needRenderWeekHeader: function() {
+        return false;
+    },
+
     _incrementDate: function(date) {
         date.setDate(date.getDate() + 1);
     },
