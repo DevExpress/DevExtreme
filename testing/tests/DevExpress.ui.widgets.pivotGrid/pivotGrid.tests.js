@@ -2652,6 +2652,20 @@ QUnit.test("getScrollPath for columns", function(assert) {
     scrollable.scrollTo(columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10);
 });
 
+QUnit.test("getScrollPath after initialization", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    var pivotGrid = createPivotGrid({
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    // assert
+    assert.deepEqual(pivotGrid.getScrollPath('column'), ['2010', '1']);
+    assert.deepEqual(pivotGrid.getScrollPath('row'), ['A']);
+});
+
 QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
     var done = assert.async(),
         assertFunction;
