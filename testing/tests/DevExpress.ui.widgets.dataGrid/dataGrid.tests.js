@@ -4345,6 +4345,8 @@ QUnit.test("pageSize state is applied when scrolling mode is not virtual", funct
 
     // assert
     assert.equal(dataGrid.pageSize(), 10, "pageSize from stateStoring is applied");
+
+    clock.restore();
 });
 
 // T152307
@@ -4730,6 +4732,8 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     // assert
     var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok(!$loadPanel.length, "load panel is visible");
+
+    clock.restore();
 });
 
 // T389866
@@ -5193,7 +5197,8 @@ QUnit.test("grouping should works correctly if row rendering mode is virtual and
         },
         scrolling: {
             mode: "virtual",
-            rowRenderingMode: "virtual"
+            rowRenderingMode: "virtual",
+            useNative: false
         },
         grouping: {
             autoExpandAll: false,
@@ -7150,6 +7155,7 @@ QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) 
     // assert
     assert.equal($(".dx-loadpanel").length, 2, "We have two loadpanels");
     assert.equal($(".dx-loadpanel.dx-state-invisible").length, 2, "two load panels are invisible");
+    clock.restore();
 });
 
 QUnit.test("add column", function(assert) {
