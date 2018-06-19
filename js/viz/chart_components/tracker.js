@@ -125,21 +125,21 @@ var baseTrackerPrototype = {
     },
 
     _toggleParentsScrollSubscription: function(subscribe) {
-        var that = this,
-            $parents = $(that._renderer.root.element).parents(),
+        var $parents = $(this._renderer.root.element).parents(),
             scrollEvents = addNamespace("scroll", EVENT_NS);
 
         if(devices.real().platform === "generic") {
             $parents = $parents.add(window);
         }
 
-        eventsEngine.off($().add(that._$prevRootParents), scrollEvents);
+        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
+            || (function() { this._pointerOut(); }).bind(this);
+
+        eventsEngine.off($().add(this._$prevRootParents), scrollEvents, this._proxiedTargetParentsScrollHandler);
 
         if(subscribe) {
-            eventsEngine.on($parents, scrollEvents, function() {
-                that._pointerOut();
-            });
-            that._$prevRootParents = $parents;
+            eventsEngine.on($parents, scrollEvents, this._proxiedTargetParentsScrollHandler);
+            this._$prevRootParents = $parents;
         }
     },
 
