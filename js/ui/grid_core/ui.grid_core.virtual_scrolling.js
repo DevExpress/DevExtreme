@@ -681,6 +681,16 @@ module.exports = {
 
                         return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
                     },
+                    reload: function() {
+                        var that = this,
+                            result = this.callBase.apply(this, arguments);
+                        return result && result.done(function() {
+                            var rowsScrollController = that._rowsScrollController;
+                            if(rowsScrollController) {
+                                rowsScrollController.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
+                            }
+                        });
+                    },
                     initVirtualRows: function() {
                         var that = this,
                             virtualRowsRendering = isVirtualRowRendering(that);
@@ -720,7 +730,8 @@ module.exports = {
                             },
                             load: function() {
                                 if(that._rowsScrollController.pageIndex() >= this.pageCount()) {
-                                    that._rowsScrollController.pageIndex(this.pageCount() - 1);
+                                    that._rowPageIndex = this.pageCount() - 1;
+                                    that._rowsScrollController.pageIndex(that._rowPageIndex);
                                 }
 
                                 if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
