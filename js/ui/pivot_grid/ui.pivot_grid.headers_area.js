@@ -145,7 +145,7 @@ exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
         offset -= parseInt(tableElement[0].style.left, 10) || 0;
 
         each(tableElement.find("td"), function(_, td) {
-            if(td.colSpan === 1 && td.offsetLeft < offset && td.offsetWidth + td.offsetLeft > offset) {
+            if(td.colSpan === 1 && td.offsetLeft <= offset && td.offsetWidth + td.offsetLeft > offset) {
                 cell = td;
                 return false;
             }
@@ -246,7 +246,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
         each(tableElement.find("tr"), function(_, tr) {
             var td = tr.childNodes[tr.childNodes.length - 1];
 
-            if(td && td.rowSpan === 1 && td.offsetTop < offset && td.offsetHeight + td.offsetTop > offset) {
+            if(td && td.rowSpan === 1 && td.offsetTop <= offset && td.offsetHeight + td.offsetTop > offset) {
                 cell = td;
                 return false;
             }
