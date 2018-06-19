@@ -710,7 +710,8 @@
     }
 
     .dx-scheduler-timeline-week,
-    .dx-scheduler-timeline-work-week {
+    .dx-scheduler-timeline-work-week,
+    .dx-scheduler-timeline-day.dx-scheduler-work-space-count {
         .dx-scheduler-header-panel {
             .flex-container(row, nowrap);
 
@@ -1219,7 +1220,8 @@
 
 
     .dx-scheduler-work-space.dx-scheduler-timeline-week,
-    .dx-scheduler-work-space.dx-scheduler-timeline-work-week {
+    .dx-scheduler-work-space.dx-scheduler-timeline-work-week,
+    .dx-scheduler-work-space.dx-scheduler-work-space-count.dx-scheduler-timeline-day  {
         .dx-scheduler-header-scrollable-mixin(@SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2 + @SCHEDULER_HEADER_PANEL_TOP_GAP);
 
         &.dx-scheduler-work-space-grouped {

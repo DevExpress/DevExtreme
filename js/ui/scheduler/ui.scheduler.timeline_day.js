@@ -13,7 +13,11 @@ var SchedulerTimelineDay = SchedulerTimeline.inherit({
     _setFirstViewDate: function() {
         this._firstViewDate = this.option("currentDate");
         this._setStartDayHour(this._firstViewDate);
-    }
+    },
+
+    _needRenderWeekHeader: function() {
+        return this._isWorkSpaceWithCount();
+    },
 });
 
 registerComponent("dxSchedulerTimelineDay", SchedulerTimelineDay);

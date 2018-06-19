@@ -102,6 +102,10 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         return date;
     },
 
+    _needRenderWeekHeader: function() {
+        return false;
+    },
+
     needUpdateScrollPosition: function(hours, minutes, bounds, date) {
         return this._dateWithinBounds(bounds, date);
     },
