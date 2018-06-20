@@ -81,7 +81,7 @@
  */
 
  /**
- * @typedef {string} Enums.ChartOverlappingBehavior
+ * @typedef {string} Enums.OverlappingBehavior
  * @enum {'rotate'|'stagger'|'none'|'hide'}
  */
 
