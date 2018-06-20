@@ -158,9 +158,19 @@ module.exports = SelectionStrategy.inherit({
 
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
         var that = this,
-            deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll);
+            deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll),
+            filter;
+
+        if(this.options.filter) {
+            filter = this.options.filter();
+        }
+
 
         deferred.done(function(items) {
+            that.options.filter = function() {
+                return filter;
+            };
+
             if(preserve) {
                 that._preserveSelectionUpdate(items, isDeselect);
             } else {
