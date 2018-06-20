@@ -903,9 +903,8 @@ var dxChart = {
             displayMode: "standard",
             /**
             * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior
-            * @type string
+            * @type Enums.OverlappingBehavior
             * @default 'hide'
-            * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
             */
             overlappingBehavior: "hide",
             /**
@@ -2423,9 +2422,8 @@ var dxPolarChart = {
             visible: true,
             /**
             * @name dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior
-            * @type string
+            * @type Enums.PolarChartOverlappingBehavior
             * @default 'hide'
-            * @acceptValues 'hide' | 'none'
             */
             overlappingBehavior: 'hide',
             /**
