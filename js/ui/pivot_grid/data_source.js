@@ -706,6 +706,11 @@ module.exports = Class.inherit((function() {
             * @default undefined
             */
             /**
+            * @name PivotGridDataSourceOptions.fields.name
+            * @type string
+            * @default undefined
+            */
+            /**
              * @name PivotGridDataSourceOptions.fields.dataType
              * @type Enums.PivotGridDataType
              * @default undefined
