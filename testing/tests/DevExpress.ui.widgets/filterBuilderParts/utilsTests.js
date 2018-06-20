@@ -1472,7 +1472,7 @@ QUnit.module("Lookup Value", function() {
                 lookup: {
                     dataSource: new CustomStore({
                         load: () => categories,
-                        byKey: key => categories.find(x => x === key)
+                        byKey: key => categories.filter(x => x === key)[0]
                     })
                 },
             },
