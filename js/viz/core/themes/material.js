@@ -197,6 +197,17 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
 
         bullet: {
             color: accentColor
+        },
+
+        gauge: {
+            valueIndicators: {
+                "rangebar": {
+                    color: accentColor
+                },
+                "textcloud": {
+                    color: accentColor
+                }
+            }
         }
     }, "material." + themeName);
 }
