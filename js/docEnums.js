@@ -80,6 +80,16 @@
  * @enum {'hide'|'none'}
  */
 
+ /**
+ * @typedef {string} Enums.ChartOverlappingBehavior
+ * @enum {'rotate'|'stagger'|'none'|'hide'}
+ */
+
+/**
+ * @typedef {string} Enums.PolarChartOverlappingBehavior
+ * @enum {'none'|'hide'}
+ */
+
 /**
  * @typedef {string} Enums.Orientation
  * @enum {'horizontal'|'vertical'}
