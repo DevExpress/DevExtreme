@@ -465,14 +465,8 @@ function getCurrentLookupValueText(field, value, handler) {
         return;
     }
     var dataSource = new DataSource(field.lookup.dataSource);
-    dataSource.filter(field.lookup.valueExpr, value);
-    dataSource.load().done(function(result) {
-        if(result && result.length > 0) {
-            var data = result[0];
-            handler(field.lookup.displayExpr ? data[field.lookup.displayExpr] : data);
-        } else {
-            handler("");
-        }
+    dataSource.loadSingle(field.lookup.valueExpr, value).done(function(result) {
+        result ? handler(field.lookup.displayExpr ? result[field.lookup.displayExpr] : result) : handler("");
     }).fail(function() {
         handler("");
     });

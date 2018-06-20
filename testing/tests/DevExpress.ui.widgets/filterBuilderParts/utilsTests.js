@@ -2,6 +2,7 @@
 
 import utils from "ui/filter_builder/utils";
 import between from "ui/filter_builder/between";
+import CustomStore from "data/custom_store";
 import fields from "../../../helpers/filterBuilderTestData.js";
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
@@ -1460,6 +1461,24 @@ QUnit.module("Lookup Value", function() {
         utils.getCurrentLookupValueText(field, value, function(r) {
             assert.equal(r, "");
         });
+    });
+
+    // T646772
+    QUnit.test("with custom store", function(assert) {
+        var categories = [
+                "Video Players",
+                "Televisions"
+            ], field = {
+                lookup: {
+                    dataSource: new CustomStore({
+                        load: () => categories,
+                        byKey: key => categories.filter(x => x === key)[0]
+                    })
+                },
+            },
+            value = "Televisions";
+
+        utils.getCurrentLookupValueText(field, value, r => assert.equal(r, "Televisions"));
     });
 });
 
