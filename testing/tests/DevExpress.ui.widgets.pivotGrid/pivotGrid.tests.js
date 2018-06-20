@@ -1791,6 +1791,75 @@ QUnit.test("Sorting by Summary context menu", function(assert) {
     }], "field args");
 });
 
+// T644193
+QUnit.test("Sorting by Summary context menu if several fields with same caption", function(assert) {
+    var contextMenuArgs = [],
+        pivotGrid = createPivotGrid({
+            fieldChooser: {
+                enabled: false
+            },
+            allowSortingBySummary: true,
+            showColumnGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { format: 'decimal', area: "column", expanded: true },
+
+                    { format: { format: 'quarter', dateType: 'full' }, area: "column" },
+                    { dataField: "Product", area: "row", index: 2 },
+                    { dataField: "sum1", caption: 'Sum', format: 'currency', area: "data", name: "Sum1" },
+                    { dataField: "sum1", caption: 'Sum', format: 'currency', area: "data", name: "Sum2" },
+                ],
+                rows: [
+                    { value: 'A', index: 0 },
+                    { value: 'B', index: 1 }
+                ],
+                columns: [{
+                    value: '2010', index: 2,
+                    children: [
+                        { value: '1', index: 0 },
+                        { value: '2', index: 1 }
+                    ]
+                }, {
+                    value: '2012', index: 3
+                }],
+                values: [
+                    [[1, 0.1], [8, 0.8], [15, 0.15], [36, 0.36], [43, 0.43]],
+                    [[2, 0.2], [9, 0.9], [16, 0.16], [37, 0.37], [44, 0.44]],
+                    [[3, 0.3], [10, 0.1], [17, 0.17], [38, 0.38], [45, 0.45]]
+                ]
+            }
+        }, assert);
+
+    pivotGrid.option("onContextMenuPreparing", function(e) {
+        contextMenuArgs.push(e);
+    });
+
+    var dataSource = pivotGrid.getDataSource();
+
+    sinon.spy(dataSource, "field");
+    sinon.spy(dataSource, "load");
+
+    // act
+    $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
+
+    // assert
+    assert.equal(contextMenuArgs[0].items.length, 1);
+    assert.equal(contextMenuArgs[0].items[0].text, "Sort \"Product\" by This Column");
+    assert.equal(contextMenuArgs[0].items[0].icon, "none");
+
+    // act
+    contextMenuArgs[0].items[0].onItemClick();
+
+    // assert
+    assert.ok(dataSource.load.calledOnce);
+    assert.ok(dataSource.field.calledOnce);
+    assert.deepEqual(dataSource.field.lastCall.args, [2, {
+        sortBySummaryField: "Sum2",
+        sortBySummaryPath: ["2012"],
+        sortOrder: "desc"
+    }], "field args");
+});
+
 QUnit.test("Sorting by Summary context menu when sorting defined", function(assert) {
     var contextMenuArgs = [],
         pivotGrid = createPivotGrid({
