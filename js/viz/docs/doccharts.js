@@ -903,7 +903,7 @@ var dxChart = {
             displayMode: "standard",
             /**
             * @name dxChartOptions.commonAxisSettings.label.overlappingBehavior
-            * @type Enums.ChartOverlappingBehavior
+            * @type Enums.OverlappingBehavior
             * @default 'hide'
             */
             overlappingBehavior: "hide",
