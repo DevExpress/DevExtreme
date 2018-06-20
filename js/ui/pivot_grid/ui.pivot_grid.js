@@ -1274,7 +1274,7 @@ var PivotGrid = Widget.inherit({
                             text: text,
                             onItemClick: function() {
                                 dataSource.field(field.index, {
-                                    sortBySummaryField: dataField.caption || dataField.dataField,
+                                    sortBySummaryField: dataField.name || dataField.caption || dataField.dataField,
                                     sortBySummaryPath: e.cell.path,
                                     sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
                                 });

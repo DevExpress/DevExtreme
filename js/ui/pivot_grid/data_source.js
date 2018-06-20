@@ -720,6 +720,12 @@ module.exports = Class.inherit((function() {
             * @default undefined
             */
             /**
+            * @name PivotGridDataSourceOptions_fields_name
+            * @publicName name
+            * @type string
+            * @default undefined
+            */
+            /**
              * @name PivotGridDataSourceOptions_fields_dataType
              * @publicName dataType
              * @type Enums.PivotGridDataType
