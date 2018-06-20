@@ -112,5 +112,15 @@ registerTheme({
     },
     bullet: {
         color: ACCENT_COLOR
+    },
+    gauge: {
+        valueIndicators: {
+            "rangebar": {
+                color: ACCENT_COLOR
+            },
+            "textcloud": {
+                color: ACCENT_COLOR
+            }
+        }
     }
 }, "generic.light");
