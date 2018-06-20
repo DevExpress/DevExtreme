@@ -2,7 +2,8 @@
 
 /* global fields */
 
-var utils = require("ui/filter_builder/utils");
+var utils = require("ui/filter_builder/utils"),
+    CustomStore = require("data/custom_store");
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
@@ -1026,6 +1027,30 @@ QUnit.module("Lookup Value", function() {
 
         utils.getCurrentLookupValueText(field, value, function(r) {
             assert.equal(r, "");
+        });
+    });
+
+    // T646772
+    QUnit.test("with custom store", function(assert) {
+        var categories = [
+                "Video Players",
+                "Televisions"
+            ], field = {
+                lookup: {
+                    dataSource: new CustomStore({
+                        load: function() { return categories; },
+                        byKey: function(key) {
+                            return categories.filter(function(x) {
+                                return x === key;
+                            })[0];
+                        }
+                    })
+                },
+            },
+            value = "Televisions";
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "Televisions");
         });
     });
 });
