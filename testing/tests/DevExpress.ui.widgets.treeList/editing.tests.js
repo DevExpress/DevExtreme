@@ -323,6 +323,7 @@ QUnit.test("AddRow method witout parameters should add item at begin", function(
     // arrange
     var $testElement = $('#treeList');
 
+    this.options.rootValue = 0;
     this.options.editing.allowAdding = true;
     this.options.editing.texts = { addRowToNode: "Add" };
 
@@ -337,10 +338,10 @@ QUnit.test("AddRow method witout parameters should add item at begin", function(
     var rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 2, "rows count");
-    assert.deepEqual(rows[0].key.parentKey, undefined, "row 0 key parentKey");
+    assert.deepEqual(rows[0].key.parentKey, 0, "row 0 key parentKey");
     assert.deepEqual(rows[0].key.rowIndex, 0, "row 0 key rowIndex");
     assert.deepEqual(rows[0].inserted, true, "row 0 is inserted");
-    assert.deepEqual(rows[0].data, { parentId: undefined }, "row 0 data should contains parentId");
+    assert.deepEqual(rows[0].data, { parentId: 0 }, "row 0 data should contains parentId");
     assert.strictEqual(rows[1].key, 1, "row 1");
     assert.strictEqual(rows[1].isExpanded, false, "row 1 is not expanded");
 });
