@@ -14,7 +14,13 @@ var nativeDOMAdapterStrategy = {
         var matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
             element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
             function(selector) {
-                var items = this.querySelectorAll(element.document || element.ownerDocument, selector);
+                var doc = element.document || element.ownerDocument;
+
+                if(!doc) {
+                    return false;
+                }
+
+                var items = this.querySelectorAll(doc, selector);
 
                 for(var i = 0; i < items.length; i++) {
                     if(items[i] === element) {
