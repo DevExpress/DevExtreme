@@ -189,10 +189,9 @@ module.exports = Class.inherit((function() {
             newCell,
             rowIndex,
             columnIndex,
-            dataSourceCells = dataSource.values,
-            isNewDataSourceNotEmpty = newRowItemIndexesToCurrent.length + newColumnItemIndexesToCurrent.length;
+            dataSourceCells = dataSource.values;
 
-        if(newDataSourceCells && isNewDataSourceNotEmpty) {
+        if(newDataSourceCells) {
             for(newRowIndex = 0; newRowIndex <= newDataSourceCells.length; newRowIndex++) {
                 newRowCells = newDataSourceCells[newRowIndex];
                 rowIndex = newRowItemIndexesToCurrent[newRowIndex];
@@ -1482,7 +1481,9 @@ module.exports = Class.inherit((function() {
                         newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns);
                     }
                     when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent).done(function(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
-                        updateDataSourceCells(loadedData, dataSource.values, newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent);
+                        if(area === "row" && newRowItemIndexesToCurrent.length || area === "column" && newColumnItemIndexesToCurrent.length) {
+                            updateDataSourceCells(loadedData, dataSource.values, newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent);
+                        }
                         that._update(deferred);
                     });
                 }
