@@ -113,6 +113,7 @@ var ProgressBar = TrackBar.inherit({
 
     _initMarkup: function() {
         this._renderStatus();
+        this._createCompleteAction();
 
         this.callBase();
 
@@ -126,11 +127,6 @@ var ProgressBar = TrackBar.inherit({
         this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
 
         this._toggleStatus(this.option("showStatus"));
-    },
-
-    _render: function() {
-        this._createCompleteAction();
-        this.callBase();
     },
 
     _createCompleteAction: function() {
