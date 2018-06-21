@@ -2422,8 +2422,8 @@ QUnit.test("calendar views should be positioned correctly", function(assert) {
 });
 
 QUnit.test("List picker popup should be positioned correctly for Android devices", function(assert) {
-    var origTheme = themes.current;
-    themes.current = function() { return "android5.light"; };
+    var origIsAndroid5 = themes.isAndroid5;
+    themes.isAndroid5 = function() { return "android5.light"; };
 
     var $dateBox = $("#dateBox").dxDateBox({
         type: "time",
@@ -2439,7 +2439,7 @@ QUnit.test("List picker popup should be positioned correctly for Android devices
     assert.equal(position.offset.v, -10, "correct postion.offset.v property");
     assert.equal(position.offset.h, -16, "correct postion.offset.h property");
 
-    themes.current = origTheme;
+    themes.isAndroid5 = origIsAndroid5;
 });
 
 QUnit.test("Popup with calendar strategy should be use 'flipfit flip' strategy", function(assert) {

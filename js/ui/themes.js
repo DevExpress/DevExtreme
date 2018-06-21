@@ -20,7 +20,8 @@ var context,
     $activeThemeLink,
     knownThemes,
     currentThemeName,
-    pendingThemeName;
+    pendingThemeName,
+    isAndroid5Theme;
 
 var timerId;
 
@@ -169,6 +170,7 @@ function init(options) {
     processMarkup();
 
     currentThemeName = undefined;
+    isAndroid5Theme = undefined;
     current(options);
 }
 
@@ -226,6 +228,8 @@ function current(options) {
             throw errors.Error("E0021", currentThemeName);
         }
     }
+
+    isAndroid5Theme = /android5/.test(currentThemeName || readThemeMarker());
 
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
@@ -307,6 +311,10 @@ function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
+function isAndroid5() {
+    return isAndroid5Theme;
+}
+
 ready(function() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
@@ -358,10 +366,12 @@ exports.detachCssClasses = detachCssClasses;
 
 exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
+exports.isAndroid5 = isAndroid5;
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
     currentThemeName = null;
     pendingThemeName = null;
+    isAndroid5Theme = false;
 };
 

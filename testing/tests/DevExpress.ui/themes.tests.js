@@ -445,6 +445,28 @@ require("style-compiler-test-server/known-css-files");
         assert.equal($element.hasClass("dx-theme-oldtheme-typography"), false, "old typography class deleted");
     });
 
+    QUnit.test("Themes functions return right value after themes switching", function(assert) {
+        var that = this,
+            testThemes = [{
+                functionName: "isAndroid5",
+                themeName: "android5.light"
+            }];
+
+        $.each(testThemes, function(_, themeData) {
+            that.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light' />");
+            that.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='" + themeData.themeName + "' />");
+
+            themes.init({ context: that.frameDoc(), theme: "generic.light" });
+            themes.resetTheme();
+            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after reset");
+            themes.current("generic.light");
+            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after activate generic.light");
+            themes.current(themeData.themeName);
+            assert.ok(themes[themeData.functionName](), themeData.functionName + " after activate " + themeData.themeName);
+            themes.resetTheme();
+        });
+    });
+
 })();
 
 
