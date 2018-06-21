@@ -477,11 +477,11 @@ QUnit.test("Draw Links", function(assert) {
     assert.equal(this.renderer.path.args[3][1], "area");
     assert.equal(this.renderer.path.args[4][1], "area");
 
-    assert.equal(links[0].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 72.5 C 694 72.5 306 42.5 15 42.5 Z');
-    assert.equal(links[1].attr.firstCall.args[0].d, 'M 15 72.5 C 306 72.5 694 72.5 985 72.5 L 985 157.5 C 694 157.5 306 157.5 15 157.5 Z');
-    assert.equal(links[2].attr.firstCall.args[0].d, 'M 15 157.5 C 156 157.5 344 93.75 485 93.75 L 485 263.75 C 344 263.75 156 327.5 15 327.5 Z');
-    assert.equal(links[3].attr.firstCall.args[0].d, 'M 15 357.5 C 156 357.5 344 263.75 485 263.75 L 485 306.25 C 344 306.25 156 400 15 400 Z');
-    assert.equal(links[4].attr.firstCall.args[0].d, 'M 500 93.75 C 645.5 93.75 839.5 157.5 985 157.5 L 985 370 C 839.5 370 645.5 306.25 500 306.25 Z');
+    assert.equal(links[0].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 73 C 694 73 306 42 15 42 Z');
+    assert.equal(links[1].attr.firstCall.args[0].d, 'M 15 72 C 306 72 694 73 985 73 L 985 158 C 694 158 306 157 15 157 Z');
+    assert.equal(links[2].attr.firstCall.args[0].d, 'M 15 157 C 156 157 344 94 485 94 L 485 264 C 344 264 156 327 15 327 Z');
+    assert.equal(links[3].attr.firstCall.args[0].d, 'M 15 357 C 156 357 344 264 485 264 L 485 306 C 344 306 156 399 15 399 Z');
+    assert.equal(links[4].attr.firstCall.args[0].d, 'M 500 94 C 645.5 94 839.5 158 985 158 L 985 370 C 839.5 370 645.5 306 500 306 Z');
 });
 
 QUnit.test("Draw Nodes", function(assert) {
@@ -492,10 +492,10 @@ QUnit.test("Draw Nodes", function(assert) {
 
     var nodes = this.nodes(),
         expected = {
-            A: { x: 0, y: 0, height: 42.5, width: 15, _name: 'A' },
-            B: { x: 0, y: 72.5, height: 255, width: 15, _name: 'B' },
-            C: { x: 0, y: 357.5, height: 42.5, width: 15, _name: 'C' },
-            M: { x: 485, y: 93.75, height: 212.5, width: 15, _name: 'M' },
+            A: { x: 0, y: 0, height: 42, width: 15, _name: 'A' },
+            B: { x: 0, y: 72, height: 255, width: 15, _name: 'B' },
+            C: { x: 0, y: 357, height: 42, width: 15, _name: 'C' },
+            M: { x: 485, y: 94, height: 212, width: 15, _name: 'M' },
             Y: { x: 985, y: 30, height: 340, width: 15, _name: 'Y' }
         };
     assert.equal(nodes.length, 5, 'Number of nodes');
@@ -581,7 +581,7 @@ QUnit.module("Align options applying", environment);
 
 QUnit.test("Largest cascade occupies full chart height", function(assert) {
     var sankey = createSankey({
-            dataSource: common.testData.simpleData
+            dataSource: [['A', 'Y', 1], ['B', 'Y', 1], ['B', 'M', 1], ['C', 'M', 1], ['M', 'Y', 1]]
         }),
         size = sankey.getSize(),
         nodes = sankey.getAllItems().nodes,
@@ -610,7 +610,7 @@ QUnit.test("Default align option", function(assert) {
 
 QUnit.test("Align option as <String>", function(assert) {
     var sankey = createSankey({
-            dataSource: common.testData.simpleData,
+            dataSource: [['A', 'Y', 1], ['B', 'Y', 1], ['B', 'M', 1], ['C', 'M', 1], ['M', 'Y', 1]],
             align: 'bottom'
         }),
         size = sankey.getSize(),
@@ -738,7 +738,7 @@ QUnit.test("SortData option", function(assert) {
 
 QUnit.test("Align option updated as <String>", function(assert) {
     var sankey = createSankey({
-            dataSource: common.testData.simpleData,
+            dataSource: [['A', 'Y', 1], ['B', 'Y', 1], ['B', 'M', 1], ['C', 'M', 1], ['M', 'Y', 1]],
             align: 'top'
         }),
         size = sankey.getSize();
