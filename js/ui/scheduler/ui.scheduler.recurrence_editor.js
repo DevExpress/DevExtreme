@@ -124,7 +124,7 @@ var RecurrenceRule = Class.inherit({
     }
 });
 
-var SchedulerRecurrenceEditor = Editor.inherit({
+var RecurrenceEditor = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             value: null,
@@ -894,6 +894,6 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     }
 });
 
-registerComponent("dxSchedulerRecurrenceEditor", SchedulerRecurrenceEditor);
+registerComponent("dxRecurrenceEditor", RecurrenceEditor);
 
-module.exports = SchedulerRecurrenceEditor;
+module.exports = RecurrenceEditor;

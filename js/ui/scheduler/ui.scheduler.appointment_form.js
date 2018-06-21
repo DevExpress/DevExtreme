@@ -193,7 +193,7 @@ var SchedulerAppointmentForm = {
             },
             {
                 dataField: dataExprs.recurrenceRuleExpr,
-                editorType: "dxSchedulerRecurrenceEditor",
+                editorType: "dxRecurrenceEditor",
                 editorOptions: {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),

@@ -292,9 +292,9 @@ QUnit.test("Popup should contain recurrence editor", function(assert) {
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
 
     assert.equal($recurrenceEditor.length, 1, "Recurrence editor is rendered");
-    assert.equal($recurrenceEditor.dxSchedulerRecurrenceEditor("instance").option("value"), "FREQ=YEARLY", "value is right");
-    assert.deepEqual($recurrenceEditor.dxSchedulerRecurrenceEditor("instance").option("startDate"), startDate, "startDate value is right");
-    assert.equal($recurrenceEditor.dxSchedulerRecurrenceEditor("instance").option("firstDayOfWeek"), 5, "firstDayOfWeek value is right");
+    assert.equal($recurrenceEditor.dxRecurrenceEditor("instance").option("value"), "FREQ=YEARLY", "value is right");
+    assert.deepEqual($recurrenceEditor.dxRecurrenceEditor("instance").option("startDate"), startDate, "startDate value is right");
+    assert.equal($recurrenceEditor.dxRecurrenceEditor("instance").option("firstDayOfWeek"), 5, "firstDayOfWeek value is right");
 });
 
 QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is null", function(assert) {
