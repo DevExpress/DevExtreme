@@ -3713,7 +3713,7 @@ QUnit.test("fixed column should have correct width if all columns with disabled 
         loadingTimeout: undefined,
         dataSource: [{}],
         columns: [
-            { dataField: "field1", width: 50, allowResizing: false, fixed: true },
+            { dataField: "field1", width: 50, fixed: true },
             { dataField: "field2", width: 50, allowResizing: false },
             { dataField: "field3", width: 50, allowResizing: false }
         ]
