@@ -3706,6 +3706,26 @@ QUnit.test("last column with disabled allowResizing should not change width if a
     assert.equal($dataGrid.find(".dx-row").first().find("td").last().prev().outerWidth(), 250, "previuos last column have correct width");
 });
 
+// T643192
+QUnit.test("fixed column should have correct width if all columns with disabled allowResizing and with width", function(assert) {
+    // arrange, act
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [
+            { dataField: "field1", width: 50, fixed: true },
+            { dataField: "field2", width: 50, allowResizing: false },
+            { dataField: "field3", width: 50, allowResizing: false }
+        ]
+    });
+
+    // assert
+    var $firstRow = $dataGrid.dxDataGrid("instance").getRowElement(0);
+    assert.equal($dataGrid.outerWidth(), 150, "grid width");
+    assert.equal($($firstRow[0]).children().first().outerWidth(), 50, "first cell in main table have correct width");
+    assert.equal($($firstRow[1]).children().first().outerWidth(), 50, "first cell in fixed table have correct width");
+});
+
 // T387828
 QUnit.test("columns width when all columns have width and dataGrid with fixed width", function(assert) {
     // arrange
