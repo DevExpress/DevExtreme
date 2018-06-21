@@ -410,8 +410,8 @@ module.exports = (function() {
             var result = target ? Object.create(Object.getPrototypeOf(target)) : {},
                 targetWithoutPrototype = extendFromObject({}, target);
 
-            objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, false, true);
-            return objectUtils.deepExtendArraySafe(result, changes, false, true);
+            objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, true);
+            return objectUtils.deepExtendArraySafe(result, changes, true);
         },
 
         getExpandCellTemplate: function() {
