@@ -9,6 +9,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
+    themes = require("ui/themes"),
     DateBox = require("ui/date_box"),
     Calendar = require("ui/calendar"),
     Box = require("ui/box"),
@@ -2420,6 +2421,27 @@ QUnit.test("calendar views should be positioned correctly", function(assert) {
     assert.equal($calendarViews.eq(2).position().left, viewWidth, "after view is at the right");
 });
 
+QUnit.test("List picker popup should be positioned correctly for Android devices", function(assert) {
+    var origIsAndroid5 = themes.isAndroid5;
+    themes.isAndroid5 = function() { return "android5.light"; };
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        type: "time",
+        pickerType: "list",
+        opened: true
+    });
+
+    var popup = $dateBox.find(".dx-popup").dxPopup("instance"),
+        position = popup.option("position");
+
+    assert.equal(position.at, "left bottom", "correct postion.at property");
+    assert.equal(position.my, "left top", "correct postion.my property");
+    assert.equal(position.offset.v, -10, "correct postion.offset.v property");
+    assert.equal(position.offset.h, -16, "correct postion.offset.h property");
+
+    themes.isAndroid5 = origIsAndroid5;
+});
+
 QUnit.test("Popup with calendar strategy should be use 'flipfit flip' strategy", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         type: "date",
@@ -2845,12 +2867,25 @@ QUnit.test("rendered list markup", function(assert) {
 });
 
 QUnit.test("width option test", function(assert) {
-    var device = devices.current(),
-        extraWidth = 0;
+    this.dateBox.option("opened", false);
+    this.dateBox.option("width", "auto");
+    this.dateBox.option("opened", true);
 
-    if(device.platform === "android") {
-        extraWidth = 32;
-    }
+    var popup = this.$dateBox.find(".dx-popup").dxPopup("instance");
+
+    assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width 'auto'");
+
+    this.dateBox.option("opened", false);
+    this.dateBox.option("width", "153px");
+    this.dateBox.option("opened", true);
+    assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
+});
+
+QUnit.test("width option test for Android theme", function(assert) {
+    var origIsAndroid5 = themes.isAndroid5;
+    themes.isAndroid5 = function() { return "android5.light"; };
+
+    var extraWidth = 32;
 
     this.dateBox.option("opened", false);
     this.dateBox.option("width", "auto");
@@ -2864,6 +2899,8 @@ QUnit.test("width option test", function(assert) {
     this.dateBox.option("width", "153px");
     this.dateBox.option("opened", true);
     assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
+
+    themes.isAndroid5 = origIsAndroid5;
 });
 
 QUnit.test("list should contain correct values if min/max does not specified", function(assert) {

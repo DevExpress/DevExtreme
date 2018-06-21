@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     List = require("../list"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
-    devices = require("../../core/devices"),
+    themes = require("../themes"),
     noop = require("../../core/utils/common").noop,
     isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
@@ -44,13 +44,12 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        var device = devices.current(),
-            result = extend(popupConfig, {
-                width: this._getPopupWidth()
-            });
+        var result = extend(popupConfig, {
+            width: this._getPopupWidth()
+        });
 
-        if(device.platform === "android") {
-            extend(result, {
+        if(themes.isAndroid5()) {
+            extend(true, result, {
                 position: {
                     offset: {
                         h: -16,
@@ -68,10 +67,9 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getPopupWidth: function() {
-        var device = devices.current(),
-            result = this.dateBox.$element().outerWidth();
+        var result = this.dateBox.$element().outerWidth();
 
-        if(device.platform === "android") {
+        if(themes.isAndroid5()) {
             result += 32;
         }
 
