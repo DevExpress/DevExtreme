@@ -2307,7 +2307,6 @@ QUnit.test("List picker popup should be positioned correctly for Android devices
     var $dateBox = $("#dateBox").dxDateBox({
         type: "time",
         pickerType: "list",
-        value: new Date(),
         opened: true
     });
 
