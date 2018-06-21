@@ -9,6 +9,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
+    themes = require("ui/themes"),
     DateBox = require("ui/date_box"),
     Calendar = require("ui/calendar"),
     Box = require("ui/box"),
@@ -2294,6 +2295,28 @@ QUnit.test("calendar views should be positioned correctly", function(assert) {
     assert.equal($calendarViews.eq(0).position().left, 0, "main view is at 0");
     assert.equal($calendarViews.eq(1).position().left, -viewWidth, "before view is at the left");
     assert.equal($calendarViews.eq(2).position().left, viewWidth, "after view is at the right");
+});
+
+QUnit.test("List picker popup should be positioned correctly for Android devices", function(assert) {
+    var origTheme = themes.current;
+    themes.current = function() { return "android5.light"; };
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        type: "time",
+        pickerType: "list",
+        value: new Date(),
+        opened: true
+    });
+
+    var popup = $dateBox.find(".dx-popup").dxPopup("instance"),
+        position = popup.option("position");
+
+    assert.equal(position.at, "left bottom", "correct postion.at property");
+    assert.equal(position.my, "left top", "correct postion.my property");
+    assert.equal(position.offset.v, -10, "correct postion.offset.v property");
+    assert.equal(position.offset.h, -16, "correct postion.offset.h property");
+
+    themes.current = origTheme;
 });
 
 QUnit.test("Popup with calendar strategy should be use 'flipfit flip' strategy", function(assert) {
