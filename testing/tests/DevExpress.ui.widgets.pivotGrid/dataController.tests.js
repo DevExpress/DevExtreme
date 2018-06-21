@@ -1847,7 +1847,7 @@ QUnit.test("Apply partial dataController with empty data. Update columns", funct
     });
     dataController.applyPartialDataSource('column', ['C'], {
         columns: [],
-        rows: [],
+        rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
         values: [
             [0]
         ]
@@ -1855,6 +1855,53 @@ QUnit.test("Apply partial dataController with empty data. Update columns", funct
     assert.deepEqual(prepareLoadedData(dataController.getData().columns), [
         { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
         { value: 'C', index: 3, children: [] }
+    ]);
+
+    var cells = [];
+    $.each(dataController.getCellsInfo(), function() {
+        cells.push($.map(this, function(cell) {
+            return cell && cell.text;
+        }));
+    });
+    assert.deepEqual(cells, [
+        ['1', '2', '3', '6', '12'],
+        ['2', '3', '4', '9', '18'],
+        ['3', '5', '7', '15', '30']
+    ]);
+});
+
+QUnit.test("Apply partial dataController with empty data. Update rows", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" }, { area: "row" },
+                { area: "column" }, { area: "column" },
+                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [
+                { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
+                { value: 'C', index: 3 }
+            ],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    });
+    dataController.applyPartialDataSource('row', ['Piter'], {
+        columns: [
+            { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
+            { value: 'C', index: 3 }
+        ],
+        rows: [],
+        values: [
+            [0]
+        ]
+    });
+    assert.deepEqual(prepareLoadedData(dataController.getData().rows), [
+        { value: 'Vasya', index: 0 }, { value: 'Piter', index: 1, children: [] }
     ]);
 
     var cells = [];
