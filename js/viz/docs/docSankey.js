@@ -106,7 +106,7 @@ var dxSankey = {
         /**
         * @name dxSankeyOptions.label.stroke
         * @type string
-        * @default #000000
+        * @default "#000000"
         */
         stroke: "#000000",
         /**
@@ -200,6 +200,7 @@ var dxSankey = {
         * @name dxSankeyOptions.tooltip.enabled
         * @type boolean
         * @default true
+        * @inheritdoc
         */
         enabled: true,
         /**
@@ -337,7 +338,6 @@ var dxSankey = {
                 width: 2,
             }
         },
-
     },
     /**
     * @name dxSankeyOptions.links
@@ -467,7 +467,6 @@ var dxSankey = {
     onItemClick: function() { },
     /**
     * @name dxSankeyOptions.onHoverChanged
-    
     * @extends Action
     * @type function
     * @type_function_param1 e:object
