@@ -60,13 +60,13 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E2203: "The range you are trying to set is invalid",
     /**
-    * @name ErrorsViz_e2401
+    * @name ErrorsViz_e2006
     */
-    E2401: "A cycle detected in data that you provided",
+    E2006: "A cycle is detected in provided data",
     /**
-    * @name ErrorsViz_e2402
+    * @name ErrorsViz_e2007
     */
-    E2402: "Provided data can not be displayed",
+    E2007: "Provided data can not be displayed",
     /**
     * @name ErrorsViz.W2002
     */

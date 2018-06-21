@@ -10,11 +10,11 @@ let validator = {
     validate: function(data, incidentOccurred) {
         var result = null;
         if(this._isInvalid(data)) {
-            incidentOccurred("E2402");
+            incidentOccurred("E2007");
             result = 'Provided data can not be displayed';
         } else if(this._hasCycle(data)) {
-            result = 'A cycle detected in data that you provided';
-            incidentOccurred("E2401");
+            result = 'A cycle is detected in provided data';
+            incidentOccurred("E2006");
         }
         return result;
     },

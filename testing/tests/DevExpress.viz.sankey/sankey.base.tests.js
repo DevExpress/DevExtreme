@@ -99,7 +99,7 @@ QUnit.test("Trigger error on invalid source data", function(assert) {
             onIncidentOccurred: spy
         });
         assert.ok(spy.called);
-        assert.equal(spy.getCall(0).args[0].target.id, "E2402");
+        assert.equal(spy.getCall(0).args[0].target.id, "E2007");
         assert.equal(spy.getCall(0).args[0].target.type, "error");
         assert.equal(spy.getCall(0).args[0].target.widget, "dxSankey");
     });
@@ -120,7 +120,7 @@ QUnit.test("Trigger \"cycle detected\" error on invalid source data", function(a
             onIncidentOccurred: spy
         });
         assert.ok(spy.called);
-        assert.equal(spy.getCall(0).args[0].target.id, "E2401");
+        assert.equal(spy.getCall(0).args[0].target.id, "E2006");
         assert.equal(spy.getCall(0).args[0].target.type, "error");
         assert.equal(spy.getCall(0).args[0].target.widget, "dxSankey");
     });
