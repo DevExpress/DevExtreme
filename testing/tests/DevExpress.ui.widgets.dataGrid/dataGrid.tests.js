@@ -3005,89 +3005,6 @@ QUnit.test("visible items should be rendered if virtual scrolling and preload ar
     clock.restore();
 });
 
-QUnit.test("editing should starts correctly if scrolling mode is virtual", function(assert) {
-    // arrange, act
-    var clock = sinon.useFakeTimers(),
-        array = [],
-        dataGrid;
-
-    for(var i = 1; i <= 50; i++) {
-        array.push({ id: i });
-    }
-
-    dataGrid = $("#dataGrid").dxDataGrid({
-        height: 100,
-        dataSource: array,
-        keyExpr: "id",
-        onRowPrepared: function(e) {
-            $(e.rowElement).css("height", 50);
-        },
-        editing: {
-            mode: "row",
-            allowUpdating: true
-        },
-        scrolling: {
-            mode: "virtual",
-            rowRenderingMode: "virtual",
-            useNative: false
-        }
-    }).dxDataGrid("instance");
-
-    clock.tick();
-
-    // act
-    dataGrid.getScrollable().scrollTo({ top: 500 });
-    dataGrid.editRow(1);
-
-    // assert
-    var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 15, "visible row count");
-    assert.equal(visibleRows[0].key, 6, "first visible row key");
-    assert.equal($(dataGrid.getRowElement(1, 0)).find(".dx-texteditor").length, 1, "row has editor");
-
-    clock.restore();
-});
-
-QUnit.test("selection should works correctly if row rendering mode is virtual", function(assert) {
-    // arrange, act
-    var array = [],
-        dataGrid;
-
-    for(var i = 1; i <= 50; i++) {
-        array.push({ id: i });
-    }
-
-    dataGrid = $("#dataGrid").dxDataGrid({
-        height: 100,
-        dataSource: array,
-        keyExpr: "id",
-        loadingTimeout: undefined,
-        onRowPrepared: function(e) {
-            $(e.rowElement).css("height", 50);
-        },
-        selection: {
-            mode: "multiple"
-        },
-        scrolling: {
-            mode: "virtual",
-            rowRenderingMode: "virtual",
-            useNative: false
-        }
-    }).dxDataGrid("instance");
-
-    // act
-    dataGrid.getScrollable().scrollTo({ top: 500 });
-    dataGrid.selectRows([12], true);
-
-    // assert
-    var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 15, "visible row count");
-    assert.equal(visibleRows[0].key, 6, "first visible row key");
-    assert.equal(visibleRows[6].key, 12, "selected row key");
-    assert.equal(visibleRows[6].isSelected, true, "isSelected for selected row");
-    assert.ok($(dataGrid.getRowElement(6)).hasClass("dx-selection"), "dx-selection class is added");
-});
-
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
     // arrange
     var array = [];
@@ -5183,6 +5100,207 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[40].data.key, 21);
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
 });
+
+QUnit.module("Virtual row rendering");
+
+QUnit.test("editing should starts correctly if scrolling mode is virtual", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 50; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.editRow(1);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows[0].key, 6, "first visible row key");
+    assert.equal($(dataGrid.getRowElement(1, 0)).find(".dx-texteditor").length, 1, "row has editor");
+
+    clock.restore();
+});
+
+QUnit.test("selection should works correctly if row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 50; i++) {
+        array.push({ id: i });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        selection: {
+            mode: "multiple"
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.selectRows([12], true);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows[0].key, 6, "first visible row key");
+    assert.equal(visibleRows[6].key, 12, "selected row key");
+    assert.equal(visibleRows[6].isSelected, true, "isSelected for selected row");
+    assert.ok($(dataGrid.getRowElement(6)).hasClass("dx-selection"), "dx-selection class is added");
+});
+
+// T644981
+QUnit.test("grouping should works correctly if row rendering mode is virtual and dataSource is remote", function(assert) {
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 20; i++) {
+        array.push({ id: i, group: "group" + (i % 8 + 1) });
+    }
+    var clock = sinon.useFakeTimers();
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        loadingTimeout: undefined,
+        dataSource: {
+            load: function() {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(array);
+                });
+
+                return d.promise();
+            }
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        grouping: {
+            autoExpandAll: false,
+        },
+        groupPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    clock.tick();
+
+    dataGrid.columnOption("group", "groupIndex", 0);
+    clock.tick();
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 8, "visible row count");
+    assert.deepEqual(visibleRows[0].key, ["group1"], "first visible row key");
+    assert.deepEqual(visibleRows[7].key, ["group8"], "last visible row key");
+
+    clock.restore();
+});
+
+var realSetTimeout = window.setTimeout;
+
+QUnit.test("ungrouping after grouping should works correctly if row rendering mode is virtual", function(assert) {
+    var done = assert.async();
+    // arrange, act
+    var array = [],
+        dataGrid;
+
+    for(var i = 1; i <= 25; i++) {
+        array.push({ id: i, group: "group" + (i % 8 + 1) });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        dataSource: array,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            updateTimeout: 0,
+            useNative: false
+        },
+        grouping: {
+            autoExpandAll: false,
+        },
+        groupPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 500 });
+    dataGrid.columnOption("group", "groupIndex", 0);
+
+    // assert
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 8, "visible row count");
+    assert.deepEqual(visibleRows[0].key, ["group1"], "first visible row key");
+    assert.deepEqual(visibleRows[7].key, ["group8"], "last visible row key");
+
+    // act
+    realSetTimeout(function() {
+        dataGrid.columnOption("group", "groupIndex", undefined);
+
+        // assert
+        visibleRows = dataGrid.getVisibleRows();
+        assert.equal(visibleRows.length, 15, "visible row count");
+        assert.deepEqual(visibleRows[0].key, 1, "first visible row key");
+        done();
+    });
+});
+
 
 QUnit.module("Rendered on server", {
     beforeEach: function() {
