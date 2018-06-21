@@ -6087,6 +6087,63 @@ QUnit.test("Edit row should not throw an exception after change edit mode", func
     }
 });
 
+// T642523
+QUnit.test("Add row when data items are an instance of the class and one of the fields has getter", function(assert) {
+    // arrange
+    var that = this,
+        items,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    function Employee(id, name, age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    Object.defineProperty(Employee.prototype, "isYoung", {
+        get: function() {
+            return this.age < 30;
+        }
+    });
+
+    that.options.editing = {
+        mode: "batch",
+        allowAdding: true,
+        texts: {
+            addRow: "Add New Item",
+            saveRowChanges: "Save"
+        }
+    };
+    that.options.dataSource = [new Employee(1, "joe", 25)];
+    that.options.columns = ["id", "name", "age", "isYoung"];
+    that.options.onInitNewRow = function(e) {
+        e.data = new Employee();
+    };
+
+    that.dataController.init();
+    that.columnsController.init();
+    rowsView.render($testElement);
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+
+    // assert
+    items = that.dataController.items();
+    assert.strictEqual(items.length, 1, "item count");
+    assert.ok(items[0].data instanceof Employee, "item is an instance of the Employee class");
+    assert.strictEqual(items[0].data.isYoung, true, "field value");
+
+    // act
+    that.addRow();
+    that.clock.tick();
+
+    // assert
+    items = that.dataController.items();
+    assert.strictEqual(items.length, 2, "item count");
+    assert.ok(items[0].inserted, "item is inserted");
+    assert.ok(items[0].data instanceof Employee, "item is an instance of the Employee class");
+    assert.strictEqual(items[0].data.isYoung, false, "field value");
+});
+
 if(device.ios || device.android) {
     // T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {

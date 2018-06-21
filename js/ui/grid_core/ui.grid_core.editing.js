@@ -1471,8 +1471,12 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editData.push(options);
             }
             if(that._editData[editDataIndex]) {
-                options.type = that._editData[editDataIndex].type || options.type;
-                deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
+                if(options.data) {
+                    that._editData[editDataIndex].data = gridCoreUtils.createObjectWithChanges(that._editData[editDataIndex].data, options.data);
+                }
+                if(!that._editData[editDataIndex].type && options.type) {
+                    that._editData[editDataIndex].type = options.type;
+                }
                 if(row) {
                     row.data = gridCoreUtils.createObjectWithChanges(row.data, options.data);
                 }
