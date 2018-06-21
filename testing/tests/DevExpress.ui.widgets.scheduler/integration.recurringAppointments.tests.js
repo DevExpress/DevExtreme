@@ -806,7 +806,7 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.$element().find(".dx-recurrence-switch").dxSwitch("instance").option("value", true);
+    form.getEditor("repeatOnOff").option("value", true);
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
@@ -825,15 +825,13 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and en
 
     this.instance.showAppointmentPopup(appointment);
 
-    var $popup = $(".dx-scheduler-appointment-popup"),
-        switchEditor = $popup.find(".dx-recurrence-switch").dxSwitch("instance");
+    var form = this.instance.getAppointmentDetailsForm(),
+        repeatOnEditor = form.getEditor("repeatOnOff"),
+        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
-    switchEditor.option("value", true);
-
-    var switchEndEditor = $popup.find(".dx-recurrence-switch-repeat-end").dxSwitch("instance");
-
-    switchEndEditor.option("value", true);
-    switchEditor.option("value", false);
+    repeatOnEditor.option("value", true);
+    repeatEndEditor.option("value", true);
+    repeatOnEditor.option("value", false);
 
     assert.ok(true, "recurrence editor works correctly");
 });
@@ -858,10 +856,10 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
 
     this.instance.showAppointmentPopup(appointment);
 
-    var $popup = $(".dx-scheduler-appointment-popup"),
-        switchEditor = $popup.find(".dx-recurrence-switch").dxSwitch("instance");
+    var form = this.instance.getAppointmentDetailsForm(),
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
-    switchEditor.option("value", false);
+    repeatOnEditor.option("value", false);
 
     assert.ok(true, "recurrence editor works correctly");
 });

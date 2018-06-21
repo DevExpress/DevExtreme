@@ -792,6 +792,13 @@ var Scheduler = Widget.inherit({
                 */
             allDayExpr: "allDay",
 
+            /**
+                * @name dxSchedulerOptions.repeatOnOffExpr
+                * @type string
+                * @default 'repeatOnOff'
+                */
+            repeatOnOffExpr: "repeatOnOff",
+
                 /**
                 * @name dxSchedulerOptions.recurrenceRuleExpr
                 * @type string
@@ -1274,6 +1281,7 @@ var Scheduler = Widget.inherit({
             case "descriptionExpr":
             case "allDayExpr":
             case "recurrenceRuleExpr":
+            case "repeatOnOffExpr":
             case "recurrenceExceptionExpr":
                 this._updateExpression(name, value);
                 this._initAppointmentTemplate();
@@ -1448,6 +1456,7 @@ var Scheduler = Widget.inherit({
             allDay: this.option("allDayExpr"),
             text: this.option("textExpr"),
             description: this.option("descriptionExpr"),
+            repeatOnOff: this.option("repeatOnOff"),
             recurrenceRule: this.option("recurrenceRuleExpr"),
             recurrenceException: this.option("recurrenceExceptionExpr")
         });
@@ -1472,6 +1481,7 @@ var Scheduler = Widget.inherit({
             startDateExpr: this.option("startDateExpr"),
             endDateExpr: this.option("endDateExpr"),
             allDayExpr: this.option("allDayExpr"),
+            repeatOnOffExpr: this.option("repeatOnOffExpr"),
             recurrenceRuleExpr: this.option("recurrenceRuleExpr"),
             recurrenceExceptionExpr: this.option("recurrenceExceptionExpr")
         }, combinedDataAccessors);
@@ -2062,6 +2072,7 @@ var Scheduler = Widget.inherit({
                 startDateExpr: this.option("startDateExpr"),
                 endDateExpr: this.option("endDateExpr"),
                 descriptionExpr: this.option("descriptionExpr"),
+                repeatOnOffExpr: this.option("repeatOnOffExpr"),
                 recurrenceRuleExpr: this.option("recurrenceRuleExpr"),
                 startDateTimeZoneExpr: this.option("startDateTimeZoneExpr"),
                 endDateTimeZoneExpr: this.option("endDateTimeZoneExpr")
