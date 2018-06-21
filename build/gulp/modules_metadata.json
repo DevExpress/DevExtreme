@@ -648,6 +648,12 @@
     }
   },
   {
+    "name": "viz/sankey",
+    "exports": {
+      "default": "viz.dxSankey"
+    }
+  },
+  {
     "name": "viz/linear_gauge",
     "exports": {
       "default": "viz.dxLinearGauge"
