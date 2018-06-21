@@ -464,17 +464,29 @@ require("style-compiler-test-server/known-css-files");
         assert.ok($(".dx-theme-material", this.frameDoc()).hasClass("dx-color-scheme-blue-light"), "right dx-color-scheme class for material");
     });
 
-    QUnit.test("isMaterial return right value after themes switching", function(assert) {
-        this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='material.blue.light' />");
-        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light' />");
-        themes.init({ context: this.frameDoc(), theme: "generic.light" });
-        themes.resetTheme();
-        assert.notOk(themes.isMaterial(), "isMaterial after reset");
-        themes.current("generic.light");
-        assert.notOk(themes.isMaterial(), "isMaterial after activate generic.light");
-        themes.current("material.blue.light");
-        assert.ok(themes.isMaterial(), "isMaterial after activate material.blue.light");
-        themes.resetTheme();
+    QUnit.test("Themes functions return right value after themes switching", function(assert) {
+        var that = this,
+            testThemes = [{
+                functionName: "isMaterial",
+                themeName: "material.blue.light"
+            }, {
+                functionName: "isAndroid5",
+                themeName: "android5.light"
+            }];
+
+        $.each(testThemes, function(_, themeData) {
+            that.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='generic.light' />");
+            that.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='" + themeData.themeName + "' />");
+
+            themes.init({ context: that.frameDoc(), theme: "generic.light" });
+            themes.resetTheme();
+            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after reset");
+            themes.current("generic.light");
+            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after activate generic.light");
+            themes.current(themeData.themeName);
+            assert.ok(themes[themeData.functionName](), themeData.functionName + " after activate " + themeData.themeName);
+            themes.resetTheme();
+        });
     });
 
 })();
