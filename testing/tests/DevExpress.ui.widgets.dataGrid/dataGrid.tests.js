@@ -801,6 +801,53 @@ QUnit.test("Editing should work with classes as data objects contains readonly p
     assert.deepEqual(rows[0].values, [0, "test"]);
 });
 
+// T643455
+QUnit.test("Editing should works with nested readonly property", function(assert) {
+    // arrange
+    function ItemConfig() {
+        this._enable = false;
+    }
+
+    Object.defineProperty(ItemConfig.prototype, "enable", {
+        get: function() {
+            return this._enable;
+        },
+        set: function(value) {
+            this._enable = value;
+        }
+    });
+
+    function Item(name) {
+        this.name = name;
+        this._config = new ItemConfig();
+    }
+
+    Object.defineProperty(Item.prototype, "config", {
+        get: function() {
+            return this._config;
+        }
+    });
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        columns: ["config.enable", "name"],
+        dataSource: {
+            store: [ new Item("Test") ]
+        },
+        editing: { allowUpdating: true, mode: "batch" }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.cellValue(0, 0, true);
+
+    // assert
+    var rows = dataGrid.getVisibleRows();
+    assert.equal(rows.length, 1);
+    assert.deepEqual(rows[0].data.config.enable, true, "nested property is assigned");
+    assert.ok(rows[0].data.config instanceof ItemConfig, "config type");
+    assert.deepEqual(rows[0].values, [true, "Test"]);
+});
+
 // T613804
 QUnit.test("calculateCellValue for edited cell fires twice and at the second time contains full data row as an argument", function(assert) {
     // arrange
