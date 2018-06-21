@@ -360,7 +360,8 @@ module.exports = gridCore.Controller.inherit((function() {
             if(dataSource.totalCount() >= 0) {
                 if(dataSource.pageIndex() >= that.pageCount()) {
                     dataSource.pageIndex(that.pageCount() - 1);
-                    dataSource.load();
+                    that.pageIndex(dataSource.pageIndex());
+                    dataSource.reload();
                     isLoading = true;
                 }
             } else {

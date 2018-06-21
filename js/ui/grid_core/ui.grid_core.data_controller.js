@@ -384,7 +384,6 @@ module.exports = {
                             that._dataSource.sort(that._columnsController.getSortDataSourceParameters());
                             that.reload();
                         }
-                        that.pageChanged.fire();
                     } else if(changeTypes.columns) {
                         if(optionNames.filterValues || optionNames.filterValue || optionNames.selectedFilterOperation) {
                             filterValue = that._columnsController.columnOption(e.columnIndex, "filterValue");

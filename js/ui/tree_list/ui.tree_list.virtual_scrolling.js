@@ -20,11 +20,11 @@ virtualScrollingModule.extenders.controllers.data = extend({}, originalDataContr
 
 virtualScrollingModule.extenders.dataSourceAdapter = extend({}, originalDataSourceAdapterExtender, {
     changeRowExpand: function() {
-        var viewportItemIndex = this.getViewportItemIndex();
+        return this.callBase.apply(this, arguments).done(() => {
+            var viewportItemIndex = this.getViewportItemIndex();
 
-        viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex, true);
-
-        return this.callBase.apply(this, arguments);
+            viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex);
+        });
     }
 });
 
