@@ -44,16 +44,12 @@ var ListStrategy = DateBoxStrategy.inherit({
         return displayFormat || "shorttime";
     },
 
-    isAndroidTheme: function() {
-        return themes.current().indexOf("android5") > -1;
-    },
-
     popupConfig: function(popupConfig) {
         var result = extend(popupConfig, {
             width: this._getPopupWidth()
         });
 
-        if(this.isAndroidTheme()) {
+        if(themes.isAndroid5()) {
             extend(true, result, {
                 position: {
                     offset: {
@@ -74,7 +70,7 @@ var ListStrategy = DateBoxStrategy.inherit({
     _getPopupWidth: function() {
         var result = this.dateBox.$element().outerWidth();
 
-        if(this.isAndroidTheme()) {
+        if(themes.isAndroid5()) {
             result += 32;
         }
 
