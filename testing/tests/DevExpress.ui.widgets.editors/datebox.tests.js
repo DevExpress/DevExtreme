@@ -2746,12 +2746,25 @@ QUnit.test("rendered list markup", function(assert) {
 });
 
 QUnit.test("width option test", function(assert) {
-    var device = devices.current(),
-        extraWidth = 0;
+    this.dateBox.option("opened", false);
+    this.dateBox.option("width", "auto");
+    this.dateBox.option("opened", true);
 
-    if(device.platform === "android") {
-        extraWidth = 32;
-    }
+    var popup = this.$dateBox.find(".dx-popup").dxPopup("instance");
+
+    assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width 'auto'");
+
+    this.dateBox.option("opened", false);
+    this.dateBox.option("width", "153px");
+    this.dateBox.option("opened", true);
+    assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
+});
+
+QUnit.test("width option test for Android theme", function(assert) {
+    var origIsAndroid5 = themes.isAndroid5;
+    themes.isAndroid5 = function() { return "android5.light"; };
+
+    var extraWidth = 32;
 
     this.dateBox.option("opened", false);
     this.dateBox.option("width", "auto");
@@ -2765,6 +2778,8 @@ QUnit.test("width option test", function(assert) {
     this.dateBox.option("width", "153px");
     this.dateBox.option("opened", true);
     assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
+
+    themes.isAndroid5 = origIsAndroid5;
 });
 
 QUnit.test("list should contain correct values if min/max does not specified", function(assert) {
