@@ -45,8 +45,8 @@ QUnit.test("Set data for items", function(assert) {
     assert.deepEqual(nodes[1].data.lastCall.args, [trackerModule._TESTS_dataKey, 1]);
     assert.deepEqual(nodes[2].data.lastCall.args, [trackerModule._TESTS_dataKey, 2]);
 
-    assert.deepEqual(this.link(0)[0].data.lastCall.args, [trackerModule._TESTS_dataKey, 3]);
-    assert.deepEqual(this.link(1)[0].data.lastCall.args, [trackerModule._TESTS_dataKey, 4]);
+    assert.deepEqual(this.link(0)[1].data.lastCall.args, [trackerModule._TESTS_dataKey, 3]);
+    assert.deepEqual(this.link(1)[1].data.lastCall.args, [trackerModule._TESTS_dataKey, 4]);
 });
 
 QUnit.module("Events", trackerEnvironment);
