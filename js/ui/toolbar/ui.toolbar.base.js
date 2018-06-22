@@ -65,7 +65,11 @@ var ToolbarBase = CollectionWidget.inherit({
                             }
                         }
 
-                        data.options = extend(data.options, { elementAttr: { class: buttonContainerClass } });
+                        var elementAttr = extend(
+                            data.options.elementAttr || {},
+                            { class: buttonContainerClass }
+                        );
+                        data.options = extend(data.options, { elementAttr: elementAttr });
                     }
                 }
             } else {
