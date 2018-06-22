@@ -4,7 +4,7 @@ var commonUtils = require("../../core/utils/common"),
     noop = commonUtils.noop,
     eventsEngine = require("../../events/core/events_engine"),
     typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
+    iteratorModule = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     eventUtils = require("../../events/utils"),
@@ -26,7 +26,8 @@ var commonUtils = require("../../core/utils/common"),
 
     vizUtils = require("../core/utils"),
     _map = vizUtils.map,
-    _each = each,
+    _each = iteratorModule.each,
+    _reverseEach = iteratorModule.reverseEach,
     _extend = extend,
     _isArray = Array.isArray,
     _isDefined = typeUtils.isDefined,
@@ -1239,7 +1240,7 @@ var BaseChart = BaseWidget.inherit({
             }
         });
 
-        that._eachSeriesReverse((index, series) => {
+        _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
                 changedStateSeriesCount++;
@@ -1281,19 +1282,6 @@ var BaseChart = BaseWidget.inherit({
                 that.series.push(particularSeries);
             }
         });
-
-        return that.series;
-    },
-
-    _eachSeriesReverse(callback) {
-        const that = this;
-        if(!that.series) return;
-
-        for(let i = that.series.length - 1; i >= 0; i--) {
-            if(callback.call(that.series[i], i, that.series[i]) === false) {
-                break;
-            }
-        }
 
         return that.series;
     },

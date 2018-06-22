@@ -457,12 +457,11 @@ var dxChart = AdvancedChart.inherit({
                     priority: valueAxes.length
                 };
             }
-            axis = that._createAxis("valueAxis", axisOptions, {
+            axis = that._createAxis("valueAxis", that._populateAxesOptions("valueAxis", axisOptions, {
                 pane: paneName,
                 name: axisName,
                 crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
-            }, rotated);
-
+            }, rotated));
             valueAxes.push(axis);
         }
 

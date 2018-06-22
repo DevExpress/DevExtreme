@@ -228,8 +228,8 @@ QUnit.test("change rotated option only", function(assert) {
     assert.equal(chart.series[0].type, "line", "type");
     assert.equal(chart.series[0].options.rotated, true, " rotated");
     assert.equal(chart._valueAxes[0].getOptions().name, "value", "value axis");
-    assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
-    assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
 });
 
 QUnit.test("change customizePoint option only", function(assert) {
@@ -264,8 +264,8 @@ QUnit.test("change customizePoint option only", function(assert) {
     assert.equal(chart.series[0].options.name, "First series", "name");
     assert.equal(chart.series[0].type, "line", "type");
     assert.strictEqual(chart.series[0].options.customizePoint, customizePoint, "customizePoint");
-    assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
-    assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
 });
 
 QUnit.test("change customizeLabel option only", function(assert) {
@@ -300,8 +300,8 @@ QUnit.test("change customizeLabel option only", function(assert) {
     assert.equal(chart.series[0].options.name, "First series", "name");
     assert.equal(chart.series[0].type, "line", "type");
     assert.strictEqual(chart.series[0].options.customizeLabel, customizeLabel, "customizeLabel");
-    assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
-    assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
 });
 
 QUnit.test("change series options only. render called", function(assert) {
@@ -364,12 +364,12 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
     assert.equal(chart._options.containerBackgroundColor, "red", "Container background color should be correct");
     assert.ok(!series.disposed);
     assert.ok(!seriesFamily.dispose.called);
-    assert.ok(valAxis.disposed);
-    assert.ok(argAxis.disposed);
+    assert.ok(!valAxis.disposed);
+    assert.ok(!argAxis.disposed);
 
     assert.ok(stubSeries1 === chart.getAllSeries()[0], "Series should be updated");
-    assert.ok(valAxis !== chart._valueAxes[0], "Val axis should not be recreated");
-    assert.ok(argAxis !== chart._argumentAxes[0], "Arg axis should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should be updated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should be updated");
 });
 
 QUnit.test("change resolveLabelsOverlapping option only", function(assert) {
@@ -501,8 +501,8 @@ QUnit.test("change default Pane", function(assert) {
     assert.ok(!chart.seriesDisposed, "Series should not be disposed");
     assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
     assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
-    assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
-    assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledTwice, "SeriesFamilies should adjust series values");
 });
@@ -533,7 +533,7 @@ QUnit.test("change valueAxis option", function(assert) {
     // Act
     chart.option({
         valueAxis: {
-            name: "axis1",
+            color: "red",
             label: {
                 overlappingBehavior: "rotate"
             }
@@ -541,12 +541,12 @@ QUnit.test("change valueAxis option", function(assert) {
     });
     // Assert
     assert.equal(chart.series.length, 1, "series length");
-    assert.equal(chart.series[0].getValueAxis().name, "axis1", "series axis");
+    assert.equal(chart.series[0].getValueAxis().getOptions().color, "red", "series axis");
     assert.ok(!chart.seriesDisposed, "Series should not be disposed");
     assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
     assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
-    assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
-    assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
 });
@@ -944,8 +944,8 @@ QUnit.test("CommonSettings changed. commonAxisSettings", function(assert) {
 
     assert.ok(chart._valueAxes[0]);
     assert.ok(chart._valueAxes[0]);
-    assert.ok(chart.horizontalAxesDisposed, "Horizontal Axes should be disposed");
-    assert.ok(chart.verticalAxesDisposed, "Vertical Axes should be disposed");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal Axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical Axes should not be disposed");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
@@ -1436,8 +1436,8 @@ QUnit.test("useAggregation option", function(assert) {
 
     // assert
     assert.ok(series === chart.getAllSeries()[0], "Series should be updated");
-    assert.ok(valAxis !== chart._valueAxes[0], "Val axis should be recreated");
-    assert.ok(argAxis !== chart._argumentAxes[0], "Arg axis should be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should be updated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should be updated");
 });
 
 QUnit.test("synchronizeMultiAxes option", function(assert) {

@@ -44,5 +44,16 @@ var each = function(values, callback) {
     return values;
 };
 
+var reverseEach = function(array, callback) {
+    if(!array || !("length" in array) || array.length === 0) return;
+
+    for(let i = array.length - 1; i >= 0; i--) {
+        if(callback.call(array[i], i, array[i]) === false) {
+            break;
+        }
+    }
+};
+
 exports.map = map;
 exports.each = each;
+exports.reverseEach = reverseEach;
