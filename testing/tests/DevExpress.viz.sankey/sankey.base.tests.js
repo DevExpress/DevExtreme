@@ -471,17 +471,33 @@ QUnit.test("Draw Links", function(assert) {
     assert.equal(links.length, 5);
     assert.equal(this.linksGroup().clear.callCount, 1);
 
+    assert.equal(this.renderer.path.callCount, 10, '5x2 paths drawn');
+
     assert.equal(this.renderer.path.args[0][1], "area");
     assert.equal(this.renderer.path.args[1][1], "area");
     assert.equal(this.renderer.path.args[2][1], "area");
     assert.equal(this.renderer.path.args[3][1], "area");
     assert.equal(this.renderer.path.args[4][1], "area");
+    assert.equal(this.renderer.path.args[5][1], "area");
+    assert.equal(this.renderer.path.args[6][1], "area");
+    assert.equal(this.renderer.path.args[7][1], "area");
+    assert.equal(this.renderer.path.args[8][1], "area");
+    assert.equal(this.renderer.path.args[9][1], "area");
 
-    assert.equal(links[0].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 73 C 694 73 306 42 15 42 Z');
-    assert.equal(links[1].attr.firstCall.args[0].d, 'M 15 72 C 306 72 694 73 985 73 L 985 158 C 694 158 306 157 15 157 Z');
-    assert.equal(links[2].attr.firstCall.args[0].d, 'M 15 157 C 156 157 344 94 485 94 L 485 264 C 344 264 156 327 15 327 Z');
-    assert.equal(links[3].attr.firstCall.args[0].d, 'M 15 357 C 156 357 344 264 485 264 L 485 306 C 344 306 156 399 15 399 Z');
-    assert.equal(links[4].attr.firstCall.args[0].d, 'M 500 94 C 645.5 94 839.5 158 985 158 L 985 370 C 839.5 370 645.5 306 500 306 Z');
+    assert.equal(this.link(0)[0].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 73 C 694 73 306 42 15 42 Z');
+    assert.equal(this.link(0)[1].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 73 C 694 73 306 42 15 42 Z');
+
+    assert.equal(this.link(1)[0].attr.firstCall.args[0].d, 'M 15 72 C 306 72 694 73 985 73 L 985 158 C 694 158 306 157 15 157 Z');
+    assert.equal(this.link(1)[1].attr.firstCall.args[0].d, 'M 15 72 C 306 72 694 73 985 73 L 985 158 C 694 158 306 157 15 157 Z');
+
+    assert.equal(this.link(2)[0].attr.firstCall.args[0].d, 'M 15 157 C 156 157 344 94 485 94 L 485 264 C 344 264 156 327 15 327 Z');
+    assert.equal(this.link(2)[1].attr.firstCall.args[0].d, 'M 15 157 C 156 157 344 94 485 94 L 485 264 C 344 264 156 327 15 327 Z');
+
+    assert.equal(this.link(3)[0].attr.firstCall.args[0].d, 'M 15 357 C 156 357 344 264 485 264 L 485 306 C 344 306 156 399 15 399 Z');
+    assert.equal(this.link(3)[1].attr.firstCall.args[0].d, 'M 15 357 C 156 357 344 264 485 264 L 485 306 C 344 306 156 399 15 399 Z');
+
+    assert.equal(this.link(4)[0].attr.firstCall.args[0].d, 'M 500 94 C 645.5 94 839.5 158 985 158 L 985 370 C 839.5 370 645.5 306 500 306 Z');
+    assert.equal(this.link(4)[1].attr.firstCall.args[0].d, 'M 500 94 C 645.5 94 839.5 158 985 158 L 985 370 C 839.5 370 645.5 306 500 306 Z');
 });
 
 QUnit.test("Draw Nodes", function(assert) {
@@ -662,10 +678,9 @@ QUnit.test("Update styles of links", function(assert) {
 
     sankey.option({ links: { border: { visible: true, width: 2, color: "green", opacity: 0.2 } } });
 
-    var links = this.links();
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke-width"], 2, 'stroke-width applied');
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke-opacity"], 0.2, 'stroke-opacity applied');
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke"], "green", 'stroke applied');
+    assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["stroke-width"], 2, 'stroke-width applied');
+    assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["stroke-opacity"], 0.2, 'stroke-opacity applied');
+    assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["stroke"], "green", 'stroke applied');
 });
 
 QUnit.test("Update color of nodes", function(assert) {
@@ -684,11 +699,9 @@ QUnit.test("Update color of links", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1]]
     });
-
     sankey.option({ links: { color: "gray" } });
 
-    var links = this.links();
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["fill"], "gray", 'fill applied');
+    assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["fill"], "gray", 'fill applied');
 });
 
 QUnit.test("Update palette", function(assert) {

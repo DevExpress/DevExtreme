@@ -42,10 +42,9 @@ QUnit.test("Color from options applied to all links", function(assert) {
             color: '#aabbcc'
         }
     });
-    var links = this.links();
 
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0].fill, "#aabbcc");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].fill, "#aabbcc");
+    assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0].fill, "#aabbcc");
+    assert.deepEqual(this.link(1)[0].smartAttr.lastCall.args[0].fill, "#aabbcc");
 });
 
 QUnit.test("Normal style, border is not visible", function(assert) {
@@ -59,13 +58,13 @@ QUnit.test("Normal style, border is not visible", function(assert) {
             }
         }
     });
-    var links = this.links();
 
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0].stroke, "#ffeedd");
-    assert.deepEqual(links[0].smartAttr.lastCall.args[0]["stroke-width"], 0);
+    var base = this.link(0)[0];
+    assert.deepEqual(base.smartAttr.lastCall.args[0].stroke, "#ffeedd");
+    assert.deepEqual(base.smartAttr.lastCall.args[0]["stroke-width"], 0);
 
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].stroke, "#ffeedd");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+    assert.deepEqual(base.smartAttr.lastCall.args[0].stroke, "#ffeedd");
+    assert.deepEqual(base.smartAttr.lastCall.args[0]["stroke-width"], 0);
 });
 
 QUnit.test("Hover style", function(assert) {
@@ -73,6 +72,7 @@ QUnit.test("Hover style", function(assert) {
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         links: {
             color: '#432432',
+            opacity: 0.1,
             border: {
                 visible: true,
                 color: "#ffeedd",
@@ -80,6 +80,7 @@ QUnit.test("Hover style", function(assert) {
             },
             hoverStyle: {
                 color: '#654654',
+                opacity: 0.75,
                 border: {
                     visible: true,
                     color: "#aabbcc",
@@ -93,15 +94,21 @@ QUnit.test("Hover style", function(assert) {
         }
     });
 
+    var overlay = this.link(1)[0], base = this.link(1)[1];
+    assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0, 'overlay element is invisible');
+    assert.equal(base.smartAttr.lastCall.args[0].opacity, 0.1, 'base element is visible');
+    assert.equal(base.smartAttr.lastCall.args[0].fill, "#432432");
+
     sankey.getAllItems().links[1].hover(true);
 
-    var links = this.links();
+    assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0.75, 'overlay visible');
+    assert.equal(base.smartAttr.lastCall.args[0].opacity, 0), 'base invisible';
 
-    assert.equal(links[1].smartAttr.lastCall.args[0].fill, "#654654");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].stroke, "#aabbcc");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 3);
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.1);
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].hatching, {
+    assert.equal(overlay.smartAttr.lastCall.args[0].fill, "#654654");
+    assert.equal(overlay.smartAttr.lastCall.args[0].stroke, "#aabbcc");
+    assert.equal(overlay.smartAttr.lastCall.args[0]["stroke-width"], 3);
+    assert.equal(overlay.smartAttr.lastCall.args[0]["stroke-opacity"], 0.1);
+    assert.deepEqual(overlay.smartAttr.lastCall.args[0].hatching, {
         direction: "left",
         opacity: 0.75,
         step: 6,
@@ -150,12 +157,16 @@ QUnit.test("Clear hover of item", function(assert) {
     link.hover(true);
     link.hover(false);
 
-    var links = this.links();
+    var overlay = this.link(1)[0],
+        base = this.link(1)[1];
 
-    assert.equal(links[1].smartAttr.lastCall.args[0].fill, "#111111");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
-    assert.ok(!links[1].smartAttr.lastCall.args[0].hatching);
+    assert.equal(base.smartAttr.lastCall.args[0].opacity, 0.3, 'base element visible');
+    assert.equal(base.smartAttr.lastCall.args[0].fill, "#111111");
+    assert.equal(base.smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.equal(base.smartAttr.lastCall.args[0]["stroke-width"], 2);
+    assert.ok(!base.smartAttr.lastCall.args[0].hatching);
+
+    assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0, 'overlay element invisible');
 });
 
 QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
@@ -175,12 +186,15 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
 
     link.hover(true);
 
-    var links = this.links();
+    var overlay = this.link(1)[0],
+        base = this.link(1)[1];
 
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].fill, "#234234");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-opacity"], 0.4);
+    assert.equal(base.smartAttr.lastCall.args[0].opacity, 0, 'base invisible');
+    assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0.5, 'overlay visible');
+    assert.equal(overlay.smartAttr.lastCall.args[0].fill, "#234234");
+    assert.equal(overlay.smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.equal(overlay.smartAttr.lastCall.args[0]["stroke-width"], 2);
+    assert.equal(overlay.smartAttr.lastCall.args[0]["stroke-opacity"], 0.4);
 });
 
 QUnit.test("Border for hoverStyle can be disabled", function(assert) {
@@ -203,9 +217,12 @@ QUnit.test("Border for hoverStyle can be disabled", function(assert) {
 
     link.hover(true);
 
-    var links = this.links();
+    var overlay = this.link(1)[0],
+        base = this.link(1)[1];
 
-    assert.deepEqual(links[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+    assert.deepEqual(base.smartAttr.lastCall.args[0].opacity, 0);
+    assert.deepEqual(overlay.smartAttr.lastCall.args[0].opacity, 0.5);
+    assert.deepEqual(overlay.smartAttr.lastCall.args[0]["stroke-width"], 0);
 });
 
 QUnit.test("hover changed event", function(assert) {
@@ -315,41 +332,63 @@ QUnit.test("links colorMode with fixed color of nodes", function(assert) {
             colorMode: 'node'
         }
     });
-    var links = this.links();
 
-    assert.equal(links[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
-    assert.equal(links[1].smartAttr.firstCall.args[0].fill, '#aabbcc');
+    assert.equal(this.link(0)[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
+    assert.equal(this.link(1)[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
 });
 
 QUnit.test("links style when adjacent node is hovered", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1], ['B', 'Z', 1], ['C', 'Z', 1]],
-            nodes: {
-                color: '#aabbcc'
-            },
-            links: {
-                color: '#112233',
-                hoverStyle: {
-                    color: '#ffeedd'
-                }
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1], ['C', 'Z', 1]],
+        nodes: {
+            color: '#aabbcc'
+        },
+        links: {
+            color: '#112233',
+            hoverStyle: {
+                color: '#ffeedd'
             }
-        }),
-        links = this.links();
+        }
+    });
 
     sankey.getAllItems().nodes[0].hover(true);
-    assert.equal(links[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
-    assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#112233');
-    assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#112233');
+    assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].opacity, 0.5);
+    assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].opacity, 0);
+
+    assert.equal(this.link(1)[0].smartAttr.lastCall.args[0].opacity, 0);
+    assert.equal(this.link(1)[1].smartAttr.lastCall.args[0].opacity, 0.3);
+    assert.equal(this.link(1)[1].smartAttr.lastCall.args[0].fill, '#112233');
+
+    assert.equal(this.link(2)[0].smartAttr.lastCall.args[0].opacity, 0);
+    assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].opacity, 0.3);
+    assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].fill, '#112233');
 
     sankey.getAllItems().nodes[0].hover(false);
     sankey.getAllItems().nodes[1].hover(true);
-    assert.equal(links[0].smartAttr.lastCall.args[0].fill, '#112233');
-    assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#ffeedd');
-    assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#112233');
+    assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].opacity, 0);
+    assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].opacity, 0.3);
+    assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].fill, '#112233');
+
+    assert.equal(this.link(1)[0].smartAttr.lastCall.args[0].opacity, 0.5);
+    assert.equal(this.link(1)[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(this.link(1)[1].smartAttr.lastCall.args[0].opacity, 0);
+
+    assert.equal(this.link(2)[0].smartAttr.lastCall.args[0].opacity, 0);
+    assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].opacity, 0.3);
+    assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].fill, '#112233');
 
     sankey.getAllItems().nodes[1].hover(false);
-    sankey.getAllItems().nodes[3].hover(true);
-    assert.equal(links[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
-    assert.equal(links[1].smartAttr.lastCall.args[0].fill, '#ffeedd');
-    assert.equal(links[2].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    sankey.getAllItems().nodes[2].hover(true);
+    assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].opacity, 0);
+    assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].opacity, 0.3);
+    assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].fill, '#112233');
+
+    assert.equal(this.link(1)[0].smartAttr.lastCall.args[0].opacity, 0);
+    assert.equal(this.link(1)[1].smartAttr.lastCall.args[0].opacity, 0.3);
+    assert.equal(this.link(1)[1].smartAttr.lastCall.args[0].fill, '#112233');
+
+    assert.equal(this.link(2)[0].smartAttr.lastCall.args[0].opacity, 0.5);
+    assert.equal(this.link(2)[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
+    assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].opacity, 0);
 });

@@ -49,7 +49,7 @@ var environment = {
     },
 
     link: function(index) {
-        return this.links[index];
+        return this.links()[index].append.returnValues[0].children;
     },
 
     nodesGroup: function() {

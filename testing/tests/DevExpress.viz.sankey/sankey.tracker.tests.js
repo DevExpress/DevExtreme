@@ -45,8 +45,8 @@ QUnit.test("Set data for items", function(assert) {
     assert.deepEqual(nodes[1].data.lastCall.args, [trackerModule._TESTS_dataKey, 1]);
     assert.deepEqual(nodes[2].data.lastCall.args, [trackerModule._TESTS_dataKey, 2]);
 
-    assert.deepEqual(links[0].data.lastCall.args, [trackerModule._TESTS_dataKey, 3]);
-    assert.deepEqual(links[1].data.lastCall.args, [trackerModule._TESTS_dataKey, 4]);
+    assert.deepEqual(this.link(0)[0].data.lastCall.args, [trackerModule._TESTS_dataKey, 3]);
+    assert.deepEqual(this.link(1)[0].data.lastCall.args, [trackerModule._TESTS_dataKey, 4]);
 });
 
 QUnit.module("Events", trackerEnvironment);
@@ -62,8 +62,8 @@ QUnit.test("Node hover on. Get item by tracker data", function(assert) {
     assert.strictEqual(widget.getAllItems().nodes[1].isHovered(), false, "node state");
     assert.strictEqual(widget.getAllItems().nodes[2].isHovered(), true, "node state");
 
-    assert.strictEqual(widget.getAllItems().links[0].isHovered(), true, "adjacent links hovered");
-    assert.strictEqual(widget.getAllItems().links[1].isHovered(), true, "adjacent links hovered");
+    assert.strictEqual(widget.getAllItems().links[0].isAdjacentNodeHovered(), true, "adjacent links hovered");
+    assert.strictEqual(widget.getAllItems().links[1].isAdjacentNodeHovered(), true, "adjacent links hovered");
 });
 
 QUnit.test("Link hover on. Get item by tracker data", function(assert) {
