@@ -1,19 +1,29 @@
 "use strict";
 
+const COLOR_MODE_GRADIENT = 'gradient',
+    COLOR_MODE_NODE = 'node';
+
 var states = ["normal", "adjacentNodeHover", "hover"],
     isDefined = require("../../core/utils/type").isDefined;
 
-function compileAttrs(color, itemOptions, itemBaseOptions) {
+function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
 
     let border = itemOptions.border,
         baseBorder = itemBaseOptions.border,
         borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
         borderWidth = isDefined(border.width) ? border.width : baseBorder.width,
         borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1),
-        opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1);
+        opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1),
+        fill = itemOptions.color || color;
+
+    if(itemBaseOptions.colorMode === COLOR_MODE_NODE) {
+        fill = color;
+    } else if(itemBaseOptions.colorMode === COLOR_MODE_GRADIENT && gradient && isDefined(gradient.id)) {
+        fill = gradient.id;
+    }
 
     return {
-        fill: itemOptions.colorMode === 'node' ? color : itemOptions.color || color,
+        fill: fill,
         'stroke-width': borderVisible ? borderWidth : 0,
         stroke: itemOptions.border.color || itemBaseOptions.border.color,
         'stroke-opacity': borderOpacity,
@@ -40,34 +50,36 @@ function LinkItem(widget, params) {
     };
 
     that.states = {
-        normal: compileAttrs(that.color, that.options, that.options),
+        normal: compileAttrs(that.color, that.options, that.options, params.gradient),
+        adjacentNodeHover: compileAttrs(that.color, { opacity: 0, border: {} }, that.options, params.gradient),
+        hover: compileAttrs(that.color, { opacity: 0, border: {} }, that.options, params.gradient)
+    };
+
+    that.overlayStates = {
+        normal: compileAttrs(that.color, { opacity: 0, border: {} }, that.options),
         adjacentNodeHover: compileAttrs(that.color, that.options.hoverStyle, that.options),
         hover: compileAttrs(that.color, that.options.hoverStyle, that.options)
     };
-
 }
 
 LinkItem.prototype = {
-    compileAttrs: function() {
-        return compileAttrs(this.color, this.options);
-    },
     getState: function() {
         return states[this.code];
     },
 
     isHovered: function() {
-        return !!(this.code & 1);
+        return this.code === 2;
     },
 
     isAdjacentNodeHovered: function() {
-        return !!(this.code & 1);
+        return this.code === 1;
     },
 
     setState: function(code, state) {
         if(state) {
-            this.code |= code;
+            this.code = code;
         } else {
-            this.code &= ~code;
+            this.code = 0;
         }
 
         if(!state && this.widget._tooltip) {
@@ -88,7 +100,7 @@ LinkItem.prototype = {
 
         this.widget._suspend();
         state && this.widget.clearHover();
-        this.setState(1, state);
+        this.setState(2, state);
         this.widget._eventTrigger("hoverChanged", { item: this });
         this.widget._resume();
     },

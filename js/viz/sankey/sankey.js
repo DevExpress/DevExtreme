@@ -1,5 +1,7 @@
 "use strict";
 
+const COLOR_MODE_GRADIENT = 'gradient';
+
 var noop = require("../../core/utils/common").noop,
     NodeItem = require("./node_item"),
     LinkItem = require("./link_item"),
@@ -49,6 +51,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
         this._nodes = [];
         this._links = [];
+        this._gradients = [];
     },
 
     _disposeCore: noop,
@@ -115,8 +118,9 @@ var dxSankey = require("../core/base_widget").inherit({
             links = that._links;
 
         links.forEach(function(link, index) {
-            var element = that._renderer.path([], "area").attr({ d: link.d }).append(that._groupLinks);
-            link.element = element;
+            var group = that._renderer.g().attr({ class: 'link', 'data-link-idx': index }).append(that._groupLinks);
+            link.overlayElement = that._renderer.path([], "area").attr({ d: link.d }).append(group);
+            link.element = that._renderer.path([], "area").attr({ d: link.d }).append(group);
         });
         this._applyLinksAppearance();
     },
@@ -139,8 +143,13 @@ var dxSankey = require("../core/base_widget").inherit({
     clearHover: function() {
         this._suspend();
 
-        this._nodes.concat(this._links).forEach(function(node) {
+        this._nodes.forEach(function(node) {
             node.isHovered() && node.hover(false);
+        });
+
+        this._links.forEach(function(link) {
+            link.isHovered() && link.hover(false);
+            link.isAdjacentNodeHovered() && link.adjacentNodeHover(false);
         });
 
         this._resume();
@@ -157,6 +166,7 @@ var dxSankey = require("../core/base_widget").inherit({
         this._links.forEach(function(link) {
             var state = link.getState();
             link.element.smartAttr(link.states[state]);
+            link.overlayElement.smartAttr(link.overlayStates[state]);
         });
     },
 
@@ -206,10 +216,15 @@ var dxSankey = require("../core/base_widget").inherit({
                 linkOptions = that._getOption("links"),
                 totalNodesNum = layout.nodes
                     .map((item) => { return item.length; })
-                    .reduce((previousValue, currentValue, index, array) => { return previousValue + currentValue; }, 0);
+                    .reduce((previousValue, currentValue) => { return previousValue + currentValue; }, 0);
 
             that._nodes = [];
             that._links = [];
+
+            that._gradients.forEach(gradient => { gradient.dispose() });
+            that._gradients = [];
+
+            that._shadowFilter && that._shadowFilter.dispose();
 
             layout.nodes.forEach((cascadeNodes) => {
                 cascadeNodes.forEach((node) => {
@@ -229,16 +244,29 @@ var dxSankey = require("../core/base_widget").inherit({
             });
 
             layout.links.forEach((link) => {
+                let gradient = null;
+
+                if(linkOptions.colorMode === COLOR_MODE_GRADIENT) {
+                    gradient = that._renderer.linearGradient([nodeColors[link._from._name], nodeColors[link._to._name]]);
+                    this._gradients.push(gradient);
+                }
+
+                let color = linkOptions.color;
+                if(linkOptions.colorMode !== 'none') {
+                    color = nodeColors[link._from._name];
+                }
+
                 var linkItem = new LinkItem(that, {
                     d: link.d,
                     boundingRect: link._boundingRect,
-                    color: linkOptions.colorMode === 'node' ? nodeColors[link._from._name] : linkOptions.color,
+                    color: color,
                     options: linkOptions,
                     connection: {
                         from: link._from._name,
                         to: link._to._name,
                         weight: link._weight
-                    }
+                    },
+                    gradient: gradient
                 });
                 that._links.push(linkItem);
             });
@@ -278,18 +306,17 @@ var dxSankey = require("../core/base_widget").inherit({
     _applyLabelsAppearance: function() {
         var that = this,
             labelOptions = that._getOption("label"),
-            filter = that._renderer.shadowFilter("-50%", "-50%", "200%", "200%"),
             availableWidth = that._rect[2] - that._rect[0],
             nodeOptions = that._getOption("nodes");
 
-        filter.attr(labelOptions.shadow);
+        that._shadowFilter = that._renderer.shadowFilter("-50%", "-50%", "200%", "200%").attr(labelOptions.shadow);
         that._groupLabels.clear();
 
         if(that._drawLabels && labelOptions.visible) {
             // emtpy space between cascades with 'labelOptions.horizontalOffset' subtracted
             var availableLabelWidth = (availableWidth - (nodeOptions.width + labelOptions.horizontalOffset) - (that._layoutMap.cascades.length * nodeOptions.width)) / (that._layoutMap.cascades.length - 1) - labelOptions.horizontalOffset;
             that._nodes.forEach(function(node) {
-                that._createLabel(node, labelOptions, filter.id, availableLabelWidth);
+                that._createLabel(node, labelOptions, that._shadowFilter.id, availableLabelWidth);
             });
 
             // test and handle labels overlapping here
