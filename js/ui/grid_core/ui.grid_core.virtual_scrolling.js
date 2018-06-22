@@ -19,6 +19,7 @@ var TABLE_CLASS = "table",
     ROW_CLASS = "dx-row",
     FREESPACE_CLASS = "dx-freespace-row",
     COLUMN_LINES_CLASS = "dx-column-lines",
+    VIRTUAL_ROW_CLASS = "dx-virtual-row",
 
     SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual",
@@ -304,7 +305,7 @@ var VirtualScrollingRowsViewExtender = (function() {
         _getRowElements: function(tableElement) {
             var $rows = this.callBase(tableElement);
 
-            return $rows && $rows.not(".dx-virtual-row");
+            return $rows && $rows.not("." + VIRTUAL_ROW_CLASS);
         },
 
         _renderContent: function(contentElement, tableElement) {
@@ -383,26 +384,21 @@ var VirtualScrollingRowsViewExtender = (function() {
                 }
                 var top = dataController.getContentOffset("begin"),
                     bottom = dataController.getContentOffset("end"),
-                    $tables = that.getTableElements(),
-                    getBody = $element => $element.children("tbody");
+                    $tables = that.getTableElements();
 
-                $tables.each(function() {
-                    getBody($(this)).children(".dx-virtual-row").remove();
-                });
+                $tables.children("tbody").children("." + VIRTUAL_ROW_CLASS).remove();
 
                 if(top) {
                     $tables.each(function() {
-                        var $topRow = that._createEmptyRow().addClass("dx-virtual-row"),
-                            $body = getBody($(this));
-                        $topRow.prependTo($body.first()).css("height", top);
+                        var $topRow = that._createEmptyRow().addClass(VIRTUAL_ROW_CLASS);
+                        $topRow.prependTo($(this).children("tbody").first()).css("height", top);
                     });
                 }
 
                 if(bottom) {
                     $tables.each(function() {
-                        var $bottomRow = that._createEmptyRow().addClass("dx-virtual-row"),
-                            $body = getBody($(this));
-                        $bottomRow.appendTo($body.last()).css("height", bottom);
+                        var $bottomRow = that._createEmptyRow().addClass(VIRTUAL_ROW_CLASS);
+                        $bottomRow.appendTo($(this).children("tbody").last()).css("height", bottom);
                     });
                 }
             } else {
