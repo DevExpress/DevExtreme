@@ -137,6 +137,81 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments without c
     assert.deepEqual(args.event.target, $item.get(0), "jquery event has correct target");
 });
 
+QUnit.test("onSelectAllValueChanged event should be rised after select by the selectAll method", function(assert) {
+    var handler = sinon.spy(),
+        treeView = initTree({
+            items: [{ text: "item 1" }],
+            showCheckBoxesMode: "selectAll",
+            selectionMode: "multiple",
+            onSelectAllValueChanged: handler
+        }).dxTreeView("instance");
+
+    treeView.selectAll();
+
+    assert.equal(handler.callCount, 1, "event has been rised on select");
+    assert.equal(handler.getCall(0).args[0].value, true, "value is correct on select");
+
+    treeView.unselectAll();
+    assert.equal(handler.callCount, 2, "event has been rised on deselect");
+    assert.equal(handler.getCall(1).args[0].value, false, "value is correct on deselect");
+});
+
+QUnit.test("onSelectAllValueChanged event should be rised after all item selected", function(assert) {
+    var handler = sinon.spy(),
+        treeView = initTree({
+            items: [{ text: "item 1" }],
+            showCheckBoxesMode: "selectAll",
+            selectionMode: "multiple",
+            onSelectAllValueChanged: handler
+        }).dxTreeView("instance");
+
+    treeView.selectItem(1);
+
+    assert.equal(handler.callCount, 1, "event has been rised on select");
+    assert.equal(handler.getCall(0).args[0].value, true, "value is correct on select");
+
+    treeView.unselectItem(1);
+    assert.equal(handler.callCount, 2, "event has been rised on deselect");
+    assert.equal(handler.getCall(1).args[0].value, false, "value is correct on deselect");
+});
+
+QUnit.test("onSelectAllValueChanged event should not be rised after all item selected without selectAll checkbox", function(assert) {
+    var handler = sinon.spy(),
+        treeView = initTree({
+            items: [{ text: "item 1" }],
+            showCheckBoxesMode: "normal",
+            selectionMode: "multiple",
+            onSelectAllValueChanged: handler
+        }).dxTreeView("instance");
+
+    treeView.selectAll();
+    treeView.unselectAll();
+    treeView.selectItem(1);
+    treeView.unselectItem(1);
+
+    assert.equal(handler.callCount, 0, "event has never been rised");
+});
+
+QUnit.test("onSelectAllValueChanged event should be rised after selectAll checked", function(assert) {
+    var handler = sinon.spy(),
+        $treeView = initTree({
+            items: [{ text: "item 1" }],
+            showCheckBoxesMode: "selectAll",
+            selectionMode: "multiple",
+            onSelectAllValueChanged: handler
+        }),
+        $selectAll = $treeView.find(".dx-treeview-select-all-item");
+
+    $selectAll.trigger("dxclick");
+
+    assert.equal(handler.callCount, 1, "event has been rised on select");
+    assert.equal(handler.getCall(0).args[0].value, true, "value is correct on select");
+
+    $selectAll.trigger("dxclick");
+    assert.equal(handler.callCount, 2, "event has been rised on deselect");
+    assert.equal(handler.getCall(1).args[0].value, false, "value is correct on deselect");
+});
+
 QUnit.test("'onSelectionChanged' should be fired when item is selected", function(assert) {
     var onSelectionChangedHandler = sinon.spy(function() { return; }),
         $treeView = initTree({
