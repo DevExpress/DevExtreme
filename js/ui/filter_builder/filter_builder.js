@@ -283,14 +283,14 @@ var FilterBuilder = Widget.inherit({
             defaultGroupOperation: "and",
 
             /**
-             * @name dxFilterBuilderField.filterOperations
+             * @name dxFilterBuilderOptions.groupOperations
              * @type Array<Enums.FilterBuilderGroupOperations>
              * @default ['and', 'or', 'notAnd', 'notOr']
              */
             groupOperations: ["and", "or", "notAnd", "notOr"],
 
             /**
-             * @name dxFilterBuilderField.maxGroupLevel
+             * @name dxFilterBuilderOptions.maxGroupLevel
              * @type number
              * @default undefined
              */
