@@ -10,6 +10,7 @@ import { extend } from "../../core/utils/extend";
 import messageLocalization from "../../localization/message";
 import utils from "./utils";
 import deferredUtils from "../../core/utils/deferred";
+import { isDefined } from "../../core/utils/type";
 import TreeView from "../tree_view";
 import Popup from "../popup";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
@@ -595,7 +596,7 @@ var FilterBuilder = Widget.inherit({
     _initMarkup: function() {
         this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
-        this._createGroupElementByCriteria(this._model, null, this.option("maxGroupLevel"))
+        this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
 
@@ -605,7 +606,7 @@ var FilterBuilder = Widget.inherit({
             .append(this._createConditionItem(condition, parent));
     },
 
-    _createGroupElementByCriteria: function(criteria, parent, groupLevel) {
+    _createGroupElementByCriteria: function(criteria, parent, groupLevel = 0) {
         var $group = this._createGroupElement(criteria, parent, groupLevel),
             $groupContent = $group.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS),
             groupCriteria = utils.getGroupCriteria(criteria);
@@ -613,7 +614,7 @@ var FilterBuilder = Widget.inherit({
         for(var i = 0; i < groupCriteria.length; i++) {
             var innerCriteria = groupCriteria[i];
             if(utils.isGroup(innerCriteria)) {
-                this._createGroupElementByCriteria(innerCriteria, groupCriteria, this._decreaseGroupLevel(groupLevel))
+                this._createGroupElementByCriteria(innerCriteria, groupCriteria, ++groupLevel)
                     .appendTo($groupContent);
             } else if(utils.isCondition(innerCriteria)) {
                 this._createConditionElement(innerCriteria, groupCriteria)
@@ -621,10 +622,6 @@ var FilterBuilder = Widget.inherit({
             }
         }
         return $group;
-    },
-
-    _decreaseGroupLevel: function(groupLevel) {
-        return groupLevel && --groupLevel;
     },
 
     _createGroupElement: function(criteria, parent, groupLevel) {
@@ -647,7 +644,7 @@ var FilterBuilder = Widget.inherit({
         this._createAddButton(() => {
             var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
             utils.addItem(newGroup, criteria);
-            this._createGroupElement(newGroup, criteria, this._decreaseGroupLevel(groupLevel)).appendTo($groupContent);
+            this._createGroupElement(newGroup, criteria, ++groupLevel).appendTo($groupContent);
         }, () => {
             var field = this.option("fields")[0],
                 newCondition = utils.createCondition(field, this._customOperations);
@@ -900,8 +897,12 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createAddButton: function(addGroupHandler, addConditionHandler, groupLevel) {
-        let $button;
-        if(groupLevel !== 0) {
+        let $button,
+            maxGroupLevel = this.option("maxGroupLevel");
+        if(isDefined(maxGroupLevel) && groupLevel >= maxGroupLevel) {
+            $button = this._createButton();
+            this._subscribeOnClickAndEnterKey($button, addConditionHandler);
+        } else {
             $button = this._createButtonWithMenu({
                 menu: {
                     items: [{
@@ -918,9 +919,6 @@ var FilterBuilder = Widget.inherit({
                     cssClass: FILTER_BUILDER_ADD_CONDITION_CLASS
                 }
             });
-        } else {
-            $button = this._createButton();
-            this._subscribeOnClickAndEnterKey($button, addConditionHandler);
         }
         return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
             .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
