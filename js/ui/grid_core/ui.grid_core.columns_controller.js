@@ -1271,7 +1271,7 @@ module.exports = {
                 var i,
                     column,
                     commandColumnIndex,
-                    result = columns.length ? (needToExtend && commandColumns || columns).slice() : [],
+                    result = columns.length ? (needToExtend && commandColumns || columns).slice().map(column => extend({}, column)) : [],
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
                         return commandColumn.command === column.command ? index : result;
                     }, -1);

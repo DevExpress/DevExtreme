@@ -8123,6 +8123,33 @@ QUnit.test("isBandColumnsUsed should return false when bandcolumns are not set",
     assert.notOk(this.columnsController.isBandColumnsUsed(), "band column is not used");
 });
 
+// T647024
+QUnit.test("Expand column must have the right rowspan", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        columns: [
+            { caption: "Band column 1", columns: ["Column1", "Column2"] },
+            { dataField: "Column3", caption: "Column 3" }
+        ],
+        masterDetail: {
+            enabled: true
+        }
+    });
+
+    // act
+    this.columnsController.getVisibleColumns();
+    this.columnsController.resetColumnsCache();
+    visibleColumns = this.columnsController.getVisibleColumns();
+
+    // assert
+    assert.strictEqual(visibleColumns.length, 4, "column count");
+    assert.strictEqual(visibleColumns[0].command, "expand", "expand column");
+    assert.ok(!visibleColumns[0].rowspan, "rowspan of the expand column");
+});
+
+
 QUnit.module("onOptionChanged", {
     beforeEach: function() {
         setupModule.apply(this, ["adaptivity"]);
