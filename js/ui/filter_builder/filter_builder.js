@@ -614,7 +614,7 @@ var FilterBuilder = Widget.inherit({
         for(var i = 0; i < groupCriteria.length; i++) {
             var innerCriteria = groupCriteria[i];
             if(utils.isGroup(innerCriteria)) {
-                this._createGroupElementByCriteria(innerCriteria, groupCriteria, ++groupLevel)
+                this._createGroupElementByCriteria(innerCriteria, groupCriteria, groupLevel + 1)
                     .appendTo($groupContent);
             } else if(utils.isCondition(innerCriteria)) {
                 this._createConditionElement(innerCriteria, groupCriteria)
@@ -644,7 +644,7 @@ var FilterBuilder = Widget.inherit({
         this._createAddButton(() => {
             var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
             utils.addItem(newGroup, criteria);
-            this._createGroupElement(newGroup, criteria, ++groupLevel).appendTo($groupContent);
+            this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
         }, () => {
             var field = this.option("fields")[0],
                 newCondition = utils.createCondition(field, this._customOperations);
