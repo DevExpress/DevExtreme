@@ -512,6 +512,7 @@ var FilterBuilder = Widget.inherit({
                 break;
             case "fields":
             case "defaultGroupOperation":
+            case "maxGroupLevel":
             case "groupOperations":
             case "allowHierarchicalFields":
             case "groupOperationDescriptions":
