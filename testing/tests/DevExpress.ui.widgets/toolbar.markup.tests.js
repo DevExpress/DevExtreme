@@ -145,6 +145,19 @@ QUnit.module("render", {
     });
 });
 
+QUnit.test("elementAttr should be rendered on button items", function(assert) {
+    var $toolbar = $("#toolbar").dxToolbar({
+        items: [{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                elementAttr: { 'test': '123' },
+            }
+        }]
+    });
+
+    assert.equal($toolbar.find(".dx-button").eq(0).attr("test"), 123, "test attr exists");
+});
 
 QUnit.module("option change handlers", {
     beforeEach: () => {
