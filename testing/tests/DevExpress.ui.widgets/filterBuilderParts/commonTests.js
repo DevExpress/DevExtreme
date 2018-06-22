@@ -27,7 +27,7 @@ const
     ACTIVE_CLASS = "dx-state-active",
     FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
     TREE_VIEW_CLASS = "dx-treeview",
-    TREE_VIEW_TEM_CLASS = TREE_VIEW_CLASS + "-item",
+    TREE_VIEW_ITEM_CLASS = TREE_VIEW_CLASS + "-item",
     DISABLED_STATE_CLASS = "dx-state-disabled";
 
 var getSelectedMenuText = function() {
@@ -43,13 +43,13 @@ var clickByValue = function(index) {
 };
 
 var selectMenuItem = function(menuItemIndex) {
-    $(`.${TREE_VIEW_TEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
+    $(`.${TREE_VIEW_ITEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
 };
 
 var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
     $button.trigger("dxclick");
     selectMenuItem(menuItemIndex);
-    $(`.${TREE_VIEW_TEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
+    $(`.${TREE_VIEW_ITEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
 };
 
 QUnit.module("Rendering", function() {
@@ -71,7 +71,7 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.trigger("dxclick");
 
-        var $menuItem = $(`.${TREE_VIEW_TEM_CLASS}`).eq(1);
+        var $menuItem = $(`.${TREE_VIEW_ITEM_CLASS}`).eq(1);
         assert.equal($menuItem.text(), "Budget");
     });
 
@@ -128,7 +128,7 @@ QUnit.module("Rendering", function() {
 
         assert.ok($(".dx-filterbuilder-fields").length > 0);
 
-        var $menuItem = $(`.${TREE_VIEW_TEM_CLASS}`).eq(2);
+        var $menuItem = $(`.${TREE_VIEW_ITEM_CLASS}`).eq(2);
         assert.equal($menuItem.text(), "State");
         $menuItem.trigger("dxclick");
         assert.equal($fieldButton.html(), "State");
@@ -171,7 +171,7 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.trigger("dxclick");
 
-        var $menuItem = $(`.${TREE_VIEW_TEM_CLASS}`).eq(5);
+        var $menuItem = $(`.${TREE_VIEW_ITEM_CLASS}`).eq(5);
         $menuItem.trigger("dxclick");
 
         assert.equal($fieldButton.html(), "City");
@@ -1257,7 +1257,7 @@ QUnit.module("Group operations", function() {
             groupOperations: ["and", "or"]
         });
         container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
-        let items = $(`.${TREE_VIEW_TEM_CLASS}`);
+        let items = $(`.${TREE_VIEW_ITEM_CLASS}`);
 
         assert.equal(items.length, 2);
         assert.equal(items.eq(0).text(), "And");
