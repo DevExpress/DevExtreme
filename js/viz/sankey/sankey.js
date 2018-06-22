@@ -221,7 +221,7 @@ var dxSankey = require("../core/base_widget").inherit({
             that._nodes = [];
             that._links = [];
 
-            that._gradients.forEach(gradient => { gradient.dispose() });
+            that._gradients.forEach(gradient => { gradient.dispose(); });
             that._gradients = [];
 
             that._shadowFilter && that._shadowFilter.dispose();
