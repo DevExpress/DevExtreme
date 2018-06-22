@@ -1,16 +1,16 @@
 "use strict";
 
-var $ = require("jquery"),
-    isRenderer = require("core/utils/type").isRenderer,
-    devices = require("core/devices"),
-    config = require("core/config"),
-    fields = require("../../../helpers/filterBuilderTestData.js");
+import $ from "jquery";
+import { isRenderer } from "core/utils/type";
+import devices from "core/devices";
+import config from "core/config";
+import fields from "../../../helpers/filterBuilderTestData.js";
 
-require("ui/filter_builder/filter_builder");
-require("ui/drop_down_box");
-require("ui/button");
+import "ui/filter_builder/filter_builder";
+import "ui/drop_down_box";
+import "ui/button";
 
-var
+const
     FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
@@ -25,7 +25,10 @@ var
     FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
     FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
     ACTIVE_CLASS = "dx-state-active",
-    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation";
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
+    TREE_VIEW_CLASS = "dx-treeview",
+    TREE_VIEW_TEM_CLASS = TREE_VIEW_CLASS + "-item",
+    DISABLED_STATE_CLASS = "dx-state-disabled";
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
@@ -40,13 +43,13 @@ var clickByValue = function(index) {
 };
 
 var selectMenuItem = function(menuItemIndex) {
-    $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
+    $(`.${TREE_VIEW_TEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
 };
 
 var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
     $button.trigger("dxclick");
     selectMenuItem(menuItemIndex);
-    $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
+    $(`.${TREE_VIEW_TEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
 };
 
 QUnit.module("Rendering", function() {
@@ -68,7 +71,7 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.trigger("dxclick");
 
-        var $menuItem = $(".dx-treeview-item").eq(1);
+        var $menuItem = $(`.${TREE_VIEW_TEM_CLASS}`).eq(1);
         assert.equal($menuItem.text(), "Budget");
     });
 
@@ -103,7 +106,7 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
         $fieldButton.trigger("dxclick");
 
-        var $customItems = $(".dx-treeview").find("." + FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
+        var $customItems = $(`.${TREE_VIEW_CLASS}`).find("." + FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS);
         assert.equal($customItems.length, 1, "one custom");
         assert.equal($customItems.text(), "Is between", "between is custom");
     });
@@ -125,7 +128,7 @@ QUnit.module("Rendering", function() {
 
         assert.ok($(".dx-filterbuilder-fields").length > 0);
 
-        var $menuItem = $(".dx-treeview-item").eq(2);
+        var $menuItem = $(`.${TREE_VIEW_TEM_CLASS}`).eq(2);
         assert.equal($menuItem.text(), "State");
         $menuItem.trigger("dxclick");
         assert.equal($fieldButton.html(), "State");
@@ -168,7 +171,7 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.trigger("dxclick");
 
-        var $menuItem = $(".dx-treeview-item").eq(5);
+        var $menuItem = $(`.${TREE_VIEW_TEM_CLASS}`).eq(5);
         $menuItem.trigger("dxclick");
 
         assert.equal($fieldButton.html(), "City");
@@ -1234,5 +1237,36 @@ QUnit.module("Methods", function() {
             "and",
             ["field", "<", 5]
         ]);
+    });
+});
+
+QUnit.module("Group operations", function() {
+    QUnit.test("change groupOperation array", function(assert) {
+        let container = $("#container");
+        container.dxFilterBuilder({
+            fields: fields,
+            groupOperations: ["and", "or"]
+        });
+        container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger("dxclick");
+        let items = $(`.${TREE_VIEW_TEM_CLASS}`);
+
+        assert.equal(items.length, 2);
+        assert.equal(items.eq(0).text(), "And");
+        assert.equal(items.eq(1).text(), "Or");
+    });
+
+    QUnit.test("group operation contains 1 item", function(assert) {
+        let container = $("#container");
+        container.dxFilterBuilder({
+            fields: fields,
+            groupOperations: ["and"]
+        });
+
+        let groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+        groupButton.trigger("dxclick");
+        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+
+        assert.ok(groupButton.hasClass(DISABLED_STATE_CLASS));
+        assert.equal(popup.length, 0);
     });
 });

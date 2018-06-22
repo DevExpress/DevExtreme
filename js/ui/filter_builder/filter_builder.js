@@ -14,7 +14,7 @@ var $ = require("../../core/renderer"),
     Popup = require("../popup"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
-var FILTER_BUILDER_CLASS = "dx-filterbuilder",
+const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
     FILTER_BUILDER_GROUP_ITEM_CLASS = FILTER_BUILDER_GROUP_CLASS + "-item",
     FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_GROUP_CLASS + "-content",
@@ -39,6 +39,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     ACTIVE_CLASS = "dx-state-active",
     FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
     SOURCE = "filterBuilder",
+    DISABLED_STATE_CLASS = "dx-state-disabled",
 
     TAB_KEY = 9,
     ENTER_KEY = 13,
@@ -280,6 +281,14 @@ var FilterBuilder = Widget.inherit({
             */
             defaultGroupOperation: "and",
 
+
+            /**
+             * @name dxFilterBuilderField.filterOperations
+             * @type Array<Enums.FilterBuilderGroupOperations>
+             * @default ['and', 'or', 'notAnd', 'notOr']
+             */
+            groupOperations: ["and", "or", "notAnd", "notOr"],
+
             /**
              * @name dxFilterBuilderOptions.value
              * @type Filter expression
@@ -497,6 +506,7 @@ var FilterBuilder = Widget.inherit({
                 break;
             case "fields":
             case "defaultGroupOperation":
+            case "groupOperations":
             case "allowHierarchicalFields":
             case "groupOperationDescriptions":
             case "filterOperationDescriptions":
@@ -641,33 +651,39 @@ var FilterBuilder = Widget.inherit({
         return $group;
     },
 
+    _createButton: function(caption) {
+        return $("<div>").text(caption);
+    },
+
     _createGroupOperationButton: function(criteria) {
-        var that = this,
-            groupOperations = this._getGroupOperations(),
+        let groupOperations = this._getGroupOperations(),
             groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations),
-            $operationButton = this._createButtonWithMenu({
-                caption: groupMenuItem.text,
-                menu: {
-                    items: groupOperations,
-                    displayExpr: "text",
-                    keyExpr: "value",
-                    onItemClick: function(e) {
-                        if(groupMenuItem !== e.itemData) {
-                            utils.setGroupValue(criteria, e.itemData.value);
-                            $operationButton.html(e.itemData.text);
-                            groupMenuItem = e.itemData;
-                            that._updateFilter();
-                        }
-                    },
-                    onContentReady: function(e) {
-                        e.component.selectItem(groupMenuItem);
-                    },
-                    cssClass: FILTER_BUILDER_GROUP_OPERATIONS_CLASS
-                }
-            }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-                .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
-                .attr("tabindex", 0);
-        return $operationButton;
+            caption = groupMenuItem.text,
+            $operationButton = groupOperations && groupOperations.length < 2
+                ? this._createButton(caption).addClass(DISABLED_STATE_CLASS)
+                : this._createButtonWithMenu({
+                    caption: caption,
+                    menu: {
+                        items: groupOperations,
+                        displayExpr: "text",
+                        keyExpr: "value",
+                        onItemClick: (e) => {
+                            if(groupMenuItem !== e.itemData) {
+                                utils.setGroupValue(criteria, e.itemData.value);
+                                $operationButton.html(e.itemData.text);
+                                groupMenuItem = e.itemData;
+                                this._updateFilter();
+                            }
+                        },
+                        onContentReady: function(e) {
+                            e.component.selectItem(groupMenuItem);
+                        },
+                        cssClass: FILTER_BUILDER_GROUP_OPERATIONS_CLASS
+                    }
+                });
+        return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+            .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
+            .attr("tabindex", 0);
     },
 
     _createButtonWithMenu: function(options) {
@@ -687,7 +703,7 @@ var FilterBuilder = Widget.inherit({
                 };
             },
             position = rtlEnabled ? "right" : "left",
-            $button = $("<div>").text(options.caption);
+            $button = this._createButton(options.caption);
 
         extend(options.menu, {
             focusStateEnabled: true,
@@ -850,18 +866,13 @@ var FilterBuilder = Widget.inherit({
     },
 
     _getGroupOperations: function() {
-        var result = [],
-            operatorDescription,
+        let groupOperations = this.option("groupOperations"),
             groupOperationDescriptions = this.option("groupOperationDescriptions");
 
-        for(operatorDescription in groupOperationDescriptions) {
-            result.push({
-                text: groupOperationDescriptions[operatorDescription],
-                value: OPERATORS[operatorDescription]
-            });
-        }
-
-        return result;
+        return groupOperations.map(operation => ({
+            text: groupOperationDescriptions[operation],
+            value: OPERATORS[operation]
+        }));
     },
 
     _createRemoveButton: function(handler) {
