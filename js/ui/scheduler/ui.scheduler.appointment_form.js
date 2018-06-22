@@ -194,7 +194,7 @@ var SchedulerAppointmentForm = {
                 }
             },
             {
-                dataField: dataExprs.repeatOnOffExpr,
+                dataField: "repeatOnOff",
                 editorType: "dxSwitch",
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
