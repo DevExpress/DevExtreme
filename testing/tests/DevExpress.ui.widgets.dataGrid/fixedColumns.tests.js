@@ -475,7 +475,7 @@ QUnit.test("RowsView - set column width for fixed table when has scroll", functi
 });
 
 // T290161
-QUnit.testInActiveWindow("Reset scrollTop by fixed table for rowsView", function(assert) {
+QUnit.testInActiveWindow("Not reset scrollTop by fixed table for rowsView", function(assert) {
     // arrange
     var that = this,
         done = assert.async(),
@@ -491,6 +491,7 @@ QUnit.testInActiveWindow("Reset scrollTop by fixed table for rowsView", function
     // assert
     that.clock.restore();
     setTimeout(function() {
+        assert.equal(that.rowsView._fixedTableElement.css("top"), "0px", "top if fixed table is zero");
         assert.equal(that.rowsView._fixedTableElement.parent().scrollTop(), 30, "scrollTop by fixed table");
         done();
     }, 100);
@@ -1967,7 +1968,8 @@ QUnit.test("Updating position of the fixed table on refresh grid", function(asse
 
         // assert
         $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-        assert.equal($fixedTable.css("top"), "0px", "scroll top of the fixed table");
+        assert.equal($fixedTable.css("top"), "0px", "top of the fixed table");
+        assert.equal($fixedTable.parent().scrollTop(), 500, "scroll top of the fixed table");
         done();
     });
 });
@@ -1977,6 +1979,7 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
     // arrange
     var that = this,
         $cell,
+        top,
         scrollTop,
         $fixedTable,
         done = assert.async(),
@@ -1997,8 +2000,10 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
 
     var scrollChanged = function(e) {
         that.rowsView.scrollChanged.remove(scrollChanged);
-        scrollTop = parseFloat($fixedTable.css("top"));
-        assert.equal(scrollTop, 0, "scroll top of the fixed table");
+        top = parseFloat($fixedTable.css("top"));
+        scrollTop = $fixedTable.parent().scrollTop();
+        assert.equal(top, 0, "top of the fixed table");
+        assert.ok(scrollTop > 500, "scroll top of the fixed table");
         assert.ok(that.rowsView._scrollTop > 500, "scroll top of the main table");
         done();
     };
