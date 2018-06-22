@@ -3615,26 +3615,24 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
 
     this.instance.showAppointmentPopup(firstAppointment);
 
-    var $popup = $(".dx-scheduler-appointment-popup"),
-        switchEditor = $popup.find(".dx-recurrence-switch").dxSwitch("instance"),
-        switchEndEditor = $popup.find(".dx-recurrence-switch-repeat-end").dxSwitch("instance");
+    var form = this.instance.getAppointmentDetailsForm(),
+        repeatOnEditor = form.getEditor("repeatOnOff"),
+        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
+    repeatOnEditor.option("value", true);
 
-    switchEditor.option("value", true);
-
-    switchEndEditor.option("value", true);
-    $popup.find(".dx-popup-done").trigger("dxclick");
-
+    repeatEndEditor.option("value", true);
+    $(".dx-scheduler-appointment-popup").find(".dx-popup-done").trigger("dxclick");
 
     this.instance.showAppointmentPopup(secondAppointment);
 
-    $popup = $(".dx-scheduler-appointment-popup");
-    switchEditor = $popup.find(".dx-recurrence-switch").dxSwitch("instance");
-    switchEndEditor = $popup.find(".dx-recurrence-switch-repeat-end").dxSwitch("instance");
+    form = this.instance.getAppointmentDetailsForm(),
+    repeatOnEditor = form.getEditor("repeatOnOff"),
+    repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
-    switchEditor.option("value", true);
+    repeatOnEditor.option("value", true);
 
-    assert.notOk(switchEndEditor.option("value"), "Switch is closed");
+    assert.notOk(repeatEndEditor.option("value"), "Switch is closed");
 });
 
 QUnit.test("Rival appointments should have correct positions on month view, rtl mode", function(assert) {

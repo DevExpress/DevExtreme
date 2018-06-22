@@ -27,7 +27,6 @@ var clickEvent = require("../../events/click");
 var RECURRENCE_EDITOR = "dx-recurrence-editor",
     LABEL_POSTFIX = "-label",
     RECURRENCE_EDITOR_CONTAINER = "dx-recurrence-editor-container",
-    SWITCH_EDITOR = "dx-recurrence-switch",
     SWITCH_REPEAT_END_EDITOR = "dx-recurrence-switch-repeat-end",
     FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
     INTERVAL_EDITOR = "dx-recurrence-numberbox-interval",
@@ -130,7 +129,8 @@ var RecurrenceEditor = Editor.inherit({
             value: null,
             onValueChanged: null,
             startDate: new Date(),
-            firstDayOfWeek: undefined
+            firstDayOfWeek: undefined,
+            visible: true
         });
     },
 
@@ -156,38 +156,13 @@ var RecurrenceEditor = Editor.inherit({
 
         this.$element().addClass(RECURRENCE_EDITOR);
 
-        this._renderSwitch();
-
         this._$container = $("<div>")
             .addClass(RECURRENCE_EDITOR_CONTAINER)
             .appendTo(this.$element());
 
         this._renderEditors();
-        this._renderContainerVisibility(!!this.option("value"));
-    },
 
-    _renderSwitch: function() {
-        var $switchEditor = $("<div>")
-            .addClass(SWITCH_EDITOR)
-            .appendTo(this.$element());
-
-        this._switchEditor = this._createComponent($switchEditor, Switch, {
-            value: !!this.option("value"),
-            onValueChanged: this._switchValueChangeHandler.bind(this)
-        });
-    },
-
-    _switchValueChangeHandler: function(args) {
-        var value = args.value;
-
-        this._renderContainerVisibility(value);
-
-        if(!this.option("value") && value) {
-            this._handleDefaults();
-        } else if(!value) {
-            this._recurrenceRule.makeRules("");
-            this.option("value", "");
-        }
+        this._changeValueByVisibility(!!this.option("value"));
     },
 
     _renderContainerVisibility: function(value) {
@@ -196,6 +171,19 @@ var RecurrenceEditor = Editor.inherit({
             domUtils.triggerShownEvent(this._$container);
         } else {
             this._$container.hide();
+        }
+    },
+
+    _changeValueByVisibility: function(value) {
+        this._renderContainerVisibility(value);
+
+        if(value) {
+            if(!this.option("value")) {
+                this._handleDefaults();
+            }
+        } else {
+            this._recurrenceRule.makeRules("");
+            this.option("value", "");
         }
     },
 
@@ -767,9 +755,7 @@ var RecurrenceEditor = Editor.inherit({
         switch(args.name) {
             case "value":
                 this._recurrenceRule.makeRules(args.value);
-
-                this._switchEditor.option("value", !!args.value);
-
+                this.option("visible", !!args.value);
                 this._switchEndEditor.option("value", !!this._recurrenceRule.repeatableRule());
 
                 this._repeatTypeEditor.option("value", this._recurrenceRule.repeatableRule() || "count");
@@ -797,7 +783,10 @@ var RecurrenceEditor = Editor.inherit({
                 if(this._$repeatDateEditor) {
                     this._repeatUntilDate.option("calendarOptions.firstDayOfWeek", this._getFirstDayOfWeek());
                 }
-
+                break;
+            case "visible":
+                this._changeValueByVisibility(args.value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
