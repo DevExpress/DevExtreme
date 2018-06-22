@@ -869,18 +869,14 @@ var FilterBuilder = Widget.inherit({
         let groupOperations = this.option("groupOperations"),
             groupOperationDescriptions = this.option("groupOperationDescriptions");
 
-        if(groupOperations && groupOperations.length > 0) {
-            return groupOperations.map(operation => ({
-                text: groupOperationDescriptions[operation],
-                value: OPERATORS[operation]
-            }));
-        } else {
-            let groupValue = utils.getGroupValue(criteria).replace("!", "not");
-            return [{
-                value: groupValue,
-                text: groupOperationDescriptions[groupValue]
-            }];
+        if(!groupOperations || !groupOperations.length) {
+            groupOperations = [utils.getGroupValue(criteria).replace("!", "not")];
         }
+
+        return groupOperations.map(operation => ({
+            text: groupOperationDescriptions[operation],
+            value: OPERATORS[operation]
+        }));
     },
 
     _createRemoveButton: function(handler) {
