@@ -1241,6 +1241,15 @@ QUnit.module("Methods", function() {
 });
 
 QUnit.module("Group operations", function() {
+    let checkPopupDisabledState = function(assert, container) {
+        let groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+        groupButton.trigger("dxclick");
+        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+
+        assert.ok(groupButton.hasClass(DISABLED_STATE_CLASS));
+        assert.equal(popup.length, 0);
+    };
+
     QUnit.test("change groupOperation array", function(assert) {
         let container = $("#container");
         container.dxFilterBuilder({
@@ -1262,11 +1271,26 @@ QUnit.module("Group operations", function() {
             groupOperations: ["and"]
         });
 
-        let groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
-        groupButton.trigger("dxclick");
-        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+        checkPopupDisabledState(assert, container);
+    });
 
-        assert.ok(groupButton.hasClass(DISABLED_STATE_CLASS));
-        assert.equal(popup.length, 0);
+    QUnit.test("group operation does not contain items", function(assert) {
+        let container = $("#container");
+        container.dxFilterBuilder({
+            fields: fields,
+            groupOperations: []
+        });
+
+        checkPopupDisabledState(assert, container);
+    });
+
+    QUnit.test("group operation is undefined", function(assert) {
+        let container = $("#container");
+        container.dxFilterBuilder({
+            fields: fields,
+            groupOperations: undefined
+        });
+
+        checkPopupDisabledState(assert, container);
     });
 });

@@ -656,7 +656,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createGroupOperationButton: function(criteria) {
-        let groupOperations = this._getGroupOperations(),
+        let groupOperations = this._getGroupOperations(criteria),
             groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations),
             caption = groupMenuItem.text,
             $operationButton = groupOperations && groupOperations.length < 2
@@ -865,14 +865,22 @@ var FilterBuilder = Widget.inherit({
         return $item;
     },
 
-    _getGroupOperations: function() {
+    _getGroupOperations: function(criteria) {
         let groupOperations = this.option("groupOperations"),
             groupOperationDescriptions = this.option("groupOperationDescriptions");
 
-        return groupOperations.map(operation => ({
-            text: groupOperationDescriptions[operation],
-            value: OPERATORS[operation]
-        }));
+        if(groupOperations && groupOperations.length > 0) {
+            return groupOperations.map(operation => ({
+                text: groupOperationDescriptions[operation],
+                value: OPERATORS[operation]
+            }));
+        } else {
+            let groupValue = utils.getGroupValue(criteria).replace("!", "not");
+            return [{
+                value: groupValue,
+                text: groupOperationDescriptions[groupValue]
+            }];
+        }
     },
 
     _createRemoveButton: function(handler) {
