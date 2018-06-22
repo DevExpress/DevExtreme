@@ -281,13 +281,19 @@ var FilterBuilder = Widget.inherit({
             */
             defaultGroupOperation: "and",
 
-
             /**
              * @name dxFilterBuilderField.filterOperations
              * @type Array<Enums.FilterBuilderGroupOperations>
              * @default ['and', 'or', 'notAnd', 'notOr']
              */
             groupOperations: ["and", "or", "notAnd", "notOr"],
+
+            /**
+             * @name dxFilterBuilderField.maxGroupLevel
+             * @type number
+             * @default undefined
+             */
+            maxGroupLevel: undefined,
 
             /**
              * @name dxFilterBuilderOptions.value
@@ -588,7 +594,7 @@ var FilterBuilder = Widget.inherit({
     _initMarkup: function() {
         this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
-        this._createGroupElementByCriteria(this._model)
+        this._createGroupElementByCriteria(this._model, null, this.option("maxGroupLevel"))
             .appendTo(this.$element());
     },
 
@@ -598,15 +604,15 @@ var FilterBuilder = Widget.inherit({
             .append(this._createConditionItem(condition, parent));
     },
 
-    _createGroupElementByCriteria: function(criteria, parent) {
-        var $group = this._createGroupElement(criteria, parent),
+    _createGroupElementByCriteria: function(criteria, parent, groupLevel) {
+        var $group = this._createGroupElement(criteria, parent, groupLevel),
             $groupContent = $group.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS),
             groupCriteria = utils.getGroupCriteria(criteria);
 
         for(var i = 0; i < groupCriteria.length; i++) {
             var innerCriteria = groupCriteria[i];
             if(utils.isGroup(innerCriteria)) {
-                this._createGroupElementByCriteria(innerCriteria, groupCriteria)
+                this._createGroupElementByCriteria(innerCriteria, groupCriteria, this._decreaseGroupLevel(groupLevel))
                     .appendTo($groupContent);
             } else if(utils.isCondition(innerCriteria)) {
                 this._createConditionElement(innerCriteria, groupCriteria)
@@ -616,37 +622,40 @@ var FilterBuilder = Widget.inherit({
         return $group;
     },
 
-    _createGroupElement: function(criteria, parent) {
-        var that = this,
-            $groupItem = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+    _decreaseGroupLevel: function(groupLevel) {
+        return groupLevel && --groupLevel;
+    },
+
+    _createGroupElement: function(criteria, parent, groupLevel) {
+        var $groupItem = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             $groupContent = $("<div>").addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS),
             $group = $("<div>").addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
 
         if(parent != null) {
-            this._createRemoveButton(function() {
+            this._createRemoveButton(() => {
                 utils.removeItem(parent, criteria);
                 $group.remove();
                 if(!utils.isEmptyGroup(criteria)) {
-                    that._updateFilter();
+                    this._updateFilter();
                 }
             }).appendTo($groupItem);
         }
 
         this._createGroupOperationButton(criteria).appendTo($groupItem);
 
-        this._createAddButton(function() {
-            var newGroup = utils.createEmptyGroup(that.option("defaultGroupOperation"));
+        this._createAddButton(() => {
+            var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
             utils.addItem(newGroup, criteria);
-            that._createGroupElement(newGroup, criteria).appendTo($groupContent);
-        }, function() {
-            var field = that.option("fields")[0],
-                newCondition = utils.createCondition(field, that._customOperations);
+            this._createGroupElement(newGroup, criteria, this._decreaseGroupLevel(groupLevel)).appendTo($groupContent);
+        }, () => {
+            var field = this.option("fields")[0],
+                newCondition = utils.createCondition(field, this._customOperations);
             utils.addItem(newCondition, criteria);
-            that._createConditionElement(newCondition, criteria).appendTo($groupContent);
+            this._createConditionElement(newCondition, criteria).appendTo($groupContent);
             if(utils.isValidCondition(newCondition, field)) {
-                that._updateFilter();
+                this._updateFilter();
             }
-        }).appendTo($groupItem);
+        }, groupLevel).appendTo($groupItem);
 
         return $group;
     },
@@ -889,23 +898,30 @@ var FilterBuilder = Widget.inherit({
         return $removeButton;
     },
 
-    _createAddButton: function(addGroupHandler, addConditionHandler) {
-        return this._createButtonWithMenu({
-            menu: {
-                items: [{
-                    caption: messageLocalization.format("dxFilterBuilder-addCondition"),
-                    click: addConditionHandler
-                }, {
-                    caption: messageLocalization.format("dxFilterBuilder-addGroup"),
-                    click: addGroupHandler
-                }],
-                displayExpr: "caption",
-                onItemClick: function(e) {
-                    e.itemData.click();
-                },
-                cssClass: FILTER_BUILDER_ADD_CONDITION_CLASS
-            }
-        }).addClass(FILTER_BUILDER_IMAGE_CLASS)
+    _createAddButton: function(addGroupHandler, addConditionHandler, groupLevel) {
+        let $button;
+        if(groupLevel !== 0) {
+            $button = this._createButtonWithMenu({
+                menu: {
+                    items: [{
+                        caption: messageLocalization.format("dxFilterBuilder-addCondition"),
+                        click: addConditionHandler
+                    }, {
+                        caption: messageLocalization.format("dxFilterBuilder-addGroup"),
+                        click: addGroupHandler
+                    }],
+                    displayExpr: "caption",
+                    onItemClick: function(e) {
+                        e.itemData.click();
+                    },
+                    cssClass: FILTER_BUILDER_ADD_CONDITION_CLASS
+                }
+            });
+        } else {
+            $button = this._createButton();
+            this._subscribeOnClickAndEnterKey($button, addConditionHandler);
+        }
+        return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
             .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
             .addClass(FILTER_BUILDER_ACTION_CLASS)
             .attr("tabindex", 0);

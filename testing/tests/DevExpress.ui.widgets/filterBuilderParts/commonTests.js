@@ -1293,4 +1293,37 @@ QUnit.module("Group operations", function() {
 
         checkPopupDisabledState(assert, container);
     });
+
+    QUnit.test("adding of groups is disabled", function(assert) {
+        let container = $("#container"),
+            filterBuilderInstance = container.dxFilterBuilder({
+                fields: fields,
+                maxGroupLevel: 0,
+                groupOperations: undefined
+            }).dxFilterBuilder("instance");
+
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
+        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+
+        assert.equal(popup.length, 0);
+        assert.deepEqual(filterBuilderInstance.option("value"), ["CompanyName", "contains", ""]);
+    });
+
+    QUnit.test("nested level of groups = 1", function(assert) {
+        let container = $("#container"),
+            filterBuilderInstance = container.dxFilterBuilder({
+                fields: fields,
+                maxGroupLevel: 1,
+                groupOperations: undefined
+            }).dxFilterBuilder("instance");
+
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
+        selectMenuItem(1);
+
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1).trigger("dxclick");
+
+        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+        assert.equal(popup.length, 0);
+        assert.deepEqual(filterBuilderInstance.option("value"), ["CompanyName", "contains", ""]);
+    });
 });
