@@ -306,6 +306,11 @@
  */
 
 /**
+ * @typedef {string} Enums.FilterBuilderGroupOperations
+ * @enum {'and'|'or'|'notAnd'|'notOr'}
+ */
+
+/**
  * @typedef {string} Enums.FilterOperations
  * @enum {'<'|'<='|'<>'|'='|'>'|'>='|'between'|'contains'|'endswith'|'notcontains'|'startswith'}
  */
