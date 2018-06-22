@@ -944,8 +944,8 @@ var environment = {
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
         assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
         assert.ok(chart.seriesFamilies[0].adjustedValues, "SeriesFamilies should adjust series values");
-        assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
-        assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
+        assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
+        assert.ok(!chart.verticalAxesDisposed, "Vertical axes should be disposed");
     });
 
     QUnit.test("EqualBarWidth updating", function(assert) {
