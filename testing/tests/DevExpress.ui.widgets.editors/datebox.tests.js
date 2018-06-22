@@ -2762,7 +2762,7 @@ QUnit.test("width option test", function(assert) {
 
 QUnit.test("width option test for Android theme", function(assert) {
     var origIsAndroid5 = themes.isAndroid5;
-    themes.isAndroid5 = function() { return "android5.light"; };
+    themes.isAndroid5 = function() { return true; };
 
     var extraWidth = 32;
 
