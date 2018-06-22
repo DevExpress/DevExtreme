@@ -1,18 +1,18 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    Class = require("../../core/class"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Widget = require("../widget/ui.widget"),
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    messageLocalization = require("../../localization/message"),
-    utils = require("./utils"),
-    deferredUtils = require("../../core/utils/deferred"),
-    TreeView = require("../tree_view"),
-    Popup = require("../popup"),
-    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import Class from "../../core/class";
+import eventsEngine from "../../events/core/events_engine";
+import Widget from "../widget/ui.widget";
+import registerComponent from "../../core/component_registrator";
+import { extend } from "../../core/utils/extend";
+import messageLocalization from "../../localization/message";
+import utils from "./utils";
+import deferredUtils from "../../core/utils/deferred";
+import TreeView from "../tree_view";
+import Popup from "../popup";
+import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
 
 const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
