@@ -422,7 +422,7 @@
 
 /**
  * @typedef {string} Enums.SankeyColorMode
- * @enum {'node'|'none'}
+ * @enum {'node'|'gradient'|'none'}
  */
 
 /**
