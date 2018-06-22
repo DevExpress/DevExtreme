@@ -857,7 +857,7 @@ var runTests = function() {
             });
 
         ds._mapFunc = function(item) {
-            return Object.assign(item, { map: item.id + item.name });
+            return $.extend(item, { map: item.id + item.name });
         };
 
         instance.unselectItem(0);
