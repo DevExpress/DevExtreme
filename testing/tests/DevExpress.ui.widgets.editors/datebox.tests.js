@@ -2299,7 +2299,7 @@ QUnit.test("calendar views should be positioned correctly", function(assert) {
 
 QUnit.test("List picker popup should be positioned correctly for Android devices", function(assert) {
     var origIsAndroid5 = themes.isAndroid5;
-    themes.isAndroid5 = function() { return "android5.light"; };
+    themes.isAndroid5 = function() { return true; };
 
     var $dateBox = $("#dateBox").dxDateBox({
         type: "time",
