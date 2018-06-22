@@ -367,6 +367,18 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
+        _addVirtualRow: function($table, isFixed, location, position) {
+            if(!position) return;
+
+            var $virtualRow = this._createEmptyRow(isFixed).addClass(VIRTUAL_ROW_CLASS).css("height", position),
+                $bodies = $table.children("tbody");
+
+            if(location === "top") {
+                $virtualRow.prependTo($bodies.first());
+            } else {
+                $virtualRow.appendTo($bodies.last());
+            }
+        },
         _updateContentPosition: function(isRender) {
             var that = this,
                 dataController = that._dataController,
@@ -388,19 +400,13 @@ var VirtualScrollingRowsViewExtender = (function() {
 
                 $tables.children("tbody").children("." + VIRTUAL_ROW_CLASS).remove();
 
-                if(top) {
-                    $tables.each(function() {
-                        var $topRow = that._createEmptyRow().addClass(VIRTUAL_ROW_CLASS);
-                        $topRow.prependTo($(this).children("tbody").first()).css("height", top);
-                    });
-                }
-
-                if(bottom) {
-                    $tables.each(function() {
-                        var $bottomRow = that._createEmptyRow().addClass(VIRTUAL_ROW_CLASS);
-                        $bottomRow.appendTo($(this).children("tbody").last()).css("height", bottom);
-                    });
-                }
+                $tables.each(function(index) {
+                    var isFixed = index > 0;
+                    that._isFixedTableRendering = isFixed;
+                    that._addVirtualRow($(this), isFixed, "top", top);
+                    that._addVirtualRow($(this), isFixed, "bottom", bottom);
+                    that._isFixedTableRendering = false;
+                });
             } else {
                 commonUtils.deferUpdate(function() {
                     that._updateContentPositionCore();
