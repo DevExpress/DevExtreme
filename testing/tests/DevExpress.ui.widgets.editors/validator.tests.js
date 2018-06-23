@@ -185,13 +185,36 @@ QUnit.test("Options changing after validator creation", function(assert) {
     }
 });
 
+QUnit.test("Internal validation rules are should be reset when validation rules are changed via the option", function(assert) {
+    var validator = this.fixture.createValidator({
+        validationRules: [{ type: 'required' }]
+    });
+
+    validator.validate();
+    validator.option("validationRules", [{ type: "custom", validationCallback: $.noop }]);
+    validator.validate();
+
+    assert.deepEqual(validator._getValidationRules(), [
+        {
+            isValid: undefined,
+            message: "Value is invalid",
+            type: "custom",
+            validationCallback: $.noop,
+            validator: validator,
+            value: undefined
+        }
+    ]);
+});
+
 
 QUnit.module("Validator specific tests", {
     beforeEach: function() {
         this.fixture = new Fixture();
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.fixture.teardown();
+        this.clock.restore();
     }
 });
 
@@ -214,7 +237,6 @@ QUnit.test("changed Value (correct -> incorrect through options) should be valid
     assert.ok(result.brokenRule, "brokenRule should be passed as part of result");
     assert.equal(result.brokenRule.message, errorMessage, "Validation message should be passed from rules");
 });
-
 
 QUnit.test("changed Value (incorrect -> correct through options) should be validated", function(assert) {
     var validator = this.fixture.createValidator({
@@ -251,6 +273,43 @@ QUnit.test("Validator should be able to bypass validation", function(assert) {
 
     assert.strictEqual(result.isValid, true, "Validator should be able to bypass validation");
     assert.ok(!result.brokenRule, "brokenRule is null");
+});
+
+QUnit.test("Validation rules are not modified after validate", function(assert) {
+    var value = "",
+        name = "Login",
+        handler = sinon.stub();
+
+
+    var validator = this.fixture.createValidator({
+        name: name,
+        onValidated: handler,
+        validationRules: [{ type: 'required' }]
+    });
+    this.fixture.stubAdapter.getValue.returns(value);
+
+    validator.validate();
+
+    assert.deepEqual(validator.option("validationRules"), [{ type: 'required' }]);
+});
+
+QUnit.test("Remote validation is worked correctly", function(assert) {
+    var validator = this.fixture.createValidator({
+        validationRules: [{
+            type: "custom",
+            validationCallback: function(params) {
+                setTimeout(function() {
+                    params.rule.isValid = true;
+                    params.validator.validate();
+                });
+            }
+        }]
+    });
+
+    validator.validate();
+    this.clock.tick();
+
+    assert.ok(validator.option("isValid"));
 });
 
 
@@ -326,7 +385,6 @@ QUnit.module("Events", {
 QUnit.test("Validated event should fire", function(assert) {
     var value = "",
         name = "Login",
-        validationRules = [{ type: 'required' }],
         expectedFailedValidationRule = { type: 'required', isValid: false, message: "Login is required", validator: {}, value: value },
         handler = sinon.stub();
 
@@ -334,7 +392,7 @@ QUnit.test("Validated event should fire", function(assert) {
     var validator = this.fixture.createValidator({
         name: name,
         onValidated: handler,
-        validationRules: validationRules
+        validationRules: [{ type: 'required' }]
     });
     expectedFailedValidationRule.validator = validator;
     this.fixture.stubAdapter.getValue.returns(value);
@@ -348,7 +406,13 @@ QUnit.test("Validated event should fire", function(assert) {
     assert.equal(params.value, value, "Correct value was passed");
     assert.equal(params.name, name, "Name of Validator should be passed");
     assert.strictEqual(params.isValid, false, "isValid was passed");
-    assert.deepEqual(params.validationRules, validationRules, "Correct rules were passed");
+    assert.deepEqual(params.validationRules, [{
+        isValid: false,
+        message: "Login is required",
+        type: "required",
+        validator: validator,
+        value: value
+    }], "Correct rules were passed");
     assert.deepEqual(params.brokenRule, expectedFailedValidationRule, "Failed rules were passed");
 });
 
