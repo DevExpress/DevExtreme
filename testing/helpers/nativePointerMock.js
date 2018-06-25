@@ -459,14 +459,13 @@
                     customEvent = document.createEvent("TouchEvent");
 
                     var createTouchByOptions = function(options) {
-                        return document.createTouch(
-                            options.view || window,
-                            options.target,
-                            options.identifier || $.now(),
-                            options.pageX || 0,
-                            options.pageY || 0,
-                            options.screenX || 0,
-                            options.screenY || 0
+                        return new window.Touch({
+                            target: options.target || document.body,
+                            identifier: options.identifier || $.now(),
+                            pageX: options.pageX || 0,
+                            pageY: options.pageY || 0,
+                            screenX: options.screenX || 0,
+                            screenY: options.screenY || 0 }
                         );
                     };
 
@@ -483,11 +482,13 @@
                     targetTouches = createTouchListByArray(targetTouches);
                     changedTouches = createTouchListByArray(changedTouches);
 
-                    customEvent.initTouchEvent(type, bubbles, cancelable, view, detail,
-                        screenX, screenY, clientX, clientY,
-                        ctrlKey, altKey, shiftKey, metaKey,
-                        touches, targetTouches, changedTouches,
-                        scale, rotation);
+                    customEvent = new window.TouchEvent(type, {
+                        cancelable: cancelable,
+                        bubbles: bubbles,
+                        touches: touches,
+                        targetTouches: targetTouches,
+                        changedTouches: changedTouches
+                    });
 
                 } else {
                     throw Error('No touch event simulation framework present for iOS, ' + UA.ios + '.');
