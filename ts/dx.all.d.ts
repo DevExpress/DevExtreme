@@ -912,9 +912,9 @@ declare module DevExpress.data {
         filter?: any;
         /** A group expression. */
         group?: any;
-        /** A group summary expression. */
+        /** A group summary expression. Used with the group setting. */
         groupSummary?: any;
-        /** Indicates whether a top-level group count is required. */
+        /** Indicates whether a top-level group count is required. Used in conjunction with the filter, take, skip, requireTotalCount, and group settings. */
         requireGroupCount?: boolean;
         /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
@@ -1353,6 +1353,7 @@ declare module DevExpress.data {
         headerFilter?: { width?: number, height?: number, allowSearch?: boolean };
         /** Specifies whether the field should be treated as a measure (a field providing data for calculation). */
         isMeasure?: boolean;
+        name?: string;
         /** @deprecated Use the format.precision option instead. */
         precision?: number;
         /** Specifies whether to calculate the running total by rows or by columns. */
@@ -2270,7 +2271,7 @@ declare module DevExpress.ui {
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** A function that is executed after the widget creates a row. */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
-        /** Specifies the operations that must be performed on the server side. */
+        /** Notifies the DataGrid of the server's data processing operations. */
         remoteOperations?: boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean } | 'auto';
         /** Specifies a custom template for rows. */
         rowTemplate?: template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
@@ -4203,6 +4204,7 @@ declare module DevExpress.ui {
         onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
+        onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /** A handler for the selectionChanged event. Executed after selecting an item or clearing its selection. */
         onSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
