@@ -34,6 +34,19 @@ require("../integration/knockout");
 * @deprecated
 */
 var Command = DOMComponent.inherit({
+    /**
+    * @name dxCommandMethods.ctor
+    * @publicName ctor(element,options)
+    * @param1 element:Node|JQuery
+    * @param2 options:dxCommandOptions|undefined
+    * @hidden
+    */
+    /**
+    * @name dxCommandMethods.ctor
+    * @publicName ctor(options)
+    * @param1 options:dxCommandOptions
+    * @hidden
+    */
     ctor: function(element, options) {
         if(isPlainObject(element)) {
             options = element;
