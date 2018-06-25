@@ -744,7 +744,7 @@ declare module DevExpress {
         /** Gets the instance of a widget found using its DOM node. */
         static getInstance(element: Element | JQuery): DOMComponent;
     }
-    /** An object used to manage OData endpoints in your application. */
+    /** The EndpointSelector is an object for managing OData endpoints in your application. */
     export class EndpointSelector {
         constructor(options: any);
         /** Gets an endpoint with a specific key. */
@@ -815,39 +815,39 @@ declare module DevExpress {
     }
 }
 declare module DevExpress.data {
-    /** An object used to generate and hold the GUID. */
+    /** The Guid is an object used to generate and contain a GUID. */
     export class Guid {
         constructor();
         constructor(value: string);
-        /** Gets a Guid converted to a string. */
+        /** Gets the GUID. Works identically to the valueOf() method. */
         toString(): string;
-        /** Gets a Guid converted to a string. */
+        /** Gets the GUID. Works identically to the toString() method. */
         valueOf(): string;
     }
     export interface StoreOptions {
-        /** Specifies the function called when the Store causes an error. */
+        /** Specifies the function that is executed when the store throws an error. */
         errorHandler?: Function;
-        /** Specifies the key property or properties. */
+        /** Specifies the key property (or properties) used to access data items. */
         key?: string | Array<string>;
-        /** A handler for the inserted event. */
+        /** A function that is executed after a data item is added to the store. */
         onInserted?: ((values: any, key: any | string | number) => any);
-        /** A handler for the inserting event. */
+        /** A function that is executed before a data item is added to the store. */
         onInserting?: ((values: any) => any);
-        /** A handler for the loaded event. */
+        /** A function that is executed after data is loaded to the store. */
         onLoaded?: ((result: Array<any>) => any);
-        /** A handler for the loading event. */
+        /** A function that is executed before data is loaded to the store. */
         onLoading?: ((loadOptions: LoadOptions) => any);
-        /** A handler for the modified event. */
+        /** A function that is executed after a data item is added, updated, or removed from the store. */
         onModified?: Function;
-        /** A handler for the modifying event. */
+        /** A function that is executed before a data item is added, updated, or removed from the store. */
         onModifying?: Function;
-        /** A handler for the removed event. */
+        /** A function that is executed after a data item is removed from the store. */
         onRemoved?: ((key: any | string | number) => any);
-        /** A handler for the removing event. */
+        /** A function that is executed before a data item is removed from the store. */
         onRemoving?: ((key: any | string | number) => any);
-        /** A handler for the updated event. */
+        /** A function that is executed after a data item is updated in the store. */
         onUpdated?: ((key: any | string | number, values: any) => any);
-        /** A handler for the updating event. */
+        /** A function that is executed before a data item is updated in the store. */
         onUpdating?: ((key: any | string | number, values: any) => any);
     }
     /** The base class for all Stores. */
@@ -855,11 +855,11 @@ declare module DevExpress.data {
         constructor(options?: StoreOptions)
         /** Gets a data item with a specific key. */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-        /** Adds an item to the Store's data. */
+        /** Adds a data item to the store. */
         insert(values: any): Promise<any> & JQueryPromise<any>;
-        /** Gets the key option's value. */
+        /** Gets the key property (or properties) as specified in the key option. */
         key(): any;
-        /** Gets the key value of an item found using its data object. */
+        /** Gets a data item's key value. */
         keyOf(obj: any): any;
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
@@ -873,23 +873,23 @@ declare module DevExpress.data {
         on(eventName: string, eventHandler: Function): any;
         /** Subscribes to events. */
         on(events: any): any;
-        /** Removes a data item with a specific key. */
+        /** Removes a data item with a specific key from the store. */
         remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
         /** Gets the total count of items the load() function returns. */
         totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
-        /** Updates the data item specified by the key. */
+        /** Updates a data item with a specific key. */
         update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
     }
     export interface ArrayStoreOptions extends StoreOptions {
-        /** Specifies the array associated with the Store. */
+        /** Specifies the store's associated array. */
         data?: Array<any>;
     }
-    /** A Store accessing an in-memory array. */
+    /** The ArrayStore is a store that provides an interface for loading and editing an in-memory array and handling related events. */
     export class ArrayStore extends Store {
         constructor(options?: ArrayStoreOptions)
-        /** Clears all data associated with the current ArrayStore. */
+        /** Clears all the ArrayStore's associated data. */
         clear(): void;
-        /** Creates the Query object for the underlying array. */
+        /** Creates a Query for the underlying array. */
         createQuery(): any;
     }
     /** This section describes the loadOptions object's fields. */
@@ -947,16 +947,16 @@ declare module DevExpress.data {
         /** Specifies whether the store combines the search and filter expressions. Defaults to true if the loadMode is "raw" and false if it is "processed". */
         useDefaultSearch?: boolean;
     }
-    /** A Store object that enables you to implement your own data access logic. */
+    /** The CustomStore enables you to implement custom data access logic for consuming data from any source. */
     export class CustomStore extends Store {
         constructor(options?: CustomStoreOptions)
         /** Deletes data from the cache. Takes effect only if the cacheRawData option is true. */
         clearRawDataCache(): void;
     }
     export interface DataSourceOptions {
-        /** The bag of custom parameters passed to the query executed when the DataSource load operation is invoked. */
+        /** Custom parameters that should be passed to an OData service with the load query. Available only for the ODataStore. */
         customQueryParams?: any;
-        /** Specifies the navigation properties that are loaded with the OData entity. Available only for the ODataStore. */
+        /** Specifies the navigation properties to be loaded with the OData entity. Available only for the ODataStore. */
         expand?: Array<string> | string;
         /** Specifies data filtering conditions. */
         filter?: string | Array<any> | Function;
@@ -964,19 +964,19 @@ declare module DevExpress.data {
         group?: string | Array<any> | Function;
         /** Specifies an item mapping function. */
         map?: ((dataItem: any) => any);
-        /** A handler for the changed event. */
+        /** A function that is executed after data is successfully loaded. */
         onChanged?: Function;
-        /** A handler for the loadError event. */
+        /** A function that is executed when data loading fails. */
         onLoadError?: ((error: { message?: string }) => any);
-        /** A handler for the loadingChanged event. */
+        /** A function that is executed when the data loading status changes. */
         onLoadingChanged?: ((isLoading: boolean) => any);
-        /** Specifies the maximum number of items the page can contain. */
+        /** Specifies the maximum number of data items per page. Applies only if paginate is true. */
         pageSize?: number;
-        /** Specifies whether a DataSource loads data by pages, or all items at once. */
+        /** Specifies whether the DataSource loads data items by pages or all at once. Defaults to false if group is set; otherwise, true. */
         paginate?: boolean;
         /** Specifies a post processing function. */
         postProcess?: ((data: Array<any>) => Array<any>);
-        /** Specifies whether or not the DataSource instance requests the total count of items available in the storage. */
+        /** Specifies whether the DataSource requests the total count of data items in the storage. */
         requireTotalCount?: boolean;
         /** Specifies the fields to search. */
         searchExpr?: string | Function | Array<string | Function>;
@@ -988,10 +988,10 @@ declare module DevExpress.data {
         select?: string | Array<any> | Function;
         /** Specifies data sorting options. */
         sort?: string | Array<any> | Function;
-        /** Specifies the underlying Store instance used to access data. */
+        /** Configures the store underlying the DataSource. */
         store?: Store | StoreOptions | Array<any> | any;
     }
-    /** An object that provides access to a data web service or local data storage for collection container widgets. */
+    /** The DataSource is an object that provides an API for processing data from an underlying store. */
     export class DataSource {
         constructor(url: string);
         constructor(data: Array<any>);
@@ -999,7 +999,7 @@ declare module DevExpress.data {
         constructor(options: CustomStoreOptions | DataSourceOptions);
         /** Cancels the load operation with a specific identifier. */
         cancel(): boolean;
-        /** Disposes all resources associated with this DataSource. */
+        /** Disposes of all the resources allocated to the DataSource instance. */
         dispose(): void;
         /** Gets the filter option's value. */
         filter(): any;
@@ -1013,15 +1013,15 @@ declare module DevExpress.data {
         isLastPage(): boolean;
         /** Checks whether data is loaded in the DataSource. */
         isLoaded(): boolean;
-        /** Checks whether the DataSource is being loaded. */
+        /** Checks whether data is being loaded in the DataSource. */
         isLoading(): boolean;
-        /** Gets data items the DataSource currently operate. */
+        /** Gets data items the DataSource performs operations on. */
         items(): Array<any>;
-        /** Gets the value of the underlying Store's key option. */
+        /** Gets the value of the underlying store's key option. */
         key(): any & string & number;
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
-        /** Returns an object that would be passed to the load() method of the underlying Store according to the current data shaping option values of the current DataSource instance. */
+        /** Gets an object with current data processing settings. */
         loadOptions(): any;
         /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
@@ -1033,7 +1033,7 @@ declare module DevExpress.data {
         on(events: any): any;
         /** Gets the current page index. */
         pageIndex(): number;
-        /** Sets the index of the page that should be loaded on the next call of the load() method. */
+        /** Sets the index of the page that should be loaded on the next load() method call. */
         pageIndex(newIndex: number): void;
         /** Gets the page size. */
         pageSize(): number;
@@ -1069,194 +1069,194 @@ declare module DevExpress.data {
         sort(): any;
         /** Sets the sort option's value. */
         sort(sortExpr: any): void;
-        /** Gets the underlying Store instance. */
+        /** Gets the instance of the store underlying the DataSource. */
         store(): any;
-        /** Returns the number of data items available in an underlying Store after the last load() operation without paging. */
+        /** Gets the number of data items in the store after the last load() operation without paging. Takes effect only if requireTotalCount is true */
         totalCount(): number;
     }
     export interface LocalStoreOptions extends ArrayStoreOptions {
-        /** Specifies the time (in miliseconds) after the change operation, before the data is flushed. */
+        /** Specifies a delay in milliseconds between when data changes and the moment these changes are saved in the local storage. Applies only if immediate is false. */
         flushInterval?: number;
-        /** Specifies whether the data is flushed immediatelly after each change operation, or after the delay specified via the flushInterval option. */
+        /** Specifies whether the LocalStore saves changes in the local storage immediately. */
         immediate?: boolean;
-        /** The unique identifier used to distinguish the data within the HTML5 Web Storage. */
+        /** Specifies the name under which data should be saved in the local storage. The `dx-data-localStore-` prefix will be added to the name. */
         name?: string;
     }
-    /** A Store providing access to the HTML5 Web Storage. */
+    /** The LocalStore is a store that provides an interface for loading and editing data from HTML Web Storage (also known as window.localStorage) and handling related events. */
     export class LocalStore extends ArrayStore {
         constructor(options?: LocalStoreOptions)
-        /** Removes all data associated with this Store. */
+        /** Removes data from the local storage. */
         clear(): void;
     }
-    /** An universal chainable data query interface object. */
+    /** The Query is an object that provides a chainable interface for making data queries. */
     export class Query {
         /** Calculates a custom summary for all data items. */
         aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
         /** Calculates a custom summary for all data items. */
         aggregate(step: Function): Promise<any> & JQueryPromise<any>;
-        /** Calculates the average item value. Takes effect only if data is a numeric array. */
+        /** Calculates the average of all values. Applies only to numeric arrays. */
         avg(): Promise<number> & JQueryPromise<number>;
-        /** Calculates the average getter value. */
+        /** Calculates the average of all values found using a getter. */
         avg(getter: any): Promise<number> & JQueryPromise<number>;
-        /** Gets the total item count. */
+        /** Calculates the number of data items. */
         count(): Promise<number> & JQueryPromise<number>;
-        /** Executes the Query. */
+        /** Executes the Query. This is an asynchronous alternative to the toArray() method. */
         enumerate(): Promise<any> & JQueryPromise<any>;
         /** Filters data items using a filter expression. */
         filter(criteria: Array<any>): Query;
         /** Filters data items using a custom function. */
         filter(predicate: Function): Query;
-        /** Groups data items. */
+        /** Groups data items by the specified getter. */
         groupBy(getter: any): Query;
-        /** Finds a data item with the maximum value. Takes effect only if data is a numeric array. */
+        /** Calculates the maximum value. Applies only to numeric arrays. */
         max(): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Finds a data item with the maximum getter value. */
+        /** Calculates the maximum of all values found using a getter. */
         max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Finds a data item with the minimum value. Takes effect only if data is a numeric array. */
+        /** Calculates the minimum value. Applies only to numeric arrays. */
         min(): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Finds a data item with the minimum getter value. */
+        /** Calculates the minumum of all values found using a getter. */
         min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Selects data using a getter. */
+        /** Selects individual fields from data objects. */
         select(getter: any): Query;
-        /** Limits the number of data items. */
+        /** Gets a specified number of data items starting from a given index. */
         slice(skip: number, take?: number): Query;
-        /** Sorts data items. */
+        /** Sorts data items by the specified getter in ascending order. */
         sortBy(getter: any): Query;
-        /** Sorts data items in the specified sort order. */
+        /** Sorts data items by the specified getter in the specified sorting order. */
         sortBy(getter: any, desc: boolean): Query;
-        /** Calculates the sum of item values. */
+        /** Calculates the sum of all values. */
         sum(): Promise<number> & JQueryPromise<number>;
-        /** Calculates the sum of getter values. */
+        /** Calculates the sum of all values found using a getter. */
         sum(getter: any): Promise<number> & JQueryPromise<number>;
-        /** Adds one more sorting expression to the Query. */
+        /** Sorts data items by one more getter in ascending order. */
         thenBy(getter: any): Query;
-        /** Adds one more sorting expression to the Query. The sort order depends on the second argument. */
+        /** Sorts data items by one more getter in the specified sorting order. */
         thenBy(getter: any, desc: boolean): Query;
-        /** Gets data items. */
+        /** Gets data items associated with the Query. This is a synchronous alternative to the enumerate() method. */
         toArray(): Array<any>;
     }
     export interface ODataContextOptions {
-        /** Specifies a function used to customize a web request before it is sent. */
+        /** Specifies a function that customizes the request before it is sent to the server. */
         beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
         /** Specifies whether stores in the ODataContext serialize/parse date-time values. */
         deserializeDates?: boolean;
-        /** Specifies the list of entities to be accessed with the ODataContext. */
+        /** Specifies entity collections to be accessed. */
         entities?: any;
-        /** Specifies the function called if the ODataContext causes an error. */
+        /** Specifies a function that is executed when the ODataContext throws an error. */
         errorHandler?: Function;
-        /** Specifies whether to use JSONP to access CORS-incompatiable remote services. */
+        /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
-        /** Specifies the URL of the data service being accessed via the current ODataContext. */
+        /** Specifies a URL to an OData service. */
         url?: string;
-        /** Specifies the version of the OData protocol used to interact with the data service. */
+        /** Specifies the OData version. */
         version?: number;
-        /** Specifies the value of the withCredentials field of the underlying jqXHR object. */
+        /** Specifies whether to send cookies, authorization headers, and client certificates in a cross-origin request. */
         withCredentials?: boolean;
     }
-    /** Provides access to the entire OData service. */
+    /** The ODataContent is an object that provides access to an entire OData service. */
     export class ODataContext {
         constructor(options?: ODataContextOptions)
-        /** Invokes a WebGet service operation that returns a value. */
+        /** Invokes an OData operation that returns a value. */
         get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
-        /** Invokes a WebGet service operation that returns nothing. */
+        /** Invokes an OData operation that returns nothing. */
         invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
-        /** Gets a special proxy object to describe the entity link. */
+        /** Gets a link to an entity with a specific key. */
         objectLink(entityAlias: string, key: any | string | number): any;
     }
     export interface ODataStoreOptions extends StoreOptions {
-        /** A function used to customize a web request before it is sent. */
+        /** Specifies a function that customizes the request before it is sent to the server. */
         beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
         /** Specifies whether the store serializes/parses date-time values. */
         deserializeDates?: boolean;
-        /** Specifies the types of data fields. Accepts the following types: "String", "Int32", "Int64", "Boolean", "Single", "Decimal" and "Guid". */
+        /** Specifies the data field types. Accepts the following types: "String", "Int32", "Int64", "Boolean", "Single", "Decimal" and "Guid". */
         fieldTypes?: any;
-        /** Specifies whether the ODataStore uses the JSONP approach to access non-CORS-compatible remote services. */
+        /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
         /** Specifies the type of the key property or properties. */
         keyType?: string | any;
-        /** A handler for the loading event. */
+        /** A function that is executed before data is loaded to the store. */
         onLoading?: ((loadOptions: LoadOptions) => any);
-        /** Specifies the URL of the OData entity to access. */
+        /** Specifies a URL to an OData entity collection. */
         url?: string;
-        /** Specifies the version of the OData protocol used to interact with the data service. */
+        /** Specifies the OData version. */
         version?: number;
-        /** Specifies whether to send cookies and authorization headers to foreign domains in a cross-origin request. */
+        /** Specifies whether to send cookies, authorization headers, and client certificates in a cross-origin request. */
         withCredentials?: boolean;
     }
-    /** A Store providing access to a separate OData web service entity. */
+    /** The ODataStore is a store that provides an interface for loading and editing data from an individual OData entity collection and handling related events. */
     export class ODataStore extends Store {
         constructor(options?: ODataStoreOptions)
         /** Gets a data item with a specific key. */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-        /** Gets a data item with a specific key. */
+        /** Gets an entity with a specific key. */
         byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
-        /** Creates a Query object for the OData endpoint. */
+        /** Creates a Query for the OData endpoint. */
         createQuery(loadOptions: any): any;
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
         /** Starts loading data. */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
     }
-    /** An object used to work with primitive data types not supported by JavaScript when accessing an OData web service. */
+    /** The EdmLiteral is an object for working with primitive data types from the OData's Abstract Type System that are not supported in JavaScript. */
     export class EdmLiteral {
         constructor(value: string);
         /** Gets the EdmLiteral's value converted to a string. */
         valueOf(): string;
     }
     export interface PivotGridDataSourceOptions {
-        /** An array of pivot grid fields. */
+        /** Configures pivot grid fields. */
         fields?: Array<PivotGridDataSourceField>;
-        /** Specifies data filtering conditions. Cannot be used for the XmlaStore store type. */
+        /** Specifies data filtering conditions. Cannot be used with an XmlaStore. */
         filter?: string | Array<any> | Function;
-        /** A handler for the changed event. */
+        /** A function that is executed after data is successfully loaded. */
         onChanged?: Function;
-        /** A handler for the fieldsPrepared event. */
+        /** A function that is executed when all fields are loaded from the store and they are ready to be displayed in the PivotGrid. */
         onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
-        /** A handler for the loadError event. */
+        /** A function that is executed when data loading fails. */
         onLoadError?: ((error: any) => any);
-        /** A handler for the loadingChanged event. */
+        /** A function that is executed when the data loading status changes. */
         onLoadingChanged?: ((isLoading: boolean) => any);
-        /** Specifies whether or not all the operations (filtering, grouping and summary calculation) are performed remotely. */
+        /** Specifies whether the data processing operations (filtering, grouping, summary calculation) should be performed on the server. */
         remoteOperations?: boolean;
-        /** Indicates whether or not the automatic field generation from data in the Store is enabled. */
+        /** Specifies whether to auto-generate pivot grid fields from the store's data. */
         retrieveFields?: boolean;
-        /** Specifies the underlying Store instance used to access data. */
+        /** Configures the DataSource's underlying store. */
         store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: string }> | { type?: string };
     }
-    /** An object that provides access to data for the PivotGrid widget. */
+    /** The PivotGridDataSource is an object that provides an API for processing data from an underlying store. This object is used in the PivotGrid widget. */
     export class PivotGridDataSource {
         constructor(options?: PivotGridDataSourceOptions)
-        /** Collapses all header items of a field. */
+        /** Collapses all header items of a field with the specified identifier. */
         collapseAll(id: number | string): void;
-        /** Collapses a header item. */
+        /** Collapses a specific header item. */
         collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
-        /** Provides access to a list of records (facts) that were used to calculate a specific summary. */
+        /** Provides access to the facts that were used to calculate a specific summary value. */
         createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
-        /** Disposes of all resources associated with this PivotGridDataSource. */
+        /** Disposes of all the resources allocated to the PivotGridDataSource instance. */
         dispose(): void;
-        /** Expands all header items of a field. */
+        /** Expands all the header items of a field with the specified identifier. */
         expandAll(id: number | string): void;
-        /** Expands a header item. */
+        /** Expands a specific header item. */
         expandHeaderItem(area: string, path: Array<any>): void;
-        /** Gets all options of a field with a specific identifier. */
+        /** Gets all the options of a field with the specified identifier. */
         field(id: number | string): any;
-        /** Updates the values of several field options. */
+        /** Updates field options' values. */
         field(id: number | string, options: any): void;
-        /** Gets all the fields. */
+        /** Gets all the fields including those generated automatically. */
         fields(): Array<PivotGridDataSourceField>;
-        /** Updates all the fields. */
+        /** Specifies a new fields collection. */
         fields(fields: Array<PivotGridDataSourceField>): void;
-        /** Gets the filter option's value. Does not take effect for the XmlaStore. */
+        /** Gets the filter option's value. Does not affect an XmlaStore. */
         filter(): any;
-        /** Sets the filter option's value. Does not take effect for the XmlaStore. */
+        /** Sets the filter option's value. Does not affect an XmlaStore. */
         filter(filterExpr: any): void;
         /** Gets all the fields within an area. */
         getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
-        /** Gets the PivotGrid's data. */
+        /** Gets the loaded data. Another data portion is loaded every time a header item is expanded. */
         getData(): any;
-        /** Checks whether the PivotGridDataSource is being loaded. */
+        /** Checks whether the PivotGridDataSource is loading data. */
         isLoading(): boolean;
-        /** Starts updating the data source. Reloads data from the XMLA store only. */
+        /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
         /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
@@ -1266,7 +1266,7 @@ declare module DevExpress.data {
         on(eventName: string, eventHandler: Function): any;
         /** Subscribes to events. */
         on(events: any): any;
-        /** Starts reloading data from any store and updating the data source. */
+        /** Clears the loaded PivotGridDataSource data and calls the load() method. */
         reload(): Promise<any> & JQueryPromise<any>;
         /** Gets the current PivotGridDataSource state. */
         state(): any;
@@ -1274,106 +1274,107 @@ declare module DevExpress.data {
         state(state: any): void;
     }
     export interface XmlaStoreOptions {
-        /** Specifies a function used to customize a web request before it is sent. */
+        /** Specifies a function that customizes the request before it is sent to the server. */
         beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
-        /** Specifies the database that contains the OLAP cube to use. */
+        /** Specifies the database (or initial catalog) that contains the OLAP cube to use. */
         catalog?: string;
         /** Specifies the name of the OLAP cube to use from the catalog. */
         cube?: string;
-        /** Specifies the URL to the OLAP server. */
+        /** Specifies the OLAP server's URL. */
         url?: string;
     }
-    /** A Store that provides access to an OLAP cube according to the XMLA standard. */
+    /** The XmlaStore is a store that provides an interface for accessing an OLAP cube according to the XMLA standard. */
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
     }
-    /** The global data layer error handler. */
+    /** Specifies the function that is executed when a data layer object throws an error. */
     export function errorHandler(e: Error): void;
     /** Creates a Query instance. */
     export function query(array: Array<any>): Query;
-    /** Creates a Query instance for accessing a remote service by its URL. */
+    /** Creates a Query instance that accesses a remote data service using its URL. */
     export function query(url: string, queryOptions: any): Query;
-    /** Encodes a string or an array of bytes to base64 encoding. */
+    /** Encodes a string or array of bytes in Base64. */
     export function base64_encode(input: string | Array<number>): string;
-    /** An array of pivot grid fields. */
+    /** Configures pivot grid fields. */
     export interface PivotGridDataSourceField {
-        /** Specifies whether to allow the predefined summary post-processing functions ('absoluteVariation' and 'percentVariation') and runningTotal to take values of different groups into account. */
+        /** Specifies whether to take neighboring groups' summary values into account when calculating a running total and absolute or percent variation. */
         allowCrossGroupCalculation?: boolean;
-        /** Allows an end-user to expand/collapse all header items within a header level. */
+        /** Specifies whether a user can expand/collapse all items within the same column or row header level using the context menu. */
         allowExpandAll?: boolean;
-        /** Allows a user to filter fields by selecting or deselecting values in the popup menu. */
+        /** Specifies whether a user can filter the field's values. */
         allowFiltering?: boolean;
-        /** Allows an end-user to change sorting options. */
+        /** Specifies whether a user can change the field's sorting. */
         allowSorting?: boolean;
-        /** Allows an end-user to sort columns by summary values. */
+        /** Specifies whether a user can sort the pivot grid by summary values instead of field values. */
         allowSortingBySummary?: boolean;
-        /** Type of the area where the field is located. */
+        /** Specifies the field's area. */
         area?: string;
-        /** Index among the other fields displayed within the same area. */
+        /** Specifies the field's order among the other fields in the same area. Corresponds to the field's order in the fields array by default. */
         areaIndex?: number;
-        /** Allows you to use a custom aggregate function to calculate the summary values. Cannot be used for the XmlaStore store type. */
+        /** Specifies a custom aggregate function. Applies only if the summaryType is "custom". Cannot be used with an XmlaStore. */
         calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
-        /** Specifies a callback function that allows you to modify summary values after they are calculated. */
+        /** Specifies a custom post-processing function for summary values. */
         calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
-        /** A caption that will be displayed in the pivot grid's field chooser and field panel to identify the field. */
+        /** Specifies the field's caption to be displayed in the field chooser and on the field panel. */
         caption?: string;
-        /** Specifies a callback function that returns the text to be displayed in the cells of a field. */
+        /** Customizes the text displayed in summary cells. */
         customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
-        /** Name of the data source field containing data for the pivot grid field. */
+        /** Specifies which data source field provides data for the pivot grid field. */
         dataField?: string;
         /** Casts field values to a specific data type. */
         dataType?: string;
-        /** The name of the folder in which the field is located. */
+        /** Specifies the name of the folder in which the field is located when displayed in the field chooser. */
         displayFolder?: string;
-        /** Indicates whether all header items of the field's header level are expanded. */
+        /** Specifies whether to expand all items within the field's header level. */
         expanded?: boolean;
-        /** Specifies whether a user can change the current filter by including (selecting) or excluding (clearing the selection) values. Applies only if allowFiltering is true. */
+        /** Specifies whether a user changes the current filter by including (selecting) or excluding (clearing the selection of) values. */
         filterType?: string;
-        /** Specifies by which values the field is filtered. */
+        /** Specifies the values by which the field is filtered. */
         filterValues?: Array<any>;
         /** Formats field values before they are displayed. */
         format?: DevExpress.ui.format;
-        /** The index of the field within a group. */
+        /** Specifies the field's index within its group. */
         groupIndex?: number;
-        /** Specifies how the values of the current field are combined into groups. Cannot be used for the XmlaStore store type. */
+        /** Specifies how the field's values are combined into groups for the headers. Cannot be used with an XmlaStore. */
         groupInterval?: string | number;
-        /** The name of the group to which the field belongs. */
+        /** Specifies the name of the field's group. */
         groupName?: string;
-        /** Configures the header filter feature. */
+        /** Configures the field's header filter. */
         headerFilter?: { width?: number, height?: number, allowSearch?: boolean };
-        /** Specifies whether the field should be treated as a Data Field. */
+        /** Specifies whether the field should be treated as a measure (a field providing data for calculation). */
         isMeasure?: boolean;
+        name?: string;
         /** @deprecated Use the format.precision option instead. */
         precision?: number;
-        /** Specifies whether to summarize each next summary value with the previous one by rows or columns. */
+        /** Specifies whether to calculate the running total by rows or by columns. */
         runningTotal?: string;
-        /** Specifies the function that determines how to split data from the data source into ranges for header items. Cannot be used for the XmlaStore store type and along with remote operations. */
+        /** Specifies a function that combines the field's values into groups for the headers. Cannot be used with an XmlaStore or remote operations. */
         selector?: Function;
-        /** Specifies whether or not to display Grand Total values for the field. */
+        /** Specifies whether to display the field's grand totals. Applies only if the field is in the data area. */
         showGrandTotals?: boolean;
-        /** Specifies whether or not to display Total values for the field. */
+        /** Specifies whether to display the field's totals. Applies only if the field is in the data area. */
         showTotals?: boolean;
-        /** Specifies whether or not to display summary values. Applies only to the fields whose area is "data". Inherits the value of showTotals by default. */
+        /** Specifies whether to display the field's summary values. Applies only if the field is in the data area. Inherits the showTotals' value by default. */
         showValues?: boolean;
-        /** Specifies how field data should be sorted. Can be used for the XmlaStore store type only. */
+        /** Specifies how the field's values in the headers should be sorted. */
         sortBy?: string;
-        /** Sorts the header items of this field by the summary values of another field. */
+        /** Sorts the field's values in the headers by the specified measure's summary values. */
         sortBySummaryField?: string;
-        /** The array of field names that specify a path to column/row whose summary field is used for sorting of this field's header items. */
+        /** Specifies a path to the column or row whose summary values should be used to sort the field's values in the headers. */
         sortBySummaryPath?: Array<number | string>;
-        /** Specifies how to sort header items. */
+        /** Specifies a custom comparison function that sorts the field's values in the headers. */
         sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
-        /** Specifies the sort order of field values. */
+        /** Specifies the field values' sorting order. */
         sortOrder?: string;
-        /** Specifies the summary post-processing algorithm. */
+        /** Specifies a predefined post-processing function. Does not apply when the calculateSummaryValue option is set. */
         summaryDisplayMode?: string;
-        /** Specifies how to aggregate field data. Cannot be used for the XmlaStore store type. */
+        /** Specifies how to aggregate the field's data. Cannot be used with an XmlaStore. */
         summaryType?: string;
-        /** A boolean value specifying whether or not the field is visible in the pivot grid and the Field Chooser. */
+        /** Specifies whether the field is visible in the pivot grid and field chooser. */
         visible?: boolean;
-        /** Specifies the absolute width of the field in the pivot grid. */
+        /** Specifies the field's width in pixels when the field is displayed in the pivot grid. */
         width?: number;
-        /** Specifies whether or not long text in header items should be wrapped. */
+        /** Specifies whether text that does not fit into a header item should be wrapped. */
         wordWrapEnabled?: boolean;
     }
 }
@@ -1636,7 +1637,7 @@ declare module DevExpress.ui {
         animationDuration?: number;
         /** Specifies whether all items can be collapsed or whether at least one item must always be expanded. */
         collapsible?: boolean;
-        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
+        /** Specifies whether to render the panel's content when it is displayed. If false, the content is rendered immediately. */
         deferRendering?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -1914,7 +1915,7 @@ declare module DevExpress.ui {
         /** Specifies whether columns should adjust their widths to the content. */
         columnAutoWidth?: boolean;
         /** Configures the column chooser. */
-        columnChooser?: { enabled?: boolean, allowSearch?: boolean, mode?: string, width?: number, height?: number, title?: string, emptyPanelText?: string };
+        columnChooser?: { enabled?: boolean, allowSearch?: boolean, searchTimeout?: number, mode?: string, width?: number, height?: number, title?: string, emptyPanelText?: string };
         /** Configures column fixing. */
         columnFixing?: { enabled?: boolean, texts?: { fix?: string, unfix?: string, leftPosition?: string, rightPosition?: string } };
         /** Specifies whether the widget should hide columns to adapt to the screen or container size. Ignored if allowColumnResizing is true and columnResizingMode is "widget". */
@@ -1936,7 +1937,7 @@ declare module DevExpress.ui {
         /** Configures the filter row. */
         filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: string, applyFilterText?: string, operationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, between?: string }, betweenStartText?: string, betweenEndText?: string };
         /** Configures the header filter feature. */
-        headerFilter?: { visible?: boolean, width?: number, height?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
+        headerFilter?: { visible?: boolean, width?: number, height?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Configures the load panel. */
         loadPanel?: { enabled?: string | boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
         /** Specifies text shown when the widget does not display any data. */
@@ -2181,7 +2182,7 @@ declare module DevExpress.ui {
         columns?: Array<dxDataGridColumn>;
         /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
-        /** Customizes grid columns and data before exporting. */
+        /** Customizes data before exporting. */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** Configures editing. */
         editing?: dxDataGridEditing;
@@ -2209,9 +2210,9 @@ declare module DevExpress.ui {
         onEditorPrepared?: ((options: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => any);
         /** A handler for the editorPreparing event. */
         onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => any);
-        /** A handler for the exported event. */
+        /** A function that is executed after data is exported. */
         onExported?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the exporting event. */
+        /** A function that is executed before data is exported. */
         onExporting?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** A handler for the fileSaving event. */
         onFileSaving?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
@@ -2850,7 +2851,7 @@ declare module DevExpress.ui {
         closeOnOutsideClick?: boolean | (() => boolean);
         /** @deprecated This option is deprecated, because the functionality controlled by it was not supposed to belong to the Lookup widget. Instead, we suggest that you use the SelectBox widget with the acceptCustomValue option set to true. */
         fieldEditEnabled?: any;
-        /** Specifies a custom template for the input field. Must contain the TextBox widget. */
+        /** Specifies a custom template for the input field. */
         fieldTemplate?: template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -2923,9 +2924,9 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxLookupOptions)
     }
     export interface dxMapOptions extends WidgetOptions {
-        /** Specifies whether or not the widget automatically adjusts center and zoom option values when adding a new marker or route, or when creating a widget if it initially contains markers or routes. */
+        /** Specifies whether the widget automatically adjusts center and zoom option values when adding a new marker or route, or if a new widget contains markers or routes by default. */
         autoAdjust?: boolean;
-        /** An object, a string, or an array specifying the location displayed at the center of the widget. */
+        /** An object, a string, or an array specifying which part of the map is displayed at the widget's center using coordinates. The widget can change this value if autoAdjust is enabled. */
         center?: any | string | Array<number>;
         /** Specifies whether or not map widget controls are available. */
         controls?: boolean;
@@ -2959,7 +2960,7 @@ declare module DevExpress.ui {
         type?: string;
         /** Specifies the widget's width. */
         width?: number | string | (() => number | string);
-        /** The zoom level of the map. */
+        /** The map's zoom level. The widget can change this value if autoAdjust is enabled. */
         zoom?: number;
     }
     /** The Map is an interactive widget that displays a geographic map with markers and routes. */
@@ -3011,7 +3012,7 @@ declare module DevExpress.ui {
     export interface dxMultiViewOptions extends CollectionWidgetOptions {
         /** Specifies whether or not to animate the displayed item change. */
         animationEnabled?: boolean;
-        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
+        /** Specifies whether to render the view's content when it is displayed. If false, the content is rendered immediately. */
         deferRendering?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -3057,7 +3058,7 @@ declare module DevExpress.ui {
         mode?: string;
         /** Specifies whether to show the buttons that change the value by a step. */
         showSpinButtons?: boolean;
-        /** Specifies by which value the widget value changes when a spin button is clicked. */
+        /** Specifies how much the widget's value changes when using the spin buttons, Up/Down arrow keys, or mouse wheel. */
         step?: number;
         /** Specifies whether to use touch friendly spin buttons. Applies only if showSpinButtons is true. */
         useLargeSpinButtons?: boolean;
@@ -3078,7 +3079,7 @@ declare module DevExpress.ui {
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** Specifies a custom template for the widget content. */
         contentTemplate?: template | ((contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
+        /** Specifies whether to render the widget's content when it is displayed. If false, the content is rendered immediately. */
         deferRendering?: boolean;
         /** Specifies whether or not an end-user can drag the widget. */
         dragEnabled?: boolean;
@@ -3191,11 +3192,11 @@ declare module DevExpress.ui {
         /** Configures client-side exporting. */
         export?: { enabled?: boolean, fileName?: string, proxyUrl?: string, ignoreExcelErrors?: boolean };
         /** The Field Chooser configuration options. */
-        fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string } };
+        fieldChooser?: { enabled?: boolean, allowSearch?: boolean, searchTimeout?: number, layout?: number, title?: string, width?: number, height?: number, texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string } };
         /** Configures the field panel. */
         fieldPanel?: { showColumnFields?: boolean, showFilterFields?: boolean, showDataFields?: boolean, showRowFields?: boolean, allowFieldDragging?: boolean, visible?: boolean, texts?: { columnFieldArea?: string, rowFieldArea?: string, filterFieldArea?: string, dataFieldArea?: string } };
         /** Configures the header filter feature. */
-        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
+        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies whether or not to hide rows and columns with no data. */
         hideEmptySummaryCells?: boolean;
         /** Specifies options configuring the load panel. */
@@ -3253,18 +3254,20 @@ declare module DevExpress.ui {
         updateDimensions(): void;
     }
     export interface dxPivotGridFieldChooserOptions extends WidgetOptions {
-        /** Specifies whether searching is enabled in the field chooser. */
+        /** Specifies whether the field chooser allows searching in the "All Fields" section. */
         allowSearch?: boolean;
         /** The data source of a PivotGrid widget. */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** Configures the header filter feature. */
-        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
+        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
         /** Specifies the field chooser layout. */
         layout?: number;
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+        /** Specifies a delay in milliseconds between when a user finishes typing in the field chooser's search panel, and when the search is executed. */
+        searchTimeout?: number;
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
         texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string };
     }
@@ -4097,7 +4100,7 @@ declare module DevExpress.ui {
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
         /** Expands a row with a specific key. */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
-        /** Performs a pre-order tree traversal, executing a function on each visited node. Starts traversing from the root node's children. */
+        /** Performs a pre-order tree traversal, executing a function on each visited node. Starts traversing from the top level nodes. */
         forEachNode(callback: Function): void;
         /** Performs a pre-order tree traversal, executing a function on each visited node. Starts traversing from the specified nodes. */
         forEachNode(nodes: Array<dxTreeListNode>, callback: Function): void;
@@ -4488,7 +4491,7 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** Specifies the way an end-user applies the selected value. */
         applyValueMode?: string;
-        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
+        /** Specifies whether to render the drop-down field's content when it is displayed. If false, the content is rendered immediately. */
         deferRendering?: boolean;
         /** Specifies a custom template for the drop-down button. */
         dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
@@ -4583,7 +4586,7 @@ declare module DevExpress.ui {
         reset(): void;
     }
     export interface DataExpressionMixinOptions {
-        /** A data source used to fetch data to be displayed by the widget. */
+        /** A data source used to fetch data the widget should display. */
         dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** Specifies the name of the data source item field whose value is displayed by the widget. */
         displayExpr?: string | Function;
@@ -4816,7 +4819,7 @@ declare module DevExpress.ui {
         /** Specifies whether the column bands other columns or not. */
         isBand?: boolean;
         /** Specifies options of a lookup column. */
-        lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions), valueExpr?: string, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
+        lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store), valueExpr?: string, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
         /** Specifies the minimum width of the column. */
         minWidth?: number;
         /** Specifies the identifier of the column. */
@@ -7061,7 +7064,7 @@ declare module DevExpress.data.utils {
     export function compileSetter(expr: string | Array<string>): Function;
 }
 declare module DevExpress.data.utils.odata {
-    /** Holds key value converters for OData. */
+    /** Contains built-in OData type converters (for String, Int32, Int64, Boolean, Single, Decimal, and Guid) and allows you to register a custom type converter. */
     export var keyConverters: any;
 }
 declare module DevExpress.utils {
@@ -7473,7 +7476,7 @@ declare module DevExpress.viz.charts {
     }
     /** Configures the value axis. */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
-        /** Enables auto-calculated scale breaks. Applies only if the axis' type is "continuous" or "logarithmic". Does not apply to a multi-axis chart. */
+        /** Enables auto-calculated scale breaks. Applies only if the axis' type is "continuous" or "logarithmic" and valueType is "numeric". Does not apply to a multi-axis chart. */
         autoBreaksEnabled?: boolean;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
