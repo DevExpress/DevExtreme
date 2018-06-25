@@ -912,9 +912,9 @@ declare module DevExpress.data {
         filter?: any;
         /** A group expression. */
         group?: any;
-        /** A group summary expression. */
+        /** A group summary expression. Used with the group setting. */
         groupSummary?: any;
-        /** Indicates whether a top-level group count is required. */
+        /** Indicates whether a top-level group count is required. Used in conjunction with the filter, take, skip, requireTotalCount, and group settings. */
         requireGroupCount?: boolean;
         /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
@@ -1353,6 +1353,7 @@ declare module DevExpress.data {
         headerFilter?: { width?: number, height?: number, allowSearch?: boolean };
         /** Specifies whether the field should be treated as a measure (a field providing data for calculation). */
         isMeasure?: boolean;
+        name?: string;
         /** Specifies whether to calculate the running total by rows or by columns. */
         runningTotal?: 'column' | 'row';
         /** Specifies a function that combines the field's values into groups for the headers. Cannot be used with an XmlaStore or remote operations. */
@@ -1424,8 +1425,8 @@ declare module DevExpress.framework {
     }
     /** @deprecated #include spa-deprecated-note */
     export class dxCommand extends DOMComponent {
-        constructor(element: Element, options?: dxCommandOptions)
-        constructor(element: JQuery, options?: dxCommandOptions)
+        constructor(element: Element | JQuery, options?: dxCommandOptions);
+        constructor(options: dxCommandOptions);
         /** Executes the action associated with this command. */
         execute(): void;
     }
@@ -2268,7 +2269,7 @@ declare module DevExpress.ui {
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** A function that is executed after the widget creates a row. */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
-        /** Specifies the operations that must be performed on the server side. */
+        /** Notifies the DataGrid of the server's data processing operations. */
         remoteOperations?: boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean } | 'auto';
         /** Specifies a custom template for rows. */
         rowTemplate?: template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
@@ -2537,6 +2538,8 @@ declare module DevExpress.ui {
         filterOperationDescriptions?: { between?: string, equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, isBlank?: string, isNotBlank?: string };
         /** Specifies group operation descriptions. */
         groupOperationDescriptions?: { and?: string, or?: string, notAnd?: string, notOr?: string };
+        groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
+        maxGroupLevel?: number;
         /** A handler for the editorPrepared event. Executed after an editor is created. */
         onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
         /** A handler for the editorPreparing event. Executed before an editor is created. */
@@ -4201,6 +4204,7 @@ declare module DevExpress.ui {
         onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
+        onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /** A handler for the selectionChanged event. Executed after selecting an item or clearing its selection. */
         onSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
@@ -7520,7 +7524,7 @@ declare module DevExpress.viz.charts {
         /** Adds a pixel-measured empty space between an axis and its labels. */
         indentFromAxis?: number;
         /** Decides how to arrange axis labels when there is not enough space to keep all of them. */
-        overlappingBehavior?: 'stagger' | 'rotate' | 'hide' | 'none';
+        overlappingBehavior?: 'rotate' | 'stagger' | 'none' | 'hide';
         /** Specifies the rotation angle of axis labels. Applies only if displayMode or overlappingBehavior is "rotate". */
         rotationAngle?: number;
         /** Adds a pixel-measured empty space between two staggered rows of axis labels. Applies only if displayMode or overlappingBehavior is "stagger". */
@@ -7994,7 +7998,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the spacing between an axis and its labels in pixels. */
         indentFromAxis?: number;
         /** Decides how to arrange axis labels when there is not enough space to keep all of them. */
-        overlappingBehavior?: 'hide' | 'none';
+        overlappingBehavior?: 'none' | 'hide';
         /** Indicates whether or not axis labels are visible. */
         visible?: boolean;
     }
