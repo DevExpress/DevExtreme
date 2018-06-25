@@ -18,8 +18,8 @@ var dxSankey = require("../core/base_widget").inherit({
         dataSource: "DATA_SOURCE",
         sortData: "DATA_SOURCE",
         align: "DATA_SOURCE",
-        nodes: "BUILD_LAYOUT",
-        links: "BUILD_LAYOUT",
+        node: "BUILD_LAYOUT",
+        link: "BUILD_LAYOUT",
         palette: "BUILD_LAYOUT",
         paletteExtensionMode: "BUILD_LAYOUT"
     },
@@ -187,7 +187,7 @@ var dxSankey = require("../core/base_widget").inherit({
         var that = this,
             data = that._dataSourceItems() || [],
             availableRect = this._rect,
-            nodeOptions = that._getOption('nodes'),
+            nodeOptions = that._getOption('node'),
             sortData = that._getOption('sortData'),
             layoutBuilder = that._getOption('layoutBuilder', true) || defaultLayoutBuilder,
             palette = that._themeManager.createPalette(that._getOption("palette", true), {
@@ -213,7 +213,7 @@ var dxSankey = require("../core/base_widget").inherit({
         if(!layout.hasOwnProperty('error')) {
             let nodeColors = {},
                 nodeIdx = 0,
-                linkOptions = that._getOption("links"),
+                linkOptions = that._getOption("link"),
                 totalNodesNum = layout.nodes
                     .map((item) => { return item.length; })
                     .reduce((previousValue, currentValue) => { return previousValue + currentValue; }, 0);
@@ -233,7 +233,7 @@ var dxSankey = require("../core/base_widget").inherit({
                             id: nodeIdx,
                             color: color,
                             rect: node,
-                            options: that._getOption("nodes"),
+                            options: nodeOptions,
                             linksIn: that._getConnectedLinks(layout, node._name, 'in'),
                             linksOut: that._getConnectedLinks(layout, node._name, 'out')
                         });
@@ -307,7 +307,7 @@ var dxSankey = require("../core/base_widget").inherit({
         var that = this,
             labelOptions = that._getOption("label"),
             availableWidth = that._rect[2] - that._rect[0],
-            nodeOptions = that._getOption("nodes");
+            nodeOptions = that._getOption("node");
 
         that._shadowFilter = that._renderer.shadowFilter("-50%", "-50%", "200%", "200%").attr(labelOptions.shadow);
         that._groupLabels.clear();

@@ -8,7 +8,7 @@ var common = require("./commonParts/common.js"),
 themeModule.registerTheme({
     name: "test-theme",
     sankey: {
-        nodes: {
+        node: {
             border: {
                 visible: true,
                 color: "black"
@@ -38,7 +38,7 @@ QUnit.test("Creation", function(assert) {
 QUnit.test("Color from options applied to all links", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        links: {
+        link: {
             color: '#aabbcc'
         }
     });
@@ -50,7 +50,7 @@ QUnit.test("Color from options applied to all links", function(assert) {
 QUnit.test("Normal style, border is not visible", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        links: {
+        link: {
             border: {
                 visible: false,
                 color: "#ffeedd",
@@ -70,7 +70,7 @@ QUnit.test("Normal style, border is not visible", function(assert) {
 QUnit.test("Hover style", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        links: {
+        link: {
             color: '#432432',
             opacity: 0.1,
             border: {
@@ -133,7 +133,7 @@ QUnit.test("Sankey does not fire drawn event on link hover", function(assert) {
 QUnit.test("Clear hover of item", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-            links: {
+            link: {
                 color: '#111111',
                 border: {
                     visible: true,
@@ -172,7 +172,7 @@ QUnit.test("Clear hover of item", function(assert) {
 QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-            links: {
+            link: {
                 color: '#234234',
                 border: {
                     visible: true,
@@ -200,7 +200,7 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
 QUnit.test("Border for hoverStyle can be disabled", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-            links: {
+            link: {
                 border: {
                     visible: true,
                     color: "#ffffff",
@@ -310,7 +310,7 @@ QUnit.test("isHovered method", function(assert) {
 QUnit.test("links colorMode", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-            links: {
+            link: {
                 colorMode: 'node'
             }
         }),
@@ -325,10 +325,10 @@ QUnit.test("links colorMode", function(assert) {
 QUnit.test("links colorMode with fixed color of nodes", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        nodes: {
+        node: {
             color: '#aabbcc'
         },
-        links: {
+        link: {
             colorMode: 'node'
         }
     });
@@ -340,10 +340,10 @@ QUnit.test("links colorMode with fixed color of nodes", function(assert) {
 QUnit.test("links style when adjacent node is hovered", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1], ['C', 'Z', 1]],
-        nodes: {
+        node: {
             color: '#aabbcc'
         },
-        links: {
+        link: {
             color: '#112233',
             hoverStyle: {
                 color: '#ffeedd'

@@ -13,7 +13,7 @@ var $ = require("jquery"),
 themeModule.registerTheme({
     name: "test-theme",
     sankey: {
-        nodes: {
+        node: {
             border: {
                 visible: true,
                 color: "black"
@@ -659,7 +659,7 @@ QUnit.test("Update styles of nodes", function(assert) {
         dataSource: [['A', 'Z', 1]]
     });
 
-    sankey.option({ nodes: { border: { visible: true, width: 3, color: "red", opacity: 0.1 } } });
+    sankey.option({ node: { border: { visible: true, width: 3, color: "red", opacity: 0.1 } } });
 
     var nodes = this.nodes();
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["stroke-width"], 3);
@@ -676,7 +676,7 @@ QUnit.test("Update styles of links", function(assert) {
         dataSource: [['A', 'Z', 1]]
     });
 
-    sankey.option({ links: { border: { visible: true, width: 2, color: "green", opacity: 0.2 } } });
+    sankey.option({ link: { border: { visible: true, width: 2, color: "green", opacity: 0.2 } } });
 
     assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["stroke-width"], 2, 'stroke-width applied');
     assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["stroke-opacity"], 0.2, 'stroke-opacity applied');
@@ -688,7 +688,7 @@ QUnit.test("Update color of nodes", function(assert) {
         dataSource: [['A', 'Z', 1]]
     });
 
-    sankey.option({ nodes: { color: "green" } });
+    sankey.option({ node: { color: "green" } });
 
     var nodes = this.nodes();
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]["fill"], "green", 'fill applied');
@@ -699,7 +699,7 @@ QUnit.test("Update color of links", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1]]
     });
-    sankey.option({ links: { color: "gray" } });
+    sankey.option({ link: { color: "gray" } });
 
     assert.deepEqual(this.link(0)[0].smartAttr.lastCall.args[0]["fill"], "gray", 'fill applied');
 });
@@ -787,7 +787,7 @@ QUnit.test("Redrawn on nodes.padding option updated", function(assert) {
             onDrawn: drawn
         });
 
-    sankey.option({ nodes: { padding: 50 } });
+    sankey.option({ node: { padding: 50 } });
 
     assert.equal(drawn.callCount, 2, 'Drawn twice');
     assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[2].nodePadding, 50, 'New node padding applied');

@@ -8,7 +8,7 @@ var common = require("./commonParts/common.js"),
 themeModule.registerTheme({
     name: "test-theme",
     sankey: {
-        nodes: {
+        node: {
             border: {
                 visible: true,
                 color: "black"
@@ -63,7 +63,7 @@ QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
 QUnit.test("Color from options applied to all nodes", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1]],
-        nodes: {
+        node: {
             color: '#aabbcc'
         }
     });
@@ -76,7 +76,7 @@ QUnit.test("Color from options applied to all nodes", function(assert) {
 QUnit.test("Normal style, border is not visible", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1]],
-        nodes: {
+        node: {
             border: {
                 visible: false,
                 color: "#ffeedd",
@@ -96,7 +96,7 @@ QUnit.test("Normal style, border is not visible", function(assert) {
 QUnit.test("Hover style", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1]],
-        nodes: {
+        node: {
             color: '#432432',
             border: {
                 visible: true,
@@ -151,7 +151,7 @@ QUnit.test("Sankey does not fire drawn event on hover", function(assert) {
 QUnit.test("Clear hover of item", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            nodes: {
+            node: {
                 color: '#111111',
                 border: {
                     visible: true,
@@ -186,7 +186,7 @@ QUnit.test("Clear hover of item", function(assert) {
 QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            nodes: {
+            node: {
                 color: '#234234',
                 border: {
                     visible: true,
@@ -211,7 +211,7 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
 QUnit.test("Border for hoverStyle can be disabled", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            nodes: {
+            node: {
                 border: {
                     visible: true,
                     color: "#ffffff",
@@ -332,7 +332,7 @@ QUnit.test("Default nodes.padding option", function(assert) {
 QUnit.test("Applying nodes.padding option", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        nodes: {
+        node: {
             padding: 10
         }
     });
@@ -349,11 +349,11 @@ QUnit.test("Applying nodes.padding option", function(assert) {
 QUnit.test("Updating nodes.padding option", function(assert) {
     var sankey = createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-        nodes: {
+        node: {
             padding: 10
         }
     });
-    sankey.option({ nodes: { padding: 50 } });
+    sankey.option({ node: { padding: 50 } });
 
     var nodes = this.nodes(),
         nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),

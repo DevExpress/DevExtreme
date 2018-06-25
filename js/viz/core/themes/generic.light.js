@@ -1619,7 +1619,7 @@ registerTheme({
                 return info.type === 'link' ? { html: `<strong>${info.from} > ${info.to}</strong><br/>Weight: ${info.weight}` } : { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
             },
         },
-        nodes: {
+        node: {
             padding: 30,
             width: 15,
             opacity: 1,
@@ -1638,7 +1638,7 @@ registerTheme({
                 border: { }
             },
         },
-        links: {
+        link: {
             color: BLACK,
             colorMode: "none",
             opacity: 0.3,
