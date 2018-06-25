@@ -990,6 +990,10 @@ var PivotGrid = Widget.inherit({
             scrollLeft,
             scrolled = that._scrollTop || that._scrollLeft;
 
+        if(that._scrollUpdating) return; // T645458
+
+        that._scrollUpdating = true;
+
         if(rowsArea && !rowsArea.hasScroll() && that._hasHeight) {
             that._scrollTop = null;
         }
@@ -1005,6 +1009,8 @@ var PivotGrid = Widget.inherit({
             rowsArea.scrollTo(scrollTop);
             that._dataController.updateWindowScrollPosition(that._scrollTop);
         }
+
+        that._scrollUpdating = false;
     },
 
     _subscribeToEvents: function(columnsArea, rowsArea, dataArea) {
