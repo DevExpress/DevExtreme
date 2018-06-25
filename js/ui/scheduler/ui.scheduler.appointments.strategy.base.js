@@ -21,7 +21,7 @@ var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
 
-    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 23;
+    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 24;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
