@@ -35,7 +35,8 @@ var $ = require("../../core/renderer"),
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
-    COMMAND_EXPAND_CLASS = "dx-command-expand";
+    COMMAND_EXPAND_CLASS = "dx-command-expand",
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
@@ -307,12 +308,6 @@ module.exports = {
              * @type_function_return string
              */
             /**
-             * @name dxDataGridColumn.precision
-             * @type number
-             * @default undefined
-             * @deprecated
-             */
-            /**
              * @name GridBaseColumn.filterOperations
              * @type Array<string>
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"
@@ -501,6 +496,11 @@ module.exports = {
              * @name GridBaseColumn.headerFilter.allowSearch
              * @type boolean
              * @default false
+             */
+            /**
+             * @name GridBaseColumn.headerFilter.searchMode
+             * @type Enums.CollectionSearchMode
+             * @default 'contains'
              */
             /**
              * @name GridBaseColumn.headerFilter.width
@@ -957,6 +957,9 @@ module.exports = {
                                 column[fieldName] = userStateColumn[fieldName];
                             }
                         } else {
+                            if(fieldName === "selectedFilterOperation" && userStateColumn[fieldName]) {
+                                column.defaultSelectedFilterOperation = column[fieldName] || null;
+                            }
                             column[fieldName] = userStateColumn[fieldName];
                         }
                     }
@@ -1095,28 +1098,6 @@ module.exports = {
                 }
             };
 
-            var getColumnByPath = function(that, path, columns) {
-                var column,
-                    columnIndexes = [];
-
-                path.replace(regExp, function(_, columnIndex) {
-                    columnIndexes.push(parseInt(columnIndex));
-                    return "";
-                });
-
-                if(columnIndexes.length) {
-                    if(columns) {
-                        column = columnIndexes.reduce(function(prevColumn, index) {
-                            return prevColumn ? prevColumn.columns[index] : columns[index];
-                        }, 0);
-                    } else {
-                        column = getColumnByIndexes(that, columnIndexes);
-                    }
-                }
-
-                return column;
-            };
-
             var fireOptionChanged = function(that, options) {
                 var value = options.value,
                     optionName = options.optionName,
@@ -1171,7 +1152,7 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = getColumnByPath(that, fullOptionName, columns);
+                            column = that.getColumnByPath(fullOptionName, columns);
                             if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
@@ -1290,7 +1271,7 @@ module.exports = {
                 var i,
                     column,
                     commandColumnIndex,
-                    result = columns.length ? (needToExtend && commandColumns || columns).slice() : [],
+                    result = columns.length ? (needToExtend && commandColumns || columns).slice().map(column => extend({}, column)) : [],
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
                         return commandColumn.command === column.command ? index : result;
                     }, -1);
@@ -1387,6 +1368,29 @@ module.exports = {
                     return ["columnsChanged"];
                 },
 
+                getColumnByPath: function(path, columns) {
+                    var that = this,
+                        column,
+                        columnIndexes = [];
+
+                    path.replace(regExp, function(_, columnIndex) {
+                        columnIndexes.push(parseInt(columnIndex));
+                        return "";
+                    });
+
+                    if(columnIndexes.length) {
+                        if(columns) {
+                            column = columnIndexes.reduce(function(prevColumn, index) {
+                                return prevColumn ? prevColumn.columns[index] : columns[index];
+                            }, 0);
+                        } else {
+                            column = getColumnByIndexes(that, columnIndexes);
+                        }
+                    }
+
+                    return column;
+                },
+
                 optionChanged: function(args) {
                     switch(args.name) {
                         case "adaptColumnWidthByRatio":
@@ -1432,7 +1436,7 @@ module.exports = {
 
                 _columnOptionChanged: function(args) {
                     var columnOptionValue = {},
-                        column = getColumnByPath(this, args.fullName),
+                        column = this.getColumnByPath(args.fullName),
                         columnOptionName = args.fullName.replace(regExp, "");
 
                     if(column) {
@@ -1597,6 +1601,9 @@ module.exports = {
 
                     return this._fixedColumns[rowIndex] || [];
 
+                },
+                getFilteringColumns: function(rowIndex) {
+                    return this.getColumns().filter(item => item.dataField && item.allowFiltering);
                 },
                 _getFixedColumnsCore: function() {
                     var that = this,
@@ -1932,10 +1939,10 @@ module.exports = {
                             var targetColumn = that._columns[toIndex];
 
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-                                options.visibleIndex = undefined;
+                                options.visibleIndex = MAX_SAFE_INTEGER;
                             } else {
                                 if(column.fixed ^ targetColumn.fixed) {
-                                    options.visibleIndex = undefined;
+                                    options.visibleIndex = MAX_SAFE_INTEGER;
                                 } else {
                                     options.visibleIndex = targetColumn.visibleIndex;
                                 }
@@ -2098,8 +2105,9 @@ module.exports = {
                         column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option("rtlEnabled"));
                         column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
+                        column.defaultFilterOperations = !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
-                            column.filterOperations = !lookup && DATATYPE_OPERATIONS[dataType] || [];
+                            column.filterOperations = column.defaultFilterOperations;
                         }
                         column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || "=";
                         column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === "boolean" && !column.cellTemplate);
@@ -2662,7 +2670,7 @@ module.exports = {
                     if(columnOptions.dataType) {
                         calculatedColumnOptions.userDataType = columnOptions.dataType;
                     }
-                    if(columnOptions.selectedFilterOperation) {
+                    if(columnOptions.selectedFilterOperation && !("defaultSelectedFilterOperation" in calculatedColumnOptions)) {
                         calculatedColumnOptions.defaultSelectedFilterOperation = columnOptions.selectedFilterOperation;
                     }
                     if(columnOptions.lookup) {

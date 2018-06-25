@@ -943,17 +943,20 @@ var SchedulerWorkSpace = Widget.inherit({
             }
         }
 
-        this._renderAllDayPanel();
-
         this._renderDateTable();
 
-        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
-            this._setHorizontalGroupHeaderCellsHeight();
-        }
+        this._renderAllDayPanel();
+
+        this._updateGroupTableHeight();
 
         this._shader = new VerticalShader();
     },
 
+    _updateGroupTableHeight: function() {
+        if(this._isVerticalGroupedWorkSpace() && windowUtils.hasWindow()) {
+            this._setHorizontalGroupHeaderCellsHeight();
+        }
+    },
 
     _renderDateTimeIndication: noop,
     _setIndicationUpdateInterval: noop,
@@ -2200,7 +2203,7 @@ var SchedulerWorkSpace = Widget.inherit({
             cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight(),
             leftOffset = this._isRTL() || this.option("crossScrollingEnabled") ? 0 : this.getWorkSpaceLeftOffset(),
             topIndex = allDay ? Math.floor(coordinates.top / cellHeight) : Math.round(coordinates.top / cellHeight),
-            leftIndex = Math.round((coordinates.left + 5 - leftOffset) / cellWidth);
+            leftIndex = Math.floor((coordinates.left + 5 - leftOffset) / cellWidth);
 
         if(this._isRTL()) {
             leftIndex = cellCount - leftIndex - 1;
@@ -2366,6 +2369,10 @@ var SchedulerWorkSpace = Widget.inherit({
             });
 
         return result;
+    },
+
+    _supportCompactDropDownAppointments: function() {
+        return true;
     },
 
     _formatWeekday: function(date) {

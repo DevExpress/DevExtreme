@@ -42,11 +42,6 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                // DEPRECATED IN 15_2
-                if(this.withoutPath) {
-                    return;
-                }
-
                 if(axis.areCoordsOutsideAxis(this.coords)) {
                     return;
                 }
@@ -67,11 +62,6 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             },
             drawLabel: function(range) {
                 if(!labelOptions.visible || skipLabels) {
-                    return;
-                }
-
-                // DEPRECATED IN 15_2
-                if(this.withoutLabel) {
                     return;
                 }
 

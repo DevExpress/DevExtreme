@@ -89,14 +89,17 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
         lastWeekDate.setDate(lastWeekDate.getDate() + weekendDuration);
     }
 
-    var isDifferentMonthDates = firstWeekDate.getMonth() !== lastWeekDate.getMonth(),
-        useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
-        firstWeekDateText = dateLocalization.format(firstWeekDate, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
-        lastWeekDateText = dateLocalization.format(lastWeekDate, getCaptionFormat(useShortFormat));
-
-    return firstWeekDateText + "-" + lastWeekDateText;
+    return formatCaptionByMonths.call(this, lastWeekDate, firstWeekDate);
 };
 
+var formatCaptionByMonths = function(lastDate, firstDate) {
+    var isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth(),
+        useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
+        firstDateText = dateLocalization.format(firstDate, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
+        lastDateText = dateLocalization.format(lastDate, getCaptionFormat(useShortFormat));
+
+    return firstDateText + "-" + lastDateText;
+};
 var getMonthCaption = function(date) {
     if(this.option("intervalCount") > 1) {
         var firstDate = new Date(date);
@@ -185,7 +188,7 @@ var getConfig = function(step) {
                         var lastDate = new Date(date);
 
                         lastDate.setDate(lastDate.getDate() + agendaDuration - 1);
-                        return dateLocalization.format(date, "d") + "-" + dateLocalization.format(lastDate, format);
+                        return formatCaptionByMonths.call(this, lastDate, date);
                     } else {
                         return dateLocalization.format(date, format);
                     }

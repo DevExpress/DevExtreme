@@ -589,21 +589,10 @@ var CommonPolarChartSeries = {
         */
         format: '',
         /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.precision
-        * @extends CommonVizPrecision
-        */
-        precision: 0,
-        /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat
         * @extends CommonVizFormat
         */
         argumentFormat: '',
-        /**
-        * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentPrecision
-        * @extends CommonVizPrecision
-        * @deprecated
-        */
-        argumentPrecision: 0,
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
         * @type Enums.RelativePosition
@@ -618,10 +607,9 @@ var CommonPolarChartSeries = {
         font: {
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.weight
             * @type number

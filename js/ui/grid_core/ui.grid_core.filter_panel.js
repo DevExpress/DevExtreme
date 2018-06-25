@@ -207,7 +207,7 @@ var FilterPanelView = modules.View.inherit({
         var that = this,
             options = {
                 customOperations: customOperations,
-                columns: that.getController("columns").getColumns(),
+                columns: that.getController("columns").getFilteringColumns(),
                 filterOperationDescriptions: that.option("filterBuilder.filterOperationDescriptions"),
                 groupOperationDescriptions: that.option("filterBuilder.groupOperationDescriptions")
             };
@@ -242,7 +242,7 @@ module.exports = {
                  * @name GridBaseOptions.filterPanel.customizeText
                  * @type function
                  * @type_function_param1 e:object
-                 * @type_function_param1_field1 component:Component
+                 * @type_function_param1_field1 component:this
                  * @type_function_param1_field2 filterValue:object
                  * @type_function_param1_field3 text:string
                  * @type_function_return string

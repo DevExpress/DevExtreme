@@ -57,7 +57,7 @@ Slider.prototype = {
 
     update: function(verticalRange, sliderHandleOptions, sliderMarkerOptions) {
         var that = this;
-        that._formatOptions = { format: sliderMarkerOptions.format, precision: sliderMarkerOptions.precision /* DEPRECATED_16_1 */, customizeText: sliderMarkerOptions.customizeText };
+        that._formatOptions = { format: sliderMarkerOptions.format, customizeText: sliderMarkerOptions.customizeText };
         that._marker.applyOptions(sliderMarkerOptions, that._translator.getScreenRange());
         that._colors = [sliderMarkerOptions.invalidRangeColor, sliderHandleOptions.color];
         that._sliderGroup.attr({ translateY: verticalRange[0] });

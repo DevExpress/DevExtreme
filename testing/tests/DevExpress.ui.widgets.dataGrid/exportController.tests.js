@@ -2149,7 +2149,6 @@ QUnit.test("data styles. column headers are hidden", function(assert) {
         alignment: "right",
         wrapText: false,
         format: undefined,
-        precision: undefined,
         dataType: "string"
     });
 });
@@ -2164,7 +2163,7 @@ QUnit.test("data styles", function(assert) {
         columns: [{
             dataField: 'TestField1', dataType: "string", alignment: "right"
         }, {
-            dataField: 'TestField2', dataType: "number", format: "currency", precision: 0
+            dataField: 'TestField2', dataType: "number", format: { type: "currency", precision: 0 }
         }]
     });
     var dataProvider = this.exportController.getDataProvider();
@@ -2180,15 +2179,16 @@ QUnit.test("data styles", function(assert) {
         alignment: "right",
         wrapText: false,
         format: undefined,
-        precision: undefined,
         dataType: "string"
     });
 
     assert.deepEqual(styles[dataProvider.getStyleId(1, 1)], {
         alignment: "right",
         wrapText: false,
-        format: "currency",
-        precision: 0,
+        format: {
+            type: "currency",
+            precision: 0
+        },
         dataType: "number"
     });
 });

@@ -112,7 +112,7 @@
     }
 
     .dx-row-alt {
-        & > td {
+        & > td, & > tr > td {
             background-color: @WIN8_DATAGRID_ROW_ALTERNATION_COLOR;
         }
 
@@ -594,16 +594,16 @@
         .text-shadow(none);
         color: @WIN8_DATAGRID_SELECTION_COLOR;
 
-        & > td {
+        & > td, & > tr > td {
             background-color: @WIN8_DATAGRID_SELECTION_BACKGROUND;
 
             &.dx-datagrid-group-space {
                 border-right-color: @WIN8_DATAGRID_SELECTION_BACKGROUND;
             }
-        }
 
-        & > td.dx-focused {
-            background-color: transparent;
+            &.dx-focused {
+                background-color: transparent;
+            }
         }
 
         &:not(.dx-row-lines) {
@@ -749,9 +749,11 @@
 
     .dx-datagrid-rowsview {
         .dx-selection, .dx-selection.dx-row:hover {
-            & > td:not(.dx-focused) {
-                &.dx-datagrid-group-space {
-                    border-left-color: @WIN8_DATAGRID_SELECTION_BACKGROUND;
+            & > td, & > tr > td {
+                &:not(.dx-focused) {
+                    &.dx-datagrid-group-space {
+                        border-left-color: @WIN8_DATAGRID_SELECTION_BACKGROUND;
+                    }
                 }
             }
         }

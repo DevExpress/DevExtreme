@@ -4,6 +4,7 @@ var typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     _isDefined = typeUtils.isDefined,
     _isDate = typeUtils.isDate,
+    _isFunction = typeUtils.isFunction,
     unique = require("../core/utils").unique,
 
     minSelector = "min",
@@ -135,13 +136,23 @@ _Range.prototype = {
         return that;
     },
 
-    sortCategories: function(arr) {
-        var cat = this.categories,
-            callback = (this.dataType === "datetime") ? function(item) {
-                return cat.map(Number).indexOf(item.valueOf()) !== -1;
-            } : function(item) {
-                return cat.indexOf(item) !== -1;
-            };
-        arr && cat && (this.categories = arr.filter(callback));
+    sortCategories(sort) {
+        if(sort === false || !this.categories) {
+            return;
+        }
+
+        if(Array.isArray(sort)) {
+            let cat = this.categories.map(item => item && item.valueOf());
+            this.categories = sort.filter(item => cat.indexOf(item && item.valueOf()) !== -1);
+        } else {
+            let notAFunction = !_isFunction(sort);
+
+            if(notAFunction && this.dataType !== "string") {
+                sort = (a, b) => a.valueOf() - b.valueOf();
+            } else if(notAFunction) {
+                sort = false;
+            }
+            sort && this.categories.sort(sort);
+        }
     }
 };

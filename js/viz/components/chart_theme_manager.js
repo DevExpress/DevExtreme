@@ -71,12 +71,6 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             if(axisOptions.label.alignment) {
                 axisOptions.label["userAlignment"] = true;
             }
-            if(_isString(axisOptions.label.overlappingBehavior)) {
-                axisOptions.label.overlappingBehavior = { mode: axisOptions.label.overlappingBehavior };
-            }
-            if(!axisOptions.label.overlappingBehavior || !axisOptions.label.overlappingBehavior.mode) {
-                axisOptions.label.overlappingBehavior = axisOptions.label.overlappingBehavior || {};
-            }
         }
         return axisOptions;
     };

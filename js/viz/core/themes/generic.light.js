@@ -20,15 +20,14 @@ var WHITE = "#ffffff",
     OUTSIDE = "outside",
 
     themeModule = require("../../themes"),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias;
+    registerTheme = themeModule.registerTheme;
 
 registerTheme({
     name: "generic.light",
     isDefault: true,
     font: {
         color: SECONDARY_TITLE_COLOR,
-        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
         weight: 400,
         size: 12,
         cursor: "default"
@@ -43,7 +42,7 @@ registerTheme({
         backgroundColor: WHITE,
         font: {
             size: 28,
-            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
             weight: 200
         },
         subtitle: {
@@ -1014,7 +1013,6 @@ registerTheme({
             color: BLACK,
             opacity: 0.1,
             showCustomBoundaryTicks: true,
-            showMinorTicks: true, // DEPRECATED IN 15_2
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",
@@ -1087,7 +1085,7 @@ registerTheme({
             moveSelectedRangeByClick: true,
             manualRangeSelectionEnabled: true,
             allowSlidersSwap: true,
-            callSelectedRangeChanged: "onMovingComplete"
+            callValueChanged: "onMovingComplete"
         },
         redrawOnResize: true,
         chart: {
@@ -1176,7 +1174,6 @@ registerTheme({
         "layer:marker:dot": {
             borderWidth: 2,
             borderColor: WHITE,
-            color: "#ba4d51",
             size: 8,
             selectedStep: 2,
             backStep: 18,
@@ -1187,7 +1184,6 @@ registerTheme({
         "layer:marker:bubble": {
             minSize: 20,
             maxSize: 50,
-            color: "#ba4d51",
             hoveredBorderWidth: 1,
             hoveredBorderColor: GREY_GREEN,
             selectedBorderWidth: 2,
@@ -1212,8 +1208,7 @@ registerTheme({
                 visible: true
             },
             paddingLeftRight: 16,
-            paddingTopBottom: 12,
-            markerColor: "#ba4d51"
+            paddingTopBottom: 12
         },
         controlBar: {
             borderColor: "#5d5d5d",
@@ -1661,5 +1656,3 @@ registerTheme({
     }
 });
 
-// DEPRECATED_15_1 / "desktop" name
-registerThemeAlias("desktop.light", "generic.light");

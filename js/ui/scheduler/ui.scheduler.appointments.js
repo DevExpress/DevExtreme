@@ -348,6 +348,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var startDate = model.settings ? new Date(this.invoke("getField", "startDate", model.settings)) : data.startDate,
             endDate = model.settings ? new Date(this.invoke("getField", "endDate", model.settings)) : data.endDate;
 
+        if(isNaN(startDate) || isNaN(endDate)) {
+            startDate = data.startDate;
+            endDate = data.endDate;
+        }
 
         $("<div>")
             .text(this._createAppointmentTitle(data))
@@ -831,7 +835,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                     left: virtualAppointment.left
                 },
                 items: { data: [], colors: [] },
-                isAllDay: virtualAppointment.isAllDay,
+                isAllDay: virtualAppointment.isAllDay ? true : false,
                 buttonColor: color
             };
         }
@@ -849,19 +853,19 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderDropDownAppointments: function() {
-        var buttonWidth = this.invoke("getCompactAppointmentGroupMaxWidth"),
-            rtlOffset = 0;
-
-        if(this.option("rtlEnabled")) {
-            rtlOffset = buttonWidth;
-        }
-
         each(this._virtualAppointments, (function(groupIndex) {
             var virtualGroup = this._virtualAppointments[groupIndex],
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
                 $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
+
+            var buttonWidth = this.invoke("getCompactAppointmentGroupMaxWidth", virtualGroup.isAllDay),
+                rtlOffset = 0;
+
+            if(this.option("rtlEnabled")) {
+                rtlOffset = buttonWidth;
+            }
 
             this.notifyObserver("renderDropDownAppointments", {
                 $container: $container,
@@ -873,7 +877,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
                 buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
-                onAppointmentClick: this.option("onItemClick")
+                onAppointmentClick: this.option("onItemClick"),
+                isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments")
             });
         }).bind(this));
     },

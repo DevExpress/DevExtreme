@@ -40,7 +40,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 result.format = DATE_INTERVAL_FORMATS[groupInterval[currentLevel]];
             } else if(column.dataType === "number") {
                 result.getDisplayFormat = function() {
-                    var formatOptions = { format: column.format, precision: column.precision, target: "headerFilter" },
+                    var formatOptions = { format: column.format, target: "headerFilter" },
                         firstValueText = gridCoreUtils.formatValue(value, formatOptions),
                         secondValue = value + groupInterval[currentLevel],
                         secondValueText = gridCoreUtils.formatValue(secondValue, formatOptions);
@@ -91,7 +91,11 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 displayValue = value;
             }
 
-            item = typeUtils.isObject(item) ? item : {};
+            if(!typeUtils.isObject(item)) {
+                item = {};
+            } else if(item === value) {
+                item = extend({}, item);
+            }
 
             path.push(value);
 

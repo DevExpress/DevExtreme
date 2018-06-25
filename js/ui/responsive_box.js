@@ -244,6 +244,8 @@ var ResponsiveBox = CollectionWidget.inherit({
         }
 
         this._refreshItem($item, item);
+        this._clearItemNodeTemplates();
+        this._update();
     },
 
     _setScreenSize: function() {

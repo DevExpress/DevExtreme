@@ -20,6 +20,21 @@
 .dx-fileuploader-input-wrapper {
     .dx-clearfix-mixin();
 
+    &:before,
+    &:after {
+        width: 100%;
+    }
+
+    &:before {
+        padding-top: 1em;
+        margin-top: -1em;
+    }
+
+    &:after {
+        padding-bottom: 1em;
+        margin-bottom: -1em;
+    }
+
     .dx-button {
         float: left;
     }

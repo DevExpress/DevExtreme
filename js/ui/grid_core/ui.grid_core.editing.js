@@ -7,7 +7,6 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
-    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
     clickEvent = require("../../events/click"),
@@ -1471,8 +1470,12 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editData.push(options);
             }
             if(that._editData[editDataIndex]) {
-                options.type = that._editData[editDataIndex].type || options.type;
-                deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
+                if(options.data) {
+                    that._editData[editDataIndex].data = gridCoreUtils.createObjectWithChanges(that._editData[editDataIndex].data, options.data);
+                }
+                if(!that._editData[editDataIndex].type && options.type) {
+                    that._editData[editDataIndex].type = options.type;
+                }
                 if(row) {
                     row.data = gridCoreUtils.createObjectWithChanges(row.data, options.data);
                 }
@@ -1628,7 +1631,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _createLink: function(container, text, methodName, options, useIcon) {
             var that = this,
                 $link = $("<a>")
-                .attr("href", "#")
+                    .attr("href", "#")
                     .addClass(LINK_CLASS)
                     .addClass(EDIT_LINK_CLASS[methodName]);
 
@@ -1644,6 +1647,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 var e = params.event;
 
                 e.stopPropagation();
+                e.preventDefault();
                 setTimeout(function() {
                     options.row && that[methodName](options.row.rowIndex);
                 });

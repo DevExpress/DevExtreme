@@ -34,8 +34,10 @@ QUnit.module('LinearRangeBar', {
             space: 3,
             text: {
                 indent: 9,
-                format: 'fixedPoint',
-                precision: 1,
+                format: {
+                    type: 'fixedPoint',
+                    precision: 1
+                },
                 font: {
                     family: 'Font'
                 }

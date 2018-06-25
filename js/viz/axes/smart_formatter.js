@@ -1,12 +1,12 @@
 "use strict";
 
-import _format from "../core/format";
 import formatHelper from "../../format_helper";
 import { isDefined, isFunction, isExponential, isObject } from "../../core/utils/type";
 import dateUtils from "../../core/utils/date";
 import { adjust, getPrecision, getExponent } from "../../core/utils/math";
 import { getAdjustedLog10 as log10 } from "../core/utils";
 
+const _format = formatHelper.format;
 const floor = Math.floor;
 const abs = Math.abs;
 const EXPONENTIAL = "exponential";
@@ -133,7 +133,7 @@ function createFormat(type) {
         formatter = type;
         type = null;
     }
-    return { format: { type, formatter } };
+    return { type, formatter };
 }
 
 export function smartFormatter(tick, options) {
@@ -221,10 +221,12 @@ export function smartFormatter(tick, options) {
                 }
             }
 
-            format = {
-                type: typeFormat,
-                precision: precision
-            };
+            if(typeFormat !== undefined || precision !== undefined) {
+                format = {
+                    type: typeFormat,
+                    precision: precision
+                };
+            }
         } else {
             typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
             if(options.showTransition && ticks.length) {
@@ -242,11 +244,11 @@ export function smartFormatter(tick, options) {
                     typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
                 }
             }
-            format = createFormat(typeFormat).format;
+            format = createFormat(typeFormat);
         }
     }
 
-    return _format(tick, { format: format, precision: options.labelOptions.precision });
+    return _format(tick, format);
 }
 
 function getHighDiffFormat(diff) {

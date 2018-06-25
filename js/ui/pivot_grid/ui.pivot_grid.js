@@ -1206,7 +1206,7 @@ var PivotGrid = Widget.inherit({
                             text: text,
                             onItemClick: function() {
                                 dataSource.field(field.index, {
-                                    sortBySummaryField: dataField.caption || dataField.dataField,
+                                    sortBySummaryField: dataField.name || dataField.caption || dataField.dataField,
                                     sortBySummaryPath: e.cell.path,
                                     sortOrder: field.sortOrder === "desc" ? "asc" : "desc"
                                 });
@@ -1580,7 +1580,8 @@ var PivotGrid = Widget.inherit({
             dataSource: that.getDataSource(),
             encodeHtml: that.option("encodeHtml"),
             allowFieldDragging: that.option("fieldPanel.allowFieldDragging"),
-            headerFilter: that.option("headerFilter")
+            headerFilter: that.option("headerFilter"),
+            visible: that.option("visible")
         });
 
         dataArea = that._renderDataArea(dataAreaElement);
@@ -1792,6 +1793,11 @@ var PivotGrid = Widget.inherit({
 
             totalHeight = getArraySum(resultHeights);
 
+            if(!totalWidth || !totalHeight) {
+                d.resolve();
+                return;
+            }
+
             rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
             elementWidth = that.$element().width();
@@ -1808,7 +1814,6 @@ var PivotGrid = Widget.inherit({
             }
 
             commonUtils.deferRender(function() {
-
                 columnsArea.tableElement().append(dataArea.headElement());
 
                 rowFieldsHeader.tableElement().append(rowsArea.headElement());
@@ -1899,7 +1904,6 @@ var PivotGrid = Widget.inherit({
 
                 that._updateLoading();
                 that._renderNoDataText(dataAreaCell);
-
 
                 ///#DEBUG
                 that._testResultWidths = resultWidths;

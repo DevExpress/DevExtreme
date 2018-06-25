@@ -224,15 +224,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return (containerWidth - fixedColumnsWidth) / columnsWithoutFixedWidthCount;
     },
 
-    _calculatePercentWidth: function(options) {
-        var columnFitted = (options.visibleIndex < options.columnsCount - 1) && options.columnsCanFit,
-            partialWidth = options.containerWidth * parseFloat(options.columnWidth) / 100,
-            resultWidth = options.columnsCanFit && (partialWidth < options.bestFitWidth) ? options.bestFitWidth : partialWidth;
-
-        return columnFitted ? this.component.$element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
-    },
-
-    _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
+    _calculateColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
         var columnId = getColumnId(column),
             widthOption = this._columnsController.columnOption(columnId, "width"),
             bestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth"),
@@ -254,13 +246,33 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             }
         } else {
             var columnAutoWidth = this.option("columnAutoWidth");
-
             colWidth = columnAutoWidth || !!column.command ? bestFitWidth : this._getAverageColumnsWidth(containerWidth, contentColumns, columnsCanFit);
         }
 
-        var isTruncated = colWidth < bestFitWidth;
+        return colWidth;
+    },
 
-        return isTruncated ? null : colWidth;
+    _calculatePercentWidth: function(options) {
+        var columnFitted = (options.visibleIndex < options.columnsCount - 1) && options.columnsCanFit,
+            partialWidth = options.containerWidth * parseFloat(options.columnWidth) / 100,
+            resultWidth = options.columnsCanFit && (partialWidth < options.bestFitWidth) ? options.bestFitWidth : partialWidth;
+
+        return columnFitted ? options.containerWidth * parseFloat(options.columnWidth) / 100 : resultWidth;
+    },
+
+    _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
+        var columnId = getColumnId(column),
+            widthOption = this._columnsController.columnOption(columnId, "width"),
+            bestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth"),
+            colWidth;
+
+        if(widthOption && widthOption !== "auto" && !this._isPercentWidth(widthOption)) {
+            return widthOption;
+        }
+
+        colWidth = this._calculateColumnWidth(column, containerWidth, contentColumns, columnsCanFit);
+
+        return colWidth < bestFitWidth ? null : colWidth;
     },
 
     _getItemPercentWidth: function(item) {
@@ -411,12 +423,13 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 percentWidths,
                 $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
-                contentColumns = visibleColumns.filter(function(item) {
-                    return !item.command;
-                }),
+                getVisibleContentColumns = function() {
+                    return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.dataField === item.dataField).length === 0);
+                }.bind(this),
+                visibleContentColumns = getVisibleContentColumns(),
+                contentColumnsCount = visibleContentColumns.length,
                 columnsCanFit,
                 i,
-                contentColumnCount = contentColumns.length,
                 needHideColumn;
 
             do {
@@ -424,11 +437,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 totalWidth = 0;
 
                 percentWidths = that._calculatePercentWidths(resultWidths, visibleColumns);
+
                 columnsCanFit = percentWidths < 100 && percentWidths !== 0;
                 for(i = 0; i < visibleColumns.length; i++) {
                     visibleColumn = visibleColumns[i];
 
-                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, contentColumns, columnsCanFit),
+                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit),
                         columnId = getColumnId(visibleColumn),
                         widthOption = that._columnsController.columnOption(columnId, "width"),
                         columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
@@ -447,19 +461,22 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     }
                 }
                 needHideColumn = needHideColumn || totalWidth > $rootElement.width();
+
                 if(needHideColumn) {
                     var column = hiddenQueue.pop(),
                         visibleIndex = that._columnsController.getVisibleIndex(column.index);
 
+                    rootElementWidth += that._calculateColumnWidth(column, rootElementWidth, visibleContentColumns, columnsCanFit);
+
                     that._addCssClassToColumn(that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
                     resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
-                    contentColumnCount--;
                     this._hiddenColumns.push(column);
+                    visibleContentColumns = getVisibleContentColumns();
                 }
             }
-            while(needHideColumn && contentColumnCount > 1 && hiddenQueue.length);
+            while(needHideColumn && visibleContentColumns.length > 1 && hiddenQueue.length);
 
-            if(contentColumnCount === contentColumns.length) {
+            if(contentColumnsCount === visibleContentColumns.length) {
                 that._hideAdaptiveColumn(resultWidths, visibleColumns);
             }
         } else {

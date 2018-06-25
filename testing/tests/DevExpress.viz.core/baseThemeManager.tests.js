@@ -37,12 +37,14 @@ var environment = {
         this.themeManager.setCallback(this.callback);
         this.Palette = sinon.stub(paletteModule, "Palette");
         this.DiscretePalette = sinon.stub(paletteModule, "DiscretePalette");
+        this.getAccentColor = sinon.stub(paletteModule, "getAccentColor");
     },
 
     afterEach: function() {
         this.themeManager.dispose();
         this.Palette.restore();
         this.DiscretePalette.restore();
+        this.getAccentColor.restore();
     }
 };
 
@@ -263,7 +265,7 @@ QUnit.test('initializeFont', function(assert) {
     assert.ok(theme.testLabel);
     assert.equal(theme.testLabel.font.color, 'white', 'color');
     assert.equal(theme.testLabel.font.size, 12, 'size');
-    assert.equal(theme.testLabel.font.family, "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana", 'Font families');
+    assert.equal(theme.testLabel.font.family, "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif", 'Font families');
     assert.equal(theme.testLabel.font.cursor, 'default');
 });
 
@@ -386,11 +388,11 @@ QUnit.test('initializeFont via font fields', function(assert) {
     // assert
     assert.deepEqual(this.themeManager.theme('testLabel1.font'), {
         size: 12, cursor: 'default', weight: 400, color: 'white',
-        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
     }, 'font 1');
     assert.deepEqual(this.themeManager.theme('testObject2.testLabel2.font'), {
         size: 20, cursor: 'default', weight: 400, color: '#767676',
-        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+        family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
     }, 'font 2');
 });
 
@@ -476,4 +478,14 @@ QUnit.test("Create discrete palette. Palette and default palette", function(asse
     assert.ok(this.DiscretePalette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
     assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13, "some-default-palette"]);
+});
+
+QUnit.test("Get palette's accent color", function(assert) {
+    this.getAccentColor.returns("accent color");
+    this.themeManager.setTheme("custom-default-palette");
+
+    var color = this.themeManager.getAccentColor('paletteName');
+
+    assert.equal(color, "accent color");
+    assert.deepEqual(this.getAccentColor.lastCall.args, ['paletteName', "some-default-palette"]);
 });

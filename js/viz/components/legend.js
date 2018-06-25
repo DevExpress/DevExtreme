@@ -403,8 +403,7 @@ extend(legendPrototype, {
             renderer = that._renderer,
             bBox,
             maxBBoxHeight = 0,
-            // "markerType" is not documented but lived long enough so should be considered deprecated.
-            createMarker = getMarkerCreator(options.markerShape || options.markerType /* DEPRECATED_16_1 */);
+            createMarker = getMarkerCreator(options.markerShape);
 
         that._markersId = {};
 
@@ -415,7 +414,7 @@ extend(legendPrototype, {
                 normalState = stateOfDataItem.normal,
                 normalStateFill = normalState.fill,
                 marker = createMarker(renderer, markerSize)
-                    .attr({ fill: normalStateFill || options.markerColor, opacity: normalState.opacity })
+                    .attr({ fill: normalStateFill || options.markerColor || options.defaultColor, opacity: normalState.opacity })
                     .append(group),
                 label = that._createLabel(dataItem, group),
                 states = {

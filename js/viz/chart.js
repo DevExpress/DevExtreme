@@ -343,18 +343,6 @@ var dxChart = AdvancedChart.inherit({
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         _extend(this._deprecatedOptions, {
-            "argumentAxis.label.overlappingBehavior.rotationAngle": { since: "17.1", message: "Use the 'argumentAxis.label.rotationAngle' option instead" },
-            "argumentAxis.label.overlappingBehavior.staggeringSpacing": { since: "17.1", message: "Use the 'argumentAxis.label.staggeringSpacing' option instead" },
-            "argumentAxis.label.overlappingBehavior.mode": { since: "17.1", message: "Use the 'overlappingBehavior' option directly" },
-
-            "valueAxis.label.overlappingBehavior.rotationAngle": { since: "17.1", message: "Use the 'valueAxis.label.rotationAngle' option instead" },
-            "valueAxis.label.overlappingBehavior.staggeringSpacing": { since: "17.1", message: "Use the 'valueAxis.label.staggeringSpacing' option instead" },
-            "valueAxis.label.overlappingBehavior.mode": { since: "17.1", message: "Use the 'overlappingBehavior' option directly" },
-
-            "commonAxisSettings.label.overlappingBehavior.rotationAngle": { since: "17.1", message: "Use the 'commonAxisSettings.label.rotationAngle' option instead" },
-            "commonAxisSettings.label.overlappingBehavior.staggeringSpacing": { since: "17.1", message: "Use the 'commonAxisSettings.label.staggeringSpacing' option instead" },
-            "commonAxisSettings.label.overlappingBehavior.mode": { since: "17.1", message: "Use the 'overlappingBehavior' option directly" },
-
             "useAggregation": { since: "18.1", message: "Use the 'commonSeriesSettings.aggregation.enabled' or 'series.aggregation.enabled' option instead" }
         });
     },
@@ -469,12 +457,11 @@ var dxChart = AdvancedChart.inherit({
                     priority: valueAxes.length
                 };
             }
-            axis = that._createAxis("valueAxis", axisOptions, {
+            axis = that._createAxis("valueAxis", that._populateAxesOptions("valueAxis", axisOptions, {
                 pane: paneName,
                 name: axisName,
                 crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
-            }, rotated);
-
+            }, rotated));
             valueAxes.push(axis);
         }
 

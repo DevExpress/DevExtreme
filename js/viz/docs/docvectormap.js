@@ -54,13 +54,6 @@ var dxVectorMap = {
         */
         dataSource: undefined,
         /**
-        * @name dxVectorMapOptions.layers.data
-        * @type object|DataSource|DataSourceOptions
-        * @deprecated dxVectorMapOptions.layers.dataSource
-        * @notUsedInTheme
-        */
-        data: undefined,
-        /**
         * @name dxVectorMapOptions.layers.type
         * @type Enums.VectorMapLayerType
         * @notUsedInTheme
@@ -233,10 +226,9 @@ var dxVectorMap = {
             font: {
                 /**
                 * @name dxVectorMapOptions.layers.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+                * @extends CommonVizFontFamily
                 */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+                family: undefined,
                 /**
                 * @name dxVectorMapOptions.layers.label.font.weight
                 * @type number
@@ -264,457 +256,6 @@ var dxVectorMap = {
             }
         }
     }],
-    /**
-    * @name dxVectorMapOptions.mapData
-    * @type Array<string>|string
-    * @default undefined
-    * @deprecated dxVectorMapOptions.layers.dataSource
-    * @notUsedInTheme
-    */
-    mapData: undefined,
-    /**
-    * @name dxVectorMapOptions.areaSettings
-    * @type object
-    * @deprecated dxVectorMapOptions.layers
-    */
-    areaSettings: {
-        /**
-        * @name dxVectorMapOptions.areaSettings.borderWidth
-        * @type number
-        * @default 1
-        * @deprecated dxVectorMapOptions.layers.borderWidth
-        */
-        borderWidth: 1,
-        /**
-        * @name dxVectorMapOptions.areaSettings.borderColor
-        * @type string
-        * @default '#9d9d9d'
-        * @deprecated dxVectorMapOptions.layers.borderColor
-        */
-        borderColor: '#9d9d9d',
-        /**
-        * @name dxVectorMapOptions.areaSettings.color
-        * @type string
-        * @default '#d2d2d2'
-        * @deprecated dxVectorMapOptions.layers.color
-        */
-        color: '#d2d2d2',
-        /**
-        * @name dxVectorMapOptions.areaSettings.hoveredBorderWidth
-        * @type number
-        * @default 1
-        * @deprecated dxVectorMapOptions.layers.hoveredBorderWidth
-        */
-        hoveredBorderWidth: 1,
-        /**
-        * @name dxVectorMapOptions.areaSettings.hoveredBorderColor
-        * @type string
-        * @default '#303030'
-        * @deprecated dxVectorMapOptions.layers.hoveredBorderColor
-        */
-        hoveredBorderColor: '#303030',
-        /**
-        * @name dxVectorMapOptions.areaSettings.hoveredColor
-        * @type string
-        * @default '#d2d2d2'
-        * @deprecated dxVectorMapOptions.layers.hoveredColor
-        */
-        hoveredColor: '#d2d2d2',
-        /**
-        * @name dxVectorMapOptions.areaSettings.selectedBorderWidth
-        * @type number
-        * @default 2
-        * @deprecated dxVectorMapOptions.layers.selectedBorderWidth
-        */
-        selectedBorderWidth: 2,
-        /**
-        * @name dxVectorMapOptions.areaSettings.selectedBorderColor
-        * @type string
-        * @default '#303030'
-        * @deprecated dxVectorMapOptions.layers.selectedBorderColor
-        */
-        selectedBorderColor: '#303030',
-        /**
-        * @name dxVectorMapOptions.areaSettings.selectedColor
-        * @type string
-        * @default '#d2d2d2'
-        * @deprecated dxVectorMapOptions.layers.selectedColor
-        */
-        selectedColor: '#d2d2d2',
-        /**
-        * @name dxVectorMapOptions.areaSettings.hoverEnabled
-        * @type boolean
-        * @default true
-        * @deprecated dxVectorMapOptions.layers.hoverEnabled
-        */
-        hoverEnabled: true,
-        /**
-        * @name dxVectorMapOptions.areaSettings.selectionMode
-        * @type Enums.SelectionMode
-        * @default 'single'
-        * @deprecated dxVectorMapOptions.layers.selectionMode
-        */
-        selectionMode: 'single',
-        /**
-        * @name dxVectorMapOptions.areaSettings.palette
-        * @extends CommonVizPalette
-        * @deprecated dxVectorMapOptions.layers.palette
-        */
-        palette: 'default',
-        /**
-        * @name dxVectorMapOptions.areaSettings.paletteSize
-        * @type number
-        * @default 0
-        * @deprecated dxVectorMapOptions.layers.paletteSize
-        */
-        paletteSize: 0,
-        /**
-        * @name dxVectorMapOptions.areaSettings.colorGroups
-        * @type Array<number>
-        * @default undefined
-        * @deprecated dxVectorMapOptions.layers.colorGroups
-        */
-        colorGroups: undefined,
-        /**
-        * @name dxVectorMapOptions.areaSettings.colorGroupingField
-        * @type string
-        * @default undefined
-        * @deprecated dxVectorMapOptions.layers.colorGroupingField
-        */
-        colorGroupingField: undefined,
-        /**
-        * @name dxVectorMapOptions.areaSettings.label
-        * @type object
-        * @deprecated dxVectorMapOptions.layers.label
-        */
-        label: {
-            /**
-            * @name dxVectorMapOptions.areaSettings.label.enabled
-            * @type boolean
-            * @deprecated dxVectorMapOptions.layers.label.enabled
-            */
-            enabled: false,
-            /**
-            * @name dxVectorMapOptions.areaSettings.label.dataField
-            * @type string
-            * @deprecated dxVectorMapOptions.layers.label.dataField
-            */
-            dataField: undefined,
-            /**
-            * @name dxVectorMapOptions.areaSettings.label.font
-            * @type object
-            * @deprecated dxVectorMapOptions.layers.label.font
-            */
-            font: {
-                /**
-                * @name dxVectorMapOptions.areaSettings.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
-                * @deprecated dxVectorMapOptions.layers.label.font.family
-                */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-                /**
-                * @name dxVectorMapOptions.areaSettings.label.font.weight
-                * @type number
-                * @default 400
-                * @deprecated dxVectorMapOptions.layers.label.font.weight
-                */
-                weight: 400,
-                /**
-                * @name dxVectorMapOptions.areaSettings.label.font.color
-                * @type string
-                * @default '#2b2b2b'
-                * @deprecated dxVectorMapOptions.layers.label.font.color
-                */
-                color: '#2b2b2b',
-                /**
-                * @name dxVectorMapOptions.areaSettings.label.font.size
-                * @type number|string
-                * @default 12
-                * @deprecated dxVectorMapOptions.layers.label.font.size
-                */
-                size: 12,
-                /**
-                * @name dxVectorMapOptions.areaSettings.label.font.opacity
-                * @type number
-                * @default undefined
-                * @deprecated dxVectorMapOptions.layers.label.font.opacity
-                */
-                opacity: undefined
-            }
-        },
-        /**
-        * @name dxVectorMapOptions.areaSettings.customize
-        * @type function(area)
-        * @type_function_param1 area:areaObjects
-        * @type_function_return dxVectorMapOptions.areaSettings
-        * @deprecated dxVectorMapOptions.layers.customize
-        * @notUsedInTheme
-        */
-        customize: function() { }
-    },
-    /**
-    * @name dxVectorMapOptions.markers
-    * @type Array<Object>|string
-    * @default undefined
-    * @deprecated dxVectorMapOptions.layers.dataSource
-    * @notUsedInTheme
-    */
-    /**
-    * @name dxVectorMapOptions.markers.coordinates
-    * @type Array<number>
-    * @default undefined
-    * @deprecated
-    */
-    /**
-    * @name dxVectorMapOptions.markers.attributes
-    * @type object
-    * @default undefined
-    * @deprecated
-    */
-    /**
-    * @name dxVectorMapOptions.markers.text
-    * @type string
-    * @default undefined
-    * @deprecated
-    */
-    /**
-    * @name dxVectorMapOptions.markers.value
-    * @type number
-    * @default undefined
-    * @deprecated
-    */
-    /**
-    * @name dxVectorMapOptions.markers.values
-    * @type Array<number>
-    * @default undefined
-    * @deprecated
-    */
-    /**
-    * @name dxVectorMapOptions.markers.url
-    * @type string
-    * @default undefined
-    * @deprecated
-    */
-    markers: undefined,
-    /**
-    * @name dxVectorMapOptions.markerSettings
-    * @type object
-    * @deprecated dxVectorMapOptions.layers
-    */
-    markerSettings: {
-        /**
-        * @name dxVectorMapOptions.markerSettings.type
-        * @type Enums.VectorMapMarkerType
-        * @default 'dot'
-        * @deprecated dxVectorMapOptions.layers.elementType
-        */
-        type: 'dot',
-        /**
-        * @name dxVectorMapOptions.markerSettings.size
-        * @type number
-        * @default 8
-        * @deprecated dxVectorMapOptions.layers.size
-        */
-        size: 8,
-        /**
-        * @name dxVectorMapOptions.markerSettings.minSize
-        * @type number
-        * @default 20
-        * @deprecated dxVectorMapOptions.layers.minSize
-        */
-        minSize: 20,
-        /**
-        * @name dxVectorMapOptions.markerSettings.maxSize
-        * @type number
-        * @default 50
-        * @deprecated dxVectorMapOptions.layers.maxSize
-        */
-        maxSize: 50,
-        /**
-        * @name dxVectorMapOptions.markerSettings.borderWidth
-        * @type number
-        * @default 2
-        * @deprecated dxVectorMapOptions.layers.borderWidth
-        */
-        borderWidth: 2,
-        /**
-        * @name dxVectorMapOptions.markerSettings.borderColor
-        * @type string
-        * @default '#ffffff'
-        * @deprecated dxVectorMapOptions.layers.borderColor
-        */
-        borderColor: '#ffffff',
-        /**
-        * @name dxVectorMapOptions.markerSettings.color
-        * @type string
-        * @default '#ba4d51'
-        * @deprecated dxVectorMapOptions.layers.color
-        */
-        color: '#ba4d51',
-        /**
-        * @name dxVectorMapOptions.markerSettings.hoveredBorderWidth
-        * @type number
-        * @default 2
-        * @deprecated dxVectorMapOptions.layers.hoveredBorderWidth
-        */
-        hoveredBorderWidth: 2,
-        /**
-        * @name dxVectorMapOptions.markerSettings.hoveredBorderColor
-        * @type string
-        * @default '#ffffff'
-        * @deprecated dxVectorMapOptions.layers.hoveredBorderColor
-        */
-        hoveredBorderColor: '#ffffff',
-        /**
-        * @name dxVectorMapOptions.markerSettings.hoveredColor
-        * @type string
-        * @default '#ba4d51'
-        * @deprecated dxVectorMapOptions.layers.hoveredColor
-        */
-        hoveredColor: '#ba4d51',
-        /**
-        * @name dxVectorMapOptions.markerSettings.selectedBorderWidth
-        * @type number
-        * @default 2
-        * @deprecated dxVectorMapOptions.layers.selectedBorderWidth
-        */
-        selectedBorderWidth: 2,
-        /**
-        * @name dxVectorMapOptions.markerSettings.selectedBorderColor
-        * @type string
-        * @default '#ffffff'
-        * @deprecated dxVectorMapOptions.layers.selectedBorderColor
-        */
-        selectedBorderColor: '#ffffff',
-        /**
-        * @name dxVectorMapOptions.markerSettings.selectedColor
-        * @type string
-        * @default '#ba4d51'
-        * @deprecated dxVectorMapOptions.layers.selectedColor
-        */
-        selectedColor: '#ba4d51',
-        /**
-        * @name dxVectorMapOptions.markerSettings.opacity
-        * @type number
-        * @default 1
-        * @deprecated dxVectorMapOptions.layers.opacity
-        */
-        opacity: 1,
-        /**
-        * @name dxVectorMapOptions.markerSettings.palette
-        * @extends CommonVizPalette
-        * @deprecated dxVectorMapOptions.layers.palette
-        */
-        palette: 'default',
-        /**
-        * @name dxVectorMapOptions.markerSettings.colorGroups
-        * @type Array<number>
-        * @default undefined
-        * @deprecated dxVectorMapOptions.layers.colorGroups
-        */
-        colorGroups: undefined,
-        /**
-        * @name dxVectorMapOptions.markerSettings.colorGroupingField
-        * @type string
-        * @default undefined
-        * @deprecated dxVectorMapOptions.layers.colorGroupingField
-        */
-        colorGroupingField: undefined,
-        /**
-        * @name dxVectorMapOptions.markerSettings.sizeGroups
-        * @type Array<number>
-        * @default undefined
-        * @deprecated dxVectorMapOptions.layers.sizeGroups
-        */
-        sizeGroups: undefined,
-        /**
-        * @name dxVectorMapOptions.markerSettings.sizeGroupingField
-        * @type string
-        * @default undefined
-        * @deprecated dxVectorMapOptions.layers.sizeGroupingField
-        */
-        sizeGroupingField: undefined,
-        /**
-        * @name dxVectorMapOptions.markerSettings.label
-        * @type object
-        * @deprecated dxVectorMapOptions.layers.label
-        */
-        label: {
-            /**
-            * @name dxVectorMapOptions.markerSettings.label.enabled
-            * @type boolean
-            * @default true
-            * @deprecated dxVectorMapOptions.layers.label.enabled
-            */
-            enabled: true,
-            /**
-            * @name dxVectorMapOptions.markerSettings.label.font
-            * @type object
-            * @deprecated dxVectorMapOptions.layers.label.font
-            */
-            font: {
-                /**
-                * @name dxVectorMapOptions.markerSettings.label.font.family
-                * @type string
-                * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
-                * @deprecated dxVectorMapOptions.layers.label.font.family
-                */
-                family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
-                /**
-                * @name dxVectorMapOptions.markerSettings.label.font.weight
-                * @type number
-                * @default 400
-                * @deprecated dxVectorMapOptions.layers.label.font.weight
-                */
-                weight: 400,
-                /**
-                * @name dxVectorMapOptions.markerSettings.label.font.color
-                * @type string
-                * @default '#2b2b2b'
-                * @deprecated dxVectorMapOptions.layers.label.font.color
-                */
-                color: '#2b2b2b',
-                /**
-                * @name dxVectorMapOptions.markerSettings.label.font.size
-                * @type number|string
-                * @default 12
-                * @deprecated dxVectorMapOptions.layers.label.font.size
-                */
-                size: 12,
-                /**
-                * @name dxVectorMapOptions.markerSettings.label.font.opacity
-                * @type number
-                * @default undefined
-                * @deprecated dxVectorMapOptions.layers.label.font.opacity
-                */
-                opacity: undefined
-            }
-        },
-        /**
-        * @name dxVectorMapOptions.markerSettings.hoverEnabled
-        * @type boolean
-        * @default true
-        * @deprecated dxVectorMapOptions.layers.hoverEnabled
-        */
-        hoverEnabled: true,
-        /**
-        * @name dxVectorMapOptions.markerSettings.selectionMode
-        * @type Enums.SelectionMode
-        * @default 'single'
-        * @deprecated dxVectorMapOptions.layers.selectionMode
-        */
-        selectionMode: 'single',
-        /**
-        * @name dxVectorMapOptions.markerSettings.customize
-        * @type function(marker)
-        * @type_function_param1 marker:markerObjects
-        * @type_function_return dxVectorMapOptions.markerSettings
-        * @deprecated dxVectorMapOptions.layers.customize
-        * @notUsedInTheme
-        */
-        customize: function() { }
-    },
     /**
     * @name dxVectorMapOptions.controlBar
     * @type object
@@ -771,7 +312,7 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.tooltip.customizeTooltip
         * @type function(info)
-        * @type_function_param1 info:areaObjects|markerObjects
+        * @type_function_param1 info:MapLayerElement
         * @type_function_return object
         * @default undefined
         * @notUsedInTheme
@@ -782,13 +323,7 @@ var dxVectorMap = {
         * @hidden
         * @inheritdoc
         */
-        format: undefined,
-        /**
-        * @name dxVectorMapOptions.tooltip.precision
-        * @hidden
-        * @inheritdoc
-        */
-        precision: undefined
+        format: undefined
     },
     /**
     * @name dxVectorMapOptions.onTooltipShown
@@ -904,8 +439,7 @@ var dxVectorMap = {
             color: '#2b2b2b',
             /**
             * @name dxVectorMapOptions.legends.font.family
-            * @type string
-            * @default undefined
+            * @extends CommonVizFontFamily
             */
             family: undefined,
             /**
@@ -973,9 +507,9 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.markerColor
         * @type string
-        * @default "#ba4d51"
+        * @default undefined
         */
-        markerColor: "#ba4d51",
+        markerColor: undefined,
         /**
         * @name dxVectorMapOptions.legends.markerShape
         * @type Enums.VectorMapMarkerShape
@@ -1169,54 +703,6 @@ var dxVectorMap = {
     */
     onSelectionChanged: function() { },
     /**
-    * @name dxVectorMapOptions.onAreaClick
-    * @extends Action
-    * @type function|string
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 target:areaObjects
-    * @notUsedInTheme
-    * @deprecated dxVectorMapOptions.onClick
-    * @action
-    */
-    onAreaClick: function() { },
-    /**
-    * @name dxVectorMapOptions.onAreaSelectionChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 target:areaObjects
-    * @notUsedInTheme
-    * @deprecated dxVectorMapOptions.onSelectionChanged
-    * @action
-    */
-    onAreaSelectionChanged: function() { },
-    /**
-    * @name dxVectorMapOptions.onMarkerClick
-    * @extends Action
-    * @type function|string
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 target:markerObjects
-    * @notUsedInTheme
-    * @deprecated dxVectorMapOptions.onClick
-    * @action
-    */
-    onMarkerClick: function() { },
-    /**
-    * @name dxVectorMapOptions.onMarkerSelectionChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 target:markerObjects
-    * @notUsedInTheme
-    * @deprecated dxVectorMapOptions.onSelectionChanged
-    * @action
-    */
-    onMarkerSelectionChanged: function() { },
-    /**
     * @name dxVectorMapMethods.getLayers
     * @publicName getLayers()
     * @return Array<MapLayer>
@@ -1236,32 +722,6 @@ var dxVectorMap = {
     * @param1 name:string
     */
     getLayerByName: function() { },
-    /**
-    * @name dxVectorMapMethods.getAreas
-    * @publicName getAreas()
-    * @return Array<areaObjects>
-    * @deprecated dxVectorMapMethods.getLayers
-    */
-    getAreas: function() { },
-    /**
-    * @name dxVectorMapMethods.getMarkers
-    * @publicName getMarkers()
-    * @return Array<markerObjects>
-    * @deprecated dxVectorMapMethods.getLayers
-    */
-    getMarkers: function() { },
-    /**
-    * @name dxVectorMapMethods.clearAreaSelection
-    * @publicName clearAreaSelection()
-    * @deprecated dxVectorMapMethods.clearSelection
-    */
-    clearAreaSelection: function() { },
-    /**
-    * @name dxVectorMapMethods.clearMarkerSelection
-    * @publicName clearMarkerSelection()
-    * @deprecated dxVectorMapMethods.clearSelection
-    */
-    clearMarkerSelection: function() { },
     /**
     * @name dxVectorMapMethods.clearSelection
     * @publicName clearSelection()

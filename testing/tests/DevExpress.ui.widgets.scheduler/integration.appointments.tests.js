@@ -478,6 +478,26 @@ QUnit.test("Appointments on Day view should have a right height and position if 
     assert.equal($appointment.outerHeight(), cellHeight, "Appointment has a right height");
 });
 
+QUnit.test("Appointments on Day view should have a right position if widget is small", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            startDate: new Date(2016, 9, 6, 1),
+            endDate: new Date(2016, 9, 6, 3),
+            text: "new Date sample"
+        }],
+        currentDate: new Date(2016, 9, 6),
+        views: ["week"],
+        width: 350,
+        currentView: "week",
+        cellDuration: 60
+    });
+    var $element = this.instance.$element(),
+        $appointment = $element.find("." + APPOINTMENT_CLASS),
+        cellWidth = $element.find("." + DATE_TABLE_CELL_CLASS).first().outerWidth();
+
+    assert.roughEqual($appointment.position().left, cellWidth * 4 + 50, 2, "Appointment has a right left position");
+});
+
 QUnit.test("Appointment with resources should have a right height and position if it ends on the next day", function(assert) {
     this.createInstance({
         dataSource: [{
@@ -3595,26 +3615,24 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
 
     this.instance.showAppointmentPopup(firstAppointment);
 
-    var $popup = $(".dx-scheduler-appointment-popup"),
-        switchEditor = $popup.find(".dx-recurrence-switch").dxSwitch("instance"),
-        switchEndEditor = $popup.find(".dx-recurrence-switch-repeat-end").dxSwitch("instance");
+    var form = this.instance.getAppointmentDetailsForm(),
+        repeatOnEditor = form.getEditor("repeatOnOff"),
+        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
+    repeatOnEditor.option("value", true);
 
-    switchEditor.option("value", true);
-
-    switchEndEditor.option("value", true);
-    $popup.find(".dx-popup-done").trigger("dxclick");
-
+    repeatEndEditor.option("value", true);
+    $(".dx-scheduler-appointment-popup").find(".dx-popup-done").trigger("dxclick");
 
     this.instance.showAppointmentPopup(secondAppointment);
 
-    $popup = $(".dx-scheduler-appointment-popup");
-    switchEditor = $popup.find(".dx-recurrence-switch").dxSwitch("instance");
-    switchEndEditor = $popup.find(".dx-recurrence-switch-repeat-end").dxSwitch("instance");
+    form = this.instance.getAppointmentDetailsForm(),
+    repeatOnEditor = form.getEditor("repeatOnOff"),
+    repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
-    switchEditor.option("value", true);
+    repeatOnEditor.option("value", true);
 
-    assert.notOk(switchEndEditor.option("value"), "Switch is closed");
+    assert.notOk(repeatEndEditor.option("value"), "Switch is closed");
 });
 
 QUnit.test("Rival appointments should have correct positions on month view, rtl mode", function(assert) {
@@ -4895,6 +4913,49 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
     assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, "Task has a right width");
 });
 
+QUnit.test("DropDown appointment button should have correct width on timeline view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: [{ type: "timelineDay", name: "timelineDay", forceMaxAppointmentPerCell: true }],
+        width: 850,
+        maxAppointmentsPerCell: 2,
+        currentView: "timelineDay"
+    });
+
+    this.instance.option("dataSource", [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) }
+    ]);
+
+    var cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth(),
+        $dropDownButton = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.roughEqual($dropDownButton.outerWidth(), cellWidth - 4, 1.5, "DropDown button has correct width");
+});
+
+QUnit.test("dropDown appointment should not compact class on vertical view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: [{ type: "week", name: "week", forceMaxAppointmentPerCell: true }],
+        currentView: "week",
+        maxAppointmentsPerCell: 'auto'
+    });
+
+    this.instance.option("dataSource", [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
+    ]);
+
+    var $dropDown = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.ok($dropDown.hasClass("dx-scheduler-dropdown-appointments-compact"), "class is ok");
+});
+
 QUnit.test("Appointment should have right width in workspace with timezone", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
     try {
@@ -5632,7 +5693,7 @@ QUnit.test("Rival appointments from one group should be rendered correctly in ve
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        maxAppointmentsPerCell: null
     });
 
     var defaultWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), "_getAppointmentMaxWidth").returns(50);

@@ -26,7 +26,8 @@ var context,
     knownThemes,
     currentThemeName,
     pendingThemeName,
-    isMaterialTheme;
+    isMaterialTheme,
+    isAndroid5Theme;
 
 var timerId;
 
@@ -180,6 +181,7 @@ function init(options) {
 
     currentThemeName = undefined;
     isMaterialTheme = undefined;
+    isAndroid5Theme = undefined;
     current(options);
 }
 
@@ -239,6 +241,8 @@ function current(options) {
     }
 
     isMaterialTheme = /material/.test(currentThemeName || readThemeMarker());
+
+    isAndroid5Theme = /android5/.test(currentThemeName || readThemeMarker());
 
     checkThemeDeprecation();
 
@@ -319,6 +323,10 @@ function themeReady(callback) {
 
 function isMaterial() {
     return isMaterialTheme;
+}
+
+function isAndroid5() {
+    return isAndroid5Theme;
 }
 
 function checkThemeDeprecation() {
@@ -405,11 +413,13 @@ exports.detachCssClasses = detachCssClasses;
 exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
+exports.isAndroid5 = isAndroid5;
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
     currentThemeName = null;
     pendingThemeName = null;
     isMaterialTheme = false;
+    isAndroid5Theme = false;
 };
 

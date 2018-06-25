@@ -75,7 +75,7 @@ var environment = {
             endOnTick: undefined,
             crosshairMargin: 0,
             label: {
-                visible: false, indentFromAxis: 10, overlappingBehavior: { mode: "hide" }
+                visible: false, indentFromAxis: 10, overlappingBehavior: "hide"
             },
             isHorizontal: options.isHorizontal !== undefined ? options.isHorizontal : true,
             grid: {},
@@ -316,27 +316,6 @@ QUnit.test("forceTickInterval true. User's tickIntervsal 1, calculated tickInter
         allowDecimals: true,
         forceUserTickInterval: true,
         tickInterval: 1
-    });
-
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(300));
-
-    assert.deepEqual(this.axis._tickInterval, 1);
-});
-
-QUnit.test("DEPRECATED. overlappingBehavior = ignore. User's tickIntervsal 1, calculated tickInterval 2 - return user tickInterval", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true,
-        forceUserTickInterval: false,
-        tickInterval: 1,
-        label: {
-            overlappingBehavior: { mode: "ignore" }
-        }
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
@@ -741,47 +720,6 @@ QUnit.test("Custom one tick", function(assert) {
 
     assert.deepEqual(this.axis._majorTicks.map(value), [5]);
     assert.deepEqual(this.axis._tickInterval, undefined);
-});
-
-QUnit.test("customTicks with showCalculatedTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true,
-        customTicks: [0.1, 0.2, 2.5],
-        tick: {
-            showCalculatedTicks: true
-        }
-    });
-
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(200));
-
-    assert.deepEqual(this.axis._majorTicks.map(value), [0.1, 0.2, 2.5, 0, 5, 10, 15, 20]);
-    assert.deepEqual(this.axis._tickInterval, 5);
-});
-
-QUnit.test("showCalculatedTicks w/o customTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true,
-        tick: {
-            showCalculatedTicks: true
-        }
-    });
-
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(200));
-
-    assert.deepEqual(this.axis._majorTicks.map(value), [0, 5, 10, 15, 20]);
-    assert.deepEqual(this.axis._tickInterval, 5);
 });
 
 QUnit.test("Custom axisDivisionFactor", function(assert) {
@@ -1598,51 +1536,6 @@ QUnit.test("tickInterval with custom ticks", function(assert) {
     this.axis.createTicks(canvas(200));
 
     assert.strictEqual(this.axis._tickInterval, 0.1);
-});
-
-QUnit.test("Custom minorTicks with minorTick showCalculatedTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true,
-        customMinorTicks: [0.1, 0.2, 2.5],
-        minorTick: {
-            visible: true,
-            showCalculatedTicks: true
-        },
-        endOnTick: false
-    });
-
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 12, addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(100));
-
-    assert.deepEqual(this.axis._minorTicks.map(value), [0.1, 0.2, 2.5, 2, 4, 6, 8, 12]);
-    assert.deepEqual(this.axis._minorTickInterval, 2);
-});
-
-QUnit.test("showMinorCalculatedTicks w/o Custom minorTicks", function(assert) { // DEPRECATED IN 15_2
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true,
-        minorTick: {
-            visible: true,
-            showCalculatedTicks: true
-        },
-        endOnTick: false
-    });
-
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 12, addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(100));
-
-    assert.deepEqual(this.axis._minorTicks.map(value), [2, 4, 6, 8, 12]);
-    assert.deepEqual(this.axis._minorTickInterval, 2);
 });
 
 QUnit.test("Minor ticks when there is only one major tick on min (big tickInterval)", function(assert) {

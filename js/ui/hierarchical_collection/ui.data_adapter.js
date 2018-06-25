@@ -7,6 +7,7 @@ var Class = require("../../core/class"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),
+    getOperationBySearchMode = require("../../ui/widget/ui.search_box_mixin").getOperationBySearchMode,
     inArray = require("../../core/utils/array").inArray,
     query = require("../../data/query"),
     storeHelper = require("../../data/store_helper"),
@@ -448,7 +449,8 @@ var DataAdapter = Class.inherit({
 
     _filterDataStructure: function(filterValue, dataStructure) {
         var selector = this.options.searchExpr || this.options.dataAccessors.getters.display,
-            criteria = this._createCriteria(selector, filterValue, this.options.searchMode);
+            operation = getOperationBySearchMode(this.options.searchMode),
+            criteria = this._createCriteria(selector, filterValue, operation);
 
         dataStructure = dataStructure || this._initialDataStructure;
 

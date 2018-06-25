@@ -220,7 +220,7 @@ module.exports = (function() {
         },
 
         formatValue: function(value, options) {
-            var valueText = formatHelper.format(value, options.format, options.precision) || (value && value.toString()) || "",
+            var valueText = formatHelper.format(value, options.format) || (value && value.toString()) || "",
                 formatObject = {
                     value: value,
                     valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
@@ -234,7 +234,6 @@ module.exports = (function() {
         getFormatOptionsByColumn: function(column, target) {
             return {
                 format: column.format,
-                precision: column.precision,
                 getDisplayFormat: column.getDisplayFormat,
                 customizeText: column.customizeText,
                 target: target,
@@ -271,7 +270,6 @@ module.exports = (function() {
 
             return this.formatValue(summaryItem.value, {
                 format: summaryItem.valueFormat,
-                precision: summaryItem.precision,
                 getDisplayFormat: function(valueText) {
                     return displayFormat ? stringUtils.format(displayFormat, valueText, summaryItem.columnCaption) : valueText;
                 },
@@ -410,8 +408,8 @@ module.exports = (function() {
             var result = target ? Object.create(Object.getPrototypeOf(target)) : {},
                 targetWithoutPrototype = extendFromObject({}, target);
 
-            objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, false, true);
-            return objectUtils.deepExtendArraySafe(result, changes, false, true);
+            objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+            return objectUtils.deepExtendArraySafe(result, changes, true, true);
         },
 
         getExpandCellTemplate: function() {

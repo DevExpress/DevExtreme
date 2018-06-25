@@ -52,12 +52,6 @@ var CommonIndicator = {
         */
         format: undefined,
         /**
-        * @name CommonIndicator.text.precision
-        * @extends CommonVizPrecision
-        * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-        */
-        precision: undefined,
-        /**
         * @name CommonIndicator.text.customizeText
         * @type function(indicatedValue)
         * @type_function_param1 indicatedValue:object
@@ -91,11 +85,10 @@ var CommonIndicator = {
             size: 14,
             /**
             * @name CommonIndicator.text.font.family
-            * @type string
-            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
+            * @extends CommonVizFontFamily
             * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
             */
-            family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+            family: undefined,
             /**
             * @name CommonIndicator.text.font.weight
             * @type number

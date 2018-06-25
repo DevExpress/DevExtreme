@@ -301,6 +301,13 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @hidden
+                * @name dxSchedulerOptions.views.forceMaxAppointmentPerCell
+                * @type boolean
+                * @default false
+                */
+
+                /**
                 * @name dxSchedulerOptions.currentView
                 * @type Enums.SchedulerViewType
                 * @default "day"
@@ -1700,6 +1707,8 @@ var Scheduler = Widget.inherit({
         this._appointments.option("itemTemplate", this._getAppointmentTemplate("appointmentTemplate"));
 
         this._loadResources().done((function(resources) {
+            this._readyToRenderAppointments = windowUtils.hasWindow();
+
             this._renderWorkSpace(resources);
 
             var $fixedContainer = this._workSpace.getFixedContainer(),
@@ -1709,7 +1718,7 @@ var Scheduler = Widget.inherit({
                 fixedContainer: $fixedContainer,
                 allDayContainer: $allDayContainer
             });
-            this._readyToRenderAppointments = windowUtils.hasWindow();
+
             this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
             this._filterAppointmentsByDate();
             this._reloadDataSource();
@@ -1717,9 +1726,9 @@ var Scheduler = Widget.inherit({
     },
 
     _render: function() {
-        this.callBase();
-
         this._toggleSmallClass();
+
+        this.callBase();
     },
 
     _renderHeader: function() {
@@ -1814,6 +1823,7 @@ var Scheduler = Widget.inherit({
     },
 
     _renderWorkSpace: function(groups) {
+        this._readyToRenderAppointments && this._toggleSmallClass();
         var $workSpace = $("<div>").appendTo(this.$element());
 
         var countConfig = this._getViewCountConfig();
@@ -1994,6 +2004,10 @@ var Scheduler = Widget.inherit({
 
     getMaxAppointmentsPerCell: function() {
         return this._getCurrentViewOption("maxAppointmentsPerCell");
+    },
+
+    forceMaxAppointmentPerCell: function() {
+        return this._getCurrentViewOption("forceMaxAppointmentPerCell");
     },
 
     _createPopup: function(appointmentData, processTimeZone) {

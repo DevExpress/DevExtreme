@@ -6,70 +6,13 @@ var _Number = Number,
     translator1DModule = require("../translators/translator1d"),
     _extend = extend,
     BaseWidget = require("../core/base_widget"),
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    Tracker = require("./tracker"),
-    _isString = require("../../core/utils/type").isString;
+    Tracker = require("./tracker");
 
 var dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: "dxg",
 
     _createThemeManager: function() {
         return new this._factory.ThemeManager();
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        _extend(this._deprecatedOptions, {
-            subtitle: {
-                since: '15.2',
-                message: "Use the 'title.subtitle' option instead"
-            },
-            "title.position": {
-                since: "15.2",
-                message: "Use the 'verticalAlignment' and 'horizontalAlignment' options instead"
-            },
-            "scale.hideFirstTick": {
-                since: "15.2",
-                message: "The functionality is not more available"
-            },
-            "scale.hideLastTick": {
-                since: "15.2",
-                message: "The functionality is not more available"
-            },
-            "scale.hideFirstLabel": {
-                since: "15.2",
-                message: "The functionality is not more available"
-            },
-            "scale.hideLastLabel": {
-                since: "15.2",
-                message: "The functionality is not more available"
-            },
-            "scale.majorTick": {
-                since: "15.2",
-                message: "Use the 'tick' option instead"
-            },
-            "scale.minorTick.showCalculatedTicks": {
-                since: "15.2",
-                message: "The functionality is not more available"
-            },
-            "scale.minorTick.customTickValues": {
-                since: "15.2",
-                message: "Use the 'customMinorTicks' option instead"
-            },
-            "scale.minorTick.tickInterval": {
-                since: "15.2",
-                message: "Use the 'minorTickInterval' option instead"
-            },
-            "scale.label.overlappingBehavior.useAutoArrangement": {
-                since: "17.1",
-                message: "Use the 'scale.label.overlappingBehavior' option instead"
-            },
-            "scale.label.overlappingBehavior.hideFirstOrLast": {
-                since: "17.1",
-                message: "Use the 'scale.label.hideFirstOrLast' option instead"
-            }
-        });
     },
 
     _initCore: function() {
@@ -274,12 +217,12 @@ var dxBaseGauge = BaseWidget.inherit({
 
 exports.dxBaseGauge = dxBaseGauge;
 
-var _format = require("../core/format");
+var _format = require("../../format_helper").format;
 
 //  TODO: find a better place for it
 var formatValue = function(value, options, extra) {
     options = options || {};
-    var text = _format(value, options),
+    var text = _format(value, options.format),
         formatObject;
     if(typeof options.customizeText === "function") {
         formatObject = _extend({ value: value, valueText: text }, extra);
@@ -332,27 +275,4 @@ var _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;
 dxBaseGauge.prototype._setTooltipOptions = function() {
     _setTooltipOptions.apply(this, arguments);
     this._tracker && this._tracker.setTooltipState(this._tooltip.isEnabled());
-};
-
-// DEPRECATED_15_2
-function processTitleOptions(options) {
-    return _isString(options) ? { text: options } : (options || {});
-}
-dxBaseGauge.prototype._getTitleOptions = function() {
-    var that = this,
-        titleOptions = processTitleOptions(that.option("title")),
-        options,
-        position;
-
-    that._suppressDeprecatedWarnings();
-    titleOptions.subtitle = extend(processTitleOptions(titleOptions.subtitle), processTitleOptions(that.option("subtitle")));
-    that._resumeDeprecatedWarnings();
-    options = _extend(true, {}, that._themeManager.theme("title"), titleOptions);
-    if(options.position) {
-        position = _normalizeEnum(options.position).split('-');
-        options.verticalAlignment = position[0];
-        options.horizontalAlignment = position[1];
-    }
-
-    return options;
 };

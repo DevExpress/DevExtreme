@@ -1831,6 +1831,19 @@ QUnit.test('Common color', function(assert) {
     });
 });
 
+QUnit.test('No state color, no marker color - use default color', function(assert) {
+    $.each(this.data, function(_, item) {
+        item.states.normal.fill = null;
+    });
+    this.options.defaultColor = 'default-color';
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+    $.each(this.data, function(i) {
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: undefined }], String(i));
+    });
+});
+
 QUnit.test('Sizes', function(assert) {
     this.options.markerSize = 8;
     this.createAndDrawLegend();

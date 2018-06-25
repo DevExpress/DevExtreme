@@ -342,12 +342,6 @@ gridCore.registerModule("summary", {
                  * @default undefined
                  */
                 /**
-                 * @name dxDataGridOptions.summary.groupItems.precision
-                 * @type number
-                 * @default undefined
-                 * @deprecated
-                 */
-                /**
                  * @name dxDataGridOptions.summary.groupItems.displayFormat
                  * @type string
                  * @default undefined
@@ -409,12 +403,6 @@ gridCore.registerModule("summary", {
                  * @name dxDataGridOptions.summary.totalItems.valueFormat
                  * @type format
                  * @default undefined
-                 */
-                /**
-                 * @name dxDataGridOptions.summary.totalItems.precision
-                 * @type number
-                 * @default undefined
-                 * @deprecated
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.displayFormat
@@ -655,9 +643,15 @@ gridCore.registerModule("summary", {
 
                                 aggregate = aggregates[summaryIndex];
                                 if(aggregate === aggregate) {
+                                    var valueFormat;
+                                    if(typeUtils.isDefined(summaryItem.valueFormat)) {
+                                        valueFormat = summaryItem.valueFormat;
+                                    } else if(summaryItem.summaryType !== "count") {
+                                        valueFormat = gridCore.getFormatByDataType(column && column.dataType);
+                                    }
                                     summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
                                         value: typeUtils.isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
-                                        valueFormat: !typeUtils.isDefined(summaryItem.valueFormat) ? gridCore.getFormatByDataType(column && column.dataType) : summaryItem.valueFormat,
+                                        valueFormat: valueFormat,
                                         columnCaption: (column && column.index !== columnIndex) ? column.caption : undefined
                                     }));
                                 }

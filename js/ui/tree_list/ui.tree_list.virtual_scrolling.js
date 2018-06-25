@@ -6,7 +6,8 @@ var gridCore = require("./ui.tree_list.core"),
     extend = require("../../core/utils/extend").extend;
 
 var oldDefaultOptions = virtualScrollingModule.defaultOptions,
-    originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data;
+    originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data,
+    originalDataSourceAdapterExtender = virtualScrollingModule.extenders.dataSourceAdapter;
 
 virtualScrollingModule.extenders.controllers.data = extend({}, originalDataControllerExtender, {
     _loadOnOptionChange: function() {
@@ -14,6 +15,16 @@ virtualScrollingModule.extenders.controllers.data = extend({}, originalDataContr
 
         virtualScrollController && virtualScrollController.reset();
         this.callBase();
+    }
+});
+
+virtualScrollingModule.extenders.dataSourceAdapter = extend({}, originalDataSourceAdapterExtender, {
+    changeRowExpand: function() {
+        return this.callBase.apply(this, arguments).done(() => {
+            var viewportItemIndex = this.getViewportItemIndex();
+
+            viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex);
+        });
     }
 });
 

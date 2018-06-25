@@ -14,7 +14,13 @@ var nativeDOMAdapterStrategy = {
         var matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
             element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
             function(selector) {
-                var items = this.querySelectorAll(element.document || element.ownerDocument, selector);
+                var doc = element.document || element.ownerDocument;
+
+                if(!doc) {
+                    return false;
+                }
+
+                var items = this.querySelectorAll(doc, selector);
 
                 for(var i = 0; i < items.length; i++) {
                     if(items[i] === element) {
@@ -160,12 +166,12 @@ var nativeDOMAdapterStrategy = {
         return property in this._document;
     },
 
-    listen: function(element, event, callback, options) {
+    listen: function(element, event, callback, useCapture) {
         if(!element || !("addEventListener" in element)) {
             return noop;
         }
 
-        element.addEventListener(event, callback, options);
+        element.addEventListener(event, callback, useCapture);
 
         return function() {
             element.removeEventListener(event, callback);

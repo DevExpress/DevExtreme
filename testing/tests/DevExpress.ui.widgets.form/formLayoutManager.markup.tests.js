@@ -1601,14 +1601,14 @@ QUnit.module("Layout manager", () => {
                 dataField: "name",
                 editorType: "dxTextBox"
             }, {
-                visibleIndex: 1,
+                visibleIndex: 0,
                 dataField: "age",
                 editorType: "dxTextBox"
             }, {
                 dataField: "gender",
                 editorType: "dxTextBox"
             }, {
-                visibleIndex: 2,
+                visibleIndex: 1,
                 dataField: "hasAuto",
                 editorType: "dxTextBox"
             }]
@@ -2036,8 +2036,27 @@ QUnit.module("Layout manager", () => {
         // assert
         assert.equal($testContainer.find("." + internals.FIELD_EMPTY_ITEM_CLASS).length, 1);
     });
-});
 
+    QUnit.test("Templates of form's items render with deferring_T638831", function(assert) {
+        // arrange, act
+        var spy;
+
+        $("#container").dxLayoutManager({
+            onInitialized: function(e) {
+                spy = sinon.spy(e.component, "_renderTemplates");
+            },
+            items: [{
+                dataField: "StartDate",
+                editorType: "dxDateBox"
+            }]
+        });
+
+        // assert
+        var templatesInfo = spy.args[0][0];
+        assert.ok(templatesInfo[0].container.hasClass("dx-field-item"), "template container of field item");
+        assert.equal(templatesInfo[0].formItem.dataField, "StartDate", "correct a form item for template");
+    });
+});
 
 QUnit.module("Render multiple columns", () => {
     test("Render layoutManager with 2 columns", (assert) => {
@@ -2714,7 +2733,6 @@ QUnit.module("Render multiple columns", () => {
     });
 });
 
-
 QUnit.module("Templates", () => {
     test("Render template", (assert) => {
         // arrange
@@ -2789,7 +2807,6 @@ QUnit.module("Templates", () => {
         assert.equal(layoutManager.option("layoutData.test"), "qwerty", "Correct data");
     });
 });
-
 
 QUnit.module("Public methods", () => {
     test("UpdateData, simple case", (assert) => {
@@ -2866,7 +2883,6 @@ QUnit.module("Public methods", () => {
     });
 });
 
-
 QUnit.module("Accessibility", () => {
     test("Check required state", (assert) => {
         // arrange
@@ -2907,7 +2923,6 @@ QUnit.module("Accessibility", () => {
         assert.equal(itemDescribedBy, helpTextID, "Help text id and input's describedby attributes are equal");
     });
 });
-
 
 QUnit.module("Layout manager responsibility", {
     beforeEach: () => {
@@ -2956,7 +2971,6 @@ QUnit.module("Layout manager responsibility", {
         assert.ok($testContainer.hasClass(internals.LAYOUT_MANAGER_ONE_COLUMN), "Layout manager has one column mode");
     });
 });
-
 
 QUnit.module("Button item", () => {
     test("Base rendering", (assert) => {

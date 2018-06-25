@@ -252,7 +252,9 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     options.userData = that._dataSource._userData;
                 }
                 var store = that._dataSource && that._dataSource.store();
-                return store ? store.load(options) : new Deferred().resolve([]);
+                return store ? store.load(options).done(function(items) {
+                    that._dataSource._applyMapFunction(items);
+                }) : new Deferred().resolve([]);
             },
             dataFields: function() {
                 return that._dataSource && that._dataSource.select();

@@ -681,6 +681,16 @@ module.exports = {
 
                         return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
                     },
+                    reload: function() {
+                        var that = this,
+                            result = this.callBase.apply(this, arguments);
+                        return result && result.done(function() {
+                            var rowsScrollController = that._rowsScrollController;
+                            if(rowsScrollController) {
+                                rowsScrollController.setViewportItemIndex(rowsScrollController.getViewportItemIndex());
+                            }
+                        });
+                    },
                     initVirtualRows: function() {
                         var that = this,
                             virtualRowsRendering = isVirtualRowRendering(that);
@@ -715,14 +725,16 @@ module.exports = {
                                 return that.isLoading();
                             },
                             pageCount: function() {
-                                return Math.ceil(this.totalItemsCount() / this.pageSize());
+                                var pageCount = Math.ceil(this.totalItemsCount() / this.pageSize());
+                                return pageCount ? pageCount : 1;
                             },
                             load: function() {
                                 if(that._rowsScrollController.pageIndex() >= this.pageCount()) {
-                                    that._rowsScrollController.pageIndex(this.pageCount() - 1);
+                                    that._rowPageIndex = this.pageCount() - 1;
+                                    that._rowsScrollController.pageIndex(that._rowPageIndex);
                                 }
 
-                                if(!that._rowsScrollController._dataSource.items().length) return;
+                                if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
                                 that._rowsScrollController.handleDataChanged(function(change) {
                                     change = change || {};
                                     change.changeType = change.changeType || "refresh";

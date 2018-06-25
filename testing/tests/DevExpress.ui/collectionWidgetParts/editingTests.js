@@ -840,6 +840,31 @@ var runTests = function() {
         instance.selectItem(0);
     });
 
+    QUnit.test("added and removed selection should be correct, if items are mapped", function(assert) {
+        var items = [{ id: 1, name: "alex" }, { id: 2, name: "john" }, { id: 3, name: "bob" }, { id: 4, name: "amanda" }];
+
+        var ds = new DataSource({
+            store: items,
+            pageSize: 2,
+            paginate: true
+        });
+
+        var $element = $("#cmp"),
+            instance = new TestComponent($element, {
+                dataSource: ds,
+                selectedItems: items.slice(),
+                selectionMode: "multiple"
+            });
+
+        ds._mapFunc = function(item) {
+            return $.extend(item, { map: item.id + item.name });
+        };
+
+        instance.unselectItem(0);
+        instance.selectItem(0);
+        assert.equal(instance.option("selectedItems")[0].map, "1alex", "selectedItems is correct");
+    });
+
     QUnit.test("dynamically loaded items should be selected", function(assert) {
         var items = [1, 2, 3, 4];
         var ds = new DataSource({

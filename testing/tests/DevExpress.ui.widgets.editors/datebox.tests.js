@@ -9,6 +9,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
+    themes = require("ui/themes"),
     DateBox = require("ui/date_box"),
     Calendar = require("ui/calendar"),
     Box = require("ui/box"),
@@ -27,10 +28,16 @@ require("ui/validator");
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="parent-div"></div>\
+        '<style>\
+            #containerWithWidth {\
+                width: 100px;\
+            }\
+        </style>\
+        <div id="parent-div"></div>\
         <div id="dateBox"></div>\
         <div id="dateBoxWithPicker"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="containerWithWidth"><div id="innerDateBox"></div></div';
 
     $("#qunit-fixture").html(markup);
 });
@@ -389,6 +396,45 @@ QUnit.test("T437211: Custom dxDateBox value formatter is not called if the same 
     $input.change();
 
     assert.equal(instance.option("text"), expectedDisplayValue, "input value was formatted");
+});
+
+QUnit.test("onPopupInitialized handler calls with the calendar picker type", function(assert) {
+    assert.expect(1);
+
+    $("#dateBoxWithPicker").dxDateBox({
+        pickerType: "calendar",
+        onPopupInitialized: function(e) {
+            assert.equal(e.popup.NAME, "dxPopup", "initialized event is fired for popup");
+        },
+        opened: true
+    });
+
+});
+
+QUnit.test("onPopupInitialized handler calls with the rollers picker type", function(assert) {
+    assert.expect(1);
+
+    $("#dateBoxWithPicker").dxDateBox({
+        pickerType: "rollers",
+        onPopupInitialized: function(e) {
+            assert.equal(e.popup.NAME, "dxPopup", "initialized event is fired for popup");
+        },
+        opened: true
+    });
+
+});
+
+QUnit.test("onPopupInitialized handler calls with the list picker type", function(assert) {
+    assert.expect(1);
+
+    $("#dateBoxWithPicker").dxDateBox({
+        pickerType: "list",
+        onPopupInitialized: function(e) {
+            assert.equal(e.popup.NAME, "dxPopup", "initialized event is fired for popup");
+        },
+        opened: true
+    });
+
 });
 
 
@@ -1194,6 +1240,14 @@ QUnit.test("default", function(assert) {
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
 });
 
+QUnit.test("widget shouldn't be wider than a container", function(assert) {
+    var $element = $("#innerDateBox").dxDateBox(),
+        instance = $element.dxDateBox("instance");
+
+    assert.strictEqual(instance.option("width"), undefined);
+    assert.ok($element.outerWidth() <= 100, "outer width of the element must be less or equal to a container width");
+});
+
 QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", function(assert) {
     var $parent = $("#parent-div");
     $parent.css("width", 200);
@@ -1235,7 +1289,7 @@ QUnit.test("default", function(assert) {
 QUnit.test("change width", function(assert) {
     var $element = $("#dateBox").dxDateBox({ pickerType: "calendar" }),
         instance = $element.dxDateBox("instance"),
-        customWidth = 1234;
+        customWidth = 258;
 
     instance.option("width", customWidth);
 
@@ -1737,9 +1791,6 @@ QUnit.test("When typing a correct date, dateBox must not make a redundant _setIn
 
 QUnit.test("Swiping must not close the calendar", function(assert) {
     $(this.fixture.dateBox._input()).focus();
-    if(browser.msie && browser.version < 11) {
-        $(this.fixture.dateBox._input()).focus();
-    }
     this.fixture.dateBox.open();
     pointerMock(this.fixture.dateBox._strategy._calendarContainer).start().swipeStart().swipeEnd(1);
     assert.ok(this.fixture.dateBox._input()[0] === document.activeElement);
@@ -2246,6 +2297,27 @@ QUnit.test("calendar views should be positioned correctly", function(assert) {
     assert.equal($calendarViews.eq(2).position().left, viewWidth, "after view is at the right");
 });
 
+QUnit.test("List picker popup should be positioned correctly for Android devices", function(assert) {
+    var origIsAndroid5 = themes.isAndroid5;
+    themes.isAndroid5 = function() { return true; };
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        type: "time",
+        pickerType: "list",
+        opened: true
+    });
+
+    var popup = $dateBox.find(".dx-popup").dxPopup("instance"),
+        position = popup.option("position");
+
+    assert.equal(position.at, "left bottom", "correct postion.at property");
+    assert.equal(position.my, "left top", "correct postion.my property");
+    assert.equal(position.offset.v, -10, "correct postion.offset.v property");
+    assert.equal(position.offset.h, -16, "correct postion.offset.h property");
+
+    themes.isAndroid5 = origIsAndroid5;
+});
+
 QUnit.test("Popup with calendar strategy should be use 'flipfit flip' strategy", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         type: "date",
@@ -2674,12 +2746,25 @@ QUnit.test("rendered list markup", function(assert) {
 });
 
 QUnit.test("width option test", function(assert) {
-    var device = devices.current(),
-        extraWidth = 0;
+    this.dateBox.option("opened", false);
+    this.dateBox.option("width", "auto");
+    this.dateBox.option("opened", true);
 
-    if(device.platform === "android") {
-        extraWidth = 32;
-    }
+    var popup = this.$dateBox.find(".dx-popup").dxPopup("instance");
+
+    assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width 'auto'");
+
+    this.dateBox.option("opened", false);
+    this.dateBox.option("width", "153px");
+    this.dateBox.option("opened", true);
+    assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
+});
+
+QUnit.test("width option test for Android theme", function(assert) {
+    var origIsAndroid5 = themes.isAndroid5;
+    themes.isAndroid5 = function() { return true; };
+
+    var extraWidth = 32;
 
     this.dateBox.option("opened", false);
     this.dateBox.option("width", "auto");
@@ -2693,6 +2778,8 @@ QUnit.test("width option test", function(assert) {
     this.dateBox.option("width", "153px");
     this.dateBox.option("opened", true);
     assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
+
+    themes.isAndroid5 = origIsAndroid5;
 });
 
 QUnit.test("list should contain correct values if min/max does not specified", function(assert) {

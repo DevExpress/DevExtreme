@@ -7,9 +7,6 @@ QUnit.testStart(function() {
     .dx-scrollable-content {\
         padding: 0 !important;\
     }\
-    .container-height-200px {\
-        height: 200px;\
-    }\
 </style>\
 <div id="pivotGrid"></div>\
 <div class="dx-pivotgrid">\
@@ -221,14 +218,12 @@ QUnit.test("Empty store", function(assert) {
 });
 
 QUnit.test("No data when pivot grid rendered to invisible container", function(assert) {
-    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+    var $pivotGridElement = $("#pivotGrid").hide().height("200px"),
         pivotGrid = createPivotGrid({
             height: 200,
             dataSource: [{ sum: 100 }],
-
         }, assert);
 
-    assert.ok(pivotGrid._loadPanel.option("visible"), 'loadPanel should be visible');
     // act
     $pivotGridElement.show();
 
@@ -242,7 +237,21 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
 
     assert.ok($noDataElement.is(":visible"));
     assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + dataAreaCell.outerHeight()) - (noDataElementOffset.top + $noDataElement.height()), 2.5, "no data element position");
+});
 
+QUnit.test("Not render pivot grid to invisible container", function(assert) {
+    // arrange
+    var onContentReadyCallback = sinon.stub();
+    this.testOptions.onContentReady = onContentReadyCallback;
+    this.testOptions.scrolling = { mode: "virtual" };
+    this.testOptions.height = 300;
+
+    // act
+    $("#pivotGrid").hide();
+    createPivotGrid(this.testOptions, assert);
+
+    // assert
+    assert.equal(onContentReadyCallback.callCount, 1, "contentReady calls");
 });
 
 QUnit.test("Create PivotGrid with Data", function(assert) {
@@ -538,7 +547,6 @@ QUnit.test("onCellClick event", function(assert) {
         dataIndex: 1,
         dataType: undefined,
         format: "percent",
-        precision: undefined,
         text: '90%',
         value: 0.9
     }, 'first cell click arguments');
@@ -550,7 +558,6 @@ QUnit.test("onCellClick event", function(assert) {
         dataIndex: 0,
         dataType: undefined,
         format: "currency",
-        precision: undefined,
         text: '$17',
         value: 17
     }, 'second cell click arguments');
@@ -590,7 +597,6 @@ QUnit.test("onCellClick event after resize", function(assert) {
         dataIndex: 1,
         dataType: undefined,
         format: "percent",
-        precision: undefined,
         text: '90%',
         value: 0.9
     }, 'first cell click arguments');
@@ -602,7 +608,6 @@ QUnit.test("onCellClick event after resize", function(assert) {
         dataIndex: 0,
         dataType: undefined,
         format: "currency",
-        precision: undefined,
         text: '$17',
         value: 17
     }, 'second cell click arguments');
@@ -639,6 +644,28 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     assert.strictEqual($(".dx-pivotgrid-toolbar").find(".dx-button").length, 1);
     assert.strictEqual($(".dx-pivotgrid-toolbar").parent()[0], pivotGrid.$element().find(".dx-area-description-cell")[0]);
     assert.ok(!pivotGrid.$element().find(".dx-area-description-cell").hasClass("dx-pivotgrid-background"));
+});
+
+QUnit.test("FieldPanel inherits visible option", function(assert) {
+    // arrange, act
+    var pivotGrid = createPivotGrid({
+            dataSource: {
+                rows: [],
+                columns: [],
+                values: []
+            },
+            fieldPanel: {
+                visible: true
+            },
+            visible: false
+        }, assert),
+        fieldPanelInstance = pivotGrid.$element().dxPivotGridFieldChooserBase("instance");
+
+    this.clock.tick();
+
+    // assert
+    assert.notOk(fieldPanelInstance.option("visible"), 'fieldPanel in invisible');
+    assert.ok(pivotGrid.$element().hasClass("dx-state-invisible"), "pivot grid saves invisible styles");
 });
 
 QUnit.test("create field chooser with search", function(assert) {
@@ -1222,7 +1249,6 @@ QUnit.test("onCellPrepared event", function(assert) {
             dataIndex: 0,
             dataType: undefined,
             format: "currency",
-            precision: undefined,
             columnPath: ["2010", "1"],
             rowPath: ["B"],
             columnType: 'D',
@@ -1304,7 +1330,6 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
             dataIndex: 0,
             dataType: undefined,
             format: "currency",
-            precision: undefined,
             columnPath: ["2010", "1"],
             rowPath: ["B"],
             columnType: 'D',
@@ -1405,7 +1430,6 @@ QUnit.test("contextMenu", function(assert) {
         dataIndex: 1,
         dataType: undefined,
         format: "percent",
-        precision: undefined,
         text: '90%',
         value: 0.9
     }, 'first cell contextmenu cell arguments');
@@ -1767,6 +1791,75 @@ QUnit.test("Sorting by Summary context menu", function(assert) {
     }], "field args");
 });
 
+// T644193
+QUnit.test("Sorting by Summary context menu if several fields with same caption", function(assert) {
+    var contextMenuArgs = [],
+        pivotGrid = createPivotGrid({
+            fieldChooser: {
+                enabled: false
+            },
+            allowSortingBySummary: true,
+            showColumnGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { format: 'decimal', area: "column", expanded: true },
+
+                    { format: { format: 'quarter', dateType: 'full' }, area: "column" },
+                    { dataField: "Product", area: "row", index: 2 },
+                    { dataField: "sum1", caption: 'Sum', format: 'currency', area: "data", name: "Sum1" },
+                    { dataField: "sum1", caption: 'Sum', format: 'currency', area: "data", name: "Sum2" },
+                ],
+                rows: [
+                    { value: 'A', index: 0 },
+                    { value: 'B', index: 1 }
+                ],
+                columns: [{
+                    value: '2010', index: 2,
+                    children: [
+                        { value: '1', index: 0 },
+                        { value: '2', index: 1 }
+                    ]
+                }, {
+                    value: '2012', index: 3
+                }],
+                values: [
+                    [[1, 0.1], [8, 0.8], [15, 0.15], [36, 0.36], [43, 0.43]],
+                    [[2, 0.2], [9, 0.9], [16, 0.16], [37, 0.37], [44, 0.44]],
+                    [[3, 0.3], [10, 0.1], [17, 0.17], [38, 0.38], [45, 0.45]]
+                ]
+            }
+        }, assert);
+
+    pivotGrid.option("onContextMenuPreparing", function(e) {
+        contextMenuArgs.push(e);
+    });
+
+    var dataSource = pivotGrid.getDataSource();
+
+    sinon.spy(dataSource, "field");
+    sinon.spy(dataSource, "load");
+
+    // act
+    $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers td').last().trigger('dxcontextmenu');
+
+    // assert
+    assert.equal(contextMenuArgs[0].items.length, 1);
+    assert.equal(contextMenuArgs[0].items[0].text, "Sort \"Product\" by This Column");
+    assert.equal(contextMenuArgs[0].items[0].icon, "none");
+
+    // act
+    contextMenuArgs[0].items[0].onItemClick();
+
+    // assert
+    assert.ok(dataSource.load.calledOnce);
+    assert.ok(dataSource.field.calledOnce);
+    assert.deepEqual(dataSource.field.lastCall.args, [2, {
+        sortBySummaryField: "Sum2",
+        sortBySummaryPath: ["2012"],
+        sortOrder: "desc"
+    }], "field args");
+});
+
 QUnit.test("Sorting by Summary context menu when sorting defined", function(assert) {
     var contextMenuArgs = [],
         pivotGrid = createPivotGrid({
@@ -1842,7 +1935,7 @@ QUnit.test("Render to invisible container", function(assert) {
     var $pivotGridElement = $("#pivotGrid")
         .hide()
         .width(2000)
-        .addClass("container-height-200px"),
+        .height("200px"),
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     $pivotGridElement.show();
@@ -2628,6 +2721,20 @@ QUnit.test("getScrollPath for columns", function(assert) {
     scrollable.scrollTo(columnWidths[0] + columnWidths[1] + columnWidths[2] + columnWidths[3] + 10);
 });
 
+QUnit.test("getScrollPath after initialization", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    var pivotGrid = createPivotGrid({
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    // assert
+    assert.deepEqual(pivotGrid.getScrollPath('column'), ['2010', '1']);
+    assert.deepEqual(pivotGrid.getScrollPath('row'), ['A']);
+});
+
 QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
     var done = assert.async(),
         assertFunction;
@@ -2810,7 +2917,7 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         dataAreaScrollable.off("scroll", scrollAssert);
 
         // assert
-        assert.ok(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.equal(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
@@ -2823,6 +2930,48 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
 
     // act
     dataAreaScrollable.scrollBy({ left: -10 });
+});
+
+
+QUnit.test("Fix horizontal scroll position after scroll when rtl is enabled", function(assert) {
+    var done = assert.async();
+
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        width: 500,
+        height: 150,
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            useNative: false
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+
+    var assertFunction = function(e) {
+        if(e.scrollOffset.top === 10) {
+            assert.equal(dataAreaScrollable.scrollLeft(), 100);
+            dataAreaScrollable.off("scroll", assertFunction);
+            done();
+        }
+    };
+
+    var scrollAssert = function() {
+        dataAreaScrollable.off("scroll", scrollAssert);
+        dataAreaScrollable.on("scroll", assertFunction);
+
+        // act
+        dataAreaScrollable.scrollTo({ top: 10 });
+        assert.equal(dataAreaScrollable.scrollLeft(), 100);
+    };
+
+    dataAreaScrollable.on("scroll", scrollAssert);
+
+    dataAreaScrollable.scrollTo({ left: 100 });
 });
 
 QUnit.test("Virtual scrolling if height is not defined", function(assert) {

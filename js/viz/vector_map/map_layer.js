@@ -133,44 +133,6 @@ function customizeHandles(proxies, callback, widget) {
     callback.call(widget, proxies);
 }
 
-// DEPRECATED_15_2
-function customizeHandles_deprecated(proxies, callback) {
-    var i,
-        ii = proxies.length,
-        proxy,
-        settings;
-    for(i = 0; i < ii; ++i) {
-        proxy = proxies[i];
-        settings = callback.call(proxy, proxy) || {};
-        proxy.applySettings(settings);
-        if(settings.isSelected) {
-            proxy.selected(true);
-        }
-    }
-}
-
-// DEPRECATED_15_2
-function patchProxies(handles, name, data) {
-    var type = { areas: "area", markers: "marker" }[name],
-        i,
-        ii = handles.length,
-        dataItem;
-    for(i = 0; i < ii; ++i) {
-        handles[i].proxy.type = type;
-    }
-    if(type === "marker") {
-        for(i = 0; i < ii; ++i) {
-            dataItem = data.item(i);
-            _extend(handles[i].proxy, {
-                text: dataItem.text,
-                value: dataItem.value,
-                values: dataItem.values,
-                url: dataItem.url
-            });
-        }
-    }
-}
-
 // TODO: Consider moving it inside a strategy
 function setAreaLabelVisibility(label) {
     label.text.attr({ visibility: label.size[0] / label.spaceSize[0] < TOLERANCE && label.size[1] / label.spaceSize[1] < TOLERANCE ? null : "hidden" });
@@ -181,9 +143,8 @@ function setLineLabelVisibility(label) {
     label.text.attr({ visibility: label.size[0] / label.spaceSize[0] < TOLERANCE || label.size[1] / label.spaceSize[1] < TOLERANCE ? null : "hidden" });
 }
 
-// DEPRECATED_15_2 (just proxy.attribute(dataField) must stay)
-function getDataValue(proxy, dataField, deprecatedField) {
-    return proxy.attribute(dataField) || proxy[deprecatedField];
+function getDataValue(proxy, dataField) {
+    return proxy.attribute(dataField);
 }
 
 var TYPE_TO_TYPE_MAP = {
@@ -248,7 +209,9 @@ var emptyStrategy = {
 
     arrange: _noop,
 
-    updateGrouping: _noop
+    updateGrouping: _noop,
+
+    getDefaultColor: _noop
 };
 
 var strategiesByType = {};
@@ -292,7 +255,9 @@ strategiesByType[TYPE_AREA] = {
 
     updateGrouping: function(context) {
         groupByColor(context);
-    }
+    },
+
+    getDefaultColor: _noop
 };
 
 strategiesByType[TYPE_LINE] = {
@@ -334,7 +299,9 @@ strategiesByType[TYPE_LINE] = {
 
     updateGrouping: function(context) {
         groupByColor(context);
-    }
+    },
+
+    getDefaultColor: _noop
 };
 
 strategiesByType[TYPE_MARKER] = {
@@ -375,6 +342,10 @@ strategiesByType[TYPE_MARKER] = {
     updateGrouping: function(context) {
         groupByColor(context);
         groupBySize(context);
+    },
+
+    getDefaultColor: function(ctx, palette) {
+        return ctx.params.themeManager.getAccentColor(palette);
     }
 };
 
@@ -484,7 +455,7 @@ strategiesByElementType[TYPE_MARKER] = {
             }
 
             for(i = 0; i < ii; ++i) {
-                values[i] = _max(getDataValue(handles[i].proxy, dataField, "value") || 0, 0);
+                values[i] = _max(getDataValue(handles[i].proxy, dataField) || 0, 0);
             }
             minValue = _min.apply(null, values);
             maxValue = _max.apply(null, values);
@@ -499,7 +470,7 @@ strategiesByElementType[TYPE_MARKER] = {
             var dataField = context.settings.dataField;
             strategiesByType[TYPE_MARKER].updateGrouping(context);
             groupBySize(context, function(proxy) {
-                return getDataValue(proxy, dataField, "value");
+                return getDataValue(proxy, dataField);
             });
         }
     },
@@ -511,7 +482,7 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         refresh: function(ctx, figure, data, proxy, settings) {
-            var values = getDataValue(proxy, ctx.settings.dataField, "values") || [],
+            var values = getDataValue(proxy, ctx.settings.dataField) || [],
                 i,
                 ii = values.length || 0,
                 colors = settings._colors,
@@ -562,7 +533,7 @@ strategiesByElementType[TYPE_MARKER] = {
                 count = 0,
                 palette;
             for(i = 0; i < ii; ++i) {
-                values = getDataValue(handles[i].proxy, dataField, "values");
+                values = getDataValue(handles[i].proxy, dataField);
                 if(values && values.length > count) {
                     count = values.length;
                 }
@@ -589,7 +560,7 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         refresh: function(ctx, figure, data, proxy) {
-            figure.image.attr({ href: getDataValue(proxy, ctx.settings.dataField, "url") });
+            figure.image.attr({ href: getDataValue(proxy, ctx.settings.dataField) });
         },
 
         _getStyles: function(styles, style) {
@@ -694,7 +665,6 @@ function transformLineLabel(label, projection, coordinates) {
 
 function getItemSettings(context, proxy, settings) {
     var result = combineSettings(context.settings, settings);
-    proxy.text = proxy.text || settings.text;   // DEPRECATED_15_2
     applyGrouping(context.grouping, proxy, result);
     if(settings.color === undefined && settings.paletteIndex >= 0) {
         result.color = result._colors[settings.paletteIndex];
@@ -747,8 +717,10 @@ function combineSettings(common, partial) {
     return obj;
 }
 
-function processCommonSettings(type, options, themeManager) {
-    var settings = combineSettings(themeManager.theme("layer:" + type) || { label: {} }, options),
+function processCommonSettings(context, options) {
+    var themeManager = context.params.themeManager,
+        strategy = context.str,
+        settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme("layer:" + strategy.fullType)), options),
         colors,
         i,
         palette;
@@ -776,7 +748,7 @@ var performGrouping = function(context, partition, settingField, dataField, valu
             partition: partition,
             values: values
         };
-        context.params.dataExchanger.set(context.name, settingField, { partition: partition, values: values });
+        context.params.dataExchanger.set(context.name, settingField, { partition: partition, values: values, defaultColor: context.settings.color });
     }
 };
 
@@ -945,14 +917,12 @@ MapLayer.prototype = _extend({
     ///#ENDDEBUG
 
     setOptions: function(options) {
-        var that = this,
-            name;   // DEPRECATED_15_2
+        var that = this;
         options = that._options = options || {};
-        name = !("dataSource" in options) && "data" in options ? "data" : "dataSource"; // DEPRECATED_15_2
-        if(name in options && options[name] !== that._options_dataSource) {
-            that._options_dataSource = options[name];
+        if("dataSource" in options && options.dataSource !== that._options_dataSource) {
+            that._options_dataSource = options.dataSource;
             that._params.notifyDirty();
-            that._specificDataSourceOption = wrapToDataSource(options[name]);
+            that._specificDataSourceOption = wrapToDataSource(options.dataSource);
             that._refreshDataSource();
         } else if(that._data.count() > 0) {
             that._params.notifyDirty();
@@ -976,7 +946,7 @@ MapLayer.prototype = _extend({
             that.proxy.type = context.str.type;
             that.proxy.elementType = context.str.elementType;
         }
-        context.settings = processCommonSettings(context.str.fullType, that._options, that._params.themeManager);
+        context.settings = processCommonSettings(context, that._options);
         context.hasSeparateLabel = !!(context.settings.label.enabled && context.str.hasLabelsGroup);
         context.hover = !!_parseScalar(context.settings.hoverEnabled, true);
         // There is intentionally no attempt to preserve previous selection (or part of it)
@@ -1039,13 +1009,7 @@ MapLayer.prototype = _extend({
             handles[i] = new MapLayerElement(context, i, geometry(dataItem), attributes(dataItem));
         }
         // Customization must be performed before anything else happens to element (that is the idea of customization)
-        if(_isFunction(that._options.customize)) {
-            (that._options._deprecated ? customizeHandles_deprecated : customizeHandles)(that.getProxies(), that._options.customize, that._params.widget);
-        }
-        // DEPRECATED_15_2
-        if(that._options._deprecated) {
-            patchProxies(handles, context.name, data);
-        }
+        _isFunction(that._options.customize) && customizeHandles(that.getProxies(), that._options.customize, that._params.widget);
 
         for(i = 0; i < ii; ++i) {
             handle = handles[i];

@@ -6,6 +6,7 @@ var noop = require("../../core/utils/common").noop,
     errors = require("../widget/ui.errors"),
     dateUtils = require("../../core/utils/date"),
     isNumeric = require("../../core/utils/type").isNumeric,
+    typeUtils = require("../../core/utils/type"),
     themes = require("../themes");
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -18,7 +19,9 @@ var APPOINTMENT_MIN_SIZE = 2,
     APPOINTMENT_DEFAULT_WIDTH = 40,
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
-    COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
+    COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3,
+
+    DROP_DOWN_BUTTON_DEFAULT_WIDTH = 23;
 
 var BaseRenderingStrategy = Class.inherit({
     ctor: function(instance) {
@@ -417,10 +420,10 @@ var BaseRenderingStrategy = Class.inherit({
     _checkLongCompactAppointment: noop,
 
     _splitLongCompactAppointment: function(item, result) {
-        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCellByType(item.allDay);
         var compactCount = 0;
 
-        if(appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
+        if(appointmentCountPerCell !== undefined && appointmentCountPerCell !== 0 && item.index > appointmentCountPerCell - 1) {
             item.isCompact = true;
             compactCount = this._getCompactAppointmentParts(item.width);
             for(var k = 1; k < compactCount; k++) {
@@ -528,7 +531,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _markAppointmentAsVirtual: function(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCell();
+        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
@@ -539,9 +542,23 @@ var BaseRenderingStrategy = Class.inherit({
         }
     },
 
-    getCompactAppointmentGroupMaxWidth: function() {
-        var widthInPercents = 75;
-        return widthInPercents * this.getDefaultCellWidth() / 100;
+    _getMaxAppointmentCountPerCellByType: function(isAllDay) {
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
+
+        if(typeUtils.isObject(appointmentCountPerCell)) {
+            return isAllDay ? this._getMaxAppointmentCountPerCell().allDay : this._getMaxAppointmentCountPerCell().simple;
+        } else {
+            return appointmentCountPerCell;
+        }
+    },
+
+    getCompactAppointmentGroupMaxWidth: function(intervalCount, isAllDay) {
+        if(isAllDay || !typeUtils.isDefined(isAllDay)) {
+            var widthInPercents = 75;
+            return widthInPercents * this.getDefaultCellWidth() / 100;
+        } else {
+            return DROP_DOWN_BUTTON_DEFAULT_WIDTH;
+        }
     },
 
     getDefaultCellWidth: function() {
@@ -673,6 +690,10 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultHeight: function() {
+        return this._getAppointmentHeightByTheme();
+    },
+
+    _getAppointmentHeightByTheme: function() {
         return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
     },
 

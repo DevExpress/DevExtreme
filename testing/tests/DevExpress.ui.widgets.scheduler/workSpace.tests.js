@@ -180,26 +180,6 @@ QUnit.testStart(function() {
             "Exception messages should be correct"
         );
     });
-
-    QUnit.test("Workspace scrollable should work correctly after changing currentDate", function(assert) {
-        this.instance.option("height", 200);
-        this.instance.option("currentDate", new Date());
-
-        var $element = this.instance.$element();
-
-        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
-    });
-
-    QUnit.test("Workspace scrollable should work correctly after changing currentDate, crossScrollingEnabled = true", function(assert) {
-        this.instance.option("crossScrollingEnabled", true);
-        this.instance.option("height", 200);
-        this.instance.option("currentDate", new Date());
-
-        var $element = this.instance.$element();
-
-        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
-    });
-
 })("Work Space Base");
 
 (function() {
@@ -2158,6 +2138,13 @@ QUnit.testStart(function() {
     QUnit.test("Week view", function(assert) {
         this.createInstance("Week", { width: 800, height: 800 });
         var index = this.instance.getCellIndexByCoordinates({ left: 100, top: 55 });
+
+        assert.equal(index, 7, "Index is OK");
+    });
+
+    QUnit.test("Week view, fractional value", function(assert) {
+        this.createInstance("Week", { width: 800, height: 800 });
+        var index = this.instance.getCellIndexByCoordinates({ left: 160.4, top: 55 });
 
         assert.equal(index, 7, "Index is OK");
     });

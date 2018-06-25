@@ -2577,6 +2577,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 2, 9),
             startDateExpr: "start.date",
             endDateExpr: "end.date",
+            maxAppointmentsPerCell: null,
             recurrenceRuleExpr: "recurrence.rule",
             onAppointmentClick: function(e) {
                 var targetedAppointmentData = e.targetedAppointmentData;
@@ -3384,6 +3385,7 @@ QUnit.testStart(function() {
             this.createInstance({
                 width: 300,
                 currentView: "week",
+                maxAppointmentsPerCell: null,
                 dataSource: [{
                     text: "a",
                     startDate: new Date(2015, 6, 5, 0, 0),

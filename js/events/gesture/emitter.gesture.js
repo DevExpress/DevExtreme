@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     styleUtils = require("../../core/utils/style"),
     callOnce = require("../../core/utils/call_once"),
-    browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     readyCallbacks = require("../../core/utils/ready_callbacks"),
     ready = readyCallbacks.add,
@@ -30,10 +29,7 @@ var isMouseWheelEvent = function(e) {
 };
 
 var supportPointerEvents = function() {
-    var cssSupport = styleUtils.styleProp("pointer-events");
-    var msieLess11 = browser.msie && parseInt(browser.version, 10) < 11;
-
-    return cssSupport && !msieLess11;
+    return styleUtils.styleProp("pointer-events");
 };
 
 var setGestureCover = callOnce(function() {

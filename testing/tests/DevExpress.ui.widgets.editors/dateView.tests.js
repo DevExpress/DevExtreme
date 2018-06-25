@@ -238,6 +238,39 @@ QUnit.module("dateView", {
     }
 });
 
+QUnit.test("DateView should have compact class on mobile device", function(assert) {
+    var currentDevice = devices.current();
+    devices.current({ platform: "android", deviceType: "phone" });
+
+    try {
+        var date = new Date(2013, 7, 31);
+
+        var $element = $("#customDateView").dxDateView({
+            visible: true,
+            value: date
+        });
+        assert.ok($element.hasClass(DATEVIEW_CLASS + "-compact"), "DateView isn't compact");
+    } finally {
+        devices.current(currentDevice);
+    }
+});
+
+QUnit.test("DateView should not have compact class on desktop", function(assert) {
+    var currentDevice = devices.current();
+    devices.current({ platform: "generic", deviceType: "desktop" });
+
+    try {
+        var date = new Date(2013, 7, 31);
+
+        var $element = $("#customDateView").dxDateView({
+            visible: true,
+            value: date
+        });
+        assert.notOk($element.hasClass(DATEVIEW_CLASS + "-compact"), "DateView isn't compact");
+    } finally {
+        devices.current(currentDevice);
+    }
+});
 QUnit.test("default value set correctly", function(assert) {
     var value = new Date(2015, 5, 5, 5, 5);
 
@@ -303,6 +336,32 @@ QUnit.test("check state rollers", function(assert) {
     assert.equal(rollers.day.option("selectedIndex"), date.getDate() - 1);
     assert.equal(rollers.month.option("selectedIndex"), date.getMonth());
     assert.equal(rollers.year.option("selectedIndex"), date.getFullYear() - minDate.getFullYear());
+});
+
+QUnit.test("min and max date should take hours into account", function(assert) {
+    var value = new Date(2000, 5, 5, 10, 0, 0),
+        min = new Date(2000, 5, 4, 8, 0, 0),
+        max = new Date(2000, 5, 6, 12, 0, 0);
+
+    this.instance.option({ type: "datetime", value: value, minDate: min, maxDate: max });
+
+    var rollers = this.instance._rollers,
+        hourItems = rollers.hours.option("items");
+
+    assert.equal(hourItems[0], 0, "hours start from 0 in middle day");
+    assert.equal(hourItems[hourItems.length - 1], 23, "hours end at 23 in middle day");
+
+    this.instance.option("value", new Date(2000, 5, 6, 11, 0, 0));
+    hourItems = rollers.hours.option("items");
+
+    assert.equal(hourItems[0], 0, "hours start from 0 in last day");
+    assert.equal(hourItems[hourItems.length - 1], 12, "hours end at 12 in last day");
+
+    this.instance.option("value", new Date(2000, 5, 4, 11, 0, 0));
+    hourItems = rollers.hours.option("items");
+
+    assert.equal(hourItems[0], 8, "hours start from 8 in first day");
+    assert.equal(hourItems[hourItems.length - 1], 23, "hours end at 23 in first day");
 });
 
 // T584111
@@ -739,3 +798,4 @@ QUnit.test("time component should be preserved after value is changed by rollers
         assert.equal(newValue.getMilliseconds(), date.getMilliseconds(), "milliseconds component is correct");
     }
 });
+

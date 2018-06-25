@@ -80,6 +80,16 @@
  * @enum {'hide'|'none'}
  */
 
+ /**
+ * @typedef {string} Enums.OverlappingBehavior
+ * @enum {'rotate'|'stagger'|'none'|'hide'}
+ */
+
+/**
+ * @typedef {string} Enums.PolarChartOverlappingBehavior
+ * @enum {'none'|'hide'}
+ */
+
 /**
  * @typedef {string} Enums.Orientation
  * @enum {'horizontal'|'vertical'}
@@ -296,6 +306,11 @@
  */
 
 /**
+ * @typedef {string} Enums.FilterBuilderGroupOperations
+ * @enum {'and'|'or'|'notAnd'|'notOr'}
+ */
+
+/**
  * @typedef {string} Enums.FilterOperations
  * @enum {'<'|'<='|'<>'|'='|'>'|'>='|'between'|'contains'|'endswith'|'notcontains'|'startswith'}
  */
@@ -447,7 +462,7 @@
 
 /**
  * @typedef {string} Enums.CollectionSearchMode
- * @enum {'contains'|'startswith'}
+ * @enum {'contains'|'startswith'|'equals'}
  */
 
 /**
@@ -818,4 +833,9 @@
  /**
  * @typedef {string} Enums.PivotGridStoreType
  * @enum {'array'|'local'|'odata'|'xmla'}
+ */
+
+/**
+ * @typedef {string} Enums.ExportFormat
+ * @enum {'GIF'|'JPEG'|'PDF'|'PNG'|'SVG'}
  */

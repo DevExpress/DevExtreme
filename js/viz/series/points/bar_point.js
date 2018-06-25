@@ -20,16 +20,18 @@ var extend = require("../../../core/utils/extend").extend,
 
 module.exports = _extend({}, symbolPoint, {
 
-    correctCoordinates: function(correctOptions) {
-        var that = this,
-            correction = _floor(correctOptions.offset - (correctOptions.width / 2));
+    correctCoordinates(correctOptions) {
+        const that = this;
+        const correction = _floor(correctOptions.offset - (correctOptions.width / 2));
 
         if(that._options.rotated) {
             that.height = correctOptions.width;
             that.yCorrection = correction;
+            that.xCorrection = null;
         } else {
             that.width = correctOptions.width;
             that.xCorrection = correction;
+            that.yCorrection = null;
         }
     },
 

@@ -361,7 +361,7 @@ QUnit.test("Value format for summary item", function(assert) {
     var footerView = this.createFooterView(getFooterOptions({
             0: [
                 { summaryType: "min", valueFormat: "currency", value: 100 },
-                { summaryType: "max", valueFormat: "fixedPoint", precision: 4, value: 120.00012034 }
+                { summaryType: "max", valueFormat: { type: "fixedPoint", precision: 4 }, value: 120.00012034 }
             ]
         }, 5)),
         $container = $("#container"),
@@ -381,7 +381,7 @@ QUnit.test("Display format for summary item", function(assert) {
     var footerView = this.createFooterView(getFooterOptions({
             0: [
                 { summaryType: "min", valueFormat: "currency", value: 100, displayFormat: "Min: {0}" },
-                { summaryType: "max", valueFormat: "fixedPoint", precision: 4, value: 120.00012034, displayFormat: "{0} - Max" }
+                { summaryType: "max", valueFormat: { type: "fixedPoint", precision: 4 }, value: 120.00012034, displayFormat: "{0} - Max" }
             ]
         }, 5)),
         $container = $("#container"),
@@ -766,8 +766,10 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
                 {
                     column: "cash",
                     summaryType: "avg",
-                    valueFormat: "fixedPoint",
-                    precision: 2
+                    valueFormat: {
+                        type: "fixedPoint",
+                        precision: 2
+                    }
                 },
                 {
                     column: "regDate",
@@ -777,8 +779,11 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
                     column: "regDate",
                     valueFormat: "longDate",
                     summaryType: "max"
+                },
+                {
+                    column: "regDate",
+                    summaryType: "count"
                 }
-
             ]
         }
     });
@@ -793,6 +798,7 @@ QUnit.test("Summary items with valueFormat and displayFormat", function(assert) 
     assert.equal($summary.eq(4).text(), "Avg: 173,836.71", "names count");
     assert.equal($summary.eq(5).text(), "Max: 5/18/2014", "date max default valueFormat");
     assert.equal($summary.eq(6).text(), "Max: Sunday, May 18, 2014", "date max custom valueFormat");
+    assert.equal($summary.eq(7).text(), "Count: 7");
 });
 
 // T348335

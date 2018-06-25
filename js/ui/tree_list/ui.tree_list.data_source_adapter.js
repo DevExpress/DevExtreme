@@ -174,7 +174,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 itemsExpr,
                 childItems;
 
-            if(this._itemsGetter) {
+            if(this._itemsGetter && !data.isConverted) {
                 result = result || [];
 
                 for(var i = 0; i < data.length; i++) {
@@ -200,6 +200,8 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                         }
                     }
                 }
+
+                result.isConverted = true;
 
                 return result;
             }
@@ -393,12 +395,16 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoaded: function(options) {
-            options.data = this._convertDataToPlainStructure(options.data);
+            var data = options.data = this._convertDataToPlainStructure(options.data);
             if(!options.remoteOperations.filtering) {
                 options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
             }
             this._updateHasItemsMap(options);
             this.callBase(options);
+
+            if(data.isConverted && this._cachedStoreData) {
+                this._cachedStoreData.isConverted = true;
+            }
         },
 
         _fillNodes: function(nodes, options, expandedRowKeys, level) {

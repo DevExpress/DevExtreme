@@ -132,6 +132,7 @@ var Button = Widget.inherit({
             useSubmitBehavior: false,
 
             useInkRipple: false
+
             /**
             * @name dxButtonDefaultTemplate
             * @type object
@@ -287,6 +288,7 @@ var Button = Widget.inherit({
 
         this._$submitInput = $("<input>")
             .attr("type", "submit")
+            .attr("tabindex", -1)
             .addClass("dx-button-submit-input")
             .appendTo(this._$content);
 

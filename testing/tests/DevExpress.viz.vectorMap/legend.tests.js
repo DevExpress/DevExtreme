@@ -60,8 +60,8 @@ QUnit.module('Legend', {
         this.legend.dispose();
     },
 
-    updateData: function(values, partition) {
-        this.bind.lastCall.args[2]({ partition: partition || [], values: values });
+    updateData: function(values, partition, color) {
+        this.bind.lastCall.args[2]({ partition: partition || [], values: values, defaultColor: color });
     }
 });
 
@@ -103,14 +103,6 @@ QUnit.test('setOptions', function(assert) {
     assert.deepEqual(this.updateLayout.lastCall.args, [], 'layout');
 });
 
-QUnit.test('setOptions / deprecated', function(assert) {
-    this.options.source = "areacolorgroups";
-    this.legend.setOptions(this.options);
-
-    assert.deepEqual(this.bind.lastCall.args, ['areas', 'color', this.bind.lastCall.args[2]], 'bind');
-    assert.deepEqual(this.updateLayout.lastCall.args, [], 'layout');
-});
-
 QUnit.test('setOptions / reset', function(assert) {
     this.legend.setOptions(this.options);
     this.options.source = { layer: "test-source-2", grouping: "test-field-2" };
@@ -128,6 +120,15 @@ QUnit.test('data callback', function(assert) {
 
     assert.strictEqual(this.renderer.rect.callCount, 3, 'items');
     assert.deepEqual(this.updateLayout.lastCall.args, [], 'layout');
+});
+
+QUnit.test('Pass default layer color for markers', function(assert) {
+    this.legend.setOptions(this.options);
+
+    this.updateData([1, 2], [], "default color");
+
+    assert.strictEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0].fill, "default color");
+    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0].fill, "default color");
 });
 
 QUnit.test('customizeText format object', function(assert) {

@@ -273,8 +273,8 @@ exports.GroupingHelper = Class.inherit((function() {
             var that = this,
                 groupIndex,
                 storeLoadOptions = options.storeLoadOptions,
-                oldGroups = normalizeSortingInfo(that._group || []),
                 groups = normalizeSortingInfo(storeLoadOptions.group || []),
+                oldGroups = "_group" in that ? normalizeSortingInfo(that._group || []) : groups,
                 groupsCount = Math.min(oldGroups.length, groups.length);
 
             that._group = storeLoadOptions.group;

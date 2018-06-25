@@ -50,6 +50,18 @@ QUnit.test("wave class depend on called method", function(assert) {
     assert.ok(!$wave.hasClass(INKRIPPLE_WAVE_SHOWING_CLASS), "wave has no showing class after the 'hideWave' method call");
 });
 
+QUnit.test("showing wave class is removed if call hideWave after showWave immediately", function(assert) {
+    var $element = $("<div>"),
+        inkRippleInstance = inkRipple.render();
+
+    inkRippleInstance.showWave({ element: $element, event: {} });
+    var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS);
+
+    inkRippleInstance.hideWave({ element: $element, event: {} });
+    this.clock.tick();
+    assert.ok(!$wave.hasClass(INKRIPPLE_WAVE_SHOWING_CLASS), "wave has no showing class after the 'hideWave' method call");
+});
+
 QUnit.test("number of waves depend on 'wavesNumber' option", function(assert) {
     var $element = $("<div>"),
         wavesNumber = 2,

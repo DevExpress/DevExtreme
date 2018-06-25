@@ -38,6 +38,8 @@
     @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 1px solid transparent;
 }
 
+@GENERIC_SCHEDULER_APPOINTMENT_EMPTY_TRANSPARENT_BORDER: 1px solid transparent;
+
 @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
 @GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 0.5;
 @GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT - @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP;
@@ -285,7 +287,7 @@
     }
 }
 
-.dx-scheduler-header-panel {
+.dx-scheduler-header-panel{
     .dx-scheduler-group-row {
         &:not(:first-child) {
             border-bottom: @SCHEDULER_BASE_BORDER;
@@ -295,12 +297,18 @@
                 color: @SCHEDULER_PANEL_TEXT_COLOR;
             }
         }
+    }
 
-        .dx-scheduler-group-header {
-            font-weight: bold;
-            font-size: 18px;
-            color: @scheduler-group-header-color;
-        }
+    .dx-scheduler-group-header {
+        font-size: 18px;
+    }
+}
+
+.dx-scheduler-header-panel,
+.dx-scheduler-work-space-vertical-group-table {
+    .dx-scheduler-group-header {
+        font-weight: bold;
+        color: @scheduler-group-header-color;
     }
 }
 
@@ -362,7 +370,7 @@
 
 .dx-recurrence-editor-container {
     position: relative;
-    margin-top: 15px;
+    margin-left: 84px;
     margin-bottom: 21px;
     padding-top: 17px;
 }
@@ -480,6 +488,11 @@
     &.dx-state-focused {
         color: @scheduler-appointment-focus-color;
     }
+
+    &.dx-scheduler-appointment-empty {
+        border-left: @GENERIC_SCHEDULER_APPOINTMENT_EMPTY_TRANSPARENT_BORDER;
+        border-right: @GENERIC_SCHEDULER_APPOINTMENT_EMPTY_TRANSPARENT_BORDER;
+    }
 }
 
 .dx-scheduler-dropdown-appointment {
@@ -504,7 +517,8 @@
 }
 
 .dx-scheduler-work-space.dx-scheduler-timeline-week,
-.dx-scheduler-work-space.dx-scheduler-timeline-work-week {
+.dx-scheduler-work-space.dx-scheduler-timeline-work-week,
+.dx-scheduler-work-space.dx-scheduler-work-space-count.dx-scheduler-timeline-day {
     .dx-scheduler-header-scrollable-mixin(@GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2 + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
 
     &.dx-scheduler-work-space-grouped {

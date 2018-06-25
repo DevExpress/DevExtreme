@@ -93,7 +93,7 @@ QUnit.test("Editor for resource should be passed to details view", function(asse
     this.instance.showAppointmentPopup(task1);
 
     var taskDetailsView = this.instance.getAppointmentDetailsForm(),
-        ownerEditor = taskDetailsView.option("items")[10];
+        ownerEditor = taskDetailsView.option("items")[11];
 
     ownerEditor.editorOptions.dataSource.load();
 
@@ -106,7 +106,7 @@ QUnit.test("Editor for resource should be passed to details view", function(asse
     this.instance.showAppointmentPopup(task2);
     taskDetailsView = this.instance.getAppointmentDetailsForm();
 
-    var roomEditor = taskDetailsView.option("items")[11];
+    var roomEditor = taskDetailsView.option("items")[12];
 
     roomEditor.editorOptions.dataSource.load();
 
@@ -153,7 +153,7 @@ QUnit.test("Editor for resource should be passed to details view for scheduler w
     this.instance.showAppointmentPopup(task);
 
     var taskDetailsView = this.instance.getAppointmentDetailsForm(),
-        ownerEditor = taskDetailsView.option("items")[10];
+        ownerEditor = taskDetailsView.option("items")[11];
 
 
     assert.equal(ownerEditor.editorType, "dxTagBox", "Editor is dxTagBox");
@@ -203,7 +203,7 @@ QUnit.test("Editor for resource with right value should be passed to details vie
     this.instance.showAppointmentPopup(appointment);
 
     var taskDetailsView = this.instance.getAppointmentDetailsForm(),
-        movieEditor = taskDetailsView.option("items")[10];
+        movieEditor = taskDetailsView.option("items")[11];
 
     movieEditor.editorOptions.dataSource.load();
 

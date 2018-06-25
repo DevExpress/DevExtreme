@@ -12,7 +12,11 @@ var $ = require("../../core/renderer"),
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
 
-    HORIZONTAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-horizontal-grouped";
+    HORIZONTAL_GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-horizontal-grouped",
+
+    HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
+    HEADER_PANEL_WEEK_CELL_CLASS = "dx-scheduler-header-panel-week-cell",
+    HEADER_ROW_CLASS = "dx-scheduler-header-row";
 
 var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_HEIGHT = 75,
@@ -193,6 +197,57 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _createAllDayPanelElements: noop,
 
+    _renderDateHeader: function() {
+        var $headerRow = this.callBase();
+
+        if(this._needRenderWeekHeader()) {
+            var firstViewDate = new Date(this._firstViewDate),
+                $cells = [],
+                colspan = this._getCellCountInDay(),
+                cellTemplate = this.option("dateCellTemplate");
+
+            for(var i = 0; i < this._getWeekDuration() * this.option("intervalCount"); i++) {
+                var $th = $("<th>"),
+                    text = this._formatWeekdayAndDay(firstViewDate);
+
+                if(cellTemplate) {
+                    var templateOptions = {
+                        model: {
+                            text: text,
+                            date: firstViewDate
+                        },
+                        container: $th,
+                        index: i
+                    };
+
+                    cellTemplate.render(templateOptions);
+                } else {
+                    $th.text(text);
+                }
+
+                $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr("colSpan", colspan);
+                $cells.push($th);
+
+                this._incrementDate(firstViewDate);
+            }
+
+            var $row = $("<tr>").addClass(HEADER_ROW_CLASS).append($cells);
+            $headerRow.before($row);
+        }
+    },
+
+    _needRenderWeekHeader: function() {
+        return false;
+    },
+
+    _incrementDate: function(date) {
+        date.setDate(date.getDate() + 1);
+    },
+
+    _getWeekDuration: function() {
+        return 1;
+    },
+
     _renderView: function() {
         this._setFirstViewDate();
         var groupCellTemplates = this._renderGroupHeader();
@@ -204,8 +259,16 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         this._shader = new HorizontalShader();
 
+        this._updateGroupTableHeight();
+
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
         this._applyCellTemplates(groupCellTemplates);
+    },
+
+    _setHorizontalGroupHeaderCellsHeight: function() {
+        var height = this._$dateTable.get(0).getBoundingClientRect().height;
+
+        this._$sidebarTable.outerHeight(height);
     },
 
     getIndicationWidth: function() {
@@ -293,7 +356,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceMinHeight: function() {
         var minHeight = this._getWorkSpaceHeight(),
-            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight();
+            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - 1;
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
@@ -481,6 +544,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return isUpdateNeeded;
+    },
+
+    _supportCompactDropDownAppointments: function() {
+        return false;
     },
 
     scrollToTime: function(hours, minutes, date) {
