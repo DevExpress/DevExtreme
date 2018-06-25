@@ -80,7 +80,7 @@ QUnit.test("Create labels with styles", function(assert) {
     assert.deepEqual(css, {
         fill: "red",
         cursor: "default",
-        "font-family": "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
+        "font-family": "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
         "font-size": 26,
         "font-weight": 400
     });
