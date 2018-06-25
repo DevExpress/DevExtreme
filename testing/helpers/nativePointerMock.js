@@ -494,12 +494,8 @@
                     throw Error('No touch event simulation framework present for iOS, ' + UA.ios + '.');
                 }
             } else if(UA.chrome && ('ontouchstart' in window)) {
-                customEvent = document.createEvent("UIEvent");
+                customEvent = new window.UIEvent(type, { view: view, detail: detail, bubbles: bubbles, cancelable: cancelable, target: target });
 
-                customEvent.initEvent(type, bubbles, cancelable);
-
-                customEvent.view = view;
-                customEvent.detail = detail;
                 customEvent.screenX = screenX;
                 customEvent.screenY = screenY;
                 customEvent.clientX = clientX;
@@ -508,7 +504,6 @@
                 customEvent.altKey = altKey;
                 customEvent.metaKey = metaKey;
                 customEvent.shiftKey = shiftKey;
-                customEvent.target = target;
                 customEvent.touches = touches || [];
                 customEvent.targetTouches = targetTouches || [];
                 customEvent.changedTouches = changedTouches || [];
