@@ -1427,8 +1427,8 @@ declare module DevExpress.framework {
     }
     /** @deprecated #include spa-deprecated-note */
     export class dxCommand extends DOMComponent {
-        constructor(element: Element, options?: dxCommandOptions)
-        constructor(element: JQuery, options?: dxCommandOptions)
+        constructor(element: Element | JQuery, options?: dxCommandOptions);
+        constructor(options: dxCommandOptions);
         /** Executes the action associated with this command. */
         execute(): void;
     }
