@@ -184,7 +184,7 @@ var dxSankey = {
         /**
         * @name dxSankeyOptions.label.customizeText
         * @type function(itemInfo)
-        * @type_function_param1 itemInfo: dxSankeyNodeItem
+        * @type_function_param1 itemInfo: dxSankeyNode
         * @type_function_return string
         * @notUsedInTheme
         */
@@ -460,7 +460,7 @@ var dxSankey = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field2 event:event
-    * @type_function_param1_field3 item:dxSankeyNodeItem|dxSankeyLinkItem
+    * @type_function_param1_field3 item:dxSankeyNode|dxSankeyLink
     * @notUsedInTheme
     * @action
     */
@@ -470,7 +470,7 @@ var dxSankey = {
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 item:dxSankeyNodeItem|dxSankeyLinkItem
+    * @type_function_param1_field1 item:dxSankeyNode|dxSankeyLink
     * @notUsedInTheme
     * @action
     */

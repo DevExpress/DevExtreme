@@ -1,79 +1,79 @@
 
 /**
-* @name dxSankeyNodeItem
-* @publicName NodeItem
+* @name dxSankeyNode
+* @publicName Node
 */
 var NodeItem = {
     /**
-    * @name dxSankeyNodeItemfields.title
+    * @name dxSankeyNodefields.title
     * @type string
     */
     title: undefined,
     /**
-    * @name dxSankeyNodeItemfields.linksIn
+    * @name dxSankeyNodefields.linksIn
     * @type Array<Object>
     */
     linksIn: undefined,
     /**
-    * @name dxSankeyNodeItemfields.linksOut
+    * @name dxSankeyNodefields.linksOut
     * @type Array<Object>
     */
     linksOut: undefined,
     /**
-    * @name dxSankeyNodeItemmethods.hover
+    * @name dxSankeyNodemethods.hover
     * @publicName hover(state)
     * @param1 state:boolean
     */
     hover: function () { },
     /**
-    * @name dxSankeyNodeItemmethods.isHovered
+    * @name dxSankeyNodemethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function () { },
     /**
-    * @name dxSankeyNodeItemmethods.showtTooltip
+    * @name dxSankeyNodemethods.showtTooltip
     * @publicName showTooltip()
     */
     showTooltip: function(){ }
 };
 
 /**
-* @name dxSankeyLinkItem
-* @publicName LinkItem
+* @name dxSankeyLink
+* @publicName Link
 */
-var LinkItem = {
+var Link = {
     /**
-    * @name dxSankeyLinkItemfields.connection
+    * @name dxSankeyLinkfields.connection
     * @type Object
     */
     connection: undefined,
     /**
-    * @name dxSankeyLinkItemmethods.hover
+    * @name dxSankeyLinkmethods.hover
     * @publicName hover(state)
     * @param1 state:boolean
     */
     hover: function () { },
     /**
-    * @name dxSankeyLinkItemmethods.adjacentNodeHover
+    * @name dxSankeyLinkmethods.adjacentNodeHover
     * @publicName adjacentNodeHover(state)
     * @param1 state:boolean
     */
     adjacentNodeHover: function () { },
     /**
-    * @name dxSankeyLinkItemmethods.isHovered
+    * @name dxSankeyLinkmethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function () { },
     /**
-    * @name dxSankeyLinkItemmethods.isAdjacentNodeHovered
+    * @name dxSankeyLinkmethods.isAdjacentNodeHovered
     * @publicName isAdjacentNodeHovered()
     * @return boolean
     */
     isAdjacentNodeHovered: function () { },
     /**
-    * @name dxSankeyLinkItemmethods.showTooltip
+    * @name dxSankeyLinkmethods.showTooltip
     * @publicName showTooltip()
     */
     showTooltip: function(){ }
@@ -86,12 +86,12 @@ var LinkItem = {
 var SankeyItems = {
     /**
     * @name dxSankeyItemsfields.nodes
-    * @type Array<dxSankeyNodeItem>
+    * @type Array<dxSankeyNode>
     */
     nodes: undefined,
     /**
     * @name dxSankeyItemsfields.links
-    * @type Array<dxSankeyLinksItem>
+    * @type Array<dxSankeyLinks>
     */
     links: undefined
 }

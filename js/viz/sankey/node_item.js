@@ -46,7 +46,7 @@ function compileLabelAttrs(labelOptions, filter, node) {
     };
 }
 
-function NodeItem(widget, params) {
+function Node(widget, params) {
     var that = this,
         widgetOffset = widget._renderer.getRootOffset();
 
@@ -71,7 +71,7 @@ function NodeItem(widget, params) {
     };
 }
 
-NodeItem.prototype = {
+Node.prototype = {
     compileAttrs: function() {
         return compileAttrs(this.color, this.options);
     },
@@ -152,4 +152,4 @@ NodeItem.prototype = {
 
 };
 
-module.exports = NodeItem;
+module.exports = Node;

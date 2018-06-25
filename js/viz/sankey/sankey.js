@@ -3,8 +3,8 @@
 const COLOR_MODE_GRADIENT = 'gradient';
 
 var noop = require("../../core/utils/common").noop,
-    NodeItem = require("./node_item"),
-    LinkItem = require("./link_item"),
+    Node = require("./node_item"),
+    Link = require("./link_item"),
     defaultLayoutBuilder = require("./layout");
 
 var dxSankey = require("../core/base_widget").inherit({
@@ -229,7 +229,7 @@ var dxSankey = require("../core/base_widget").inherit({
             layout.nodes.forEach((cascadeNodes) => {
                 cascadeNodes.forEach((node) => {
                     var color = nodeOptions.color || palette.getNextColor(totalNodesNum),
-                        nodeItem = new NodeItem(that, {
+                        nodeItem = new Node(that, {
                             id: nodeIdx,
                             color: color,
                             rect: node,
@@ -256,7 +256,7 @@ var dxSankey = require("../core/base_widget").inherit({
                     color = nodeColors[link._from._name];
                 }
 
-                var linkItem = new LinkItem(that, {
+                var linkItem = new Link(that, {
                     d: link.d,
                     boundingRect: link._boundingRect,
                     color: color,

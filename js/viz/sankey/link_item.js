@@ -32,7 +32,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
     };
 }
 
-function LinkItem(widget, params) {
+function Link(widget, params) {
     var that = this,
         widgetOffset = widget._renderer.getRootOffset();
 
@@ -62,7 +62,7 @@ function LinkItem(widget, params) {
     };
 }
 
-LinkItem.prototype = {
+Link.prototype = {
     getState: function() {
         return states[this.code];
     },
@@ -132,4 +132,4 @@ LinkItem.prototype = {
     }
 };
 
-module.exports = LinkItem;
+module.exports = Link;
