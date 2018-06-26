@@ -689,6 +689,8 @@
                 // values: [ 0.0 .. 1.0 ] - no pressure and the maximum amount of pressure respectively.
                 force: null,
 
+                cancelable: true,  // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
+
                 touches: [],
                 targetTouches: [],
                 changedTouches: [],
