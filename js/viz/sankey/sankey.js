@@ -17,7 +17,7 @@ var dxSankey = require("../core/base_widget").inherit({
     _optionChangesMap: {
         dataSource: "DATA_SOURCE",
         sortData: "DATA_SOURCE",
-        align: "DATA_SOURCE",
+        alignment: "DATA_SOURCE",
         node: "BUILD_LAYOUT",
         link: "BUILD_LAYOUT",
         palette: "BUILD_LAYOUT",
@@ -205,7 +205,7 @@ var dxSankey = require("../core/base_widget").inherit({
                     availableRect: rect,
                     nodePadding: nodeOptions.padding,
                     nodeWidth: nodeOptions.width,
-                    nodeAlign: that._getOption('align', true)
+                    nodeAlign: that._getOption('alignment', true)
                 }, that._incidentOccurred
             );
         that._layoutMap = layout;

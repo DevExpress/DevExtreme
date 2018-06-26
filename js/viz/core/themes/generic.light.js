@@ -1555,7 +1555,7 @@ registerTheme({
     },
     sankey: {
         hoverEnabled: true,
-        align: "center",
+        alignment: "center",
         adaptiveLayout: {
             width: 80,
             height: 80,

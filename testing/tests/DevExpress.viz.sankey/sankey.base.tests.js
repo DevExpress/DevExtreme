@@ -376,7 +376,7 @@ QUnit.test("Passing default align option", function(assert) {
 QUnit.test("Passing string align option", function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        align: 'bottom',
+        alignment: 'bottom',
         dataSource: [
             ['A', 'Z', 1]
         ]
@@ -387,7 +387,7 @@ QUnit.test("Passing string align option", function(assert) {
 QUnit.test("Passing array align option", function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
-        align: ['top', 'bottom'],
+        alignment: ['top', 'bottom'],
         dataSource: [
             ['A', 'Z', 1]
         ]
@@ -634,7 +634,7 @@ QUnit.test("Default align option", function(assert) {
 QUnit.test("Align option as <String>", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Y', 1], ['B', 'Y', 1], ['B', 'M', 1], ['C', 'M', 1], ['M', 'Y', 1]],
-            align: 'bottom'
+            alignment: 'bottom'
         }),
         size = sankey.getSize(),
         nodes = sankey.getAllNodes();
@@ -648,7 +648,7 @@ QUnit.test("Align option as <String>", function(assert) {
 QUnit.test("Align option as <Array>", function(assert) {
     var sankey = createSankey({
             dataSource: common.testData.simpleData,
-            align: ['top', 'top', 'top']
+            alignment: ['top', 'top', 'top']
         }),
         nodes = sankey.getAllNodes();
 
@@ -759,11 +759,11 @@ QUnit.test("SortData option", function(assert) {
 QUnit.test("Align option updated as <String>", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Y', 1], ['B', 'Y', 1], ['B', 'M', 1], ['C', 'M', 1], ['M', 'Y', 1]],
-            align: 'top'
+            alignment: 'top'
         }),
         size = sankey.getSize();
 
-    sankey.option({ align: 'bottom' });
+    sankey.option({ alignment: 'bottom' });
     var nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
@@ -775,10 +775,10 @@ QUnit.test("Align option updated as <String>", function(assert) {
 QUnit.test("Align option updated as <Array>", function(assert) {
     var sankey = createSankey({
         dataSource: common.testData.simpleData,
-        align: 'bottom'
+        alignment: 'bottom'
     });
 
-    sankey.option({ align: ['top', 'top', 'top'] });
+    sankey.option({ alignment: ['top', 'top', 'top'] });
     var nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
