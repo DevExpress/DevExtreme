@@ -1697,6 +1697,31 @@ QUnit.test("selectionChanged should not fire if selectedItem was not changed", f
     assert.equal(selectionChangedHandler.callCount, 1, "selectionChanged should not fire twice");
 });
 
+QUnit.test("selectionChanged should not fire if selectedItem was not changed and displayValue is a number", function(assert) {
+    var selectionChangedHandler = sinon.spy(),
+        $element = $("#selectBox").dxSelectBox({
+            dataSource: {
+                load: function() {
+                    return [{ id: 1, text: 1 }];
+                },
+
+                byKey: function(key) {
+                    return { id: key, text: key };
+                }
+            },
+            onSelectionChanged: selectionChangedHandler,
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            value: 1
+        }),
+        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+    $input.focusout();
+
+    assert.equal(selectionChangedHandler.callCount, 1, "selectionChanged does not rise twice");
+});
+
 
 QUnit.test("set non existing item is not reset after dataSource changing", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
