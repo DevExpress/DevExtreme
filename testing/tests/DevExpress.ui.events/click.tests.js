@@ -58,10 +58,10 @@ QUnit.test("event triggers", function(assert) {
 });
 
 QUnit.test("event args", function(assert) {
-    var fields = ["altKey", "button", "cancelable", "clientX", "clientY",
+    var fields = ["altKey", "cancelable", "clientX", "clientY",
         "ctrlKey", "currentTarget", "data", "delegateTarget",
         "isDefaultPrevented", "metaKey", "originalEvent",
-        "pageX", "pageY", "relatedTarget", "screenX", "screenY", "shiftKey",
+        "pageX", "pageY", "screenX", "screenY", "shiftKey",
         "target", "timeStamp", "type", "view", "which"];
 
     var element = this.element.on("dxclick", function(e) {
