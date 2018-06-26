@@ -79,6 +79,21 @@ registerTheme({
             breakStyle: { color: "#73869e" }
         }
     },
+    gauge: {
+        valueIndicators: {
+            "rangebar": {
+                color: ACCENT_COLOR
+            },
+            "textcloud": {
+                color: ACCENT_COLOR,
+                text: {
+                    font: {
+                        color: BACKGROUND_COLOR
+                    }
+                }
+            }
+        }
+    },
     barGauge: {
         backgroundColor: "#526280"
     },
