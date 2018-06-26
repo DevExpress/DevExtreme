@@ -458,9 +458,8 @@ var dxSankey = {
     * @extends Action
     * @type function|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field2 event:event
-    * @type_function_param1_field3 item:dxSankeyNode|dxSankeyLink
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 item:dxSankeyNode|dxSankeyLink
     * @notUsedInTheme
     * @action
     */
@@ -470,15 +469,21 @@ var dxSankey = {
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 item:dxSankeyNode|dxSankeyLink
+    * @type_function_param1_field4 item:dxSankeyNode|dxSankeyLink
     * @notUsedInTheme
     * @action
     */
     onHoverChanged: function() { },
     /**
-    * @name dxSankeyMethods.getAllItems
-    * @publicName getAllItems()
-    * @return dxSankeyItems
+    * @name dxSankeyMethods.getAllNodes
+    * @publicName getAllNodes()
+    * @return Array<dxSankeyNode>
     */
-    getAllItems: function () { }
+    getAllNodes: function() { },
+    /**
+    * @name dxSankeyMethods.getAllLinks
+    * @publicName getAllLinks()
+    * @return Array<dxSankeyLink>
+    */
+    getAllLinks: function() { }
 }

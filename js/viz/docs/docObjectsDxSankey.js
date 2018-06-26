@@ -3,7 +3,7 @@
 * @name dxSankeyNode
 * @publicName Node
 */
-var NodeItem = {
+var Node = {
     /**
     * @name dxSankeyNodefields.title
     * @type string
@@ -45,7 +45,7 @@ var NodeItem = {
 var Link = {
     /**
     * @name dxSankeyLinkfields.connection
-    * @type Object
+    * @type dxSankeyConnectionInfoObject
     */
     connection: undefined,
     /**
@@ -80,18 +80,24 @@ var Link = {
 };
 
 /**
-* @name dxSankeyItems
-* @publicName SankeyItems
+* @name dxSankeyConnectionInfoObject
+* @publicName connection
+* @type object
 */
-var SankeyItems = {
+var SankeyConnectionInfoObject = {
     /**
-    * @name dxSankeyItemsfields.nodes
-    * @type Array<dxSankeyNode>
+    * @name dxSankeyConnectionInfoObject.from
+    * @type string
     */
-    nodes: undefined,
+    from: undefined,
     /**
-    * @name dxSankeyItemsfields.links
-    * @type Array<dxSankeyLinks>
+    * @name dxSankeyConnectionInfoObject.to
+    * @type string
     */
-    links: undefined
+    to: undefined,
+    /**
+    * @name dxSankeyConnectionInfoObject.weight
+    * @type Number
+    */
+   weight: undefined
 }
