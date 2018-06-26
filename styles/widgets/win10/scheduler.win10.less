@@ -4,7 +4,6 @@
 
 @WIN10_NAVIGATOR_ICON_SIZE: 16px;
 @WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET: 70px;
-@WIN10_SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH: 85px;
 
 .scheduler-mixin(100px);
 
@@ -143,11 +142,6 @@
     }
 }
 
-.dx-recurrence-radiogroup-repeat-type-label,
-.dx-recurrence-repeat-end-label {
-    line-height: 30px;
-}
-
 .dx-scheduler-dropdown-appointments {
     &.dx-button,
     &.dx-button.dx-state-hover,
@@ -160,15 +154,4 @@
             line-height: 10px;
         }
     }
-}
-
-.dx-recurrence-editor-container {
-    margin-top: 15px;
-    padding-top: 17px;
-}
-
-.dx-recurrence-numberbox-interval,
-.dx-recurrence-numberbox-day-of-month,
-.dx-recurrence-numberbox-repeat-count {
-    width: @WIN10_SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH !important;
 }
