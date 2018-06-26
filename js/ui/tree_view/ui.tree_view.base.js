@@ -344,7 +344,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             createChildren: null,
 
             /**
-             * @name dxTreeViewOptions.onSelectAllValueChanged
+             * @name dxTreeViewOptions_onSelectAllValueChanged
+             * @publicName onSelectAllValueChanged
              * @extends Action
              * @type function(e)
              * @type_function_param1 e:object
