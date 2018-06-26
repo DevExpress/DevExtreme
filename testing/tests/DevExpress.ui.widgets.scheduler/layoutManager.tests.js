@@ -2354,6 +2354,33 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     assert.equal(dropDownMenuText, "3", "DropDown menu has correct text");
 });
 
+QUnit.test("DropDown appointments button should have correct width on week view", function(assert) {
+    var items = [
+        { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+        { text: "Task 5", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
+        { text: "Task 6", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'auto',
+                forceMaxAppointmentPerCell: true
+            }],
+            height: 600,
+            width: 1500,
+            dataSource: items
+        }
+    );
+
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+
+    assert.roughEqual($dropDownMenu.outerWidth(), 24, 0.5, "ddAppointment has correct width");
+});
+
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
     var items = [
         { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
