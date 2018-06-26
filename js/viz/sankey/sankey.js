@@ -374,13 +374,13 @@ var dxSankey = require("../core/base_widget").inherit({
         return [adaptiveLayout.width, adaptiveLayout.height];
     },
 
-    getAllItems: function() {
-        return {
-            nodes: this._nodes.slice(),
-            links: this._links.slice()
-        };
+    getAllNodes: function() {
+        return this._nodes.slice();
     },
 
+    getAllLinks: function() {
+        return this._links.slice();
+    },
 });
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({

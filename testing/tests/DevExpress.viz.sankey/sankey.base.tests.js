@@ -46,13 +46,13 @@ QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
         dataSource: [['A', 'Z', 1]]
     });
 
-    sankey.getAllItems().links[0].showTooltip();
+    sankey.getAllLinks()[0].showTooltip();
     sankey.hideTooltip();
 
-    sankey.getAllItems().nodes[0].showTooltip();
+    sankey.getAllNodes()[0].showTooltip();
     sankey.hideTooltip();
 
-    sankey.getAllItems().nodes[1].showTooltip();
+    sankey.getAllNodes()[1].showTooltip();
     sankey.hideTooltip();
 
     assert.ok(sankey);
@@ -404,46 +404,53 @@ QUnit.module("Returning correct layout data", $.extend({}, environment, {
     }
 }));
 
-QUnit.test("Returning all nodes and links data in getAllItems", function(assert) {
+QUnit.test("Returning all nodes in getAllNodes", function(assert) {
     var sankey = createSankey({
             layoutBuilder: layoutBuilder,
             dataSource: common.testData.countriesData
         }),
-        items = sankey.getAllItems();
+        nodes = sankey.getAllNodes();
 
-    assert.ok(items.hasOwnProperty('links'));
-    assert.ok(items.hasOwnProperty('nodes'));
-    assert.equal(items.links.length, 46);
-    assert.equal(items.nodes.length, 16);
+    assert.equal(nodes.length, 16);
 });
 
-QUnit.test("Returning correct links[].connection data in getAllItems", function(assert) {
+QUnit.test("Returning all links data in getAllLinks", function(assert) {
+    var sankey = createSankey({
+            layoutBuilder: layoutBuilder,
+            dataSource: common.testData.countriesData
+        }),
+        links = sankey.getAllLinks();
+
+    assert.equal(links.length, 46);
+});
+
+QUnit.test("Returning correct links[].connection data in getAllLinks", function(assert) {
     var sankey = createSankey({
             layoutBuilder: layoutBuilder,
             dataSource: common.testData.simpleData
         }),
-        items = sankey.getAllItems();
+        links = sankey.getAllLinks();
 
-    assert.equal(items.links.length, common.testData.simpleData.length);
+    assert.equal(links.length, common.testData.simpleData.length);
     common.testData.simpleData.forEach(function(linkData) {
-        var output = items.links.find(function(i) {
+        var output = links.find(function(i) {
             return i.connection.from === linkData[0] && i.connection.to === linkData[1] && i.connection.weight === linkData[2];
         });
         assert.ok(typeof output !== 'undefined');
     });
 });
 
-QUnit.test("Returning correct nodes[].linksIn and nodes[].linksOut data in getAllItems", function(assert) {
+QUnit.test("Returning correct nodes[].linksIn and nodes[].linksOut data in getAllNodes", function(assert) {
     var sankey = createSankey({
             layoutBuilder: layoutBuilder,
             dataSource: common.testData.simpleData
         }),
-        items = sankey.getAllItems(),
+        nodes = sankey.getAllNodes(),
         expected = { 'A': [0, 1], 'B': [0, 2], 'C': [0, 1], 'M': [2, 1], Y: [3, 0] };
 
-    assert.equal(items.nodes.length, 5);
+    assert.equal(nodes.length, 5);
     ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = items.nodes.find(function(node) { return node.title === nodeName; });
+        var node = nodes.find(function(node) { return node.title === nodeName; });
         assert.equal(node.linksIn.length, expected[nodeName][0]);
         assert.equal(node.linksOut.length, expected[nodeName][1]);
     });
@@ -600,7 +607,7 @@ QUnit.test("Largest cascade occupies full chart height", function(assert) {
             dataSource: [['A', 'Y', 1], ['B', 'Y', 1], ['B', 'M', 1], ['C', 'M', 1], ['M', 'Y', 1]]
         }),
         size = sankey.getSize(),
-        nodes = sankey.getAllItems().nodes,
+        nodes = sankey.getAllNodes(),
         cascadeHeight = 0;
 
     ['A', 'B', 'C'].forEach(function(nodeName) {
@@ -616,7 +623,7 @@ QUnit.test("Default align option", function(assert) {
             dataSource: common.testData.simpleData
         }),
         size = sankey.getSize(),
-        nodes = sankey.getAllItems().nodes;
+        nodes = sankey.getAllNodes();
 
     ['M', 'Y'].forEach(function(nodeName) {
         var node = nodes.find(function(node) { return node.title === nodeName; });
@@ -630,7 +637,7 @@ QUnit.test("Align option as <String>", function(assert) {
             align: 'bottom'
         }),
         size = sankey.getSize(),
-        nodes = sankey.getAllItems().nodes;
+        nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
         var node = nodes.find(function(node) { return node.title === nodeName; });
@@ -643,7 +650,7 @@ QUnit.test("Align option as <Array>", function(assert) {
             dataSource: common.testData.simpleData,
             align: ['top', 'top', 'top']
         }),
-        nodes = sankey.getAllItems().nodes;
+        nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
         var node = nodes.find(function(node) { return node.title === nodeName; });
@@ -743,7 +750,7 @@ QUnit.test("SortData option", function(assert) {
     });
 
     sankey.option({ sortData: { A: 2, B: 1 } });
-    var nodesSorted = sankey.getAllItems().nodes;
+    var nodesSorted = sankey.getAllNodes();
 
     assert.equal(nodesSorted[0].title, 'B');
     assert.equal(nodesSorted[1].title, 'A');
@@ -757,7 +764,7 @@ QUnit.test("Align option updated as <String>", function(assert) {
         size = sankey.getSize();
 
     sankey.option({ align: 'bottom' });
-    var nodes = sankey.getAllItems().nodes;
+    var nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
         var node = nodes.find(function(node) { return node.title === nodeName; });
@@ -772,7 +779,7 @@ QUnit.test("Align option updated as <Array>", function(assert) {
     });
 
     sankey.option({ align: ['top', 'top', 'top'] });
-    var nodes = sankey.getAllItems().nodes;
+    var nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
         var node = nodes.find(function(node) { return node.title === nodeName; });

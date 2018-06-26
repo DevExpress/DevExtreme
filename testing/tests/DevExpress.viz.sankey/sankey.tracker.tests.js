@@ -58,12 +58,12 @@ QUnit.test("Node hover on. Get item by tracker data", function(assert) {
 
     this.trigger(pointerEvents.move, 2);
 
-    assert.strictEqual(widget.getAllItems().nodes[0].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllItems().nodes[1].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllItems().nodes[2].isHovered(), true, "node state");
+    assert.strictEqual(widget.getAllNodes()[0].isHovered(), false, "node state");
+    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, "node state");
+    assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, "node state");
 
-    assert.strictEqual(widget.getAllItems().links[0].isAdjacentNodeHovered(), true, "adjacent links hovered");
-    assert.strictEqual(widget.getAllItems().links[1].isAdjacentNodeHovered(), true, "adjacent links hovered");
+    assert.strictEqual(widget.getAllLinks()[0].isAdjacentNodeHovered(), true, "adjacent links hovered");
+    assert.strictEqual(widget.getAllLinks()[1].isAdjacentNodeHovered(), true, "adjacent links hovered");
 });
 
 QUnit.test("Link hover on. Get item by tracker data", function(assert) {
@@ -73,12 +73,12 @@ QUnit.test("Link hover on. Get item by tracker data", function(assert) {
 
     this.trigger(pointerEvents.move, 3);
 
-    assert.strictEqual(widget.getAllItems().nodes[0].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllItems().nodes[1].isHovered(), false, "node state");
-    assert.strictEqual(widget.getAllItems().nodes[2].isHovered(), false, "node state");
+    assert.strictEqual(widget.getAllNodes()[0].isHovered(), false, "node state");
+    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, "node state");
+    assert.strictEqual(widget.getAllNodes()[2].isHovered(), false, "node state");
 
-    assert.strictEqual(widget.getAllItems().links[0].isHovered(), true, "link state");
-    assert.strictEqual(widget.getAllItems().links[1].isHovered(), false, "link state");
+    assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, "link state");
+    assert.strictEqual(widget.getAllLinks()[1].isHovered(), false, "link state");
 });
 
 QUnit.test("Hover off", function(assert) {
@@ -86,11 +86,11 @@ QUnit.test("Hover off", function(assert) {
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
     });
     this.trigger(pointerEvents.move, 2);
-    assert.strictEqual(widget.getAllItems().nodes[2].isHovered(), true, "node is hovered");
+    assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, "node is hovered");
 
     this.trigger(pointerEvents.move, 3);
-    assert.strictEqual(widget.getAllItems().nodes[1].isHovered(), false, "node is not hovered");
-    assert.strictEqual(widget.getAllItems().links[0].isHovered(), true, "link is hovered");
+    assert.strictEqual(widget.getAllNodes()[1].isHovered(), false, "node is not hovered");
+    assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, "link is hovered");
 });
 
 QUnit.test("Click", function(assert) {
@@ -104,7 +104,7 @@ QUnit.test("Click", function(assert) {
     this.trigger(clickEventName, 2, { pageX: 400, pageY: 300 });
 
     assert.strictEqual(spy.callCount, 1, "call count");
-    assert.strictEqual(spy.lastCall.args[0].item, widget.getAllItems().nodes[2], "item");
+    assert.strictEqual(spy.lastCall.args[0].item, widget.getAllNodes()[2], "item");
 });
 
 QUnit.module("Tooltip", trackerEnvironment);
@@ -117,11 +117,11 @@ QUnit.test("Show tooltip on hovered node", function(assert) {
         }
     });
 
-    sinon.spy(widget.getAllItems().nodes[2], "showTooltip");
+    sinon.spy(widget.getAllNodes()[2], "showTooltip");
 
     this.trigger(pointerEvents.move, 2);
 
-    assert.ok(widget.getAllItems().nodes[2].showTooltip.called);
+    assert.ok(widget.getAllNodes()[2].showTooltip.called);
 });
 
 QUnit.test("Show tooltip on hovered link", function(assert) {
@@ -132,10 +132,10 @@ QUnit.test("Show tooltip on hovered link", function(assert) {
         }
     });
 
-    sinon.spy(widget.getAllItems().links[0], "showTooltip");
+    sinon.spy(widget.getAllLinks()[0], "showTooltip");
 
     this.trigger(pointerEvents.move, 3);
 
-    assert.ok(widget.getAllItems().links[0].showTooltip.called);
+    assert.ok(widget.getAllLinks()[0].showTooltip.called);
 });
 

@@ -23,7 +23,7 @@ QUnit.test("Creation", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         }),
-        nodes = sankey.getAllItems().nodes;
+        nodes = sankey.getAllNodes();
 
     assert.equal(nodes[0].title, 'A');
     assert.equal(nodes[0].linksIn.length, 0);
@@ -50,7 +50,7 @@ QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         }),
-        nodes = sankey.getAllItems().nodes,
+        nodes = sankey.getAllNodes(),
         nodesSVG = this.nodes();
 
     ['A', 'B', 'Z'].forEach(function(nodeName) {
@@ -118,7 +118,7 @@ QUnit.test("Hover style", function(assert) {
         }
     });
 
-    sankey.getAllItems().nodes[1].hover(true);
+    sankey.getAllNodes()[1].hover(true);
 
     var nodes = this.nodes();
 
@@ -143,7 +143,7 @@ QUnit.test("Sankey does not fire drawn event on hover", function(assert) {
 
     drawn.reset();
 
-    sankey.getAllItems().nodes[0].hover(true);
+    sankey.getAllNodes()[0].hover(true);
 
     assert.equal(drawn.callCount, 0);
 });
@@ -170,7 +170,7 @@ QUnit.test("Clear hover of item", function(assert) {
                 }
             }
         }),
-        node = sankey.getAllItems().nodes[1];
+        node = sankey.getAllNodes()[1];
 
     node.hover(true);
     node.hover(false);
@@ -196,7 +196,7 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
                 }
             }
         }),
-        node = sankey.getAllItems().nodes[1];
+        node = sankey.getAllNodes()[1];
 
     node.hover(true);
 
@@ -224,7 +224,7 @@ QUnit.test("Border for hoverStyle can be disabled", function(assert) {
                 }
             }
         }),
-        node = sankey.getAllItems().nodes[1];
+        node = sankey.getAllNodes()[1];
 
     node.hover(true);
 
@@ -239,7 +239,7 @@ QUnit.test("hover changed event", function(assert) {
             dataSource: [['A', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        node = sankey.getAllItems().nodes[0];
+        node = sankey.getAllNodes()[0];
 
     node.hover(true);
 
@@ -253,12 +253,12 @@ QUnit.test("hover changed event after hover second item", function(assert) {
             dataSource: [['A', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        node = sankey.getAllItems().nodes[0];
+        node = sankey.getAllNodes()[0];
 
     node.hover(true);
     hoverChanged.reset();
 
-    sankey.getAllItems().nodes[1].hover(true);
+    sankey.getAllNodes()[1].hover(true);
 
     assert.equal(hoverChanged.callCount, 2);
 });
@@ -269,7 +269,7 @@ QUnit.test("Hover item two times, hover changed event should fire only one time"
             dataSource: [['A', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        node = sankey.getAllItems().nodes[0];
+        node = sankey.getAllNodes()[0];
 
     node.hover(true);
     node.hover(true);
@@ -283,7 +283,7 @@ QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fir
             dataSource: [['A', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        node = sankey.getAllItems().nodes[0];
+        node = sankey.getAllNodes()[0];
 
     node.hover(false);
 
@@ -295,7 +295,7 @@ QUnit.test("disable hover", function(assert) {
             dataSource: [['A', 'Z', 1]],
             hoverEnabled: false
         }),
-        nodes = sankey.getAllItems().nodes;
+        nodes = sankey.getAllNodes();
 
     nodes[0].hover(true);
 
@@ -307,7 +307,7 @@ QUnit.test("isHovered method", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1]]
         }),
-        nodes = sankey.getAllItems().nodes;
+        nodes = sankey.getAllNodes();
 
     nodes[1].hover(true);
 

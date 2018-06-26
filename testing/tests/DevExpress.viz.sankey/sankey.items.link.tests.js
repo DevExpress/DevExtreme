@@ -24,7 +24,7 @@ QUnit.test("Creation", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         }),
-        links = sankey.getAllItems().links;
+        links = sankey.getAllLinks();
 
     assert.equal(links[0].connection.from, 'A');
     assert.equal(links[0].connection.to, 'Z');
@@ -99,7 +99,7 @@ QUnit.test("Hover style", function(assert) {
     assert.equal(base.smartAttr.lastCall.args[0].opacity, 0.1, 'base element is visible');
     assert.equal(base.smartAttr.lastCall.args[0].fill, "#432432");
 
-    sankey.getAllItems().links[1].hover(true);
+    sankey.getAllLinks()[1].hover(true);
 
     assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0.75, 'overlay visible');
     assert.equal(base.smartAttr.lastCall.args[0].opacity, 0), 'base invisible';
@@ -125,7 +125,7 @@ QUnit.test("Sankey does not fire drawn event on link hover", function(assert) {
 
     drawn.reset();
 
-    sankey.getAllItems().links[0].hover(true);
+    sankey.getAllLinks()[0].hover(true);
 
     assert.equal(drawn.callCount, 0);
 });
@@ -152,7 +152,7 @@ QUnit.test("Clear hover of item", function(assert) {
                 }
             }
         }),
-        link = sankey.getAllItems().links[1];
+        link = sankey.getAllLinks()[1];
 
     link.hover(true);
     link.hover(false);
@@ -182,7 +182,7 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
                 }
             }
         }),
-        link = sankey.getAllItems().links[1];
+        link = sankey.getAllLinks()[1];
 
     link.hover(true);
 
@@ -213,7 +213,7 @@ QUnit.test("Border for hoverStyle can be disabled", function(assert) {
                 }
             }
         }),
-        link = sankey.getAllItems().links[1];
+        link = sankey.getAllLinks()[1];
 
     link.hover(true);
 
@@ -231,7 +231,7 @@ QUnit.test("hover changed event", function(assert) {
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        link = sankey.getAllItems().links[0];
+        link = sankey.getAllLinks()[0];
 
     link.hover(true);
 
@@ -245,12 +245,12 @@ QUnit.test("hover changed event after hover second item", function(assert) {
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        link = sankey.getAllItems().links[0];
+        link = sankey.getAllLinks()[0];
 
     link.hover(true);
     hoverChanged.reset();
 
-    sankey.getAllItems().links[1].hover(true);
+    sankey.getAllLinks()[1].hover(true);
 
     assert.equal(hoverChanged.callCount, 2);
 });
@@ -261,7 +261,7 @@ QUnit.test("Hover item two times, hover changed event should fire only one time"
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        link = sankey.getAllItems().links[0];
+        link = sankey.getAllLinks()[0];
 
     link.hover(true);
     link.hover(true);
@@ -275,7 +275,7 @@ QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fir
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
             onHoverChanged: hoverChanged
         }),
-        link = sankey.getAllItems().links[0];
+        link = sankey.getAllLinks()[0];
 
     link.hover(false);
 
@@ -287,7 +287,7 @@ QUnit.test("disable hover", function(assert) {
             dataSource: [['A', 'Z', 1]],
             hoverEnabled: false
         }),
-        links = sankey.getAllItems().links;
+        links = sankey.getAllLinks();
 
     links[0].hover(true);
 
@@ -299,7 +299,7 @@ QUnit.test("isHovered method", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
         }),
-        links = sankey.getAllItems().links;
+        links = sankey.getAllLinks();
 
     links[1].hover(true);
 
@@ -316,7 +316,7 @@ QUnit.test("links colorMode", function(assert) {
         }),
         nodes = this.nodes();
 
-    sankey.getAllItems().links.forEach(function(linkItem) {
+    sankey.getAllLinks().forEach(function(linkItem) {
         var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.from; });
         assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
     });
@@ -351,7 +351,7 @@ QUnit.test("links style when adjacent node is hovered", function(assert) {
         }
     });
 
-    sankey.getAllItems().nodes[0].hover(true);
+    sankey.getAllNodes()[0].hover(true);
     assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].opacity, 0.5);
     assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].fill, '#ffeedd');
     assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].opacity, 0);
@@ -364,8 +364,8 @@ QUnit.test("links style when adjacent node is hovered", function(assert) {
     assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].opacity, 0.3);
     assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].fill, '#112233');
 
-    sankey.getAllItems().nodes[0].hover(false);
-    sankey.getAllItems().nodes[1].hover(true);
+    sankey.getAllNodes()[0].hover(false);
+    sankey.getAllNodes()[1].hover(true);
     assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].opacity, 0);
     assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].opacity, 0.3);
     assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].fill, '#112233');
@@ -378,8 +378,8 @@ QUnit.test("links style when adjacent node is hovered", function(assert) {
     assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].opacity, 0.3);
     assert.equal(this.link(2)[1].smartAttr.lastCall.args[0].fill, '#112233');
 
-    sankey.getAllItems().nodes[1].hover(false);
-    sankey.getAllItems().nodes[2].hover(true);
+    sankey.getAllNodes()[1].hover(false);
+    sankey.getAllNodes()[2].hover(true);
     assert.equal(this.link(0)[0].smartAttr.lastCall.args[0].opacity, 0);
     assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].opacity, 0.3);
     assert.equal(this.link(0)[1].smartAttr.lastCall.args[0].fill, '#112233');
