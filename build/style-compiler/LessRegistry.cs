@@ -200,7 +200,8 @@ namespace StyleCompiler
                 "scheduler",
                 "form",
                 "spa",
-                "filterBuilder"
+                "filterBuilder",
+                "recurrenceEditor"
             });
 
             // Non-themeable components that have only common styles

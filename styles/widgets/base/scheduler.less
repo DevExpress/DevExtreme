@@ -30,8 +30,6 @@
 @SCHEDULER_MONTH_DATE_TEXT_SIZE: 16px;
 @SCHEDULER_MONTH_DATE_TEXT_PADDING: 6px;
 
-@SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH: 70px;
-@SCHEDULER_RECURRENCE_SELECTBOX_WIDTH: 120px;
 @SCHEDULER_RECURRENCE_LINE_TOP_POSITION: 70px;
 
 @SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH: 250px;
@@ -2051,65 +2049,6 @@
         }
     }
 
-    .dx-numberbox.dx-recurrence-numberbox-interval,
-    .dx-numberbox.dx-recurrence-numberbox-day-of-month,
-    .dx-selectbox.dx-recurrence-selectbox-month-of-year,
-    .dx-numberbox.dx-recurrence-numberbox-repeat-count,
-    .dx-datebox.dx-recurrence-datebox-until-date,
-    .dx-switch.dx-recurrence-switch-repeat-end {
-        float: left;
-        position: relative !important;
-
-        &.dx-rtl {
-            float: right;
-        }
-    }
-
-    .dx-recurrence-numberbox-interval,
-    .dx-recurrence-numberbox-day-of-month,
-    .dx-recurrence-numberbox-repeat-count {
-        width: @SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH !important;
-    }
-
-    .dx-datebox.dx-recurrence-datebox-until-date {
-        width: inherit !important;
-    }
-
-    .dx-recurrence-radiogroup-repeat-type-label,
-    .dx-recurrence-repeat-end-label {
-        display: inline-block;
-        padding: 0 5px;
-        vertical-align: top;
-    }
-
-    .dx-recurrence-repeat-end-label {
-        float: left;
-        width: 50px;
-        white-space: nowrap;
-    }
-
-    .dx-recurrence-selectbox-month-of-year {
-        width: @SCHEDULER_RECURRENCE_SELECTBOX_WIDTH !important;
-        top: 0 !important;
-    }
-
-    .dx-recurrence-checkbox-day-of-week {
-        position: relative !important;
-        padding-right: 10px;
-    }
-
-    .dx-recurrence-radiogroup-repeat-type {
-        margin: 0;
-
-        .dx-item:first-child {
-            padding-bottom: 10px;
-        }
-
-        &.dx-rtl .dx-recurrence-repeat-end-label {
-            float: right;
-        }
-    }
-
     .dx-scheduler-dropdown-appointments {
         background-color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
         color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
@@ -2796,31 +2735,6 @@
                     }
 
                     margin-left: 0;
-                }
-            }
-        }
-
-        .dx-scheduler-recurrence-rule-item {
-            .dx-field-item-label {
-                &.dx-field-item-label-location-left,
-                &.dx-field-item-label-location-top {
-                    padding-left: 10px;
-                }
-
-                &.dx-field-item-label-location-right {
-                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
-            &.dx-label-v-align {
-                .dx-recurrence-editor {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
-                }
-            }
-
-            .dx-field-item-content-location-left {
-                .dx-recurrence-editor {
-                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
                 }
             }
         }
