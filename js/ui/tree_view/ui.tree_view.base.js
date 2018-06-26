@@ -341,7 +341,17 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1 parentNode:dxTreeViewNode
             * @type_function_return Promise<any>|Array<Object>
             */
-            createChildren: null
+            createChildren: null,
+
+            /**
+             * @name dxTreeViewOptions.onSelectAllValueChanged
+             * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 value:boolean
+             * @action
+             */
+            onSelectAllValueChanged: null
 
             /**
             * @name dxTreeViewOptions_onSelectionChanged
@@ -492,6 +502,16 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }).bind(this));
     },
 
+    _createSelectAllValueChangedAction: function() {
+        this._selectAllValueChangedAction = this._createActionByOption("onSelectAllValueChanged", {
+            excludeValidators: ["disabled", "readOnly"]
+        });
+    },
+
+    _fireSelectAllValueChanged: function(value) {
+        this._selectAllValueChangedAction({ value: value });
+    },
+
     _checkBoxModeChange: function(value, previousValue) {
         if(previousValue === "none" || value === "none") {
             this.repaint();
@@ -574,6 +594,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case "animationEnabled":
             case "virtualModeEnabled":
             case "selectByClick":
+                break;
+            case "onSelectAllValueChanged":
+                this._createSelectAllValueChangedAction();
                 break;
             case "selectNodesRecursive":
                 this._dataAdapter.setOption("recursiveSelection", args.value);
@@ -819,6 +842,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initExpandEvent();
 
         if(this._selectAllEnabled()) {
+            this._createSelectAllValueChangedAction();
             this._renderSelectAllItem($nodeContainer);
         }
     },
@@ -1293,7 +1317,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
             text: this.option("selectAllText"),
-            onValueChanged: this._toggleSelectAll.bind(this)
+            onValueChanged: function(args) {
+                this._toggleSelectAll(args);
+                this._fireSelectAllValueChanged(args.value);
+            }.bind(this)
         });
 
         this._toggleSelectedClass(this._$selectAllItem, value);
