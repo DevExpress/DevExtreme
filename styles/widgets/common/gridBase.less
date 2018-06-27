@@ -737,7 +737,13 @@
     }
 
     .dx-gridbase-container > .dx-@{widgetName}-rowsview {
-        flex: auto;
+        display: flex;
+        flex: auto;        
+
+        .dx-scrollable-wrapper {
+            flex: 1;
+            height: auto;
+        }
     }
 
     .dx-@{widgetName}-rowsview {

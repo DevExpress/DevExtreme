@@ -448,7 +448,6 @@ var ResizingController = modules.ViewController.inherit({
         }
 
         return commonUtils.deferRender(function() {
-            that._rowsView.height("");
             if(that._dataController.isLoaded()) {
                 that._synchronizeColumns();
             }
@@ -483,7 +482,6 @@ var ResizingController = modules.ViewController.inherit({
             hasHeight = that._hasHeight || maxHeightHappened,
             height = that.option("height") || $rootElement.get(0).style.height,
             editorFactory = that.getController("editorFactory"),
-            rowsViewHeight = "",
             isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight,
             $testDiv;
 
@@ -495,12 +493,8 @@ var ResizingController = modules.ViewController.inherit({
             $testDiv.remove();
         }
 
-        if(isMaxHeightApplied) {
-            rowsViewHeight = rowsView.height();
-        }
-
         commonUtils.deferRender(function() {
-            rowsView.height(rowsViewHeight, hasHeight);
+            rowsView.height(null, hasHeight);
             // IE11
             if(maxHeightHappened && !isMaxHeightApplied) {
                 $(groupElement).css("height", maxHeight);
