@@ -1455,9 +1455,9 @@ QUnit.test("Lose focus on start of resize columns", function(assert) {
 
 // T615174
 QUnit.test("Last cell width != auto if sum of cells width == container width", function(assert) {
-    $("#container").width(200);
+    $("#container").width(150);
     // arrange, act
-    var dataGrid = $("#dataGrid").dxDataGrid({
+    var dataGrid = $("#dataGrid").css("float", "left").dxDataGrid({
             loadingTimeout: undefined,
             dataSource: [{}],
             columns: [{ dataField: "firstName", width: 100 }, { dataField: "lastName", width: 100 }]
@@ -1470,16 +1470,9 @@ QUnit.test("Last cell width != auto if sum of cells width == container width", f
     assert.strictEqual(instance.columnOption(1, "width"), 100);
 
     var cols = $(".dx-datagrid colgroup").eq(0).find("col");
+    assert.strictEqual($("#dataGrid").width(), 200);
     assert.strictEqual(cols[0].style.width, "100px");
     assert.strictEqual(cols[1].style.width, "100px");
-
-    // act
-    $("#container").width(201);
-    instance.updateDimensions();
-
-    // assert
-    assert.strictEqual(cols[0].style.width, "100px");
-    assert.strictEqual(cols[1].style.width, "auto");
 });
 
 QUnit.test("Resize is not called after editCell", function(assert) {
