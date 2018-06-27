@@ -857,6 +857,7 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
     });
 
+    // T649282
     QUnit.test("'Reset' operation click when 'Between' operation is active", function(assert) {
         // arrange
         var dataGrid = this.initDataGrid({
