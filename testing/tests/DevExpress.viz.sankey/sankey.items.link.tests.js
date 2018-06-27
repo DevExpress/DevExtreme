@@ -307,11 +307,11 @@ QUnit.test("isHovered method", function(assert) {
     assert.ok(!links[0].isHovered());
 });
 
-QUnit.test("links colorMode", function(assert) {
+QUnit.test("links colorMode 'source'", function(assert) {
     var sankey = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
             link: {
-                colorMode: 'node'
+                colorMode: 'source'
             }
         }),
         nodes = this.nodes();
@@ -322,14 +322,44 @@ QUnit.test("links colorMode", function(assert) {
     });
 });
 
-QUnit.test("links colorMode with fixed color of nodes", function(assert) {
+QUnit.test("links colorMode 'source' with fixed color of nodes", function(assert) {
     createSankey({
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
         node: {
             color: '#aabbcc'
         },
         link: {
-            colorMode: 'node'
+            colorMode: 'source'
+        }
+    });
+
+    assert.equal(this.link(0)[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
+    assert.equal(this.link(1)[0].smartAttr.firstCall.args[0].fill, '#aabbcc');
+});
+
+QUnit.test("links colorMode 'target'", function(assert) {
+    var sankey = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            link: {
+                colorMode: 'target'
+            }
+        }),
+        nodes = this.nodes();
+
+    sankey.getAllLinks().forEach(function(linkItem) {
+        var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.to; });
+        assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
+    });
+});
+
+QUnit.test("links colorMode 'target' with fixed color of nodes", function(assert) {
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        node: {
+            color: '#aabbcc'
+        },
+        link: {
+            colorMode: 'target'
         }
     });
 

@@ -1,6 +1,6 @@
 "use strict";
 
-const COLOR_MODE_GRADIENT = 'gradient';
+import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
 var noop = require("../../core/utils/common").noop,
     Node = require("./node_item"),
@@ -252,8 +252,10 @@ var dxSankey = require("../core/base_widget").inherit({
                 }
 
                 let color = linkOptions.color;
-                if(linkOptions.colorMode !== 'none') {
+                if(linkOptions.colorMode === COLOR_MODE_SOURCE) {
                     color = nodeColors[link._from._name];
+                } else if(linkOptions.colorMode === COLOR_MODE_TARGET) {
+                    color = nodeColors[link._to._name];
                 }
 
                 var linkItem = new Link(that, {

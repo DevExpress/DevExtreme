@@ -1,7 +1,6 @@
 "use strict";
 
-const COLOR_MODE_GRADIENT = 'gradient',
-    COLOR_MODE_NODE = 'node';
+import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
 var states = ["normal", "adjacentNodeHover", "hover"],
     isDefined = require("../../core/utils/type").isDefined;
@@ -16,7 +15,7 @@ function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
         opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1),
         fill = itemOptions.color || color;
 
-    if(itemBaseOptions.colorMode === COLOR_MODE_NODE) {
+    if(itemBaseOptions.colorMode === COLOR_MODE_TARGET || itemBaseOptions.colorMode === COLOR_MODE_SOURCE) {
         fill = color;
     } else if(itemBaseOptions.colorMode === COLOR_MODE_GRADIENT && gradient && isDefined(gradient.id)) {
         fill = gradient.id;
