@@ -857,6 +857,25 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
     });
 
+    QUnit.test("'Reset' operation click when 'Between' operation is active", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "dateField", dataType: "date" }],
+            filterValue: ["dateField", "between", [new Date(), new Date()]]
+        });
+
+        var filterMenu = $(dataGrid.element()).find('.dx-menu .dx-menu-item');
+        filterMenu.trigger("dxclick");
+        var filterMenuItems = $('.dx-filter-menu.dx-overlay-content').first().find('li'),
+            resetItem = filterMenuItems.find('.dx-menu-item').last();
+
+        // act
+        resetItem.trigger('dxclick');
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), null);
+    });
+
     QUnit.test("do not sync if filterSyncEnabled = false", function(assert) {
         // arrange
         var dataGrid = this.initDataGrid({
