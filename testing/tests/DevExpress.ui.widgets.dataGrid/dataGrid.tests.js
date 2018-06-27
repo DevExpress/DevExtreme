@@ -1453,6 +1453,35 @@ QUnit.test("Lose focus on start of resize columns", function(assert) {
     assert.ok(isLoseFocusCalled, "loseFocus is called");
 });
 
+// T615174
+QUnit.test("Last cell width != auto if sum of cells width == container width", function(assert) {
+    $("#container").width(200);
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            columns: [{ dataField: "firstName", width: 100 }, { dataField: "lastName", width: 100 }]
+        }),
+        instance = dataGrid.dxDataGrid("instance");
+
+
+    // assert
+    assert.strictEqual(instance.columnOption(0, "width"), 100);
+    assert.strictEqual(instance.columnOption(1, "width"), 100);
+
+    var cols = $(".dx-datagrid colgroup").eq(0).find("col");
+    assert.strictEqual(cols[0].style.width, "100px");
+    assert.strictEqual(cols[1].style.width, "100px");
+
+    // act
+    $("#container").width(201);
+    instance.updateDimensions();
+
+    // assert
+    assert.strictEqual(cols[0].style.width, "100px");
+    assert.strictEqual(cols[1].style.width, "auto");
+});
+
 QUnit.test("Resize is not called after editCell", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
@@ -1588,7 +1617,7 @@ QUnit.test("Resize grid after column resizing", function(assert) {
 
         assert.strictEqual(headersCols.length, 2);
         assert.strictEqual(headersCols[0].style.width, "60%");
-        assert.strictEqual(headersCols[1].style.width, "auto");
+        assert.strictEqual(headersCols[1].style.width, "40%");
     }
 
 });
@@ -2218,7 +2247,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
 
         assert.strictEqual(headersCols.length, 2);
         assert.strictEqual(headersCols[0].style.width, "75%");
-        assert.strictEqual(headersCols[1].style.width, "auto");
+        assert.strictEqual(headersCols[1].style.width, "25%");
     }
 });
 
