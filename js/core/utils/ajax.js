@@ -198,15 +198,16 @@ var getJsonpOptions = function(options) {
 var getRequestOptions = function(options, headers) {
 
     var params = options.data,
+        paramsAlreadyString = typeof params === "string",
         url = options.url || window.location.href;
 
-    if(!options.cache) {
+    if(!paramsAlreadyString && !options.cache) {
         params = params || {};
         params["_"] = Date.now();
     }
 
     if(params && !options.upload) {
-        if(typeof params !== "string") {
+        if(!paramsAlreadyString) {
             params = paramsConvert(params);
         }
 
