@@ -864,12 +864,11 @@ QUnit.module("Real dataGrid", {
             filterValue: ["dateField", "between", [new Date(), new Date()]]
         });
 
+        // act
         var filterMenu = $(dataGrid.element()).find('.dx-menu .dx-menu-item');
         filterMenu.trigger("dxclick");
         var filterMenuItems = $('.dx-filter-menu.dx-overlay-content').first().find('li'),
             resetItem = filterMenuItems.find('.dx-menu-item').last();
-
-        // act
         resetItem.trigger('dxclick');
 
         // assert
