@@ -459,14 +459,13 @@
                     customEvent = document.createEvent("TouchEvent");
 
                     var createTouchByOptions = function(options) {
-                        return document.createTouch(
-                            options.view || window,
-                            options.target,
-                            options.identifier || $.now(),
-                            options.pageX || 0,
-                            options.pageY || 0,
-                            options.screenX || 0,
-                            options.screenY || 0
+                        return new window.Touch({
+                            target: options.target || document.body,
+                            identifier: options.identifier || $.now(),
+                            pageX: options.pageX || 0,
+                            pageY: options.pageY || 0,
+                            screenX: options.screenX || 0,
+                            screenY: options.screenY || 0 }
                         );
                     };
 
@@ -483,22 +482,20 @@
                     targetTouches = createTouchListByArray(targetTouches);
                     changedTouches = createTouchListByArray(changedTouches);
 
-                    customEvent.initTouchEvent(type, bubbles, cancelable, view, detail,
-                        screenX, screenY, clientX, clientY,
-                        ctrlKey, altKey, shiftKey, metaKey,
-                        touches, targetTouches, changedTouches,
-                        scale, rotation);
+                    customEvent = new window.TouchEvent(type, {
+                        cancelable: cancelable,
+                        bubbles: bubbles,
+                        touches: touches,
+                        targetTouches: targetTouches,
+                        changedTouches: changedTouches
+                    });
 
                 } else {
                     throw Error('No touch event simulation framework present for iOS, ' + UA.ios + '.');
                 }
             } else if(UA.chrome && ('ontouchstart' in window)) {
-                customEvent = document.createEvent("UIEvent");
+                customEvent = new window.UIEvent(type, { view: view, detail: detail, bubbles: bubbles, cancelable: cancelable, target: target });
 
-                customEvent.initEvent(type, bubbles, cancelable);
-
-                customEvent.view = view;
-                customEvent.detail = detail;
                 customEvent.screenX = screenX;
                 customEvent.screenY = screenY;
                 customEvent.clientX = clientX;
@@ -507,7 +504,6 @@
                 customEvent.altKey = altKey;
                 customEvent.metaKey = metaKey;
                 customEvent.shiftKey = shiftKey;
-                customEvent.target = target;
                 customEvent.touches = touches || [];
                 customEvent.targetTouches = targetTouches || [];
                 customEvent.changedTouches = changedTouches || [];
@@ -692,6 +688,8 @@
                 // The amount of pressure the user is applying to the touch surface for this
                 // values: [ 0.0 .. 1.0 ] - no pressure and the maximum amount of pressure respectively.
                 force: null,
+
+                cancelable: true,  // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
 
                 touches: [],
                 targetTouches: [],
