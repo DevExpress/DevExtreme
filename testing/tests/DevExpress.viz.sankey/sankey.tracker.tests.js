@@ -93,18 +93,34 @@ QUnit.test("Hover off", function(assert) {
     assert.strictEqual(widget.getAllLinks()[0].isHovered(), true, "link is hovered");
 });
 
-QUnit.test("Click", function(assert) {
+QUnit.test("Click on node", function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
     var spy = sinon.spy(),
         widget = createSankey({
             dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
-            onItemClick: spy
+            onNodeClick: spy
         });
 
     this.trigger(clickEventName, 2, { pageX: 400, pageY: 300 });
 
     assert.strictEqual(spy.callCount, 1, "call count");
-    assert.strictEqual(spy.lastCall.args[0].item, widget.getAllNodes()[2], "item");
+    assert.strictEqual(spy.lastCall.args[0].target, widget.getAllNodes()[2], "target");
+});
+
+QUnit.test("Click on link", function(assert) {
+    this.renderer.offsetTemplate = { left: 40, top: 30 };
+    var spy = sinon.spy(),
+        widget = createSankey({
+            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            node: { width: 5 },
+            onLinkClick: spy
+        });
+
+    this.trigger(clickEventName, 3, { pageX: 200, pageY: 200 });
+
+    assert.strictEqual(spy.callCount, 1, "call count");
+    assert.strictEqual(spy.lastCall.args[0].target, widget.getAllLinks()[0], "target");
+
 });
 
 QUnit.module("Tooltip", trackerEnvironment);
