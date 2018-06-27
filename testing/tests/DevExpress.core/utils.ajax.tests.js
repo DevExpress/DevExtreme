@@ -602,6 +602,24 @@ QUnit.test("cache=false for dataType=json", function(assert) {
     assert.ok(/_=\d+/.test(this.requests[0].url));
 });
 
+QUnit.test("cache=false, POST string", function(assert) {
+    var options = {
+        url: "/",
+        dataType: "json",
+        cache: false
+    };
+
+    // customization (e.g. onBeforeSend in DevExtreme.AspNet.Data)
+    options.method = "POST";
+    options.data = "payload";
+
+    ajax.sendRequest(options);
+
+    var xhr = this.requests[0];
+    assert.equal(xhr.url, "/");
+    assert.equal(xhr.requestBody, "payload");
+});
+
 QUnit.test("xhr is available in done", function(assert) {
     var xhrCount = 0;
     var requests = this.requests;
