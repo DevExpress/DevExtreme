@@ -131,6 +131,30 @@
         }
     }
 
+    .dx-filter-header {
+        .dx-area-field-container{
+            border-spacing: 8px;
+            border-collapse: separate;
+        }
+
+        .dx-pivotgrid-fields-area-head {
+            td {
+                padding: 2px;
+            }
+
+            tr > td:first-child {
+                padding-left: 2px;
+            }
+        }
+    }
+
+    .dx-area-description-cell,
+    .dx-data-header {
+        tr > td:first-child {
+            padding-left: @PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
+        }
+    }
+
     .dx-area-field.dx-area-box {
         margin-bottom: 0;
     }
@@ -383,6 +407,10 @@
 
         .dx-filter-header {
             border-top: @PIVOTGRID_BORDER;
+
+            td {
+                display: inline-block;
+            }
         }
 
         .dx-area-data-cell,

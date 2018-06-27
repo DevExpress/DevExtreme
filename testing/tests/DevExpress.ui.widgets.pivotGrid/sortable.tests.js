@@ -2,7 +2,8 @@
 
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    HORIZONTAL_WIDTH_LARGE = 1500;
+    HORIZONTAL_WIDTH_LARGE = 1500,
+    HORIZONTAL_WIDTH_SMALL = 900;
 
 require("common.css!");
 require("ui/pivot_grid/ui.sortable");
@@ -784,7 +785,40 @@ QUnit.test("dragging to empty group", function(assert) {
 
     indicator = $(".dx-position-indicator");
     assert.ok(!indicator.length); // TODO: indicator should be shown
+});
 
+QUnit.test("indicator is shown on bottom dragging when items are set in two lines", function(assert) {
+    createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true, true);
+
+    var indicator,
+        $sortable = $("#sortable").dxSortable({
+            itemSelector: ".test-item",
+            direction: "auto",
+            useIndicator: true,
+            itemContainerSelector: ".test-container"
+        });
+
+    var $item = $sortable.find(".test-item").eq(1),
+        $targetItem = $sortable.find(".dx-drag-target");
+    var offset = $item.offset();
+
+    // act
+    pointerMock($item)
+        .start()
+        .down()
+        .move(offset.left - 3, offset.top + 3)
+        .move(offset.left - 103, offset.top + 15);
+
+    indicator = $(".dx-position-indicator");
+
+    assert.ok(indicator.length, "indicator is rendered");
+    assert.notOk($targetItem.is(":visible"));
+
+    assert.ok(indicator.offset().left <= $sortable.find(".test-item").eq(5).offset().left, "indicator was rendered before 5 item");
+    assert.ok(indicator.offset().left > $sortable.find(".test-item").eq(4).offset().left, "indicator was rendered after 4 item");
+    assert.ok(indicator.hasClass("dx-position-indicator-horizontal"));
+    assert.ok(!indicator.hasClass("dx-position-indicator-vertical"));
+    assert.ok(!indicator.hasClass("dx-position-indicator-last"));
 });
 
 QUnit.test("indicator is shown on bottom dragging", function(assert) {
