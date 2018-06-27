@@ -143,6 +143,8 @@
     }
 
     &.dx-scheduler-work-space-count:not(.dx-scheduler-work-space-vertical-grouped) {
+        .dx-scheduler-scrollable-offset-mixin(@GENERIC_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP, @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+
         .dx-scheduler-header-panel {
             margin-top: @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP;
         }
