@@ -742,7 +742,7 @@ QUnit.test("default", function(assert) {
 });
 
 QUnit.test("render with auto height", (assert) => {
-    let $gallery = $("#gallerySimple").dxGallery({
+    var $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3],
         height: "auto"
     });
