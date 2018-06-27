@@ -3366,7 +3366,7 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
 
     // assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-    assert.equal(heightCalls.length, 2, "rowsview height is assigned twice");
+    assert.equal(heightCalls.length, 1, "rowsview height is assigned once");
 });
 
 // T108204
