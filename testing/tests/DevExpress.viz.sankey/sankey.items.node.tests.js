@@ -237,7 +237,7 @@ QUnit.test("hover changed event", function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            onHoverChanged: hoverChanged
+            onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
 
@@ -251,7 +251,7 @@ QUnit.test("hover changed event after hover second item", function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            onHoverChanged: hoverChanged
+            onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
 
@@ -267,7 +267,7 @@ QUnit.test("Hover item two times, hover changed event should fire only one time"
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            onHoverChanged: hoverChanged
+            onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
 
@@ -281,7 +281,7 @@ QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fir
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
             dataSource: [['A', 'Z', 1]],
-            onHoverChanged: hoverChanged
+            onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
 

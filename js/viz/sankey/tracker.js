@@ -5,7 +5,8 @@ var proto = require("./sankey").prototype,
     DATA_KEY_BASE = "__sankey_data_",
     dataKeyModifier = 0;
 
-proto._eventsMap.onItemClick = { name: "itemClick" };
+proto._eventsMap.onNodeClick = { name: "nodeClick" };
+proto._eventsMap.onLinkClick = { name: "linkClick" };
 
 exports.plugin = {
     name: "tracker",
@@ -28,8 +29,9 @@ exports.plugin = {
                 }
             },
             click: function(e) {
-                that._eventTrigger("itemClick", {
-                    item: e.node,
+                var eventName = this.getData(e.event) < that._nodes.length ? "nodeClick" : "linkClick";
+                that._eventTrigger(eventName, {
+                    target: e.node,
                     event: e.event
                 });
             }

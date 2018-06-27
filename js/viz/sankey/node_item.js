@@ -118,7 +118,7 @@ Node.prototype = {
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(1, state);
-        this.widget._eventTrigger("hoverChanged", { item: this });
+        this.widget._eventTrigger("nodeHoverChanged", { item: this });
         this.widget._resume();
     },
 
@@ -133,8 +133,8 @@ Node.prototype = {
             to: null,
             weight: null,
             title: this.title,
-            weightIn: this.linksIn.reduce(function(previousValue, currentValue, index, array) { return previousValue + currentValue.weight; }, 0),
-            weightOut: this.linksOut.reduce(function(previousValue, currentValue, index, array) { return previousValue + currentValue.weight; }, 0)
+            weightIn: this.linksIn.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0),
+            weightOut: this.linksOut.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0)
         }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
     },
 

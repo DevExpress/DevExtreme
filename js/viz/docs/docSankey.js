@@ -220,118 +220,118 @@ var dxSankey = {
         customizeTooltip: undefined
     },
     /**
-    * @name dxSankeyOptions.nodes
+    * @name dxSankeyOptions.node
     * @type object
     */
-    nodes: {
+    node: {
         /**
-        * @name dxSankeyOptions.nodes.color
+        * @name dxSankeyOptions.node.color
         * @type number
         * @default undefined
         */
         color: undefined,
         /**
-        * @name dxSankeyOptions.nodes.width
+        * @name dxSankeyOptions.node.width
         * @type number
         * @default 15
         */
         width: 15,
         /**
-        * @name dxSankeyOptions.nodes.padding
+        * @name dxSankeyOptions.node.padding
         * @type number
         * @default 30
         */
         padding: 30,
         /**
-        * @name dxSankeyOptions.nodes.opacity
+        * @name dxSankeyOptions.node.opacity
         * @type number
         * @default 1
         */
         opacity: 1,
         /**
-        * @name dxSankeyOptions.nodes.colorMode
+        * @name dxSankeyOptions.node.colorMode
         * @type Enums.SankeyColorMode
         * @default 'none'
         */
         colorMode: 'none',
         /**
-        * @name dxSankeyOptions.nodes.border
+        * @name dxSankeyOptions.node.border
         * @type object
         */
         border: {
             /**
-            * @name dxSankeyOptions.nodes.border.visible
+            * @name dxSankeyOptions.node.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxSankeyOptions.nodes.border.width
+            * @name dxSankeyOptions.node.border.width
             * @type number
             * @default 2
             */
             width: 1,
             /**
-            * @name dxSankeyOptions.nodes.border.color
+            * @name dxSankeyOptions.node.border.color
             * @type string
             * @default #000000
             */
             color: '#000000'
         },
         /**
-        * @name dxSankeyOptions.nodes.hoverStyle
+        * @name dxSankeyOptions.node.hoverStyle
         * @type object
         */
         hoverStyle: {
             /**
-            * @name dxSankeyOptions.nodes.hoverStyle.border
+            * @name dxSankeyOptions.node.hoverStyle.border
             * @type object
             */
             border: {
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.border.visible
+                * @name dxSankeyOptions.node.hoverStyle.border.visible
                 * @type boolean
                 * @default undefined
                 */
                 visible: undefined,
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.border.width
+                * @name dxSankeyOptions.node.hoverStyle.border.width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.border.color
+                * @name dxSankeyOptions.node.hoverStyle.border.color
                 * @type string
                 * @default undefined
                 */
                 color: undefined
             },
             /**
-            * @name dxSankeyOptions.nodes.hoverStyle.hatching
+            * @name dxSankeyOptions.node.hoverStyle.hatching
             * @type object
             */
             hatching: {
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.hatching.direction
+                * @name dxSankeyOptions.node.hoverStyle.hatching.direction
                 * @type Enums.HatchingDirection
                 * @default 'right'
                 */
                 direction: "right",
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.hatching.opacity
+                * @name dxSankeyOptions.node.hoverStyle.hatching.opacity
                 * @type number
                 * @default 0.75
                 */
                 opacity: 0.75,
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.hatching.step
+                * @name dxSankeyOptions.node.hoverStyle.hatching.step
                 * @type number
                 * @default 6
                 */
                 step: 6,
                 /**
-                * @name dxSankeyOptions.nodes.hoverStyle.hatching.width
+                * @name dxSankeyOptions.node.hoverStyle.hatching.width
                 * @type number
                 * @default 2
                 */
@@ -340,112 +340,112 @@ var dxSankey = {
         },
     },
     /**
-    * @name dxSankeyOptions.links
+    * @name dxSankeyOptions.link
     * @type object
     */
-    links: {
+    link: {
         /**
-        * @name dxSankeyOptions.links.color
+        * @name dxSankeyOptions.link.color
         * @type number
         * @default '#000000'
         */
         color: '#000000',
         /**
-        * @name dxSankeyOptions.links.opacity
+        * @name dxSankeyOptions.link.opacity
         * @type number
         * @default 1
         */
         opacity: 1,
         /**
-        * @name dxSankeyOptions.links.border
+        * @name dxSankeyOptions.link.border
         * @type object
         */
         border: {
             /**
-            * @name dxSankeyOptions.links.border.visible
+            * @name dxSankeyOptions.link.border.visible
             * @type boolean
             * @default false
             */
             visible: false,
             /**
-            * @name dxSankeyOptions.links.border.width
+            * @name dxSankeyOptions.link.border.width
             * @type number
             * @default 2
             */
             width: 1,
             /**
-            * @name dxSankeyOptions.links.border.color
+            * @name dxSankeyOptions.link.border.color
             * @type string
             * @default #000000
             */
             color: '#000000'
         },
         /**
-        * @name dxSankeyOptions.links.hoverStyle
+        * @name dxSankeyOptions.link.hoverStyle
         * @type object
         */
         hoverStyle: {
             /**
-            * @name dxSankeyOptions.links.hoverStyle.opacity
+            * @name dxSankeyOptions.link.hoverStyle.opacity
             * @type number
             * @default 0.5
             */
             opacity: 0.5,
             /**
-            * @name dxSankeyOptions.links.hoverStyle.color
+            * @name dxSankeyOptions.link.hoverStyle.color
             * @type number
             * @default undefined
             */
             color: undefined,
             /**
-            * @name dxSankeyOptions.links.hoverStyle.border
+            * @name dxSankeyOptions.link.hoverStyle.border
             * @type object
             */
             border: {
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.border.visible
+                * @name dxSankeyOptions.link.hoverStyle.border.visible
                 * @type boolean
                 * @default undefined
                 */
                 visible: undefined,
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.border.width
+                * @name dxSankeyOptions.link.hoverStyle.border.width
                 * @type number
                 * @default undefined
                 */
                 width: undefined,
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.border.color
+                * @name dxSankeyOptions.link.hoverStyle.border.color
                 * @type string
                 * @default undefined
                 */
                 color: undefined
             },
             /**
-            * @name dxSankeyOptions.links.hoverStyle.hatching
+            * @name dxSankeyOptions.link.hoverStyle.hatching
             * @type object
             */
             hatching: {
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.hatching.direction
+                * @name dxSankeyOptions.link.hoverStyle.hatching.direction
                 * @type Enums.HatchingDirection
                 * @default 'right'
                 */
                 direction: "right",
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.hatching.opacity
+                * @name dxSankeyOptions.link.hoverStyle.hatching.opacity
                 * @type number
                 * @default 0.75
                 */
                 opacity: 0.75,
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.hatching.step
+                * @name dxSankeyOptions.link.hoverStyle.hatching.step
                 * @type number
                 * @default 6
                 */
                 step: 6,
                 /**
-                * @name dxSankeyOptions.links.hoverStyle.hatching.width
+                * @name dxSankeyOptions.link.hoverStyle.hatching.width
                 * @type number
                 * @default 2
                 */
@@ -454,26 +454,47 @@ var dxSankey = {
         },
     },
     /**
-    * @name dxSankeyOptions.onItemClick
+    * @name dxSankeyOptions.onNodeClick
     * @extends Action
     * @type function|string
     * @type_function_param1 e:object
     * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 item:dxSankeyNode|dxSankeyLink
+    * @type_function_param1_field5 target:dxSankeyNode
     * @notUsedInTheme
     * @action
     */
-    onItemClick: function() { },
+    onNodeClick: function() { },
     /**
-    * @name dxSankeyOptions.onHoverChanged
+    * @name dxSankeyOptions.onLinkClick
+    * @extends Action
+    * @type function|string
+    * @type_function_param1 e:object
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:dxSankeyLink
+    * @notUsedInTheme
+    * @action
+    */
+    onLinkClick: function() { },
+    /**
+    * @name dxSankeyOptions.onNodeHoverChanged
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxSankeyNode|dxSankeyLink
+    * @type_function_param1_field4 item:dxSankeyNode
     * @notUsedInTheme
     * @action
     */
-    onHoverChanged: function() { },
+    onNodeHoverChanged: function() { },
+    /**
+    * @name dxSankeyOptions.onLinkHoverChanged
+    * @extends Action
+    * @type function
+    * @type_function_param1 e:object
+    * @type_function_param1_field4 item:dxSankeyLink
+    * @notUsedInTheme
+    * @action
+    */
+    onLinkHoverChanged: function() { },
     /**
     * @name dxSankeyMethods.getAllNodes
     * @publicName getAllNodes()

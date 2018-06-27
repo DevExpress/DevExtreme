@@ -71,7 +71,8 @@ var dxSankey = require("../core/base_widget").inherit({
     },
 
     _eventsMap: {
-        onHoverChanged: { name: "hoverChanged" },
+        onNodeHoverChanged: { name: "nodeHoverChanged" },
+        onLinkHoverChanged: { name: "linkHoverChanged" }
     },
 
     _customChangesOrder: ["BUILD_LAYOUT", "NODES_DRAW", "LINKS_DRAW", "LABELS", "DRAWN"],
