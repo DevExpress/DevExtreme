@@ -4,6 +4,8 @@
         define(function(require) {
             factory(require("devextreme/localization"));
         });
+    } else if(typeof module === "object" && module.exports) {
+        factory(exports);
     } else {
         factory(DevExpress.localization);
     }
