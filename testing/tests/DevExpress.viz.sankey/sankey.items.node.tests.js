@@ -244,7 +244,7 @@ QUnit.test("hover changed event", function(assert) {
     node.hover(true);
 
     assert.ok(hoverChanged.calledOnce);
-    assert.strictEqual(hoverChanged.lastCall.args[0].item, node);
+    assert.strictEqual(hoverChanged.lastCall.args[0].target, node);
 });
 
 QUnit.test("hover changed event after hover second item", function(assert) {

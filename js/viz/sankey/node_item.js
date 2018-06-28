@@ -118,7 +118,7 @@ Node.prototype = {
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(1, state);
-        this.widget._eventTrigger("nodeHoverChanged", { item: this });
+        this.widget._eventTrigger("nodeHoverChanged", { target: this });
         this.widget._resume();
     },
 

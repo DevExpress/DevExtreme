@@ -100,7 +100,7 @@ Link.prototype = {
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(2, state);
-        this.widget._eventTrigger("linkHoverChanged", { item: this });
+        this.widget._eventTrigger("linkHoverChanged", { target: this });
         this.widget._resume();
     },
 
