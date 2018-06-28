@@ -239,7 +239,8 @@ var Popup = Overlay.inherit({
             */
             showCloseButton: false,
 
-            bottomTemplate: "bottom"
+            bottomTemplate: "bottom",
+            useDefaultToolbarButtons: false
         });
     },
 
@@ -319,6 +320,14 @@ var Popup = Overlay.inherit({
                     * @inheritdoc
                     */
                     focusStateEnabled: true
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useDefaultToolbarButtons: true
                 }
             }
         ]);
@@ -440,7 +449,8 @@ var Popup = Overlay.inherit({
         if(toolbarTemplate) {
             var toolbarOptions = {
                 items: data,
-                rtlEnabled: this.option("rtlEnabled")
+                rtlEnabled: this.option("rtlEnabled"),
+                useDefaultButtons: this.option("useDefaultToolbarButtons")
             };
 
             this._getTemplate("dx-polymorph-widget").render({
@@ -728,6 +738,7 @@ var Popup = Overlay.inherit({
                 this._createTitleRenderAction(args.value);
                 break;
             case "toolbarItems":
+            case "useDefaultToolbarButtons":
                 var isPartialUpdate = args.fullName.search(".options") !== -1;
                 this._renderTitle();
                 this._renderBottom();

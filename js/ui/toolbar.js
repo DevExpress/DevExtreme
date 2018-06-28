@@ -55,7 +55,7 @@ var Toolbar = ToolbarBase.inherit({
             * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
             * @hidden
             */
-            submenuType: "dropDownMenu",
+            submenuType: "dropDownMenu"
 
             /**
             * @name dxToolbarItemTemplate.location
@@ -148,8 +148,6 @@ var Toolbar = ToolbarBase.inherit({
             * @hidden
             * @inheritdoc
             */
-
-            useFlatButtons: false
         });
 
     },
@@ -186,14 +184,6 @@ var Toolbar = ToolbarBase.inherit({
                 },
                 options: {
                     submenuType: "listTop"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isMaterial();
-                },
-                options: {
-                    useFlatButtons: true
                 }
             }
         ]);
@@ -389,7 +379,6 @@ var Toolbar = ToolbarBase.inherit({
 
         switch(name) {
             case "submenuType":
-            case "useFlatButtons":
                 this._invalidate();
                 break;
             case "visible":

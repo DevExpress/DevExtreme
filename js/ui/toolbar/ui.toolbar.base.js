@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    themes = require("../themes"),
     commonUtils = require("../../core/utils/common"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     registerComponent = require("../../core/component_registrator"),
@@ -23,6 +24,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
     TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS,
     BUTTON_FLAT_CLASS = "dx-button-flat",
+    DEFAULT_BUTTON_TYPE = "default",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
@@ -55,10 +57,11 @@ var ToolbarBase = CollectionWidget.inherit({
                 }
 
                 if(data.widget === "dxButton") {
-                    if(data.options) {
+                    var buttonOptions = data.options;
+                    if(buttonOptions) {
                         var buttonContainerClass = this.option("useFlatButtons") ? BUTTON_FLAT_CLASS : "";
-                        if(data.options.elementAttr) {
-                            var customClass = data.options.elementAttr.class;
+                        if(buttonOptions.elementAttr) {
+                            var customClass = buttonOptions.elementAttr.class;
                             if(customClass) {
                                 customClass = customClass.replace(BUTTON_FLAT_CLASS, "");
                                 buttonContainerClass += (" " + customClass);
@@ -66,10 +69,20 @@ var ToolbarBase = CollectionWidget.inherit({
                         }
 
                         var elementAttr = extend(
-                            data.options.elementAttr || {},
+                            buttonOptions.elementAttr || {},
                             { class: buttonContainerClass }
                         );
-                        data.options = extend(data.options, { elementAttr: elementAttr });
+                        buttonOptions = extend(buttonOptions, { elementAttr: elementAttr });
+                    }
+
+                    if(this.option("useDefaultButtons")) {
+                        if(!buttonOptions.type) {
+                            buttonOptions._defaultTypeForced = true;
+                            buttonOptions.type = DEFAULT_BUTTON_TYPE;
+                        }
+                    } else if(buttonOptions._defaultTypeForced) {
+                        delete buttonOptions.type;
+                        delete buttonOptions._defaultTypeForced;
                     }
                 }
             } else {
@@ -88,8 +101,23 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            renderAs: "topToolbar"
+            renderAs: "topToolbar",
+            useFlatButtons: false,
+            useDefaultButtons: false
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useFlatButtons: true
+                }
+            }
+        ]);
     },
 
     _itemContainer: function() {
@@ -364,6 +392,8 @@ var ToolbarBase = CollectionWidget.inherit({
                 this._dimensionChanged();
                 break;
             case "renderAs":
+            case "useFlatButtons":
+            case "useDefaultButtons":
                 this._invalidate();
                 break;
             default:
