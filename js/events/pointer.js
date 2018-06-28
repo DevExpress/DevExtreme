@@ -3,6 +3,7 @@
 var support = require("../core/utils/support"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
+    domAdapter = require("../core/dom_adapter"),
     registerEvent = require("./core/event_registrator"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
@@ -84,7 +85,17 @@ var EventStrategy = (function() {
 })();
 
 each(EventStrategy.map, function(pointerEvent, originalEvents) {
-    registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
+    var eventStrategy = new EventStrategy(pointerEvent, originalEvents);
+
+    if(pointerEvent === "dxpointermove") { // T630650
+        eventStrategy.setup = function(element, data, namespaces, handler) {
+            domAdapter.listen(element, "touchmove", handler, { passive: false });
+
+            return true;
+        };
+    }
+
+    registerEvent(pointerEvent, eventStrategy);
 });
 
 module.exports = {

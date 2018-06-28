@@ -4,7 +4,8 @@ var $ = require("jquery"),
     TouchStrategy = require("events/pointer/touch"),
     registerEvent = require("events/core/event_registrator"),
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
-    special = require("../../../helpers/eventHelper.js").special;
+    special = require("../../../helpers/eventHelper.js").special,
+    noop = require("core/utils/common").noop;
 
 QUnit.module("touch events", {
     beforeEach: function() {
@@ -136,4 +137,28 @@ $.each({
             touches: eventName === "dxpointerup" ? [] : [{ identifier: 17, pageX: 0, pageY: 0 }]
         });
     });
+});
+
+QUnit.test("touchmove should not be a passive event listener", function(assert) {
+    var element = this.$element.get(0),
+        origAddEventListener = element.addEventListener,
+        nonPassiveEvent = true;
+
+    element.addEventListener = function(event, handler, options) {
+        if(event === "touchmove" && options.passive !== false) {
+            nonPassiveEvent = false;
+        }
+    };
+
+    this.$element.on("touchstart touchmove wheel mousewheel", { isNative: true }, noop);
+
+    nativePointerMock(this.$element)
+        .start()
+        .touchStart()
+        .touchMove(0, 50)
+        .touchEnd();
+
+    assert.ok(nonPassiveEvent, "");
+
+    element.addEventListener = origAddEventListener;
 });

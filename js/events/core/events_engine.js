@@ -171,6 +171,7 @@ var getHandlersController = function(element, eventName) {
 
             var firstHandlerForTheType = eventData.handleObjects.length === 1;
             var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
+            var options;
 
             if(shouldAddNativeListener) {
                 shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
@@ -178,7 +179,14 @@ var getHandlersController = function(element, eventName) {
 
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
-                eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
+
+                if(eventName === "touchmove") { // T630650
+                    options = {
+                        passive: false
+                    };
+                }
+
+                eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler, options);
             }
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
