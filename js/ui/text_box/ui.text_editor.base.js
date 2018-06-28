@@ -284,8 +284,7 @@ var TextEditorBase = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    var currentTheme = (themes.current() || "").split(".")[0];
-                    return currentTheme === "android5";
+                    return themes.isAndroid5();
                 },
                 options: {
                     validationMessageOffset: { v: -8 }

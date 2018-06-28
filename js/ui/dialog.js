@@ -54,8 +54,7 @@ var FakeDialogComponent = Component.inherit({
             },
             {
                 device: function(device) {
-                    var currentTheme = (themes.current() || "").split(".")[0];
-                    return !device.phone && currentTheme === "win8";
+                    return !device.phone && themes.isWin8();
                 },
                 options: {
                     width: function() {
@@ -65,8 +64,7 @@ var FakeDialogComponent = Component.inherit({
             },
             {
                 device: function(device) {
-                    var currentTheme = (themes.current() || "").split(".")[0];
-                    return device.phone && currentTheme === "win8";
+                    return device.phone && themes.isWin8();
                 },
                 options: {
                     position: {
