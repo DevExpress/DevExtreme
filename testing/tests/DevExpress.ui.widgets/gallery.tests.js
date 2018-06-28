@@ -19,7 +19,7 @@ QUnit.testStart(function() {
     var markup =
         '<style>\
             .dx-gallery {\
-                width: 400px\
+                width: 400px;\
             }\
             .dx-gallery-item {\
                 width: 400px;\
@@ -114,7 +114,7 @@ var calculateItemPosition = function($item, $gallery) {
         containerPosition = $container.position(),
         itemPosition = $item.position();
 
-    return Math.round(itemPosition.left + containerPosition.left + parseInt($item.css("marginLeft")));
+    return Math.round(itemPosition.left + containerPosition.left + parseFloat($item.css("marginLeft")));
 };
 
 QUnit.module("behavior", {
@@ -741,8 +741,8 @@ QUnit.test("default", function(assert) {
     assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
 });
 
-QUnit.test("render with auto height", (assert) => {
-    let $gallery = $("#gallerySimple").dxGallery({
+QUnit.test("render with auto height", function(assert) {
+    var $gallery = $("#gallerySimple").dxGallery({
         items: [0, 1, 2, 3],
         height: "auto"
     });
