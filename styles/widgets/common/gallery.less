@@ -9,6 +9,7 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
+    white-space: nowrap;
 
     & > .dx-empty-message {
         text-align: center;
@@ -25,7 +26,7 @@
 }
 
 .dx-gallery-item {
-    position: absolute;
+    display: inline-block;
     overflow: hidden;
     width: 100%;
     height: 100%;
@@ -35,17 +36,15 @@
 .dx-gallery-item-image {
     max-width: 100%;
     height: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
     margin: auto;
 }
 
 .dx-gallery-item-content {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .dx-gallery .dx-gallery-item-loop {
@@ -53,7 +52,8 @@
 }
 
 .dx-gallery-loop .dx-gallery-item-loop {
-    display: block;
+    display: inline-block;
+    position: absolute;
 }
 
 .dx-gallery-item-invisible {
