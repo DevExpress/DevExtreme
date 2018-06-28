@@ -543,6 +543,34 @@ QUnit.test("select and replace all text", function(assert) {
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret position is correct");
 });
 
+QUnit.test("don't replace selected text after enter pressed", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 6 })
+        .press("enter");
+
+    assert.equal(this.instance.option("value"), 123.45);
+    assert.equal(this.input.val(), "123.45");
+});
+
+QUnit.test("don't replace selected text after focusOut", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 6 })
+        .blur();
+
+    assert.equal(this.instance.option("value"), 123.45);
+    assert.equal(this.input.val(), "123.45");
+});
+
 QUnit.test("decimal point should move the caret before float part only", function(assert) {
     this.instance.option({
         format: "#0.00",
