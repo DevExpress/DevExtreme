@@ -1,13 +1,12 @@
 @RECURRENCE_EDITOR_NUMBERBOX_WIDTH: 70px;
 @RECURRENCE_EDITOR_SELECTBOX_WIDTH: 120px;
-@RECURRENCE_EDITOR_HORIZONTAL_OFFSET: 20px;
 
-.dx-numberbox.dx-recurrence-numberbox-interval,
-.dx-numberbox.dx-recurrence-numberbox-day-of-month,
-.dx-selectbox.dx-recurrence-selectbox-month-of-year,
-.dx-numberbox.dx-recurrence-numberbox-repeat-count,
-.dx-datebox.dx-recurrence-datebox-until-date,
-.dx-switch.dx-recurrence-switch-repeat-end {
+.dx-recurrence-numberbox-interval,
+.dx-recurrence-numberbox-day-of-month,
+.dx-recurrence-selectbox-month-of-year,
+.dx-recurrence-numberbox-repeat-count,
+.dx-recurrence-datebox-until-date,
+.dx-recurrence-switch-repeat-end {
     float: left;
     position: relative !important;
 
@@ -22,10 +21,6 @@
     width: @RECURRENCE_EDITOR_NUMBERBOX_WIDTH !important;
 }
 
-.dx-datebox.dx-recurrence-datebox-until-date {
-    width: inherit !important;
-}
-
 .dx-recurrence-radiogroup-repeat-type-label,
 .dx-recurrence-repeat-end-label {
     display: inline-block;
@@ -37,6 +32,7 @@
     float: left;
     width: 50px;
     white-space: nowrap;
+    line-height: 36px;
 }
 
 .dx-recurrence-selectbox-month-of-year {
@@ -61,28 +57,24 @@
     }
 }
 
-.dx-scheduler-recurrence-rule-item {
-    .dx-field-item-label {
-        &.dx-field-item-label-location-left,
-        &.dx-field-item-label-location-top {
-            padding-left: 10px;
+
+.dx-recurrence-editor-container {
+    .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+        .dx-field-value-static {
+            width: 100%;
         }
 
-        &.dx-field-item-label-location-right {
-            padding-left: @RECURRENCE_EDITOR_HORIZONTAL_OFFSET;
-        }
-    }
+        .dx-field-value:not(.dx-widget) > .dx-checkbox {
+            float: left;
 
-    &.dx-label-v-align {
-        .dx-recurrence-editor {
-            padding-right: @RECURRENCE_EDITOR_HORIZONTAL_OFFSET;
+            &.dx-rtl {
+                float: right;
+            }
         }
+    
+    .dx-field-label {
+        width: auto;
+        float: none;
     }
-
-    .dx-field-item-content-location-left {
-        .dx-recurrence-editor {
-            padding-right: @RECURRENCE_EDITOR_HORIZONTAL_OFFSET;
-        }
-    }
+    
 }
-

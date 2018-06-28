@@ -1966,7 +1966,6 @@
 
         .dx-scheduler-recurrence-rule-item {
             position: relative;
-            padding-left: 0;
             padding-right: 0;
 
             .dx-field-item-label {
@@ -2735,6 +2734,31 @@
                     }
 
                     margin-left: 0;
+                }
+            }
+        }
+
+        .dx-scheduler-recurrence-rule-item {
+            .dx-field-item-label {
+                &.dx-field-item-label-location-left,
+                &.dx-field-item-label-location-top {
+                    padding-left: 10px;
+                }
+        
+                &.dx-field-item-label-location-right {
+                    padding-left: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
+                }
+            }
+        
+            &.dx-label-v-align {
+                .dx-recurrence-editor {
+                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
+                }
+            }
+        
+            .dx-field-item-content-location-left {
+                .dx-recurrence-editor {
+                    padding-right: @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET;
                 }
             }
         }
