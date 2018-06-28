@@ -5,7 +5,7 @@
             factory(require("devextreme/localization"));
         });
     } else if(typeof module === "object" && module.exports) {
-        factory(exports);
+        factory(require("devextreme/localization"));
     } else {
         factory(DevExpress.localization);
     }
