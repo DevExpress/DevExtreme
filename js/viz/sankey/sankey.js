@@ -276,34 +276,8 @@ var dxSankey = require("../core/base_widget").inherit({
 
             that._renderer.initHatching();
             that._change(["NODES_DRAW", "LINKS_DRAW", "LABELS"]);
-        } else {
-            that._drawError(layout.error, rect);
         }
         that._change(["DRAWN"]);
-    },
-
-    _compileErrorAttrs(labelOptions, rect) {
-        var _patchFontOptions = require("../core/utils").patchFontOptions;
-        var attr = labelOptions["stroke-width"] ? {
-            stroke: labelOptions.stroke,
-            "stroke-width": labelOptions["stroke-width"],
-            "stroke-opacity": labelOptions["stroke-opacity"]
-        } : {};
-        attr.y = rect.y + rect.height / 2;
-        return {
-            attr: attr,
-            css: _patchFontOptions(labelOptions.font)
-        };
-    },
-
-    _drawError: function(error, rect) {
-        var settings = this._compileErrorAttrs(this._getOption('error'), rect);
-        this._errorMessage = this._renderer.text(error)
-            .attr(settings.attr)
-            .css(settings.css)
-            .append(this._groupErrors);
-        var x = rect.x + rect.width / 2 - this._errorMessage.getBBox().width / 2;
-        this._errorMessage.attr({ x: x });
     },
 
     _applyLabelsAppearance: function() {
