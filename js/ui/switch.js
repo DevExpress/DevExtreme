@@ -124,7 +124,7 @@ var Switch = Editor.inherit({
             },
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return themes.isAndroid5();
                 },
                 options: {
                     useInkRipple: true
@@ -132,7 +132,7 @@ var Switch = Editor.inherit({
             },
             {
                 device: function(device) {
-                    return /ios7/.test(themes.current());
+                    return themes.isIos7();
                 },
                 options: {
                     _animateHandle: false
