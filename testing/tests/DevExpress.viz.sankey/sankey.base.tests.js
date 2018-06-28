@@ -87,11 +87,14 @@ QUnit.test("Trigger error on invalid source data", function(assert) {
         [['A', 1, 1], ['A', 'C', 1]],
         [['A', 'B', 1], [1, 'C', 1]],
         [['A', 'B', 1], ['A', 'C', -5]],
-        ['ABCD', ['A', 'C', 1]],
+        ['ABCD', ['A', 'C', 1]]
+        ],
+        expectedErrorCodes = [
+            'E2009', 'E2011', 'E2010', 'E2010', 'E2011', 'E2008'
         ],
         spy = sinon.spy();
 
-    invalidDataSets.forEach(function(data) {
+    invalidDataSets.forEach(function(data, dataIdx) {
         spy.reset();
         createSankey({
             layoutBuilder: layoutBuilder,
@@ -99,7 +102,7 @@ QUnit.test("Trigger error on invalid source data", function(assert) {
             onIncidentOccurred: spy
         });
         assert.ok(spy.called);
-        assert.equal(spy.getCall(0).args[0].target.id, "E2007");
+        assert.equal(spy.getCall(0).args[0].target.id, expectedErrorCodes[dataIdx]);
         assert.equal(spy.getCall(0).args[0].target.type, "error");
         assert.equal(spy.getCall(0).args[0].target.widget, "dxSankey");
     });

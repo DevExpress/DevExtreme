@@ -60,14 +60,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E2203: "The range you are trying to set is invalid",
     /**
-    * @name ErrorsViz_e2006
-    */
-    E2006: "A cycle is detected in provided data",
-    /**
-    * @name ErrorsViz_e2007
-    */
-    E2007: "Provided data can not be displayed",
-    /**
     * @name ErrorsViz.W2002
     */
     W2002: "The {0} data field is absent",
@@ -75,6 +67,30 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsViz.W2003
     */
     W2003: "Tick interval is too small",
+    /**
+    * @name ErrorsViz_e2006
+    */
+    E2006: "A cycle is detected in provided data",
+    /**
+    * @name ErrorsViz_e2007
+    */
+    E2007: "Input data expected to be an array",
+    /**
+    * @name ErrorsViz_e2008
+    */
+    E2008: "Each link is expected to be an array",
+    /**
+    * @name ErrorsViz_e2009
+    */
+    E2009: "Each link must be described by array of 3 items",
+    /**
+    * @name ErrorsViz_e2010
+    */
+    E2010: "Description of each link must contain elements of following types: string, string, number",
+    /**
+    * @name ErrorsViz_e2011
+    */
+    E2011: "Each link is expected to have positive weight",
     /**
     * @name ErrorsViz.W2101
     */

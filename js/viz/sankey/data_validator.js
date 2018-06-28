@@ -8,13 +8,13 @@ var typeUtils = require("../../core/utils/type"),
 
 let validator = {
     validate: function(data, incidentOccurred) {
-        var result = null;
-        if(this._isInvalid(data)) {
-            incidentOccurred("E2007");
-            result = 'Provided data can not be displayed';
+        var result = null, validationCode = this._isInvalid(data);
+        if(validationCode !== null) {
+            result = validationCode;
+            incidentOccurred(validationCode);
         } else if(this._hasCycle(data)) {
-            result = 'A cycle is detected in provided data';
-            incidentOccurred("E2006");
+            result = 'E2006';
+            incidentOccurred('E2006');
         }
         return result;
     },
@@ -22,18 +22,19 @@ let validator = {
         return graphModule.struct.hasCycle(data);
     },
     _isInvalid: function(data) {
+        var result = null;
         if(!_isArray(data)) {
-            return true;
+            result = 'E2007';
         } else {
-            var result = null;
             for(let link of data) {
-                if(!(_isArray(link) &&
-                    link.length >= 2 &&
-                    _isString(link[0]) &&
-                    _isString(link[1]) &&
-                    _isNumber(link[2]) &&
-                    link[2] > 0)) {
-                    result = true;
+                if(!_isArray(link)) {
+                    result = 'E2008';
+                } else if(link.length !== 3) {
+                    result = 'E2009';
+                } else if(!(_isString(link[0]) && _isString(link[1]) && _isNumber(link[2]))) {
+                    result = 'E2010';
+                } else if(link[2] <= 0) {
+                    result = 'E2011';
                 }
             }
             return result;
