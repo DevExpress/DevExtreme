@@ -57,11 +57,10 @@ var ToolbarBase = CollectionWidget.inherit({
                 }
 
                 if(data.widget === "dxButton") {
-                    var buttonOptions = data.options;
-                    if(buttonOptions) {
+                    if(data.options) {
                         var buttonContainerClass = this.option("useFlatButtons") ? BUTTON_FLAT_CLASS : "";
-                        if(buttonOptions.elementAttr) {
-                            var customClass = buttonOptions.elementAttr.class;
+                        if(data.options.elementAttr) {
+                            var customClass = data.options.elementAttr.class;
                             if(customClass) {
                                 customClass = customClass.replace(BUTTON_FLAT_CLASS, "");
                                 buttonContainerClass += (" " + customClass);
@@ -69,20 +68,21 @@ var ToolbarBase = CollectionWidget.inherit({
                         }
 
                         var elementAttr = extend(
-                            buttonOptions.elementAttr || {},
+                            data.options.elementAttr || {},
                             { class: buttonContainerClass }
                         );
-                        buttonOptions = extend(buttonOptions, { elementAttr: elementAttr });
+                        data.options = extend(data.options, { elementAttr: elementAttr });
                     }
 
                     if(this.option("useDefaultButtons")) {
-                        if(!buttonOptions.type) {
-                            buttonOptions._defaultTypeForced = true;
-                            buttonOptions.type = DEFAULT_BUTTON_TYPE;
+                        data.options = data.options || {};
+                        if(!data.options.type) {
+                            data.options._defaultTypeForced = true;
+                            data.options.type = DEFAULT_BUTTON_TYPE;
                         }
-                    } else if(buttonOptions._defaultTypeForced) {
-                        delete buttonOptions.type;
-                        delete buttonOptions._defaultTypeForced;
+                    } else if(data.options && data.options._defaultTypeForced) {
+                        delete data.options.type;
+                        delete data.options._defaultTypeForced;
                     }
                 }
             } else {
