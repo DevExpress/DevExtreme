@@ -5,6 +5,8 @@
 @WIN10_NAVIGATOR_ICON_SIZE: 16px;
 @WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET: 70px;
 
+@WIN10_SCHEDULER_RECURRENCE_RULE_ITEM_PADDING: 84px;
+
 .scheduler-mixin(100px);
 
 .dx-scheduler {
@@ -153,5 +155,11 @@
             min-height: 10px;
             line-height: 10px;
         }
+    }
+}
+
+.dx-scheduler-appointment-popup {
+    .dx-scheduler-recurrence-rule-item {
+        padding-left: @WIN10_SCHEDULER_RECURRENCE_RULE_ITEM_PADDING;
     }
 }
