@@ -90,7 +90,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _updateFormattedValue: function() {
-        this._parsedValue = this._tryParse(this._getInputVal(), this._caret(), "");
+        this._parsedValue = this._tryParse(this._getInputVal(), this._caret());
         this._adjustParsedValue();
         this._setTextByParsedValue();
 
@@ -275,6 +275,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getEditedText: function(text, selection, char) {
+        if(char === undefined) {
+            return text;
+        }
+
         var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
             edited = textBefore + char + textAfter;
