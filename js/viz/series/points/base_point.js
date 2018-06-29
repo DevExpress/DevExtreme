@@ -154,8 +154,6 @@ Point.prototype = {
         that.graphic = null;
     },
 
-    _drawErrorBar: _noop,
-
     draw: function(renderer, groups, animationEnabled, firstDrawing) {
         var that = this;
         if(that._needDeletingOnDraw) {
@@ -168,7 +166,7 @@ Point.prototype = {
         }
 
         if(!that._hasGraphic()) {
-            that._getMarkerVisibility() && that._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
+            that.getMarkerVisibility() && that._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
         } else {
             that._updateMarker(animationEnabled, this._getStyle(), groups.markers);
         }
@@ -452,6 +450,8 @@ Point.prototype = {
     correctLabelPosition: _noop,
     getMinValue: _noop,
     getMaxValue: _noop,
+    _drawErrorBar: _noop,
+    getMarkerVisibility: _noop,
     dispose: function() {
         var that = this;
         that.deleteMarker();
