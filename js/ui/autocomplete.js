@@ -117,7 +117,7 @@ var Autocomplete = DropDownList.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return themes.isAndroid5();
                 },
                 options: {
                     popupPosition: {
