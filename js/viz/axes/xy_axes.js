@@ -946,13 +946,14 @@ module.exports = {
             max: true
         },
 
-        _getMinMax: function() {
+        _getMinMax() {
             return { min: this._options.min, max: this._options.max };
         },
 
-        _setMinMax: function(min, max) {
-            this._options.min = min;
-            this._options.max = max;
+        _setMinMax(min, max) {
+            const isRangeDefined = isDefined(min) || isDefined(max);
+            this._options.min = isRangeDefined ? min : this._storedMin;
+            this._options.max = isRangeDefined ? max : this._storedMax;
         },
 
         _getStick: function() {

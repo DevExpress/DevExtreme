@@ -972,6 +972,9 @@ Axis.prototype = {
             }
         }
 
+        that._storedMin = options.min;
+        that._storedMax = options.max;
+
         that._updateTranslator();
     },
 
