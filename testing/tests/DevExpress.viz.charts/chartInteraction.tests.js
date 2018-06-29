@@ -214,7 +214,6 @@ QUnit.module("series API", {
             commonAxisSettings: {
                 grid: { visible: false },
                 label: { visible: false },
-                point: { visible: false },
                 tick: { visible: false },
                 visible: false
             },

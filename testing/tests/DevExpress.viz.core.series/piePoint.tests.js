@@ -467,6 +467,11 @@ QUnit.test("circle point", function(assert) {
 
 });
 
+QUnit.test("getMarkerVisibility", function(assert) {
+    let point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    assert.strictEqual(point.getMarkerVisibility(), true);
+});
 
 QUnit.module("Draw Point", {
     beforeEach: function() {

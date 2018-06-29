@@ -59,6 +59,7 @@ var createPoint = function(series, argument) {
     point.stub("getTooltipFormatObject").returns({ valueText: "pointValue" });
 
     point.stub("isVisible").returns(true);
+    point.stub("getMarkerVisibility").returns(true);
 
     point.stub("getCrosshairData").withArgs(97, 45).returns({ x: 90, y: 40, xValue: 10, yValue: 20 });
     point.stub("getCrosshairData").returns({});
@@ -475,6 +476,13 @@ QUnit.test("dxpointermove over point", function(assert) {
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
 });
 
+QUnit.test("dxpointermove over invisible point", function(assert) {
+    this.point.stub("getMarkerVisibility").returns(false);
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
+
+    assert.ok(!this.point.hover.called, "point was not hovered");
+});
+
 QUnit.test("dxpointermove over point. move crosshair on point", function(assert) {
     // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
@@ -527,6 +535,45 @@ QUnit.test("mouseover on series - mouseout from series", function(assert) {
     assert.strictEqual(this.series.clearHover.callCount, 1);
     assert.ok(this.series.clearHover.calledAfter(this.series.hover));
     assert.ok(this.point.hover.calledOnce, "point hovered");
+});
+
+QUnit.test("mouseover on series - mouseout from series. Invisible points", function(assert) {
+    // arrange
+    this.point.stub("getMarkerVisibility").returns(false);
+    this.series.getNeighborPoint.withArgs(99, 40).returns(this.point);
+
+    // act
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 45, pointerType: "mouse" }));
+    this.clock.tick(this.tracker.__trackerDelay);
+
+    // assert
+    assert.ok(!this.point.hover.called, "point hovered");
+});
+
+QUnit.test("no pointClick on invisible point", function(assert) {
+    var clickEvent = getEvent("dxclick", { pageX: 100, pageY: 50, target: this.seriesGroup.element });
+    this.point.stub("getMarkerVisibility").returns(false);
+    this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
+
+    // Act
+    $(this.renderer.root.element).trigger(clickEvent);
+
+    // assert
+    assert.ok(!this.options.eventTrigger.withArgs("pointClick").called);
+});
+
+QUnit.test("no pointClick on invisible point. Rising click by series", function(assert) {
+    var clickEvent = getEvent("dxclick", { pageX: 100, pageY: 50, target: this.seriesGroup.element });
+    this.point.stub("getMarkerVisibility").returns(false);
+    this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
+
+    // Act
+    $(this.renderer.root.element).trigger(clickEvent);
+
+    // assert
+    assert.ok(this.options.eventTrigger.withArgs("seriesClick").called);
 });
 
 QUnit.test("mouse out from series before hover", function(assert) {
