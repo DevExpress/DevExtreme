@@ -104,10 +104,10 @@ circularAxes = polarAxes.circular = {
         return this._options.firstPointOnStartAngle;
     },
 
-    _getMinMax: function() {
-        var options = this._options,
-            min = isNumeric(options.originValue) ? options.originValue : undefined,
-            max;
+    _getMinMax() {
+        const options = this._options;
+        let min = isNumeric(options.originValue) ? options.originValue : undefined;
+        let max;
 
         if(options.period > 0 && options.argumentType === constants.numeric) {
             min = min || 0;

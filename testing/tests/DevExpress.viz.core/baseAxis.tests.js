@@ -453,11 +453,11 @@ QUnit.test("Check min/max after zoom and reset zoom", function(assert) {
 
     var rangeData = this.axis.getRangeData();
 
-    assert.strictEqual(rangeData.min, null, "Min should be correct");
-    assert.strictEqual(rangeData.max, null, "Max should be correct");
+    assert.strictEqual(rangeData.min, undefined, "Min should be correct");
+    assert.strictEqual(rangeData.max, undefined, "Max should be correct");
 
-    assert.strictEqual(rangeData.minVisible, null, "Min visible should be correct");
-    assert.strictEqual(rangeData.maxVisible, null, "Max visible should be correct");
+    assert.strictEqual(rangeData.minVisible, undefined, "Min visible should be correct");
+    assert.strictEqual(rangeData.maxVisible, undefined, "Max visible should be correct");
 });
 
 QUnit.module("Labels Settings", {
