@@ -514,8 +514,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 $content = $("<div>").addClass(contentClass);
 
                 eventsEngine.on($content, "scroll", function(e) {
-                    scrollTop = $(e.target).scrollTop();
-                    scrollable.scrollTo({ y: scrollTop });
+                    that._fixedScrollTimeout = setTimeout(function() {
+                        scrollTop = $(e.target).scrollTop();
+                        scrollable.scrollTo({ y: scrollTop });
+                    });
                 });
                 eventsEngine.on($content, wheelEvent.name, function(e) {
                     if(scrollable) {
@@ -734,6 +736,11 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _afterRowPrepared: function(e) {
         if(this._isFixedTableRendering) return;
         this.callBase(e);
+    },
+
+    dispose: function() {
+        this.callBase.apply(this, arguments);
+        clearTimeout(this._fixedScrollTimeout);
     }
 });
 
