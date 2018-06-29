@@ -1,5 +1,4 @@
 (function(root, factory) {
-    /* global DevExpress, define */
     if(typeof define === 'function' && define.amd) {
         define(function(require) {
             factory(require("devextreme/localization")<%
@@ -7,6 +6,8 @@
                     %>, require("devextreme/core/errors")<%
                 } %>);
         });
+    } else if(typeof module === "object" && module.exports) {
+        factory(require("devextreme/localization"));
     } else {
         factory(DevExpress.localization<%
         if(isDeprecated) {
