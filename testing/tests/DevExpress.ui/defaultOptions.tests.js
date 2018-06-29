@@ -415,11 +415,11 @@ testComponentDefaults(SelectBox,
         }
     },
     function() {
-        this.origIsWin8 = themes.isWin8;
-        themes.isWin8 = function() { return true; };
+        this.originalCurrentTheme = themes.current();
+        themes.current("win8");
     },
     function() {
-        themes.isWin8 = this.origIsWin8;
+        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -436,11 +436,11 @@ testComponentDefaults(SelectBox,
         }
     },
     function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
+        this.originalCurrentTheme = themes.current();
+        themes.current("android5");
     },
     function() {
-        themes.isAndroid5 = this.origIsAndroid5;
+        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -981,11 +981,10 @@ testComponentDefaults(Toolbar,
     {},
     { submenuType: "actionSheet" },
     function() {
-        this.origIsIos7 = themes.isIos7;
-        themes.isIos7 = function() { return true; };
-    },
-    function() {
-        themes.isIos7 = this.origIsIos7;
+        this.originalCurrentTheme = themes.current();
+        themes.current("ios7");
+    }, function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -1005,11 +1004,10 @@ testComponentDefaults(Toolbar,
     {},
     { submenuType: "listTop" },
     function() {
-        this.origIsWin10 = themes.isWin10;
-        themes.isWin10 = function() { return true; };
-    },
-    function() {
-        themes.isWin10 = this.origIsWin10;
+        this.originalCurrentTheme = themes.current();
+        themes.current("win10");
+    }, function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -1017,11 +1015,10 @@ testComponentDefaults(Toolbar,
     {},
     { submenuType: "dropDownMenu" },
     function() {
-        this.origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = function() { return true; };
-    },
-    function() {
-        themes.isAndroid5 = this.origIsAndroid5;
+        this.originalCurrentTheme = themes.current();
+        themes.current("android5");
+    }, function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
 
@@ -1106,11 +1103,11 @@ testComponentDefaults(LoadIndicator,
         _animatingSegmentInner: false
     },
     function() {
-        this.origIsWin8 = themes.isWin8;
-        themes.isWin8 = function() { return true; };
+        this.originalCurrentTheme = themes.current();
+        themes.current("win8");
     },
     function() {
-        themes.isWin8 = this.origIsWin8;
+        themes.current(this.originalCurrentTheme);
     }
 );
 
