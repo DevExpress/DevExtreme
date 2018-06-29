@@ -661,7 +661,7 @@ module.exports = {
             _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {});
     },
 
-    _getMarkerVisibility: function() {
+    getMarkerVisibility: function() {
         return this._options.visible;
     },
 

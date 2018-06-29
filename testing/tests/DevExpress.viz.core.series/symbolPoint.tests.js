@@ -3416,3 +3416,10 @@ QUnit.test("coordsIn", function(assert) {
     assert.ok(point.coordsIn(11, 3), "top side");
     assert.ok(!point.coordsIn(11, 1), "top side out");
 });
+
+QUnit.test("getMarkerVisibility", function(assert) {
+    this.options.visible = "visible_value";
+    let point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    assert.strictEqual(point.getMarkerVisibility(), "visible_value");
+});

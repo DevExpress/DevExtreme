@@ -300,7 +300,7 @@ module.exports = _extend({}, symbolPoint, {
 
     },
 
-    _getMarkerVisibility: function() {
+    getMarkerVisibility: function() {
         return true;
     },
 
