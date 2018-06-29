@@ -103,7 +103,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _isValueDirty: function() {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        return this._isDirty;
+        return this._isDirty || this._parsedValue !== this.option("value");
     },
 
     _arrowHandler: function(step, e) {
