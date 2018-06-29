@@ -608,16 +608,17 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _isZooming() {
-        const that = this,
-            argumentAxis = that._getArgumentAxis();
+        const that = this;
+        const argumentAxis = that._getArgumentAxis();
 
         if(!argumentAxis || !argumentAxis.getTranslator()) {
             return false;
         }
 
         const businessRange = argumentAxis.getTranslator().getBusinessRange();
-        let min = that._zoomMinArg ? that._zoomMinArg : 0;
-        let max = that._zoomMaxArg ? that._zoomMaxArg : 0;
+        const zoomRange = that._argumentAxes[that._displayedArgumentAxisIndex].getViewport();
+        let min = zoomRange ? zoomRange.min : 0;
+        let max = zoomRange ? zoomRange.max : 0;
 
         if(businessRange.axisType === "logarithmic") {
             min = vizUtils.getLog(min, businessRange.base);
@@ -1137,26 +1138,19 @@ var dxChart = AdvancedChart.inherit({
     },
 
     // API
-    zoomArgument: function(min, max, gesturesUsed) {
-        var that = this,
-            bounds,
-            zoomArg;
+    zoomArgument(min, max) {
+        const that = this;
+        let bounds;
 
         if(!_isDefined(min) && !_isDefined(max)) {
             return;
         }
 
-        if(!gesturesUsed) {
-            that._eventTrigger("zoomStart");
-        }
+        that._eventTrigger("zoomStart"); // TODO !gesturesUsed condition
 
         that._argumentAxes.forEach(function(axis) {
-            zoomArg = axis.zoom(min, max, gesturesUsed);
+            axis.zoom(min, max);
         });
-
-        that._zoomMinArg = zoomArg && zoomArg.min;
-        that._zoomMaxArg = zoomArg && zoomArg.max;
-        that._notApplyMargins = gesturesUsed; // TODO
 
         that._recreateSizeDependentObjects(false);
         that._doRender({
@@ -1170,11 +1164,12 @@ var dxChart = AdvancedChart.inherit({
         that._eventTrigger("zoomEnd", { rangeStart: bounds.minVisible, rangeEnd: bounds.maxVisible });
     },
 
-    _resetZoom: function() {
-        var that = this;
-        that._zoomMinArg = that._zoomMaxArg = that._notApplyMargins = undefined; // T190927
-        that._argumentAxes[0].resetZoom();
-        that._valueAxes.forEach(function(axis) { axis.resetZoom(); }); // T602156
+    _resetZoom() {
+        const that = this;
+        if(that.isReady()) {
+            that._argumentAxes.forEach(function(axis) { axis.resetZoom(); });
+            that._valueAxes.forEach(function(axis) { axis.resetZoom(); }); // T602156
+        }
     },
 
     // T218011 for dashboards

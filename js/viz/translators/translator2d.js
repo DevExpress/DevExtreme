@@ -139,10 +139,10 @@ function getEqualityCorrection(range) {
     return isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION;
 }
 
-function zoomArgsIsEqualCanvas(zoomArgs) {
+function zoomIsEqualCanvas(range) {
     const businessRange = this.getBusinessRange();
 
-    return valuesAreDefinedAndEqual(businessRange.min, businessRange.max) && this.isEqualRange(zoomArgs);
+    return valuesAreDefinedAndEqual(businessRange.min, businessRange.max) && this.isEqualRange(range);
 }
 
 function isEqualRange(range) {
@@ -165,7 +165,7 @@ function isEqualRange(range) {
         (!isDefined(comparingRange.max) || _abs(comparingRange.max - canvasOptions.rangeMax) <= correctionPrecision);
 }
 
-function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches, zoomArgs) {
+function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches, isZoomed) {
     var that = this,
         businessRange = that.getBusinessRange(),
         isDiscreteAxis = businessRange.axisType === "discrete",
@@ -175,7 +175,7 @@ function checkGestureEventsForScaleEdges(scrollThreshold, scale, scroll, touches
         scalingEventAtMin = scrollBarNearMin && ((businessRange.rotated ? scroll > 0 : scroll < 0) || scale !== 1),
         scalingEventAtMax = scrollBarNearMax && ((businessRange.rotated ? scroll < 0 : scroll > 0) || scale !== 1);
 
-    return (touches === 2 && scale === 1) || ((zoomArgs || isDiscreteAxis || !this.isEqualRange({ min: businessRange.minVisible, max: businessRange.maxVisible })) && (!scrollBarNearMin && !scrollBarNearMax)) ||
+    return (touches === 2 && scale === 1) || ((isZoomed || isDiscreteAxis || !this.isEqualRange({ min: businessRange.minVisible, max: businessRange.maxVisible })) && (!scrollBarNearMin && !scrollBarNearMax)) ||
         (!isOriginalScale && (scalingEventAtMin || scalingEventAtMax)) || (isOriginalScale && scale > 1);
 }
 
@@ -492,7 +492,7 @@ _Translator2d.prototype = {
     getInterval: _noop,
     zoom: _noop,
     getMinScale: _noop,
-    zoomArgsIsEqualCanvas: zoomArgsIsEqualCanvas,
+    zoomIsEqualCanvas: zoomIsEqualCanvas,
     isEqualRange: isEqualRange,
     checkScrollForOriginalScale: checkScrollForOriginalScale,
     scrollHasExtremePosition: scrollHasExtremePosition,

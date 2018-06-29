@@ -564,7 +564,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             that._pointerOut();
 
             that._eventTrigger(ZOOM_START);
-            that._chart.zoomArgument(zoom.min, zoom.max, true);
+            that._chart.zoomArgument(zoom.min, zoom.max);
 
             e.preventDefault();
             e.stopPropagation();    // T249548
@@ -661,7 +661,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         that._startScroll = false;
 
         function complete() {
-            that._chart.zoomArgument(zoom.min, zoom.max, true);
+            that._chart.zoomArgument(zoom.min, zoom.max);
         }
 
         if(startGesture && startGesture.changed) {
@@ -768,7 +768,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             touches = that._startGesture.touches;
 
         that._pointerOut();
-        if(that._argumentAxis.getTranslator().checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, scale, scroll, touches, that._argumentAxis._zoomArgs)) {
+        if(that._argumentAxis.getTranslator().checkGestureEventsForScaleEdges(SCROLL_THRESHOLD, scale, scroll, touches, that._argumentAxis.isZoomed())) {
             that._chart._transformArgument(that._startGesture.scroll, that._startGesture.scale);
             that._stopEvent(e);
         } else {

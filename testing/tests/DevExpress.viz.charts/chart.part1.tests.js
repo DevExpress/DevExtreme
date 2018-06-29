@@ -321,8 +321,16 @@ QUnit.test("Do not recreate series points on scrolling if aggregation is enabled
         };
     };
 
+    chart._argumentAxes[0].getViewport.returns({
+        min: 1,
+        max: 10
+    });
     chart.zoomArgument(1, 10);
     series._useAllAggregatedPoints = true;
+    chart._argumentAxes[0].getViewport.returns({
+        min: 10,
+        max: 100
+    });
     chart.zoomArgument(10, 100);
 
     assert.ok(series.createPoints.calledOnce);
@@ -341,8 +349,16 @@ QUnit.test("Do not recreate series points on scrolling if aggregation is enabled
 
     series.createPoints.reset();
 
+    chart._argumentAxes[0].getViewport.returns({
+        min: 0,
+        max: 1
+    });
     chart.zoomArgument(0, 1);
     series._useAllAggregatedPoints = true;
+    chart._argumentAxes[0].getViewport.returns({
+        min: 1,
+        max: 2
+    });
     chart.zoomArgument(1, 2);
 
     assert.ok(series.createPoints.calledOnce);

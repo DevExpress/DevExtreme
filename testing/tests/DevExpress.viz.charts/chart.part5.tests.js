@@ -54,7 +54,7 @@ QUnit.test("chart pass common series viewport to value axis on zoom", function(a
 
     chart.zoomArgument(10, 50);
     // assert
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
     assert.strictEqual(series1.getValueAxis().zoom.lastCall.args[0], 5, "min passed in value axis");
     assert.strictEqual(series1.getValueAxis().zoom.lastCall.args[1], 15, "max passed in value axis");
 });
@@ -133,6 +133,7 @@ QUnit.test("Reset zooming on dataSource Changed", function(assert) {
     chart.zoomArgument(10, 50);
     chart.getAllSeries()[0].getValueAxis().zoom.reset();
     // act
+    chart.isReady = function() { return true; };
     chart.option("dataSource", []);
     // assert
     assert.strictEqual(chart.getAllSeries()[0].getValueAxis().zoom.called, false);
@@ -218,7 +219,7 @@ QUnit.test("showZero has affect to value axis on zoom", function(assert) {
 
     chart.zoomArgument(10, 50);
     // assert
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
     assert.strictEqual(series.getValueAxis().zoom.lastCall.args[0], 0, "min passed in value axis");
     assert.strictEqual(series.getValueAxis().zoom.lastCall.args[1], 15, "max passed in value axis");
 });
@@ -261,7 +262,7 @@ QUnit.test("MultiAxis chart", function(assert) {
     chart.zoomArgument(10, 50);
     // assert
 
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
     assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [8, 15], "axis 1 viewport");
     assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
 });
@@ -304,8 +305,8 @@ QUnit.test("Zoom all argument axis", function(assert) {
     chart.zoomArgument(10, 50);
     // assert
 
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
-    assert.deepEqual(chart._argumentAxes[1].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
+    assert.deepEqual(chart._argumentAxes[1].zoom.lastCall.args, [10, 50]);
     assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [8, 15], "axis 1 viewport");
     assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
 });
@@ -1197,7 +1198,7 @@ QUnit.test("T172802. Scroll bar after zooming. One categories", function(assert)
 
     scrollBar.setPosition.reset();
 
-    chart.zoomArgument("January", "January", true);
+    chart.zoomArgument("January", "January");
 
     assert.ok(scrollBar.setPosition.calledOnce);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [undefined, undefined]);

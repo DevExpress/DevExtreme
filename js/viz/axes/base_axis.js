@@ -1180,9 +1180,8 @@ Axis.prototype = {
             options = that._options,
             marginOptions = that._marginOptions,
             viewPort = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
-            zoomArgs = that._zoomArgs,
-            minVisible = zoomArgs && isDefined(zoomArgs.min) ? zoomArgs.min : viewPort.minVisible,
-            maxVisible = zoomArgs && isDefined(zoomArgs.max) ? zoomArgs.max : viewPort.maxVisible,
+            minVisible = isDefined(options.min) ? options.min : viewPort.minVisible,
+            maxVisible = isDefined(options.max) ? options.max : viewPort.maxVisible,
             ticks = [];
 
         let aggregationInterval = options.aggregationInterval;
@@ -1300,7 +1299,7 @@ Axis.prototype = {
         if(that._options.type !== constants.discrete) {
             if(length &&
                 !that._options.skipViewportExtending &&
-                (!isDefined(that._zoomArgs) || !that.isArgumentAxis)) {
+                (!that.isZoomed() || !that.isArgumentAxis)) {
                 if(ticks[0].value < range.minVisible) {
                     minVisible = ticks[0].value;
                 }
@@ -1328,11 +1327,11 @@ Axis.prototype = {
 
     _getViewportRange: function() {
         var range = new rangeModule.Range(this._seriesData),
-            zoom = this._zoomArgs;
+            zoom = this.getViewport();
 
         range = this._applyMargins(range);
 
-        if(isDefined(zoom) && (isDefined(zoom.min) || isDefined(zoom.max))) {
+        if(zoom && this.isZoomed()) {
             isDefined(zoom.min) && (range.minVisible = zoom.min);
             isDefined(zoom.max) && (range.maxVisible = zoom.max);
             if(!this.isArgumentAxis) {
@@ -1578,15 +1577,11 @@ Axis.prototype = {
         }
     },
 
-    zoom: function(min, max, skipAdjusting) {
-        var that = this,
-            options = that._options,
-            minOpt = options.min,
-            maxOpt = options.max,
-            isDiscrete = options.type === constants.discrete,
-            translator = that.getTranslator();
-
-        skipAdjusting = skipAdjusting || isDiscrete;
+    zoom(min, max) {
+        const that = this;
+        const options = that._options;
+        const isDiscrete = options.type === constants.discrete;
+        const translator = that.getTranslator();
 
         min = that._validateUnit(min);
         max = that._validateUnit(max);
@@ -1595,47 +1590,38 @@ Axis.prototype = {
             max = [min, min = max][0];
         }
 
-        if(!skipAdjusting) {
-            if(minOpt !== undefined) {
-                min = minOpt > min ? minOpt : min;
-                max = minOpt > max ? minOpt : max;
-            }
-            if(maxOpt !== undefined) {
-                max = maxOpt < max ? maxOpt : max;
-                min = maxOpt < min ? maxOpt : min;
-            }
+        if(!isDiscrete && isDefined(min) && isDefined(max) && min > max) { // TODO bounds
+            const temp = min;
+            min = max;
+            max = temp;
         }
 
-        that._zoomArgs = { min: min, max: max };
+        that._setMinMax(min, max);
 
         that._breaks = that._getScaleBreaks(options, {
             minVisible: min,
             maxVisible: max
         }, that._series, that.isArgumentAxis);
 
-        if(translator.zoomArgsIsEqualCanvas(that._zoomArgs)) {
+        if(translator.zoomIsEqualCanvas(that.getViewport())) {
             that.resetZoom();
         }
 
-        return that._zoomArgs;
+        return that.getViewport();
     },
 
-    resetZoom: function() {
-        this._zoomArgs = null;
+    resetZoom() {
+        this._setMinMax(null, null);
     },
 
     isZoomed() {
-        return isDefined(this._zoomArgs) && (isDefined(this._zoomArgs.min) || isDefined(this._zoomArgs.max));
+        return !this._translator.isEqualRange(this.getViewport());
     },
 
-    getViewport: function() {
-        var that = this,
-            minOpt = that._options.min,
-            maxOpt = that._options.max;
-
-        if(that._zoomArgs) {
-            return that._zoomArgs;
-        }
+    getViewport() {
+        const that = this;
+        const minOpt = that._options.min;
+        const maxOpt = that._options.max;
 
         if(isDefined(minOpt) || isDefined(maxOpt)) {
             return {
@@ -1645,10 +1631,9 @@ Axis.prototype = {
         }
     },
 
-    getRangeData(useZoom) {
+    getRangeData() {
         const that = this;
         const minMax = that._getMinMax();
-        const zoomArgs = that._zoomArgs || {};
         const options = that._options;
         const type = options.type;
         const synchronizedValue = options.synchronizedValue;
@@ -1671,8 +1656,8 @@ Axis.prototype = {
                 rangeMin = min < max ? min : max;
                 rangeMax = max > min ? max : min;
             }
-            rangeMinVisible = isDefined(zoomArgs.min) && useZoom ? zoomArgs.min : rangeMin;
-            rangeMaxVisible = isDefined(zoomArgs.max) && useZoom ? zoomArgs.max : rangeMax;
+            rangeMinVisible = rangeMin;
+            rangeMaxVisible = rangeMax;
 
             if(isDefined(synchronizedValue)) {
                 rangeMin = isDefined(rangeMin) && (rangeMin < synchronizedValue) ? rangeMin : synchronizedValue;
@@ -1680,8 +1665,8 @@ Axis.prototype = {
             }
 
         } else {
-            rangeMinVisible = isDefined(zoomArgs.min) && useZoom ? zoomArgs.min : min;
-            rangeMaxVisible = isDefined(zoomArgs.max) && useZoom ? zoomArgs.max : max;
+            rangeMinVisible = min;
+            rangeMaxVisible = max;
         }
 
         return {

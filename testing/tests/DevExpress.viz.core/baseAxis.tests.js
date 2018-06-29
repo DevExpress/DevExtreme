@@ -7,6 +7,7 @@ import tickGeneratorModule from "viz/axes/tick_generator";
 import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
 import { Axis as originalAxis } from "viz/axes/base_axis";
 import translator2DModule from "viz/translators/translator2d";
+import xyMethods from "viz/axes/xy_axes";
 
 const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
@@ -64,7 +65,8 @@ function Axis(settings) {
 Axis.prototype = $.extend({}, originalAxis.prototype, {
     _setType: noop,
 
-    _getMinMax: sinon.stub().returns({ min: 0, max: 100 }),
+    _getMinMax: xyMethods.linear._getMinMax,
+    _setMinMax: xyMethods.linear._setMinMax,
     _getStick: sinon.stub().returns(true),
     _getSpiderCategoryOption: sinon.stub().returns(false),
 
@@ -360,7 +362,7 @@ QUnit.module("Get range data", {
 });
 
 QUnit.test("Check min/max and minVisible/maxVisible", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ min: 0, max: 100 });
 
     var rangeData = this.axis.getRangeData();
 
@@ -373,14 +375,15 @@ QUnit.test("Check min/max and minVisible/maxVisible", function(assert) {
 
 QUnit.test("Check min/max and minVisible/maxVisible. Discrete axis", function(assert) {
     this.updateOptions({ type: "discrete" });
+    this.axis.zoom("Second", "Fifth");
 
     var rangeData = this.axis.getRangeData();
 
     assert.strictEqual(rangeData.min, undefined, "Min should be correct");
     assert.strictEqual(rangeData.max, undefined, "Max should be correct");
 
-    assert.strictEqual(rangeData.minVisible, 0, "Min visible should be correct");
-    assert.strictEqual(rangeData.maxVisible, 100, "Max visible should be correct");
+    assert.strictEqual(rangeData.minVisible, "Second", "Min visible should be correct");
+    assert.strictEqual(rangeData.maxVisible, "Fifth", "Max visible should be correct");
 });
 
 QUnit.test("Check categories", function(assert) {
@@ -406,7 +409,8 @@ QUnit.test("Check axisType and dataType", function(assert) {
 QUnit.test("Check logarithmic range", function(assert) {
     this.updateOptions({
         type: "logarithmic",
-        logarithmBase: 10
+        logarithmBase: 10,
+        max: 100
     });
 
     var rangeData = this.axis.getRangeData();
@@ -435,8 +439,8 @@ QUnit.test("Check min/max when zoom args are defined", function(assert) {
 
     var rangeData = this.axis.getRangeData(true);
 
-    assert.strictEqual(rangeData.min, 0, "Min should be correct");
-    assert.strictEqual(rangeData.max, 100, "Max should be correct");
+    assert.strictEqual(rangeData.min, 10, "Min should be correct");
+    assert.strictEqual(rangeData.max, 50, "Max should be correct");
 
     assert.strictEqual(rangeData.minVisible, 10, "Min visible should be correct");
     assert.strictEqual(rangeData.maxVisible, 50, "Max visible should be correct");
@@ -449,11 +453,11 @@ QUnit.test("Check min/max after zoom and reset zoom", function(assert) {
 
     var rangeData = this.axis.getRangeData();
 
-    assert.strictEqual(rangeData.min, 0, "Min should be correct");
-    assert.strictEqual(rangeData.max, 100, "Max should be correct");
+    assert.strictEqual(rangeData.min, null, "Min should be correct");
+    assert.strictEqual(rangeData.max, null, "Max should be correct");
 
-    assert.strictEqual(rangeData.minVisible, 0, "Min visible should be correct");
-    assert.strictEqual(rangeData.maxVisible, 100, "Max visible should be correct");
+    assert.strictEqual(rangeData.minVisible, null, "Min visible should be correct");
+    assert.strictEqual(rangeData.maxVisible, null, "Max visible should be correct");
 });
 
 QUnit.module("Labels Settings", {
@@ -749,6 +753,8 @@ QUnit.test("range min and max are not defined", function(assert) {
 
     var result = this.axis.zoom(10, 20);
 
+    assert.equal(this.axis.getOptions().min, 10, "option range min should be correct");
+    assert.equal(this.axis.getOptions().max, 20, "option range max should be correct");
     assert.equal(result.min, 10, "min range value should be correct");
     assert.equal(result.max, 20, "max range value should be correct");
 });
@@ -786,8 +792,8 @@ QUnit.test("min and max out of the specified area", function(assert) {
 
     var result = this.axis.zoom(15, 60);
 
-    assert.equal(result.min, 20, "min range value should be correct");
-    assert.equal(result.max, 50, "max range value should be correct");
+    assert.equal(result.min, 15, "min range value should be correct");
+    assert.equal(result.max, 60, "max range value should be correct");
 });
 
 QUnit.test("min and max out of the specified area to left", function(assert) {
@@ -798,8 +804,8 @@ QUnit.test("min and max out of the specified area to left", function(assert) {
 
     var result = this.axis.zoom(5, 10);
 
-    assert.equal(result.min, 20, "min range value should be correct");
-    assert.equal(result.max, 20, "max range value should be correct");
+    assert.equal(result.min, 5, "min range value should be correct");
+    assert.equal(result.max, 10, "max range value should be correct");
 });
 
 QUnit.test("min and max out of the specified area to right", function(assert) {
@@ -809,56 +815,6 @@ QUnit.test("min and max out of the specified area to right", function(assert) {
     });
 
     var result = this.axis.zoom(60, 80);
-
-    assert.equal(result.min, 50, "min range value should be correct");
-    assert.equal(result.max, 50, "max range value should be correct");
-});
-
-QUnit.test("range min and max are not defined. Skip adjust", function(assert) {
-    this.updateOptions({
-        min: 0,
-        max: 100
-    });
-
-    var result = this.axis.zoom(10, 20, true);
-
-    assert.equal(this.axis.getOptions().min, 0, "option range min should be correct");
-    assert.equal(this.axis.getOptions().max, 100, "option range max should be correct");
-    assert.equal(result.min, 10, "min range value should be correct");
-    assert.equal(result.max, 20, "max range value should be correct");
-});
-
-QUnit.test("range min and max are defined. Skip adjust", function(assert) {
-    this.updateOptions({
-        min: 0,
-        max: 50
-    });
-
-    var result = this.axis.zoom(10, 20, true);
-
-    assert.equal(result.min, 10, "min range value should be correct");
-    assert.equal(result.max, 20, "max range value should be correct");
-});
-
-QUnit.test("min and max out of the specified area to left. Skip adjust", function(assert) {
-    this.updateOptions({
-        min: 20,
-        max: 50
-    });
-
-    var result = this.axis.zoom(5, 10, true);
-
-    assert.equal(result.min, 5, "min range value should be correct");
-    assert.equal(result.max, 10, "max range value should be correct");
-});
-
-QUnit.test("min and max out of the specified area to right. skip adjust", function(assert) {
-    this.updateOptions({
-        min: 20,
-        max: 50
-    });
-
-    var result = this.axis.zoom(60, 80, true);
 
     assert.equal(result.min, 60, "min range value should be correct");
     assert.equal(result.max, 80, "max range value should be correct");
@@ -934,7 +890,7 @@ QUnit.test("Get viewport. min/max undefined, there is no zooming", function(asse
 });
 
 QUnit.test("Get viewport after zooming", function(assert) {
-    this.axis.zoom(10, 20, true);
+    this.axis.zoom(10, 20);
     assert.deepEqual(this.axis.getViewport(), { min: 10, max: 20 });
 });
 
@@ -1005,7 +961,9 @@ QUnit.module("Data margins calculations", {
                 visible: true
             }
         }, options));
-
+        axis._translator.isEqualRange = function() {
+            return !axis.getViewport();
+        };
         return axis;
     },
     testMargins: function(assert, data) {
@@ -2385,7 +2343,7 @@ QUnit.module("Data margins calculations after zooming", {
 
         this.translator.stub("updateBusinessRange").reset();
 
-        axis.zoom(data.zoom[0], data.zoom[1], data.zoom[3]);
+        axis.zoom(data.zoom[0], data.zoom[1]);
         axis.createTicks(this.canvas);
 
         assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, 1);
