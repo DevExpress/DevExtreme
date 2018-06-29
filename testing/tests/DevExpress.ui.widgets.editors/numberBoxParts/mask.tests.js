@@ -1249,6 +1249,20 @@ QUnit.test("change event should be fired after stub removed and sign reverted", 
     assert.equal(changeHandler.callCount, 1, "change event has not been fired if value is not changed");
 });
 
+QUnit.test("change event should be fired after extra digits have been entered (IE bug)", function(assert) {
+    var changeHandler = sinon.spy();
+
+    this.instance.option({
+        format: "#0.00 kg",
+        value: 0,
+        onChange: changeHandler
+    });
+
+    this.keyboard.caret(1).type("123.456").press("enter");
+    assert.equal(changeHandler.callCount, 1, "change event has been fired after enter pressed");
+    assert.equal(this.instance.option("value"), 123.45, "value is correct");
+});
+
 
 QUnit.module("format: caret boundaries", moduleConfig);
 
