@@ -110,7 +110,7 @@ QUnit.test("change dataSource after zoomArgument with gesture and useAggregation
         chart = this.createChart(chartOptions);
 
     // act
-    chart.zoomArgument(2, 3, true);
+    chart.zoomArgument(2, 3);
     chart.option(chartOptions);
 
     assert.ok(true);
@@ -1261,8 +1261,8 @@ QUnit.test("adjustOnZoom option", function(assert) {
         argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
     argAxis.getViewport.returns({
-        min: chart._zoomMinArg,
-        max: chart._zoomMaxArg
+        min: 1,
+        max: 2
     });
 
     valAxis.zoom.reset();

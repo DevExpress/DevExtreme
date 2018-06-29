@@ -950,6 +950,11 @@ module.exports = {
             return { min: this._options.min, max: this._options.max };
         },
 
+        _setMinMax: function(min, max) {
+            this._options.min = min;
+            this._options.max = max;
+        },
+
         _getStick: function() {
             return !this._options.valueMarginsEnabled;
         },

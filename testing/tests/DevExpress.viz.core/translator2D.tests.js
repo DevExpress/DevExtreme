@@ -2761,7 +2761,7 @@ QUnit.test('check reset zoom for single point. Numeric', function(assert) {
     zoomInfo = translator.zoom(-50, 0.9);
     translator.updateBusinessRange($.extend({}, numericRange, { min: 100, max: 100, minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
 
-    assert.ok(translator.zoomArgsIsEqualCanvas(zoomInfo));
+    assert.ok(translator.zoomIsEqualCanvas(zoomInfo));
 });
 
 QUnit.test('check reset zoom for single point. DateTime', function(assert) {
@@ -2775,7 +2775,7 @@ QUnit.test('check reset zoom for single point. DateTime', function(assert) {
     zoomInfo = translator.zoom(-50, 0.9);
     translator.updateBusinessRange($.extend({}, datetimeRange, { min: new Date(2012, 9, 2), max: new Date(2012, 9, 2), minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
 
-    assert.ok(translator.zoomArgsIsEqualCanvas(zoomInfo));
+    assert.ok(translator.zoomIsEqualCanvas(zoomInfo));
 });
 
 QUnit.test("Zoom. Min in the break after zoom", function(assert) {
