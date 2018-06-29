@@ -365,6 +365,9 @@ var baseTrackerPrototype = {
             series = getData(e, SERIES_DATA),
             point = getData(e, POINT_DATA) || series && series.getPointByCoord(x, y);
 
+        if(point && !point.getMarkerVisibility()) {
+            point = undefined;
+        }
         that._enableOutHandler();
         if(that._checkGestureEvents(e, canvas, rootOffset)) {
             return;
@@ -414,7 +417,7 @@ var baseTrackerPrototype = {
             series = that._stuckSeries;
             point = series.getNeighborPoint(x, y);
             that._releaseHoveredSeries();
-            point && that._setHoveredPoint(point);
+            point && point.getMarkerVisibility() && that._setHoveredPoint(point);
         }
 
         that._pointerComplete(point, x, y);
@@ -451,8 +454,7 @@ var baseTrackerPrototype = {
             }
         } else if(series) {
             point = point || series.getPointByCoord(x, y);
-
-            if(point) {
+            if(point && point.getMarkerVisibility()) {
                 that._pointClick(point, e);
             } else {
                 getData(e, SERIES_DATA) && that._eventTrigger(SERIES_CLICK, { target: series, event: e });
