@@ -1554,12 +1554,6 @@ var dxChart = {
         */
         max: undefined,
         /**
-        * @name dxChartOptions.argumentAxis.range
-        * @extends VizTimeIntervalEnum
-        * @inherits VizTimeInterval
-        */
-        range: {},
-        /**
         * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
         * @default 70
