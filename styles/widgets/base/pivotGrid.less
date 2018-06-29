@@ -4,6 +4,8 @@
 @PIVOTGRID_BORDER_WIDTH: 1px;
 @PIVOTGRID_BORDER: @PIVOTGRID_BORDER_WIDTH solid @PIVOTGRID_BORDER_COLOR;
 @PIVOTGRID_ICON_SIZE: 14px;
+@PIVOTGRID_COMMON_FIELD_PADDING: 2px;
+@PIVOTGRID_FILTER_AREA_BORDING_SPACING: @PIVOTGRID_COMMON_LEFT_RIGHT_PADDING - @PIVOTGRID_COMMON_FIELD_PADDING;
 
 .dx-pivotgrid-fields-container {
 
@@ -132,26 +134,19 @@
     }
 
     .dx-filter-header {
-        .dx-area-field-container{
-            border-spacing: 8px;
+        .dx-area-field-container {
+            border-spacing: @PIVOTGRID_FILTER_AREA_BORDING_SPACING;
             border-collapse: separate;
         }
 
         .dx-pivotgrid-fields-area-head {
             td {
-                padding: 2px;
+                padding: @PIVOTGRID_COMMON_FIELD_PADDING;
             }
 
             tr > td:first-child {
-                padding-left: 2px;
+                padding-left: @PIVOTGRID_COMMON_FIELD_PADDING;
             }
-        }
-    }
-
-    .dx-area-description-cell,
-    .dx-data-header {
-        tr > td:first-child {
-            padding-left: @PIVOTGRID_COMMON_LEFT_RIGHT_PADDING;
         }
     }
 
