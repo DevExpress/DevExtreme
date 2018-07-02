@@ -76,13 +76,7 @@ var ToolbarBase = CollectionWidget.inherit({
 
                     if(this.option("useDefaultButtons")) {
                         data.options = data.options || {};
-                        if(!data.options.type) {
-                            data.options._defaultTypeForced = true;
-                            data.options.type = DEFAULT_BUTTON_TYPE;
-                        }
-                    } else if(data.options && data.options._defaultTypeForced) {
-                        delete data.options.type;
-                        delete data.options._defaultTypeForced;
+                        data.options.type = data.options.type || DEFAULT_BUTTON_TYPE;
                     }
                 }
             } else {

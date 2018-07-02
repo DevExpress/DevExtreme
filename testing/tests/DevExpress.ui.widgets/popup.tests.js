@@ -371,11 +371,6 @@ QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButt
 
     assert.ok(toolbarButtons.first().hasClass("dx-button-danger"), "button has custom class");
     assert.ok(toolbarButtons.last().hasClass("dx-button-default"), "button default class is 'default', not normal");
-
-    popupInstance.option("useDefaultToolbarButtons", false);
-    toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
-
-    assert.ok(toolbarButtons.last().hasClass("dx-button-normal"), "button default class is 'normal'");
 });
 
 
