@@ -429,10 +429,7 @@ QUnit.testStart(function() {
 
         this.createInstance({
             currentDate: new Date(2015, 1, 9),
-            dataSource: data,
-            onAppointmentRendered: function() {
-                assert.ok(true, "Updated item was rerendered");
-            }
+            dataSource: data
         });
 
         this.clock.tick();
@@ -442,7 +439,39 @@ QUnit.testStart(function() {
             startDate: new Date(2015, 1, 9, 1, 0),
             endDate: new Date(2015, 1, 9, 2, 0)
         };
+
+        this.instance.option("onAppointmentRendered", function() {
+            assert.ok(true, "Updated item was rerendered");
+        });
         this.instance.updateAppointment(this.tasks[0], newTask);
+        this.clock.tick();
+    });
+
+    QUnit.test("Updated item should be rerendered if it's coordinates weren't changed (T650811)", function(assert) {
+        var data = new DataSource({
+            store: [this.tasks[0]]
+        });
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
+        this.clock.tick();
+
+        var newTask = {
+            allDay: undefined,
+            text: "Task 11",
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        };
+
+        this.instance.option("onAppointmentRendered", function() {
+            assert.ok(true, "Updated item was rerendered");
+        });
+
+        this.instance.updateAppointment(this.tasks[0], newTask);
+
         this.clock.tick();
     });
 

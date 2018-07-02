@@ -108,6 +108,7 @@ var AppointmentLayoutManager = Class.inherit({
             result = this._markDeletedAppointments(renderedItems, appointments),
             itemFound,
             coordinatesChanged,
+            objectChanged,
             repaintAll = false;
 
         each(appointments, (function(_, currentItem) {
@@ -127,8 +128,9 @@ var AppointmentLayoutManager = Class.inherit({
                         }
                     }
                     coordinatesChanged = this._compareSettings(currentItem, item, isAgenda);
+                    objectChanged = updatedAppointment && (Object.keys(updatedAppointment).length !== Object.keys(item.itemData).length);
 
-                    if(coordinatesChanged || repaintAll) {
+                    if(coordinatesChanged || objectChanged || repaintAll) {
                         item.settings = currentItem.settings;
                         item.needRepaint = true;
                         item.needRemove = false;
