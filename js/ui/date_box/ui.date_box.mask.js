@@ -9,6 +9,7 @@ var eventsUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
     eventsEngine = require("../../events/core/events_engine"),
+    wheelEvent = require("../../events/core/wheel"),
     dateParts = require("./ui.date_box.mask.parts"),
     DateBoxBase = require("./ui.date_box.base");
 
@@ -64,18 +65,22 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _attachMaskEvents: function() {
         eventsEngine.on(this._input(), eventsUtils.addNamespace("click", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+        eventsEngine.on(this._input(), eventsUtils.addNamespace(wheelEvent.name, MASK_EVENT_NAMESPACE), this._mouseWheelHandler.bind(this));
     },
 
     _selectLastPart: function(e) {
         this._activePartIndex = this._dateParts.length;
-        this._selectNextPart(BACKWARD);
-        e && e.preventDefault();
+        this._selectNextPart(BACKWARD, e);
     },
 
     _selectFirstPart: function(e) {
         this._activePartIndex = -1;
-        this._selectNextPart(FORWARD);
-        e && e.preventDefault();
+        this._selectNextPart(FORWARD, e);
+    },
+
+    _mouseWheelHandler: function(e) {
+        var direction = e.delta > 0 ? FORWARD : BACKWARD;
+        this._partIncrease(direction, e);
     },
 
     _selectNextPart: function(step, e) {
