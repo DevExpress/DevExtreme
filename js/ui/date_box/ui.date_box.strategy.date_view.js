@@ -50,8 +50,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function() {
-                        var currentTheme = (themes.current() || "").split(".")[0];
-                        return currentTheme === "win8";
+                        return themes.isWin8();
                     },
                     options: {
                         fullScreen: true
@@ -94,8 +93,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function(device) {
-                        var currentTheme = (themes.current() || "").split(".")[0];
-                        return device.phone && currentTheme === "win10";
+                        return device.phone && themes.isWin10();
                     },
                     options: {
                         width: 333,

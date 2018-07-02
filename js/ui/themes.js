@@ -27,7 +27,11 @@ var context,
     currentThemeName,
     pendingThemeName,
     isMaterialTheme,
-    isAndroid5Theme;
+    isAndroid5Theme,
+    isIos7Theme,
+    isGenericTheme,
+    isWin8Theme,
+    isWin10Theme;
 
 var timerId;
 
@@ -182,6 +186,11 @@ function init(options) {
     currentThemeName = undefined;
     isMaterialTheme = undefined;
     isAndroid5Theme = undefined;
+    isGenericTheme = undefined;
+    isIos7Theme = undefined;
+    isWin8Theme = undefined;
+    isWin10Theme = undefined;
+
     current(options);
 }
 
@@ -243,6 +252,14 @@ function current(options) {
     isMaterialTheme = /material/.test(currentThemeName || readThemeMarker());
 
     isAndroid5Theme = /android5/.test(currentThemeName || readThemeMarker());
+
+    isIos7Theme = /ios7/.test(currentThemeName || readThemeMarker());
+
+    isGenericTheme = /generic/.test(currentThemeName || readThemeMarker());
+
+    isWin8Theme = /win8/.test(currentThemeName || readThemeMarker());
+
+    isWin10Theme = /win10/.test(currentThemeName || readThemeMarker());
 
     checkThemeDeprecation();
 
@@ -329,18 +346,32 @@ function isAndroid5() {
     return isAndroid5Theme;
 }
 
-function checkThemeDeprecation() {
-    var name = currentThemeName || readThemeMarker();
+function isIos7() {
+    return isIos7Theme;
+}
 
-    if(/win8/.test(name)) {
+function isGeneric() {
+    return isGenericTheme;
+}
+
+function isWin8() {
+    return isWin8Theme;
+}
+
+function isWin10() {
+    return isWin10Theme;
+}
+
+function checkThemeDeprecation() {
+    if(isWin8()) {
         errors.log("W0010", "The 'win8' theme", "16.1", "Use the 'generic' theme instead.");
     }
 
-    if(/win10/.test(name)) {
+    if(isWin10()) {
         errors.log("W0010", "The 'win10' theme", "17.2", "Use the 'generic' theme instead.");
     }
 
-    if(/android/.test(name)) {
+    if(isAndroid5()) {
         errors.log("W0010", "The 'android5' theme", "18.1", "Use the 'material' theme instead.");
     }
 }
@@ -414,6 +445,11 @@ exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
 exports.isAndroid5 = isAndroid5;
+exports.isIos7 = isIos7;
+exports.isGeneric = isGeneric;
+exports.isWin8 = isWin8;
+exports.isWin10 = isWin10;
+
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
@@ -421,5 +457,9 @@ exports.resetTheme = function() {
     pendingThemeName = null;
     isMaterialTheme = false;
     isAndroid5Theme = false;
+    isIos7Theme = false;
+    isGenericTheme = false;
+    isWin8Theme = false;
+    isWin10Theme = false;
 };
 

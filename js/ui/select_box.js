@@ -224,7 +224,7 @@ var SelectBox = DropDownList.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return /win8/.test(themes.current());
+                    return themes.isWin8();
                 },
                 options: {
                     _isAdaptablePopupPosition: true,
@@ -236,7 +236,7 @@ var SelectBox = DropDownList.inherit({
             },
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return themes.isAndroid5();
                 },
                 options: {
                     _isAdaptablePopupPosition: true,
