@@ -2,6 +2,7 @@
 
 var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     VerticalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.vertical"),
     HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
@@ -66,6 +67,7 @@ var AppointmentLayoutManager = Class.inherit({
             var appointmentSettings = this._positionMap[index];
 
             each(appointmentSettings, (function(_, settings) {
+                settings.data = extend({}, itemData);
                 settings.direction = this.renderingStrategy === "vertical" && !settings.allDay ? "vertical" : "horizontal";
             }).bind(this));
 
