@@ -488,6 +488,12 @@ var PivotGrid = Widget.inherit({
             */
             hideEmptySummaryCells: true,
             /**
+            * @name dxPivotGridOptions.showDataFieldHeaders
+            * @type boolean
+            * @default undefined
+            */
+            showDataFieldHeaders: undefined,
+            /**
              * @name dxPivotGridOptions.showTotalsPrior
              * @type Enums.PivotGridTotalsDisplayMode
              * @default "none"
@@ -809,6 +815,7 @@ var PivotGrid = Widget.inherit({
             dataFieldArea: that.option('dataFieldArea'),
             rowHeaderLayout: that.option('rowHeaderLayout'),
             hideEmptySummaryCells: that.option("hideEmptySummaryCells"),
+            showDataFieldHeaders: that.option('showDataFieldHeaders'),
 
             onFieldsPrepared: function(fields) {
                 each(fields, function(index, field) {
@@ -916,6 +923,7 @@ var PivotGrid = Widget.inherit({
             case "showColumnTotals":
             case "showColumnGrandTotals":
             case "hideEmptySummaryCells":
+            case "showDataFieldHeaders":
             case "dataFieldArea":
                 that._dataController.updateViewOptions(that._getDataControllerOptions());
                 break;
