@@ -445,6 +445,53 @@ QUnit.test("columnsInfo when cells descriptions count === 1 when showColumnGrand
     ]);
 });
 
+QUnit.test("columnsInfo when showDataFieldHeaders is true and cells descriptions count === 1", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "column" },
+                { area: "data", caption: 'Sum' }
+            ],
+            columns: [{ value: 'A' }]
+        },
+        showDataFieldHeaders: true,
+        texts: texts
+    });
+
+    assert.deepEqual(dataController.getColumnsInfo(), [
+        [
+            { text: 'A', path: ['A'], type: 'D' },
+            { text: 'Grand Total', type: 'GT' }
+        ],
+        [
+            { text: 'Sum', dataIndex: 0, isLast: true, path: ['A'], type: 'D' },
+            { text: 'Sum', dataIndex: 0, isLast: true, type: 'GT' }
+        ]
+    ]);
+});
+
+QUnit.test("columnsInfo when showDataFieldHeaders is false and cells descriptions count > 1", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "column" },
+                { area: "data", caption: 'Sum1' },
+                { area: "data", caption: 'Sum2' }
+            ],
+            columns: [{ value: 'A' }]
+        },
+        showDataFieldHeaders: false,
+        texts: texts
+    });
+
+    assert.deepEqual(dataController.getColumnsInfo(), [
+        [
+            { text: 'A', colspan: 2, path: ['A'], type: 'D' },
+            { text: 'Grand Total', colspan: 2, type: 'GT' }
+        ]
+    ]);
+});
+
 QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled", function(assert) {
     var dataController = new DataController({
         showColumnGrandTotals: false,
@@ -832,6 +879,54 @@ QUnit.test("rowsInfo when cells descriptions count > 1. dataFieldArea is 'rowAre
         [
                 { dataIndex: 1, isLast: true, text: "Avg", type: "GT" }
         ]
+    ]);
+});
+
+QUnit.test("rowsInfo when cells descriptions count > 1 and showDataFieldHeaders is false and dataFieldArea is 'row'", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { caption: 'Sum', area: "data" },
+                { caption: 'Avg', area: "data" }
+            ],
+            rows: [{ value: 'A' }]
+        },
+        texts: texts,
+        dataFieldArea: "row",
+        showDataFieldHeaders: false
+    });
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ path: ["A"], rowspan: 2, text: "A", type: "D" }],
+        [],
+        [{ rowspan: 2, text: "Grand Total", type: "GT" }],
+        []
+    ]);
+});
+
+QUnit.test("rowsInfo when cells descriptions count = 1 and showDataFieldHeaders is true and dataFieldArea is 'row'", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { caption: 'Sum', area: "data" }
+            ],
+            rows: [{ value: 'A' }]
+        },
+        texts: texts,
+        dataFieldArea: "row",
+        showDataFieldHeaders: true
+    });
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [
+            { path: ["A"], text: "A", type: "D" },
+            { dataIndex: 0, isLast: true, path: ["A"], text: "Sum", type: "D" }
+        ],
+        [
+            { text: "Grand Total", type: "GT" },
+            { dataIndex: 0, isLast: true, text: "Sum", type: "GT" }
+        ],
     ]);
 });
 
