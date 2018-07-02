@@ -22,10 +22,12 @@ var DateBoxMask = DateBoxBase.inherit({
         var that = this;
 
         return extend(this.callBase(), {
+            home: this._selectFirstPart.bind(that),
+            end: this._selectLastPart.bind(that),
             escape: that._revertChanges.bind(that),
             enter: that._fireChangeEvent.bind(that),
-            leftArrow: that._toggleActivePart.bind(that, BACKWARD),
-            rightArrow: that._toggleActivePart.bind(that, FORWARD),
+            leftArrow: that._selectNextPart.bind(that, BACKWARD),
+            rightArrow: that._selectNextPart.bind(that, FORWARD),
             upArrow: that._partIncrease.bind(that, FORWARD),
             downArrow: that._partIncrease.bind(that, BACKWARD)
         });
@@ -51,7 +53,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _renderDateParts: function() {
         this._dateParts = dateParts.renderDateParts(this.option("text"), this.option("displayFormat"));
-        this._toggleActivePart(0);
+        this._selectNextPart(0);
         var caret = this._getActivePartProp("caret");
         caret && this._caret(caret);
     },
@@ -64,10 +66,22 @@ var DateBoxMask = DateBoxBase.inherit({
         eventsEngine.on(this._input(), eventsUtils.addNamespace("click", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
     },
 
-    _toggleActivePart: function(step, e) {
+    _selectLastPart: function(e) {
+        this._activePartIndex = this._dateParts.length;
+        this._selectNextPart(BACKWARD);
+        e && e.preventDefault();
+    },
+
+    _selectFirstPart: function(e) {
+        this._activePartIndex = -1;
+        this._selectNextPart(FORWARD);
+        e && e.preventDefault();
+    },
+
+    _selectNextPart: function(step, e) {
         var index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            this._toggleActivePart(step >= 0 ? step + 1 : step - 1, e);
+            this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);
             return;
         }
 
