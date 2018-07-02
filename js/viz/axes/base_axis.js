@@ -1328,15 +1328,15 @@ Axis.prototype = {
         translator.updateBusinessRange(range);
     },
 
-    _getViewportRange: function() {
-        var range = new rangeModule.Range(this._seriesData),
-            zoom = this.getViewport();
+    _getViewportRange() {
+        const rangeData = new rangeModule.Range(this._seriesData);
+        const viewPort = this.getViewport();
 
-        range = this._applyMargins(range);
+        let range = this._applyMargins(extend({}, rangeData));
 
-        if(zoom && this.isZoomed()) {
-            isDefined(zoom.min) && (range.minVisible = zoom.min);
-            isDefined(zoom.max) && (range.maxVisible = zoom.max);
+        if(viewPort && this.isZoomed()) {
+            range.minVisible = isDefined(viewPort.min) ? viewPort.min : this.isArgumentAxis ? range.minVisible : rangeData.min;
+            range.maxVisible = isDefined(viewPort.max) ? viewPort.max : this.isArgumentAxis ? range.maxVisible : rangeData.max;
             if(!this.isArgumentAxis) {
                 range = this._applyMargins(range);
             }

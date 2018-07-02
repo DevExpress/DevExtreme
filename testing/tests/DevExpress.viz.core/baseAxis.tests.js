@@ -2465,9 +2465,9 @@ QUnit.test("value axis, max zoom is not defined - apply margins to both zoomed a
         zoom: [120, undefined],
         expectedRange: {
             min: 90,
-            max: 240,
-            minVisible: 110,
-            maxVisible: 240
+            max: 220,
+            minVisible: 112,
+            maxVisible: 216
         },
         isArgumentAxis: false
     });
