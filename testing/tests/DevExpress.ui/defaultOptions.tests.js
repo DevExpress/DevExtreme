@@ -992,11 +992,10 @@ testComponentDefaults(Toolbar,
     {},
     { submenuType: "listBottom" },
     function() {
-        this.origIsWin8 = themes.isWin8;
-        themes.isWin8 = function() { return true; };
-    },
-    function() {
-        themes.isWin8 = this.origIsWin8;
+        this.originalCurrentTheme = themes.current();
+        themes.current("win8");
+    }, function() {
+        themes.current(this.originalCurrentTheme);
     }
 );
 
