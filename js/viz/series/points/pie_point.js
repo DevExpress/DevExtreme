@@ -17,10 +17,13 @@ var extend = require("../../../core/utils/extend").extend,
     RADIAL_LABEL_INDENT = require("../../components/consts").radialLabelIndent;
 
 module.exports = _extend({}, symbolPoint, {
-    _updateData: function(data) {
+    _updateData: function(data, argumentChanged) {
         var that = this;
         symbolPoint._updateData.call(this, data);
-        that._visible = true;
+        if(argumentChanged || !_isDefined(that._visible)) {
+            that._visible = true;
+        }
+
         that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue) ? data.minValue : 0;
     },
 
