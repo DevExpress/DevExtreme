@@ -165,7 +165,7 @@ QUnit.module("Sync with FilterValue", {
 
     // T649274
     QUnit.test("clear filter if the boolean column is filtered with the 'false' value", function(assert) {
-        // arrange, act
+        // arrange
         this.setupDataGrid({
             columns: [{ dataField: "field", dataType: "number", filterValue: false }],
         });
