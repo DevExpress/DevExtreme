@@ -1,31 +1,30 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    dataUtils = require("../core/element_data"),
-    getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
+    dataUtils = require("../core/element_data"),
+    eventsEngine = require("../events/core/events_engine"),
+    registerComponent = require("../core/component_registrator"),
+    browser = require("../core/utils/browser"),
     commonUtils = require("../core/utils/common"),
     noop = commonUtils.noop,
-    isDefined = require("../core/utils/type").isDefined,
-    typeUtils = require("../core/utils/type"),
-    windowUtils = require("../core/utils/window"),
-    iteratorUtils = require("../core/utils/iterator"),
-    extend = require("../core/utils/extend").extend,
-    messageLocalization = require("../localization/message"),
-    registerComponent = require("../core/component_registrator"),
-    eventUtils = require("../events/utils"),
-    SelectBox = require("./select_box"),
-    clickEvent = require("../events/click"),
-    caret = require("./text_box/utils.caret"),
-    browser = require("../core/utils/browser"),
     FilterCreator = require("../core/utils/selection_filter").SelectionFilterCreator,
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
-    BindableTemplate = require("./widget/bindable_template"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
+    typeUtils = require("../core/utils/type"),
+    isDefined = typeUtils.isDefined,
+    windowUtils = require("../core/utils/window"),
+    extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
-    each = require("../core/utils/iterator").each;
+    each = require("../core/utils/iterator").each,
+    messageLocalization = require("../localization/message"),
+    eventUtils = require("../events/utils"),
+    clickEvent = require("../events/click"),
+    SelectBox = require("./select_box"),
+    caret = require("./text_box/utils.caret"),
+    BindableTemplate = require("./widget/bindable_template");
 
 var TAGBOX_TAG_DATA_KEY = "dxTagData";
 
@@ -804,7 +803,7 @@ var TagBox = SelectBox.inherit({
     _createTagData: function(values, filteredItems) {
         var items = [];
 
-        iteratorUtils.each(values, function(valueIndex, value) {
+        each(values, function(valueIndex, value) {
             var item = filteredItems[valueIndex];
 
             if(isDefined(item)) {
@@ -920,14 +919,14 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        var $tag = this._getTag(value);
+        var $tag = this._getTag(value),
+            displayValue = this._displayGetter(item),
+            itemModel = this._getItemModel(item, displayValue);
 
         if($tag) {
-            var displayValue = this._displayGetter(item);
-
             if(isDefined(displayValue)) {
                 $tag.empty();
-                this._applyTagTemplate(item, $tag);
+                this._applyTagTemplate(itemModel, $tag);
             }
 
             $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
@@ -935,11 +934,19 @@ var TagBox = SelectBox.inherit({
             $tag = this._createTag(value, $input);
 
             if(isDefined(item)) {
-                this._applyTagTemplate(item, $tag);
+                this._applyTagTemplate(itemModel, $tag);
             } else {
                 $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
                 this._applyTagTemplate(value, $tag);
             }
+        }
+    },
+
+    _getItemModel: function(item, displayValue) {
+        if(typeUtils.isObject(item)) {
+            return item;
+        } else {
+            return displayValue;
         }
     },
 
@@ -1023,11 +1030,11 @@ var TagBox = SelectBox.inherit({
 
         var value = this._getValue().slice();
 
-        iteratorUtils.each(e.removedItems || [], (function(_, removedItem) {
+        each(e.removedItems || [], (function(_, removedItem) {
             this._removeTag(value, this._valueGetter(removedItem));
         }).bind(this));
 
-        iteratorUtils.each(e.addedItems || [], (function(_, addedItem) {
+        each(e.addedItems || [], (function(_, addedItem) {
             this._addTag(value, this._valueGetter(addedItem));
         }).bind(this));
 
@@ -1107,7 +1114,7 @@ var TagBox = SelectBox.inherit({
         values = values || this._getValue();
 
 
-        iteratorUtils.each(values, (function(index, selectedValue) {
+        each(values, (function(index, selectedValue) {
             if(this._isValueEquals(value, selectedValue)) {
                 result = index;
                 return false;
@@ -1206,7 +1213,7 @@ var TagBox = SelectBox.inherit({
     _dataSourceFilterExpr: function() {
         var filter = [];
 
-        iteratorUtils.each(this._getValue(), (function(index, value) {
+        each(this._getValue(), (function(index, value) {
             filter.push(["!", [this._valueGetterExpr(), value]]);
         }).bind(this));
 
@@ -1217,7 +1224,7 @@ var TagBox = SelectBox.inherit({
         var itemValue = this._valueGetter(itemData),
             result = true;
 
-        iteratorUtils.each(this._getValue(), (function(index, value) {
+        each(this._getValue(), (function(index, value) {
             if(this._isValueEquals(value, itemValue)) {
                 result = false;
                 return false;
@@ -1253,7 +1260,7 @@ var TagBox = SelectBox.inherit({
             selectedItems = this._getPlainItems(this._list.option("selectedItems")),
             result = [];
 
-        iteratorUtils.each(selectedItems, function(index, item) {
+        each(selectedItems, function(index, item) {
             result[index] = that._valueGetter(item);
         });
 
