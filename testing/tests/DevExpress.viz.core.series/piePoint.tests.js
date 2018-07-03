@@ -834,7 +834,7 @@ QUnit.test("Apply view with legend callback", function(assert) {
     assert.strictEqual(callback.callCount, 1);
 });
 
-QUnit.test("Update data when point was hidden", function(assert) {
+QUnit.test("Point should preserve visibility state on data updating", function(assert) {
     this.options.visibilityChanged = noop;
     let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
 
@@ -844,12 +844,12 @@ QUnit.test("Update data when point was hidden", function(assert) {
     assert.strictEqual(point.isVisible(), false);
 });
 
-QUnit.test("Add new argument to dataSource when some points were hidden", function(assert) {
+QUnit.test("Point should reset hidden state if argument changed", function(assert) {
     this.options.visibilityChanged = noop;
     let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
 
     point.hide();
-    point.updateData({ arg: "a1", val: 10 });
+    point.updateData({ argument: "a2", value: 10 });
 
     assert.strictEqual(point.isVisible(), true);
 });
