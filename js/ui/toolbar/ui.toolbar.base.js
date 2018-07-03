@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    themes = require("../themes"),
     commonUtils = require("../../core/utils/common"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     registerComponent = require("../../core/component_registrator"),
@@ -23,6 +24,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
     TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS,
     BUTTON_FLAT_CLASS = "dx-button-flat",
+    DEFAULT_BUTTON_TYPE = "default",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
@@ -71,6 +73,11 @@ var ToolbarBase = CollectionWidget.inherit({
                         );
                         data.options = extend(data.options, { elementAttr: elementAttr });
                     }
+
+                    if(this.option("useDefaultButtons")) {
+                        data.options = data.options || {};
+                        data.options.type = data.options.type || DEFAULT_BUTTON_TYPE;
+                    }
                 }
             } else {
                 $container.text(String(data));
@@ -88,8 +95,23 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            renderAs: "topToolbar"
+            renderAs: "topToolbar",
+            useFlatButtons: false,
+            useDefaultButtons: false
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    useFlatButtons: true
+                }
+            }
+        ]);
     },
 
     _itemContainer: function() {
@@ -364,6 +386,8 @@ var ToolbarBase = CollectionWidget.inherit({
                 this._dimensionChanged();
                 break;
             case "renderAs":
+            case "useFlatButtons":
+            case "useDefaultButtons":
                 this._invalidate();
                 break;
             default:
