@@ -92,6 +92,16 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return result;
     },
 
+    _fixUnstableSorting: function(comparisonResult, a, b) {
+        if(comparisonResult === 0) {
+            if(a.sortTop && b.sortTop) {
+                if(a.sortTop < b.sortTop) return -1;
+                if(a.sortTop > b.sortTop) return 1;
+            }
+        }
+        return comparisonResult;
+    },
+
     createTaskPositionMap: function(items) {
         return this.callBase(items, true);
     },
