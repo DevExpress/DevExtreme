@@ -170,9 +170,6 @@ QUnit.module("Sync with FilterValue", {
             columns: [{ dataField: "field", dataType: "number", filterValue: false }],
         });
 
-        // assert
-        assert.deepEqual(this.option("filterValue"), ["field", "=", false]);
-
         // act
         this.option("filterValue", null);
         this.dataController.optionChanged({ name: "filterValue" });
