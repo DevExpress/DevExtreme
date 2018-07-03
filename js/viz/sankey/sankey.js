@@ -248,7 +248,10 @@ var dxSankey = require("../core/base_widget").inherit({
                 let gradient = null;
 
                 if(linkOptions.colorMode === COLOR_MODE_GRADIENT) {
-                    gradient = that._renderer.linearGradient([nodeColors[link._from._name], nodeColors[link._to._name]]);
+                    gradient = that._renderer.linearGradient([
+                        { offset: '0%', 'stop-color': nodeColors[link._from._name] },
+                        { offset: '100%', 'stop-color': nodeColors[link._to._name] }
+                    ]);
                     this._gradients.push(gradient);
                 }
 
@@ -277,6 +280,7 @@ var dxSankey = require("../core/base_widget").inherit({
             that._renderer.initHatching();
             that._change(["NODES_DRAW", "LINKS_DRAW", "LABELS"]);
         }
+
         that._change(["DRAWN"]);
     },
 
@@ -357,7 +361,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
     getAllLinks: function() {
         return this._links.slice();
-    },
+    }
 });
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({

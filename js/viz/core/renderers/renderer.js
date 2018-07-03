@@ -1725,16 +1725,15 @@ Renderer.prototype = {
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
-    linearGradient: function(stopColors) {
+    linearGradient: function(stops) {
         var gradient,
             id = getNextDefsSvgId(),
             that = this;
         gradient = that._createElement("linearGradient", { id: id }).append(that._defs);
         gradient.id = id;
 
-        stopColors.map((stopColor, idx) => {
-            var offset = idx === stopColors.length - 1 ? offset = "100%" : `${idx * 100 / (stopColors.length - 1)}%`;
-            that._createElement("stop", { offset: offset, 'stop-color': stopColor }).append(gradient);
+        stops.forEach((stop) => {
+            that._createElement("stop", { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
         });
 
         return gradient;
