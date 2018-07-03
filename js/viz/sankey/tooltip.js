@@ -14,7 +14,7 @@ export function setTooltipCustomOptions(sankey) {
                 } else if(args.type === 'link' && isFunction(options.customizeLinkTooltip)) {
                     return options.customizeLinkTooltip(args.info);
                 }
-                return {}
+                return {};
             },
             enabled: options.enabled
         }));
