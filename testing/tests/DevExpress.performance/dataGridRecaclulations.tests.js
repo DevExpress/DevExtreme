@@ -25,7 +25,7 @@ QUnit.performanceTest("render without data", function(assert) {
     var measureFunction = createDataGridMeasureFunction({
     });
 
-    assert.measureStyleRecalculation(measureFunction, 12);
+    assert.measureStyleRecalculation(measureFunction, 11);
 });
 
 QUnit.performanceTest("render with data", function(assert) {
@@ -33,7 +33,7 @@ QUnit.performanceTest("render with data", function(assert) {
         dataSource: window.orders
     });
 
-    assert.measureStyleRecalculation(measureFunction, 7);
+    assert.measureStyleRecalculation(measureFunction, 6);
 });
 
 QUnit.performanceTest("render with columnAutoWidth", function(assert) {
@@ -42,7 +42,7 @@ QUnit.performanceTest("render with columnAutoWidth", function(assert) {
         columnAutoWidth: true
     });
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, 12);
 });
 
 QUnit.performanceTest("render with columnFixing", function(assert) {
@@ -54,7 +54,7 @@ QUnit.performanceTest("render with columnFixing", function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 15);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("render with virtual scrolling", function(assert) {
@@ -64,7 +64,7 @@ QUnit.performanceTest("render with virtual scrolling", function(assert) {
         scrolling: { mode: "virtual" }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 13);
 });
 
 QUnit.performanceTest("updateDimensions", function(assert) {
