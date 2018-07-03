@@ -30,8 +30,8 @@ QUnit.module("Sync with FilterValue", {
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
-            setupDataGridModules(this, ["columns", "data", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
-                initViews: true
+            setupDataGridModules(this, ["data", "columns", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
+                initViews: false
             });
         };
     }
@@ -161,6 +161,25 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "include");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), undefined);
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), undefined);
+    });
+
+    // T649274
+    QUnit.test("clear filter if the boolean column is filtered with the 'false' value", function(assert) {
+        // arrange, act
+        this.setupDataGrid({
+            columns: [{ dataField: "field", dataType: "number", filterValue: false }],
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "=", false]);
+
+        // act
+        this.option("filterValue", null);
+        this.dataController.optionChanged({ name: "filterValue" });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), null);
+        assert.deepEqual(this.columnOption("field", "filterValue"), undefined);
     });
 
     // T639390
