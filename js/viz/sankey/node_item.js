@@ -129,12 +129,11 @@ Node.prototype = {
     showTooltip: function(coords) {
         this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'node',
-            from: null,
-            to: null,
-            weight: null,
-            title: this.title,
-            weightIn: this.linksIn.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0),
-            weightOut: this.linksOut.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0)
+            info: {
+                title: this.title,
+                weightIn: this.linksIn.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0),
+                weightOut: this.linksOut.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0)
+            }
         }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
     },
 

@@ -204,20 +204,21 @@ var dxSankey = {
         */
         enabled: true,
         /**
-        * @name  dxSankeyOptions.tooltip.customizeTooltip
+        * @name  dxSankeyOptions.tooltip.customizeNodeTooltip
         * @default undefined
         * @type function(info)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 type:string
-        * @type_function_param1_field2 from:string
-        * @type_function_param1_field3 to:string
-        * @type_function_param1_field4 weight:Number
-        * @type_function_param1_field5 title:string
-        * @type_function_param1_field6 weightIn:Number
-        * @type_function_param1_field7 weightOut:Number
+        * @type_function_param1 info:dxSankeyNodeInfoObject
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeNodeTooltip: undefined,
+        /**
+        * @name  dxSankeyOptions.tooltip.customizeLinkTooltip
+        * @default undefined
+        * @type function(info)
+        * @type_function_param1 info:dxSankeyLinkInfoObject
+        * @type_function_return object
+        */
+        customizeLinkTooltip: undefined
     },
     /**
     * @name dxSankeyOptions.node

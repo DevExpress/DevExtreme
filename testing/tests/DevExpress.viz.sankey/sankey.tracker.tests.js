@@ -5,16 +5,24 @@ var $ = require("jquery"),
     createSankey = common.createSankey,
     environment = common.environment,
     trackerModule = require("viz/sankey/tracker"),
+    tooltipModule = require("viz/core/tooltip"),
     clickEventName = require("events/click").name,
-    pointerEvents = require("events/pointer");
+    pointerEvents = require("events/pointer"),
+    setTooltipCustomOptions = require("viz/sankey/tooltip").setTooltipCustomOptions;
 
 var dxSankey = require("viz/sankey/sankey");
 dxSankey.addPlugin(trackerModule.plugin);
+dxSankey.addPlugin(tooltipModule.plugin);
+setTooltipCustomOptions(dxSankey);
 
 var trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         common.environment.beforeEach.apply(this, arguments);
         this.renderer.root.element = $("<div>").appendTo("#test-container")[0];
+
+        this.linksGroupIndex = 1;
+        this.nodesGroupIndex = 2;
+        this.labelsGroupIndex = 3;
     },
 
     afterEach: function() {
@@ -155,3 +163,32 @@ QUnit.test("Show tooltip on hovered link", function(assert) {
     assert.ok(widget.getAllLinks()[0].showTooltip.called);
 });
 
+QUnit.test("Show custom tooltip on hovered node", function(assert) {
+    var stub = sinon.stub();
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        tooltip: {
+            enabled: true,
+            customizeNodeTooltip: stub
+        }
+    });
+
+    this.trigger(pointerEvents.move, 2);
+    assert.ok(stub.called);
+    assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
+});
+
+QUnit.test("Show custom tooltip on hovered link", function(assert) {
+    var stub = sinon.stub();
+    createSankey({
+        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        tooltip: {
+            enabled: true,
+            customizeLinkTooltip: stub
+        }
+    });
+
+    this.trigger(pointerEvents.move, 3);
+    assert.ok(stub.called);
+    assert.deepEqual(stub.getCall(0).args[0], { from: 'A', to: 'Z', weight: 1 });
+});

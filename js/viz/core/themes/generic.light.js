@@ -1610,9 +1610,12 @@ registerTheme({
         },
         tooltip: {
             enabled: true,
-            customizeTooltip: function(info) {
-                return info.type === 'link' ? { html: `<strong>${info.from} > ${info.to}</strong><br/>Weight: ${info.weight}` } : { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
+            customizeLinkTooltip: function(info) {
+                return { html: `<strong>${info.from} > ${info.to}</strong><br/>Weight: ${info.weight}` };
             },
+            customizeNodeTooltip: function(info) {
+                return { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
+            }
         },
         node: {
             padding: 30,

@@ -35,7 +35,7 @@ var Node = {
     * @name dxSankeyNodemethods.showtTooltip
     * @publicName showTooltip()
     */
-    showTooltip: function(){ }
+    showTooltip: function () { }
 };
 
 /**
@@ -76,28 +76,51 @@ var Link = {
     * @name dxSankeyLinkmethods.showTooltip
     * @publicName showTooltip()
     */
-    showTooltip: function(){ }
+    showTooltip: function () { }
 };
 
 /**
-* @name dxSankeyConnectionInfoObject
+* @name dxSankeyLinkInfoObject
 * @publicName connection
 * @type object
 */
-var SankeyConnectionInfoObject = {
+var dxSankeyLinkInfoObject = {
     /**
-    * @name dxSankeyConnectionInfoObject.from
+    * @name dxSankeyLinkInfoObject.from
     * @type string
     */
     from: undefined,
     /**
-    * @name dxSankeyConnectionInfoObject.to
+    * @name dxSankeyLinkInfoObject.to
     * @type string
     */
     to: undefined,
     /**
-    * @name dxSankeyConnectionInfoObject.weight
+    * @name dxSankeyLinkInfoObject.weight
     * @type Number
     */
-   weight: undefined
+    weight: undefined
+}
+
+/**
+* @name dxSankeyNodeInfoObject
+* @publicName nodeInfo
+* @type object
+*/
+var dxSankeyNodeInfoObject = {
+    /**
+    * @name dxSankeyNodeInfoObject.title
+    * @type string
+    */
+    title: undefined,
+    /**
+    * @name dxSankeyNodeInfoObject.weightIn
+    * @type Number
+    */
+    weightIn: undefined,
+    /**
+    * @name dxSankeyNodeInfoObject.weightOut
+    * @type Number
+    */
+    weightOut: undefined
 }

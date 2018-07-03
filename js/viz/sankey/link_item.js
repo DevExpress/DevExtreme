@@ -121,12 +121,11 @@ Link.prototype = {
     showTooltip: function(coords) {
         this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'link',
-            from: this.connection.from,
-            to: this.connection.to,
-            weight: this.connection.weight,
-            title: null,
-            weightIn: null,
-            weightOut: null
+            info: {
+                from: this.connection.from,
+                to: this.connection.to,
+                weight: this.connection.weight
+            }
         }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
     }
 };
