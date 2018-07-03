@@ -3,17 +3,19 @@
 import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
 import { noop } from "core/utils/common";
+import { getPatternSetter } from "localization/ldml/date.parser";
 
 QUnit.testStart(() => {
     $("#qunit-fixture").html("<div id='dateBox'></div>");
 });
 
-QUnit.module("Date parts", {
+let setupModule = {
     beforeEach: () => {
-        this.parts = renderDateParts("Tuesday, July 2, 2024 16:19", "EEEE, MMMM d, yyyy HH:mm");
+        this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", "EEEE, MMMM d, yyyy HH:mm a");
     }
-}, () => {
+};
 
+QUnit.module("Date parts", setupModule, () => {
     let checkAndRemoveAccessors = (part, stub, assert) => {
         assert.equal(part.getter(), stub, "stub getter");
         assert.deepEqual(part.setter, noop, "stub setter");
@@ -23,7 +25,7 @@ QUnit.module("Date parts", {
     };
 
     QUnit.test("Check parts length", (assert) => {
-        assert.equal(this.parts.length, 13);
+        assert.equal(this.parts.length, 15);
     });
 
     QUnit.test("Day of week", (assert) => {
@@ -98,6 +100,18 @@ QUnit.module("Date parts", {
         });
     });
 
+    QUnit.test("Time indication", (assert) => {
+        assert.deepEqual(this.parts[14], {
+            index: 14,
+            isStub: false,
+            caret: { start: 28, end: 30 },
+            getter: "getHours",
+            setter: getPatternSetter("a"),
+            pattern: "a",
+            text: "PM"
+        });
+    });
+
     QUnit.test("Comma stub", (assert) => {
         checkAndRemoveAccessors(this.parts[1], ",", assert);
 
@@ -135,11 +149,7 @@ QUnit.module("Date parts", {
     });
 });
 
-QUnit.module("Get date part index by position", {
-    beforeEach: () => {
-        this.parts = renderDateParts("Tuesday, July 2, 2024 16:19", "EEEE, MMMM d, yyyy HH:mm");
-    }
-}, () => {
+QUnit.module("Get date part index by position", setupModule, () => {
     QUnit.test("Find day of week", (assert) => {
         assert.equal(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
         assert.equal(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
@@ -173,5 +183,11 @@ QUnit.module("Get date part index by position", {
         assert.equal(getDatePartIndexByPosition(this.parts, 25), 12, "start position of the group");
         assert.equal(getDatePartIndexByPosition(this.parts, 26), 12, "middle position of the group");
         assert.equal(getDatePartIndexByPosition(this.parts, 27), 12, "end position of the group");
+    });
+
+    QUnit.test("Find time indicator", (assert) => {
+        assert.equal(getDatePartIndexByPosition(this.parts, 28), 14, "start position of the group");
+        assert.equal(getDatePartIndexByPosition(this.parts, 29), 14, "middle position of the group");
+        assert.equal(getDatePartIndexByPosition(this.parts, 30), 14, "end position of the group");
     });
 });
