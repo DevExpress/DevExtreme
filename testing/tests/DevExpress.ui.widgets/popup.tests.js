@@ -351,6 +351,28 @@ QUnit.test("toolbar must receive 'rtlEnabled' from dxPopup after optionChanged",
     assert.notOk(toolbarInstance.option("rtlEnabled"), "toolbar's 'rtlEnabled' option is false");
 });
 
+QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButtons' is set", function(assert) {
+    var popupInstance = $("#popup").dxPopup({
+        visible: true,
+        useDefaultToolbarButtons: true,
+        deferRendering: false,
+        toolbarItems: [{
+            toolbar: "bottom",
+            widget: "dxButton",
+            options: { text: "Retry", type: "danger" }
+        }, {
+            toolbar: "bottom",
+            widget: "dxButton",
+            options: { text: "Ok" }
+        }]
+    }).dxPopup("instance");
+
+    var toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
+
+    assert.ok(toolbarButtons.first().hasClass("dx-button-danger"), "button has custom class");
+    assert.ok(toolbarButtons.last().hasClass("dx-button-default"), "button default class is 'default', not normal");
+});
+
 
 QUnit.module("dimensions");
 
