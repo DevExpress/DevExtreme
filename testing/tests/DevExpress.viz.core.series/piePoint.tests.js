@@ -490,7 +490,8 @@ QUnit.module("Draw Point", {
             },
             _options: {},
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+            hidePointTooltip: noop
         };
         this.options = {
             widgetType: "pie",
@@ -831,6 +832,26 @@ QUnit.test("Apply view with legend callback", function(assert) {
 
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
     assert.strictEqual(callback.callCount, 1);
+});
+
+QUnit.test("Update data when point was hidden", function(assert) {
+    this.options.visibilityChanged = noop;
+    let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
+
+    point.hide();
+    point.updateData({ argument: "a1", value: 10 });
+
+    assert.strictEqual(point.isVisible(), false);
+});
+
+QUnit.test("Add new argument to dataSource when some points were hidden", function(assert) {
+    this.options.visibilityChanged = noop;
+    let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
+
+    point.hide();
+    point.updateData({ arg: "a1", val: 10 });
+
+    assert.strictEqual(point.isVisible(), true);
 });
 
 QUnit.module("Tooltip", {

@@ -124,21 +124,21 @@ Point.prototype = {
 
     updateData: function(dataItem) {
         var that = this;
+        const argumentWasChanged = that.argument !== dataItem.argument;
         that.argument = that.initialArgument = that.originalArgument = dataItem.argument;
         that.tag = dataItem.tag;
         that.index = dataItem.index;
 
-        this._dataItem = dataItem;
+        that._dataItem = dataItem;
 
-        this.data = dataItem.data;
+        that.data = dataItem.data;
 
         that.lowError = dataItem.lowError;
         that.highError = dataItem.highError;
 
         that.aggregationInfo = dataItem.aggregationInfo;
 
-        that._updateData(dataItem);
-
+        that._updateData(dataItem, argumentWasChanged);
 
         !that.hasValue() && that.setInvisibility();
 
