@@ -41,6 +41,13 @@ QUnit.test("Recurrence editor should be initialized", function(assert) {
     assert.ok(this.instance.$element().hasClass("dx-recurrence-editor"));
 });
 
+QUnit.test("Recurrence editor should have correct default options", function(assert) {
+    this.createInstance();
+
+    assert.equal(this.instance.option("value"), "FREQ=DAILY", "editor is visible");
+    assert.equal(this.instance.option("visible"), true, "editor is visible");
+});
+
 QUnit.test("Recurrence editor should correctly process null value and reset inner editors to default values", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
