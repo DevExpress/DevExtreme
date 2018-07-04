@@ -192,7 +192,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @name dxSchedulerOptions.views
-                * @type Array<string>
+                * @type Array<string, object>
                 * @default ['day', 'week']
                 * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
