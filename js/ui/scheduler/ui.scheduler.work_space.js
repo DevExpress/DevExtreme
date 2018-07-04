@@ -2022,7 +2022,7 @@ var SchedulerWorkSpace = Widget.inherit({
             groupIndex: groupIndex
         };
 
-        if(shift.sortTop) {
+        if(isDefined(shift.sortTop)) {
             extend(coordinates, {
                 sortTop: position.top + shift.sortTop
             });
