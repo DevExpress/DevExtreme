@@ -25,8 +25,8 @@ window.internals = {
     ITEM_WITH_CHECKBOX_CLASS: "dx-treeview-item-with-checkbox",
     ITEM_DATA_KEY: "dx-treeview-item-data",
     IS_LEAF: "dx-treeview-node-is-leaf",
-    TOGGLE_ITEM_VISIBILITY_CLASS: "dx-treeview-toggle-item-visibility",
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: "dx-treeview-toggle-item-visibility-opened",
+    EXPAND_ICON_CLASS: "dx-treeview-expand-icon",
+    EXPAND_ICON_OPENED_CLASS: "dx-treeview-expand-icon-opened",
     SELECT_ALL_ITEM_CLASS: "dx-treeview-select-all-item"
 };
 

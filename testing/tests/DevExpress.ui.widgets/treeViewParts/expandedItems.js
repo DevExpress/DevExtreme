@@ -104,7 +104,7 @@ QUnit.test("onItemExpanded callback after click should have correct arguments", 
 
     var $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
         event = new $.Event("dxclick");
-    $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
+    $firstItem.parent().find("> ." + internals.EXPAND_ICON_CLASS).trigger(event);
 
     var args = itemExpandedHandler.getCall(0).args[0];
     this.checkFunctionArguments(assert, args, {
@@ -154,7 +154,7 @@ QUnit.test("onItemCollapsed callback after click should have correct arguments",
 
     var $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
         event = new $.Event("dxclick");
-    $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
+    $firstItem.parent().find("> ." + internals.EXPAND_ICON_CLASS).trigger(event);
 
     var args = itemCollapsedHandler.getCall(0).args[0];
     this.checkFunctionArguments(assert, args, {
@@ -173,7 +173,7 @@ QUnit.test("disabled item should not expand on click", function(assert) {
         }),
         treeView = $treeView.dxTreeView("instance"),
         $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
-        $icon = $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+        $icon = $firstItem.parent().find("> ." + internals.EXPAND_ICON_CLASS);
 
     $icon.trigger("dxclick");
 
@@ -189,7 +189,7 @@ QUnit.test("expanded disabled item should not collapse on click", function(asser
         }),
         treeView = $treeView.dxTreeView("instance"),
         $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
-        $icon = $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+        $icon = $firstItem.parent().find("> ." + internals.EXPAND_ICON_CLASS);
 
     $icon.trigger("dxclick");
 
@@ -218,14 +218,14 @@ QUnit.test("ui expand and collapse work correctly", function(assert) {
     var $treeView = initTree({
             items: data
         }),
-        $toggleExpandIcon = $($treeView.find(".dx-treeview-toggle-item-visibility").eq(0));
+        $toggleExpandIcon = $($treeView.find(".dx-treeview-expand-icon").eq(0));
 
     $toggleExpandIcon.trigger("dxclick");
-    assert.ok(!$toggleExpandIcon.hasClass("dx-treeview-toggle-item-visibility-opened"));
+    assert.ok(!$toggleExpandIcon.hasClass("dx-treeview-expand-icon-opened"));
 
     $toggleExpandIcon.trigger("dxclick");
     this.clock.tick(100);
-    assert.ok($toggleExpandIcon.hasClass("dx-treeview-toggle-item-visibility-opened"));
+    assert.ok($toggleExpandIcon.hasClass("dx-treeview-expand-icon-opened"));
 });
 
 QUnit.test("itemExpanded should be fired when expanding item", function(assert) {
@@ -235,7 +235,7 @@ QUnit.test("itemExpanded should be fired when expanding item", function(assert) 
             items: data
         }),
         treeView = $treeView.dxTreeView("instance"),
-        $toggleExpandIcon = $($treeView.find(".dx-treeview-toggle-item-visibility").eq(0));
+        $toggleExpandIcon = $($treeView.find(".dx-treeview-expand-icon").eq(0));
 
     treeView.on("itemExpanded", function() {
         assert.ok(true, "itemExpanded was fired");

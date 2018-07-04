@@ -236,7 +236,7 @@ QUnit.test("down arrow move focus on item with the same level", function(assert)
         $secondNode = $treeView.find("." + internals.NODE_CLASS).eq(4);
 
 
-    $treeView.find(".dx-treeview-toggle-item-visibility-opened").trigger("dxclick");
+    $treeView.find(".dx-treeview-expand-icon-opened").trigger("dxclick");
 
     $firstItem.trigger("dxpointerdown");
     keyboard.keyDown("down");
@@ -286,7 +286,7 @@ QUnit.test("up arrow move focus on item with same level", function(assert) {
         $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(4),
         $secondNode = $treeView.find("." + internals.NODE_CLASS).eq(0);
 
-    $treeView.find(".dx-treeview-toggle-item-visibility-opened").trigger("dxclick");
+    $treeView.find(".dx-treeview-expand-icon-opened").trigger("dxclick");
 
     $firstItem.trigger("dxpointerdown");
     keyboard.keyDown("up");
@@ -336,7 +336,7 @@ QUnit.test("left/right arrow collapse/expand node-container", function(assert) {
         }),
         keyboard = keyboardMock($treeView),
         $parentItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
-        $iconItem = $parentItem.parent().find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        $iconItem = $parentItem.parent().find("." + internals.EXPAND_ICON_CLASS).eq(0);
 
     var instance = $treeView.dxTreeView("instance");
 
@@ -345,12 +345,12 @@ QUnit.test("left/right arrow collapse/expand node-container", function(assert) {
     keyboard.keyDown("right");
     assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($treeView.find("." + internals.NODE_CLASS).eq(1).is(":visible"), "child item not hidden");
-    assert.ok($iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate opened state");
+    assert.ok($iconItem.hasClass("dx-treeview-expand-icon-opened"), "icon item indicate opened state");
 
     keyboard.keyDown("left");
     assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($treeView.find("." + internals.NODE_CLASS).eq(1).is(":hidden"), "child item is hidden");
-    assert.ok(!$iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate closed state");
+    assert.ok(!$iconItem.hasClass("dx-treeview-expand-icon-opened"), "icon item indicate closed state");
 }),
 
 QUnit.test("item-icon indicate closed state after retry to collapse node", function(assert) {
@@ -364,13 +364,13 @@ QUnit.test("item-icon indicate closed state after retry to collapse node", funct
         }),
         keyboard = keyboardMock($treeView),
         $parentItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
-        $iconItem = $parentItem.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        $iconItem = $parentItem.find("." + internals.EXPAND_ICON_CLASS).eq(0);
 
     $treeView.focusin();
     $parentItem.trigger("dxpointerdown");
 
     keyboard.keyDown("left");
-    assert.ok(!$iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate closed state");
+    assert.ok(!$iconItem.hasClass("dx-treeview-expand-icon-opened"), "icon item indicate closed state");
 }),
 
 QUnit.test("left arrow focus parent node-container", function(assert) {
@@ -386,14 +386,14 @@ QUnit.test("left arrow focus parent node-container", function(assert) {
         $parentNode = $treeView.find(".dx-treeview-node").eq(0),
         $parentItem = $treeView.find(".dx-treeview-item").eq(0),
         $childItem = $treeView.find(".dx-treeview-item").eq(2),
-        $iconItem = $parentNode.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        $iconItem = $parentNode.find("." + internals.EXPAND_ICON_CLASS).eq(0);
 
     $treeView.focusin();
     $parentItem.trigger("dxpointerdown");
     keyboard.keyDown("right");
 
     assert.ok($childItem.is(":visible"), "child item not hidden");
-    assert.ok($iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate opened state");
+    assert.ok($iconItem.hasClass("dx-treeview-expand-icon-opened"), "icon item indicate opened state");
 
     $childItem.trigger("dxpointerdown");
     keyboard.keyDown("left");

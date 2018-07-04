@@ -37,7 +37,7 @@ QUnit.test("Nested items should be rendered correctly", function(assert) {
         items: [{ text: "Item 1", items: [{ text: "Nested item 1" }, { text: "Nested item 2" }] }, { text: "Item 2" }]
     }).dxTreeView("instance");
 
-    $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+    $(treeView.$element()).find("." + internals.EXPAND_ICON_CLASS).trigger("dxclick");
 
     assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 4);
 });

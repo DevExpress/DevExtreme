@@ -1,12 +1,12 @@
 .dx-treeview {
-    .make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING) {
+    .dx-loadindicator {
+        left: auto;
+        right: 0px;
+    }
+}
 
-        .dx-loadindicator {
-            left: auto;
-            right: 0px;
-        }
-
-        &.dx-treeview-border-visible {
+.dx-treeview-make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING) {
+    &.dx-treeview-border-visible {
 
         .dx-treeview-select-all-item {
             padding-left: 0;
@@ -21,43 +21,42 @@
         }
     }
 
-        .dx-treeview-node {
-            padding-right: @NODE_OFFSET;
-        }
+    .dx-treeview-node {
+        padding-right: @NODE_OFFSET;
+    }
 
+    .dx-treeview-item {
+        .dx-icon {
+            margin-left: 5px;
+        }
+    }
+
+    .dx-treeview-item-with-checkbox {
         .dx-treeview-item {
-
-            .dx-icon {
-                margin-left: 5px;
-            }
+            padding-right: @ITEM_WITH_CHECKBOX_OFFSET;
         }
 
-        .dx-treeview-item-with-checkbox {
-            .dx-treeview-item {
-                padding-right: @ITEM_WITH_CHECKBOX_OFFSET;
-            }
-
-            .dx-checkbox {
-                right: @CHECKBOX_OFFSET;
-            }
+        .dx-checkbox {
+            right: @CHECKBOX_OFFSET;
         }
+    }
 
-        .dx-treeview-select-all-item {
+    .dx-treeview-select-all-item {
+        padding-left: 0;
+        padding-right: @CHECKBOX_OFFSET;
+
+        .dx-checkbox-text {
             padding-left: 0;
-            padding-right: @CHECKBOX_OFFSET;
-
-            .dx-checkbox-text {
-                padding-left: 0;
-                padding-right: @SELECT_ALL_TEXT_OFFSET;
-            }
-        }
-
-        &.dx-rtl {
-            .dx-treeview-node {
-                .dx-checkbox {
-                    left: auto;
-                }
-            }
+            padding-right: @SELECT_ALL_TEXT_OFFSET;
         }
     }
 }
+
+.dx-rtl {
+    .dx-treeview-node {
+        .dx-checkbox {
+            left: auto;
+        }
+    }
+}
+
