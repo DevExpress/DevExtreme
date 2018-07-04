@@ -53,6 +53,20 @@ QUnit.test("render slideoutView", function(assert) {
     assert.equal($element.find("." + SLIDEOUTVIEW_CONTENT_CLASS).length, 1, "slideoutview has content");
 });
 
+QUnit.test("slideoutView should have correct mode class by default", function(assert) {
+    var $element = $("#slideOutView").dxSlideOutView();
+
+    assert.ok($element.hasClass(SLIDEOUTVIEW_CLASS + "-persistent"), "slideoutview class is correct");
+});
+
+QUnit.test("slideoutView should have correct class depending on mode", function(assert) {
+    var $element = $("#slideOutView").dxSlideOutView({
+        mode: "temporary"
+    });
+
+    assert.ok($element.hasClass(SLIDEOUTVIEW_CLASS + "-temporary"), "slideoutview class is correct");
+});
+
 QUnit.test("render slideoutView content", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({}),
         $content = $element.find("." + SLIDEOUTVIEW_CONTENT_CLASS);

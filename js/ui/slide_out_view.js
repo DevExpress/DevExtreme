@@ -93,6 +93,13 @@ var SlideOutView = Widget.inherit({
             contentTemplate: "content",
 
             /**
+            * @name dxSlideOutViewOptions.mode
+            * @type Enums.SlideOutMode
+            * @default "normal"
+            */
+            mode: "persistent",
+
+            /**
             * @name dxSlideOutViewOptions.contentOffset
             * @hidden
             * @inheritdoc
@@ -183,6 +190,8 @@ var SlideOutView = Widget.inherit({
 
         this._renderMarkup();
 
+        this._refreshModeClass();
+
         var menuTemplate = this._getTemplate(this.option("menuTemplate")),
             contentTemplate = this._getTemplate(this.option("contentTemplate"));
 
@@ -216,6 +225,13 @@ var SlideOutView = Widget.inherit({
 
         // NOTE: B251455
         eventsEngine.on(this._$container, "MSPointerDown", noop);
+    },
+
+    _refreshModeClass: function(prevClass) {
+        prevClass && this.$element()
+            .removeClass(SLIDEOUTVIEW_CLASS + "-" + prevClass);
+
+        this.$element().addClass(SLIDEOUTVIEW_CLASS + "-" + this.option("mode"));
     },
 
     _renderShield: function() {
@@ -379,6 +395,9 @@ var SlideOutView = Widget.inherit({
             case "contentTemplate":
             case "menuTemplate":
                 this._invalidate();
+                break;
+            case "mode":
+                this._refreshModeClass(args.previousValue);
                 break;
             default:
                 this.callBase(args);

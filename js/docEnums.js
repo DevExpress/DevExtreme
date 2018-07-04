@@ -571,6 +571,11 @@
  */
 
 /**
+ * @typedef {string} Enums.SlideOutMode
+ * @enum {'persistent'|'temporary '}
+ */
+
+/**
  * @typedef {string} Enums.TextBoxMode
  * @enum {'email'|'password'|'search'|'tel'|'text'|'url'}
  */
