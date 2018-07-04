@@ -1348,6 +1348,44 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
     scrollableInstance.scrollTo({ y: 20000 });
 });
 
+QUnit.test("Check that fixed column has virtual rows (T642937)", function(assert) {
+    // arrange
+    var that = this,
+        $fixTable,
+        scrollableInstance,
+        $testElement = $("#container"),
+        fixedColumnsCount,
+        notFixedColumnsCount;
+
+    var dataOptions = {
+        virtualItemsCount: {
+            begin: 1,
+            end: 2
+        }
+    };
+
+    that.setupDataGrid(dataOptions);
+    that.options.scrolling = {
+        mode: "virtual"
+    };
+
+    that.rowsView.render($testElement);
+    that.rowsView.height(50);
+    that.rowsView.resize();
+
+    scrollableInstance = that.rowsView.element().dxScrollable("instance");
+    $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    fixedColumnsCount = that.columns.filter((element, _) => element.fixed).length;
+    notFixedColumnsCount = that.columns.filter((element, _) => !element.fixed).length;
+
+    // assert
+    assert.equal($fixTable.find(".dx-virtual-row").eq(0).children("td").length, fixedColumnsCount + 1, "fixed table first virtual row columns count");
+    assert.equal($fixTable.find(".dx-virtual-row").eq(1).children("td").length, fixedColumnsCount + 1, "fixed table last virtual row columns count");
+    assert.equal($fixTable.find(".dx-virtual-row td").eq(1).attr("colspan"), notFixedColumnsCount, "colspan for not fixed columns");
+    assert.equal($fixTable.find(".dx-virtual-row").eq(0).height(), 20, "fixed table first virtual row height");
+    assert.equal($fixTable.find(".dx-virtual-row").eq(1).height(), 40, "fixed table last virtual row height");
+});
+
 if(device.deviceType === "desktop") {
     // T241973
     QUnit.test("Synchronize position main table with fixed table", function(assert) {
