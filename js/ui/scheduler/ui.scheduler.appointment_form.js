@@ -222,10 +222,9 @@ var SchedulerAppointmentForm = {
                 editorOptions: {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
-                    onInitialized: function(args) {
-                        var isVisible = !!args.component.option("value");
-
-                        args.component.option("visible", isVisible);
+                    onValueChanged: function(args) {
+                        var value = !typeUtils.isEmptyObject(that._appointmentForm) ? !!that._appointmentForm.option("formData.recurrenceRule") : false;
+                        args.component.option("visible", value);
                     },
                     onContentReady: function(args) {
                         var $editorField = $(args.element).closest(".dx-field-item"),
