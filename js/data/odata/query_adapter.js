@@ -84,8 +84,13 @@ var compileCriteria = (function() {
             value = odataUtils.convertPrimitiveValue(fieldTypes[fieldName], value);
         }
 
+        var serializedPropName = serializePropName(fieldName);
+        if(typeUtils.type(value) === "string") {
+            serializedPropName = "tolower(" + serializedPropName + ")";
+        }
+
         return formatter(
-            serializePropName(fieldName, typeof value),
+            serializedPropName,
             odataUtils.serializeValue(value, protocolVersion)
         );
     };

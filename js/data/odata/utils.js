@@ -434,14 +434,12 @@ var serializeString = function(value) {
     return "'" + value.replace(/'/g, "''").toLowerCase() + "'";
 };
 
-var serializePropName = function(propName, valueType) {
-    propName = propName instanceof EdmLiteral ?
-        propName.valueOf() :
-        propName.replace(/\./g, "/");
+var serializePropName = function(propName) {
+    if(propName instanceof EdmLiteral) {
+        return propName.valueOf();
+    }
 
-    return valueType === "string" ?
-        "tolower(" + propName + ")" :
-        propName;
+    return propName.replace(/\./g, "/");
 };
 
 var serializeValueV4 = function(value) {
