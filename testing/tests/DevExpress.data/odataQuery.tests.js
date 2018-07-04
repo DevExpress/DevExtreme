@@ -562,7 +562,7 @@ QUnit.test("NOT with group operation", function(assert) {
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], "not ((f gt 2) and (k ne 'ab'))");
+                assert.equal(r[0].data["$filter"], "not ((f gt 2) and (tolower(k) ne 'ab'))");
             });
     };
 
@@ -580,13 +580,13 @@ QUnit.test("string values", function(assert) {
     var done = assert.async();
 
     QUERY("odata.org")
-        .filter(["f", "=", "a'b<a"])
+        .filter(["f", "=", "a'b<A"])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "f eq 'a''b<a'");
+            assert.equal(r[0].data["$filter"], "tolower(f) eq 'a''b<a'");
         })
         .always(done);
 });
@@ -683,7 +683,7 @@ QUnit.test("string functions", function(assert) {
 
     var check = function(operation, expectation) {
         return QUERY("odata.org")
-            .filter("f.p", operation, "ab")
+            .filter("f.p", operation, "Ab")
             .enumerate()
             .done(function(r) {
                 assert.equal(r[0].data["$filter"], expectation);
@@ -691,10 +691,10 @@ QUnit.test("string functions", function(assert) {
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'ab')"),
-        check("endsWith", "endswith(f/p,'ab')"),
-        check("contains", "substringof('ab',f/p)"),
-        check("notContains", "not substringof('ab',f/p)")
+        check("startsWith", "startswith(tolower(f/p),'ab')"),
+        check("endsWith", "endswith(tolower(f/p),'ab')"),
+        check("contains", "substringof('ab',tolower(f/p))"),
+        check("notContains", "not substringof('ab',tolower(f/p))")
     ];
 
     $.when.apply($, promises)
@@ -711,7 +711,7 @@ QUnit.test("string functions (v4)", function(assert) {
 
     var check = function(operation, expectation) {
         return QUERY("odata.org", { version: 4 })
-            .filter("f.p", operation, "ab")
+            .filter("f.p", operation, "Ab")
             .enumerate()
             .done(function(r) {
                 assert.equal(r[0].data["$filter"], expectation);
@@ -719,10 +719,10 @@ QUnit.test("string functions (v4)", function(assert) {
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'ab')"),
-        check("endsWith", "endswith(f/p,'ab')"),
-        check("contains", "contains(f/p,'ab')"),
-        check("notContains", "not contains(f/p,'ab')")
+        check("startsWith", "startswith(tolower(f/p),'ab')"),
+        check("endsWith", "endswith(tolower(f/p),'ab')"),
+        check("contains", "contains(tolower(f/p),'ab')"),
+        check("notContains", "not contains(tolower(f/p),'ab')")
     ];
 
     $.when.apply($, promises)
@@ -780,7 +780,7 @@ QUnit.test("Values are converted according to 'fieldTypes' property", function(a
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (name eq '789') and (total eq null)");
+            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (tolower(name) eq '789') and (total eq null)");
         })
         .always(done);
 });

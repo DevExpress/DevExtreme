@@ -1952,12 +1952,12 @@ QUnit.test("works", function(assert) {
         url: "odata.org",
         responseText: {},
         callback: function(bag) {
-            assert.equal(bag.data.customName, "'customValue'");
+            assert.equal(bag.data.customName, "'customvalue'");
         }
     });
 
     ajaxMock.setup({
-        url: "odata4.org(customName='customValue')",
+        url: "odata4.org(customName='customvalue')",
         responseText: {},
         callback: function(bag) {
             assert.deepEqual(bag.data, {});

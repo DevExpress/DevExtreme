@@ -431,15 +431,17 @@ var serializeDate = function(date) {
 };
 
 var serializeString = function(value) {
-    return "'" + value.replace(/'/g, "''") + "'";
+    return "'" + value.replace(/'/g, "''").toLowerCase() + "'";
 };
 
-var serializePropName = function(propName) {
-    if(propName instanceof EdmLiteral) {
-        return propName.valueOf();
-    }
+var serializePropName = function(propName, valueType) {
+    propName = propName instanceof EdmLiteral ?
+        propName.valueOf() :
+        propName.replace(/\./g, "/");
 
-    return propName.replace(/\./g, "/");
+    return valueType === "string" ?
+        "tolower(" + propName + ")" :
+        propName;
 };
 
 var serializeValueV4 = function(value) {

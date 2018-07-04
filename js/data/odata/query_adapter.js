@@ -85,7 +85,7 @@ var compileCriteria = (function() {
         }
 
         return formatter(
-            serializePropName(fieldName),
+            serializePropName(fieldName, typeof value),
             odataUtils.serializeValue(value, protocolVersion)
         );
     };
