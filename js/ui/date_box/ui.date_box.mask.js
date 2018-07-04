@@ -64,7 +64,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _attachMaskEvents: function() {
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("click", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+        eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
         eventsEngine.on(this._input(), eventsUtils.addNamespace(wheelEvent.name, MASK_EVENT_NAMESPACE), this._mouseWheelHandler.bind(this));
     },
 
@@ -158,6 +158,10 @@ var DateBoxMask = DateBoxBase.inherit({
         switch(args.name) {
             case "useMaskBehavior":
                 this._renderMask();
+                break;
+            case "displayFormat":
+                this.callBase(args);
+                this._renderDateParts();
                 break;
             default:
                 this.callBase(args);
