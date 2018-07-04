@@ -2012,16 +2012,22 @@ var SchedulerWorkSpace = Widget.inherit({
             throw errors.Error("E1039");
         }
 
-        return {
+        var coordinates = {
             top: position.top + shift.top,
             left: position.left + shift.left,
-            sortTop: position.top + shift.sortTop,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
             hMax: this._groupedStrategy.getHorizontalMax(groupIndex),
             vMax: this._groupedStrategy.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
+
+        if(shift.sortTop) {
+            extend(coordinates, {
+                sortTop: position.top + shift.sortTop
+            });
+        }
+        return coordinates;
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {

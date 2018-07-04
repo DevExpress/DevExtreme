@@ -97,6 +97,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             if(a.sortTop && b.sortTop) {
                 if(a.sortTop < b.sortTop) return -1;
                 if(a.sortTop > b.sortTop) return 1;
+            } else {
+                this.callBase(comparisonResult, a, b);
             }
         }
         return comparisonResult;
