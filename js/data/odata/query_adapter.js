@@ -15,7 +15,7 @@ var typeUtils = require("../../core/utils/type"),
 var DEFAULT_PROTOCOL_VERSION = 2;
 
 var makeArray = function(value) {
-    return typeUtils.type(value) === "string" ? value.split() : value;
+    return typeUtils.isString(value) ? value.split() : value;
 };
 
 var compileCriteria = (function() {
@@ -85,7 +85,7 @@ var compileCriteria = (function() {
         }
 
         var serializedPropName = serializePropName(fieldName);
-        if(typeUtils.type(value) === "string") {
+        if(typeUtils.isString(value)) {
             serializedPropName = "tolower(" + serializedPropName + ")";
         }
 
