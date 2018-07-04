@@ -19,7 +19,6 @@ var $ = require("../core/renderer"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
     deferredUtils = require("../core/utils/deferred"),
-    compileSetter = require("../core/utils/data").compileSetter,
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     BindableTemplate = require("./widget/bindable_template"),
@@ -495,16 +494,6 @@ var TagBox = SelectBox.inherit({
         });
     },
 
-    _compileDisplaySetter: function() {
-        var displayGetterExpr = this._displayGetterExpr();
-        this._displaySetter = displayGetterExpr && compileSetter(displayGetterExpr);
-    },
-
-    _initDataExpressions: function() {
-        this.callBase();
-        this._compileDisplaySetter();
-    },
-
     _multiTagPreparingHandler: function(args) {
         var selectedCount = this._getValue().length;
 
@@ -515,18 +504,15 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _initTemplates: function() {
+    _initDynamicTemplates: function() {
         this.callBase();
 
         this._defaultTemplates["tag"] = new BindableTemplate(function($container, data) {
-            if(this._displayGetterExpr()) {
-                data = this._displayGetter(data);
-            }
 
             var $tagContent = $("<div>").addClass(TAGBOX_TAG_CONTENT_CLASS);
 
             $("<span>")
-                .text(data)
+                .text(data.text || data)
                 .appendTo($tagContent);
 
             $("<div>")
@@ -534,7 +520,9 @@ var TagBox = SelectBox.inherit({
                 .appendTo($tagContent);
 
             $container.append($tagContent);
-        }.bind(this), [this._displayGetterExpr()], this.option("integrationOptions.watchMethod"));
+        }.bind(this), ["text"], this.option("integrationOptions.watchMethod"), {
+            "text": this._displayGetter
+        });
     },
 
     _renderSubmitElement: function() {
@@ -769,8 +757,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiTag: function($input) {
-        var item,
-            $tag = $("<div>")
+        var $tag = $("<div>")
                 .addClass(TAGBOX_TAG_CLASS)
                 .addClass(TAGBOX_MULTI_TAG_CLASS);
 
@@ -788,13 +775,8 @@ var TagBox = SelectBox.inherit({
         $tag.data(TAGBOX_TAG_DATA_KEY, args.text);
         $tag.insertBefore($input);
 
-        if(this._displaySetter) {
-            item = {};
-            this._displaySetter(item, args.text);
-        }
-
         this._tagTemplate.render({
-            model: item || args.text,
+            model: args.text,
             container: getPublicElement($tag)
         });
 
@@ -1318,7 +1300,6 @@ var TagBox = SelectBox.inherit({
             case "displayExpr":
                 this.callBase(args);
                 this._initTemplates();
-                this._compileDisplaySetter();
                 this._invalidate();
                 break;
             case "tagTemplate":
