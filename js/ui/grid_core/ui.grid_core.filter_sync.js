@@ -120,8 +120,8 @@ var FilterSyncController = modules.Controller.inherit((function() {
                     updateHeaderFilterCondition(columnsController, column, filterCondition);
                     updateFilterRowCondition(columnsController, column, filterCondition);
                 } else {
-                    column.filterValues && updateHeaderFilterCondition(columnsController, column);
-                    column.filterValue && updateFilterRowCondition(columnsController, column);
+                    isDefined(column.filterValues) && updateHeaderFilterCondition(columnsController, column);
+                    isDefined(column.filterValue) && updateFilterRowCondition(columnsController, column);
                 }
             });
             this._skipSyncColumnOptions = false;
