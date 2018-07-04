@@ -4,6 +4,8 @@ import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
 import { noop } from "core/utils/common";
 import { getPatternSetter } from "localization/ldml/date.parser";
+import "ui/date_box";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
 QUnit.testStart(() => {
     $("#qunit-fixture").html("<div id='dateBox'></div>");
@@ -12,6 +14,14 @@ QUnit.testStart(() => {
 let setupModule = {
     beforeEach: () => {
         this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", "EEEE, MMMM d, yyyy HH:mm a");
+        this.$element = $("#dateBox").dxDateBox({
+            value: new Date("10/10/2012 13:07"),
+            useMaskBehavior: true,
+            displayFormat: "MMMM d yyyy"
+        });
+        this.instance = this.$element.dxDateBox("instance");
+        this.$input = this.$element.find(".dx-texteditor-input");
+        this.keyboard = keyboardMock(this.$input, true);
     }
 };
 
@@ -189,5 +199,60 @@ QUnit.module("Get date part index by position", setupModule, () => {
         assert.equal(getDatePartIndexByPosition(this.parts, 28), 14, "start position of the group");
         assert.equal(getDatePartIndexByPosition(this.parts, 29), 14, "middle position of the group");
         assert.equal(getDatePartIndexByPosition(this.parts, 30), 14, "end position of the group");
+    });
+});
+
+QUnit.module("Keyboard navigation", setupModule, () => {
+    QUnit.test("Select date part on click", (assert) => {
+        this.keyboard.caret(9);
+        this.$input.trigger("dxclick");
+
+        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret position is good");
+    });
+
+    QUnit.test("First group should be selected on focus", (assert) => {
+        this.keyboard.focus();
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
+    });
+
+    QUnit.test("Right and left arrows should move the selection", (assert) => {
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
+
+        this.keyboard.press("right");
+        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
+
+        this.keyboard.press("left");
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "previous group is selected");
+    });
+
+    QUnit.test("Home and end keys should move selection to boundaries", (assert) => {
+        this.keyboard.press("end");
+        assert.deepEqual(this.keyboard.caret(), { start: 11, end: 15 }, "last group is selected");
+
+        this.keyboard.press("home");
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is selected");
+    });
+
+    QUnit.test("Up and down arrows should increase and decrease current group value", (assert) => {
+        const groups = [
+            { pattern: "EEEE", up: "Thursday", down: "Wednesday" },
+            { pattern: "d", up: "11", down: "10" },
+            { pattern: "MMMM", up: "November", down: "October" },
+            { pattern: "yyyy", up: "2013", down: "2012" },
+            { pattern: "HH", up: "14", down: "13" },
+            { pattern: "mm", up: "08", down: "07" }
+        ];
+
+        assert.equal(this.$input.val(), "October 10 2012", "initial value is correct");
+
+        groups.forEach(function(group) {
+            this.instance.option("displayFormat", group.pattern);
+
+            this.keyboard.press("up");
+            assert.equal(this.$input.val(), group.up, "group '" + group.pattern + "' increased");
+
+            this.keyboard.press("down");
+            assert.equal(this.$input.val(), group.down, "group '" + group.pattern + "' decreased");
+        }.bind(this));
     });
 });
