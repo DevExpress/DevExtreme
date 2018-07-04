@@ -653,17 +653,11 @@ var ScaleBreak = {
 
 /**
 * @name VizTimeInterval
-* @type object
+* @type number|object|Enums.VizTimeInterval
+* @default undefined
 * @hidden
 */
 var tickInterval = {
-    /**
-    * @pseudo VizTimeIntervalEnum
-    * @type number|object|string
-    * @default undefined
-    * @acceptValues 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
-    */
-
     /**
     * @name VizTimeInterval.years
     * @type number
