@@ -846,6 +846,15 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 20, 23, 59)], "Range is OK");
     });
 
+    QUnit.test("Scheduler allDay title should have correct text after changing currentDate", function(assert) {
+        this.instance.option("showAllDayPanel", true);
+        this.instance.option("currentDate", new Date(2017, 2, 4));
+
+        var $allDayTitle = this.instance.$element().find(".dx-scheduler-all-day-title");
+
+        assert.equal($allDayTitle.text(), "All day", "All-day title is correct");
+    });
+
 })("Work Space Work Week");
 
 (function() {
