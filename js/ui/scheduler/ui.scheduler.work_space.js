@@ -1360,8 +1360,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
-
-        showAllDayPanel && this._updateScrollable();
+        this._updateScrollable();
     },
 
     _changeAllDayVisibility: function() {
