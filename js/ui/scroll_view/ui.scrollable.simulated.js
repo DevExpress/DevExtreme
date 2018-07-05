@@ -191,14 +191,17 @@ var Scroller = Class.inherit({
     },
 
     _getScaleRatio: function() {
+        var ratio;
+
         if(windowUtils.hasWindow()) {
             var element = this._$element.get(0),
                 baseDimension = this._getBaseDimension(element, this._dimension),
                 computedDimension = this._getComputedDimension(element, this._dimension);
-            return baseDimension / computedDimension;
+
+            ratio = baseDimension / computedDimension;
         }
 
-        return 1;
+        return ratio || 1;
     },
 
     _getBaseDimension: function(element, dimension) {
