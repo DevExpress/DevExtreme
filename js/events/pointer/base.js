@@ -51,17 +51,25 @@ var BaseStrategy = Class.inherit({
         return eventUtils.fireEvent(args);
     },
 
+    _setSelector: function(handleObj) {
+        this._selector = this.noBubble && handleObj ? handleObj.selector : null;
+    },
+
+    _getSelector: function() {
+        return this._selector;
+    },
+
     setup: function() {
         return true;
     },
 
     add: function(element, handleObj) {
         if(this._handlerCount <= 0 || this.noBubble) {
-            this._selector = handleObj.selector;
             element = this.noBubble ? element : document;
+            this._setSelector(handleObj);
 
             var that = this;
-            eventsEngine.on(element, this._originalEvents, this._selector, function(e) {
+            eventsEngine.on(element, this._originalEvents, this._getSelector(), function(e) {
                 that._handler(e);
             });
         }
@@ -71,7 +79,9 @@ var BaseStrategy = Class.inherit({
         }
     },
 
-    remove: function() {
+    remove: function(handleObj) {
+        this._setSelector(handleObj);
+
         if(!this.noBubble) {
             this._handlerCount--;
         }
@@ -85,7 +95,7 @@ var BaseStrategy = Class.inherit({
         element = this.noBubble ? element : document;
 
         if(this._originalEvents !== "." + POINTER_EVENTS_NAMESPACE) {
-            eventsEngine.off(element, this._originalEvents, this._selector);
+            eventsEngine.off(element, this._originalEvents, this._getSelector());
         }
     },
 
