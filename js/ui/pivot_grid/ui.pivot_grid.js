@@ -1147,6 +1147,7 @@ var PivotGrid = Widget.inherit({
                 texts: fieldChooserOptions.texts || {},
                 dataSource: that.getDataSource(),
                 allowSearch: fieldChooserOptions.allowSearch,
+                searchTimeout: fieldChooserOptions.searchTimeout,
                 width: undefined,
                 height: undefined,
                 headerFilter: that.option("headerFilter"),
