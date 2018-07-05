@@ -517,11 +517,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 $content = $("<div>").addClass(contentClass);
 
                 eventsEngine.on($content, "scroll", function(e) {
-                    scrollTop = $(e.target).scrollTop();
-                    if(scrollTop) {
-                        $(e.target).scrollTop(0);
-                        scrollable.scrollTo({ y: that._scrollTop + scrollTop });
-                    }
+                    that._fixedScrollTimeout = setTimeout(function() {
+                        scrollTop = $(e.target).scrollTop();
+                        scrollable.scrollTo({ y: scrollTop });
+                    });
                 });
                 eventsEngine.on($content, wheelEvent.name, function(e) {
                     if(scrollable) {
@@ -543,19 +542,13 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         return that.callBase();
     },
 
-    _updateBottomLoading: function() {
-        if(!this._isFixedTableRendering) {
-            this.callBase();
-        }
-    },
-
     _updateScrollable: function() {
         this.callBase();
 
         var scrollable = this.getScrollable(),
             scrollTop = scrollable && scrollable.scrollOffset().top;
 
-        this._updateFixedTablePosition(-scrollTop);
+        this._updateFixedTablePosition(scrollTop);
     },
 
     _renderContent: function(contentElement, tableElement) {
@@ -703,11 +696,9 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _updateFixedTablePosition: function(scrollTop, needFocus) {
         if(this._fixedTableElement && this._tableElement) {
             var $focusedElement,
-                editorFactory = this.getController("editorFactory"),
-                dataController = this._dataController,
-                offset = dataController.getContentOffset ? dataController.getContentOffset() : 0;
+                editorFactory = this.getController("editorFactory");
 
-            this._fixedTableElement.css("top", scrollTop + offset);
+            this._fixedTableElement.parent().scrollTop(scrollTop);
 
             if(needFocus) {
                 $focusedElement = editorFactory.focus();
@@ -730,19 +721,24 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     },
 
     _handleScroll: function(e) {
-        this._updateFixedTablePosition(-e.scrollOffset.top, true);
+        this._updateFixedTablePosition(e.scrollOffset.top, true);
         this.callBase(e);
     },
 
     _updateContentPosition: function(isRender) {
         this.callBase.apply(this, arguments);
         if(!isRender) {
-            this._updateFixedTablePosition(-this._scrollTop);
+            this._updateFixedTablePosition(this._scrollTop);
         }
     },
     _afterRowPrepared: function(e) {
         if(this._isFixedTableRendering) return;
         this.callBase(e);
+    },
+
+    dispose: function() {
+        this.callBase.apply(this, arguments);
+        clearTimeout(this._fixedScrollTimeout);
     }
 });
 
