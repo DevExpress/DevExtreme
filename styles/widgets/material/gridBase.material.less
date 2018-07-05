@@ -313,7 +313,7 @@
             padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
         }
 
-        .dx-dropdowneditor-button-visible {
+        .dx-dropdowneditor-button-visible.dx-dropdowneditor {
             &.dx-show-clear-button {
                 .dx-texteditor-input {
                     padding-right: @MATERIAL_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
@@ -379,6 +379,9 @@
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                 height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
                 line-height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
+                padding-right: 0;
+                padding-left: 0;
+                padding-top: 18px;
             }
 
             &.dx-state-hover, &.dx-state-focused, &.dx-state-active {
@@ -798,7 +801,7 @@
 
         .dx-adaptive-detail-row {
             .dx-field-item-label {
-                padding: 0 @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
+                padding-top: 0;
             }
             .dx-field-item-content {
                 padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
@@ -815,7 +818,6 @@
             .dx-texteditor-input {
                 padding-left: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
                 padding-right: @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING;
-                background: ~"@{@{widgetName}-editor-bg}";
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                 height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
                 line-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
