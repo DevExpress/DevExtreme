@@ -29,32 +29,13 @@
 
 .dx-treeview {
     background-color: @WIN10_TREEVIEW_BACKGROUND_COLOR;
-
-    &.dx-rtl {
-        .dx-treeview-make-rtl(@WIN10_TREEVIEW_WITH_BORDER_OFFSET, @WIN10_TREEVIEW_NODE_OFFSET, @WIN10_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, @WIN10_TREEVIEW_CHECKBOX_OFFSET, @WIN10_TREEVIEW_SELECT_ALL_ITEM_OFFSET, @WIN10_TREEVIEW_SELECT_ALL_ITEM_LEFT_PADDING, @WIN10_TREEVIEW_PADDING_BASE);
-
-        .dx-treeview-item {
-            .dx-icon {
-                margin-right: 0;
-                margin-left: @WIN10_TREEVIEW_PADDING_BASE;
-            }
-        }
-
-        .dx-treeview-node-container {
-            .dx-treeview-node.dx-treeview-item-with-checkbox {
-                .dx-treeview-item {
-                    padding-left: @WIN10_TREEVIEW_PADDING_BASE;
-                }
-            }
-        }
-    }
 }
 
-&.dx-treeview-with-search > .dx-scrollable {
+.dx-treeview-with-search > .dx-scrollable {
     height: calc(~"100% - "@WIN10_TREEVIEW_SEARCH_EDITOR_HEIGHT + @WIN10_TREEVIEW_SEARCH_EDITOR_MARGIN);
 }
 
-&.dx-treeview-border-visible {
+.dx-treeview-border-visible {
     border: 1px solid @WIN10_TREEVIEW_BORDER_COLOR;
 
     .dx-treeview-select-all-item {
@@ -132,6 +113,25 @@
 
     &.dx-treeview-expand-icon-opened {
         .dx-icon-chevrondown;
+    }
+}
+
+.dx-rtl {
+    .dx-treeview-make-rtl(@WIN10_TREEVIEW_WITH_BORDER_OFFSET, @WIN10_TREEVIEW_NODE_OFFSET, @WIN10_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, @WIN10_TREEVIEW_CHECKBOX_OFFSET, @WIN10_TREEVIEW_SELECT_ALL_ITEM_OFFSET, @WIN10_TREEVIEW_SELECT_ALL_ITEM_LEFT_PADDING, @WIN10_TREEVIEW_PADDING_BASE);
+
+    .dx-treeview-item {
+        .dx-icon {
+            margin-right: 0;
+            margin-left: @WIN10_TREEVIEW_PADDING_BASE;
+        }
+    }
+
+    .dx-treeview-node-container {
+        .dx-treeview-node.dx-treeview-item-with-checkbox {
+            .dx-treeview-item {
+                padding-left: @WIN10_TREEVIEW_PADDING_BASE;
+            }
+        }
     }
 }
 

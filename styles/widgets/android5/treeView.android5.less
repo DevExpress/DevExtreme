@@ -43,17 +43,11 @@
     }
 }
 
-.dx-treeview {
-    &.dx-rtl {
-        .dx-treeview-make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING);
-    }
-}
-
-&.dx-treeview-with-search > .dx-scrollable {
+.dx-treeview-with-search > .dx-scrollable {
     height: calc(~"100% - "@ANDROID5_TREEVIEW_SEARCH_EDITOR_HEIGHT);
 }
 
-&.dx-treeview-border-visible {
+.dx-treeview-border-visible {
     border: 1px solid @ANDROID5_TREE_VIEW_BORDER_COLOR;
 
     .dx-treeview-select-all-item {
@@ -104,10 +98,6 @@
     padding: 8px 6px 6px 3px;
     min-height: 42px;
 
-    .dx-treeview-item-content {
-        color: @ANDROID5_TREE_VIEW_TEXT_COLOR;
-    }
-
     .dx-icons-dark();
 
     .dx-icon {
@@ -117,6 +107,10 @@
     &.dx-state-hover {
         background-color: @ANDROID5_TREE_VIEW_HOVERED_STATE_BACKGROUND;
     }
+}
+
+.dx-treeview-item-content {
+    color: @ANDROID5_TREE_VIEW_TEXT_COLOR;
 }
 
 .dx-state-focused > .dx-treeview-item {
@@ -139,4 +133,8 @@
     &.dx-treeview-expand-icon-opened {
         .dx-icon-chevrondown;
     }
+}
+
+.dx-rtl {
+    .dx-treeview-make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING);
 }
