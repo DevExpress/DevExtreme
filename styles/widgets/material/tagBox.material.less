@@ -17,6 +17,25 @@
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 1px;
 }
 
+.dx-tagbox {
+    .dx-texteditor-container:after {
+        border-bottom: 0;
+    }
+
+    &.dx-state-hover, &.dx-state-focused, &.dx-state-active, & {
+        .dx-texteditor-input {
+            background: transparent;
+        }
+    }
+
+    &.dx-state-focused, &.dx-state-active {
+        .dx-texteditor-container:before {
+            border-top: 0;
+            border-bottom: 0;
+        }
+    }
+}
+
 .dx-tagbox:not(.dx-texteditor-empty) {
     .dx-texteditor-input {
         padding-left: 0;
@@ -152,6 +171,10 @@
         border-bottom: 1px solid @tagbox-select-all-border-color;
         padding-bottom: @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM;
         margin-bottom: @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM;
+
+        &:after {
+            background-color: transparent;
+        }
     }
 }
 

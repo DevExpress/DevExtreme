@@ -1,4 +1,4 @@
-@MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + 6;
+@MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
 .dx-searchbox {
     .dx-icon-search {
         .dx-icon-search;
@@ -10,6 +10,12 @@
             color: @textbox-search-icon-color;
         }
         color: @texteditor-placeholder-color;
+        left: @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            right: @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        }
     }
 
     .dx-texteditor-input,
