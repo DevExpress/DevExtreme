@@ -4,6 +4,7 @@ import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
 import { noop } from "core/utils/common";
 import { getPatternSetter } from "localization/ldml/date.parser";
+import pointerMock from "../../helpers/pointerMock.js";
 import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
 
@@ -19,13 +20,22 @@ let setupModule = {
             useMaskBehavior: true,
             displayFormat: "MMMM d yyyy"
         });
+
         this.instance = this.$element.dxDateBox("instance");
         this.$input = this.$element.find(".dx-texteditor-input");
         this.keyboard = keyboardMock(this.$input, true);
+        this.pointer = pointerMock(this.$input);
     }
 };
 
-QUnit.module("Date parts", setupModule, () => {
+QUnit.module("Rendering", setupModule, () => {
+    QUnit.test("Text option should follow the input value", (assert) => {
+        this.keyboard.press("up");
+        assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
+    });
+});
+
+QUnit.module("Date parts rendering", setupModule, () => {
     let checkAndRemoveAccessors = (part, stub, assert) => {
         assert.equal(part.getter(), stub, "stub getter");
         assert.deepEqual(part.setter, noop, "stub setter");
@@ -159,7 +169,12 @@ QUnit.module("Date parts", setupModule, () => {
     });
 });
 
-QUnit.module("Get date part index by position", setupModule, () => {
+QUnit.module("Date parts find", setupModule, () => {
+    QUnit.test("First group should be selected on focus", (assert) => {
+        this.keyboard.focus();
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
+    });
+
     QUnit.test("Find day of week", (assert) => {
         assert.equal(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
         assert.equal(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
@@ -203,18 +218,6 @@ QUnit.module("Get date part index by position", setupModule, () => {
 });
 
 QUnit.module("Keyboard navigation", setupModule, () => {
-    QUnit.test("Select date part on click", (assert) => {
-        this.keyboard.caret(9);
-        this.$input.trigger("dxclick");
-
-        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret position is good");
-    });
-
-    QUnit.test("First group should be selected on focus", (assert) => {
-        this.keyboard.focus();
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
-    });
-
     QUnit.test("Right and left arrows should move the selection", (assert) => {
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
 
@@ -254,5 +257,31 @@ QUnit.module("Keyboard navigation", setupModule, () => {
             this.keyboard.press("down");
             assert.equal(this.$input.val(), group.down, "group '" + group.pattern + "' decreased");
         }.bind(this));
+    });
+
+    QUnit.test("Esc should restore the value", (assert) => {
+        this.keyboard.press("up");
+        assert.deepEqual(this.$input.val(), "November 10 2012", "text was changed");
+        assert.equal(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
+
+        this.keyboard.press("esc");
+        assert.equal(this.$input.val(), "October 10 2012", "text was reverted");
+    });
+});
+
+QUnit.module("Events", setupModule, () => {
+    QUnit.test("Select date part on click", (assert) => {
+        this.keyboard.caret(9);
+        this.$input.trigger("dxclick");
+
+        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret position is good");
+    });
+
+    QUnit.test("Increment and decrement date part by mouse wheel", (assert) => {
+        this.pointer.wheel(10);
+        assert.equal(this.$input.val(), "November 10 2012", "increment works");
+
+        this.pointer.wheel(-10);
+        assert.equal(this.$input.val(), "October 10 2012", "decrement works");
     });
 });
