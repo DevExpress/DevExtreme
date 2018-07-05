@@ -592,7 +592,7 @@ module.exports = {
                         case "update":
                             each(change.rowIndices, function(index, rowIndex) {
                                 var $newRowElement = that._getRowElements(newTableElement).eq(index),
-                                    changeType = change.changeTypes[index],
+                                    changeType = change.changeTypes && change.changeTypes[index],
                                     item = change.items && change.items[index];
 
                                 executors.push(function() {

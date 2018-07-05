@@ -7117,6 +7117,20 @@ QUnit.test("insert row", function(assert) {
     assert.equal($("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr").length, 3, "inserting row + data row + freespace row");
 });
 
+// T652111
+QUnit.test("add row if dataSource is not defined", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        columns: ["id", "text"]
+    });
+
+    // act
+    dataGrid.addRow();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
+});
+
 QUnit.test("Disable editing buttons after insert a row", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
