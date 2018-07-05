@@ -131,7 +131,7 @@ var Appointment = DOMComponent.inherit({
         var geometry = this.option("geometry"),
             $element = this.$element();
 
-        var top = this.option("allowSnapping") ? geometry.cellTop : top;
+        var top = this.option("allowSnapping") ? geometry.cellTop : geometry.top;
 
         translator.move($element, {
             top: top,
