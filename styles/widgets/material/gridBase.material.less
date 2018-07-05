@@ -380,6 +380,16 @@
                 line-height: @MATERIAL_GRID_BASE_CELL_HEIGHT;
             }
 
+            &.dx-state-hover, &.dx-state-focused, &.dx-state-active {
+                .dx-texteditor-input {
+                    background: ~"@{@{widgetName}-editor-bg}";
+                }
+            }
+
+            .dx-texteditor-buttons-container {
+                right: 0;
+            }
+
             .dx-texteditor-container:after, .dx-texteditor-container:before {
                 content: none;
             }
@@ -390,6 +400,12 @@
 
             &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
                 padding-right: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+            }
+
+            &.dx-rtl, .dx-rtl & {
+                .dx-texteditor-buttons-container {
+                    left: 0;
+                }
             }
         }
 

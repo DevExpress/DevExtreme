@@ -1,7 +1,7 @@
-@MATERIAL_TEXTEDITOR_BORDER_WIDTH: @MATERIAL_BASE_BORDER_WIDTH;
-@MATERIAL_TEXTEDITOR_BOTTOM_PADDING: 8px;
-@MATERIAL_TEXTEDITOR_INPUT_VERTICAL_PADDING: @MATERIAL_TEXTEDITOR_BOTTOM_PADDING - @MATERIAL_TEXTEDITOR_BORDER_WIDTH;
-@MATERIAL_TEXTEDITOR_INPUT_PADDING: @MATERIAL_TEXTEDITOR_INPUT_VERTICAL_PADDING 0;
+@MATERIAL_TEXTEDITOR_INPUT_TOP_PADDING: 19px;
+@MATERIAL_TEXTEDITOR_INPUT_BOTTOM_PADDING: 18px;
+@MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 12px;
+@MATERIAL_TEXTEDITOR_INPUT_PADDING: @MATERIAL_TEXTEDITOR_INPUT_TOP_PADDING @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING @MATERIAL_TEXTEDITOR_INPUT_BOTTOM_PADDING;
 
 @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_ICON_SIZE;
 
@@ -18,7 +18,7 @@
 }
 
 .dx-texteditor-icon() {
-    position: absolute;
+    position: absolute;    
     top: 50%;
     margin-top: -@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE / 2;
     .dx-icon-sizing(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
@@ -27,15 +27,15 @@
 .validation-icon-position(@padding: 0) {
     &.dx-invalid {
         .dx-texteditor-input {
-            padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE;
+            padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
 
         &.dx-rtl .dx-texteditor-input {
             padding: @MATERIAL_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE;
+            padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
 
-        .dx-texteditor-container {
+        .dx-texteditor-buttons-container {
             &:after {
                 right: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
 
@@ -50,7 +50,7 @@
 }
 
 .dx-texteditor {
-    &:not(.dx-textarea) {
+    //&:not(.dx-tagbox) {
         .dx-texteditor-borders-position() {
             left: 0;
             right: 0;
@@ -69,13 +69,15 @@
 
         .dx-texteditor-container:after {
             .dx-texteditor-borders-position();
-            border-bottom: 1px solid @texteditor-border-color;
         }
 
         &.dx-state-hover {
             .dx-texteditor-container:after {
                 border-bottom: 1px solid @texteditor-hover-border-color;
-                border-top: 1px solid @texteditor-hover-border-color;
+            }
+
+            .dx-texteditor-input {
+                background-color: @texteditor-hover-bg;
             }
         }
 
@@ -86,28 +88,36 @@
                 .scale(1);
                 .transition-transform(0.4s, cubic-bezier(0.4, 0, 0.02, 1));
             }
+
+            .dx-texteditor-input {
+                background-color: @texteditor-focused-bg;
+            }
         }
 
         &.dx-state-disabled,
         &.dx-state-readonly,
         &.dx-state-readonly.dx-state-hover {
-            .dx-texteditor-container:after {
-                border-bottom: 1px dotted @texteditor-border-color;
-                border-top: 0;
+            .dx-texteditor-input {
+                background-color: fade(@texteditor-bg, 12%);
+                color: fade(@texteditor-color, 50%);
             }
         }
-    }
+   // }
 
-    //.validation-icon-position();
+    .validation-icon-position();
+}
+
+.dx-texteditor-buttons-container {
+    right: @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
 }
 
 .dx-show-clear-button {
     .dx-texteditor-input {
-        padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         .dx-rtl &,
         .dx-rtl& {
             padding: @MATERIAL_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+            padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
     }
 
@@ -124,10 +134,11 @@
         .dx-icon-font-centered-sizing(@MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE);
     }
 
-    //&:not(.dx-texteditor-empty) {
-        //.validation-icon-position(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
-    //}
+    &:not(.dx-texteditor-empty) {
+        .validation-icon-position(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
+    }
 }
+
 
 /*B231111*/
 .dx-placeholder {
@@ -145,7 +156,8 @@
     background: @texteditor-bg;
     color: @texteditor-color;
     font-size: @MATERIAL_TEXTEDITOR_FONT_SIZE;
-    border-radius: @texteditor-input-border-radius;
+    border-top-left-radius: @texteditor-input-border-radius;
+    border-top-right-radius: @texteditor-input-border-radius;
     //min-height: round(@MATERIAL_BASE_LINE_HEIGHT * @MATERIAL_BASE_FONT_SIZE) + @MATERIAL_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING
 }
 
@@ -153,7 +165,6 @@
 
     &.dx-state-hover {
         .dx-texteditor-container:after {
-            border-top: 1px solid @texteditor-invalid-faded-border-color;
             border-bottom: 1px solid @texteditor-invalid-faded-border-color;
         }
     }
@@ -165,8 +176,11 @@
         }
     }
 
-    .dx-texteditor-container:after {
-        border-bottom: 1px solid @texteditor-invalid-faded-border-color;
+    .dx-texteditor-buttons-container {
+        width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        &:after {
+            .dx-invalid-material-badge();
+        }
     }
 }
 
@@ -175,5 +189,11 @@
     .dx-placeholder:before {
         right: 0;
         left: auto;
+    }
+
+    .dx-texteditor, &.dx-texteditor {
+        .dx-texteditor-buttons-container {
+            left: @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        }
     }
 }
