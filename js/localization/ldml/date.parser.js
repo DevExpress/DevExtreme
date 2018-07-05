@@ -116,7 +116,7 @@ var PATTERN_PARSERS = {
 var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
 
 var PATTERN_GETTERS = {
-    E: "getDate",
+    E: "getDay",
     y: "getFullYear",
     M: "getMonth",
     L: "getMonth",
@@ -130,7 +130,12 @@ var PATTERN_GETTERS = {
 };
 
 var PATTERN_SETTERS = {
-    E: "setDate",
+    E: function(date, value) {
+        if(value < 0) {
+            return;
+        }
+        date.setDate(date.getDate() - date.getDay() + value % 6);
+    },
     y: "setFullYear",
     M: "setMonth",
     L: "setMonth",

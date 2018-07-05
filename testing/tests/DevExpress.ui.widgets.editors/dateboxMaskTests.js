@@ -53,8 +53,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
             index: 0,
             isStub: false,
             caret: { start: 0, end: 7 },
-            getter: "getDate",
-            setter: "setDate",
+            getter: "getDay",
+            setter: getPatternSetter("E"),
             pattern: "EEEE",
             text: "Tuesday"
         });
