@@ -26,16 +26,13 @@
         border-bottom: 0;
     }
 
-    &.dx-state-hover {
+    &.dx-state-hover, &.dx-state-focused, &.dx-state-active {
         .dx-texteditor-input {
             background: transparent;
         }
     }
 
     &.dx-state-focused, &.dx-state-active {
-        .dx-texteditor-input {
-            background: transparent;
-        }
         .dx-texteditor-container:before {
             border-top: 0;
             border-bottom: 0;
@@ -180,7 +177,7 @@
         margin-bottom: @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM;
 
         &:after {
-            background-color: none;
+            background-color: transparent;
         }
     }
 }
