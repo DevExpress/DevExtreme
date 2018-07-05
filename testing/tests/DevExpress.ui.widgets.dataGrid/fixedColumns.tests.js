@@ -3005,9 +3005,12 @@ QUnit.module("Fixed columns with real dataController and columnController", {
 QUnit.test("Scroll top should be correct after expanding master detail", function(assert) {
     // arrange
     var that = this,
-        done = assert.async(),
+        scrollable,
         $testElement = $("#container");
 
+    that.options.scrolling = {
+        useNative: false
+    };
     that.options.masterDetail = {
         enabled: true,
         template: function(container, options) {
@@ -3021,19 +3024,17 @@ QUnit.test("Scroll top should be correct after expanding master detail", functio
     that.rowsView.resize();
 
     that.expandRow(1); // expand detail of the first row
+
     that.rowsView.resize();
 
-    that.rowsView.scrollTo({ y: 100 }); // scroll down
+    scrollable = that.rowsView.getScrollable();
+    scrollable.update();
+    scrollable.scrollTo({ top: 100 }); // scroll down
 
-    setTimeout(function() {
-        // act
-        that.expandRow(4); // expand detail of the fourth row
-        that.rowsView.resize();
+    // act
+    that.expandRow(4); // expand detail of the fourth row
+    that.rowsView.resize();
 
-        setTimeout(function() {
-            // assert
-            assert.ok(that.rowsView.getScrollable().scrollTop() > 0, "scroll top");
-            done();
-        });
-    });
+    // assert
+    assert.ok(scrollable.scrollTop() > 0, "scroll top");
 });
