@@ -261,11 +261,23 @@ QUnit.module("Keyboard navigation", setupModule, () => {
 
     QUnit.test("Esc should restore the value", (assert) => {
         this.keyboard.press("up");
-        assert.deepEqual(this.$input.val(), "November 10 2012", "text was changed");
+        assert.equal(this.$input.val(), "November 10 2012", "text was changed");
         assert.equal(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
 
         this.keyboard.press("esc");
         assert.equal(this.$input.val(), "October 10 2012", "text was reverted");
+    });
+
+    QUnit.test("Enter should commit the value", (assert) => {
+        this.keyboard.press("up");
+        assert.equal(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
+
+        this.keyboard.press("enter");
+        assert.equal(this.instance.option("value").getMonth(), 10, "November 10 2012", "month was changed in the value");
+
+        this.keyboard.press("down");
+        assert.equal(this.$input.val(), "October 10 2012", "text was changed");
+        assert.equal(this.instance.option("value").getMonth(), 10, "month did not changed in the value after commit");
     });
 });
 
