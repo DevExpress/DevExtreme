@@ -20,7 +20,7 @@ QUnit.module("pointer events", {
     }
 });
 
-QUnit.test("touchmove should not be a passive event listener", function(assert) {
+QUnit.test("touchmove should not have a passive event listener", function(assert) {
     var $element = $("<div style=\"height: 20px; width: 20px;\"></div>").appendTo("#qunit-fixture");
     var element = $element.get(0),
         origAddEventListener = element.addEventListener,
@@ -40,7 +40,7 @@ QUnit.test("touchmove should not be a passive event listener", function(assert) 
         .touchMove(0, 50)
         .touchEnd();
 
-    assert.ok(nonPassiveEvent, "");
+    assert.ok(nonPassiveEvent, "event listener for touchmove is not passive");
 
     element.addEventListener = origAddEventListener;
 });
