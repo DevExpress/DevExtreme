@@ -940,7 +940,9 @@ testComponentDefaults(Toast,
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = function() {
+            return true;
+        };
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
