@@ -225,7 +225,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
     getPositionShift: function(timeShift) {
         return {
-            sortTop: timeShift * this.getCellHeight(),
+            cellTop: timeShift * this.getCellHeight(),
             top: 0,
             left: 0
         };
