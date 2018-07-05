@@ -721,7 +721,7 @@ module.exports = Class.inherit((function() {
              */
             /**
              * @name PivotGridDataSourceOptions.fields.summaryType
-             * @type Enums.SummaryType
+             * @type Enums.SummaryType|string
              * @default 'count'
              */
             /**
