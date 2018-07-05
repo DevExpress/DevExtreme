@@ -225,8 +225,8 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
     getPositionShift: function(timeShift) {
         return {
-            cellTop: timeShift * this.getCellHeight(),
-            top: 0,
+            cellTop: 0,
+            top: timeShift * this.getCellHeight(),
             left: 0
         };
     },
@@ -243,6 +243,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         }
 
         return result;
+    },
+
+    applySnapping: function() {
+        return true;
     },
 
     getCellCountToLastViewDate: function(date) {

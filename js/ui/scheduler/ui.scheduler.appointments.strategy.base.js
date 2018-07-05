@@ -581,6 +581,7 @@ var BaseRenderingStrategy = Class.inherit({
         var index = coordinates.index,
             appointmentHeight = height / appointmentCountPerCell,
             appointmentTop = coordinates.top + (index * appointmentHeight),
+            cellTop = coordinates.cellTop + (index * appointmentHeight) + topOffset,
             top = appointmentTop + topOffset,
             width = coordinates.width,
             left = coordinates.left,
@@ -601,6 +602,7 @@ var BaseRenderingStrategy = Class.inherit({
         return {
             height: appointmentHeight,
             width: width,
+            cellTop: cellTop,
             top: top,
             left: left,
             empty: this._isAppointmentEmpty(height, width)

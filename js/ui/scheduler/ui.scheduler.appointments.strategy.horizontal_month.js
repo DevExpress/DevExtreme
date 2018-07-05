@@ -92,11 +92,17 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return result;
     },
 
+    _columnCondition: function(a, b) {
+        var columnCondition = this._normalizeCondition(a.left, b.left),
+            rowCondition = this._normalizeCondition(a.cellTop, b.cellTop);
+        return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
+    },
+
     _fixUnstableSorting: function(comparisonResult, a, b) {
         if(comparisonResult === 0) {
             if(a.cellTop && b.cellTop) {
-                if(a.cellTop < b.cellTop) return -1;
-                if(a.cellTop > b.cellTop) return 1;
+                if(a.top < b.top) return -1;
+                if(a.top > b.top) return 1;
             } else {
                 this.callBase(comparisonResult, a, b);
             }

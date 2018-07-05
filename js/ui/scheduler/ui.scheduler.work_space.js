@@ -2032,6 +2032,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return coordinates;
     },
 
+    applySnapping: function() {
+        return false;
+    },
+
     getCellIndexByDate: function(date, inAllDayRow) {
         var timeInterval = inAllDayRow ? 24 * 60 * 60 * 1000 : this._getInterval(),
             dateTimeStamp = this._getIntervalBetween(date, inAllDayRow);

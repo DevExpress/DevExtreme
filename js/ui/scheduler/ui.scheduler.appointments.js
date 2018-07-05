@@ -528,6 +528,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 direction: settings.direction || "vertical",
                 allowResize: allowResize,
                 allowDrag: allowDrag,
+                allowSnapping: this.option("allowSnapping"),
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
