@@ -37,7 +37,8 @@ var Scrollbar = Widget.inherit({
             visibilityMode: SCROLLBAR_VISIBLE.onScroll,
             containerSize: 0,
             contentSize: 0,
-            expandable: true
+            expandable: true,
+            scaleRatio: 1
         });
     },
 
@@ -175,9 +176,9 @@ var Scrollbar = Widget.inherit({
 
         this._containerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
         var thumbSize = Math.round(Math.max(Math.round(containerSize * this._containerToContentRatio), THUMB_MIN_SIZE));
-        this._thumbRatio = (containerSize - thumbSize) / (contentSize - containerSize);
+        this._thumbRatio = (containerSize - thumbSize) / (this.option("scaleRatio") * (contentSize - containerSize));
 
-        this.option(this._dimension, thumbSize);
+        this.option(this._dimension, thumbSize / this.option("scaleRatio"));
         this.$element().css("display", this._needScrollbar() ? "" : "none");
     },
 
@@ -220,6 +221,9 @@ var Scrollbar = Widget.inherit({
             case "visibilityMode":
             case "direction":
                 this._invalidate();
+                break;
+            case "scaleRatio":
+                this._update();
                 break;
             default:
                 this.callBase.apply(this, arguments);
