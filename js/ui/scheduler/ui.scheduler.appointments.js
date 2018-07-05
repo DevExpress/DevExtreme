@@ -177,6 +177,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this.callBase(args);
                 break;
             case "allowDelete":
+            case "allowSnapping":
                 break;
             case "focusStateEnabled":
                 this._clearDropDownItemsElements();

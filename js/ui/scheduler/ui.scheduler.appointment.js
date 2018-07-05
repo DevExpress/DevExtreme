@@ -61,6 +61,7 @@ var Appointment = DOMComponent.inherit({
             case "geometry":
             case "allowDrag":
             case "allowResize":
+            case "allowSnapping":
             case "reduced":
             case "sortedIndex":
             case "isCompact":
