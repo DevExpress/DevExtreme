@@ -699,7 +699,7 @@ QUnit.test("create field chooser with search", function(assert) {
     // assert
     assert.ok(fieldChooser.option("allowSearch"), 'fieldChooser with search');
     assert.ok(treeViewInstance.option("searchEnabled"), 'treeview with search');
-    assert.ok(treeViewInstance.option("searchTimeout"), 300, 'searchTimeout is assigned');
+    assert.equal(treeViewInstance.option("searchTimeout"), 300, 'searchTimeout is assigned');
 });
 
 QUnit.test("clear selection and filtering in field chooser treeview on popup hidding", function(assert) {
