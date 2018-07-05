@@ -3014,3 +3014,69 @@ QUnit.test("Draw fixed band columns with master detail", function(assert) {
     assert.strictEqual($cells.eq(1).text(), "Column 1", "text of the second column");
     assert.strictEqual($cells.eq(2).text(), "Column 2", "text of the third column");
 });
+
+QUnit.module("Fixed columns with real dataController and columnController", {
+    beforeEach: function() {
+        var that = this;
+
+        that.options = {
+            loadingTimeout: undefined,
+            keyExpr: "id",
+            columns: [{ dataField: "field1", fixed: true }, "field2", "field3", "field4"],
+            dataSource: [
+                { id: 1, field1: 1, field2: "test2", field3: 3, field4: 4 },
+                { id: 2, field1: 5, field2: "test6", field3: 7, field4: 8 },
+                { id: 3, field1: 9, field2: "test10", field3: 11, field4: 12 },
+                { id: 4, field1: 13, field2: "test14", field3: 15, field4: 16 },
+                { id: 5, field1: 17, field2: "test18", field3: 19, field4: 20 }
+            ]
+        };
+
+        that.setupDataGrid = function() {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnFixing", "masterDetail", "editorFactory", "grouping"], {
+                initViews: true
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+    }
+});
+
+// T624538
+QUnit.test("Scroll top should be correct after expanding master detail", function(assert) {
+    // arrange
+    var that = this,
+        scrollable,
+        $testElement = $("#container");
+
+    that.options.scrolling = {
+        useNative: false
+    };
+    that.options.masterDetail = {
+        enabled: true,
+        template: function(container, options) {
+            $(container).append($("<div/>").width(900).height("300"));
+        }
+    };
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(440);
+    that.rowsView.resize();
+
+    that.expandRow(1); // expand detail of the first row
+
+    that.rowsView.resize();
+
+    scrollable = that.rowsView.getScrollable();
+    scrollable.update();
+    scrollable.scrollTo({ top: 100 }); // scroll down
+
+    // act
+    that.expandRow(4); // expand detail of the fourth row
+    that.rowsView.resize();
+
+    // assert
+    assert.ok(scrollable.scrollTop() > 0, "scroll top");
+});
