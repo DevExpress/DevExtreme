@@ -367,18 +367,6 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
-        _addVirtualRow: function($table, isFixed, location, position) {
-            if(!position) return;
-
-            var $virtualRow = this._createEmptyRow(isFixed).addClass(VIRTUAL_ROW_CLASS).css("height", position),
-                $bodies = $table.children("tbody");
-
-            if(location === "top") {
-                $virtualRow.prependTo($bodies.first());
-            } else {
-                $virtualRow.appendTo($bodies.last());
-            }
-        },
         _updateContentPosition: function(isRender) {
             var that = this,
                 dataController = that._dataController,
@@ -395,22 +383,28 @@ var VirtualScrollingRowsViewExtender = (function() {
                     dataController.setContentSize(rowHeights);
                 }
                 var top = dataController.getContentOffset("begin"),
-                    bottom = dataController.getContentOffset("end"),
-                    $tables = that.getTableElements();
+                    bottom = dataController.getContentOffset("end");
 
-                $tables.children("tbody").children("." + VIRTUAL_ROW_CLASS).remove();
-
-                $tables.each(function(index) {
-                    var isFixed = index > 0;
-                    that._isFixedTableRendering = isFixed;
-                    that._addVirtualRow($(this), isFixed, "top", top);
-                    that._addVirtualRow($(this), isFixed, "bottom", bottom);
-                    that._isFixedTableRendering = false;
-                });
+                this._updateVirtualRows(this._tableElement, top, bottom);
             } else {
                 commonUtils.deferUpdate(function() {
                     that._updateContentPositionCore();
                 });
+            }
+        },
+        _updateVirtualRows: function($table, top, bottom, isFixed) {
+            var $virtualRow,
+                $bodies = $table.children("tbody");
+
+            $bodies.children("." + VIRTUAL_ROW_CLASS).remove();
+
+            if(top) {
+                $virtualRow = this._createEmptyRow(isFixed).addClass(VIRTUAL_ROW_CLASS).css("height", top);
+                $virtualRow.prependTo($bodies.first());
+            }
+            if(bottom) {
+                $virtualRow = this._createEmptyRow(isFixed).addClass(VIRTUAL_ROW_CLASS).css("height", bottom);
+                $virtualRow.appendTo($bodies.last());
             }
         },
         _updateContentPositionCore: function() {

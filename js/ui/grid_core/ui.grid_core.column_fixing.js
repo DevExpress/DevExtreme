@@ -742,6 +742,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if(this._isFixedTableRendering) return;
         this.callBase(e);
     },
+    _updateVirtualRows: function($table, top, bottom) {
+        this.callBase.apply(this, arguments);
+        this._fixedTableElement && this.callBase(this._fixedTableElement, top, bottom, true);
+    },
 
     dispose: function() {
         this.callBase.apply(this, arguments);
