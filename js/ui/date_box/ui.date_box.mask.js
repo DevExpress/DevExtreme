@@ -111,7 +111,9 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _renderDisplayText: function(text) {
         this.callBase(text);
-        this.option("text", text);
+        if(this.option("useMaskBehavior")) {
+            this.option("text", text);
+        }
     },
 
     _partIncrease: function(step, e) {
@@ -151,7 +153,9 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _valueChangeEventHandler: function(e) {
         this.callBase(e);
-        this.option("value", this._maskValue);
+        if(this.option("useMaskBehavior")) {
+            this.option("value", this._maskValue);
+        }
     },
 
     _optionChanged: function(args) {
@@ -161,7 +165,9 @@ var DateBoxMask = DateBoxBase.inherit({
                 break;
             case "displayFormat":
                 this.callBase(args);
-                this._renderDateParts();
+                if(this.option("useMaskBehavior")) {
+                    this._renderDateParts();
+                }
                 break;
             default:
                 this.callBase(args);
