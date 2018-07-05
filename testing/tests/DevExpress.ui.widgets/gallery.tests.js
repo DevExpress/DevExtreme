@@ -18,7 +18,10 @@ require("common.css!");
 QUnit.testStart(function() {
     var markup =
         '<style>\
-            .dx-gallery, .dx-gallery-item {\
+            .dx-gallery {\
+                width: 400px;\
+            }\
+            .dx-gallery-item {\
                 width: 400px;\
                 height: 400px;\
             }\
@@ -103,14 +106,15 @@ var GALLERY_CLASS = "dx-gallery",
     NAV_NEXT_BUTTON_CLASS = "dx-gallery-nav-button-next",
     DX_WIDGET_CLASS = "dx-widget",
 
-    ANIMATION_WAIT_TIME = 500;
+    ANIMATION_WAIT_TIME = 500,
+    ITEM_WIDTH = 400;
 
 var calculateItemPosition = function($item, $gallery) {
     var $container = $gallery.find("." + GALLERY_ITEM_CONTAINER_CLASS),
         containerPosition = $container.position(),
         itemPosition = $item.position();
 
-    return Math.round(itemPosition.left + containerPosition.left);
+    return Math.round(itemPosition.left + containerPosition.left + parseFloat($item.css("marginLeft")));
 };
 
 QUnit.module("behavior", {
@@ -735,6 +739,15 @@ QUnit.test("default", function(assert) {
     assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).length, 1);
     assert.equal($gallery.find("." + NAV_NEXT_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
     assert.equal($gallery.find("." + NAV_PREV_BUTTON_CLASS).hasClass(DX_WIDGET_CLASS), true);
+});
+
+QUnit.test("render with auto height", function(assert) {
+    var $gallery = $("#gallerySimple").dxGallery({
+        items: [0, 1, 2, 3],
+        height: "auto"
+    });
+
+    assert.ok($gallery.height() > 0, "Gallery has non-zero height");
 });
 
 QUnit.test("selectedIndex option on init", function(assert) {
@@ -2318,6 +2331,7 @@ QUnit.test("change sizes after showing", function(assert) {
     var $elementWrapper = $element.wrap("<div>").parent().detach();
 
     $element.dxGallery({
+        height: 400,
         items: [1]
     });
 
@@ -2450,7 +2464,7 @@ QUnit.test("items positions are correct after loading new items", function(asser
     $gallery.find("." + NAV_NEXT_BUTTON_CLASS).trigger("dxclick");
 
     var $thirdItem = $gallery.find("." + GALLERY_ITEM_CLASS).eq(2);
-    assert.equal(calculateItemPosition($thirdItem, $gallery), 400, "item position is correct");
+    assert.equal(calculateItemPosition($thirdItem, $gallery), ITEM_WIDTH, "item position is correct");
 });
 
 QUnit.test("indicators count is correct after loading new items", function(assert) {

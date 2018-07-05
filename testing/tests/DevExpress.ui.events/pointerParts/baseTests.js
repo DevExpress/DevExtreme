@@ -236,3 +236,20 @@ QUnit.test("event is triggered one time after refresh", function(assert) {
 QUnit.test("pointer event base strategy should have 'setup' implementation, because jQuery adds a browser event via addEventListener/attachEvent otherwise (T208653)", function(assert) {
     assert.ok($.isFunction((new BaseStrategy("", "")).setup));
 });
+
+QUnit.test("pointer events should correctly unsubscribe events with target", function(assert) {
+    var $element = $("#element"),
+        getEvents = function() {
+            return $.map($._data($element.get(0), "events") || [], function(i) { return i; });
+        };
+
+    assert.equal(getEvents().length, 0);
+
+    $element
+        .on("dxpointerenter dxpointerleave", "#target1", noop)
+        .on("dxpointerenter dxpointerleave", "#target2", noop)
+        .off("dxpointerenter dxpointerleave", "#target1")
+        .off("dxpointerenter dxpointerleave", "#target2");
+
+    assert.equal(getEvents().length, 0);
+});

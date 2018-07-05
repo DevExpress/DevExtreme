@@ -467,6 +467,11 @@ QUnit.test("circle point", function(assert) {
 
 });
 
+QUnit.test("getMarkerVisibility", function(assert) {
+    let point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    assert.strictEqual(point.getMarkerVisibility(), true);
+});
 
 QUnit.module("Draw Point", {
     beforeEach: function() {
@@ -485,7 +490,8 @@ QUnit.module("Draw Point", {
             },
             _options: {},
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; },
+            hidePointTooltip: noop
         };
         this.options = {
             widgetType: "pie",
@@ -826,6 +832,26 @@ QUnit.test("Apply view with legend callback", function(assert) {
 
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
     assert.strictEqual(callback.callCount, 1);
+});
+
+QUnit.test("Point should preserve visibility state on data updating", function(assert) {
+    this.options.visibilityChanged = noop;
+    let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
+
+    point.hide();
+    point.updateData({ argument: "a1", value: 10 });
+
+    assert.strictEqual(point.isVisible(), false);
+});
+
+QUnit.test("Point should reset hidden state if argument changed", function(assert) {
+    this.options.visibilityChanged = noop;
+    let point = createPoint(this.series, { argument: "a1", value: 1 }, this.options);
+
+    point.hide();
+    point.updateData({ argument: "a2", value: 10 });
+
+    assert.strictEqual(point.isVisible(), true);
 });
 
 QUnit.module("Tooltip", {

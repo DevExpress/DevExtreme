@@ -91,7 +91,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _updateFormattedValue: function() {
-        this._parsedValue = this._tryParse(this._getInputVal(), this._caret(), "");
+        this._parsedValue = this._tryParse(this._getInputVal(), this._caret());
         this._adjustParsedValue();
         this._setTextByParsedValue();
 
@@ -104,7 +104,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _isValueDirty: function() {
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
         // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        return this._isDirty;
+        return this._isDirty || this._parsedValue !== this.option("value");
     },
 
     _arrowHandler: function(step, e) {
@@ -276,6 +276,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getEditedText: function(text, selection, char) {
+        if(char === undefined) {
+            return text;
+        }
+
         var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
             edited = textBefore + char + textAfter;

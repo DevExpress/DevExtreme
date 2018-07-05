@@ -638,11 +638,11 @@ module.exports = {
                     }
                 },
 
-                _createEmptyRow: function() {
+                _createEmptyRow: function(isFixed) {
                     var that = this,
                         i,
                         $row = that._createRow(),
-                        columns = this.getColumns();
+                        columns = isFixed ? this.getFixedColumns() : this.getColumns();
 
                     $row.toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
@@ -1214,14 +1214,14 @@ module.exports = {
                     var that = this,
                         $element = this.element();
 
-                    if(isDefined(height)) {
-                        that._hasHeight = hasHeight === undefined ? height !== "auto" : hasHeight;
-
-                        if($element) {
-                            styleUtils.setHeight($element, height);
-                        }
-                    } else {
+                    if(arguments.length === 0) {
                         return $element ? $element.outerHeight(true) : 0;
+                    }
+
+                    that._hasHeight = hasHeight === undefined ? height !== "auto" : hasHeight;
+
+                    if(isDefined(height) && $element) {
+                        styleUtils.setHeight($element, height);
                     }
                 },
 

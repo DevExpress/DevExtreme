@@ -55,7 +55,7 @@ var Toolbar = ToolbarBase.inherit({
             * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
             * @hidden
             */
-            submenuType: "dropDownMenu",
+            submenuType: "dropDownMenu"
 
             /**
             * @name dxToolbarItemTemplate.location
@@ -148,8 +148,6 @@ var Toolbar = ToolbarBase.inherit({
             * @hidden
             * @inheritdoc
             */
-
-            useFlatButtons: false
         });
 
     },
@@ -158,7 +156,7 @@ var Toolbar = ToolbarBase.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return /ios7.*/.test(themes.current());
+                    return themes.isIos7();
                 },
                 options: {
                     submenuType: "actionSheet"
@@ -166,7 +164,7 @@ var Toolbar = ToolbarBase.inherit({
             },
             {
                 device: function() {
-                    return /android5.*/.test(themes.current());
+                    return themes.isAndroid5();
                 },
                 options: {
                     submenuType: "dropDownMenu"
@@ -174,7 +172,7 @@ var Toolbar = ToolbarBase.inherit({
             },
             {
                 device: function() {
-                    return /win8.*/.test(themes.current());
+                    return themes.isWin8();
                 },
                 options: {
                     submenuType: "listBottom"
@@ -182,18 +180,10 @@ var Toolbar = ToolbarBase.inherit({
             },
             {
                 device: function() {
-                    return /win10.*/.test(themes.current());
+                    return themes.isWin10();
                 },
                 options: {
                     submenuType: "listTop"
-                }
-            },
-            {
-                device: function() {
-                    return themes.isMaterial();
-                },
-                options: {
-                    useFlatButtons: true
                 }
             }
         ]);
@@ -389,7 +379,6 @@ var Toolbar = ToolbarBase.inherit({
 
         switch(name) {
             case "submenuType":
-            case "useFlatButtons":
                 this._invalidate();
                 break;
             case "visible":

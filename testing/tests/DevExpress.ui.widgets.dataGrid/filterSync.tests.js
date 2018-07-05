@@ -30,8 +30,8 @@ QUnit.module("Sync with FilterValue", {
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
-            setupDataGridModules(this, ["columns", "data", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
-                initViews: true
+            setupDataGridModules(this, ["data", "columns", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
+                initViews: false
             });
         };
     }
@@ -161,6 +161,22 @@ QUnit.module("Sync with FilterValue", {
         assert.deepEqual(this.columnsController.columnOption("field", "filterType"), "include");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValue"), undefined);
         assert.deepEqual(this.columnsController.columnOption("field", "selectedFilterOperation"), undefined);
+    });
+
+    // T649274
+    QUnit.test("clear filter if the boolean column is filtered with the 'false' value", function(assert) {
+        // arrange
+        this.setupDataGrid({
+            columns: [{ dataField: "field", dataType: "number", filterValue: false }],
+        });
+
+        // act
+        this.option("filterValue", null);
+        this.dataController.optionChanged({ name: "filterValue" });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), null);
+        assert.deepEqual(this.columnOption("field", "filterValue"), undefined);
     });
 
     // T639390
@@ -855,6 +871,25 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.columnOption("field", "filterType"), "include");
         assert.deepEqual(dataGrid.columnOption("field", "filterValue"), 100);
         assert.deepEqual(dataGrid.columnOption("field", "selectedFilterOperation"), "=");
+    });
+
+    // T649282
+    QUnit.test("'Reset' operation click when 'Between' operation is active", function(assert) {
+        // arrange
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: "dateField", dataType: "date" }],
+            filterValue: ["dateField", "between", [new Date(), new Date()]]
+        });
+
+        // act
+        var filterMenu = $(dataGrid.element()).find('.dx-menu .dx-menu-item');
+        filterMenu.trigger("dxclick");
+        var filterMenuItems = $('.dx-filter-menu.dx-overlay-content').first().find('li'),
+            resetItem = filterMenuItems.find('.dx-menu-item').last();
+        resetItem.trigger('dxclick');
+
+        // assert
+        assert.deepEqual(dataGrid.option("filterValue"), null);
     });
 
     QUnit.test("do not sync if filterSyncEnabled = false", function(assert) {

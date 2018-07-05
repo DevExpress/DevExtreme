@@ -221,10 +221,18 @@ var Sortable = DOMComponent.inherit({
 
     _getItemOffset: function(isVertical, itemsOffset, e) {
         for(var i = 0; i < itemsOffset.length; i++) {
-            var shouldInsert = isVertical ?
-                (e.pageY < itemsOffset[i].posVertical) :
-                checkHorizontalPosition(e.pageX, itemsOffset[i], this.option("rtlEnabled"));
+            var shouldInsert,
+                sameLine = e.pageY < itemsOffset[i].posVertical;
 
+            if(isVertical) {
+                shouldInsert = sameLine;
+            } else if(sameLine) {
+                shouldInsert = checkHorizontalPosition(e.pageX, itemsOffset[i], this.option("rtlEnabled"));
+
+                if(!shouldInsert && itemsOffset[i + 1] && itemsOffset[i + 1].posVertical > itemsOffset[i].posVertical) {
+                    shouldInsert = true;
+                }
+            }
             if(shouldInsert) {
                 return itemsOffset[i];
             }

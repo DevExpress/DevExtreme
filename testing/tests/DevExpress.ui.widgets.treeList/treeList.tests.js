@@ -843,3 +843,32 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
         done();
     }, 100);
 });
+
+// T648005
+QUnit.test("Scrollbar position must be kept after expanding node when the treelist container has max-height", function(assert) {
+    // arrange
+    $("#treeList").css("max-height", 400);
+
+    var done = assert.async(),
+        treeList = createTreeList({
+            loadingTimeout: undefined,
+            scrolling: {
+                mode: "virtual",
+                useNative: false
+            },
+            dataSource: generateData(100)
+        });
+
+    treeList.getScrollable().scrollTo({ y: 1000 });
+
+    setTimeout(function() {
+        // act
+        treeList.expandRow(69);
+
+        setTimeout(function() {
+            // assert
+            assert.ok($(treeList.element()).find(".dx-treelist-rowsview .dx-scrollbar-vertical > .dx-scrollable-scroll").position().top > 0, "scrollbar position top");
+            done();
+        }, 310);
+    });
+});

@@ -251,7 +251,7 @@ var Slider = TrackBar.inherit({
             },
             {
                 device: function() {
-                    return /android5|material/.test(themes.current());
+                    return themes.isMaterial() || themes.isAndroid5();
                 },
                 options: {
                     useInkRipple: true

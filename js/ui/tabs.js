@@ -181,7 +181,7 @@ var Tabs = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return /android5/.test(themes.current());
+                    return themes.isAndroid5();
                 },
                 options: {
                     useInkRipple: true

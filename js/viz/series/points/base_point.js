@@ -124,21 +124,21 @@ Point.prototype = {
 
     updateData: function(dataItem) {
         var that = this;
+        const argumentWasChanged = that.argument !== dataItem.argument;
         that.argument = that.initialArgument = that.originalArgument = dataItem.argument;
         that.tag = dataItem.tag;
         that.index = dataItem.index;
 
-        this._dataItem = dataItem;
+        that._dataItem = dataItem;
 
-        this.data = dataItem.data;
+        that.data = dataItem.data;
 
         that.lowError = dataItem.lowError;
         that.highError = dataItem.highError;
 
         that.aggregationInfo = dataItem.aggregationInfo;
 
-        that._updateData(dataItem);
-
+        that._updateData(dataItem, argumentWasChanged);
 
         !that.hasValue() && that.setInvisibility();
 
@@ -154,8 +154,6 @@ Point.prototype = {
         that.graphic = null;
     },
 
-    _drawErrorBar: _noop,
-
     draw: function(renderer, groups, animationEnabled, firstDrawing) {
         var that = this;
         if(that._needDeletingOnDraw) {
@@ -168,7 +166,7 @@ Point.prototype = {
         }
 
         if(!that._hasGraphic()) {
-            that._getMarkerVisibility() && that._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
+            that.getMarkerVisibility() && that._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
         } else {
             that._updateMarker(animationEnabled, this._getStyle(), groups.markers);
         }
@@ -452,6 +450,8 @@ Point.prototype = {
     correctLabelPosition: _noop,
     getMinValue: _noop,
     getMaxValue: _noop,
+    _drawErrorBar: _noop,
+    getMarkerVisibility: _noop,
     dispose: function() {
         var that = this;
         that.deleteMarker();

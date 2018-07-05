@@ -475,7 +475,7 @@ QUnit.test("RowsView - set column width for fixed table when has scroll", functi
 });
 
 // T290161
-QUnit.testInActiveWindow("Reset scrollTop by fixed table for rowsView", function(assert) {
+QUnit.testInActiveWindow("Not reset scrollTop by fixed table for rowsView", function(assert) {
     // arrange
     var that = this,
         done = assert.async(),
@@ -486,12 +486,13 @@ QUnit.testInActiveWindow("Reset scrollTop by fixed table for rowsView", function
     that.rowsView.height(20);
 
     // act
-    that.rowsView._fixedTableElement.parent().scrollTop(100);
+    that.rowsView._fixedTableElement.parent().scrollTop(30);
 
     // assert
     that.clock.restore();
     setTimeout(function() {
-        assert.equal(that.rowsView._fixedTableElement.parent().scrollTop(), 0, "scrollTop by fixed table");
+        assert.equal(that.rowsView._fixedTableElement.css("top"), "0px", "top if fixed table is zero");
+        assert.equal(that.rowsView._fixedTableElement.parent().scrollTop(), 30, "scrollTop by fixed table");
         done();
     }, 100);
 });
@@ -1407,7 +1408,7 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
         // assert
         assert.ok($fixTable.position().top < 0, "position top is defined");
         assert.ok($table.find(".dx-virtual-row").eq(0).height() > 0, "virtual row has height");
-        assert.equal($fixTable.position().top, (-e.top + $table.find(".dx-virtual-row").eq(0).height()), "fixed table - position top");
+        assert.equal($fixTable.position().top, -e.top, "fixed table - position top");
         that.rowsView.scrollChanged.remove(scrollChanged);
         done();
     };
@@ -1419,6 +1420,44 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
 
     // act
     scrollableInstance.scrollTo({ y: 20000 });
+});
+
+QUnit.test("Check that fixed column has virtual rows (T642937)", function(assert) {
+    // arrange
+    var that = this,
+        $fixTable,
+        scrollableInstance,
+        $testElement = $("#container"),
+        fixedColumnsCount,
+        notFixedColumnsCount;
+
+    var dataOptions = {
+        virtualItemsCount: {
+            begin: 1,
+            end: 2
+        }
+    };
+
+    that.setupDataGrid(dataOptions);
+    that.options.scrolling = {
+        mode: "virtual"
+    };
+
+    that.rowsView.render($testElement);
+    that.rowsView.height(50);
+    that.rowsView.resize();
+
+    scrollableInstance = that.rowsView.element().dxScrollable("instance");
+    $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    fixedColumnsCount = that.columns.filter((element, _) => element.fixed).length;
+    notFixedColumnsCount = that.columns.filter((element, _) => !element.fixed).length;
+
+    // assert
+    assert.equal($fixTable.find(".dx-virtual-row").eq(0).children("td").length, fixedColumnsCount + 1, "fixed table first virtual row columns count");
+    assert.equal($fixTable.find(".dx-virtual-row").eq(1).children("td").length, fixedColumnsCount + 1, "fixed table last virtual row columns count");
+    assert.equal($fixTable.find(".dx-virtual-row td").eq(1).attr("colspan"), notFixedColumnsCount, "colspan for not fixed columns");
+    assert.equal($fixTable.find(".dx-virtual-row").eq(0).height(), 20, "fixed table first virtual row height");
+    assert.equal($fixTable.find(".dx-virtual-row").eq(1).height(), 40, "fixed table last virtual row height");
 });
 
 if(device.deviceType === "desktop") {
@@ -1967,7 +2006,8 @@ QUnit.test("Updating position of the fixed table on refresh grid", function(asse
 
         // assert
         $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-        assert.equal($fixedTable.css("top"), "-500px", "scroll top of the fixed table");
+        assert.equal($fixedTable.css("top"), "0px", "top of the fixed table");
+        assert.equal($fixedTable.parent().scrollTop(), 500, "scroll top of the fixed table");
         done();
     });
 });
@@ -1977,6 +2017,7 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
     // arrange
     var that = this,
         $cell,
+        top,
         scrollTop,
         $fixedTable,
         done = assert.async(),
@@ -1997,10 +2038,11 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
 
     var scrollChanged = function(e) {
         that.rowsView.scrollChanged.remove(scrollChanged);
-        scrollTop = -parseFloat($fixedTable.css("top"));
+        top = parseFloat($fixedTable.css("top"));
+        scrollTop = $fixedTable.parent().scrollTop();
+        assert.equal(top, 0, "top of the fixed table");
         assert.ok(scrollTop > 500, "scroll top of the fixed table");
         assert.ok(that.rowsView._scrollTop > 500, "scroll top of the main table");
-        assert.equal(scrollTop, that.rowsView._scrollTop, "scroll top of the fixed table equal scroll top of the main table");
         done();
     };
 
@@ -2971,4 +3013,70 @@ QUnit.test("Draw fixed band columns with master detail", function(assert) {
     assert.ok(!$cells.eq(0).hasClass("dx-last-cell"), "transparent column hasn't 'dx-last-cell' class");
     assert.strictEqual($cells.eq(1).text(), "Column 1", "text of the second column");
     assert.strictEqual($cells.eq(2).text(), "Column 2", "text of the third column");
+});
+
+QUnit.module("Fixed columns with real dataController and columnController", {
+    beforeEach: function() {
+        var that = this;
+
+        that.options = {
+            loadingTimeout: undefined,
+            keyExpr: "id",
+            columns: [{ dataField: "field1", fixed: true }, "field2", "field3", "field4"],
+            dataSource: [
+                { id: 1, field1: 1, field2: "test2", field3: 3, field4: 4 },
+                { id: 2, field1: 5, field2: "test6", field3: 7, field4: 8 },
+                { id: 3, field1: 9, field2: "test10", field3: 11, field4: 12 },
+                { id: 4, field1: 13, field2: "test14", field3: 15, field4: 16 },
+                { id: 5, field1: 17, field2: "test18", field3: 19, field4: 20 }
+            ]
+        };
+
+        that.setupDataGrid = function() {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnFixing", "masterDetail", "editorFactory", "grouping"], {
+                initViews: true
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+    }
+});
+
+// T624538
+QUnit.test("Scroll top should be correct after expanding master detail", function(assert) {
+    // arrange
+    var that = this,
+        scrollable,
+        $testElement = $("#container");
+
+    that.options.scrolling = {
+        useNative: false
+    };
+    that.options.masterDetail = {
+        enabled: true,
+        template: function(container, options) {
+            $(container).append($("<div/>").width(900).height("300"));
+        }
+    };
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(440);
+    that.rowsView.resize();
+
+    that.expandRow(1); // expand detail of the first row
+
+    that.rowsView.resize();
+
+    scrollable = that.rowsView.getScrollable();
+    scrollable.update();
+    scrollable.scrollTo({ top: 100 }); // scroll down
+
+    // act
+    that.expandRow(4); // expand detail of the fourth row
+    that.rowsView.resize();
+
+    // assert
+    assert.ok(scrollable.scrollTop() > 0, "scroll top");
 });
