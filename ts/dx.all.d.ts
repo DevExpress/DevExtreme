@@ -610,12 +610,6 @@ declare module DevExpress {
         /** Stops all started animations. */
         stop(): void;
     }
-    /** @deprecated Use requestAnimationFrame instead. */
-    export function requestAnimationFrame(): void;
-    /** @deprecated Use cancelAnimationFrame instead. */
-    export function cancelAnimationFrame(): void;
-    /** @deprecated */
-    export var rtlEnabled: boolean;
     export interface ComponentOptions {
         /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
         onDisposing?: ((e: { component?: Component }) => any);
@@ -737,7 +731,7 @@ declare module DevExpress {
         constructor(element: Element | JQuery, options?: DOMComponentOptions);
         /** Specifies the device-dependent default configuration options for this component. */
         static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
-        /** Removes the widget from the DOM. */
+        /** Disposes of all the resources allocated to the {WidgetName} instance. */
         dispose(): void;
         /** Gets the root widget element. */
         element(): DevExpress.core.dxElement;
@@ -749,6 +743,21 @@ declare module DevExpress {
         constructor(options: any);
         /** Gets an endpoint with a specific key. */
         urlFor(key: string): string;
+    }
+    /** Hides the last displayed overlay widget. */
+    export function hideTopOverlay(): boolean;
+    /** Processes the hardware back button click. */
+    export function processHardwareBackButton(): void;
+    /** An object that serves as a namespace for DevExtreme UI widgets as well as for methods implementing UI logic in DevExtreme sites/applications. */
+    export class ui {
+        /** Creates a toast message. */
+        static notify(message: string, type?: string, displayTime?: number): void;
+        /** Creates a toast message. */
+        static notify(options: any, type?: string, displayTime?: number): void;
+        /** Sets a template engine. */
+        static setTemplateEngine(templateEngineName: string): void;
+        /** Sets a custom template engine defined via custom compile and render functions. */
+        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
     /** An object that serves as a namespace for the methods required to perform validation. */
     export class validationEngine {
@@ -771,21 +780,12 @@ declare module DevExpress {
         /** Validates a view model. */
         static validateModel(model: any): any;
     }
-    /** Hides the last displayed overlay widget. */
-    export function hideTopOverlay(): boolean;
-    /** Processes the hardware back button click. */
-    export function processHardwareBackButton(): void;
-    /** An object that serves as a namespace for DevExtreme UI widgets as well as for methods implementing UI logic in DevExtreme sites/applications. */
-    export class ui {
-        /** Creates a toast message. */
-        static notify(message: string, type?: string, displayTime?: number): void;
-        /** Creates a toast message. */
-        static notify(options: any, type?: string, displayTime?: number): void;
-        /** Sets a template engine. */
-        static setTemplateEngine(templateEngineName: string): void;
-        /** Sets a custom template engine defined via custom compile and render functions. */
-        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-    }
+    /** @deprecated Use requestAnimationFrame instead. */
+    export function requestAnimationFrame(): void;
+    /** @deprecated Use cancelAnimationFrame instead. */
+    export function cancelAnimationFrame(): void;
+    /** @deprecated */
+    export var rtlEnabled: boolean;
     /** An object that serves as a namespace for DevExtreme Data Visualization Widgets. */
     export class viz {
         /** Changes the current palette for all data visualization widgets on the page. */
@@ -1343,6 +1343,7 @@ declare module DevExpress.data {
         headerFilter?: { width?: number, height?: number, allowSearch?: boolean };
         /** Specifies whether the field should be treated as a measure (a field providing data for calculation). */
         isMeasure?: boolean;
+        /** Specifies the field's identifier. */
         name?: string;
         /** @deprecated Use the format.precision option instead. */
         precision?: number;
@@ -1358,7 +1359,7 @@ declare module DevExpress.data {
         showValues?: boolean;
         /** Specifies how the field's values in the headers should be sorted. */
         sortBy?: string;
-        /** Sorts the field's values in the headers by the specified measure's summary values. */
+        /** Sorts the field's values in the headers by the specified measure's summary values. Accepts the measure's name, caption, dataField, or index in the fields array. */
         sortBySummaryField?: string;
         /** Specifies a path to the column or row whose summary values should be used to sort the field's values in the headers. */
         sortBySummaryPath?: Array<number | string>;
@@ -1546,90 +1547,6 @@ declare module DevExpress.framework {
     export class dxContent {
         constructor(options?: dxContentOptions)
     }
-}
-declare module DevExpress.framework.html {
-    export interface HtmlApplicationOptions {
-        /** Specifies the animation presets that are used to animate different UI elements in the current application. */
-        animationSet?: any;
-        /** Specifies where the commands that are defined in the application's views must be displayed. */
-        commandMapping?: any;
-        /** Specifies whether or not view caching is disabled. */
-        disableViewCache?: boolean;
-        /** An array of layout controllers that should be used to show application views in the current navigation context. */
-        layoutSet?: string | Array<any>;
-        /** Specifies whether the current application must behave as a mobile or web application. */
-        mode?: string;
-        /** Specifies the object that represents a root namespace of the application. */
-        namespace?: any;
-        /** Specifies application behavior when the user navigates to a root view. */
-        navigateToRootViewMode?: string;
-        /** An array of dxCommand configuration objects used to define commands available from the application's global navigation. */
-        navigation?: Array<dxCommand | dxCommandOptions>;
-        /** A custom router to be used in the application. */
-        router?: any;
-        /** A state manager to be used in the application. */
-        stateManager?: any;
-        /** Specifies the storage to be used by the application's state manager to store the application state. */
-        stateStorage?: any;
-        /** Specifies the current version of application templates. */
-        templatesVersion?: string;
-        /** Indicates whether on not to use the title of the previously displayed view as text on the Back button. */
-        useViewTitleAsBackText?: boolean;
-        /** A custom view cache to be used in the application. */
-        viewCache?: any;
-        /** Specifies a limit for the views that can be cached. */
-        viewCacheSize?: number;
-        /** Specifies options for the viewport meta tag of a mobile browser. */
-        viewPort?: any;
-    }
-    /** An object that manages views and controls the application life cycle. */
-    export class HtmlApplication {
-        constructor(options?: HtmlApplicationOptions)
-        /** Provides access to the ViewCache object. */
-        viewCache: any;
-        /** Provides access to the Router object. */
-        router: any;
-        /** An array of dxCommand components that are created based on the application's navigation option value. */
-        navigation: Array<dxCommand>;
-        /** Provides access to the StateManager object. */
-        stateManager: any;
-        /** Navigates to the URI preceding the current one in the navigation history. */
-        back(): void;
-        /** Returns a Boolean value indicating whether or not backwards navigation is currently possible. */
-        canBack(): boolean;
-        /** Calls the clearState() method of the application's StateManager object. */
-        clearState(): void;
-        /** Creates global navigation commands. */
-        createNavigation(navigationConfig: Array<any>): void;
-        /** Returns an HTML template of the specified view. */
-        getViewTemplate(viewName: string): JQuery;
-        /** Returns a configuration object used to create a dxView component for a specified view. */
-        getViewTemplateInfo(viewName: string): any;
-        /** Adds a specified HTML template to a collection of view or layout templates. */
-        loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
-        /** Navigates to the specified URI. */
-        navigate(uri?: string | any): void;
-        /** Navigates to the specified URI. */
-        navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
-        /** Detaches all event handlers from a single event. */
-        off(eventName: string): any;
-        /** Detaches a particular event handler from a single event. */
-        off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to an event. */
-        on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to events. */
-        on(events: any): any;
-        /** Renders navigation commands to the navigation command containers that are located in the layouts used in the application. */
-        renderNavigation(): void;
-        /** Calls the restoreState() method of the application's StateManager object. */
-        restoreState(): void;
-        /** Calls the saveState method of the application's StateManager object. */
-        saveState(): void;
-        /** Provides access to the object that defines the current context to be considered when choosing an appropriate template for a view. */
-        templateContext(): any;
-    }
-    export var layoutSets: Array<string>;
-    export var animationSets: any;
 }
 declare module DevExpress.ui {
     export interface dxAccordionOptions extends CollectionWidgetOptions {
@@ -2206,9 +2123,9 @@ declare module DevExpress.ui {
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A handler for the editingStart event. Executed before a cell or row switches to the editing state. */
         onEditingStart?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
-        /** A handler for the editorPrepared event. */
+        /** A function that is executed after an editor is created. */
         onEditorPrepared?: ((options: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => any);
-        /** A handler for the editorPreparing event. */
+        /** A function that is executed before an editor is created. */
         onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => any);
         /** A function that is executed after data is exported. */
         onExported?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
@@ -2659,7 +2576,7 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** Specifies whether or not an end user can delete list items. */
         allowItemDeleting?: boolean;
-        /** Specifies whether or not an end user can reorder list items. */
+        /** Specifies whether a user can reorder list items. Grouped items cannot be moved from one group to another. */
         allowItemReordering?: boolean;
         /** @deprecated Use the pageLoadMode option instead. */
         autoPagingEnabled?: any;
@@ -4045,9 +3962,9 @@ declare module DevExpress.ui {
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A handler for the editingStart event. Executed before a cell or row switches to the editing state. */
         onEditingStart?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
-        /** A handler for the editorPrepared event. Executed after an editor is created. */
+        /** A function that is executed after an editor is created. */
         onEditorPrepared?: ((options: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
-        /** A handler for the editorPreparing event. Executed before an editor is created. */
+        /** A function that is executed before an editor is created. */
         onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
         /** A handler for the nodesInitialized event. Executed after the loaded nodes are initialized. */
         onNodesInitialized?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
@@ -4162,6 +4079,8 @@ declare module DevExpress.ui {
         onItemSelected?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemElement?: DevExpress.core.dxElement, node?: dxTreeViewNode }) => any);
         /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
+        /** A function that is executed after the "Select All" check box's state changes. Applies only if showCheckBoxesMode is "selectAll" and selectionMode is "multiple". */
+        onSelectAllValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /** A handler for the selectionChanged event. Executed after selecting an item or clearing its selection. */
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
@@ -5315,6 +5234,90 @@ declare module DevExpress.ui {
         static ready(callback: Function): void;
     }
 }
+declare module DevExpress.framework.html {
+    export interface HtmlApplicationOptions {
+        /** Specifies the animation presets that are used to animate different UI elements in the current application. */
+        animationSet?: any;
+        /** Specifies where the commands that are defined in the application's views must be displayed. */
+        commandMapping?: any;
+        /** Specifies whether or not view caching is disabled. */
+        disableViewCache?: boolean;
+        /** An array of layout controllers that should be used to show application views in the current navigation context. */
+        layoutSet?: string | Array<any>;
+        /** Specifies whether the current application must behave as a mobile or web application. */
+        mode?: string;
+        /** Specifies the object that represents a root namespace of the application. */
+        namespace?: any;
+        /** Specifies application behavior when the user navigates to a root view. */
+        navigateToRootViewMode?: string;
+        /** An array of dxCommand configuration objects used to define commands available from the application's global navigation. */
+        navigation?: Array<dxCommand | dxCommandOptions>;
+        /** A custom router to be used in the application. */
+        router?: any;
+        /** A state manager to be used in the application. */
+        stateManager?: any;
+        /** Specifies the storage to be used by the application's state manager to store the application state. */
+        stateStorage?: any;
+        /** Specifies the current version of application templates. */
+        templatesVersion?: string;
+        /** Indicates whether on not to use the title of the previously displayed view as text on the Back button. */
+        useViewTitleAsBackText?: boolean;
+        /** A custom view cache to be used in the application. */
+        viewCache?: any;
+        /** Specifies a limit for the views that can be cached. */
+        viewCacheSize?: number;
+        /** Specifies options for the viewport meta tag of a mobile browser. */
+        viewPort?: any;
+    }
+    /** An object that manages views and controls the application life cycle. */
+    export class HtmlApplication {
+        constructor(options?: HtmlApplicationOptions)
+        /** Provides access to the ViewCache object. */
+        viewCache: any;
+        /** Provides access to the Router object. */
+        router: any;
+        /** An array of dxCommand components that are created based on the application's navigation option value. */
+        navigation: Array<dxCommand>;
+        /** Provides access to the StateManager object. */
+        stateManager: any;
+        /** Navigates to the URI preceding the current one in the navigation history. */
+        back(): void;
+        /** Returns a Boolean value indicating whether or not backwards navigation is currently possible. */
+        canBack(): boolean;
+        /** Calls the clearState() method of the application's StateManager object. */
+        clearState(): void;
+        /** Creates global navigation commands. */
+        createNavigation(navigationConfig: Array<any>): void;
+        /** Returns an HTML template of the specified view. */
+        getViewTemplate(viewName: string): JQuery;
+        /** Returns a configuration object used to create a dxView component for a specified view. */
+        getViewTemplateInfo(viewName: string): any;
+        /** Adds a specified HTML template to a collection of view or layout templates. */
+        loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
+        /** Navigates to the specified URI. */
+        navigate(uri?: string | any): void;
+        /** Navigates to the specified URI. */
+        navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
+        /** Detaches all event handlers from a single event. */
+        off(eventName: string): any;
+        /** Detaches a particular event handler from a single event. */
+        off(eventName: string, eventHandler: Function): any;
+        /** Subscribes to an event. */
+        on(eventName: string, eventHandler: Function): any;
+        /** Subscribes to events. */
+        on(events: any): any;
+        /** Renders navigation commands to the navigation command containers that are located in the layouts used in the application. */
+        renderNavigation(): void;
+        /** Calls the restoreState() method of the application's StateManager object. */
+        restoreState(): void;
+        /** Calls the saveState method of the application's StateManager object. */
+        saveState(): void;
+        /** Provides access to the object that defines the current context to be considered when choosing an appropriate template for a view. */
+        templateContext(): any;
+    }
+    export var layoutSets: Array<string>;
+    export var animationSets: any;
+}
 declare module DevExpress.viz {
     export interface BaseWidgetOptions extends DOMComponentOptions {
         /** Configures the exporting and printing features. */
@@ -5792,7 +5795,7 @@ declare module DevExpress.viz {
         argumentFormat?: DevExpress.ui.format;
         /** @deprecated Use the series.label.argumentFormat.precision instead. */
         argumentPrecision?: number;
-        /** Colors the background of point labels. By default, point labels inherit the color from their points. */
+        /** Colors the point labels' background. The default color is inherited from the points. */
         backgroundColor?: string;
         /** Configures the borders of point labels. */
         border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string };
@@ -6860,7 +6863,7 @@ declare module DevExpress.viz {
         argumentFormat?: DevExpress.ui.format;
         /** @deprecated Use the series.label.argumentFormat.precision instead. */
         argumentPrecision?: number;
-        /** Specifies a background color for point labels. */
+        /** Colors the point labels' background. The default color is inherited from the points. */
         backgroundColor?: string;
         /** Specifies border options for point labels. */
         border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string };
