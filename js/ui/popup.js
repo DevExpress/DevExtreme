@@ -38,7 +38,10 @@ var POPUP_CLASS = "dx-popup",
 
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
-    ALLOWED_TOOLBAR_ITEM_ALIASES = ["cancel", "clear", "done"];
+    ALLOWED_TOOLBAR_ITEM_ALIASES = ["cancel", "clear", "done"],
+
+    BUTTON_DEFAULT_TYPE = "default",
+    BUTTON_FLAT_CLASS = "dx-button-flat";
 
 var getButtonPlace = function(name) {
 
@@ -240,7 +243,8 @@ var Popup = Overlay.inherit({
             showCloseButton: false,
 
             bottomTemplate: "bottom",
-            useDefaultToolbarButtons: false
+            useDefaultToolbarButtons: false,
+            useFlatToolbarButtons: false
         });
     },
 
@@ -326,7 +330,8 @@ var Popup = Overlay.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    useDefaultToolbarButtons: true
+                    useDefaultToolbarButtons: true,
+                    useFlatToolbarButtons: true
                 }
             }
         ]);
@@ -449,7 +454,8 @@ var Popup = Overlay.inherit({
             var toolbarOptions = {
                 items: data,
                 rtlEnabled: this.option("rtlEnabled"),
-                useDefaultButtons: this.option("useDefaultToolbarButtons")
+                useDefaultButtons: this.option("useDefaultToolbarButtons"),
+                useFlatButtons: this.option("useFlatToolbarButtons")
             };
 
             this._getTemplate("dx-polymorph-widget").render({
@@ -564,10 +570,14 @@ var Popup = Overlay.inherit({
         var itemConfig = extend({
             text: messageLocalization.format(camelize(itemType, true)),
             onClick: this._createToolbarItemAction(data.onClick),
-            integrationOptions: {}
+            integrationOptions: {},
+            type: that.option("useDefaultToolbarButtons") ? BUTTON_DEFAULT_TYPE : undefined
         }, data.options || {});
 
         var itemClass = POPUP_CLASS + "-" + itemType;
+        if(that.option("useFlatToolbarButtons")) {
+            itemClass += " " + BUTTON_FLAT_CLASS;
+        }
 
         this._toolbarItemClasses.push(itemClass);
 
@@ -738,6 +748,7 @@ var Popup = Overlay.inherit({
                 break;
             case "toolbarItems":
             case "useDefaultToolbarButtons":
+            case "useFlatToolbarButtons":
                 var isPartialUpdate = args.fullName.search(".options") !== -1;
                 this._renderTitle();
                 this._renderBottom();
