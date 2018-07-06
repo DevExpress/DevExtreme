@@ -95,9 +95,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     _columnCondition: function(a, b) {
         var columnCondition = this._normalizeCondition(a.left, b.left),
             rowCondition = this._normalizeCondition(a.top, b.top),
-            cellShiftCondition = this._normalizeCondition(a.left, b.left);
+            cellShiftCondition = this._normalizeCondition(a.cellLeft, b.cellLeft);
 
-        return rowCondition ? rowCondition : cellShiftCondition ? cellShiftCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
+        return rowCondition ? rowCondition : columnCondition ? columnCondition : cellShiftCondition ? cellShiftCondition : a.isStart - b.isStart;
     },
 
     createTaskPositionMap: function(items) {
