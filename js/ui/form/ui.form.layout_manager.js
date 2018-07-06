@@ -769,7 +769,7 @@ var LayoutManager = Widget.inherit({
         var fieldName = this._getFieldLabelName(item),
             validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
 
-        if(Array.isArray(validationRules)) {
+        if(Array.isArray(validationRules) && validationRules.length) {
             this._createComponent($editor, Validator, {
                 validationRules: validationRules,
                 validationGroup: this.option("validationGroup")
