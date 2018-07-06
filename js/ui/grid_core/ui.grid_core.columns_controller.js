@@ -1342,7 +1342,7 @@ module.exports = {
                     return items;
                 },
                 _endUpdateCore: function() {
-                    fireColumnsChanged(this);
+                    !this._skipProcessingColumnsChange && fireColumnsChanged(this);
                 },
                 init: function() {
                     var that = this,
