@@ -19,7 +19,6 @@ var TABLE_CLASS = "table",
     ROW_CLASS = "dx-row",
     FREESPACE_CLASS = "dx-freespace-row",
     COLUMN_LINES_CLASS = "dx-column-lines",
-    VIRTUAL_ROW_CLASS = "dx-virtual-row",
 
     SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual",
@@ -305,7 +304,7 @@ var VirtualScrollingRowsViewExtender = (function() {
         _getRowElements: function(tableElement) {
             var $rows = this.callBase(tableElement);
 
-            return $rows && $rows.not("." + VIRTUAL_ROW_CLASS);
+            return $rows && $rows.not(".dx-virtual-row");
         },
 
         _renderContent: function(contentElement, tableElement) {
@@ -367,18 +366,6 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that._updateBottomLoading();
         },
-        _addVirtualRow: function($table, isFixed, location, position) {
-            if(!position) return;
-
-            var $virtualRow = this._createEmptyRow(isFixed).addClass(VIRTUAL_ROW_CLASS).css("height", position),
-                $bodies = $table.children("tbody");
-
-            if(location === "top") {
-                $virtualRow.prependTo($bodies.first());
-            } else {
-                $virtualRow.appendTo($bodies.last());
-            }
-        },
         _updateContentPosition: function(isRender) {
             var that = this,
                 dataController = that._dataController,
@@ -394,19 +381,21 @@ var VirtualScrollingRowsViewExtender = (function() {
 
                     dataController.setContentSize(rowHeights);
                 }
-                var top = dataController.getContentOffset("begin"),
-                    bottom = dataController.getContentOffset("end"),
-                    $tables = that.getTableElements();
+                var top = dataController.getContentOffset("begin");
+                var bottom = dataController.getContentOffset("end");
+                var $body = that._tableElement.children("tbody");
 
-                $tables.children("tbody").children("." + VIRTUAL_ROW_CLASS).remove();
+                $body.children(".dx-virtual-row").remove();
 
-                $tables.each(function(index) {
-                    var isFixed = index > 0;
-                    that._isFixedTableRendering = isFixed;
-                    that._addVirtualRow($(this), isFixed, "top", top);
-                    that._addVirtualRow($(this), isFixed, "bottom", bottom);
-                    that._isFixedTableRendering = false;
-                });
+                if(top) {
+                    var $topRow = that._createEmptyRow().addClass("dx-virtual-row");
+                    $topRow.prependTo($body.first()).css("height", top);
+                }
+
+                if(bottom) {
+                    var $bottomRow = that._createEmptyRow().addClass("dx-virtual-row");
+                    $bottomRow.appendTo($body.last()).css("height", bottom);
+                }
             } else {
                 commonUtils.deferUpdate(function() {
                     that._updateContentPositionCore();

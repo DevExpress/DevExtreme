@@ -638,11 +638,11 @@ module.exports = {
                     }
                 },
 
-                _createEmptyRow: function(isFixed) {
+                _createEmptyRow: function() {
                     var that = this,
                         i,
                         $row = that._createRow(),
-                        columns = isFixed ? this.getFixedColumns() : this.getColumns();
+                        columns = this.getColumns();
 
                     $row.toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
