@@ -28,16 +28,18 @@ var compileCriteria = (function() {
         };
     };
 
-    var createStringFuncFormatter = function(op, reverse, forceLowerCase) {
+    var createStringFuncFormatter = function(op, params) {
+        params = params || {};
+
         return function(prop, val) {
             var bag = [op, "("];
 
-            if(forceLowerCase) {
-                prop = prop.indexOf("tolower") === -1 ? "tolower(" + prop + ")" : prop;
+            if(params.forceLowerCase) {
+                prop = prop.indexOf("tolower(") === -1 ? "tolower(" + prop + ")" : prop;
                 val = val.toLowerCase();
             }
 
-            if(reverse) {
+            if(params.reverse) {
                 bag.push(val, ",", prop);
             } else {
                 bag.push(prop, ",", val);
@@ -55,18 +57,18 @@ var compileCriteria = (function() {
         ">=": createBinaryOperationFormatter("ge"),
         "<": createBinaryOperationFormatter("lt"),
         "<=": createBinaryOperationFormatter("le"),
-        "startswith": createStringFuncFormatter("startswith", false, true),
-        "endswith": createStringFuncFormatter("endswith", false, true)
+        "startswith": createStringFuncFormatter("startswith", { forceLowerCase: true }),
+        "endswith": createStringFuncFormatter("endswith", { forceLowerCase: true })
     };
 
     var formattersV2 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("substringof", true, true),
-        "notcontains": createStringFuncFormatter("not substringof", true, true)
+        "contains": createStringFuncFormatter("substringof", { reverse: true, forceLowerCase: true }),
+        "notcontains": createStringFuncFormatter("not substringof", { reverse: true, forceLowerCase: true })
     });
 
     var formattersV4 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("contains", false, true),
-        "notcontains": createStringFuncFormatter("not contains", false, true)
+        "contains": createStringFuncFormatter("contains", { forceLowerCase: true }),
+        "notcontains": createStringFuncFormatter("not contains", { forceLowerCase: true })
     });
 
     var compileBinary = function(criteria) {
@@ -88,7 +90,6 @@ var compileCriteria = (function() {
         if(fieldTypes && fieldTypes[fieldName]) {
             value = odataUtils.convertPrimitiveValue(fieldTypes[fieldName], value);
         }
-
 
         return formatter(
             serializePropName(fieldName),
