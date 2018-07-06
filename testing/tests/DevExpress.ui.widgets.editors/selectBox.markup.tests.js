@@ -187,7 +187,7 @@ QUnit.test("set value using dataSource instead of store", function(assert) {
         value: 1
     }).dxSelectBox("instance");
 
-    assert.equal(selectBox.option("displayValue"), "", "display value is not defined");
+    assert.equal(selectBox.option("displayValue"), null, "display value is not defined");
 });
 
 QUnit.test("placeholder", function(assert) {
