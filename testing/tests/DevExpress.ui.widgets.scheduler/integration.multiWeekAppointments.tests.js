@@ -234,6 +234,7 @@ QUnit.test("Appointment should have a special icon and class if it greater than 
         currentDate: new Date(2015, 4, 6),
         views: ["month"],
         currentView: "month",
+        height: 600,
         firstDayOfWeek: 1,
         dataSource: [{ startDate: new Date(2015, 4, 10), endDate: new Date(2015, 5, 7) }]
     });

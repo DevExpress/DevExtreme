@@ -22,6 +22,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             result = [],
             totalWidth = appointmentGeometry.reducedWidth + tailWidth,
             currentPartTop = appointmentSettings.top + this._defaultHeight,
+            currentPartCellTop = appointmentSettings.cellTop + this._defaultHeight,
             left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
         if(this.instance._groupOrientation === "vertical") {
@@ -34,6 +35,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
+                cellTop: currentPartCellTop,
                 left: left,
                 height: height,
                 width: fullWeekAppointmentWidth,
@@ -43,6 +45,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             }));
 
             currentPartTop += this._defaultHeight;
+            currentPartCellTop += this._defaultHeight;
             totalWidth += fullWeekAppointmentWidth;
         }
 
@@ -53,6 +56,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
+                cellTop: currentPartCellTop,
                 left: left,
                 height: height,
                 width: tailWidth,
