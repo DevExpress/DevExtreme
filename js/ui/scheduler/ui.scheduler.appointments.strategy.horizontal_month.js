@@ -94,9 +94,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
     _fixUnstableSorting: function(comparisonResult, a, b) {
         if(comparisonResult === 0) {
-            if(a.cellTop && b.cellTop) {
-                if(a.cellTop < b.cellTop) return -1;
-                if(a.cellTop > b.cellTop) return 1;
+            if(a.cellLeft && b.cellLeft) {
+                if(a.cellLeft < b.cellLeft) return -1;
+                if(a.cellLeft > b.cellLeft) return 1;
             } else {
                 this.callBase(comparisonResult, a, b);
             }
