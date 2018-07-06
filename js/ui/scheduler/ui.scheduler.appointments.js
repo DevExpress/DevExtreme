@@ -834,7 +834,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._virtualAppointments[virtualGroupIndex] = {
                 coordinates: {
                     top: virtualAppointment.top,
-                    left: virtualAppointment.left
+                    left: virtualAppointment.left,
+                    cellTop: appointmentSetting.cellTop
                 },
                 items: { data: [], colors: [] },
                 isAllDay: virtualAppointment.isAllDay ? true : false,
@@ -872,7 +873,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this.notifyObserver("renderDropDownAppointments", {
                 $container: $container,
                 coordinates: {
-                    top: virtualCoordinates.top,
+                    top: this.option("allowSnapping") ? virtualCoordinates.cellTop : virtualCoordinates.top,
                     left: left + rtlOffset
                 },
                 items: virtualItems,
