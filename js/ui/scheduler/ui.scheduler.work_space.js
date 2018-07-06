@@ -2013,7 +2013,7 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var coordinates = {
-            cellLeft: position.left + shift.cellLeft,
+            cellShift: position.left + shift.cellShift,
             top: position.top + shift.top,
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
@@ -2047,7 +2047,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return {
             top: timeShift * this.getCellHeight(),
             left: 0,
-            cellLeft: 0
+            cellShift: 0
         };
     },
 

@@ -424,7 +424,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return {
             top: 0,
             left: left,
-            cellLeft: left
+            cellShift: left
         };
     },
 
