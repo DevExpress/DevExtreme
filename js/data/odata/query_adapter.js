@@ -15,7 +15,7 @@ var typeUtils = require("../../core/utils/type"),
 var DEFAULT_PROTOCOL_VERSION = 2;
 
 var makeArray = function(value) {
-    return typeUtils.isString(value) ? value.split() : value;
+    return typeUtils.type(value) === "string" ? value.split() : value;
 };
 
 var compileCriteria = (function() {
@@ -28,9 +28,14 @@ var compileCriteria = (function() {
         };
     };
 
-    var createStringFuncFormatter = function(op, reverse) {
+    var createStringFuncFormatter = function(op, reverse, forceLowerCase) {
         return function(prop, val) {
             var bag = [op, "("];
+
+            if(forceLowerCase) {
+                prop = prop.indexOf("tolower") === -1 ? "tolower(" + prop + ")" : prop;
+                val = val.toLowerCase();
+            }
 
             if(reverse) {
                 bag.push(val, ",", prop);
@@ -50,18 +55,18 @@ var compileCriteria = (function() {
         ">=": createBinaryOperationFormatter("ge"),
         "<": createBinaryOperationFormatter("lt"),
         "<=": createBinaryOperationFormatter("le"),
-        "startswith": createStringFuncFormatter("startswith"),
-        "endswith": createStringFuncFormatter("endswith")
+        "startswith": createStringFuncFormatter("startswith", false, true),
+        "endswith": createStringFuncFormatter("endswith", false, true)
     };
 
     var formattersV2 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("substringof", true),
-        "notcontains": createStringFuncFormatter("not substringof", true)
+        "contains": createStringFuncFormatter("substringof", true, true),
+        "notcontains": createStringFuncFormatter("not substringof", true, true)
     });
 
     var formattersV4 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("contains"),
-        "notcontains": createStringFuncFormatter("not contains")
+        "contains": createStringFuncFormatter("contains", false, true),
+        "notcontains": createStringFuncFormatter("not contains", false, true)
     });
 
     var compileBinary = function(criteria) {
@@ -84,13 +89,9 @@ var compileCriteria = (function() {
             value = odataUtils.convertPrimitiveValue(fieldTypes[fieldName], value);
         }
 
-        var serializedPropName = serializePropName(fieldName);
-        if(typeUtils.isString(value)) {
-            serializedPropName = "tolower(" + serializedPropName + ")";
-        }
 
         return formatter(
-            serializedPropName,
+            serializePropName(fieldName),
             odataUtils.serializeValue(value, protocolVersion)
         );
     };

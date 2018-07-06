@@ -562,7 +562,7 @@ QUnit.test("NOT with group operation", function(assert) {
             .filter(criteria)
             .enumerate()
             .done(function(r) {
-                assert.equal(r[0].data["$filter"], "not ((f gt 2) and (tolower(k) ne 'ab'))");
+                assert.equal(r[0].data["$filter"], "not ((f gt 2) and (k ne 'ab'))");
             });
     };
 
@@ -580,13 +580,13 @@ QUnit.test("string values", function(assert) {
     var done = assert.async();
 
     QUERY("odata.org")
-        .filter(["f", "=", "a'b<A"])
+        .filter(["f", "=", "a'b<a"])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "tolower(f) eq 'a''b<a'");
+            assert.equal(r[0].data["$filter"], "f eq 'a''b<a'");
         })
         .always(done);
 });
@@ -780,7 +780,7 @@ QUnit.test("Values are converted according to 'fieldTypes' property", function(a
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (tolower(name) eq '789') and (total eq null)");
+            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (name eq '789') and (total eq null)");
         })
         .always(done);
 });

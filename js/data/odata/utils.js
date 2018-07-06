@@ -431,7 +431,7 @@ var serializeDate = function(date) {
 };
 
 var serializeString = function(value) {
-    return "'" + value.replace(/'/g, "''").toLowerCase() + "'";
+    return "'" + value.replace(/'/g, "''") + "'";
 };
 
 var serializePropName = function(propName) {
