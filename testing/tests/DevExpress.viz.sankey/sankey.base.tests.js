@@ -90,7 +90,7 @@ QUnit.test("Trigger error on invalid source data", function(assert) {
         ['ABCD', ['A', 'C', 1]]
         ],
         expectedErrorCodes = [
-            'E2009', 'E2011', 'E2010', 'E2010', 'E2011', 'E2008'
+            'E2008', 'E2009', 'E2008', 'E2008', 'E2009', 'E2008'
         ],
         spy = sinon.spy();
 

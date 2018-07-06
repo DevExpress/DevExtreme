@@ -28,6 +28,22 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E2005: "The value field \"{0}\" is absent in the data source or all its values are negative",
     /**
+    * @name ErrorsViz_E2006
+    */
+    E2006: "A cycle is detected in provided data",
+    /**
+    * @name ErrorsViz_E2007
+    */
+    E2007: "Input data must be an array",
+    /**
+    * @name ErrorsViz_E2008
+    */
+    E2008: "Each link must be an array of three items: [string, string, number]",
+    /**
+    * @name ErrorsViz_E2009
+    */
+    E2009: "Each link is expected to have positive weight",
+    /**
     * @name ErrorsViz.E2101
     */
     E2101: "Unknown series type: {0}",
@@ -67,30 +83,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsViz.W2003
     */
     W2003: "Tick interval is too small",
-    /**
-    * @name ErrorsViz_e2006
-    */
-    E2006: "A cycle is detected in provided data",
-    /**
-    * @name ErrorsViz_e2007
-    */
-    E2007: "Input data expected to be an array",
-    /**
-    * @name ErrorsViz_e2008
-    */
-    E2008: "Each link is expected to be an array",
-    /**
-    * @name ErrorsViz_e2009
-    */
-    E2009: "Each link must be described by array of 3 items",
-    /**
-    * @name ErrorsViz_e2010
-    */
-    E2010: "Description of each link must contain elements of following types: string, string, number",
-    /**
-    * @name ErrorsViz_e2011
-    */
-    E2011: "Each link is expected to have positive weight",
     /**
     * @name ErrorsViz.W2101
     */

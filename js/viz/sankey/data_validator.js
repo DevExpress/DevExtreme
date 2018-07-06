@@ -27,14 +27,10 @@ let validator = {
             result = 'E2007';
         } else {
             for(let link of data) {
-                if(!_isArray(link)) {
+                if(!_isArray(link) || link.length !== 3 || !(_isString(link[0]) && _isString(link[1]) && _isNumber(link[2]))) {
                     result = 'E2008';
-                } else if(link.length !== 3) {
-                    result = 'E2009';
-                } else if(!(_isString(link[0]) && _isString(link[1]) && _isNumber(link[2]))) {
-                    result = 'E2010';
                 } else if(link[2] <= 0) {
-                    result = 'E2011';
+                    result = 'E2009';
                 }
             }
             return result;
