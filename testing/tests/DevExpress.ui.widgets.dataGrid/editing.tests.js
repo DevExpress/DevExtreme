@@ -9359,7 +9359,7 @@ QUnit.test("Required mark should be rendered for column with validationRules whe
         },
         columns: [{
             dataField: 'name',
-            validationRules: [{ type: "required" }]
+            validationRules: [{ type: "required", message: "Name!" }, { type: "stringLength", max: 20 }]
         }, {
             dataField: "lastName",
             formItem: {
@@ -9378,6 +9378,10 @@ QUnit.test("Required mark should be rendered for column with validationRules whe
     assert.equal($rowElement.find(".dx-validator").length, 2, "validator count");
     assert.equal($rowElement.find(".dx-field-item").eq(0).find(".dx-field-item-required-mark").length, 1, "required mark in first item");
     assert.equal($rowElement.find(".dx-field-item").eq(1).find(".dx-field-item-required-mark").length, 0, "no required mark in second item");
+    var firstValidationRules = $rowElement.find(".dx-validator").eq(0).dxValidator("option", "validationRules");
+    assert.equal(firstValidationRules.length, 2, "two validation rules for first column"); // T652579, T651049
+    assert.equal(firstValidationRules[0].message, "Name!", "first validation rule has correct message"); // T652602
+    assert.equal(firstValidationRules[1].type, "stringLength", "second validation rule type for first column"); // T652579, T651049
 });
 
 // T472946
