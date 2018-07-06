@@ -92,14 +92,22 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return result;
     },
 
-    _fixUnstableSorting: function(comparisonResult, a, b) {
-        if(comparisonResult === 0) {
-            if(a.cellLeft < b.cellLeft) return -1;
-            if(a.cellLeft > b.cellLeft) return 1;
+    // _fixUnstableSorting: function(comparisonResult, a, b) {
+    //     if(comparisonResult === 0) {
+    //         if(a.cellLeft < b.cellLeft) return -1;
+    //         if(a.cellLeft > b.cellLeft) return 1;
 
-            if(a.cellLeft === b.cellLeft) return this.callBase(comparisonResult, a, b);
-        }
-        return comparisonResult;
+    //         if(a.cellLeft === b.cellLeft) return this.callBase(comparisonResult, a, b);
+    //     }
+    //     return comparisonResult;
+    // },
+
+    _columnCondition: function(a, b) {
+        var columnCondition = this._normalizeCondition(a.left, b.left),
+            rowCondition = this._normalizeCondition(a.top, b.top),
+            cellShiftCondition = this._normalizeCondition(a.left, b.left);
+
+        return rowCondition ? rowCondition : cellShiftCondition ? cellShiftCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
     },
 
     createTaskPositionMap: function(items) {
