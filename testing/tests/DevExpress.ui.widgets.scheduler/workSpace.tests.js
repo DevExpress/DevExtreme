@@ -112,6 +112,16 @@ QUnit.testStart(function() {
         assert.ok(stub.calledOnce, "Scrollables were updated");
     });
 
+    QUnit.test("Scheduler workspace scrollables should be updated after endDayHour option changed if allDayPanel is hided", function(assert) {
+        this.instance.option("showAllDayPanel", false);
+        this.instance.option("endDayHour", 18);
+        var stub = sinon.stub(this.instance, "_updateScrollable");
+
+        this.instance.option("endDayHour", 24);
+
+        assert.ok(stub.calledOnce, "Scrollables were updated");
+    });
+
     QUnit.test("Tables should be rerendered if dimension was changed and horizontal scrolling is enabled", function(assert) {
         this.instance.option("crossScrollingEnabled", true);
         var stub = sinon.stub(this.instance, "_setTableSizes");

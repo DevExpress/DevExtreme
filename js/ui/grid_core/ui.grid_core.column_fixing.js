@@ -344,7 +344,8 @@ var baseFixedColumns = {
             heightTable,
             heightFixedTable,
             $rowElements,
-            $fixedRowElements;
+            $fixedRowElements,
+            $contentElement;
 
 
         if(that._isFixedColumns && that._tableElement && that._fixedTableElement) {
@@ -352,8 +353,10 @@ var baseFixedColumns = {
             heightFixedTable = that._getClientHeight(that._fixedTableElement.get(0));
             $rowElements = that._getRowElements(that._tableElement);
             $fixedRowElements = that._getRowElements(that._fixedTableElement);
+            $contentElement = that._findContentElement();
 
             if(heightTable !== heightFixedTable) {
+                $contentElement && $contentElement.css("height", heightTable);
                 $rowElements.css("height", "");
                 $fixedRowElements.css("height", "");
 
@@ -370,6 +373,8 @@ var baseFixedColumns = {
                         $rowElements.eq(rowIndex).css("height", fixedRowHeight);
                     }
                 }
+
+                $contentElement && $contentElement.css("height", "");
             }
         }
     }
