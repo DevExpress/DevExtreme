@@ -28,11 +28,11 @@ var dxSankey = {
     */
     paletteExtensionMode: 'blend',
     /**
-    * @name dxSankeyOptions.align
+    * @name dxSankeyOptions.alignment
     * @type Enums.VerticalAlignment|Array<Enums.VerticalAlignment>
     * @default 'center'
     */
-    align: 'center',
+    alignment: 'center',
     /**
     * @name dxSankeyOptions.adaptiveLayout
     * @type object
