@@ -115,7 +115,19 @@ var BaseBaseSeries = {
   * @name baseSeriesObjectMethods.hide
   * @publicName hide()
   */
-    hide: function() { }
+    hide: function() { },
+    /**
+    * @name baseSeriesObjectMethods.getArgumentAxis
+    * @publicName getArgumentAxis()
+    * @returns chartAxisObject
+    */
+    getArgumentAxis: function() { },
+    /**
+    * @name baseSeriesObjectMethods.getValueAxis
+    * @publicName getValueAxis()
+    * @returns chartAxisObject
+    */
+    getValueAxis: function() { }
 }
 
 /**

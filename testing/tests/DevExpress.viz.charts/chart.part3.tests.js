@@ -73,23 +73,21 @@ QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.ok(chart._argumentAxes[0]);
-    assert.ok(chart._valueAxes[0]);
+    assert.ok(chart.getValueAxis());
     assert.ok(chart._argumentAxes[0]._stripsGroup);
-    assert.ok(chart._valueAxes[0]._stripsGroup);
+    assert.ok(chart.getValueAxis()._stripsGroup);
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0].gridGroup);
+    assert.ok(chart.getValueAxis()._constantLinesGroup);
+    assert.ok(chart.getValueAxis().gridGroup);
     argumentAxis = chart._argumentAxes[0];
 
     assert.ok(argumentAxis.getOptions().categories, "Categories should be assigned");
     assert.deepEqual(argumentAxis.getOptions().categories, categories);
     assertCommonAxesProperties(assert, argumentAxis, {});
 
-    valueAxis = chart._valueAxes[0];
+    valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, "Categories should not be assigned");
     assertCommonAxesProperties(assert, valueAxis, {});
     assert.equal(this.themeManager.getOptions.withArgs("argumentAxis").callCount, 1);
@@ -98,7 +96,7 @@ QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function
     assert.equal(this.themeManager.getOptions.withArgs("valueAxis").lastCall.args[2], false);
 
     assert.equal(chart._argumentAxes[0].isArgumentAxis, true);
-    assert.equal(chart._valueAxes[0].isArgumentAxis, false);
+    assert.equal(chart.getValueAxis().isArgumentAxis, false);
 });
 
 // B254993
@@ -138,12 +136,9 @@ QUnit.test("Value axis is empty array", function(assert) {
         series: []
     });
 
-    assert.ok(chart._valueAxes);
-    assert.equal(chart._valueAxes.length, 1);
-    assert.ok(chart._valueAxes[0]);
-    assert.ok(chart._valueAxes[0]._stripsGroup);
-    assert.ok(chart._valueAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0].gridGroup);
+    assert.ok(chart.getValueAxis()._stripsGroup);
+    assert.ok(chart.getValueAxis()._constantLinesGroup);
+    assert.ok(chart.getValueAxis().gridGroup);
 });
 
 QUnit.test("create axes with crosshair", function(assert) {
@@ -170,11 +165,9 @@ QUnit.test("create axes with crosshair", function(assert) {
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 4);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 8);
 });
 
 QUnit.test("create axes with crosshair. horizontal line is invisible", function(assert) {
@@ -201,11 +194,9 @@ QUnit.test("create axes with crosshair. horizontal line is invisible", function(
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 4);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 0);
 });
 
 QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", function(assert) {
@@ -233,11 +224,9 @@ QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", 
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 4);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 4);
 });
 
 QUnit.test("create axes with crosshair. vertical line is invisible", function(assert) {
@@ -264,11 +253,9 @@ QUnit.test("create axes with crosshair. vertical line is invisible", function(as
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 8);
 });
 
 QUnit.test("create axes with crosshair. vertical line is invisible. rotated", function(assert) {
@@ -296,11 +283,9 @@ QUnit.test("create axes with crosshair. vertical line is invisible. rotated", fu
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.ok(chart._argumentAxes[0].getOptions().crosshairMargin, 8);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 0);
 });
 
 QUnit.test("T543486. Named value axis in non-existent pane should have crosshairMargin", function(assert) {
@@ -332,8 +317,7 @@ QUnit.test("T543486. Named value axis in non-existent pane should have crosshair
     });
 
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 8);
 });
 
 QUnit.test("T543486. Named value axis in non-existent pane should have crosshairMargin. Rotated", function(assert) {
@@ -366,8 +350,7 @@ QUnit.test("T543486. Named value axis in non-existent pane should have crosshair
     });
 
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 4);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 4);
 });
 
 
@@ -402,22 +385,19 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", functi
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.ok(chart._argumentAxes[0]);
-    assert.ok(chart._valueAxes[0]);
     assert.ok(chart._argumentAxes[0]._stripsGroup);
-    assert.ok(chart._valueAxes[0]._stripsGroup);
+    assert.ok(chart.getValueAxis()._stripsGroup);
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0].gridGroup);
+    assert.ok(chart.getValueAxis()._constantLinesGroup);
+    assert.ok(chart.getValueAxis().gridGroup);
 
     argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories, "Categories should not be assigned");
     assertCommonAxesProperties(assert, argumentAxis, { });
 
-    valueAxis = chart._valueAxes[0];
+    valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, "Categories should not be assigned");
     assertCommonAxesProperties(assert, valueAxis, {});
 });
@@ -449,22 +429,19 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis (horizon
     });
 
     assert.ok(chart._argumentAxes);
-    assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.equal(chart._valueAxes.length, 1);
     assert.ok(chart._argumentAxes[0]);
-    assert.ok(chart._valueAxes[0]);
     assert.ok(chart._argumentAxes[0]._stripsGroup);
-    assert.ok(chart._valueAxes[0]._stripsGroup);
+    assert.ok(chart.getValueAxis()._stripsGroup);
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0].gridGroup);
+    assert.ok(chart.getValueAxis()._constantLinesGroup);
+    assert.ok(chart.getValueAxis().gridGroup);
 
     argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories, "Categories should not be assigned");
     assertCommonAxesProperties(assert, argumentAxis, {});
 
-    valueAxis = chart._valueAxes[0];
+    valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, "Categories should not be assigned");
     assertCommonAxesProperties(assert, valueAxis, {});
 });
@@ -489,24 +466,21 @@ QUnit.test("Create Vertical Category Axis, Horizontal Continuous axis (rotated)"
         }
     });
 
-    assert.ok(chart._valueAxes);
     assert.ok(chart._argumentAxes);
-    assert.equal(chart._valueAxes.length, 1);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.ok(chart._valueAxes[0]);
     assert.ok(chart._argumentAxes[0]);
-    assert.ok(chart._valueAxes[0]._stripsGroup);
+    assert.ok(chart.getValueAxis()._stripsGroup);
     assert.ok(chart._argumentAxes[0]._stripsGroup);
-    assert.ok(chart._valueAxes[0]._constantLinesGroup);
+    assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0].gridGroup);
+    assert.ok(chart.getValueAxis().gridGroup);
 
     argumentAxis = chart._argumentAxes[0];
     assert.ok(argumentAxis.getOptions().categories, "Categories should be assigned");
     assert.deepEqual(argumentAxis.getOptions().categories, categories);
     assertCommonAxesProperties(assert, argumentAxis, { });
 
-    valueAxis = chart._valueAxes[0];
+    valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories, "Categories should not be assigned");
     assertCommonAxesProperties(assert, valueAxis, {});
 
@@ -538,17 +512,14 @@ QUnit.test("Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
         }
     });
 
-    assert.ok(chart._valueAxes);
     assert.ok(chart._argumentAxes);
-    assert.equal(chart._valueAxes.length, 1);
     assert.equal(chart._argumentAxes.length, 1);
-    assert.ok(chart._valueAxes[0]);
     assert.ok(chart._argumentAxes[0]);
-    assert.ok(chart._valueAxes[0]._stripsGroup);
+    assert.ok(chart.getValueAxis()._stripsGroup);
     assert.ok(chart._argumentAxes[0]._stripsGroup);
-    assert.ok(chart._valueAxes[0]._constantLinesGroup);
+    assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
-    assert.ok(chart._valueAxes[0].gridGroup);
+    assert.ok(chart.getValueAxis().gridGroup);
 
     argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories);
@@ -556,7 +527,7 @@ QUnit.test("Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
     assert.equal(argumentAxis.getOptions().max, 20, "Vertical max");
     assertCommonAxesProperties(assert, argumentAxis, {});
 
-    valueAxis = chart._valueAxes[0];
+    valueAxis = chart.getValueAxis();
     assert.ok(!valueAxis.getOptions().categories);
     assertCommonAxesProperties(assert, valueAxis, {});
 });
@@ -577,9 +548,9 @@ QUnit.test("Creation axes, container color and group of the scale breaks should 
     });
 
     assert.ok(chart._argumentAxes[0]._scaleBreaksGroup);
-    assert.ok(chart._valueAxes[0]._scaleBreaksGroup);
+    assert.ok(chart.getValueAxis()._scaleBreaksGroup);
     assert.equal(chart._argumentAxes[0].getOptions().containerColor, "color");
-    assert.equal(chart._valueAxes[0].getOptions().containerColor, "color");
+    assert.equal(chart.getValueAxis().getOptions().containerColor, "color");
 });
 
 QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous axis", function(assert) {
@@ -607,7 +578,7 @@ QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous ax
     });
 
     assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane" });
-    assertCommonAxesProperties(assert, chart._valueAxes[0], { pane: "topPane" });
+    assertCommonAxesProperties(assert, chart.getValueAxis(), { pane: "topPane" });
 });
 
 QUnit.test("Panes - single pane specified, replace default for Horizontal Category Axis, Vertical Continuous axis", function(assert) {
@@ -631,7 +602,7 @@ QUnit.test("Panes - single pane specified, replace default for Horizontal Catego
     });
 
     assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane" });
-    assertCommonAxesProperties(assert, chart._valueAxes[0], { pane: "topPane" });
+    assertCommonAxesProperties(assert, chart.getValueAxis(), { pane: "topPane" });
 });
 
 // duplicate
@@ -681,7 +652,7 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
     assert.ok(valueAxis._constantLinesGroup);
     assert.strictEqual(valueAxis.getOptions().min, 1, "Min values goes from common options");
 
-    valueAxis = chart._valueAxes[0];
+    valueAxis = chart.getValueAxis();
     assertCommonAxesProperties(assert, valueAxis, { pane: "bottomPane" });
     assert.ok(valueAxis._stripsGroup);
     assert.ok(valueAxis._constantLinesGroup);
@@ -757,13 +728,12 @@ QUnit.test("Panes - Percent format for pane with full stacked series", function(
     assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane" });
     assertCommonAxesProperties(assert, chart._argumentAxes[1], { pane: "bottomPane" });
 
-    assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
     valueAxis = chart._valueAxes[0];
     assertCommonAxesProperties(assert, valueAxis, { pane: "topPane" });
     assert.ok(!valueAxis.setPercentLabelFormat.called, "no set percent format");
     assert.ok(valueAxis.resetAutoLabelFormat.called, "reset percent format");
 
-    valueAxis = chart._valueAxes[1];
+    valueAxis = chart.getValueAxis();
     assertCommonAxesProperties(assert, valueAxis, { pane: "bottomPane" });
     assert.ok(valueAxis.setPercentLabelFormat.called, "set percent format");
     assert.ok(!valueAxis.resetAutoLabelFormat.called, "no reset percent format");
@@ -803,13 +773,12 @@ QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
     assert.equal(chart._argumentAxes.length, 1, "Axis should not be duplicated");
     assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "default" });
 
-    assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
-    verticalAxis = chart._valueAxes[0];
+    verticalAxis = chart.getValueAxis("axis1");
     assertCommonAxesProperties(assert, verticalAxis, { pane: "default" });
     assert.ok(!verticalAxis.setPercentLabelFormat.called, "no set percent format");
     assert.ok(verticalAxis.resetAutoLabelFormat.called, "reset percent format");
 
-    verticalAxis = chart._valueAxes[1];
+    verticalAxis = chart.getValueAxis("axis2");
     assertCommonAxesProperties(assert, verticalAxis, { pane: "default" });
     assert.ok(verticalAxis.setPercentLabelFormat.called, "set percent format");
     assert.ok(!verticalAxis.resetAutoLabelFormat.called, "no reset percent format");
@@ -828,10 +797,12 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
             pane: "bottomPane"
         },
         valueAxis: [{
+            name: "first",
             pane: "topPane",
             min: 1,
             title: "axisForTopPane"
         }, {
+            name: "second",
             pane: "bottomPane",
             min: 10,
             title: "axisForBottomPane"
@@ -850,12 +821,11 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
     assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane" });
     assertCommonAxesProperties(assert, chart._argumentAxes[1], { pane: "bottomPane" });
 
-    assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
-    var verticalAxis = chart._valueAxes[0];
+    var verticalAxis = chart.getValueAxis("first");
     assertCommonAxesProperties(assert, verticalAxis, { pane: "topPane" });
     assert.strictEqual(verticalAxis.getOptions().min, 1, "Min values goes from top axis options");
 
-    verticalAxis = chart._valueAxes[1];
+    verticalAxis = chart.getValueAxis("second");
     assertCommonAxesProperties(assert, verticalAxis, { pane: "bottomPane" });
     assert.strictEqual(verticalAxis.getOptions().min, 10, "Min values goes from bottom axis options");
 });
@@ -926,9 +896,11 @@ QUnit.test("Title for Axes - initialization as String ", function(assert) {
             pane: "bottomPane"
         },
         valueAxis: [{
+            name: "first",
             pane: "topPane",
             title: "title of valueAxis for topPane"
         }, {
+            name: "second",
             pane: "bottomPane",
             title: "title of valueAxis for bottomPane"
         }],
@@ -944,11 +916,10 @@ QUnit.test("Title for Axes - initialization as String ", function(assert) {
 
     assert.equal(chart._argumentAxes.length, 2);
 
-    assert.equal(chart._valueAxes.length, 2);
-    verticalAxis = chart._valueAxes[0];
+    verticalAxis = chart.getValueAxis("first");
     assert.strictEqual(verticalAxis.getOptions().pane, "topPane");
 
-    verticalAxis = chart._valueAxes[1];
+    verticalAxis = chart.getValueAxis("second");
     assert.strictEqual(verticalAxis.getOptions().pane, "bottomPane");
 });
 
@@ -1773,7 +1744,7 @@ QUnit.test("require canvas is not defined", function(assert) {
     chart._doRender({ force: true });
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 2);
-    assert.equal(chart._valueAxes[0].draw.callCount, 2);
+    assert.equal(chart.getValueAxis().draw.callCount, 2);
 });
 
 QUnit.module("CrosshairCursor", $.extend({}, commons.environment, {
@@ -1809,7 +1780,8 @@ QUnit.test("Create CrosshairCursor, not rotated", function(assert) {
     assert.equal(crosshairModule.Crosshair.args[0][0], chart._renderer);
     assert.deepEqual(crosshairModule.Crosshair.args[0][1], chart._options.crosshair);
     assert.deepEqual(crosshairModule.Crosshair.args[0][2].canvas, chart._canvas, "canvas");
-    assert.deepEqual(crosshairModule.Crosshair.args[0][2].axes, [chart._argumentAxes, chart._valueAxes]);
+    assert.strictEqual(crosshairModule.Crosshair.args[0][2].axes[0][0], chart._argumentAxes[0]);
+    assert.strictEqual(crosshairModule.Crosshair.args[0][2].axes[1][0], chart.getValueAxis());
     assert.deepEqual(crosshairModule.Crosshair.args[0][2].panes, []);
     assert.deepEqual(crosshairModule.Crosshair.args[0][3], chart._crosshairCursorGroup);
 });
@@ -1977,7 +1949,7 @@ QUnit.test("Argument and value axes are passed to single series", function(asser
         seriesOptions = chartMocks.seriesMockData.args[0][0];
 
     assert.strictEqual(seriesOptions.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series");
-    assert.strictEqual(seriesOptions.valueAxis, chart._valueAxes[0], "value axis is passed to series");
+    assert.strictEqual(seriesOptions.valueAxis, chart.getValueAxis(), "value axis is passed to series");
 });
 
 QUnit.test("Argument and value axes are passed to series with different value axis", function(assert) {
@@ -2012,10 +1984,10 @@ QUnit.test("Argument and value axes are passed to series in defferent panes", fu
     assert.strictEqual(incidentOccurred.callCount, 0, "no incidentOccurred");
     assert.strictEqual(chart._valueAxes.length, 2, "chart has two value axes");
 
-    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[1], "argument axis is passed to series1");
     assert.strictEqual(seriesOptions1.valueAxis.pane, "pane1", "correct value axis is passed to series1");
 
-    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[1], "argument axis is passed to series1");
     assert.strictEqual(seriesOptions2.valueAxis.pane, "pane2", "correct value axis is passed to series2");
 });
 
@@ -2072,7 +2044,7 @@ QUnit.test("Argument and value axes are passed to series. Series with undefined 
         seriesOptions1 = chartMocks.seriesMockData.args[0][0];
 
     assert.strictEqual(chart._valueAxes.length, 2, "chart has one value axis");
-    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[1], "argument axis is passed to series1");
     assert.strictEqual(seriesOptions1.valueAxis.pane, "bottom", "correct value axis is passed to series1");
 });
 

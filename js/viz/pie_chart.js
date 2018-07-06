@@ -76,7 +76,7 @@ var dxPieChart = BaseChart.inherit({
         };
     },
 
-    _getArgumentAxis: function() {
+    getArgumentAxis: function() {
         return null;
     },
 

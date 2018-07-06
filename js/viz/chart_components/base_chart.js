@@ -641,7 +641,7 @@ var BaseChart = BaseWidget.inherit({
             that._canvas,
             function(sizeShortage) {
                 var panesCanvases = that._renderAxes(drawOptions, preparedOptions, isRotated);
-                that._shrinkAxes(drawOptions, sizeShortage, panesCanvases);
+                that._shrinkAxes(sizeShortage, panesCanvases);
             },
             layoutTargets,
             isRotated
@@ -1260,7 +1260,7 @@ var BaseChart = BaseWidget.inherit({
             let seriesTheme = basis.options;
             let renderSettings = {
                 commonSeriesModes: that._getSelectionModes(),
-                argumentAxis: that._getArgumentAxis(),
+                argumentAxis: that.getArgumentAxis(),
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             };
             if(basis.series) {

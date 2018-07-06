@@ -18,7 +18,7 @@ QUnit.test("Pass rotation info to Business range (rotated = true)", function(ass
         rotated: true,
         argumentAxis: { mockRange: {} }
     });
-    assert.strictEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].rotated, true);
+    assert.strictEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].rotated, true);
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, true);
 });
 
@@ -27,7 +27,7 @@ QUnit.test("Pass rotation info to Business range (rotated = false)", function(as
         argumentAxis: { mockRange: {} }
     });
 
-    assert.strictEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
+    assert.strictEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].rotated, false);
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
 });
 
@@ -56,9 +56,9 @@ QUnit.test("Calculate business range for continuous without indent", function(as
         }
     });
     assert.ok(!chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories);
-    assert.ok(!chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories);
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].min, 0);
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].max, 10);
+    assert.ok(!chart.getValueAxis().setBusinessRange.lastCall.args[0].categories);
+    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].min, 0);
+    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 10);
 });
 
 QUnit.test("Calculate business range for continuous with default indent", function(assert) {
@@ -76,7 +76,7 @@ QUnit.test("Calculate business range for continuous with default indent", functi
         }
     });
 
-    var range = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+    var range = chart.getValueAxis().setBusinessRange.lastCall.args[0];
     assert.ok(!chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories);
     assert.ok(!range.categories);
     assert.equal(range.min, -1);
@@ -98,8 +98,8 @@ QUnit.test("Calculate business range for categories from Axis and continuous val
         }
     });
 
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].min, -1);
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].max, 9);
+    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].min, -1);
+    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 9);
 });
 
 QUnit.test("Calculate business range merged with Value Axis range (no indent)", function(assert) {
@@ -129,8 +129,8 @@ QUnit.test("Calculate business range merged with Value Axis range (no indent)", 
         series: { type: "line" }
     });
     assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].min, -2);
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].max, 12);
+    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].min, -2);
+    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 12);
 });
 
 QUnit.test("Calculate business range merged with Argument Axis range (no indent)", function(assert) {
@@ -218,7 +218,7 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
     });
     // assert
 
-    var range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+    var range1 = chart.businessRanges[0].val;
     assertRange(assert, range1, {
         pane: "topPane",
         min: 0,
@@ -305,7 +305,7 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
     });
     // assert
 
-    assertRange(assert, chart._valueAxes[0].setBusinessRange.lastCall.args[0], {
+    assertRange(assert, chart.businessRanges[0].val, {
         pane: "topPane",
         min: 0,
         max: 100
@@ -394,19 +394,19 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
     });
     // assert
 
-    assertRange(assert, chart._valueAxes[0].setBusinessRange.lastCall.args[0], {
+    assertRange(assert, chart.businessRanges[0].val, {
         pane: "topPane",
         min: 0,
         max: 100
     });
 
-    assertRange(assert, chart._valueAxes[1].setBusinessRange.lastCall.args[0], {
+    assertRange(assert, chart.businessRanges[1].val, {
         pane: "otherPane",
         min: -100,
         max: 0
     });
 
-    assertRange(assert, chart._valueAxes[2].setBusinessRange.lastCall.args[0], {
+    assertRange(assert, chart.businessRanges[2].val, {
         pane: "otherPane",
         min: 20,
         max: 200
@@ -471,7 +471,7 @@ QUnit.test("Value axis categories sorting. Numeric - sort by default in ascendin
         valueAxis: {}
     });
 
-    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, [1, 2, 3, 4]);
+    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, [1, 2, 3, 4]);
 });
 
 QUnit.test("Value axis categories sorting. Datetime - sort by default in ascending order", function(assert) {
@@ -483,7 +483,7 @@ QUnit.test("Value axis categories sorting. Datetime - sort by default in ascendi
         valueAxis: {}
     });
 
-    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4)]);
+    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4)]);
 });
 
 QUnit.test("Value axis categories sorting. String - do not sort by default", function(assert) {
@@ -495,7 +495,7 @@ QUnit.test("Value axis categories sorting. String - do not sort by default", fun
         valueAxis: {}
     });
 
-    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
+    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
 });
 
 QUnit.test("Value axis categories sorting. categoriesSortingMethod = false, numeric - do not sort", function(assert) {
@@ -509,7 +509,7 @@ QUnit.test("Value axis categories sorting. categoriesSortingMethod = false, nume
         }
     });
 
-    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, [2, 4, 3, 1]);
+    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, [2, 4, 3, 1]);
 });
 
 QUnit.test("Value axis categories sorting. categoriesSortingMethod = true, string - do not sort", function(assert) {
@@ -523,7 +523,7 @@ QUnit.test("Value axis categories sorting. categoriesSortingMethod = true, strin
         }
     });
 
-    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
+    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
 });
 
 QUnit.test("Value axis categories sorting. categoriesSortingMethod = callback, string - sort using callback", function(assert) {
@@ -537,7 +537,7 @@ QUnit.test("Value axis categories sorting. categoriesSortingMethod = callback, s
         }
     });
 
-    assert.deepEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories, ["4", "3", "2", "1"]);
+    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, ["4", "3", "2", "1"]);
 });
 
 var assertRange = commonMethodsForTests.assertRange;
@@ -958,7 +958,7 @@ QUnit.test("Pass merged marginOptions to axes", function(assert) {
         series: [{}, {}]
     });
 
-    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0], {
+    assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0], {
         size: 8,
         checkInterval: true,
         percentStick: true,
@@ -980,7 +980,7 @@ QUnit.test("Merge options witout size", function(assert) {
         series: [{}]
     });
 
-    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 0);
+    assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0].size, 0);
 });
 
 QUnit.test("Pass merged marginOptions to axes when two value axis", function(assert) {
@@ -1013,21 +1013,21 @@ QUnit.test("Pass merged marginOptions to axes when two value axis", function(ass
         }]
     });
 
-    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0], {
+    assert.deepEqual(chart.getValueAxis("axis1").setMarginOptions.lastCall.args[0], {
         checkInterval: false,
         size: 8,
         percentStick: false,
         sizePointNormalState: 0
     });
 
-    assert.deepEqual(chart._valueAxes[1].setMarginOptions.lastCall.args[0], {
+    assert.deepEqual(chart.getValueAxis("axis2").setMarginOptions.lastCall.args[0], {
         checkInterval: true,
         size: 5,
         percentStick: true,
         sizePointNormalState: 0
     });
 
-    assert.deepEqual(chart._argumentAxes[0].setMarginOptions.lastCall.args[0], {
+    assert.deepEqual(chart.getArgumentAxis().setMarginOptions.lastCall.args[0], {
         size: 8,
         checkInterval: true,
         percentStick: true,
@@ -1057,7 +1057,7 @@ QUnit.test("Process margin for bubble", function(assert) {
         }
     });
 
-    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 80);
+    assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0].size, 80);
 });
 
 QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
@@ -1083,7 +1083,7 @@ QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
         }
     });
 
-    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 100);
+    assert.deepEqual(chart.getValueAxis().setMarginOptions.lastCall.args[0].size, 100);
 });
 
 QUnit.test("pointSize merging", function(assert) {

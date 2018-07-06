@@ -552,7 +552,7 @@ var dxChart = AdvancedChart.inherit({
     _adjustViewport() {
         const that = this;
         const series = that._getVisibleSeries();
-        const argumentAxis = that._getArgumentAxis();
+        const argumentAxis = that.getArgumentAxis();
         const argumentViewport = argumentAxis.getViewport();
         const minMaxDefined = argumentViewport && (_isDefined(argumentViewport.min) || _isDefined(argumentViewport.max));
         const useAggregation = series.some(s => s.useAggregation());
@@ -609,7 +609,7 @@ var dxChart = AdvancedChart.inherit({
 
     _isZooming() {
         const that = this;
-        const argumentAxis = that._getArgumentAxis();
+        const argumentAxis = that.getArgumentAxis();
 
         if(!argumentAxis || !argumentAxis.getTranslator()) {
             return false;
@@ -777,7 +777,7 @@ var dxChart = AdvancedChart.inherit({
         return cleanPanesCanvases;
     },
 
-    _shrinkAxes: function(drawOptions, sizeShortage, panesCanvases) {
+    _shrinkAxes: function(sizeShortage, panesCanvases) {
         if(!sizeShortage || !panesCanvases) {
             return;
         }
