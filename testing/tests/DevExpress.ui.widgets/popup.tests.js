@@ -369,8 +369,29 @@ QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButt
 
     var toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
 
-    assert.ok(toolbarButtons.first().hasClass("dx-button-danger"), "button has custom class");
-    assert.ok(toolbarButtons.last().hasClass("dx-button-default"), "button default class is 'default', not normal");
+    assert.ok(toolbarButtons.eq(0).hasClass("dx-button-danger"), "button has custom class");
+    assert.ok(toolbarButtons.eq(1).hasClass("dx-button-default"), "button default class is 'default', not normal");
+});
+
+QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarButtons' is set", function(assert) {
+    var popupInstance = $("#popup").dxPopup({
+        visible: true,
+        useFlatToolbarButtons: true,
+        deferRendering: false,
+        toolbarItems: [{
+            shortcut: "done",
+            options: { text: "Retry" }
+        }, {
+            toolbar: "bottom",
+            widget: "dxButton",
+            options: { text: "Ok" }
+        }]
+    }).dxPopup("instance");
+
+    var toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
+
+    assert.ok(toolbarButtons.eq(0).hasClass("dx-button-flat"), "shortcut has dx-button-flat class");
+    assert.ok(toolbarButtons.eq(1).hasClass("dx-button-flat"), "button has dx-button-flat class");
 });
 
 
