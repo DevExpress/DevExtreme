@@ -1,5 +1,5 @@
 .dx-size-default() {
-    @MATERIAL_TOAST_CONTENT_PADDING: 0 24px;
+    @MATERIAL_TOAST_CONTENT_PADDING: 0 16px;
 }
 .dx-size-compact() {
     @MATERIAL_TOAST_CONTENT_PADDING: 5px;
@@ -11,6 +11,7 @@
     font-weight: 400;
     padding: @MATERIAL_TOAST_CONTENT_PADDING;
     .border-radius(@toast-border-radius);
+    .box-shadow(0 2px 3px rgba(0, 0 ,0 ,0.25));
 
     min-height: 48px;
     display: flex;
