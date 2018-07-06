@@ -846,10 +846,10 @@
 * @type color
 * @group overlays.toasts
 */
-@toast-color: #fff;
+@toast-color: fade(@base-inverted-text-color, 87%);
 
 @toast-border-radius: @base-border-radius;
-@toast-default-bg: #323232;
+@toast-default-bg: fade(@base-inverted-bg, 87%);
 
 /**
 * @name 20. Info background color
@@ -904,10 +904,11 @@
 * @type color
 * @group sliders
 */
-@material-slider-bar-bg: fade(@base-text-color, 26%);
+@material-slider-bar-bg: fade(@base-accent, 24%);
 @material-slider-bg: @base-accent;
-@material-slider-active: fade(@base-accent, 26%);
-@material-slider-disabled-bg: fade(@base-text-color, 26%);
+@material-slider-active: fade(@base-accent, 24%);
+@material-slider-disabled-bg: fade(@base-text-color, 24%);
+@material-slider-bar-disabled-bg: fade(@base-text-color, 24%);
 
 /**
 * @name 20. Slider tooltip background color

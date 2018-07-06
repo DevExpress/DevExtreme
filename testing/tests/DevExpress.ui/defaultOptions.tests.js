@@ -934,43 +934,15 @@ testComponentDefaults(Toast,
 testComponentDefaults(Toast,
     {},
     {
-        position: {
-            my: "bottom center",
-            at: "bottom center",
-            offset: "0 0"
-        },
-        minWidth: 288,
+        minWidth: 344,
         maxWidth: 568,
-        animation: {
-            show: {
-                type: "slide",
-                duration: 250,
-                easing: "cubic-bezier(0.4, 0, 1, 1)",
-                from: {
-                    position: {
-                        my: "top",
-                        at: "bottom",
-                        of: window
-                    }
-                },
-            },
-            hide: {
-                type: "slide",
-                duration: 250,
-                easing: "cubic-bezier(0.4, 0, 1, 1)",
-                to: {
-                    position: {
-                        my: "top",
-                        at: "bottom",
-                        of: window
-                    }
-                },
-            }
-        }
+        displayTime: 4000
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() { return true; };
+        themes.isMaterial = function() {
+            return true;
+        };
     },
     function() {
         themes.isMaterial = this.origIsMaterial;
