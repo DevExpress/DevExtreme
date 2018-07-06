@@ -591,7 +591,7 @@ var BaseRenderingStrategy = Class.inherit({
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
             compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
+            top = typeUtils.isDefined(coordinates.cellTop) ? coordinates.cellTop + compactAppointmentDefaultOffset : coordinates.top + compactAppointmentDefaultOffset;
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
