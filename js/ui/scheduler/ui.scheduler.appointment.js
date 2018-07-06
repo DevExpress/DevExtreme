@@ -61,6 +61,7 @@ var Appointment = DOMComponent.inherit({
             case "geometry":
             case "allowDrag":
             case "allowResize":
+            case "allowSnapping":
             case "reduced":
             case "sortedIndex":
             case "isCompact":
@@ -131,8 +132,10 @@ var Appointment = DOMComponent.inherit({
         var geometry = this.option("geometry"),
             $element = this.$element();
 
+        var top = !this.option("isCompact") && this.option("allowSnapping") ? geometry.cellTop : geometry.top;
+
         translator.move($element, {
-            top: geometry.top,
+            top: top,
             left: geometry.left
         });
 

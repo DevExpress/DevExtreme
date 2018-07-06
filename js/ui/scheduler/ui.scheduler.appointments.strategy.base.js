@@ -251,6 +251,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top,
                     left: item.left,
+                    cellTop: item.cellTop,
                     isStart: true,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
@@ -263,6 +264,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top + item.height,
                     left: item.left + item.width,
+                    cellTop: item.cellTop,
                     isStart: false,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
@@ -579,6 +581,7 @@ var BaseRenderingStrategy = Class.inherit({
         var index = coordinates.index,
             appointmentHeight = height / appointmentCountPerCell,
             appointmentTop = coordinates.top + (index * appointmentHeight),
+            cellTop = coordinates.cellTop + (index * appointmentHeight) + topOffset,
             top = appointmentTop + topOffset,
             width = coordinates.width,
             left = coordinates.left,
@@ -588,7 +591,7 @@ var BaseRenderingStrategy = Class.inherit({
         if(coordinates.isCompact) {
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
             compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
+            top = typeUtils.isDefined(coordinates.cellTop) ? coordinates.cellTop + compactAppointmentDefaultOffset : coordinates.top + compactAppointmentDefaultOffset;
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
@@ -599,6 +602,7 @@ var BaseRenderingStrategy = Class.inherit({
         return {
             height: appointmentHeight,
             width: width,
+            cellTop: cellTop,
             top: top,
             left: left,
             empty: this._isAppointmentEmpty(height, width)

@@ -633,7 +633,7 @@ QUnit.test("Grouped appointments schould have correct colors", function(assert) 
     }
     i = 10;
     while(i > 0) {
-        items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), roomId: 2 });
+        items.push({ text: i, startDate: new Date(2015, 1, 9, 3), endDate: new Date(2015, 1, 9, 4), roomId: 2 });
         i--;
     }
 
@@ -673,7 +673,7 @@ QUnit.test("Grouped appointments schould have correct colors when resourses stor
     }
     i = 10;
     while(i > 0) {
-        items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), roomId: 2 });
+        items.push({ text: i, startDate: new Date(2015, 1, 9, 3), endDate: new Date(2015, 1, 9, 4), roomId: 2 });
         i--;
     }
 
@@ -740,7 +740,7 @@ QUnit.test("Grouped appointments should be reinitialized if datasource is change
 QUnit.test("Parts of long compact appt should have right positions", function(assert) {
     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 5, 3, 0) },
         { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 5, 12, 0) },
-        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 7, 2, 0) } ];
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 12, 0), endDate: new Date(2015, 2, 7, 2, 0) } ];
 
     this.createInstance(
         {

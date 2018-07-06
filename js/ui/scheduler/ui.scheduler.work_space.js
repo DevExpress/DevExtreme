@@ -2012,7 +2012,7 @@ var SchedulerWorkSpace = Widget.inherit({
             throw errors.Error("E1039");
         }
 
-        return {
+        var coordinates = {
             top: position.top + shift.top,
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
@@ -2021,6 +2021,17 @@ var SchedulerWorkSpace = Widget.inherit({
             vMax: this._groupedStrategy.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
+
+        if(isDefined(shift.cellTop)) {
+            extend(coordinates, {
+                cellTop: position.top + shift.cellTop
+            });
+        }
+        return coordinates;
+    },
+
+    applySnapping: function() {
+        return false;
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {

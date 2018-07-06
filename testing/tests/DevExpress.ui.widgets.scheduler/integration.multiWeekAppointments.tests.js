@@ -224,9 +224,9 @@ QUnit.test("Compact parts of long appointments should be located properly (group
     assert.equal($appointments.length, 7, "Appointment part quantity is right");
     assert.equal($compactAppts.length, 3, "Quantity of compact appointment parts is right");
 
-    assert.roughEqual($compactAppts.eq(0).position().top, 124, 2.001, "Position of compact appointment part is right");
+    assert.roughEqual($compactAppts.eq(0).position().top, 183, 2.001, "Position of compact appointment part is right");
     assert.roughEqual($compactAppts.eq(1).position().top, 124, 2.001, "Position of compact appointment part is right");
-    assert.roughEqual($compactAppts.eq(2).position().top, 184, 2.001, "Position of compact appointment part is right");
+    assert.roughEqual($compactAppts.eq(2).position().top, 124, 2.001, "Position of compact appointment part is right");
 });
 
 QUnit.test("Appointment should have a special icon and class if it greater than work space width", function(assert) {
@@ -234,6 +234,7 @@ QUnit.test("Appointment should have a special icon and class if it greater than 
         currentDate: new Date(2015, 4, 6),
         views: ["month"],
         currentView: "month",
+        height: 600,
         firstDayOfWeek: 1,
         dataSource: [{ startDate: new Date(2015, 4, 10), endDate: new Date(2015, 5, 7) }]
     });

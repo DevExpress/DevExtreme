@@ -1114,7 +1114,10 @@ var Scheduler = Widget.inherit({
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
+
                     this._appointments.option("allowAllDayResize", value !== "day");
+                    this._appointments.option("allowSnapping", this._workSpace.applySnapping());
+
                     this._reloadDataSource();
                 }).bind(this));
                 break;
@@ -1716,7 +1719,8 @@ var Scheduler = Widget.inherit({
 
             this._appointments.option({
                 fixedContainer: $fixedContainer,
-                allDayContainer: $allDayContainer
+                allDayContainer: $allDayContainer,
+                allowSnapping: this._workSpace.applySnapping()
             });
 
             this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();

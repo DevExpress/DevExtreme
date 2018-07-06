@@ -177,6 +177,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this.callBase(args);
                 break;
             case "allowDelete":
+            case "allowSnapping":
                 break;
             case "focusStateEnabled":
                 this._clearDropDownItemsElements();
@@ -528,6 +529,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 direction: settings.direction || "vertical",
                 allowResize: allowResize,
                 allowDrag: allowDrag,
+                allowSnapping: this.option("allowSnapping"),
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
@@ -832,7 +834,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._virtualAppointments[virtualGroupIndex] = {
                 coordinates: {
                     top: virtualAppointment.top,
-                    left: virtualAppointment.left
+                    left: virtualAppointment.left,
+                    cellTop: appointmentSetting.cellTop
                 },
                 items: { data: [], colors: [] },
                 isAllDay: virtualAppointment.isAllDay ? true : false,
@@ -870,7 +873,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this.notifyObserver("renderDropDownAppointments", {
                 $container: $container,
                 coordinates: {
-                    top: virtualCoordinates.top,
+                    top: this.option("allowSnapping") ? virtualCoordinates.cellTop : virtualCoordinates.top,
                     left: left + rtlOffset
                 },
                 items: virtualItems,

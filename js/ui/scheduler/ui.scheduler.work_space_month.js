@@ -223,12 +223,14 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
-    getPositionShift: function() {
+    getPositionShift: function(timeShift) {
         return {
-            top: 0,
+            cellTop: 0,
+            top: timeShift * this.getCellHeight(),
             left: 0
         };
     },
+
 
     getCoordinatesByDates: function(startDate, endDate) {
         var result = [],
@@ -241,6 +243,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         }
 
         return result;
+    },
+
+    applySnapping: function() {
+        return true;
     },
 
     getCellCountToLastViewDate: function(date) {
