@@ -45,7 +45,7 @@ var Node = {
 var Link = {
     /**
     * @name dxSankeyLinkfields.connection
-    * @type dxSankeyConnectionInfoObject
+    * @type dxSankeyLinkInfoObject
     */
     connection: undefined,
     /**
@@ -100,27 +100,4 @@ var dxSankeyLinkInfoObject = {
     * @type Number
     */
     weight: undefined
-}
-
-/**
-* @name dxSankeyNodeInfoObject
-* @publicName nodeInfo
-* @type object
-*/
-var dxSankeyNodeInfoObject = {
-    /**
-    * @name dxSankeyNodeInfoObject.title
-    * @type string
-    */
-    title: undefined,
-    /**
-    * @name dxSankeyNodeInfoObject.weightIn
-    * @type Number
-    */
-    weightIn: undefined,
-    /**
-    * @name dxSankeyNodeInfoObject.weightOut
-    * @type Number
-    */
-    weightOut: undefined
 }
