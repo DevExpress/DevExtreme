@@ -24,6 +24,8 @@ var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
 
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
+    OPENED_STATE_CLASS = "dx-slideoutview-opened",
+
     ANONYMOUS_TEMPLATE_NAME = "content",
 
     ANIMATION_DURATION = 400;
@@ -188,6 +190,7 @@ var SlideOutView = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
+        this._togglePositionClass(this.option("menuVisible"));
         this._renderMarkup();
 
         this._refreshModeClass();
@@ -302,15 +305,23 @@ var SlideOutView = Widget.inherit({
 
     _renderPosition: function(offset, animate) {
         if(!windowUtils.hasWindow()) return;
-        var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
-        this._toggleHideMenuCallback(offset);
+        if(this.option("mode") === "persistent") {
+            var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
-        if(animate) {
-            this._toggleShieldVisibility(true);
-            animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
-        } else {
-            translator.move($(this.content()), { left: pos });
+            this._toggleHideMenuCallback(offset);
+
+            if(animate) {
+                this._toggleShieldVisibility(true);
+                animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
+            } else {
+                translator.move($(this.content()), { left: pos });
+            }
+        }
+
+        if(this.option("mode") === "temporary") {
+            // this._toggleHideMenuCallback(offset);
+            // this._toggleShieldVisibility(true);
         }
     },
 
@@ -373,6 +384,11 @@ var SlideOutView = Widget.inherit({
         this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible);
     },
 
+    _togglePositionClass: function(menuVisible) {
+        this.$element().toggleClass(OPENED_STATE_CLASS, menuVisible);
+    },
+
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "width":
@@ -384,6 +400,7 @@ var SlideOutView = Widget.inherit({
                 break;
             case "menuVisible":
                 this._renderPosition(args.value, true);
+                this._togglePositionClass(args.value);
                 break;
             case "menuPosition":
                 this._renderPosition(this.option("menuVisible"), true);

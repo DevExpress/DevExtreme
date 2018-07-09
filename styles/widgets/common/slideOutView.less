@@ -44,3 +44,29 @@
 .dx-device-android .dx-slideoutview-content {
     .backface-visibility(hidden);
 }
+
+.dx-slideoutview-temporary {
+    .dx-slideoutview-menu-content {
+        z-index: 1000;
+        transform: translate3d(-100%, 0, 0);
+    }
+
+    .dx-slideoutview-shield {
+        .transition(~"background-color .5s linear .3s");
+        opacity: 0.5;
+        background: #111;
+    }
+
+    &.dx-slideoutview-opened {
+        .dx-slideoutview-menu-content {
+            transform: translate3d(0, 0, 0);
+            .transition(~"transform .5s linear");
+        }
+
+         .dx-slideoutview-shield {
+            .transition(~"background-color .5s linear .3s");
+                opacity: 0.5;
+                background: #111;
+            }
+    }
+}

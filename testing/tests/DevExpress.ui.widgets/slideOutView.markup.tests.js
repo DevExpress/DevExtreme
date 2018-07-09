@@ -12,7 +12,9 @@ var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
     SLIDEOUTVIEW_WRAPPER_CLASS = "dx-slideoutview-wrapper",
     SLIDEOUTVIEW_MENU_CONTENT_CLASS = "dx-slideoutview-menu-content",
     SLIDEOUTVIEW_CONTENT_CLASS = "dx-slideoutview-content",
-    SLIDEOUTVIEW_SHIELD_CLASS = "dx-slideoutview-shield";
+    SLIDEOUTVIEW_SHIELD_CLASS = "dx-slideoutview-shield",
+
+    OPENED_STATE_CLASS = "dx-slideoutview-opened";
 
 var position = function($element) {
     return $element.position().left;
@@ -133,3 +135,15 @@ QUnit.test("shield should be rendered", function(assert) {
     assert.equal($element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).length, 1, "slideoutview has shield");
 });
 
+QUnit.test("opened class should be applied correctly", function(assert) {
+    var $element = $("#slideOutView").dxSlideOutView({
+            menuVisible: true
+        }),
+        instance = $element.dxSlideOutView("instance");
+
+    assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "slideoutview has opened class");
+
+    instance.option("menuVisible", false);
+
+    assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "slideoutview hasn't opened class");
+});
