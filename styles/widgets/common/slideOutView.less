@@ -49,24 +49,25 @@
     .dx-slideoutview-menu-content {
         z-index: 1000;
         transform: translate3d(-100%, 0, 0);
+         .transition(~"all .5s linear");
     }
 
     .dx-slideoutview-shield {
-        .transition(~"background-color .5s linear .3s");
-        opacity: 0.5;
-        background: #111;
+        -webkit-transition: all .5s linear 0s;
+        transition: all .5s linear 0s;
+        opacity: 0;
     }
 
     &.dx-slideoutview-opened {
         .dx-slideoutview-menu-content {
             transform: translate3d(0, 0, 0);
-            .transition(~"transform .5s linear");
         }
 
          .dx-slideoutview-shield {
-            .transition(~"background-color .5s linear .3s");
-                opacity: 0.5;
-                background: #111;
+                z-index: 1;
+                pointer-events: auto;
+                background-color: #111;
+                opacity: 0.5
             }
     }
 }

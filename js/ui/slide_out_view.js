@@ -320,8 +320,7 @@ var SlideOutView = Widget.inherit({
         }
 
         if(this.option("mode") === "temporary") {
-            // this._toggleHideMenuCallback(offset);
-            // this._toggleShieldVisibility(true);
+            this._toggleShieldVisibility(offset);
         }
     },
 
@@ -381,7 +380,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _toggleShieldVisibility: function(visible) {
-        this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+        this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible && (this.option('mode') !== 'temporary'));
     },
 
     _togglePositionClass: function(menuVisible) {
