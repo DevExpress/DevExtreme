@@ -303,6 +303,17 @@ QUnit.test("Render checkbox before itemRendered is fired", function(assert) {
 
 });
 
+QUnit.test("onItemRendered should have correct node if key is string", function(assert) {
+    var itemRenderedHandler = sinon.spy();
+
+    initTree({
+        items: [{ id: "1_0", text: "String id" }],
+        onItemRendered: itemRenderedHandler
+    });
+
+    assert.equal(itemRenderedHandler.getCall(0).args[0].node.id, "1_0", "node is correct");
+});
+
 QUnit.test("Items change correct on option change", function(assert) {
     var data = $.extend(true, [], DATA[5]);
     data[0].expanded = true;
