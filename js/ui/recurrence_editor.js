@@ -4,7 +4,7 @@
 * @name dxRecurrenceEditor
 * @isEditor
 * @inherits Editor
-* @module ui/scheduler_recurrence_editor
+* @module ui/recurrence_editor
 * @export default
 */
 module.exports = require("./scheduler/ui.scheduler.recurrence_editor");
