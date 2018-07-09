@@ -203,7 +203,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1049
     */
-    E1049: `The column '{0}' does not contain the 'dataField' or 'name' identifier`,
+    E1049: `Сolumn '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
 
     /**
     * @name ErrorsUIWidgets.W1001
