@@ -8398,8 +8398,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
     }, "Tabbing to cell OK, column index saved");
 });
 
-// T317210
-QUnit.test("Focused cell position has correct value when focus grouping row with alignByColumn summary cells", function(assert) {
+QUnit.test("Focused cell position has correct value when focus grouping row with alignByColumn summary cells (T317210)", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -8454,8 +8453,42 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
     assert.equal($(dataGrid.getCellElement(0, 1)).next().text(), "Sum: 3", "row 0 column 2 exists");
 });
 
-// T404427
-QUnit.testInActiveWindow("focus method for cell with editor must focus this editor", function(assert) {
+QUnit.test("Create new row when grouping and group summary (T644293)", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            columns: [
+                "field1",
+                {
+                    dataField: "field2",
+                    groupIndex: 0
+                }
+            ],
+            dataSource: {
+                store: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+            },
+            summary: {
+                groupItems: [
+                    {
+                        column: "field1",
+                        summaryType: "count",
+                        showInGroupFooter: true
+                    }
+                ]
+            }
+        }),
+        $insertedRow;
+
+    // act
+    dataGrid.addRow();
+    $insertedRow = dataGrid.getVisibleRows()[0];
+
+    // assert
+    assert.equal($insertedRow.rowType, "data", "inserted row has the 'data' type");
+    assert.equal($insertedRow.inserted, true, "inserted row is presents and has 0 index");
+});
+
+QUnit.testInActiveWindow("focus method for cell with editor must focus this editor (T404427)", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
@@ -10524,7 +10557,6 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
     });
     this.dataGrid.expandRow(0);
     this.clock.tick();
-
     $dateBoxInput = $(this.dataGrid.$element()).find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
     $dateBoxInput.focus();
     this.clock.tick();
