@@ -135,17 +135,6 @@ var RecurrenceEditor = Editor.inherit({
             value: null,
 
             /**
-            * @name dxRecurrenceEditorOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @action
-            */
-            onValueChanged: null,
-
-            /**
             * @name dxRecurrenceEditorOptions.startDate
             * @type Date
             * @default new Date()
@@ -157,14 +146,7 @@ var RecurrenceEditor = Editor.inherit({
             * @type Enums.FirstDayOfWeek
             * @default undefined
             */
-            firstDayOfWeek: undefined,
-
-            /**
-            * @name dxRecurrenceEditorOptions.visible
-            * @type Boolean
-            * @default true
-            */
-            visible: true
+            firstDayOfWeek: undefined
         });
     },
 
