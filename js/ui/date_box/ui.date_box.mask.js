@@ -119,7 +119,11 @@ var DateBoxMask = DateBoxBase.inherit({
     _partIncrease: function(step, e) {
         var getter = this._getActivePartProp("getter"),
             setter = this._getActivePartProp("setter"),
-            newValue = step + (isFunction(getter) ? getter(this._maskValue) : this._maskValue[getter]());
+            newValue = step + (isFunction(getter) ? getter(this._maskValue) : this._maskValue[getter]()),
+            limits = this._getActivePartProp("limits")(this._maskValue);
+
+        newValue = newValue > limits.max ? limits.min : newValue;
+        newValue = newValue < limits.min ? limits.max : newValue;
 
         isFunction(setter) ? setter(this._maskValue, newValue) : this._maskValue[setter](newValue);
         this._renderDisplayText(this._getDisplayedText(this._maskValue));

@@ -13,7 +13,8 @@ var renderDateParts = function(text, format) {
         start = end;
         end = start + result[i].length;
 
-        var pattern = regExpInfo.patterns[i - 1];
+        var pattern = regExpInfo.patterns[i - 1],
+            getter = dateParser.getPatternGetter(pattern[0]);
 
         sections.push({
             index: i - 1,
@@ -21,12 +22,30 @@ var renderDateParts = function(text, format) {
             caret: { start: start, end: end },
             pattern: pattern,
             text: result[i],
+            limits: getLimits.bind(this, getter),
             setter: dateParser.getPatternSetter(pattern[0]),
-            getter: dateParser.getPatternGetter(pattern[0])
+            getter: getter
         });
     }
 
     return sections;
+};
+
+var getLimits = function(getter, date) {
+    var limits = {
+        "getFullYear": { min: 0, max: Infinity },
+        "getMonth": { min: 0, max: 11 },
+        "getDate": {
+            min: 1,
+            max: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+        },
+        "getDay": { min: 0, max: 6 },
+        "getHours": { min: 0, max: 23 },
+        "getMinutes": { min: 0, max: 59 },
+        "getAmPm": { min: 0, max: 1 }
+    };
+
+    return limits[getter] || limits["getAmPm"];
 };
 
 var getDatePartIndexByPosition = function(dateParts, position) {

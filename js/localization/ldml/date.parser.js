@@ -134,7 +134,7 @@ var PATTERN_SETTERS = {
         if(value < 0) {
             return;
         }
-        date.setDate(date.getDate() - date.getDay() + value % 6);
+        date.setDate(date.getDate() - date.getDay() + value);
     },
     y: "setFullYear",
     M: "setMonth",
