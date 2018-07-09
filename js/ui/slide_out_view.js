@@ -324,12 +324,7 @@ var SlideOutView = Widget.inherit({
             } else {
                 translator.move($(this.content()), { left: pos });
             }
-        }
-        if(this.option("mode") !== "persistent") {
-
-        }
-
-        if(this.option("mode") === "temporary") {
+        } else {
             this._toggleShieldVisibility(offset);
         }
     },
