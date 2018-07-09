@@ -1,7 +1,8 @@
 .dx-size-default() {
-    @MATERIAL_TABS_ITEM_PADDING: 12px;
+    @MATERIAL_TABS_ITEM_PADDING: 12px 16px;
     @MATERIAL_TAB_TEXT_LINE_HEIGHT: 24px;
     @MATERIAL_TAB_HEIGHT: 48px;
+    @MATERIAL_TAB_MIN_WIDTH: 90px;
 }
 
 @MATERIAL_TABS_BACKGROUND: darken(@base-bg, 4%);
@@ -55,6 +56,7 @@
 
 .dx-tab {
     padding: @MATERIAL_TABS_ITEM_PADDING;
+    min-width: @MATERIAL_TAB_MIN_WIDTH;
     background-color: @tabs-tab-bg;
     color: @tabs-tab-color;
 
