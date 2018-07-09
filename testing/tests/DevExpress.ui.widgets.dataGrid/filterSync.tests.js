@@ -250,6 +250,19 @@ QUnit.module("getCombinedFilter", {
         assert.deepEqual(this.getCombinedFilter(true), ["Test", "=", 1], "combined filter");
     });
 
+    // T651579
+    QUnit.test("filter value with caption in identifier", function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ caption: "Test", allowFiltering: true }],
+            filterValue: ["Test", "=", 1]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ["Test", "=", 1], "combined filter");
+    });
+
     QUnit.test("between", function(assert) {
         // act
         this.setupDataGrid({
