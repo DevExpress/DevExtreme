@@ -318,6 +318,9 @@ var SlideOutView = Widget.inherit({
                 translator.move($(this.content()), { left: pos });
             }
         }
+        if(this.option("mode") !== "persistent") {
+
+        }
 
         if(this.option("mode") === "temporary") {
             this._toggleShieldVisibility(offset);
