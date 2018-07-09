@@ -542,6 +542,31 @@ var LayoutManager = Widget.inherit({
             .html("&nbsp;");
     },
 
+    _getButtonHorizontalAlignment: function(item) {
+        if(typeUtils.isDefined(item.horizontalAlignment)) {
+            return item.horizontalAlignment;
+        }
+
+        if(typeUtils.isDefined(item.alignment)) {
+            var formInstance = this.option("form");
+            errors.log("W0001", formInstance && formInstance.NAME, "alignment", "18.1", "Use the 'horizontalAlignment' option in button items instead.");
+            return item.alignment;
+        }
+
+        return "right";
+    },
+
+    _getButtonVerticalAlignment: function(item) {
+        switch(item.verticalAlignment) {
+            case "center":
+                return "center";
+            case "bottom":
+                return "flex-end";
+            default:
+                return "flex-start";
+        }
+    },
+
     _renderButtonItem: function(item, $container) {
         var $button = $("<div>").appendTo($container),
             defaultOptions = {
@@ -550,7 +575,9 @@ var LayoutManager = Widget.inherit({
 
         $container
             .addClass(FIELD_BUTTON_ITEM_CLASS)
-            .css("textAlign", item.alignment ? item.alignment : "right");
+            .css("textAlign", this._getButtonHorizontalAlignment(item));
+
+        $container.parent().css("justifyContent", this._getButtonVerticalAlignment(item));
 
         this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
         this._addItemClasses($container, item.col);
