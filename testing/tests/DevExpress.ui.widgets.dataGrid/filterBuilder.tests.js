@@ -173,10 +173,10 @@ QUnit.module("Common", {
     });
 
     // T651579
-    QUnit.test("filter value with caption in identifier shows in filterBuilder", function(assert) {
+    QUnit.test("filter value with name in identifier shows in filterBuilder", function(assert) {
         // arrange, act
         this.initFilterBuilderView({
-            columns: [{ caption: "field", allowFiltering: true }],
+            columns: [{ name: "field", allowFiltering: true }],
             filterValue: ["field", "=", 1],
             filterBuilderPopup: { visible: true },
         });

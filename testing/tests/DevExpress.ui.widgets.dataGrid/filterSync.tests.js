@@ -251,16 +251,16 @@ QUnit.module("getCombinedFilter", {
     });
 
     // T651579
-    QUnit.test("filter value with caption in identifier", function(assert) {
+    QUnit.test("filter value with name in identifier", function(assert) {
         // act
         this.setupDataGrid({
             dataSource: [],
-            columns: [{ caption: "Test", allowFiltering: true }],
-            filterValue: ["Test", "=", 1]
+            columns: [{ name: "test", allowFiltering: true }],
+            filterValue: ["test", "=", 1]
         });
 
         // assert
-        assert.deepEqual(this.getCombinedFilter(true), ["Test", "=", 1], "combined filter");
+        assert.deepEqual(this.getCombinedFilter(true), ["test", "=", 1], "combined filter");
     });
 
     QUnit.test("between", function(assert) {
@@ -584,6 +584,25 @@ QUnit.module("Sync on initialization", {
         assert.deepEqual(this.option("filterValue"), ["field", "=", "1" ], "filterValue");
         assert.equal(this.columnsController.columnOption("field", "filterValue"), "1");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["1"]);
+    });
+
+    QUnit.test("Error E1049", function(assert) {
+        assert.throws(
+            function() {
+                this.setupDataGrid({
+                    filterValue: ["field", "=", "1"],
+                    filterSyncEnabled: true,
+                    columns: [{
+                        caption: "Field",
+                        allowFiltering: true
+                    }]
+                });
+            },
+            function(e) {
+                return /E1049/.test(e.message);
+            },
+            `The column 'Field' does not contain the 'dataField' or 'name' identifier`
+        );
     });
 
     QUnit.test("sync filterValues if filterValue == null", function(assert) {
