@@ -126,10 +126,44 @@ var RecurrenceRule = Class.inherit({
 var RecurrenceEditor = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxRecurrenceEditorOptions.value
+            * @type string
+            * @default null
+            * @fires dxRecurrenceEditorOptions.onValueChanged
+            */
             value: null,
+
+            /**
+            * @name dxRecurrenceEditorOptions.onValueChanged
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 value:object
+            * @type_function_param1_field5 previousValue:object
+            * @action
+            */
             onValueChanged: null,
+
+            /**
+            * @name dxRecurrenceEditorOptions.startDate
+            * @type Date
+            * @default new Date()
+            */
             startDate: new Date(),
+
+            /**
+            * @name dxRecurrenceEditorOptions.firstDayOfWeek
+            * @type Enums.FirstDayOfWeek
+            * @default undefined
+            */
             firstDayOfWeek: undefined,
+
+            /**
+            * @name dxRecurrenceEditorOptions.visible
+            * @type Boolean
+            * @default true
+            */
             visible: true
         });
     },
