@@ -135,6 +135,9 @@ QUnit.test("shield should be rendered", function(assert) {
     assert.equal($element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).length, 1, "slideoutview has shield");
 });
 
+
+QUnit.module("temporary mode");
+
 QUnit.test("opened class should be applied correctly", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({
             menuVisible: true
@@ -146,4 +149,18 @@ QUnit.test("opened class should be applied correctly", function(assert) {
     instance.option("menuVisible", false);
 
     assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "slideoutview hasn't opened class");
+});
+
+QUnit.test("shield should always visible in temporary mode", function(assert) {
+    var $element = $("#slideOutView").dxSlideOutView({
+            menuVisible: true
+        }),
+        instance = $element.dxSlideOutView("instance"),
+        $shield = $element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).eq(0);
+
+    assert.notOk($shield.hasClass("dx-state-invisible"), "slideoutview has visible shield");
+
+    instance.option("menuVisible", false);
+
+    assert.notOk($shield.hasClass("dx-state-invisible"), "slideoutview has visible shield");
 });
