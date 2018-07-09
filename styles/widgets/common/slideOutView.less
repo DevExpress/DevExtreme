@@ -54,6 +54,12 @@
 
     .dx-slideoutview-content {
         width: auto;
+        .transition(~"all .5s linear");
+    }
+
+    .dx-slideoutview-shield {
+        .transition(~"all .5s linear");
+        opacity: 0;
     }
 
     &.dx-slideoutview-opened {
@@ -63,6 +69,13 @@
 
         .dx-slideoutview-content {
             padding-left: 200px;
+        }
+
+        .dx-slideoutview-shield {
+            z-index: 1;
+            pointer-events: auto;
+            background-color: #111;
+            opacity: 0.5
         }
     }
 }
@@ -75,8 +88,7 @@
     }
 
     .dx-slideoutview-shield {
-        -webkit-transition: all .5s linear 0s;
-        transition: all .5s linear 0s;
+        .transition(~"all .5s linear");
         opacity: 0;
     }
 
@@ -90,10 +102,6 @@
                 pointer-events: auto;
                 background-color: #111;
                 opacity: 0.5
-            }
+        }
     }
-}
-
-.dx-slideoutview-persistent {
-
 }

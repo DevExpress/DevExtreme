@@ -79,6 +79,13 @@ var SlideOutView = Widget.inherit({
             swipeEnabled: true,
 
             /**
+            * @name dxSlideOutViewOptions.showShader
+            * @type boolean
+            * @default true
+            */
+            showShader: true,
+
+            /**
             * @name dxSlideOutViewOptions.menuTemplate
             * @type_function_param1 menuElement:dxElement
             * @type template|function
@@ -383,7 +390,11 @@ var SlideOutView = Widget.inherit({
     },
 
     _toggleShieldVisibility: function(visible) {
-        this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible && (this.option('mode') !== 'temporary'));
+        if(this.option("showShader")) {
+            this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+        } else {
+            this._$shield.toggleClass(INVISIBLE_STATE_CLASS, true);
+        }
     },
 
     _togglePositionClass: function(menuVisible) {
@@ -416,6 +427,9 @@ var SlideOutView = Widget.inherit({
                 this._invalidate();
                 break;
             case "mode":
+                this._refreshModeClass(args.previousValue);
+                break;
+            case "showShader":
                 this._refreshModeClass(args.previousValue);
                 break;
             default:

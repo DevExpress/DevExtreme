@@ -119,7 +119,7 @@ QUnit.test("render right menu position", function(assert) {
     assert.ok($menuContent.hasClass(SLIDEOUTVIEW_CLASS + "-left"), "left menu position class added");
 });
 
-QUnit.test("shield should be rendered", function(assert) {
+QUnit.test("shield should be rendered by default if menu is visible", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({
         menuVisible: true
     });
@@ -127,6 +127,14 @@ QUnit.test("shield should be rendered", function(assert) {
     assert.equal($element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).length, 1, "slideoutview has shield");
 });
 
+QUnit.test("shield should not be rendered if showShader = false", function(assert) {
+    var $element = $("#slideOutView").dxSlideOutView({
+        menuVisible: true,
+        showShader: false
+    });
+
+    assert.equal($element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).length, 1, "slideoutview has shield");
+});
 
 QUnit.module("temporary mode");
 
