@@ -263,6 +263,13 @@ interface JQuery {
     dxRangeSlider(options: DevExpress.ui.dxRangeSliderOptions): JQuery;
 }
 interface JQuery {
+    dxRecurrenceEditor(): JQuery;
+    dxRecurrenceEditor(options: "instance"): DevExpress.ui.dxRecurrenceEditor;
+    dxRecurrenceEditor(options: string): any;
+    dxRecurrenceEditor(options: string, ...params: any[]): any;
+    dxRecurrenceEditor(options: DevExpress.ui.dxRecurrenceEditorOptions): JQuery;
+}
+interface JQuery {
     dxResizable(): JQuery;
     dxResizable(options: "instance"): DevExpress.ui.dxResizable;
     dxResizable(options: string): any;
@@ -3383,6 +3390,17 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxRangeSliderOptions)
         /** Resets the value option to the default value. */
         reset(): void;
+    }
+    export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
+        firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+        startDate?: Date;
+        /** Specifies the currently selected value. */
+        value?: string;
+    }
+    /** A base class for editors. */
+    export class dxRecurrenceEditor extends Editor {
+        constructor(element: Element, options?: dxRecurrenceEditorOptions)
+        constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
     }
     export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
         /** Specifies which borders of the widget element are used as a handle. */
