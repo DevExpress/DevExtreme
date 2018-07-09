@@ -31,7 +31,7 @@ QUnit.module("ExportController", {
 
             initDefaultOptions = initDefaultOptions !== undefined ? initDefaultOptions : true;
 
-            setupDataGridModules(this, ["data", "columns", "rows", "editorFactory", "editing", "selection", "grouping", "summary", "masterDetail", "export"], {
+            setupDataGridModules(this, ["data", "columns", "rows", "editorFactory", "editing", "selection", "grouping", "summary", "masterDetail", "virtualColumns", "export"], {
                 initViews: true,
                 initDefaultOptions: initDefaultOptions,
                 options: $.extend(true, { loadingTimeout: null }, this.options)
@@ -454,6 +454,51 @@ QUnit.test("Get cell value", function(assert) {
     assert.equal(dataProvider.getCellValue(2, 2), new Date("2/10/2014").toString(), "2 row 3 cell");
     assert.equal(dataProvider.getCellValue(2, 3), "false", "2 row 4 cell");
     assert.ok(!dataProvider.getCellValue(2, 4), "edit command column");
+});
+
+QUnit.test("Virtual columns", function(assert) {
+    var data = [{}],
+        columns = [];
+
+    for(var i = 1; i <= 100; i++) {
+        var dataField = "field" + i;
+        data[0][dataField] = i;
+        columns.push({
+            dataField: dataField,
+            allowExporting: i !== 99
+        });
+    }
+
+    // act
+    this.setupModules({
+        width: 500,
+        columnWidth: 50,
+        dataSource: data,
+        showColumnHeaders: true,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        },
+        columns: columns
+    });
+
+    var dataProvider = this.exportController.getDataProvider();
+
+    dataProvider.ready();
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getVisibleColumns().length, 11, "visible column count");
+    assert.equal(dataProvider.getColumns().length, 99, "column count");
+    assert.equal(dataProvider.getRowsCount(), 2, "row count");
+
+    assert.equal(dataProvider.getCellValue(0, 0), "Field 1", "header row cell 1");
+    assert.equal(dataProvider.getCellValue(0, 97), "Field 98", "header row cell 98");
+    assert.equal(dataProvider.getCellValue(0, 98), "Field 100", "header row cell 99");
+
+    assert.equal(dataProvider.getCellValue(1, 0), 1, "data row cell 1");
+    assert.equal(dataProvider.getCellValue(1, 97), 98, "data row cell 98");
+    assert.equal(dataProvider.getCellValue(1, 98), 100, "data row cell 99");
 });
 
 QUnit.test("Get lookup cell value", function(assert) {
