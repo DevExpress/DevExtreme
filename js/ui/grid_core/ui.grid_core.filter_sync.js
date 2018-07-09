@@ -4,6 +4,7 @@ import { isDefined } from "../../core/utils/type";
 
 var modules = require("./ui.grid_core.modules"),
     utils = require("../filter_builder/utils"),
+    errors = require("../widget/ui.errors"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     filterUtils = require("../shared/filtering"),
     customOperations = require("./ui.grid_core.filter_custom_operations");
@@ -11,7 +12,14 @@ var modules = require("./ui.grid_core.modules"),
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"];
 
 function getColumnIdentifier(column) {
-    return column.dataField || column.name || column.caption;
+    return column.name || column.dataField;
+}
+
+function checkForErrors(columns) {
+    columns.forEach(column => {
+        let identifier = getColumnIdentifier(column);
+        if(!isDefined(identifier) && column.allowFiltering) throw new errors.Error("E1049", column.caption);
+    });
 }
 
 var FilterSyncController = modules.Controller.inherit((function() {
@@ -132,9 +140,11 @@ var FilterSyncController = modules.Controller.inherit((function() {
         },
 
         _initSync: function() {
+            let columns = this.getController("columns").getColumns();
+            checkForErrors(columns);
             if(!this.option("filterValue")) {
-                let columns = this.getController("columns").getFilteringColumns(),
-                    filterValue = this.getFilterValueFromColumns(columns);
+                let filteringColumns = this.getController("columns").getFilteringColumns(),
+                    filterValue = this.getFilterValueFromColumns(filteringColumns);
                 this.option("filterValue", filterValue);
             }
             this.syncFilterValue();

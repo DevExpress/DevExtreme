@@ -1608,10 +1608,10 @@ module.exports = {
 
                 },
                 getFilteringColumns: function() {
-                    return this.getColumns().filter(item => (item.dataField || item.caption) && item.allowFiltering).map(item => {
+                    return this.getColumns().filter(item => (item.dataField || item.name) && item.allowFiltering).map(item => {
                         let field = extend(true, {}, item);
                         if(!isDefined(field.dataField)) {
-                            field.dataField = field.name || field.caption;
+                            field.dataField = field.name;
                         }
                         field.filterOperations = item.filterOperations !== item.defaultFilterOperations ? field.filterOperations : null;
                         return field;
