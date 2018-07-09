@@ -534,7 +534,7 @@ module.exports = {
                 _processItems: function(items, changeType) {
                     var that = this,
                         rowIndexDelta = that.getRowIndexDelta(),
-                        visibleColumns = that._columnsController.getVisibleColumns(),
+                        visibleColumns = that._columnsController.getVisibleColumns(null, changeType === "loadingAll"),
                         visibleItems = that._items,
                         dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
                         options = {
