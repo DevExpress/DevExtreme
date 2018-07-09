@@ -7,7 +7,6 @@ var $ = require("../../core/renderer"),
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
     windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
     iteratorUtils = require("../../core/utils/iterator"),
     translator = require("../../animation/translator"),
     Class = require("../../core/class"),
@@ -195,33 +194,23 @@ var Scroller = Class.inherit({
 
         if(windowUtils.hasWindow()) {
             var element = this._$element.get(0),
-                baseDimension = this._getBaseDimension(element, this._dimension),
-                computedDimension = this._getComputedDimension(element, this._dimension);
+                realDimension = this._getRealDimension(element, this._dimension),
+                baseDimension = this._getBaseDimension(element, this._dimension);
 
-            ratio = baseDimension / computedDimension;
+            ratio = realDimension / baseDimension;
         }
 
         return ratio || 1;
     },
 
-    _getBaseDimension: function(element, dimension) {
+    _getRealDimension: function(element, dimension) {
         return math.round(element.getBoundingClientRect()[dimension]);
     },
 
-    _getComputedDimension: function(element, dimension) {
-        var computedStyles = window.getComputedStyle(element),
-            bordersWidth = 0,
-            paddingsWidth = 0,
-            computedDimension = parseFloat(computedStyles[dimension]);
+    _getBaseDimension: function(element, dimension) {
+        var dimensionName = "offset" + titleize(dimension);
 
-        if(computedStyles.boxSizing === "content-box") {
-            bordersWidth = dimension === "width" ? parseInt(computedStyles.borderRightWidth) + parseInt(computedStyles.borderLeftWidth) :
-                parseInt(computedStyles.borderTopWidth) + parseInt(computedStyles.borderBottomWidth);
-            paddingsWidth = dimension === "width" ? parseInt(computedStyles.paddingLeft) + parseInt(computedStyles.paddingRight) :
-                parseInt(computedStyles.paddingTop) + parseInt(computedStyles.paddingBottom);
-        }
-
-        return math.round(computedDimension + bordersWidth + paddingsWidth);
+        return element[dimensionName];
     },
 
     _moveContentByTranslator: function(location) {
