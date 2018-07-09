@@ -120,7 +120,9 @@ var PATTERN_GETTERS = {
     y: "getFullYear",
     M: "getMonth",
     L: "getMonth",
-    a: "getHours",
+    a: function(date) {
+        return date.getHours < 12;
+    },
     d: "getDate",
     H: "getHours",
     h: "getHours",

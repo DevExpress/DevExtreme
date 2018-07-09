@@ -3,7 +3,7 @@
 import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
 import { noop } from "core/utils/common";
-import { getPatternSetter } from "localization/ldml/date.parser";
+import { getPatternSetter, getPatternGetter } from "localization/ldml/date.parser";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
@@ -42,6 +42,14 @@ QUnit.module("Date parts rendering", setupModule, () => {
 
         delete part.setter;
         delete part.getter;
+        delete part.limits;
+    };
+
+    let checkAndRemoveLimits = (part, expected, assert) => {
+        var limits = part.limits;
+        assert.deepEqual(limits(new Date(2012, 1, 4, 5, 6)), expected, "limits for " + part.pattern);
+
+        delete part.limits;
     };
 
     QUnit.test("Check parts length", (assert) => {
@@ -49,6 +57,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Day of week", (assert) => {
+        checkAndRemoveLimits(this.parts[0], { min: 0, max: 6 }, assert);
+
         assert.deepEqual(this.parts[0], {
             index: 0,
             isStub: false,
@@ -61,6 +71,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Month", (assert) => {
+        checkAndRemoveLimits(this.parts[3], { min: 0, max: 11 }, assert);
+
         assert.deepEqual(this.parts[3], {
             index: 3,
             isStub: false,
@@ -73,6 +85,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Day", (assert) => {
+        checkAndRemoveLimits(this.parts[5], { min: 1, max: 29 }, assert);
+
         assert.deepEqual(this.parts[5], {
             index: 5,
             isStub: false,
@@ -85,6 +99,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Year", (assert) => {
+        checkAndRemoveLimits(this.parts[8], { min: 0, max: Infinity }, assert);
+
         assert.deepEqual(this.parts[8], {
             index: 8,
             isStub: false,
@@ -97,6 +113,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Hours", (assert) => {
+        checkAndRemoveLimits(this.parts[10], { min: 0, max: 23 }, assert);
+
         assert.deepEqual(this.parts[10], {
             index: 10,
             isStub: false,
@@ -109,6 +127,8 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Minutes", (assert) => {
+        checkAndRemoveLimits(this.parts[12], { min: 0, max: 59 }, assert);
+
         assert.deepEqual(this.parts[12], {
             index: 12,
             isStub: false,
@@ -121,11 +141,13 @@ QUnit.module("Date parts rendering", setupModule, () => {
     });
 
     QUnit.test("Time indication", (assert) => {
+        checkAndRemoveLimits(this.parts[14], { min: 0, max: 1 }, assert);
+
         assert.deepEqual(this.parts[14], {
             index: 14,
             isStub: false,
             caret: { start: 28, end: 30 },
-            getter: "getHours",
+            getter: getPatternGetter("a"),
             setter: getPatternSetter("a"),
             pattern: "a",
             text: "PM"
