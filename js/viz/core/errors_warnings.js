@@ -42,7 +42,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsViz_E2009
     */
-    E2009: "Each link is expected to have positive weight",
+    E2009: "Each link must have positive weight",
     /**
     * @name ErrorsViz.E2101
     */
