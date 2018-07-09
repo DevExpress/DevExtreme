@@ -92,6 +92,14 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return result;
     },
 
+    _columnCondition: function(a, b) {
+        var columnCondition = this._normalizeCondition(a.left, b.left),
+            rowCondition = this._normalizeCondition(a.top, b.top),
+            cellShiftCondition = this._normalizeCondition(a.cellShift, b.cellShift);
+
+        return rowCondition ? rowCondition : columnCondition ? columnCondition : cellShiftCondition ? cellShiftCondition : a.isStart - b.isStart;
+    },
+
     createTaskPositionMap: function(items) {
         return this.callBase(items, true);
     },
