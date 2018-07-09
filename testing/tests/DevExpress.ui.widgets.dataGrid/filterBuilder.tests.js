@@ -148,7 +148,6 @@ QUnit.module("Common", {
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
     });
 
-
     QUnit.test("the 'any of' operation is available in filterBuilderPopup if filterOperations are not set", function(assert) {
         // arrange, act
         this.initFilterBuilderView({
@@ -166,6 +165,19 @@ QUnit.module("Common", {
         this.initFilterBuilderView({
             columns: [{ dataField: "field", dataType: "string", defaultFilterOperations: ["="] }],
             filterValue: ["field", "anyof", ["a"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
+    // T651579
+    QUnit.test("filter value with caption in identifier shows in filterBuilder", function(assert) {
+        // arrange, act
+        this.initFilterBuilderView({
+            columns: [{ caption: "field", allowFiltering: true }],
+            filterValue: ["field", "=", 1],
             filterBuilderPopup: { visible: true },
         });
 
