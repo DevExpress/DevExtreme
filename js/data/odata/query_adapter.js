@@ -28,11 +28,18 @@ var compileCriteria = (function() {
         };
     };
 
-    var createStringFuncFormatter = function(op, reverse) {
+    var createStringFuncFormatter = function(op, params) {
+        params = params || {};
+
         return function(prop, val) {
             var bag = [op, "("];
 
-            if(reverse) {
+            if(params.forceLowerCase) {
+                prop = prop.indexOf("tolower(") === -1 ? "tolower(" + prop + ")" : prop;
+                val = val.toLowerCase();
+            }
+
+            if(params.reverse) {
                 bag.push(val, ",", prop);
             } else {
                 bag.push(prop, ",", val);
@@ -50,18 +57,18 @@ var compileCriteria = (function() {
         ">=": createBinaryOperationFormatter("ge"),
         "<": createBinaryOperationFormatter("lt"),
         "<=": createBinaryOperationFormatter("le"),
-        "startswith": createStringFuncFormatter("startswith"),
-        "endswith": createStringFuncFormatter("endswith")
+        "startswith": createStringFuncFormatter("startswith", { forceLowerCase: true }),
+        "endswith": createStringFuncFormatter("endswith", { forceLowerCase: true })
     };
 
     var formattersV2 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("substringof", true),
-        "notcontains": createStringFuncFormatter("not substringof", true)
+        "contains": createStringFuncFormatter("substringof", { reverse: true, forceLowerCase: true }),
+        "notcontains": createStringFuncFormatter("not substringof", { reverse: true, forceLowerCase: true })
     });
 
     var formattersV4 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("contains"),
-        "notcontains": createStringFuncFormatter("not contains")
+        "contains": createStringFuncFormatter("contains", { forceLowerCase: true }),
+        "notcontains": createStringFuncFormatter("not contains", { forceLowerCase: true })
     });
 
     var compileBinary = function(criteria) {
