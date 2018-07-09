@@ -24,5 +24,5 @@ require("./ui.data_grid.keyboard_navigation");
 require("./ui.data_grid.summary");
 require("./ui.data_grid.column_fixing");
 require("./ui.data_grid.adaptivity");
-require("./ui.data_grid.export");
 require("./ui.data_grid.virtual_columns");
+require("./ui.data_grid.export");
