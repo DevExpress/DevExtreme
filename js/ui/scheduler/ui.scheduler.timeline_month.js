@@ -109,7 +109,8 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
     getPositionShift: function() {
         return {
             top: 0,
-            left: 0
+            left: 0,
+            cellShift: 0
         };
     }
 
