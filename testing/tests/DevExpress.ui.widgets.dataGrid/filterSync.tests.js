@@ -601,7 +601,7 @@ QUnit.module("Sync on initialization", {
             function(e) {
                 return /E1049/.test(e.message);
             },
-            `The column 'Field' does not contain the 'dataField' or 'name' identifier`
+            `Сolumn 'Field': filtering is allowed but the 'dataField' or 'name' option is not specified`
         );
     });
 
