@@ -99,7 +99,7 @@ var SlideOutView = Widget.inherit({
             * @type Enums.SlideOutMode
             * @default "normal"
             */
-            mode: "persistent",
+            mode: "default",
 
             /**
             * @name dxSlideOutViewOptions.contentOffset
@@ -306,7 +306,7 @@ var SlideOutView = Widget.inherit({
     _renderPosition: function(offset, animate) {
         if(!windowUtils.hasWindow()) return;
 
-        if(this.option("mode") === "persistent") {
+        if(this.option("mode") === "default") {
             var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
             this._toggleHideMenuCallback(offset);

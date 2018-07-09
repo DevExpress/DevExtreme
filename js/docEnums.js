@@ -572,7 +572,7 @@
 
 /**
  * @typedef {string} Enums.SlideOutMode
- * @enum {'persistent'|'temporary '}
+ * @enum {'persistent'|'temporary'|'default'}
  */
 
 /**
