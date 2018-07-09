@@ -683,7 +683,7 @@ QUnit.test("string functions", function(assert) {
 
     var check = function(operation, expectation) {
         return QUERY("odata.org")
-            .filter("f.p", operation, "ab")
+            .filter("f.p", operation, "Ab")
             .enumerate()
             .done(function(r) {
                 assert.equal(r[0].data["$filter"], expectation);
@@ -691,10 +691,10 @@ QUnit.test("string functions", function(assert) {
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'ab')"),
-        check("endsWith", "endswith(f/p,'ab')"),
-        check("contains", "substringof('ab',f/p)"),
-        check("notContains", "not substringof('ab',f/p)")
+        check("startsWith", "startswith(tolower(f/p),'ab')"),
+        check("endsWith", "endswith(tolower(f/p),'ab')"),
+        check("contains", "substringof('ab',tolower(f/p))"),
+        check("notContains", "not substringof('ab',tolower(f/p))")
     ];
 
     $.when.apply($, promises)
@@ -711,7 +711,7 @@ QUnit.test("string functions (v4)", function(assert) {
 
     var check = function(operation, expectation) {
         return QUERY("odata.org", { version: 4 })
-            .filter("f.p", operation, "ab")
+            .filter("f.p", operation, "Ab")
             .enumerate()
             .done(function(r) {
                 assert.equal(r[0].data["$filter"], expectation);
@@ -719,10 +719,10 @@ QUnit.test("string functions (v4)", function(assert) {
     };
 
     var promises = [
-        check("startsWith", "startswith(f/p,'ab')"),
-        check("endsWith", "endswith(f/p,'ab')"),
-        check("contains", "contains(f/p,'ab')"),
-        check("notContains", "not contains(f/p,'ab')")
+        check("startsWith", "startswith(tolower(f/p),'ab')"),
+        check("endsWith", "endswith(tolower(f/p),'ab')"),
+        check("contains", "contains(tolower(f/p),'ab')"),
+        check("notContains", "not contains(tolower(f/p),'ab')")
     ];
 
     $.when.apply($, promises)
