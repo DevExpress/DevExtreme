@@ -516,7 +516,7 @@ var CollectionWidget = Widget.inherit({
     _refreshItem: function($item) {
         var itemData = this._getItemData($item),
             index = $item.data(this._itemIndexKey());
-        this._renderItem(index, itemData, null, $item);
+        this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
 
     _optionChanged: function(args) {
@@ -852,15 +852,15 @@ var CollectionWidget = Widget.inherit({
 
     _renderItems: function(items) {
         if(items.length) {
-            iteratorUtils.each(items, this._renderItem.bind(this));
+            iteratorUtils.each(items, function(index, itemData) {
+                this._renderItem(this._renderedItemsCount + index, itemData);
+            }.bind(this));
         }
 
         this._renderEmptyMessage();
     },
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
-        index = this._renderedItemsCount + index;
-
         $container = $container || this._itemContainer();
         var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
