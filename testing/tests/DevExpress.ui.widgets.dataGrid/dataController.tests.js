@@ -5830,6 +5830,32 @@ QUnit.test("expandAll", function(assert) {
     assert.ok(!dataSourceOptions.reloaded);
 });
 
+// T648268
+QUnit.test("No exceptions on moving the column from group panel to headers (AngularJS)", function(assert) {
+    // arrange
+    var that = this,
+        dataSource = createDataSource([]);
+
+    that.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    that.applyOptions({ columns: ["field1", "field2", { dataField: "field3", groupIndex: 0 }, { dataField: "field4", groupIndex: 1 }, "field5"] });
+    that._notifyOptionChanged = function() {
+        that.columnsController._endUpdateCore();
+    };
+
+    try {
+        // act
+        that.columnsController.moveColumn(0, 2, 'group', 'headers');
+
+        // assert
+        assert.strictEqual(that.columnsController.getGroupColumns().length, 1, "group column count");
+    } catch(e) {
+        // assert
+        assert.ok(false, "the error is thrown");
+    }
+});
+
 QUnit.module("Editing", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Inserting Row", function(assert) {
