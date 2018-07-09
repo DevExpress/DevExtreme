@@ -454,6 +454,12 @@
     }
   },
   {
+    "name": "ui/recurrence_editor",
+    "exports": {
+      "default": "ui.dxRecurrenceEditor"
+    }
+  },
+  {
     "name": "ui/responsive_box",
     "exports": {
       "default": "ui.dxResponsiveBox"
