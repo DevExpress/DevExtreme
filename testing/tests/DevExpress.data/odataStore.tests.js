@@ -626,6 +626,49 @@ QUnit.test("Guid as key", function(assert) {
         .always(done);
 });
 
+QUnit.test("string as key", function(assert) {
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata2.org*",
+        callback: function(bag) {
+            this.responseText = { d: { url: bag.url } };
+        }
+    });
+
+    ajaxMock.setup({
+        url: "odata4.org*",
+        callback: function(bag) {
+            this.responseText = { value: { url: bag.url } };
+        }
+    });
+
+    var assertFunc = function(r) {
+        var url = decodeURIComponent(r.url);
+        assert.equal(url.indexOf("('abc')"), 10);
+    };
+
+    var promises = [
+        new ODataStore({ url: "odata2.org" })
+            .byKey("abc")
+            .done(assertFunc),
+
+        new ODataStore({ version: 3, url: "odata2.org" })
+            .byKey("abc")
+            .done(assertFunc),
+
+        new ODataStore({ version: 4, url: "odata4.org" })
+            .byKey("abc")
+            .done(assertFunc)
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
 QUnit.test("key type conversions by keyType option", function(assert) {
     var done = assert.async();
 
