@@ -548,8 +548,7 @@ var LayoutManager = Widget.inherit({
         }
 
         if(typeUtils.isDefined(item.alignment)) {
-            var formInstance = this.option("form");
-            errors.log("W0001", formInstance && formInstance.NAME, "alignment", "18.1", "Use the 'horizontalAlignment' option in button items instead.");
+            errors.log("W0001", "dxForm", "alignment", "18.1", "Use the 'horizontalAlignment' option in button items instead.");
             return item.alignment;
         }
 

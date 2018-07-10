@@ -3059,7 +3059,7 @@ QUnit.module("Button item", () => {
         assert.equal($buttonItems.last().css("textAlign"), "center", "Center alignment accepted");
         assert.deepEqual(logStub.firstCall.args, [
             "W0001",
-            undefined,
+            "dxForm",
             "alignment",
             "18.1",
             "Use the 'horizontalAlignment' option in button items instead."
