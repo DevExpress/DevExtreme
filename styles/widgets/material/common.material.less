@@ -83,12 +83,12 @@
 .dx-size-compact() {
     @MATERIAL_INVALID_BADGE_SIZE: @MATERIAL_BASE_ICON_SIZE + 2px;
 }
-@MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING: 0; // TODO make calculating (@MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @MATERIAL_INVALID_BADGE_SIZE) / 2;
+@MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING: 2px;//(@MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @MATERIAL_INVALID_BADGE_SIZE) / 2;
 @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING / 2;
 
 .dx-invalid-material-badge() {
     pointer-events: none;
-    font-weight: bold;
+    font-weight: 500;
     background-color: @badge-invalid-bg;
     color: @base-selected-text-color;
     content: '!';
@@ -99,8 +99,8 @@
     height: @MATERIAL_INVALID_BADGE_SIZE;
     .border-radius(@radius: ~"50%");
     text-align: center;
-    line-height: @MATERIAL_INVALID_BADGE_SIZE;
-    font-size: @MATERIAL_BASE_FONT_SIZE - 1px;
+    line-height: @MATERIAL_INVALID_BADGE_SIZE + 1;
+    font-size: @MATERIAL_BASE_FONT_SIZE;
 }
 
 

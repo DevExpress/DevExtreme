@@ -150,7 +150,7 @@
 * @type color
 * @group editors.texteditors
 */
-@texteditor-bg: transparent;
+@texteditor-bg: fade(@base-text-color, 4%);
 
 /**
 * @name 30. Focused border color
@@ -159,7 +159,14 @@
 * @paletteColorOpacity 1
 */
 @texteditor-focused-border-color: @base-accent;
-@texteditor-hover-bg: @texteditor-bg;
+
+/**
+* @name 30. Focused background color
+* @type color
+* @group editors.texteditors
+* @paletteColorOpacity 1
+*/
+@texteditor-focused-bg: fade(@base-text-color, 4%);
 
 /**
 * @name 40. Hovered border color
@@ -169,11 +176,17 @@
 @texteditor-hover-border-color: @texteditor-color;
 
 /**
+* @name 40. Hovered background color
+* @type color
+* @group editors.texteditors
+*/
+@texteditor-hover-bg: fade(@base-text-color, 7%);
+
+/**
 * @name 50. Text color
 * @type color
 * @group editors.texteditors
 */
-
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .38;
 
@@ -191,7 +204,6 @@
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
 
-@texteditor-border-radius: @base-border-radius;
 @texteditor-input-border-radius: @base-border-radius;
 
 //TextBox

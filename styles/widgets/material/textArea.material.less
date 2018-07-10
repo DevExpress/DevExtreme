@@ -1,47 +1,16 @@
 @TEXTAREA_CONTENT_PADDING: 10px;
+@TEXTAREA_CONTENT_LINE_HEIGHT: 24px;
 
 .dx-textarea {
     height: auto;
-    margin: 2px;
-    border-radius: @texteditor-border-radius;
-    box-shadow: 0 0 0 1px @texteditor-border-color;
-
-    &.dx-state-hover {
-        box-shadow: 0 0 0 2px @texteditor-hover-border-color;
-    }
-
-    &.dx-state-focused, &.dx-state-active {
-        box-shadow: 0 0 0 2px @texteditor-focused-border-color;
-    }
-
-    &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover {
-        box-shadow: 0 0 0 1px @texteditor-border-color;
-
-        .dx-texteditor-input {
-            color: fade(@texteditor-color, 38%);
-        }
-    }
-
-     &.dx-invalid {
-        box-shadow: 0 0 0 1px @texteditor-invalid-faded-border-color;
-
-        &.dx-state-hover {
-            box-shadow: 0 0 0 2px @texteditor-invalid-faded-border-color;
-        }
-
-        &.dx-state-focused {
-            box-shadow: 0 0 0 1px @texteditor-invalid-focused-border-color;
-        }
-     }
 
     .dx-texteditor-input {
         padding: @TEXTAREA_CONTENT_PADDING;
+        line-height: @TEXTAREA_CONTENT_LINE_HEIGHT;
     }
 
-    .dx-placeholder {
-        padding: (@TEXTAREA_CONTENT_PADDING - @MATERIAL_TEXTEDITOR_INPUT_VERTICAL_PADDING) @TEXTAREA_CONTENT_PADDING;
+    .dx-placeholder:before {
+        padding: (@TEXTAREA_CONTENT_PADDING + 3) @TEXTAREA_CONTENT_PADDING;
     }
 
     .dx-icon-clear {

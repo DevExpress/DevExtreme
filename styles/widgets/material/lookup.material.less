@@ -1,7 +1,7 @@
 .dx-size-default() {
-    @MATERIAL_LOOKUP_HEIGHT: 36px;
+    @MATERIAL_LOOKUP_HEIGHT: 56px;
     @MATERIAL_LOOKUP_FONT_SIZE: 16px;
-    @MATERIAL_LOOKUP_FIELD_HORIZONTAL_PADDING: 0;
+    @MATERIAL_LOOKUP_FIELD_HORIZONTAL_PADDING: 12px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_TOP: 49px;
     @MATERIAL_LOOKUP_POPUP_CONTENT_PADDING: 20px;
     @MATERIAL_LOOKUP_LIST_TOP: 70px;
@@ -44,8 +44,13 @@
 
 .dx-lookup {
     height: @MATERIAL_LOOKUP_HEIGHT;
-    border-bottom: 1px solid @texteditor-border-color;
     background: @texteditor-bg;
+    border-bottom: 1px solid transparent;
+
+    &.dx-state-hover {
+        background: @texteditor-hover-bg;
+        border-bottom: 1px solid @texteditor-hover-border-color;
+    }
 }
 
 .dx-lookup-field {
