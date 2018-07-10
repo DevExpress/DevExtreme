@@ -1978,21 +1978,21 @@ var dxChart = {
     */
     zoomArgument: function() { },
     /**
-    * @name dxchartmethods.getValueAxes
-    * @publicName getValueAxes()
+    * @name dxchartmethods.getValueAxis
+    * @publicName getValueAxis()
     * @returns chartAxisObject
     */
     getValueAxis: function() { },
     /**
-    * @name dxchartmethods.getValueAxes(name)
-    * @publicName getValueAxes(name)
+    * @name dxchartmethods.getValueAxis(name)
+    * @publicName getValueAxis(name)
     * @param1 name:string
     * @returns chartAxisObject
     */
     getValueAxis: function(name) { },
     /**
-    * @name dxchartmethods.getArgumentAxes
-    * @publicName getArgumentAxes()
+    * @name dxchartmethods.getArgumentAxis
+    * @publicName getArgumentAxis()
     * @returns chartAxisObject
     */
     getArgumentAxis: function() { }
