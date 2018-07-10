@@ -121,7 +121,7 @@ var PATTERN_GETTERS = {
     M: "getMonth",
     L: "getMonth",
     a: function(date) {
-        return date.getHours < 12;
+        return date.getHours() < 12 ? 0 : 1;
     },
     d: "getDate",
     H: "getHours",
@@ -143,10 +143,17 @@ var PATTERN_SETTERS = {
     L: "setMonth",
     a: function(date, value) {
         var hours = date.getHours();
+
+        if(hours > 12) {
+            hours -= 12;
+        }
+
         if(!value && hours === 12) {
             date.setHours(0);
         } else if(value && hours !== 12) {
             date.setHours(hours + 12);
+        } else {
+            date.setHours(hours);
         }
     },
     d: "setDate",
