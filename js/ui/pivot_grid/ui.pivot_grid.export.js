@@ -55,7 +55,6 @@ exports.ExportMixin = extend({}, exportMixin, {
             rowIndex,
             sourceItems = columnsInfo.concat(cellsInfo),
             rowsLength = this._getLength(rowsInfoItems),
-            colsLength = this._getLength(columnsInfo),
             headerRowsCount = columnsInfo.length;
 
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
@@ -76,7 +75,7 @@ exports.ExportMixin = extend({}, exportMixin, {
                 rowspan: headerRowsCount
             }));
 
-        return this._prepareItems(rowsLength + colsLength, sourceItems);
+        return this._prepareItems(sourceItems);
     },
 
     getDataProvider: function() {
