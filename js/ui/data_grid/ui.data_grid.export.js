@@ -318,7 +318,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         }
 
         columns = result[rowCount];
-        result = this._prepareItems(0, result.slice(0, -1));
+        result = this._prepareItems(result.slice(0, -1));
         result.push(columns);
 
         return result;
