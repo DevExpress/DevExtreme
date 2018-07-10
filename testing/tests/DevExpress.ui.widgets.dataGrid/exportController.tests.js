@@ -3082,7 +3082,7 @@ QUnit.test("PrepareItems with extended Array prototypes", function(assert) {
 
     items.test = function() { }; // As appending prototype method to array
 
-    resultItems = exportMixin._prepareItems(0, items);
+    resultItems = exportMixin._prepareItems(items);
 
     assert.deepEqual(resultItems, [
         [{
