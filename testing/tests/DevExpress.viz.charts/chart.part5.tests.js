@@ -325,28 +325,30 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
     assert.strictEqual(series1.getValueAxis().adjust.callCount, 1);
 });
 
-// QUnit.test("Event, zoomEnd", function(assert) {
-//     var zoomEnd = sinon.spy(),
-//         series = new MockSeries();
-//     chartMocks.seriesMockData.series.push(series);
+QUnit.test("Event, zoomEnd", function(assert) {
+    var zoomEnd = sinon.spy(),
+        series = new MockSeries({
+            range: {
+                val: { min: 0, max: 1 },
+                arg: {
+                    min: 100,
+                    max: 200
+                }
+            }
+        });
+    chartMocks.seriesMockData.series.push(series);
 
-//     var chart = this.createChart({
-//         series: { type: "line" },
-//         onZoomEnd: zoomEnd,
-//         argumentAxis: {
-//             mockRange: {
-//                 minVisible: 100,
-//                 maxVisible: 200
-//             }
-//         }
-//     });
+    var chart = this.createChart({
+        series: { type: "line" },
+        onZoomEnd: zoomEnd
+    });
 
-//     chart.zoomArgument(30, 80);
+    chart.zoomArgument(30, 80);
 
-//     assert.equal(zoomEnd.callCount, 1);
-//     assert.equal(zoomEnd.getCall(0).args[0].rangeStart, 100, 'rangeStart', "rangeStart from axis");
-//     assert.equal(zoomEnd.getCall(0).args[0].rangeEnd, 200, 'rangeEnd', "rangeEnd from axis");
-// });
+    assert.equal(zoomEnd.callCount, 1);
+    assert.equal(zoomEnd.getCall(0).args[0].rangeStart, 100, 'rangeStart', "rangeStart from axis");
+    assert.equal(zoomEnd.getCall(0).args[0].rangeEnd, 200, 'rangeEnd', "rangeEnd from axis");
+});
 
 QUnit.test("Event, zoomStart", function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
