@@ -14,7 +14,19 @@ var chartSeriesObject = {
     * @name chartSeriesObjectFields.pane
     * @type string
     */
-    pane: null
+    pane: null,
+    /**
+    * @name chartSeriesObjectMethods.getArgumentAxis
+    * @publicName getArgumentAxis()
+    * @returns chartAxisObject
+    */
+    getArgumentAxis: function() { },
+    /**
+    * @name chartSeriesObjectMethods.getValueAxis
+    * @publicName getValueAxis()
+    * @returns chartAxisObject
+    */
+    getValueAxis: function() { }
 }
 
 /**
