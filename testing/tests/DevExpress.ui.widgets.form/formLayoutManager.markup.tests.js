@@ -3,14 +3,30 @@
 import $ from "jquery";
 import consoleUtils from "core/utils/console";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import {
-    __internals as internals
-} from "ui/form/ui.form.layout_manager";
+import { __internals as internals } from "ui/form/ui.form.layout_manager";
 import config from "core/config";
 import typeUtils from "core/utils/type";
 import windowUtils from "core/utils/window";
+import errors from "ui/widget/ui.errors";
+
+import "ui/switch";
+import "ui/select_box";
+import "ui/tag_box";
+import "ui/lookup";
+import "ui/text_area";
+import "ui/radio_group";
+import "ui/range_slider";
+
+import "common.css!";
 
 const { test } = QUnit;
+
+QUnit.testStart(() => {
+    const markup =
+        '<div id="container"></div>';
+
+    $("#qunit-fixture").html(markup);
+});
 
 const createTestObject = () => {
     return {
@@ -27,23 +43,6 @@ const createTestObject = () => {
         "StateID": 5
     };
 };
-
-import "ui/switch";
-import "ui/select_box";
-import "ui/tag_box";
-import "ui/lookup";
-import "ui/text_area";
-import "ui/radio_group";
-import "ui/range_slider";
-
-import "common.css!";
-
-QUnit.testStart(() => {
-    const markup =
-        '<div id="container"></div>';
-
-    $("#qunit-fixture").html(markup);
-});
 
 QUnit.module("Layout manager", () => {
     test("Default render", (assert) => {
@@ -3035,7 +3034,39 @@ QUnit.module("Button item", () => {
         assert.ok($buttonItems.last().hasClass("dx-last-col"), "Correct column index");
     });
 
-    test("alignment", (assert) => {
+    test("Check deprecated alignment option", (assert) => {
+        // arrange, act
+        let $testContainer = $("#container");
+        let logStub = sinon.stub(errors, "log");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: "button"
+            }, {
+                itemType: "button",
+                alignment: "left"
+            }, {
+                itemType: "button",
+                alignment: "center"
+            }]
+        });
+
+        let $buttonItems = $testContainer.find(".dx-field-button-item");
+
+        // assert
+        assert.equal($buttonItems.first().css("textAlign"), "right", "By default buttons align by the right");
+        assert.equal($buttonItems.eq(1).css("textAlign"), "left", "Left alignment accepted");
+        assert.equal($buttonItems.last().css("textAlign"), "center", "Center alignment accepted");
+        assert.deepEqual(logStub.firstCall.args, [
+            "W0001",
+            "dxForm",
+            "alignment",
+            "18.1",
+            "Use the 'horizontalAlignment' option in button items instead."
+        ], "Check warning parameters");
+    });
+
+    test("Horizontal alignment", (assert) => {
         // arrange, act
         let $testContainer = $("#container");
 
@@ -3044,7 +3075,10 @@ QUnit.module("Button item", () => {
                 itemType: "button"
             }, {
                 itemType: "button",
-                alignment: "left"
+                horizontalAlignment: "left"
+            }, {
+                itemType: "button",
+                horizontalAlignment: "center"
             }]
         });
 
@@ -3052,6 +3086,31 @@ QUnit.module("Button item", () => {
 
         // assert
         assert.equal($buttonItems.first().css("textAlign"), "right", "By default buttons align by the right");
-        assert.equal($buttonItems.last().css("textAlign"), "left", "Custom alignment accepted");
+        assert.equal($buttonItems.eq(1).css("textAlign"), "left", "Left alignment accepted");
+        assert.equal($buttonItems.last().css("textAlign"), "center", "Center alignment accepted");
+    });
+
+    test("Vertical alignment", (assert) => {
+        // arrange, act
+        let $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: "button"
+            }, {
+                itemType: "button",
+                verticalAlignment: "center"
+            }, {
+                itemType: "button",
+                verticalAlignment: "bottom"
+            }]
+        });
+
+        let $buttonItems = $testContainer.find(".dx-field-button-item");
+
+        // assert
+        assert.equal($buttonItems.first().parent().css("justifyContent"), "flex-start", "By default buttons align by the center");
+        assert.equal($buttonItems.eq(1).parent().css("justifyContent"), "center", "Top alignment accepted");
+        assert.equal($buttonItems.last().parent().css("justifyContent"), "flex-end", "Bottom alignment accepted");
     });
 });
