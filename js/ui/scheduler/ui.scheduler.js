@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     recurrenceUtils = require("./utils.recurrence"),
     domUtils = require("../../core/utils/dom"),
     dateUtils = require("../../core/utils/date"),
+    objectUtils = require("../../core/utils/object"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -2155,8 +2156,11 @@ var Scheduler = Widget.inherit({
 
         this._saveChanges(true);
 
-        var startDate = this.fire("getField", "startDate", this._appointmentForm.option("formData"));
-        this._workSpace.updateScrollPosition(startDate);
+        if(this._lastEditData) {
+            var startDate = this.fire("getField", "startDate", this._lastEditData);
+            this._workSpace.updateScrollPosition(startDate);
+            delete this._lastEditData;
+        }
     },
 
     _saveChanges: function(disableButton) {
@@ -2168,7 +2172,7 @@ var Scheduler = Widget.inherit({
 
         disableButton && this._disableDoneButton();
 
-        var formData = this._getFormData(),
+        var formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true),
             oldData = this._editAppointmentData,
             recData = this._updatedRecAppointment;
 
@@ -2198,6 +2202,7 @@ var Scheduler = Widget.inherit({
         }
         this._enableDoneButton();
 
+        this._lastEditData = formData;
         return true;
     },
 

@@ -15,6 +15,7 @@ var $ = require("jquery"),
     dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
     dxSchedulerWorkSpace = require("ui/scheduler/ui.scheduler.work_space"),
     dxSchedulerWorkSpaceDay = require("ui/scheduler/ui.scheduler.work_space_day"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
@@ -1862,6 +1863,34 @@ QUnit.testStart(function() {
         this.clock.tick();
 
         assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" }], "Update operation is canceled");
+    });
+
+    QUnit.test("Appointment form should not be updated if 'cancel' flag is defined as true (T653358)", function(assert) {
+        var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+
+        try {
+            var appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" }],
+                dataSource = new DataSource({
+                    store: appointments
+                });
+
+            this.createInstance({
+                timeZone: "Etc/UTC",
+                onAppointmentUpdating: function(args) {
+                    args.cancel = true;
+                },
+                dataSource: dataSource,
+                currentDate: new Date(2015, 1, 9)
+            });
+
+            this.instance.showAppointmentPopup(appointments[0]);
+            $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+            this.clock.tick();
+            assert.deepEqual(this.instance._appointmentForm.option("formData").startDate, new Date(2015, 1, 9, 13), "Form data is correct");
+        } finally {
+            tzOffsetStub.restore();
+        }
     });
 
     QUnit.test("Appointment should not be updated if 'cancel' flag is defined as true during async operation", function(assert) {
