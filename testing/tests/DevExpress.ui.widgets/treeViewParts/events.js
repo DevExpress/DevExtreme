@@ -534,7 +534,7 @@ QUnit.test("onItemClick should not be fired when clicking on expander icon", fun
             showCheckBoxesMode: "normal",
             onItemClick: clickHandler
         }),
-        $expander = $treeView.find(".dx-treeview-toggle-item-visibility").eq(0);
+        $expander = $treeView.find(".dx-treeview-expand-icon").eq(0);
 
     $expander.trigger("dxclick");
 
@@ -606,7 +606,7 @@ QUnit.test("T184799: expand item", function(assert) {
 
         assert.ok(treeView.option("items")[0].expanded);
         assert.ok(treeView.getNodes()[0].expanded);
-        assert.ok($rootItem.parent().find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
+        assert.ok($rootItem.parent().find("." + internals.EXPAND_ICON_CLASS).hasClass(internals.EXPAND_ICON_OPENED_CLASS));
         assert.ok(handler.calledOnce);
         assert.ok(args.itemData.expanded);
         assert.ok(args.node.expanded);
@@ -712,7 +712,7 @@ QUnit.test("T184799: collapse item", function(assert) {
 
         assert.ok(!treeView.option("items")[0].expanded);
         assert.ok(!treeView.getNodes()[0].expanded);
-        assert.ok(!$rootItem.parent().find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
+        assert.ok(!$rootItem.parent().find("." + internals.EXPAND_ICON_CLASS).hasClass(internals.EXPAND_ICON_OPENED_CLASS));
         assert.ok(handler.calledOnce);
         assert.ok(!args.itemData.expanded);
         assert.ok(!args.node.expanded);
@@ -756,7 +756,7 @@ QUnit.test("Collapse event handler has correct arguments", function(assert) {
                 checkEventArgs(assert, e);
             }
         }),
-        $icon = treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        $icon = treeView.find("." + internals.EXPAND_ICON_CLASS).eq(0);
 
     assert.ok(treeView);
     $icon.trigger("dxclick");
@@ -789,7 +789,7 @@ QUnit.test("Expand event handler has correct arguments", function(assert) {
                 checkEventArgs(assert, e);
             }
         }),
-        $icon = treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        $icon = treeView.find("." + internals.EXPAND_ICON_CLASS).eq(0);
 
     assert.ok(treeView);
     $icon.trigger("dxclick");

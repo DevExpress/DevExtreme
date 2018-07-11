@@ -97,7 +97,7 @@ QUnit.test("Render second level in virtualMode after click on icon", function(as
         }),
 
         $firstItem = this.$element.find("." + internals.ITEM_CLASS).eq(0),
-        $icon = $firstItem.parent().find("> ." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+        $icon = $firstItem.parent().find("> ." + internals.EXPAND_ICON_CLASS);
 
     $icon.trigger("dxclick");
 
@@ -172,7 +172,7 @@ QUnit.test("Render toggle icon everywhen", function(assert) {
         virtualModeEnabled: true
     });
 
-    var $icons = this.$element.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    var $icons = this.$element.find("." + internals.EXPAND_ICON_CLASS);
 
     assert.equal($icons.length, 3);
 });
@@ -186,7 +186,7 @@ QUnit.test("Remove toggle icon after expand childless item", function(assert) {
 
     treeView.expandItem(16);
 
-    var $icons = this.$element.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    var $icons = this.$element.find("." + internals.EXPAND_ICON_CLASS);
     assert.equal($icons.length, 2);
 });
 
@@ -200,7 +200,7 @@ QUnit.test("Remove loadindicator after expand childless item", function(assert) 
     this.clock.tick(400);
 
     var $node = this.$element.find("." + internals.NODE_CLASS).eq(2);
-    $node.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+    $node.find("." + internals.EXPAND_ICON_CLASS).trigger("dxclick");
     assert.equal($node.find(".dx-treeview-node-loadindicator").length, 1);
 
     this.clock.tick(400);
@@ -257,7 +257,7 @@ QUnit.test("Don't create loadindicator when disabled item expands", function(ass
 
     var $node = this.$element.find("." + internals.NODE_CLASS).eq(2);
 
-    $node.find(".dx-treeview-toggle-item-visibility").trigger("dxclick");
+    $node.find(".dx-treeview-expand-icon").trigger("dxclick");
     assert.equal($node.find(".dx-loadindicator").length, 0);
 });
 
@@ -284,7 +284,7 @@ QUnit.test("Don't render toggle icon if item.hasItems is false", function(assert
         virtualModeEnabled: true
     });
 
-    var icons = this.$element.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    var icons = this.$element.find("." + internals.EXPAND_ICON_CLASS);
     assert.equal(icons.length, 2);
 });
 
@@ -300,7 +300,7 @@ QUnit.test("Don't render toggle icon if item.hasChildren is false", function(ass
     });
 
 
-    var icons = this.$element.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    var icons = this.$element.find("." + internals.EXPAND_ICON_CLASS);
     assert.equal(icons.length, 2);
 });
 
@@ -315,7 +315,7 @@ QUnit.test("Render opened icon if item is expanded", function(assert) {
         hasItemsExpr: "hasChildren"
     });
 
-    var icons = this.$element.find("." + internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
+    var icons = this.$element.find("." + internals.EXPAND_ICON_OPENED_CLASS);
     assert.equal(icons.length, 1);
 });
 
@@ -635,18 +635,18 @@ QUnit.test("Item should expand correct at the second time", function(assert) {
             dataStructure: "plain",
             virtualModeEnabled: true
         }),
-        toggleIcon = this.$element.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).first();
+        toggleIcon = this.$element.find("." + internals.EXPAND_ICON_CLASS).first();
 
     treeView.expandItem(1);
-    assert.ok(toggleIcon.hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS), "expanded icon is correct");
+    assert.ok(toggleIcon.hasClass(internals.EXPAND_ICON_OPENED_CLASS), "expanded icon is correct");
     assert.ok(data[0].expanded, "item's property is correct");
 
     treeView.collapseItem(1);
-    assert.ok(!toggleIcon.hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS), "collapsed icon is correct");
+    assert.ok(!toggleIcon.hasClass(internals.EXPAND_ICON_OPENED_CLASS), "collapsed icon is correct");
     assert.ok(!data[0].expanded, "item's property is correct");
 
     treeView.expandItem(1);
-    assert.ok(toggleIcon.hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS), "expanded icon is correct");
+    assert.ok(toggleIcon.hasClass(internals.EXPAND_ICON_OPENED_CLASS), "expanded icon is correct");
     assert.ok(data[0].expanded, "item's property is correct");
 });
 
@@ -866,7 +866,7 @@ QUnit.test("DataSource change should not influence on items", function(assert) {
     assert.equal(treeView.option("items").length, 3);
 
     var $node = this.$element.find("." + internals.NODE_CLASS).eq(0);
-    $node.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+    $node.find("." + internals.EXPAND_ICON_CLASS).trigger("dxclick");
     this.clock.tick(400);
     assert.equal(treeView._dataSource.items().length, 3);
     assert.equal(treeView.option("items").length, 6);
@@ -1238,7 +1238,7 @@ QUnit.test("arrow should be rendered for a node if the 'createChildren' callback
         createChildren: noop
     });
 
-    assert.equal($treeView.find(".dx-treeview-toggle-item-visibility").length, 1, "arrow is rendered");
+    assert.equal($treeView.find(".dx-treeview-expand-icon").length, 1, "arrow is rendered");
 });
 
 QUnit.test("widget should not be rerendered after data is loaded with the help of 'createChildren'", function(assert) {
@@ -1297,7 +1297,7 @@ QUnit.test("arrow should not be rendered for item which is explicitly has 'hasIt
         }
     });
 
-    assert.equal($treeView.find(".dx-treeview-toggle-item-visibility").length, 0, "arrow is not rendered");
+    assert.equal($treeView.find(".dx-treeview-expand-icon").length, 0, "arrow is not rendered");
 });
 
 QUnit.test("the 'createChildren' callback should support native promises", function(assert) {

@@ -11,7 +11,7 @@ var $ = require("jquery"),
 var NODE_CLASS = "dx-treeview-node",
     ITEM_CLASS = "dx-treeview-item",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
-    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
+    EXPAND_ICON_CLASS = "dx-treeview-expand-icon";
 
 QUnit.module("Focusing");
 
@@ -54,7 +54,7 @@ QUnit.testInActiveWindow("widget should not have focus-state class after click o
             items: treeViewData,
             focusStateEnabled: true
         }),
-        $arrow = $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0),
+        $arrow = $treeView.find("." + internals.EXPAND_ICON_CLASS).eq(0),
         $node = $treeView.find("." + internals.NODE_CLASS).eq(0);
 
     $arrow.trigger("dxclick");
@@ -124,7 +124,7 @@ QUnit.test("PointerDown event at expansion arrow should not be ignored", functio
     var pointerDownStub = sinon.stub(treeView, "_itemPointerDownHandler");
 
     var $node = $treeView.find("." + NODE_CLASS).eq(0),
-        $arrow = $node.find("." + TOGGLE_ITEM_VISIBILITY_CLASS);
+        $arrow = $node.find("." + EXPAND_ICON_CLASS);
 
     $arrow.trigger("dxpointerdown");
 
