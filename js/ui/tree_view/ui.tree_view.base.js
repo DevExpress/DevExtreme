@@ -29,6 +29,7 @@ var WIDGET_CLASS = "dx-treeview",
     NODE_CLASS = "dx-treeview-node",
     ITEM_CLASS = "dx-treeview-item",
     ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
+    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
     ITEM_DATA_KEY = "dx-treeview-item-data",
     IS_LEAF = "dx-treeview-node-is-leaf",
     EXPAND_EVENT_NAMESPACE = "dxTreeView_expand",
@@ -842,9 +843,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _renderItem: function(node, $nodeContainer) {
         var $node = this._createDOMElement($nodeContainer, node),
-            nodeData = node.internalFields;
+            nodeData = node.internalFields,
+            showCheckBox = this._showCheckboxes();
 
-        this._showCheckboxes() && this._renderCheckBox($node, node);
+        $node.addClass(showCheckBox ? ITEM_WITH_CHECKBOX_CLASS : ITEM_WITHOUT_CHECKBOX_CLASS);
+        showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
@@ -1233,8 +1236,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderCheckBox: function($node, node) {
-        $node.addClass(ITEM_WITH_CHECKBOX_CLASS);
-
         var $checkbox = $("<div>").appendTo($node);
 
         this._createComponent($checkbox, CheckBox, {

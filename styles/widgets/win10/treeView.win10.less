@@ -62,25 +62,25 @@
 
 .dx-treeview-node {
     padding-left: @WIN10_TREEVIEW_NODE_OFFSET;
+}
 
-    &.dx-treeview-item-with-checkbox {
-        .dx-treeview-item {
-            padding-left: @WIN10_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
-        }
-    }
-
-    &:not(.dx-treeview-item-with-checkbox) {
-        &.dx-state-selected {
-            > .dx-treeview-item {
-                background-color: @WIN10_LIST_ITEM_SELECTED_BACKGROUND_COLOR;
-            }
-        }
+.dx-treeview-item-with-checkbox {
+    .dx-treeview-item {
+        padding-left: @WIN10_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
     }
 
     .dx-checkbox {
         top: @WIN10_TREEVIEW_PADDING_BASE;
         left: @WIN10_TREEVIEW_CHECKBOX_OFFSET;
         background-color: transparent;
+    }
+}
+
+.dx-treeview-item-without-checkbox {
+    &.dx-state-selected {
+        > .dx-treeview-item {
+            background-color: @WIN10_LIST_ITEM_SELECTED_BACKGROUND_COLOR;
+        }
     }
 }
 
