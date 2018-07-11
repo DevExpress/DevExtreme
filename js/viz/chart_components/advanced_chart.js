@@ -416,10 +416,6 @@ var AdvancedChart = BaseChart.inherit({
                 argRange.addRange(seriesRange.arg);
             });
 
-            if(valueAxis.getOptions().showZero) {
-                groupRange.correctValueZeroLevel();
-            }
-
             valueAxis.setGroupSeries(groupSeries);
             valueAxis.setBusinessRange(groupRange);
         });

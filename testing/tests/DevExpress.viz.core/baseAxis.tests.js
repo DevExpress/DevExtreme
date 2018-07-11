@@ -2516,8 +2516,8 @@ QUnit.test("viewport can't go out from whole range", function(assert) {
     assert.equal(businessRange.maxVisible, 100);
 });
 
-QUnit.test("Whole range lenght greater then data range", function(assert) {
-    this.updateOptions({ wholeRange: [100, -100] });
+QUnit.test("Whole range length greater then data range", function(assert) {
+    this.updateOptions({ wholeRange: [-100, 100] });
     this.axis.validate();
 
     this.axis.setBusinessRange({
@@ -2761,4 +2761,17 @@ QUnit.test("Add synchronized value", function(assert) {
     assert.equal(businessRange.min, 0);
     assert.equal(businessRange.max, 0);
     assert.equal(businessRange.stubData, undefined);
+});
+
+QUnit.test("Correct zero level if showZero is true", function(assert) {
+    this.updateOptions({ showZero: true });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 120);
 });

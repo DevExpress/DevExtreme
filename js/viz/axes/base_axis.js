@@ -1108,6 +1108,9 @@ Axis.prototype = {
         if(that.isArgumentAxis) {
             that._seriesData.sortCategories(categoriesOrder);
         } else {
+            if(options.showZero) {
+                that._seriesData.correctValueZeroLevel();
+            }
             that._seriesData.sortCategories(that.getCategoriesSorter());
         }
 
