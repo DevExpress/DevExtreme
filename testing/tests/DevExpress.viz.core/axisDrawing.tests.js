@@ -59,7 +59,7 @@ var environment = {
         });
 
         this.translator = new StubTranslator();
-        this.translator.stub("getBusinessRange").returns({ addRange: sinon.stub() });
+        this.translator.stub("getBusinessRange").returns({ });
         this.translator.stub("getCanvasVisibleArea").returns({ min: 10, max: 90 }); // for horizontal only
     },
     createAxis: function(options) {
@@ -957,7 +957,7 @@ QUnit.test("showCustomBoundaryTicks true, majorTicks not on bounds - render boun
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
     this.generatedTicks = [1.5, 2, 2.5];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -990,7 +990,7 @@ QUnit.test("Tick visible false, but showCustomBoundaryTicks true - render bounda
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
     this.generatedTicks = [1.5, 2, 2.5];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -1020,7 +1020,7 @@ QUnit.test("No ticks, showCustomBoundaryTicks true - render boundary ticks", fun
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
     this.generatedTicks = [];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -1116,7 +1116,7 @@ QUnit.test("Boundary ticks, discrete axis, no ticks - do not render boundary tic
         }
     });
 
-    this.axis.setBusinessRange({ min: "a", max: "e", addRange: function() { } });
+    this.axis.setBusinessRange({ min: "a", max: "e" });
     this.generatedTicks = [];
 
     // act
@@ -1137,7 +1137,7 @@ QUnit.test("Check calls to translator. Boundary ticks", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
 
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(3).returns(70);
@@ -1166,7 +1166,7 @@ QUnit.test("showCustomBoundaryTicks true, first majorTick on bound - do not rend
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
     this.generatedTicks = [1, 2];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -1196,7 +1196,7 @@ QUnit.test("showCustomBoundaryTicks true, last majorTick on bound - do not rende
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
     this.generatedTicks = [2, 3];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -1227,7 +1227,7 @@ QUnit.test("showCustomBoundaryTicks true, customBoundTicks - render first two cu
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
 
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(3).returns(70);
@@ -1260,7 +1260,7 @@ QUnit.test("showCustomBoundaryTicks true, customBoundTicks, double drawing, seco
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(3).returns(70);
 
@@ -1269,7 +1269,7 @@ QUnit.test("showCustomBoundaryTicks true, customBoundTicks, double drawing, seco
     this.updateOptions({
         customBoundTicks: [undefined]
     });
-    this.axis.setBusinessRange({ min: undefined, max: undefined, addRange: function() { } });
+    this.axis.setBusinessRange({ min: undefined, max: undefined });
     this.translator.stub("translate").reset();
     this.renderer.path.reset();
 
@@ -1297,7 +1297,7 @@ QUnit.test("showCustomBoundaryTicks true, range inside ticks (endOnTick = true) 
         }
     });
 
-    this.axis.setBusinessRange({ min: 1.5, max: 3.5, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1.5, max: 3.5 });
     this.generatedTicks = [1, 2, 3, 4];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -1329,7 +1329,7 @@ QUnit.test("Boundary points coincide with minor ticks - remove minor ticks", fun
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5 });
     this.generatedMinorTicks = [1, 2, 3, 4, 5];
 
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -1986,7 +1986,7 @@ QUnit.test("Labels with hints. Check callback's param", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: -1, max: 4, addRange: function() { } });
+    this.axis.setBusinessRange({ min: -1, max: 4 });
 
     this.generatedTicks = [1];
 
@@ -3621,7 +3621,7 @@ QUnit.test("Horizontal. Inverted", function(assert) {
             }
         }
     });
-    this.axis.setBusinessRange({ invert: true, addRange: function() { } });
+    this.axis.setBusinessRange({ invert: true });
 
     this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
 
@@ -3652,7 +3652,7 @@ QUnit.test("Vertical. Inverted", function(assert) {
             }
         }
     });
-    this.axis.setBusinessRange({ invert: true, addRange: function() { } });
+    this.axis.setBusinessRange({ invert: true });
 
     this.renderer.bBoxTemplate = { x: 2, y: 1, width: 6, height: 12 };
 
@@ -3700,7 +3700,7 @@ QUnit.test("Full markers", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -3786,7 +3786,7 @@ QUnit.test("Full markers. Inverted", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: true });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -3857,7 +3857,7 @@ QUnit.test("First marker without line", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -3930,7 +3930,7 @@ QUnit.test("First marker without line and label", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -3998,7 +3998,7 @@ QUnit.test("First marker without line and label, inverted", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: true });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -4067,7 +4067,7 @@ QUnit.test("Last marker without label", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -4129,7 +4129,7 @@ QUnit.test("Last marker without label, inverted", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: true });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -4191,7 +4191,7 @@ QUnit.test("Second marker is too wide, draw without label and line", function(as
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date2];
     this.generatedTickInterval = "hour";
@@ -4269,7 +4269,7 @@ QUnit.test("Second marker is too wide, draw without label and line, inverted", f
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: true });
 
     this.generatedTicks = [date0, date2];
     this.generatedTickInterval = "hour";
@@ -4345,7 +4345,7 @@ QUnit.test("T402810. Do not render markers if there is only one on start of scal
             }
         }
     });
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "day";
@@ -4391,7 +4391,7 @@ QUnit.test("T402810. Render 2 markers if there is only one in the middle of scal
             }
         }
     });
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "day";
@@ -4440,7 +4440,7 @@ QUnit.test("Draw date marker with customizeText", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -4486,7 +4486,7 @@ QUnit.test("Do not draw date marker when axis type is discrete", function(assert
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -4533,7 +4533,7 @@ QUnit.test("Date marker with millisecond delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "millisecond";
@@ -4582,7 +4582,7 @@ QUnit.test("Date marker with second delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "second";
@@ -4630,7 +4630,7 @@ QUnit.test("Date marker with minute delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "minute";
@@ -4678,7 +4678,7 @@ QUnit.test("Date marker with hour delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "hour";
@@ -4726,7 +4726,7 @@ QUnit.test("Date marker with day delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "day";
@@ -4774,7 +4774,7 @@ QUnit.test("Date marker with week delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "week";
@@ -4823,7 +4823,7 @@ QUnit.test("Date marker with month delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "month";
@@ -4872,7 +4872,7 @@ QUnit.test("Date marker with quarter delta", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "quarter";
@@ -4920,7 +4920,7 @@ QUnit.test("Date marker with day delta and month boundary tick", function(assert
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "day";
@@ -4968,7 +4968,7 @@ QUnit.test("T448590. If tickInterval is 'year' and markers are visible set marke
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedTickInterval = "year";
@@ -5070,7 +5070,7 @@ QUnit.test("Horizontal bottom. With date markers, last marker without label", fu
     });
     this.axis.validate();
 
-    this.axis.setBusinessRange({ min: date0, max: date2, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date2, invert: false });
 
     this.generatedTicks = [date0, date1, date2];
     this.generatedMinorTicks = [date0m, date1m];
@@ -5202,7 +5202,7 @@ QUnit.test("Horizontal top", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, invert: false });
 
     this.generatedTicks = [1, 3, 5];
     this.generatedMinorTicks = [2, 4];
@@ -5316,7 +5316,7 @@ QUnit.test("Vertical left", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, invert: false });
 
     this.generatedTicks = [1, 3, 5];
     this.generatedMinorTicks = [2, 4];
@@ -5430,7 +5430,7 @@ QUnit.test("Vertical right", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, invert: false });
 
     this.generatedTicks = [1, 3, 5];
     this.generatedMinorTicks = [2, 4];
@@ -5527,7 +5527,7 @@ QUnit.test("Horizontal. Constant line labels on both sides - labels on opposite 
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, invert: false });
 
     this.generatedTicks = [1, 3, 5];
     this.generatedMinorTicks = [2, 4];
@@ -5620,7 +5620,7 @@ QUnit.test("Vertical. Constant line labels on both sides - labels on opposite do
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, invert: false });
 
     this.generatedTicks = [1, 3, 5];
     this.generatedMinorTicks = [2, 4];
@@ -5713,7 +5713,7 @@ QUnit.test("Horizontal. All constant line labels on opposite side - do not produ
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 5, invert: false });
 
     this.generatedTicks = [1, 3, 5];
     this.generatedMinorTicks = [2, 4];
@@ -8308,7 +8308,7 @@ QUnit.test("Update boundary tick mark points", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 3 });
 
     this.axis.draw(this.zeroMarginCanvas);
     this.translator.stub("translate").withArgs(1).returns(30);
@@ -8338,7 +8338,7 @@ QUnit.test("Update boundary invalid tick mark points", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 4, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 4 });
 
     this.axis.draw(this.zeroMarginCanvas);
     this.translator.stub("translate").withArgs(1).returns(30);

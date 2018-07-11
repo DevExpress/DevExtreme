@@ -3523,7 +3523,7 @@ QUnit.test("Argument axis. Without breaks", function(assert) {
     });
 
     axis.setGroupSeries(this.series);
-    axis.setBusinessRange({ min: 2, max: 100, addRange: function() { return this; } });
+    axis.setBusinessRange({ min: 2, max: 100 });
     axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);

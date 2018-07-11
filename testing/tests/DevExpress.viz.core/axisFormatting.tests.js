@@ -53,7 +53,7 @@ var environment = {
         });
 
         this.translator = new StubTranslator();
-        this.translator.stub("getBusinessRange").returns({ addRange: sinon.stub() });
+        this.translator.stub("getBusinessRange").returns({ });
         this.translator.stub("getCanvasVisibleArea").returns({ min: 0, max: 200 }); // for horizontal only
     },
     createAxis: function(options) {
@@ -1289,7 +1289,7 @@ QUnit.test("No custom format - use auto formatting", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date4, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date4, invert: false });
 
     this.generatedTicks = [date0, date1, date2, date3, date4];
     this.generatedTickInterval = "hour";
@@ -1323,7 +1323,7 @@ QUnit.test("Custom format - use custom format", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date4, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date4, invert: false });
 
     this.generatedTicks = [date0, date1, date2, date3, date4];
     this.generatedTickInterval = "hour";
@@ -1358,7 +1358,7 @@ QUnit.test("Tick labels do not show date transition", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date3, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date3, invert: false });
 
     this.generatedTicks = [date0, date1, date2, date3];
     this.generatedTickInterval = "hour";
@@ -1393,7 +1393,7 @@ QUnit.test("Custom format for tick labels - use custom format", function(assert)
         }
     });
 
-    this.axis.setBusinessRange({ min: date0, max: date3, invert: false, addRange: function() { } });
+    this.axis.setBusinessRange({ min: date0, max: date3, invert: false });
 
     this.generatedTicks = [date0, date1, date2, date3];
     this.generatedTickInterval = "hour";
