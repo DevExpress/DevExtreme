@@ -562,28 +562,9 @@ var dxChart = AdvancedChart.inherit({
             return;
         }
 
-        const isArgumentAxisZoomed = argumentAxis.isZoomed();
-        that._valueAxes.forEach(function(axis) {
-            if(!isArgumentAxisZoomed && axis.isZoomed()) {
-                return;
-            }
-            const viewport = series.filter(s => {
-                return s.getValueAxis() === axis;
-            }).reduce((range, s) => {
-                var seriesRange = s.getViewport();
-
-                range.min = _isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
-                range.max = _isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
-                if(s.showZero) {
-                    range = new rangeModule.Range(range);
-                    range.correctValueZeroLevel();
-                }
-                return range;
-            }, {});
-            if(_isDefined(viewport.min) && _isDefined(viewport.max)) {
-                axis.zoom(viewport.min, viewport.max);
-            }
-        });
+        if(argumentAxis.isZoomed()) {
+            that._valueAxes.forEach(axis => axis.adjust());
+        }
     },
 
     _recreateSizeDependentObjects(isCanvasChanged) {

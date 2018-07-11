@@ -790,12 +790,11 @@ var environment = {
         chart.series[0].setOptions({ range: { val: { min: 1, max: 5 } } });
         chart.option({ dataSource: [] });
 
-        assert.equal(chart.businessRanges.length, 2);
-        assert.equal(chart.businessRanges[0].min, 1);
-        assert.equal(chart.businessRanges[0].max, 5);
+        var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
+        var businessRange2 = chartMocks.seriesMockData.args[1][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
 
-        assert.equal(chart.businessRanges[1].min, 0);
-        assert.equal(chart.businessRanges[1].max, 10);
+        assert.deepEqual(businessRange1, [1, 5]);
+        assert.deepEqual(businessRange2, [0, 10]);
     });
 
     QUnit.test("draw without labels", function(assert) {
@@ -1764,10 +1763,20 @@ var environment = {
             environment.beforeEach.apply(this, arguments);
             chartMocks.seriesMockData.series.push(new MockSeries({ name: "Pie series" }));
             executeAsyncMock.setup();
+
+            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+
+            sinon.stub(translator1DModule, "Translator1D", function() {
+                var translator = new translatorClass();
+                translator.stub("setDomain").returnsThis();
+                translator.stub("setCodomain").returnsThis();
+                return translator;
+            });
         },
         afterEach: function() {
             executeAsyncMock.teardown();
             environment.afterEach.apply(this, arguments);
+            translator1DModule.Translator1D.restore();
         }
     });
 
@@ -1789,9 +1798,8 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, "Series data was reinitialized");
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, "update data");
 
-        assert.equal(chart.businessRanges.length, 1, "business range count");
-        assert.equal(chart.businessRanges[0].min, 1, "business range min");
-        assert.equal(chart.businessRanges[0].max, 5, "business range max");
+        var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
+        assert.deepEqual(businessRange1, [1, 5]);
 
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted");
@@ -1829,9 +1837,8 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, "Series data was reinitialized");
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, "update data");
 
-        assert.equal(chart.businessRanges.length, 1, "business range count");
-        assert.equal(chart.businessRanges[0].min, 1, "business range min");
-        assert.equal(chart.businessRanges[0].max, 5, "business range max");
+        var businessRange1 = chartMocks.seriesMockData.args[0][0].valueAxis.getTranslator().stub("setDomain").lastCall.args;
+        assert.deepEqual(businessRange1, [1, 5]);
 
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart._canvas, "legend and title layouted");

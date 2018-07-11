@@ -1265,7 +1265,7 @@ QUnit.test("adjustOnZoom option", function(assert) {
         max: 2
     });
 
-    valAxis.zoom.reset();
+    valAxis.adjust.reset();
 
     // act
     chart.option({
@@ -1273,8 +1273,7 @@ QUnit.test("adjustOnZoom option", function(assert) {
     });
 
     // assert
-    assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 1);
-    assert.deepEqual(stubSeries1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
+    assert.strictEqual(stubSeries1.getValueAxis().adjust.callCount, 1);
 
     assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
     assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
@@ -1309,8 +1308,7 @@ QUnit.test("adjustOnZoom with min/max options", function(assert) {
     });
 
     // assert
-    assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 1);
-    assert.deepEqual(stubSeries1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
+    assert.strictEqual(stubSeries1.getValueAxis().adjust.callCount, 1);
 });
 
 QUnit.test("adjustOnZoom disabled with min/max options (no rerender)", function(assert) {

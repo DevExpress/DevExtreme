@@ -1,30 +1,29 @@
 "use strict";
+import rangeModule from "../translators/range";
+import { getDateFormatByDifferences } from "../../format_helper";
+import dateUtils from "../../core/utils/date";
+import { extend } from "../../core/utils/extend";
+import { generateDateBreaks } from "./datetime_breaks";
+import { noop } from "../../core/utils/common";
+import vizUtils from "../core/utils";
+import { isDefined } from "../../core/utils/type";
+import constants from "./axes_constants";
 
-var formatHelper = require("../../format_helper"),
-    dateUtils = require("../../core/utils/date"),
-    extend = require("../../core/utils/extend").extend,
-    generateDateBreaks = require("./datetime_breaks").generateDateBreaks,
-    getNextDateUnit = dateUtils.getNextDateUnit,
-    correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning,
-    noop = require("../../core/utils/common").noop,
-    vizUtils = require("../core/utils"),
-    isDefined = require("../../core/utils/type").isDefined,
-    constants = require("./axes_constants"),
-    _extend = extend,
-    _math = Math,
-    _max = _math.max,
-
-    TOP = constants.top,
-    BOTTOM = constants.bottom,
-    LEFT = constants.left,
-    RIGHT = constants.right,
-    CENTER = constants.center,
-    SCALE_BREAK_OFFSET = 3,
-    RANGE_RATIO = 0.3,
-    WAVED_LINE_CENTER = 2,
-    WAVED_LINE_TOP = 0,
-    WAVED_LINE_BOTTOM = 4,
-    WAVED_LINE_LENGTH = 24;
+const getNextDateUnit = dateUtils.getNextDateUnit;
+const correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning;
+const _math = Math;
+const _max = _math.max;
+const TOP = constants.top;
+const BOTTOM = constants.bottom;
+const LEFT = constants.left;
+const RIGHT = constants.right;
+const CENTER = constants.center;
+const SCALE_BREAK_OFFSET = 3;
+const RANGE_RATIO = 0.3;
+const WAVED_LINE_CENTER = 2;
+const WAVED_LINE_TOP = 0;
+const WAVED_LINE_BOTTOM = 4;
+const WAVED_LINE_LENGTH = 24;
 
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
@@ -148,7 +147,7 @@ function getMarkerFormat(curDate, prevDate, tickInterval, markerInterval) {
         datesDifferences = prevDate && dateUtils.getDatesDifferences(prevDate, curDate);
     if(prevDate && tickInterval !== "year") {
         prepareDatesDifferences(datesDifferences, tickInterval);
-        format = formatHelper.getDateFormatByDifferences(datesDifferences);
+        format = getDateFormatByDifferences(datesDifferences);
     }
     return format;
 }
@@ -624,7 +623,7 @@ module.exports = {
                 markerLabelOptions = that._markerLabelOptions;
 
             if(!markerLabelOptions) {
-                that._markerLabelOptions = markerLabelOptions = _extend(true, {}, that._options.marker.label);
+                that._markerLabelOptions = markerLabelOptions = extend(true, {}, that._options.marker.label);
             }
 
             if(!isDefined(that._options.marker.label.format)) {
@@ -765,7 +764,7 @@ module.exports = {
         estimateMargins: function(canvas) {
             this.updateCanvas(canvas);
             var that = this,
-                range = that._getViewportRange(),
+                range = that.applyViewportAndBounds(that._getViewportRange()),
                 ticksData = this._createTicksAndLabelFormat(range),
                 ticks = ticksData.ticks,
                 tickInterval = ticksData.tickInterval,
@@ -946,14 +945,30 @@ module.exports = {
             max: true
         },
 
-        _getMinMax() {
-            return { min: this._options.min, max: this._options.max };
-        },
-
         _setMinMax(min, max) {
             const isRangeDefined = isDefined(min) || isDefined(max);
             this._options.min = isRangeDefined ? min : this._storedMin;
             this._options.max = isRangeDefined ? max : this._storedMax;
+
+            this._viewport = [min, max];
+        },
+
+        adjust() {
+            const viewport = this._series.filter(s=>s.isVisible()).reduce((range, s) => {
+                var seriesRange = s.getViewport();
+                range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
+                range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
+                if(s.showZero) {
+                    range = new rangeModule.Range(range);
+                    range.correctValueZeroLevel();
+                }
+                return range;
+            }, {});
+
+            if(isDefined(viewport.min) && isDefined(viewport.max)) {
+                this._seriesData.minVisible = viewport.min;
+                this._seriesData.maxVisible = viewport.max;
+            }
         },
 
         _getStick: function() {

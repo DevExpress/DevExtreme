@@ -1402,13 +1402,13 @@ QUnit.test("dxChart with two Series on one pane and different value axis check R
         }]
     });
     // assert
-    var ranges = chart.businessRanges;
-    assert.ok(ranges);
-    assert.equal(ranges.length, 2);
-    assert.equal(ranges[0].val.pane, "pane1");
-    assert.equal(ranges[0].val.axis, "axis2");
-    assert.equal(ranges[1].val.pane, "pane1");
-    assert.equal(ranges[1].val.axis, "axis1");
+    assert.equal(chart._valueAxes.length, 2);
+    var range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+    assert.equal(range1.pane, "pane1");
+    assert.equal(range1.axis, "axis2");
+    var range2 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
+    assert.equal(range2.pane, "pane1");
+    assert.equal(range2.axis, "axis1");
     var chartSeries = chart.series;
 
     assert.deepEqual(this.validateData.lastCall.args[1].groups[0].series, [chartSeries[0]]);
@@ -1486,17 +1486,16 @@ QUnit.test("Two ranges for two series with two value axis on single pane", funct
 
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 2);
+    assert.equal(chart._valueAxes.length, 2);
 
-    var range1 = chart.businessRanges[0].val;
+    var range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
         pane: "pane1",
         min: 0,
         max: 10
     });
 
-    var range2 = chart.businessRanges[1].val;
+    var range2 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
     assertRange(assert, range2, {
         pane: "pane1",
         min: 101,
@@ -1558,17 +1557,16 @@ QUnit.test("Two series, two value axis, one pane (check default)", function(asse
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 2);
+    assert.equal(chart._valueAxes.length, 2);
 
-    var range1 = chart.businessRanges[1].val;
+    var range1 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
         pane: "default",
         min: 0,
         max: 10
     });
 
-    var range2 = chart.businessRanges[0].val;
+    var range2 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range2, {
         pane: "default",
         min: 101,
@@ -1636,17 +1634,16 @@ QUnit.test("dxChart with two panes and one value axis with pointer to bottom pan
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 2);
+    assert.equal(chart._valueAxes.length, 2);
 
-    var range1 = chart.businessRanges[1].val;
+    var range1 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
         pane: "top",
         min: 0,
         max: 10
     });
 
-    var range2 = chart.businessRanges[0].val;
+    var range2 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range2, {
         pane: "bottom",
         min: 101,
@@ -1811,12 +1808,6 @@ QUnit.test("Axes. Axis has no panes. no series has axis (axis2)", function(asser
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 3);
-
-    var range3 = chart.businessRanges[2].val;
-    assert.equal(range3.stubData, true, "axis2 must has stubDataY");
-
     var verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, "chart must has vertical axis");
     assert.equal(verticalAxis.length, 3, "chart must has three axis");
@@ -1858,9 +1849,6 @@ QUnit.test("Axes. There are series with axis and has no pane. axis has no pane",
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 3);
-
     var verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, "chart must has vertical axis");
     assert.equal(verticalAxis.length, 3, "chart must has three axis");
@@ -1898,9 +1886,6 @@ QUnit.test("Axes. There are series with axis and pane. axis has no pane", functi
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 3);
-
     var verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, "chart must has vertical axis");
     assert.equal(verticalAxis.length, 3, "chart must has three axis");
@@ -1934,9 +1919,6 @@ QUnit.test("Axes. dxChart without series. Axis has panes", function(assert) {
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 2);
-
     var verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, "chart must has vertical axis");
     assert.equal(verticalAxis.length, 2, "chart must has two axis");
@@ -2151,9 +2133,6 @@ QUnit.test("Series. Series with invalid Pane", function(assert) {
         ]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-
     var series = chart.series;
     assert.ok(series);
     assert.equal(series.length, 1);
@@ -2182,9 +2161,6 @@ QUnit.test("Series. Series with invalid axis", function(assert) {
         }]
     });
     // assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 2);
-
     var series = chart.series;
     assert.ok(series);
     assert.equal(series.length, 1);
