@@ -2156,8 +2156,11 @@ var Scheduler = Widget.inherit({
 
         this._saveChanges(true);
 
-        var startDate = this.fire("getField", "startDate", this._appointmentForm.option("formData"));
-        this._workSpace.updateScrollPosition(startDate);
+        if(this._lastEditData) {
+            var startDate = this.fire("getField", "startDate", this._lastEditData);
+            this._workSpace.updateScrollPosition(startDate);
+            delete this._lastEditData;
+        }
     },
 
     _saveChanges: function(disableButton) {
@@ -2199,6 +2202,7 @@ var Scheduler = Widget.inherit({
         }
         this._enableDoneButton();
 
+        this._lastEditData = formData;
         return true;
     },
 
