@@ -17,5 +17,3 @@ require("./pointerParts/mouseTests.js");
 require("./pointerParts/touchTests.js");
 require("./pointerParts/mouseAndTouchTests.js");
 require("./pointerParts/msPointerTests.js");
-
-

@@ -8,6 +8,7 @@ var support = require("../core/utils/support"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
     MouseStrategy = require("./pointer/mouse"),
+    eventsEngine = require("../events/core/events_engine"),
     MouseAndTouchStrategy = require("./pointer/mouse_and_touch");
 
 /**
@@ -87,9 +88,9 @@ var EventStrategy = (function() {
 each(EventStrategy.map, function(pointerEvent, originalEvents) {
     var eventStrategy = new EventStrategy(pointerEvent, originalEvents);
 
-    if(pointerEvent === "dxpointermove") { // T630650
+    if(pointerEvent === eventsEngine.passiveListenerEvents.eventName) {
         eventStrategy.setup = function(element, data, namespaces, handler) {
-            domAdapter.listen(element, "touchmove", handler, { passive: false });
+            domAdapter.listen(element, eventsEngine.passiveListenerEvents.nativeEventName, handler, { passive: false });
 
             return true;
         };
