@@ -205,6 +205,32 @@ QUnit.test("Correct start scroll position when RTL and detached container of the
     clock.restore();
 });
 
+QUnit.test("Customize text called for column only (T653374)", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    createDataGrid({
+        columns:
+        [
+            "field1",
+            {
+                dataField: "field2",
+                customizeText: function(cellInfo) {
+                    // assert
+                    assert.equal(cellInfo.target, "row");
+                    return cellInfo.valueText;
+                }
+            }
+        ],
+        dataSource: {
+            store: [{ field1: "1123123", field2: 123 }]
+        }
+    });
+
+    clock.tick();
+
+    clock.restore();
+});
+
 // T475354
 QUnit.test("Correct start scroll position when RTL and columnAutoWidth option is enabled", function(assert) {
     // arrange
