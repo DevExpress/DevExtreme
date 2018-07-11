@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     recurrenceUtils = require("./utils.recurrence"),
     domUtils = require("../../core/utils/dom"),
     dateUtils = require("../../core/utils/date"),
+    objectUtils = require("../../core/utils/object"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -2168,7 +2169,7 @@ var Scheduler = Widget.inherit({
 
         disableButton && this._disableDoneButton();
 
-        var formData = this._getFormData(),
+        var formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true),
             oldData = this._editAppointmentData,
             recData = this._updatedRecAppointment;
 
