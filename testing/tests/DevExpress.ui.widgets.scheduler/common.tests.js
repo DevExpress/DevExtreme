@@ -1865,7 +1865,7 @@ QUnit.testStart(function() {
         assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" }], "Update operation is canceled");
     });
 
-    QUnit.test("Appointment form should not be updated if 'cancel' flag is defined as true", function(assert) {
+    QUnit.test("Appointment form should not be updated if 'cancel' flag is defined as true (T653358)", function(assert) {
         var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
 
         try {
@@ -1887,7 +1887,7 @@ QUnit.testStart(function() {
             $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
 
             this.clock.tick();
-            assert.deepEqual(this.instance._appointmentForm.option("formData").startDate, new Date(2015, 1, 9, 13), "Update operation is canceled");
+            assert.deepEqual(this.instance._appointmentForm.option("formData").startDate, new Date(2015, 1, 9, 13), "Form data is correct");
         } finally {
             tzOffsetStub.restore();
         }
