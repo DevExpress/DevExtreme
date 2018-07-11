@@ -40,7 +40,27 @@ var animation = {
             complete: completeAction
         });
     },
+    paddingLeft: function($element, padding, completeAction) {
+        var toConfig = {};
 
+        toConfig["padding-left"] = padding;
+
+        fx.animate($element, {
+            to: toConfig,
+            duration: ANIMATION_DURATION,
+            complete: completeAction
+        });
+    },
+
+    fade: function($element, config, completeAction) {
+        fx.animate($element, {
+            type: "fade",
+            to: config.to,
+            from: config.from,
+            duration: ANIMATION_DURATION,
+            complete: completeAction
+        });
+    },
     complete: function($element) {
         fx.stop($element, true);
     }
@@ -313,8 +333,12 @@ var SlideOutView = Widget.inherit({
     _renderPosition: function(offset, animate) {
         if(!windowUtils.hasWindow()) return;
 
+        var pos,
+            menuPos,
+            contentPos;
+
         if(this.option("mode") === "default") {
-            var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
+            pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
             this._toggleHideMenuCallback(offset);
 
@@ -324,14 +348,59 @@ var SlideOutView = Widget.inherit({
             } else {
                 translator.move($(this.content()), { left: pos });
             }
-        } else {
-            this._toggleShieldVisibility(offset);
+        }
+        if(this.option("mode") === "persistent") {
+            menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
+            contentPos = offset * this._getMenuWidth();
+
+            this._toggleHideMenuCallback(offset);
+
+            if(animate) {
+                this._toggleShieldVisibility(true);
+                animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
+                animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+            }
+        }
+        if(this.option("mode") === "temporary") {
+            menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
+            contentPos = offset * this._getMenuWidth();
+
+            this._toggleHideMenuCallback(offset);
+
+            if(animate) {
+                this._toggleShieldVisibility(true);
+                animation.fade($(this._$shield), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
+                // animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
+                animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+            }
         }
     },
 
+    _getFadeConfig(offset) {
+        if(offset) {
+            return {
+                to: 0.5,
+                from: 0
+            };
+        } else {
+            return {
+                to: 0,
+                from: 0.5
+            };
+        }
+    },
     _calculatePixelOffset: function(offset) {
-        offset = offset || 0;
-        return offset * this._getMenuWidth();
+        if(this.option("mode") === "default") {
+            offset = offset || 0;
+            return offset * this._getMenuWidth();
+        }
+        if(this.option("mode") === "persistent" || this.option("mode") === "temporary") {
+            if(offset) {
+                return 0;
+            } else {
+                return -this._getMenuWidth();
+            }
+        }
     },
 
     _getMenuWidth: function() {
@@ -422,7 +491,9 @@ var SlideOutView = Widget.inherit({
                 this._invalidate();
                 break;
             case "mode":
+                translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
+                this._renderPosition(this.option("menuVisible"), true);
                 break;
             case "showShader":
                 this._refreshModeClass(args.previousValue);
