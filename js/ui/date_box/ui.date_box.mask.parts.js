@@ -2,7 +2,52 @@
 
 var dateParser = require("../../localization/ldml/date.parser"),
     dateLocalization = require("../../localization/date"),
+    extend = require("../../core/utils/extend").extend,
+    noop = require("../../core/utils/common").noop,
     escapeRegExp = require("../../core/utils/common").escapeRegExp;
+
+var PATTERN_GETTERS = {
+    a: function(date) {
+        return date.getHours() < 12 ? 0 : 1;
+    },
+    E: "getDay",
+    y: "getFullYear",
+    M: "getMonth",
+    L: "getMonth",
+    d: "getDate",
+    H: "getHours",
+    h: "getHours",
+    m: "getMinutes",
+    s: "getSeconds",
+    S: "getMilliseconds"
+};
+
+var PATTERN_SETTERS = extend(dateParser.getPatternSetters(), {
+    a: function(date, value) {
+        var hours = date.getHours(),
+            current = hours >= 12;
+
+        if(current === value) {
+            return;
+        }
+
+        date.setHours((hours + 12) % 24);
+    },
+    E: function(date, value) {
+        if(value < 0) {
+            return;
+        }
+        date.setDate(date.getDate() - date.getDay() + value);
+    }
+});
+
+var getPatternGetter = function(patternChar) {
+    var unsupportedCharGetter = function() {
+        return patternChar;
+    };
+
+    return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
+};
 
 var renderDateParts = function(text, format) {
     var regExpInfo = dateParser.getRegExpInfo(format, dateLocalization),
@@ -14,7 +59,7 @@ var renderDateParts = function(text, format) {
         end = start + result[i].length;
 
         var pattern = regExpInfo.patterns[i - 1],
-            getter = dateParser.getPatternGetter(pattern[0]);
+            getter = getPatternGetter(pattern[0]);
 
         sections.push({
             index: i - 1,
@@ -23,7 +68,7 @@ var renderDateParts = function(text, format) {
             pattern: pattern,
             text: result[i],
             limits: getLimits.bind(this, getter),
-            setter: dateParser.getPatternSetter(pattern[0]),
+            setter: PATTERN_SETTERS[pattern[0]] || noop,
             getter: getter
         });
     }

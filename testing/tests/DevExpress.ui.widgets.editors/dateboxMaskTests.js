@@ -3,7 +3,6 @@
 import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
 import { noop } from "core/utils/common";
-import { getPatternSetter, getPatternGetter } from "localization/ldml/date.parser";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
@@ -59,12 +58,16 @@ QUnit.module("Date parts rendering", setupModule, () => {
     QUnit.test("Day of week", (assert) => {
         checkAndRemoveLimits(this.parts[0], { min: 0, max: 6 }, assert);
 
+        var date = new Date(2012, 1, 4, 15, 6);
+        this.parts[0].setter(date, 2);
+        assert.equal(date.getDay(), 2, "setter sets day of week");
+        delete this.parts[0].setter;
+
         assert.deepEqual(this.parts[0], {
             index: 0,
             isStub: false,
             caret: { start: 0, end: 7 },
             getter: "getDay",
-            setter: getPatternSetter("E"),
             pattern: "EEEE",
             text: "Tuesday"
         });
@@ -143,12 +146,20 @@ QUnit.module("Date parts rendering", setupModule, () => {
     QUnit.test("Time indication", (assert) => {
         checkAndRemoveLimits(this.parts[14], { min: 0, max: 1 }, assert);
 
+        var date = new Date(2012, 1, 4, 15, 6);
+
+        var isPm = this.parts[14].getter(date);
+        assert.equal(isPm, 1, "getter returns PM");
+        delete this.parts[14].getter;
+
+        this.parts[14].setter(date, 0);
+        assert.equal(date.getHours(), 3, "setter sets AM");
+        delete this.parts[14].setter;
+
         assert.deepEqual(this.parts[14], {
             index: 14,
             isStub: false,
             caret: { start: 28, end: 30 },
-            getter: getPatternGetter("a"),
-            setter: getPatternSetter("a"),
             pattern: "a",
             text: "PM"
         });

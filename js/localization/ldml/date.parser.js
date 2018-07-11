@@ -1,7 +1,6 @@
 "use strict";
 
-var escapeRegExp = require("../../core/utils/common").escapeRegExp,
-    noop = require("../../core/utils/common").noop;
+var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
 var FORMAT_TYPES = {
     "3": "abbreviated",
@@ -114,46 +113,16 @@ var PATTERN_PARSERS = {
 };
 
 var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
-
-var PATTERN_GETTERS = {
-    E: "getDay",
-    y: "getFullYear",
-    M: "getMonth",
-    L: "getMonth",
-    a: function(date) {
-        return date.getHours() < 12 ? 0 : 1;
-    },
-    d: "getDate",
-    H: "getHours",
-    h: "getHours",
-    m: "getMinutes",
-    s: "getSeconds",
-    S: "getMilliseconds"
-};
-
 var PATTERN_SETTERS = {
-    E: function(date, value) {
-        if(value < 0) {
-            return;
-        }
-        date.setDate(date.getDate() - date.getDay() + value);
-    },
     y: "setFullYear",
     M: "setMonth",
     L: "setMonth",
     a: function(date, value) {
         var hours = date.getHours();
-
-        if(hours > 12) {
-            hours -= 12;
-        }
-
         if(!value && hours === 12) {
             date.setHours(0);
         } else if(value && hours !== 12) {
             date.setHours(hours + 12);
-        } else {
-            date.setHours(hours);
         }
     },
     d: "setDate",
@@ -220,22 +189,13 @@ var getRegExpInfo = function(format, dateParts) {
     };
 };
 
-var getPatternSetter = function(patternChar) {
-    return PATTERN_SETTERS[patternChar] || noop;
+var getPatternSetters = function() {
+    return PATTERN_SETTERS;
 };
-
-var getPatternGetter = function(patternChar) {
-    var unsupportedCharGetter = function() {
-        return patternChar;
-    };
-
-    return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
-};
-
 
 var setPatternPart = function(date, pattern, text, dateParts) {
     var patternChar = pattern[0],
-        partSetter = getPatternSetter(patternChar),
+        partSetter = PATTERN_SETTERS[patternChar],
         partParser = PATTERN_PARSERS[patternChar];
 
     if(partSetter && partParser) {
@@ -310,5 +270,4 @@ var getParser = function(format, dateParts) {
 
 exports.getParser = getParser;
 exports.getRegExpInfo = getRegExpInfo;
-exports.getPatternSetter = getPatternSetter;
-exports.getPatternGetter = getPatternGetter;
+exports.getPatternSetters = getPatternSetters;
