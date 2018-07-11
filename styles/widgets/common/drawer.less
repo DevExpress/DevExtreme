@@ -1,0 +1,110 @@
+.dx-drawer {
+    height: 100%;
+    width: 100%;
+    .touch-action(pinch-zoom);
+}
+
+.dx-drawer-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.dx-drawer-menu-content {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+
+    &.dx-drawer-right {
+        right: 0px;
+    }
+
+    &.dx-drawer-left {
+        left: 0px;
+    }
+}
+
+.dx-drawer-content {
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+.dx-drawer-shield {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
+.dx-device-android .dx-drawer-content {
+    .backface-visibility(hidden);
+}
+
+.dx-drawer-persistent {
+    .dx-drawer-menu-content {
+        z-index: 1000;
+        transform: translate3d(-100%, 0, 0);
+         // .transition(~"all .5s linear");
+    }
+
+    .dx-drawer-content {
+        width: auto;
+        // .transition(~"all .5s linear");
+    }
+
+    .dx-drawer-shield {
+        .transition(~"all .5s linear");
+        opacity: 0;
+    }
+
+    &.dx-drawer-opened {
+        .dx-drawer-menu-content {
+            transform: translate3d(0, 0, 0);
+        }
+
+        .dx-drawer-content {
+            // padding-left: 200px;
+        }
+
+        .dx-drawer-shield {
+            z-index: 1;
+            pointer-events: auto;
+            background-color: #111;
+            opacity: 0.5
+        }
+    }
+}
+
+.dx-drawer-temporary {
+    .dx-drawer-menu-content {
+        z-index: 1000;
+        transform: translate3d(-100%, 0, 0);
+        /*z-index: 1000;
+        transform: translate3d(-100%, 0, 0);
+         .transition(~"all .5s linear");*/
+    }
+
+    .dx-drawer-shield {
+        background-color: #111;
+        /*.transition(~"all .5s linear");
+        opacity: 0;*/
+    }
+
+    &.dx-drawer-opened {
+        /*.dx-drawer-menu-content {
+            transform: translate3d(0, 0, 0);
+        }
+
+         .dx-drawer-shield {
+                z-index: 1;
+                pointer-events: auto;
+                background-color: #111;
+                opacity: 0.5
+        }*/
+    }
+}

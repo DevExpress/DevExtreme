@@ -571,7 +571,7 @@
  */
 
 /**
- * @typedef {string} Enums.SlideOutMode
+ * @typedef {string} Enums.DrawerMode
  * @enum {'persistent'|'temporary'|'default'}
  */
 
