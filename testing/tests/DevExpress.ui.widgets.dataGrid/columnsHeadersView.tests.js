@@ -2431,3 +2431,44 @@ QUnit.test("DataGrid headers has no dx-header-multi-row class for single-row hea
     var $headers = $testElement.find(".dx-datagrid-headers");
     assert.notOk($headers.hasClass("dx-header-multi-row"));
 });
+
+// T652025
+QUnit.test("The grid should ignore the width of the band column", function(assert) {
+    // arrange
+    var $bandColumnElements,
+        $testElement = $('#container');
+
+    this.columns = [
+        {
+            caption: "Band column 1",
+            columns: [
+                { caption: "Column2" }
+            ],
+            width: 100
+        },
+        {
+            caption: "Band column 2",
+            columns: [
+                { caption: "Column3" }
+            ],
+            width: 200
+        }
+    ];
+    this.options.columnAutoWidth = true;
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    $bandColumnElements = $testElement.find(".dx-header-row").first().children();
+    assert.strictEqual($bandColumnElements.length, 2, "band column count");
+
+    assert.strictEqual($bandColumnElements.get(0).style.width, "");
+    assert.strictEqual($bandColumnElements.get(0).style.minWidth, "");
+    assert.strictEqual($bandColumnElements.get(0).style.maxWidth, "");
+
+    assert.strictEqual($bandColumnElements.get(1).style.width, "");
+    assert.strictEqual($bandColumnElements.get(1).style.minWidth, "");
+    assert.strictEqual($bandColumnElements.get(1).style.maxWidth, "");
+});
