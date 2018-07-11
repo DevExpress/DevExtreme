@@ -109,7 +109,6 @@ var chartPointObject = {
 
 /**
 * @name chartAxisObject
-* @publicName Axis
 * @type object
 */
 var chartAxisObject = {
