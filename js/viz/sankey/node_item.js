@@ -101,9 +101,7 @@ Node.prototype = {
             this.widget._links.forEach(function(link) {
                 link.isAdjacentNodeHovered() && link.adjacentNodeHover(false);
             });
-            if(this.widget._tooltip) {
-                this.widget._tooltip.hide();
-            }
+            this.hideTooltip();
         }
 
         this.widget._applyNodesAppearance();
@@ -135,6 +133,10 @@ Node.prototype = {
                 weightOut: this.linksOut.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0)
             }
         }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
+    },
+
+    hideTooltip: function() {
+        this.widget._tooltip && this.widget._tooltip.hide();
     },
 
     getLabelAttributes: function(labelSettings, filter, diagramRect) {

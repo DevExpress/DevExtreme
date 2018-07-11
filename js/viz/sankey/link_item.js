@@ -79,10 +79,7 @@ Link.prototype = {
             this.code = code;
         } else {
             this.code = 0;
-        }
-
-        if(!state && this.widget._tooltip) {
-            this.widget._tooltip.hide();
+            this.hideTooltip();
         }
 
         this.widget._applyLinksAppearance();
@@ -127,6 +124,10 @@ Link.prototype = {
                 weight: this.connection.weight
             }
         }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);
+    },
+
+    hideTooltip: function() {
+        this.widget._tooltip && this.widget._tooltip.hide();
     }
 };
 

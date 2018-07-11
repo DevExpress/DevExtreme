@@ -32,10 +32,15 @@ var Node = {
     */
     isHovered: function () { },
     /**
-    * @name dxSankeyNodemethods.showtTooltip
+    * @name dxSankeyNodemethods.showTooltip
     * @publicName showTooltip()
     */
-    showTooltip: function () { }
+    showTooltip: function () { },
+    /**
+    * @name dxSankeyNodemethods.hideTooltip
+    * @publicName hideTooltip()
+    */
+    hideTooltip: function () { }
 };
 
 /**
@@ -76,7 +81,12 @@ var Link = {
     * @name dxSankeyLinkmethods.showTooltip
     * @publicName showTooltip()
     */
-    showTooltip: function () { }
+    showTooltip: function () { },
+    /**
+    * @name dxSankeyLinkmethods.hideTooltip
+    * @publicName hideTooltip()
+    */
+    hideTooltip: function () { }
 };
 
 /**
