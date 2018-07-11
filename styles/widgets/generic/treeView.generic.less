@@ -85,7 +85,7 @@
     &.dx-rtl {
         .dx-treeview-make-rtl(@GENERIC_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET, @GENERIC_TREEVIEW_NODE_OFFSET, @GENERIC_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, @GENERIC_TREEVIEW_CHECKBOX_OFFSET, @GENERIC_SELECT_ALL_TEXT_OFFSET, @GENERIC_SELECT_ALL_ITEM_LEFT_PADDING, @GENERIC_TREEVIEW_BORDER_PADDING);
 
-        .dx-treeview-expand-icon {
+        .dx-treeview-toggle-item-visibility {
             right: -4px;
         }
 
@@ -189,7 +189,7 @@
     }
 }
 
-.dx-treeview-expand-icon {
+.dx-treeview-toggle-item-visibility {
     .dx-icon-spinright;
     .dx-icon-font-centered-sizing(@GENERIC_TREEVIEW_ARROW_ICON_SIZE);
     color: @treeview-spin-icon-color;
@@ -198,7 +198,7 @@
     top: 0;
     left: -4px;
 
-    &.dx-treeview-expand-icon-opened {
+    &.dx-treeview-toggle-item-visibility-opened {
         .dx-icon-spindown;
         .dx-icon-font-centered-sizing(@GENERIC_TREEVIEW_ARROW_ICON_SIZE);
     }

@@ -688,7 +688,7 @@ QUnit.test("Header filter with items when column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").eq(1).text(), "1986", "text treeview item");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon")).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     // assert
     assert.equal($popupContent.find(".dx-treeview-node-container-opened").length, 1, "treeview node container opened");
@@ -696,7 +696,7 @@ QUnit.test("Header filter with items when column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").last().text(), "January", "text the nested treeview item");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon").last()).trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").last()).trigger("dxclick"); // expanded nested item
 
     // assert
     assert.equal($popupContent.find(".dx-treeview-node-container-opened").length, 2, "treeview node container opened");
@@ -828,13 +828,13 @@ QUnit.test("Header filter with items when column with dataType date and filterVa
     assert.strictEqual($popupContent.find(".dx-treeview-item").text(), "1986", "text treeview item");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon")).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     // assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 2, "count treeview items");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon").last()).trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").last()).trigger("dxclick"); // expanded nested item
 
     // assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 4, "count treeview items");
@@ -1154,7 +1154,7 @@ QUnit.test("Save state when selecting for column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").text(), "1986", "text treeview item");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon")).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     // assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 3, "count treeview items");
@@ -1188,7 +1188,7 @@ QUnit.test("Save state when selecting for column with dataType date", function(a
     assert.equal($popupContent.find(".dx-checkbox-indeterminate").length, 2, "count an indeterminate checkboxes");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon")).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     // assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 3, "count treeview items");
@@ -1221,7 +1221,7 @@ QUnit.test("Save state when selecting for column with dataType date. filterType 
     assert.strictEqual($popupContent.find(".dx-treeview-item").text(), "1986", "text treeview item");
 
     // act
-    $($popupContent.find(".dx-treeview-expand-icon")).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
     that.clock.tick(500);
     // assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 3, "count treeview items");
@@ -3054,14 +3054,14 @@ QUnit.test("Header Filter (TreeView) - saving state with changed dataSource via 
     assert.strictEqual($treeViewItems.eq(1).text(), "1993", "text of the second item");
     assert.strictEqual($treeViewItems.eq(2).text(), "1994", "text of the third item");
 
-    $($popupContent.find(".dx-treeview-expand-icon").first()).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
     $treeViewItems = $popupContent.find(".dx-treeview-item");
 
     // assert
     assert.equal($treeViewItems.length, 4, "count item");
     assert.strictEqual($treeViewItems.eq(1).text(), "August", "text of the second item");
 
-    $($popupContent.find(".dx-treeview-expand-icon").eq(1)).trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").eq(1)).trigger("dxclick"); // expanded nested item
     $treeViewItems = $popupContent.find(".dx-treeview-item");
 
     // assert
@@ -3085,8 +3085,8 @@ QUnit.test("Header Filter (TreeView) - saving state with changed dataSource via 
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $($popupContent.find(".dx-treeview-expand-icon").first()).trigger("dxclick"); // expanded first item
-    $($popupContent.find(".dx-treeview-expand-icon").eq(1)).trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").eq(1)).trigger("dxclick"); // expanded nested item
 
     // assert
     $treeViewItems = $popupContent.find(".dx-treeview-item");
@@ -3187,7 +3187,7 @@ QUnit.test("Header Filter with customize text for column with dataType the date"
     assert.equal($listItems.length, 1, "count treeview item");
     assert.strictEqual($listItems.eq(0).text(), "1992", "text of the first item");
 
-    $($popupContent.find(".dx-treeview-expand-icon").first()).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
 
     // assert
     $listItems = $popupContent.find(".dx-treeview-item");
@@ -3380,7 +3380,7 @@ QUnit.test("Header filter with group interval 'quarter' for column with dataType
     assert.equal($listItems.length, 1, "count treeview item");
     assert.strictEqual($listItems.eq(0).text(), "1992", "text of the first item");
 
-    $($popupContent.find(".dx-treeview-expand-icon").first()).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
 
     // assert
     $listItems = $popupContent.find(".dx-treeview-item");
@@ -3476,7 +3476,7 @@ QUnit.test("Header filter with group interval for column with dataType 'number'"
     assert.strictEqual($listItems.eq(0).text(), "0 - 100", "text of the first item");
     assert.strictEqual($listItems.eq(1).text(), "200 - 300", "text of the first item");
 
-    $($popupContent.find(".dx-treeview-expand-icon").first()).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
 
     // assert
     $listItems = $popupContent.find(".dx-treeview-item");

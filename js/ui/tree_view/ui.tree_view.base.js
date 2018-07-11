@@ -33,11 +33,11 @@ var WIDGET_CLASS = "dx-treeview",
     ITEM_DATA_KEY = "dx-treeview-item-data",
     IS_LEAF = "dx-treeview-node-is-leaf",
     EXPAND_EVENT_NAMESPACE = "dxTreeView_expand",
-    EXPAND_ICON_CLASS = "dx-treeview-expand-icon",
+    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
     LOAD_INDICATOR_CLASS = "dx-treeview-loadindicator",
     LOAD_INDICATOR_WRAPPER_CLASS = "dx-treeview-loadindicator-wrapper",
     NODE_LOAD_INDICATOR_CLASS = "dx-treeview-node-loadindicator",
-    EXPAND_ICON_OPENED_CLASS = "dx-treeview-expand-icon-opened",
+    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = "dx-treeview-toggle-item-visibility-opened",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
     DISABLED_STATE_CLASS = "dx-state-disabled",
     SELECTED_ITEM_CLASS = "dx-state-selected",
@@ -1011,10 +1011,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _createLoadIndicator: function($node) {
-        var $icon = $node.children("." + EXPAND_ICON_CLASS),
+        var $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS),
             $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
 
-        if($icon.hasClass(EXPAND_ICON_OPENED_CLASS) || $nodeContainer.not(":empty").length) {
+        if($icon.hasClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS) || $nodeContainer.not(":empty").length) {
             return;
         }
 
@@ -1024,11 +1024,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _renderToggleItemVisibilityIcon: function($node, node) {
         var $icon = $("<div>")
-            .addClass(EXPAND_ICON_CLASS)
+            .addClass(TOGGLE_ITEM_VISIBILITY_CLASS)
             .appendTo($node);
 
         if(node.internalFields.expanded) {
-            $icon.addClass(EXPAND_ICON_OPENED_CLASS);
+            $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
             $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
         }
 
@@ -1056,10 +1056,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._updateExpandedItemsUI(this._getNode(node.internalFields.parentKey), state, e);
         }
 
-        var $icon = $node.children("." + EXPAND_ICON_CLASS);
+        var $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
         var $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
 
-        $icon.toggleClass(EXPAND_ICON_OPENED_CLASS, state);
+        $icon.toggleClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS, state);
 
         var nodeContainerExists = $nodeContainer.length > 0;
 
@@ -1187,12 +1187,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $loadIndicator.length && LoadIndicator.getInstance($loadIndicator).option("visible", false);
 
         if(hasNewItems) {
-            $icon = $node.find("." + EXPAND_ICON_CLASS);
+            $icon = $node.find("." + TOGGLE_ITEM_VISIBILITY_CLASS);
             $icon.show();
             return;
         }
 
-        $node.find("." + EXPAND_ICON_CLASS).removeClass(EXPAND_ICON_CLASS);
+        $node.find("." + TOGGLE_ITEM_VISIBILITY_CLASS).removeClass(TOGGLE_ITEM_VISIBILITY_CLASS);
         $node.addClass(IS_LEAF);
     },
 

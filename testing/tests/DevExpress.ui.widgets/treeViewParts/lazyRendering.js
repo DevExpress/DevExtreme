@@ -29,7 +29,7 @@ QUnit.test("Nested item should be rendered after click on toggle visibility icon
         items: [{ id: 1, text: "Item 1", items: [{ id: 3, text: "Item 3" }] }, { id: 2, text: "Item 2" }]
     });
 
-    $treeView.find("." + internals.EXPAND_ICON_CLASS).trigger("dxclick");
+    $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
 
     var items = $treeView.find("." + internals.ITEM_CLASS);
 
@@ -114,7 +114,7 @@ QUnit.test("'selectAll' should work correctly when nested items are rendered", f
         }),
         $selectAllItem = $treeView.find(".dx-treeview-select-all-item");
 
-    $treeView.find("." + internals.EXPAND_ICON_CLASS).trigger("dxclick");
+    $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
     $selectAllItem.trigger("dxclick");
 
     var items = $treeView.find(".dx-treeview-node-container .dx-checkbox-checked");
@@ -132,7 +132,7 @@ QUnit.test("'selectAll' should work correctly when nested items are rendered aft
         $selectAllItem = $treeView.find(".dx-treeview-select-all-item");
 
     $selectAllItem.trigger("dxclick");
-    $treeView.find("." + internals.EXPAND_ICON_CLASS).trigger("dxclick");
+    $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
 
     var items = $treeView.find(".dx-treeview-node-container .dx-checkbox-checked");
 

@@ -29,7 +29,7 @@ QUnit.test("Scrollable container should be updated after collapse/expand treeVie
     treeView._scrollableContainer.update = sinon.spy(commonUtils.noop);
 
     $treeView
-        .find("." + internals.EXPAND_ICON_CLASS + ":first")
+        .find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS + ":first")
         .trigger("dxclick");
 
     assert.equal(treeView._scrollableContainer.update.callCount, 2);
@@ -75,13 +75,13 @@ QUnit.test("Toggle visibility action", function(assert) {
         items = treeView.option("items");
 
 
-    var $toggleVisibilityIcon = $treeView.find("." + internals.EXPAND_ICON_CLASS);
+    var $toggleVisibilityIcon = $treeView.find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
 
     $toggleVisibilityIcon.trigger("dxclick");
 
     var $nestedNode = $treeView.find("." + internals.NODE_CONTAINER_CLASS + ":last-child");
     assert.ok($nestedNode.hasClass(internals.OPENED_NODE_CONTAINER_CLASS));
-    assert.ok($toggleVisibilityIcon.hasClass(internals.EXPAND_ICON_OPENED_CLASS));
+    assert.ok($toggleVisibilityIcon.hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
     assert.ok(items[0].expanded);
 
     var nodes = treeView.getNodes();
@@ -89,7 +89,7 @@ QUnit.test("Toggle visibility action", function(assert) {
 
     $toggleVisibilityIcon.trigger("dxclick");
     assert.ok(!$nestedNode.hasClass(internals.OPENED_NODE_CONTAINER_CLASS));
-    assert.ok(!$toggleVisibilityIcon.hasClass(internals.EXPAND_ICON_OPENED_CLASS));
+    assert.ok(!$toggleVisibilityIcon.hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
     assert.ok(!items[0].expanded);
 
     nodes = treeView.getNodes();
@@ -417,7 +417,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
             dataSource: dataSource,
             dataStructure: "plain"
         }).dxTreeView("instance"),
-        toggleIcon = $(treeView.$element()).find("." + internals.EXPAND_ICON_CLASS).eq(1),
+        toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1),
         items;
 
     dataSource.store().insert({
@@ -497,14 +497,14 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
             dataSource: dataSource,
             dataStructure: "plain"
         }).dxTreeView("instance"),
-        toggleIcon = $(treeView.$element()).find("." + internals.EXPAND_ICON_CLASS),
+        toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS),
         items;
 
     toggleIcon.eq(0).trigger("dxclick");
 
     toggleIcon.eq(1).trigger("dxclick");
 
-    toggleIcon = $(treeView.$element()).find("." + internals.EXPAND_ICON_CLASS);
+    toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
     toggleIcon.eq(1).trigger("dxclick");
 
     items = $(treeView.$element()).find("." + internals.ITEM_CLASS);

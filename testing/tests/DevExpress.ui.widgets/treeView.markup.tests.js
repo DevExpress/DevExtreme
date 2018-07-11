@@ -20,7 +20,7 @@ var WIDGET_CLASS = "dx-treeview",
     ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
     ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
     IS_LEAF = "dx-treeview-node-is-leaf",
-    EXPAND_ICON_CLASS = "dx-treeview-expand-icon",
+    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
 
 var initTree = function(options) {
@@ -269,8 +269,8 @@ QUnit.test("Render toggle icon", function(assert) {
         $rootNodeFirstItem = $rootNode.find("." + NODE_CLASS).eq(0),
         $rootNodeSecondItem = $rootNode.find("." + NODE_CLASS).eq(1);
 
-    assert.equal($rootNodeFirstItem.find("." + EXPAND_ICON_CLASS).length, 1);
-    assert.equal($rootNodeSecondItem.find("." + EXPAND_ICON_CLASS).length, 0);
+    assert.equal($rootNodeFirstItem.find("." + TOGGLE_ITEM_VISIBILITY_CLASS).length, 1);
+    assert.equal($rootNodeSecondItem.find("." + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);
 });
 
 QUnit.test("Add disabled class for toggle icon if item is disabled", function(assert) {
@@ -284,7 +284,7 @@ QUnit.test("Add disabled class for toggle icon if item is disabled", function(as
     });
 
     var $rootNode = $treeView.find("." + NODE_CONTAINER_CLASS + ":first-child"),
-        $icon = $rootNode.find("." + NODE_CLASS).eq(0).children("." + EXPAND_ICON_CLASS).eq(0);
+        $icon = $rootNode.find("." + NODE_CLASS).eq(0).children("." + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
     assert.ok($icon.hasClass("dx-state-disabled"));
 });
@@ -388,7 +388,7 @@ QUnit.test("toggle visibility icon should not render for invisible item (T323491
                 { text: "item 1", visible: false, items: [{ text: "item 11" }] },
                 { text: "item 1", items: [{ text: "item 21" }] }],
         }),
-        $icons = $treeView.find("." + EXPAND_ICON_CLASS);
+        $icons = $treeView.find("." + TOGGLE_ITEM_VISIBILITY_CLASS);
 
     assert.equal($icons.length, 1, "only one icon should be rendered");
 });
