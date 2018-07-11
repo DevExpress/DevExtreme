@@ -181,8 +181,8 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
 
     assert.ok(chart);
     // B231181
-    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5], "second value axis tick values");
-    assert.deepEqual(chart._valueAxes[2].getTicksValues().majorTicksValues, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "third value axis tick values");
+    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6], "second value axis tick values");
+    assert.deepEqual(chart._valueAxes[2].getTicksValues().majorTicksValues, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "third value axis tick values");
 });
 
 QUnit.test("Problem with two axis and range", function(assert) {

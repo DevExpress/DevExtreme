@@ -462,7 +462,6 @@ var BaseChart = BaseWidget.inherit({
 
         that._renderer.stopAllAnimations();
 
-        that.businessRanges = null;
         disposeObjectsInArray.call(that, "series");
 
         disposeObject("_headerBlock");

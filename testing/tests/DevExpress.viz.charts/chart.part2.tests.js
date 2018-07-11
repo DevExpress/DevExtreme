@@ -102,71 +102,6 @@ QUnit.test("Calculate business range for categories from Axis and continuous val
     assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 9);
 });
 
-QUnit.test("Calculate business range merged with Value Axis range (no indent)", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 0,
-                max: 10
-            }
-        }
-    }));
-    var chart = this.createChart({
-        valueAxis: {
-            min: -2,
-            max: 12,
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                min: -2,
-                max: 12,
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        },
-        series: { type: "line" }
-    });
-    assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].min, -2);
-    assert.equal(chart.getValueAxis().setBusinessRange.lastCall.args[0].max, 12);
-});
-
-QUnit.test("Calculate business range merged with Argument Axis range (no indent)", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            arg: {
-                min: 0,
-                max: 10
-            }
-        }
-    }));
-    var chart = this.createChart({
-        argumentAxis: {
-            min: -2,
-            max: 12,
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                min: -2,
-                max: 12,
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        },
-        series: {
-            type: "line"
-        }
-    });
-
-    var range = chart._argumentAxes[0].setBusinessRange.lastCall.args[0];
-    assert.equal(range.min, -2);
-    assert.equal(range.max, 12);
-});
-
 QUnit.test("Two ranges for two panes - data from series, indents from common axis", function(assert) {
     // arrange
     chartMocks.seriesMockData.series.push(new MockSeries({
@@ -218,198 +153,18 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
     });
     // assert
 
-    var range1 = chart.businessRanges[0].val;
+    var range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
         pane: "topPane",
         min: 0,
         max: 10
     });
 
-    var range2 = chart.businessRanges[1].val;
+    var range2 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
     assertRange(assert, range2, {
         pane: "otherPane",
         min: 101,
         max: 151
-    });
-});
-
-QUnit.test("Two ranges for two panes. One axis with showZero = true, another one with showZero = false", function(assert) {
-    // arrange
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 10,
-                max: 100
-            }
-        }
-    }));
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: -100,
-                max: -10
-            }
-        }
-    }));
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 20,
-                max: 200
-            }
-        }
-    }));
-    // act
-    var chart = this.createChart({
-        series: [{
-            // doesn't matter as range goes from predefined series above
-            pane: "topPane",
-            axis: "a1",
-            type: "line"
-        }, {
-            // doesn't matter as range goes from predefined series above
-            pane: "otherPane",
-            axis: "a1",
-            type: "line"
-        }, {
-            // doesn't matter as range goes from predefined series above
-            pane: "otherPane",
-            axis: "a2",
-            type: "line"
-        }],
-        valueAxis: [{
-            name: "a1",
-            showZero: true,
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        }, {
-            name: "a2",
-            showZero: false,
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        }],
-        panes: [{ name: "topPane", position: "top" },
-            { name: "otherPane" }]
-    });
-    // assert
-
-    assertRange(assert, chart.businessRanges[0].val, {
-        pane: "topPane",
-        min: 0,
-        max: 100
-    });
-
-    assertRange(assert, chart.businessRanges[1].val, {
-        pane: "otherPane",
-        min: -100,
-        max: 0
-    });
-
-    assertRange(assert, chart.businessRanges[2].val, {
-        pane: "otherPane",
-        min: 20,
-        max: 200
-    });
-});
-
-QUnit.test("Two ranges for two panes. One axis with showZero = true, another one with showZero = false. Rotated chart", function(assert) {
-    // arrange
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 10, max: 100
-            }
-        }
-    }));
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: -100, max: -10
-            }
-        }
-    }));
-    chartMocks.seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 20, max: 200
-            }
-        }
-    }));
-    // act
-    var chart = this.createChart({
-        rotated: true,
-        series: [{
-            // doesn't matter as range goes from predefined series above
-            pane: "topPane",
-            axis: "a1",
-            type: "line"
-        }, {
-            // doesn't matter as range goes from predefined series above
-            pane: "otherPane",
-            axis: "a1",
-            type: "line"
-        }, {
-            // doesn't matter as range goes from predefined series above
-            pane: "otherPane",
-            axis: "a2",
-            type: "line"
-        }],
-        valueAxis: [{
-            name: "a1",
-            showZero: true,
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        }, {
-            name: "a2",
-            showZero: false,
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        }],
-        panes: [{ name: "topPane", position: "top" },
-            { name: "otherPane" }]
-    });
-    // assert
-
-    assertRange(assert, chart.businessRanges[0].val, {
-        pane: "topPane",
-        min: 0,
-        max: 100
-    });
-
-    assertRange(assert, chart.businessRanges[1].val, {
-        pane: "otherPane",
-        min: -100,
-        max: 0
-    });
-
-    assertRange(assert, chart.businessRanges[2].val, {
-        pane: "otherPane",
-        min: 20,
-        max: 200
     });
 });
 
@@ -425,7 +180,7 @@ QUnit.test("Two Series, one of them is not visible", function(assert) {
     assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["D", "E", "F"]);
 });
 
-QUnit.test("Categories in series is not sort", function(assert) {
+QUnit.test("Pass groupData categories to axis.setBusinesRange", function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: ["A", "D", "E", "C", "F"] } } }));
 
     var chart = this.createChart({
@@ -433,111 +188,8 @@ QUnit.test("Categories in series is not sort", function(assert) {
         series: [{ type: "line" }]
     });
 
-    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["A", "C", "D", "E", "F"]);
-});
-
-// T474125
-QUnit.test("Sort categories in series, dateTime", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { categories: [new Date(2017, 6, 2), new Date(2017, 2, 2), new Date(2017, 1, 2), new Date(2017, 8, 2)] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: new Date(2017, 1, 2), val: 1 }, { arg: new Date(2017, 2, 2), val: 2 }, { arg: new Date(2017, 6, 2), val: 3 }, { arg: new Date(2017, 8, 2), val: 1 }],
-        series: [{ type: "line" }],
-        argumentAxis: {
-            mockRange: { dataType: "datetime" }
-        }
-    });
-
-    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, [new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 6, 2), new Date(2017, 8, 2)]);
-});
-
-QUnit.test("Series is not discrete, argument axis has empty categories, category filtering should be successful", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { arg: { } } }));
-
-    var chart = this.createChart({
-        argumentAxis: { mockRange: { categories: [] } },
-        series: [{ type: "line" }]
-    });
-
-    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, []);
-});
-
-QUnit.test("Value axis categories sorting. Numeric - sort by default in ascending order", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "numeric", categories: [2, 4, 3, 1] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: 2 }, { arg: 2, val: 4 }, { arg: 3, val: 3 }, { arg: 4, val: 1 }],
-        series: [{ type: "line" }],
-        valueAxis: {}
-    });
-
-    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, [1, 2, 3, 4]);
-});
-
-QUnit.test("Value axis categories sorting. Datetime - sort by default in ascending order", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "datetime", categories: [new Date(2018, 1, 2), new Date(2018, 1, 4), new Date(2018, 1, 3), new Date(2018, 1, 1)] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: new Date(2018, 1, 2) }, { arg: 2, val: new Date(2018, 1, 4) }, { arg: 3, val: new Date(2018, 1, 3) }, { arg: 4, val: new Date(2018, 1, 1) }],
-        series: [{ type: "line" }],
-        valueAxis: {}
-    });
-
-    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4)]);
-});
-
-QUnit.test("Value axis categories sorting. String - do not sort by default", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "string", categories: ["2", "4", "3", "1"] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
-        series: [{ type: "line" }],
-        valueAxis: {}
-    });
-
-    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
-});
-
-QUnit.test("Value axis categories sorting. categoriesSortingMethod = false, numeric - do not sort", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "numeric", categories: [2, 4, 3, 1] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: 2 }, { arg: 2, val: 4 }, { arg: 3, val: 3 }, { arg: 4, val: 1 }],
-        series: [{ type: "line" }],
-        valueAxis: {
-            categoriesSortingMethod: false
-        }
-    });
-
-    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, [2, 4, 3, 1]);
-});
-
-QUnit.test("Value axis categories sorting. categoriesSortingMethod = true, string - do not sort", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "string", categories: ["2", "4", "3", "1"] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
-        series: [{ type: "line" }],
-        valueAxis: {
-            categoriesSortingMethod: true
-        }
-    });
-
-    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, ["2", "4", "3", "1"]);
-});
-
-QUnit.test("Value axis categories sorting. categoriesSortingMethod = callback, string - sort using callback", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { dataType: "string", categories: ["2", "4", "3", "1"] } } }));
-
-    var chart = this.createChart({
-        dataSource: [{ arg: 1, val: "2" }, { arg: 2, val: "4" }, { arg: 3, val: "3" }, { arg: 4, val: "1" }],
-        series: [{ type: "line" }],
-        valueAxis: {
-            categoriesSortingMethod: function(a, b) { return +b - +a; }
-        }
-    });
-
-    assert.deepEqual(chart.getValueAxis().setBusinessRange.lastCall.args[0].categories, ["4", "3", "2", "1"]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["A", "D", "E", "C", "F"]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[1], ["A", "B", "C", "D", "E", "F"]);
 });
 
 var assertRange = commonMethodsForTests.assertRange;

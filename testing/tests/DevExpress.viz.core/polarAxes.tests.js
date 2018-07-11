@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    translator2DModule = require("viz/translators/translator2d"),
-    tickGeneratorModule = require("viz/axes/tick_generator"),
-    rangeModule = require("viz/translators/range"),
-    Axis = require("viz/axes/base_axis").Axis;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import translator2DModule from "viz/translators/translator2d";
+import tickGeneratorModule from "viz/axes/tick_generator";
+import rangeModule from "viz/translators/range";
+import { Axis } from "viz/axes/base_axis";
 
 var TranslatorStubCtor = new vizMocks.ObjectPool(translator2DModule.Translator2D),
     RangeStubCtor = new vizMocks.ObjectPool(rangeModule.Range);
@@ -834,78 +834,6 @@ QUnit.test("measure labels without labels, with axis, width of axis is thick", f
     assert.deepEqual(axis.measureLabels(this.canvas), { width: 6, height: 6, x: 0, y: 0 });
 });
 
-QUnit.test("get range data, set period without originValue", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ period: 20, argumentType: "numeric" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, 0);
-    assert.equal(range.max, 20);
-});
-
-QUnit.test("get range data, set period with originValue, min & max", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ period: 20, originValue: 20, min: 50, max: 100, argumentType: "numeric" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, 20);
-    assert.equal(range.max, 40);
-});
-
-QUnit.test("get range data, set originValue, min & max", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ originValue: 10, min: 20, max: 40, argumentType: "numeric" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, 10);
-    assert.equal(range.max, undefined);
-});
-
-QUnit.test("get range data, set string originValue", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ originValue: "string", argumentType: "numeric" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, undefined);
-    assert.equal(range.max, undefined);
-});
-
-QUnit.test("get range data, set string period", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ period: "str", argumentType: "numeric" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, undefined);
-    assert.equal(range.max, undefined);
-});
-
-QUnit.test("get range data, set zero period", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ period: 0, argumentType: "numeric" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, undefined);
-    assert.equal(range.max, undefined);
-});
-
-QUnit.test("get range data, set period, argumentType is string", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ period: 20, argumentType: "string" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, undefined);
-    assert.equal(range.max, undefined);
-});
-
-QUnit.test("get range data, set period, argumentType is datetime", function(assert) {
-    this.options.min = this.options.max = undefined;
-    var axis = this.createDrawnAxis({ period: 20, argumentType: "datetime" }),
-        range = axis.getRangeData();
-
-    assert.equal(range.min, undefined);
-    assert.equal(range.max, undefined);
-});
-
 QUnit.test("getSpiderTicks. without spiderWeb", function(assert) {
     var axis = this.createDrawnAxis();
 
@@ -1020,7 +948,6 @@ QUnit.test("Value margins are not applied for circular axis", function(assert) {
     this.options.max = 200;
     this.generatedTicks = [100, 200];
     var axis = this.createSimpleAxis({
-        period: 20,
         argumentType: "numeric",
         valueMarginsEnabled: true,
         minValueMargin: 0.5,
@@ -1944,4 +1871,124 @@ QUnit.test("frequent ticks", function(assert) {
     assert.equal(text.getCall(3).returnValue.stub("remove").called, true, "0 text is removed");
     assert.equal(text.getCall(4).returnValue.stub("remove").called, false, "0 text is not removed");
     assert.equal(text.getCall(5).returnValue.stub("remove").called, true, "0 text is removed");
+});
+
+QUnit.module("Circular polar axis. Set business range", {
+    beforeEach() {
+        environment.beforeEach.call(this);
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "polarAxes",
+            drawingType: "circular",
+            isArgumentAxis: true
+        }, {});
+    },
+
+    updateOptions(options) {
+        options = $.extend(true, {
+            label: {}
+        }, options);
+        this.axis.updateOptions(options);
+        this.axis.validate();
+    },
+
+    afterEach() {
+        environment.afterEach.call(this);
+    }
+});
+
+QUnit.test("Set business range when period is set", function(assert) {
+    this.updateOptions({ period: 20, argumentType: "numeric" });
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 720
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 20);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 20);
+});
+
+QUnit.test("Set business range when period and originValue are set", function(assert) {
+    this.updateOptions({ period: 20, originValue: 20, argumentType: "numeric" });
+
+    this.axis.setBusinessRange({
+        min: 20,
+        max: 50
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 20);
+    assert.equal(businessRange.max, 40);
+    assert.equal(businessRange.minVisible, 20);
+    assert.equal(businessRange.maxVisible, 40);
+});
+
+QUnit.test("Set business range when originValue, min, max are set", function(assert) {
+    this.updateOptions({ originValue: 10, min: 20, max: 40, argumentType: "numeric" });
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 720
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 10);
+    assert.equal(businessRange.max, 720);
+    assert.equal(businessRange.minVisible, 10);
+    assert.equal(businessRange.maxVisible, 720);
+});
+
+QUnit.test("Set business range, set string originValue", function(assert) {
+    this.updateOptions({ originValue: "string", argumentType: "numeric" });
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 720
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 720);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 720);
+});
+
+QUnit.test("Set business range when period is string value", function(assert) {
+    this.updateOptions({ period: "string", argumentType: "numeric" });
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 720
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 720);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 720);
+});
+
+QUnit.test("Set business range when period is zero", function(assert) {
+    this.updateOptions({ period: 0, argumentType: "numeric" });
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 720
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 720);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 720);
+});
+
+QUnit.test("Set business range when period is set and argumentType is string", function(assert) {
+    this.updateOptions({ period: 0, argumentType: "string" });
+    this.axis.setBusinessRange({});
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.ok(businessRange.stubData, true);
 });

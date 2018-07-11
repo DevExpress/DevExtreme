@@ -198,7 +198,7 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
 
     assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.updateCanvas.firstCall));
     assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.setBusinessRange.firstCall));
-    assert.ok(argumentAxis.setBusinessRange.lastCall.calledAfter(stubSeries.createPoints.lastCall));
+    assert.ok(argumentAxis.setBusinessRange.lastCall.calledAfter(stubSeries.createPoints.lastCall), "axis.setBusiness range should be after create points");
     assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].min, 0);
     assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].max, 30);
 });

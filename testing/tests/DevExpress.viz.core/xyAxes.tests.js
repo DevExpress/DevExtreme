@@ -1,11 +1,13 @@
 "use strict";
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    tickGeneratorModule = require("viz/axes/tick_generator"),
-    translator2DModule = require("viz/translators/translator2d"),
-    rangeModule = require("viz/translators/range"),
-    Axis = require("viz/axes/base_axis").Axis;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import tickGeneratorModule from "viz/axes/tick_generator";
+import translator2DModule from "viz/translators/translator2d";
+import rangeModule from "viz/translators/range";
+import { Axis } from "viz/axes/base_axis";
+import { MockSeries } from "../../helpers/chartMocks.js";
+import { patchFontOptions } from "viz/core/utils";
 
 var Translator2D = translator2DModule.Translator2D,
     TranslatorStubCtor = vizMocks.stubClass(Translator2D),
@@ -122,7 +124,7 @@ var environment = {
             this.range = new RangeStubCtor();
             this.range.min = 0;
             this.range.max = 100;
-            this.css = require("viz/core/utils").patchFontOptions(this.options.marker.label.font);
+            this.css = patchFontOptions(this.options.marker.label.font);
         },
         afterEach: function() {
             this.tickGenerator.restore();
@@ -625,40 +627,6 @@ QUnit.test("IncidentOccured on measure labels", function(assert) {
     axis.measureLabels(this.canvas);
 
     assert.ok(this.tickGenerator.lastCall.args[0].incidentOccurred !== this.incidentOccurred);
-});
-
-QUnit.test("range data with synchronizedValue. synchronizedValue above max ", function(assert) {
-    var axis = this.createSimpleAxis({
-            min: 0,
-            max: 100,
-            synchronizedValue: 1000
-        }),
-        rangeData = axis.getRangeData();
-
-    assert.strictEqual(rangeData.min, 0);
-    assert.strictEqual(rangeData.max, 1000);
-});
-
-QUnit.test("range data with synchronizedValue. synchronizedValue less min", function(assert) {
-    var axis = this.createSimpleAxis({
-            synchronizedValue: -10,
-            min: 0,
-            max: 100
-        }),
-        rangeData = axis.getRangeData();
-
-    assert.strictEqual(rangeData.min, -10);
-    assert.strictEqual(rangeData.max, 100);
-});
-
-QUnit.test("range data with synchronizedValue and min/max were not set", function(assert) {
-    var axis = this.createSimpleAxis({
-            synchronizedValue: 10
-        }),
-        rangeData = axis.getRangeData();
-
-    assert.strictEqual(rangeData.min, 10);
-    assert.strictEqual(rangeData.max, 10);
 });
 
 QUnit.test("call measure labels after axis draw - use ticks generated on draw", function(assert) {
@@ -3555,7 +3523,7 @@ QUnit.test("Argument axis. Without breaks", function(assert) {
     });
 
     axis.setGroupSeries(this.series);
-    axis.setBusinessRange({ min: 2, max: 100, addRange: function() { return this; } });
+    axis.setBusinessRange({ min: 2, max: 100 });
     axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
@@ -3576,8 +3544,8 @@ QUnit.test("Discrete. Without breaks", function(assert) {
 QUnit.test("Datetime. Without breaks", function(assert) {
     this.updateOptions({
         dataType: "datetime",
-        min: 2,
-        max: 100
+        min: new Date(2),
+        max: new Date(100)
     });
     this.axis.createTicks(this.canvas);
 
@@ -3911,4 +3879,310 @@ QUnit.test("Apply margins taking into account breaks range size", function(asser
         max: 204,
         min: 98
     });
+});
+
+QUnit.module("Adjust value axis", {
+    beforeEach: function() {
+        environment2DTranslator.beforeEach.call(this);
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "xyAxes",
+            drawingType: "linear",
+            isArgumentAxis: false
+        });
+
+        this.series = [new MockSeries({}), new MockSeries({})];
+
+        this.axis.setGroupSeries(this.series);
+
+        this.updateOptions({});
+    },
+    afterEach: function() {
+        environment2DTranslator.afterEach.call(this);
+    },
+    updateOptions: function(options) {
+        var defaultOptions = {
+            isHorizontal: true,
+            label: {
+                visible: true,
+            }
+        };
+        this.axis.updateOptions($.extend(true, defaultOptions, options));
+    }
+});
+
+QUnit.test("Calculate common range from series on adjust", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+    });
+
+    this.series[0].getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    this.series[1].getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, 5);
+    assert.strictEqual(maxVisible, 15);
+});
+
+QUnit.test("Calculate common range from series on adjust. series with show zero", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+    });
+
+    this.series[0].getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    this.series[0].showZero = true;
+
+    this.series[1].getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, 0);
+    assert.strictEqual(maxVisible, 15);
+});
+
+QUnit.test("Calculate common range from series on adjust when one series is not visible", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+    });
+
+    this.series[0] = new MockSeries({ visible: false });
+
+    this.series[0].getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    this.series[1].getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    this.axis.setGroupSeries(this.series);
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, 5);
+    assert.strictEqual(maxVisible, 12);
+});
+
+QUnit.test("min and are undefined in common range", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, -100);
+    assert.strictEqual(maxVisible, 100);
+});
+
+QUnit.test("Apply margin to series range", function(assert) {
+    this.updateOptions({
+        valueMarginsEnabled: true,
+        minValueMargin: 0.1,
+        maxValueMargin: 0.2
+    });
+
+    this.series[0].getViewport.returns({
+        min: 120,
+        max: 180
+    });
+
+    this.axis.setBusinessRange({ min: 100, max: 200 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, 100);
+    assert.strictEqual(max, 200);
+    assert.strictEqual(minVisible, 114);
+    assert.strictEqual(maxVisible, 192);
+});
+
+QUnit.test("Extend range to boundery ticks on adjust", function(assert) {
+    this.updateOptions({
+        valueMarginsEnabled: false,
+        endOnTick: false
+    });
+
+    this.series[0].getViewport.returns({
+        min: 120,
+        max: 180
+    });
+
+    this.generatedTicks = [110, 190];
+
+    this.axis.setBusinessRange({ min: 100, max: 200 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, 100);
+    assert.strictEqual(max, 200);
+    assert.strictEqual(minVisible, 110);
+    assert.strictEqual(maxVisible, 190);
+});
+
+QUnit.test("Do not adjust axis if it has min/max", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+        min: -20,
+        max: 60
+    });
+
+    this.axis.validate();
+
+    this.series[0].getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, -20);
+    assert.strictEqual(maxVisible, 60);
+});
+
+QUnit.test("Do not adjust axis if it was zoomed", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+    });
+
+    this.axis.validate();
+
+    this.series[0].getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.zoom(-20, 60);
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, -20);
+    assert.strictEqual(maxVisible, 60);
+});
+
+QUnit.test("Adjust axis after reset zoom", function(assert) {
+    this.updateOptions({
+        endOnTick: false,
+        valueMarginsEnabled: false,
+        min: -20,
+        max: 60
+    });
+
+    this.axis.validate();
+
+    this.series[0].getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setMarginOptions({});
+
+    this.axis.resetZoom();
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, -100);
+    assert.strictEqual(max, 100);
+    assert.strictEqual(minVisible, 10);
+    assert.strictEqual(maxVisible, 15);
 });

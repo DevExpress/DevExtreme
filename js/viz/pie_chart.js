@@ -95,7 +95,7 @@ var dxPieChart = BaseChart.inherit({
     },
 
     _populateBusinessRange: function() {
-        this.businessRanges = this.series.map(function(series) {
+        this.series.map(function(series) {
             var range = new rangeModule.Range();
             range.addRange(series.getRangeData().val);
             if(!range.isDefined()) {

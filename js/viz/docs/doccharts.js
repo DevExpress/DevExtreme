@@ -1323,7 +1323,13 @@ var dxChart = {
         * @type boolean
         * @default undefined
         */
-        endOnTick: undefined
+        endOnTick: undefined,
+        /**
+        * @name dxChartOptions.commonAxisSettings.wholeRange
+        * @type Array<number,string,Date>
+        * @default undefined
+        */
+        wholeRange: undefined
     },
     /**
     * @name dxChartOptions.argumentAxis
