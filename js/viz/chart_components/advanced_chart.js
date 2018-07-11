@@ -450,16 +450,12 @@ var AdvancedChart = BaseChart.inherit({
         that.businessRanges = businessRanges;
     },
 
-    _getArgumentAxis: function() {
-        return this._argumentAxes[0];
+    getArgumentAxis: function() {
+        return this._argumentAxes[this._displayedArgumentAxisIndex];
     },
 
-    _getArgumentAxes: function() {
-        return this._argumentAxes;
-    },
-
-    _getValueAxes: function() {
-        return this._valueAxes;
+    getValueAxis: function(name) {
+        return this._valueAxes.filter(_isDefined(name) ? a => a.name === name : a => a.pane === this.defaultPane)[0];
     },
 
     _getGroupsData: function() {

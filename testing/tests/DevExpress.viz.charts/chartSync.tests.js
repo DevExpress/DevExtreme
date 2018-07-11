@@ -1825,7 +1825,7 @@ function resetMocksInChart(chart) {
     chart.layoutManager.layoutElements.reset && chart.layoutManager.layoutElements.reset();
 
     chart._argumentAxes[0].resetMock();
-    chart._valueAxes[0].resetMock();
+    chart.getValueAxis().resetMock();
 
     chart._legendGroup.stub("linkAppend").reset();
     chart._legendGroup.stub("linkRemove").reset();

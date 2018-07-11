@@ -818,7 +818,7 @@ QUnit.test("set strips options in value axis ", function(assert) {
     }, this.$container);
     // assert
 
-    var stripLabel = chart._valueAxes[0].getOptions().strips[0].label;
+    var stripLabel = chart.getValueAxis().getOptions().strips[0].label;
     assert.ok(stripLabel);
     assert.equal(stripLabel.horizontalAlignment, "center");
     assert.equal(stripLabel.verticalAlignment, "top");
@@ -917,7 +917,7 @@ QUnit.test("set constant lines options in value axis", function(assert) {
         }
     });
     // assert
-    var constantLine = chart._valueAxes[0].getOptions().constantLines[0];
+    var constantLine = chart.getValueAxis().getOptions().constantLines[0];
     assert.ok(constantLine);
     assert.equal(constantLine.label.horizontalAlignment, "left");
     assert.equal(constantLine.label.verticalAlignment, "center");

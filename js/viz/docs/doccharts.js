@@ -1977,6 +1977,25 @@ var dxChart = {
     * @param2 endValue:Number|Date|string
     */
     zoomArgument: function() { },
+    /**
+    * @name dxchartmethods.getValueAxis
+    * @publicName getValueAxis()
+    * @returns chartAxisObject
+    */
+    getValueAxis: function() { },
+    /**
+    * @name dxchartmethods.getValueAxis(name)
+    * @publicName getValueAxis(name)
+    * @param1 name:string
+    * @returns chartAxisObject
+    */
+    getValueAxis: function(name) { },
+    /**
+    * @name dxchartmethods.getArgumentAxis
+    * @publicName getArgumentAxis()
+    * @returns chartAxisObject
+    */
+    getArgumentAxis: function() { }
 };
 
 /**
