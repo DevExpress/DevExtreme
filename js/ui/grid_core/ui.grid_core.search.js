@@ -333,7 +333,7 @@ module.exports = {
                         searchText = that.option("searchPanel.text");
 
                     if(isEquals && column) {
-                        searchText = that._getFormattedSearchText(column, searchText);
+                        searchText = searchText && that._getFormattedSearchText(column, searchText);
                     }
 
                     if(searchText && that.option("searchPanel.highlightSearchText")) {
