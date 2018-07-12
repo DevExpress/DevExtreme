@@ -11,6 +11,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
+require("./pointerParts/pointerTests.js");
 require("./pointerParts/baseTests.js");
 require("./pointerParts/mouseTests.js");
 require("./pointerParts/touchTests.js");
