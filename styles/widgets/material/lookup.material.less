@@ -44,12 +44,11 @@
 
 .dx-lookup {
     height: @MATERIAL_LOOKUP_HEIGHT;
-    background: @texteditor-bg;
-    border-bottom: 1px solid transparent;
 
-    &.dx-state-hover {
-        background: @texteditor-hover-bg;
-        border-bottom: 1px solid @texteditor-hover-border-color;
+    &.dx-state-focused {
+        &:before {
+            content: none;
+        }
     }
 }
 

@@ -50,8 +50,26 @@
 }
 
 .dx-dropdowneditor-input-wrapper {
-    .dx-texteditor.dx-state-focused {
-        border: none;
+    .dx-texteditor {
+        background-color: transparent;
+
+        &:before, &:after {
+            content: none;
+        }
+
+        &.dx-state-hover {
+            background-color: transparent;
+        }
+
+        &.dx-state-focused, &.dx-state-active {
+            background-color: transparent;
+        }
+
+        &.dx-state-disabled,
+        &.dx-state-readonly,
+        &.dx-state-readonly.dx-state-hover {
+            background-color: transparent;
+        }
     }
 }
 

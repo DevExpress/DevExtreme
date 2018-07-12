@@ -18,18 +18,12 @@
 }
 
 .dx-tagbox {
-    .dx-texteditor-container:after {
-        border-bottom: 0;
-    }
-
     &.dx-state-hover, &.dx-state-focused, &.dx-state-active, & {
-        .dx-texteditor-input {
-            background: transparent;
-        }
+        background: transparent;
     }
 
     &.dx-state-focused, &.dx-state-active {
-        .dx-texteditor-container:before {
+        &:before {
             border-top: 0;
             border-bottom: 0;
         }
@@ -50,21 +44,16 @@
     }
 
     &.dx-state-focused, &.dx-state-active {
-        .dx-texteditor-container:before {
+        &:before {
             border-top: 0;
             border-bottom: 0;
         }
     }
 
     &.dx-state-hover {
-        .dx-texteditor-container:after {
-            border-top: 0;
+        &:after {
             border-bottom: 0;
         }
-    }
-
-    .dx-texteditor-container:after {
-        border-bottom: 0;
     }
 }
 
