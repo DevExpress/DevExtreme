@@ -16,7 +16,7 @@ require("ui/drawer");
 var DRAWER_CLASS = "dx-drawer",
     DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content",
     DRAWER_CONTENT_CLASS = "dx-drawer-content",
-    DRAWER_SHIELD_CLASS = "dx-drawer-shield";
+    DRAWER_SHADER_CLASS = "dx-drawer-shader";
 
 var position = function($element) {
     return $element.position().left;
@@ -408,86 +408,86 @@ QUnit.test("animation should be stopped after swipe start", function(assert) {
 // });
 
 
-QUnit.module("shield");
+QUnit.module("shader");
 
-QUnit.test("shield should be visible if menu is opened", function(assert) {
+QUnit.test("shader should be visible if menu is opened", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: true
         }),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS);
+        $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    assert.ok($shield.is(":visible"), "shield is visible");
+    assert.ok($shader.is(":visible"), "shader is visible");
 });
 
-QUnit.test("shield should not be visible if menu is closed", function(assert) {
+QUnit.test("shader should not be visible if menu is closed", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: false
         }),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS);
+        $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    assert.ok($shield.is(":hidden"), "shield is visible");
+    assert.ok($shader.is(":hidden"), "shader is visible");
 });
 
-QUnit.test("click on shield should not close menu", function(assert) {
+QUnit.test("click on shader should not close menu", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: true
         }),
         instance = $element.dxDrawer("instance"),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS);
+        $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    $shield.trigger("dxclick");
+    $shader.trigger("dxclick");
     assert.ok(!instance.option("menuVisible"), "menu was closed");
 });
 
-QUnit.test("shield should be visible during swipe", function(assert) {
+QUnit.test("shader should be visible during swipe", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: true
         }),
         instance = $element.dxDrawer("instance"),
         $content = $(instance.content()),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS),
+        $shader = $element.find("." + DRAWER_SHADER_CLASS),
         pointer = pointerMock($content).start();
 
     pointer.swipeStart();
-    assert.ok($shield.is(":visible"), "shield won't hidden");
+    assert.ok($shader.is(":visible"), "shader won't hidden");
 });
 
-QUnit.test("shield should be visible during animation", function(assert) {
+QUnit.test("shader should be visible during animation", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: false
         }),
         instance = $element.dxDrawer("instance"),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS);
+        $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
     instance.showMenu();
-    assert.ok($shield.is(":visible"), "shield is visible during animation");
+    assert.ok($shader.is(":visible"), "shader is visible during animation");
 });
 
-QUnit.test("shield should have correct position", function(assert) {
+QUnit.test("shader should have correct position", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: true
         }),
         instance = $element.dxDrawer("instance"),
         $content = $(instance.content()),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS);
+        $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    assert.equal($shield.offset().left, $content.offset().left, "shield has correct position");
+    assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
-QUnit.test("shield should have correct position after widget resize", function(assert) {
+QUnit.test("shader should have correct position after widget resize", function(assert) {
     var $element = $("#drawer2").dxDrawer({
             width: "100%",
             menuVisible: true
         }),
         instance = $element.dxDrawer("instance"),
         $content = $(instance.content()),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS),
+        $shader = $element.find("." + DRAWER_SHADER_CLASS),
         menuWidth = $(instance.menuContent()).width();
 
     $("#drawerContainer").width(menuWidth * 2);
     resizeCallbacks.fire();
 
-    assert.equal($shield.offset().left, $content.offset().left, "shield has correct position");
+    assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
 

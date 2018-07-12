@@ -12,7 +12,7 @@ var DRAWER_CLASS = "dx-drawer",
     DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
     DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content",
     DRAWER_CONTENT_CLASS = "dx-drawer-content",
-    DRAWER_SHIELD_CLASS = "dx-drawer-shield",
+    DRAWER_SHADER_CLASS = "dx-drawer-shader",
 
     OPENED_STATE_CLASS = "dx-drawer-opened";
 
@@ -119,21 +119,21 @@ QUnit.test("render right menu position", function(assert) {
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-left"), "left menu position class added");
 });
 
-QUnit.test("shield should be rendered by default if menu is visible", function(assert) {
+QUnit.test("shader should be rendered by default if menu is visible", function(assert) {
     var $element = $("#drawer").dxDrawer({
         menuVisible: true
     });
 
-    assert.equal($element.find("." + DRAWER_SHIELD_CLASS).length, 1, "drawer has shield");
+    assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
 });
 
-QUnit.test("shield should not be rendered if showShader = false", function(assert) {
+QUnit.test("shader should not be rendered if showShader = false", function(assert) {
     var $element = $("#drawer").dxDrawer({
         menuVisible: true,
         showShader: false
     });
 
-    assert.equal($element.find("." + DRAWER_SHIELD_CLASS).length, 1, "drawer has shield");
+    assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
 });
 
 QUnit.module("temporary mode");
@@ -159,16 +159,16 @@ QUnit.test("opened class should be applied correctly", function(assert) {
     assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
 });
 
-QUnit.test("shield should always visible in temporary mode", function(assert) {
+QUnit.test("shader should always visible in temporary mode", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: true
         }),
         instance = $element.dxDrawer("instance"),
-        $shield = $element.find("." + DRAWER_SHIELD_CLASS).eq(0);
+        $shader = $element.find("." + DRAWER_SHADER_CLASS).eq(0);
 
-    assert.notOk($shield.hasClass("dx-state-invisible"), "drawer has visible shield");
+    assert.notOk($shader.hasClass("dx-state-invisible"), "drawer has visible shader");
 
     instance.option("menuVisible", false);
 
-    assert.notOk($shield.hasClass("dx-state-invisible"), "drawer has visible shield");
+    assert.notOk($shader.hasClass("dx-state-invisible"), "drawer has visible shader");
 });

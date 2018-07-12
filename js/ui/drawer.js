@@ -20,7 +20,7 @@ var DRAWER_CLASS = "dx-drawer",
     DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
     DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content",
     DRAWER_CONTENT_CLASS = "dx-drawer-content",
-    DRAWER_SHIELD_CLASS = "dx-drawer-shield",
+    DRAWER_SHADER_CLASS = "dx-drawer-shader",
 
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
@@ -233,7 +233,7 @@ var Drawer = Widget.inherit({
             noModel: true
         });
 
-        this._renderShield();
+        this._renderShader();
         this._toggleMenuPositionClass();
     },
 
@@ -264,12 +264,12 @@ var Drawer = Widget.inherit({
         this.$element().addClass(DRAWER_CLASS + "-" + this.option("mode"));
     },
 
-    _renderShield: function() {
-        this._$shield = this._$shield || $("<div>").addClass(DRAWER_SHIELD_CLASS);
-        this._$shield.appendTo(this.content());
-        eventsEngine.off(this._$shield, clickEvent.name);
-        eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
-        this._toggleShieldVisibility(this.option("menuVisible"));
+    _renderShader: function() {
+        this._$shader = this._$shader || $("<div>").addClass(DRAWER_SHADER_CLASS);
+        this._$shader.appendTo(this.content());
+        eventsEngine.off(this._$shader, clickEvent.name);
+        eventsEngine.on(this._$shader, clickEvent.name, this.hideMenu.bind(this));
+        this._toggleShaderVisibility(this.option("menuVisible"));
     },
 
     _initSwipeHandlers: function() {
@@ -299,7 +299,7 @@ var Drawer = Widget.inherit({
         event.maxLeftOffset = +(rtl ? !menuVisible : menuVisible);
         event.maxRightOffset = +(rtl ? menuVisible : !menuVisible);
 
-        this._toggleShieldVisibility(true);
+        this._toggleShaderVisibility(true);
     },
 
     _swipeUpdateHandler: function(e) {
@@ -343,7 +343,7 @@ var Drawer = Widget.inherit({
             this._toggleHideMenuCallback(offset);
 
             if(animate) {
-                this._toggleShieldVisibility(true);
+                this._toggleShaderVisibility(true);
                 animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
             } else {
                 translator.move($(this.content()), { left: pos });
@@ -356,7 +356,7 @@ var Drawer = Widget.inherit({
             this._toggleHideMenuCallback(offset);
 
             if(animate) {
-                this._toggleShieldVisibility(true);
+                this._toggleShaderVisibility(true);
                 animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
                 animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
             }
@@ -368,8 +368,8 @@ var Drawer = Widget.inherit({
             this._toggleHideMenuCallback(offset);
 
             if(animate) {
-                this._toggleShieldVisibility(true);
-                animation.fade($(this._$shield), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
+                this._toggleShaderVisibility(true);
+                animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
                 // animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
                 animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
             }
@@ -417,7 +417,7 @@ var Drawer = Widget.inherit({
     },
 
     _animationCompleteHandler: function() {
-        this._toggleShieldVisibility(this.option("menuVisible"));
+        this._toggleShaderVisibility(this.option("menuVisible"));
 
         if(this._deferredAnimate) {
             this._deferredAnimate.resolveWith(this);
@@ -455,9 +455,9 @@ var Drawer = Widget.inherit({
 
     _toggleShieldVisibility: function(visible) {
         if(this.option("showShader")) {
-            this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+            this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
         } else {
-            this._$shield.toggleClass(INVISIBLE_STATE_CLASS, true);
+            this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
         }
     },
 
