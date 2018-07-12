@@ -131,9 +131,9 @@ var Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.mode
             * @type Enums.DrawerMode
-            * @default "slide"
+            * @default "push"
             */
-            mode: "slide",
+            mode: "push",
 
             /**
             * @name dxDrawerOptions.contentOffset
@@ -353,7 +353,7 @@ var Drawer = Widget.inherit({
             menuPos,
             contentPos;
 
-        if(this.option("mode") === "slide") {
+        if(this.option("mode") === "push") {
             pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
             this._toggleHideMenuCallback(offset);
@@ -407,7 +407,7 @@ var Drawer = Widget.inherit({
     },
 
     _calculatePixelOffset: function(offset) {
-        if(this.option("mode") === "slide") {
+        if(this.option("mode") === "push") {
             offset = offset || 0;
             var minWidth = !offset ? this.option("minWidth") : 0;
             return offset * this._getMenuWidth() + minWidth;

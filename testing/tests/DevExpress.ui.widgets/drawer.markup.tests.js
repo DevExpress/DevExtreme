@@ -58,7 +58,7 @@ QUnit.test("render drawer", function(assert) {
 QUnit.test("drawer should have correct mode class by default", function(assert) {
     var $element = $("#drawer").dxDrawer();
 
-    assert.ok($element.hasClass(DRAWER_CLASS + "-slide"), "drawer class is correct");
+    assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
 });
 
 QUnit.test("render drawer content", function(assert) {
@@ -150,14 +150,14 @@ QUnit.test("shader should not be rendered if showShader = false", function(asser
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
 });
 
-QUnit.module("slide mode");
+QUnit.module("push mode");
 
 QUnit.test("drawer should have correct class depending on mode", function(assert) {
     var $element = $("#drawer").dxDrawer({
-        mode: "slide"
+        mode: "push"
     });
 
-    assert.ok($element.hasClass(DRAWER_CLASS + "-slide"), "drawer class is correct");
+    assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
 });
 
 QUnit.module("temporary mode");

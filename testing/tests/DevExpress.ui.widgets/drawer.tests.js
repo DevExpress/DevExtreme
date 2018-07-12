@@ -7,7 +7,7 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     config = require("core/config"),
     typeUtils = require("core/utils/type"),
-    animation = require("ui/slide_out_view").animation,
+    animation = require("ui/drawer").animation,
     pointerMock = require("../../helpers/pointerMock.js");
 
 require("common.css!");
@@ -365,19 +365,19 @@ QUnit.module("animation", {
     }
 });
 
-// QUnit.test("showing menu should be animated", function(assert) {
-//     var $element = $("#drawer").dxDrawer({}),
-//         instance = $element.dxDrawer("instance"),
-//         $content = $(instance.content()),
-//         $menu = $(instance.menuContent()),
-//         pointer = pointerMock($content).start();
+QUnit.test("showing menu should be animated", function(assert) {
+    var $element = $("#drawer").dxDrawer({}),
+        instance = $element.dxDrawer("instance"),
+        $content = $(instance.content()),
+        $menu = $(instance.menuContent()),
+        pointer = pointerMock($content).start();
 
-//     pointer.swipeStart().swipe(0.1).swipeEnd(1);
+    pointer.swipeStart().swipe(0.1).swipeEnd(1);
 
-//     assert.equal(this.capturedAnimations[0].$element.get(0), $content.get(0), "content was animated");
-//     assert.equal(this.capturedAnimations[0].start, $menu.width() / 10, "correct start position");
-//     assert.equal(this.capturedAnimations[0].end, $menu.width(), "correct end position");
-// });
+    assert.equal(this.capturedAnimations[0].$element.get(0), $content.get(0), "content was animated");
+    assert.equal(this.capturedAnimations[0].start, $menu.width() / 10, "correct start position");
+    assert.equal(this.capturedAnimations[0].end, $menu.width(), "correct end position");
+});
 
 QUnit.test("animation should be stopped after swipe start", function(assert) {
     var $element = $("#drawer").dxDrawer({}),
@@ -391,21 +391,21 @@ QUnit.test("animation should be stopped after swipe start", function(assert) {
     assert.ok(!fx.isAnimating($content), "animation was stopped");
 });
 
-// QUnit.test("hiding menu should be animated", function(assert) {
-//     var $element = $("#drawer").dxDrawer({
-//             menuVisible: true
-//         }),
-//         instance = $element.dxDrawer("instance"),
-//         $content = $(instance.content()),
-//         $menu = $(instance.menuContent()),
-//         pointer = pointerMock($content).start();
+QUnit.test("hiding menu should be animated", function(assert) {
+    var $element = $("#drawer").dxDrawer({
+            menuVisible: true
+        }),
+        instance = $element.dxDrawer("instance"),
+        $content = $(instance.content()),
+        $menu = $(instance.menuContent()),
+        pointer = pointerMock($content).start();
 
-//     pointer.swipeStart().swipe(-0.5).swipeEnd(-1);
+    pointer.swipeStart().swipe(-0.5).swipeEnd(-1);
 
-//     assert.equal(this.capturedAnimations[0].$element.get(0), $content.get(0), "content was animated");
-//     assert.equal(this.capturedAnimations[0].start, $menu.width() * 0.5, "correct start position");
-//     assert.equal(this.capturedAnimations[0].end, 0, "correct end position");
-// });
+    assert.equal(this.capturedAnimations[0].$element.get(0), $content.get(0), "content was animated");
+    assert.equal(this.capturedAnimations[0].start, $menu.width() * 0.5, "correct start position");
+    assert.equal(this.capturedAnimations[0].end, 0, "correct end position");
+});
 
 
 QUnit.module("shader");
@@ -490,15 +490,15 @@ QUnit.test("shader should have correct position after widget resize", function(a
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
-QUnit.module("slide mode");
+QUnit.module("push mode");
 
-QUnit.test("minWidth should be rendered correctly in slide mode", function(assert) {
+QUnit.test("minWidth should be rendered correctly in push mode", function(assert) {
     fx.off = true;
 
     var $element = $("#drawer").dxDrawer({
             minWidth: 50,
             menuVisible: true,
-            mode: "slide"
+            mode: "push"
         }),
         instance = $element.dxDrawer("instance"),
         $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
