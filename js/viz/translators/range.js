@@ -111,8 +111,8 @@ _Range.prototype = {
         if(axisType === "discrete") {
             that.categories = isDate ? [new Date(year, 0, 1), new Date(year, 3, 1), new Date(year, 6, 1), new Date(year, 9, 1)] : ["0", "1", "2"];
         } else {
-            that[minSelector] = isDate ? new Date(year, 0, 1) : min;
-            that[maxSelector] = isDate ? new Date(year, 11, 31) : 10;
+            that[minVisibleSelector] = that[minSelector] = isDate ? new Date(year, 0, 1) : min;
+            that[maxVisibleSelector] = that[maxSelector] = isDate ? new Date(year, 11, 31) : 10;
         }
         that.stubData = true;
 

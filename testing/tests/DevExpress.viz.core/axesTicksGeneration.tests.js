@@ -739,26 +739,6 @@ QUnit.test("Custom axisDivisionFactor", function(assert) {
     assert.deepEqual(this.axis._tickInterval, 2);
 });
 
-QUnit.test("No data - do not generate ticks nor calculate tickInterval", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: false
-    });
-
-    this.axis.setBusinessRange({ });
-
-    // act
-    this.axis.createTicks(canvas(200));
-
-    assert.deepEqual(this.axis._minorTicks, []);
-    assert.deepEqual(this.axis._minorTickInterval, undefined);
-
-    assert.deepEqual(this.axis._majorTicks, []);
-    assert.deepEqual(this.axis._tickInterval, undefined);
-});
-
 QUnit.test("interval correction issue", function(assert) {
     this.createAxis();
     this.updateOptions({
@@ -1159,22 +1139,6 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
     assert.strictEqual(aggregationInfo.interval, 5);
     assert.strictEqual(aggregationInfo.ticks[0], 0);
     assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 105);
-});
-
-QUnit.test("aggregationInfo should not genrate tick if min or max is undefined", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        valueType: "datetime",
-        type: "continuous"
-    });
-
-    this.axis.setBusinessRange({ });
-    this.axis.createTicks(canvas(400));
-
-    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
-
-    assert.strictEqual(aggregationInfo.interval, undefined);
-    assert.deepEqual(aggregationInfo.ticks, []);
 });
 
 QUnit.test("getAggregationInfo for discrete axis", function(assert) {
