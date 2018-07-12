@@ -31,12 +31,22 @@ if(devices.real().deviceType === "desktop") {
     };
 
     QUnit.module("Rendering", setupModule, () => {
-        if(this.isDesktop) {
-            QUnit.test("Text option should follow the input value", (assert) => {
-                this.keyboard.press("up");
-                assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
-            });
-        }
+        QUnit.test("Text option should follow the input value", (assert) => {
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
+        });
+
+        QUnit.test("Masks should not be enabled when displayFormat is not specified", (assert) => {
+            this.instance.option("displayFormat", undefined);
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "10/10/2012", "mask behavior does not work");
+        });
+
+        QUnit.test("Masks should not be enabled when mode is not text", (assert) => {
+            this.instance.option("mode", "date");
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "October 10 2012", "mask behavior does not work");
+        });
     });
 
     QUnit.module("Date parts rendering", setupModule, () => {

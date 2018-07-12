@@ -35,7 +35,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior: function() {
-        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayValue");
+        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
     },
 
     _getDefaultOptions: function() {
@@ -46,7 +46,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _renderMask: function() {
         this.callBase();
-        this._detachMaskEvents();
+        this._clearState();
 
         if(this._useMaskBehavior()) {
             this._activePartIndex = 0;
@@ -169,24 +169,26 @@ var DateBoxMask = DateBoxBase.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "useMaskBehavior":
-                this._renderMask();
-                break;
             case "displayFormat":
+            case "mode":
                 this.callBase(args);
-                if(this._useMaskBehavior()) {
-                    this._renderDateParts();
-                }
+                this._renderMask();
                 break;
             default:
                 this.callBase(args);
         }
     },
 
-    _clean: function() {
-        this.callBase();
+    _clearState: function() {
+        this._detachMaskEvents();
         delete this._dateParts;
         delete this._activePartIndex;
         delete this._maskValue;
+    },
+
+    _clean: function() {
+        this.callBase();
+        this._clearState();
     }
 });
 
