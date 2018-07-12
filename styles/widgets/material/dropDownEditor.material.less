@@ -51,23 +51,18 @@
 
 .dx-dropdowneditor-input-wrapper {
     .dx-texteditor {
-        background-color: transparent;
 
         &:before, &:after {
             content: none;
         }
 
-        &.dx-state-hover {
-            background-color: transparent;
-        }
-
-        &.dx-state-focused, &.dx-state-active {
-            background-color: transparent;
-        }
-
+        &.dx-state-hover,
+        &.dx-state-focused,
+        &.dx-state-active
         &.dx-state-disabled,
         &.dx-state-readonly,
-        &.dx-state-readonly.dx-state-hover {
+        &.dx-state-readonly.dx-state-hover,
+        & {
             background-color: transparent;
         }
     }
