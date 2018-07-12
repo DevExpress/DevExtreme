@@ -22,7 +22,7 @@ var PATTERN_GETTERS = {
     S: "getMilliseconds"
 };
 
-var PATTERN_SETTERS = extend(dateParser.getPatternSetters(), {
+var PATTERN_SETTERS = extend({}, dateParser.getPatternSetters(), {
     a: function(date, value) {
         var hours = date.getHours(),
             current = hours >= 12;
