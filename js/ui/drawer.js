@@ -136,6 +136,13 @@ var Drawer = Widget.inherit({
             mode: "push",
 
             /**
+            * @name dxDrawerOptions.showMode
+            * @type Enums.DrawerMode
+            * @default "slide"
+            */
+            showMode: "slide",
+
+            /**
             * @name dxDrawerOptions.contentOffset
             * @hidden
             * @inheritdoc

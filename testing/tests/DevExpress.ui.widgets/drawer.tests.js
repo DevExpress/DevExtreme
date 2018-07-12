@@ -88,6 +88,14 @@ QUnit.testStart(function() {
 
 QUnit.module("api");
 
+QUnit.test("defaults", function(assert) {
+    var $element = $("#drawer").dxDrawer({}),
+        instance = $element.dxDrawer("instance");
+
+    assert.equal(instance.option("showMode"), "slide", "showMode is OK");
+    assert.equal(instance.option("mode"), "push", "mode is OK");
+});
+
 QUnit.test("menuContent() function", function(assert) {
     var $element = $("#drawer").dxDrawer({}),
         instance = $element.dxDrawer("instance"),

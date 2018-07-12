@@ -576,6 +576,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DrawerShowMode
+ * @enum {'slide'|'shrink'}
+ */
+
+/**
  * @typedef {string} Enums.TextBoxMode
  * @enum {'email'|'password'|'search'|'tel'|'text'|'url'}
  */
