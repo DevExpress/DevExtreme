@@ -108,6 +108,12 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     E4015: "Unknown entity name or alias is used: {0}",
 
     /**
+    * @name Errors and Warnings_E4016
+    * @publicName E4016
+    */
+    E4016: "The compileSetter(expr) method is called with 'self' passed as a parameter",
+
+    /**
     * @name Errors and Warnings_E4017
     * @publicName E4017
     */
