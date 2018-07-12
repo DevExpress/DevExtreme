@@ -156,12 +156,6 @@ module.exports = errorUtils({
 
 
     /**
-    * @name ErrorsCore.E4016
-    */
-    E4016: "The compileSetter(expr) method is called with 'self' passed as a parameter",
-
-
-    /**
     * @name ErrorsCore.W0000
     */
     W0000: "'{0}' is deprecated in {1}. {2}",
