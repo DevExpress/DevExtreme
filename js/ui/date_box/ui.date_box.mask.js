@@ -16,7 +16,7 @@ var eventsUtils = require("../../events/utils"),
 var DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys: function() {
-        if(!this.option("useMaskBehavior")) {
+        if(!this._useMaskBehavior()) {
             return this.callBase();
         }
 
@@ -34,6 +34,10 @@ var DateBoxMask = DateBoxBase.inherit({
         });
     },
 
+    _useMaskBehavior: function() {
+        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             useMaskBehavior: false
@@ -42,9 +46,9 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _renderMask: function() {
         this.callBase();
-        this._detachMaskEvents();
+        this._clearState();
 
-        if(this.option("useMaskBehavior")) {
+        if(this._useMaskBehavior()) {
             this._activePartIndex = 0;
             this._attachMaskEvents();
             this._renderDateParts();
@@ -111,7 +115,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _renderDisplayText: function(text) {
         this.callBase(text);
-        if(this.option("useMaskBehavior")) {
+        if(this._useMaskBehavior()) {
             this.option("text", text);
         }
     },
@@ -150,14 +154,14 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _focusOutHandler: function(e) {
         this.callBase(e);
-        if(this.option("useMaskBehavior")) {
+        if(this._useMaskBehavior()) {
             this._fireChangeEvent();
         }
     },
 
     _valueChangeEventHandler: function(e) {
         this.callBase(e);
-        if(this.option("useMaskBehavior")) {
+        if(this._useMaskBehavior()) {
             this.option("value", this._maskValue);
         }
     },
@@ -168,21 +172,25 @@ var DateBoxMask = DateBoxBase.inherit({
                 this._renderMask();
                 break;
             case "displayFormat":
+            case "mode":
                 this.callBase(args);
-                if(this.option("useMaskBehavior")) {
-                    this._renderDateParts();
-                }
+                this._renderMask();
                 break;
             default:
                 this.callBase(args);
         }
     },
 
-    _clean: function() {
-        this.callBase();
+    _clearState: function() {
+        this._detachMaskEvents();
         delete this._dateParts;
         delete this._activePartIndex;
         delete this._maskValue;
+    },
+
+    _clean: function() {
+        this.callBase();
+        this._clearState();
     }
 });
 
