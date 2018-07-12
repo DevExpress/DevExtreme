@@ -218,7 +218,8 @@ namespace StyleCompiler
                 "scheduler",
                 "form",
                 "spa",
-                "filterBuilder"
+                "filterBuilder",
+                "card"
             });
 
             // Non-themeable components that have only common styles
