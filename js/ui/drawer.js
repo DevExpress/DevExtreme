@@ -453,7 +453,7 @@ var Drawer = Widget.inherit({
         this._renderPosition(this.option("menuVisible"), false);
     },
 
-    _toggleShieldVisibility: function(visible) {
+    _toggleShaderVisibility: function(visible) {
         if(this.option("showShader")) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
         } else {
