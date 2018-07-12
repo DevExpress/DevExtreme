@@ -470,6 +470,7 @@ var ResizingController = modules.ViewController.inherit({
     },
     _updateDimensionsCore: function() {
         var that = this,
+            hasHeight,
             dataController = that._dataController,
             rowsView = that._rowsView,
             columnHeadersView = that._columnHeadersView,
@@ -479,13 +480,13 @@ var ResizingController = modules.ViewController.inherit({
             rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height()),
             maxHeight = parseFloat($rootElement.css("maxHeight")),
             maxHeightHappened = maxHeight && rootElementHeight >= maxHeight,
-            hasHeight = that._hasHeight || maxHeightHappened,
             height = that.option("height") || $rootElement.get(0).style.height,
             editorFactory = that.getController("editorFactory"),
             isMaxHeightApplied = maxHeightHappened && groupElement.scrollHeight === groupElement.offsetHeight,
             $testDiv;
 
         that.updateSize($rootElement);
+        hasHeight = that._hasHeight || maxHeightHappened;
 
         if(height && (that._hasHeight ^ height !== "auto")) {
             $testDiv = $("<div>").height(height).appendTo($rootElement);
