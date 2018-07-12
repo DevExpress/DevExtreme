@@ -7,7 +7,6 @@ var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     _isDefined = typeUtils.isDefined,
     _isArray = Array.isArray,
     _isNumber = typeUtils.isNumeric,
-    rangeModule = require("../translators/range"),
     axisModule = require("../axes/base_axis"),
     _map = require("../core/utils").map,
     _normalizeEnum = require("../core/utils").normalizeEnum,
@@ -207,13 +206,13 @@ exports.dxGauge = dxBaseGauge.inherit({
         scaleOptions.endAngle = SHIFT_ANGLE - angles[1];
         scaleOptions.skipViewportExtending = true;
         that._scale.updateOptions(scaleOptions);
-        that._scale.setBusinessRange(new rangeModule.Range({
+        that._scale.setBusinessRange({
             axisType: "continuous",
             dataType: "numeric",
-            minVisible: min,
-            maxVisible: max,
+            min: min,
+            max: max,
             invert: invert
-        }));
+        });
         that._updateScaleTickIndent(scaleOptions);
 
         that._scaleGroup.linkAppend();

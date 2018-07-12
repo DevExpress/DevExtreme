@@ -665,15 +665,15 @@ QUnit.test("startValue < endValue", function(assert) {
 
     var scale = axisModule.Axis.getCall(0).returnValue,
         updateOptions = scale.updateOptions.getCall(0).args[0],
-        setBusinessRange = scale.setBusinessRange.getCall(0).args[0].ctorArgs[0];
+        setBusinessRange = scale.setBusinessRange.getCall(0).args[0];
 
     assert.strictEqual(updateOptions.min, 10);
     assert.strictEqual(updateOptions.max, 20);
     assert.deepEqual(setBusinessRange, {
         axisType: "continuous",
         dataType: "numeric",
-        minVisible: 10,
-        maxVisible: 20,
+        min: 10,
+        max: 20,
         invert: false
     });
 });
@@ -688,15 +688,15 @@ QUnit.test("startValue > endValue", function(assert) {
 
     var scale = axisModule.Axis.getCall(0).returnValue,
         updateOptions = scale.updateOptions.getCall(0).args[0],
-        setBusinessRange = scale.setBusinessRange.getCall(0).args[0].ctorArgs[0];
+        setBusinessRange = scale.setBusinessRange.getCall(0).args[0];
 
     assert.strictEqual(updateOptions.min, 10);
     assert.strictEqual(updateOptions.max, 20);
     assert.deepEqual(setBusinessRange, {
         axisType: "continuous",
         dataType: "numeric",
-        minVisible: 10,
-        maxVisible: 20,
+        min: 10,
+        max: 20,
         invert: true
     });
 });
