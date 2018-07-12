@@ -8,7 +8,6 @@ var $ = require("jquery"),
     factory = dxLinearGauge.prototype._factory,
     axisModule = require("viz/axes/base_axis"),
     Class = require("core/class"),
-    rangeModule = require("viz/translators/range"),
     rendererModule = require("viz/core/renderers/renderer");
 
 $('<div id="test-container">').appendTo("#qunit-fixture");
@@ -104,8 +103,6 @@ var TestPointerElement = TestElement.inherit({
 });
 
 (function linearGauge() {
-    var stubRange = vizMocks.stubClass(rangeModule.Range);
-
     rendererModule.Renderer = sinon.stub();
 
     sinon.stub(axisModule, "Axis", function(parameters) {
@@ -123,10 +120,6 @@ var TestPointerElement = TestElement.inherit({
         return axis;
     });
 
-    sinon.stub(rangeModule, "Range", function(parameters) {
-        return new stubRange(parameters);
-    });
-
     var environment = {
         beforeEach: function() {
             this.renderer = new vizMocks.Renderer();
@@ -138,7 +131,6 @@ var TestPointerElement = TestElement.inherit({
         afterEach: function() {
             this.container.remove();
             axisModule.Axis.reset();
-            rangeModule.Range.reset();
             rendererModule.Renderer.reset();
             this.renderer = null;
             delete this.container;
@@ -150,11 +142,10 @@ var TestPointerElement = TestElement.inherit({
     QUnit.test("Gauge creation", function(assert) {
         new dxLinearGauge(this.container, {});
 
-        var range = rangeModule.Range.getCall(0).returnValue,
-            scale = axisModule.Axis.getCall(0).returnValue;
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
         assert.strictEqual(rendererModule.Renderer.firstCall.args[0]["cssClass"], "dxg dxg-linear-gauge", "root class");
-        assert.deepEqual(scale.setBusinessRange.lastCall.args[0], range, "range passed to scale");
+        assert.ok(scale.setBusinessRange.lastCall.args[0], "range passed to scale");
         assert.deepEqual(scale.draw.getCall(0).args[0], { bottom: 0, top: 0, left: 0, right: 0, height: 600, width: 800 }, "canvas passed to scale");
     });
 
@@ -442,7 +433,7 @@ var TestPointerElement = TestElement.inherit({
         });
         var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.strictEqual(scale.updateOptions.lastCall.calledAfter(rangeModule.Range.lastCall), true);
+        assert.strictEqual(scale.updateOptions.lastCall.calledAfter(scale.setBusinessRange.lastCall), true);
     });
 
     QUnit.module("VerticalGauge - positioning of elements", environment);
