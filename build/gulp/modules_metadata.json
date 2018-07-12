@@ -142,7 +142,8 @@
       "on": "events.on",
       "one": "events.one",
       "off": "events.off",
-      "trigger": "events.trigger"
+      "trigger": "events.trigger",
+      "triggerHandler": "events.triggerHandler"
     }
   },
   {
