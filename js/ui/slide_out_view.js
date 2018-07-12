@@ -354,11 +354,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _toggleShieldVisibility: function(visible) {
-        if(this.option("showShader")) {
-            this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible);
-        } else {
-            this._$shield.toggleClass(INVISIBLE_STATE_CLASS, true);
-        }
+        this._$shield.toggleClass(INVISIBLE_STATE_CLASS, !visible);
     },
 
     _optionChanged: function(args) {
