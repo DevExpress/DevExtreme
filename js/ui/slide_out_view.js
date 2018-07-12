@@ -24,8 +24,6 @@ var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
 
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
-    OPENED_STATE_CLASS = "dx-slideoutview-opened",
-
     ANONYMOUS_TEMPLATE_NAME = "content",
 
     ANIMATION_DURATION = 400;
@@ -36,27 +34,6 @@ var animation = {
         fx.animate($element, {
             type: "slide",
             to: { left: position },
-            duration: ANIMATION_DURATION,
-            complete: completeAction
-        });
-    },
-    paddingLeft: function($element, padding, completeAction) {
-        var toConfig = {};
-
-        toConfig["padding-left"] = padding;
-
-        fx.animate($element, {
-            to: toConfig,
-            duration: ANIMATION_DURATION,
-            complete: completeAction
-        });
-    },
-
-    fade: function($element, config, completeAction) {
-        fx.animate($element, {
-            type: "fade",
-            to: config.to,
-            from: config.from,
             duration: ANIMATION_DURATION,
             complete: completeAction
         });
@@ -99,13 +76,6 @@ var SlideOutView = Widget.inherit({
             swipeEnabled: true,
 
             /**
-            * @name dxSlideOutViewOptions.showShader
-            * @type boolean
-            * @default true
-            */
-            showShader: true,
-
-            /**
             * @name dxSlideOutViewOptions.menuTemplate
             * @type_function_param1 menuElement:dxElement
             * @type template|function
@@ -120,13 +90,6 @@ var SlideOutView = Widget.inherit({
             * @default "content"
             */
             contentTemplate: "content",
-
-            /**
-            * @name dxSlideOutViewOptions.mode
-            * @type Enums.SlideOutMode
-            * @default "normal"
-            */
-            mode: "default",
 
             /**
             * @name dxSlideOutViewOptions.contentOffset
@@ -217,10 +180,7 @@ var SlideOutView = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        this._togglePositionClass(this.option("menuVisible"));
         this._renderMarkup();
-
-        this._refreshModeClass();
 
         var menuTemplate = this._getTemplate(this.option("menuTemplate")),
             contentTemplate = this._getTemplate(this.option("contentTemplate"));
@@ -255,13 +215,6 @@ var SlideOutView = Widget.inherit({
 
         // NOTE: B251455
         eventsEngine.on(this._$container, "MSPointerDown", noop);
-    },
-
-    _refreshModeClass: function(prevClass) {
-        prevClass && this.$element()
-            .removeClass(SLIDEOUTVIEW_CLASS + "-" + prevClass);
-
-        this.$element().addClass(SLIDEOUTVIEW_CLASS + "-" + this.option("mode"));
     },
 
     _renderShield: function() {
@@ -333,74 +286,21 @@ var SlideOutView = Widget.inherit({
     _renderPosition: function(offset, animate) {
         if(!windowUtils.hasWindow()) return;
 
-        var pos,
-            menuPos,
-            contentPos;
+        var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
-        if(this.option("mode") === "default") {
-            pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
+        this._toggleHideMenuCallback(offset);
 
-            this._toggleHideMenuCallback(offset);
-
-            if(animate) {
-                this._toggleShieldVisibility(true);
-                animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
-            } else {
-                translator.move($(this.content()), { left: pos });
-            }
-        }
-        if(this.option("mode") === "persistent") {
-            menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-            contentPos = offset * this._getMenuWidth();
-
-            this._toggleHideMenuCallback(offset);
-
-            if(animate) {
-                this._toggleShieldVisibility(true);
-                animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
-                animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
-            }
-        }
-        if(this.option("mode") === "temporary") {
-            menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-            contentPos = offset * this._getMenuWidth();
-
-            this._toggleHideMenuCallback(offset);
-
-            if(animate) {
-                this._toggleShieldVisibility(true);
-                animation.fade($(this._$shield), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
-                // animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
-                animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
-            }
-        }
-    },
-
-    _getFadeConfig(offset) {
-        if(offset) {
-            return {
-                to: 0.5,
-                from: 0
-            };
+        if(animate) {
+            this._toggleShieldVisibility(true);
+            animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
         } else {
-            return {
-                to: 0,
-                from: 0.5
-            };
+            translator.move($(this.content()), { left: pos });
         }
     },
+
     _calculatePixelOffset: function(offset) {
-        if(this.option("mode") === "default") {
-            offset = offset || 0;
-            return offset * this._getMenuWidth();
-        }
-        if(this.option("mode") === "persistent" || this.option("mode") === "temporary") {
-            if(offset) {
-                return 0;
-            } else {
-                return -this._getMenuWidth();
-            }
-        }
+        offset = offset || 0;
+        return offset * this._getMenuWidth();
     },
 
     _getMenuWidth: function() {
@@ -461,11 +361,6 @@ var SlideOutView = Widget.inherit({
         }
     },
 
-    _togglePositionClass: function(menuVisible) {
-        this.$element().toggleClass(OPENED_STATE_CLASS, menuVisible);
-    },
-
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "width":
@@ -489,14 +384,6 @@ var SlideOutView = Widget.inherit({
             case "contentTemplate":
             case "menuTemplate":
                 this._invalidate();
-                break;
-            case "mode":
-                translator.move(this._$menu, { left: 0 });
-                this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("menuVisible"), true);
-                break;
-            case "showShader":
-                this._refreshModeClass(args.previousValue);
                 break;
             default:
                 this.callBase(args);
