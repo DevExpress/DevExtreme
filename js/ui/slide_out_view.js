@@ -372,7 +372,6 @@ var SlideOutView = Widget.inherit({
                 break;
             case "menuVisible":
                 this._renderPosition(args.value, true);
-                this._togglePositionClass(args.value);
                 break;
             case "menuPosition":
                 this._renderPosition(this.option("menuVisible"), true);
