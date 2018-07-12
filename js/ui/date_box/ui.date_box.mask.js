@@ -152,7 +152,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _focusInHandler: function(e) {
         this.callBase(e);
-        if(this.option("useMaskBehavior")) {
+        if(this._useMaskBehavior()) {
             var caret = this._getActivePartProp("caret");
             caret && this._caret(caret);
         }
