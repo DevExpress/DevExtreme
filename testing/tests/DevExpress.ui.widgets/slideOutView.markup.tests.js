@@ -12,9 +12,7 @@ var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
     SLIDEOUTVIEW_WRAPPER_CLASS = "dx-slideoutview-wrapper",
     SLIDEOUTVIEW_MENU_CONTENT_CLASS = "dx-slideoutview-menu-content",
     SLIDEOUTVIEW_CONTENT_CLASS = "dx-slideoutview-content",
-    SLIDEOUTVIEW_SHIELD_CLASS = "dx-slideoutview-shield",
-
-    OPENED_STATE_CLASS = "dx-slideoutview-opened";
+    SLIDEOUTVIEW_SHIELD_CLASS = "dx-slideoutview-shield";
 
 var position = function($element) {
     return $element.position().left;
@@ -53,12 +51,6 @@ QUnit.test("render slideoutView", function(assert) {
     assert.equal($element.find("." + SLIDEOUTVIEW_WRAPPER_CLASS).length, 1, "slideoutview has wrapper");
     assert.equal($element.find("." + SLIDEOUTVIEW_MENU_CONTENT_CLASS).length, 1, "slideoutview has menu container");
     assert.equal($element.find("." + SLIDEOUTVIEW_CONTENT_CLASS).length, 1, "slideoutview has content");
-});
-
-QUnit.test("slideoutView should have correct mode class by default", function(assert) {
-    var $element = $("#slideOutView").dxSlideOutView();
-
-    assert.ok($element.hasClass(SLIDEOUTVIEW_CLASS + "-default"), "slideoutview class is correct");
 });
 
 QUnit.test("render slideoutView content", function(assert) {
@@ -119,7 +111,7 @@ QUnit.test("render right menu position", function(assert) {
     assert.ok($menuContent.hasClass(SLIDEOUTVIEW_CLASS + "-left"), "left menu position class added");
 });
 
-QUnit.test("shield should be rendered by default if menu is visible", function(assert) {
+QUnit.test("shield should be rendered", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({
         menuVisible: true
     });
@@ -136,39 +128,3 @@ QUnit.test("shield should not be rendered if showShader = false", function(asser
     assert.equal($element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).length, 1, "slideoutview has shield");
 });
 
-QUnit.module("temporary mode");
-
-QUnit.test("slideoutView should have correct class depending on mode", function(assert) {
-    var $element = $("#slideOutView").dxSlideOutView({
-        mode: "temporary"
-    });
-
-    assert.ok($element.hasClass(SLIDEOUTVIEW_CLASS + "-temporary"), "slideoutview class is correct");
-});
-
-QUnit.test("opened class should be applied correctly", function(assert) {
-    var $element = $("#slideOutView").dxSlideOutView({
-            menuVisible: true
-        }),
-        instance = $element.dxSlideOutView("instance");
-
-    assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "slideoutview has opened class");
-
-    instance.option("menuVisible", false);
-
-    assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "slideoutview hasn't opened class");
-});
-
-QUnit.test("shield should always visible in temporary mode", function(assert) {
-    var $element = $("#slideOutView").dxSlideOutView({
-            menuVisible: true
-        }),
-        instance = $element.dxSlideOutView("instance"),
-        $shield = $element.find("." + SLIDEOUTVIEW_SHIELD_CLASS).eq(0);
-
-    assert.notOk($shield.hasClass("dx-state-invisible"), "slideoutview has visible shield");
-
-    instance.option("menuVisible", false);
-
-    assert.notOk($shield.hasClass("dx-state-invisible"), "slideoutview has visible shield");
-});
