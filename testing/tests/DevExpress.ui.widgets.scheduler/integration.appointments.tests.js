@@ -6217,3 +6217,24 @@ QUnit.test("Appointment inside vertical grouped view should have a right resizab
     assert.equal($appointment.dxResizable("instance").option("area").top, initialResizableAreaTop);
     assert.equal($appointment.dxResizable("instance").option("area").bottom, initialResizableAreaBottom);
 });
+
+QUnit.test("New added appointment should be rendered correctly in specified timeZone", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        currentDate: new Date(2018, 4, 25),
+        views: ["week"],
+        currentView: "week",
+        timeZone: "Etc/UTC",
+        startDayHour: 4
+    });
+
+    var task = { text: "a", startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
+
+    this.instance.showAppointmentPopup(task, true);
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+    var $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS),
+        startDate = $appointment.dxSchedulerAppointment("instance").option("startDate");
+
+    assert.deepEqual(startDate, task.startDate, "appointment starts in 8AM");
+});
