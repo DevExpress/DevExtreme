@@ -59,8 +59,6 @@ var DateBoxMask = DateBoxBase.inherit({
     _renderDateParts: function() {
         this._dateParts = dateParts.renderDateParts(this.option("text"), this.option("displayFormat"));
         this._selectNextPart(0);
-        var caret = this._getActivePartProp("caret");
-        caret && this._caret(caret);
     },
 
     _detachMaskEvents: function() {
@@ -149,6 +147,14 @@ var DateBoxMask = DateBoxBase.inherit({
     _fireChangeEvent: function() {
         if(this._isValueDirty()) {
             eventsEngine.trigger(this._input(), "change");
+        }
+    },
+
+    _focusInHandler: function(e) {
+        this.callBase(e);
+        if(this.option("useMaskBehavior")) {
+            var caret = this._getActivePartProp("caret");
+            caret && this._caret(caret);
         }
     },
 

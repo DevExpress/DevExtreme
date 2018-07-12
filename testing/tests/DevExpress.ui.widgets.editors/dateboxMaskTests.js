@@ -265,9 +265,9 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Keyboard navigation", setupModule, () => {
-        QUnit.test("Right and left arrows should move the selection", (assert) => {
-            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
+QUnit.module("Keyboard navigation", setupModule, () => {
+    QUnit.test("Right and left arrows should move the selection", (assert) => {
+        this.keyboard.focus();assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
 
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
@@ -276,9 +276,9 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "previous group is selected");
         });
 
-        QUnit.test("Home and end keys should move selection to boundaries", (assert) => {
-            this.keyboard.press("end");
-            assert.deepEqual(this.keyboard.caret(), { start: 11, end: 15 }, "last group is selected");
+    QUnit.test("Home and end keys should move selection to boundaries", (assert) => {
+        this.keyboard.focus();this.keyboard.press("end");
+        assert.deepEqual(this.keyboard.caret(), { start: 11, end: 15 }, "last group is selected");
 
             this.keyboard.press("home");
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is selected");
