@@ -92,6 +92,13 @@ var Drawer = Widget.inherit({
             menuVisible: false,
 
             /**
+             * @name dxDrawerOptions.minWidth
+             * @type number
+             * @default null
+             */
+            minWidth: null,
+
+            /**
             * @name dxDrawerOptions.swipeEnabled
             * @type boolean
             * @default true
@@ -124,9 +131,9 @@ var Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.mode
             * @type Enums.DrawerMode
-            * @default "normal"
+            * @default "slide"
             */
-            mode: "default",
+            mode: "slide",
 
             /**
             * @name dxDrawerOptions.contentOffset
@@ -235,6 +242,15 @@ var Drawer = Widget.inherit({
 
         this._renderShader();
         this._toggleMenuPositionClass();
+
+        // this._renderMinWidth();
+    },
+
+    _renderMinWidth: function() {
+        if(this.option("minWidth")) {
+            var minWidth = this.option("minWidth");
+            $(this.content()).css("left", minWidth);
+        }
     },
 
     _render: function() {
@@ -337,7 +353,7 @@ var Drawer = Widget.inherit({
             menuPos,
             contentPos;
 
-        if(this.option("mode") === "default") {
+        if(this.option("mode") === "slide") {
             pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
             this._toggleHideMenuCallback(offset);
@@ -376,7 +392,7 @@ var Drawer = Widget.inherit({
         }
     },
 
-    _getFadeConfig(offset) {
+    _getFadeConfig: function(offset) {
         if(offset) {
             return {
                 to: 0.5,
@@ -389,10 +405,12 @@ var Drawer = Widget.inherit({
             };
         }
     },
+
     _calculatePixelOffset: function(offset) {
-        if(this.option("mode") === "default") {
+        if(this.option("mode") === "slide") {
             offset = offset || 0;
-            return offset * this._getMenuWidth();
+            var minWidth = !offset ? this.option("minWidth") : 0;
+            return offset * this._getMenuWidth() + minWidth;
         }
         if(this.option("mode") === "persistent" || this.option("mode") === "temporary") {
             if(offset) {
