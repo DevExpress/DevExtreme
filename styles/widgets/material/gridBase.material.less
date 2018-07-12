@@ -385,7 +385,7 @@
             }
 
             &.dx-state-hover, &.dx-state-focused, &.dx-state-active {
-                .dx-texteditor-input {
+                .dx-texteditor {
                     background: ~"@{@{widgetName}-editor-bg}";
                 }
             }
@@ -394,7 +394,7 @@
                 right: 0;
             }
 
-            .dx-texteditor-container:after, .dx-texteditor-container:before {
+            &:after, &:before {
                 content: none;
             }
 
@@ -652,6 +652,12 @@
             .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
 
             .dx-texteditor {
+                &.dx-state-focused:after,
+                &.dx-state-hover:after {
+                    top: auto;
+                    bottom: 0;
+                } 
+
                 .dx-texteditor-input {
                     font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
                     height: @MATERIAL_GRID_BASE_CELL_HEIGHT + 1;
@@ -825,7 +831,7 @@
                 line-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
             }
 
-            .dx-texteditor-container:after, .dx-texteditor-container:before {
+            .dx-texteditor:after, .dx-texteditor:before {
                 content: none;
             }
         }
