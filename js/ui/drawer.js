@@ -509,6 +509,7 @@ var Drawer = Widget.inherit({
                 this._invalidate();
                 break;
             case "mode":
+            case "minWidth":
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("menuVisible"), true);

@@ -68,6 +68,20 @@ QUnit.test("render drawer content", function(assert) {
     assert.equal($.trim($content.text()), "Test Content", "drawer content was rendered");
 });
 
+
+QUnit.test("opened class should be applied correctly", function(assert) {
+    var $element = $("#drawer").dxDrawer({
+            menuVisible: true
+        }),
+        instance = $element.dxDrawer("instance");
+
+    assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "drawer has opened class");
+
+    instance.option("menuVisible", false);
+
+    assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
+});
+
 QUnit.test("custom content template for menu should be rendered correctly", function(assert) {
     var $element = $("#contentTemplate").dxDrawer({
             menuTemplate: "customMenu"
@@ -136,6 +150,16 @@ QUnit.test("shader should not be rendered if showShader = false", function(asser
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
 });
 
+QUnit.module("slide mode");
+
+QUnit.test("drawer should have correct class depending on mode", function(assert) {
+    var $element = $("#drawer").dxDrawer({
+        mode: "slide"
+    });
+
+    assert.ok($element.hasClass(DRAWER_CLASS + "-slide"), "drawer class is correct");
+});
+
 QUnit.module("temporary mode");
 
 QUnit.test("drawer should have correct class depending on mode", function(assert) {
@@ -144,19 +168,6 @@ QUnit.test("drawer should have correct class depending on mode", function(assert
     });
 
     assert.ok($element.hasClass(DRAWER_CLASS + "-temporary"), "drawer class is correct");
-});
-
-QUnit.test("opened class should be applied correctly", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance");
-
-    assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "drawer has opened class");
-
-    instance.option("menuVisible", false);
-
-    assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
 });
 
 QUnit.test("shader should always visible in temporary mode", function(assert) {

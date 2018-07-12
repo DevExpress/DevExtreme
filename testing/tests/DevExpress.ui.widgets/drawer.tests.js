@@ -490,6 +490,27 @@ QUnit.test("shader should have correct position after widget resize", function(a
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
+QUnit.module("slide mode");
+
+QUnit.test("minWidth should be rendered correctly in slide mode", function(assert) {
+    fx.off = true;
+
+    var $element = $("#drawer").dxDrawer({
+            minWidth: 50,
+            menuVisible: true,
+            mode: "slide"
+        }),
+        instance = $element.dxDrawer("instance"),
+        $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().left, 200, "content has correct left when minWidth is set");
+
+    instance.toggleMenuVisibility();
+
+    assert.equal($content.position().left, 50, "content has correct left when minWidth is set");
+
+    fx.off = false;
+});
 
 QUnit.module("rtl");
 
