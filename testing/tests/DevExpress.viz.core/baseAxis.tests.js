@@ -2398,6 +2398,8 @@ QUnit.test("Set stub data if range is empty", function(assert) {
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.min, 0);
     assert.equal(businessRange.max, 10);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 10);
     assert.equal(businessRange.stubData, true);
 });
 
