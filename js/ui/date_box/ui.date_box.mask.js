@@ -175,6 +175,7 @@ var DateBoxMask = DateBoxBase.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "useMaskBehavior":
+                this._clearCache();
                 this._renderMask();
                 break;
             case "displayFormat":
@@ -187,8 +188,7 @@ var DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _clearState: function() {
-        this._detachMaskEvents();
+    _clearCache: function() {
         delete this._dateParts;
         delete this._activePartIndex;
         delete this._maskValue;
@@ -196,7 +196,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _clean: function() {
         this.callBase();
-        this._clearState();
+        this._clearCache();
     }
 });
 
