@@ -267,6 +267,7 @@ if(devices.real().deviceType === "desktop") {
 
     QUnit.module("Keyboard navigation", setupModule, () => {
         QUnit.test("Right and left arrows should move the selection", (assert) => {
+            this.keyboard.focus();
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
 
             this.keyboard.press("right");
@@ -277,6 +278,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Home and end keys should move selection to boundaries", (assert) => {
+            this.keyboard.focus();
             this.keyboard.press("end");
             assert.deepEqual(this.keyboard.caret(), { start: 11, end: 15 }, "last group is selected");
 
