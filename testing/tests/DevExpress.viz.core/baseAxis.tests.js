@@ -2667,6 +2667,23 @@ QUnit.test("Do not set min/max for discrete axis", function(assert) {
     assert.equal(businessRange.maxVisible, "E");
 });
 
+QUnit.test("Create ticks with empty range. StubData should is set on series range", function(assert) {
+    this.updateOptions({
+        argumentType: "datetime",
+        valueMarginsEnabled: true,
+        minValueMargin: 0.01,
+        maxValueMargin: 0.01
+    });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({ });
+
+    this.axis.createTicks(this.canvas);
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.ok(businessRange.stubData);
+});
+
 QUnit.module("Set business range. Value axis", {
     beforeEach: function() {
         environment.beforeEach.call(this);

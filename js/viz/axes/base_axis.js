@@ -1054,10 +1054,6 @@ Axis.prototype = {
             result.maxVisible = result.max;
         }
 
-        if(!result.isDefined()) {
-            result.setStubData(result.dataType);
-        }
-
         return result;
     },
 
@@ -1116,6 +1112,10 @@ Axis.prototype = {
                 that._seriesData.correctValueZeroLevel();
             }
             that._seriesData.sortCategories(that.getCategoriesSorter());
+        }
+
+        if(!that._seriesData.isDefined()) {
+            that._seriesData.setStubData(that._seriesData.dataType);
         }
 
         that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
