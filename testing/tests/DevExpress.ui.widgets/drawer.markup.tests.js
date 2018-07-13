@@ -61,6 +61,12 @@ QUnit.test("drawer should have correct mode class by default", function(assert) 
     assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
 });
 
+QUnit.test("drawer should have correct showMode class by default", function(assert) {
+    var $element = $("#drawer").dxDrawer();
+
+    assert.ok($element.hasClass(DRAWER_CLASS + "-slide"), "drawer class is correct");
+});
+
 QUnit.test("render drawer content", function(assert) {
     var $element = $("#drawer").dxDrawer({}),
         $content = $element.find("." + DRAWER_CONTENT_CLASS);
