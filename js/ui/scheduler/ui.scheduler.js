@@ -2190,9 +2190,8 @@ var Scheduler = Widget.inherit({
         if(oldData && !recData) {
             this.updateAppointment(oldData, formData);
         } else {
-
             if(recData) {
-                recData && this.updateAppointment(oldData, recData);
+                this.updateAppointment(oldData, recData);
                 delete this._updatedRecAppointment;
 
                 if(typeof this._getTimezoneOffsetByOption() === "number") {
