@@ -2192,7 +2192,7 @@ var Scheduler = Widget.inherit({
         } else {
 
             if(recData) {
-                recData && this.updateAppointment(oldData, recData);
+                this.updateAppointment(oldData, recData);
                 delete this._updatedRecAppointment;
 
                 if(typeof this._getTimezoneOffsetByOption() === "number") {
