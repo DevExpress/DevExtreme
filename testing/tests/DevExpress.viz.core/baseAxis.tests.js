@@ -2649,6 +2649,22 @@ QUnit.test("Set min > max", function(assert) {
     assert.equal(businessRange.maxVisible, 10);
 });
 
+QUnit.test("Do not set min/max for discrete axis", function(assert) {
+    this.updateOptions({ type: "discrete", min: "D", max: "E", synchronizedValue: 0 });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: ["A", "B", "C", "D", "E", "F"]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.categories, ["A", "B", "C", "D", "E", "F"]);
+    assert.equal(businessRange.min, undefined);
+    assert.deepEqual(businessRange.max, undefined);
+    assert.equal(businessRange.minVisible, "D");
+    assert.equal(businessRange.maxVisible, "E");
+});
+
 QUnit.module("Set business range. Value axis", {
     beforeEach: function() {
         environment.beforeEach.call(this);

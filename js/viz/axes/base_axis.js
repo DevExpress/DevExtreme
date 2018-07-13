@@ -1090,17 +1090,21 @@ Axis.prototype = {
             categories: options.categories,
             dataType: options.dataType,
             axisType: options.type,
-            min: synchronizedValue,
-            max: synchronizedValue,
             base: options.logarithmBase,
             invert: options.inverted
         });
         const visualRange = this.adjustRange(this._viewport);
 
-        that._seriesData.addRange({
-            min: visualRange[0],
-            max: visualRange[1]
-        });
+        if(options.type !== constants.discrete) {
+            that._seriesData.addRange({
+                min: visualRange[0],
+                max: visualRange[1]
+            });
+            that._seriesData.addRange({
+                min: synchronizedValue,
+                max: synchronizedValue
+            });
+        }
 
         that._seriesData.minVisible = that._seriesData.minVisible === undefined ? that._seriesData.min : that._seriesData.minVisible;
         that._seriesData.maxVisible = that._seriesData.maxVisible === undefined ? that._seriesData.max : that._seriesData.maxVisible;
