@@ -8,6 +8,7 @@ var eventsUtils = require("../../events/utils"),
     isFunction = require("../../core/utils/type").isFunction,
     extend = require("../../core/utils/extend").extend,
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
+    inRange = require("../../core/utils/math").inRange,
     eventsEngine = require("../../events/core/events_engine"),
     wheelEvent = require("../../events/core/wheel"),
     dateParts = require("./ui.date_box.mask.parts"),
@@ -32,6 +33,59 @@ var DateBoxMask = DateBoxBase.inherit({
             upArrow: that._partIncrease.bind(that, FORWARD),
             downArrow: that._partIncrease.bind(that, BACKWARD)
         });
+    },
+
+    _keyboardHandler: function(e) {
+        this.callBase(e);
+        var key = e.originalEvent.originalEvent.key;
+
+        if(!this._useMaskBehavior() || key.length > 1) {
+            return;
+        }
+
+        if(isNaN(parseInt(key))) {
+            this._searchString(key.toLowerCase());
+        } else {
+            this._searchValue += key;
+
+            var limits = this._getActivePartLimits(),
+                newValue = parseInt(this._searchValue);
+
+            if(!inRange(newValue, limits.min, limits.max)) {
+                this._searchValue = key;
+            }
+
+            this._setActivePartValue(this._searchValue);
+            this._startSearchTimeout();
+        }
+
+        e.originalEvent.preventDefault();
+    },
+
+    _startSearchTimeout: function() {
+        clearTimeout(this._searchTimeout);
+        this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), 1500);
+    },
+
+    _searchString: function(letter) {
+        var limits = this._getActivePartProp("limits")(this._maskValue),
+            startString = this._searchValue + letter;
+
+        for(var i = 0; i <= limits.max - limits.min; i++) {
+            this._partIncrease(1);
+            if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
+                this._searchValue = startString;
+                this._startSearchTimeout();
+                return;
+            }
+        }
+
+        this._revertChanges();
+    },
+
+    _clearSearchValue: function() {
+        clearTimeout(this._searchTimeout);
+        this._searchValue = "";
     },
 
     _useMaskBehavior: function() {
@@ -94,7 +148,32 @@ var DateBoxMask = DateBoxBase.inherit({
 
         this._activePartIndex = index;
         this._caret(this._getActivePartProp("caret"));
+        if(step !== 0) {
+            this._clearSearchValue();
+        }
         e && e.preventDefault();
+    },
+
+    _getActivePartLimits: function() {
+        var limitFunction = this._getActivePartProp("limits");
+        return limitFunction(this._maskValue);
+    },
+
+    _getActivePartValue: function() {
+        var getter = this._getActivePartProp("getter");
+        return isFunction(getter) ? getter(this._maskValue) : this._maskValue[getter]();
+    },
+
+    _setActivePartValue: function(value) {
+        var setter = this._getActivePartProp("setter"),
+            limits = this._getActivePartLimits();
+
+        value = fitIntoRange(value, limits.min, limits.max);
+
+        isFunction(setter) ? setter(this._maskValue, value) : this._maskValue[setter](value);
+        this._renderDisplayText(this._getDisplayedText(this._maskValue));
+
+        this._renderDateParts();
     },
 
     _getActivePartProp: function(property) {
@@ -119,18 +198,13 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _partIncrease: function(step, e) {
-        var getter = this._getActivePartProp("getter"),
-            setter = this._getActivePartProp("setter"),
-            newValue = step + (isFunction(getter) ? getter(this._maskValue) : this._maskValue[getter]()),
-            limits = this._getActivePartProp("limits")(this._maskValue);
+        var limits = this._getActivePartLimits(),
+            newValue = step + this._getActivePartValue();
 
         newValue = newValue > limits.max ? limits.min : newValue;
         newValue = newValue < limits.min ? limits.max : newValue;
 
-        isFunction(setter) ? setter(this._maskValue, newValue) : this._maskValue[setter](newValue);
-        this._renderDisplayText(this._getDisplayedText(this._maskValue));
-
-        this._renderDateParts();
+        this._setActivePartValue(newValue);
         e && e.preventDefault();
     },
 
@@ -189,6 +263,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _clearState: function() {
         this._detachMaskEvents();
+        this._clearSearchValue();
         delete this._dateParts;
         delete this._activePartIndex;
         delete this._maskValue;
