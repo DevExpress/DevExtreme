@@ -1289,6 +1289,22 @@ QUnit.test("'clear' button should clear value when items is object and searchEna
     assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), "", "text is cleared");
 });
 
+QUnit.test("'clear' button should save valueChange event instance", function(assert) {
+    var valueChangedHandler = sinon.spy(),
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: [1],
+            value: 1,
+            onValueChanged: valueChangedHandler,
+            showClearButton: true
+        }),
+        $clearButton = $selectBox.find(".dx-clear-button-area");
+
+    $($clearButton).trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangeEventHandler has been called once");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 QUnit.test("selectedItem should be reset on 'clear' button", function(assert) {
     var $selectBox = $("#selectBox");
 
