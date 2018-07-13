@@ -2191,13 +2191,16 @@ var Scheduler = Widget.inherit({
             this.updateAppointment(oldData, formData);
         } else {
 
-            recData && this.updateAppointment(oldData, recData);
-            delete this._updatedRecAppointment;
+            if(recData) {
+                this.updateAppointment(oldData, recData);
+                delete this._updatedRecAppointment;
 
-            if(typeof this._getTimezoneOffsetByOption() === "number") {
-                this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
-                this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
+                if(typeof this._getTimezoneOffsetByOption() === "number") {
+                    this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
+                    this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
+                }
             }
+
             this.addAppointment(formData);
         }
         this._enableDoneButton();
