@@ -325,7 +325,6 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions.displayTime
                     * @default 4000 @for Material
-                    * @inheritdoc
                     */
                     displayTime: 4000
                 }
