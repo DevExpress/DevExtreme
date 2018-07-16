@@ -158,7 +158,9 @@ function getGroupValue(group) {
 }
 
 function getFilterOperations(field) {
-    var result = field.filterOperations || (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    var result = field.filterOperations && field.filterOperations.length
+                    ? field.filterOperations
+                    : (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
     return extend([], result);
 }
 
