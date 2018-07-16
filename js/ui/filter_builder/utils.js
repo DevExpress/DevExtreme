@@ -1,6 +1,7 @@
 "use strict";
 
 import { Deferred, when } from "../../core/utils/deferred";
+import { isEmpty } from "../../core/utils/array";
 
 var dataErrors = require("../../data/errors").errors,
     domAdapter = require("../../core/dom_adapter"),
@@ -157,10 +158,12 @@ function getGroupValue(group) {
     return value;
 }
 
+function getDefaultFilterOperations(field) {
+    return (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+}
+
 function getFilterOperations(field) {
-    var result = field.filterOperations && field.filterOperations.length
-                    ? field.filterOperations
-                    : (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    var result = isEmpty(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
     return extend([], result);
 }
 
