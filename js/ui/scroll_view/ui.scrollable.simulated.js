@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
+    windowUtils = require("../../core/utils/window"),
     iteratorUtils = require("../../core/utils/iterator"),
     translator = require("../../animation/translator"),
     Class = require("../../core/class"),
@@ -176,15 +177,40 @@ var Scroller = Class.inherit({
     },
 
     _move: function(location) {
-        this._location = location !== undefined ? location : this._location;
+        this._location = location !== undefined ? location * this._getScaleRatio() : this._location;
         this._moveContent();
         this._moveScrollbar();
     },
 
     _moveContent: function() {
         var location = this._location;
-        this._$container[this._scrollProp](-location);
+
+        this._$container[this._scrollProp](-location / this._getScaleRatio());
         this._moveContentByTranslator(location);
+    },
+
+    _getScaleRatio: function() {
+        var ratio;
+
+        if(windowUtils.hasWindow()) {
+            var element = this._$element.get(0),
+                realDimension = this._getRealDimension(element, this._dimension),
+                baseDimension = this._getBaseDimension(element, this._dimension);
+
+            ratio = realDimension / baseDimension;
+        }
+
+        return ratio || 1;
+    },
+
+    _getRealDimension: function(element, dimension) {
+        return math.round(element.getBoundingClientRect()[dimension]);
+    },
+
+    _getBaseDimension: function(element, dimension) {
+        var dimensionName = "offset" + titleize(dimension);
+
+        return element[dimensionName];
     },
 
     _moveContentByTranslator: function(location) {
@@ -396,7 +422,7 @@ var Scroller = Class.inherit({
     },
 
     _updateLocation: function() {
-        this._location = translator.locate(this._$content)[this._prop] - this._$container[this._scrollProp]();
+        this._location = (translator.locate(this._$content)[this._prop] - this._$container[this._scrollProp]()) * this._getScaleRatio();
     },
 
     _updateBounds: function() {
@@ -421,7 +447,8 @@ var Scroller = Class.inherit({
         commonUtils.deferRender(function() {
             that._scrollbar.option({
                 containerSize: containerSize,
-                contentSize: contentSize
+                contentSize: contentSize,
+                scaleRatio: that._getScaleRatio()
             });
         });
     }),
@@ -460,7 +487,8 @@ var Scroller = Class.inherit({
             contentSize = this._$content[this._dimension]();
 
         if(!isOverflowHidden) {
-            var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)];
+            var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
+
             contentSize = math.max(containerScrollSize, contentSize);
         }
 
