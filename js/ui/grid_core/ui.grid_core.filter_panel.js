@@ -150,7 +150,7 @@ var FilterPanelView = modules.View.inherit({
             customOperation = utils.getCustomOperation(options.customOperations, operation),
             operationText,
             field = utils.getField(filterValue[0], options.columns),
-            fieldText = field.caption,
+            fieldText = field.caption || "",
             value = filterValue[2];
 
         if(customOperation) {
