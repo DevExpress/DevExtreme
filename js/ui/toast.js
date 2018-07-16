@@ -395,7 +395,7 @@ var Toast = Overlay.inherit({
     },
 
     _show: function() {
-        if(visibleToastInstance) {
+        if(visibleToastInstance && visibleToastInstance !== this) {
             clearTimeout(visibleToastInstance._hideTimeout);
             visibleToastInstance.hide();
         }
