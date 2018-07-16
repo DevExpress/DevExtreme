@@ -1,8 +1,7 @@
 "use strict";
 
 import { Deferred, when } from "../../core/utils/deferred";
-import { isEmpty } from "../../core/utils/array";
-import { dataErrors } from "../../data/errors";
+import { errors as dataErrors } from "../../data/errors";
 import domAdapter from "../../core/dom_adapter";
 import errors from "../widget/ui.errors";
 import filterUtils from "../shared/filtering";
@@ -161,8 +160,12 @@ function getDefaultFilterOperations(field) {
     return (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
 }
 
+function containItems(entity) {
+    return Array.isArray(entity) && entity.length;
+}
+
 function getFilterOperations(field) {
-    var result = !isEmpty(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
+    var result = containItems(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
     return extend([], result);
 }
 
