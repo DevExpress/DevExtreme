@@ -18,13 +18,13 @@ var chartSeriesObject = {
     /**
     * @name chartSeriesObjectMethods.getArgumentAxis
     * @publicName getArgumentAxis()
-    * @returns chartAxisObject
+    * @return chartAxisObject
     */
     getArgumentAxis: function() { },
     /**
     * @name chartSeriesObjectMethods.getValueAxis
     * @publicName getValueAxis()
-    * @returns chartAxisObject
+    * @return chartAxisObject
     */
     getValueAxis: function() { }
 }
@@ -115,7 +115,7 @@ var chartAxisObject = {
     /**
     * @name chartAxisObjectMethods.visualRange
     * @publicName visualRange()
-    * @returns Array<number,string,Date>
+    * @return Array<number,string,Date>
     */
     visualRange: function() { },
     /**
