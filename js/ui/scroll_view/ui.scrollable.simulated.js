@@ -479,12 +479,12 @@ var Scroller = Class.inherit({
     },
 
     _containerSize: function() {
-        return this._$container[this._dimension]();
+        return this._getRealDimension(this._$container.get(0), this._dimension);
     },
 
     _contentSize: function() {
         var isOverflowHidden = this._$content.css("overflow" + this._axis.toUpperCase()) === "hidden",
-            contentSize = this._$content[this._dimension]();
+            contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 
         if(!isOverflowHidden) {
             var containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
