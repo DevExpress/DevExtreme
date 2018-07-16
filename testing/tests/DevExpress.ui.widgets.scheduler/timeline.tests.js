@@ -478,8 +478,8 @@ QUnit.test("Scheduler timeline week header cells should have right width if cros
         $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0),
         $dateTableCell = $element.find(".dx-scheduler-date-table-cell").eq(0);
 
-    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
-    assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.outerWidth(), 1.5, "Last row cell has correct width");
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.get(0).getBoundingClientRect().width, 1.5, "First row cell has correct width");
+    assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.get(0).getBoundingClientRect().width, 1.5, "Last row cell has correct width");
 });
 
 QUnit.test("Scheduler timeline week cells should have right height if crossScrollingEnabled = true", function(assert) {

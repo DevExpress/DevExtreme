@@ -264,7 +264,7 @@ QUnit.testStart(function() {
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
 
-        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(2).position().top, "Cell coordinates are right");
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(2).position().top, 1, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(2).position().left, "Cell coordinates are right");
     });
 
@@ -276,7 +276,7 @@ QUnit.testStart(function() {
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 6, 0));
 
-        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(1).position().top, "Cell coordinates are right");
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(1).position().top, 1, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(1).position().left, "Cell coordinates are right");
     });
 
@@ -464,7 +464,7 @@ QUnit.testStart(function() {
         this.instance.option("firstDayOfWeek", 7);
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
-        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(18).position().top, "Cell coordinates are right");
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(18).position().top, 1, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(18).position().left, "Cell coordinates are right");
     });
 
@@ -833,7 +833,7 @@ QUnit.testStart(function() {
         this.instance.option("firstDayOfWeek", 7);
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
-        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(14).position().top, "Cell coordinates are right");
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(14).position().top, 1, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(14).position().left, "Cell coordinates are right");
     });
 
@@ -915,7 +915,7 @@ QUnit.testStart(function() {
         this.instance.option("startDayHour", 5);
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
-        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, "Cell coordinates are right");
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, 1, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, "Cell coordinates are right");
     });
 
@@ -927,7 +927,7 @@ QUnit.testStart(function() {
         this.instance.option("endDayHour", 10);
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
-        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, "Cell coordinates are right");
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, 1, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, "Cell coordinates are right");
     });
 
@@ -1044,10 +1044,10 @@ QUnit.testStart(function() {
 
         assert.deepEqual(this.instance.getMaxAllowedPosition(),
             [
-                Math.round($firstGroupLastCell.position().left + $firstGroupLastCell.outerWidth()),
-                Math.round($secondGroupLastCell.position().left + $secondGroupLastCell.outerWidth()),
-                Math.round($thirdGroupLastCell.position().left + $thirdGroupLastCell.outerWidth()),
-                Math.round($fourthGroupLastCell.position().left + $fourthGroupLastCell.outerWidth())
+                Math.round($firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width),
+                Math.round($secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width),
+                Math.round($thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width),
+                Math.round($fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width)
             ], "Max left positions are correct");
     });
 
