@@ -5112,4 +5112,45 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.equal($("input:focus").val(), "Alex", "value of first editor");
     });
+
+    QUnit.test("Editor's input should be focused after mouse click (T650581)", function(assert) {
+        // arrange
+        var that = this,
+            $testElement;
+
+        that.$element = function() {
+            return $("#container");
+        };
+
+        that.options = {
+            rowTemplate: function(container, item) {
+                var data = item.data;
+
+                var tbodyElement = $("<tbody>").addClass("dx-row template");
+                var trElement = $("<tr>").addClass("dx-data-row");
+                tbodyElement.append(trElement);
+                var cellElement = $("<td>");
+                trElement.append($(cellElement));
+
+                $(cellElement).dxTextBox({
+                    value: data.name
+                });
+                $(container).append(tbodyElement);
+            }
+        };
+        this.setupModule();
+
+        that.gridView.render($("#container"));
+
+        // arrange, act
+        $testElement = that.$element().find(".template td").eq(0);
+        $testElement.find("input").focus();
+        $testElement.trigger(CLICK_EVENT);
+
+        this.clock.tick();
+
+        // arrange, assert
+        assert.notOk($testElement.hasClass("dx-cell-focus-disabled"), "no keyboard interaction with cell template element");
+        assert.ok($testElement.find("input").is(":focus"), 'input has focus');
+    });
 });
