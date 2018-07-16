@@ -1,12 +1,10 @@
 "use strict";
 
-require("ui/data_grid/ui.data_grid");
-
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    customOperations = require("ui/grid_core/ui.grid_core.filter_custom_operations"),
-    fx = require("animation/fx"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
+import customOperations from "ui/grid_core/ui.grid_core.filter_custom_operations";
+import fx from "animation/fx";
+import "ui/data_grid/ui.data_grid";
 
 var HEADER_FILTER_CLASS = "dx-header-filter",
     HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + "-empty";
