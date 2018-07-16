@@ -49,6 +49,7 @@ var Tooltip = Popover.inherit({
             /**
             * @name dxTooltipOptions.onTitleRendered
             * @hidden
+            * @action
             * @inheritdoc
             */
             onTitleRendered: null,

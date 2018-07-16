@@ -410,18 +410,21 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions.onCopy
             * @hidden
+            * @action
             * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.onCut
             * @hidden
+            * @action
             * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions.onPaste
             * @hidden
+            * @action
             * @inheritdoc
             */
 
