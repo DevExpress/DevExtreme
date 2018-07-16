@@ -148,6 +148,27 @@ QUnit.module("Filter Panel", {
         assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Equals '1'", "check filter text");
     });
 
+    // T651579
+    QUnit.test("filter value with name in identifier shows in panel", function(assert) {
+        // arrange
+        this.initFilterPanelView({
+            columns: [{ name: "field", caption: "Field", allowFiltering: true }]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[Field] Equals '1'", "check filter text");
+    });
+
+    QUnit.test("filter value with column witout caption contains empty string", function(assert) {
+        // arrange
+        this.initFilterPanelView({
+            columns: [{ name: "field", allowFiltering: true }]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[] Equals '1'", "check filter text");
+    });
+
     QUnit.test("can customize hints", function(assert) {
         // arrange, act
         this.initFilterPanelView({

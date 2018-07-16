@@ -1602,8 +1602,15 @@ module.exports = {
                     return this._fixedColumns[rowIndex] || [];
 
                 },
-                getFilteringColumns: function(rowIndex) {
-                    return this.getColumns().filter(item => item.dataField && item.allowFiltering);
+                getFilteringColumns: function() {
+                    return this.getColumns().filter(item => (item.dataField || item.name) && item.allowFiltering).map(item => {
+                        let field = extend(true, {}, item);
+                        if(!isDefined(field.dataField)) {
+                            field.dataField = field.name;
+                        }
+                        field.filterOperations = item.filterOperations !== item.defaultFilterOperations ? field.filterOperations : null;
+                        return field;
+                    });
                 },
                 _getFixedColumnsCore: function() {
                     var that = this,
