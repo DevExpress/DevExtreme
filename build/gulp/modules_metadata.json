@@ -137,6 +137,16 @@
     "name": "events/transform"
   },
   {
+    "name": "events",
+    "exports": {
+      "on": "events.on",
+      "one": "events.one",
+      "off": "events.off",
+      "trigger": "events.trigger",
+      "triggerHandler": "events.triggerHandler"
+    }
+  },
+  {
     "name": "framework/command",
     "exports": {
       "default": "framework.dxCommand"
