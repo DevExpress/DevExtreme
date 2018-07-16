@@ -89,6 +89,15 @@
     }
 }
 
+
+.dx-radiogroup:not(.dx-state-disabled) {
+    .dx-radiobutton {
+        &.dx-state-disabled {
+            opacity: @texteditor-disabled-opacity;
+        }
+    }
+}
+
 .dx-rtl .dx-radiobutton,
 .dx-rtl.dx-radiobutton {
     &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
