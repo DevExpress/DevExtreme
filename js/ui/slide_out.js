@@ -71,6 +71,7 @@ var SlideOut = CollectionWidget.inherit({
             * @name dxSlideOutOptions.menuVisible
             * @type boolean
             * @default false
+            * @fires dxSlideOutOptions.onOptionChanged
             */
             menuVisible: false,
 
