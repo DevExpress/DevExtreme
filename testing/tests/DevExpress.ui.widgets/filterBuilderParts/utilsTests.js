@@ -949,6 +949,16 @@ QUnit.module("getAvailableOperations", {
         }]);
     });
 
+    // T653737
+    QUnit.test("for field with empty filterOperations array", function(assert) {
+        var operations = utils.getAvailableOperations({
+            filterOperations: [],
+            dataType: "boolean"
+        }, filterOperationsDescriptions, []);
+
+        assert.equal(operations.length, 4);
+    });
+
     QUnit.test("ignore custom operation if dataType is not set", function(assert) {
         // arrange, act
         var operations = utils.getAvailableOperations({
@@ -964,7 +974,6 @@ QUnit.module("getAvailableOperations", {
         // assert
         assert.strictEqual(operations.length, 8, "custom operation is ignored");
     });
-
 
     QUnit.test("for custom operation with filterOperations", function(assert) {
         // arrange, act

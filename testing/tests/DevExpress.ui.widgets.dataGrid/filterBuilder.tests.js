@@ -277,6 +277,23 @@ QUnit.module("Common", {
         assert.deepEqual(filterBuilderFields.length, 1);
         assert.deepEqual(filterBuilderFields[0].dataField, "field");
     });
+
+    // T653737
+    QUnit.test("Filter builder doesn't throw errors when boolean data type columns are used", function(assert) {
+        var handlerInit = sinon.spy();
+        this.initFilterBuilderView({
+            columns: [
+                { dataField: "field", dataType: "boolean", filterOperations: [] }
+            ],
+            filterBuilder: {
+                onInitialized: handlerInit
+            },
+            filterBuilderPopup: { visible: true },
+            filterValue: ["field", "=", true]
+        });
+
+        assert.equal(handlerInit.called, 1);
+    });
 });
 
 QUnit.module("Real dataGrid", {
