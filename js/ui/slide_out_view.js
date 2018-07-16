@@ -66,6 +66,7 @@ var SlideOutView = Widget.inherit({
             * @name dxSlideOutViewOptions.menuVisible
             * @type boolean
             * @default false
+            * @fires dxSlideOutViewOptions.onOptionChanged
             */
             menuVisible: false,
 
