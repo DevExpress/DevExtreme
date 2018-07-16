@@ -378,7 +378,8 @@ var Drawer = Widget.inherit({
 
         var pos,
             menuPos,
-            contentPos;
+            contentPos,
+            width;
 
         if(this.option("mode") === "push") {
             pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
@@ -393,7 +394,7 @@ var Drawer = Widget.inherit({
             }
         }
         if(this.option("mode") === "persistent") {
-            var width = this._calculateMenuWidth(offset);
+            width = this._calculateMenuWidth(offset);
 
             contentPos = width;
 
@@ -415,7 +416,6 @@ var Drawer = Widget.inherit({
         }
         if(this.option("mode") === "temporary") {
             menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-            contentPos = offset * this._getMenuWidth();
 
             this._toggleHideMenuCallback(offset);
 
@@ -423,7 +423,16 @@ var Drawer = Widget.inherit({
                 this._toggleShaderVisibility(true);
                 animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
                 // animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
+            }
+
+            if(this.option("showMode") === "slide") {
+                menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
                 animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+            }
+
+            if(this.option("showMode") === "shrink") {
+                width = this._calculateMenuWidth(offset);
+                animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
             }
         }
     },
@@ -451,16 +460,17 @@ var Drawer = Widget.inherit({
     },
 
     _calculatePixelOffset: function(offset) {
+        var minWidth = !offset ? this.option("minWidth") : 0;
+
         if(this.option("mode") === "push") {
             offset = offset || 0;
-            var minWidth = !offset ? this.option("minWidth") : 0;
             return offset * this._getMenuWidth() + minWidth;
         }
         if(this.option("mode") === "persistent" || this.option("mode") === "temporary") {
             if(offset) {
                 return 0;
             } else {
-                return -this._getMenuWidth();
+                return -this._getMenuWidth() + minWidth;
             }
         }
     },
