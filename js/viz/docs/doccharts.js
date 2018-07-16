@@ -1986,20 +1986,20 @@ var dxChart = {
     /**
     * @name dxchartmethods.getValueAxis
     * @publicName getValueAxis()
-    * @returns chartAxisObject
+    * @return chartAxisObject
     */
     getValueAxis: function() { },
     /**
     * @name dxchartmethods.getValueAxis(name)
     * @publicName getValueAxis(name)
     * @param1 name:string
-    * @returns chartAxisObject
+    * @return chartAxisObject
     */
     getValueAxis: function(name) { },
     /**
     * @name dxchartmethods.getArgumentAxis
     * @publicName getArgumentAxis()
-    * @returns chartAxisObject
+    * @return chartAxisObject
     */
     getArgumentAxis: function() { }
 };
