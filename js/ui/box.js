@@ -509,6 +509,7 @@ var Box = CollectionWidget.inherit({
             */
             /**
             * @name dxBoxOptions.onSelectionChanged
+            * @action
             * @hidden
             * @inheritdoc
             */
