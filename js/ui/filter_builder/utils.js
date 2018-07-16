@@ -2,18 +2,17 @@
 
 import { Deferred, when } from "../../core/utils/deferred";
 import { isEmpty } from "../../core/utils/array";
-
-var dataErrors = require("../../data/errors").errors,
-    domAdapter = require("../../core/dom_adapter"),
-    errors = require("../widget/ui.errors"),
-    filterUtils = require("../shared/filtering"),
-    formatHelper = require("../../format_helper"),
-    extend = require("../../core/utils/extend").extend,
-    inflector = require("../../core/utils/inflector"),
-    between = require("./between"),
-    messageLocalization = require("../../localization/message"),
-    DataSource = require("../../data/data_source/data_source").DataSource,
-    filterOperationsDictionary = require("./ui.filter_operations_dictionary");
+import { dataErrors } from "../../data/errors";
+import domAdapter from "../../core/dom_adapter";
+import errors from "../widget/ui.errors";
+import filterUtils from "../shared/filtering";
+import formatHelper from "../../format_helper";
+import { extend } from "../../core/utils/extend";
+import inflector from "../../core/utils/inflector";
+import between from "./between";
+import messageLocalization from "../../localization/message";
+import { DataSource } from "../../data/data_source/data_source";
+import filterOperationsDictionary from "./ui.filter_operations_dictionary";
 
 var DEFAULT_DATA_TYPE = "string",
     EMPTY_MENU_ICON = "icon-none",
