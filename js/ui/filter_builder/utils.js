@@ -163,7 +163,7 @@ function getDefaultFilterOperations(field) {
 }
 
 function getFilterOperations(field) {
-    var result = isEmpty(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
+    var result = !isEmpty(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
     return extend([], result);
 }
 
