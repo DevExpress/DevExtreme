@@ -46,7 +46,7 @@ var animation = {
         toConfig["padding-left"] = padding;
 
         fx.animate($element, {
-            to: toConfig,
+            to: { paddingLeft: padding },
             duration: ANIMATION_DURATION,
             complete: completeAction
         });
@@ -400,9 +400,12 @@ var Drawer = Widget.inherit({
 
             this._toggleHideMenuCallback(offset);
 
-            // if(animate) {
-            this._toggleShaderVisibility(true);
-            animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
+            if(animate) {
+                this._toggleShaderVisibility(true);
+                animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
+            } else {
+                $(this.content()).css("paddingLeft", contentPos);
+            }
 
             if(this.option("showMode") === "slide") {
                 menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
@@ -412,7 +415,6 @@ var Drawer = Widget.inherit({
             if(this.option("showMode") === "shrink") {
                 animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
             }
-            // }
         }
         if(this.option("mode") === "temporary") {
             menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
