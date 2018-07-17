@@ -69,6 +69,10 @@
             }
         }
     }
+
+    &.dx-state-disabled {
+        opacity: @texteditor-disabled-opacity;
+    }
 }
 
 .dx-invalid {
@@ -87,6 +91,14 @@
             .dx-radiobutton-icon:before {
                 border-color: @radiobutton-invalid-focused-border-color;
             }
+        }
+    }
+}
+
+.dx-state-disabled {
+    .dx-radiobutton {
+        &.dx-state-disabled {
+            opacity: 1;
         }
     }
 }
