@@ -45,6 +45,9 @@ viz.dxTreeMap = require("../../../viz/tree_map");
 /* Funnel */
 viz.dxFunnel = require("../../../viz/funnel");
 
+/* Sankey */
+viz.dxSankey = require("../../../viz/sankey");
+
 /// BUNDLER_PARTS_END
 
 viz.BaseWidget = require("../../../viz/core/base_widget");

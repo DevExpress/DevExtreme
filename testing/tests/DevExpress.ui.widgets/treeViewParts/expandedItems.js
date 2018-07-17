@@ -386,3 +386,56 @@ QUnit.test("expand childless item in recursive case", function(assert) {
     assert.ok(nodes[0].expanded, "root node is expanded");
     assert.ok(nodes[0].children[0].expanded, "child node is expanded");
 });
+
+QUnit.test("Expand all method", function(assert) {
+    var items = [{
+            text: "1",
+            id: 1,
+            items: [{
+                text: "11",
+                id: 11,
+                items: [{
+                    text: "111",
+                    id: 111
+                }]
+            }]
+        }],
+        $treeView = initTree({
+            items: items
+        }),
+        treeView = $treeView.dxTreeView("instance");
+
+    treeView.expandAll();
+
+    var nodes = treeView.getNodes();
+    assert.ok(nodes[0].expanded, "item 1");
+    assert.ok(nodes[0].items[0].expanded, "item 11");
+    assert.ok(nodes[0].items[0].items[0].expanded, "item 111");
+});
+
+QUnit.test("Collapse all method", function(assert) {
+    var items = [{
+            text: "1",
+            id: 1,
+            items: [{
+                text: "11",
+                id: 11,
+                items: [{
+                    text: "111",
+                    id: 111
+                }]
+            }]
+        }],
+        $treeView = initTree({
+            items: items
+        }),
+        treeView = $treeView.dxTreeView("instance");
+
+    treeView.expandAll();
+    treeView.collapseAll();
+
+    var nodes = treeView.getNodes();
+    assert.notOk(nodes[0].expanded, "item 1");
+    assert.notOk(nodes[0].items[0].expanded, "item 11");
+    assert.notOk(nodes[0].items[0].items[0].expanded, "item 111");
+});

@@ -85,6 +85,10 @@
             }
         }
     }
+
+    &.dx-state-disabled {
+        opacity: @texteditor-disabled-opacity;
+    }
 }
 
 &.dx-state-readonly,
@@ -122,6 +126,14 @@
                 background-color: fade(@radiobutton-invalid-focused-border-color, 10%);
                 .scale(1);
             }
+        }
+    }
+}
+
+.dx-state-disabled {
+    .dx-radiobutton {
+        &.dx-state-disabled {
+            opacity: 1;
         }
     }
 }

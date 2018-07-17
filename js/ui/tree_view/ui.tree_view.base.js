@@ -1798,12 +1798,24 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    collapseAll: function() {
-        var that = this;
+    /**
+    * @name dxTreeViewMethods_expandAll
+    * @publicName expandAll
+    */
+    expandAll: function() {
+        each(this._dataAdapter.getData(), (function(_, node) {
+            this._toggleExpandedState(node.internalFields.key, true);
+        }).bind(this));
+    },
 
-        each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
-            that._toggleExpandedState(key, false);
-        });
+    /**
+     * @name dxTreeViewMethods_collapseAll
+     * @publicName collapseAll
+     */
+    collapseAll: function() {
+        each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
+            this._toggleExpandedState(key, false);
+        }).bind(this));
     }
 
 });

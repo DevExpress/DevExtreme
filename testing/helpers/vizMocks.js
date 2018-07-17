@@ -79,7 +79,6 @@
             return this;
         },
         remove: function() {
-            $(this.element).removeData();
             if(this.parent) {
                 for(var i = this.parent.children.length - 1; i >= 0; i--) {
                     if(this.parent.children[i] === this) {

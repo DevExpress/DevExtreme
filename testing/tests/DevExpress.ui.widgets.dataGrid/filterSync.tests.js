@@ -1,12 +1,10 @@
 "use strict";
 
-require("ui/data_grid/ui.data_grid");
-
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    customOperations = require("ui/grid_core/ui.grid_core.filter_custom_operations"),
-    fx = require("animation/fx"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
+import customOperations from "ui/grid_core/ui.grid_core.filter_custom_operations";
+import fx from "animation/fx";
+import "ui/data_grid/ui.data_grid";
 
 var HEADER_FILTER_CLASS = "dx-header-filter",
     HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + "-empty";
@@ -248,6 +246,19 @@ QUnit.module("getCombinedFilter", {
 
         // assert
         assert.deepEqual(this.getCombinedFilter(true), ["Test", "=", 1], "combined filter");
+    });
+
+    // T651579
+    QUnit.test("filter value with name in identifier", function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ name: "test", allowFiltering: true }],
+            filterValue: ["test", "=", 1]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ["test", "=", 1], "combined filter");
     });
 
     QUnit.test("between", function(assert) {
@@ -571,6 +582,25 @@ QUnit.module("Sync on initialization", {
         assert.deepEqual(this.option("filterValue"), ["field", "=", "1" ], "filterValue");
         assert.equal(this.columnsController.columnOption("field", "filterValue"), "1");
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["1"]);
+    });
+
+    QUnit.test("Error E1049", function(assert) {
+        assert.throws(
+            function() {
+                this.setupDataGrid({
+                    filterValue: ["field", "=", "1"],
+                    filterSyncEnabled: true,
+                    columns: [{
+                        caption: "Field",
+                        allowFiltering: true
+                    }]
+                });
+            },
+            function(e) {
+                return /E1049/.test(e.message);
+            },
+            `Сolumn 'Field': filtering is allowed but the 'dataField' or 'name' option is not specified`
+        );
     });
 
     QUnit.test("sync filterValues if filterValue == null", function(assert) {

@@ -7,6 +7,9 @@ QUnit.testStart(function() {
         padding: 0;\
         margin: 0;\
     }\
+    .gridWithHeight {\
+        height: 440px;\
+    }\
 </style>\
 <div style="padding: 0px 40px; margin: 0px 50px">\
     <div id="testContainer"></div>\
@@ -947,6 +950,35 @@ function createGridView(options, userOptions) {
         // assert
         $rowsViewContainer = gridView.getView("rowsView").element();
         assert.strictEqual($rowsViewContainer.get(0).style.height, "", "height of the rowsView");
+    });
+
+    // T654070
+    QUnit.test("Render scrollable after showing grid", function(assert) {
+        // arrange
+        var $testElement = $("#container");
+
+        $testElement.hide();
+        $testElement.addClass("gridWithHeight");
+
+        var gridView = this.createGridView({
+            columnsController: new MockColumnsController([{ caption: 'Column 1', visible: true }]),
+            dataController: new MockDataController({
+                items: [ { values: [1] } ]
+            })
+        });
+
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        assert.notOk(this.rowsView.element().hasClass("dx-scrollable"), "hasn't scrollable");
+
+        // act
+        $testElement.show();
+        this.updateDimensions();
+
+        // assert
+        assert.ok(this.rowsView.element().hasClass("dx-scrollable"), "has scrollable");
     });
 }());
 
