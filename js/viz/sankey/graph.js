@@ -4,8 +4,6 @@ const WHITE = 'white';
 const GRAY = 'gray';
 const BLACK = 'black';
 
-let inArray = require("../../core/utils/array").inArray;
-
 let routines = {
     maxOfArray: function(arr, callback) {
         let m = 0, callback_function = (v) => { return v; };
@@ -21,11 +19,11 @@ let getVertices = function(links) {
     let vert = [];
 
     links.forEach(link => {
-        if(inArray(link[0], vert) === -1) {
+        if(vert.indexOf(link[0]) === -1) {
             vert.push(link[0]);
         }
 
-        if(inArray(link[1], vert) === -1) {
+        if(vert.indexOf(link[1]) === -1) {
             vert.push(link[1]);
         }
     });
@@ -37,7 +35,7 @@ let getAdjacentVertices = function(links, vertex) {
     let avert = [];
 
     links.forEach(link => {
-        if(link[0] === vertex && inArray(link[1], avert) === -1) {
+        if(link[0] === vertex && avert.indexOf(link[1]) === -1) {
             avert.push(link[1]);
         }
     });
@@ -49,7 +47,7 @@ let getReverseAdjacentVertices = function(links, vertex) {
     let avert = [];
 
     links.forEach(link => {
-        if(link[1] === vertex && inArray(link[0], avert) === -1) {
+        if(link[1] === vertex && avert.indexOf(link[0]) === -1) {
             avert.push(link[0]);
         }
     });
