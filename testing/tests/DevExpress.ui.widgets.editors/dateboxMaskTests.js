@@ -449,10 +449,10 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("displayFormat", "MMMM");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "February");
+            assert.equal(this.$input.val(), "January");
 
             this.clock.tick(SEARCH_TIMEOUT - 1);
-            this.keyboard.type("1");
+            this.keyboard.type("2");
             assert.equal(this.$input.val(), "December");
 
             this.clock.tick(1);

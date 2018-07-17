@@ -44,21 +44,7 @@ var DateBoxMask = DateBoxBase.inherit({
             return;
         }
 
-        if(isNaN(parseInt(key))) {
-            this._searchString(key.toLowerCase());
-        } else {
-            this._searchValue += key;
-
-            var limits = this._getActivePartLimits(),
-                newValue = parseInt(this._searchValue);
-
-            if(!inRange(newValue, limits.min, limits.max)) {
-                this._searchValue = key;
-            }
-
-            this._setActivePartValue(this._searchValue);
-            this._startSearchTimeout();
-        }
+        isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
 
         e.originalEvent.preventDefault();
     },
@@ -68,9 +54,29 @@ var DateBoxMask = DateBoxBase.inherit({
         this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), SEARCH_TIMEOUT);
     },
 
-    _searchString: function(letter) {
+    _searchNumber: function(char) {
+        this._searchValue += char;
+
+        var limits = this._getActivePartLimits(),
+            setter = this._getActivePartProp("setter"),
+            newValue = parseInt(this._searchValue);
+
+        if(setter === "setMonth") {
+            newValue--;
+        }
+
+        if(!inRange(newValue, limits.min, limits.max)) {
+            this._searchValue = char;
+            newValue = parseInt(char);
+        }
+
+        this._setActivePartValue(newValue);
+        this._startSearchTimeout();
+    },
+
+    _searchString: function(char) {
         var limits = this._getActivePartProp("limits")(this._maskValue),
-            startString = this._searchValue + letter;
+            startString = this._searchValue + char.toLowerCase();
 
         for(var i = 0; i <= limits.max - limits.min; i++) {
             this._partIncrease(1);
