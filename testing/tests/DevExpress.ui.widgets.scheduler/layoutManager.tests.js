@@ -1331,8 +1331,8 @@ QUnit.test("Two rival appointments should have correct positions, vertical strat
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
-        cellHeight = $tableCell.outerHeight(),
-        cellWidth = $tableCell.outerWidth(),
+        cellHeight = $tableCell.get(0).getBoundingClientRect().height,
+        cellWidth = $tableCell.get(0).getBoundingClientRect().width,
         offset = getOffset();
 
     assert.equal($appointment.length, 2, "All appointments are rendered");
@@ -1366,8 +1366,8 @@ QUnit.test("Three rival appointments with two columns should have correct positi
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
-        cellHeight = $tableCell.outerHeight(),
-        cellWidth = $tableCell.outerWidth(),
+        cellHeight = $tableCell.get(0).getBoundingClientRect().height,
+        cellWidth = $tableCell.get(0).getBoundingClientRect().width,
         offset = getOffset(),
         firstAppointmentPosition = translator.locate($appointment.eq(0)),
         secondAppointmentPosition = translator.locate($appointment.eq(1)),
@@ -1406,8 +1406,8 @@ QUnit.test("Four rival appointments with three columns should have correct posit
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         $tableCell = $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0)),
-        cellHeight = $tableCell.outerHeight(),
-        cellWidth = $tableCell.outerWidth(),
+        cellHeight = $tableCell.get(0).getBoundingClientRect().height,
+        cellWidth = $tableCell.get(0).getBoundingClientRect().width,
         offset = getOffset(),
         expectedAppWidth = (cellWidth - offset) / 3;
 
