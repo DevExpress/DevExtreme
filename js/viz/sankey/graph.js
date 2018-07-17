@@ -19,11 +19,11 @@ let getVertices = function(links) {
     let vert = [];
 
     links.forEach(link => {
-        if(vert.findIndex((item) => { return item === link[0]; }) === -1) {
+        if(vert.indexOf(link[0]) === -1) {
             vert.push(link[0]);
         }
 
-        if(vert.findIndex((item) => { return item === link[1]; }) === -1) {
+        if(vert.indexOf(link[1]) === -1) {
             vert.push(link[1]);
         }
     });
@@ -35,7 +35,7 @@ let getAdjacentVertices = function(links, vertex) {
     let avert = [];
 
     links.forEach(link => {
-        if((link[0] === vertex) && (avert.findIndex((item) => { return item === link[1]; }) === -1)) {
+        if(link[0] === vertex && avert.indexOf(link[1]) === -1) {
             avert.push(link[1]);
         }
     });
@@ -47,7 +47,7 @@ let getReverseAdjacentVertices = function(links, vertex) {
     let avert = [];
 
     links.forEach(link => {
-        if((link[1] === vertex) && (avert.findIndex((item) => { return item === link[0]; }) === -1)) {
+        if(link[1] === vertex && avert.indexOf(link[0]) === -1) {
             avert.push(link[0]);
         }
     });
@@ -110,8 +110,7 @@ let struct = {
                 let maxLP = [];
                 // get max through avertex.lp and add 1 to it
                 averts.forEach(adjacentVertex => {
-                    let sortedVertexIdx = sortedVertices.findIndex((sv) => sv.name === adjacentVertex);
-                    maxLP.push(sortedVertices[sortedVertexIdx].lp);
+                    maxLP.push(sortedVertices.filter(sv => sv.name === adjacentVertex)[0].lp);
                 });
                 vertex.lp = routines.maxOfArray(maxLP) + 1;
             }

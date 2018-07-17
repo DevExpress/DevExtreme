@@ -1,6 +1,9 @@
 "use strict";
 
 const _SPLINE_TENSION = 0.3;
+const _ALIGNMENT_CENTER = 'center';
+const _ALIGNMENT_BOTTOM = 'bottom';
+const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 
 const graphModule = require('./graph');
 const validatorModule = require('./data_validator');
@@ -9,7 +12,7 @@ let layout = {
     _weightPerPixel: null,
 
     _getCascadeIdx: function(nodeTitle, cascadesConfig) {
-        let nodeInfo = cascadesConfig.find((c) => { return c.name === nodeTitle; });
+        let nodeInfo = cascadesConfig.filter((c) => { return c.name === nodeTitle; })[0];
 
         if(nodeInfo.outgoing.length > 0) {
             // in common case number of cascade is the longest path to the node
@@ -124,17 +127,17 @@ let layout = {
                 nodesInCascade = Object.keys(cascade).length,
                 cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
 
-            let cascadeAlign = 'top';
+            let cascadeAlign = _ALIGNMENT_DEFAULT;
 
             if(Array.isArray(options.nodeAlign)) {
-                cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : 'top';
+                cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : _ALIGNMENT_DEFAULT;
             } else {
                 cascadeAlign = options.nodeAlign;
             }
 
-            if(cascadeAlign === 'bottom') {
+            if(cascadeAlign === _ALIGNMENT_BOTTOM) {
                 y = options.height - cascadeHeight;
-            } else if(cascadeAlign === 'center') {
+            } else if(cascadeAlign === _ALIGNMENT_CENTER) {
                 y = 0.5 * (options.height - cascadeHeight);
             }
             y = Math.round(y);

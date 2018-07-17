@@ -6,6 +6,7 @@ var $ = require("jquery"),
     layoutBuilder = common.layoutBuilder,
     spiesLayoutBuilder = common.spiesLayoutBuilder,
     environment = common.environment,
+    find = common.find,
     rendererModule = require("viz/core/renderers/renderer"),
     paletteModule = require("viz/palette"),
     themeModule = require("viz/themes");
@@ -20,7 +21,6 @@ themeModule.registerTheme({
             }
         }
     } }, "generic.light");
-
 
 QUnit.module("Initialization", environment);
 
@@ -61,9 +61,9 @@ QUnit.test("Base sankey not fail when tooltip api is called", function(assert) {
 QUnit.module("DataSource processing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        for(let spyKey of Object.keys(spiesLayoutBuilder)) {
+        Object.keys(spiesLayoutBuilder).forEach(function(spyKey) {
             spiesLayoutBuilder[spyKey].reset();
-        }
+        });
     }
 }));
 
@@ -173,9 +173,9 @@ QUnit.test("Sort nodes in all cascades by sortData option", function(assert) {
 QUnit.module("Layout building", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        for(let spyKey of Object.keys(spiesLayoutBuilder)) {
+        Object.keys(spiesLayoutBuilder).forEach(function(spyKey) {
             spiesLayoutBuilder[spyKey].reset();
-        }
+        });
     }
 }));
 
@@ -401,9 +401,9 @@ QUnit.test("Passing array align option", function(assert) {
 QUnit.module("Returning correct layout data", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        for(let spyKey of Object.keys(spiesLayoutBuilder)) {
+        Object.keys(spiesLayoutBuilder).forEach(function(spyKey) {
             spiesLayoutBuilder[spyKey].reset();
-        }
+        });
     }
 }));
 
@@ -436,7 +436,7 @@ QUnit.test("Returning correct links[].connection data in getAllLinks", function(
 
     assert.equal(links.length, common.testData.simpleData.length);
     common.testData.simpleData.forEach(function(linkData) {
-        var output = links.find(function(i) {
+        var output = find(links, function(i) {
             return i.connection.from === linkData[0] && i.connection.to === linkData[1] && i.connection.weight === linkData[2];
         });
         assert.ok(typeof output !== 'undefined');
@@ -453,7 +453,7 @@ QUnit.test("Returning correct nodes[].linksIn and nodes[].linksOut data in getAl
 
     assert.equal(nodes.length, 5);
     ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.linksIn.length, expected[nodeName][0]);
         assert.equal(node.linksOut.length, expected[nodeName][1]);
     });
@@ -528,7 +528,7 @@ QUnit.test("Draw Nodes", function(assert) {
     assert.equal(this.nodesGroup().clear.callCount, 1, 'Existing nodes cleared');
 
     ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
+        var node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
         assert.deepEqual(node.attr.firstCall.args[0], expected[nodeName], 'Node ' + nodeName + ': params match');
     });
 });
@@ -614,7 +614,7 @@ QUnit.test("Largest cascade occupies full chart height", function(assert) {
         cascadeHeight = 0;
 
     ['A', 'B', 'C'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         cascadeHeight += node.rect.height + (nodeName !== 'C' ? 30 : 0);
     });
 
@@ -629,7 +629,7 @@ QUnit.test("Default align option", function(assert) {
         nodes = sankey.getAllNodes();
 
     ['M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y + node.rect.height / 2, size.height / 2, nodeName + ' aligned to middle');
     });
 });
@@ -643,7 +643,7 @@ QUnit.test("Align option as <String>", function(assert) {
         nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y + node.rect.height, size.height, nodeName + ' aligned to bottom');
     });
 });
@@ -656,10 +656,25 @@ QUnit.test("Align option as <Array>", function(assert) {
         nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
     });
 
+});
+
+QUnit.test("Default alignment value for cascade which is not mentioned in options.alignment", function(assert) {
+    var sankey = createSankey({
+        dataSource: [
+            ['A', 'Z', 1],
+            ['B', 'Z', 1]
+        ],
+        alignment: ['top']
+    });
+    var nodes = sankey.getAllNodes(),
+        node = find(nodes, function(node) { return node.title === 'Z'; });
+
+    // 'Z' is expected to be centered
+    assert.equal(node.rect.y, 15, 'Z aligned to center');
 });
 
 QUnit.module("Update options", environment);
@@ -770,7 +785,7 @@ QUnit.test("Align option updated as <String>", function(assert) {
     var nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y + node.rect.height, size.height, 'aligned to bottom');
     });
 });
@@ -785,7 +800,7 @@ QUnit.test("Align option updated as <Array>", function(assert) {
     var nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
-        var node = nodes.find(function(node) { return node.title === nodeName; });
+        var node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y, 0, 'aligned to top');
     });
 });

@@ -26,7 +26,8 @@ let validator = {
         if(!_isArray(data)) {
             result = 'E2007';
         } else {
-            for(let link of data) {
+            for(let i = 0; i < data.length; i++) {
+                let link = data[i];
                 if(!_isArray(link) || link.length !== 3 || !(_isString(link[0]) && _isString(link[1]) && _isNumber(link[2]))) {
                     result = 'E2008';
                 } else if(link[2] <= 0) {

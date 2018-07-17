@@ -3,7 +3,8 @@
 var common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
     environment = common.environment,
-    themeModule = require("viz/themes");
+    themeModule = require("viz/themes"),
+    find = common.find;
 
 themeModule.registerTheme({
     name: "test-theme",
@@ -54,8 +55,8 @@ QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
         nodesSVG = this.nodes();
 
     ['A', 'B', 'Z'].forEach(function(nodeName) {
-        var nodeItem = nodes.find(function(n) { return n.title === nodeName; }),
-            nodeSVG = nodesSVG.find(function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
+        var nodeItem = find(nodes, function(n) { return n.title === nodeName; }),
+            nodeSVG = find(nodesSVG, function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
         assert.deepEqual(nodeSVG.attr.firstCall.args[0], nodeItem.rect, 'Node ' + nodeName + ': rectangles match');
     });
 });
@@ -320,8 +321,8 @@ QUnit.test("Default nodes.padding option", function(assert) {
         dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
     });
     var nodes = this.nodes(),
-        nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
-        nodeB = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
+        nodeA = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
+        nodeB = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
         yA = nodeA.attr.firstCall.args[0].y,
         heightA = nodeA.attr.firstCall.args[0].height,
         yB = nodeB.attr.firstCall.args[0].y;
@@ -337,8 +338,8 @@ QUnit.test("Applying nodes.padding option", function(assert) {
         }
     });
     var nodes = this.nodes(),
-        nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
-        nodeB = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
+        nodeA = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
+        nodeB = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
         yA = nodeA.attr.firstCall.args[0].y,
         heightA = nodeA.attr.firstCall.args[0].height,
         yB = nodeB.attr.firstCall.args[0].y;
@@ -356,8 +357,8 @@ QUnit.test("Updating nodes.padding option", function(assert) {
     sankey.option({ node: { padding: 50 } });
 
     var nodes = this.nodes(),
-        nodeA = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
-        nodeB = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
+        nodeA = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
+        nodeB = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'B'; }),
         yA = nodeA.attr.firstCall.args[0].y,
         heightA = nodeA.attr.firstCall.args[0].height,
         yB = nodeB.attr.firstCall.args[0].y;
