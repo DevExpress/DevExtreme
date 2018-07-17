@@ -4,6 +4,16 @@ const WHITE = 'white';
 const GRAY = 'gray';
 const BLACK = 'black';
 
+let findIndex = function(array, callback) {
+    for(let i = 0; i < array.length; i++) {
+        let value = array[i];
+        if(callback(value)) {
+            return i;
+        }
+    }
+    return -1;
+};
+
 let routines = {
     maxOfArray: function(arr, callback) {
         let m = 0, callback_function = (v) => { return v; };
@@ -19,11 +29,11 @@ let getVertices = function(links) {
     let vert = [];
 
     links.forEach(link => {
-        if(vert.findIndex((item) => { return item === link[0]; }) === -1) {
+        if(findIndex(vert, (item) => { return item === link[0]; }) === -1) {
             vert.push(link[0]);
         }
 
-        if(vert.findIndex((item) => { return item === link[1]; }) === -1) {
+        if(findIndex(vert, (item) => { return item === link[1]; }) === -1) {
             vert.push(link[1]);
         }
     });
@@ -35,7 +45,7 @@ let getAdjacentVertices = function(links, vertex) {
     let avert = [];
 
     links.forEach(link => {
-        if((link[0] === vertex) && (avert.findIndex((item) => { return item === link[1]; }) === -1)) {
+        if((link[0] === vertex) && (findIndex(avert, (item) => { return item === link[1]; }) === -1)) {
             avert.push(link[1]);
         }
     });
@@ -47,7 +57,7 @@ let getReverseAdjacentVertices = function(links, vertex) {
     let avert = [];
 
     links.forEach(link => {
-        if((link[1] === vertex) && (avert.findIndex((item) => { return item === link[0]; }) === -1)) {
+        if((link[1] === vertex) && (findIndex(avert, (item) => { return item === link[0]; }) === -1)) {
             avert.push(link[0]);
         }
     });
@@ -110,7 +120,7 @@ let struct = {
                 let maxLP = [];
                 // get max through avertex.lp and add 1 to it
                 averts.forEach(adjacentVertex => {
-                    let sortedVertexIdx = sortedVertices.findIndex((sv) => sv.name === adjacentVertex);
+                    let sortedVertexIdx = findIndex(sortedVertices, (sv) => sv.name === adjacentVertex);
                     maxLP.push(sortedVertices[sortedVertexIdx].lp);
                 });
                 vertex.lp = routines.maxOfArray(maxLP) + 1;

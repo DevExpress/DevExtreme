@@ -108,17 +108,17 @@ QUnit.test("Toposort and computing longest paths in graph", function(assert) {
     vertices = logicModule.struct.computeLongestPaths(noCycle0);
     expected = { A: 0, B: 1, C: 2, D: 3, F: 4 };
     assert.deepEqual(vertices.length, 5);
-    vertices.forEach(vertex => { assert.equal(vertex.lp, expected[vertex.name]); });
+    vertices.forEach(function(vertex) { assert.equal(vertex.lp, expected[vertex.name]); });
 
     logicModule.struct.hasCycle(noCycle1);
     vertices = logicModule.struct.computeLongestPaths(noCycle1);
     expected = { A: 0, B: 1, C1: 2, C2: 2, D: 3, F: 4 };
     assert.deepEqual(vertices.length, 6);
-    vertices.forEach(vertex => { assert.equal(vertex.lp, expected[vertex.name]); });
+    vertices.forEach(function(vertex) { assert.equal(vertex.lp, expected[vertex.name]); });
 
     logicModule.struct.hasCycle(noCycle2);
     vertices = logicModule.struct.computeLongestPaths(noCycle2);
     expected = { A: 0, B: 0, C: 0, M: 1, N: 1, X: 2, Y: 2, Z: 1 };
     assert.deepEqual(vertices.length, 8);
-    vertices.forEach(vertex => { assert.equal(vertex.lp, expected[vertex.name]); });
+    vertices.forEach(function(vertex) { assert.equal(vertex.lp, expected[vertex.name]); });
 });

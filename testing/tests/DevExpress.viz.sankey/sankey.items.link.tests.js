@@ -3,7 +3,8 @@
 var common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
     environment = common.environment,
-    themeModule = require("viz/themes");
+    themeModule = require("viz/themes"),
+    find = common.find;
 
 themeModule.registerTheme({
     name: "test-theme",
@@ -317,7 +318,7 @@ QUnit.test("links colorMode 'source'", function(assert) {
         nodes = this.nodes();
 
     sankey.getAllLinks().forEach(function(linkItem) {
-        var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.from; });
+        var node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.from; });
         assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
     });
 });
@@ -347,7 +348,7 @@ QUnit.test("links colorMode 'target'", function(assert) {
         nodes = this.nodes();
 
     sankey.getAllLinks().forEach(function(linkItem) {
-        var node = nodes.find(function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.to; });
+        var node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.to; });
         assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
     });
 });

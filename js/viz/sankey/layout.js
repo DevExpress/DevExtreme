@@ -5,11 +5,20 @@ const _SPLINE_TENSION = 0.3;
 const graphModule = require('./graph');
 const validatorModule = require('./data_validator');
 
+let find = function(array, callback) {
+    for(let i = 0; i < array.length; i++) {
+        if(callback(array[i])) {
+            return array[i];
+        }
+    }
+    return null;
+};
+
 let layout = {
     _weightPerPixel: null,
 
     _getCascadeIdx: function(nodeTitle, cascadesConfig) {
-        let nodeInfo = cascadesConfig.find((c) => { return c.name === nodeTitle; });
+        let nodeInfo = find(cascadesConfig, (c) => { return c.name === nodeTitle; });
 
         if(nodeInfo.outgoing.length > 0) {
             // in common case number of cascade is the longest path to the node
