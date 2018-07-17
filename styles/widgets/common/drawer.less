@@ -1,3 +1,5 @@
+@DRAWER_ZINDEX: 1000;
+
 .dx-drawer {
     height: 100%;
     width: 100%;
@@ -11,6 +13,10 @@
 }
 
 .dx-drawer-menu-content {
+    z-index: @DRAWER_ZINDEX;
+
+    overflow: hidden;
+
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -39,98 +45,24 @@
     height: 100%;
     width: 100%;
     z-index: 1;
+
+    background-color: #111;
 }
 
 .dx-device-android .dx-drawer-content {
     .backface-visibility(hidden);
 }
 
-.dx-drawer-persistent.dx-drawer-slide{
+.dx-drawer-push {
     .dx-drawer-menu-content {
-        z-index: 1000;
-        // transform: translate3d(-100%, 0, 0);
-    }
-
-    .dx-drawer-content {
-        width: auto;
-    }
-
-    .dx-drawer-shader {
-        .transition(~"all .5s linear");
-        opacity: 0;
-    }
-
-    &.dx-drawer-opened {
-        .dx-drawer-menu-content {
-            // transform: translate3d(0, 0, 0);
-        }
-
-        .dx-drawer-content {
-            // padding-left: 200px;
-        }
-
-        .dx-drawer-shader {
-            z-index: 1;
-            pointer-events: auto;
-            background-color: #111;
-            opacity: 0.5
-        }
+        z-index: 1;
     }
 }
-
-.dx-drawer-persistent.dx-drawer-shrink{
-     .dx-drawer-menu-content {
-        z-index: 1000;
-        overflow: hidden;
-    }
-
+.dx-drawer-persistent {
     .dx-drawer-content {
         width: auto;
     }
 }
 
-.dx-drawer-temporary {
-     .dx-drawer-shader {
-        background-color: #111;
-    }
-}
 
-.dx-drawer-temporary.dx-drawer-shrink{
-     .dx-drawer-menu-content {
-        z-index: 1000;
-        overflow: hidden;
-    }
 
-    .dx-drawer-content {
-        width: auto;
-    }
-}
-
-.dx-drawer-temporary.dx-drawer-slide {
-    .dx-drawer-menu-content {
-        z-index: 1000;
-        // transform: translate3d(-100%, 0, 0);
-        /*z-index: 1000;
-        transform: translate3d(-100%, 0, 0);
-         .transition(~"all .5s linear");*/
-    }
-
-    .dx-drawer-shader {
-        background-color: #111;
-        /*.transition(~"all .5s linear");
-        opacity: 0;*/
-    }
-
-    &.dx-drawer-opened {
-        /*.dx-drawer-menu-content {
-            transform: translate3d(0, 0, 0);
-        }
-
-         .dx-drawer-shield {
-                z-index: 1;
-                pointer-events: auto;
-                background-color: #111;
-                opacity: 0.5
-        }*/
-    }
-}

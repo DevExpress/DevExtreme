@@ -388,6 +388,7 @@ var Drawer = Widget.inherit({
 
             if(animate) {
                 this._toggleShaderVisibility(true);
+                animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
                 animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
             } else {
                 translator.move($(this.content()), { left: pos });
@@ -402,6 +403,7 @@ var Drawer = Widget.inherit({
 
             if(animate) {
                 this._toggleShaderVisibility(true);
+                animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
                 animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
             } else {
                 $(this.content()).css("paddingLeft", contentPos);
