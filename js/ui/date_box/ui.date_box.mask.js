@@ -2,7 +2,8 @@
 
 var MASK_EVENT_NAMESPACE = "dateBoxMask",
     FORWARD = 1,
-    BACKWARD = -1;
+    BACKWARD = -1,
+    SEARCH_TIMEOUT = 1500;
 
 var eventsUtils = require("../../events/utils"),
     isFunction = require("../../core/utils/type").isFunction,
@@ -37,7 +38,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _keyboardHandler: function(e) {
         this.callBase(e);
-        var key = e.originalEvent.originalEvent.key;
+        var key = e.originalEvent.key;
 
         if(!this._useMaskBehavior() || key.length > 1) {
             return;
@@ -64,7 +65,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _startSearchTimeout: function() {
         clearTimeout(this._searchTimeout);
-        this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), 1500);
+        this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), SEARCH_TIMEOUT);
     },
 
     _searchString: function(letter) {

@@ -27,6 +27,11 @@ if(devices.real().deviceType === "desktop") {
             this.$input = this.$element.find(".dx-texteditor-input");
             this.keyboard = keyboardMock(this.$input, true);
             this.pointer = pointerMock(this.$input);
+            this.clock = sinon.useFakeTimers();
+        },
+
+        afterEach: () => {
+            this.clock.restore();
         }
     };
 
@@ -345,6 +350,123 @@ if(devices.real().deviceType === "desktop") {
 
             this.pointer.wheel(-10);
             assert.equal(this.$input.val(), "October 10 2012", "decrement works");
+        });
+    });
+
+    var SEARCH_TIMEOUT = 1500;
+
+    QUnit.module("Search", setupModule, () => {
+        QUnit.test("Time indication", (assert) => {
+            this.instance.option("displayFormat", "a");
+
+            this.keyboard.type("a");
+            assert.equal(this.$input.val(), "AM", "select on typing");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            this.keyboard.type("p");
+            assert.equal(this.$input.val(), "PM", "revert incorrect changes before timeout");
+
+            this.clock.tick(1);
+            this.keyboard.type("a");
+            assert.equal(this.$input.val(), "AM", "don't revert after timeout");
+        });
+
+        QUnit.test("Hour", (assert) => {
+            this.instance.option("displayFormat", "hh");
+
+            this.keyboard.type("31");
+            assert.equal(this.$input.val(), "01", "don't accept out-of-limit values");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            this.keyboard.type("2");
+            assert.equal(this.$input.val(), "12", "add values before timeout");
+
+            this.clock.tick(1);
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "01", "set new value after timeout");
+        });
+
+        QUnit.test("Day of week", (assert) => {
+            this.instance.option("displayFormat", "EEEE");
+
+            this.keyboard.type("monda");
+            assert.equal(this.$input.val(), "Monday", "select on typing");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            this.keyboard.type("s");
+            assert.equal(this.$input.val(), "Wednesday", "revert incorrect changes before timeout");
+
+            this.clock.tick(1);
+            this.keyboard.type("s");
+            assert.equal(this.$input.val(), "Saturday", "don't revert after timeout");
+        });
+
+        QUnit.test("Day", (assert) => {
+            this.instance.option("displayFormat", "MMM, dd");
+
+            this.keyboard
+                .type("feb")
+                .press("right")
+                .type("3");
+
+            assert.equal(this.$input.val(), "Feb, 03", "select on typing");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "Feb, 01", "don't accept out-of-limit values");
+        });
+
+        QUnit.test("Month", (assert) => {
+            this.instance.option("displayFormat", "MMMM");
+
+            this.keyboard.type("jan");
+            assert.equal(this.$input.val(), "January", "select on typing");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            this.keyboard.type("d");
+            assert.equal(this.$input.val(), "October", "revert incorrect changes before timeout");
+
+            this.clock.tick(1);
+            this.keyboard.type("d");
+            assert.equal(this.$input.val(), "December", "don't ignore chars after timeout");
+        });
+
+        QUnit.test("Short month", (assert) => {
+            this.instance.option("displayFormat", "MMM");
+
+            this.keyboard.type("jan");
+            assert.equal(this.$input.val(), "Jan", "select on typing");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            this.keyboard.type("d");
+            assert.equal(this.$input.val(), "Oct", "revert incorrect changes before timeout");
+
+            this.clock.tick(1);
+            this.keyboard.type("d");
+            assert.equal(this.$input.val(), "Dec", "don't ignore chars after timeout");
+        });
+
+        QUnit.test("Month by a number", (assert) => {
+            this.instance.option("displayFormat", "MMMM");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "February");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "December");
+
+            this.clock.tick(1);
+            this.keyboard.type("30");
+            assert.equal(this.$input.val(), "January");
+        });
+
+        QUnit.test("Year", (assert) => {
+            this.instance.option("displayFormat", "yyyy");
+
+            this.keyboard
+                .type("20250");
+
+            assert.equal(this.$input.val(), "20250", "year should not be limited");
         });
     });
 }
