@@ -175,7 +175,6 @@ var DateBoxMask = DateBoxBase.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "useMaskBehavior":
-                this._clearState();
                 this._renderMask();
                 break;
             case "displayFormat":
