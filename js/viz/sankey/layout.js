@@ -1,18 +1,14 @@
 "use strict";
 
 const _SPLINE_TENSION = 0.3;
+const _ALIGNMENT_CENTER = 'center';
+const _ALIGNMENT_BOTTOM = 'bottom';
+const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 
 const graphModule = require('./graph');
 const validatorModule = require('./data_validator');
 
-let find = function(array, callback) {
-    for(let i = 0; i < array.length; i++) {
-        if(callback(array[i])) {
-            return array[i];
-        }
-    }
-    return null;
-};
+let find = require("../../core/utils/array").find;
 
 let layout = {
     _weightPerPixel: null,
@@ -133,17 +129,17 @@ let layout = {
                 nodesInCascade = Object.keys(cascade).length,
                 cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
 
-            let cascadeAlign = 'top';
+            let cascadeAlign = _ALIGNMENT_DEFAULT;
 
             if(Array.isArray(options.nodeAlign)) {
-                cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : 'top';
+                cascadeAlign = cascadeIdx < options.nodeAlign.length ? options.nodeAlign[cascadeIdx] : _ALIGNMENT_DEFAULT;
             } else {
                 cascadeAlign = options.nodeAlign;
             }
 
-            if(cascadeAlign === 'bottom') {
+            if(cascadeAlign === _ALIGNMENT_BOTTOM) {
                 y = options.height - cascadeHeight;
-            } else if(cascadeAlign === 'center') {
+            } else if(cascadeAlign === _ALIGNMENT_CENTER) {
                 y = 0.5 * (options.height - cascadeHeight);
             }
             y = Math.round(y);

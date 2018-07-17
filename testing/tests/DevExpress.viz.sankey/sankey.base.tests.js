@@ -9,7 +9,7 @@ var $ = require("jquery"),
     rendererModule = require("viz/core/renderers/renderer"),
     paletteModule = require("viz/palette"),
     themeModule = require("viz/themes"),
-    find = common.find;
+    find = require("core/utils/array").find;
 
 themeModule.registerTheme({
     name: "test-theme",
@@ -21,7 +21,6 @@ themeModule.registerTheme({
             }
         }
     } }, "generic.light");
-
 
 QUnit.module("Initialization", environment);
 
@@ -661,6 +660,21 @@ QUnit.test("Align option as <Array>", function(assert) {
         assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
     });
 
+});
+
+QUnit.test("Default alignment value for cascade which is not mentioned in options.alignment", function(assert) {
+    var sankey = createSankey({
+        dataSource: [
+            ['A', 'Z', 1],
+            ['B', 'Z', 1]
+        ],
+        alignment: ['top']
+    });
+    var nodes = sankey.getAllNodes(),
+        node = find(nodes, function(node) { return node.title === 'Z'; });
+
+    // 'Z' is expected to be centered
+    assert.equal(node.rect.y, 15, 'Z aligned to center');
 });
 
 QUnit.module("Update options", environment);

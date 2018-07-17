@@ -104,6 +104,17 @@ var inArray = function(value, object) {
     return array.indexOf(value);
 };
 
+var find = function(object, predicate) {
+    var array = Array.isArray(object) ? object : object.toArray();
+
+    for(let i = 0; i < array.length; i++) {
+        if(predicate(array[i], i, array)) {
+            return array[i];
+        }
+    }
+    return undefined;
+};
+
 var merge = function(array1, array2) {
     for(var i = 0; i < array2.length; i++) {
         array1[array1.length] = array2[i];
@@ -118,4 +129,5 @@ exports.intersection = intersection;
 exports.removeDuplicates = removeDuplicates;
 exports.normalizeIndexes = normalizeIndexes;
 exports.inArray = inArray;
+exports.find = find;
 exports.merge = merge;

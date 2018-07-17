@@ -77,13 +77,6 @@ var environment = {
     }
 };
 
-var find = function(array, callback) {
-    for(let i = 0; i < array.length; i++) {
-        if(callback(array[i])) { return array[i]; }
-    }
-    return null;
-};
-
 var testData = {
     countriesData: [
         ['Brazil', 'Portugal', 5],
@@ -142,4 +135,3 @@ module.exports.testData = testData;
 module.exports.environment = environment;
 module.exports.layoutBuilder = layoutBuilder;
 module.exports.spiesLayoutBuilder = spiesLayoutBuilder;
-module.exports.find = find;

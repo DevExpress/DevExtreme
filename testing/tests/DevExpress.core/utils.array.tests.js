@@ -34,3 +34,14 @@ QUnit.test("merge arrays with undefined items", function(assert) {
     assert.deepEqual(arrayUtils.merge(array1, array2), [ 1, 2, 3, 4, undefined, 5 ]);
     assert.deepEqual(array1.length, 6);
 });
+
+QUnit.test("find", function(assert) {
+    var array = [ 10, 20, 30, 40 ];
+    var arrayOfObjects = [{ data: 10 }, { data: 20 }, { data: 30 }, { data: 40 }];
+
+    assert.deepEqual(arrayUtils.find(array, function(item) { return item === 40; }), 40);
+    assert.deepEqual(arrayUtils.find(array, function(item) { return item === 5; }), undefined);
+
+    assert.deepEqual(arrayUtils.find(arrayOfObjects, function(item) { return item.data === 40; }), { data: 40 });
+    assert.deepEqual(arrayUtils.find(arrayOfObjects, function(item) { return item.data === 5; }), undefined);
+});
