@@ -2,7 +2,10 @@
 
 var $ = require("jquery"),
     vizMocks = require("../../../helpers/vizMocks.js"),
-    rendererModule = require("viz/core/renderers/renderer");
+    rendererModule = require("viz/core/renderers/renderer"),
+    find = function(array, predicate) {
+        return array.filter(predicate)[0];
+    };
 
 require("viz/sankey/sankey");
 require("viz/themes");
@@ -135,3 +138,4 @@ module.exports.testData = testData;
 module.exports.environment = environment;
 module.exports.layoutBuilder = layoutBuilder;
 module.exports.spiesLayoutBuilder = spiesLayoutBuilder;
+module.exports.find = find;

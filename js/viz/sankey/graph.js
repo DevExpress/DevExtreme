@@ -112,13 +112,7 @@ let struct = {
                 let maxLP = [];
                 // get max through avertex.lp and add 1 to it
                 averts.forEach(adjacentVertex => {
-                    let sortedVertexIdx;
-                    for(let i = 0; i < sortedVertices.length; i++) {
-                        if(sortedVertices[i].name === adjacentVertex) {
-                            sortedVertexIdx = i;
-                        }
-                    }
-                    maxLP.push(sortedVertices[sortedVertexIdx].lp);
+                    maxLP.push(sortedVertices.filter(sv => sv.name === adjacentVertex)[0].lp);
                 });
                 vertex.lp = routines.maxOfArray(maxLP) + 1;
             }

@@ -8,13 +8,11 @@ const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 const graphModule = require('./graph');
 const validatorModule = require('./data_validator');
 
-let find = require("../../core/utils/array").find;
-
 let layout = {
     _weightPerPixel: null,
 
     _getCascadeIdx: function(nodeTitle, cascadesConfig) {
-        let nodeInfo = find(cascadesConfig, (c) => { return c.name === nodeTitle; });
+        let nodeInfo = cascadesConfig.filter((c) => { return c.name === nodeTitle; })[0];
 
         if(nodeInfo.outgoing.length > 0) {
             // in common case number of cascade is the longest path to the node

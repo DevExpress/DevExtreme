@@ -6,10 +6,10 @@ var $ = require("jquery"),
     layoutBuilder = common.layoutBuilder,
     spiesLayoutBuilder = common.spiesLayoutBuilder,
     environment = common.environment,
+    find = common.find,
     rendererModule = require("viz/core/renderers/renderer"),
     paletteModule = require("viz/palette"),
-    themeModule = require("viz/themes"),
-    find = require("core/utils/array").find;
+    themeModule = require("viz/themes");
 
 themeModule.registerTheme({
     name: "test-theme",

@@ -4,7 +4,7 @@ var common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
     environment = common.environment,
     themeModule = require("viz/themes"),
-    find = require("core/utils/array").find;
+    find = common.find;
 
 themeModule.registerTheme({
     name: "test-theme",
