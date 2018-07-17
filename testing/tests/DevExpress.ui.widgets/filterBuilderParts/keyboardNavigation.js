@@ -53,12 +53,16 @@ QUnit.module("Keyboard navigation", {
 
             keyboardMock(this.getTextEditorElement()).keyUp(key);
         };
+
+        this.showTextEditor = function() {
+            keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
+        };
     }
 }, function() {
     QUnit.test("show editor on keyup event", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
-        keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
+        this.showTextEditor();
 
         assert.notOk(this.getValueButtonElement().length);
         assert.ok(this.getTextEditorElement().length);
@@ -67,7 +71,7 @@ QUnit.module("Keyboard navigation", {
     QUnit.test("enter keyup for value button and editor", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
-        keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
+        this.showTextEditor();
 
         assert.ok(this.getTextEditorElement().length);
 
@@ -167,5 +171,28 @@ QUnit.module("Keyboard navigation", {
 
         assert.ok(this.getOperationButtonElement().is(":focus"));
         assert.equal(this.getOperationButtonElement().text(), "Contains");
+    });
+
+    // T653968
+    QUnit.testInActiveWindow("editor.value is changed after 'keyup' and saved in filterBulder.value by outer click", function(assert) {
+        this.showTextEditor();
+
+        var textEditorElement = this.getTextEditorElement(),
+            textEditorInput = textEditorElement.find("input"),
+            textEditorInstance = textEditorElement.dxTextBox("instance");
+
+        textEditorInput.val("Test");
+        assert.equal(textEditorInput.val(), "Test");
+        assert.equal(textEditorInstance.option("value"), "");
+
+        keyboardMock(textEditorInput).keyUp();
+
+        assert.deepEqual(this.instance.option("value"), [["State", "=", ""]]);
+        assert.equal(textEditorInstance.option("value"), "Test");
+        assert.equal(textEditorInput.val(), "Test");
+
+        $("body").trigger("dxpointerdown");
+
+        assert.deepEqual(this.instance.option("value"), ["State", "=", "Test"]);
     });
 });
