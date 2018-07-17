@@ -3,7 +3,6 @@
 /* global fields */
 
 var $ = require("jquery"),
-    utils = require("ui/filter_builder/utils"),
     keyboardMock = require("../../../helpers/keyboardMock.js");
 
 require("ui/filter_builder/filter_builder");
@@ -57,6 +56,12 @@ QUnit.module("Keyboard navigation", {
         this.showTextEditor = function() {
             keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
         };
+
+        this.setFocusToBody = function() {
+            if(document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body") {
+                document.activeElement.blur();
+            }
+        };
     }
 }, function() {
     QUnit.test("show editor on keyup event", function(assert) {
@@ -95,7 +100,7 @@ QUnit.module("Keyboard navigation", {
 
         var textEditorElement = this.getTextEditorElement();
         textEditorElement.dxTextBox("instance").option("value", "Test");
-        utils.setFocusToBody();
+        this.setFocusToBody();
 
         keyboardMock(this.getTextEditorElement()).keyUp(TAB_KEY);
 
@@ -105,7 +110,7 @@ QUnit.module("Keyboard navigation", {
     QUnit.test("tab press without change a condition", function(assert) {
         this.getValueButtonElement().trigger("dxclick");
 
-        utils.setFocusToBody();
+        this.setFocusToBody();
         keyboardMock(this.getTextEditorElement().find("input")).keyUp(TAB_KEY);
 
         assert.equal(this.getValueButtonElement().text(), "<enter a value>");

@@ -866,7 +866,7 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts(e.target)) {
-                utils.setFocusToBody();
+                eventsEngine.trigger($editor.find("input"), "change");
                 that._updateConditionValue(item, value, function() {
                     createValueText();
                 });
