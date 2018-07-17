@@ -1060,6 +1060,38 @@ QUnit.test("load indicator should be removed after datasource is loaded even if 
     });
 });
 
+QUnit.test("Expand all method with the virtual mode", function(assert) {
+    var treeView = new TreeView(this.$element, {
+        dataSource: makeSlowDataSource([
+            {
+                id: 1,
+                parentId: 0,
+                text: "1"
+            },
+            {
+                id: 11,
+                parentId: 1,
+                text: "11"
+            },
+            {
+                id: 111,
+                parentId: 11,
+                text: "111"
+            }
+        ]),
+        dataStructure: "plain",
+        virtualModeEnabled: true
+    });
+
+    this.clock.tick(300);
+    treeView.expandAll();
+    this.clock.tick(300);
+
+    var nodes = treeView.getNodes();
+    assert.ok(nodes[0].expanded, "item 1");
+    assert.notOk(nodes[0].items[0].expanded, "item 11");
+    assert.equal(nodes[0].items[0].items.length, 0, "children count of the item 11");
+});
 
 QUnit.module("the 'createChildren' option");
 
