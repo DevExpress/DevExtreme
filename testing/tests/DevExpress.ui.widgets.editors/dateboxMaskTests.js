@@ -31,7 +31,7 @@ if(devices.real().deviceType === "desktop") {
     };
 
     QUnit.module("Rendering", setupModule, () => {
-        QUnit.test("Text option should follow the input value", (assert) => {
+        QUnit.test("Text option should depend on the input value", (assert) => {
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
         });
@@ -331,7 +331,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Events", setupModule, () => {
+    QUnit.module("Pointer events", setupModule, () => {
         QUnit.test("Select date part on click", (assert) => {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
@@ -345,6 +345,27 @@ if(devices.real().deviceType === "desktop") {
 
             this.pointer.wheel(-10);
             assert.equal(this.$input.val(), "October 10 2012", "decrement works");
+        });
+    });
+
+    QUnit.module("Options changed", setupModule, () => {
+        QUnit.test("The 'useMaskBehavior' option is changed to false", (assert) => {
+            this.keyboard.caret(9);
+            this.$input.trigger("dxclick");
+
+            this.instance.option("useMaskBehavior", false);
+
+            assert.notOk(this.instance._dateParts, "dateParts is undefined");
+            assert.notOk(this.instance._activePartIndex, "activePartIndex is undefined");
+            assert.notOk(this.instance._maskValue, "maskValue is undefined");
+
+            this.keyboard.caret(9);
+            this.$input.trigger("dxclick");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 9, end: 9 }, "caret is not changed");
+
+            this.pointer.wheel(10);
+            assert.equal(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
         });
     });
 }
