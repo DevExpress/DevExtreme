@@ -41,7 +41,13 @@
 
 .dx-state-disabled {
     &.dx-radiobutton {
-        opacity: 1;
+        opacity: @IOS7_DISABLED_OPACITY;
+    }
+
+    .dx-radiobutton {
+        &.dx-state-disabled {
+            opacity: 1;
+        }
     }
 }
 
