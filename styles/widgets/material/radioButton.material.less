@@ -85,6 +85,10 @@
             }
         }
     }
+
+    &.dx-state-disabled {
+        opacity: @texteditor-disabled-opacity;
+    }
 }
 
 &.dx-state-readonly,
@@ -126,10 +130,10 @@
     }
 }
 
-.dx-radiogroup:not(.dx-state-disabled) {
+.dx-state-disabled {
     .dx-radiobutton {
         &.dx-state-disabled {
-            opacity: @texteditor-disabled-opacity;
+            opacity: 1;
         }
     }
 }
