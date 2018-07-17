@@ -37,11 +37,11 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
-        this.callBase(e);
+        var result = this.callBase(e);
         var key = e.originalEvent.key;
 
-        if(!this._useMaskBehavior() || key.length > 1) {
-            return;
+        if(!this._useMaskBehavior() || this.option("opened") || key.length > 1) {
+            return result;
         }
 
         isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
