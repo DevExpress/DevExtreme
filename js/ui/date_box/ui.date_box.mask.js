@@ -47,6 +47,8 @@ var DateBoxMask = DateBoxBase.inherit({
         isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
 
         e.originalEvent.preventDefault();
+
+        return result;
     },
 
     _startSearchTimeout: function() {
