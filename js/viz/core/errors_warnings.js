@@ -34,15 +34,15 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsViz.E2007
     */
-    E2007: "Input data must be an array",
+    E2007: "The value field \"{0}\" is absent in the data source",
     /**
     * @name ErrorsViz.E2008
     */
-    E2008: "Each link must be an array of three items: [string, string, number]",
+    E2008: "The value field \"{0}\" must be a string",
     /**
     * @name ErrorsViz.E2009
     */
-    E2009: "Each link must have positive weight",
+    E2009: "The value field \"{0}\" must be a positive numerical value",
     /**
     * @name ErrorsViz.E2101
     */

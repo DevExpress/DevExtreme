@@ -20,7 +20,9 @@ $("#qunit-fixture").append('<div id="test-container"></div>');
 
 function createSankey(options) {
     var defaultOptions = {
-        // TODO: default options
+        node: {
+            width: 15
+        }
     };
     return $("#test-container").dxSankey($.extend({}, defaultOptions, options)).dxSankey("instance");
 }
@@ -82,55 +84,59 @@ var environment = {
 
 var testData = {
     countriesData: [
-        ['Brazil', 'Portugal', 5],
-        ['Brazil', 'France', 1],
-        ['Brazil', 'Spain', 1],
-        ['Brazil', 'England', 1],
-        ['Canada', 'Portugal', 1],
-        ['Canada', 'France', 5],
-        ['Canada', 'England', 1],
-        ['Mexico', 'Portugal', 1],
-        ['Mexico', 'France', 1],
-        ['Mexico', 'Spain', 5],
-        ['Mexico', 'England', 1],
-        ['USA', 'Portugal', 1],
-        ['USA', 'France', 1],
-        ['USA', 'Spain', 1],
-        ['USA', 'England', 5],
-        ['Portugal', 'Angola', 2],
-        ['Portugal', 'Senegal', 1],
-        ['Portugal', 'Morocco', 1],
-        ['Portugal', 'South Africa', 3],
-        ['France', 'Angola', 1],
-        ['France', 'Senegal', 3],
-        ['France', 'Mali', 3],
-        ['France', 'Morocco', 3],
-        ['France', 'South Africa', 1],
-        ['Spain', 'Senegal', 1],
-        ['Spain', 'Morocco', 3],
-        ['Spain', 'South Africa', 1],
-        ['England', 'Angola', 1],
-        ['England', 'Senegal', 1],
-        ['England', 'Morocco', 2],
-        ['England', 'South Africa', 7],
-        ['South Africa', 'China', 5],
-        ['South Africa', 'India', 1],
-        ['South Africa', 'Japan', 3],
-        ['Angola', 'China', 5],
-        ['Angola', 'India', 1],
-        ['Angola', 'Japan', 3],
-        ['Senegal', 'China', 5],
-        ['Senegal', 'India', 1],
-        ['Senegal', 'Japan', 3],
-        ['Mali', 'China', 5],
-        ['Mali', 'India', 1],
-        ['Mali', 'Japan', 3],
-        ['Morocco', 'China', 5],
-        ['Morocco', 'India', 1],
-        ['Morocco', 'Japan', 3]
+        { source: 'Brazil', target: 'Portugal', weight: 5 },
+        { source: 'Brazil', target: 'France', weight: 1 },
+        { source: 'Brazil', target: 'Spain', weight: 1 },
+        { source: 'Brazil', target: 'England', weight: 1 },
+        { source: 'Canada', target: 'Portugal', weight: 1 },
+        { source: 'Canada', target: 'France', weight: 5 },
+        { source: 'Canada', target: 'England', weight: 1 },
+        { source: 'Mexico', target: 'Portugal', weight: 1 },
+        { source: 'Mexico', target: 'France', weight: 1 },
+        { source: 'Mexico', target: 'Spain', weight: 5 },
+        { source: 'Mexico', target: 'England', weight: 1 },
+        { source: 'USA', target: 'Portugal', weight: 1 },
+        { source: 'USA', target: 'France', weight: 1 },
+        { source: 'USA', target: 'Spain', weight: 1 },
+        { source: 'USA', target: 'England', weight: 5 },
+        { source: 'Portugal', target: 'Angola', weight: 2 },
+        { source: 'Portugal', target: 'Senegal', weight: 1 },
+        { source: 'Portugal', target: 'Morocco', weight: 1 },
+        { source: 'Portugal', target: 'South Africa', weight: 3 },
+        { source: 'France', target: 'Angola', weight: 1 },
+        { source: 'France', target: 'Senegal', weight: 3 },
+        { source: 'France', target: 'Mali', weight: 3 },
+        { source: 'France', target: 'Morocco', weight: 3 },
+        { source: 'France', target: 'South Africa', weight: 1 },
+        { source: 'Spain', target: 'Senegal', weight: 1 },
+        { source: 'Spain', target: 'Morocco', weight: 3 },
+        { source: 'Spain', target: 'South Africa', weight: 1 },
+        { source: 'England', target: 'Angola', weight: 1 },
+        { source: 'England', target: 'Senegal', weight: 1 },
+        { source: 'England', target: 'Morocco', weight: 2 },
+        { source: 'England', target: 'South Africa', weight: 7 },
+        { source: 'South Africa', target: 'China', weight: 5 },
+        { source: 'South Africa', target: 'India', weight: 1 },
+        { source: 'South Africa', target: 'Japan', weight: 3 },
+        { source: 'Angola', target: 'China', weight: 5 },
+        { source: 'Angola', target: 'India', weight: 1 },
+        { source: 'Angola', target: 'Japan', weight: 3 },
+        { source: 'Senegal', target: 'China', weight: 5 },
+        { source: 'Senegal', target: 'India', weight: 1 },
+        { source: 'Senegal', target: 'Japan', weight: 3 },
+        { source: 'Mali', target: 'China', weight: 5 },
+        { source: 'Mali', target: 'India', weight: 1 },
+        { source: 'Mali', target: 'Japan', weight: 3 },
+        { source: 'Morocco', target: 'China', weight: 5 },
+        { source: 'Morocco', target: 'India', weight: 1 },
+        { source: 'Morocco', target: 'Japan', weight: 3 }
     ],
     simpleData: [
-        ['A', 'Y', 1], ['B', 'Y', 2], ['B', 'M', 4], ['C', 'M', 1], ['M', 'Y', 5]
+        { source: 'A', target: 'Y', weight: 1 },
+        { source: 'B', target: 'Y', weight: 2 },
+        { source: 'B', target: 'M', weight: 4 },
+        { source: 'C', target: 'M', weight: 1 },
+        { source: 'M', target: 'Y', weight: 5 }
     ]
 };
 module.exports.createSankey = createSankey;

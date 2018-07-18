@@ -17,7 +17,7 @@ QUnit.test("Create label group on initialization", function(assert) {
 
 QUnit.test("Create labels", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true
         }
@@ -43,7 +43,7 @@ QUnit.test("Create labels", function(assert) {
 
 QUnit.test("If no labels present", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: false
         }
@@ -57,7 +57,7 @@ QUnit.test("If no labels present", function(assert) {
 
 QUnit.test("Create labels with styles", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true,
             border: {
@@ -91,7 +91,7 @@ QUnit.test("Create labels with styles", function(assert) {
 
 QUnit.test("Create labels with styles and invisible borders", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true,
             border: {
@@ -110,7 +110,7 @@ QUnit.test("Create labels with styles and invisible borders", function(assert) {
 
 QUnit.test("Label color if colorMode is 'source'", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             colorMode: 'source'
         }
@@ -130,7 +130,7 @@ QUnit.test("Labels customize text", function(assert) {
     };
 
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             customizeText: customizeText
         }
@@ -143,7 +143,7 @@ QUnit.test("Labels customize text", function(assert) {
 
 QUnit.test("Labels alignment through cascades", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
     });
 
     var labels = this.labels(),
@@ -160,7 +160,7 @@ QUnit.test("Labels alignment through cascades", function(assert) {
 
 QUnit.test("Labels offsets", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             horizontalOffset: 0,
             verticalOffset: 0
@@ -171,7 +171,7 @@ QUnit.test("Labels offsets", function(assert) {
         y = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; });
 
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             horizontalOffset: 20,
             verticalOffset: 30
@@ -198,7 +198,7 @@ QUnit.module("Node labels. Adaptive layout", $.extend({}, environment, {
 
 QUnit.test("Shown labels if container size bigger than adaptiveLayout", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true
         },
@@ -214,7 +214,7 @@ QUnit.test("Shown labels if container size bigger than adaptiveLayout", function
 
 QUnit.test("Hide labels if container size smaller than adaptiveLayout", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true
         },
@@ -230,7 +230,7 @@ QUnit.test("Hide labels if container size smaller than adaptiveLayout", function
 
 QUnit.test("Show labels if keepLabels is true and container size is smaller than adaptiveLayout", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true
         },
@@ -245,7 +245,7 @@ QUnit.test("Show labels if keepLabels is true and container size is smaller than
 
 QUnit.test("Show labels if keepLabels is true and widget size is smaller than adaptiveLayout", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true
         },
@@ -263,7 +263,7 @@ QUnit.test("Show labels if keepLabels is true and widget size is smaller than ad
 
 QUnit.test("Show hidden labels", function(assert) {
     var sankey = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true
         },

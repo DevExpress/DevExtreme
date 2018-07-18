@@ -96,15 +96,15 @@ var Link = {
 */
 var dxSankeyConnectionInfoObject = {
     /**
-    * @name dxSankeyConnectionInfoObject.from
+    * @name dxSankeyConnectionInfoObject.source
     * @type string
     */
-    from: undefined,
+    source: undefined,
     /**
-    * @name dxSankeyConnectionInfoObject.to
+    * @name dxSankeyConnectionInfoObject.target
     * @type string
     */
-    to: undefined,
+    target: undefined,
     /**
     * @name dxSankeyConnectionInfoObject.weight
     * @type Number

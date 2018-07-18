@@ -1554,6 +1554,9 @@ registerTheme({
         }
     },
     sankey: {
+        sourceField: 'source',
+        targetField: 'target',
+        weightField: 'weight',
         hoverEnabled: true,
         alignment: "center",
         adaptiveLayout: {
@@ -1563,38 +1566,29 @@ registerTheme({
         },
         label: {
             visible: true,
-            horizontalOffset: 5,
+            horizontalOffset: 8,
             verticalOffset: 0,
             overlappingBehavior: "ellipsis",
             colorMode: "none",
             font: {
-                color: WHITE,
-                weight: 300
+                color: BLACK,
+                weight: 400
             },
             border: {
                 visible: false,
-                width: 1,
+                width: 2,
                 color: WHITE
             },
             customizeText: function(info) {
                 return info.title;
             },
             shadow: {
-                opacity: 0.8,
+                opacity: 0,
                 offsetX: 0,
                 offsetY: 1,
                 blur: 1,
-                color: BLACK
+                color: WHITE
             }
-        },
-        error: {
-            stroke: WHITE,
-            "stroke-width": 1,
-            "stroke-opacity": 0.3,
-            font: {
-                color: "#ff3300",
-                weight: 300
-            },
         },
         title: {
             margin: 10,
@@ -1611,7 +1605,7 @@ registerTheme({
         tooltip: {
             enabled: true,
             customizeLinkTooltip: function(info) {
-                return { html: `<strong>${info.from} > ${info.to}</strong><br/>Weight: ${info.weight}` };
+                return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
             },
             customizeNodeTooltip: function(info) {
                 return { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
@@ -1619,10 +1613,10 @@ registerTheme({
         },
         node: {
             padding: 30,
-            width: 15,
+            width: 8,
             opacity: 1,
             border: {
-                color: BLACK,
+                color: WHITE,
                 width: 1,
                 visible: false
             },
@@ -1637,11 +1631,11 @@ registerTheme({
             },
         },
         link: {
-            color: BLACK,
+            color: "#888888",
             colorMode: "none",
             opacity: 0.3,
             border: {
-                color: BLACK,
+                color: WHITE,
                 width: 1,
                 visible: false
             },
