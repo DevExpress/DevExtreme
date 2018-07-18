@@ -1074,6 +1074,20 @@ QUnit.test("popup should be configured with templatesRenderAsynchronously=false 
     assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
 });
 
+var POPUP_TOOLBAR_COMPACT_CLASS = "dx-popup-toolbar-compact",
+    POPUP_BOTTOM_CLASS = "dx-popup-bottom";
+
+QUnit.test("popup action buttons should have a compact class for small widget width", function(assert) {
+    $("#dropDownList").dxDropDownList({
+        dataSource: ["item-1", "item-2", "item-3"],
+        applyValueMode: "useButtons",
+        width: 50,
+        opened: true
+    });
+
+    assert.strictEqual($(".dx-dropdowneditor-overlay ." + POPUP_BOTTOM_CLASS + "." + POPUP_TOOLBAR_COMPACT_CLASS).length, 1, "compact class has been added");
+});
+
 
 QUnit.module("dataSource integration", moduleConfig);
 
