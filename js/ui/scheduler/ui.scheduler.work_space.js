@@ -1593,10 +1593,10 @@ var SchedulerWorkSpace = Widget.inherit({
         eventsEngine.on($table, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, "td", {
             itemSizeFunc: function($element) {
                 if(!cellHeight) {
-                    cellHeight = $element.height();
+                    cellHeight = $element.get(0).getBoundingClientRect().height;
                 }
                 if(!cellWidth) {
-                    cellWidth = $element.width();
+                    cellWidth = $element.get(0).getBoundingClientRect().width;
                 }
                 return {
                     width: cellWidth,
