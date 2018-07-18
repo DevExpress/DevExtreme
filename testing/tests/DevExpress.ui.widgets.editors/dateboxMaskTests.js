@@ -401,6 +401,19 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "Saturday", "don't revert after timeout");
         });
 
+        QUnit.test("Day of week by a number", (assert) => {
+            this.instance.option("displayFormat", "EEEE");
+
+            this.keyboard.type("0");
+            assert.equal(this.$input.val(), "Sunday", "week starts from the Sunday");
+
+            this.keyboard.type("6");
+            assert.equal(this.$input.val(), "Saturday", "week ends at the Saturday");
+
+            this.keyboard.type("7");
+            assert.equal(this.$input.val(), "Saturday", "out-of-limit values does not supported");
+        });
+
         QUnit.test("Day", (assert) => {
             this.instance.option("displayFormat", "MMM, dd");
 
@@ -467,6 +480,29 @@ if(devices.real().deviceType === "desktop") {
                 .type("20250");
 
             assert.equal(this.$input.val(), "20250", "year should not be limited");
+        });
+
+        QUnit.test("Hotkeys should not be handled by the search", (assert) => {
+            this.instance.option("displayFormat", "EEEE");
+
+            this.keyboard.keyDown("s", { altKey: true });
+            assert.equal(this.$input.val(), "Wednesday", "alt was not handled");
+
+            this.keyboard.keyDown("s", { ctrlKey: true });
+            assert.equal(this.$input.val(), "Wednesday", "ctrl was not handled");
+        });
+
+        QUnit.test("Typing a letter in the year section should not lead to an infinite loop", (assert) => {
+            this.instance.option("displayFormat", "yyyy");
+
+            sinon.stub(this.instance, "_partIncrease").throws();
+
+            try {
+                this.keyboard.type("s");
+                assert.equal(this.$input.val(), "2012", "year was not changed");
+            } catch(e) {
+                assert.notOk(true, "Infinite loop detected");
+            }
         });
     });
 

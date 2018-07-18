@@ -36,11 +36,16 @@ var DateBoxMask = DateBoxBase.inherit({
         });
     },
 
+    _isSingleCharKey: function(e) {
+        var key = e.originalEvent.key;
+        return typeof key === "string" && key.length === 1 && !e.ctrl && !e.alt;
+    },
+
     _keyboardHandler: function(e) {
         var result = this.callBase(e);
         var key = e.originalEvent.key;
 
-        if(!this._useMaskBehavior() || this.option("opened") || key.length > 1) {
+        if(!this._useMaskBehavior() || this.option("opened") || !this._isSingleCharKey(e)) {
             return result;
         }
 
@@ -78,9 +83,14 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _searchString: function(char) {
         var limits = this._getActivePartProp("limits")(this._maskValue),
-            startString = this._searchValue + char.toLowerCase();
+            startString = this._searchValue + char.toLowerCase(),
+            endLimit = limits.max - limits.min;
 
-        for(var i = 0; i <= limits.max - limits.min; i++) {
+        if(endLimit === Infinity) {
+            return;
+        }
+
+        for(var i = 0; i <= endLimit; i++) {
             this._partIncrease(1);
             if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
