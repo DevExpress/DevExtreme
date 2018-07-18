@@ -192,27 +192,20 @@ var dxSankey = require("../core/base_widget").inherit({
             weightField = that._getOption("weightField", true),
             processedData = [];
 
-        // TODO
         data.forEach(function(item) {
             if(!item.hasOwnProperty(sourceField)) {
-                // incidentOccurred - sourceField is absent
                 that._incidentOccurred("E2007", sourceField);
             } else if(!item.hasOwnProperty(targetField)) {
-                // incidentOccurred - targetField is absent
                 that._incidentOccurred("E2007", targetField);
             } else if(!item.hasOwnProperty(weightField)) {
-                // incidentOccurred - weightField is absent
                 that._incidentOccurred("E2007", weightField);
             } else {
 
                 if(!_isString(item[sourceField])) {
-                    // incidentOccurred - sourceField must be a string
                     that._incidentOccurred("E2008", sourceField);
                 } else if(!_isString(item[targetField])) {
-                    // incidentOccurred - targetField must be a string
                     that._incidentOccurred("E2008", targetField);
                 } else if(!_isNumber(item[weightField]) || item[weightField] <= 0) {
-                    // incidentOccurred - weightField must be a positive number
                     that._incidentOccurred("E2009", weightField);
                 } else {
                     processedData.push([ item[sourceField], item[targetField], item[weightField] ]);
