@@ -469,6 +469,7 @@ var DropDownList = DropDownEditor.inherit({
     _popupShownHandler: function() {
         this.callBase();
         this._setFocusPolicy();
+        this._popup._updateBottomToolbarCompactMode();
     },
 
     _setFocusPolicy: function() {
