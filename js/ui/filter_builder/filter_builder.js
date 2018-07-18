@@ -854,7 +854,7 @@ var FilterBuilder = Widget.inherit({
         var options = {
             value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
-            isValueChanged: true,
+            updateValueImmediately: true,
             setValue: function(data) {
                 value = data === null ? "" : data;
             }
@@ -866,7 +866,7 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts(e.target)) {
-                utils.setFocusToBody();
+                eventsEngine.trigger($editor.find("input"), "change");
                 that._updateConditionValue(item, value, function() {
                     createValueText();
                 });
