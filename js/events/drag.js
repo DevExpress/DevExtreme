@@ -128,8 +128,8 @@ var getItemSize = function(dropTargetConfig, $element) {
     }
 
     return {
-        width: $element.width(),
-        height: $element.height()
+        width: $element.get(0).getBoundingClientRect().width,
+        height: $element.get(0).getBoundingClientRect().height
     };
 };
 
