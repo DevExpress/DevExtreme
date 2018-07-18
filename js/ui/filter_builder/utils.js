@@ -2,7 +2,6 @@
 
 import { Deferred, when } from "../../core/utils/deferred";
 import { errors as dataErrors } from "../../data/errors";
-import domAdapter from "../../core/dom_adapter";
 import errors from "../widget/ui.errors";
 import filterUtils from "../shared/filtering";
 import formatHelper from "../../format_helper";
@@ -660,13 +659,6 @@ function isValidCondition(condition, field) {
     return true;
 }
 
-function setFocusToBody() {
-    var doc = domAdapter.getDocument();
-    if(doc && doc.activeElement && doc.activeElement.nodeName && doc.activeElement.nodeName.toLowerCase() !== "body") {
-        doc.activeElement.blur();
-    }
-}
-
 function getMergedOperations(customOperations, betweenCaption) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
@@ -815,7 +807,6 @@ exports.getCurrentLookupValueText = getCurrentLookupValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
-exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;
