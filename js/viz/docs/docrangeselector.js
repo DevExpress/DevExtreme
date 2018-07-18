@@ -68,7 +68,6 @@ var dxRangeSelector = {
         showMinorTicks: true,
         /**
         * @name dxRangeSelectorOptions.scale.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -180,7 +179,6 @@ var dxRangeSelector = {
         },
         /**
         * @name dxRangeSelectorOptions.scale.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
@@ -206,13 +204,11 @@ var dxRangeSelector = {
         placeholderHeight: undefined,
         /**
         * @name dxRangeSelectorOptions.scale.minRange
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minRange: {},
         /**
         * @name dxRangeSelectorOptions.scale.maxRange
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         maxRange: {},
@@ -431,7 +427,6 @@ var dxRangeSelector = {
         aggregationGroupWidth: 10,
         /**
         * @name dxRangeSelectorOptions.scale.aggregationInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         aggregationInterval: undefined,
