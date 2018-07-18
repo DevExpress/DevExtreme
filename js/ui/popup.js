@@ -247,7 +247,8 @@ var Popup = Overlay.inherit({
 
             bottomTemplate: "bottom",
             useDefaultToolbarButtons: false,
-            useFlatToolbarButtons: false
+            useFlatToolbarButtons: false,
+            toolbarCompactMode: false
         });
     },
 
@@ -617,7 +618,7 @@ var Popup = Overlay.inherit({
     _getBottomToolbarWidth: function() {
         var width = 0;
 
-        if(this.$bottomToolbarContentItems && this.$bottomToolbarContentItems.length) {
+        if(this.$bottomToolbarContentItems) {
             this.$bottomToolbarContentItems.each(function(index, item) {
                 width += $(item).outerWidth();
             });
@@ -634,6 +635,16 @@ var Popup = Overlay.inherit({
                 this._$bottom.addClass(POPUP_TOOLBAR_COMPACT_CLASS);
             }
         }
+    },
+
+    _show: function() {
+        var result = this.callBase.apply(this, arguments);
+
+        if(this.option("toolbarCompactMode")) {
+            this._updateBottomToolbarCompactMode();
+        }
+
+        return result;
     },
 
     _toggleClasses: function() {
@@ -766,6 +777,7 @@ var Popup = Overlay.inherit({
                 this._renderGeometry();
                 break;
             case "bottomTemplate":
+            case "toolbarCompactMode":
                 this._renderBottom();
                 this._renderGeometry();
                 break;
