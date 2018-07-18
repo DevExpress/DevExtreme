@@ -159,25 +159,19 @@ module.exports = SelectionStrategy.inherit({
         var that = this,
             needAddFilter = true,
             currentFilter = isDeselect ? ["!", filter] : filter,
-            currentOperation = isDeselect ? "and" : "or",
             selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
-            that._removeSameFilter(selectionFilter, filter, isDeselect);
-            var lastOperation = JSON.stringify(filter) !== JSON.stringify(selectionFilter) && selectionFilter[1];
-            if(that._removeSameFilter(selectionFilter, filter, !isDeselect)) {
-                if(lastOperation !== "or" && currentOperation === "and") {
-                    needAddFilter = false;
-                    selectionFilter = [];
-                } if(currentOperation === "or") {
-                    needAddFilter = lastOperation === "and" && !isUnique;
-                }
+            that._removeSameFilter(selectionFilter, filter, isDeselect, true);
+
+            if(that._removeSameFilter(selectionFilter, filter, !isDeselect, !isUnique)) {
+                needAddFilter = selectionFilter.length && !isUnique;
             }
 
             if(needAddFilter) {
-                selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
+                selectionFilter = that._addFilterOperator(selectionFilter, isDeselect ? "and" : "or");
             }
         }
 
@@ -197,7 +191,7 @@ module.exports = SelectionStrategy.inherit({
         return filter;
     },
 
-    _removeSameFilter: function(selectionFilter, filter, inverted) {
+    _removeSameFilter: function(selectionFilter, filter, inverted, forceRemove) {
         filter = inverted ? ["!", filter] : filter;
 
         var filterIndex = this._findSubFilter(selectionFilter, filter);
@@ -207,21 +201,15 @@ module.exports = SelectionStrategy.inherit({
             return true;
         }
 
-        if(filterIndex >= 0) {
+        var isLastItem = filterIndex === selectionFilter.length - 1;
+
+        if(filterIndex >= 0 && (forceRemove || isLastItem)) {
             if(filterIndex > 0) {
                 selectionFilter.splice(filterIndex - 1, 2);
             } else {
                 selectionFilter.splice(filterIndex, 2);
             }
             return true;
-        } else {
-            for(var i = 0; i < selectionFilter.length; i++) {
-                if(Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter)) {
-                    if(selectionFilter[i].length === 1) {
-                        selectionFilter[i] = selectionFilter[i][0];
-                    }
-                }
-            }
         }
         return false;
     },
