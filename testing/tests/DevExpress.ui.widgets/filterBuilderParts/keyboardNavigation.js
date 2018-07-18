@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("jquery"),
-    utils = require("ui/filter_builder/utils"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     fields = require("../../../helpers/filterBuilderTestData.js");
 
@@ -52,12 +51,22 @@ QUnit.module("Keyboard navigation", {
 
             keyboardMock(this.getTextEditorElement()).keyUp(key);
         };
+
+        this.showTextEditor = function() {
+            keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
+        };
+
+        this.setFocusToBody = function() {
+            if(document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body") {
+                document.activeElement.blur();
+            }
+        };
     }
 }, function() {
     QUnit.test("show editor on keyup event", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
-        keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
+        this.showTextEditor();
 
         assert.notOk(this.getValueButtonElement().length);
         assert.ok(this.getTextEditorElement().length);
@@ -66,7 +75,7 @@ QUnit.module("Keyboard navigation", {
     QUnit.test("enter keyup for value button and editor", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
-        keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
+        this.showTextEditor();
 
         assert.ok(this.getTextEditorElement().length);
 
@@ -90,7 +99,7 @@ QUnit.module("Keyboard navigation", {
 
         var textEditorElement = this.getTextEditorElement();
         textEditorElement.dxTextBox("instance").option("value", "Test");
-        utils.setFocusToBody();
+        this.setFocusToBody();
 
         keyboardMock(this.getTextEditorElement()).keyUp(TAB_KEY);
 
@@ -100,7 +109,7 @@ QUnit.module("Keyboard navigation", {
     QUnit.test("tab press without change a condition", function(assert) {
         this.getValueButtonElement().trigger("dxclick");
 
-        utils.setFocusToBody();
+        this.setFocusToBody();
         keyboardMock(this.getTextEditorElement().find("input")).keyUp(TAB_KEY);
 
         assert.equal(this.getValueButtonElement().text(), "<enter a value>");
@@ -166,5 +175,28 @@ QUnit.module("Keyboard navigation", {
 
         assert.ok(this.getOperationButtonElement().is(":focus"));
         assert.equal(this.getOperationButtonElement().text(), "Contains");
+    });
+
+    // T653968
+    QUnit.testInActiveWindow("editor.value is changed after 'keyup' and saved in filterBulder.value by outer click", function(assert) {
+        this.showTextEditor();
+
+        var textEditorElement = this.getTextEditorElement(),
+            textEditorInput = textEditorElement.find("input"),
+            textEditorInstance = textEditorElement.dxTextBox("instance");
+
+        textEditorInput.val("Test");
+        assert.equal(textEditorInput.val(), "Test");
+        assert.equal(textEditorInstance.option("value"), "");
+
+        keyboardMock(textEditorInput).keyUp();
+
+        assert.deepEqual(this.instance.option("value"), [["State", "=", ""]]);
+        assert.equal(textEditorInstance.option("value"), "Test");
+        assert.equal(textEditorInput.val(), "Test");
+
+        $("body").trigger("dxpointerdown");
+
+        assert.deepEqual(this.instance.option("value"), ["State", "=", "Test"]);
     });
 });
