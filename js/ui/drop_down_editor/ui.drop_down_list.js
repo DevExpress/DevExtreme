@@ -469,7 +469,6 @@ var DropDownList = DropDownEditor.inherit({
     _popupShownHandler: function() {
         this.callBase();
         this._setFocusPolicy();
-        this._popup._updateBottomToolbarCompactMode();
     },
 
     _setFocusPolicy: function() {
@@ -535,7 +534,8 @@ var DropDownList = DropDownEditor.inherit({
                 that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
             },
             height: "auto",
-            maxHeight: this._getMaxHeight.bind(this)
+            maxHeight: this._getMaxHeight.bind(this),
+            toolbarCompactMode: true
         });
     },
 
