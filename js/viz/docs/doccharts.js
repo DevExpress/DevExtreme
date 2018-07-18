@@ -1339,13 +1339,11 @@ var dxChart = {
     argumentAxis: {
         /**
         * @name dxChartOptions.argumentAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxChartOptions.argumentAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -1407,7 +1405,6 @@ var dxChart = {
         aggregationGroupWidth: 10,
         /**
         * @name dxChartOptions.argumentAxis.aggregationInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         aggregationInterval: undefined,
@@ -1628,13 +1625,11 @@ var dxChart = {
         multipleAxesSpacing: 5,
         /**
         * @name dxChartOptions.valueAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxChartOptions.valueAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -2794,13 +2789,11 @@ var dxPolarChart = {
         originValue: undefined,
         /**
         * @name dxPolarChartOptions.argumentAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxPolarChartOptions.argumentAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -2954,13 +2947,11 @@ var dxPolarChart = {
         showZero: undefined,
         /**
         * @name dxPolarChartOptions.valueAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxPolarChartOptions.valueAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
