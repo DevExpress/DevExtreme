@@ -399,7 +399,7 @@ var Drawer = Widget.inherit({
 
         this._toggleHideMenuCallback(offset);
 
-        this._renderShaderVisibility(offset, animate, duration);
+        offset && this._toggleShaderVisibility(offset);
 
         if(this.option("mode") === "push") {
             $(this.content()).css("paddingLeft", 0);
@@ -464,12 +464,12 @@ var Drawer = Widget.inherit({
                 }
             }
         }
+
+        this._renderShaderVisibility(offset, animate, duration);
     },
 
     _renderShaderVisibility: function(offset, animate, duration) {
         var fadeConfig = this._getFadeConfig(offset);
-
-        this._toggleShaderVisibility(offset);
 
         if(animate) {
             animation.fade($(this._$shader), fadeConfig, duration, this._animationCompleteHandler.bind(this));
