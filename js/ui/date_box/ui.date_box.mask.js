@@ -49,7 +49,7 @@ var DateBoxMask = DateBoxBase.inherit({
             return result;
         }
 
-        this._initMaskValue();
+        this._setNewDateIfEmpty();
 
         isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
 
@@ -58,7 +58,7 @@ var DateBoxMask = DateBoxBase.inherit({
         return result;
     },
 
-    _initMaskValue: function() {
+    _setNewDateIfEmpty: function() {
         if(!this._maskValue) {
             this._maskValue = new Date();
             this._renderDateParts();
@@ -170,7 +170,6 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _mouseWheelHandler: function(e) {
-        this._initMaskValue();
         var direction = e.delta > 0 ? FORWARD : BACKWARD;
         this._partIncrease(direction, e);
     },
@@ -234,7 +233,8 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _partIncrease: function(step, e) {
-        this._initMaskValue();
+        this._setNewDateIfEmpty();
+
         var limits = this._getActivePartLimits(),
             newValue = step + this._getActivePartValue();
 
@@ -246,7 +246,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler: function() {
-        this._initMaskValue();
+        this._setNewDateIfEmpty();
         this._activePartIndex = dateParts.getDatePartIndexByPosition(this._dateParts, this._caret().start);
         this._caret(this._getActivePartProp("caret"));
     },
@@ -264,6 +264,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _focusInHandler: function(e) {
         this.callBase(e);
+
         if(this._useMaskBehavior()) {
             var caret = this._getActivePartProp("caret");
             caret && this._caret(caret);
