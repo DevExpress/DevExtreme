@@ -506,6 +506,54 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
+    QUnit.module("Empty dateBox", {
+        beforeEach: () => {
+            this.$element = $("#dateBox").dxDateBox({
+                value: null,
+                useMaskBehavior: true,
+                mode: "text",
+                displayFormat: "MMMM d yyyy"
+            });
+
+            this.instance = this.$element.dxDateBox("instance");
+            this.$input = this.$element.find(".dx-texteditor-input");
+            this.keyboard = keyboardMock(this.$input, true);
+        },
+    }, () => {
+        QUnit.test("Current date should be rendered on first input", (assert) => {
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "January 19 2018", "first part was changed, other parts is from the current date");
+        });
+
+        QUnit.test("Bluring the input after first input should update the value", (assert) => {
+            this.keyboard.type("1");
+            this.$input.trigger("focusout");
+
+            assert.equal(this.$input.val(), "January 19 2018", "text is correct");
+            assert.equal(this.instance.option("value").getMonth(), 0, "value is correct");
+        });
+
+        QUnit.test("Clear button should clear the value", (assert) => {
+            this.instance.option({
+                showClearButton: true,
+                value: new Date(2018, 6, 19)
+            });
+
+            assert.equal(this.$input.val(), "July 19 2018", "initial value is correct");
+
+            this.$element.find(".dx-clear-button-area").trigger("dxclick");
+
+            assert.equal(this.$input.val(), "", "text was cleared");
+            assert.equal(this.instance.option("value"), null, "value was cleared");
+
+            this.$input.trigger("change");
+
+            assert.equal(this.$input.val(), "", "text is still cleared");
+            assert.equal(this.instance.option("value"), null, "value is still cleared");
+        });
+
+    });
+
     QUnit.module("Options changed", setupModule, () => {
         QUnit.test("The 'useMaskBehavior' option is changed to false", (assert) => {
             this.keyboard.caret(9);

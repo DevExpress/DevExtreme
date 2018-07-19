@@ -119,19 +119,24 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _renderMask: function() {
         this.callBase();
+        this._detachMaskEvents();
         this._clearState();
 
         if(this._useMaskBehavior()) {
             this._activePartIndex = 0;
             this._attachMaskEvents();
+            this._maskValue = new Date(this.dateOption("value") || new Date());
             this._renderDateParts();
-            this._maskValue = new Date(this.dateOption("value"));
         }
     },
 
     _renderDateParts: function() {
-        this._dateParts = dateParts.renderDateParts(this.option("text"), this.option("displayFormat"));
-        this._selectNextPart(0);
+        var text = this.option("text") || this._getDisplayedText(this._maskValue);
+
+        if(text) {
+            this._dateParts = dateParts.renderDateParts(text, this.option("displayFormat"));
+            this._selectNextPart(0);
+        }
     },
 
     _detachMaskEvents: function() {
@@ -234,7 +239,7 @@ var DateBoxMask = DateBoxBase.inherit({
 
     _isValueDirty: function() {
         var value = this.dateOption("value");
-        return this._maskValue.getTime() !== value.getTime();
+        return (this._maskValue && this._maskValue.getTime()) !== (value && value.getTime());
     },
 
     _fireChangeEvent: function() {
@@ -281,15 +286,20 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _clearState: function() {
-        this._detachMaskEvents();
         this._clearSearchValue();
         delete this._dateParts;
         delete this._activePartIndex;
         delete this._maskValue;
     },
 
+    reset: function() {
+        this.callBase();
+        this._clearState();
+    },
+
     _clean: function() {
         this.callBase();
+        this._detachMaskEvents();
         this._clearState();
     }
 });
