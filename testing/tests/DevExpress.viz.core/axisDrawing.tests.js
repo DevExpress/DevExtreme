@@ -1,15 +1,16 @@
-var $ = require("jquery"),
-    errors = require("viz/core/errors_warnings"),
-    translator2DModule = require("viz/translators/translator2d"),
-    tickGeneratorModule = require("viz/axes/tick_generator"),
-    dxErrors = errors.ERROR_MESSAGES,
-    Axis = require("viz/axes/base_axis").Axis,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
-        updateBusinessRange: function(range) {
-            this.getBusinessRange.returns(range);
-        }
-    });
+"use strict";
+import $ from "jquery";
+import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
+import translator2DModule from "viz/translators/translator2d";
+import tickGeneratorModule from "viz/axes/tick_generator";
+import { Axis } from "viz/axes/base_axis";
+import vizMocks from "../../helpers/vizMocks.js";
+
+var StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+    updateBusinessRange: function(range) {
+        this.getBusinessRange.returns(range);
+    }
+});
 
 var environment = {
     beforeEach: function() {
@@ -410,9 +411,9 @@ QUnit.test("Horizontal top", function(assert) {
     assert.deepEqual(path.getCall(0).args, [[], "line"]);
     assert.deepEqual(path.getCall(1).args, [[], "line"]);
     assert.deepEqual(path.getCall(2).args, [[], "line"]);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(path.getCall(1).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(path.getCall(2).returnValue.append.getCall(0).args[0], group);
@@ -686,9 +687,9 @@ QUnit.test("Horizontal top, minor tick marks", function(assert) {
 
     var path = this.renderer.path;
     assert.equal(path.callCount, 3);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 30 - 5, 30, 30 + 5] });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 30 - 5, 50, 30 + 5] });
     assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5] });
@@ -966,8 +967,8 @@ QUnit.test("showCustomBoundaryTicks true, majorTicks not on bounds - render boun
 
     var path = this.renderer.path;
     assert.equal(path.callCount, 5);
-    assert.deepEqual(path.getCall(3).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(4).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
+    assert.deepEqual(path.getCall(3).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(4).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(3).returnValue.attr.getCall(1).args[0], { points: [30, 70 - 5, 30, 70 + 5] });
     assert.deepEqual(path.getCall(4).returnValue.attr.getCall(1).args[0], { points: [70, 70 - 5, 70, 70 + 5] });
 });
@@ -1235,8 +1236,8 @@ QUnit.test("showCustomBoundaryTicks true, customBoundTicks - render first two cu
 
     var path = this.renderer.path;
     assert.equal(path.callCount, 2);
-    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 70 - 5, 30, 70 + 5] });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [70, 70 - 5, 70, 70 + 5] });
 });
@@ -5790,9 +5791,9 @@ QUnit.test("Horizontal. Major grids", function(assert) {
     assert.deepEqual(path.getCall(0).args, [[30, 30, 30, 70], "line"]);
     assert.deepEqual(path.getCall(1).args, [[50, 30, 50, 70], "line"]);
     assert.deepEqual(path.getCall(2).args, [[70, 30, 70, 70], "line"]);
-    assert.deepEqual(path.getCall(0).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
 
     assert.deepEqual(path.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(path.getCall(1).returnValue.append.getCall(0).args[0], group);
@@ -5828,9 +5829,9 @@ QUnit.test("Horizontal. Minor grids", function(assert) {
     assert.deepEqual(path.getCall(0).args, [[30, 30, 30, 70], "line"]);
     assert.deepEqual(path.getCall(1).args, [[50, 30, 50, 70], "line"]);
     assert.deepEqual(path.getCall(2).args, [[70, 30, 70, 70], "line"]);
-    assert.deepEqual(path.getCall(0).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
+    assert.deepEqual(path.getCall(0).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.args[0][0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3, opacity: 1 });
 
     assert.deepEqual(path.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(path.getCall(1).returnValue.append.getCall(0).args[0], group);
@@ -9438,4 +9439,899 @@ QUnit.test("Do not draw addition break line if axis line is not visible", functi
     assert.deepEqual(this.renderer.path.getCall(0).args[0], [10, 21, 90, 21]);
     assert.deepEqual(this.renderer.path.getCall(1).args[0], [10, 20, 90, 20]);
     assert.deepEqual(this.renderer.path.getCall(2).args[0], [10, 22, 90, 22]);
+});
+
+QUnit.module("XY axis animation", environment);
+
+QUnit.test("Do not animate tick mark on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        tick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 0);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [40, 27, 40, 33]
+    });
+});
+
+QUnit.test("Animate tick to the new position on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        tick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(50);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 1);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [40, 27, 40, 33]
+    });
+
+    assert.deepEqual(tick.animate.lastCall.args[0], {
+        points: [50, 27, 50, 33],
+        opacity: 1
+    });
+});
+
+QUnit.test("Fade in new tick on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        tick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedTicks = [1, 2];
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.translator.stub("translate").withArgs(2).returns(70);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 2);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 1);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [70, 27, 70, 33],
+        opacity: 0
+    });
+
+    assert.deepEqual(tick.animate.lastCall.args, [{
+        opacity: 1
+    }, {
+        delay: 0.5,
+        partitionDuration: 0.5
+    }]);
+});
+
+QUnit.test("Fade out unnecessary tick", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        tick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    const tick = renderer.path.lastCall.returnValue;
+
+    // act
+    this.generatedTicks = [];
+    tick.append.reset();
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+
+    assert.equal(tick.stub("animate").callCount, 1);
+
+    assert.deepEqual(tick.append.callCount, 1);
+    assert.equal(tick.append.lastCall.args[0], this.axis._axisLineGroup);
+    assert.deepEqual(tick.animate.lastCall.args, [{ opacity: 0 }, { partitionDuration: 0.5 }]);
+});
+
+QUnit.test("Do not animate grid line on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        grid: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const gridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(gridLine.stub("animate").callCount, 0);
+    assert.deepEqual(gridLine.attr.lastCall.args[0], {
+        points: [40, 30, 40, 70]
+    });
+});
+
+QUnit.test("Animate grid line to the new position on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        grid: {
+            visible: true,
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(50);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const gridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(gridLine.stub("animate").callCount, 1);
+    assert.deepEqual(gridLine.attr.lastCall.args[0], {
+        points: [40, 30, 40, 70]
+    });
+
+    assert.deepEqual(gridLine.animate.lastCall.args[0], {
+        points: [50, 30, 50, 70],
+        opacity: 1
+    });
+});
+
+QUnit.test("Fade in new grid line on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        grid: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedTicks = [1, 2];
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.translator.stub("translate").withArgs(2).returns(70);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 2);
+    const gridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(gridLine.stub("animate").callCount, 1);
+    assert.deepEqual(gridLine.attr.lastCall.args[0], {
+        points: [70, 30, 70, 70],
+        opacity: 0
+    });
+
+    assert.deepEqual(gridLine.animate.lastCall.args, [{
+        opacity: 1
+    }, {
+        delay: 0.5,
+        partitionDuration: 0.5
+    }]);
+});
+
+QUnit.test("Fade out unnecessary grid line", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        grid: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    const gridLine = renderer.path.lastCall.returnValue;
+
+    // act
+    this.generatedTicks = [];
+    gridLine.append.reset();
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+
+    assert.equal(gridLine.stub("animate").callCount, 1);
+
+    assert.deepEqual(gridLine.append.callCount, 1);
+    assert.equal(gridLine.append.lastCall.args[0], this.axis._axisGridGroup);
+    assert.deepEqual(gridLine.animate.lastCall.args, [{ opacity: 0 }, { partitionDuration: 0.5 }]);
+});
+
+QUnit.test("Do not animate label on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.text.callCount, 1);
+    const label = renderer.text.lastCall.returnValue;
+
+    assert.equal(label.stub("animate").callCount, 0);
+    assert.deepEqual(label.attr.lastCall.args[0], {
+        x: 40,
+        y: 30
+    });
+});
+
+QUnit.test("Animate label to the new position on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true,
+            opacity: 0.8
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    const label = renderer.text.lastCall.returnValue;
+    label.append.reset();
+    label.attr.reset();
+    // act
+    this.translator.stub("translate").withArgs(1).returns(45);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.text.callCount, 1);
+
+    assert.deepEqual(label.attr.firstCall.args[0], {
+        x: 45,
+        y: 0
+    });
+
+    assert.equal(label.append.callCount, 1);
+    assert.equal(label.append.lastCall.args[0], this.axis._axisElementsGroup);
+
+    assert.equal(label.stub("animate").callCount, 1);
+    assert.deepEqual(label.attr.lastCall.args[0], {
+        x: 40,
+        y: 30,
+        opacity: 0.8
+    }, "from positioin");
+
+    assert.deepEqual(label.animate.lastCall.args[0], {
+        x: 50,
+        y: 30,
+        opacity: 0.8
+    });
+});
+
+QUnit.test("Fade in new label on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true,
+            opacity: 0.8
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedTicks = [1, 2];
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.translator.stub("translate").withArgs(2).returns(70);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.text.callCount, 2);
+    const label = renderer.text.lastCall.returnValue;
+
+    assert.equal(label.stub("animate").callCount, 1);
+    assert.deepEqual(label.attr.lastCall.args[0], {
+        opacity: 0
+    });
+
+    assert.deepEqual(label.animate.lastCall.args, [{
+        opacity: 0.8
+    }, {
+        delay: 0.5,
+        partitionDuration: 0.5
+    }]);
+});
+
+QUnit.test("Fade out unnecessary label", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    const label = renderer.text.lastCall.returnValue;
+
+    // act
+    this.generatedTicks = [];
+    label.append.reset();
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.text.callCount, 1);
+
+    assert.equal(label.stub("animate").callCount, 1);
+
+    assert.deepEqual(label.append.callCount, 1);
+    assert.equal(label.append.lastCall.args[0], this.axis._axisElementsGroup);
+    assert.deepEqual(label.animate.lastCall.args, [{ opacity: 0 }, { partitionDuration: 0.5 }]);
+});
+
+QUnit.test("Do not animate axis if animation is disabled", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true
+        },
+        grid: {
+            visible: true
+        },
+        tick: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, false);
+
+    // act
+    this.generatedTicks = [1];
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, false);
+    // assert
+    const label = renderer.text.lastCall.returnValue;
+    assert.equal(label.stub("animate").callCount, 0);
+    const gridLine = renderer.path.lastCall.returnValue;
+    assert.equal(gridLine.stub("animate").callCount, 0);
+    const tick = renderer.path.lastCall.returnValue;
+    assert.equal(tick.stub("animate").callCount, 0);
+});
+
+QUnit.test("Do not animate axis if animation is disabled. Remove tick", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true
+        },
+        grid: {
+            visible: true
+        },
+        tick: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, false);
+
+    // act
+    this.generatedTicks = [];
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, false);
+    // assert
+    const label = renderer.text.lastCall.returnValue;
+    assert.equal(label.stub("animate").callCount, 0);
+    const gridLine = renderer.path.lastCall.returnValue;
+    assert.equal(gridLine.stub("animate").callCount, 0);
+    const tick = renderer.path.lastCall.returnValue;
+    assert.equal(tick.stub("animate").callCount, 0);
+});
+
+QUnit.test("Do not animate minor tick mark on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorTick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 0);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [40, 27, 40, 33]
+    });
+});
+
+QUnit.test("Animate minor Tick to the new position on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorTick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedMinorTicks = [2];
+    this.translator.stub("translate").withArgs(2).returns(50);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 1);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [40, 27, 40, 33]
+    });
+
+    assert.deepEqual(tick.animate.lastCall.args[0], {
+        points: [50, 27, 50, 33],
+        opacity: 1
+    });
+});
+
+QUnit.test("Fade in new minor tick on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorTick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedMinorTicks = [1, 2];
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.translator.stub("translate").withArgs(2).returns(70);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 2);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 1);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [70, 27, 70, 33],
+        opacity: 0
+    });
+
+    assert.deepEqual(tick.animate.lastCall.args, [{
+        opacity: 1
+    }, {
+        delay: 0.5,
+        partitionDuration: 0.5
+    }]);
+});
+
+QUnit.test("Fade out unnecessary minor tick", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorTick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    const tick = renderer.path.lastCall.returnValue;
+
+    // act
+    this.generatedMinorTicks = [];
+    tick.append.reset();
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+
+    assert.equal(tick.stub("animate").callCount, 1);
+
+    assert.deepEqual(tick.append.callCount, 1);
+    assert.equal(tick.append.lastCall.args[0], this.axis._axisLineGroup);
+    assert.deepEqual(tick.animate.lastCall.args, [{ opacity: 0 }, { partitionDuration: 0.5 }]);
+});
+
+QUnit.test("Do not animate minor grid line on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorGrid: {
+            visible: true
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const minorGridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(minorGridLine.stub("animate").callCount, 0);
+    assert.deepEqual(minorGridLine.attr.lastCall.args[0], {
+        points: [40, 30, 40, 70]
+    });
+});
+
+QUnit.test("Animate minor grid line to the new position on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorGrid: {
+            visible: true
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedMinorTicks = [2];
+    this.translator.stub("translate").withArgs(2).returns(50);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const minorGridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(minorGridLine.stub("animate").callCount, 1);
+    assert.deepEqual(minorGridLine.attr.lastCall.args[0], {
+        points: [40, 30, 40, 70]
+    });
+
+    assert.deepEqual(minorGridLine.animate.lastCall.args[0], {
+        points: [50, 30, 50, 70],
+        opacity: 1
+    });
+});
+
+QUnit.test("Fade in new grid line on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorGrid: {
+            visible: true
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.generatedMinorTicks = [1, 2];
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.translator.stub("translate").withArgs(2).returns(70);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 2);
+    const minorGridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(minorGridLine.stub("animate").callCount, 1);
+    assert.deepEqual(minorGridLine.attr.lastCall.args[0], {
+        points: [70, 30, 70, 70],
+        opacity: 0
+    });
+
+    assert.deepEqual(minorGridLine.animate.lastCall.args, [{
+        opacity: 1
+    }, {
+        delay: 0.5,
+        partitionDuration: 0.5
+    }]);
+});
+
+QUnit.test("Fade out unnecessary minor grid line", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        minorGrid: {
+            visible: true
+        }
+    });
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    const minorGridLine = renderer.path.lastCall.returnValue;
+
+    // act
+    this.generatedMinorTicks = [];
+    minorGridLine.append.reset();
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+
+    assert.equal(minorGridLine.stub("animate").callCount, 1);
+
+    assert.deepEqual(minorGridLine.append.callCount, 1);
+    assert.equal(minorGridLine.append.lastCall.args[0], this.axis._axisGridGroup);
+    assert.deepEqual(minorGridLine.animate.lastCall.args, [{ opacity: 0 }, { partitionDuration: 0.5 }]);
+});
+
+QUnit.test("Draw tick mark and grid line in new position", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        tick: {
+            visible: true,
+            length: 6
+        },
+        grid: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(50);
+
+    this.axis.draw(this.canvas);
+
+    // assert
+    const tick = renderer.path.firstCall.returnValue;
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [50, 27, 50, 33]
+    });
+
+    const gridLine = renderer.path.lastCall.returnValue;
+    assert.deepEqual(gridLine.attr.lastCall.args[0], {
+        points: [50, 30, 50, 70]
+    });
 });

@@ -208,7 +208,7 @@ circularAxes = polarAxes.circular = {
         return _abs(angles[0] - angles[1]) * this.getRadius() * Math.PI / 180;
     },
 
-    _getTickMarkPoints: function(tick, length) {
+    _getTickMarkPoints: function(coords, length) {
         var center = this.getCenter(),
             corrections = {
                 inside: -1,
@@ -474,8 +474,7 @@ polarAxes.linear = {
         return this.getRadius();
     },
 
-    _getTickMarkPoints: function(tick, length) {
-        var coords = tick.coords;
+    _getTickMarkPoints: function(coords, length) {
         return [
             coords.x - length / 2,
             coords.y,

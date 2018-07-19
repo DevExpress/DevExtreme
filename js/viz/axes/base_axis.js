@@ -123,12 +123,12 @@ function drawGrids(ticks, drawLine) {
     callAction(ticks, "drawGrid", drawLine);
 }
 
-function updateTicksPosition(ticks) {
-    callAction(ticks, "updateTickPosition");
+function updateTicksPosition(ticks, animate) {
+    callAction(ticks, "updateTickPosition", animate);
 }
 
-function updateGridsPosition(ticks) {
-    callAction(ticks, "updateGridPosition");
+function updateGridsPosition(ticks, animate) {
+    callAction(ticks, "updateGridPosition", animate);
 }
 
 function measureLabels(items) {
@@ -293,6 +293,8 @@ const Axis = exports.Axis = function(renderSettings) {
     that._translator = that._createTranslator();
     that.isArgumentAxis = renderSettings.isArgumentAxis;
     that._viewport = [];
+
+    that._firstDrawing = true;
 };
 
 Axis.prototype = {
@@ -1413,8 +1415,38 @@ Axis.prototype = {
         that._tickInterval = ticks.tickInterval;
         that._minorTickInterval = ticks.minorTickInterval;
 
-        that._majorTicks = ticks.ticks.map(createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks)));
-        that._minorTicks = minors.map(createMinorTick(that, renderer));
+        const majorTicksByValues = (that._majorTicks || []).reduce((r, t) => {
+            r[t.value.valueOf()] = t;
+            return r;
+        }, {});
+
+
+        const majorTicks = ticks.ticks.map(v => {
+            const tick = majorTicksByValues[v.valueOf()];
+            delete majorTicksByValues[v.valueOf()];
+            if(tick) {
+                return tick;
+            } else {
+                return createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks))(v);
+            }
+        });
+
+        that._majorTicks = majorTicks;
+
+        const oldMinorTicks = that._minorTicks || [];
+
+        that._minorTicks = minors.map((v, i) => {
+            const minorTick = oldMinorTicks[i];
+            if(minorTick) {
+                minorTick.updateValue(v);
+                return minorTick;
+            }
+            return createMinorTick(that, renderer)(v);
+        });
+
+        that._ticksToRemove = Object.keys(majorTicksByValues)
+            .map(k => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
+
         that._correctedBreaks = ticks.breaks;
 
         that._reinitTranslator(range);
@@ -1631,11 +1663,16 @@ Axis.prototype = {
 
     _measureTitle: _noop,
 
-    updateSize: function(canvas) {
-        var that = this;
+    animate() {
+        callAction(this._majorTicks, "animateLabels");
+    },
 
+    updateSize: function(canvas, animate) {
+        var that = this;
         that.updateCanvas(canvas);
         that._reinitTranslator(that._getViewportRange());
+
+        const animationEnabled = !that._firstDrawing && animate;
 
         var canvasStartEnd = that._getCanvasStartEnd();
 
@@ -1649,11 +1686,11 @@ Axis.prototype = {
 
         that._updateAxisElementPosition();
 
-        updateTicksPosition(that._majorTicks);
-        updateTicksPosition(that._minorTicks);
+        updateTicksPosition(that._majorTicks, animationEnabled);
+        updateTicksPosition(that._minorTicks, animationEnabled);
         updateTicksPosition(that._boundaryTicks);
 
-        callAction(that._majorTicks, "updateLabelPosition");
+        callAction(that._majorTicks, "updateLabelPosition", animationEnabled);
 
         that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(function(item) {
             var coord = that._getConstantLinePos(item.options.value, canvasStartEnd.start, canvasStartEnd.end).value;
@@ -1675,8 +1712,18 @@ Axis.prototype = {
         that._updateTitleCoords();
         that._checkTitleOverflow();
 
-        updateGridsPosition(that._majorTicks);
-        updateGridsPosition(that._minorTicks);
+        updateGridsPosition(that._majorTicks, animationEnabled);
+        updateGridsPosition(that._minorTicks, animationEnabled);
+
+        if(animationEnabled) {
+            callAction(that._ticksToRemove || [], "fadeOutElements");
+        }
+
+        callAction(that._majorTicks.concat(that._minorTicks), "saveCoords");
+
+        that._ticksToRemove = null;
+
+        that._firstDrawing = false;
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {

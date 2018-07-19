@@ -608,7 +608,7 @@ QUnit.test("draw ticks. Orientation = center", function(assert) {
     assert.equal(this.renderer.path.callCount, 4);
     for(var i = 0; i < this.renderer.path.callCount; i++) {
         assert.deepEqual(this.renderer.path.getCall(i).args, [[], "line"]);
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1 });
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1, opacity: 1 });
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [30, 50, 50, 50] });
 
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[1], "Created element attached to the group");
@@ -648,7 +648,7 @@ QUnit.test("discrete axis", function(assert) {
     assert.equal(this.renderer.path.callCount, 5);
     for(var i = 0; i < this.renderer.path.callCount; i++) {
         assert.deepEqual(this.renderer.path.getCall(i).args, [[], "line"]);
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1 });
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1, opacity: 1 });
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [36, 50, 44, 50] });
 
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.rotate.firstCall.args, [33, 20, 50]);
@@ -720,7 +720,8 @@ QUnit.test("draw grid", function(assert) {
         assert.deepEqual(returnedPath.attr.firstCall.args[0], {
             "stroke-width": 1,
             stroke: "black",
-            "stroke-opacity": 1
+            "stroke-opacity": 1,
+            opacity: 1
         });
         assert.deepEqual(returnedPath.rotate.firstCall.args, [33, 20, 50]);
         assert.equal(returnedPath.append.firstCall.args[0], this.renderSettings.gridGroup.children[0], "Created element attached to the group");
@@ -1017,7 +1018,7 @@ QUnit.test("draw ticks", function(assert) {
     assert.equal(this.renderer.path.callCount, 3);
     for(var i = 0; i < this.renderer.path.callCount; i++) {
         assert.deepEqual(this.renderer.path.getCall(i).args, [[], "line"]);
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1 });
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1, opacity: 1 });
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [10, 50, 30, 50] });
 
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[1], "Created elements attached to the group");
@@ -1032,7 +1033,7 @@ QUnit.test("discrete axis", function(assert) {
     assert.equal(this.renderer.path.callCount, 5);
     for(var i = 0; i < this.renderer.path.callCount; i++) {
         assert.deepEqual(this.renderer.path.getCall(i).args, [[], "line"]);
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1 });
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(0).args[0], { "stroke-width": 1, stroke: "red", "stroke-opacity": 1, opacity: 1 });
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [16, 50, 24, 50] });
 
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.rotate.firstCall.args, [33 + 90, 20, 50]);
@@ -1120,7 +1121,8 @@ QUnit.test("draw grid", function(assert) {
         assert.deepEqual(this.renderer.circle.getCall(i).returnValue.attr.firstCall.args[0], {
             "stroke-width": 1,
             stroke: "black",
-            "stroke-opacity": 1
+            "stroke-opacity": 1,
+            opacity: 1
         });
         assert.equal(this.renderer.circle.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.gridGroup.children[0], 'Created elements attached to the group');
         assert.ok(this.renderer.circle.getCall(i).returnValue.sharp.calledOnce);
@@ -1141,7 +1143,8 @@ QUnit.test("draw spider grid", function(assert) {
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.firstCall.args[0], {
             "stroke-width": 1,
             stroke: "black",
-            "stroke-opacity": 1
+            "stroke-opacity": 1,
+            opacity: 1
         });
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.gridGroup.children[0], 'Created elements attached to the group');
         assert.ok(this.renderer.path.getCall(i).returnValue.sharp.calledOnce);

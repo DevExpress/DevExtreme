@@ -2,7 +2,7 @@ var isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend;
 
 function getPathStyle(options) {
-    return { stroke: options.color, "stroke-width": options.width, "stroke-opacity": options.opacity };
+    return { stroke: options.color, "stroke-width": options.width, "stroke-opacity": options.opacity, opacity: 1 };
 }
 
 function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, skipLabels, offset) {
@@ -31,9 +31,18 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
     return function(value) {
         var tick = {
             value: value,
+
+            updateValue(newValue) {
+                this.value = value = newValue;
+            },
+
             initCoords: function() {
                 this.coords = axis._getTranslatedValue(value, tickOffset);
                 this.labelCoords = axis._getTranslatedValue(value);
+            },
+            saveCoords() {
+                this._storedCoords = this.coords;
+                this._storedLabelsCoords = this.labelCoords;
             },
             drawMark: function() {
                 if(!tickOptions.visible || skippedCategory === value) {
@@ -44,26 +53,67 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                this.mark = axis._createPathElement([], tickStyle).append(lineGroup);
-                this.updateTickPosition();
+                if(this.mark) {
+                    this.mark.append(lineGroup);
+                    this.updateTickPosition();
+                } else {
+                    this.mark = axis._createPathElement([], tickStyle).append(lineGroup);
+                    this.updateTickPosition();
+                }
             },
-            updateTickPosition: function() {
+
+            _updateLine(lineElement, settings, storedSettings, animate) {
+                if(!lineElement) {
+                    return;
+                }
+                if(animate && storedSettings) {
+                    settings.opacity = 1;
+                    lineElement.attr(storedSettings);
+                    lineElement.animate(settings);
+                } else {
+                    if(animate) {
+                        settings.opacity = 0;
+                    }
+
+                    lineElement.attr(settings);
+
+                    animate && lineElement.animate({
+                        opacity: 1
+                    }, {
+                        delay: 0.5,
+                        partitionDuration: 0.5
+                    });
+                }
+            },
+
+            updateTickPosition: function(animate) {
                 if(!this.mark) {
                     return;
                 }
 
-                this.mark.attr({
-                    points: axis._getTickMarkPoints(tick, tickOptions.length)
-                });
+                this._updateLine(this.mark, {
+                    points: axis._getTickMarkPoints(tick.coords, tickOptions.length)
+                },
+                    this._storedCoords && {
+                        points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length)
+                    },
+                    animate);
 
                 this.coords.angle && axis._rotateTick(this.mark, this.coords);
             },
             drawLabel: function(range) {
-                if(!labelOptions.visible || skipLabels) {
+                const labelIsVisible = labelOptions.visible && !skipLabels && !axis.areCoordsOutsideAxis(this.labelCoords);
+
+                if(!labelIsVisible) {
+                    if(this.label) {
+                        this.label.remove();
+                    }
                     return;
                 }
 
-                if(axis.areCoordsOutsideAxis(this.labelCoords)) {
+                if(this.label) {
+                    this.label.append(elementsGroup);
+                    this.updateLabelPosition();
                     return;
                 }
 
@@ -75,6 +125,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                         .text(text)
                         .css(getLabelFontStyle(this))
                         .attr(labelStyle)
+
                         .data("chart-data-argument", this.value)
                         .append(elementsGroup);
 
@@ -86,24 +137,78 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     }
                 }
             },
-            updateLabelPosition: function() {
+
+            fadeOutElements() {
+                const startSettings = { opacity: 1 };
+                const endSettings = { opacity: 0 };
+                const animationSettings = { partitionDuration: 0.5 };
+
+                if(this.label) {
+                    this.label.append(elementsGroup).attr(startSettings).animate(endSettings, animationSettings);
+                }
+                if(this.grid) {
+                    this.grid.append(axis._axisGridGroup).attr(startSettings).animate(endSettings, animationSettings);
+                }
+                if(this.mark) {
+                    this.mark.append(axis._axisLineGroup).attr(startSettings).animate(endSettings, animationSettings);
+                }
+            },
+
+            updateLabelPosition: function(animate) {
                 if(!this.label) {
                     return;
                 }
 
-                this.label.attr({
-                    x: this.labelCoords.x,
-                    y: this.labelCoords.y
-                });
-            },
-            drawGrid: function(drawLine) {
-                if(gridOptions.visible && skippedCategory !== this.value) {
-                    this.grid = drawLine(this, gridStyle);
-                    this.grid && this.grid.append(axis._axisGridGroup);
+                if(animate && this._storedLabelsCoords) {
+                    this.label.attr({
+                        x: this._storedLabelsCoords.x,
+                        y: this._storedLabelsCoords.y,
+                        opacity: labelStyle.opacity
+                    });
+
+                    this.label.animate({
+                        x: this.labelCoords.x,
+                        y: this.labelCoords.y,
+                        opacity: labelStyle.opacity
+                    });
+
+                } else {
+                    this.label.attr({
+                        x: this.labelCoords.x,
+                        y: this.labelCoords.y
+                    });
+
+                    if(animate) {
+                        this.label.attr({
+                            opacity: 0
+                        });
+
+                        this.label.animate({
+                            opacity: labelStyle.opacity
+                        }, {
+                            delay: 0.5,
+                            partitionDuration: 0.5
+                        });
+                    }
                 }
             },
-            updateGridPosition: function(updateLine) {
-                this.grid && this.grid.attr(axis._getGridPoints(tick.coords));
+
+            drawGrid: function(drawLine) {
+                if(gridOptions.visible && skippedCategory !== this.value) {
+                    if(this.grid) {
+                        this.grid.append(axis._axisGridGroup);
+                        this.updateGridPosition();
+                    } else {
+                        this.grid = drawLine(this, gridStyle);
+                        this.grid && this.grid.append(axis._axisGridGroup);
+                    }
+                }
+            },
+            updateGridPosition: function(animate) {
+                this._updateLine(this.grid,
+                    axis._getGridPoints(tick.coords),
+                    this._storedCoords && axis._getGridPoints(this._storedCoords),
+                    animate);
             }
         };
         return tick;

@@ -339,9 +339,8 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(tick, length) {
-            var coords = tick.coords,
-                isHorizontal = this._isHorizontal,
+        _getTickMarkPoints: function(coords, length) {
+            var isHorizontal = this._isHorizontal,
                 tickCorrection = {
                     left: -1,
                     top: -1,
