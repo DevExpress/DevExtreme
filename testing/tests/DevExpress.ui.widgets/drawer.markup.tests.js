@@ -2,8 +2,7 @@
 
 var $ = require("jquery"),
     config = require("core/config"),
-    typeUtils = require("core/utils/type"),
-    windowUtils = require("core/utils/window");
+    typeUtils = require("core/utils/type");
 
 require("common.css!");
 require("ui/drawer");
@@ -15,10 +14,6 @@ var DRAWER_CLASS = "dx-drawer",
     DRAWER_SHADER_CLASS = "dx-drawer-shader",
 
     OPENED_STATE_CLASS = "dx-drawer-opened";
-
-var position = function($element) {
-    return $element.position().left;
-};
 
 
 QUnit.testStart(function() {
@@ -118,25 +113,21 @@ QUnit.test("custom content template for content should be rendered correctly", f
     assert.equal($.trim($content.text()), "Test Content Template", "content text is correct");
 });
 
-QUnit.test("render right menu position", function(assert) {
+QUnit.test("render menu positions", function(assert) {
     var $element = $("#contentTemplate").dxDrawer({
-            menuPosition: "inverted",
+            menuPosition: "right",
             menuVisible: true
         }),
         instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
         $menuContent = $(instance.menuContent());
 
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "there is no left menu position class");
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class added");
 
-    if(windowUtils.hasWindow()) {
-        assert.equal(position($content), -200, "menu left position is negative");
-    }
-
-    instance.option("menuPosition", "normal");
+    instance.option("menuPosition", "top");
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class has been removed");
-    assert.ok($menuContent.hasClass(DRAWER_CLASS + "-left"), "left menu position class added");
+    assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "right menu position class has been removed");
+    assert.ok($menuContent.hasClass(DRAWER_CLASS + "-top"), "top menu position class added");
 });
 
 QUnit.test("shader should be rendered by default if menu is visible", function(assert) {

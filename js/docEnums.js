@@ -576,6 +576,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DrawerMenuPosition
+ * @enum {'top'|'left'|'right'}
+ */
+
+/**
  * @typedef {string} Enums.DrawerShowMode
  * @enum {'slide'|'shrink'}
  */

@@ -90,10 +90,10 @@ var Drawer = Widget.inherit({
 
             /**
             * @name dxDrawerOptions.menuPosition
-            * @type Enums.SlideOutMenuPosition
-            * @default "normal"
+            * @type Enums.DrawerMenuPosition
+            * @default "left"
             */
-            menuPosition: "normal",
+            menuPosition: "left",
 
             /**
             * @name dxDrawerOptions.menuVisible
@@ -378,11 +378,12 @@ var Drawer = Widget.inherit({
     },
 
     _toggleMenuPositionClass: function() {
-        var left = DRAWER_CLASS + "-left",
-            right = DRAWER_CLASS + "-right",
-            menuPosition = this._isRightMenuPosition() ? "right" : "left";
+        var menuPosition = this.option("menuPosition");
 
-        this._$menu.removeClass(left + " " + right);
+        this._$menu.removeClass(DRAWER_CLASS + "-left");
+        this._$menu.removeClass(DRAWER_CLASS + "-right");
+        this._$menu.removeClass(DRAWER_CLASS + "-top");
+
         this._$menu.addClass(DRAWER_CLASS + "-" + menuPosition);
     },
 
@@ -593,8 +594,8 @@ var Drawer = Widget.inherit({
                 this._togglePositionClass(args.value);
                 break;
             case "menuPosition":
-                this._renderPosition(this.option("menuVisible"));
                 this._toggleMenuPositionClass();
+                this._renderPosition(this.option("menuVisible"));
                 break;
             case "swipeEnabled":
                 this._initSwipeHandlers();
