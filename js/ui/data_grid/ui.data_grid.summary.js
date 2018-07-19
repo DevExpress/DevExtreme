@@ -333,7 +333,7 @@ gridCore.registerModule("summary", {
                  */
                 /**
                  * @name dxDataGridOptions.summary.groupItems.summaryType
-                 * @type Enums.SummaryType
+                 * @type Enums.SummaryType|string
                  * @default undefined
                  */
                 /**
@@ -396,7 +396,7 @@ gridCore.registerModule("summary", {
                  */
                 /**
                  * @name dxDataGridOptions.summary.totalItems.summaryType
-                 * @type Enums.SummaryType
+                 * @type Enums.SummaryType|string
                  * @default undefined
                  */
                 /**
