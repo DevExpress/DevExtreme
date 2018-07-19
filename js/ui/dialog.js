@@ -94,7 +94,7 @@ exports.title = "";
  * @param1 options:object
  * @param1_field1 title:String
  * @param1_field2 message:String
- * @param1_field3 buttons:Array<Object>
+ * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
  * @static
  * @module ui/dialog
