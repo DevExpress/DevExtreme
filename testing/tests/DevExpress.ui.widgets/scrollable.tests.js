@@ -92,6 +92,13 @@ QUnit.testStart(function() {
                     <div class="innerContent"></div>\
             </div>\
             <div style="height: 100px;"></div>\
+        </div>\
+        <div id="scaledContainer" style="transform:scale(0.5)">\
+            <div style="height: 500px; width: 50px;">\
+                <div id="scaledScrollable">\
+                    <div id="scaledContent" style="height: 1000px; width: 100px;"></div>\
+                </div>\
+            </div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -1418,6 +1425,64 @@ QUnit.test("scrollbar position calculated correctly when content much greater th
 
     var scrollBarPosition = translator.locate($scrollbar);
     assert.equal(scrollBarPosition.top, containerSize - SCROLLBAR_MIN_HEIGHT);
+});
+
+QUnit.test("scrollbar position calculated correctly with scaled content", function(assert) {
+    var $scrollable = $("#scaledScrollable");
+
+    $scrollable.dxScrollable({
+        useSimulatedScrollbar: true,
+        useNative: false,
+        showScrollbar: "always",
+        direction: "vertical"
+    });
+
+    var instance = $scrollable.dxScrollable("instance"),
+        $scrollbar = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
+
+    instance.scrollTo({ top: 500 });
+
+    var scrollBarPosition = translator.locate($scrollbar),
+        $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS),
+        scrollbarRect = $scrollbar.get(0).getBoundingClientRect();
+
+    assert.equal(scrollBarPosition.top, 250, "Correct scrollbar position");
+    assert.equal(scrollbarRect.height, 125, "Correct scrollbar size");
+    assert.equal($container.scrollTop(), 500, "Content position isn't zoomed");
+});
+
+QUnit.test("scrollbar in scaled container has correct position after update", function(assert) {
+    var containerHeight = 500,
+        contentHeight = 1000,
+        scaleRatio = 0.5,
+        distance = -100,
+        scrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
+
+    var $scrollable = $("#scaledScrollable").dxScrollable({
+        useNative: false,
+        inertiaEnabled: false
+    });
+
+    var $content = $scrollable.find("." + SCROLLABLE_CONTENT_CLASS),
+        $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS),
+        $scroll = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
+
+    $container.height(containerHeight);
+    $content.height(contentHeight);
+    $scrollable.dxScrollable("instance").update();
+
+    pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS))
+        .start()
+        .down()
+        .move(0, distance)
+        .up();
+
+    $content.height(contentHeight * 5);
+    $scrollable.dxScrollable("instance").update();
+    $scroll.css("opacity", 1);
+
+    var location = translator.locate($scroll);
+    assert.equal(location.top, scrollbarDistance, "scrollbar correctly positioned");
 });
 
 QUnit.test("scrollbar width calculated correctly", function(assert) {
