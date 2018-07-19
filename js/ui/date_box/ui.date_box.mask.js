@@ -49,11 +49,20 @@ var DateBoxMask = DateBoxBase.inherit({
             return result;
         }
 
+        this._initMaskValue();
+
         isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
 
         e.originalEvent.preventDefault();
 
         return result;
+    },
+
+    _initMaskValue: function() {
+        if(!this._maskValue) {
+            this._maskValue = new Date();
+            this._renderDateParts();
+        }
     },
 
     _startSearchTimeout: function() {
@@ -125,7 +134,9 @@ var DateBoxMask = DateBoxBase.inherit({
         if(this._useMaskBehavior()) {
             this._activePartIndex = 0;
             this._attachMaskEvents();
-            this._maskValue = new Date(this.dateOption("value") || new Date());
+
+            var value = this.dateOption("value");
+            this._maskValue = value && new Date(value);
             this._renderDateParts();
         }
     },
@@ -159,6 +170,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _mouseWheelHandler: function(e) {
+        this._initMaskValue();
         var direction = e.delta > 0 ? FORWARD : BACKWARD;
         this._partIncrease(direction, e);
     },
@@ -222,6 +234,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _partIncrease: function(step, e) {
+        this._initMaskValue();
         var limits = this._getActivePartLimits(),
             newValue = step + this._getActivePartValue();
 
@@ -233,6 +246,7 @@ var DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler: function() {
+        this._initMaskValue();
         this._activePartIndex = dateParts.getDatePartIndexByPosition(this._dateParts, this._caret().start);
         this._caret(this._getActivePartProp("caret"));
     },

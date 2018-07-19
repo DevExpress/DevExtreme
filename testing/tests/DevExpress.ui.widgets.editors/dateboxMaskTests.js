@@ -518,6 +518,7 @@ if(devices.real().deviceType === "desktop") {
             this.instance = this.$element.dxDateBox("instance");
             this.$input = this.$element.find(".dx-texteditor-input");
             this.keyboard = keyboardMock(this.$input, true);
+            this.pointer = pointerMock(this.$input);
         },
     }, () => {
         QUnit.test("Current date should be rendered on first input", (assert) => {
@@ -552,6 +553,47 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value"), null, "value is still cleared");
         });
 
+        QUnit.test("Incorrect search on empty input should be prevented", (assert) => {
+            this.keyboard.type("qq");
+
+            assert.equal(this.$input.val(), "", "text is correct");
+            assert.equal(this.instance.option("value"), null, "value is correct");
+        });
+
+        QUnit.test("focus and blur empty input should not change it's value", (assert) => {
+            this.$input.trigger("focusin");
+            this.$input.trigger("focusout");
+
+            assert.equal(this.$input.val(), "", "text is correct");
+            assert.equal(this.instance.option("value"), null, "value is correct");
+        });
+
+        QUnit.test("focusing datebox by click should work", (assert) => {
+            this.$input.trigger("dxclick");
+            this.keyboard.type("2");
+
+            assert.equal(this.$input.val(), "February 19 2018", "text is correct");
+            assert.equal(this.instance.option("value"), null, "value is correct");
+        });
+
+        QUnit.test("focusing datebox by mousewheel should work", (assert) => {
+            this.pointer.wheel(10);
+            this.keyboard.type("2");
+
+            assert.equal(this.$input.val(), "February 19 2018", "text is correct");
+            assert.equal(this.instance.option("value"), null, "value is correct");
+        });
+
+        QUnit.test("moving between groups should work with empty dateBox", (assert) => {
+            ["up", "down", "right", "left", "home", "end", "esc"].forEach((arrow) => {
+                this.instance.option("value", null);
+                this.keyboard.press(arrow);
+                assert.ok(true, arrow + " key is good");
+            });
+
+            assert.equal(this.$input.val(), "", "text is correct");
+            assert.equal(this.instance.option("value"), null, "value is correct");
+        });
     });
 
     QUnit.module("Options changed", setupModule, () => {
