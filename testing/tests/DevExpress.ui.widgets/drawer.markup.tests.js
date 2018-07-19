@@ -175,17 +175,3 @@ QUnit.test("drawer should have correct class depending on mode", function(assert
 
     assert.ok($element.hasClass(DRAWER_CLASS + "-temporary"), "drawer class is correct");
 });
-
-QUnit.test("shader should always visible in temporary mode", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $shader = $element.find("." + DRAWER_SHADER_CLASS).eq(0);
-
-    assert.notOk($shader.hasClass("dx-state-invisible"), "drawer has visible shader");
-
-    instance.option("menuVisible", false);
-
-    assert.notOk($shader.hasClass("dx-state-invisible"), "drawer has visible shader");
-});

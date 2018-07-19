@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
+    typeUtils = require("../core/utils/type"),
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
     translator = require("../animation/translator"),
@@ -159,7 +160,14 @@ var Drawer = Widget.inherit({
             * @hidden
             * @inheritdoc
             */
-            contentOffset: 45
+            contentOffset: 45,
+
+            /**
+            * @name dxDrawerOptions.animationEnabled
+            * @type boolean
+            * @default true
+            */
+            animationEnabled: true,
 
             /**
             * @name dxDrawerOptions.onContentReady
@@ -358,7 +366,7 @@ var Drawer = Widget.inherit({
             menuVisible = targetOffset !== 0;
 
         if(this.option("menuVisible") === menuVisible) {
-            this._renderPosition(this.option("menuVisible"), true);
+            this._renderPosition(this.option("menuVisible"));
         } else {
             this.option("menuVisible", menuVisible);
         }
@@ -374,6 +382,8 @@ var Drawer = Widget.inherit({
     },
 
     _renderPosition: function(offset, animate) {
+        animate = typeUtils.isDefined(animate) ? animate && this.option("animationEnabled") : this.option("animationEnabled");
+
         if(!windowUtils.hasWindow()) return;
 
         var pos,
@@ -381,14 +391,14 @@ var Drawer = Widget.inherit({
             contentPos,
             width;
 
+        this._toggleHideMenuCallback(offset);
+
+        this._renderShaderVisibility(offset, animate);
+
         if(this.option("mode") === "push") {
             pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
-            this._toggleHideMenuCallback(offset);
-
             if(animate) {
-                this._toggleShaderVisibility(true);
-                animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
                 animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
             } else {
                 translator.move($(this.content()), { left: pos });
@@ -399,11 +409,7 @@ var Drawer = Widget.inherit({
 
             contentPos = width;
 
-            this._toggleHideMenuCallback(offset);
-
             if(animate) {
-                this._toggleShaderVisibility(true);
-                animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
                 animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
             } else {
                 $(this.content()).css("paddingLeft", contentPos);
@@ -421,23 +427,35 @@ var Drawer = Widget.inherit({
         if(this.option("mode") === "temporary") {
             menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
-            this._toggleHideMenuCallback(offset);
-
-            if(animate) {
-                this._toggleShaderVisibility(true);
-                animation.fade($(this._$shader), this._getFadeConfig(offset), this._animationCompleteHandler.bind(this));
-                // animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
-            }
-
             if(this.option("showMode") === "slide") {
                 menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-                animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+                if(animate) {
+                    animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+                } else {
+                    translator.move($(this._$menu), { left: menuPos });
+                }
             }
 
             if(this.option("showMode") === "shrink") {
                 width = this._calculateMenuWidth(offset);
-                animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
+                if(animate) {
+                    animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
+                } else {
+                    $(this._$menu).css("width", width);
+                }
             }
+        }
+    },
+
+    _renderShaderVisibility: function(offset, animate) {
+        var fadeConfig = this._getFadeConfig(offset);
+
+        this._toggleShaderVisibility(offset);
+
+        if(animate) {
+            animation.fade($(this._$shader), fadeConfig, this._animationCompleteHandler.bind(this));
+        } else {
+            this._$shader.css("opacity", fadeConfig.to);
         }
     },
 
@@ -552,11 +570,11 @@ var Drawer = Widget.inherit({
                 this._dimensionChanged();
                 break;
             case "menuVisible":
-                this._renderPosition(args.value, true);
+                this._renderPosition(args.value);
                 this._togglePositionClass(args.value);
                 break;
             case "menuPosition":
-                this._renderPosition(this.option("menuVisible"), true);
+                this._renderPosition(this.option("menuVisible"));
                 this._toggleMenuPositionClass();
                 break;
             case "swipeEnabled":
@@ -570,13 +588,15 @@ var Drawer = Widget.inherit({
             case "minWidth":
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("menuVisible"), true);
+                this._renderPosition(this.option("menuVisible"));
                 break;
             case "showMode":
                 this._refreshShowModeClass(args.previousValue);
                 break;
             case "showShader":
                 this._refreshModeClass(args.previousValue);
+                break;
+            case "animationEnabled":
                 break;
             default:
                 this.callBase(args);
