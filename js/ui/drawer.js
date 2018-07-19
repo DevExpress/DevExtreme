@@ -27,50 +27,48 @@ var DRAWER_CLASS = "dx-drawer",
 
     OPENED_STATE_CLASS = "dx-drawer-opened",
 
-    ANONYMOUS_TEMPLATE_NAME = "content",
-
-    ANIMATION_DURATION = 400;
+    ANONYMOUS_TEMPLATE_NAME = "content";
 
 
 var animation = {
-    moveTo: function($element, position, completeAction) {
+    moveTo: function($element, position, duration, completeAction) {
         fx.animate($element, {
             type: "slide",
             to: { left: position },
-            duration: ANIMATION_DURATION,
+            duration: duration,
             complete: completeAction
         });
     },
-    paddingLeft: function($element, padding, completeAction) {
+    paddingLeft: function($element, padding, duration, completeAction) {
         var toConfig = {};
 
         toConfig["padding-left"] = padding;
 
         fx.animate($element, {
             to: { paddingLeft: padding },
-            duration: ANIMATION_DURATION,
+            duration: duration,
             complete: completeAction
         });
     },
 
-    fade: function($element, config, completeAction) {
+    fade: function($element, config, duration, completeAction) {
         fx.animate($element, {
             type: "fade",
             to: config.to,
             from: config.from,
-            duration: ANIMATION_DURATION,
+            duration: duration,
             complete: completeAction
         });
     },
 
-    width: function($element, width, completeAction) {
+    width: function($element, width, duration, completeAction) {
         var toConfig = {};
 
         toConfig["width"] = width;
 
         fx.animate($element, {
             to: toConfig,
-            duration: ANIMATION_DURATION,
+            duration: duration,
             complete: completeAction
         });
     },
@@ -168,6 +166,13 @@ var Drawer = Widget.inherit({
             * @default true
             */
             animationEnabled: true,
+
+            /**
+            * @name dxDrawerOptions.animationDuration
+            * @type number
+            * @default 400
+            */
+            animationDuration: 400,
 
             /**
             * @name dxDrawerOptions.onContentReady
@@ -386,14 +391,15 @@ var Drawer = Widget.inherit({
 
         if(!windowUtils.hasWindow()) return;
 
-        var pos,
+        var duration = this.option("animationDuration"),
+            pos,
             menuPos,
             contentPos,
             width;
 
         this._toggleHideMenuCallback(offset);
 
-        this._renderShaderVisibility(offset, animate);
+        this._renderShaderVisibility(offset, animate, duration);
 
         if(this.option("mode") === "push") {
             $(this.content()).css("paddingLeft", 0);
@@ -401,7 +407,7 @@ var Drawer = Widget.inherit({
             pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
             if(animate) {
-                animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
+                animation.moveTo($(this.content()), pos, duration, this._animationCompleteHandler.bind(this));
             } else {
                 translator.move($(this.content()), { left: pos });
             }
@@ -414,7 +420,7 @@ var Drawer = Widget.inherit({
             translator.move($(this.content()), { left: 0 });
 
             if(animate) {
-                animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
+                animation.paddingLeft($(this.content()), contentPos, duration, this._animationCompleteHandler.bind(this));
             } else {
                 $(this.content()).css("paddingLeft", contentPos);
             }
@@ -422,7 +428,7 @@ var Drawer = Widget.inherit({
             if(this.option("showMode") === "slide") {
                 menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
                 if(animate) {
-                    animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+                    animation.moveTo($(this._$menu), menuPos, duration, this._animationCompleteHandler.bind(this));
                 } else {
                     translator.move($(this._$menu), { left: menuPos });
                 }
@@ -431,7 +437,7 @@ var Drawer = Widget.inherit({
             if(this.option("showMode") === "shrink") {
                 width = this._calculateMenuWidth(offset);
                 if(animate) {
-                    animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
+                    animation.width($(this._$menu), width, duration, this._animationCompleteHandler.bind(this));
                 } else {
                     $(this._$menu).css("width", width);
                 }
@@ -443,7 +449,7 @@ var Drawer = Widget.inherit({
             if(this.option("showMode") === "slide") {
                 menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
                 if(animate) {
-                    animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+                    animation.moveTo($(this._$menu), menuPos, duration, this._animationCompleteHandler.bind(this));
                 } else {
                     translator.move($(this._$menu), { left: menuPos });
                 }
@@ -452,7 +458,7 @@ var Drawer = Widget.inherit({
             if(this.option("showMode") === "shrink") {
                 width = this._calculateMenuWidth(offset);
                 if(animate) {
-                    animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
+                    animation.width($(this._$menu), width, duration, this._animationCompleteHandler.bind(this));
                 } else {
                     $(this._$menu).css("width", width);
                 }
@@ -460,13 +466,13 @@ var Drawer = Widget.inherit({
         }
     },
 
-    _renderShaderVisibility: function(offset, animate) {
+    _renderShaderVisibility: function(offset, animate, duration) {
         var fadeConfig = this._getFadeConfig(offset);
 
         this._toggleShaderVisibility(offset);
 
         if(animate) {
-            animation.fade($(this._$shader), fadeConfig, this._animationCompleteHandler.bind(this));
+            animation.fade($(this._$shader), fadeConfig, duration, this._animationCompleteHandler.bind(this));
         } else {
             this._$shader.css("opacity", fadeConfig.to);
         }
@@ -610,6 +616,7 @@ var Drawer = Widget.inherit({
                 this._refreshModeClass(args.previousValue);
                 break;
             case "animationEnabled":
+            case "animationDuration":
                 break;
             default:
                 this.callBase(args);

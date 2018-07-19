@@ -446,6 +446,24 @@ QUnit.test("animationEnabled option test", function(assert) {
     }
 });
 
+QUnit.test("animationDuration option test", function(assert) {
+    var $drawer = $("#drawer").dxDrawer({
+            menuVisible: false,
+            animationEnabled: true,
+            mode: "push"
+        }),
+        drawer = $drawer.dxDrawer("instance");
+
+
+    drawer.option("animationDuration", 300);
+
+    drawer.toggleMenuVisibility();
+    assert.equal(this.capturedAnimations[0].duration, 300, "duration is correct");
+    drawer.option("animationDuration", 10000);
+    drawer.toggleMenuVisibility();
+    assert.equal(this.capturedAnimations[1].duration, 10000, "duration is correct");
+});
+
 QUnit.module("shader");
 
 QUnit.test("shader should be visible if menu is opened", function(assert) {
