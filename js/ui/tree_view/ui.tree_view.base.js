@@ -1799,8 +1799,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-    * @name dxTreeViewMethods_expandAll
-    * @publicName expandAll
+    * @name dxTreeViewMethods.expandAll
+    * @publicName expandAll()
     */
     expandAll: function() {
         each(this._dataAdapter.getData(), (function(_, node) {
@@ -1809,8 +1809,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-     * @name dxTreeViewMethods_collapseAll
-     * @publicName collapseAll
+     * @name dxTreeViewMethods.collapseAll
+     * @publicName collapseAll()
      */
     collapseAll: function() {
         each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
