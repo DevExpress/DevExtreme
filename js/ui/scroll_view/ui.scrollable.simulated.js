@@ -190,17 +190,15 @@ var Scroller = Class.inherit({
     },
 
     _getScaleRatio: function() {
-        var ratio;
-
-        if(windowUtils.hasWindow()) {
+        if(windowUtils.hasWindow() && !this._scaleRatio) {
             var element = this._$element.get(0),
                 realDimension = this._getRealDimension(element, this._dimension),
                 baseDimension = this._getBaseDimension(element, this._dimension);
 
-            ratio = realDimension / baseDimension;
+            this._scaleRatio = realDimension / baseDimension;
         }
 
-        return ratio || 1;
+        return this._scaleRatio || 1;
     },
 
     _getRealDimension: function(element, dimension) {
@@ -411,6 +409,7 @@ var Scroller = Class.inherit({
 
         that._stopScrolling();
         return commonUtils.deferUpdate(function() {
+            that._resetScaleRatio();
             that._updateLocation();
             that._updateBounds();
             that._updateScrollbar();
@@ -419,6 +418,10 @@ var Scroller = Class.inherit({
                 that._scrollbar.update();
             });
         });
+    },
+
+    _resetScaleRatio: function() {
+        this._scaleRatio = null;
     },
 
     _updateLocation: function() {
