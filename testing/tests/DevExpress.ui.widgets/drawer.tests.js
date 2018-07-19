@@ -415,6 +415,36 @@ QUnit.test("hiding menu should be animated", function(assert) {
     assert.equal(this.capturedAnimations[0].end, 0, "correct end position");
 });
 
+QUnit.test("animationEnabled option test", function(assert) {
+    fx.off = false;
+
+    var origFX = fx.animate,
+        animated = false;
+
+    fx.animate = function() {
+        animated = true;
+        return $.Deferred().resolve().promise();
+    };
+
+    try {
+        var $drawer = $("#drawer").dxDrawer({
+                menuVisible: true,
+                animationEnabled: false
+            }),
+            drawer = $drawer.dxDrawer("instance");
+
+        drawer.option("menuVisible", false);
+
+        assert.equal(animated, false, "animation was not present");
+
+        drawer.option("animationEnabled", true);
+        drawer.option("menuVisible", true);
+
+        assert.equal(animated, true, "animation present");
+    } finally {
+        fx.animate = origFX;
+    }
+});
 
 QUnit.module("shader");
 

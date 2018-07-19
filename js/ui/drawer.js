@@ -396,6 +396,8 @@ var Drawer = Widget.inherit({
         this._renderShaderVisibility(offset, animate);
 
         if(this.option("mode") === "push") {
+            $(this.content()).css("paddingLeft", 0);
+
             pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
             if(animate) {
@@ -409,6 +411,8 @@ var Drawer = Widget.inherit({
 
             contentPos = width;
 
+            translator.move($(this.content()), { left: 0 });
+
             if(animate) {
                 animation.paddingLeft($(this.content()), contentPos, this._animationCompleteHandler.bind(this));
             } else {
@@ -417,11 +421,20 @@ var Drawer = Widget.inherit({
 
             if(this.option("showMode") === "slide") {
                 menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-                animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+                if(animate) {
+                    animation.moveTo($(this._$menu), menuPos, this._animationCompleteHandler.bind(this));
+                } else {
+                    translator.move($(this._$menu), { left: menuPos });
+                }
             }
 
             if(this.option("showMode") === "shrink") {
-                animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
+                width = this._calculateMenuWidth(offset);
+                if(animate) {
+                    animation.width($(this._$menu), width, this._animationCompleteHandler.bind(this));
+                } else {
+                    $(this._$menu).css("width", width);
+                }
             }
         }
         if(this.option("mode") === "temporary") {
