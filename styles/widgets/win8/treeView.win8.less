@@ -26,81 +26,79 @@
     height: @WIN8_TREEVIEW_LOADINCICATOR_SIZE;
 }
 
-.dx-treeview {
-    &.dx-treeview-border-visible {
-        border: 1px solid @WIN8_TREE_VIEW_BORDER_COLOR;
-
-        .dx-treeview-select-all-item {
-            padding-left: @SELECT_ALL_ITEM_LEFT_PADDING;
-        }
-
-        .dx-scrollable-content {
-            >.dx-treeview-node-container {
-                padding: @CONTAINER_PADDING;
-            }
-        }
-    }
+.dx-treeview-border-visible {
+    border: 1px solid @WIN8_TREE_VIEW_BORDER_COLOR;
 
     .dx-treeview-select-all-item {
-        margin: 0 0 7px 0;
-        border-bottom: 1px solid @WIN8_TREE_VIEW_BORDER_COLOR;
-        padding: 9px 0 11px @SELECT_ALL_ITEM_OFFSET;
-
-        .dx-checkbox-text {
-            padding-left: 28px;
-        }
+        padding-left: @SELECT_ALL_ITEM_LEFT_PADDING;
     }
 
-    .dx-treeview-node {
-        padding-left: @NODE_OFFSET;
-
-        &.dx-treeview-item-with-checkbox {
-            .dx-treeview-item {
-                padding-left: @ITEM_WITH_CHECKBOX_OFFSET;
-            }
-        }
-
-        .dx-checkbox {
-            top: 9px;
-            left: @CHECKBOX_OFFSET;
-            background-color: transparent;
+    .dx-scrollable-content {
+        >.dx-treeview-node-container {
+            padding: @CONTAINER_PADDING;
         }
     }
+}
 
+.dx-treeview-select-all-item {
+    margin: 0 0 7px 0;
+    border-bottom: 1px solid @WIN8_TREE_VIEW_BORDER_COLOR;
+    padding: 9px 0 11px @SELECT_ALL_ITEM_OFFSET;
+
+    .dx-checkbox-text {
+        padding-left: 28px;
+    }
+}
+
+.dx-treeview-node {
+    padding-left: @NODE_OFFSET;
+}
+
+.dx-treeview-item-with-checkbox {
     .dx-treeview-item {
-        padding: 8px 6px 8px 3px;
-        min-height: 34px;
-        color: @WIN8_TREE_VIEW_TEXT_COLOR;
-
-        .dx-icon {
-            .dx-icon-sizing(24px);
-        }
-
-        &.dx-state-hover {
-            background-color: @WIN8_TREE_VIEW_HOVERED_STATE_BACKGROUND;
-            color: @WIN8_TREE_VIEW_HOVERED_STATE_COLOR;
-        }
+        padding-left: @ITEM_WITH_CHECKBOX_OFFSET;
     }
 
-    .dx-state-focused > .dx-treeview-item {
-        background-color: @WIN8_TREE_VIEW_FOCUSED_BACKGROUND;
-        color: @WIN8_TREE_VIEW_FOCUSED_COLOR;
+    .dx-checkbox {
+        top: 9px;
+        left: @CHECKBOX_OFFSET;
+        background-color: transparent;
+    }
+}
+
+.dx-treeview-item {
+    padding: 8px 6px 8px 3px;
+    min-height: 34px;
+    color: @WIN8_TREE_VIEW_TEXT_COLOR;
+
+    .dx-icon {
+        .dx-icon-sizing(24px);
     }
 
-    .dx-treeview-toggle-item-visibility {
-        .dx-icon-chevronright;
-        .dx-icon-font-centered-sizing(@WIN8_TREEVIEW_ARROW_ICON_SIZE);
-        width: 21px;
-        height: 38px;
-        top: 0;
-        left: 0;
-
-        &.dx-treeview-toggle-item-visibility-opened {
-            .dx-icon-chevrondown;
-        }
+    &.dx-state-hover {
+        background-color: @WIN8_TREE_VIEW_HOVERED_STATE_BACKGROUND;
+        color: @WIN8_TREE_VIEW_HOVERED_STATE_COLOR;
     }
+}
 
-    &.dx-rtl {
-        .dx-treeview > .make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING);
+.dx-state-focused > .dx-treeview-item {
+    background-color: @WIN8_TREE_VIEW_FOCUSED_BACKGROUND;
+    color: @WIN8_TREE_VIEW_FOCUSED_COLOR;
+}
+
+.dx-treeview-toggle-item-visibility {
+    .dx-icon-chevronright;
+    .dx-icon-font-centered-sizing(@WIN8_TREEVIEW_ARROW_ICON_SIZE);
+    width: 21px;
+    height: 38px;
+    top: 0;
+    left: 0;
+
+    &.dx-treeview-toggle-item-visibility-opened {
+        .dx-icon-chevrondown;
     }
+}
+
+.dx-rtl {
+    .dx-treeview-make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING);
 }
