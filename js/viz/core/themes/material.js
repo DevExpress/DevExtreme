@@ -196,17 +196,17 @@ registerTheme({
             hover: {
                 color: "#dedede",
                 borderColor: "#6c6c6c",
-                backgroundColor: "#23232a"
+                backgroundColor: "#3f3f4b"
             },
             focus: {
                 color: "#dedede",
                 borderColor: "#8d8d8d",
-                backgroundColor: "#1a1a1f"
+                backgroundColor: "#494956"
             },
             active: {
                 color: "#dedede",
                 borderColor: "#8d8d8d",
-                backgroundColor: "#1a1a1f"
+                backgroundColor: "#494956"
             }
         },
         shadowColor: "#292929"
