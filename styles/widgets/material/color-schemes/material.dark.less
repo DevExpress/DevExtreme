@@ -1,4 +1,4 @@
-@MATERIAL_COLOR_POSTFIX: ".@{MATERIAL_COLOR_ACCENT_MODIFICATOR}.light";
+@MATERIAL_COLOR_POSTFIX: ".@{MATERIAL_COLOR_ACCENT_MODIFICATOR}.dark";
 
 /**
 * @name 1. Font family
@@ -26,7 +26,7 @@
 * @type color
 * @group base.common
 */
-@base-border-color: #191919;
+@base-border-color: #515159;
 
 /**
 * @name 120. Border radius
@@ -41,7 +41,7 @@
 @base-focus-color: lighten(@base-bg, 20%);
 @base-hover-color: lighten(@base-bg, 4%);
 
-@base-shadow-color: @base-inverted-bg;
+@base-shadow-color: #000;
 
 /**
 * @name 80. Success color
@@ -91,7 +91,7 @@
 */
 @base-icon-color: fade(@base-text-color, 54%);
 
-@base-inverted-text-color: #fff;
+@base-inverted-text-color: #363640;
 @base-inverted-icon-color: @base-inverted-text-color;
 
 /**
@@ -763,8 +763,8 @@
 * @group editors.tagbox
 * @paletteColorOpacity 0.3
 */
-@tagbox-tag-bg: darken(@base-bg, 12%);
-@tagbox-tag-hover-bg: darken(@base-bg, 15%);
+@tagbox-tag-bg: lighten(@base-bg, 12%);
+@tagbox-tag-hover-bg: lighten(@base-bg, 15%);
 /**
 * @name 40. Tag text color
 * @type color
@@ -786,7 +786,7 @@
 * @paletteColorOpacity 1
 */
 @tagbox-tag-button-remove-bg: rgba(0, 0, 0, .36);
-@tagbox-tag-focused-bg: darken(@base-bg, 32%);
+@tagbox-tag-focused-bg: lighten(@base-bg, 32%);
 @tagbox-select-all-border-color: @base-border-color;
 
 // NavBar
@@ -846,10 +846,10 @@
 * @type color
 * @group overlays.toasts
 */
-@toast-color: fade(@base-inverted-text-color, 87%);
+@toast-color: fade(#fff, 87%);
 
 @toast-border-radius: @base-border-radius;
-@toast-default-bg: fade(@base-inverted-bg, 87%);
+@toast-default-bg: fade(#000, 87%);
 
 /**
 * @name 20. Info background color
@@ -1062,7 +1062,7 @@
 */
 @datagrid-columnchooser-item-color: fade(@datagrid-base-color, 60%);
 @datagrid-columnchooser-hover-icon-color: fade(@datagrid-base-color, 38%);
-@datagrid-block-separator-bg: darken(@datagrid-base-background-color, 9.5%);
+@datagrid-block-separator-bg: lighten(@datagrid-base-background-color, 12%);
 /**
 * @name 21. Header text weight
 * @type select
@@ -1082,7 +1082,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-selection-bg: fade(@base-accent, 4%);
+@datagrid-selection-bg: fade(@base-accent, 7%);
 
 @datagrid-row-selected-border-color: @datagrid-border-color;
 /**
@@ -1097,7 +1097,7 @@
 * @group datagrid
 * @paletteColorOpacity .15
 */
-@datagrid-hover-bg: darken(@datagrid-base-background-color, 5%);
+@datagrid-hover-bg: lighten(@datagrid-base-background-color, 5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1224,7 +1224,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-row-alternation-bg: darken(@datagrid-base-background-color, 4%);
+@datagrid-row-alternation-bg: lighten(@datagrid-base-background-color, 4%);
 @datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
 
 /**
@@ -1447,7 +1447,7 @@
 * @type color
 * @group treelist
 */
-@treelist-row-alternation-bg: darken(@treelist-base-background-color, 4%);
+@treelist-row-alternation-bg: lighten(@treelist-base-background-color, 4%);
 @treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
 
 /**
@@ -1493,7 +1493,7 @@
 @PIVOTGRID_AREA_COLOR: fade(@base-text-color, 54%);
 
 @pivotgrid-field-area-box-text-color: @PIVOTGRID_AREA_COLOR;
-@pivotgrid-field-area-box-background-color: darken(@base-bg, 9.5%);
+@pivotgrid-field-area-box-background-color: lighten(@base-bg, 12%);
 
 /**
 * @name 30. Data text color
@@ -1707,7 +1707,7 @@
 * @group navigations.menu
 * @paletteColorOpacity 1
 */
-@menu-item-selected-bg: darken(@base-text-color, 88%);
+@menu-item-selected-bg: lighten(@base-bg, 8%);
 /**
 * @name 20. Border color
 * @type color
