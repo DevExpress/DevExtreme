@@ -459,7 +459,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'filterRow', 'headerFilter', 'search', 'pager', 'selection'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -472,6 +472,7 @@ QUnit.module('State Storing with real controllers', {
     },
     afterEach: function() {
         this.clock.restore();
+        this.dispose();
     }
 });
 
@@ -1368,4 +1369,51 @@ QUnit.test("Selected filter operation should be reset to the default state after
     } finally {
         fx.off = false;
     }
+});
+
+// T643374
+QUnit.test("ScrollTop should be correct after loading pageIndex from state", function(assert) {
+    // arrange
+    this.clock.restore();
+
+    var that = this,
+        scrollTop,
+        done = assert.async(),
+        $testElement = $("#container").height(60);
+
+    that.$element = function() {
+        return $testElement;
+    };
+
+    that.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+                return { pageIndex: 3 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        loadingTimeout: null,
+        dataSource: {
+            pageSize: 2,
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
+        }
+    });
+
+    // act
+    that.gridView.render($testElement);
+    that.gridView.update();
+
+    setTimeout(function() {
+        // assert
+        scrollTop = that.getScrollable().scrollTop();
+        assert.ok(scrollTop > 0, "scrollTop");
+        assert.ok($testElement.find(".dx-virtual-row").first().height() <= scrollTop, "scrollTop should be less than or equal to virtual row height");
+        done();
+    });
 });
