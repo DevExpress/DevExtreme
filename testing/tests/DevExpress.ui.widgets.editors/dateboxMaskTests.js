@@ -519,18 +519,19 @@ if(devices.real().deviceType === "desktop") {
             this.$input = this.$element.find(".dx-texteditor-input");
             this.keyboard = keyboardMock(this.$input, true);
             this.pointer = pointerMock(this.$input);
+            this.dateEnd = " " + new Date().getDate() + " " + new Date().getFullYear();
         },
     }, () => {
         QUnit.test("Current date should be rendered on first input", (assert) => {
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "January 19 2018", "first part was changed, other parts is from the current date");
+            assert.equal(this.$input.val(), "January" + this.dateEnd, "first part was changed, other parts is from the current date");
         });
 
         QUnit.test("Bluring the input after first input should update the value", (assert) => {
             this.keyboard.type("1");
             this.$input.trigger("focusout");
 
-            assert.equal(this.$input.val(), "January 19 2018", "text is correct");
+            assert.equal(this.$input.val(), "January" + this.dateEnd, "text is correct");
             assert.equal(this.instance.option("value").getMonth(), 0, "value is correct");
         });
 
@@ -572,7 +573,7 @@ if(devices.real().deviceType === "desktop") {
             this.$input.trigger("dxclick");
             this.keyboard.type("2");
 
-            assert.equal(this.$input.val(), "February 19 2018", "text is correct");
+            assert.equal(this.$input.val(), "February" + this.dateEnd, "text is correct");
             assert.equal(this.instance.option("value"), null, "value is correct");
         });
 
@@ -580,7 +581,7 @@ if(devices.real().deviceType === "desktop") {
             this.pointer.wheel(10);
             this.keyboard.type("2");
 
-            assert.equal(this.$input.val(), "February 19 2018", "text is correct");
+            assert.equal(this.$input.val(), "February" + this.dateEnd, "text is correct");
             assert.equal(this.instance.option("value"), null, "value is correct");
         });
 
