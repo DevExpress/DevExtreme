@@ -1349,3 +1349,28 @@ QUnit.test("the 'createChildren' callback should support native promises", funct
         done();
     });
 });
+
+QUnit.test("expand should work with createChildren", function(assert) {
+    var $treeView = $("#treeView").dxTreeView({
+            createChildren: function(parent) {
+                parent = (parent && parent.key) || 0;
+
+                var id = parent + 1,
+                    text = "Item " + id;
+
+                return [{ id: id, parentId: parent, text: text }];
+            },
+            parentIdExpr: "parentId",
+            dataStructure: "plain"
+        }),
+        $expander = $treeView.find(".dx-treeview-node:eq(0) .dx-treeview-toggle-item-visibility"),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.expandItem(1);
+    $expander.trigger("dxclick");
+
+    instance.expandItem(1);
+    $expander.trigger("dxclick");
+
+    assert.notOk($expander.hasClass("dx-treeview-toggle-item-visibility-opened"), "node is collapsed");
+});
