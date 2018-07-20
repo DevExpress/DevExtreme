@@ -606,7 +606,7 @@
 * @group list
 * @paletteColorOpacity .25
 */
-@list-item-selected-bg: darken(@base-bg, 12%);
+@list-item-selected-bg: lighten(@base-bg, 12%);
 /**
 * @name 30. Focused selected item state background color
 * @type color
@@ -626,7 +626,7 @@
 * @group list
 * @paletteColorOpacity 1
 */
-@list-item-active-bg: darken(@base-bg, 20%);
+@list-item-active-bg: lighten(@base-bg, 20%);
 @list-holdmenu-bg: @base-bg;
 @list-holdmenu-border-color: @list-border-color;
 @list-holdmenu-shadow-color: fade(@base-shadow-color, 10%);
@@ -961,7 +961,7 @@
 * @group editors.switch
 * @paletteColorOpacity 1
 */
-@switch-bg: darken(@base-element-bg, 38%);
+@switch-bg: lighten(@base-element-bg, 38%);
 
 
 /**
@@ -971,7 +971,7 @@
 * @paletteColorOpacity 1
 */
 
-@switch-handle-off-bg: darken(@base-element-bg, 2%);
+@switch-handle-off-bg: lighten(@base-element-bg, 2%);
 
 
 /**
@@ -992,6 +992,7 @@
 
 @switch-handle-border-radius: 50%;
 @switch-hover-bg: transparent;
+@switch-handle-disabled-bg: lighten(@base-element-bg, 26%);
 
 
 // Pager
@@ -1306,7 +1307,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-selection-bg: fade(@base-accent, 4%);
+@treelist-selection-bg: fade(@base-accent, 7%);
 
 @treelist-row-selected-border-color: @treelist-border-color;
 /**
@@ -1321,7 +1322,7 @@
 * @group treelist
 * @paletteColorOpacity .15
 */
-@treelist-hover-bg: darken(@datagrid-base-background-color, 5%);
+@treelist-hover-bg: lighten(@datagrid-base-background-color, 5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1793,7 +1794,7 @@
 * @type color
 * @group overlays.tooltip
 */
-@tooltip-color: @base-inverted-text-color;
+@tooltip-color: @base-text-color;
 /**
 * @name 20. Background color
 * @type color
