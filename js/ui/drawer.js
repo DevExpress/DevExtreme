@@ -447,6 +447,8 @@ var Drawer = Widget.inherit({
         if(this.option("mode") === "temporary") {
             menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
+            $(this.content()).css("paddingLeft", this.option("minWidth"));
+
             if(this.option("showMode") === "slide") {
                 menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
                 if(animate) {
@@ -609,9 +611,15 @@ var Drawer = Widget.inherit({
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("menuVisible"));
+
+                // NOTE: temporary fix
+                this.repaint();
                 break;
             case "showMode":
                 this._refreshShowModeClass(args.previousValue);
+
+                // NOTE: temporary fix
+                this.repaint();
                 break;
             case "showShader":
                 this._refreshModeClass(args.previousValue);
