@@ -13,8 +13,7 @@ var $ = require("jquery"),
 require("common.css!");
 require("ui/drawer");
 
-var DRAWER_CLASS = "dx-drawer",
-    DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content",
+var DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content",
     DRAWER_CONTENT_CLASS = "dx-drawer-content",
     DRAWER_SHADER_CLASS = "dx-drawer-shader";
 
@@ -719,22 +718,6 @@ QUnit.test("content should be moved by swipe in rtl with inverted position", fun
 
     pointer.swipeStart().swipe(0.1);
     assert.equal(position($content), $menu.width() / 10, "container moved");
-});
-
-QUnit.test("menu position classes in rtl", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            rtlEnabled: true,
-            menuPosition: "normal"
-        }),
-        instance = $element.dxDrawer("instance"),
-        $menu = $(instance.menuContent());
-
-    assert.ok($menu.hasClass(DRAWER_CLASS + "-right"), "menu has class for right position");
-    assert.notOk($menu.hasClass(DRAWER_CLASS + "-left"), "menu has not class for left position");
-
-    instance.option("menuPosition", "inverted");
-    assert.ok($menu.hasClass(DRAWER_CLASS + "-left"), "menu has class for left position");
-    assert.notOk($menu.hasClass(DRAWER_CLASS + "-right"), "menu has not class for right position");
 });
 
 QUnit.test("content should not be moved out of menu", function(assert) {
