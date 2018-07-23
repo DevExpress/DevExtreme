@@ -280,18 +280,19 @@ module.exports = {
                     var that = this,
                         $parent = cellElement.parent(),
                         $items,
+                        columnIndex,
                         stringNormalizer = this._getStringNormalizer(),
                         normalizedSearchText = stringNormalizer(searchText);
 
                     if(!$parent.length) {
                         $parent = $("<div>").append(cellElement);
                     } else if(column) {
-                        var columnIndex = that._columnsController.getVisibleIndex(column.index);
-                        $items = $parent.children("td").eq(columnIndex);
+                        columnIndex = that._columnsController.getVisibleIndex(column.index);
+                        $items = $parent.children("td").eq(columnIndex).find("*");
                     }
                     $items = $items || $parent.find("*");
 
-                    $items = $items.filter(function(index, element) {
+                    $items = $items.filter(function(_, element) {
                         var $contents = $(element).contents();
                         for(var i = 0; i < $contents.length; i++) {
                             var node = $contents.get(i);
