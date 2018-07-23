@@ -108,10 +108,7 @@ var SelectBox = DropDownList.inherit({
             },
             escape: function() {
                 parent.escape.apply(this, arguments);
-                if(!this._isEditable() && this._list) {
-                    this._focusListElement(null);
-                    this._updateField(this.option("selectedItem"));
-                }
+                this._cancelEditing();
             },
             enter: function(e) {
                 if(this._input().val() === "" && this.option("value") && this.option("allowClearing")) {
@@ -303,6 +300,18 @@ var SelectBox = DropDownList.inherit({
 
     _popupWrapperClass: function() {
         return this.callBase() + " " + SELECTBOX_POPUP_WRAPPER_CLASS;
+    },
+
+    _cancelEditing: function() {
+        if(!this.option("searchEnabled") && this._list) {
+            this._focusListElement(null);
+            this._updateField(this.option("selectedItem"));
+        }
+    },
+
+    _closeOutsideDropDownHandler: function(e) {
+        this.callBase(e);
+        this._cancelEditing();
     },
 
     _renderOpenedState: function() {
