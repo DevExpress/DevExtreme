@@ -1569,7 +1569,7 @@ registerTheme({
             horizontalOffset: 8,
             verticalOffset: 0,
             overlappingBehavior: "ellipsis",
-            colorMode: "none",
+            useNodeColors: false,
             font: {
                 color: BLACK,
                 weight: 400

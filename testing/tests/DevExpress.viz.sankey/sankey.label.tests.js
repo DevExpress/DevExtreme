@@ -108,11 +108,11 @@ QUnit.test("Create labels with styles and invisible borders", function(assert) {
     assert.equal(attrs["stroke-width"], 0);
 });
 
-QUnit.test("Label color if colorMode is 'source'", function(assert) {
+QUnit.test("Label color if useNodeColors set to true", function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
-            colorMode: 'source'
+            useNodeColors: true
         }
     });
     var labels = this.labels(),
