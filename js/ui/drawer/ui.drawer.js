@@ -453,7 +453,7 @@ var Drawer = Widget.inherit({
 
     _calculateMenuWidth: function(offset) {
         if(offset) {
-            return 200;
+            return this._$menu.get(0).childNodes[0].getBoundingClientRect().width;
         } else {
             return this.option("minWidth") || 0;
         }
