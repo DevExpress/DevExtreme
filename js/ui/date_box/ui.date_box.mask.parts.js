@@ -1,6 +1,6 @@
 "use strict";
 
-import dateParser from "../../localization/ldml/date.parser";
+import { getPatternSetters, getRegExpInfo } from "../../localization/ldml/date.parser";
 import dateLocalization from "../../localization/date";
 import { extend } from "../../core/utils/extend";
 import { noop } from "../../core/utils/common";
@@ -20,7 +20,7 @@ const PATTERN_GETTERS = {
     S: "getMilliseconds"
 };
 
-const PATTERN_SETTERS = extend({}, dateParser.getPatternSetters(), {
+const PATTERN_SETTERS = extend({}, getPatternSetters(), {
     a: (date, value) => {
         let hours = date.getHours(),
             current = hours >= 12;
@@ -45,7 +45,7 @@ const getPatternGetter = (patternChar) => {
 };
 
 const renderDateParts = (text, format) => {
-    const regExpInfo = dateParser.getRegExpInfo(format, dateLocalization),
+    const regExpInfo = getRegExpInfo(format, dateLocalization),
         result = regExpInfo.regexp.exec(text);
 
     let start = 0,
