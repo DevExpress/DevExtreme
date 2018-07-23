@@ -1127,7 +1127,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         $icon
             .off(eventName)
             .on(eventName, function(e) {
-                that._toggleExpandedState(node, undefined, e);
+                that._toggleExpandedState(node.internalFields.key, undefined, e);
             });
     },
 
