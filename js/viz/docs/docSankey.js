@@ -74,8 +74,8 @@ var dxSankey = {
     */
     label: {
         /**
-        * @name dxSankeyOptions.label.overlapingBehavior
-        * @type Enums.SankeyLabelOverlappingBehavior
+        * @name dxSankeyOptions.label.overlappingBehavior
+        * @type Enums.SankeyLabeloverlappingBehavior
         * @default 'ellipsis'
         */
         overlappingBehavior: 'ellipsis',
@@ -165,9 +165,9 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.label.shadow.opacity
             * @type number
-            * @default 0.8
+            * @default 0
             */
-            opacity: 0.8,
+            opacity: 0,
             /**
             * @name dxSankeyOptions.label.shadow.offsetX
             * @type number
@@ -255,12 +255,6 @@ var dxSankey = {
         * @default 1
         */
         opacity: 1,
-        /**
-        * @name dxSankeyOptions.node.colorMode
-        * @type Enums.SankeyColorMode
-        * @default 'none'
-        */
-        colorMode: 'none',
         /**
         * @name dxSankeyOptions.node.border
         * @type object
@@ -352,17 +346,23 @@ var dxSankey = {
     */
     link: {
         /**
+        * @name dxSankeyOptions.link.colorMode
+        * @type Enums.SankeyColorMode
+        * @default 'none'
+        */
+        colorMode: 'none',
+        /**
         * @name dxSankeyOptions.link.color
-        * @type number
+        * @type string
         * @default '#000000'
         */
         color: '#000000',
         /**
         * @name dxSankeyOptions.link.opacity
         * @type number
-        * @default 1
+        * @default 0.3
         */
-        opacity: 1,
+        opacity: 0.3,
         /**
         * @name dxSankeyOptions.link.border
         * @type object
