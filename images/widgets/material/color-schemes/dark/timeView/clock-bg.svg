@@ -3,8 +3,8 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="200px" height="200px" viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;}
-	.st1{fill:#7A7A7A;}
+	.st0{fill:#363640;}
+	.st1{fill:rgba(255, 255, 255, 0.6);}
 	.st2{fill:#03A9F4;}
 </style>
 <circle class="st0" cx="100" cy="100" r="100"/>
