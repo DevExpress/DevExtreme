@@ -299,8 +299,6 @@ var Drawer = Widget.inherit({
 
         this._renderShader();
         this._toggleMenuPositionClass();
-
-        // this._renderMinWidth();
     },
 
     _renderMinWidth: function() {
@@ -451,14 +449,6 @@ var Drawer = Widget.inherit({
         }
     },
 
-    _calculateMenuWidth: function(offset) {
-        if(offset) {
-            return this._$menu.get(0).childNodes[0].getBoundingClientRect().width;
-        } else {
-            return this.option("minWidth") || 0;
-        }
-    },
-
     _getMenuWidth: function() {
         if(!this._menuWidth) {
             var maxMenuWidth = this.$element().width() - this.option("contentOffset"),
@@ -473,7 +463,7 @@ var Drawer = Widget.inherit({
     },
 
     _animationCompleteHandler: function() {
-        this._toggleShaderVisibility(this.option("menuVisible"));
+        // this._toggleShaderVisibility(this.option("menuVisible"));
 
         if(this._deferredAnimate) {
             this._deferredAnimate.resolveWith(this);

@@ -9,7 +9,7 @@ var DrawerStrategy = require("./ui.drawer.strategy"),
 
 var PersistentStrategy = DrawerStrategy.inherit({
     renderPosition: function(offset, animate) {
-        var width = this._drawer._calculateMenuWidth(offset);
+        var width = this._calculateMenuWidth(offset);
 
         var contentPos = width;
 
