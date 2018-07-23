@@ -53,9 +53,8 @@ var Resizable = DOMComponent.inherit({
 
             /**
             * @name dxResizableOptions.handles
-            * @type string
+            * @type Enums.ResizeHandle | string
             * @default "all"
-            * @acceptValues 'top'|'bottom'|'right'|'left'|'all'
             */
             handles: "all",
 

@@ -27,91 +27,89 @@
     height: @IOS7_TREEVIEW_LOADINCICATOR_SIZE;
 }
 
-.dx-treeview {
-    &.dx-treeview-with-search > .dx-scrollable {
-        height: calc(~"100% - 1.2em - "2*@TEXTEDITOR_INPUT_PADDING + @IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN);
-    }
+.dx-treeview-with-search > .dx-scrollable {
+    height: calc(~"100% - 1.2em - "2*@TEXTEDITOR_INPUT_PADDING + @IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN);
+}
 
-    &.dx-treeview-border-visible {
-        border: 1px solid @IOS7_TREE_VIEW_BORDER_COLOR;
-
-        .dx-treeview-select-all-item {
-            padding-left: @SELECT_ALL_ITEM_LEFT_PADDING;
-        }
-
-        .dx-scrollable-content {
-            >.dx-treeview-node-container {
-                padding: @CONTAINER_PADDING;
-            }
-        }
-    }
+.dx-treeview-border-visible {
+    border: 1px solid @IOS7_TREE_VIEW_BORDER_COLOR;
 
     .dx-treeview-select-all-item {
-        margin: 0 0 7px 0;
-        border-bottom: 1px solid @IOS7_TREE_VIEW_BORDER_COLOR;
-        padding: 9px 0 11px @SELECT_ALL_ITEM_OFFSET;
+        padding-left: @SELECT_ALL_ITEM_LEFT_PADDING;
+    }
 
-        .dx-checkbox-text {
-            padding-left: @SELECT_ALL_TEXT_OFFSET;
+    .dx-scrollable-content {
+        >.dx-treeview-node-container {
+            padding: @CONTAINER_PADDING;
         }
     }
+}
+
+.dx-treeview-select-all-item {
+    margin: 0 0 7px 0;
+    border-bottom: 1px solid @IOS7_TREE_VIEW_BORDER_COLOR;
+    padding: 9px 0 11px @SELECT_ALL_ITEM_OFFSET;
+
+    .dx-checkbox-text {
+        padding-left: @SELECT_ALL_TEXT_OFFSET;
+    }
+}
+
+.dx-treeview-node {
+    padding-left: @NODE_OFFSET;
+}
+
+.dx-treeview-item-with-checkbox {
+    .dx-treeview-item {
+        padding-left: @ITEM_WITH_CHECKBOX_OFFSET;
+    }
+
+    .dx-checkbox {
+        top: 3px;
+        left: @CHECKBOX_OFFSET;
+    }
+}
+
+.dx-treeview-item-without-checkbox {
+    &.dx-state-selected {
+        > .dx-treeview-item {
+            background-color: @IOS7_LIST_ITEM_SELECTED;
+        }
+    }
+}
+
+.dx-treeview-item {
+    padding: 8px 6px 6px 6px;
+    min-height: 32px;
+
+    .dx-icon {
+        .dx-icon-sizing(24px);
+    }
+}
+
+.dx-state-focused > .dx-treeview-item {
+    background-color: @IOS7_TREE_VIEW_FOCUSED_BACKGROUND;
+}
+
+.dx-treeview-toggle-item-visibility {
+    .dx-icon-chevronright;
+    .dx-icon-font-centered-sizing(@IOS7_TREEVIEW_ARROW_ICON_SIZE);
+    width: 21px;
+    height: 31px;
+    top: 0;
+    left: 0;
+
+    &.dx-treeview-toggle-item-visibility-opened {
+        .dx-icon-chevrondown;
+    }
+}
+
+.dx-rtl {
+    .dx-treeview-make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING);
 
     .dx-treeview-node {
-        padding-left: @NODE_OFFSET;
-
-        &.dx-treeview-item-with-checkbox {
-            .dx-treeview-item {
-                padding-left: @ITEM_WITH_CHECKBOX_OFFSET;
-            }
-        }
-
-        &:not(.dx-treeview-item-with-checkbox) {
-            &.dx-state-selected {
-                > .dx-treeview-item {
-                    background-color: @IOS7_LIST_ITEM_SELECTED;
-                }
-            }
-        }
-
-        .dx-checkbox {
-            top: 3px;
-            left: @CHECKBOX_OFFSET;
-        }
-    }
-
-    .dx-treeview-item {
-        padding: 8px 6px 6px 6px;
-        min-height: 32px;
-
-        .dx-icon {
-            .dx-icon-sizing(24px);
-        }
-    }
-
-    .dx-state-focused > .dx-treeview-item {
-        background-color: @IOS7_TREE_VIEW_FOCUSED_BACKGROUND;
-    }
-
-    .dx-treeview-toggle-item-visibility {
-        .dx-icon-chevronright;
-        .dx-icon-font-centered-sizing(@IOS7_TREEVIEW_ARROW_ICON_SIZE);
-        width: 21px;
-        height: 31px;
-        top: 0;
-        left: 0;
-
-        &.dx-treeview-toggle-item-visibility-opened {
-            .dx-icon-chevrondown;
-        }
-    }
-
-    &.dx-rtl {
-        .dx-treeview > .make-rtl(@CONTAINER_WITH_BORDER_OFFSET, @NODE_OFFSET, @ITEM_WITH_CHECKBOX_OFFSET, @CHECKBOX_OFFSET, @SELECT_ALL_TEXT_OFFSET, @SELECT_ALL_ITEM_LEFT_PADDING, @BORDER_PADDING);
-
-        .dx-treeview-node {
-            .dx-checkbox-container {
-                margin-right: 1px;
-            }
+        .dx-checkbox-container {
+            margin-right: 1px;
         }
     }
 }
