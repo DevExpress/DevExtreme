@@ -58,6 +58,16 @@ var DrawerStrategy = Class.inherit({
         this._drawer = drawer;
     },
 
+    _calculatePixelOffset: function(offset) {
+        var minWidth = !offset ? this._drawer.option("minWidth") : 0;
+
+        if(offset) {
+            return 0;
+        } else {
+            return -this._drawer._getMenuWidth() + minWidth;
+        }
+    },
+
     renderPosition: abstract
 });
 

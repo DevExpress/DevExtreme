@@ -459,22 +459,6 @@ var Drawer = Widget.inherit({
         }
     },
 
-    _calculatePixelOffset: function(offset) {
-        var minWidth = !offset ? this.option("minWidth") : 0;
-
-        if(this.option("mode") === "push") {
-            offset = offset || 0;
-            return offset * this._getMenuWidth() + minWidth;
-        }
-        if(this.option("mode") === "persistent" || this.option("mode") === "temporary") {
-            if(offset) {
-                return 0;
-            } else {
-                return -this._getMenuWidth() + minWidth;
-            }
-        }
-    },
-
     _getMenuWidth: function() {
         if(!this._menuWidth) {
             var maxMenuWidth = this.$element().width() - this.option("contentOffset"),

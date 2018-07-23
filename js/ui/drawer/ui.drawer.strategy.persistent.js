@@ -22,7 +22,7 @@ var PersistentStrategy = DrawerStrategy.inherit({
         }
 
         if(this._drawer.option("showMode") === "slide") {
-            var menuPos = this._drawer._calculatePixelOffset(offset) * this._drawer._getRTLSignCorrection();
+            var menuPos = this._calculatePixelOffset(offset) * this._drawer._getRTLSignCorrection();
             if(animate) {
                 animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
             } else {
@@ -31,7 +31,6 @@ var PersistentStrategy = DrawerStrategy.inherit({
         }
 
         if(this._drawer.option("showMode") === "shrink") {
-            width = this._calculateMenuWidth(offset);
             if(animate) {
                 animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
             } else {
