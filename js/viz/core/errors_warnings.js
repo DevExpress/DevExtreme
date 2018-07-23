@@ -42,7 +42,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsViz.E2009
     */
-    E2009: "The value field \"{0}\" must be a positive numerical value",
+    E2009: "The value field \"{0}\" must be a positive numeric value",
     /**
     * @name ErrorsViz.E2101
     */
