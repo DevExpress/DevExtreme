@@ -28,7 +28,7 @@ registerTemplateEngine("default", {
         return domUtils.normalizeTemplateElement(element);
     },
     render: function(template) {
-        return template.clone();
+        return template;
     }
 });
 
