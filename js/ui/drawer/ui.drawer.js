@@ -15,7 +15,11 @@ var $ = require("../../core/renderer"),
     Swipeable = require("../../events/gesture/swipeable"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    windowUtils = require("../../core/utils/window");
+    windowUtils = require("../../core/utils/window"),
+    PushStrategy = require("./ui.drawer.strategy.push"),
+    PersistentStrategy = require("./ui.drawer.strategy.persistent"),
+    TemporaryStrategy = require("./ui.drawer.strategy.temporary");
+
 
 var DRAWER_CLASS = "dx-drawer",
     DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
@@ -236,10 +240,30 @@ var Drawer = Widget.inherit({
 
     _init: function() {
         this.callBase();
+
+        this._initStrategy();
+
         this.$element().addClass(DRAWER_CLASS);
 
         this._deferredAnimate = undefined;
         this._initHideTopOverlayHandler();
+    },
+
+    _initStrategy: function() {
+        var mode = this.option("mode"),
+            Strategy;
+
+        if(mode === "push") {
+            Strategy = PushStrategy;
+        }
+        if(mode === "persistent") {
+            Strategy = PersistentStrategy;
+        }
+        if(mode === "temporary") {
+            Strategy = TemporaryStrategy;
+        }
+
+        this._strategy = new Strategy(this);
     },
 
     _initHideTopOverlayHandler: function() {
@@ -392,81 +416,13 @@ var Drawer = Widget.inherit({
 
         if(!windowUtils.hasWindow()) return;
 
-        var duration = this.option("animationDuration"),
-            pos,
-            menuPos,
-            contentPos,
-            width;
+        var duration = this.option("animationDuration");
 
         this._toggleHideMenuCallback(offset);
 
         offset && this._toggleShaderVisibility(offset);
 
-        if(this.option("mode") === "push") {
-            $(this.content()).css("paddingLeft", 0);
-
-            pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-
-            if(animate) {
-                animation.moveTo($(this.content()), pos, duration, this._animationCompleteHandler.bind(this));
-            } else {
-                translator.move($(this.content()), { left: pos });
-            }
-        }
-        if(this.option("mode") === "persistent") {
-            width = this._calculateMenuWidth(offset);
-
-            contentPos = width;
-
-            translator.move($(this.content()), { left: 0 });
-
-            if(animate) {
-                animation.paddingLeft($(this.content()), contentPos, duration, this._animationCompleteHandler.bind(this));
-            } else {
-                $(this.content()).css("paddingLeft", contentPos);
-            }
-
-            if(this.option("showMode") === "slide") {
-                menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-                if(animate) {
-                    animation.moveTo($(this._$menu), menuPos, duration, this._animationCompleteHandler.bind(this));
-                } else {
-                    translator.move($(this._$menu), { left: menuPos });
-                }
-            }
-
-            if(this.option("showMode") === "shrink") {
-                width = this._calculateMenuWidth(offset);
-                if(animate) {
-                    animation.width($(this._$menu), width, duration, this._animationCompleteHandler.bind(this));
-                } else {
-                    $(this._$menu).css("width", width);
-                }
-            }
-        }
-        if(this.option("mode") === "temporary") {
-            menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-
-            $(this.content()).css("paddingLeft", this.option("minWidth"));
-
-            if(this.option("showMode") === "slide") {
-                menuPos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
-                if(animate) {
-                    animation.moveTo($(this._$menu), menuPos, duration, this._animationCompleteHandler.bind(this));
-                } else {
-                    translator.move($(this._$menu), { left: menuPos });
-                }
-            }
-
-            if(this.option("showMode") === "shrink") {
-                width = this._calculateMenuWidth(offset);
-                if(animate) {
-                    animation.width($(this._$menu), width, duration, this._animationCompleteHandler.bind(this));
-                } else {
-                    $(this._$menu).css("width", width);
-                }
-            }
-        }
+        this._strategy.renderPosition(offset, animate);
 
         this._renderShaderVisibility(offset, animate, duration);
     },
@@ -608,6 +564,8 @@ var Drawer = Widget.inherit({
                 break;
             case "mode":
             case "minWidth":
+
+                this._initStrategy();
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("menuVisible"));
@@ -700,7 +658,5 @@ var Drawer = Widget.inherit({
 registerComponent("dxDrawer", Drawer);
 
 module.exports = Drawer;
-
-///#DEBUG
 module.exports.animation = animation;
-///#ENDDEBUG
+
