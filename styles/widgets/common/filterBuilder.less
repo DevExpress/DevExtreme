@@ -72,23 +72,20 @@
     }
 }
 
-.dx-filterbuilder-overlay {
-    white-space: nowrap;
+.dx-filterbuilder-operations {
+    .dx-treeview-item {
+        padding-left: 5px;
+    }
 
-    &.dx-filterbuilder-operations {
-        .dx-treeview {
-            &:not(.dx-rtl) {
-                .dx-treeview-item {
-                    padding-left: 5px;
-                }
-            }
-            &.dx-rtl {
-                .dx-treeview-item {
-                    padding-right: 5px;
-                }
-            }
+    .dx-rtl {
+        .dx-treeview-item {
+            padding-right: 5px;
         }
     }
+}
+
+.dx-filterbuilder-overlay {
+    white-space: nowrap;
 
     .dx-treeview {
         .dx-treeview-node {
