@@ -1,15 +1,13 @@
 "use strict";
 
-var dateParser = require("../../localization/ldml/date.parser"),
-    dateLocalization = require("../../localization/date"),
-    extend = require("../../core/utils/extend").extend,
-    noop = require("../../core/utils/common").noop,
-    escapeRegExp = require("../../core/utils/common").escapeRegExp;
+import { getPatternSetters, getRegExpInfo } from "../../localization/ldml/date.parser";
+import dateLocalization from "../../localization/date";
+import { extend } from "../../core/utils/extend";
+import { noop } from "../../core/utils/common";
+import { escapeRegExp } from "../../core/utils/common";
 
-var PATTERN_GETTERS = {
-    a: function(date) {
-        return date.getHours() < 12 ? 0 : 1;
-    },
+const PATTERN_GETTERS = {
+    a: (date) => date.getHours() < 12 ? 0 : 1,
     E: "getDay",
     y: "getFullYear",
     M: "getMonth",
@@ -22,9 +20,9 @@ var PATTERN_GETTERS = {
     S: "getMilliseconds"
 };
 
-var PATTERN_SETTERS = extend({}, dateParser.getPatternSetters(), {
-    a: function(date, value) {
-        var hours = date.getHours(),
+const PATTERN_SETTERS = extend({}, getPatternSetters(), {
+    a: (date, value) => {
+        let hours = date.getHours(),
             current = hours >= 12;
 
         if(current === value) {
@@ -33,7 +31,7 @@ var PATTERN_SETTERS = extend({}, dateParser.getPatternSetters(), {
 
         date.setHours((hours + 12) % 24);
     },
-    E: function(date, value) {
+    E: (date, value) => {
         if(value < 0) {
             return;
         }
@@ -41,24 +39,24 @@ var PATTERN_SETTERS = extend({}, dateParser.getPatternSetters(), {
     }
 });
 
-var getPatternGetter = function(patternChar) {
-    var unsupportedCharGetter = function() {
-        return patternChar;
-    };
-
+const getPatternGetter = (patternChar) => {
+    const unsupportedCharGetter = () => patternChar;
     return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
 };
 
-var renderDateParts = function(text, format) {
-    var regExpInfo = dateParser.getRegExpInfo(format, dateLocalization),
+const renderDateParts = (text, format) => {
+    const regExpInfo = getRegExpInfo(format, dateLocalization),
         result = regExpInfo.regexp.exec(text);
 
-    var start = 0, end = 0, sections = [];
-    for(var i = 1; i < result.length; i++) {
+    let start = 0,
+        end = 0,
+        sections = [];
+
+    for(let i = 1; i < result.length; i++) {
         start = end;
         end = start + result[i].length;
 
-        var pattern = regExpInfo.patterns[i - 1],
+        let pattern = regExpInfo.patterns[i - 1],
             getter = getPatternGetter(pattern[0]);
 
         sections.push({
@@ -76,8 +74,8 @@ var renderDateParts = function(text, format) {
     return sections;
 };
 
-var getLimits = function(getter, date) {
-    var limits = {
+const getLimits = (getter, date) => {
+    const limits = {
         "getFullYear": { min: 0, max: Infinity },
         "getMonth": { min: 0, max: 11 },
         "getDate": {
@@ -93,9 +91,9 @@ var getLimits = function(getter, date) {
     return limits[getter] || limits["getAmPm"];
 };
 
-var getDatePartIndexByPosition = function(dateParts, position) {
-    for(var i = 0; i < dateParts.length; i++) {
-        var caretInGroup = dateParts[i].caret.end >= position;
+const getDatePartIndexByPosition = (dateParts, position) => {
+    for(let i = 0; i < dateParts.length; i++) {
+        let caretInGroup = dateParts[i].caret.end >= position;
 
         if(!dateParts[i].isStub && caretInGroup) {
             return i;
@@ -105,5 +103,4 @@ var getDatePartIndexByPosition = function(dateParts, position) {
     return null;
 };
 
-exports.getDatePartIndexByPosition = getDatePartIndexByPosition;
-exports.renderDateParts = renderDateParts;
+export { getDatePartIndexByPosition, renderDateParts };
