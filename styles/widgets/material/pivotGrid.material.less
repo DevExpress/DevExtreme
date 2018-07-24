@@ -140,45 +140,45 @@
         }
     }
 
-    .dx-treeview.dx-treeview-border-visible .dx-scrollable-content > .dx-treeview-node-container {
+    .dx-treeview-border-visible .dx-scrollable-content > .dx-treeview-node-container {
         padding-right: 8px;
     }
 
-    .dx-treeview-node-container {
-        .dx-treeview-node {
-            &.dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
-                padding-left: 0;
+    .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
+        padding-left: 0;
 
-                .dx-checkbox {
-                    left: 8px;
-                }
-            }
+        .dx-checkbox {
+            left: 8px;
+        }
+    }
 
-            .dx-treeview-node-container-opened {
-                .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
-                    padding-left: @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
+    .dx-treeview-node-container-opened {
+        .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
+            padding-left: @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
 
-                    .dx-checkbox {
-                        left: @MATERIAL_TREEVIEW_CHECKBOX_OFFSET;
-                    }
-                }
-            }
-
-            &.dx-treeview-item-with-checkbox {
-                .dx-checkbox {
-                    top: 9px;
-                }
-            }
-
-            .dx-treeview-item {
-                min-height: @MATERIAL_PIVOTGRIDFIELDCHOOSER_FIELD_MIN_HEIGHT;
-                padding: 9px 8px;
-            }
-
-            .dx-treeview-toggle-item-visibility {
-                height: @MATERIAL_PIVOTGRIDFIELDCHOOSER_FIELD_MIN_HEIGHT;
+            .dx-checkbox {
+                left: @MATERIAL_TREEVIEW_CHECKBOX_OFFSET;
             }
         }
+    }
+
+    .dx-treeview-item {
+        min-height: @MATERIAL_PIVOTGRIDFIELDCHOOSER_FIELD_MIN_HEIGHT;
+        padding: 9px 8px;
+    }
+
+    .dx-treeview-item-with-checkbox {
+        .dx-checkbox {
+            top: 9px;
+        }
+
+        .dx-treeview-item {
+            padding-left: @MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
+        }
+    }
+
+    .dx-treeview-toggle-item-visibility {
+        height: @MATERIAL_PIVOTGRIDFIELDCHOOSER_FIELD_MIN_HEIGHT;
     }
 }
 

@@ -38,65 +38,68 @@
     }
 
     &.dx-filterbuilder-operations {
-        .dx-treeview {
-            &:not(.dx-rtl) {
-                .dx-treeview-item {
-                    padding-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
-                }
-            }
-            &.dx-rtl {
-                .dx-treeview-item {
-                    padding-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
-                }
+        .dx-treeview-item {
+            padding-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
+        }
+
+        .dx-rtl {
+            .dx-treeview-item {
+                padding-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
             }
         }
     }
-    .dx-treeview {
+    .dx-treeview-node {
+        > .dx-treeview-item {
+            padding-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING * 2;
+        }
+
+        &.dx-treeview-node-is-leaf > .dx-treeview-item {
+            padding-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
+        }
+
+        .dx-treeview-node-container-opened {
+            margin-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
+        }
+    }
+
+    .dx-treeview-item {
+        padding: 8px @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING 10px;
+        min-height: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH;
+
+        .dx-icon {
+            margin-right: 10px;
+        }
+    }
+
+    .dx-treeview-toggle-item-visibility {
+        height: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH;
+        left: 16px;
+    }
+
+    .dx-rtl {
         .dx-treeview-node {
-            &:not(.dx-treeview-node-is-leaf) > .dx-treeview-item {
-                padding-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING * 2;
+            > .dx-treeview-item {
+                padding-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING * 2;
+            }
+
+            &.dx-treeview-node-is-leaf > .dx-treeview-item {
+                padding-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
             }
 
             .dx-treeview-node-container-opened {
-                margin-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
+                margin-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
+                margin-left: 0;
             }
         }
 
         .dx-treeview-item {
-            padding: 8px @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING 10px;
-            min-height: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH;
-
             .dx-icon {
-                margin-right: 10px;
+                margin-left: 10px;
             }
         }
 
         .dx-treeview-toggle-item-visibility {
-            height: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH;
-            left: 16px;
-        }
-
-        &.dx-rtl {
-            .dx-treeview-node {
-                &:not(.dx-treeview-node-is-leaf) > .dx-treeview-item {
-                    padding-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING * 2;
-                }
-
-                .dx-treeview-node-container-opened {
-                    margin-right: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING;
-                    margin-left: 0;
-                }
-            }
-
-            .dx-treeview-item {
-                .dx-icon {
-                    margin-left: 10px;
-                }
-            }
-
-            .dx-treeview-toggle-item-visibility {
-                 right: 16px;
-            }
+            right: 16px;
         }
     }
 }
