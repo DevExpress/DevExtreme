@@ -10114,6 +10114,9 @@ QUnit.test("reload reset pageIndex in infinite scrolling mode", function(assert)
     assert.equal(this.dataController.totalItemsCount(), 5);
     assert.equal(this.dataController.items().length, 5);
 
+    var spy = sinon.spy();
+    this.dataSource.on("customizeStoreLoadOptions", spy);
+
     // act
     this.dataSource.reload(true);
     this.clock.tick();
@@ -10123,6 +10126,8 @@ QUnit.test("reload reset pageIndex in infinite scrolling mode", function(assert)
     assert.equal(this.dataController.items().length, 3);
     assert.equal(this.dataController.pageIndex(), 0);
     assert.equal(this.dataSource.pageIndex(), 0);
+    assert.equal(spy.getCall(0).args[0].pageIndex, 0); // T646491
+    assert.equal(spy.getCall(0).args[0].storeLoadOptions.pageIndex, 0);
 });
 
 QUnit.test("Grouping not reset after change option autoExpandAll", function(assert) {
