@@ -76,7 +76,7 @@ const renderDateParts = (text, format) => {
 
 const getLimits = (getter, date) => {
     const limits = {
-        "getFullYear": { min: 0, max: Infinity },
+        "getFullYear": { min: 0, max: 9999 },
         "getMonth": { min: 0, max: 11 },
         "getDate": {
             min: 1,

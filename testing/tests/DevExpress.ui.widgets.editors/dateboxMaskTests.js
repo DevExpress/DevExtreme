@@ -8,6 +8,8 @@ import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 
+var SEARCH_TIMEOUT = 1500;
+
 QUnit.testStart(() => {
     $("#qunit-fixture").html("<div id='dateBox'></div>");
 });
@@ -122,7 +124,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Year", (assert) => {
-            checkAndRemoveLimits(this.parts[8], { min: 0, max: Infinity }, assert);
+            checkAndRemoveLimits(this.parts[8], { min: 0, max: 9999 }, assert);
 
             assert.deepEqual(this.parts[8], {
                 index: 8,
@@ -353,7 +355,6 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    var SEARCH_TIMEOUT = 1500;
 
     QUnit.module("Search", setupModule, () => {
         QUnit.test("Time indication", (assert) => {
@@ -477,9 +478,9 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("displayFormat", "yyyy");
 
             this.keyboard
-                .type("20250");
+                .type("99991");
 
-            assert.equal(this.$input.val(), "20250", "year should not be limited");
+            assert.equal(this.$input.val(), "0001", "year should be limited");
         });
 
         QUnit.test("Hotkeys should not be handled by the search", (assert) => {
@@ -615,6 +616,34 @@ if(devices.real().deviceType === "desktop") {
 
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
+        });
+    });
+
+    QUnit.module("Advanced caret", setupModule, () => {
+        QUnit.test("Move caret to the next group before timeout", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("15");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
+        });
+
+        QUnit.test("Move caret to the next group after timeout", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("1");
+
+            this.clock.tick(SEARCH_TIMEOUT - 1);
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, "caret was not moved yet");
+
+            this.clock.tick(1);
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
         });
     });
 }
