@@ -1,4 +1,4 @@
-@MATERIAL_COLOR_POSTFIX: ".@{MATERIAL_COLOR_ACCENT_MODIFICATOR}.light";
+@MATERIAL_COLOR_POSTFIX: ".@{MATERIAL_COLOR_ACCENT_MODIFICATOR}.dark";
 
 /**
 * @name 1. Font family
@@ -12,21 +12,21 @@
 * @type color
 * @group base.common
 */
-@base-bg: #fff;
+@base-bg: #363640;
 
 /**
 * @name 10. Text color
 * @type color
 * @group base.typography
 */
-@base-text-color: rgba(0,0,0, 0.87);
+@base-text-color: #fff;
 
 /**
 * @name 70. Border color
 * @type color
 * @group base.common
 */
-@base-border-color: #e0e0e0;
+@base-border-color: #515159;
 
 /**
 * @name 120. Border radius
@@ -35,13 +35,13 @@
 */
 @base-border-radius: 4px;
 
-@base-inverted-bg: darken(@base-bg, 100%);
+@base-inverted-bg: lighten(@base-bg, 100%);
 @base-element-bg: @base-bg;
 
-@base-focus-color: darken(@base-bg, 20%);
-@base-hover-color: darken(@base-bg, 4%);
+@base-focus-color: lighten(@base-bg, 20%);
+@base-hover-color: lighten(@base-bg, 4%);
 
-@base-shadow-color: @base-inverted-bg;
+@base-shadow-color: #000;
 
 /**
 * @name 80. Success color
@@ -91,7 +91,7 @@
 */
 @base-icon-color: fade(@base-text-color, 54%);
 
-@base-inverted-text-color: #fff;
+@base-inverted-text-color: #363640;
 @base-inverted-icon-color: @base-inverted-text-color;
 
 /**
@@ -195,11 +195,11 @@
 * @type color
 * @group editors.texteditors
 */
-@texteditor-placeholder-color: lighten(@texteditor-color, 58%);
+@texteditor-placeholder-color: darken(@texteditor-color, 50%);
 
-@texteditor-button-clear-icon-color: lighten(@texteditor-color, 46%);
+@texteditor-button-clear-icon-color: darken(@texteditor-color, 76%);
 
-@texteditor-button-clear-icon-color-bg: lighten(@texteditor-color, 76%);
+@texteditor-button-clear-icon-color-bg: darken(@texteditor-color, 34%);
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -300,7 +300,7 @@
 
 @button-border-radius: @base-border-radius;
 
-@button-disabled-background: rgba(0,0,0, .1);
+@button-disabled-background: rgba(255, 255, 255, .1);
 @button-disabled-text-color: fadein(@button-disabled-background, 25%);
 
 @button-disabled-icon-opacity: .6;
@@ -586,7 +586,7 @@
 * @type color
 * @group list
 */
-@list-group-color: @base-text-color;
+@list-group-color: fade(@base-text-color, 60%);
 /**
 * @name 25. Expanded group header text color
 * @type color
@@ -606,7 +606,7 @@
 * @group list
 * @paletteColorOpacity .25
 */
-@list-item-selected-bg: darken(@base-bg, 12%);
+@list-item-selected-bg: lighten(@base-bg, 12%);
 /**
 * @name 30. Focused selected item state background color
 * @type color
@@ -626,7 +626,7 @@
 * @group list
 * @paletteColorOpacity 1
 */
-@list-item-active-bg: darken(@base-bg, 20%);
+@list-item-active-bg: lighten(@base-bg, 20%);
 @list-holdmenu-bg: @base-bg;
 @list-holdmenu-border-color: @list-border-color;
 @list-holdmenu-shadow-color: fade(@base-shadow-color, 10%);
@@ -751,7 +751,7 @@
 * @group navigations.tabs
 * @paletteColorOpacity 1
 */
-@tabs-hovered-tab-bg-color: darken(@base-bg, 7%);
+@tabs-hovered-tab-bg-color: lighten(@base-bg, 7%);
 
 
 
@@ -763,8 +763,8 @@
 * @group editors.tagbox
 * @paletteColorOpacity 0.3
 */
-@tagbox-tag-bg: darken(@base-bg, 12%);
-@tagbox-tag-hover-bg: darken(@base-bg, 15%);
+@tagbox-tag-bg: lighten(@base-bg, 12%);
+@tagbox-tag-hover-bg: lighten(@base-bg, 15%);
 /**
 * @name 40. Tag text color
 * @type color
@@ -786,8 +786,8 @@
 * @paletteColorOpacity 1
 */
 @tagbox-tag-button-remove-bg: rgba(0, 0, 0, .36);
-@tagbox-tag-button-remove-color: @tagbox-tag-bg;
-@tagbox-tag-focused-bg: darken(@base-bg, 32%);
+@tagbox-tag-button-remove-color: lighten(@base-bg, 22%);
+@tagbox-tag-focused-bg: lighten(@base-bg, 32%);
 @tagbox-select-all-border-color: @base-border-color;
 
 // NavBar
@@ -815,7 +815,7 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scroll-bg: fade(darken(@scrollable-bg, 25%), 70%);
+@scrollable-scroll-bg: fade(lighten(@scrollable-bg, 25%), 70%);
 
 @scrollable-scroll-shadow-color: transparent;
 
@@ -962,7 +962,7 @@
 * @group editors.switch
 * @paletteColorOpacity 1
 */
-@switch-bg: darken(@base-element-bg, 38%);
+@switch-bg: lighten(@base-element-bg, 38%);
 
 
 /**
@@ -972,7 +972,7 @@
 * @paletteColorOpacity 1
 */
 
-@switch-handle-off-bg: darken(@base-element-bg, 2%);
+@switch-handle-off-bg: lighten(@base-element-bg, 2%);
 
 
 /**
@@ -993,7 +993,7 @@
 
 @switch-handle-border-radius: 50%;
 @switch-hover-bg: transparent;
-@switch-handle-disabled-bg: darken(@base-element-bg, 26%);
+@switch-handle-disabled-bg: lighten(@base-element-bg, 26%);
 
 
 // Pager
@@ -1062,9 +1062,9 @@
 * @type color
 * @group datagrid
 */
-@datagrid-columnchooser-item-color: fade(@datagrid-base-color, 54%);
+@datagrid-columnchooser-item-color: fade(@datagrid-base-color, 60%);
 @datagrid-columnchooser-hover-icon-color: fade(@datagrid-base-color, 38%);
-@datagrid-block-separator-bg: darken(@datagrid-base-background-color, 12%);
+@datagrid-block-separator-bg: lighten(@datagrid-base-background-color, 12%);
 /**
 * @name 21. Header text weight
 * @type select
@@ -1084,7 +1084,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-selection-bg: fade(@base-accent, 4%);
+@datagrid-selection-bg: fade(@base-accent, 7%);
 
 @datagrid-row-selected-border-color: @datagrid-border-color;
 /**
@@ -1099,7 +1099,7 @@
 * @group datagrid
 * @paletteColorOpacity .15
 */
-@datagrid-hover-bg: darken(@datagrid-base-background-color, 5%);
+@datagrid-hover-bg: lighten(@datagrid-base-background-color, 5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1226,7 +1226,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-row-alternation-bg: darken(@datagrid-base-background-color, 4%);
+@datagrid-row-alternation-bg: lighten(@datagrid-base-background-color, 4%);
 @datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
 
 /**
@@ -1253,7 +1253,7 @@
 * @group datagrid
 */
 @datagrid-active-header-filter-icon-color: @base-accent;
-@datagrid-text-stub-background-image-path: url(images/widgets/material/color-schemes/light/grid/text-stub.png);
+@datagrid-text-stub-background-image-path: url(images/widgets/material/color-schemes/dark/grid/text-stub.png);
 
 /**
 * @name 200. Filter panel text color
@@ -1289,7 +1289,7 @@
 * @type color
 * @group treelist
 */
-@treelist-columnchooser-item-color: fade(@treelist-base-color, 54%);
+@treelist-columnchooser-item-color: fade(@treelist-base-color, 60%);
 @treelist-columnchooser-hover-icon-color: fade(@treelist-base-color, 38%);
 /**
 * @name 21. Header text weight
@@ -1308,7 +1308,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-selection-bg: fade(@base-accent, 4%);
+@treelist-selection-bg: fade(@base-accent, 7%);
 
 @treelist-row-selected-border-color: @treelist-border-color;
 /**
@@ -1323,7 +1323,7 @@
 * @group treelist
 * @paletteColorOpacity .15
 */
-@treelist-hover-bg: darken(@datagrid-base-background-color, 5%);
+@treelist-hover-bg: lighten(@datagrid-base-background-color, 5%);
 
 /**
 * @name 95. Hovered state text color
@@ -1449,7 +1449,7 @@
 * @type color
 * @group treelist
 */
-@treelist-row-alternation-bg: darken(@treelist-base-background-color, 4%);
+@treelist-row-alternation-bg: lighten(@treelist-base-background-color, 4%);
 @treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
 
 /**
@@ -1475,7 +1475,7 @@
 * @group treelist
 */
 @treelist-active-header-filter-icon-color: @base-accent;
-@treelist-text-stub-background-image-path: url(images/widgets/material/color-schemes/light/grid/text-stub.png);
+@treelist-text-stub-background-image-path: url(images/widgets/material/color-schemes/dark/grid/text-stub.png);
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
@@ -1495,7 +1495,7 @@
 @PIVOTGRID_AREA_COLOR: fade(@base-text-color, 54%);
 
 @pivotgrid-field-area-box-text-color: @PIVOTGRID_AREA_COLOR;
-@pivotgrid-field-area-box-background-color: darken(@base-bg, 12%);
+@pivotgrid-field-area-box-background-color: lighten(@base-bg, 12%);
 
 /**
 * @name 30. Data text color
@@ -1530,14 +1530,14 @@
 @PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@base-shadow-color, 10%);
 @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@base-shadow-color, 20%);
 
-@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-all.png);
-@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-filter.png);
-@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-column.png);
-@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-row.png);
-@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/material/color-schemes/light/grid/area-data.png);
+@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-all.png);
+@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-filter.png);
+@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-column.png);
+@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-row.png);
+@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-data.png);
 
-@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/material/color-schemes/light/grid/dimension.png);
-@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/material/color-schemes/light/grid/hierarchy.png);
+@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/material/color-schemes/dark/grid/dimension.png);
+@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/material/color-schemes/dark/grid/hierarchy.png);
 
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
 /**
@@ -1709,7 +1709,7 @@
 * @group navigations.menu
 * @paletteColorOpacity 1
 */
-@menu-item-selected-bg: lighten(@base-text-color, 88%);
+@menu-item-selected-bg: lighten(@base-bg, 8%);
 /**
 * @name 20. Border color
 * @type color
@@ -1795,7 +1795,7 @@
 * @type color
 * @group overlays.tooltip
 */
-@tooltip-color: @base-inverted-text-color;
+@tooltip-color: @base-text-color;
 /**
 * @name 20. Background color
 * @type color
@@ -1859,7 +1859,7 @@
 * @group navigations.treeview
 */
 @treeview-item-selected-color: @treeview-color;
-@treeview-item-selected-bg: darken(@base-bg, 12%);
+@treeview-item-selected-bg: lighten(@base-bg, 12%);
 
 /**
 * @name 120. Spin icon color
@@ -1870,9 +1870,9 @@
 
 //TimeView
 @timeview-bg: darken(@base-bg, 5%);
-@timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/clock-bg.svg');
-@timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/hour-arrow.svg');
-@timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/min-arrow.svg');
+@timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/clock-bg.svg');
+@timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/hour-arrow.svg');
+@timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/min-arrow.svg');
 
 // theme-depends shadow parameters
 
@@ -1904,13 +1904,13 @@
 @form-field-mark-color: @form-field-item-color;
 
 // Images
-@list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/light/list/delete.png);
-@sctollbar-button-horizontal-decrement-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png) no-repeat;
-@sctollbar-button-horizontal-increment-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png) no-repeat;
-@sctollbar-button-vertical-decrement-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png) no-repeat;
-@sctollbar-button-vertical-increment-bg: url(images/widgets/material/color-schemes/light/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
-@colorbox-preview-empty-bg: url(images/widgets/material/color-schemes/light/colorbox/nocolor.png);
-@loadindicator-background-image: url(images/widgets/material/color-schemes/light/loader64.gif);
+@list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/dark/list/delete.png);
+@sctollbar-button-horizontal-decrement-bg: url(images/widgets/material/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-start.png) no-repeat;
+@sctollbar-button-horizontal-increment-bg: url(images/widgets/material/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-end.png) no-repeat;
+@sctollbar-button-vertical-decrement-bg: url(images/widgets/material/color-schemes/dark/scrollable/scrollbar-vertical-arrow-up.png) no-repeat;
+@sctollbar-button-vertical-increment-bg: url(images/widgets/material/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
+@colorbox-preview-empty-bg: url(images/widgets/material/color-schemes/dark/colorbox/nocolor.png);
+@loadindicator-background-image: url(images/widgets/material/color-schemes/dark/loader64.gif);
 
 
 // SPA
