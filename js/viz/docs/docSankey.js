@@ -75,7 +75,7 @@ var dxSankey = {
     label: {
         /**
         * @name dxSankeyOptions.label.overlappingBehavior
-        * @type Enums.SankeyLabeloverlappingBehavior
+        * @type Enums.SankeyLabelOverlappingBehavior
         * @default 'ellipsis'
         */
         overlappingBehavior: 'ellipsis',
