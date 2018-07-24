@@ -3225,6 +3225,37 @@ QUnit.test("changeRowSelection for edited data", function(assert) {
     assert.deepEqual(that.selectionController.getSelectedRowKeys(), [{ name: 'Test', age: 15 }], "selected row key of the first row after save");
 });
 
+QUnit.test("selectedRowsData for edited data should have modified data (T654321)", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $('#container').width(800),
+        modifiedValues;
+
+    that.options.selection.showCheckBoxesMode = 'onClick';
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+    that.options.onSelectionChanged = function(e) {
+        modifiedValues = e.selectedRowsModifiedData;
+    };
+    that.setup();
+    that.columnHeadersView.render($testElement);
+    that.rowsView.render($testElement);
+
+    // assert
+    that.selectionController.changeItemSelection(1);
+    assert.deepEqual(modifiedValues, undefined, "no selected row modified values");
+
+    // act
+    that.cellValue(0, 1, "Test");
+    that.selectionController.changeItemSelection(0);
+
+    // assert
+    assert.deepEqual(modifiedValues, [{ key: { name: "Alex", age: 15 }, index: 0, value: "Test" }], "selected row modified values");
+});
+
+
 QUnit.test("Indeterminate state of selectAll", function(assert) {
     var $checkbox,
         testElement = $('#container');

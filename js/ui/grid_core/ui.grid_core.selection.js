@@ -209,8 +209,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 return;
             }
 
-            var isSelectionWithCheckboxes = that.isSelectionWithCheckboxes();
-            var changedItemIndexes = that.getChangedItemIndexes(items);
+            var isSelectionWithCheckboxes = that.isSelectionWithCheckboxes(),
+                changedItemIndexes = that.getChangedItemIndexes(items),
+                changedItems = that.getChangedItems(items, args.selectedItemKeys);
 
             that._updateCheckboxesState({
                 selectedItemKeys: args.selectedItemKeys,
@@ -239,6 +240,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     currentSelectedRowKeys: args.addedItemKeys.slice(0),
                     currentDeselectedRowKeys: args.removedItemKeys.slice(0)
                 };
+                if(changedItems.length > 0) {
+                    selectionChangedOptions.selectedRowsModifiedData = changedItems;
+                }
             }
 
             that._fireSelectionChanged(selectionChangedOptions);
@@ -259,6 +263,33 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             }
 
             return itemIndexes;
+        },
+
+        getChangedItems: function(items, indexes) {
+            var that = this,
+                changedItems = [],
+                rowIndex,
+                selectedRow;
+
+            each(indexes, (_, rowKey) => {
+                if(this.isRowSelected(rowKey)) {
+                    rowIndex = that._dataController.getRowIndexByKey(rowKey);
+                    selectedRow = items[rowIndex];
+                    if(selectedRow && selectedRow.modifiedValues) {
+                        each(selectedRow.modifiedValues, (_, modifiedValue) => {
+                            if(modifiedValue) {
+                                changedItems.push({
+                                    key: selectedRow.key,
+                                    index: rowIndex,
+                                    value: modifiedValue
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+
+            return changedItems;
         },
 
         callbackNames: function() {

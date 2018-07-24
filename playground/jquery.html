@@ -22,14 +22,32 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="gridContainer"></div>
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
-        });
+    var dataGrid;
+    $(function(){
+        var data = [];
+
+        for(var i = 0; i < 10; ++i) {
+            data.push({ ID: i, C1: "1", C2: "2", C3: "3", C4: i % 4 });
+        }
+
+        dataGrid = $("#gridContainer").dxDataGrid({
+            width: 600,
+            keyExpr: "ID",
+            dataSource: data,
+            selection: {
+                mode: "multiple"
+            },
+            editing: {
+                allowUpdating: true,
+                mode: "batch"
+            },
+            onSelectionChanged: function(e) {
+                debugger
+            }
+        }).dxDataGrid("instance");
+    });
     </script>
 </body>
 </html>
