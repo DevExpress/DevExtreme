@@ -214,6 +214,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                     that.pageIndex(0);
                     dataSource.pageIndex(0);
                     storeLoadOptions.pageIndex = 0;
+                    options.pageIndex = 0;
                     storeLoadOptions.skip = 0;
                 } else {
                     dataSource.pageIndex(that.pageIndex());
