@@ -9,13 +9,18 @@ var DrawerStrategy = require("./ui.drawer.strategy"),
 
 var TemporaryStrategy = DrawerStrategy.inherit({
     renderPosition: function(offset, animate) {
+        this.callBase(offset, animate);
+
         var menuPos = this._calculatePixelOffset(offset) * this._drawer._getRTLSignCorrection();
 
         $(this._drawer.content()).css("paddingLeft", this._drawer.option("minWidth"));
 
         if(this._drawer.option("showMode") === "slide") {
             if(animate) {
-                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
+                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), function() {
+                    this._contentAnimation.resolve();
+                    this._menuAnimation.resolve();
+                });
             } else {
                 translator.move($(this._drawer._$menu), { left: menuPos });
             }
@@ -24,7 +29,10 @@ var TemporaryStrategy = DrawerStrategy.inherit({
         if(this._drawer.option("showMode") === "shrink") {
             var width = this._getMenuWidth(offset);
             if(animate) {
-                animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
+                animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), function() {
+                    this._contentAnimation.resolve();
+                    this._menuAnimation.resolve();
+                });
             } else {
                 $(this._drawer._$menu).css("width", width);
             }

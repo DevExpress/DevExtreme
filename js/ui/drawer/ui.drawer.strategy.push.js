@@ -9,12 +9,17 @@ var DrawerStrategy = require("./ui.drawer.strategy"),
 
 var PushStrategy = DrawerStrategy.inherit({
     renderPosition: function(offset, animate) {
+        this.callBase(offset, animate);
+
         $(this._drawer.content()).css("paddingLeft", 0);
 
         var pos = this._getMenuWidth(offset) * this._drawer._getRTLSignCorrection();
 
         if(animate) {
-            animation.moveTo($(this._drawer.content()), pos, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
+            animation.moveTo($(this._drawer.content()), pos, this._drawer.option("animationDuration"), (function() {
+                this._contentAnimation.resolve();
+                this._menuAnimation.resolve();
+            }).bind(this));
         } else {
             translator.move($(this._drawer.content()), { left: pos });
         }

@@ -295,6 +295,8 @@ var Drawer = Widget.inherit({
     },
 
     _renderPosition: function(offset, animate) {
+        this._animations = [];
+
         animate = typeUtils.isDefined(animate) ? animate && this.option("animationEnabled") : this.option("animationEnabled");
 
         if(!windowUtils.hasWindow()) return;
@@ -311,10 +313,16 @@ var Drawer = Widget.inherit({
     },
 
     _renderShaderVisibility: function(offset, animate, duration) {
+        var shaderAnimation = new Deferred();
+
+        this._animations.push(shaderAnimation);
+
         var fadeConfig = this._getFadeConfig(offset);
 
         if(animate) {
-            animation.fade($(this._$shader), fadeConfig, duration, this._animationCompleteHandler.bind(this));
+            animation.fade($(this._$shader), fadeConfig, duration, function() {
+                shaderAnimation.resolve();
+            });
         } else {
             this._$shader.css("opacity", fadeConfig.to);
         }
@@ -337,6 +345,7 @@ var Drawer = Widget.inherit({
     _animationCompleteHandler: function() {
         if(this._deferredAnimate) {
             this._deferredAnimate.resolveWith(this);
+            this._animations = [];
         }
     },
 

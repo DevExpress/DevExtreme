@@ -1,7 +1,10 @@
 "use strict";
 
 var Class = require("../../core/class"),
-    abstract = Class.abstract,
+    Deferred = require("../../core/utils/deferred").Deferred,
+    deferredUtils = require("../../core/utils/deferred"),
+    $ = require("../../core/renderer"),
+    when = deferredUtils.when,
     fx = require("../../animation/fx");
 
 
@@ -58,6 +61,20 @@ var DrawerStrategy = Class.inherit({
         this._drawer = drawer;
     },
 
+    renderPosition: function(offset, animate) {
+        this._contentAnimation = new Deferred(),
+        this._menuAnimation = new Deferred();
+
+        if(animate) {
+            this._drawer._animations.push(this._contentAnimation);
+            this._drawer._animations.push(this._menuAnimation);
+
+            when.apply($, this._drawer._animations).done((function() {
+                this._animationCompleteHandler();
+            }).bind(this._drawer));
+        }
+    },
+
     _calculatePixelOffset: function(offset) {
         if(offset) {
             return -(this._drawer.getRealMenuWidth() - this._drawer.getMaxWidth());
@@ -68,9 +85,7 @@ var DrawerStrategy = Class.inherit({
 
     _getMenuWidth: function(offset) {
         return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
-    },
-
-    renderPosition: abstract
+    }
 });
 
 
