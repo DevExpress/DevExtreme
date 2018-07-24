@@ -17,10 +17,10 @@ var TemporaryStrategy = DrawerStrategy.inherit({
 
         if(this._drawer.option("showMode") === "slide") {
             if(animate) {
-                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), function() {
+                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), (function() {
                     this._contentAnimation.resolve();
                     this._menuAnimation.resolve();
-                });
+                }).bind(this));
             } else {
                 translator.move($(this._drawer._$menu), { left: menuPos });
             }
