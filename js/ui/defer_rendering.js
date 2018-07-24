@@ -218,7 +218,8 @@ var DeferRendering = Widget.inherit({
         if(contentTemplate) {
             contentTemplate.render({
                 container: $element.empty(),
-                noModel: true
+                noModel: true,
+                transclude: true
             });
         }
 

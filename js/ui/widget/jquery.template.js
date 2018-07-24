@@ -27,8 +27,8 @@ registerTemplateEngine("default", {
     compile: function(element) {
         return domUtils.normalizeTemplateElement(element);
     },
-    render: function(template, _, __, skipClone) {
-        return skipClone ? template : template.clone();
+    render: function(template, _, __, transclude) {
+        return transclude ? template : template.clone();
     }
 });
 
@@ -128,7 +128,7 @@ var Template = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model, options.index, options.noModel)).contents();
+        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model, options.index, options.transclude)).contents();
     },
 
     source: function() {

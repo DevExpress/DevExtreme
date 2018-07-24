@@ -258,10 +258,12 @@ var Button = Widget.inherit({
             .toggleClass(BUTTON_HAS_ICON_CLASS, !!data.icon)
             .toggleClass(BUTTON_HAS_TEXT_CLASS, !!data.text);
 
+        var transclude = this._getAnonymousTemplateName() === this.option("template");
         var template = this._getTemplateByOption("template"),
             $result = $(template.render({
                 model: data,
-                container: domUtils.getPublicElement(this._$content)
+                container: domUtils.getPublicElement(this._$content),
+                transclude
             }));
 
         if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
