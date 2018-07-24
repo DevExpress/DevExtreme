@@ -201,6 +201,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1048: "The \"{0}\" operation is not found in the filterOperations array",
 
     /**
+    * @name ErrorsUIWidgets.E1049
+    */
+    E1049: `Column '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",

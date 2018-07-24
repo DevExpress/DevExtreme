@@ -50,6 +50,11 @@
 }
 
 .dx-texteditor {
+    background-color: @texteditor-bg;
+    border-top-left-radius: @texteditor-input-border-radius;
+    border-top-right-radius: @texteditor-input-border-radius;
+    position: relative;
+
     .dx-texteditor-borders-position() {
         left: 0;
         right: 0;
@@ -60,44 +65,41 @@
         position: absolute;
     }
 
-    .dx-texteditor-container:before {
+    &:before {
         .dx-texteditor-borders-position();
         z-index: 2;
         .scale(0);
     }
 
-    .dx-texteditor-container:after {
+    &:after {
         .dx-texteditor-borders-position();
     }
 
     &.dx-state-hover {
-        .dx-texteditor-container:after {
-            border-bottom: 1px solid @texteditor-hover-border-color;
-        }
+        background-color: @texteditor-hover-bg;
 
-        .dx-texteditor-input {
-            background-color: @texteditor-hover-bg;
+        &:after {
+            border-bottom: 1px solid @texteditor-hover-border-color;
         }
     }
 
     &.dx-state-focused, &.dx-state-active {
-        .dx-texteditor-container:before {
+        background-color: @texteditor-focused-bg;
+
+        &:before {
             border-bottom: 1px solid @texteditor-focused-border-color;
             border-top: 1px solid @texteditor-focused-border-color;
             .scale(1);
-            .transition-transform(0.4s, cubic-bezier(0.4, 0, 0.02, 1));
-        }
-
-        .dx-texteditor-input {
-            background-color: @texteditor-focused-bg;
+            .transition-transform(0.6s, cubic-bezier(0.4, 0, 0.02, 1));
         }
     }
 
     &.dx-state-disabled,
     &.dx-state-readonly,
     &.dx-state-readonly.dx-state-hover {
+        background-color: fade(@texteditor-bg, 12%);
+
         .dx-texteditor-input {
-            background-color: fade(@texteditor-bg, 12%);
             color: fade(@texteditor-color, 50%);
         }
     }
@@ -151,23 +153,21 @@
 .dx-texteditor-input {
     margin: 0;
     padding: @MATERIAL_TEXTEDITOR_INPUT_PADDING;
-    background: @texteditor-bg;
+    background-color: transparent;
     color: @texteditor-color;
     font-size: @MATERIAL_TEXTEDITOR_FONT_SIZE;
-    border-top-left-radius: @texteditor-input-border-radius;
-    border-top-right-radius: @texteditor-input-border-radius;
 }
 
 .dx-invalid.dx-texteditor {
 
     &.dx-state-hover {
-        .dx-texteditor-container:after {
+        &:after {
             border-bottom: 1px solid @texteditor-invalid-faded-border-color;
         }
     }
 
     &.dx-state-focused, &.dx-state-active {
-        .dx-texteditor-container:before {
+        &:before {
             border-top: 1px solid @texteditor-invalid-focused-border-color;
             border-bottom: 1px solid @texteditor-invalid-focused-border-color;
         }
@@ -175,6 +175,7 @@
 
     .dx-texteditor-buttons-container {
         width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        
         &:after {
             .dx-invalid-material-badge();
         }

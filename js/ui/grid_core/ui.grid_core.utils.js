@@ -140,7 +140,7 @@ module.exports = (function() {
             var index = -1,
                 item;
 
-            if(Array.isArray(items)) {
+            if(key !== undefined && Array.isArray(items)) {
                 keyName = arguments.length <= 2 ? "key" : keyName;
                 for(var i = 0; i < items.length; i++) {
                     item = typeUtils.isDefined(keyName) ? items[i][keyName] : items[i];

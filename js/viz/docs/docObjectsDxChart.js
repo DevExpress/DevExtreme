@@ -14,7 +14,19 @@ var chartSeriesObject = {
     * @name chartSeriesObjectFields.pane
     * @type string
     */
-    pane: null
+    pane: null,
+    /**
+    * @name chartSeriesObjectMethods.getArgumentAxis
+    * @publicName getArgumentAxis()
+    * @return chartAxisObject
+    */
+    getArgumentAxis: function() { },
+    /**
+    * @name chartSeriesObjectMethods.getValueAxis
+    * @publicName getValueAxis()
+    * @return chartAxisObject
+    */
+    getValueAxis: function() { }
 }
 
 /**
@@ -93,4 +105,23 @@ var chartPointObject = {
     * @return object
     */
     getBoundingRect: function() { }
+};
+
+/**
+* @name chartAxisObject
+* @type object
+*/
+var chartAxisObject = {
+    /**
+    * @name chartAxisObjectMethods.visualRange
+    * @publicName visualRange()
+    * @return Array<number,string,Date>
+    */
+    visualRange: function() { },
+    /**
+    * @name chartAxisObjectMethods.visualRange
+    * @publicName visualRange(visualRange)
+    * @param1 visualRange:Array<number,string,Date>
+    */
+    visualRange: function(visualRange) { }
 };

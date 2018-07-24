@@ -286,26 +286,20 @@
     }
 }
 
-    .dx-state-focused {
-        &.dx-calendar {
-            .box-shadow(none);
+.dx-invalid {
+    &.dx-calendar {
+        border-color: @calendar-invalid-faded-border-color;
+
+        &.dx-state-focused {
+            border-color: @calendar-invalid-focused-border-color;
         }
     }
+}
 
-    .dx-invalid {
-        &.dx-calendar {
-            border-color: @calendar-invalid-faded-border-color;
-
-            &.dx-state-focused {
-                border-color: @calendar-invalid-focused-border-color;
-            }
+.dx-popup-wrapper {
+    .dx-calendar {
+        .dx-calendar-caption-button {
+            margin: 0;
         }
     }
-
-    .dx-popup-wrapper {
-        .dx-calendar {
-            .dx-calendar-caption-button {
-                margin: 0;
-            }
-        }
-    }
+}

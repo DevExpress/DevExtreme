@@ -598,6 +598,17 @@ var Form = Widget.inherit({
              * @name dxFormButtonItem.alignment
              * @type Enums.HorizontalAlignment
              * @default "right"
+             * @deprecated dxFormButtonItem.horizontalAlignment
+             */
+            /**
+             * @name dxFormButtonItem.horizontalAlignment
+             * @type Enums.HorizontalAlignment
+             * @default "right"
+             */
+            /**
+             * @name dxFormButtonItem.verticalAlignment
+             * @type Enums.VerticalAlignment
+             * @default "top"
              */
         });
     },

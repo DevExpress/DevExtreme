@@ -137,6 +137,16 @@
     "name": "events/transform"
   },
   {
+    "name": "events",
+    "exports": {
+      "on": "events.on",
+      "one": "events.one",
+      "off": "events.off",
+      "trigger": "events.trigger",
+      "triggerHandler": "events.triggerHandler"
+    }
+  },
+  {
     "name": "framework/command",
     "exports": {
       "default": "framework.dxCommand"
@@ -451,6 +461,12 @@
     "name": "ui/resizable",
     "exports": {
       "default": "ui.dxResizable"
+    }
+  },
+  {
+    "name": "ui/recurrence_editor",
+    "exports": {
+      "default": "ui.dxRecurrenceEditor"
     }
   },
   {

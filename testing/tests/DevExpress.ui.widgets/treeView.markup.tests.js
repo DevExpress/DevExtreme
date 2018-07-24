@@ -18,6 +18,7 @@ var WIDGET_CLASS = "dx-treeview",
     ITEM_CLASS = "dx-treeview-item",
     SELECTED_STATE_CLASS = "dx-state-selected",
     ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
+    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
     IS_LEAF = "dx-treeview-node-is-leaf",
     TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
@@ -250,11 +251,13 @@ QUnit.test("Render nested items", function(assert) {
 
     assert.ok(!$rootNodeFirstItem.hasClass(IS_LEAF));
     assert.ok($rootNodeSecondItem.hasClass(IS_LEAF));
+    assert.ok($rootNodeFirstItem.hasClass(ITEM_WITHOUT_CHECKBOX_CLASS));
     assert.ok($firstNestedNode.length);
     assert.ok($firstNestedNode.find("." + NODE_CLASS).eq(0).hasClass(IS_LEAF));
     assert.ok(!$firstNestedNode.find("." + NODE_CLASS).eq(1).hasClass(IS_LEAF));
     assert.ok(!$firstNestedNode.find("." + NODE_CLASS).eq(0).find("." + NODE_CONTAINER_CLASS).length);
     assert.ok($firstNestedNode.find("." + NODE_CLASS).eq(1).find("." + NODE_CONTAINER_CLASS).length);
+    assert.ok($firstNestedNode.find("." + NODE_CLASS).eq(1).find("." + NODE_CLASS).hasClass(ITEM_WITHOUT_CHECKBOX_CLASS));
 });
 
 QUnit.test("Render toggle icon", function(assert) {

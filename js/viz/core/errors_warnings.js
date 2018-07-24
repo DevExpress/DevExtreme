@@ -28,6 +28,22 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E2005: "The value field \"{0}\" is absent in the data source or all its values are negative",
     /**
+    * @name ErrorsViz.E2006
+    */
+    E2006: "A cycle is detected in provided data",
+    /**
+    * @name ErrorsViz.E2007
+    */
+    E2007: "Input data must be an array",
+    /**
+    * @name ErrorsViz.E2008
+    */
+    E2008: "Each link must be an array of three items: [string, string, number]",
+    /**
+    * @name ErrorsViz.E2009
+    */
+    E2009: "Each link must have positive weight",
+    /**
     * @name ErrorsViz.E2101
     */
     E2101: "Unknown series type: {0}",

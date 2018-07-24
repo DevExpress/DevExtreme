@@ -141,7 +141,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(column.colspan > 1) {
             $cell.attr("colSpan", column.colspan);
-        } else if(!this.option("legacyRendering") && this.option("columnAutoWidth")) {
+        } else if(!column.isBand && !this.option("legacyRendering") && this.option("columnAutoWidth")) {
             if(column.width || column.minWidth) {
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
             }

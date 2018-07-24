@@ -8449,3 +8449,37 @@ QUnit.test("Update dataSource of the column lookup", function(assert) {
     // assert
     assert.deepEqual(this.columnOption("TestField3", "lookup.dataSource"), [1, 2, 3], "lookup datasource");
 });
+
+// T652910
+QUnit.test("Colspan of the band column should be correct when all child columns are hidden in a nested band column", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    // act
+    this.applyOptions({
+        columns: [
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField1", caption: "Column 1", visible: true },
+                    {
+                        caption: "Band Column 2", columns: [
+                            { dataField: "TestField2", caption: "Column 2", visible: false },
+                            { dataField: "TestField3", caption: "Column 3", visible: false }
+                        ]
+                    }
+                ]
+            }
+        ]
+    });
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns(0);
+    assert.strictEqual(visibleColumns.length, 1, "column count on the first level");
+    assert.strictEqual(visibleColumns[0].caption, "Band Column 1", "band column");
+    assert.strictEqual(visibleColumns[0].colspan, 2, "colspan of the band column");
+
+    visibleColumns = this.columnsController.getVisibleColumns(1);
+    assert.strictEqual(visibleColumns.length, 2, "column count on the second level");
+    assert.strictEqual(visibleColumns[0].dataField, "TestField1", "dataField of the column");
+    assert.strictEqual(visibleColumns[1].caption, "Band Column 2", "caption of the band column");
+});

@@ -79,7 +79,7 @@ var EditorFactoryMixin = (function() {
                     options.setValue(e.component.option("value"));
                 }
             },
-            valueChangeEvent: "change" + (options.parentType === "filterRow" || isEnterBug ? " keyup" : "")
+            valueChangeEvent: "change" + (options.parentType === "filterRow" || options.parentType === "filterBuilder" || isEnterBug ? " keyup" : "")
         }, options);
     };
 

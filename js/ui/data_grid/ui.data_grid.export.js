@@ -302,7 +302,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
         for(i = 0; i <= rowCount; i++) {
             result.push([]);
-            columns = columnsController.getVisibleColumns(i);
+            columns = columnsController.getVisibleColumns(i, true);
             for(j = 0; j < columns.length; j++) {
                 column = extend({}, columns[j], {
                     dataType: columns[j].dataType === "datetime" ? "date" : columns[j].dataType
@@ -318,7 +318,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         }
 
         columns = result[rowCount];
-        result = this._prepareItems(0, result.slice(0, -1));
+        result = this._prepareItems(result.slice(0, -1));
         result.push(columns);
 
         return result;
@@ -421,7 +421,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     _processUnExportedItems: function(items) {
-        var columns = this._columnsController.getVisibleColumns(),
+        var columns = this._columnsController.getVisibleColumns(null, true),
             groupColumns = this._columnsController.getGroupColumns(),
             item,
             column,

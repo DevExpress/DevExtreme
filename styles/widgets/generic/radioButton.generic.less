@@ -61,13 +61,15 @@
     }
 
     &.dx-state-focused {
-        .box-shadow(none);
-
         &:not(.dx-state-active) {
             .dx-radiobutton-icon:before {
                 border: @GENERIC_RADIOBUTTON_BORDER_WIDTH solid @radiobutton-focused-border-color;
             }
         }
+    }
+
+    &.dx-state-disabled {
+        opacity: @texteditor-disabled-opacity;
     }
 }
 
@@ -87,6 +89,14 @@
             .dx-radiobutton-icon:before {
                 border-color: @radiobutton-invalid-focused-border-color;
             }
+        }
+    }
+}
+
+.dx-state-disabled {
+    .dx-radiobutton {
+        &.dx-state-disabled {
+            opacity: 1;
         }
     }
 }

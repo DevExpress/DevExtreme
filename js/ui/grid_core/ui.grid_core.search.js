@@ -277,18 +277,19 @@ module.exports = {
                     var that = this,
                         $parent = cellElement.parent(),
                         $items,
+                        columnIndex,
                         stringNormalizer = this._getStringNormalizer(),
                         normalizedSearchText = stringNormalizer(searchText);
 
                     if(!$parent.length) {
                         $parent = $("<div>").append(cellElement);
                     } else if(column) {
-                        var columnIndex = that._columnsController.getVisibleIndex(column.index);
-                        $items = $parent.children("td").eq(columnIndex);
+                        columnIndex = that._columnsController.getVisibleIndex(column.index);
+                        $items = $parent.children("td").eq(columnIndex).find("*");
                     }
                     $items = $items || $parent.find("*");
 
-                    $items = $items.filter(function(index, element) {
+                    $items = $items.filter(function(_, element) {
                         var $contents = $(element).contents();
                         for(var i = 0; i < $contents.length; i++) {
                             var node = $contents.get(i);
@@ -330,13 +331,13 @@ module.exports = {
                         searchText = that.option("searchPanel.text");
 
                     if(isEquals && column) {
-                        searchText = that._getFormattedSearchText(column, searchText);
+                        searchText = searchText && that._getFormattedSearchText(column, searchText);
                     }
 
                     if(searchText && that.option("searchPanel.highlightSearchText")) {
                         var textNodes = that._findHighlightingTextNodes(column, cellElement, searchText);
-                        each(textNodes, function(index, element) {
-                            each($(element).contents(), function(index, textNode) {
+                        each(textNodes, function(_, element) {
+                            each($(element).contents(), function(_, textNode) {
                                 if(isEquals) {
                                     if(stringNormalizer($(textNode).text()) === stringNormalizer(searchText)) {
                                         $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(textNode).text()));

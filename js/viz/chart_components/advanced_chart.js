@@ -397,13 +397,9 @@ var AdvancedChart = BaseChart.inherit({
 
     _populateBusinessRange(useZoom) {
         const that = this;
-        const businessRanges = [];
         const rotated = that._isRotated();
-        const argAxes = that._argumentAxes;
         const argRange = new rangeModule.Range({ rotated: !!rotated });
         const groupsData = that._groupsData;
-
-        argAxes.forEach(axis => argRange.addRange(axis.getRangeData(useZoom)));
 
         that._valueAxes.forEach(valueAxis => {
             var groupRange = new rangeModule.Range({
@@ -413,8 +409,6 @@ var AdvancedChart = BaseChart.inherit({
                 }),
                 groupSeries = that.series.filter(series => series.getValueAxis() === valueAxis);
 
-            groupRange.addRange(valueAxis.getRangeData(useZoom));
-
             groupSeries.forEach(series => {
                 var seriesRange = series.getRangeData();
 
@@ -422,44 +416,21 @@ var AdvancedChart = BaseChart.inherit({
                 argRange.addRange(seriesRange.arg);
             });
 
-            if(!groupRange.isDefined()) {
-                groupRange.setStubData(valueAxis.getOptions().valueType);
-            }
-
-            if(valueAxis.getOptions().showZero) {
-                groupRange.correctValueZeroLevel();
-            }
-
-            groupRange.sortCategories(valueAxis.getCategoriesSorter());
             valueAxis.setGroupSeries(groupSeries);
             valueAxis.setBusinessRange(groupRange);
-
-            businessRanges.push({ val: groupRange, arg: argRange });
         });
 
-        argRange.sortCategories(groupsData.categories);
-
-        if(!argRange.isDefined()) {
-            argRange.setStubData(argAxes[0].getOptions().argumentType);
-        }
-
-        that._argumentAxes.forEach(a => a.setBusinessRange(argRange));
+        that._argumentAxes.forEach(a => a.setBusinessRange(argRange, groupsData.categories));
 
         that._populateMarginOptions();
-
-        that.businessRanges = businessRanges;
     },
 
-    _getArgumentAxis: function() {
-        return this._argumentAxes[0];
+    getArgumentAxis: function() {
+        return this._argumentAxes[this._displayedArgumentAxisIndex];
     },
 
-    _getArgumentAxes: function() {
-        return this._argumentAxes;
-    },
-
-    _getValueAxes: function() {
-        return this._valueAxes;
+    getValueAxis: function(name) {
+        return this._valueAxes.filter(_isDefined(name) ? a => a.name === name : a => a.pane === this.defaultPane)[0];
     },
 
     _getGroupsData: function() {

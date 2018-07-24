@@ -461,9 +461,7 @@ module.exports = Class.inherit((function() {
             that._storeFields = storeFields;
             mergedFields = mergeFields(that._fields, storeFields, that._retrieveFields);
             result.resolve(mergedFields);
-        }).fail(function() {
-            result.resolve(that._fields);
-        });
+        }).fail(result.reject);
 
         return result;
     }
@@ -721,7 +719,7 @@ module.exports = Class.inherit((function() {
              */
             /**
              * @name PivotGridDataSourceOptions.fields.summaryType
-             * @type Enums.SummaryType
+             * @type Enums.SummaryType|string
              * @default 'count'
              */
             /**

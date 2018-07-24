@@ -1283,17 +1283,9 @@ QUnit.test("retrieve Fields. Fail on load store fields", function(assert) {
             retrieveFields: true
         }),
         loadResult = {
-            columns: [{
-                value: "column1"
-            }],
-            rows: [
-                {
-                    value: "rowValue"
-                }
-            ],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
+            columns: [],
+            rows: [],
+            values: []
         };
 
     def.resolve(loadResult);
@@ -1301,55 +1293,7 @@ QUnit.test("retrieve Fields. Fail on load store fields", function(assert) {
 
     // assert
     assert.deepEqual(dataSource.getData(), loadResult);
-    assert.ok(this.testStore.load.calledOnce, "load count");
-    assert.deepEqual(prepareLoadArgs(this.testStore.load.lastCall.args), [{
-        rowExpandedPaths: [],
-        columnExpandedPaths: [],
-        values: [
-            {
-                dataField: "[Measures].[Customer Count]",
-                area: "data",
-                areaIndex: 0,
-                caption: ""
-            }
-        ],
-        columns: [
-            {
-                dataField: "[Product].[Category]",
-                areaIndex: 0,
-                area: "column",
-                caption: ""
-            },
-            {
-                dataField: "[Product].[Subcategory]",
-                area: "column",
-                areaIndex: 1,
-                caption: ""
-            },
-            {
-                dataField: "date",
-                area: "column",
-                groupInterval: "year",
-                areaIndex: 2,
-                caption: ""
-            }
-        ],
-        rows: [
-            {
-                dataField: "[Ship Date].[Calendar Year]",
-                area: "row",
-                areaIndex: 0,
-                caption: ""
-            },
-            {
-                dataField: "date",
-                area: "row",
-                areaIndex: 1,
-                caption: ""
-            }
-        ],
-        filters: []
-    }], "load args");
+    assert.equal(this.testStore.load.callCount, 0, "load count");
 });
 
 QUnit.test("Retrieve Fields. Create data field with summaryType", function(assert) {

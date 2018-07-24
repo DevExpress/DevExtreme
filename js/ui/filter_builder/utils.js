@@ -1,18 +1,16 @@
 "use strict";
 
 import { Deferred, when } from "../../core/utils/deferred";
-
-var dataErrors = require("../../data/errors").errors,
-    domAdapter = require("../../core/dom_adapter"),
-    errors = require("../widget/ui.errors"),
-    filterUtils = require("../shared/filtering"),
-    formatHelper = require("../../format_helper"),
-    extend = require("../../core/utils/extend").extend,
-    inflector = require("../../core/utils/inflector"),
-    between = require("./between"),
-    messageLocalization = require("../../localization/message"),
-    DataSource = require("../../data/data_source/data_source").DataSource,
-    filterOperationsDictionary = require("./ui.filter_operations_dictionary");
+import { errors as dataErrors } from "../../data/errors";
+import errors from "../widget/ui.errors";
+import filterUtils from "../shared/filtering";
+import formatHelper from "../../format_helper";
+import { extend } from "../../core/utils/extend";
+import inflector from "../../core/utils/inflector";
+import between from "./between";
+import messageLocalization from "../../localization/message";
+import { DataSource } from "../../data/data_source/data_source";
+import filterOperationsDictionary from "./ui.filter_operations_dictionary";
 
 var DEFAULT_DATA_TYPE = "string",
     EMPTY_MENU_ICON = "icon-none",
@@ -157,8 +155,16 @@ function getGroupValue(group) {
     return value;
 }
 
+function getDefaultFilterOperations(field) {
+    return (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+}
+
+function containItems(entity) {
+    return Array.isArray(entity) && entity.length;
+}
+
 function getFilterOperations(field) {
-    var result = field.filterOperations || (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    var result = containItems(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
     return extend([], result);
 }
 
@@ -653,13 +659,6 @@ function isValidCondition(condition, field) {
     return true;
 }
 
-function setFocusToBody() {
-    var doc = domAdapter.getDocument();
-    if(doc && doc.activeElement && doc.activeElement.nodeName && doc.activeElement.nodeName.toLowerCase() !== "body") {
-        doc.activeElement.blur();
-    }
-}
-
 function getMergedOperations(customOperations, betweenCaption) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
@@ -808,7 +807,6 @@ exports.getCurrentLookupValueText = getCurrentLookupValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
-exports.setFocusToBody = setFocusToBody;
 exports.getFilterExpression = getFilterExpression;
 exports.getCustomOperation = getCustomOperation;
 exports.getMergedOperations = getMergedOperations;

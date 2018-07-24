@@ -1060,6 +1060,38 @@ QUnit.test("load indicator should be removed after datasource is loaded even if 
     });
 });
 
+QUnit.test("Expand all method with the virtual mode", function(assert) {
+    var treeView = new TreeView(this.$element, {
+        dataSource: makeSlowDataSource([
+            {
+                id: 1,
+                parentId: 0,
+                text: "1"
+            },
+            {
+                id: 11,
+                parentId: 1,
+                text: "11"
+            },
+            {
+                id: 111,
+                parentId: 11,
+                text: "111"
+            }
+        ]),
+        dataStructure: "plain",
+        virtualModeEnabled: true
+    });
+
+    this.clock.tick(300);
+    treeView.expandAll();
+    this.clock.tick(300);
+
+    var nodes = treeView.getNodes();
+    assert.ok(nodes[0].expanded, "item 1");
+    assert.notOk(nodes[0].items[0].expanded, "item 11");
+    assert.equal(nodes[0].items[0].items.length, 0, "children count of the item 11");
+});
 
 QUnit.module("the 'createChildren' option");
 
@@ -1316,4 +1348,29 @@ QUnit.test("the 'createChildren' callback should support native promises", funct
         assert.equal(treeView.option("items").length, 1, "items are loaded after native Promise resolution");
         done();
     });
+});
+
+QUnit.test("expand should work with createChildren", function(assert) {
+    var $treeView = $("#treeView").dxTreeView({
+            createChildren: function(parent) {
+                parent = (parent && parent.key) || 0;
+
+                var id = parent + 1,
+                    text = "Item " + id;
+
+                return [{ id: id, parentId: parent, text: text }];
+            },
+            parentIdExpr: "parentId",
+            dataStructure: "plain"
+        }),
+        $expander = $treeView.find(".dx-treeview-node:eq(0) .dx-treeview-toggle-item-visibility"),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.expandItem(1);
+    $expander.trigger("dxclick");
+
+    instance.expandItem(1);
+    $expander.trigger("dxclick");
+
+    assert.notOk($expander.hasClass("dx-treeview-toggle-item-visibility-opened"), "node is collapsed");
 });

@@ -75,118 +75,116 @@
     height: @MATERIAL_TREEVIEW_LOADINCICATOR_SIZE;
 }
 
-.dx-treeview {
-    .dx-treeview-search {
-        margin-bottom: @MATERIAL_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
-    }
-
-    &.dx-treeview-with-search > .dx-scrollable {
-        height: calc(~"100% - "@MATERIAL_TREEVIEW_SEARCH_EDITOR_HEIGHT + @MATERIAL_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM);
-    }
-
-    &.dx-treeview-border-visible {
-        border: 1px solid @treeview-border-color;
-
-        .dx-treeview-select-all-item {
-            padding-left: @MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING;
-        }
-
-        .dx-scrollable-content {
-            >.dx-treeview-node-container {
-                padding: @MATERIAL_TREEVIEW_CONTAINER_PADDING;
-            }
-        }
-    }
-
-    .dx-treeview-select-all-item {
-        border-bottom: 1px solid @treeview-border-color;
-        padding: @MATERIAL_SELECT_ALL_ITEM_PADDING;
-        margin-left:  @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
-
-        .dx-checkbox-text {
-            padding-left: @MATERIAL_SELECT_ALL_TEXT_OFFSET;
-        }
-    }
-
-    .dx-treeview-node {
-        padding-left: @MATERIAL_TREEVIEW_NODE_OFFSET;
-
-        &.dx-state-selected {
-            > .dx-treeview-item {
-                color: @treeview-item-selected-color;
-            }
-        }
-
-        &.dx-treeview-item-with-checkbox {
-            .dx-treeview-item {
-                color: @base-text-color;
-                padding-left: @MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
-            }
-
-            .dx-checkbox {
-                top: 14px;
-                left: @MATERIAL_TREEVIEW_CHECKBOX_OFFSET;
-            }
-        }
-
-        &:not(.dx-treeview-item-with-checkbox) {
-            &.dx-state-selected {
-                > .dx-treeview-item {
-                    color: @treeview-item-selected-color;
-                    background-color: @treeview-item-selected-bg;
-                }
-            }
-
-            &.dx-state-focused {
-                > .dx-treeview-item {
-                    background-color: @treeview-focused-bg;
-
-                    * {
-                        color: @treeview-focus-color;
-                    }
-                }
-            }
-        }
-    }
-
-    .dx-treeview-item {
-        padding: @MATERIAL_TREEVIEW_ITEM_PADDING;
-        min-height: @MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;
-
-        .dx-icon {
-            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
-        }
-
-        &.dx-state-hover {
-            background-color: @treeview-hover-bg;
-            color: @treeview-item-hover-color;
-        }
-    }
+.dx-rtl {
+    .dx-treeview-make-rtl(@MATERIAL_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET, @MATERIAL_TREEVIEW_NODE_OFFSET, @MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, @MATERIAL_TREEVIEW_CHECKBOX_OFFSET, @MATERIAL_SELECT_ALL_TEXT_OFFSET, @MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING, @MATERIAL_TREEVIEW_BORDER_PADDING);
 
     .dx-treeview-toggle-item-visibility {
-        .dx-icon-chevronright;
-        .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
-        color: @treeview-spin-icon-color;
-        width: @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
-        height: @MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;
-        top: 0;
-        left: 0;
+        right: 0;
+    }
 
-        &.dx-treeview-toggle-item-visibility-opened {
-            .dx-icon-chevrondown;
-            .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
+    .dx-treeview-item-with-checkbox .dx-checkbox {
+        overflow: visible;
+    }
+}
+
+.dx-treeview-search {
+    margin-bottom: @MATERIAL_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
+}
+
+.dx-treeview-with-search > .dx-scrollable {
+    height: calc(~"100% - "@MATERIAL_TREEVIEW_SEARCH_EDITOR_HEIGHT + @MATERIAL_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM);
+}
+
+.dx-treeview-border-visible {
+    border: 1px solid @treeview-border-color;
+
+    .dx-treeview-select-all-item {
+        padding-left: @MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING;
+    }
+
+    .dx-scrollable-content {
+        >.dx-treeview-node-container {
+            padding: @MATERIAL_TREEVIEW_CONTAINER_PADDING;
+        }
+    }
+}
+
+.dx-treeview-select-all-item {
+    border-bottom: 1px solid @treeview-border-color;
+    padding: @MATERIAL_SELECT_ALL_ITEM_PADDING;
+    margin-left:  @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
+
+    .dx-checkbox-text {
+        padding-left: @MATERIAL_SELECT_ALL_TEXT_OFFSET;
+    }
+}
+
+.dx-treeview-node {
+    padding-left: @MATERIAL_TREEVIEW_NODE_OFFSET;
+}
+
+.dx-state-selected {
+    > .dx-treeview-item {
+        color: @treeview-item-selected-color;
+    }
+}
+
+.dx-treeview-item-with-checkbox {
+    .dx-treeview-item {
+        color: @base-text-color;
+        padding-left: @MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
+    }
+
+    .dx-checkbox {
+        top: 14px;
+        left: @MATERIAL_TREEVIEW_CHECKBOX_OFFSET;
+    }
+}
+
+.dx-treeview-item-without-checkbox {
+    &.dx-state-selected {
+        > .dx-treeview-item {
+            color: @treeview-item-selected-color;
+            background-color: @treeview-item-selected-bg;
         }
     }
 
-    &.dx-rtl {
-        .dx-treeview > .make-rtl(@MATERIAL_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET, @MATERIAL_TREEVIEW_NODE_OFFSET, @MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, @MATERIAL_TREEVIEW_CHECKBOX_OFFSET, @MATERIAL_SELECT_ALL_TEXT_OFFSET, @MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING, @MATERIAL_TREEVIEW_BORDER_PADDING);
+    &.dx-state-focused {
+        > .dx-treeview-item {
+            background-color: @treeview-focused-bg;
 
-        .dx-treeview-toggle-item-visibility {
-            right: 0;
+            * {
+                color: @treeview-focus-color;
+            }
         }
+    }
+}
 
-        .dx-treeview-item-with-checkbox .dx-checkbox {
-            overflow: visible;
-        }
+.dx-treeview-item {
+    padding: @MATERIAL_TREEVIEW_ITEM_PADDING;
+    min-height: @MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;
+
+    .dx-icon {
+        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+    }
+
+    &.dx-state-hover {
+        background-color: @treeview-hover-bg;
+        color: @treeview-item-hover-color;
+    }
+}
+
+.dx-treeview-toggle-item-visibility {
+    .dx-icon-chevronright;
+    .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
+    color: @treeview-spin-icon-color;
+    width: @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
+    height: @MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;
+    top: 0;
+    left: 0;
+
+    &.dx-treeview-toggle-item-visibility-opened {
+        .dx-icon-chevrondown;
+        .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
     }
 }

@@ -223,12 +223,14 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
-    getPositionShift: function() {
+    getPositionShift: function(timeShift) {
         return {
+            cellShift: timeShift * this.getCellWidth(),
             top: 0,
             left: 0
         };
     },
+
 
     getCoordinatesByDates: function(startDate, endDate) {
         var result = [],

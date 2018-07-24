@@ -126,11 +126,27 @@ var RecurrenceRule = Class.inherit({
 var RecurrenceEditor = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxRecurrenceEditorOptions.value
+            * @type string
+            * @default null
+            * @fires dxRecurrenceEditorOptions.onValueChanged
+            */
             value: null,
-            onValueChanged: null,
+
+            /**
+            * @name dxRecurrenceEditorOptions.startDate
+            * @type Date
+            * @default new Date()
+            */
             startDate: new Date(),
-            firstDayOfWeek: undefined,
-            visible: true
+
+            /**
+            * @name dxRecurrenceEditorOptions.firstDayOfWeek
+            * @type Enums.FirstDayOfWeek
+            * @default undefined
+            */
+            firstDayOfWeek: undefined
         });
     },
 

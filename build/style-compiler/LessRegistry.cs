@@ -202,7 +202,8 @@ namespace StyleCompiler
                 "spa",
                 "filterBuilder",
                 "recurrenceEditor",
-                "drawer"
+                "drawer",
+                "card"
             });
 
             // Non-themeable components that have only common styles

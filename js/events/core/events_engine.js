@@ -28,6 +28,11 @@ var NATIVE_EVENTS_TO_TRIGGER = {
 };
 var NO_BUBBLE_EVENTS = ["blur", "focusout", "focus", "focusin", "load"];
 
+var passiveListenerEvents = {
+    eventName: "dxpointermove",
+    nativeEventName: "touchmove"
+};
+
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && domAdapter.elementMatches(target, selector);
 };
@@ -171,6 +176,7 @@ var getHandlersController = function(element, eventName) {
 
             var firstHandlerForTheType = eventData.handleObjects.length === 1;
             var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
+            var nativeListenerOptions;
 
             if(shouldAddNativeListener) {
                 shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
@@ -178,7 +184,14 @@ var getHandlersController = function(element, eventName) {
 
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
-                eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
+
+                if(eventName === passiveListenerEvents.nativeEventName) {
+                    nativeListenerOptions = {
+                        passive: false
+                    };
+                }
+
+                eventData.removeListener = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler, nativeListenerOptions);
             }
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
@@ -591,6 +604,8 @@ eventsEngine.subscribeGlobal = function() {
         });
     }));
 };
+
+eventsEngine.passiveListenerEvents = passiveListenerEvents;
 
 ///#DEBUG
 eventsEngine.elementDataMap = elementDataMap;

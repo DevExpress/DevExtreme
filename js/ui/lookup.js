@@ -776,6 +776,10 @@ var Lookup = DropDownList.inherit({
             }
             this._list && this._list.option("focusedElement", null);
         }
+
+        if(this.option("fullScreen") && this.option("_scrollToSelectedItemEnabled")) {
+            this._popup.option("position").of = $(window);
+        }
     },
 
     _scrollToSelectedItem: function() {

@@ -113,7 +113,6 @@ var PATTERN_PARSERS = {
 };
 
 var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
-
 var PATTERN_SETTERS = {
     y: "setFullYear",
     M: "setMonth",
@@ -159,8 +158,6 @@ var getRegExpInfo = function(format, dateParts) {
         isEscaping,
         patterns = [];
 
-    format = escapeRegExp(format);
-
     for(var i = 0; i < format.length; i++) {
         var char = format[i],
             isEscapeChar = char === "'",
@@ -181,13 +178,19 @@ var getRegExpInfo = function(format, dateParts) {
             regexpText += "(" + regexpPart(count, dateParts) + ")";
             i += count - 1;
         } else {
-            regexpText += char;
+            char = escapeRegExp(char);
+            patterns.push(char);
+            regexpText += "(" + char + ")";
         }
     }
     return {
         patterns: patterns,
         regexp: new RegExp("^" + regexpText + "$")
     };
+};
+
+var getPatternSetters = function() {
+    return PATTERN_SETTERS;
 };
 
 var setPatternPart = function(date, pattern, text, dateParts) {
@@ -266,3 +269,5 @@ var getParser = function(format, dateParts) {
 };
 
 exports.getParser = getParser;
+exports.getRegExpInfo = getRegExpInfo;
+exports.getPatternSetters = getPatternSetters;

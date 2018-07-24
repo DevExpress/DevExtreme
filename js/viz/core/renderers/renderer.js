@@ -1725,6 +1725,20 @@ Renderer.prototype = {
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
+    linearGradient: function(stops) {
+        var gradient,
+            id = getNextDefsSvgId(),
+            that = this;
+        gradient = that._createElement("linearGradient", { id: id }).append(that._defs);
+        gradient.id = id;
+
+        stops.forEach((stop) => {
+            that._createElement("stop", { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
+        });
+
+        return gradient;
+    },
+
     // appended automatically
     pattern: function(color, hatching, _id) {
         hatching = hatching || {};

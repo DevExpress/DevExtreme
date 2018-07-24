@@ -993,6 +993,7 @@ export const MockAxis = function(renderOptions) {
         zoom: sinon.spy(function(min, max) {
             return { min: min, max: max };
         }),
+        adjust: sinon.spy(),
         getViewport: sinon.stub().returns({}),
         resetZoom: sinon.spy(),
         drawScaleBreaks: sinon.spy(),

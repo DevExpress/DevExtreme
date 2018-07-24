@@ -478,8 +478,8 @@ QUnit.test("Scheduler timeline week header cells should have right width if cros
         $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0),
         $dateTableCell = $element.find(".dx-scheduler-date-table-cell").eq(0);
 
-    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
-    assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.outerWidth(), 1.5, "Last row cell has correct width");
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.get(0).getBoundingClientRect().width, 1.5, "First row cell has correct width");
+    assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.get(0).getBoundingClientRect().width, 1.5, "Last row cell has correct width");
 });
 
 QUnit.test("Scheduler timeline week cells should have right height if crossScrollingEnabled = true", function(assert) {
@@ -639,7 +639,7 @@ QUnit.test("Scheduler timeline month getPositionShift should return null shift",
         currentDate: new Date(2015, 9, 21)
     });
 
-    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0 }, "First view date is OK");
+    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0, cellShift: 0 }, "First view date is OK");
 });
 
 QUnit.test("Scrollables should be updated after currentDate changing", function(assert) {

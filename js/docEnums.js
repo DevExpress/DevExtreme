@@ -116,6 +116,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ResizeHandle
+ * @enum {'bottom'|'left'|'right'|'top'|'all'}
+ */
+
+/**
  * @typedef {string} Enums.BoxDirection
  * @enum {'col'|'row'}
  */
@@ -428,6 +433,16 @@
 /**
  * @typedef {string} Enums.FunnelLabelPosition
  * @enum {'columns'|'inside'|'outside'}
+ */
+
+/**
+ * @typedef {string} Enums.SankeyLabelOverlappingBehavior
+ * @enum {'ellipsis'|'hide'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.SankeyColorMode
+ * @enum {'none'|'source'|'target'|'gradient'}
  */
 
 /**

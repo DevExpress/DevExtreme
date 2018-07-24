@@ -29,6 +29,7 @@ var WIDGET_CLASS = "dx-treeview",
     NODE_CLASS = "dx-treeview-node",
     ITEM_CLASS = "dx-treeview-item",
     ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
+    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
     ITEM_DATA_KEY = "dx-treeview-item-data",
     IS_LEAF = "dx-treeview-node-is-leaf",
     EXPAND_EVENT_NAMESPACE = "dxTreeView_expand",
@@ -842,9 +843,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _renderItem: function(node, $nodeContainer) {
         var $node = this._createDOMElement($nodeContainer, node),
-            nodeData = node.internalFields;
+            nodeData = node.internalFields,
+            showCheckBox = this._showCheckboxes();
 
-        this._showCheckboxes() && this._renderCheckBox($node, node);
+        $node.addClass(showCheckBox ? ITEM_WITH_CHECKBOX_CLASS : ITEM_WITHOUT_CHECKBOX_CLASS);
+        showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
@@ -1042,7 +1045,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         eventsEngine.off($icon, eventName);
         eventsEngine.on($icon, eventName, function(e) {
-            that._toggleExpandedState(node, undefined, e);
+            that._toggleExpandedState(node.internalFields.key, undefined, e);
         });
     },
 
@@ -1233,8 +1236,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderCheckBox: function($node, node) {
-        $node.addClass(ITEM_WITH_CHECKBOX_CLASS);
-
         var $checkbox = $("<div>").appendTo($node);
 
         this._createComponent($checkbox, CheckBox, {
@@ -1798,12 +1799,24 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    collapseAll: function() {
-        var that = this;
+    /**
+    * @name dxTreeViewMethods.expandAll
+    * @publicName expandAll()
+    */
+    expandAll: function() {
+        each(this._dataAdapter.getData(), (function(_, node) {
+            this._toggleExpandedState(node.internalFields.key, true);
+        }).bind(this));
+    },
 
-        each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
-            that._toggleExpandedState(key, false);
-        });
+    /**
+     * @name dxTreeViewMethods.collapseAll
+     * @publicName collapseAll()
+     */
+    collapseAll: function() {
+        each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
+            this._toggleExpandedState(key, false);
+        }).bind(this));
     }
 
 });

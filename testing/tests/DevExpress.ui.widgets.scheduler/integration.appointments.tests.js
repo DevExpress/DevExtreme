@@ -472,7 +472,7 @@ QUnit.test("Appointments on Day view should have a right height and position if 
     });
     var $element = this.instance.$element(),
         $appointment = $element.find("." + APPOINTMENT_CLASS),
-        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).first().get(0).getBoundingClientRect().height;
 
     assert.equal($appointment.position().top, 0, "Appointment has a right top position");
     assert.equal($appointment.outerHeight(), cellHeight, "Appointment has a right height");
@@ -524,7 +524,7 @@ QUnit.test("Appointment with resources should have a right height and position i
 
     var $element = this.instance.$element(),
         $appointment = $element.find("." + APPOINTMENT_CLASS),
-        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).first().get(0).getBoundingClientRect().height;
 
     assert.equal($appointment.length, 1, "Only one appt is rendered");
     assert.equal($appointment.position().top, cellHeight * 20, "Appointment has a right top position");
@@ -568,7 +568,7 @@ QUnit.test("The part of the appointment that ends after midnight should have rig
 
     var $element = this.instance.$element(),
         $appointment = $element.find("." + APPOINTMENT_CLASS).eq(1),
-        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
     assert.equal($appointment.outerHeight(), cellHeight, "appt part has right height");
 });
@@ -612,7 +612,7 @@ QUnit.test("The part of recurrence appointment after midnight should have right 
 
     var $element = this.instance.$element(),
         $appointment = $element.find("." + APPOINTMENT_CLASS).eq(0),
-        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
     assert.equal($appointment.outerHeight(), cellHeight * 3, "appt part has right height");
 });
@@ -678,7 +678,7 @@ QUnit.test("Appts should be filtered correctly if there is a custom tz and start
 
     var $element = this.instance.$element(),
         $appt = $element.find("." + APPOINTMENT_CLASS),
-        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        cellHeight = $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
         apptPosition = translator.locate($appt.eq(0)),
         clientTzOffset = new Date("2015-05-27T23:00:00+01:00").getTimezoneOffset() / 60;
 
@@ -796,7 +796,7 @@ QUnit.test("Appointments should have correctly height with a custom timezone(T38
 QUnit.test("Scheduler tasks should have a right height", function(assert) {
     this.createInstance({ dataSource: this.tasks, currentDate: new Date(2015, 1, 9) });
     this.clock.tick();
-    var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+    var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
         resultHeight = cellHeight * 2;
 
     assert.equal(this.instance.$element().find("." + APPOINTMENT_CLASS).eq(0).outerHeight(), resultHeight, "Task has a right height");
@@ -1910,7 +1910,7 @@ QUnit.test("Appointment with custom timezone should be resized correctly(T390801
             }]
         });
 
-        var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
             $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS),
             initialAppointmentTop = $appointment.position().top;
 
@@ -1947,7 +1947,7 @@ QUnit.test("Recurrence appointment with custom timezone should be resized correc
             }]
         });
 
-        var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
             $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS),
             initialAppointmentTop = $appointments.eq(0).position().top;
 
@@ -1986,7 +1986,7 @@ QUnit.test("Recurrence appointment with custom tz that isn't equal to scheduler 
             }]
         });
 
-        var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        var cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
             $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS),
             initialAppointmentTop = $appointments.eq(0).position().top;
 
@@ -4378,7 +4378,7 @@ QUnit.test("Appointment should have correct height, when appointment timeZones w
         });
 
         var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-            cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+            cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
         assert.roughEqual($appointment.position().top, 0, 2.001, "Appointment top is correct");
         assert.roughEqual($appointment.outerHeight(), 6 * cellHeight, 2.001, "Appointment height is correct");
@@ -5459,7 +5459,7 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
     var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
     assert.equal($appointments.length, 2, "two appointments are rendered");
 
-    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight();
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().get(0).getBoundingClientRect().height;
 
     assert.equal($appointments.eq(0).position().top, 0, "correct top position");
     assert.equal($appointments.eq(0).position().left, 200, "correct left position");
@@ -5503,8 +5503,8 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
     var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
     assert.equal($appointments.length, 2, "two appointments is rendered");
 
-    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
-        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
+        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().width;
 
     assert.equal($appointments.eq(0).position().top, 0, "correct top position");
     assert.equal($appointments.eq(0).position().left, 200 + cellWidth * 5, "correct left position");
@@ -6124,7 +6124,7 @@ QUnit.test("Appt shouldn't be resized to the group border in horizontal grouped 
     });
 
     var $element = $(this.instance.$element()),
-        cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
+        cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
         pointer = pointerMock($element.find(".dx-resizable-handle-bottom").eq(0)).start();
 
     pointer.dragStart().drag(0, cellHeight * 2).dragEnd();
@@ -6216,4 +6216,29 @@ QUnit.test("Appointment inside vertical grouped view should have a right resizab
 
     assert.equal($appointment.dxResizable("instance").option("area").top, initialResizableAreaTop);
     assert.equal($appointment.dxResizable("instance").option("area").bottom, initialResizableAreaBottom);
+});
+
+QUnit.test("New added appointment should be rendered correctly in specified timeZone", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        this.createInstance({
+            dataSource: [],
+            currentDate: new Date(2018, 4, 25),
+            views: ["week"],
+            currentView: "week",
+            timeZone: "Etc/UTC"
+        });
+
+        var task = { text: "a", startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
+
+        this.instance.showAppointmentPopup(task, true);
+        $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+        var $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS),
+            startDate = $appointment.dxSchedulerAppointment("instance").option("startDate");
+
+        assert.deepEqual(startDate, task.startDate, "appointment starts in 8AM");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });

@@ -558,14 +558,15 @@ QUnit.test("hide grids for first stub axis", function(assert) {
             }
         }]
     });
-    var verticalAxes = chart._valueAxes;
 
-    assert.equal(verticalAxes.length, 2, "chart shoul has two value axis");
-    assert.equal(verticalAxes[0].getOptions().grid.visible, false, "first axis grid isn't visible");
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, false, "first axis grid isn't visible");
+    var stubAxis = chart.getValueAxis("stubAxis");
+    var valueAxis = chart.getValueAxis("a1");
 
-    assert.equal(verticalAxes[1].getOptions().grid.visible, true, "second axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, true, "second axis grid visible");
+    assert.equal(stubAxis.getOptions().grid.visible, false, "first axis grid isn't visible");
+    assert.equal(stubAxis.getOptions().minorGrid.visible, false, "first axis grid isn't visible");
+
+    assert.equal(valueAxis.getOptions().grid.visible, true, "second axis grid visible");
+    assert.equal(valueAxis.getOptions().minorGrid.visible, true, "second axis grid visible");
 });
 
 QUnit.test("hide grids for second axis", function(assert) {
@@ -591,14 +592,14 @@ QUnit.test("hide grids for second axis", function(assert) {
             }
         }]
     });
-    var verticalAxes = chart._valueAxes;
+    var firstAxis = chart.getValueAxis("a2");
+    var secondAxis = chart.getValueAxis("a1");
 
-    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
-    assert.equal(verticalAxes[0].getOptions().grid.visible, true, "first axis grid visible");
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis grid visible");
+    assert.equal(firstAxis.getOptions().grid.visible, true, "first axis grid visible");
+    assert.equal(firstAxis.getOptions().minorGrid.visible, true, "first axis grid visible");
 
-    assert.equal(verticalAxes[1].getOptions().grid.visible, false, "second axis grid isn't visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis grid isn't visible");
+    assert.equal(secondAxis.getOptions().grid.visible, false, "second axis grid isn't visible");
+    assert.equal(secondAxis.getOptions().minorGrid.visible, false, "second axis grid isn't visible");
 });
 
 QUnit.test("T570332. Do not show minor grid when it disabled and two stub axis", function(assert) {
@@ -623,11 +624,11 @@ QUnit.test("T570332. Do not show minor grid when it disabled and two stub axis",
             }
         }]
     });
-    var verticalAxes = chart._valueAxes;
+    var firstAxis = chart.getValueAxis("a2");
+    var secondAxis = chart.getValueAxis("a1");
 
-    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, false, "first axis minor grid isn't visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis minor grid isn't visible");
+    assert.equal(firstAxis.getOptions().minorGrid.visible, false, "first axis minor grid isn't visible");
+    assert.equal(secondAxis.getOptions().minorGrid.visible, false, "second axis minor grid isn't visible");
 });
 
 QUnit.test("T570332. Make minor grid visible for first non stub axis", function(assert) {
@@ -653,11 +654,11 @@ QUnit.test("T570332. Make minor grid visible for first non stub axis", function(
             }
         }]
     });
-    var verticalAxes = chart._valueAxes;
+    var firstAxis = chart.getValueAxis("a2");
+    var secondAxis = chart.getValueAxis("a1");
 
-    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis minor grid is visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis minor grid isn't visible");
+    assert.equal(firstAxis.getOptions().minorGrid.visible, true, "first axis minor grid is visible");
+    assert.equal(secondAxis.getOptions().minorGrid.visible, false, "second axis minor grid isn't visible");
 });
 
 QUnit.test("two stub axis", function(assert) {

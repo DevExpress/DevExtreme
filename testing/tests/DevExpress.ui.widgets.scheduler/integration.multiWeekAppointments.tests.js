@@ -226,7 +226,7 @@ QUnit.test("Compact parts of long appointments should be located properly (group
 
     assert.roughEqual($compactAppts.eq(0).position().top, 124, 2.001, "Position of compact appointment part is right");
     assert.roughEqual($compactAppts.eq(1).position().top, 124, 2.001, "Position of compact appointment part is right");
-    assert.roughEqual($compactAppts.eq(2).position().top, 184, 2.001, "Position of compact appointment part is right");
+    assert.roughEqual($compactAppts.eq(2).position().top, 183, 2.501, "Position of compact appointment part is right");
 });
 
 QUnit.test("Appointment should have a special icon and class if it greater than work space width", function(assert) {

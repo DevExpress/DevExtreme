@@ -1323,7 +1323,13 @@ var dxChart = {
         * @type boolean
         * @default undefined
         */
-        endOnTick: undefined
+        endOnTick: undefined,
+        /**
+        * @name dxChartOptions.commonAxisSettings.wholeRange
+        * @type Array<number,string,Date>
+        * @default undefined
+        */
+        wholeRange: undefined
     },
     /**
     * @name dxChartOptions.argumentAxis
@@ -1333,13 +1339,11 @@ var dxChart = {
     argumentAxis: {
         /**
         * @name dxChartOptions.argumentAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxChartOptions.argumentAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -1401,7 +1405,6 @@ var dxChart = {
         aggregationGroupWidth: 10,
         /**
         * @name dxChartOptions.argumentAxis.aggregationInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         aggregationInterval: undefined,
@@ -1622,13 +1625,11 @@ var dxChart = {
         multipleAxesSpacing: 5,
         /**
         * @name dxChartOptions.valueAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxChartOptions.valueAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -1977,6 +1978,25 @@ var dxChart = {
     * @param2 endValue:Number|Date|string
     */
     zoomArgument: function() { },
+    /**
+    * @name dxchartmethods.getValueAxis
+    * @publicName getValueAxis()
+    * @return chartAxisObject
+    */
+    getValueAxis: function() { },
+    /**
+    * @name dxchartmethods.getValueAxis(name)
+    * @publicName getValueAxis(name)
+    * @param1 name:string
+    * @return chartAxisObject
+    */
+    getValueAxis: function(name) { },
+    /**
+    * @name dxchartmethods.getArgumentAxis
+    * @publicName getArgumentAxis()
+    * @return chartAxisObject
+    */
+    getArgumentAxis: function() { }
 };
 
 /**
@@ -2769,13 +2789,11 @@ var dxPolarChart = {
         originValue: undefined,
         /**
         * @name dxPolarChartOptions.argumentAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxPolarChartOptions.argumentAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},
@@ -2929,13 +2947,11 @@ var dxPolarChart = {
         showZero: undefined,
         /**
         * @name dxPolarChartOptions.valueAxis.tickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         tickInterval: {},
         /**
         * @name dxPolarChartOptions.valueAxis.minorTickInterval
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         minorTickInterval: {},

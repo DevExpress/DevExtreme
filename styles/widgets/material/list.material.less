@@ -140,10 +140,6 @@
                 }
 
                 &.dx-state-focused {
-                    .dx-radiobutton {
-                        .box-shadow(none);
-                    }
-
                     .dx-checkbox {
                         .dx-checkbox-icon:after {
                             background-color: fade(@checkbox-border-color, 10%);
@@ -442,7 +438,7 @@
         margin-right: @item_horizontal_padding;
         padding: 0;
         border-radius: 50%;
-        height: @MATERIAL_BASE_ICON_SIZE + @MATERIAL_BUTTON_ICON_HORIZONTAL_PADDING * 2 - 2px;
+        height: @MATERIAL_BASE_ICON_SIZE + @MATERIAL_BUTTON_VERTICAL_PADDING * 2 - 2px;
         margin-top: -2px;
 
         &.dx-button {

@@ -1120,3 +1120,40 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
     assert.notOk($appointment.length, "appt is deleted");
     assert.equal(this.instance.option("dataSource")[0].recurrenceException, "20180401T100000", "exception is correct");
 });
+
+QUnit.test("Single changed appointment should be rendered correctly in specified timeZone", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        this.createInstance({
+            dataSource: [{
+                text: "Recurrence",
+                startDate: "2018-05-23T10:00:00Z",
+                endDate: "2018-05-23T10:30:00Z",
+                recurrenceRule: "FREQ=DAILY"
+            }],
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2018, 4, 23),
+            timeZone: "Etc/UTC"
+        });
+
+        $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick").trigger("dxclick");
+
+        $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
+
+        var $startDate = $(".dx-datebox").eq(0),
+            startDate = $startDate.dxDateBox("instance"),
+            expectedStartDate = new Date(2018, 4, 23, 9, 0);
+
+        startDate.option("value", expectedStartDate);
+        $(".dx-button.dx-popup-done").eq(0).trigger("dxclick");
+        this.clock.tick(300);
+
+        var actualStartDate = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(3).dxSchedulerAppointment("instance").option("startDate");
+
+        assert.deepEqual(actualStartDate, expectedStartDate, "appointment starts in 9AM");
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+

@@ -325,7 +325,6 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions.displayTime
                     * @default 4000 @for Material
-                    * @inheritdoc
                     */
                     displayTime: 4000
                 }
@@ -396,7 +395,7 @@ var Toast = Overlay.inherit({
     },
 
     _show: function() {
-        if(visibleToastInstance) {
+        if(visibleToastInstance && visibleToastInstance !== this) {
             clearTimeout(visibleToastInstance._hideTimeout);
             visibleToastInstance.hide();
         }

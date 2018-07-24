@@ -1293,9 +1293,9 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, "Series data was reinitialized");
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, "Data is correct");
 
-        assert.equal(chart.businessRanges.length, 1, "There is one business range");
-        assert.equal(chart.businessRanges[0].val.min, 1, "Correct val min");
-        assert.equal(chart.businessRanges[0].val.max, 5, "Correct val max");
+        var businessRange = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+        assert.equal(businessRange.min, 1, "Correct val min");
+        assert.equal(businessRange.max, 5, "Correct val max");
 
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
@@ -1360,9 +1360,9 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, "Series data was reinitialized");
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, "Data is correct");
 
-        assert.equal(chart.businessRanges.length, 1, "There is one business range");
-        assert.equal(chart.businessRanges[0].val.min, 1, "Correct val min");
-        assert.equal(chart.businessRanges[0].val.max, 5, "Correct val max");
+        var businessRange = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+        assert.equal(businessRange.min, 1, "Correct val min");
+        assert.equal(businessRange.max, 5, "Correct val max");
 
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
@@ -1411,8 +1411,6 @@ var environment = {
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
 
-        assert.equal(chart.businessRanges.length, 1);
-
         assert.ok(!chart._renderer.stub("resize").called, "Canvas should not be recreated");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [], "legend and title layouted");
         assert.ok(chart._argumentAxes[0].wasDrawn, "Horizontal axis was drawn");
@@ -1430,80 +1428,6 @@ var environment = {
         assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
         assert.ok(chart._crosshairCursorGroup.stub("linkRemove").called, "crosshair group should be detached");
         assert.ok(chart._crosshairCursorGroup.stub("clear").called, "crosshair should be cleared");
-    });
-
-    QUnit.test("Re-Calculate business range for continuous without valueMargin", function(assert) {
-        // arrange
-        chartMocks.seriesMockData.series.push(new MockSeries({
-            range: {
-                val: {
-                    min: -20,
-                    max: 30
-                }
-            }
-        }));
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            valueAxis: {
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                mockRange: {
-                    minValueMargin: 0,
-                    maxValueMargin: 0,
-                    minValueMarginPriority: 50,
-                    maxValueMarginPriority: 50
-                }
-            }
-        });
-
-        chart.series[0].setOptions({ range: { val: { min: 0, max: 10 } } });
-        resetMocksInChart(chart);
-
-        // act
-        chart.zoomArgument(2, 4);
-
-        // assert
-
-        assert.ok(chart.businessRanges);
-        assert.equal(chart.businessRanges.length, 1);
-        var range = chart.businessRanges[0];
-        assert.ok(!range.arg.categories);
-
-        assert.equal(range.val.min, 0);
-        assert.equal(range.val.max, 10);
-    });
-
-    QUnit.test("Re-Calculate business range for continuous with default valueMargin", function(assert) {
-        chartMocks.seriesMockData.series.push(new MockSeries({
-            range: {
-                val: {
-                    min: -20,
-                    max: 30
-                }
-            }
-        }));
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: {
-                type: "line"
-            }
-        });
-
-        chart.series[0].setOptions({ range: { val: { min: 0, max: 10 } } });
-        resetMocksInChart(chart);
-
-        // act
-        chart.zoomArgument(2, 4);
-
-        // assert
-        assert.ok(chart.businessRanges);
-        assert.equal(chart.businessRanges.length, 1);
-        var range = chart.businessRanges[0];
-        assert.ok(!range.arg.categories);
-
-        assert.equal(range.val.min, 0);
-        assert.equal(range.val.max, 10);
     });
 
     QUnit.module("Animation", environment);
@@ -1676,7 +1600,6 @@ var environment = {
             chart[propName] && (chart[propName].dispose = function() { chart[propName + "Disposed"] = true; });
         };
 
-        countDisposedObjects("businessRanges", ["arg", "val"]);
         countDisposedObjects("series");
         countDisposedObjects("panesBackground");
         countDisposedObjectsInArrays("_panesClipRects");
@@ -1721,7 +1644,6 @@ var environment = {
 
         assert.ok(!("_resizeHandlerCallback" in chart), "resize handler callback");
 
-        assert.strictEqual(chart.businessRanges, null, "business ranges are null");
         assert.strictEqual(chart.seriesDisposed, 3, "series");
         assert.strictEqual(chart.series, null, "series are null");
 
@@ -1825,7 +1747,7 @@ function resetMocksInChart(chart) {
     chart.layoutManager.layoutElements.reset && chart.layoutManager.layoutElements.reset();
 
     chart._argumentAxes[0].resetMock();
-    chart._valueAxes[0].resetMock();
+    chart.getValueAxis().resetMock();
 
     chart._legendGroup.stub("linkAppend").reset();
     chart._legendGroup.stub("linkRemove").reset();

@@ -339,3 +339,83 @@ QUnit.test("disposing", function(assert) {
 
     assert.strictEqual(chart.getDataSource(), null);
 });
+
+QUnit.module("API", environment);
+
+QUnit.test("getValueAxis. Call without name.", function(assert) {
+    this.options = {
+        dataSource: [{
+            arg: "January",
+            val1: 4.1,
+            val2: 109
+        }, {
+            arg: "February",
+            val1: 5.8,
+            val2: 104
+        }],
+        panes: [{
+            name: "topPane"
+        }, {
+            name: "bottomPane"
+        }],
+        series: [{
+            pane: "topPane",
+            valueField: "minT"
+        }, {
+            valueField: "prec"
+        }],
+        defaultPane: "topPane",
+        valueAxis: [{
+            pane: "bottomPane",
+            name: "first"
+        }, {
+            pane: "topPane",
+            name: "second"
+        }, {
+            pane: "topPane",
+            name: "third"
+        }]
+    };
+    var chart = this.createChart();
+    var valueAxis = chart.getValueAxis();
+
+    assert.ok(valueAxis instanceof Axis);
+    assert.strictEqual(valueAxis.name, "second", "first axis from default pane");
+});
+
+QUnit.test("getValueAxis. With name", function(assert) {
+    this.options = {
+        dataSource: [{
+            arg: "1750",
+            val1: 106000000,
+            val2: 791000000
+        }, {
+            arg: "1800",
+            val1: 107000000,
+            val2: 978000000
+        }],
+        series: [{
+            valueField: "val1"
+        }, {
+            axis: "second",
+            valueField: "val2"
+        }],
+        valueAxis: [{
+            name: "first"
+        }, {
+            name: "second"
+        }]
+    };
+    var chart = this.createChart();
+    var valueAxis = chart.getValueAxis("second");
+
+    assert.ok(valueAxis instanceof Axis);
+    assert.strictEqual(valueAxis.name, "second");
+});
+
+QUnit.test("getArgumentAxis", function(assert) {
+    var chart = this.createChart();
+    var argumentAxis = chart.getArgumentAxis();
+
+    assert.ok(argumentAxis instanceof Axis);
+});

@@ -213,6 +213,32 @@ QUnit.test("Command column accessibility structure", function(assert) {
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
 });
 
+QUnit.test("Customize text called for column only (T653374)", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    createDataGrid({
+        columns:
+        [
+            "field1",
+            {
+                dataField: "field2",
+                customizeText: function(cellInfo) {
+                    // assert
+                    assert.equal(cellInfo.target, "row");
+                    return cellInfo.valueText;
+                }
+            }
+        ],
+        dataSource: {
+            store: [{ field1: "1123123", field2: 123 }]
+        }
+    });
+
+    clock.tick();
+
+    clock.restore();
+});
+
 // T388508
 QUnit.test("Correct start scroll position when RTL and detached container of the datagrid", function(assert) {
     // arrange, act
@@ -5844,7 +5870,6 @@ QUnit.test("dataSource pageSize change", function(assert) {
     assert.equal(dataGrid.getController("data")._dataSource.pageSize(), 50);
 });
 
-
 QUnit.test("columns change", function(assert) {
     // arrange, act
     var loadingCount = 0,
@@ -8398,8 +8423,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
     }, "Tabbing to cell OK, column index saved");
 });
 
-// T317210
-QUnit.test("Focused cell position has correct value when focus grouping row with alignByColumn summary cells", function(assert) {
+QUnit.test("Focused cell position has correct value when focus grouping row with alignByColumn summary cells (T317210)", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
@@ -8454,8 +8478,42 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
     assert.equal($(dataGrid.getCellElement(0, 1)).next().text(), "Sum: 3", "row 0 column 2 exists");
 });
 
-// T404427
-QUnit.testInActiveWindow("focus method for cell with editor must focus this editor", function(assert) {
+QUnit.test("Create new row when grouping and group summary (T644293)", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            columns: [
+                "field1",
+                {
+                    dataField: "field2",
+                    groupIndex: 0
+                }
+            ],
+            dataSource: {
+                store: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+            },
+            summary: {
+                groupItems: [
+                    {
+                        column: "field1",
+                        summaryType: "count",
+                        showInGroupFooter: true
+                    }
+                ]
+            }
+        }),
+        $insertedRow;
+
+    // act
+    dataGrid.addRow();
+    $insertedRow = dataGrid.getVisibleRows()[0];
+
+    // assert
+    assert.equal($insertedRow.rowType, "data", "inserted row has the 'data' type");
+    assert.equal($insertedRow.inserted, true, "inserted row is presents and has 0 index");
+});
+
+QUnit.testInActiveWindow("focus method for cell with editor must focus this editor (T404427)", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
@@ -10524,7 +10582,6 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
     });
     this.dataGrid.expandRow(0);
     this.clock.tick();
-
     $dateBoxInput = $(this.dataGrid.$element()).find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
     $dateBoxInput.focus();
     this.clock.tick();

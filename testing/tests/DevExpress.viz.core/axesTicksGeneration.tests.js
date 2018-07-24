@@ -33,7 +33,7 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
 
         this.translator = new StubTranslator();
-        this.translator.stub("getBusinessRange").returns({ addRange: sinon.stub() });
+        this.translator.stub("getBusinessRange").returns({ });
     },
     createAxis: function(options) {
         var stripsGroup = this.renderer.g(),
@@ -126,7 +126,7 @@ QUnit.test("Return all categories", function(assert) {
         type: "discrete"
     });
 
-    this.axis.setBusinessRange({ categories: ["cat1", "cat2", "cat3", "cat4", "cat5"], addRange: function() { } });
+    this.axis.setBusinessRange({ categories: ["cat1", "cat2", "cat3", "cat4", "cat5"] });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -142,7 +142,7 @@ QUnit.test("Calculate tickInterval if ratio of (categories count) to (count by s
         axisDivisionFactor: 110
     });
 
-    this.axis.setBusinessRange({ categories: getArray(82, 1).map(function(_, i) { return i; }), addRange: function() { } });
+    this.axis.setBusinessRange({ categories: getArray(82, 1).map(function(_, i) { return i; }) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -164,7 +164,7 @@ QUnit.test("Return categories between min and max", function(assert) {
         max: "cat4"
     });
 
-    this.axis.setBusinessRange({ categories: ["cat1", "cat2", "cat3", "cat4", "cat5"], addRange: function() { } });
+    this.axis.setBusinessRange({ categories: ["cat1", "cat2", "cat3", "cat4", "cat5"] });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -182,7 +182,7 @@ QUnit.test("0-10, screenDelta 200 - tickInterval 5", function(assert) {
         allowDecimals: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -198,7 +198,7 @@ QUnit.test("0-100, screenDelta 250 - tickInterval 20", function(assert) {
         allowDecimals: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -214,7 +214,7 @@ QUnit.test("0-100, screenDelta 200 - tickInterval 25", function(assert) {
         allowDecimals: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -230,7 +230,7 @@ QUnit.test("0-2, screenDelta 500 - tickInterval 1", function(assert) {
         allowDecimals: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 2, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 2 });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -248,7 +248,7 @@ QUnit.test("0-10, screenDelta 200 - tickInterval 2.5", function(assert) {
         allowDecimals: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -264,7 +264,7 @@ QUnit.test("0-2, screenDelta 500 - tickInterval 0.2", function(assert) {
         allowDecimals: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 2, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 2 });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -280,7 +280,7 @@ QUnit.test("0-2.1, screenDelta 5000 - tickInterval 0.025", function(assert) {
         allowDecimals: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 2.1, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 2.1 });
 
     // act
     this.axis.createTicks(canvas(5000));
@@ -300,7 +300,7 @@ QUnit.test("forceTickInterval false. User's tickIntervsal 1, calculated tickInte
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -318,7 +318,7 @@ QUnit.test("forceTickInterval true. User's tickIntervsal 1, calculated tickInter
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -336,7 +336,7 @@ QUnit.test("forceTickInterval true. No user's tickIntervsal, calculated tickInte
         tickInterval: undefined
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -353,7 +353,7 @@ QUnit.test("Adjust numeric ticks", function(assert) {
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: 1.2e-7, maxVisible: 1.22e-7, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1.2e-7, max: 1.22e-7 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -370,7 +370,7 @@ QUnit.test("endOnTick is undefined - calculate ticks inside data bounds", functi
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.95, maxVisible: 10.05, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.95, max: 10.05 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -387,7 +387,7 @@ QUnit.test("endOnTick is undefined - calculate ticks outside data bounds", funct
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.5, maxVisible: 10.5, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.5, max: 10.5 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -404,7 +404,7 @@ QUnit.test("endOnTick is undefined - calculate ticks outside data bounds (large 
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.95, maxVisible: 3.05, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.95, max: 3.05 });
 
     // act
     this.axis.createTicks(canvas(1100));
@@ -422,7 +422,7 @@ QUnit.test("endOnTick === false - calculate ticks as multipliers of tickInterval
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 2, maxVisible: 11, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 2, max: 11 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -440,7 +440,7 @@ QUnit.test("endOnTick === true - calculate ticks as multipliers of tickInterval"
         endOnTick: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 2, maxVisible: 11, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 2, max: 11 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -458,7 +458,7 @@ QUnit.test("endOnTick === true - calculate ticks outside or on data bounds", fun
         tickInterval: 3
     });
 
-    this.axis.setBusinessRange({ minVisible: 2, maxVisible: 12, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 2, max: 12 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -476,7 +476,7 @@ QUnit.test("allowDecimals is ignored with user tickInterval", function(assert) {
         tickInterval: 2.5
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.5, maxVisible: 10.5, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.5, max: 10.5 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -494,7 +494,7 @@ QUnit.test("Force user tick interval if it is too small for given screenDelta an
         forceUserTickInterval: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 20 });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -512,7 +512,7 @@ QUnit.test("Stub data. User's tickIntervsal 4 - ignore users tickInterval", func
         tickInterval: 4
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, stubData: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10, stubData: true });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -528,7 +528,7 @@ QUnit.test("BusinessDelta is 0", function(assert) {
         allowDecimals: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 200, maxVisible: 200, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 200, max: 200 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -547,7 +547,7 @@ QUnit.test("Custom tickInterval is very small - ignore tickInterval and raise W2
         forceUserTickInterval: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 20 });
 
     // act
     this.axis.createTicks(canvas(199));
@@ -566,7 +566,7 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
         tickInterval: 100
     });
 
-    this.axis.setBusinessRange({ minVisible: 13, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 13, max: 20 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -584,7 +584,7 @@ QUnit.test("2*tickInterval > businessDelta > tickInterval, no data as multiplier
         tickInterval: 50
     });
 
-    this.axis.setBusinessRange({ minVisible: 3, maxVisible: 89, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 3, max: 89 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -603,7 +603,7 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
         endOnTick: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 13, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 13, max: 20 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -622,7 +622,7 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 13, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 13, max: 20 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -640,7 +640,7 @@ QUnit.test("tickInterval > businessDelta, there is data as multiplier of tickInt
         tickInterval: 20
     });
 
-    this.axis.setBusinessRange({ minVisible: 17.5, maxVisible: 24, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 17.5, max: 24 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -658,7 +658,7 @@ QUnit.test("Custom numberMultipliers", function(assert) {
         numberMultipliers: [3, 4]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 18.1, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 18.1 });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -676,7 +676,7 @@ QUnit.test("Custom ticks", function(assert) {
         customTicks: [0, 6, 12, 18]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 20 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -695,7 +695,7 @@ QUnit.test("T574873. Custom ticks with minor ticks calculation", function(assert
         calculateMinors: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 20 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -713,7 +713,7 @@ QUnit.test("Custom one tick", function(assert) {
         customTicks: [5]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 20 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -731,32 +731,12 @@ QUnit.test("Custom axisDivisionFactor", function(assert) {
         allowDecimals: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
 
     assert.deepEqual(this.axis._tickInterval, 2);
-});
-
-QUnit.test("No data - do not generate ticks nor calculate tickInterval", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: false
-    });
-
-    this.axis.setBusinessRange({ addRange: function() { } });
-
-    // act
-    this.axis.createTicks(canvas(200));
-
-    assert.deepEqual(this.axis._minorTicks, []);
-    assert.deepEqual(this.axis._minorTickInterval, undefined);
-
-    assert.deepEqual(this.axis._majorTicks, []);
-    assert.deepEqual(this.axis._tickInterval, undefined);
 });
 
 QUnit.test("interval correction issue", function(assert) {
@@ -768,7 +748,7 @@ QUnit.test("interval correction issue", function(assert) {
         endOnTicks: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 1.2, maxVisible: 1.3 });
+    this.axis.setBusinessRange({ min: 1.2, max: 1.3 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -785,7 +765,7 @@ QUnit.test("calculated ticks out of mix/max issue", function(assert) {
         endOnTicks: true
     });
 
-    this.axis.setBusinessRange({ minVisible: -0.9, maxVisible: -0.7 });
+    this.axis.setBusinessRange({ min: -0.9, max: -0.7 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -800,7 +780,7 @@ QUnit.test("Add extra tick (continuous, numeric) for the bar point is equal to t
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: 200, maxVisible: 605, checkMinDataVisibility: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 200, max: 605, checkMinDataVisibility: true });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -816,7 +796,7 @@ QUnit.test("Add extra tick (continuous, numeric) for the bar point is equal to t
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: -605, maxVisible: -200, checkMaxDataVisibility: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: -605, max: -200, checkMaxDataVisibility: true });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -833,7 +813,7 @@ QUnit.test("Add extra tick (logarithmic, numeric) for the bar point is equal to 
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.01, maxVisible: 10011, checkMinDataVisibility: true, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.01, max: 10011, checkMinDataVisibility: true });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -853,15 +833,14 @@ QUnit.test("getAggregationInfo with tickInterval", function(assert) {
         aggregationInterval: 2
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10 });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(1000));
     // act
-
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
-    assert.equal(aggregationInfo.ticks[0], -8);
-    assert.equal(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 20);
+    assert.equal(aggregationInfo.ticks[0], 0);
+    assert.equal(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 12);
 });
 
 QUnit.test("getAggregationInfo. Do not generate aggregation ticks in breaks", function(assert) {
@@ -891,13 +870,13 @@ QUnit.test("getAggregationInfo. Ticks was generated with endOnTick", function(as
         aggregationInterval: 5
     });
 
-    this.axis.setBusinessRange({ minVisible: 4, maxVisible: 12, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 4, maxVisible: 12 });
     this.axis.createTicks(canvas(170));
     // act
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.deepEqual(aggregationInfo.ticks[0], -5);
-    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 25);
+    assert.deepEqual(aggregationInfo.ticks[0], 0);
+    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 15);
 });
 
 QUnit.test("getAggregationInfo. With aggregationGroupWidth", function(assert) {
@@ -909,15 +888,15 @@ QUnit.test("getAggregationInfo. With aggregationGroupWidth", function(assert) {
     });
 
     this.axis.setMarginOptions({ checkInterval: true, sizePointNormalState: 5 });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
-    assert.deepEqual(aggregationInfo.ticks[0], -8);
-    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 20);
+    assert.deepEqual(aggregationInfo.ticks[0], 0);
+    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 12);
 });
 
 QUnit.test("getAggregationInfo. Without aggregationGroupWidth", function(assert) {
@@ -928,7 +907,7 @@ QUnit.test("getAggregationInfo. Without aggregationGroupWidth", function(assert)
         axisDivisionFactor: 50
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     this.axis.setMarginOptions({ sizePointNormalState: 20 });
     // act
@@ -936,8 +915,8 @@ QUnit.test("getAggregationInfo. Without aggregationGroupWidth", function(assert)
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.interval, 2);
-    assert.deepEqual(aggregationInfo.ticks[0], -8);
-    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 20);
+    assert.deepEqual(aggregationInfo.ticks[0], 0);
+    assert.deepEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 12);
 });
 
 QUnit.test("getAggregationInfo. Use axisDivisionFactor if aggregationGroupWidth and pointSize are not defined", function(assert) {
@@ -948,7 +927,7 @@ QUnit.test("getAggregationInfo. Use axisDivisionFactor if aggregationGroupWidth 
         axisDivisionFactor: 30
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -966,7 +945,7 @@ QUnit.test("getAggregationInfo. Use point size as groupWidth if point size is de
     });
 
     this.axis.setMarginOptions({ checkInterval: true, sizePointNormalState: 5 });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -984,7 +963,7 @@ QUnit.test("getAggregationInfo. Do not get tickInterval less than data interval"
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1002,7 +981,7 @@ QUnit.test("getAggregationInfo. Adjust data interval by multipliers", function(a
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1020,7 +999,7 @@ QUnit.test("getAggregationInfo. Can get interval less than data interval if aggr
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1038,7 +1017,7 @@ QUnit.test("getAggregationInfo. Can get interval less than data interval if agre
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1056,7 +1035,7 @@ QUnit.test("getAggregationInfo. Use axisDivisionFactor as groupWidth if point si
     });
 
     this.axis.setMarginOptions({ checkInterval: true, sizePointNormalState: 50 });
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1074,13 +1053,13 @@ QUnit.test("getAggregationInfo. get tick from minVisible - tickInterval if tickI
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: 0.8, maxVisible: 1, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 0.8, max: 1 });
     this.axis.createTicks(canvas(170));
     // act
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, { interval: 5 });
 
-    assert.deepEqual(aggregationInfo.ticks, [-5, 0, 5, 10]);
+    assert.deepEqual(aggregationInfo.ticks, [0, 5]);
 });
 
 QUnit.test("getAggregationInfo with zooming. min is 0", function(assert) {
@@ -1091,7 +1070,7 @@ QUnit.test("getAggregationInfo with zooming. min is 0", function(assert) {
         aggregationGroupWidth: 10
     });
 
-    this.axis.setBusinessRange({ min: -50, max: 50, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: -50, max: 50 });
     this.axis.zoom(0, 5);
     this.axis.createTicks(canvas(170));
 
@@ -1111,7 +1090,7 @@ QUnit.test("getAggregationInfo with zooming. max is 0", function(assert) {
         aggregationGroupWidth: 10
     });
 
-    this.axis.setBusinessRange({ min: -50, max: 50, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: -50, max: 50 });
     this.axis.zoom(-5, 0);
     this.axis.createTicks(canvas(170));
 
@@ -1133,7 +1112,7 @@ QUnit.test("getAggregationInfo with min/max", function(assert) {
         aggregationGroupWidth: 10
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 10 });
     this.axis.createTicks(canvas(170));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
@@ -1152,7 +1131,7 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
         aggregationInterval: 5
     });
 
-    this.axis.setBusinessRange({ min: 1, minVisible: 1, maxVisible: 100, max: 100, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, minVisible: 1, maxVisible: 100, max: 100 });
     this.axis.createTicks(canvas(400));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
@@ -1162,22 +1141,6 @@ QUnit.test("getAggregationInfo should have ticks out from bounds", function(asse
     assert.strictEqual(aggregationInfo.ticks[aggregationInfo.ticks.length - 1], 105);
 });
 
-QUnit.test("aggregationInfo should not genrate tick if min or max is undefined", function(assert) {
-    this.createAxis();
-    this.updateOptions({
-        valueType: "datetime",
-        type: "continuous"
-    });
-
-    this.axis.setBusinessRange({ addRange: sinon.stub().returnsThis() });
-    this.axis.createTicks(canvas(400));
-
-    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
-
-    assert.strictEqual(aggregationInfo.interval, undefined);
-    assert.deepEqual(aggregationInfo.ticks, []);
-});
-
 QUnit.test("getAggregationInfo for discrete axis", function(assert) {
     this.createAxis();
     this.updateOptions({
@@ -1185,7 +1148,7 @@ QUnit.test("getAggregationInfo for discrete axis", function(assert) {
         type: "discrete"
     });
 
-    this.axis.setBusinessRange({ categories: ["a", "b", "c"], addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ categories: ["a", "b", "c"] });
     this.axis.createTicks(canvas(170));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
@@ -1202,7 +1165,7 @@ QUnit.test("skip ckecking max count ticks on getAggregationInfo", function(asser
         aggregationInterval: 0.1
     });
 
-    this.axis.setBusinessRange({ min: 1, max: 5, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 1, max: 5 });
     this.axis.createTicks(canvas(10));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
@@ -1218,13 +1181,13 @@ QUnit.test("datetime getAggregationInfo", function(assert) {
         aggregationGroupWidth: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 12, 3, 5, 123), maxVisible: new Date(2012, 3, 1, 12, 3, 5, 149), addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 12, 3, 5, 123), max: new Date(2012, 3, 1, 12, 3, 5, 149) });
     this.axis.createTicks(canvas(300));
     // act
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.strictEqual(aggregationInfo.ticks.length, 80);
+    assert.strictEqual(aggregationInfo.ticks.length, 28);
 });
 
 QUnit.test("Do not get tickInterval less than data interval", function(assert) {
@@ -1236,7 +1199,7 @@ QUnit.test("Do not get tickInterval less than data interval", function(assert) {
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1), maxVisible: new Date(2012, 3, 2), addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1), max: new Date(2012, 3, 2) });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1254,13 +1217,13 @@ QUnit.test("logarithmic getAggregationInfo", function(assert) {
         aggregationGroupWidth: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.01, maxVisible: 10, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 0.01, max: 10 });
     this.axis.createTicks(canvas(450));
 
     // assert
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
-    assert.strictEqual(aggregationInfo.ticks.length, 91);
+    assert.strictEqual(aggregationInfo.ticks.length, 32);
 });
 
 QUnit.test("Do not get tickInterval less than data interval. Logarithmic", function(assert) {
@@ -1273,7 +1236,7 @@ QUnit.test("Do not get tickInterval less than data interval. Logarithmic", funct
     });
 
     this.axis.setMarginOptions({ checkInterval: true });
-    this.axis.setBusinessRange({ minVisible: 10, maxVisible: 100, addRange: sinon.stub().returnsThis() });
+    this.axis.setBusinessRange({ min: 10, max: 100 });
     this.axis.createTicks(canvas(170));
     // act
 
@@ -1309,7 +1272,7 @@ QUnit.test("minorTick and minorGrid are not visible - do not calculate minor tic
         tickInterval: 5
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1327,7 +1290,7 @@ QUnit.test("minorTick and minorGrid are not visible, calculateMinors = true (for
         calculateMinors: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1347,7 +1310,7 @@ QUnit.test("tickInterval 5 - minorTickInterval 1. minorTick visible", function(a
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1367,7 +1330,7 @@ QUnit.test("tickInterval 5 - minorTickInterval 1. minorGrid visible", function(a
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1387,7 +1350,7 @@ QUnit.test("tickInterval 20 - minorTickInterval 5", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -1408,7 +1371,7 @@ QUnit.test("Minor ticks do not go beyond bounds if endOnTick = fasle", function(
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 2.5, maxVisible: 12.3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 2.5, max: 12.3 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1429,7 +1392,7 @@ QUnit.test("Minor ticks go beyond bounds if endOnTick = true", function(assert) 
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 4, maxVisible: 12.3, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 4, max: 12.3 });
 
     // act
     this.axis.createTicks(canvas(170));
@@ -1450,7 +1413,7 @@ QUnit.test("Minor ticks with given minorTickInterval", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1471,7 +1434,7 @@ QUnit.test("Minor ticks with given minorTickCount", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 12, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 12 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1493,7 +1456,7 @@ QUnit.test("minorTickInterval has higher priority than minorTickCount", function
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 12, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 12 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1513,7 +1476,7 @@ QUnit.test("Custom minorTicks", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 12, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 12 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1530,7 +1493,7 @@ QUnit.test("tickInterval with custom ticks", function(assert) {
         customTicks: [1.2, 1.3, 1.4]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 12, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 12 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1550,7 +1513,7 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 13, maxVisible: 40, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 13, max: 40 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1574,7 +1537,7 @@ QUnit.test("Minor ticks when there is only one major tick in the middle (big tic
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 17.5, maxVisible: 24, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 17.5, max: 24 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1595,7 +1558,7 @@ QUnit.test("Custom minorAxisDivisionFactor", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1613,7 +1576,7 @@ QUnit.test("Do not generate ticks when screen delta is 0", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 2, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 2 });
 
     // act
     this.axis.createTicks(canvas(0));
@@ -1632,7 +1595,7 @@ QUnit.test("0.0001 - 10000, screenDelta 450 - tickInterval 1", function(assert) 
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(450));
@@ -1648,7 +1611,7 @@ QUnit.test("0.0001 - 10000, screenDelta 200 - tickInterval 2", function(assert) 
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1664,7 +1627,7 @@ QUnit.test("0.0001 - 10000, screenDelta 150 - tickInterval 3", function(assert) 
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1680,7 +1643,7 @@ QUnit.test("0.0001 - 10000, screenDelta 100 - tickInterval 5", function(assert) 
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(100));
@@ -1696,7 +1659,7 @@ QUnit.test("0.0001 - 100000, screenDelta 70 - tickInterval 10", function(assert)
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 100000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 100000 });
 
     // act
     this.axis.createTicks(canvas(70));
@@ -1712,7 +1675,7 @@ QUnit.test("tickInterval can not be less than 1", function(assert) {
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 1000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 1000 });
 
     // act
     this.axis.createTicks(canvas(5000));
@@ -1731,7 +1694,7 @@ QUnit.test("endOnTick is undefined - calculate ticks inside data bounds", functi
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.00009, maxVisible: 11000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.00009, max: 11000 });
 
     // act
     this.axis.createTicks(canvas(450));
@@ -1750,7 +1713,7 @@ QUnit.test("endOnTick === false - calculate ticks inside data bounds", function(
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.00008, maxVisible: 11000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.00008, max: 11000 });
 
     // act
     this.axis.createTicks(canvas(450));
@@ -1769,7 +1732,7 @@ QUnit.test("endOnTick === true - calculate ticks outside or on data bounds", fun
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 9000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 9000 });
 
     // act
     this.axis.createTicks(canvas(450));
@@ -1789,7 +1752,7 @@ QUnit.test("Force user tick interval if it is too small for given screenDelta an
         forceUserTickInterval: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1806,7 +1769,7 @@ QUnit.test("logBase 2", function(assert) {
         logarithmBase: 2
     });
 
-    this.axis.setBusinessRange({ minVisible: 3.74, maxVisible: 1100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 3.74, max: 1100 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -1823,7 +1786,7 @@ QUnit.test("min = 0, max = 0", function(assert) {
         logarithmBase: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 0, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 0 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -1842,7 +1805,7 @@ QUnit.test("customTicks", function(assert) {
         customMinorTicks: [1, 2, 3]
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 1000, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 1000 });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -1862,7 +1825,7 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
         tickInterval: 1
     });
 
-    this.axis.setBusinessRange({ minVisible: 1638, maxVisible: 3166, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1638, max: 3166 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -1881,7 +1844,7 @@ QUnit.test("Logarithmic ticks adjusting", function(assert) {
         endOnTicks: true
     });
 
-    this.axis.setBusinessRange({ minVisible: 1e-9, maxVisible: 1e-7 });
+    this.axis.setBusinessRange({ min: 1e-9, max: 1e-7 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -1903,7 +1866,7 @@ QUnit.test("minorTickInterval as exponent, but ticks not", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 100 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1925,7 +1888,7 @@ QUnit.test("Minor ticks do not go beyond bounds if endOnTick = fasle", function(
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: 5, maxVisible: 300, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 5, max: 300 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1947,7 +1910,7 @@ QUnit.test("Minor ticks go beyond bounds if endOnTick = true", function(assert) 
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 5, maxVisible: 300, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 5, max: 300 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1969,7 +1932,7 @@ QUnit.test("Minor ticks with given minorTickInterval", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 100 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -1990,7 +1953,7 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 800, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 1, max: 800 });
 
     // act
     this.axis.createTicks(canvas(60));
@@ -2012,7 +1975,7 @@ QUnit.test("Minor ticks when there is only one major tick in the middle (big tic
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 50, maxVisible: 250, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 50, max: 250 });
 
     // act
     this.axis.createTicks(canvas(75));
@@ -2035,7 +1998,7 @@ QUnit.test("Minor ticks when given minorTickCount", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 10, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 10, max: 100 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -2053,7 +2016,7 @@ QUnit.test("Milliseconds tickInterval (5ms)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 12, 3, 5, 123), maxVisible: new Date(2012, 3, 1, 12, 3, 5, 149) });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 12, 3, 5, 123), max: new Date(2012, 3, 1, 12, 3, 5, 149) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2074,7 +2037,7 @@ QUnit.test("Seconds tickInterval (5s)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 12, 3, 3), maxVisible: new Date(2012, 3, 1, 12, 3, 26), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 12, 3, 3), max: new Date(2012, 3, 1, 12, 3, 26) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2095,7 +2058,7 @@ QUnit.test("Minutes tickInterval (3)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 12, 1), maxVisible: new Date(2012, 3, 1, 12, 16), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 12, 1), max: new Date(2012, 3, 1, 12, 16) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2116,7 +2079,7 @@ QUnit.test("Hours tickInterval (4)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 3), maxVisible: new Date(2012, 3, 1, 21), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 3), max: new Date(2012, 3, 1, 21) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2137,7 +2100,7 @@ QUnit.test("Days tickInterval (2)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 2, 13), maxVisible: new Date(2012, 3, 11, 5), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 2, 13), max: new Date(2012, 3, 11, 5) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2157,7 +2120,7 @@ QUnit.test("Weeks tickInterval (2)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 2, 30), maxVisible: new Date(2012, 4, 30), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 2, 30), max: new Date(2012, 4, 30) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2177,7 +2140,7 @@ QUnit.test("Months tickInterval (3)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2011, 10, 20), maxVisible: new Date(2013, 0, 15), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2011, 10, 20), max: new Date(2013, 0, 15) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2198,7 +2161,7 @@ QUnit.test("Years tickInterval (2)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2005, 0, 1), maxVisible: new Date(2013, 0, 1), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2005, 0, 1), max: new Date(2013, 0, 1) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2218,7 +2181,7 @@ QUnit.test("Years tickInterval can not be 2.5 (5)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(1994, 11, 20), maxVisible: new Date(2015, 5, 1), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(1994, 11, 20), max: new Date(2015, 5, 1) });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -2238,7 +2201,7 @@ QUnit.test("Years tickInterval (25)", function(assert) {
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(1899, 0, 1), maxVisible: new Date(2001, 0, 1), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(1899, 0, 1), max: new Date(2001, 0, 1) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2262,7 +2225,7 @@ QUnit.test("endOnTick === false - calculate ticks inside data bounds", function(
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 1, 3, 13, 28, 33), maxVisible: new Date(2017, 1, 12, 5, 3), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2017, 1, 3, 13, 28, 33), max: new Date(2017, 1, 12, 5, 3) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2283,7 +2246,7 @@ QUnit.test("endOnTick === true - calculate ticks outside or on data bounds", fun
         endOnTick: true
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 1, 3, 13, 28, 33), maxVisible: new Date(2017, 1, 11, 5, 3), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2017, 1, 3, 13, 28, 33), max: new Date(2017, 1, 11, 5, 3) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2306,7 +2269,7 @@ QUnit.test("endOnTick === true - calculate ticks outside or on data bounds. Take
         endOnTick: true
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 1, 3), maxVisible: new Date(2017, 1, 13), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2017, 1, 3), max: new Date(2017, 1, 13) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2331,7 +2294,7 @@ QUnit.test("Force user tick interval if it is too small for given screenDelta an
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 1, 4, 13, 28, 33), maxVisible: new Date(2017, 1, 8, 5, 3), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2017, 1, 4, 13, 28, 33), max: new Date(2017, 1, 8, 5, 3) });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -2349,7 +2312,7 @@ QUnit.test("Quarters custom interval", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2011, 0, 10), maxVisible: new Date(2011, 10, 1), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2011, 0, 10), max: new Date(2011, 10, 1) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2369,7 +2332,7 @@ QUnit.test("Custom tickInterval with several keys - use bigger key as multiplier
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 11, 3, 3), maxVisible: new Date(2012, 3, 1, 21), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 11, 3, 3), max: new Date(2012, 3, 1, 21) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2391,7 +2354,7 @@ QUnit.test("endOnTick true, custom tickInterval with several keys - use bigger k
         endOnTick: true
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 11, 3, 3), maxVisible: new Date(2012, 3, 1, 21), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 11, 3, 3), max: new Date(2012, 3, 1, 21) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2416,7 +2379,7 @@ QUnit.test("customTicks", function(assert) {
         customTicks: [new Date(2011, 3, 10), new Date(2011, 4, 10), new Date(2011, 5, 10), new Date(2011, 6, 10)]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1, 11, 3, 3), maxVisible: new Date(2012, 3, 1, 21), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 11, 3, 3), max: new Date(2012, 3, 1, 21) });
 
     // act
     this.axis.createTicks(canvas(250));
@@ -2436,7 +2399,7 @@ QUnit.test("Custom tickInterval is very small - ignore tickInterval and raise W2
         tickInterval: { hours: 1 }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 2, 2), maxVisible: new Date(2012, 3, 12, 12), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 2, 2), max: new Date(2012, 3, 12, 12) });
 
     // act
     this.axis.createTicks(canvas(249));
@@ -2454,7 +2417,7 @@ QUnit.test("Tick interval can be set as string value", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 1, 3, 13, 28, 33), maxVisible: new Date(2017, 1, 7, 5, 3), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2017, 1, 3, 13, 28, 33), max: new Date(2017, 1, 7, 5, 3) });
 
     // act
     this.axis.createTicks(canvas(300));
@@ -2473,7 +2436,7 @@ QUnit.test("The Daylight Saving day on the Central European time zone", function
         type: "continuous"
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date("2017-10-28T23:59:00+01:00"), maxVisible: new Date("2017-10-29T05:01:00+00:00"), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date("2017-10-28T23:59:00+01:00"), max: new Date("2017-10-29T05:01:00+00:00") });
 
     // act
     this.axis.createTicks(canvas(400));
@@ -2499,7 +2462,7 @@ QUnit.test("tickInterval month - minorTickInterval can not be in weeks", functio
         minorTick: { visible: true }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1), maxVisible: new Date(2012, 5, 1), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1), max: new Date(2012, 5, 1) });
 
     // act
     this.axis.createTicks(canvas(120));
@@ -2518,7 +2481,7 @@ QUnit.test("Custom minorTicks", function(assert) {
         customMinorTicks: [new Date(2012, 3, 10), new Date(2012, 3, 20), new Date(2012, 3, 30), new Date(2012, 4, 9)]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 1), maxVisible: new Date(2012, 5, 1), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 1), max: new Date(2012, 5, 1) });
 
     // act
     this.axis.createTicks(canvas(120));
@@ -2536,7 +2499,7 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
         minorTick: { visible: true }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 3, 10), maxVisible: new Date(2012, 3, 30), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 3, 10), max: new Date(2012, 3, 30) });
 
     // act
     this.axis.createTicks(canvas(75));
@@ -2554,7 +2517,7 @@ QUnit.test("Minor ticks when there is only one major tick in the middle (big tic
         minorTick: { visible: true }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 2, 20), maxVisible: new Date(2012, 3, 9), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 2, 20), max: new Date(2012, 3, 9) });
 
     // act
     this.axis.createTicks(canvas(75));
@@ -2577,7 +2540,7 @@ QUnit.test("Minor ticks with given minorTickCount", function(assert) {
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2015, 11, 24), maxVisible: new Date(2017, 0, 7), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2015, 11, 24), max: new Date(2017, 0, 7) });
 
     // act
     this.axis.createTicks(canvas(1388));
@@ -2600,7 +2563,7 @@ QUnit.test("Do not generate minor ticks more than minorTickCount", function(asse
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2016, 11, 24), maxVisible: new Date(2017, 1, 7), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2016, 11, 24), max: new Date(2017, 1, 7) });
 
     // act
     this.axis.createTicks(canvas(400));
@@ -2627,7 +2590,7 @@ QUnit.test("Do not generate minor ticks more than minorTickCount before first ti
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2016, 0, 15), maxVisible: new Date(2016, 2, 7), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2016, 0, 15), max: new Date(2016, 2, 7) });
 
     // act
     this.axis.createTicks(canvas(400));
@@ -2648,7 +2611,7 @@ QUnit.test("Do not generate minor ticks nor calculate minorTickInterval when dat
         minorTick: { visible: true }
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2012, 10, 1, 12), maxVisible: new Date(2012, 10, 1, 12), addRange: function() { } });
+    this.axis.setBusinessRange({ min: new Date(2012, 10, 1, 12), max: new Date(2012, 10, 1, 12) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2672,7 +2635,7 @@ QUnit.test("Circular. startAngle < endAngle", function(assert) {
         endAngle: 225
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -2693,7 +2656,7 @@ QUnit.test("Circular. startAngle > endAngle", function(assert) {
         endAngle: 200
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -2712,7 +2675,7 @@ QUnit.test("Linear", function(assert) {
         axisDivisionFactor: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -2733,7 +2696,7 @@ QUnit.test("Tune scale break values", function(assert) {
         breaks: [{ startValue: 20, endValue: 50 }, { startValue: 75, endValue: 90 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2761,7 +2724,7 @@ QUnit.test("Break size is used to calculate tick interval", function(assert) {
         breaks: [{ startValue: 20, endValue: 50 }, { startValue: 75, endValue: 90 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2780,7 +2743,7 @@ QUnit.test("Remove ticks that in the break", function(assert) {
         breaks: [{ startValue: 20, endValue: 50 }, { startValue: 75, endValue: 90 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 100 });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2802,7 +2765,7 @@ QUnit.test("Tune scale break values. Datetime", function(assert) {
         breaks: [{ startValue: new Date(2017, 4, 3), endValue: new Date(2017, 8, 5) }]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 0, 1), maxVisible: new Date(2017, 9, 1), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(2017, 0, 1), max: new Date(2017, 9, 1) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2834,7 +2797,7 @@ QUnit.test("Tune scale break values. Logarithmic", function(assert) {
         breaks: [{ startValue: 0.1, endValue: 10000 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 100000, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 100000 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -2858,7 +2821,7 @@ QUnit.test("Tune scale break values when axis division factor is too big", funct
         breaks: [{ startValue: 200, endValue: 8000 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10000, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(600));
@@ -2882,7 +2845,7 @@ QUnit.test("Do not tune day off scale break", function(assert) {
         workWeek: [1, 2, 3, 4, 5]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 13), maxVisible: new Date(2017, 8, 20), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(2017, 8, 13), max: new Date(2017, 8, 20) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2904,7 +2867,7 @@ QUnit.test("Do not remove day off scale break if it less than tickInterval", fun
         workWeek: [1, 2, 3, 4, 5]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 13), maxVisible: new Date(2017, 9, 20), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(2017, 8, 13), max: new Date(2017, 9, 20) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2927,7 +2890,7 @@ QUnit.test("Generate minor ticks when scale breaks at the begin and at the end",
         breaks: [{ startValue: 0, endValue: 40 }, { startValue: 85, endValue: 106 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 105, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 1, max: 105 });
 
     // act
     this.axis.createTicks(canvas(370));
@@ -2948,7 +2911,7 @@ QUnit.test("Move datetime ticks to work day", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 15), maxVisible: new Date(2017, 8, 19), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(2017, 8, 15), max: new Date(2017, 8, 19) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -2973,7 +2936,7 @@ QUnit.test("Correct first tick to work day", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(1994, 2, 1), maxVisible: new Date(1994, 2, 31), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(1994, 2, 1), max: new Date(1994, 2, 31) });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -2999,7 +2962,7 @@ QUnit.test("Correct first tick to work day. set tickInterval using string", func
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(1994, 2, 1), maxVisible: new Date(1994, 2, 31), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(1994, 2, 1), max: new Date(1994, 2, 31) });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -3023,7 +2986,7 @@ QUnit.test("Do not give 2 days tick interval if big weekend", function(assert) {
         axisDivisionFactor: 10
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(1994, 2, 1), maxVisible: new Date(1994, 5, 31), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(1994, 2, 1), max: new Date(1994, 5, 31) });
 
     // act
     this.axis.createTicks(canvas(500));
@@ -3042,7 +3005,7 @@ QUnit.test("Move datetime ticks to work day. Tick interval data - move tick to s
         workWeek: [1, 2, 3, 4, 5]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 15), maxVisible: new Date(2017, 8, 19), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(2017, 8, 15), max: new Date(2017, 8, 19) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -3065,7 +3028,7 @@ QUnit.test("Do not move datetime ticks to work day if work day has tick", functi
         workWeek: [1, 2, 3, 4, 5]
     });
 
-    this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 16), maxVisible: new Date(2017, 8, 22), addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: new Date(2017, 8, 16), max: new Date(2017, 8, 22) });
 
     // act
     this.axis.createTicks(canvas(1000));
@@ -3083,7 +3046,7 @@ QUnit.test("Logarithmick with scale breaks", function(assert) {
         breaks: [{ startValue: 0.1, endValue: 100 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0.0001, max: 10000 });
 
     // act
     this.axis.createTicks(canvas(150));
@@ -3102,7 +3065,7 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
         breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 800 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 1000, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 1000 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -3127,7 +3090,7 @@ QUnit.test("Remove scale break if it is less than tickInterval after correction"
         breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 751 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 1000, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 1000 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -3146,7 +3109,7 @@ QUnit.test("Remove scale break if it less than tickInterval, logarithmic", funct
         breaks: [{ startValue: 10, endValue: 50 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0.001, maxVisible: 100 });
+    this.axis.setBusinessRange({ min: 0.001, max: 100 });
 
     // act
     this.axis.createTicks(canvas(200));
@@ -3168,13 +3131,13 @@ QUnit.test("Pass correct range in translator when value margins are enabled. Mar
         endOnTick: false
     });
 
-    this.axis.setBusinessRange(new rangeModule.Range({ minVisible: 50, maxVisible: 1000 }));
+    this.axis.setBusinessRange(new rangeModule.Range({ min: 50, max: 1000 }));
 
     // act
     this.axis.createTicks(canvas(200));
 
-    assert.equal(this.translator.updateBusinessRange.lastCall.args[0].minVisible, 35);
-    assert.equal(this.translator.updateBusinessRange.lastCall.args[0].maxVisible, 1030);
+    assert.equal(this.translator.updateBusinessRange.lastCall.args[0].min, 35);
+    assert.equal(this.translator.updateBusinessRange.lastCall.args[0].max, 1030);
 });
 
 QUnit.test("Use original scale breaks after recalculation ticks", function(assert) {
@@ -3189,7 +3152,7 @@ QUnit.test("Use original scale breaks after recalculation ticks", function(asser
         breaks: [{ startValue: 100, endValue: 900 }]
     });
 
-    this.axis.setBusinessRange(new rangeModule.Range({ minVisible: 50, maxVisible: 1000 }));
+    this.axis.setBusinessRange(new rangeModule.Range({ min: 50, max: 1000 }));
     this.axis.createTicks(canvas(200));
     // act
     this.axis.createTicks(canvas(200));
@@ -3213,7 +3176,7 @@ QUnit.test("Generate sexy tick when there are breaks", function(assert) {
         breaks: [{ startValue: 1, endValue: 14.6 }, { startValue: 17.2, endValue: 95 }, { startValue: 95, endValue: 318 }]
     });
 
-    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 318, addRange: function() { return this; } });
+    this.axis.setBusinessRange({ min: 0, max: 318 });
 
     // act
     this.axis.createTicks(canvas(600));

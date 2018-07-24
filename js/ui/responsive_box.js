@@ -145,6 +145,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             */
             /**
             * @name dxResponsiveBoxOptions.onSelectionChanged
+            * @action
             * @hidden
             * @inheritdoc
             */

@@ -1,7 +1,7 @@
 "use strict";
 
 var vizUtils = require("../core/utils"),
-    isNumeric = require("../../core/utils/type").isNumeric,
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     constants = require("./axes_constants"),
     circularAxes,
@@ -104,17 +104,25 @@ circularAxes = polarAxes.circular = {
         return this._options.firstPointOnStartAngle;
     },
 
-    _getMinMax() {
-        const options = this._options;
-        let min = isNumeric(options.originValue) ? options.originValue : undefined;
-        let max;
+    _validateOptions(options) {
+        const that = this;
+        let originValue = options.originValue;
+        const wholeRange = options.wholeRange = [];
+        const period = options.period;
 
-        if(options.period > 0 && options.argumentType === constants.numeric) {
-            min = min || 0;
-            max = min + options.period;
+        if(isDefined(originValue)) {
+            originValue = that._validateUnit(originValue);
         }
 
-        return { min: min, max: max };
+        if(period > 0 && options.argumentType === constants.numeric) {
+            originValue = originValue || 0;
+            wholeRange[1] = originValue + period;
+            that._viewport = [originValue, wholeRange[1]];
+        }
+
+        if(isDefined(originValue)) {
+            wholeRange[0] = originValue;
+        }
     },
 
     _getStick: function() {
@@ -428,7 +436,6 @@ exports.circularSpider = _extend({}, circularAxes, {
 });
 
 polarAxes.linear = {
-    _getMinMax: circularAxes._getMinMax,
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: _noop,
 

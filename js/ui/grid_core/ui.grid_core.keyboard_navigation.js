@@ -153,7 +153,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 view.renderCompleted.add(function() {
                     var $element = view.element();
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td, ." + ROW_CLASS, {
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " > td, ." + ROW_CLASS, {
                         viewIndex: index,
                         view: view
                     }, clickAction);

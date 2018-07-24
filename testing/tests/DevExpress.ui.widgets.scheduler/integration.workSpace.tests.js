@@ -759,8 +759,8 @@ QUnit.test("dataCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellData.allDay && !cellIndex) {
-                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Data cell width is OK");
-                assert.equal($(cellElement).outerHeight(), 50, "Data cell height is OK");
+                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, "Data cell width is OK");
+                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, "Data cell height is OK");
             }
         }
     });
@@ -813,7 +813,7 @@ QUnit.test("timeCellTemplate should take cellElement with correct geometry(T4535
         timeCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
                 assert.equal(isRenderer(cellElement), !!config().useJQuery, "element is correct");
-                assert.equal($(cellElement).outerHeight(), 50, "Time cell height is OK");
+                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, "Time cell height is OK");
                 assert.equal($(cellElement).outerWidth(), 100, "Time cell width is OK");
             }
         }
@@ -1320,7 +1320,7 @@ QUnit.test("DateTimeIndicator should show correct time in current time zone", fu
     });
 
     var indicatorPositionBefore = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
-        cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0).outerHeight();
+        cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0).get(0).getBoundingClientRect().height;
 
     this.instance.option("timeZone", "Asia/Yekaterinburg");
 
