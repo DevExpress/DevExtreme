@@ -20,10 +20,6 @@ define(function(require) {
     window.Mustache = require("../../../node_modules/mustache/mustache.min.js");
     window._ = require("../../../node_modules/underscore/underscore-min.js");
 
-    if(QUnit.urlParams["nojquery"]) {
-        return;
-    }
-
     QUnit.module("custom template rendering", {
         beforeEach: function() {
             this.originalLog = errors.log;
@@ -199,5 +195,28 @@ define(function(require) {
         assert.equal(result.length, 1);
         assert.equal(result[0].tagName.toLowerCase(), 'div');
         assert.equal(result.text(), '123');
+    });
+
+
+    QUnit.module("default template engine");
+
+    QUnit.test("default template engine should clone element", function(assert) {
+        setTemplateEngine("default");
+        var $element = $('<div>123</div>');
+        var template = new Template($element);
+
+        var $result = template.render({ model: null, container: $('<div>') });
+
+        assert.notEqual($result[0], $element[0]);
+    });
+
+    QUnit.test("default template engine should preserve element for transcluded templates", function(assert) {
+        setTemplateEngine("default");
+        var $element = $('<div>123</div>');
+        var template = new Template($element);
+
+        var $result = template.render({ model: null, container: $('<div>'), transclude: true });
+
+        assert.equal($result[0], $element[0]);
     });
 });
