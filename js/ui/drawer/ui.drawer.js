@@ -12,7 +12,6 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
-    Swipeable = require("../../events/gesture/swipeable"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
     windowUtils = require("../../core/utils/window"),
@@ -121,13 +120,6 @@ var Drawer = Widget.inherit({
             maxWidth: null,
 
             /**
-            * @name dxDrawerOptions.swipeEnabled
-            * @type boolean
-            * @default true
-            */
-            swipeEnabled: true,
-
-            /**
             * @name dxDrawerOptions.showShader
             * @type boolean
             * @default true
@@ -163,13 +155,6 @@ var Drawer = Widget.inherit({
             * @default "slide"
             */
             showMode: "slide",
-
-            /**
-            * @name dxDrawerOptions.contentOffset
-            * @hidden
-            * @inheritdoc
-            */
-            contentOffset: 45,
 
             /**
             * @name dxDrawerOptions.animationEnabled
@@ -211,36 +196,6 @@ var Drawer = Widget.inherit({
         });
     },
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: {
-                    android: true
-                },
-                options: {
-                    contentOffset: 54
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "generic" && device.deviceType !== "desktop";
-                },
-                options: {
-                    contentOffset: 56
-                }
-            },
-            {
-                device: {
-                    win: true,
-                    phone: false
-                },
-                options: {
-                    contentOffset: 76
-                }
-            }
-        ]);
-    },
-
     _getAnonymousTemplateName: function() {
         return ANONYMOUS_TEMPLATE_NAME;
     },
@@ -271,11 +226,6 @@ var Drawer = Widget.inherit({
         }
 
         this._strategy = new Strategy(this);
-    },
-
-    _initWidth: function() {
-        this._minWidth = this.option("minWidth") || 0;
-        this._maxWidth = this.option("maxWidth") || this._getMenuRealWidth();
     },
 
     _getMenuRealWidth: function() {
@@ -323,7 +273,6 @@ var Drawer = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._initSwipeHandlers();
         this._dimensionChanged();
     },
 
@@ -362,15 +311,9 @@ var Drawer = Widget.inherit({
         this._toggleShaderVisibility(this.option("menuVisible"));
     },
 
-    _initSwipeHandlers: function() {
-        this._createComponent($(this.content()), Swipeable, {
-            disabled: !this.option("swipeEnabled"),
-            elastic: false,
-            itemSizeFunc: this._getMenuWidth.bind(this),
-            onStart: this._swipeStartHandler.bind(this),
-            onUpdated: this._swipeUpdateHandler.bind(this),
-            onEnd: this._swipeEndHandler.bind(this)
-        });
+    _initWidth: function() {
+        this._minWidth = this.option("minWidth") || 0;
+        this._maxWidth = this.option("maxWidth") || this._getMenuRealWidth();
     },
 
     _isRightMenuPosition: function() {
@@ -378,37 +321,6 @@ var Drawer = Widget.inherit({
             rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
-    },
-
-    _swipeStartHandler: function(e) {
-        animation.complete($(this.content()));
-        var event = e.event,
-            menuVisible = this.option("menuVisible"),
-            rtl = this._isRightMenuPosition();
-
-        event.maxLeftOffset = +(rtl ? !menuVisible : menuVisible);
-        event.maxRightOffset = +(rtl ? menuVisible : !menuVisible);
-
-        this._toggleShaderVisibility(true);
-    },
-
-    _swipeUpdateHandler: function(e) {
-        var event = e.event,
-            offset = this.option("menuVisible") ? event.offset + 1 * this._getRTLSignCorrection() : event.offset;
-
-        offset *= this._getRTLSignCorrection();
-        this._renderPosition(offset, false);
-    },
-
-    _swipeEndHandler: function(e) {
-        var targetOffset = e.event.targetOffset * this._getRTLSignCorrection() + this.option("menuVisible"),
-            menuVisible = targetOffset !== 0;
-
-        if(this.option("menuVisible") === menuVisible) {
-            this._renderPosition(this.option("menuVisible"));
-        } else {
-            this.option("menuVisible", menuVisible);
-        }
     },
 
     _toggleMenuPositionClass: function() {
@@ -463,7 +375,7 @@ var Drawer = Widget.inherit({
 
     _getMenuWidth: function() {
         if(!this._menuWidth) {
-            var maxMenuWidth = this.$element().width() - this.option("contentOffset"),
+            var maxMenuWidth = this._maxWidth,
                 menuContent = $(this.menuContent());
             menuContent.css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
             var currentMenuWidth = menuContent.width();
@@ -540,9 +452,6 @@ var Drawer = Widget.inherit({
             case "menuPosition":
                 this._toggleMenuPositionClass();
                 this._renderPosition(this.option("menuVisible"));
-                break;
-            case "swipeEnabled":
-                this._initSwipeHandlers();
                 break;
             case "contentTemplate":
             case "menuTemplate":

@@ -21,10 +21,7 @@ var PushStrategy = DrawerStrategy.inherit({
     },
 
     _calculatePixelOffset: function(offset) {
-        var minWidth = !offset ? this._drawer.option("minWidth") : 0;
-
-        offset = offset || 0;
-        return offset * this._drawer._getMenuWidth() + minWidth;
+        return this._getMenuWidth(offset);
     },
 });
 

@@ -7,7 +7,6 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     config = require("core/config"),
     typeUtils = require("core/utils/type"),
-    pointerMock = require("../../helpers/pointerMock.js"),
     animation = require("ui/drawer/ui.drawer.strategy").animation;
 
 require("common.css!");
@@ -175,30 +174,6 @@ QUnit.test("content container should have correct position if menu is visible", 
     assert.equal(position($content), $menu.width(), "container rendered at correct position");
 });
 
-QUnit.test("content container should have correct position if menu is lager than element", function(assert) {
-    var $element = $("#drawer2").dxDrawer({
-            width: "100%",
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content());
-
-    assert.equal(position($content), $element.width() - instance.option("contentOffset"), "container rendered at correct position");
-});
-
-QUnit.test("content should not overlap menu", function(assert) {
-    var $element = $("#drawer2").dxDrawer({
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $menu = $(instance.menuContent());
-
-    assert.equal(parseInt($menu.css("max-width")), $element.width() - instance.option("contentOffset"), "menu isn't overlapped by content");
-
-    instance.option("width", 200);
-    assert.equal(parseInt($menu.css("max-width")), $element.width() - instance.option("contentOffset"), "menu isn't overlapped by content");
-});
-
 QUnit.test("content container should have correct position after resize", function(assert) {
     var $element = $("#drawer2").dxDrawer({
             width: "100%",
@@ -222,14 +197,15 @@ QUnit.test("content container should have correct position if it is rendered in 
 
     var instance = $element.dxDrawer({
             width: "100%",
-            menuVisible: true
+            menuVisible: true,
+            maxWidth: 50
         }).dxDrawer("instance"),
         $content = $(instance.content());
 
     $container.appendTo("#qunit-fixture");
     $element.trigger("dxshown");
 
-    assert.equal(position($content), $element.width() - instance.option("contentOffset"), "container rendered at correct position");
+    assert.equal(position($content), 50, "container rendered at correct position");
 });
 
 QUnit.test("menu should be hidden after back button click", function(assert) {
@@ -258,111 +234,6 @@ QUnit.test("menu should not handle back button click if it isn't visible", funct
     assert.ok(!hideTopOverlayCallback.hasCallback());
 });
 
-
-QUnit.module("interaction via swipe");
-
-QUnit.test("content container should be moved by swipe", function(assert) {
-    fx.off = true;
-
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: false
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $menu = $(instance.menuContent()),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart().swipe(0.1);
-    assert.equal(position($content), $menu.width() / 10, "container moved");
-
-    pointer.swipeEnd(1).swipe(-0.5);
-    assert.equal(position($content), $menu.width() * 0.5, "container moved");
-    fx.off = false;
-});
-
-QUnit.test("content should be moved by swipe with inverted position", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: false,
-            menuPosition: 'inverted'
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $menu = $(instance.menuContent()),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart().swipe(-0.1);
-    assert.equal(position($content), -$menu.width() / 10, "container moved");
-});
-
-QUnit.test("content container should not be moved out of menu", function(assert) {
-    var $element = $("#drawer").dxDrawer({}),
-        instance = $element.dxDrawer("instance"),
-        pointer = pointerMock($(instance.content())).start();
-
-    var lastEvent = pointer.swipeStart().lastEvent();
-    assert.strictEqual(lastEvent.maxLeftOffset, 0, "container will not move out of menu");
-    assert.strictEqual(lastEvent.maxRightOffset, 1, "container will not move out of menu");
-
-    instance.option("menuVisible", true);
-
-    lastEvent = pointer.swipeEnd().swipeStart().lastEvent();
-    assert.strictEqual(lastEvent.maxLeftOffset, 1, "container will not move out of menu");
-    assert.strictEqual(lastEvent.maxRightOffset, 0, "container will not move out of menu");
-});
-
-QUnit.test("swipeEnabled option", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            swipeEnabled: false,
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        pointer = pointerMock($content).start();
-
-    var startPosition = position($content);
-
-    pointer.swipeStart().swipe(-0.1);
-    assert.equal(position($content), startPosition, "position won't changed");
-});
-
-QUnit.test("swipeEnabled option dynamic change", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            swipeEnabled: true,
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        pointer = pointerMock($content).start();
-
-    var startPosition = position($content);
-
-    instance.option("swipeEnabled", false);
-    pointer.swipeStart().swipe(-0.1);
-    assert.equal(position($content), startPosition, "position won't changed");
-});
-
-QUnit.test("content container should not be moved in design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var $element = $("#drawer").dxDrawer({
-                swipeEnabled: true,
-                menuVisible: true
-            }),
-            instance = $element.dxDrawer("instance"),
-            $content = $(instance.content()),
-            pointer = pointerMock($content).start();
-
-        var startPosition = position($content);
-        pointer.swipeStart().swipe(-0.1);
-        assert.equal(position($content), startPosition, "content won't moved");
-
-    } finally {
-        config({ designMode: false });
-    }
-});
-
-
 QUnit.module("animation", {
     beforeEach: function() {
         this.capturedAnimations = animationCapturing.start();
@@ -370,48 +241,6 @@ QUnit.module("animation", {
     afterEach: function() {
         animationCapturing.teardown();
     }
-});
-
-QUnit.test("showing menu should be animated", function(assert) {
-    var $element = $("#drawer").dxDrawer({}),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $menu = $(instance.menuContent()),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart().swipe(0.1).swipeEnd(1);
-
-    assert.equal(this.capturedAnimations[0].$element.get(0), $content.get(0), "content was animated");
-    assert.equal(this.capturedAnimations[0].start, $menu.width() / 10, "correct start position");
-    assert.equal(this.capturedAnimations[0].end, $menu.width(), "correct end position");
-});
-
-QUnit.test("animation should be stopped after swipe start", function(assert) {
-    var $element = $("#drawer").dxDrawer({}),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        pointer = pointerMock($content).start();
-
-    animationCapturing.teardown();
-    pointer.swipeStart().swipe(0.1).swipeEnd(1).swipeStart();
-
-    assert.ok(!fx.isAnimating($content), "animation was stopped");
-});
-
-QUnit.test("hiding menu should be animated", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $menu = $(instance.menuContent()),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart().swipe(-0.5).swipeEnd(-1);
-
-    assert.equal(this.capturedAnimations[0].$element.get(0), $content.get(0), "content was animated");
-    assert.equal(this.capturedAnimations[0].start, $menu.width() * 0.5, "correct start position");
-    assert.equal(this.capturedAnimations[0].end, 0, "correct end position");
 });
 
 QUnit.test("animationEnabled option test", function(assert) {
@@ -494,19 +323,6 @@ QUnit.test("click on shader should not close menu", function(assert) {
     assert.ok(!instance.option("menuVisible"), "menu was closed");
 });
 
-QUnit.test("shader should be visible during swipe", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $shader = $element.find("." + DRAWER_SHADER_CLASS),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart();
-    assert.ok($shader.is(":visible"), "shader won't hidden");
-});
-
 QUnit.test("shader should be visible during animation", function(assert) {
     var $element = $("#drawer").dxDrawer({
             menuVisible: false
@@ -563,6 +379,26 @@ QUnit.test("minWidth should be rendered correctly in push mode", function(assert
     instance.toggleMenuVisibility();
 
     assert.equal($content.position().left, 50, "content has correct left when minWidth is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxWidth should be rendered correctly in push mode", function(assert) {
+    fx.off = true;
+
+    var $element = $("#drawer").dxDrawer({
+            maxWidth: 300,
+            menuVisible: true,
+            mode: "push"
+        }),
+        instance = $element.dxDrawer("instance"),
+        $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().left, 300, "content has correct left when maxWidth is set");
+
+    instance.toggleMenuVisibility();
+
+    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
 
     fx.off = false;
 });
@@ -691,50 +527,3 @@ QUnit.test("content should have correct position if menu is visible in rtl mode"
     assert.equal(position($content), -$menu.width(), "container rendered at correct position");
 });
 
-QUnit.test("content should be moved by swipe in rtl", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: false,
-            rtlEnabled: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $menu = $(instance.menuContent()),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart().swipe(-0.1);
-    assert.equal(position($content), -$menu.width() / 10, "container moved");
-});
-
-QUnit.test("content should be moved by swipe in rtl with inverted position", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            menuVisible: false,
-            rtlEnabled: true,
-            menuPosition: 'inverted'
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        $menu = $(instance.menuContent()),
-        pointer = pointerMock($content).start();
-
-    pointer.swipeStart().swipe(0.1);
-    assert.equal(position($content), $menu.width() / 10, "container moved");
-});
-
-QUnit.test("content should not be moved out of menu", function(assert) {
-    var $element = $("#drawer").dxDrawer({
-            rtlEnabled: true
-        }),
-        instance = $element.dxDrawer("instance"),
-        $content = $(instance.content()),
-        pointer = pointerMock($content).start();
-
-    var lastEvent = pointer.swipeStart().lastEvent();
-    assert.strictEqual(lastEvent.maxLeftOffset, 1, "container will not move out of menu");
-    assert.strictEqual(lastEvent.maxRightOffset, 0, "container will not move out of menu");
-
-    instance.option("menuVisible", true);
-
-    lastEvent = pointer.swipeEnd().swipeStart().lastEvent();
-    assert.strictEqual(lastEvent.maxLeftOffset, 0, "container will not move out of menu");
-    assert.strictEqual(lastEvent.maxRightOffset, 1, "container will not move out of menu");
-});
