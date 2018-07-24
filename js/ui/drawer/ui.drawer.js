@@ -114,6 +114,13 @@ var Drawer = Widget.inherit({
             minWidth: null,
 
             /**
+             * @name dxDrawerOptions.maxWidth
+             * @type number
+             * @default null
+             */
+            maxWidth: null,
+
+            /**
             * @name dxDrawerOptions.swipeEnabled
             * @type boolean
             * @default true
@@ -266,6 +273,16 @@ var Drawer = Widget.inherit({
         this._strategy = new Strategy(this);
     },
 
+    _initWidth: function() {
+        this._minWidth = this.option("minWidth") || 0;
+        this._maxWidth = this.option("maxWidth") || this._getMenuRealWidth();
+    },
+
+    _getMenuRealWidth: function() {
+        var $menu = this._$menu;
+        return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
+    },
+
     _initHideTopOverlayHandler: function() {
         this._hideMenuHandler = this.hideMenu.bind(this);
     },
@@ -297,15 +314,10 @@ var Drawer = Widget.inherit({
             noModel: true
         });
 
+        this._initWidth();
+
         this._renderShader();
         this._toggleMenuPositionClass();
-    },
-
-    _renderMinWidth: function() {
-        if(this.option("minWidth")) {
-            var minWidth = this.option("minWidth");
-            $(this.content()).css("left", minWidth);
-        }
     },
 
     _render: function() {
@@ -537,11 +549,18 @@ var Drawer = Widget.inherit({
                 this._invalidate();
                 break;
             case "mode":
-            case "minWidth":
-
                 this._initStrategy();
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
+                this._renderPosition(this.option("menuVisible"));
+
+                // NOTE: temporary fix
+                this.repaint();
+                break;
+            case "minWidth":
+            case "maxWidth":
+                this._initWidth();
+                translator.move(this._$menu, { left: 0 });
                 this._renderPosition(this.option("menuVisible"));
 
                 // NOTE: temporary fix

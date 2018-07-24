@@ -7,8 +7,8 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     config = require("core/config"),
     typeUtils = require("core/utils/type"),
-    animation = require("ui/drawer").animation,
-    pointerMock = require("../../helpers/pointerMock.js");
+    pointerMock = require("../../helpers/pointerMock.js"),
+    animation = require("ui/drawer/ui.drawer.strategy").animation;
 
 require("common.css!");
 require("ui/drawer");

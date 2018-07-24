@@ -68,14 +68,8 @@ var DrawerStrategy = Class.inherit({
         }
     },
 
-    _calculateMenuWidth: function(offset) {
-        var $menu = this._drawer._$menu;
-
-        if(offset) {
-            return $menu.get(0).childNodes[0].getBoundingClientRect().width;
-        } else {
-            return this._drawer.option("minWidth") || 0;
-        }
+    _getMenuWidth: function(offset) {
+        return offset ? this._drawer._maxWidth : this._drawer._minWidth;
     },
 
     renderPosition: abstract
