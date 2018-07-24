@@ -330,4 +330,22 @@ QUnit.module("Real dataGrid", {
         // assert
         assert.equal($(".dx-popup-content .dx-filterbuilder-item-value-text").text(), "text");
     });
+
+    // T657917
+    QUnit.test("The value for the 'Is any of' operation is changed when filterBuilderPopup has closeOnOutsideClick=true", function(assert) {
+        this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "string", defaultFilterOperations: ["anyof"] }],
+            filterBuilderPopup: {
+                visible: true,
+                closeOnOutsideClick: true
+            },
+            filterValue: ["field", "anyof", ["text"]],
+        });
+        $(".dx-popup-content .dx-filterbuilder-item-value-text").trigger("dxclick");
+        this.clock.tick();
+        $(".dx-header-filter-menu.dx-popup").dxPopup("instance").hide();
+
+        // assert
+        assert.equal(this.dataGrid.option("filterBuilderPopup.visible"), true);
+    });
 });
