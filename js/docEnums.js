@@ -592,7 +592,7 @@
 
 /**
  * @typedef {string} Enums.DrawerMenuPosition
- * @enum {'top'|'left'|'right'}
+ * @enum {'left'|'right'}
  */
 
 /**

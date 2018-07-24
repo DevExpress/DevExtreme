@@ -59,17 +59,15 @@ var DrawerStrategy = Class.inherit({
     },
 
     _calculatePixelOffset: function(offset) {
-        var minWidth = !offset ? this._drawer.option("minWidth") : 0;
-
         if(offset) {
-            return 0;
+            return -(this._drawer.getRealMenuWidth() - this._drawer.getMaxWidth());
         } else {
-            return -this._drawer._getMenuWidth() + minWidth;
+            return -(this._drawer.getRealMenuWidth() - this._drawer.getMinWidth());
         }
     },
 
     _getMenuWidth: function(offset) {
-        return offset ? this._drawer._maxWidth : this._drawer._minWidth;
+        return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
     },
 
     renderPosition: abstract

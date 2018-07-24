@@ -4,7 +4,6 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
-    fx = require("../../animation/fx"),
     clickEvent = require("../../events/click"),
     translator = require("../../animation/translator"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
@@ -17,7 +16,8 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     PushStrategy = require("./ui.drawer.strategy.push"),
     PersistentStrategy = require("./ui.drawer.strategy.persistent"),
-    TemporaryStrategy = require("./ui.drawer.strategy.temporary");
+    TemporaryStrategy = require("./ui.drawer.strategy.temporary"),
+    animation = require("./ui.drawer.strategy").animation;
 
 
 var DRAWER_CLASS = "dx-drawer",
@@ -31,54 +31,6 @@ var DRAWER_CLASS = "dx-drawer",
     OPENED_STATE_CLASS = "dx-drawer-opened",
 
     ANONYMOUS_TEMPLATE_NAME = "content";
-
-
-var animation = {
-    moveTo: function($element, position, duration, completeAction) {
-        fx.animate($element, {
-            type: "slide",
-            to: { left: position },
-            duration: duration,
-            complete: completeAction
-        });
-    },
-    paddingLeft: function($element, padding, duration, completeAction) {
-        var toConfig = {};
-
-        toConfig["padding-left"] = padding;
-
-        fx.animate($element, {
-            to: { paddingLeft: padding },
-            duration: duration,
-            complete: completeAction
-        });
-    },
-
-    fade: function($element, config, duration, completeAction) {
-        fx.animate($element, {
-            type: "fade",
-            to: config.to,
-            from: config.from,
-            duration: duration,
-            complete: completeAction
-        });
-    },
-
-    width: function($element, width, duration, completeAction) {
-        var toConfig = {};
-
-        toConfig["width"] = width;
-
-        fx.animate($element, {
-            to: toConfig,
-            duration: duration,
-            complete: completeAction
-        });
-    },
-    complete: function($element) {
-        fx.stop($element, true);
-    }
-};
 
 /**
 * @name dxDrawer
@@ -207,6 +159,7 @@ var Drawer = Widget.inherit({
 
         this.$element().addClass(DRAWER_CLASS);
 
+        this._animations = [];
         this._deferredAnimate = undefined;
         this._initHideTopOverlayHandler();
     },
@@ -226,11 +179,6 @@ var Drawer = Widget.inherit({
         }
 
         this._strategy = new Strategy(this);
-    },
-
-    _getMenuRealWidth: function() {
-        var $menu = this._$menu;
-        return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
     },
 
     _initHideTopOverlayHandler: function() {
@@ -313,7 +261,20 @@ var Drawer = Widget.inherit({
 
     _initWidth: function() {
         this._minWidth = this.option("minWidth") || 0;
-        this._maxWidth = this.option("maxWidth") || this._getMenuRealWidth();
+        this._maxWidth = this.option("maxWidth") || this.getRealMenuWidth();
+    },
+
+    getMaxWidth: function() {
+        return this._maxWidth;
+    },
+
+    getMinWidth: function() {
+        return this._minWidth;
+    },
+
+    getRealMenuWidth: function() {
+        var $menu = this._$menu;
+        return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
     },
 
     _isRightMenuPosition: function() {
@@ -373,22 +334,7 @@ var Drawer = Widget.inherit({
         }
     },
 
-    _getMenuWidth: function() {
-        if(!this._menuWidth) {
-            var maxMenuWidth = this._maxWidth,
-                menuContent = $(this.menuContent());
-            menuContent.css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
-            var currentMenuWidth = menuContent.width();
-
-            this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);
-        }
-
-        return this._menuWidth;
-    },
-
     _animationCompleteHandler: function() {
-        // this._toggleShaderVisibility(this.option("menuVisible"));
-
         if(this._deferredAnimate) {
             this._deferredAnimate.resolveWith(this);
         }

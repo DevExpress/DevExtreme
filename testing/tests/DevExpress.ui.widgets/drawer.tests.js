@@ -501,14 +501,14 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", fu
         $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
     instance.toggleMenuVisibility();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
     fx.off = false;
 });
@@ -607,14 +607,14 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", fun
         $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
     instance.toggleMenuVisibility();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
     fx.off = false;
 });
