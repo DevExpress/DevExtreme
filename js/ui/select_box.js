@@ -310,8 +310,8 @@ var SelectBox = DropDownList.inherit({
     },
 
     _closeOutsideDropDownHandler: function(e) {
-        this.callBase(e);
         this._cancelEditing();
+        return this.callBase(e);
     },
 
     _renderOpenedState: function() {
