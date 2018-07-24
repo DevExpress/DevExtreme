@@ -81,86 +81,6 @@ QUnit.test("Set background options", function(assert) {
     assert.deepEqual(this.params.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 23, y: 33, width: 194, height: 94 }], "clip rect");
 });
 
-// QUnit.test("Set options", function (assert) {
-//    var container = this.params.renderer.g.lastCall.returnValue;
-//
-//    this.target.setOptions([{ tag: "t1" }, { tag: "t2", name: "test-name" }, { tag: "t3" }]);
-//
-//    assert.strictEqual(StubMapLayer.items.length, 3, "count");
-//    assert.deepEqual(StubMapLayer.items[0].ctorArgs, [this.params, container, "map-layer-0", 0], "layer 1");
-//    assert.deepEqual(StubMapLayer.items[1].ctorArgs, [this.params, container, "test-name", 1], "layer 2");
-//    assert.deepEqual(StubMapLayer.items[2].ctorArgs, [this.params, container, "map-layer-2", 2], "layer 3");
-//    assert.deepEqual(StubMapLayer.items[0].setOptions.lastCall.args, [{ tag: "t1" }], "layer 1 options");
-//    assert.deepEqual(StubMapLayer.items[1].setOptions.lastCall.args, [{ tag: "t2", name: "test-name" }], "layer 2 options");
-//    assert.deepEqual(StubMapLayer.items[2].setOptions.lastCall.args, [{ tag: "t3" }], "layer 3 options");
-// });
-//
-// QUnit.test("Set options - object", function (assert) {
-//    this.target.setOptions({ tag: "t" });
-//
-//    assert.strictEqual(StubMapLayer.items.length, 1, "count");
-//    assert.deepEqual(StubMapLayer.items[0].ctorArgs, [this.params, this.params.renderer.g.lastCall.returnValue, "map-layer-0", 0], "layer 1");
-//    assert.deepEqual(StubMapLayer.items[0].setOptions.lastCall.args, [{ tag: "t" }], "layer 1 options");
-// });
-//
-// QUnit.test("Set options - empty", function (assert) {
-//    this.target.setOptions();
-//
-//    assert.strictEqual(StubMapLayer.items.length, 0, "count");
-// });
-//
-// QUnit.test("Add layers", function (assert) {
-//    this.target.setOptions([{}, {}]);
-//    var items = StubMapLayer.items;
-//    items[0].setOptions.reset();
-//    items[1].setOptions.reset();
-//    StubMapLayer.items = [];
-//
-//    this.target.setOptions([{ tag: "t1" }, { tag: "t2" }, { tag: "t3" }]);
-//
-//    assert.strictEqual(StubMapLayer.items.length, 1, "count");
-//    assert.deepEqual(StubMapLayer.items[0].ctorArgs, [this.params, this.params.renderer.g.lastCall.returnValue, "map-layer-2", 2], "layer 3 is created");
-//    assert.deepEqual(items[0].setOptions.lastCall.args, [{ tag: "t1" }], "layer 1 is updated");
-//    assert.deepEqual(items[1].setOptions.lastCall.args, [{ tag: "t2" }], "layer 2 is updated");
-//    assert.deepEqual(StubMapLayer.items[0].setOptions.lastCall.args, [{ tag: "t3" }], "layer 3 is updated");
-// });
-//
-// QUnit.test("Remove layers", function (assert) {
-//    this.target.setOptions([{}, {}, {}]);
-//    var items = StubMapLayer.items;
-//    items[1].proxy = { name: "p2" };
-//    items[2].proxy = { name: "p3" };
-//    StubMapLayer.items = [];
-//
-//    this.target.setOptions({ tag: "t1" });
-//
-//    assert.strictEqual(StubMapLayer.items.length, 0, "count");
-//    assert.deepEqual(items[0].setOptions.lastCall.args, [{ tag: "t1" }], "layer 1 is updated");
-//    assert.deepEqual(items[1].dispose.lastCall.args, [], "layer 2 is disposed");
-//    assert.deepEqual(items[2].dispose.lastCall.args, [], "layer 3 is disposed");
-// });
-//
-// QUnit.test("Items", function (assert) {
-//    this.target.setOptions([{}, {}, {}]);
-//
-//    assert.deepEqual(this.target.items(), StubMapLayer.items);
-// });
-//
-// QUnit.test("By index", function (assert) {
-//    this.target.setOptions([{}, {}, {}]);
-//
-//    assert.strictEqual(this.target.byIndex(1), StubMapLayer.items[1]);
-//    assert.strictEqual(this.target.byIndex(10), undefined);
-// });
-//
-// QUnit.test("By name", function (assert) {
-//    this.target.setOptions([{}, { name: "test-name" }, {}]);
-//
-//    assert.strictEqual(this.target.byName("map-layer-2"), StubMapLayer.items[2]);
-//    assert.strictEqual(this.target.byName("test-name"), StubMapLayer.items[1]);
-//    assert.strictEqual(this.target.byName("test"), undefined);
-// });
-
 QUnit.test("Click layer", function(assert) {
     this.target.setOptions([{ name: "layer-1" }, { name: "layer-2" }]);
 
@@ -223,4 +143,13 @@ QUnit.test("Hover off not layer", function(assert) {
     });
 
     assert.ok(true, "no errors");
+});
+
+// T657155
+QUnit.test("Items collection should be empty after updating to empty array", function(assert) {
+    this.target.setOptions([{ name: "layer-1" }, { name: "layer-2" }]);
+
+    this.target.setOptions([]);
+
+    assert.strictEqual(this.target.items().length, 0);
 });
