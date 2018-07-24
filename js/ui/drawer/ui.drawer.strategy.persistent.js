@@ -11,14 +11,12 @@ var PersistentStrategy = DrawerStrategy.inherit({
     renderPosition: function(offset, animate) {
         var width = this._getMenuWidth(offset);
 
-        var contentPos = width;
-
         translator.move($(this._drawer.content()), { left: 0 });
 
         if(animate) {
-            animation.paddingLeft($(this._drawer.content()), contentPos, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
+            animation.paddingLeft($(this._drawer.content()), width, this._drawer.option("animationDuration"), this._drawer._animationCompleteHandler.bind(this._drawer));
         } else {
-            $(this._drawer.content()).css("paddingLeft", contentPos);
+            $(this._drawer.content()).css("paddingLeft", width);
         }
 
         if(this._drawer.option("showMode") === "slide") {
