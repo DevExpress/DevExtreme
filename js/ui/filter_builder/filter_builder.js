@@ -954,6 +954,11 @@ var FilterBuilder = Widget.inherit({
                 $container.empty();
                 removeEvents();
                 return that._createValueText(item, field, $container);
+            },
+            closeEditor = function() {
+                that._updateConditionValue(item, value, function() {
+                    createValueText();
+                });
             };
 
         var options = {
@@ -963,6 +968,7 @@ var FilterBuilder = Widget.inherit({
             setValue: function(data) {
                 value = data === null ? "" : data;
             },
+            closeEditor: closeEditor,
             text: $container.text()
         };
 
@@ -975,9 +981,7 @@ var FilterBuilder = Widget.inherit({
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts(e.target)) {
                 eventsEngine.trigger($editor.find("input"), "change");
-                that._updateConditionValue(item, value, function() {
-                    createValueText();
-                });
+                closeEditor();
             }
         };
         eventsEngine.on(document, "dxpointerdown", documentClickHandler);
