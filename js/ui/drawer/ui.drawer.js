@@ -14,10 +14,10 @@ var $ = require("../../core/renderer"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
     windowUtils = require("../../core/utils/window"),
-    PushStrategy = require("./ui.drawer.strategy.push"),
-    PersistentStrategy = require("./ui.drawer.strategy.persistent"),
-    TemporaryStrategy = require("./ui.drawer.strategy.temporary"),
-    animation = require("./ui.drawer.strategy").animation;
+    PushStrategy = require("./ui.drawer.rendering.strategy.push"),
+    PersistentStrategy = require("./ui.drawer.rendering.strategy.persistent"),
+    TemporaryStrategy = require("./ui.drawer.rendering.strategy.temporary"),
+    animation = require("./ui.drawer.rendering.strategy").animation;
 
 
 var DRAWER_CLASS = "dx-drawer",

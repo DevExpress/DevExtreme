@@ -1,8 +1,8 @@
 "use strict";
 
-import { animation } from "./ui.drawer.strategy";
+import { animation } from "./ui.drawer.rendering.strategy";
 
-var DrawerStrategy = require("./ui.drawer.strategy"),
+var DrawerStrategy = require("./ui.drawer.rendering.strategy"),
     $ = require("../../core/renderer"),
     translator = require("../../animation/translator");
 
