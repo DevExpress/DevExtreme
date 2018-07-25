@@ -1677,9 +1677,8 @@ function setDiscreteType(series) {
         // act
         series.draw(true);
         // assert
-        assert.equal(this.renderer.stub("path").callCount, 2);
-        checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[1, 10], [2, 10], [2, 20]], true, "first line element");
-        checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], [[4, 44]], true, "second line element");
+        assert.equal(this.renderer.stub("path").callCount, 1);
+        checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[1, 10], [2, 10], [2, 20], [4, 20], [4, 44]], true, "line element");
         assert.ok(!testPoint.draw.called);
         assert.ok(testPoint.setInvisibility.called);
     });
