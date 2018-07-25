@@ -65,10 +65,12 @@ var DrawerStrategy = Class.inherit({
     renderPosition: function(offset, animate) {
         this._contentAnimation = new Deferred(),
         this._menuAnimation = new Deferred();
+        this._shaderAnimation = new Deferred();
 
         if(animate) {
             this._drawer._animations.push(this._contentAnimation);
             this._drawer._animations.push(this._menuAnimation);
+            this._drawer._animations.push(this._shaderAnimation);
 
             when.apply($, this._drawer._animations).done((function() {
                 this._animationCompleteHandler();
@@ -86,7 +88,33 @@ var DrawerStrategy = Class.inherit({
 
     _getMenuWidth: function(offset) {
         return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
-    }
+    },
+
+    renderShaderVisibility: function(offset, animate, duration) {
+        var fadeConfig = this._getFadeConfig(offset);
+
+        if(animate) {
+            animation.fade($(this._drawer._$shader), fadeConfig, duration, (function() {
+                this._shaderAnimation.resolve();
+            }).bind(this));
+        } else {
+            this._drawer._$shader.css("opacity", fadeConfig.to);
+        }
+    },
+
+    _getFadeConfig: function(offset) {
+        if(offset) {
+            return {
+                to: 0.5,
+                from: 0
+            };
+        } else {
+            return {
+                to: 0,
+                from: 0.5
+            };
+        }
+    },
 });
 
 

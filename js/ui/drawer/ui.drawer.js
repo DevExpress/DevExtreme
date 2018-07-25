@@ -309,37 +309,7 @@ var Drawer = Widget.inherit({
 
         this._strategy.renderPosition(offset, animate);
 
-        this._renderShaderVisibility(offset, animate, duration);
-    },
-
-    _renderShaderVisibility: function(offset, animate, duration) {
-        var shaderAnimation = new Deferred();
-
-        this._animations.push(shaderAnimation);
-
-        var fadeConfig = this._getFadeConfig(offset);
-
-        if(animate) {
-            animation.fade($(this._$shader), fadeConfig, duration, function() {
-                shaderAnimation.resolve();
-            });
-        } else {
-            this._$shader.css("opacity", fadeConfig.to);
-        }
-    },
-
-    _getFadeConfig: function(offset) {
-        if(offset) {
-            return {
-                to: 0.5,
-                from: 0
-            };
-        } else {
-            return {
-                to: 0,
-                from: 0.5
-            };
-        }
+        this._strategy.renderShaderVisibility(offset, animate, duration);
     },
 
     _animationCompleteHandler: function() {
