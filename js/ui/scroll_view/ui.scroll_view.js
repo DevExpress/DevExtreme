@@ -202,15 +202,20 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _initLoadPanel: function() {
-        this._loadPanel = this._createComponent($("<div>").addClass(SCROLLVIEW_LOADPANEL)
-            .appendTo(this.$element()), LoadPanel, {
+        let $loadPanelElement = $("<div>")
+            .addClass(SCROLLVIEW_LOADPANEL)
+            .appendTo(this.$element());
+
+        let loadPanelOptions = {
             shading: false,
             delay: 400,
             message: this.option("refreshingText"),
             position: {
                 of: this.$element()
             }
-        });
+        };
+
+        this._loadPanel = this._createComponent($loadPanelElement, LoadPanel, loadPanelOptions);
     },
 
     _updateReachBottomText: function() {

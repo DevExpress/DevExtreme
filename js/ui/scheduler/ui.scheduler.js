@@ -1353,15 +1353,14 @@ var Scheduler = Widget.inherit({
 
         if(typeof timezone === "string") {
             date = date || new Date();
-            result = SchedulerTimezones
-                .getTimezoneOffsetById(timezone,
-                    Date.UTC(
-                        date.getUTCFullYear(),
-                        date.getUTCMonth(),
-                        date.getUTCDate(),
-                        date.getUTCHours(),
-                        date.getUTCMinutes())
-                );
+            let dateUtc = Date.UTC(
+                date.getUTCFullYear(),
+                date.getUTCMonth(),
+                date.getUTCDate(),
+                date.getUTCHours(),
+                date.getUTCMinutes()
+            );
+            result = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
         }
         return result;
     },
