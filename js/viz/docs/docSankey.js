@@ -74,17 +74,17 @@ var dxSankey = {
     */
     label: {
         /**
-        * @name dxSankeyOptions.label.overlapingBehavior
+        * @name dxSankeyOptions.label.overlappingBehavior
         * @type Enums.SankeyLabelOverlappingBehavior
         * @default 'ellipsis'
         */
         overlappingBehavior: 'ellipsis',
         /**
-        * @name dxSankeyOptions.label.colorMode
-        * @type Enums.SankeyColorMode
-        * @default 'none'
+        * @name dxSankeyOptions.label.useNodeColors
+        * @type boolean
+        * @default false
         */
-        colorMode: 'none',
+        useNodeColors: false,
         /**
         * @name dxSankeyOptions.label.visible
         * @type boolean
@@ -103,12 +103,6 @@ var dxSankey = {
         * @default 0
         */
         verticalOffset: 0,
-        /**
-        * @name dxSankeyOptions.label.stroke
-        * @type string
-        * @default "#000000"
-        */
-        stroke: "#000000",
         /**
         * @name dxSankeyOptions.label.font
         * @type object
@@ -146,6 +140,30 @@ var dxSankey = {
             opacity: undefined
         },
         /**
+        * @name dxSankeyOptions.label.border
+        * @type object
+        */
+        border: {
+            /**
+            * @name dxSankeyOptions.label.border.visible
+            * @type boolean
+            * @default false
+            */
+            visible: false,
+            /**
+            * @name dxSankeyOptions.label.border.width
+            * @type number
+            * @default 2
+            */
+            width: 2,
+            /**
+            * @name dxSankeyOptions.label.border.color
+            * @type string
+            * @default #000000
+            */
+            color: '#000000'
+        },
+        /**
         * @name dxSankeyOptions.label.shadow
         * @type object
         */
@@ -165,9 +183,9 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.label.shadow.opacity
             * @type number
-            * @default 0.8
+            * @default 0
             */
-            opacity: 0.8,
+            opacity: 0,
             /**
             * @name dxSankeyOptions.label.shadow.offsetX
             * @type number
@@ -219,8 +237,8 @@ var dxSankey = {
         * @default undefined
         * @type function(info)
         * @type_function_param1 info:object
-        * @type_function_param1_field1 from:string
-        * @type_function_param1_field2 to:string
+        * @type_function_param1_field1 source:string
+        * @type_function_param1_field2 target:string
         * @type_function_param1_field3 weight:Number
         * @type_function_return object
         */
@@ -256,12 +274,6 @@ var dxSankey = {
         */
         opacity: 1,
         /**
-        * @name dxSankeyOptions.node.colorMode
-        * @type Enums.SankeyColorMode
-        * @default 'none'
-        */
-        colorMode: 'none',
-        /**
         * @name dxSankeyOptions.node.border
         * @type object
         */
@@ -275,7 +287,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.node.border.width
             * @type number
-            * @default 2
+            * @default 1
             */
             width: 1,
             /**
@@ -352,17 +364,23 @@ var dxSankey = {
     */
     link: {
         /**
+        * @name dxSankeyOptions.link.colorMode
+        * @type Enums.SankeyColorMode
+        * @default 'none'
+        */
+        colorMode: 'none',
+        /**
         * @name dxSankeyOptions.link.color
-        * @type number
+        * @type string
         * @default '#000000'
         */
         color: '#000000',
         /**
         * @name dxSankeyOptions.link.opacity
         * @type number
-        * @default 1
+        * @default 0.3
         */
-        opacity: 1,
+        opacity: 0.3,
         /**
         * @name dxSankeyOptions.link.border
         * @type object

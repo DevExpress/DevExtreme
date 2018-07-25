@@ -119,8 +119,8 @@ Link.prototype = {
         this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'link',
             info: {
-                from: this.connection.from,
-                to: this.connection.to,
+                source: this.connection.source,
+                target: this.connection.target,
                 weight: this.connection.weight
             }
         }, typeof coords !== 'undefined' ? { x: coords[0], y: coords[1] } : this.coords);

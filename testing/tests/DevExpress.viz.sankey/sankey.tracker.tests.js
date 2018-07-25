@@ -40,7 +40,7 @@ QUnit.module("Initialization", trackerEnvironment);
 
 QUnit.test("Set data for items", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
     });
 
     var nodes = this.nodes(),
@@ -61,7 +61,7 @@ QUnit.module("Events", trackerEnvironment);
 
 QUnit.test("Node hover on. Get item by tracker data", function(assert) {
     var widget = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
     this.trigger(pointerEvents.move, 2);
@@ -76,7 +76,7 @@ QUnit.test("Node hover on. Get item by tracker data", function(assert) {
 
 QUnit.test("Link hover on. Get item by tracker data", function(assert) {
     var widget = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
     this.trigger(pointerEvents.move, 3);
@@ -91,7 +91,7 @@ QUnit.test("Link hover on. Get item by tracker data", function(assert) {
 
 QUnit.test("Hover off", function(assert) {
     var widget = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
     this.trigger(pointerEvents.move, 2);
     assert.strictEqual(widget.getAllNodes()[2].isHovered(), true, "node is hovered");
@@ -105,7 +105,7 @@ QUnit.test("Click on node", function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
     var spy = sinon.spy(),
         widget = createSankey({
-            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
             onNodeClick: spy
         });
 
@@ -119,7 +119,7 @@ QUnit.test("Click on link", function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
     var spy = sinon.spy(),
         widget = createSankey({
-            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
             node: { width: 5 },
             onLinkClick: spy
         });
@@ -135,7 +135,7 @@ QUnit.module("Tooltip", trackerEnvironment);
 
 QUnit.test("Show tooltip on hovered node", function(assert) {
     var widget = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
             enabled: true
         }
@@ -150,7 +150,7 @@ QUnit.test("Show tooltip on hovered node", function(assert) {
 
 QUnit.test("Show tooltip on hovered link", function(assert) {
     var widget = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
             enabled: true
         }
@@ -166,7 +166,7 @@ QUnit.test("Show tooltip on hovered link", function(assert) {
 QUnit.test("Show custom tooltip on hovered node", function(assert) {
     var stub = sinon.stub();
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
             enabled: true,
             customizeNodeTooltip: stub
@@ -181,7 +181,7 @@ QUnit.test("Show custom tooltip on hovered node", function(assert) {
 QUnit.test("Show custom tooltip on hovered link", function(assert) {
     var stub = sinon.stub();
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
             enabled: true,
             customizeLinkTooltip: stub
@@ -190,5 +190,5 @@ QUnit.test("Show custom tooltip on hovered link", function(assert) {
 
     this.trigger(pointerEvents.move, 3);
     assert.ok(stub.called);
-    assert.deepEqual(stub.getCall(0).args[0], { from: 'A', to: 'Z', weight: 1 });
+    assert.deepEqual(stub.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
 });

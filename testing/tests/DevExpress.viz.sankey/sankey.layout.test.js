@@ -60,7 +60,7 @@ QUnit.module("Layout Sankey element", $.extend({}, environment, {
 
 QUnit.test("Tilte with legend and labels", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         title: "Title"
     });
 
@@ -71,7 +71,7 @@ QUnit.test("Title with export button", function(assert) {
     this.export.stub("layoutOptions").returns({ horizontalAlignment: "right", verticalAlignment: "top", weak: true });
 
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]]
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
     assert.deepEqual(this.title.move.lastCall.args[0], [400, 0, 600, 50], "title rect");
@@ -86,7 +86,7 @@ QUnit.test("Do not shift title to negative are if container width too small", fu
     });
 
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         size: {
             width: 150
         }
@@ -125,7 +125,7 @@ QUnit.test("hide title", function(assert) {
         adaptiveLayout: {
             height: 500
         },
-        dataSource: [['A', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
     });
 
     assert.deepEqual(this.nodes()[0].attr.firstCall.args[0], { _name: 'A', width: 15, height: 600, x: 0, y: 0 });
@@ -144,7 +144,7 @@ QUnit.test("hide export menu", function(assert) {
         adaptiveLayout: {
             height: 500
         },
-        dataSource: [['A', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
     });
     assert.deepEqual(this.nodes()[0].attr.firstCall.args[0], { _name: 'A', width: 15, height: 600, x: 0, y: 0 });
     assert.deepEqual(this.nodes()[1].attr.firstCall.args[0], { _name: 'Z', width: 15, height: 600, x: 785, y: 0 });
@@ -166,7 +166,7 @@ QUnit.test("hide pair elements: title and export", function(assert) {
         adaptiveLayout: {
             height: 500
         },
-        dataSource: [['A', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
     });
 
     assert.deepEqual(this.nodes()[0].attr.firstCall.args[0], { _name: 'A', width: 15, height: 600, x: 0, y: 0 });

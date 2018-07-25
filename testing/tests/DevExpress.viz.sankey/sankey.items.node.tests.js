@@ -22,7 +22,7 @@ QUnit.module("Items: nodes", environment);
 
 QUnit.test("Creation", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         }),
         nodes = sankey.getAllNodes();
 
@@ -49,7 +49,7 @@ QUnit.test("Creation", function(assert) {
 
 QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         }),
         nodes = sankey.getAllNodes(),
         nodesSVG = this.nodes();
@@ -63,7 +63,7 @@ QUnit.test("Passing nodes[].rect coordinates to SVG", function(assert) {
 
 QUnit.test("Color from options applied to all nodes", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         node: {
             color: '#aabbcc'
         }
@@ -76,7 +76,7 @@ QUnit.test("Color from options applied to all nodes", function(assert) {
 
 QUnit.test("Normal style, border is not visible", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         node: {
             border: {
                 visible: false,
@@ -96,7 +96,7 @@ QUnit.test("Normal style, border is not visible", function(assert) {
 
 QUnit.test("Hover style", function(assert) {
     var sankey = createSankey({
-        dataSource: [['A', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         node: {
             color: '#432432',
             border: {
@@ -138,7 +138,7 @@ QUnit.test("Hover style", function(assert) {
 QUnit.test("Sankey does not fire drawn event on hover", function(assert) {
     var drawn = sinon.spy(),
         sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             onDrawn: drawn
         });
 
@@ -151,7 +151,7 @@ QUnit.test("Sankey does not fire drawn event on hover", function(assert) {
 
 QUnit.test("Clear hover of item", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             node: {
                 color: '#111111',
                 border: {
@@ -186,7 +186,7 @@ QUnit.test("Clear hover of item", function(assert) {
 
 QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             node: {
                 color: '#234234',
                 border: {
@@ -211,7 +211,7 @@ QUnit.test("Inherit border from normal style if hoverStyle.border option is not 
 
 QUnit.test("Border for hoverStyle can be disabled", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             node: {
                 border: {
                     visible: true,
@@ -237,7 +237,7 @@ QUnit.test("Border for hoverStyle can be disabled", function(assert) {
 QUnit.test("hover changed event", function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
@@ -251,7 +251,7 @@ QUnit.test("hover changed event", function(assert) {
 QUnit.test("hover changed event after hover second item", function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
@@ -267,7 +267,7 @@ QUnit.test("hover changed event after hover second item", function(assert) {
 QUnit.test("Hover item two times, hover changed event should fire only one time", function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
@@ -281,7 +281,7 @@ QUnit.test("Hover item two times, hover changed event should fire only one time"
 QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fire", function(assert) {
     var hoverChanged = sinon.spy(),
         sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             onNodeHoverChanged: hoverChanged
         }),
         node = sankey.getAllNodes()[0];
@@ -293,7 +293,7 @@ QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fir
 
 QUnit.test("disable hover", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1]],
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
             hoverEnabled: false
         }),
         nodes = sankey.getAllNodes();
@@ -306,7 +306,7 @@ QUnit.test("disable hover", function(assert) {
 
 QUnit.test("isHovered method", function(assert) {
     var sankey = createSankey({
-            dataSource: [['A', 'Z', 1]]
+            dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
         }),
         nodes = sankey.getAllNodes();
 
@@ -318,7 +318,7 @@ QUnit.test("isHovered method", function(assert) {
 
 QUnit.test("Default nodes.padding option", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
     });
     var nodes = this.nodes(),
         nodeA = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === 'A'; }),
@@ -332,7 +332,7 @@ QUnit.test("Default nodes.padding option", function(assert) {
 
 QUnit.test("Applying nodes.padding option", function(assert) {
     createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         node: {
             padding: 10
         }
@@ -349,7 +349,7 @@ QUnit.test("Applying nodes.padding option", function(assert) {
 
 QUnit.test("Updating nodes.padding option", function(assert) {
     var sankey = createSankey({
-        dataSource: [['A', 'Z', 1], ['B', 'Z', 1]],
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         node: {
             padding: 10
         }

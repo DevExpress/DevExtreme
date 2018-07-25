@@ -178,7 +178,7 @@ let layout = {
         return null;
     },
 
-    computeLinks: function(links, rects, cascades) {
+    _computeLinks: function(links, rects, cascades) {
         let yOffsets = {}, paths = [], result = [];
 
         cascades.forEach(cascade => {
@@ -222,7 +222,32 @@ let layout = {
             result.push(path);
         });
 
+        this._fitAllNodesHeight(rects, paths);
         return result;
+    },
+
+    _fitNodeHeight: function(nodeName, nodeRects, paths) {
+        let targetRect = this._findRectByName(nodeRects, nodeName),
+            heightOfLinksSummaryIn = 0,
+            heightOfLinksSummaryOut = 0;
+
+        paths.forEach(function(path) {
+            if(path.from.node._name === nodeName) {
+                heightOfLinksSummaryOut += path.from.height;
+            }
+            if(path.to.node._name === nodeName) {
+                heightOfLinksSummaryIn += path.to.height;
+            }
+        });
+        targetRect.height = Math.max(heightOfLinksSummaryIn, heightOfLinksSummaryOut);
+    },
+
+    _fitAllNodesHeight: function(nodeRects, paths) {
+        for(let c = 0; c < nodeRects.length; c++) {
+            for(let r = 0; r < nodeRects[c].length; r++) {
+                this._fitNodeHeight(nodeRects[c][r]._name, nodeRects, paths);
+            }
+        }
     },
 
     _spline: function(rectLeft, rectRight) {
@@ -238,7 +263,8 @@ let layout = {
 
     computeLayout: function(linksData, sortData, options, incidentOccurred) {
         this._sort = sortData;
-        let result = {}, validateResult = validatorModule.validate(linksData, incidentOccurred);
+        let result = {},
+            validateResult = validatorModule.validate(linksData, incidentOccurred);
         if(!validateResult) {
             result.cascades = this._computeCascades(linksData);
             result.nodes = this._computeNodes(
@@ -252,7 +278,7 @@ let layout = {
                     nodeWidth: options.nodeWidth,
                     nodeAlign: options.nodeAlign
                 });
-            result.links = this.computeLinks(linksData, result.nodes, result.cascades);
+            result.links = this._computeLinks(linksData, result.nodes, result.cascades);
         } else {
             result.error = validateResult;
         }
