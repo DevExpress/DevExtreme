@@ -5,7 +5,10 @@ import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './con
 var noop = require("../../core/utils/common").noop,
     Node = require("./node_item"),
     Link = require("./link_item"),
-    defaultLayoutBuilder = require("./layout");
+    defaultLayoutBuilder = require("./layout"),
+    typeUtils = require("../../core/utils/type"),
+    _isString = typeUtils.isString,
+    _isNumber = typeUtils.isNumeric;
 
 var dxSankey = require("../core/base_widget").inherit({
     _rootClass: "dxs-sankey",
@@ -39,13 +42,11 @@ var dxSankey = require("../core/base_widget").inherit({
     _initialChanges: ["DATA_SOURCE"],
 
     _initCore: function() {
-
         this._groupLinks = this._renderer.g().append(this._renderer.root);
         this._groupNodes = this._renderer.g().append(this._renderer.root);
         this._groupLabels = this._renderer.g().attr({
             class: this._rootClassPrefix + "-labels"
         }).append(this._renderer.root);
-        this._groupErrors = this._renderer.g().append(this._renderer.root);
 
         this._drawLabels = true;
 
@@ -95,7 +96,6 @@ var dxSankey = require("../core/base_widget").inherit({
     },
 
     _change_BUILD_LAYOUT: function() {
-        this._groupErrors.clear();
         this._groupNodes.clear();
         this._groupLinks.clear();
         this._groupLabels.clear();
@@ -184,9 +184,42 @@ var dxSankey = require("../core/base_widget").inherit({
         return data;
     },
 
-    _buildLayout: function() {
+    _getData: function() {
         var that = this,
             data = that._dataSourceItems() || [],
+            sourceField = that._getOption("sourceField", true),
+            targetField = that._getOption("targetField", true),
+            weightField = that._getOption("weightField", true),
+            processedData = [];
+
+        data.forEach(function(item) {
+            if(!item.hasOwnProperty(sourceField)) {
+                that._incidentOccurred("E2007", sourceField);
+            } else if(!item.hasOwnProperty(targetField)) {
+                that._incidentOccurred("E2007", targetField);
+            } else if(!item.hasOwnProperty(weightField)) {
+                that._incidentOccurred("E2007", weightField);
+            } else {
+
+                if(!_isString(item[sourceField])) {
+                    that._incidentOccurred("E2008", sourceField);
+                } else if(!_isString(item[targetField])) {
+                    that._incidentOccurred("E2008", targetField);
+                } else if(!_isNumber(item[weightField]) || item[weightField] <= 0) {
+                    that._incidentOccurred("E2009", weightField);
+                } else {
+                    processedData.push([ item[sourceField], item[targetField], item[weightField] ]);
+                }
+
+            }
+        });
+
+        return processedData;
+    },
+
+    _buildLayout: function() {
+        var that = this,
+            data = that._getData(),
             availableRect = this._rect,
             nodeOptions = that._getOption('node'),
             sortData = that._getOption('sortData'),
@@ -268,8 +301,8 @@ var dxSankey = require("../core/base_widget").inherit({
                     color: color,
                     options: linkOptions,
                     connection: {
-                        from: link._from._name,
-                        to: link._to._name,
+                        source: link._from._name,
+                        target: link._to._name,
                         weight: link._weight
                     },
                     gradient: gradient
@@ -366,7 +399,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
     _themeSection: "sankey",
-    _fontFields: ["loadingIndicator.font", "error.font", "export.font", "label.font", "title.font", "tooltip.font", "title.subtitle.font"]
+    _fontFields: ["loadingIndicator.font", "export.font", "label.font", "title.font", "tooltip.font", "title.subtitle.font"]
 });
 
 require("../../core/component_registrator")("dxSankey", dxSankey);

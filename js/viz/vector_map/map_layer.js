@@ -1506,7 +1506,7 @@ MapLayerCollection.prototype = {
     },
 
     setOptions: function(options) {
-        var optionList = options ? (options.length ? options : [options]) : [],
+        var optionList = options ? (_isArray(options) ? options : [options]) : [],
             layers = this._layers,
             layerByName = this._layerByName,
             params = this._params,

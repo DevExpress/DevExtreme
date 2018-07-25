@@ -489,6 +489,20 @@ QUnit.test("Recurrence editor should process values from repeat-on-editor after 
     assert.equal(this.instance.option("value"), "FREQ=WEEKLY;BYDAY=TU");
 });
 
+QUnit.test("Recurrence editor should be able to uncheck default day from byday rule, freq=weekly", function(assert) {
+    this.createInstance({ value: "FREQ=WEEKLY;BYDAY=TU", startDate: new Date(2018, 6, 24, 1) });
+    var $repeatOn = this.instance.$element().find("." + REPEAT_ON_EDITOR),
+        $repeatOnWeek = $repeatOn.find("." + REPEAT_ON_WEEK_EDITOR);
+
+    var $checkbox = $repeatOnWeek.find("." + "dx-checkbox").eq(2);
+
+    assert.ok($checkbox.dxCheckBox("instance").option("value"));
+
+    $($checkbox).trigger("dxclick");
+
+    assert.notOk($checkbox.dxCheckBox("instance").option("value"));
+});
+
 QUnit.test("'BYDAY' rule has a higher priority than 'startDate' rule, freq=weekly", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY;BYDAY=TU", startDate: new Date(2015, 1, 1, 1) });
 

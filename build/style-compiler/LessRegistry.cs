@@ -49,7 +49,13 @@ namespace StyleCompiler
             COLOR_SCHEME_ORANGE_LIGHT = "orange." + COLOR_SCHEME_LIGHT,
             COLOR_SCHEME_LIME_LIGHT = "lime." + COLOR_SCHEME_LIGHT,
             COLOR_SCHEME_PURPLE_LIGHT = "purple." + COLOR_SCHEME_LIGHT,
-            COLOR_SCHEME_TEAL_LIGHT = "teal." + COLOR_SCHEME_LIGHT;
+            COLOR_SCHEME_TEAL_LIGHT = "teal." + COLOR_SCHEME_LIGHT,
+
+            COLOR_SCHEME_BLUE_DARK = "blue." + COLOR_SCHEME_DARK,
+            COLOR_SCHEME_ORANGE_DARK = "orange." + COLOR_SCHEME_DARK,
+            COLOR_SCHEME_LIME_DARK = "lime." + COLOR_SCHEME_DARK,
+            COLOR_SCHEME_PURPLE_DARK = "purple." + COLOR_SCHEME_DARK,
+            COLOR_SCHEME_TEAL_DARK = "teal." + COLOR_SCHEME_DARK;
 
         public const string
             SIZE_SCHEME_DEFAULT = "default",
@@ -103,7 +109,7 @@ namespace StyleCompiler
             new KnownThemeInfo {
                 Name = THEME_MATERIAL,
                 PublicName = THEME_MATERIAL,
-                ColorSchemeNames = new[] { COLOR_SCHEME_BLUE_LIGHT, COLOR_SCHEME_ORANGE_LIGHT, COLOR_SCHEME_LIME_LIGHT, COLOR_SCHEME_PURPLE_LIGHT, COLOR_SCHEME_TEAL_LIGHT }
+                ColorSchemeNames = new[] { COLOR_SCHEME_BLUE_LIGHT, COLOR_SCHEME_ORANGE_LIGHT, COLOR_SCHEME_LIME_LIGHT, COLOR_SCHEME_PURPLE_LIGHT, COLOR_SCHEME_TEAL_LIGHT, COLOR_SCHEME_BLUE_DARK, COLOR_SCHEME_ORANGE_DARK, COLOR_SCHEME_LIME_DARK, COLOR_SCHEME_PURPLE_DARK, COLOR_SCHEME_TEAL_DARK }
             },
             new KnownThemeInfo {
                 Name = THEME_WIN10,
@@ -264,7 +270,6 @@ namespace StyleCompiler
             public string LicenseInfo = "For internal use only";
             public string[] Modules;
             public string[] SupportedThemes;
-            public string[] ExcludedColorSchemes;
             public Dictionary<string, string[]> SupportedSizeSchemes;
             public bool ForceCommonsInExternalFiles = false;
             public bool UseCommonPostfix = true;

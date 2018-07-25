@@ -60,23 +60,11 @@ var Link = {
     */
     hover: function () { },
     /**
-    * @name dxSankeyLinkmethods.adjacentNodeHover
-    * @publicName adjacentNodeHover(state)
-    * @param1 state:boolean
-    */
-    adjacentNodeHover: function () { },
-    /**
     * @name dxSankeyLinkmethods.isHovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: function () { },
-    /**
-    * @name dxSankeyLinkmethods.isAdjacentNodeHovered
-    * @publicName isAdjacentNodeHovered()
-    * @return boolean
-    */
-    isAdjacentNodeHovered: function () { },
     /**
     * @name dxSankeyLinkmethods.showTooltip
     * @publicName showTooltip()
@@ -96,15 +84,15 @@ var Link = {
 */
 var dxSankeyConnectionInfoObject = {
     /**
-    * @name dxSankeyConnectionInfoObject.from
+    * @name dxSankeyConnectionInfoObject.source
     * @type string
     */
-    from: undefined,
+    source: undefined,
     /**
-    * @name dxSankeyConnectionInfoObject.to
+    * @name dxSankeyConnectionInfoObject.target
     * @type string
     */
-    to: undefined,
+    target: undefined,
     /**
     * @name dxSankeyConnectionInfoObject.weight
     * @type Number
