@@ -184,17 +184,17 @@ function checkScrollForOriginalScale(scrollThreshold) {
 }
 
 function scrollHasExtremePosition(scrollThreshold, isMax) {
-    var that = this,
-        businessRange = that.getBusinessRange(),
-        isDiscreteAxis = businessRange.axisType === "discrete",
-        min = isDiscreteAxis ? businessRange.categories[0] : businessRange.min,
-        max = isDiscreteAxis ? businessRange.categories[businessRange.categories.length - 1] : businessRange.max,
-        isSinglePoint = min === max,
-        isMaxExtremum = (!businessRange.invert && isMax) || (businessRange.invert && !isMax),
-        axisExtremum = isMaxExtremum ? max : min,
-        scrollExtremum = isMaxExtremum ? businessRange.maxVisible : businessRange.minVisible,
-        equalityCorrection,
-        distanceToExtremum;
+    return this.checkExtremePosition(this.getBusinessRange(), scrollThreshold, isMax);
+}
+
+function checkExtremePosition(businessRange, scrollThreshold, isMax) {
+    const isDiscreteAxis = businessRange.axisType === "discrete";
+    const min = isDiscreteAxis ? businessRange.categories[0] : businessRange.min;
+    const max = isDiscreteAxis ? businessRange.categories[businessRange.categories.length - 1] : businessRange.max;
+    const isSinglePoint = min === max;
+    const isMaxExtremum = (!businessRange.invert && isMax) || (businessRange.invert && !isMax);
+    let axisExtremum = isMaxExtremum ? max : min;
+    let scrollExtremum = isMaxExtremum ? businessRange.maxVisible : businessRange.minVisible;
 
     if(isDiscreteAxis) {
         return !isDefined(scrollExtremum) || axisExtremum.valueOf() === scrollExtremum.valueOf();
@@ -204,11 +204,11 @@ function scrollHasExtremePosition(scrollThreshold, isMax) {
             scrollExtremum = vizUtils.getLog(scrollExtremum, businessRange.base);
         }
 
-        equalityCorrection = axisExtremum.valueOf() === scrollExtremum.valueOf() ? 0 : getEqualityCorrection(businessRange);
-        distanceToExtremum = isSinglePoint ?
+        const equalityCorrection = axisExtremum.valueOf() === scrollExtremum.valueOf() ? 0 : getEqualityCorrection(businessRange);
+        const distanceToExtremum = isSinglePoint ?
             Math.abs((axisExtremum + ((isMaxExtremum ? 1 : -1) * equalityCorrection)) - scrollExtremum) :
             Math.abs(axisExtremum - scrollExtremum);
-        return distanceToExtremum * that._canvasOptions.ratioOfCanvasRange < scrollThreshold;
+        return distanceToExtremum * this._canvasOptions.ratioOfCanvasRange < scrollThreshold;
     }
 }
 
@@ -276,7 +276,7 @@ _Translator2d.prototype = {
                 script = categoryTranslator;
                 that._categories = categories;
                 canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
-                that._categoriesToPoints = makeCategoriesToPoints(categories, canvasOptions.invert);
+                that._categoriesToPoints = makeCategoriesToPoints(that._categories, canvasOptions.invert);
                 if(categoriesLength) {
                     canvasOptions.startPointIndex = that._categoriesToPoints[visibleCategories[0].valueOf()];
                     that.visibleCategories = visibleCategories;
@@ -497,6 +497,7 @@ _Translator2d.prototype = {
     checkScrollForOriginalScale: checkScrollForOriginalScale,
     scrollHasExtremePosition: scrollHasExtremePosition,
     checkGestureEventsForScaleEdges: checkGestureEventsForScaleEdges,
+    checkExtremePosition: checkExtremePosition,
 
     // dxRangeSelector specific
 

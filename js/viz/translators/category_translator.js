@@ -1,6 +1,7 @@
 "use strict";
 
 var isDefined = require("../../core/utils/type").isDefined,
+    adjust = require("../../core/utils/math").adjust,
     round = Math.round;
 
 module.exports = {
@@ -70,7 +71,7 @@ module.exports = {
             interval = canvasOptions.interval * scale,
             translateCategories = translate / interval,
             startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + translateCategories + 0.5),
-            categoriesLength = parseInt(canvasOptions.canvasLength / interval + (stick ? 1 : 0)) || 1,
+            categoriesLength = parseInt(adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0)) || 1,
             endCategoryIndex,
             newVisibleCategories,
             categories = that._categories,

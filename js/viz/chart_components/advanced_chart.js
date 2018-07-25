@@ -180,13 +180,16 @@ var AdvancedChart = BaseChart.inherit({
         }
 
         _each(axesBasis, (index, basis) => {
+            let axis = basis.axis;
             if(basis.axis && isArgumentAxes) {
                 that._displayedArgumentAxisIndex = index;
             } else if(basis.options) {
-                axes.push(that._createAxis(isArgumentAxes ? "argumentAxis" : "valueAxis", basis.options,
+                axis = that._createAxis(isArgumentAxes, basis.options,
                     isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined,
-                    isArgumentAxes ? index : undefined));
+                    isArgumentAxes ? index : undefined);
+                axes.push(axis);
             }
+            axis.applyVisualRangeSetter(that._getVisualRangeSetter(isArgumentAxes, true, index));
         });
     },
 
@@ -490,12 +493,13 @@ var AdvancedChart = BaseChart.inherit({
         return options;
     },
 
-    _createAxis(typeSelector, options, virtual, index) {
+    _createAxis(isArgumentAxes, options, virtual, index) {
         const that = this;
+        const typeSelector = isArgumentAxes ? "argumentAxis" : "valueAxis";
         const renderingSettings = _extend({
             renderer: that._renderer,
             incidentOccurred: that._incidentOccurred,
-            axisClass: typeSelector === "argumentAxis" ? "arg" : "val",
+            axisClass: isArgumentAxes ? "arg" : "val",
             widgetClass: "dxc",
             stripsGroup: that._stripsGroup,
             labelAxesGroup: that._labelAxesGroup,
@@ -503,7 +507,7 @@ var AdvancedChart = BaseChart.inherit({
             scaleBreaksGroup: that._scaleBreaksGroup,
             axesContainerGroup: that._axesGroup,
             gridGroup: that._gridGroup,
-            isArgumentAxis: typeSelector === "argumentAxis"
+            isArgumentAxis: isArgumentAxes
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new axisModule.Axis(renderingSettings);
         axis.updateOptions(options);
@@ -514,6 +518,8 @@ var AdvancedChart = BaseChart.inherit({
 
         return axis;
     },
+
+    _getVisualRangeSetter: _noop,
 
     _getTrackerSettings: function() {
         return _extend(this.callBase(), {

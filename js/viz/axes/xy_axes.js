@@ -13,6 +13,7 @@ const getNextDateUnit = dateUtils.getNextDateUnit;
 const correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning;
 const _math = Math;
 const _max = _math.max;
+const _isArray = Array.isArray;
 const TOP = constants.top;
 const BOTTOM = constants.bottom;
 const LEFT = constants.left;
@@ -764,7 +765,7 @@ module.exports = {
         estimateMargins: function(canvas) {
             this.updateCanvas(canvas);
             var that = this,
-                range = that.applyViewportAndBounds(that._getViewportRange()),
+                range = that._getViewportRange(),
                 ticksData = this._createTicksAndLabelFormat(range),
                 ticks = ticksData.ticks,
                 tickInterval = ticksData.tickInterval,
@@ -945,25 +946,29 @@ module.exports = {
             max: true
         },
 
-        _setMinMax(min, max) {
-            const isRangeDefined = isDefined(min) || isDefined(max);
-            this._options.min = isRangeDefined ? min : this._storedMin;
-            this._options.max = isRangeDefined ? max : this._storedMax;
-
-            this._viewport = [min, max];
+        _setVisualRange(min, max) {
+            this._viewport = this.adjustRange([min, max]);
         },
 
-        adjust() {
-            const viewport = this._series.filter(s=>s.isVisible()).reduce((range, s) => {
-                var seriesRange = s.getViewport();
-                range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
-                range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
-                if(s.showZero) {
-                    range = new rangeModule.Range(range);
-                    range.correctValueZeroLevel();
-                }
-                return range;
-            }, {});
+        applyVisualRangeSetter(visualRangeSetter) {
+            this._visualRange = visualRangeSetter;
+        },
+
+        adjust(alignToBounds) {
+            let viewport = { min: this._seriesData.min, max: this._seriesData.max };
+
+            if(!alignToBounds) {
+                viewport = this._series.filter(s => s.isVisible()).reduce((range, s) => {
+                    var seriesRange = s.getViewport();
+                    range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
+                    range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
+                    if(s.showZero) {
+                        range = new rangeModule.Range(range);
+                        range.correctValueZeroLevel();
+                    }
+                    return range;
+                }, {});
+            }
 
             if(isDefined(viewport.min) && isDefined(viewport.max)) {
                 this._seriesData.minVisible = viewport.min;
@@ -1200,6 +1205,28 @@ module.exports = {
                 shiftGroup("left", constantLinesGroups);
                 shiftGroup("right", constantLinesGroups);
             }
+        },
+
+        // API
+        visualRange(range) {
+            const that = this;
+            let newRange = _isArray(range) ? range : arguments;
+            const rangeLength = newRange.length;
+
+            if(arguments.length === 0) {
+                const businessRange = that.adjustViewport(that._translator.getBusinessRange());
+                return [businessRange.minVisible, businessRange.maxVisible];
+            }
+
+            if(!rangeLength) {
+                newRange = [null, null];
+            } else if(rangeLength === 1) {
+                newRange = [newRange[0], null];
+            } else {
+                newRange = [newRange[0], newRange[1]];
+            }
+
+            that._visualRange(newRange);
         }
     }
 };

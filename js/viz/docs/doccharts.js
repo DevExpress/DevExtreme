@@ -1547,15 +1547,29 @@ var dxChart = {
         /**
         * @name dxChartOptions.argumentAxis.min
         * @type number | datetime | string
+        * @deprecated dxChartOptions.argumentAxis.visualRange
         * @default undefined
         */
         min: undefined,
         /**
         * @name dxChartOptions.argumentAxis.max
         * @type number | datetime | string
+        * @deprecated dxChartOptions.argumentAxis.visualRange
         * @default undefined
         */
         max: undefined,
+        /**
+        * @name dxChartOptions.argumentAxis.visualRange
+        * @type Array<number,string,Date>
+        * @notUsedInTheme
+        */
+        visualRange: [undefined, undefined],
+        /**
+        * @name dxChartOptions.argumentAxis.visualRangeLength
+        * @extends VizTimeIntervalEnum
+        * @inherits VizTimeInterval
+        */
+        visualRangeLength: {},
         /**
         * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
@@ -1817,15 +1831,23 @@ var dxChart = {
         /**
         * @name dxChartOptions.valueAxis.min
         * @type number | datetime | string
+        * @deprecated dxChartOptions.valueAxis.visualRange
         * @default undefined
         */
         min: undefined,
         /**
         * @name dxChartOptions.valueAxis.max
         * @type number | datetime | string
+        * @deprecated dxChartOptions.valueAxis.visualRange
         * @default undefined
         */
         max: undefined,
+        /**
+        * @name dxChartOptions.valueAxis.visualRange
+        * @type Array<number,string,Date>
+        * @notUsedInTheme
+        */
+        visualRange: [undefined, undefined],
         /**
         * @name dxChartOptions.valueAxis.axisDivisionFactor
         * @type number

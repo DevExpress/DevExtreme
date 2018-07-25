@@ -1308,7 +1308,9 @@ QUnit.test("adjustOnZoom with min/max options", function(assert) {
     });
 
     // assert
-    assert.strictEqual(stubSeries1.getValueAxis().adjust.callCount, 1);
+    assert.strictEqual(stubSeries1.getValueAxis().adjust.callCount, 2);
+    assert.strictEqual(stubSeries1.getValueAxis().adjust.firstCall.args[0], true);
+    assert.strictEqual(stubSeries1.getValueAxis().adjust.secondCall.args[0], false);
 });
 
 QUnit.test("adjustOnZoom disabled with min/max options (no rerender)", function(assert) {

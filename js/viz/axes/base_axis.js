@@ -24,6 +24,7 @@ const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
 const _min = _math.min;
+const _isArray = Array.isArray;
 
 const DEFAULT_AXIS_LABEL_SPACING = 5;
 const MAX_GRID_BORDER_ADHENSION = 4;
@@ -41,6 +42,8 @@ const dateIntervals = {
     day: 86400000,
     week: 604800000
 };
+
+const SCROLL_THRESHOLD = 5;
 
 function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
     return tickGeneratorModule.tickGenerator({
@@ -973,9 +976,6 @@ Axis.prototype = {
             }
         }
 
-        that._storedMin = options.min;
-        that._storedMax = options.max;
-
         that._updateTranslator();
     },
 
@@ -1031,57 +1031,124 @@ Axis.prototype = {
         }
     },
 
-    applyViewportAndBounds: function(range) {
-        const options = this._options;
-        const wholeRange = this.adjustRange(options.wholeRange);
-        const visualRange = this.adjustRange(this._viewport);
-        const viewportMin = visualRange[0];
-        const viewportMax = visualRange[1];
+    adjustViewport(businessRange) {
+        const that = this;
+        const options = that._options;
+        const isDiscrete = options.type === constants.discrete;
+        let categories = that._seriesData && that._seriesData.categories || [];
+        const wholeRange = that.adjustRange(options.wholeRange);
+        const visualRange = that.getViewport();
+        let rangeLength = options.visualRangeLength;
+        const add = getAddFunction({
+            base: options.logarithmBase,
+            axisType: options.type,
+            dataType: options.dataType
+        }, false);
 
-        const result = new rangeModule.Range(range);
+        const result = new rangeModule.Range(businessRange);
+        const minDefined = visualRange && isDefined(visualRange.min);
+        const maxDefined = visualRange && isDefined(visualRange.max);
+        let minVisible = minDefined ? visualRange.min : result.minVisible;
+        let maxVisible = maxDefined ? visualRange.max : result.maxVisible;
+        let currentMin;
+        let currentMax;
 
-        result.min = isDefined(wholeRange[0]) ? wholeRange[0] : result.min;
-        result.max = isDefined(wholeRange[1]) ? wholeRange[1] : result.max;
+        if(!isDiscrete) {
+            result.min = isDefined(wholeRange[0]) ? wholeRange[0] : result.min;
+            result.max = isDefined(wholeRange[1]) ? wholeRange[1] : result.max;
+        } else {
+            const minBoundIndex = isDefined(wholeRange[0]) ? categories.indexOf(wholeRange[0]) : 0;
+            const maxBoundIndex = isDefined(wholeRange[1]) ? categories.indexOf(wholeRange[1]) + 1 : categories.length;
 
-        result.minVisible = isDefined(viewportMin) ? viewportMin : result.minVisible;
-        result.maxVisible = isDefined(viewportMax) ? viewportMax : result.maxVisible;
-
-        if(isDefined(wholeRange[0]) && result.minVisible < result.min) {
-            result.minVisible = result.min;
+            categories = categories.slice(minBoundIndex, maxBoundIndex);
+            result.categories = categories;
         }
 
-        if(isDefined(wholeRange[1]) && result.maxVisible > result.max) {
-            result.maxVisible = result.max;
+        if((isDefined(minVisible) || isDefined(maxVisible)) && wholeRange.length > 0) {
+            if(isDiscrete) {
+                currentMin = categories.indexOf(minVisible);
+                currentMax = categories.indexOf(maxVisible);
+                if(isDefined(wholeRange[1]) && currentMin < 0) {
+                    minVisible = wholeRange[0];
+                }
+                if(isDefined(wholeRange[1]) && currentMax < 0) {
+                    maxVisible = wholeRange[1];
+                }
+            } else {
+                if(isDefined(wholeRange[0]) && isDefined(minVisible) && minVisible < wholeRange[0]) {
+                    minVisible = wholeRange[0];
+                }
+                if(isDefined(wholeRange[1]) && isDefined(maxVisible) && maxVisible > wholeRange[1]) {
+                    maxVisible = wholeRange[1];
+                }
+            }
         }
+
+        if(that.isArgumentAxis && isDefined(rangeLength)) {
+            if(!isDiscrete) {
+                if(options.dataType === "datetime" && !isNumeric(rangeLength)) {
+                    rangeLength = dateToMilliseconds(rangeLength);
+                }
+                if(!maxDefined) {
+                    currentMax = add(minVisible, rangeLength);
+                    maxVisible = currentMax > result.max ? result.max : currentMax;
+                } else if(!minDefined) {
+                    currentMin = add(maxVisible, rangeLength, -1);
+                    minVisible = currentMin < result.min ? result.min : currentMin;
+                }
+            } else {
+                rangeLength = parseInt(rangeLength);
+                if(!isNaN(rangeLength) && isFinite(rangeLength)) {
+                    rangeLength--;
+                    currentMin = categories.indexOf(minVisible);
+                    currentMax = categories.indexOf(maxVisible);
+                    if(!maxDefined) {
+                        currentMax = currentMin + rangeLength;
+                        maxVisible = currentMax > categories.length - 1 ? categories[categories.length - 1] : categories[currentMax];
+                    } else if(!minDefined) {
+                        currentMin = currentMax - rangeLength;
+                        minVisible = currentMin < 0 ? categories[0] : categories[currentMin];
+                    }
+                }
+            }
+        }
+
+        result.minVisible = minVisible;
+        result.maxVisible = maxVisible;
 
         return result;
     },
 
     adjustRange(range) {
         range = range || [];
-        if(this._options.type === constants.logarithmic) {
-            if(range[0] < 0) {
-                range[0] = null;
-            }
-            if(range[1] < 0) {
-                range[1] = null;
-            }
-        }
+        const isDiscrete = this._options.type === constants.discrete;
+        const isLogarithmic = this._options.type === constants.logarithmic;
+        const categories = this._seriesData && this._seriesData.categories || [];
 
-        if(isDefined(range[0]) && isDefined(range[1]) && range[0] > range[1]) {
+        if(isLogarithmic) {
+            range[0] = range[0] <= 0 ? null : range[0];
+            range[1] = range[1] <= 0 ? null : range[1];
+        }
+        if(!isDiscrete && isDefined(range[0]) && isDefined(range[1]) && range[0] > range[1]) {
             return [range[1], range[0]];
+        } else if(isDiscrete && _isArray(categories)) {
+            const minIndex = isDefined(range[0]) ? categories.indexOf(range[0]) : 0;
+            const maxIndex = isDefined(range[1]) ? categories.indexOf(range[1]) : categories.length - 1;
+            if(minIndex > maxIndex) {
+                return [range[1], range[0]];
+            }
         }
 
         return range;
     },
 
-    setBusinessRange: function(range, categoriesOrder) {
-        var that = this,
-            options = that._options;
+    setBusinessRange(range, categoriesOrder) {
+        const that = this;
+        const options = that._options;
+        const isDiscrete = options.type === constants.discrete;
 
         that._seriesData = new rangeModule.Range(range);
 
-        const synchronizedValue = options.synchronizedValue;
         that._seriesData.addRange({
             categories: options.categories,
             dataType: options.dataType,
@@ -1089,17 +1156,22 @@ Axis.prototype = {
             base: options.logarithmBase,
             invert: options.inverted
         });
-        const visualRange = this.adjustRange(this._viewport);
 
-        if(options.type !== constants.discrete) {
-            that._seriesData.addRange({
-                min: visualRange[0],
-                max: visualRange[1]
-            });
-            that._seriesData.addRange({
-                min: synchronizedValue,
-                max: synchronizedValue
-            });
+        if(!isDiscrete) {
+            if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
+                const visualRange = that.getViewport();
+                visualRange && that._seriesData.addRange({
+                    min: visualRange.min,
+                    max: visualRange.max
+                });
+            }
+            const synchronizedValue = options.synchronizedValue;
+            if(isDefined(synchronizedValue)) {
+                that._seriesData.addRange({
+                    min: synchronizedValue,
+                    max: synchronizedValue
+                });
+            }
         }
 
         that._seriesData.minVisible = that._seriesData.minVisible === undefined ? that._seriesData.min : that._seriesData.minVisible;
@@ -1120,7 +1192,7 @@ Axis.prototype = {
 
         that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
-        that._translator.updateBusinessRange(that.applyViewportAndBounds(that._seriesData));
+        that._translator.updateBusinessRange(that.adjustViewport(that._seriesData));
     },
 
     setGroupSeries: function(series) {
@@ -1254,9 +1326,10 @@ Axis.prototype = {
         let that = this,
             options = that._options,
             marginOptions = that._marginOptions,
-            viewPort = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
-            minVisible = isDefined(options.min) ? options.min : viewPort.minVisible,
-            maxVisible = isDefined(options.max) ? options.max : viewPort.maxVisible,
+            businessRange = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
+            visualRange = that.getViewport(),
+            minVisible = visualRange && isDefined(visualRange.min) ? visualRange.min : businessRange.minVisible,
+            maxVisible = visualRange && isDefined(visualRange.max) ? visualRange.max : businessRange.maxVisible,
             ticks = [];
 
         let aggregationInterval = options.aggregationInterval;
@@ -1273,12 +1346,12 @@ Axis.prototype = {
 
         const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
 
-        const generateTicks = configureGenerator(options, aggregationGroupWidth, viewPort, that._getScreenDelta(), minInterval);
+        const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, that._getScreenDelta(), minInterval);
         let tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._breaks).tickInterval;
 
         if(options.type !== constants.discrete) {
-            const min = useAllAggregatedPoints ? viewPort.min : minVisible;
-            const max = useAllAggregatedPoints ? viewPort.max : maxVisible;
+            const min = useAllAggregatedPoints ? businessRange.min : minVisible;
+            const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
             if(isDefined(min) && isDefined(max)) {
                 const add = getAddFunction({
                     base: options.logarithmBase,
@@ -1293,8 +1366,8 @@ Axis.prototype = {
                     start = add(min, maxMinDistance, -1);
                     end = add(max, maxMinDistance);
                 }
-                start = start < viewPort.min ? viewPort.min : start;
-                end = end > viewPort.max ? viewPort.max : end;
+                start = start < businessRange.min ? businessRange.min : start;
+                end = end > businessRange.max ? businessRange.max : end;
                 const breaks = that._getScaleBreaks(options, {
                     minVisible: start,
                     maxVisible: end
@@ -1326,8 +1399,8 @@ Axis.prototype = {
         that._isSynchronized = false;
         that.updateCanvas(canvas);
 
-        that._estimatedTickInterval = that._getTicks(this.applyViewportAndBounds(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
-        range = this.applyViewportAndBounds(that._getViewportRange());
+        that._estimatedTickInterval = that._getTicks(that.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
+        range = that._getViewportRange();
 
         ticks = that._createTicksAndLabelFormat(range);
 
@@ -1372,13 +1445,11 @@ Axis.prototype = {
             return;
         }
         if(that._options.type !== constants.discrete) {
-            if(length &&
-                !that._options.skipViewportExtending &&
-                (!that.isZoomed() || !that.isArgumentAxis)) {
-                if(ticks[0].value < range.minVisible) {
+            if(length && !that._options.skipViewportExtending) {
+                if((!that.isArgumentAxis || translator.checkExtremePosition(range, SCROLL_THRESHOLD, false)) && ticks[0].value < range.minVisible) {
                     minVisible = ticks[0].value;
                 }
-                if(length > 1 && ticks[length - 1].value > range.maxVisible) {
+                if((!that.isArgumentAxis || translator.checkExtremePosition(range, SCROLL_THRESHOLD, true)) && length > 1 && ticks[length - 1].value > range.maxVisible) {
                     maxVisible = ticks[length - 1].value;
                 }
             }
@@ -1397,15 +1468,11 @@ Axis.prototype = {
         }
 
         range.breaks = that._correctedBreaks;
-        translator.updateBusinessRange(that.applyViewportAndBounds(range));
+        translator.updateBusinessRange(that.adjustViewport(range));
     },
 
-    _getViewportRange: function() {
-        var range = new rangeModule.Range(this._seriesData);
-
-        range = this._applyMargins(range);
-
-        return range;
+    _getViewportRange() {
+        return this.adjustViewport(this._applyMargins(this._seriesData));
     },
 
     setMarginOptions: function(options) {
@@ -1442,8 +1509,9 @@ Axis.prototype = {
         return businessInterval;
     },
 
-    _applyMargins: function(range) {
+    _applyMargins: function(dataRange) {
         var that = this,
+            range = new rangeModule.Range(dataRange),
             options = that._options,
             margins = isDefined(that._marginOptions) ? that._marginOptions : {},
             marginSize = margins.size,
@@ -1626,6 +1694,18 @@ Axis.prototype = {
         this._axisStripGroup.attr({ "clip-path": elementsClipID });
     },
 
+    _mergeViewportOptions() {
+        const that = this;
+        const options = that._options;
+        let min = _isArray(options.visualRange) && options.visualRange[0] || undefined;
+        let max = _isArray(options.visualRange) && options.visualRange[1] || undefined;
+
+        (!isDefined(min) && isDefined(options.min)) && (min = options.min);
+        (!isDefined(max) && isDefined(options.max)) && (max = options.max);
+
+        that._setVisualRange(min, max);
+    },
+
     _validateOptions(options) {
         const that = this;
 
@@ -1636,8 +1716,6 @@ Axis.prototype = {
             options.max = that._validateUnit(options.max, "E2106");
         }
 
-        that._viewport = [options.min, options.max];
-
         const wholeRange = options.wholeRange || [];
         if(wholeRange[0] !== undefined) {
             wholeRange[0] = that._validateUnit(wholeRange[0]);
@@ -1646,15 +1724,25 @@ Axis.prototype = {
         if(wholeRange[1] !== undefined) {
             wholeRange[1] = that._validateUnit(wholeRange[1]);
         }
-
         options.wholeRange = wholeRange;
+
+        const visualRange = options.visualRange || [];
+        if(visualRange[0] !== undefined) {
+            visualRange[0] = that._validateUnit(visualRange[0]);
+        }
+        if(visualRange[1] !== undefined) {
+            visualRange[1] = that._validateUnit(visualRange[1]);
+        }
+        options.visualRange = visualRange;
+
+        that._mergeViewportOptions();
     },
 
-    validate: function() {
-        var that = this,
-            options = that._options,
-            dataType = that.isArgumentAxis ? options.argumentType : options.valueType,
-            parser = dataType ? parseUtils.getParser(dataType) : function(unit) { return unit; };
+    validate() {
+        const that = this;
+        const options = that._options;
+        const dataType = that.isArgumentAxis ? options.argumentType : options.valueType;
+        const parser = dataType ? parseUtils.getParser(dataType) : function(unit) { return unit; };
 
         that.parser = parser;
         options.dataType = dataType;
@@ -1665,23 +1753,12 @@ Axis.prototype = {
     zoom(min, max) {
         const that = this;
         const options = that._options;
-        const isDiscrete = options.type === constants.discrete;
         const translator = that.getTranslator();
 
         min = that._validateUnit(min);
         max = that._validateUnit(max);
 
-        if(!isDiscrete && isDefined(min) && isDefined(max) && min > max) {
-            max = [min, min = max][0];
-        }
-
-        if(!isDiscrete && isDefined(min) && isDefined(max) && min > max) { // TODO bounds
-            const temp = min;
-            min = max;
-            max = temp;
-        }
-
-        that._setMinMax(min, max);
+        that._setVisualRange(min, max);
 
         that._breaks = that._getScaleBreaks(options, {
             minVisible: min,
@@ -1696,23 +1773,20 @@ Axis.prototype = {
     },
 
     resetZoom() {
-        this._setMinMax(null, null);
+        this._setVisualRange(null, null);
     },
 
     isZoomed() {
-        return !this._translator.isEqualRange(this.getViewport());
+        const translator = this.getTranslator();
+        const visualRange = this.adjustViewport(translator.getBusinessRange());
+
+        return !((translator.checkExtremePosition(visualRange, SCROLL_THRESHOLD, false)) &&
+            (translator.checkExtremePosition(visualRange, SCROLL_THRESHOLD, true)));
     },
 
     getViewport() {
-        const that = this;
-        const minOpt = that._options.min;
-        const maxOpt = that._options.max;
-
-        if(isDefined(minOpt) || isDefined(maxOpt)) {
-            return {
-                min: minOpt,
-                max: maxOpt
-            };
+        if(isDefined(this._viewport) && (isDefined(this._viewport[0]) || isDefined(this._viewport[1]))) {
+            return { min: this._viewport[0], max: this._viewport[1] };
         }
     },
 
@@ -1953,8 +2027,18 @@ Axis.prototype = {
 
     drawScaleBreaks: _noop,
 
+    _visualRange: _noop,
+
+    applyVisualRangeSetter: _noop,
+
     getCategoriesSorter() {
         return this._options.categoriesSortingMethod;
+    },
+
+    // API
+    visualRange() {
+        const businessRange = this.adjustViewport(this.getTranslator().getBusinessRange());
+        return [businessRange.minVisible, businessRange.maxVisible];
     },
 
     ///#DEBUG

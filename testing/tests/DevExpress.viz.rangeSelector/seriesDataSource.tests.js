@@ -18,6 +18,7 @@ var environment = {
     beforeEach: function() {
         this.argumentAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
         this.argumentAxis.calculateInterval = function(a, b) { return Math.abs(a - b); };
+        this.argumentAxis.visualRange = noop;
 
         sinon.stub(this.argumentAxis, "getTranslator").returns(new MockTranslator({}));
     }

@@ -41,8 +41,8 @@ function getPolarQuarter(angle) {
 polarAxes = exports;
 
 circularAxes = polarAxes.circular = {
-    _applyMargins: function(range) {
-        return range;
+    _applyMargins: function(dataRange) {
+        return dataRange;
     },
 
     _getTranslatorOptions: function() {
@@ -124,6 +124,8 @@ circularAxes = polarAxes.circular = {
             wholeRange[0] = originValue;
         }
     },
+
+    _setVisualRange: _noop,
 
     _getStick: function() {
         return this._options.firstPointOnStartAngle || (this._options.type !== constants.discrete);
@@ -436,6 +438,7 @@ exports.circularSpider = _extend({}, circularAxes, {
 });
 
 polarAxes.linear = {
+    _setVisualRange: _noop,
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: _noop,
 
