@@ -569,7 +569,7 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value").getMonth(), 0, "value is correct");
         });
 
-        QUnit.test("Clear button should clear the value", (assert) => {
+        QUnit.test("Clear button should work", (assert) => {
             this.instance.option({
                 showClearButton: true,
                 value: new Date(2018, 6, 19)
@@ -586,6 +586,9 @@ if(devices.real().deviceType === "desktop") {
 
             assert.equal(this.$input.val(), "", "text is still cleared");
             assert.equal(this.instance.option("value"), null, "value is still cleared");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "January 25 2018", "text is correct after clearing");
         });
 
         QUnit.test("Incorrect search on empty input should be prevented", (assert) => {
@@ -642,6 +645,19 @@ if(devices.real().deviceType === "desktop") {
                 .press("enter");
 
             assert.equal(this.instance.option("value").getFullYear(), dateStart + "21", "only 2 last digits of the year should be changed");
+        });
+
+        QUnit.test("Click and leave empty datebox should not change the value", (assert) => {
+            this.instance.option({
+                displayFormat: "yy",
+                value: null
+            });
+
+            this.$input.trigger("dxclick");
+            this.keyboard.press("enter");
+            this.$input.trigger("focusout");
+
+            assert.equal(this.$input.val(), "", "value is correct");
         });
     });
 

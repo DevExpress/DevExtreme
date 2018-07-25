@@ -260,9 +260,10 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler() {
-        this._setNewDateIfEmpty();
-        this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
-        this._caret(this._getActivePartProp("caret"));
+        if(this.option("text")) {
+            this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
+            this._caret(this._getActivePartProp("caret"));
+        }
     },
 
     _isValueDirty() {
@@ -329,6 +330,7 @@ let DateBoxMask = DateBoxBase.inherit({
     reset() {
         this.callBase();
         this._clearState();
+        this._activePartIndex = 0;
     },
 
     _clean() {
