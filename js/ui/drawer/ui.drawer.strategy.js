@@ -50,6 +50,7 @@ var animation = {
             complete: completeAction
         });
     },
+
     complete: function($element) {
         fx.stop($element, true);
     }
@@ -75,7 +76,7 @@ var DrawerStrategy = Class.inherit({
         }
     },
 
-    _calculatePixelOffset: function(offset) {
+    _getMenuOffset: function(offset) {
         if(offset) {
             return -(this._drawer.getRealMenuWidth() - this._drawer.getMaxWidth());
         } else {

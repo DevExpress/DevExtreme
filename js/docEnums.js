@@ -587,7 +587,7 @@
 
 /**
  * @typedef {string} Enums.DrawerMode
- * @enum {'persistent'|'temporary'|'default'}
+ * @enum {'persistent'|'temporary'|'push'}
  */
 
 /**

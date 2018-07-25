@@ -24,7 +24,7 @@ var PersistentStrategy = DrawerStrategy.inherit({
         }
 
         if(this._drawer.option("showMode") === "slide") {
-            var menuPos = this._calculatePixelOffset(offset) * this._drawer._getRTLSignCorrection();
+            var menuPos = this._getMenuOffset(offset) * this._drawer._getRTLSignCorrection();
             if(animate) {
                 animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), (function() {
                     this._menuAnimation.resolve();

@@ -11,7 +11,7 @@ var TemporaryStrategy = DrawerStrategy.inherit({
     renderPosition: function(offset, animate) {
         this.callBase(offset, animate);
 
-        var menuPos = this._calculatePixelOffset(offset) * this._drawer._getRTLSignCorrection();
+        var menuPos = this._getMenuOffset(offset) * this._drawer._getRTLSignCorrection();
 
         $(this._drawer.content()).css("paddingLeft", this._drawer.option("minWidth"));
 
