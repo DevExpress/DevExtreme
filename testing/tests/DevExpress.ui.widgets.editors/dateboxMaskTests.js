@@ -662,6 +662,17 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
         });
 
+        QUnit.test("Move caret to the next group when next digit will overflow", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "MM.dd"
+            });
+
+            this.keyboard.type("5");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
+        });
+
         QUnit.test("Don't move caret to the next group after timeout", (assert) => {
             this.instance.option({
                 advancedCaret: true,
@@ -672,6 +683,16 @@ if(devices.real().deviceType === "desktop") {
 
             this.clock.tick(SEARCH_TIMEOUT);
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, "caret was not moved");
+        });
+
+        QUnit.test("Move caret to the next group after limit overflow", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("38");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was not moved");
         });
     });
 }

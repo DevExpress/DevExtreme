@@ -93,9 +93,7 @@ let DateBoxMask = DateBoxBase.inherit({
         this._startSearchTimeout();
 
         if(this.option("advancedCaret")) {
-            let maxLength = ("" + limits.max).length;
-
-            if(this._searchValue.length === maxLength) {
+            if(parseInt(this._searchValue + "0") > limits.max) {
                 this._selectNextPart(FORWARD);
                 clearTimeout(this._searchTimeout);
             }
