@@ -7,7 +7,6 @@ import $ from "../../core/renderer";
 const when = deferredUtils.when;
 import fx from "../../animation/fx";
 
-
 const animation = {
     moveTo($element, position, duration, completeAction) {
         fx.animate($element, {

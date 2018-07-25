@@ -1,11 +1,9 @@
 "use strict";
 
 import { animation } from "./ui.drawer.rendering.strategy";
-
 import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
-
 
 const PushStrategy = DrawerStrategy.inherit({
     renderPosition(offset, animate) {
