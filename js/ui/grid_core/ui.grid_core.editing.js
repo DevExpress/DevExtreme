@@ -1477,6 +1477,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     that._editData[editDataIndex].type = options.type;
                 }
                 if(row) {
+                    row.oldData = that._editData[editDataIndex].oldData;
                     row.data = gridCoreUtils.createObjectWithChanges(row.data, options.data);
                 }
             }
