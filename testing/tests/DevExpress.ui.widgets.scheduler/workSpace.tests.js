@@ -2180,6 +2180,12 @@ QUnit.testStart(function() {
         var index = this.instance.getCellIndexByCoordinates({ left: 398, top: 0 });
 
         assert.equal(index, 3, "Index is OK");
+
+        index = this.instance.getCellIndexByCoordinates({ left: 398, top: 45 });
+        assert.equal(index, 3, "Index is OK");
+
+        index = this.instance.getCellIndexByCoordinates({ left: 398, top: 77 });
+        assert.equal(index, 10, "Index is OK");
     });
 
     QUnit.test("Horizontal grouped view", function(assert) {
