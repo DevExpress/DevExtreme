@@ -31,6 +31,7 @@ const ANONYMOUS_TEMPLATE_NAME = "content";
 /**
 * @name dxDrawer
 * @inherits Widget
+* @hasTranscludedContent
 * @module ui/drawer
 * @export default
 */
@@ -198,14 +199,19 @@ const Drawer = Widget.inherit({
         this._refreshShowModeClass();
 
         const menuTemplate = this._getTemplate(this.option("menuTemplate"));
-        const contentTemplate = this._getTemplate(this.option("contentTemplate"));
 
         menuTemplate && menuTemplate.render({
             container: this.menuContent()
         });
+
+        const contentTemplateOption = this.option("contentTemplate"),
+            contentTemplate = this._getTemplate(contentTemplateOption),
+            transclude = this._getAnonymousTemplateName() === contentTemplateOption;
+
         contentTemplate && contentTemplate.render({
             container: this.content(),
-            noModel: true
+            noModel: true,
+            transclude
         });
 
         this._initWidth();

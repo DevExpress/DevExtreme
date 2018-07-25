@@ -65,7 +65,7 @@ QUnit.testStart(() => {
     </style>\
     \
     <div id="drawer">\
-        Test Content\
+        <div id="content">Test Content</div>\
     </div>\
     <div id="drawerContainer" style="width: 100px">\
         <div id="drawer2"></div>\
@@ -98,6 +98,13 @@ QUnit.test("menuContent() function", assert => {
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
     assert.equal(typeUtils.isRenderer(instance.menuContent()), !!config().useJQuery, "menu element");
     assert.equal($menu.get(0), $(instance.menuContent()).get(0), "menuContent function return correct DOMNode");
+});
+
+QUnit.test("drawer preserve content", assert => {
+    const $content = $("#drawer #content"),
+        $element = $("#drawer").dxDrawer({});
+
+    assert.equal($content[0], $element.find("#content")[0]);
 });
 
 QUnit.test("content() function", assert => {
