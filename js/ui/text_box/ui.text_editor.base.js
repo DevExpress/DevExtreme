@@ -279,7 +279,7 @@ var TextEditorBase = Editor.inherit({
             * @inheritdoc
             */
 
-            displayMode: "outline"
+            displayMode: "outlined"
         });
     },
 
@@ -298,7 +298,7 @@ var TextEditorBase = Editor.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    displayMode: "standart"
+                    displayMode: "standard"
                 }
             }
         ]);

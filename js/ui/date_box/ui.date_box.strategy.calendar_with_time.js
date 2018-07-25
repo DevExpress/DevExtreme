@@ -39,7 +39,8 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
             value: this.dateBoxValue(),
             _showClock: !this._isShrinkView(),
             use24HourFormat: this._is24HourFormat(),
-            onValueChanged: this._valueChangedHandler.bind(this)
+            onValueChanged: this._valueChangedHandler.bind(this),
+            displayMode: this.dateBox.option("displayMode")
         });
     },
 

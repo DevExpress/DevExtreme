@@ -37,7 +37,8 @@ var TimeView = Editor.inherit({
             value: new Date(Date.now()),
             use24HourFormat: true,
             _showClock: true,
-            _arrowOffset: 0
+            _arrowOffset: 0,
+            displayMode: undefined
         });
     },
 
@@ -172,6 +173,15 @@ var TimeView = Editor.inherit({
         }).$element();
     },
 
+    _getDisplayModeConfig: function() {
+        var displayModeConfig = {};
+        var displayMode = this.option("displayMode");
+        if(displayMode) {
+            displayModeConfig.displayMode = displayMode;
+        }
+        return displayModeConfig;
+    },
+
     _createHourBox: function() {
         this._hourBox = this._createComponent($("<div>"), NumberBox, extend({
             min: -1,
@@ -225,7 +235,7 @@ var TimeView = Editor.inherit({
                 this.option("value", time);
             }).bind(this),
             value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM
-        }));
+        }, this._getDisplayModeConfig()));
 
         this._format12.setAria("label", "type");
     },
@@ -243,13 +253,13 @@ var TimeView = Editor.inherit({
     },
 
     _getNumberBoxConfig: function() {
-        return {
+        return extend({
             showSpinButtons: true,
             disabled: this.option("disabled"),
             valueFormat: function(value) {
                 return (value < 10 ? "0" : "") + value;
             }
-        };
+        }, this._getDisplayModeConfig());
     },
 
     _normalizeHours: function(hours) {
@@ -313,6 +323,7 @@ var TimeView = Editor.inherit({
                 break;
             case "use24HourFormat":
             case "_showClock":
+            case "displayMode":
                 this._invalidate();
                 break;
             default:
