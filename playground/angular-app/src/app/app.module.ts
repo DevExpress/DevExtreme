@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { DxDataGridModule } from 'devextreme-angular';
+import { DxButtonModule } from 'devextreme-angular';
 
 import { AppComponent } from './app.component';
 import { Service } from './app.service';
@@ -11,7 +11,7 @@ import { Service } from './app.service';
   ],
   imports: [
     BrowserModule,
-    DxDataGridModule
+    DxButtonModule
   ],
   providers: [
     Service
