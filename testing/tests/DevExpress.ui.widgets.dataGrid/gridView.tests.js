@@ -48,7 +48,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editorFactory', 'columnChooser', 'summary', 'columnFixing'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing'],
         {
             initViews: true,
             controllers: {
@@ -1823,6 +1823,63 @@ function createGridView(options, userOptions) {
         assert.strictEqual($colElements.get(2).style.width, "auto", "width of a third column");
         assert.strictEqual($colElements.get(3).style.width, "70px", "width of a fourth column");
         assert.strictEqual($colElements.get(4).style.width, "150px", "width of a fifth column");
+    });
+
+    // T649950
+    QUnit.test("The width of the last data column should be correctly updated when inserting row after resizing columns", function(assert) {
+        // arrange
+        var that = this,
+            gridView,
+            resizeController,
+            $testElement = $('#container');
+
+        that.$element = function() {
+            return $testElement;
+        };
+
+        gridView = that.createGridView({}, {
+            dataSource: [],
+            allowColumnResizing: true,
+            columnResizingMode: "widget",
+            columnAutoWidth: true,
+            editing: {
+                mode: "cell",
+                allowAdding: true,
+                allowDeleting: true,
+                allowUpdating: true
+            },
+            columns: [{ dataField: "field1", width: 100, allowEditing: true }, "field2", "field3", "field4"]
+        });
+
+        gridView.render($testElement);
+        gridView.update();
+
+        resizeController = that.getController("columnsResizer");
+        resizeController._isResizing = true;
+        resizeController._targetPoint = { columnIndex: 0 };
+        resizeController._setupResizingInfo(-9900);
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                type: "mousemove",
+                pageX: -9950,
+                preventDefault: function() {}
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        // act
+        that.addRow();
+        that.clock.tick();
+
+        // assert
+        assert.notOk($(that.getCellElement(0, "field4"))[0].style.width, "the fourth column has no width");
+        assert.notOk($(that.getCellElement(0, "field4"))[0].style.maxWidth, "the fourth column has no maxWidth");
+        assert.notOk($(that.getCellElement(0, "field4"))[0].style.minWidth, "the fourth column has no minWidth");
     });
 }());
 
