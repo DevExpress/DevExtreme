@@ -183,12 +183,12 @@ var SlideOutView = Widget.inherit({
 
         this._renderMarkup();
 
-        var menuTemplate = this._getTemplate(this.option("menuTemplate"));
+        const menuTemplate = this._getTemplate(this.option("menuTemplate"));
         menuTemplate && menuTemplate.render({
             container: this.menuContent()
         });
 
-        var contentTemplateOption = this.option("contentTemplate"),
+        const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
             transclude = this._getAnonymousTemplateName() === contentTemplateOption;
 

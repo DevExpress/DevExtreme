@@ -1265,12 +1265,12 @@ QUnit.test("contentTemplate should use correct contentElement", function(assert)
 });
 
 QUnit.test("anonymous content template rendering", function(assert) {
-    var $contentElement = $("#overlayWithAnonymousTmpl #content");
+    const $contentElement = $("#overlayWithAnonymousTmpl #content");
 
-    var $overlay = $("#overlayWithAnonymousTmpl").dxOverlay({
+    const $overlay = $("#overlayWithAnonymousTmpl").dxOverlay({
         visible: true
     });
-    var $content = $overlay.dxOverlay("$content");
+    const $content = $overlay.dxOverlay("$content");
 
     assert.equal($content.children()[0], $contentElement[0], "content element preserved");
 });

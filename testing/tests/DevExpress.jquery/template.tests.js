@@ -198,24 +198,24 @@ define(function(require) {
     });
 
 
-    QUnit.module("default template engine");
+    QUnit.module("default template engine", {
+        beforeEach() {
+            setTemplateEngine("default");
+        }
+    });
 
     QUnit.test("default template engine should clone element", function(assert) {
-        setTemplateEngine("default");
-        var $element = $('<div>123</div>');
-        var template = new Template($element);
-
-        var $result = template.render({ model: null, container: $('<div>') });
+        const $element = $('<div>123</div>'),
+            template = new Template($element),
+            $result = template.render({ model: null, container: $('<div>') });
 
         assert.notEqual($result[0], $element[0]);
     });
 
     QUnit.test("default template engine should preserve element for transcluded templates", function(assert) {
-        setTemplateEngine("default");
-        var $element = $('<div>123</div>');
-        var template = new Template($element);
-
-        var $result = template.render({ model: null, container: $('<div>'), transclude: true });
+        const $element = $('<div>123</div>'),
+            template = new Template($element),
+            $result = template.render({ model: null, container: $('<div>'), transclude: true });
 
         assert.equal($result[0], $element[0]);
     });

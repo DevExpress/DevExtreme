@@ -151,15 +151,15 @@ QUnit.test("dxButton content class appear on correct container (T256387)", funct
 });
 
 QUnit.test("dxButton with anonymous template", function(assert) {
-    var $button = $("#buttonWithAnonymousTemplate").dxButton();
+    const $button = $("#buttonWithAnonymousTemplate").dxButton();
 
     assert.equal($.trim($button.text()), "test", "anonymous template rendered");
 });
 
 QUnit.test("anonymous content template rendering", function(assert) {
-    var $contentElement = $("#buttonWithAnonymousTemplate #content");
+    const $contentElement = $("#buttonWithAnonymousTemplate #content");
 
-    var $button = $("#buttonWithAnonymousTemplate").dxButton();
+    const $button = $("#buttonWithAnonymousTemplate").dxButton();
 
     assert.equal($button.find("#content")[0], $contentElement[0], "content element preserved");
 });

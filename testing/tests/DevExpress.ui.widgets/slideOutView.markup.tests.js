@@ -61,7 +61,7 @@ QUnit.test("render slideoutView content", function(assert) {
 });
 
 QUnit.test("slideoutView preserve content", function(assert) {
-    var $content = $("#slideOutView #content"),
+    const $content = $("#slideOutView #content"),
         $element = $("#slideOutView").dxSlideOutView({});
 
     assert.equal($content[0], $element.find("#content")[0]);
