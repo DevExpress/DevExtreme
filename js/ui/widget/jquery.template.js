@@ -24,12 +24,8 @@ var outerHtml = function(element) {
 };
 
 registerTemplateEngine("default", {
-    compile: function(element) {
-        return domUtils.normalizeTemplateElement(element);
-    },
-    render: function(template) {
-        return template.clone();
-    }
+    compile: (element) => domUtils.normalizeTemplateElement(element),
+    render: (template, model, index, transclude) => transclude ? template : template.clone()
 });
 
 registerTemplateEngine("jquery-tmpl", {
@@ -128,7 +124,9 @@ var Template = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model, options.index)).contents();
+        return $("<div>").append(
+            currentTemplateEngine.render(this._compiledTemplate, options.model, options.index, options.transclude)
+        ).contents();
     },
 
     source: function() {
