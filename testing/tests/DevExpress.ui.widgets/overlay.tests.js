@@ -49,7 +49,7 @@ QUnit.testStart(function() {
         \
         <div id="overlayWithClass" class="something another"></div>\
         \
-        <div id="overlayBug">\
+        <div id="overlayWithAnonymousTmpl">\
             <div id="content"></div>\
         </div>\
         \
@@ -1264,6 +1264,17 @@ QUnit.test("contentTemplate should use correct contentElement", function(assert)
     });
 });
 
+QUnit.test("anonymous content template rendering", function(assert) {
+    const $contentElement = $("#overlayWithAnonymousTmpl #content");
+
+    const $overlay = $("#overlayWithAnonymousTmpl").dxOverlay({
+        visible: true
+    });
+    const $content = $overlay.dxOverlay("$content");
+
+    assert.equal($content.children()[0], $contentElement[0], "content element preserved");
+});
+
 QUnit.test("custom content template", function(assert) {
     var $overlay = $("#overlayWithContentTemplate").dxOverlay({ contentTemplate: 'custom', visible: true }),
         $content = $($overlay.dxOverlay("instance").$content());
@@ -1369,7 +1380,7 @@ QUnit.test("overlay should not be hidden after click inside was present", functi
 
 // T494814
 QUnit.test("overlay should not be hidden after click in detached element", function(assert) {
-    var overlay = $("#overlayBug").dxOverlay({
+    var overlay = $("#overlayWithAnonymousTmpl").dxOverlay({
         closeOnOutsideClick: true,
         visible: true
     })
@@ -2197,7 +2208,7 @@ QUnit.test("content()", function(assert) {
 QUnit.module("integration tests", moduleConfig);
 
 QUnit.test("wrong gallery render on start in overlay widget (B232427)", function(assert) {
-    var overlay = $("#overlayBug").dxOverlay().dxOverlay("instance"),
+    var overlay = $("#overlayWithAnonymousTmpl").dxOverlay().dxOverlay("instance"),
         $content = $(overlay.content());
 
     assert.equal($content.children().length, 0, "Overlay has no children");
