@@ -28,13 +28,7 @@ const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 const OPENED_STATE_CLASS = "dx-drawer-opened";
 const ANONYMOUS_TEMPLATE_NAME = "content";
 
-/**
-* @name dxDrawer
-* @inherits Widget
-* @hasTranscludedContent
-* @module ui/drawer
-* @export default
-*/
+
 const Drawer = Widget.inherit({
 
     _getDefaultOptions() {

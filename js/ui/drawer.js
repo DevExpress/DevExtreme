@@ -2,8 +2,8 @@
 
 /**
 * @name dxDrawer
-* @isEditor
-* @inherits dxDropDownEditor
+* @inherits Widget
+* @hasTranscludedContent
 * @module ui/drawer
 * @export default
 */
