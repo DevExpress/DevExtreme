@@ -29,10 +29,10 @@ var TemporaryStrategy = DrawerStrategy.inherit({
         if(this._drawer.option("showMode") === "shrink") {
             var width = this._getMenuWidth(offset);
             if(animate) {
-                animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), function() {
+                animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), (function() {
                     this._contentAnimation.resolve();
                     this._menuAnimation.resolve();
-                });
+                }).bind(this));
             } else {
                 $(this._drawer._$menu).css("width", width);
             }
