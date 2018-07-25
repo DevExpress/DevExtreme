@@ -3225,6 +3225,31 @@ QUnit.test("changeRowSelection for edited data", function(assert) {
     assert.deepEqual(that.selectionController.getSelectedRowKeys(), [{ name: 'Test', age: 15 }], "selected row key of the first row after save");
 });
 
+QUnit.test("changeRowSelection for editing data (T654321)", function(assert) {
+    // arrange
+    var that = this,
+        $editingCell,
+        $testElement = $('#container').width(800);
+
+    that.options.selection.showCheckBoxesMode = 'onClick';
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+    that.options.onSelectionChanged = function(e) {
+        assert.deepEqual(e.selectedRowKeys, [{ "name": "Alex", "age": 15 }], "selectedRowKeys contains original data");
+    };
+    that.setup();
+    that.columnHeadersView.render($testElement);
+    that.rowsView.render($testElement);
+
+    // act
+    that.editCell(0, 1);
+    $editingCell = $(that.rowsView.element()).find(".dx-data-row:nth-child(1) td:nth-child(2)");
+    $editingCell.find("input").val("Test");
+    $(that.rowsView.element()).find(".dx-data-row:nth-child(1) td:nth-child(1) .dx-select-checkbox").trigger("dxclick");
+});
+
 QUnit.test("Indeterminate state of selectAll", function(assert) {
     var $checkbox,
         testElement = $('#container');
