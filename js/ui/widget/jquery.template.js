@@ -27,7 +27,7 @@ registerTemplateEngine("default", {
     compile: function(element) {
         return domUtils.normalizeTemplateElement(element);
     },
-    render: function(template, _, __, transclude) {
+    render: function(template, model, index, transclude) {
         return transclude ? template : template.clone();
     }
 });
