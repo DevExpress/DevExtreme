@@ -818,7 +818,8 @@ var RecurrenceEditor = Editor.inherit({
 
         this._changeRepeatCountValue();
         this._changeRepeatUntilValue();
-        this._changeCheckBoxesValue();
+        this._changeCheckBoxesValue(!!rules["byday"]);
+
         this._changeDayOfMonthValue();
         this._changeMonthOfYearValue();
     },
@@ -858,8 +859,8 @@ var RecurrenceEditor = Editor.inherit({
         return this._recurrenceRule.rules().until || this._formatUntilDate(new Date());
     },
 
-    _changeCheckBoxesValue: function() {
-        if(!this._$repeatOnWeek) {
+    _changeCheckBoxesValue: function(byDayChanged) {
+        if(!this._$repeatOnWeek || !byDayChanged) {
             return;
         }
 
