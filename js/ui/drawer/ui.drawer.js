@@ -1,36 +1,32 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    clickEvent = require("../../events/click"),
-    translator = require("../../animation/translator"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    hideTopOverlayCallback = require("../../mobile/hide_top_overlay").hideCallback,
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    Widget = require("../widget/ui.widget"),
-    EmptyTemplate = require("../widget/empty_template"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    windowUtils = require("../../core/utils/window"),
-    PushStrategy = require("./ui.drawer.rendering.strategy.push"),
-    PersistentStrategy = require("./ui.drawer.rendering.strategy.persistent"),
-    TemporaryStrategy = require("./ui.drawer.rendering.strategy.temporary"),
-    animation = require("./ui.drawer.rendering.strategy").animation;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import { noop } from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import clickEvent from "../../events/click";
+import translator from "../../animation/translator";
+import { getPublicElement } from "../../core/utils/dom";
+import { hideCallback } from "../../mobile/hide_top_overlay";
+import registerComponent from "../../core/component_registrator";
+import { extend } from "../../core/utils/extend";
+import Widget from "../widget/ui.widget";
+import EmptyTemplate from "../widget/empty_template";
+import { Deferred } from "../../core/utils/deferred";
+import windowUtils from "../../core/utils/window";
+import PushStrategy from "./ui.drawer.rendering.strategy.push";
+import PersistentStrategy from "./ui.drawer.rendering.strategy.persistent";
+import TemporaryStrategy from "./ui.drawer.rendering.strategy.temporary";
+import { animation } from "./ui.drawer.rendering.strategy";
 
-
-var DRAWER_CLASS = "dx-drawer",
-    DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper",
-    DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content",
-    DRAWER_CONTENT_CLASS = "dx-drawer-content",
-    DRAWER_SHADER_CLASS = "dx-drawer-shader",
-
-    INVISIBLE_STATE_CLASS = "dx-state-invisible",
-
-    OPENED_STATE_CLASS = "dx-drawer-opened",
-
-    ANONYMOUS_TEMPLATE_NAME = "content";
+const DRAWER_CLASS = "dx-drawer";
+const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
+const DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content";
+const DRAWER_CONTENT_CLASS = "dx-drawer-content";
+const DRAWER_SHADER_CLASS = "dx-drawer-shader";
+const INVISIBLE_STATE_CLASS = "dx-state-invisible";
+const OPENED_STATE_CLASS = "dx-drawer-opened";
+const ANONYMOUS_TEMPLATE_NAME = "content";
 
 /**
 * @name dxDrawer
@@ -38,9 +34,9 @@ var DRAWER_CLASS = "dx-drawer",
 * @module ui/drawer
 * @export default
 */
-var Drawer = Widget.inherit({
+const Drawer = Widget.inherit({
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), {
 
             /**
@@ -148,11 +144,11 @@ var Drawer = Widget.inherit({
         });
     },
 
-    _getAnonymousTemplateName: function() {
+    _getAnonymousTemplateName() {
         return ANONYMOUS_TEMPLATE_NAME;
     },
 
-    _init: function() {
+    _init() {
         this.callBase();
 
         this._initStrategy();
@@ -164,9 +160,9 @@ var Drawer = Widget.inherit({
         this._initHideTopOverlayHandler();
     },
 
-    _initStrategy: function() {
-        var mode = this.option("mode"),
-            Strategy;
+    _initStrategy() {
+        const mode = this.option("mode");
+        let Strategy;
 
         if(mode === "push") {
             Strategy = PushStrategy;
@@ -181,18 +177,18 @@ var Drawer = Widget.inherit({
         this._strategy = new Strategy(this);
     },
 
-    _initHideTopOverlayHandler: function() {
+    _initHideTopOverlayHandler() {
         this._hideMenuHandler = this.hideMenu.bind(this);
     },
 
-    _initTemplates: function() {
+    _initTemplates() {
         this.callBase();
 
         this._defaultTemplates["menu"] = new EmptyTemplate(this);
         this._defaultTemplates["content"] = new EmptyTemplate(this);
     },
 
-    _initMarkup: function() {
+    _initMarkup() {
         this.callBase();
 
         this._togglePositionClass(this.option("menuVisible"));
@@ -201,8 +197,8 @@ var Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshShowModeClass();
 
-        var menuTemplate = this._getTemplate(this.option("menuTemplate")),
-            contentTemplate = this._getTemplate(this.option("contentTemplate"));
+        const menuTemplate = this._getTemplate(this.option("menuTemplate"));
+        const contentTemplate = this._getTemplate(this.option("contentTemplate"));
 
         menuTemplate && menuTemplate.render({
             container: this.menuContent()
@@ -218,14 +214,14 @@ var Drawer = Widget.inherit({
         this._toggleMenuPositionClass();
     },
 
-    _render: function() {
+    _render() {
         this.callBase();
 
         this._dimensionChanged();
     },
 
-    _renderMarkup: function() {
-        var $wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
+    _renderMarkup() {
+        const $wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
         this._$menu = $("<div>").addClass(DRAWER_MENU_CONTENT_CLASS);
         this._$container = $("<div>").addClass(DRAWER_CONTENT_CLASS);
 
@@ -237,21 +233,21 @@ var Drawer = Widget.inherit({
         eventsEngine.on(this._$container, "MSPointerDown", noop);
     },
 
-    _refreshModeClass: function(prevClass) {
+    _refreshModeClass(prevClass) {
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
         this.$element().addClass(DRAWER_CLASS + "-" + this.option("mode"));
     },
 
-    _refreshShowModeClass: function(prevClass) {
+    _refreshShowModeClass(prevClass) {
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
         this.$element().addClass(DRAWER_CLASS + "-" + this.option("showMode"));
     },
 
-    _renderShader: function() {
+    _renderShader() {
         this._$shader = this._$shader || $("<div>").addClass(DRAWER_SHADER_CLASS);
         this._$shader.appendTo(this.content());
         eventsEngine.off(this._$shader, clickEvent.name);
@@ -259,33 +255,33 @@ var Drawer = Widget.inherit({
         this._toggleShaderVisibility(this.option("menuVisible"));
     },
 
-    _initWidth: function() {
+    _initWidth() {
         this._minWidth = this.option("minWidth") || 0;
         this._maxWidth = this.option("maxWidth") || this.getRealMenuWidth();
     },
 
-    getMaxWidth: function() {
+    getMaxWidth() {
         return this._maxWidth;
     },
 
-    getMinWidth: function() {
+    getMinWidth() {
         return this._minWidth;
     },
 
-    getRealMenuWidth: function() {
-        var $menu = this._$menu;
+    getRealMenuWidth() {
+        const $menu = this._$menu;
         return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
     },
 
-    _isRightMenuPosition: function() {
-        var invertedPosition = this.option("menuPosition") === "inverted",
-            rtl = this.option("rtlEnabled");
+    _isRightMenuPosition() {
+        const invertedPosition = this.option("menuPosition") === "inverted";
+        const rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
     },
 
-    _toggleMenuPositionClass: function() {
-        var menuPosition = this.option("menuPosition");
+    _toggleMenuPositionClass() {
+        const menuPosition = this.option("menuPosition");
 
         this._$menu.removeClass(DRAWER_CLASS + "-left");
         this._$menu.removeClass(DRAWER_CLASS + "-right");
@@ -294,14 +290,14 @@ var Drawer = Widget.inherit({
         this._$menu.addClass(DRAWER_CLASS + "-" + menuPosition);
     },
 
-    _renderPosition: function(offset, animate) {
+    _renderPosition(offset, animate) {
         this._animations = [];
 
         animate = typeUtils.isDefined(animate) ? animate && this.option("animationEnabled") : this.option("animationEnabled");
 
         if(!windowUtils.hasWindow()) return;
 
-        var duration = this.option("animationDuration");
+        const duration = this.option("animationDuration");
 
         this._toggleHideMenuCallback(offset);
 
@@ -312,43 +308,43 @@ var Drawer = Widget.inherit({
         this._strategy.renderShaderVisibility(offset, animate, duration);
     },
 
-    _animationCompleteHandler: function() {
+    _animationCompleteHandler() {
         if(this._deferredAnimate) {
             this._deferredAnimate.resolveWith(this);
             this._animations = [];
         }
     },
 
-    _toggleHideMenuCallback: function(subscribe) {
+    _toggleHideMenuCallback(subscribe) {
         if(subscribe) {
-            hideTopOverlayCallback.add(this._hideMenuHandler);
+            hideCallback.add(this._hideMenuHandler);
         } else {
-            hideTopOverlayCallback.remove(this._hideMenuHandler);
+            hideCallback.remove(this._hideMenuHandler);
         }
     },
 
-    _getRTLSignCorrection: function() {
+    _getRTLSignCorrection() {
         return this._isRightMenuPosition() ? -1 : 1;
     },
 
-    _dispose: function() {
+    _dispose() {
         animation.complete($(this.content()));
         this._toggleHideMenuCallback(false);
         this.callBase();
     },
 
-    _visibilityChanged: function(visible) {
+    _visibilityChanged(visible) {
         if(visible) {
             this._dimensionChanged();
         }
     },
 
-    _dimensionChanged: function() {
+    _dimensionChanged() {
         delete this._menuWidth;
         this._renderPosition(this.option("menuVisible"), false);
     },
 
-    _toggleShaderVisibility: function(visible) {
+    _toggleShaderVisibility(visible) {
         if(this.option("showShader")) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
         } else {
@@ -356,12 +352,12 @@ var Drawer = Widget.inherit({
         }
     },
 
-    _togglePositionClass: function(menuVisible) {
+    _togglePositionClass(menuVisible) {
         this.$element().toggleClass(OPENED_STATE_CLASS, menuVisible);
     },
 
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "width":
                 this.callBase(args);
@@ -422,7 +418,7 @@ var Drawer = Widget.inherit({
     * @publicName menuContent()
     * @return dxElement
     */
-    menuContent: function() {
+    menuContent() {
         return getPublicElement(this._$menu);
     },
 
@@ -431,7 +427,7 @@ var Drawer = Widget.inherit({
     * @publicName content()
     * @return dxElement
     */
-    content: function() {
+    content() {
         return getPublicElement(this._$container);
     },
 
@@ -440,7 +436,7 @@ var Drawer = Widget.inherit({
     * @publicName showMenu()
     * @return Promise<void>
     */
-    showMenu: function() {
+    showMenu() {
         return this.toggleMenuVisibility(true);
     },
 
@@ -449,7 +445,7 @@ var Drawer = Widget.inherit({
     * @publicName hideMenu()
     * @return Promise<void>
     */
-    hideMenu: function() {
+    hideMenu() {
         return this.toggleMenuVisibility(false);
     },
 
@@ -458,7 +454,7 @@ var Drawer = Widget.inherit({
     * @publicName toggleMenuVisibility()
     * @return Promise<void>
     */
-    toggleMenuVisibility: function(showing) {
+    toggleMenuVisibility(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;
 
         this._deferredAnimate = new Deferred();
@@ -485,5 +481,5 @@ var Drawer = Widget.inherit({
 registerComponent("dxDrawer", Drawer);
 
 module.exports = Drawer;
-module.exports.animation = animation;
+
 

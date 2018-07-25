@@ -1,68 +1,68 @@
 "use strict";
 
-var Class = require("../../core/class"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    deferredUtils = require("../../core/utils/deferred"),
-    $ = require("../../core/renderer"),
-    when = deferredUtils.when,
-    fx = require("../../animation/fx");
+import Class from "../../core/class";
+import { Deferred } from "../../core/utils/deferred";
+import deferredUtils from "../../core/utils/deferred";
+import $ from "../../core/renderer";
+const when = deferredUtils.when;
+import fx from "../../animation/fx";
 
 
-var animation = {
-    moveTo: function($element, position, duration, completeAction) {
+const animation = {
+    moveTo($element, position, duration, completeAction) {
         fx.animate($element, {
             type: "slide",
             to: { left: position },
-            duration: duration,
+            duration,
             complete: completeAction
         });
     },
-    paddingLeft: function($element, padding, duration, completeAction) {
-        var toConfig = {};
+    paddingLeft($element, padding, duration, completeAction) {
+        const toConfig = {};
 
         toConfig["padding-left"] = padding;
 
         fx.animate($element, {
             to: { paddingLeft: padding },
-            duration: duration,
+            duration,
             complete: completeAction
         });
     },
 
-    fade: function($element, config, duration, completeAction) {
+    fade($element, config, duration, completeAction) {
         fx.animate($element, {
             type: "fade",
             to: config.to,
             from: config.from,
-            duration: duration,
+            duration,
             complete: completeAction
         });
     },
 
-    width: function($element, width, duration, completeAction) {
-        var toConfig = {};
+    width($element, width, duration, completeAction) {
+        const toConfig = {};
 
         toConfig["width"] = width;
 
         fx.animate($element, {
             to: toConfig,
-            duration: duration,
+            duration,
             complete: completeAction
         });
     },
 
-    complete: function($element) {
+    complete($element) {
         fx.stop($element, true);
     }
 };
 
-var DrawerStrategy = Class.inherit({
+const DrawerStrategy = Class.inherit({
 
-    ctor: function(drawer) {
+    ctor(drawer) {
         this._drawer = drawer;
     },
 
-    renderPosition: function(offset, animate) {
+    renderPosition(offset, animate) {
         this._contentAnimation = new Deferred(),
         this._menuAnimation = new Deferred();
         this._shaderAnimation = new Deferred();
@@ -78,7 +78,7 @@ var DrawerStrategy = Class.inherit({
         }
     },
 
-    _getMenuOffset: function(offset) {
+    _getMenuOffset(offset) {
         if(offset) {
             return -(this._drawer.getRealMenuWidth() - this._drawer.getMaxWidth());
         } else {
@@ -86,23 +86,23 @@ var DrawerStrategy = Class.inherit({
         }
     },
 
-    _getMenuWidth: function(offset) {
+    _getMenuWidth(offset) {
         return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
     },
 
-    renderShaderVisibility: function(offset, animate, duration) {
-        var fadeConfig = this._getFadeConfig(offset);
+    renderShaderVisibility(offset, animate, duration) {
+        const fadeConfig = this._getFadeConfig(offset);
 
         if(animate) {
-            animation.fade($(this._drawer._$shader), fadeConfig, duration, (function() {
+            animation.fade($(this._drawer._$shader), fadeConfig, duration, () => {
                 this._shaderAnimation.resolve();
-            }).bind(this));
+            });
         } else {
             this._drawer._$shader.css("opacity", fadeConfig.to);
         }
     },
 
-    _getFadeConfig: function(offset) {
+    _getFadeConfig(offset) {
         if(offset) {
             return {
                 to: 0.5,
