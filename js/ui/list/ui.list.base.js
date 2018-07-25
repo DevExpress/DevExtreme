@@ -515,9 +515,9 @@ var ListBase = CollectionWidget.inherit({
             this._itemElementsCache = this._itemContainer().children(this._itemSelector());
         } else {
             this._itemElementsCache = this._itemContainer()
-                  .children("." + LIST_GROUP_CLASS)
-                  .children("." + LIST_GROUP_BODY_CLASS)
-                  .children(this._itemSelector());
+                .children("." + LIST_GROUP_CLASS)
+                .children("." + LIST_GROUP_BODY_CLASS)
+                .children(this._itemSelector());
         }
     },
 

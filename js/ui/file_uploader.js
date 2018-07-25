@@ -593,18 +593,18 @@ var FileUploader = Editor.inherit({
         var value = file.value;
 
         var $fileContainer = $("<div>")
-                .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
-                .appendTo(this._$filesContainer);
+            .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
+            .appendTo(this._$filesContainer);
 
         this._renderFileButtons(file, $fileContainer);
 
         file.$file = $("<div>")
-                .addClass(FILEUPLOADER_FILE_CLASS)
-                .appendTo($fileContainer);
+            .addClass(FILEUPLOADER_FILE_CLASS)
+            .appendTo($fileContainer);
 
         var $fileInfo = $("<div>")
-                .addClass(FILEUPLOADER_FILE_INFO_CLASS)
-                .appendTo(file.$file);
+            .addClass(FILEUPLOADER_FILE_INFO_CLASS)
+            .appendTo(file.$file);
 
         file.$statusMessage = $("<div>")
             .addClass(FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS)

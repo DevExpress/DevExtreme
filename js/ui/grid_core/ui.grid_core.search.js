@@ -31,7 +31,7 @@ function parseValue(column, text) {
 module.exports = {
     defaultOptions: function() {
         return {
-         /**
+            /**
          * @name GridBaseOptions.searchPanel
          * @type object
          */
@@ -187,8 +187,8 @@ module.exports = {
                             var toolbarItem = {
                                 template: function(data, index, container) {
                                     var $search = $("<div>")
-                                            .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
-                                            .appendTo(container);
+                                        .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
+                                        .appendTo(container);
 
                                     that.getController("editorFactory").createEditor($search, {
                                         width: searchPanelOptions.width,

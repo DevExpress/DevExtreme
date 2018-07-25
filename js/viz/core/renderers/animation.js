@@ -209,7 +209,7 @@ AnimationController.prototype = {
     lock: function() {
         var an,
             animations = this._animations,
-            unstoppable,                 // T261694
+            unstoppable, // T261694
             hasUnstoppableInAnimations;
 
         for(an in animations) {

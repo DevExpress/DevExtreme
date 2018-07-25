@@ -160,6 +160,6 @@ var ODataContext = Class.inherit({
     }
 
 })
-.include(mixins.SharedMethods);
+    .include(mixins.SharedMethods);
 
 module.exports = ODataContext;

@@ -1410,26 +1410,26 @@ var PivotGrid = Widget.inherit({
             that._createComponent($(DIV)
                 .appendTo($toolbarContainer)
                 .addClass("dx-pivotgrid-field-chooser-button"),
-                "dxButton", {
-                    icon: "columnchooser",
-                    hint: that.option("texts.showFieldChooser"),
-                    onClick: function() {
-                        that.getFieldChooserPopup().show();
-                    }
-                });
+            "dxButton", {
+                icon: "columnchooser",
+                hint: that.option("texts.showFieldChooser"),
+                onClick: function() {
+                    that.getFieldChooserPopup().show();
+                }
+            });
         }
 
         if(that.option("export.enabled")) {
             that._createComponent($(DIV)
                 .appendTo($toolbarContainer)
                 .addClass("dx-pivotgrid-export-button"),
-                "dxButton", {
-                    icon: "exportxlsx",
-                    hint: that.option("texts.exportToExcel"),
-                    onClick: function() {
-                        that.exportToExcel();
-                    }
-                });
+            "dxButton", {
+                icon: "exportxlsx",
+                hint: that.option("texts.exportToExcel"),
+                onClick: function() {
+                    that.exportToExcel();
+                }
+            });
         }
     },
 

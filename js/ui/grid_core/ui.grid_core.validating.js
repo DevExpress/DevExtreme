@@ -543,9 +543,9 @@ module.exports = {
 
                     if($targetElement && $targetElement.length) {
                         return new Tooltip(
-                        $("<div>")
-                            .addClass(that.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
-                            .appendTo($container),
+                            $("<div>")
+                                .addClass(that.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
+                                .appendTo($container),
                             {
                                 animation: null,
                                 visible: true,
@@ -557,12 +557,12 @@ module.exports = {
                                 contentTemplate: function() {
                                     return (new Button($("<div>")
                                         .addClass(REVERT_BUTTON_CLASS), {
-                                            icon: "revert",
-                                            hint: that.option("editing.texts.validationCancelChanges"),
-                                            onClick: function() {
-                                                that._editingController.cancelEditData();
-                                            }
-                                        })).$element();
+                                        icon: "revert",
+                                        hint: that.option("editing.texts.validationCancelChanges"),
+                                        onClick: function() {
+                                            that._editingController.cancelEditData();
+                                        }
+                                    })).$element();
                                 },
                                 position: {
                                     my: "left top",
@@ -591,35 +591,35 @@ module.exports = {
                         .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
                         .text(message)
                         .appendTo($cell),
-                        {
-                            target: overlayTarget,
-                            container: $cell,
-                            shading: false,
-                            width: 'auto',
-                            height: 'auto',
-                            visible: true,
-                            animation: false,
-                            propagateOutsideClick: true,
-                            closeOnOutsideClick: false,
-                            closeOnTargetScroll: false,
-                            position: {
-                                collision: "flip",
-                                boundary: that._rowsView.element(),
-                                boundaryOffset: "0 0",
-                                my: myPosition,
-                                at: atPosition
-                            },
-                            onPositioned: function(e) {
-                                if(!needRepaint) {
-                                    needRepaint = that._rowsView.updateFreeSpaceRowHeight();
-                                    if(needRepaint) {
-                                        e.component.repaint();
-                                    }
+                    {
+                        target: overlayTarget,
+                        container: $cell,
+                        shading: false,
+                        width: 'auto',
+                        height: 'auto',
+                        visible: true,
+                        animation: false,
+                        propagateOutsideClick: true,
+                        closeOnOutsideClick: false,
+                        closeOnTargetScroll: false,
+                        position: {
+                            collision: "flip",
+                            boundary: that._rowsView.element(),
+                            boundaryOffset: "0 0",
+                            my: myPosition,
+                            at: atPosition
+                        },
+                        onPositioned: function(e) {
+                            if(!needRepaint) {
+                                needRepaint = that._rowsView.updateFreeSpaceRowHeight();
+                                if(needRepaint) {
+                                    e.component.repaint();
                                 }
-
-                                that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                             }
-                        });
+
+                            that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
+                        }
+                    });
                 },
 
                 _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {

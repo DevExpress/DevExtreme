@@ -74,7 +74,7 @@ var DEFAULT_DEVICE = {
     * @type boolean
     */
     android: false,
-     /**
+    /**
     * @name Device.ios
     * @type boolean
     */

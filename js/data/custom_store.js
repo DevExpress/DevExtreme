@@ -215,11 +215,11 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @name LoadOptions.filter
  * @type object
  */
- /**
+/**
  * @name LoadOptions.sort
  * @type object
  */
- /**
+/**
  * @name LoadOptions.select
  * @type object
  */
@@ -227,55 +227,55 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @name LoadOptions.group
  * @type object
  */
- /**
+/**
  * @name LoadOptions.skip
  * @type number
  */
- /**
+/**
  * @name LoadOptions.skip
  * @type number
  */
- /**
+/**
  * @name LoadOptions.take
  * @type number
  */
- /**
+/**
  * @name LoadOptions.userData
  * @type object
  */
- /**
+/**
  * @name LoadOptions.expand
  * @type object
  */
- /**
+/**
  * @name LoadOptions.requireTotalCount
  * @type boolean
  */
- /**
+/**
  * @name LoadOptions.searchValue
  * @type any
  */
- /**
+/**
  * @name LoadOptions.searchOperation
  * @type string
  */
- /**
+/**
  * @name LoadOptions.searchExpr
  * @type getter|Array<getter>
  */
- /**
+/**
  * @name LoadOptions.customQueryParams
  * @type Object
  */
- /**
+/**
  * @name LoadOptions.totalSummary
  * @type Object
  */
- /**
+/**
  * @name LoadOptions.groupSummary
  * @type Object
  */
- /**
+/**
  * @name LoadOptions.requireGroupCount
  * @type boolean
  */

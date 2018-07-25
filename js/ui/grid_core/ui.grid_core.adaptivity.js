@@ -512,11 +512,11 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 formID: "dx-" + new Guid()
             },
             defaultFormOptions = themes.isMaterial() ?
-            {
-                colCount: 2,
-                screenByWidth: function() { return "lg"; }
-            } :
-            {};
+                {
+                    colCount: 2,
+                    screenByWidth: function() { return "lg"; }
+                } :
+                {};
 
         this.executeAction("onAdaptiveDetailRowPreparing", { formOptions: userFormOptions });
 
@@ -661,7 +661,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-     /**
+    /**
     * @name GridBaseMethods.collapseAdaptiveDetailRow
     * @publicName collapseAdaptiveDetailRow()
     */

@@ -803,11 +803,11 @@ var Gallery = CollectionWidget.inherit({
     _loadNextPageIfNeeded: function(selectedIndex) {
         selectedIndex = selectedIndex === undefined ? this.option("selectedIndex") : selectedIndex;
         if(
-           this._dataSource &&
-           this._dataSource.paginate() &&
-           this._shouldLoadNextPage(selectedIndex) &&
-           !this._isDataSourceLoading() &&
-           !this._isLastPage()
+            this._dataSource &&
+            this._dataSource.paginate() &&
+            this._shouldLoadNextPage(selectedIndex) &&
+            !this._isDataSourceLoading() &&
+            !this._isLastPage()
         ) {
             this._loadNextPage().done((function() {
                 this._renderIndicator();

@@ -939,7 +939,7 @@ MapLayer.prototype = _extend({
             context.str.reset(context);
             context.root.clear();
             context.labelRoot && context.labelRoot.clear();
-            that._params.tracker.reset();   // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
+            that._params.tracker.reset(); // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
             that._destroyHandles();
             context.str = selectStrategy(that._options, that._data);
             context.str.setup(context);
@@ -1306,7 +1306,7 @@ MapLayerElement.prototype = {
         if(selection && currentState !== newState) {
             that._state = setFlag(that._state, STATE_SELECTED, newState);
             tmp = selection.state[selection.single];
-            selection.state[selection.single] = null;   // This is to prevent stack overflow
+            selection.state[selection.single] = null; // This is to prevent stack overflow
             if(tmp) {
                 tmp.setSelected(false);
             }

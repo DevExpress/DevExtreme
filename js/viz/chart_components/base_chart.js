@@ -396,14 +396,14 @@ var BaseChart = BaseWidget.inherit({
         // Changing the `_initialized` flag prevents `_render` which is synchronously called from the `_updateDataSource` when data source is local and series rendering is synchronous
         // This is possible because `_render` checks the `_initialized` flag
         // if (!_skipRender) {
-        that._skipRender = true;        // T273635, T351032
+        that._skipRender = true; // T273635, T351032
         // }
         that._updateDataSource();
         if(!that.series || that.needToPopulateSeries) {
             that._dataSpecificInit(false);
         }
         // if (!_skipRender) {
-        that._skipRender = false;       // T273635, T351032
+        that._skipRender = false; // T273635, T351032
         // }
         that._correctAxes();
         /* _skipRender || */that._forceRender();
@@ -419,13 +419,13 @@ var BaseChart = BaseWidget.inherit({
         that._backgroundRect = renderer.rect().attr({ fill: "gray", opacity: 0.0001 }).append(root);
         that._panesBackgroundGroup = renderer.g().attr({ "class": "dxc-background" }).append(root);
 
-        that._stripsGroup = renderer.g().attr({ "class": "dxc-strips-group" }).linkOn(root, "strips");                         // TODO: Must be created in the same place where used (advanced chart)
-        that._gridGroup = renderer.g().attr({ "class": "dxc-grids-group" }).linkOn(root, "grids");                              // TODO: Must be created in the same place where used (advanced chart)
-        that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes");                                // TODO: Must be created in the same place where used (advanced chart)
-        that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels");         // TODO: Must be created in the same place where used (advanced chart)
-        that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border");                           // TODO: Must be created in the same place where used (chart)
+        that._stripsGroup = renderer.g().attr({ "class": "dxc-strips-group" }).linkOn(root, "strips"); // TODO: Must be created in the same place where used (advanced chart)
+        that._gridGroup = renderer.g().attr({ "class": "dxc-grids-group" }).linkOn(root, "grids"); // TODO: Must be created in the same place where used (advanced chart)
+        that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes"); // TODO: Must be created in the same place where used (advanced chart)
+        that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels"); // TODO: Must be created in the same place where used (advanced chart)
+        that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border"); // TODO: Must be created in the same place where used (chart)
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
-        that._constantLinesGroup = renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines");   // TODO: Must be created in the same place where used (advanced chart)
+        that._constantLinesGroup = renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines"); // TODO: Must be created in the same place where used (advanced chart)
         that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
         that._crosshairCursorGroup = renderer.g().attr({ "class": "dxc-crosshair-cursor" }).linkOn(root, "crosshair");
@@ -590,7 +590,7 @@ var BaseChart = BaseWidget.inherit({
 
         // T207665
         that.__originalCanvas = that._canvas;
-        that._canvas = extend({}, that._canvas);  // NOTE: Instance of the original canvas must be preserved
+        that._canvas = extend({}, that._canvas); // NOTE: Instance of the original canvas must be preserved
 
         // T207665
         if(recreateCanvas) {
@@ -795,11 +795,11 @@ var BaseChart = BaseWidget.inherit({
 
     _cleanGroups: function() {
         var that = this;
-        that._stripsGroup.linkRemove().clear();             // TODO: Must be removed in the same place where appended (advanced chart)
-        that._gridGroup.linkRemove().clear();               // TODO: Must be removed in the same place where appended (advanced chart)
-        that._axesGroup.linkRemove().clear();               // TODO: Must be removed in the same place where appended (advanced chart)
-        that._constantLinesGroup.linkRemove().clear();      // TODO: Must be removed in the same place where appended (advanced chart)
-        that._labelAxesGroup.linkRemove().clear();          // TODO: Must be removed in the same place where appended (advanced chart)
+        that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._constantLinesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._labelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
         that._crosshairCursorGroup.linkRemove().clear();
@@ -827,7 +827,7 @@ var BaseChart = BaseWidget.inherit({
             legendData = that._getLegendData();
 
         legendOptions.containerBackgroundColor = themeManager.getOptions("containerBackgroundColor");
-        legendOptions._incidentOccurred = that._incidentOccurred;     // TODO: Why is `_` used?
+        legendOptions._incidentOccurred = that._incidentOccurred; // TODO: Why is `_` used?
         that._legend.update(legendData, legendOptions);
     },
 
@@ -843,7 +843,7 @@ var BaseChart = BaseWidget.inherit({
                 animate: animationOptions.enabled,
                 animationPointsLimit: animationOptions.maxPointCountSupported
             },
-            drawOptions, this.__renderOptions);     // NOTE: This is to support `render` method options
+            drawOptions, this.__renderOptions); // NOTE: This is to support `render` method options
         if(!_isDefined(options.recreateCanvas)) {
             options.recreateCanvas = options.adjustAxes && options.drawLegend && options.drawTitle;
         }
