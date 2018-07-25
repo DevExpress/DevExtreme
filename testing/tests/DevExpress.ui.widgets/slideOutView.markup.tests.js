@@ -28,7 +28,7 @@ QUnit.testStart(function() {
     </style>\
     \
     <div id="slideOutView">\
-        Test Content\
+        <div id="content">Test Content</div>\
     </div>\
     <div id="contentTemplate">\
         <div data-options="dxTemplate: { name: \'customMenu\' }">\
@@ -58,6 +58,13 @@ QUnit.test("render slideoutView content", function(assert) {
         $content = $element.find("." + SLIDEOUTVIEW_CONTENT_CLASS);
 
     assert.equal($.trim($content.text()), "Test Content", "slideoutview content was rendered");
+});
+
+QUnit.test("slideoutView preserve content", function(assert) {
+    var $content = $("#slideOutView #content"),
+        $element = $("#slideOutView").dxSlideOutView({});
+
+    assert.equal($content[0], $element.find("#content")[0]);
 });
 
 QUnit.test("custom content template for menu should be rendered correctly", function(assert) {
