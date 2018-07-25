@@ -1068,7 +1068,7 @@ AxisWrapper.prototype = {
         axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
     },
 
-    getViewport: function() {}
+    visualRange: function() {}
 };
 
 ["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator"].forEach(methodName => {

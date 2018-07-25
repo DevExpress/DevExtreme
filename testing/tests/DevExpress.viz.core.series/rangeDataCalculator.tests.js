@@ -19,7 +19,7 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings = renderSettings || {};
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
-        getViewport: function() {},
+        visualRange: function() {},
         calculateInterval: function(a, b) { return Math.abs(a - b); },
         getAggregationInfo: function() {
             return {
@@ -2232,12 +2232,12 @@ QUnit.test("Doughnut", function(assert) {
 
 QUnit.module("Zooming range data", {
     beforeEach: function() {
-        var viewPort;
+        var viewPort = [];
         this.zoom = function(min, max) {
-            viewPort = { min: min, max: max };
+            viewPort = [min, max];
         };
         this.argumentAxis = {
-            getViewport: function() {
+            visualRange: function() {
                 return viewPort;
             },
             calculateInterval: function(a, b) {
@@ -2342,12 +2342,12 @@ QUnit.test("GetViewport without zooming", function(assert) {
 
 QUnit.module("Zooming range data. Simple", {
     beforeEach: function() {
-        var viewPort = {};
+        var viewPort = [];
         this.zoom = function(min, max) {
-            viewPort = { min: min, max: max };
+            viewPort = [min, max];
         };
         this.argumentAxis = {
-            getViewport: function() {
+            visualRange: function() {
                 return viewPort;
             },
             calculateInterval: function(a, b) {
@@ -2543,12 +2543,12 @@ QUnit.test("Discrete argument axis.", function(assert) {
 
 QUnit.module("Zooming range data. Bar/area", {
     beforeEach: function() {
-        var viewPort = {};
+        var viewPort = [];
         this.zoom = function(min, max) {
-            viewPort = { min: min, max: max };
+            viewPort = [min, max];
         };
         this.argumentAxis = {
-            getViewport: function() {
+            visualRange: function() {
                 return viewPort;
             },
             calculateInterval: function(a, b) {
@@ -2648,21 +2648,21 @@ QUnit.test("Discrete data", function(assert) {
 
 QUnit.module("Get points in viewport", {
     beforeEach: function() {
-        var argumentViewPort,
-            valueViewPort;
+        var argumentViewPort = [],
+            valueViewPort = [];
         this.zoomArgument = function(min, max) {
-            argumentViewPort = { min: min, max: max };
+            argumentViewPort = [min, max];
         };
         this.zoomValue = function(min, max) {
-            valueViewPort = { min: min, max: max };
+            valueViewPort = [min, max];
         };
         this.argumentAxis = {
-            getViewport: function() {
+            visualRange: function() {
                 return argumentViewPort;
             }
         };
         this.valueAxis = {
-            getViewport: function() {
+            visualRange: function() {
                 return valueViewPort;
             }
         };

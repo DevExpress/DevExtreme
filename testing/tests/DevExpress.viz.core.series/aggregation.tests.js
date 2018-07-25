@@ -252,7 +252,6 @@ QUnit.module("Aggregation methods", {
                     }
                 };
             },
-            getViewport() { },
             calculateInterval: function() {
                 return 1;
             }

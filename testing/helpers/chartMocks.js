@@ -1010,7 +1010,11 @@ export const MockAxis = function(renderOptions) {
         },
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
-        }
+        },
+        applyVisualRangeSetter: sinon.spy(),
+        _setVisualRange: sinon.spy(),
+        visualRange: sinon.spy(),
+        _getAdjustedBusinessRange: sinon.spy()
     };
 };
 
