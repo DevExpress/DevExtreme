@@ -408,11 +408,11 @@ QUnit.test("From renders the right types of editors by default", function(assert
     assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-outlined"), "right class rendered");
 });
 
-QUnit.test("From renders the right types of editors according to displayMode option", function(assert) {
+QUnit.test("From renders the right types of editors according to stylingMode option", function(assert) {
     // arrange
     var $testContainer = $("#form").dxForm({
         formData: { id: 1, name: "Name" },
-        displayMode: "standard"
+        stylingMode: "standard"
     });
 
     // assert

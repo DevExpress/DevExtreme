@@ -309,7 +309,7 @@ testComponentDefaults(TextEditor,
 testComponentDefaults(TextEditor,
     {},
     {
-        displayMode: "standard"
+        stylingMode: "standard"
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

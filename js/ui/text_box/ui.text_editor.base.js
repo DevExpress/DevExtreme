@@ -279,7 +279,7 @@ var TextEditorBase = Editor.inherit({
             * @inheritdoc
             */
 
-            displayMode: "outlined"
+            stylingMode: "outlined"
         });
     },
 
@@ -298,7 +298,7 @@ var TextEditorBase = Editor.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    displayMode: "standard"
+                    stylingMode: "standard"
                 }
             }
         ]);
@@ -323,7 +323,7 @@ var TextEditorBase = Editor.inherit({
     _initMarkup: function() {
         this.$element()
             .addClass(TEXTEDITOR_CLASS)
-            .addClass(TEXTEDITOR_DISPLAY_MODE_PREFIX + this.option("displayMode"));
+            .addClass(TEXTEDITOR_DISPLAY_MODE_PREFIX + this.option("stylingMode"));
 
         this._renderInput();
         this._renderInputType();
@@ -737,7 +737,7 @@ var TextEditorBase = Editor.inherit({
                 this._applyInputAttributes(this._input(), args.value);
                 break;
             case "valueFormat":
-            case "displayMode":
+            case "stylingMode":
                 this._invalidate();
                 break;
             default:

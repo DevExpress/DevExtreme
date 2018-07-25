@@ -202,7 +202,7 @@ var ColorView = Editor.inherit({
             onEnterKeyPressed: undefined,
             editAlphaChannel: false,
             keyStep: 1,
-            displayMode: undefined
+            stylingMode: undefined
         });
     },
 
@@ -564,16 +564,13 @@ var ColorView = Editor.inherit({
         });
 
         var editorType = options.editorType;
-        var displayMode = this.option("displayMode");
 
-        var editorOptions = {
+        var editorOptions = extend({
             value: options.value,
             onValueChanged: options.onValueChanged
-        };
-
-        if(displayMode) {
-            editorOptions.displayMode = displayMode;
-        }
+        }, {
+            stylingMode: this.option("stylingMode")
+        });
 
         if(editorType === NumberBox) {
             editorOptions.min = options.min || 0;
@@ -840,7 +837,7 @@ var ColorView = Editor.inherit({
                 break;
             case "keyStep":
                 break;
-            case "displayMode":
+            case "stylingMode":
                 this._renderControls();
                 break;
             default:

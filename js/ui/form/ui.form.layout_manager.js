@@ -766,7 +766,7 @@ var LayoutManager = Widget.inherit({
                 id: options.id
             },
             validationBoundary: options.validationBoundary,
-            displayMode: this.option("form").option("displayMode")
+            stylingMode: this.option("form").option("stylingMode")
         });
 
         this._replaceDataOptions(options.editorOptions, editorOptions);

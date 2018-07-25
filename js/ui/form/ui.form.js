@@ -237,7 +237,7 @@ var Form = Widget.inherit({
              * @default undefined
              */
             validationGroup: undefined,
-            displayMode: undefined
+            stylingMode: undefined
             /**
             * @name dxFormSimpleItem
 			* @publicName SimpleItem
@@ -1207,7 +1207,7 @@ var Form = Widget.inherit({
             case "formID":
             case "colCountByScreen":
             case "screenByWidth":
-            case "displayMode":
+            case "stylingMode":
                 this._invalidate();
                 break;
             case "showValidationSummary":
