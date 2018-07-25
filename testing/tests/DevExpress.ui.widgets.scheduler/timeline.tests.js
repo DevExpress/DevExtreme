@@ -258,7 +258,15 @@ QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinat
 
     var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
 
-    assert.equal(cellIndex, 111, "Cell index is OK");
+    assert.equal(cellIndex, 63, "Cell index is OK");
+
+    cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth + 0.656, top: cellHeight - 0.656 });
+
+    assert.equal(cellIndex, 1, "Cell index is OK");
+
+    cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth + 0.656, top: cellHeight + 0.656 });
+
+    assert.equal(cellIndex, 49, "Cell index is OK");
 });
 
 QUnit.test("Timeline should not have time panel offset", function(assert) {
