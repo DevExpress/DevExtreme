@@ -199,7 +199,7 @@ define(function(require) {
 
 
     QUnit.module("default template engine", {
-        beforeEach() {
+        beforeEach: function() {
             setTemplateEngine("default");
         }
     });
