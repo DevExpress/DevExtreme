@@ -1566,7 +1566,6 @@ var dxChart = {
         visualRange: [undefined, undefined],
         /**
         * @name dxChartOptions.argumentAxis.visualRangeLength
-        * @extends VizTimeIntervalEnum
         * @inherits VizTimeInterval
         */
         visualRangeLength: {},
