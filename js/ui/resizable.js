@@ -43,6 +43,7 @@ var SIDE_BORDER_WIDTH_STYLES = {
 /**
 * @name dxResizable
 * @inherits DOMComponent
+* @hasTranscludedContent
 * @module ui/resizable
 * @export default
 */
