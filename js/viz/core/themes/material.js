@@ -145,7 +145,6 @@ registerTheme({
     axisColor: "#e0e0e0",
     axisLabelColor: LIGHT_LABEL_COLOR,
     primaryTitleColor: LIGHT_TITLE_COLOR,
-    secondaryTitleColor: LIGHT_TITLE_COLOR,
 
     legend: {
         font: {
