@@ -1057,30 +1057,22 @@ Axis.prototype = {
             result.min = isDefined(wholeRange[0]) ? wholeRange[0] : result.min;
             result.max = isDefined(wholeRange[1]) ? wholeRange[1] : result.max;
         } else {
-            const minBoundIndex = isDefined(wholeRange[0]) ? categories.indexOf(wholeRange[0]) : 0;
-            const maxBoundIndex = isDefined(wholeRange[1]) ? categories.indexOf(wholeRange[1]) + 1 : categories.length;
+            const minBoundIndex = isDefined(wholeRange[0]) && categories.indexOf(wholeRange[0]) > -1 ? categories.indexOf(wholeRange[0]) : 0;
+            const maxBoundIndex = isDefined(wholeRange[1]) && categories.indexOf(wholeRange[1]) > -1 ? categories.indexOf(wholeRange[1]) + 1 : categories.length;
 
             categories = categories.slice(minBoundIndex, maxBoundIndex);
             result.categories = categories;
+
+            isDefined(minVisible) && (minVisible = categories.indexOf(minVisible) > -1 ? minVisible : categories[0]);
+            isDefined(maxVisible) && (maxVisible = categories.indexOf(maxVisible) > -1 ? maxVisible : categories[categories.length - 1]);
         }
 
-        if((isDefined(minVisible) || isDefined(maxVisible)) && wholeRange.length > 0) {
-            if(isDiscrete) {
-                currentMin = categories.indexOf(minVisible);
-                currentMax = categories.indexOf(maxVisible);
-                if(isDefined(wholeRange[1]) && currentMin < 0) {
-                    minVisible = wholeRange[0];
-                }
-                if(isDefined(wholeRange[1]) && currentMax < 0) {
-                    maxVisible = wholeRange[1];
-                }
-            } else {
-                if(isDefined(wholeRange[0]) && isDefined(minVisible) && minVisible < wholeRange[0]) {
-                    minVisible = wholeRange[0];
-                }
-                if(isDefined(wholeRange[1]) && isDefined(maxVisible) && maxVisible > wholeRange[1]) {
-                    maxVisible = wholeRange[1];
-                }
+        if(!isDiscrete && (isDefined(minVisible) || isDefined(maxVisible)) && wholeRange.length > 0) {
+            if(isDefined(wholeRange[0]) && isDefined(minVisible) && minVisible < wholeRange[0]) {
+                minVisible = wholeRange[0];
+            }
+            if(isDefined(wholeRange[1]) && isDefined(maxVisible) && maxVisible > wholeRange[1]) {
+                maxVisible = wholeRange[1];
             }
         }
 
@@ -1778,14 +1770,14 @@ Axis.prototype = {
 
     isZoomed() {
         const translator = this.getTranslator();
-        const visualRange = this.adjustViewport(translator.getBusinessRange());
+        const range = this._getAdjustedBusinessRange();
 
-        return !((translator.checkExtremePosition(visualRange, SCROLL_THRESHOLD, false)) &&
-            (translator.checkExtremePosition(visualRange, SCROLL_THRESHOLD, true)));
+        return !((translator.checkExtremePosition(range, SCROLL_THRESHOLD, false)) &&
+            (translator.checkExtremePosition(range, SCROLL_THRESHOLD, true)));
     },
 
     getViewport() {
-        if(isDefined(this._viewport) && (isDefined(this._viewport[0]) || isDefined(this._viewport[1]))) {
+        if(isDefined(this._viewport[0]) || isDefined(this._viewport[1])) {
             return { min: this._viewport[0], max: this._viewport[1] };
         }
     },
@@ -2035,10 +2027,19 @@ Axis.prototype = {
         return this._options.categoriesSortingMethod;
     },
 
+    _getAdjustedBusinessRange() {
+        let businessRange = new rangeModule.Range(this._translator.getBusinessRange());
+        if(!this.getViewport()) {
+            businessRange.minVisible = businessRange.min;
+            businessRange.maxVisible = businessRange.max;
+        }
+        return this.adjustViewport(businessRange);
+    },
+
     // API
     visualRange() {
-        const businessRange = this.adjustViewport(this.getTranslator().getBusinessRange());
-        return [businessRange.minVisible, businessRange.maxVisible];
+        const range = this._getAdjustedBusinessRange();
+        return [range.minVisible, range.maxVisible];
     },
 
     ///#DEBUG

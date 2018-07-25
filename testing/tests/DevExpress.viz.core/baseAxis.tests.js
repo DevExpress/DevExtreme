@@ -3182,6 +3182,32 @@ QUnit.test("Do not set min/max for discrete axis (via visualRange)", function(as
     assert.equal(businessRange.maxVisible, "E");
 });
 
+QUnit.test("Do not set minVisible/maxVisible out of categories (via visualRange)", function(assert) {
+    this.updateOptions({ type: "discrete", visualRange: ["x", "y"] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: ["A", "B", "C", "D", "E", "F"]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.minVisible, "A");
+    assert.equal(businessRange.maxVisible, "F");
+});
+
+QUnit.test("Do not set wholeRange out of categories", function(assert) {
+    this.updateOptions({ type: "discrete", wholeRange: ["L", "Y"], visualRange: ["B", "E"] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: ["A", "B", "C", "D", "E", "F"]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.minVisible, "B");
+    assert.equal(businessRange.maxVisible, "E");
+});
+
 QUnit.test("Create ticks with empty range. StubData should is set on series range", function(assert) {
     this.updateOptions({
         argumentType: "datetime",

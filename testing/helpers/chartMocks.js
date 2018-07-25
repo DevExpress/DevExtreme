@@ -7,7 +7,6 @@ import commonUtils from "core/utils/common";
 import typeUtils from "core/utils/type";
 import loadingIndicatorModule from "viz/core/loading_indicator";
 import axisModule from "viz/axes/base_axis";
-import xyAxesModule from "viz/axes/xy_axes";
 import pointModule from "viz/series/points/base_point";
 import translator2DModule from "viz/translators/translator2d";
 import seriesFamilyModule from "viz/core/series_family";
@@ -1012,9 +1011,10 @@ export const MockAxis = function(renderOptions) {
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
         },
-        applyVisualRangeSetter: xyAxesModule.linear.applyVisualRangeSetter,
-        _setVisualRange: xyAxesModule.linear._setVisualRange,
-        visualRange: xyAxesModule.linear.visualRange
+        applyVisualRangeSetter: sinon.spy(),
+        _setVisualRange: sinon.spy(),
+        visualRange: sinon.spy(),
+        _getAdjustedBusinessRange: sinon.spy()
     };
 };
 

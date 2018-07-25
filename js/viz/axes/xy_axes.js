@@ -1214,8 +1214,8 @@ module.exports = {
             const rangeLength = newRange.length;
 
             if(arguments.length === 0) {
-                const businessRange = that.adjustViewport(that._translator.getBusinessRange());
-                return [businessRange.minVisible, businessRange.maxVisible];
+                const adjustedRange = this._getAdjustedBusinessRange();
+                return [adjustedRange.minVisible, adjustedRange.maxVisible];
             }
 
             if(!rangeLength) {
