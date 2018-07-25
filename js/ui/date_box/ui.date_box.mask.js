@@ -67,12 +67,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _startSearchTimeout() {
         clearTimeout(this._searchTimeout);
-        this._searchTimeout = setTimeout(() => {
-            this._clearSearchValue();
-            if(this.option("advancedCaret")) {
-                this._selectNextPart(FORWARD);
-            }
-        }, this.option("searchTimeout"));
+        this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), this.option("searchTimeout"));
     },
 
     _searchNumber(char) {
@@ -90,13 +85,7 @@ let DateBoxMask = DateBoxBase.inherit({
             this._searchValue = char;
             newValue = parseInt(char);
             if(this.option("advancedCaret")) {
-                this._selectNextPart(FORWARD);
                 clearTimeout(this._searchTimeout);
-
-                let setter = this._getActivePartProp("setter");
-                if(setter === "setMonth") {
-                    newValue--;
-                }
             }
         }
 
@@ -118,7 +107,7 @@ let DateBoxMask = DateBoxBase.inherit({
             startString = this._searchValue + char.toLowerCase(),
             endLimit = limits.max - limits.min;
 
-        if(endLimit > 60) {
+        if(endLimit > 11) {
             return;
         }
 

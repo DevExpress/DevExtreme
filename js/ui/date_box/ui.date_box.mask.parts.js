@@ -36,6 +36,15 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
             return;
         }
         date.setDate(date.getDate() - date.getDay() + value);
+    },
+    y: (date, value) => {
+        var currentYear = date.getFullYear();
+
+        if(value < 100) {
+            date.setFullYear(currentYear - currentYear % 100 + value);
+        } else {
+            date.setFullYear(value);
+        }
     }
 });
 
