@@ -340,6 +340,12 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "October 10 2012", "text was changed");
             assert.equal(this.instance.option("value").getMonth(), 10, "month did not changed in the value after commit");
         });
+
+        QUnit.test("Mask should not handle keyboard events on opened dateBox", (assert) => {
+            this.instance.open();
+            this.keyboard.press("up");
+            assert.equal(this.$input.val(), "October 10 2012", "text was not changed");
+        });
     });
 
     QUnit.module("Pointer events", setupModule, () => {
@@ -521,6 +527,16 @@ if(devices.real().deviceType === "desktop") {
             } catch(e) {
                 assert.notOk(true, "Infinite loop detected");
             }
+        });
+
+        QUnit.test("Null timeout should mean no timeout", (assert) => {
+            this.instance.option("searchTimeout", null);
+
+            this.keyboard.type("1");
+            this.clock.tick(SEARCH_TIMEOUT);
+            this.keyboard.type("2");
+
+            assert.equal(this.$input.val(), "December 10 2012", "timeout is disabled");
         });
     });
 
