@@ -41,13 +41,15 @@ export default function createConstantLine(axis, options) {
                 return this;
             }
 
-            this.line = (this.line || axis._createConstantLine(this.coord, {
+            this.line = axis._createConstantLine(this.coord, {
                 stroke: options.color,
                 "stroke-width": options.width,
                 dashStyle: options.dashStyle
-            })).append(axis._axisConstantLineGroups.inside);
+            }).append(axis._axisConstantLineGroups.inside);
 
             this.label = labelOptions.visible ? axis._drawConstantLineLabels(pos.parsedValue, labelOptions, this.coord, group) : null;
+
+            this.updatePosition();
 
             return this;
         },

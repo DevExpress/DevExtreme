@@ -1675,11 +1675,16 @@ Axis.prototype = {
             callAction(that._ticksToRemove || [], "fadeOutElements");
         }
 
-        callAction(that._majorTicks.concat(that._minorTicks).concat(this._insideConstantLines).concat(this._outsideConstantLines), "saveCoords");
+        that.prepareAnimation();
 
         that._ticksToRemove = null;
 
         that._firstDrawing = false;
+    },
+
+    prepareAnimation() {
+        const that = this;
+        callAction(that._majorTicks.concat(that._minorTicks).concat(that._insideConstantLines).concat(that._outsideConstantLines), "saveCoords");
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {
