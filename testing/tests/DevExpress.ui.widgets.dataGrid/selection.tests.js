@@ -3229,7 +3229,8 @@ QUnit.test("changeRowSelection for editing data (T654321)", function(assert) {
     // arrange
     var that = this,
         $editingCell,
-        $testElement = $('#container').width(800);
+        $testElement = $('#container').width(800),
+        clock = sinon.useFakeTimers();
 
     that.options.selection.showCheckBoxesMode = 'onClick';
     that.options.editing = {
@@ -3248,6 +3249,10 @@ QUnit.test("changeRowSelection for editing data (T654321)", function(assert) {
     $editingCell = $(that.rowsView.element()).find(".dx-data-row:nth-child(1) td:nth-child(2)");
     $editingCell.find("input").val("Test");
     $(that.rowsView.element()).find(".dx-data-row:nth-child(1) td:nth-child(1) .dx-select-checkbox").trigger("dxclick");
+
+    clock.tick();
+
+    clock.restore();
 });
 
 QUnit.test("Indeterminate state of selectAll", function(assert) {
