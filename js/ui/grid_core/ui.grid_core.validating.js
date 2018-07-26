@@ -539,45 +539,47 @@ module.exports = {
             },
             editorFactory: {
                 _showRevertButton: function($container, $targetElement) {
-                    var that = this;
-
-                    if($targetElement && $targetElement.length) {
-                        return new Tooltip(
-                            $("<div>")
-                                .addClass(that.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
-                                .appendTo($container),
-                            {
-                                animation: null,
-                                visible: true,
-                                target: $targetElement,
-                                container: $container,
-                                closeOnOutsideClick: false,
-                                closeOnTargetScroll: false,
-                                boundary: that._rowsView.element(),
-                                contentTemplate: function() {
-                                    return (new Button($("<div>")
-                                        .addClass(REVERT_BUTTON_CLASS), {
-                                        icon: "revert",
-                                        hint: that.option("editing.texts.validationCancelChanges"),
-                                        onClick: function() {
-                                            that._editingController.cancelEditData();
-                                        }
-                                    })).$element();
-                                },
-                                position: {
-                                    my: "left top",
-                                    at: "right top",
-                                    of: $targetElement,
-                                    offset: "1 0",
-                                    collision: "flip"
-                                }
-                            });
+                    if(!$targetElement || !$targetElement.length) {
+                        return;
                     }
+
+                    let $tooltipElement = $("<div>")
+                        .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
+                        .appendTo($container);
+
+                    let tooltipOptions = {
+                        animation: null,
+                        visible: true,
+                        target: $targetElement,
+                        container: $container,
+                        closeOnOutsideClick: false,
+                        closeOnTargetScroll: false,
+                        boundary: this._rowsView.element(),
+                        contentTemplate: () => {
+                            let $buttonElement = $("<div>").addClass(REVERT_BUTTON_CLASS);
+                            let buttonOptions = {
+                                icon: "revert",
+                                hint: this.option("editing.texts.validationCancelChanges"),
+                                onClick: () => {
+                                    this._editingController.cancelEditData();
+                                }
+                            };
+                            return (new Button($buttonElement, buttonOptions)).$element();
+                        },
+                        position: {
+                            my: "left top",
+                            at: "right top",
+                            of: $targetElement,
+                            offset: "1 0",
+                            collision: "flip"
+                        }
+                    };
+
+                    return new Tooltip($tooltipElement, tooltipOptions);
                 },
 
                 _showValidationMessage: function($cell, message, alignment, revertTooltip) {
-                    var that = this,
-                        needRepaint,
+                    let needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                         isMaterial = themes.isMaterial(),
                         overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
@@ -585,13 +587,14 @@ module.exports = {
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
-                    new Overlay($("<div>")
+                    let $overlayElement = $("<div>")
                         .addClass(INVALID_MESSAGE_CLASS)
                         .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                        .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                        .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
                         .text(message)
-                        .appendTo($cell),
-                    {
+                        .appendTo($cell);
+
+                    let overlayOptions = {
                         target: overlayTarget,
                         container: $cell,
                         shading: false,
@@ -604,22 +607,24 @@ module.exports = {
                         closeOnTargetScroll: false,
                         position: {
                             collision: "flip",
-                            boundary: that._rowsView.element(),
+                            boundary: this._rowsView.element(),
                             boundaryOffset: "0 0",
                             my: myPosition,
                             at: atPosition
                         },
-                        onPositioned: function(e) {
+                        onPositioned: e => {
                             if(!needRepaint) {
-                                needRepaint = that._rowsView.updateFreeSpaceRowHeight();
+                                needRepaint = this._rowsView.updateFreeSpaceRowHeight();
                                 if(needRepaint) {
                                     e.component.repaint();
                                 }
                             }
 
-                            that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
+                            this._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                         }
-                    });
+                    };
+
+                    new Overlay($overlayElement, overlayOptions);
                 },
 
                 _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
