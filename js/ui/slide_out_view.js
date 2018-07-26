@@ -46,6 +46,7 @@ var animation = {
 /**
 * @name dxSlideOutView
 * @inherits Widget
+* @hasTranscludedContent
 * @module ui/slide_out_view
 * @export default
 */
