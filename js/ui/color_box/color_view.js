@@ -201,7 +201,8 @@ var ColorView = Editor.inherit({
             value: null,
             onEnterKeyPressed: undefined,
             editAlphaChannel: false,
-            keyStep: 1
+            keyStep: 1,
+            stylingMode: undefined
         });
     },
 
@@ -564,10 +565,12 @@ var ColorView = Editor.inherit({
 
         var editorType = options.editorType;
 
-        var editorOptions = {
+        var editorOptions = extend({
             value: options.value,
             onValueChanged: options.onValueChanged
-        };
+        }, {
+            stylingMode: this.option("stylingMode")
+        });
 
         if(editorType === NumberBox) {
             editorOptions.min = options.min || 0;
@@ -834,6 +837,9 @@ var ColorView = Editor.inherit({
                 }
                 break;
             case "keyStep":
+                break;
+            case "stylingMode":
+                this._renderControls();
                 break;
             default:
                 this.callBase(args);

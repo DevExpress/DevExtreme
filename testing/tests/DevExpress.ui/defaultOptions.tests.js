@@ -309,6 +309,20 @@ testComponentDefaults(TextEditor,
 testComponentDefaults(TextEditor,
     {},
     {
+        stylingMode: "standard"
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(TextEditor,
+    {},
+    {
         showMaskMode: "always"
     }
 );
