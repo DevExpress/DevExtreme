@@ -79,6 +79,21 @@ QUnit.test("Header scrollable shouldn't update position if date scrollable posit
     assert.equal(headerScrollable.scrollLeft(), 0, "Scroll position is OK");
 });
 
+QUnit.test("Date table should have a correct width if cell is less than 75px", function(assert) {
+    this.instance.option("crossScrollingEnabled", true);
+
+    var $element = this.instance.$element(),
+        $cells = $element.find(".dx-scheduler-date-table-cell");
+
+    $cells.css("width", 10);
+
+    domUtils.triggerHidingEvent($element);
+    domUtils.triggerShownEvent($element);
+
+    var dateTableWidth = $element.find(".dx-scheduler-date-table").outerWidth();
+    assert.equal(dateTableWidth, 1008, "Width is OK");
+});
+
 QUnit.test("Sidebar scrollable should update position if date scrollable position is changed", function(assert) {
     this.instance.option({
         crossScrollingEnabled: true,
