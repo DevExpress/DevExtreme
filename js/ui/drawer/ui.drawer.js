@@ -2,7 +2,6 @@
 
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import { noop } from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 import clickEvent from "../../events/click";
 import translator from "../../animation/translator";
@@ -228,9 +227,6 @@ const Drawer = Widget.inherit({
         $wrapper.append(this._$menu);
         $wrapper.append(this._$container);
         this.$element().append($wrapper);
-
-        // NOTE: B251455
-        eventsEngine.on(this._$container, "MSPointerDown", noop);
     },
 
     _refreshModeClass(prevClass) {
