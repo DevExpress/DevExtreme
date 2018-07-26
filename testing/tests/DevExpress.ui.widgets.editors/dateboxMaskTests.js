@@ -588,7 +588,7 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value"), null, "value is still cleared");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "January 25 2018", "text is correct after clearing");
+            assert.equal(this.$input.val(), "January" + this.dateEnd, "text is correct after clearing");
         });
 
         QUnit.test("Incorrect search on empty input should be prevented", (assert) => {
