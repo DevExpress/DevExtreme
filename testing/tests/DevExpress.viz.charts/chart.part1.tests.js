@@ -616,6 +616,8 @@ QUnit.test("Can call public API on onInitialized", function(assert) {
             assert.deepEqual(chart.getAllSeries(), []);
             assert.equal(chart.getSeriesByName("non_existent_series"), undefined);
             assert.equal(chart.getSeriesByPos(1), undefined);
+            assert.equal(chart.getValueAxis(), undefined);
+            assert.equal(chart.getArgumentAxis(), undefined);
         }
     });
 });
