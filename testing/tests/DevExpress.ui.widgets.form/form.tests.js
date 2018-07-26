@@ -397,6 +397,29 @@ QUnit.test("The formData with composite object is updated correctly when formDat
     assert.equal($testContainer.find(".dx-field-item").length, 1, "form item is rendered");
 });
 
+QUnit.test("From renders the right types of editors by default", function(assert) {
+    // arrange
+    var $testContainer = $("#form").dxForm({
+        formData: { id: 1, name: "Name" }
+    });
+
+    // assert
+    assert.ok($testContainer.find(".dx-field-item .dx-numberbox").hasClass("dx-editor-outlined"), "right class rendered");
+    assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-outlined"), "right class rendered");
+});
+
+QUnit.test("From renders the right types of editors according to stylingMode option", function(assert) {
+    // arrange
+    var $testContainer = $("#form").dxForm({
+        formData: { id: 1, name: "Name" },
+        stylingMode: "standard"
+    });
+
+    // assert
+    assert.ok($testContainer.find(".dx-field-item .dx-numberbox").hasClass("dx-editor-standard"), "right class rendered");
+    assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-standard"), "right class rendered");
+});
+
 
 QUnit.module("Tabs", {
     beforeEach: function() {

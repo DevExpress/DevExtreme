@@ -740,6 +740,22 @@ QUnit.test("Click on label should not focus the input (T179488)", function(asser
     assert.ok(isDefaultPrevented, "PreventDefault on label click is enabled");
 });
 
+QUnit.test("Color view renders the editors with default stylingMode", function(assert) {
+    this.$element = $("#color-view").dxColorView({});
+    var $editors = this.$element.find(".dx-editor-outlined");
+
+    assert.equal($editors.length, 4, "the number of outlined editors is correct");
+});
+
+QUnit.test("Color view renders the editors according to stylingMode option", function(assert) {
+    this.$element = $("#color-view").dxColorView({ stylingMode: "standard" });
+    var $editors = this.$element.find(".dx-editor-standard");
+    var $outlinedEditors = this.$element.find(".dx-editor-outlined");
+
+    assert.equal($editors.length, 4, "the number of standard editors is correct");
+    assert.equal($outlinedEditors.length, 0, "there are no outlined editors");
+});
+
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

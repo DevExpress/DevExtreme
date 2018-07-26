@@ -2712,6 +2712,41 @@ QUnit.test("Reset seconds and milliseconds when DateBox has no value for time vi
     assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
 });
 
+QUnit.test("DateBox renders the right stylingMode for editors in time view overlay (default)", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "datetime",
+        value: new Date("2015/1/25")
+    }).dxDateBox("instance");
+
+    dateBox.open();
+
+    var hourEditor = $(".dx-timeview-field .dx-numberbox").eq(0);
+    var minuteEditor = $(".dx-timeview-field .dx-numberbox").eq(1);
+    var amPmEditor = $(".dx-timeview-field .dx-selectbox").eq(0);
+
+    assert.ok(hourEditor.hasClass("dx-editor-outlined"));
+    assert.ok(minuteEditor.hasClass("dx-editor-outlined"));
+    assert.ok(amPmEditor.hasClass("dx-editor-outlined"));
+});
+
+QUnit.test("DateBox renders the right stylingMode for editors in time view overlay (custom)", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        type: "datetime",
+        value: new Date("2015/1/25"),
+        stylingMode: "standard"
+    }).dxDateBox("instance");
+
+    dateBox.open();
+
+    var hourEditor = $(".dx-timeview-field .dx-numberbox").eq(0);
+    var minuteEditor = $(".dx-timeview-field .dx-numberbox").eq(1);
+    var amPmEditor = $(".dx-timeview-field .dx-selectbox").eq(0);
+
+    assert.ok(hourEditor.hasClass("dx-editor-standard"));
+    assert.ok(minuteEditor.hasClass("dx-editor-standard"));
+    assert.ok(amPmEditor.hasClass("dx-editor-standard"));
+});
+
 QUnit.module("datebox w/ time list", {
     beforeEach: function() {
         fx.off = true;

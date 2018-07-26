@@ -520,6 +520,22 @@ QUnit.test("Color changed in preview if value is valid", function(assert) {
     assert.equal(previewColor.toHex(), currentColor.toHex(), "show color if input value is valid");
 });
 
+QUnit.test("ColorBox set the right stylingMode option to ColorView (default)", function(assert) {
+    var $colorBox = $("#color-box").dxColorBox({ value: "red" }),
+        colorBox = $colorBox.dxColorBox("instance");
+
+    colorBox.open();
+    assert.equal(colorBox._colorView.option("stylingMode"), "outlined");
+});
+
+QUnit.test("ColorBox set the right stylingMode option to ColorView (custom)", function(assert) {
+    var $colorBox = $("#color-box").dxColorBox({ value: "red", stylingMode: "standard" }),
+        colorBox = $colorBox.dxColorBox("instance");
+
+    colorBox.open();
+    assert.equal(colorBox._colorView.option("stylingMode"), "standard");
+});
+
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
