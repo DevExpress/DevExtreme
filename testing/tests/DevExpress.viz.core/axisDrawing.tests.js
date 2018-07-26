@@ -10335,3 +10335,89 @@ QUnit.test("Draw tick mark and grid line in new position", function(assert) {
         points: [50, 30, 50, 70]
     });
 });
+
+QUnit.test("Do not animate constant line on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        constantLines: [{
+            value: 1,
+            label: {
+                position: "inside",
+                visible: true
+            }
+        }]
+    });
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+    const line = renderer.path.lastCall.returnValue;
+    const text = renderer.text.lastCall.returnValue;
+
+    assert.equal(line.stub("animate").callCount, 0);
+    assert.equal(text.stub("animate").callCount, 0);
+});
+
+QUnit.test("Animate constant line on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        constantLines: [{
+            value: 1,
+            label: {
+                position: "inside",
+                visible: true
+            }
+        }]
+    });
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(50);
+    this.axis.draw(this.zeroMarginCanvas);
+    const line = renderer.path.lastCall.returnValue;
+    const text = renderer.text.lastCall.returnValue;
+
+    line.attr.reset();
+    text.attr.reset();
+
+    this.translator.stub("translate").withArgs(1).returns(60);
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(line.stub("animate").callCount, 1);
+    assert.equal(text.stub("animate").callCount, 1);
+
+    assert.deepEqual(line.attr.lastCall.args, [{
+        points: [40, 30, 40, 70]
+    }]);
+    assert.deepEqual(line.animate.lastCall.args, [{
+        points: [60, 30, 60, 70]
+    }]);
+
+    assert.deepEqual(text.attr.lastCall.args, [{
+        x: 40,
+        y: 30
+    }]);
+    assert.deepEqual(text.animate.lastCall.args, [{
+        x: 60,
+        y: 30
+    }]);
+});
+

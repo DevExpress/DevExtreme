@@ -15,6 +15,7 @@ import { dateToMilliseconds } from "../../core/utils/date";
 import { noop as _noop } from "../../core/utils/common";
 import xyMethods from "./xy_axes";
 import polarMethods from "./polar_axes";
+import createConstantLine from "./constant_line";
 
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
@@ -389,53 +390,6 @@ Axis.prototype = {
 
     _createConstantLine: function(value, attr) {
         return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
-    },
-
-    _drawConstantLinesAndLabels: function(position, lineOptions, canvasStart, canvasEnd) {
-        if(!isDefined(lineOptions.value)) {
-            return { line: null, label: null, options: lineOptions };
-        }
-        var that = this,
-            pos = that._getConstantLinePos(lineOptions.value, canvasStart, canvasEnd),
-            labelOptions = lineOptions.label || {},
-            value = pos.value,
-            attr = { stroke: lineOptions.color, "stroke-width": lineOptions.width, dashStyle: lineOptions.dashStyle },
-            group = that._axisConstantLineGroups[position],
-            side;
-
-        if(!group) {
-            side = that._isHorizontal ? labelOptions.verticalAlignment : labelOptions.horizontalAlignment;
-            group = that._axisConstantLineGroups[side];
-        }
-
-        if(!isDefined(value)) {
-            return { line: null, label: null, options: lineOptions };
-        }
-
-        return {
-            line: that._createConstantLine(value, attr).append(that._axisConstantLineGroups.inside),
-            label: labelOptions.visible ? that._drawConstantLineLabels(pos.parsedValue, labelOptions, value, group) : null,
-            options: lineOptions,
-            labelOptions: labelOptions,
-            coord: value
-        };
-    },
-
-    _drawConstantLines: function(position) {
-        var that = this,
-            canvas = that._getCanvasStartEnd();
-
-        if(that._translator.getBusinessRange().stubData) {
-            return [];
-        }
-
-        return (that._options.constantLines || []).reduce(function(result, constantLine) {
-            var labelPos = constantLine.label.position;
-            if(labelPos === position || (!labelPos && position === "inside")) {
-                result.push(that._drawConstantLinesAndLabels(position, constantLine, canvas.start, canvas.end));
-            }
-            return result;
-        }, []);
     },
 
     _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
@@ -977,6 +931,7 @@ Axis.prototype = {
         }
 
         that._updateTranslator();
+        that._createConstantLines();
     },
 
     calculateInterval: function(value, prevValue) {
@@ -1021,13 +976,12 @@ Axis.prototype = {
 
     hideOuterElements: function() {
         var that = this,
-            options = that._options,
-            constantLineLabels = that._outsideConstantLines.map(function(line) { return line.label; });
+            options = that._options;
 
-        if((options.label.visible || constantLineLabels.length) && !that._translator.getBusinessRange().stubData) {
+        if((options.label.visible || that._outsideConstantLines.length) && !that._translator.getBusinessRange().stubData) {
             that._incidentOccurred("W2106", [that._isHorizontal ? "horizontal" : "vertical"]);
             that._axisElementsGroup.clear();
-            constantLineLabels.forEach(function(label) { label && label.remove(); });
+            callAction(that._outsideConstantLines, "removeLabel");
         }
     },
 
@@ -1605,6 +1559,13 @@ Axis.prototype = {
         return range;
     },
 
+    _createConstantLines() {
+        const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
+
+        this._outsideConstantLines = constantLines.filter(l => l.labelPosition === "outside");
+        this._insideConstantLines = constantLines.filter(l => l.labelPosition === "inside");
+    },
+
     draw: function(canvas, borderOptions) {
         var that = this,
             drawGridLine = that._getGridLineDrawer(borderOptions || { visible: false });
@@ -1624,8 +1585,9 @@ Axis.prototype = {
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
-        that._outsideConstantLines = that._drawConstantLines("outside");
-        that._insideConstantLines = that._drawConstantLines("inside");
+
+        callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");
+
         that._strips = that._drawStrips();
         that._dateMarkers = that._drawDateMarkers() || [];
 
@@ -1692,13 +1654,7 @@ Axis.prototype = {
 
         callAction(that._majorTicks, "updateLabelPosition", animationEnabled);
 
-        that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(function(item) {
-            var coord = that._getConstantLinePos(item.options.value, canvasStartEnd.start, canvasStartEnd.end).value;
-
-            item.label && item.label.attr(that._getConstantLineLabelsCoords(coord, item.labelOptions));
-
-            item.line && item.line.attr(that._getConstantLineGraphicAttributes(coord));
-        });
+        that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(l => l.updatePosition(animationEnabled));
 
         (that._strips || []).forEach(function(item) {
             var range = that._translator.getBusinessRange(),
@@ -1719,7 +1675,7 @@ Axis.prototype = {
             callAction(that._ticksToRemove || [], "fadeOutElements");
         }
 
-        callAction(that._majorTicks.concat(that._minorTicks), "saveCoords");
+        callAction(that._majorTicks.concat(that._minorTicks).concat(this._insideConstantLines).concat(this._outsideConstantLines), "saveCoords");
 
         that._ticksToRemove = null;
 

@@ -768,10 +768,7 @@ module.exports = {
                 ticks = ticksData.ticks,
                 tickInterval = ticksData.tickInterval,
                 options = this._options,
-                constantLineOptions = (options.constantLines || []).filter(function(options) {
-                    that._checkAlignmentConstantLineLabels(options.label);
-                    return options.label.position === "outside" && options.label.visible;
-                }),
+                constantLineOptions = that._outsideConstantLines.filter(l => l.labelOptions.visible).map(l => l.options),
                 rootElement = that._renderer.root,
                 labelIsVisible = options.label.visible && !range.stubData && ticks.length,
                 labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
