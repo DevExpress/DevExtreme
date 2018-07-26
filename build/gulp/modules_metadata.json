@@ -296,6 +296,12 @@
     }
   },
   {
+    "name": "ui/drawer",
+    "exports": {
+      "default": "ui.dxDrawer"
+    }
+  },
+  {
     "name": "ui/drop_down_box",
     "exports": {
       "default": "ui.dxDropDownBox"
