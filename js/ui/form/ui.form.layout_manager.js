@@ -761,11 +761,14 @@ var LayoutManager = Widget.inherit({
             defaultEditorOptions.value = defaultEditorOptions.value || [];
         }
 
+        var formInstance = this.option("form");
+
         editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
             inputAttr: {
                 id: options.id
             },
-            validationBoundary: options.validationBoundary
+            validationBoundary: options.validationBoundary,
+            stylingMode: formInstance && formInstance.option("stylingMode")
         });
 
         this._replaceDataOptions(options.editorOptions, editorOptions);

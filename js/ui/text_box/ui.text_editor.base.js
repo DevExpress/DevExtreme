@@ -26,6 +26,7 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear",
     TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
     TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty",
+    TEXTEDITOR_DISPLAY_MODE_PREFIX = "dx-editor-",
 
     STATE_INVISIBLE_CLASS = "dx-state-invisible";
 
@@ -269,7 +270,7 @@ var TextEditorBase = Editor.inherit({
 
             valueFormat: function(value) {
                 return value;
-            }
+            },
 
             /**
             * @name dxTextEditorOptions.name
@@ -277,6 +278,8 @@ var TextEditorBase = Editor.inherit({
             * @hidden false
             * @inheritdoc
             */
+
+            stylingMode: "outlined"
         });
     },
 
@@ -288,6 +291,14 @@ var TextEditorBase = Editor.inherit({
                 },
                 options: {
                     validationMessageOffset: { v: -8 }
+                }
+            },
+            {
+                device: function() {
+                    return themes.isMaterial();
+                },
+                options: {
+                    stylingMode: "standard"
                 }
             }
         ]);
@@ -310,7 +321,9 @@ var TextEditorBase = Editor.inherit({
     },
 
     _initMarkup: function() {
-        this.$element().addClass(TEXTEDITOR_CLASS);
+        this.$element()
+            .addClass(TEXTEDITOR_CLASS)
+            .addClass(TEXTEDITOR_DISPLAY_MODE_PREFIX + this.option("stylingMode"));
 
         this._renderInput();
         this._renderInputType();
@@ -724,6 +737,7 @@ var TextEditorBase = Editor.inherit({
                 this._applyInputAttributes(this._input(), args.value);
                 break;
             case "valueFormat":
+            case "stylingMode":
                 this._invalidate();
                 break;
             default:

@@ -232,6 +232,7 @@ var ColorBox = DropDownEditor.inherit({
             editAlphaChannel: that.option("editAlphaChannel"),
             applyValueMode: that.option("applyValueMode"),
             focusStateEnabled: that.option("focusStateEnabled"),
+            stylingMode: this.option("stylingMode"),
             onEnterKeyPressed: function() {
                 that._colorViewEnterKeyPressed = true;
                 if(that._colorView.option("value") !== that.option("value")) {

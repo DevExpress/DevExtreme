@@ -37,7 +37,8 @@ var TimeView = Editor.inherit({
             value: new Date(Date.now()),
             use24HourFormat: true,
             _showClock: true,
-            _arrowOffset: 0
+            _arrowOffset: 0,
+            stylingMode: undefined
         });
     },
 
@@ -225,6 +226,8 @@ var TimeView = Editor.inherit({
                 this.option("value", time);
             }).bind(this),
             value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM
+        }, {
+            stylingMode: this.option("stylingMode")
         }));
 
         this._format12.setAria("label", "type");
@@ -243,13 +246,15 @@ var TimeView = Editor.inherit({
     },
 
     _getNumberBoxConfig: function() {
-        return {
+        return extend({
             showSpinButtons: true,
             disabled: this.option("disabled"),
             valueFormat: function(value) {
                 return (value < 10 ? "0" : "") + value;
             }
-        };
+        }, {
+            stylingMode: this.option("stylingMode")
+        });
     },
 
     _normalizeHours: function(hours) {
@@ -313,6 +318,7 @@ var TimeView = Editor.inherit({
                 break;
             case "use24HourFormat":
             case "_showClock":
+            case "stylingMode":
                 this._invalidate();
                 break;
             default:
