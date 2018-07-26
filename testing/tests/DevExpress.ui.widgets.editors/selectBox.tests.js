@@ -3420,6 +3420,28 @@ QUnit.test("upArrow and downArrow on textbox change value after change dataSourc
     assert.strictEqual(instance.option("value"), 4, "downArrow");
 });
 
+QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", function(assert) {
+    var $element = $("#selectBox").dxSelectBox({
+            dataSource: new DataSource({
+                store: [{ id: 1, text: "item 1", Category: 1 }, { id: 2, text: "item 2", Category: 2 }],
+                key: "id",
+                group: "Category"
+            }),
+            valueExpr: "id",
+            value: 1,
+            grouped: true,
+            fieldTemplate: function(data) {
+                return $("<div>").dxTextBox({ value: data.text });
+            }
+        }),
+        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+        keyboard = keyboardMock($input);
+
+    keyboard.press("down");
+    $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+    assert.equal($input.val(), "item 2", "navigation is correct");
+});
+
 QUnit.test("disabled item should not be selected via keyboard if the widget is closed", function(assert) {
     var $element = $("#selectBox").dxSelectBox({ items: [
                 { text: "Item 1" },
