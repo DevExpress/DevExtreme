@@ -91,7 +91,6 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     CELL_DATA = "dxCellData",
 
-    DATE_TABLE_MIN_CELL_WIDTH = 75,
     DATE_TABLE_CELL_BORDER = 1,
 
     DAY_MS = toMs("day"),
@@ -842,10 +841,6 @@ var SchedulerWorkSpace = Widget.inherit({
         this._attachTableClasses();
 
         var cellWidth = this.getCellWidth();
-
-        if(cellWidth < DATE_TABLE_MIN_CELL_WIDTH) {
-            cellWidth = DATE_TABLE_MIN_CELL_WIDTH;
-        }
 
         var minWidth = this._groupedStrategy.getWorkSpaceMinWidth(),
             $headerCells = this._$headerPanel
