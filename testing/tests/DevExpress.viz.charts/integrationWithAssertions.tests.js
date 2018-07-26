@@ -211,6 +211,147 @@ QUnit.test("Problem with two axis and range", function(assert) {
     assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8], "main value axis tick values");
 });
 
+QUnit.test("Set visualRange via arguments", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 8
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        series: { type: "line" }
+    });
+
+    assert.ok(chart);
+
+    chart.getArgumentAxis().visualRange(2.5);
+
+    assert.deepEqual(chart._argumentAxes[0]._viewport, [2.5, null]);
+});
+
+QUnit.test("Set visualRange via array", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        series: { type: "line" }
+    });
+
+    assert.ok(chart);
+
+    chart.getArgumentAxis().visualRange(3, 6);
+
+    assert.deepEqual(chart._argumentAxes[0]._viewport, [3, 6]);
+    assert.deepEqual(chart._valueAxes[0].visualRange(), [3, 8]);
+});
+
+QUnit.test("Set null visualRange", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: new Date(2010, 0, 1),
+            val: 4
+        }, {
+            arg: new Date(2011, 0, 1),
+            val: 8
+        }, {
+            arg: new Date(2012, 0, 1),
+            val: 7
+        }, {
+            arg: new Date(2013, 0, 1),
+            val: 3
+        }, {
+            arg: new Date(2014, 0, 1),
+            val: 8
+        }],
+        series: { type: "line" },
+        argumentAxis: { valueMarginsEnabled: false }
+    });
+
+    assert.ok(chart);
+
+    chart.getArgumentAxis().visualRange([null, null]);
+
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), [new Date(2010, 0, 1), new Date(2014, 0, 1)], "visualRange is full (argument axis)");
+    assert.deepEqual(chart._valueAxes[0].visualRange(), [2.5, 8.5], "visualRange is full (value axis)");
+});
+
+QUnit.test("Move visual frame by visualRangeLength", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: new Date(2010, 0, 1),
+            val: 4
+        }, {
+            arg: new Date(2011, 0, 1),
+            val: 8
+        }, {
+            arg: new Date(2012, 0, 1),
+            val: 7
+        }, {
+            arg: new Date(2013, 0, 1),
+            val: 3
+        }, {
+            arg: new Date(2014, 0, 1),
+            val: 15
+        }],
+        series: { type: "line" },
+        argumentAxis: { visualRangeLength: { years: 2 } },
+        valueAxis: { valueMarginsEnabled: false }
+    });
+
+    assert.ok(chart);
+
+    chart.getArgumentAxis().visualRange([new Date(2010, 3, 1), null]);
+
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), [new Date(2010, 3, 1), new Date(2012, 2, 31)]);
+});
+
 QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
     // arrange
     var chart = this.$container.dxChart({

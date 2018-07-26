@@ -88,6 +88,7 @@ var environment = {
             axis.setPane = function(pane) {
                 axis.pane = pane;
             };
+            axis.adjust = noop;
             axis.stub("getOptions").returns({});
             return axis;
         });
