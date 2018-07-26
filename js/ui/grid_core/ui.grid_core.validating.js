@@ -555,14 +555,14 @@ module.exports = {
                         closeOnOutsideClick: false,
                         closeOnTargetScroll: false,
                         boundary: this._rowsView.element(),
-                        contentTemplate: function() {
+                        contentTemplate: () => {
                             let $buttonElement = $("<div>").addClass(REVERT_BUTTON_CLASS);
                             let buttonOptions = {
                                 icon: "revert",
                                 hint: this.option("editing.texts.validationCancelChanges"),
-                                onClick: function() {
+                                onClick: () => {
                                     this._editingController.cancelEditData();
-                                }.bind(this)
+                                }
                             };
                             return (new Button($buttonElement, buttonOptions)).$element();
                         },
