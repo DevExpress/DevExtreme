@@ -116,6 +116,5 @@ const DrawerStrategy = Class.inherit({
     },
 });
 
-
 module.exports = DrawerStrategy;
 module.exports.animation = animation;

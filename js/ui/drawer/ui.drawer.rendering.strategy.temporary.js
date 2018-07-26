@@ -40,4 +40,3 @@ const TemporaryStrategy = DrawerStrategy.inherit({
 });
 
 module.exports = TemporaryStrategy;
-
