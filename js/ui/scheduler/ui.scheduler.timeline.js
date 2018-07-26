@@ -551,6 +551,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
+    getCellMinWidth: function() {
+        return 0;
+    },
+
     scrollToTime: function(hours, minutes, date) {
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable(),
