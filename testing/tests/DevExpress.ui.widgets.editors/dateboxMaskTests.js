@@ -8,6 +8,8 @@ import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 
+let SEARCH_TIMEOUT = 1500;
+
 QUnit.testStart(() => {
     $("#qunit-fixture").html("<div id='dateBox'></div>");
 });
@@ -65,7 +67,7 @@ if(devices.real().deviceType === "desktop") {
         };
 
         let checkAndRemoveLimits = (part, expected, assert) => {
-            var limits = part.limits;
+            let limits = part.limits;
             assert.deepEqual(limits(new Date(2012, 1, 4, 5, 6)), expected, "limits for " + part.pattern);
 
             delete part.limits;
@@ -78,7 +80,7 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("Day of week", (assert) => {
             checkAndRemoveLimits(this.parts[0], { min: 0, max: 6 }, assert);
 
-            var date = new Date(2012, 1, 4, 15, 6);
+            let date = new Date(2012, 1, 4, 15, 6);
             this.parts[0].setter(date, 2);
             assert.equal(date.getDay(), 2, "setter sets day of week");
             delete this.parts[0].setter;
@@ -122,14 +124,18 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Year", (assert) => {
-            checkAndRemoveLimits(this.parts[8], { min: 0, max: Infinity }, assert);
+            checkAndRemoveLimits(this.parts[8], { min: 0, max: 9999 }, assert);
+
+            let date = new Date(2012, 1, 4, 15, 6);
+            this.parts[8].setter(date, 15);
+            assert.equal(date.getFullYear(), 2015, "setter sets AM");
+            delete this.parts[8].setter;
 
             assert.deepEqual(this.parts[8], {
                 index: 8,
                 isStub: false,
                 caret: { start: 17, end: 21 },
                 getter: "getFullYear",
-                setter: "setFullYear",
                 pattern: "yyyy",
                 text: "2024"
             });
@@ -166,9 +172,9 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("Time indication", (assert) => {
             checkAndRemoveLimits(this.parts[14], { min: 0, max: 1 }, assert);
 
-            var date = new Date(2012, 1, 4, 15, 6);
+            let date = new Date(2012, 1, 4, 15, 6);
 
-            var isPm = this.parts[14].getter(date);
+            let isPm = this.parts[14].getter(date);
             assert.equal(isPm, 1, "getter returns PM");
             delete this.parts[14].getter;
 
@@ -334,6 +340,12 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "October 10 2012", "text was changed");
             assert.equal(this.instance.option("value").getMonth(), 10, "month did not changed in the value after commit");
         });
+
+        QUnit.test("Mask should not handle keyboard events on opened dateBox", (assert) => {
+            this.instance.open();
+            this.keyboard.press("up");
+            assert.equal(this.$input.val(), "October 10 2012", "text was not changed");
+        });
     });
 
     QUnit.module("Pointer events", setupModule, () => {
@@ -353,7 +365,6 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    var SEARCH_TIMEOUT = 1500;
 
     QUnit.module("Search", setupModule, () => {
         QUnit.test("Time indication", (assert) => {
@@ -477,9 +488,22 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("displayFormat", "yyyy");
 
             this.keyboard
-                .type("20250");
+                .type("99991");
 
-            assert.equal(this.$input.val(), "20250", "year should not be limited");
+            assert.equal(this.$input.val(), "9901", "year should be limited");
+        });
+
+        QUnit.test("Short Year", (assert) => {
+            this.instance.option({
+                value: new Date(1990, 4, 2),
+                displayFormat: "yy"
+            });
+
+            this.keyboard
+                .type("21")
+                .press("enter");
+
+            assert.equal(this.instance.option("value").getFullYear(), 1921, "only 2 last digits of the year should be changed");
         });
 
         QUnit.test("Hotkeys should not be handled by the search", (assert) => {
@@ -503,6 +527,16 @@ if(devices.real().deviceType === "desktop") {
             } catch(e) {
                 assert.notOk(true, "Infinite loop detected");
             }
+        });
+
+        QUnit.test("Null timeout should mean no timeout", (assert) => {
+            this.instance.option("searchTimeout", null);
+
+            this.keyboard.type("1");
+            this.clock.tick(SEARCH_TIMEOUT);
+            this.keyboard.type("2");
+
+            assert.equal(this.$input.val(), "December 10 2012", "timeout is disabled");
         });
     });
 
@@ -535,7 +569,7 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value").getMonth(), 0, "value is correct");
         });
 
-        QUnit.test("Clear button should clear the value", (assert) => {
+        QUnit.test("Clear button should work", (assert) => {
             this.instance.option({
                 showClearButton: true,
                 value: new Date(2018, 6, 19)
@@ -552,6 +586,9 @@ if(devices.real().deviceType === "desktop") {
 
             assert.equal(this.$input.val(), "", "text is still cleared");
             assert.equal(this.instance.option("value"), null, "value is still cleared");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "January 25 2018", "text is correct after clearing");
         });
 
         QUnit.test("Incorrect search on empty input should be prevented", (assert) => {
@@ -595,6 +632,33 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "", "text is correct");
             assert.equal(this.instance.option("value"), null, "value is correct");
         });
+
+        QUnit.test("Short Year should use current date", (assert) => {
+            this.instance.option({
+                displayFormat: "yy"
+            });
+
+            let dateStart = new Date().getFullYear().toString().substr(0, 2);
+
+            this.keyboard
+                .type("21")
+                .press("enter");
+
+            assert.equal(this.instance.option("value").getFullYear(), dateStart + "21", "only 2 last digits of the year should be changed");
+        });
+
+        QUnit.test("Click and leave empty datebox should not change the value", (assert) => {
+            this.instance.option({
+                displayFormat: "yy",
+                value: null
+            });
+
+            this.$input.trigger("dxclick");
+            this.keyboard.press("enter");
+            this.$input.trigger("focusout");
+
+            assert.equal(this.$input.val(), "", "value is correct");
+        });
     });
 
     QUnit.module("Options changed", setupModule, () => {
@@ -615,6 +679,52 @@ if(devices.real().deviceType === "desktop") {
 
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
+        });
+    });
+
+    QUnit.module("Advanced caret", setupModule, () => {
+        QUnit.test("Move caret to the next group before timeout", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("15");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
+        });
+
+        QUnit.test("Move caret to the next group when next digit will overflow", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "MM.dd"
+            });
+
+            this.keyboard.type("5");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
+        });
+
+        QUnit.test("Don't move caret to the next group after timeout", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("1");
+
+            this.clock.tick(SEARCH_TIMEOUT);
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, "caret was not moved");
+        });
+
+        QUnit.test("Move caret to the next group after limit overflow", (assert) => {
+            this.instance.option({
+                advancedCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("38");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was not moved");
         });
     });
 }
