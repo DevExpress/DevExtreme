@@ -1,0 +1,18 @@
+.dx-drawer-menu-content,
+.dx-drawer-content {
+    background-color: @slideoutview-bg;
+}
+
+.dx-drawer-content {
+    border-color: @slideoutview-content-border-color;
+}
+
+
+@GENERIC_DRAWER_BORDER_WIDTH: @GENERIC_BASE_BORDER_WIDTH;
+
+.dx-drawer-content {
+    .box-sizing(content-box);
+    margin-left: -@GENERIC_DRAWER_BORDER_WIDTH;
+    border-style: solid;
+    border-width: 0 @GENERIC_DRAWER_BORDER_WIDTH;
+}

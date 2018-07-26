@@ -586,6 +586,21 @@
  */
 
 /**
+ * @typedef {string} Enums.DrawerMode
+ * @enum {'persistent'|'temporary'|'push'}
+ */
+
+/**
+ * @typedef {string} Enums.DrawerMenuPosition
+ * @enum {'left'|'right'}
+ */
+
+/**
+ * @typedef {string} Enums.DrawerShowMode
+ * @enum {'slide'|'shrink'}
+ */
+
+/**
  * @typedef {string} Enums.TextBoxMode
  * @enum {'email'|'password'|'search'|'tel'|'text'|'url'}
  */

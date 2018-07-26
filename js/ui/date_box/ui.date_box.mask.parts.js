@@ -36,6 +36,15 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
             return;
         }
         date.setDate(date.getDate() - date.getDay() + value);
+    },
+    y: (date, value) => {
+        var currentYear = date.getFullYear();
+
+        if(value < 100) {
+            date.setFullYear(currentYear - currentYear % 100 + value);
+        } else {
+            date.setFullYear(value);
+        }
     }
 });
 
@@ -76,7 +85,7 @@ const renderDateParts = (text, format) => {
 
 const getLimits = (getter, date) => {
     const limits = {
-        "getFullYear": { min: 0, max: Infinity },
+        "getFullYear": { min: 0, max: 9999 },
         "getMonth": { min: 0, max: 11 },
         "getDate": {
             min: 1,
