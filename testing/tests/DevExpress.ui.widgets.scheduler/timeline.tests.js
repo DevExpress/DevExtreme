@@ -85,13 +85,13 @@ QUnit.test("Date table should have a correct width if cell is less than 75px", f
     var $element = this.instance.$element(),
         $cells = $element.find(".dx-scheduler-date-table-cell");
 
-    $cells.css("width", 10);
+    $cells.css("width", 30);
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
     var dateTableWidth = $element.find(".dx-scheduler-date-table").outerWidth();
-    assert.equal(dateTableWidth, 1008, "Width is OK");
+    assert.equal(dateTableWidth, 1440, "Width is OK");
 });
 
 QUnit.test("Sidebar scrollable should update position if date scrollable position is changed", function(assert) {
