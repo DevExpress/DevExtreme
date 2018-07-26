@@ -22,7 +22,7 @@ var noop = require("../../core/utils/common").noop,
     nextDataKey = 1,
 
     RE_STARTS_LAYERS = /^layers/,
-    RE_ENDS_DATA_SOURCE = /\.(dataSource|data)$/;   // DEPRECATED_15_2 ("|data)")
+    RE_ENDS_DATA_SOURCE = /\.(dataSource|data)$/; // DEPRECATED_15_2 ("|data)")
 
 require("./projection");
 
@@ -224,7 +224,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
             if(RE_STARTS_LAYERS.test(name)) {
                 if(currentValue.dataSource && nextValue.dataSource && currentValue !== nextValue) {
                     currentValue.dataSource = null;
-                } else if(currentValue.data && nextValue.data && currentValue !== nextValue) {     // DEPRECATED_15_2
+                } else if(currentValue.data && nextValue.data && currentValue !== nextValue) { // DEPRECATED_15_2
                     currentValue.data = null;
                 } else if(RE_ENDS_DATA_SOURCE.test(name)) {
                     this.option(name, null);
@@ -250,10 +250,10 @@ var dxVectorMap = require("../core/base_widget").inherit({
     _optionChangesMap: {
         background: "BACKGROUND",
         layers: "LAYERS",
-        areaSettings: "LAYERS",       // DEPRECATED_15_2
-        markerSettings: "LAYERS",     // DEPRECATED_15_2
-        mapData: "LAYERS",            // DEPRECATED_15_2
-        markers: "LAYERS",            // DEPRECATED_15_2
+        areaSettings: "LAYERS", // DEPRECATED_15_2
+        markerSettings: "LAYERS", // DEPRECATED_15_2
+        mapData: "LAYERS", // DEPRECATED_15_2
+        markers: "LAYERS", // DEPRECATED_15_2
         controlBar: "CONTROL_BAR",
         legends: "LEGENDS",
         touchEnabled: "TRACKER",

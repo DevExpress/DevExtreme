@@ -657,8 +657,8 @@ module.exports = {
             argumentText: tooltip.formatValue(that.initialArgument, "argument"),
             valueText: tooltip.formatValue(that.initialValue)
         },
-            _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, "percent") } : {},
-            _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {});
+        _isDefined(labelFormatObject.percent) ? { percentText: tooltip.formatValue(labelFormatObject.percent, "percent") } : {},
+        _isDefined(labelFormatObject.total) ? { totalText: tooltip.formatValue(labelFormatObject.total) } : {});
     },
 
     getMarkerVisibility: function() {

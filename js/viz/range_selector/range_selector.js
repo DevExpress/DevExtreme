@@ -120,7 +120,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
 
     indentOptions = indentOptions || {};
     parsedPlaceholderSize = parseSliderMarkersPlaceholderSize(sliderMarkerOptions.placeholderSize);
-    if(parsedPlaceholderSize && indentOptions.left === undefined && indentOptions.right === undefined) {   // for deprecated in 15.1 sliderMarker.placeholderSize
+    if(parsedPlaceholderSize && indentOptions.left === undefined && indentOptions.right === undefined) { // for deprecated in 15.1 sliderMarker.placeholderSize
         placeholderWidthLeft = parsedPlaceholderSize.widthLeft;
         placeholderWidthRight = parsedPlaceholderSize.widthRight;
     } else {
@@ -128,7 +128,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         placeholderWidthRight = indentOptions.right;
     }
 
-    if(parsedPlaceholderSize && sliderMarkerOptions.placeholderHeight === undefined) {    // for deprecated in 15.1 sliderMarker.placeholderSize.height
+    if(parsedPlaceholderSize && sliderMarkerOptions.placeholderHeight === undefined) { // for deprecated in 15.1 sliderMarker.placeholderSize.height
         placeholderHeight = parsedPlaceholderSize.height;
     } else {
         placeholderHeight = sliderMarkerOptions.placeholderHeight;
@@ -149,7 +149,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
     }
     placeholderWidthLeft = placeholderWidthLeft !== undefined ? placeholderWidthLeft : leftScaleLabelWidth;
-    placeholderWidthRight = (placeholderWidthRight !== undefined ? placeholderWidthRight : rightScaleLabelWidth) || 1;  // T240698
+    placeholderWidthRight = (placeholderWidthRight !== undefined ? placeholderWidthRight : rightScaleLabelWidth) || 1; // T240698
 
     return {
         left: placeholderWidthLeft,
@@ -664,7 +664,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         });
 
         // RangeContainer
-        that._clipRect = renderer.clipRect();   // TODO: Try to remove it
+        that._clipRect = renderer.clipRect(); // TODO: Try to remove it
         // TODO: Groups could be created by the corresponding components
         rangeViewGroup = renderer.g().attr({ "class": "dxrs-view" }).append(root);
         slidersGroup = renderer.g().attr({ "class": "dxrs-slidersContainer", "clip-path": that._clipRect.id }).append(root);
@@ -937,7 +937,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             bottom: 0
         };
 
-         // TODO: There should be one call to some axis method (not 4 methods)
+        // TODO: There should be one call to some axis method (not 4 methods)
         that._axis.update(scaleOptions, isCompactMode, rangeContainerCanvas, argTranslatorRange, seriesDataSource);
 
         scaleOptions.minorTickInterval = scaleOptions.isEmpty ? 0 : scaleOptions.minorTickInterval;
@@ -946,7 +946,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         that._updateElements(scaleOptions, sliderMarkerOptions, isCompactMode, rangeContainerCanvas, seriesDataSource);
 
         if(chartThemeManager) {
-            chartThemeManager.dispose();    // TODO: Move it inside "SeriesDataSource"
+            chartThemeManager.dispose(); // TODO: Move it inside "SeriesDataSource"
         }
     },
 
@@ -977,7 +977,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     _createSeriesDataSource: function(chartOptions) {
         var that = this,
             seriesDataSource,
-            dataSource = that._dataSourceItems(),  // TODO: This code can be executed when data source is not loaded (it is an error)!
+            dataSource = that._dataSourceItems(), // TODO: This code can be executed when data source is not loaded (it is an error)!
             scaleOptions = that._getOption("scale"),
             valueType = scaleOptions.valueType || calculateValueType(scaleOptions.startValue, scaleOptions.endValue),
             valueAxis = new axisModule.Axis({

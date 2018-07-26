@@ -29,7 +29,7 @@ var Tracker = Class.inherit({
                 data_target = target["gauge-data-target"],
                 data_info = target["gauge-data-info"];
 
-            that._targetEvent = null;   //  Internal state must be reset strictly BEFORE callback is invoked
+            that._targetEvent = null; //  Internal state must be reset strictly BEFORE callback is invoked
             if(that._tooltipTarget !== target && that._callbacks['tooltip-show'](data_target, data_info)) {
                 that._tooltipTarget = target;
             }

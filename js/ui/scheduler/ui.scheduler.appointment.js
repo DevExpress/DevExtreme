@@ -166,8 +166,8 @@ var Appointment = DOMComponent.inherit({
 
     _renderAppointmentReducedIcon: function() {
         var $icon = $("<div>")
-            .addClass(REDUCED_APPOINTMENT_ICON)
-            .appendTo(this.$element()),
+                .addClass(REDUCED_APPOINTMENT_ICON)
+                .appendTo(this.$element()),
 
             endDate = this._getEndDate();
         var tooltipLabel = messageLocalization.format("dxScheduler-editorLabelEndDate"),

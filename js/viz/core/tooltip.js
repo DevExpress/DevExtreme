@@ -42,7 +42,7 @@ function Tooltip(params) {
     that._widgetRoot = params.widgetRoot;
 
     that._wrapper = $("<div>")
-        .css({ position: "absolute", overflow: "visible", height: "1px", "pointerEvents": "none" })  // T265557, T447623
+        .css({ position: "absolute", overflow: "visible", height: "1px", "pointerEvents": "none" }) // T265557, T447623
         .addClass(params.cssClass);
 
     that._renderer = renderer = new rendererModule.Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
@@ -271,7 +271,7 @@ Tooltip.prototype = {
         }
 
         // move wrapper
-        offset = that._wrapper.css({ left: 0, top: 0 }).offset();   // T277991
+        offset = that._wrapper.css({ left: 0, top: 0 }).offset(); // T277991
         that._wrapper.css({
             left: coords.x - offset.left,
             top: coords.y - offset.top,

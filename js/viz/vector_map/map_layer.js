@@ -704,7 +704,7 @@ function transformLineLabel(label, projection, coordinates) {
 
 function getItemSettings(context, proxy, settings) {
     var result = combineSettings(context.settings, settings);
-    proxy.text = proxy.text || settings.text;   // DEPRECATED_15_2
+    proxy.text = proxy.text || settings.text; // DEPRECATED_15_2
     applyGrouping(context.grouping, proxy, result);
     if(settings.color === undefined && settings.paletteIndex >= 0) {
         result.color = result._colors[settings.paletteIndex];
@@ -958,7 +958,7 @@ MapLayer.prototype = _extend({
 
     setOptions: function(options) {
         var that = this,
-            name;   // DEPRECATED_15_2
+            name; // DEPRECATED_15_2
         options = that._options = options || {};
         name = !("dataSource" in options) && "data" in options ? "data" : "dataSource"; // DEPRECATED_15_2
         if(name in options && options[name] !== that._options_dataSource) {
@@ -981,7 +981,7 @@ MapLayer.prototype = _extend({
             context.str.reset(context);
             context.root.clear();
             context.labelRoot && context.labelRoot.clear();
-            that._params.tracker.reset();   // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
+            that._params.tracker.reset(); // T173037; TODO: There is no need to reset the entire tracker - only its memory about items
             that._destroyHandles();
             context.str = selectStrategy(that._options, that._data);
             context.str.setup(context);
@@ -1354,7 +1354,7 @@ MapLayerElement.prototype = {
         if(selection && currentState !== newState) {
             that._state = setFlag(that._state, STATE_SELECTED, newState);
             tmp = selection.state[selection.single];
-            selection.state[selection.single] = null;   // This is to prevent stack overflow
+            selection.state[selection.single] = null; // This is to prevent stack overflow
             if(tmp) {
                 tmp.setSelected(false);
             }

@@ -220,7 +220,7 @@ var LayoutManager = Widget.inherit({
                             that.repaint();
                         },
                         { skipImmediate: true }
-                ));
+                    ));
             }
         });
     },
@@ -778,7 +778,7 @@ var LayoutManager = Widget.inherit({
             helpID: options.helpID,
             isRequired: options.isRequired
         },
-            editorOptions);
+        editorOptions);
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -918,7 +918,7 @@ var LayoutManager = Widget.inherit({
                 deep: true,
                 skipImmediate: true
             }
-         );
+        );
 
         eventsEngine.on($container, removeEvent, dispose);
     },

@@ -472,7 +472,7 @@ function verifyData(source, incidentOccurred) {
             item = source[i];
             if(_isObject(item)) {
                 data[k++] = item;
-            } else if(item) {  // TODO: And what about `null`, `undefined` and `0`?
+            } else if(item) { // TODO: And what about `null`, `undefined` and `0`?
                 hasError = true;
             }
         }

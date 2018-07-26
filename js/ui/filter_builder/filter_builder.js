@@ -260,7 +260,7 @@ var FilterBuilder = Widget.inherit({
              * @type_function_return string
              */
 
-             /**
+            /**
              * @name dxFilterBuilderField.editorTemplate
              * @type template|function
              * @type_function_param1 conditionInfo:object
@@ -866,10 +866,10 @@ var FilterBuilder = Widget.inherit({
 
     _createRemoveButton: function(handler) {
         var $removeButton = $("<div>")
-                .addClass(FILTER_BUILDER_IMAGE_CLASS)
-                .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
-                .addClass(FILTER_BUILDER_ACTION_CLASS)
-                .attr("tabindex", 0);
+            .addClass(FILTER_BUILDER_IMAGE_CLASS)
+            .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
+            .addClass(FILTER_BUILDER_ACTION_CLASS)
+            .attr("tabindex", 0);
         this._subscribeOnClickAndEnterKey($removeButton, handler);
         return $removeButton;
     },
@@ -1012,8 +1012,8 @@ var FilterBuilder = Widget.inherit({
 
     _createValueButton: function(item, field) {
         var $valueButton = $("<div>")
-                .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-                .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
+            .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+            .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
 
         this._createValueText(item, field, $valueButton);
         return $valueButton;

@@ -1062,7 +1062,7 @@ module.exports = Class.inherit((function() {
             return this.load({ reload: true });
         },
 
-       /**
+        /**
        * @name PivotGridDataSourceMethods.filter
        * @publicName filter()
        * @return object

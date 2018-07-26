@@ -223,8 +223,8 @@ exports.polarBarPoint = _extend({}, barPoint, {
         var val = vizUtils.convertXYToPolar(this.series.getValueAxis().getCenter(), x, y),
             coords = this.getMarkerCoords(),
             isBetweenAngles = coords.startAngle < coords.endAngle ?
-            -val.phi >= coords.startAngle && -val.phi <= coords.endAngle :
-            -val.phi <= coords.startAngle && -val.phi >= coords.endAngle;
+                -val.phi >= coords.startAngle && -val.phi <= coords.endAngle :
+                -val.phi <= coords.startAngle && -val.phi >= coords.endAngle;
 
         return (val.r >= coords.innerRadius && val.r <= coords.outerRadius && isBetweenAngles);
     }

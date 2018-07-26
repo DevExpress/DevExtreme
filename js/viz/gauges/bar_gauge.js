@@ -178,7 +178,7 @@ var dxBarGauge = dxBaseGauge.inherit({
         });
         relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1 ? _Number(options.relativeInnerRadius) : 0.1;
         radius = area.radius;
-        if(that._context.textEnabled) {    //  B253614
+        if(that._context.textEnabled) { //  B253614
             that._textIndent = _round(_min(that._textIndent, radius / 2));
             radius -= that._textIndent;
         }
@@ -246,7 +246,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             if(!that._dummyBackground) {
                 that._dummyBackground = that._renderer.arc().attr({ "stroke-linejoin": "round" }).append(that._barsGroup);
             }
-            that._dummyBackground.attr({   //  Because of vizMocks
+            that._dummyBackground.attr({ //  Because of vizMocks
                 x: that._context.x, y: that._context.y, outerRadius: that._outerRadius, innerRadius: that._innerRadius,
                 startAngle: that._context.endAngle, endAngle: that._context.startAngle, fill: that._context.backgroundColor
             });

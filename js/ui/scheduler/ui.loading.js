@@ -10,7 +10,7 @@ var loading = null;
 var createLoadPanel = function(options) {
     return new LoadPanel($("<div>")
         .appendTo(options && options.container || viewPortUtils.value()),
-        options);
+    options);
 };
 
 var removeLoadPanel = function() {
