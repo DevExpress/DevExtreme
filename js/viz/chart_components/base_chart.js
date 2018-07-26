@@ -1235,7 +1235,7 @@ var BaseChart = BaseWidget.inherit({
 
     // API
     getAllSeries: function getAllSeries() {
-        return this.series.slice();
+        return (this.series || []).slice();
     },
 
     getSeriesByName: function getSeriesByName(name) {
@@ -1250,7 +1250,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     getSeriesByPos: function getSeriesByPos(pos) {
-        return this.series[pos];
+        return (this.series || [])[pos];
     },
 
     clearSelection: function clearSelection() {

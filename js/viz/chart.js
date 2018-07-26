@@ -1155,7 +1155,7 @@ var dxChart = AdvancedChart.inherit({
             bounds,
             zoomArg;
 
-        if(!_isDefined(min) && !_isDefined(max)) {
+        if(!that._initialized || !_isDefined(min) && !_isDefined(max)) {
             return;
         }
 
