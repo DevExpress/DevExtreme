@@ -224,6 +224,36 @@ QUnit.test("Loading data with columns and rows", function(assert) {
     });
 });
 
+QUnit.test("Do not parse string data if data type is not set", function(assert) {
+    this.load({
+        columns: [{ dataField: "Freight" }],
+        rows: [],
+        values: []
+    }).done(function(data) {
+        assert.strictEqual(data.columns[0].value, "0.0200");
+    });
+});
+
+QUnit.test("Parse string data if data type is set. Number type", function(assert) {
+    this.load({
+        columns: [{ dataField: "Freight", dataType: "number" }],
+        rows: [],
+        values: []
+    }).done(function(data) {
+        assert.strictEqual(data.columns[0].value, 0.02);
+    });
+});
+
+QUnit.test("Parse string data if data type is set", function(assert) {
+    this.load({
+        columns: [{ dataField: "OrderDate", dataType: "date" }],
+        rows: [],
+        values: []
+    }).done(function(data) {
+        assert.deepEqual(data.columns[0].value, new Date("1996/07/04"));
+    });
+});
+
 QUnit.test("Key method should return key field name", function(assert) {
     assert.strictEqual(this.store.key(), "OrderID");
 });
@@ -686,7 +716,7 @@ QUnit.test("Store should group data in fields by group intervals", function(asse
     var store = new RemoteStore(getCustomArrayStore(dataSource));
 
     store.load({
-        columns: [{ dataField: "OrderDate", groupInterval: "Year" }],
+        columns: [{ dataField: "OrderDate", groupInterval: "Year", dataType: "date" }],
         rows: [],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
