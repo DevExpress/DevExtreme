@@ -85,7 +85,17 @@ var Autocomplete = DropDownList.inherit({
             */
             noDataText: "",
 
+            /**
+             * @name dxAutocompleteOptions.dropDownButtonTemplate
+             * @hidden
+             */
+
+            /**
+             * @name dxAutocompleteOptions.showDropDownButton
+             * @hidden
+             */
             showDropDownButton: false,
+
             searchEnabled: true
 
             /**

@@ -260,6 +260,11 @@ var TagBox = SelectBox.inherit({
             */
             value: [],
 
+            /**
+             * @name dxTagBoxOptions.showDropDownButton
+             * @inheritdoc
+             * @default false
+             */
             showDropDownButton: false,
 
             maxFilterLength: 1500,
