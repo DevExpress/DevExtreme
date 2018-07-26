@@ -92,6 +92,7 @@ var Autocomplete = DropDownList.inherit({
 
             /**
              * @name dxAutocompleteOptions.showDropDownButton
+             * @inheritdoc
              * @hidden
              */
             showDropDownButton: false,
