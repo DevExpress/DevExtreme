@@ -121,6 +121,7 @@ var POPOVER_CLASS = "dx-popover",
 /**
  * @name dxPopover
  * @inherits dxPopup
+ * @hasTranscludedContent
  * @module ui/popover
  * @export default
  */
