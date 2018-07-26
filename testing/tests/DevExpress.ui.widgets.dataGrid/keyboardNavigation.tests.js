@@ -4852,6 +4852,43 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
+    QUnit.testInActiveWindow("Focus must be after enter key pressed if 'cell' edit mode (T653709)", function(assert) {
+        var rowsView,
+            $cell;
+
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: {
+                mode: 'cell'
+            }
+        };
+
+        this.setupModule();
+
+        // arrange
+        this.gridView.render($("#container"));
+        rowsView = this.gridView.getView("rowsView");
+
+        // act
+        this.editCell(0, 1);
+        this.clock.tick();
+        this.triggerKeyDown("enter", false, false, $(this.rowsView.element().find(".dx-data-row:nth-child(1) td:nth-child(2)")));
+        this.gridView.component.editorFactoryController._$focusedElement = undefined;
+        this.clock.tick();
+
+        $cell = $(this.rowsView.element().find(".dx-data-row:nth-child(1) td:nth-child(2)"));
+
+        // assert
+        assert.ok($cell.hasClass("dx-focused"), "cell is focused");
+        assert.notOk($cell.hasClass("dx-editor-cell"), "not editor cell");
+        assert.equal(rowsView.element().find(".dx-datagrid-focus-overlay").css("visibility"), "visible", "contains overlay");
+    });
+
     QUnit.testInActiveWindow("Focus must be after cell click if edit mode == 'batch'", function(assert) {
         // arrange
         this.$element = function() {
