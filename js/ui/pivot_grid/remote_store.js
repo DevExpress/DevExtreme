@@ -1,16 +1,13 @@
 "use strict";
 
-var Class = require("../../core/class"),
-    grep = require("../../core/utils/common").grep,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    DataSourceModule = require("../../data/data_source/data_source"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    getFiltersByPath = pivotGridUtils.getFiltersByPath;
+import { isString, isDefined } from "../../core/utils/type";
+import Class from "../../core/class";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import DataSourceModule from "../../data/data_source/data_source";
+import { when, Deferred } from "../../core/utils/deferred";
+import pivotGridUtils, { getFiltersByPath } from "./ui.pivot_grid.utils";
+import { deserializeDate } from "../../core/utils/date_serialization";
 
 function createGroupingOptions(dimensionOptions) {
     var groupingOptions = [];
@@ -196,6 +193,18 @@ function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
     }
 }
 
+function parseValue(value, field) {
+    if(field && field.dataType === "number" && isString(value)) {
+        return Number(value);
+    }
+
+    if(field && field.dataType === "date" && !field.groupInterval && !(value instanceof Date)) {
+        return deserializeDate(value);
+    }
+
+    return value;
+}
+
 function parseResult(data, total, descriptions, result) {
     var rowPath = [],
         columnPath = [],
@@ -208,7 +217,7 @@ function parseResult(data, total, descriptions, result) {
         });
     }
 
-    function getItem(dataItem, dimensionName, path, level) {
+    function getItem(dataItem, dimensionName, path, level, field) {
         var dimensionHash = result[dimensionName + "Hash"],
             parentItem,
             parentItemChildren,
@@ -220,7 +229,7 @@ function parseResult(data, total, descriptions, result) {
             item = dimensionHash[pathValue];
         } else {
             item = {
-                value: dataItem.key,
+                value: parseValue(dataItem.key, field),
                 index: result[dimensionName + "Index"]++
             };
 
@@ -257,7 +266,7 @@ function parseResult(data, total, descriptions, result) {
         if(level >= descriptions.rows.length) {
             columnPath[columnLevel] = item.key + "";
 
-            columnItem = getItem(item, "column", columnPath, columnLevel);
+            columnItem = getItem(item, "column", columnPath, columnLevel, descriptions.columns[columnPath.length - 1]);
             rowItem = rowHash[rowPath.slice(0, rowLevel + 1).join("/")];
         } else {
             rowPath[rowLevel] = item.key + "";
@@ -277,10 +286,8 @@ function parseResult(data, total, descriptions, result) {
     return result;
 }
 
-function getFiltersForDimension(dimensionOptions) {
-    return grep(dimensionOptions || [], function(field) {
-        return field.filterValues && field.filterValues.length;
-    });
+function getFiltersForDimension(fields) {
+    return (fields || []).filter(f => f.filterValues && f.filterValues.length);
 }
 
 function getExpandedIndex(options, axis) {
