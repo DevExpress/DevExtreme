@@ -1126,7 +1126,7 @@ var dxChart = AdvancedChart.inherit({
     zoomArgument(min, max) {
         const that = this;
 
-        if(!_isDefined(min) && !_isDefined(max)) {
+        if(!that._initialized || !_isDefined(min) && !_isDefined(max)) {
             return;
         }
 
