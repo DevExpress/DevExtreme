@@ -7,6 +7,7 @@ var commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     eventUtils = require("../../events/utils"),
     BaseWidget = require("../core/base_widget"),
+    coreDataUtils = require("../../core/utils/data"),
     legendModule = require("../components/legend"),
     dataValidatorModule = require("../components/data_validator"),
     seriesModule = require("../series/base_series"),
@@ -913,6 +914,25 @@ var BaseChart = BaseWidget.inherit({
         _each(that.seriesFamilies || [], function(_, family) { family.dispose(); });
         that.seriesFamilies = null;
         that._needHandleRenderComplete = true;
+    },
+
+    _simulateOptionChange(fullName, value, previousValue) {
+        const that = this;
+        const optionNames = fullName.split(/[.\[\d+\]]/);
+        const args = {
+            name: optionNames[0],
+            fullName: fullName,
+            value: value,
+            previousValue: previousValue
+        };
+
+        coreDataUtils.compileSetter(fullName)(that._options, value, {
+            functionsAsIs: true,
+            merge: !that._getOptionsByReference()[fullName],
+            unwrapObservables: optionNames.length > 1 && !!that._getOptionsByReference()[optionNames[0]]
+        });
+
+        that._optionChangedAction(args);
     },
 
     _optionChanged: function(arg) {

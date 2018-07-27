@@ -245,6 +245,7 @@ QUnit.test("Set visualRange via arguments", function(assert) {
 
 QUnit.test("Set visualRange via array", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
+    var currentVisualRange = [];
 
     var chart = this.createChart({
         size: {
@@ -267,15 +268,55 @@ QUnit.test("Set visualRange via array", function(assert) {
             arg: 11,
             val: 8
         }],
-        series: { type: "line" }
+        series: { type: "line" },
+        onOptionChanged: function(e) { currentVisualRange = e.value; }
     });
 
     assert.ok(chart);
 
-    chart.getArgumentAxis().visualRange(3, 6);
+    chart.getArgumentAxis().visualRange([3, 6]);
 
     assert.deepEqual(chart._argumentAxes[0]._viewport, [3, 6]);
+    assert.deepEqual(currentVisualRange, [3, 6]);
     assert.deepEqual(chart._valueAxes[0].visualRange(), [3, 8]);
+});
+
+QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var currentVisualRange = [];
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        series: { type: "line" },
+        onOptionChanged: function(e) { currentVisualRange = e.value; },
+        valueAxis: [{}]
+    });
+
+    assert.ok(chart);
+
+    chart.getValueAxis().visualRange([3, 6]);
+
+    assert.deepEqual(currentVisualRange, [3, 6]);
+    assert.deepEqual(chart.option("valueAxis[0].visualRange"), [3, 6]);
 });
 
 QUnit.test("Set null visualRange", function(assert) {

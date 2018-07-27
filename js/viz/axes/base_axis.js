@@ -1772,6 +1772,7 @@ Axis.prototype = {
         max = that._validateUnit(max);
 
         that._setVisualRange(min, max);
+        that._options.visualRange = that._viewport;
 
         that._breaks = that._getScaleBreaks(options, {
             minVisible: min,

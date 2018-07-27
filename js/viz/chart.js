@@ -1148,13 +1148,11 @@ var dxChart = AdvancedChart.inherit({
     _getVisualRangeSetter(isArgumentAxis, useAnimation, index) {
         const chart = this;
         return function(visualRange) {
-            if(isArgumentAxis) {
-                chart._argumentAxes.forEach(function(axis) {
-                    axis.zoom(visualRange[0], visualRange[1]);
-                });
-            } else {
-                chart._valueAxes[index].zoom(visualRange[0], visualRange[1]);
-            }
+            const axes = isArgumentAxis ? chart._argumentAxes : chart._valueAxes.slice(index, index + 1);
+            axes.forEach(function(axis) {
+                axis.zoom(visualRange[0], visualRange[1]);
+                chart._riseVisualRangeOptionChange(visualRange, isArgumentAxis, index);
+            });
 
             chart._recreateSizeDependentObjects(false);
             chart._doRender({
@@ -1170,6 +1168,18 @@ var dxChart = AdvancedChart.inherit({
     _resetZoom() {
         this._argumentAxes.forEach(axis => axis.resetZoom());
         this._valueAxes.forEach(axis => axis.resetZoom()); // T602156
+    },
+
+    _riseVisualRangeOptionChange(visualRange, isArgumentAxis, index) {
+        const that = this;
+        const axisType = isArgumentAxis ? "argumentAxis" : "valueAxis";
+        const optionName = "visualRange";
+        const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + "." + optionName;
+        const previousVisualRange = that.option(optionFullName);
+
+        if(!_isDefined(previousVisualRange) || visualRange[0] !== previousVisualRange[0] || visualRange[1] !== previousVisualRange[1]) {
+            that._simulateOptionChange(optionFullName, visualRange, previousVisualRange);
+        }
     },
 
     // T218011 for dashboards
