@@ -429,11 +429,11 @@ var AdvancedChart = BaseChart.inherit({
     },
 
     getArgumentAxis: function() {
-        return this._argumentAxes[this._displayedArgumentAxisIndex];
+        return (this._argumentAxes || [])[this._displayedArgumentAxisIndex];
     },
 
     getValueAxis: function(name) {
-        return this._valueAxes.filter(_isDefined(name) ? a => a.name === name : a => a.pane === this.defaultPane)[0];
+        return (this._valueAxes || []).filter(_isDefined(name) ? a => a.name === name : a => a.pane === this.defaultPane)[0];
     },
 
     _getGroupsData: function() {

@@ -39,6 +39,11 @@ namespace StyleCompiler.ThemeBuilder
             new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_LIME_LIGHT),
             new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_PURPLE_LIGHT),
             new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_TEAL_LIGHT),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_BLUE_DARK),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_ORANGE_DARK),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_LIME_DARK),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_PURPLE_DARK),
+            new ThemeId(LessRegistry.THEME_MATERIAL, LessRegistry.COLOR_SCHEME_TEAL_DARK),
 
             new ThemeId(LessRegistry.THEME_IOS7, LessRegistry.COLOR_SCHEME_DEFAULT),
             new ThemeId(LessRegistry.THEME_ANDROID5, LessRegistry.COLOR_SCHEME_LIGHT),

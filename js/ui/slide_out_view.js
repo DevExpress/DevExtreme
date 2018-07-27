@@ -38,7 +38,6 @@ var animation = {
             complete: completeAction
         });
     },
-
     complete: function($element) {
         fx.stop($element, true);
     }
@@ -47,6 +46,7 @@ var animation = {
 /**
 * @name dxSlideOutView
 * @inherits Widget
+* @hasTranscludedContent
 * @module ui/slide_out_view
 * @export default
 */
@@ -290,6 +290,7 @@ var SlideOutView = Widget.inherit({
 
     _renderPosition: function(offset, animate) {
         if(!windowUtils.hasWindow()) return;
+
         var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
         this._toggleHideMenuCallback(offset);
