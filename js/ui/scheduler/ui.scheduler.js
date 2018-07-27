@@ -1158,7 +1158,6 @@ var Scheduler = Widget.inherit({
                 deferred.done((function() {
                     this._reloadDataSource();
                 }).bind(this));
-                this._makeHard = true;
                 break;
             case "onAppointmentAdding":
             case "onAppointmentAdded":
