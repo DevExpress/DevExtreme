@@ -681,6 +681,11 @@
  */
 
 /**
+ * @typedef {string} Enums.TreeViewExpandEvent
+ * @enum {'dblclick'|'click'}
+ */
+
+/**
  * @typedef {string} Enums.VectorMapLayerType
  * @enum {'area'|'line'|'marker'}
  */
