@@ -17,7 +17,7 @@ const MASK_EVENT_NAMESPACE = "dateBoxMask",
 let DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys() {
-        if(!this._useMaskBehavior()) {
+        if(!this._useMaskBehavior() || this.option("opened")) {
             return this.callBase();
         }
 
@@ -45,7 +45,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
         let result = this.callBase(e);
 
-        if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+        if(!this._useMaskBehavior() || this.option("opened") || !this._isSingleCharKey(e)) {
             return result;
         }
 
@@ -130,7 +130,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior() {
-        return this.option("useMaskBehavior") && !this.option("opened") && this.option("mode") === "text" && this.option("displayFormat");
+        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
     },
 
     _getDefaultOptions() {
@@ -294,9 +294,12 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _valueChangeEventHandler(e) {
-        this.callBase(e);
         if(this._useMaskBehavior()) {
+            this._saveValueChangeEvent(e);
             this.dateOption("value", this._maskValue);
+            this._saveValueChangeEvent(undefined);
+        } else {
+            this.callBase(e);
         }
     },
 
@@ -309,6 +312,15 @@ let DateBoxMask = DateBoxBase.inherit({
             case "mode":
                 this.callBase(args);
                 this._renderMask();
+                break;
+            case "value":
+                if(this._useMaskBehavior() && args.value) {
+                    this._maskValue = new Date(args.value);
+                    this.callBase(args);
+                    this._renderDateParts();
+                } else {
+                    this.callBase(args);
+                }
                 break;
             case "searchTimeout":
                 clearTimeout(this._searchTimeout);

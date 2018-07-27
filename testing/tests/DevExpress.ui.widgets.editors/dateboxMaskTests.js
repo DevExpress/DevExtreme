@@ -680,6 +680,30 @@ if(devices.real().deviceType === "desktop") {
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
         });
+
+        QUnit.test("onValueChanged should have event", (assert) => {
+            const valueChangedHandler = sinon.spy();
+
+            this.instance.option({
+                onValueChanged: valueChangedHandler
+            });
+
+            this.keyboard.press("up").press("enter");
+
+            assert.equal(valueChangedHandler.callCount, 1, "handler has been called once");
+            assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
+        });
+
+        QUnit.test("It should be possible to set a value via calendar", (assert) => {
+            this.instance.option({
+                opened: true
+            });
+
+            this.keyboard.press("right").press("enter");
+            assert.equal(this.$input.val(), "October 11 2012", "text is correct");
+            assert.equal(this.instance.option("value").getDate(), 11, "value is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
+        });
     });
 
     QUnit.module("Advanced caret", setupModule, () => {
