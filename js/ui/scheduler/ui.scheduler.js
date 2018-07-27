@@ -1098,20 +1098,14 @@ var Scheduler = Widget.inherit({
                 this._processCurrentView();
 
                 this.option("selectedCellData", []);
-                var viewCountConfig = this._getViewCountConfig();
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
                     allowResize: this._allowResizing(),
                     itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
                 });
-                this._header.option("intervalCount", viewCountConfig.intervalCount);
-                this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
-                this._header.option("min", this._dateOption("min"));
-                this._header.option("max", this._dateOption("max"));
-                this._header.option("currentDate", this._dateOption("currentDate"));
-                this._header.option("firstDayOfWeek", this._getCurrentViewOption("firstDayOfWeek"));
-                this._header.option("currentView", this._currentView);
+
+                this._updateHeader();
 
                 this._loadResources().done((function(resources) {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
@@ -1289,6 +1283,17 @@ var Scheduler = Widget.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _updateHeader: function() {
+        var viewCountConfig = this._getViewCountConfig();
+        this._header.option("intervalCount", viewCountConfig.intervalCount);
+        this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
+        this._header.option("min", this._dateOption("min"));
+        this._header.option("max", this._dateOption("max"));
+        this._header.option("currentDate", this._dateOption("currentDate"));
+        this._header.option("firstDayOfWeek", this._getCurrentViewOption("firstDayOfWeek"));
+        this._header.option("currentView", this._currentView);
     },
 
     _dateOption: function(optionName) {
