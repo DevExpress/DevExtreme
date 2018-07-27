@@ -1157,6 +1157,12 @@ QUnit.test("init", function(assert) {
     assert.strictEqual(renderers.SvgElement.returnValues[3].dispose.callCount, 1, "pattern 2");
 });
 
+QUnit.test("release after init", function(assert) {
+    this.renderer.initHatching();
+    this.renderer.releaseHatching("DevExpressId-hatching-0");
+    assert.ok(true);
+});
+
 if("pushState" in history) {
     QUnit.module("SvgElement. FuncIRI", {
         beforeEach: function() {
