@@ -1925,7 +1925,7 @@ Renderer.prototype = {
             hash = storage.refToHash[ref],
             storageItem = storage.byHash[hash];
 
-        if(--storageItem.count === 0) {
+        if(storageItem && --storageItem.count === 0) {
             storageItem.pattern.dispose();
             delete storage.byHash[hash];
             delete storage.refToHash[ref];
