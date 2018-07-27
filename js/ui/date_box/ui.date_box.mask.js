@@ -135,8 +135,26 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
+
+            /**
+             * @name dxDateBoxOptions.useMaskBehavior
+             * @type boolean
+             * @default false
+             */
             useMaskBehavior: false,
+
+            /**
+             * @name dxDateBoxOptions.searchTimeout
+             * @type number
+             * @default 1500
+             */
             searchTimeout: 1500,
+
+            /**
+             * @name dxDateBoxOptions.advancedCaret
+             * @type boolean
+             * @default false
+             */
             advancedCaret: false
         });
     },
