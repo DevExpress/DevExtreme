@@ -1063,7 +1063,8 @@ var Scheduler = Widget.inherit({
                 this._header.option(name, this._workSpace._getViewStartByOptions());
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
-                this._reloadDataSource();
+
+                this._deferredOperations["_reloadDataSource"] = this._reloadDataSource.bind(this);
                 break;
             case "dataSource":
                 this._initDataSource();
@@ -1072,7 +1073,8 @@ var Scheduler = Widget.inherit({
                 this._loadResources().done((function() {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
-                    this._reloadDataSource();
+
+                    this._deferredOperations["_reloadDataSource"] = this._reloadDataSource.bind(this);
                 }).bind(this));
                 break;
             case "min":
@@ -1116,7 +1118,8 @@ var Scheduler = Widget.inherit({
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
-                    this._reloadDataSource();
+
+                    this._deferredOperations["_reloadDataSource"] = this._reloadDataSource.bind(this);
                 }).bind(this));
                 break;
             case "appointmentTemplate":
@@ -1143,7 +1146,8 @@ var Scheduler = Widget.inherit({
                     this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
-                    this._reloadDataSource();
+
+                    this._deferredOperations["_reloadDataSource"] = this._reloadDataSource.bind(this);
                 }).bind(this));
                 break;
             case "startDayHour":
@@ -1153,11 +1157,7 @@ var Scheduler = Widget.inherit({
                 this._appointments.repaint();
                 this._filterAppointmentsByDate();
 
-                var deferred = this.getDeferred();
-
-                deferred.done((function() {
-                    this._reloadDataSource();
-                }).bind(this));
+                this._deferredOperations["_reloadDataSource"] = this._reloadDataSource.bind(this);
                 break;
             case "onAppointmentAdding":
             case "onAppointmentAdded":
@@ -1240,7 +1240,8 @@ var Scheduler = Widget.inherit({
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "allDayExpanded", value);
                     this._updateOption("workSpace", name, value);
-                    this._reloadDataSource();
+
+                    this._deferredOperations["_reloadDataSource"] = this._reloadDataSource.bind(this);
                 }).bind(this));
                 break;
             case "showCurrentTimeIndicator":
@@ -1290,13 +1291,6 @@ var Scheduler = Widget.inherit({
         }
     },
 
-    // _makeHardOperation: function() {
-    //     debugger;
-    //     if(this._makeHard) {
-    //         this._reloadDataSource();
-    //         this._makeHard = false;
-    //     }
-    // },
     _dateOption: function(optionName) {
         var optionValue = this._getCurrentViewOption(optionName);
 

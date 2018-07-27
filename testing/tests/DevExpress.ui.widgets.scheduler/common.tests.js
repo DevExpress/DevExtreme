@@ -1683,7 +1683,27 @@ QUnit.testStart(function() {
         }));
         this.instance.beginUpdate();
         this.instance.option("startDayHour", 10);
-        this.instance.option("startDayHour", 18);
+        this.instance.option("endDayHour", 18);
+        this.instance.endUpdate();
+        assert.equal(counter, 2);
+    });
+
+    QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
+        var counter = 0;
+
+        this.createInstance();
+
+        this.instance.option("dataSource", new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    counter++;
+                    return [];
+                }
+            })
+        }));
+        this.instance.beginUpdate();
+        this.instance.option("currentView", "timelineDay");
+        this.instance.option("currentView", "timelineMonth");
         this.instance.endUpdate();
         assert.equal(counter, 2);
     });

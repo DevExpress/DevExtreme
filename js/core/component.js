@@ -225,6 +225,8 @@ var Component = Class.inherit({
         this.on("disposing", function(args) {
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
+
+        this._deferredOperations = {};
     },
 
     _createOptionChangedAction: function() {
@@ -281,7 +283,7 @@ var Component = Class.inherit({
     endUpdate: function() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
-            this._makeHardOperation.resolve();
+            this._callDeferredOperations();
             if(!this._initializing && !this._initialized) {
                 this._initializing = true;
                 try {
@@ -297,8 +299,10 @@ var Component = Class.inherit({
         }
     },
 
-    getDeferred: function() {
-        return this._makeHardOperation;
+    _callDeferredOperations: function() {
+        for(var key in this._deferredOperations) {
+            this._deferredOperations[key].call();
+        }
     },
 
     _logWarningIfDeprecated: function(option) {
