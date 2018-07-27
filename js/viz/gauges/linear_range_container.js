@@ -29,7 +29,7 @@ var LinearRangeContainer = BaseRangeContainer.inherit({
                     that._inner = 1;
                     break;
                 case 'center':
-                case 'middle':  // DEPRECATED_15_2
+                case 'middle': // DEPRECATED_15_2
                     that._inner = that._outer = 0.5;
                     break;
                 default:

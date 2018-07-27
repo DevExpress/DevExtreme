@@ -233,8 +233,8 @@ var Switch = Editor.inherit({
 
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
-                .attr("type", "hidden")
-                .appendTo(this.$element());
+            .attr("type", "hidden")
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {

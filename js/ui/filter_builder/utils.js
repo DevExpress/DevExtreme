@@ -522,8 +522,8 @@ function getCurrentValueText(field, value, customOperation, target = "filterBuil
         let result = new Deferred();
         when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
             let text = args.some(item => !checkDefaultValue(item))
-                    ? args.map(item => !checkDefaultValue(item) ? item : "?")
-                    : "";
+                ? args.map(item => !checkDefaultValue(item) ? item : "?")
+                : "";
             result.resolve(text);
         });
         return result;

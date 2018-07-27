@@ -1379,15 +1379,14 @@ var PivotGrid = Widget.inherit({
     },
 
     _renderDescriptionArea: function() {
-        var that = this,
-            $element = that.$element(),
+        let $element = this.$element(),
             $descriptionCell = $element.find("." + DESCRIPTION_AREA_CELL_CLASS),
             $toolbarContainer = $(DIV).addClass("dx-pivotgrid-toolbar"),
-            fieldPanel = that.option("fieldPanel"),
+            fieldPanel = this.option("fieldPanel"),
             $filterHeader = $element.find(".dx-filter-header"),
             $columnHeader = $element.find(".dx-column-header");
 
-        var $targetContainer;
+        let $targetContainer;
 
         if(fieldPanel.visible && fieldPanel.showFilterFields) {
             $targetContainer = $filterHeader;
@@ -1402,34 +1401,38 @@ var PivotGrid = Widget.inherit({
 
         $descriptionCell.toggleClass("dx-pivotgrid-background", fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields));
 
-        that.$element().find(".dx-pivotgrid-toolbar").remove();
+        this.$element().find(".dx-pivotgrid-toolbar").remove();
 
         $toolbarContainer.prependTo($targetContainer);
 
-        if(that.option("fieldChooser.enabled")) {
-            that._createComponent($(DIV)
+        if(this.option("fieldChooser.enabled")) {
+            let $buttonElement = $(DIV)
                 .appendTo($toolbarContainer)
-                .addClass("dx-pivotgrid-field-chooser-button"),
-                "dxButton", {
-                    icon: "columnchooser",
-                    hint: that.option("texts.showFieldChooser"),
-                    onClick: function() {
-                        that.getFieldChooserPopup().show();
-                    }
-                });
+                .addClass("dx-pivotgrid-field-chooser-button");
+            let buttonOptions = {
+                icon: "columnchooser",
+                hint: this.option("texts.showFieldChooser"),
+                onClick: () => {
+                    this.getFieldChooserPopup().show();
+                }
+            };
+
+            this._createComponent($buttonElement, "dxButton", buttonOptions);
         }
 
-        if(that.option("export.enabled")) {
-            that._createComponent($(DIV)
+        if(this.option("export.enabled")) {
+            let $buttonElement = $(DIV)
                 .appendTo($toolbarContainer)
-                .addClass("dx-pivotgrid-export-button"),
-                "dxButton", {
-                    icon: "exportxlsx",
-                    hint: that.option("texts.exportToExcel"),
-                    onClick: function() {
-                        that.exportToExcel();
-                    }
-                });
+                .addClass("dx-pivotgrid-export-button");
+            let buttonOptions = {
+                icon: "exportxlsx",
+                hint: this.option("texts.exportToExcel"),
+                onClick: () => {
+                    this.exportToExcel();
+                }
+            };
+
+            this._createComponent($buttonElement, "dxButton", buttonOptions);
         }
     },
 

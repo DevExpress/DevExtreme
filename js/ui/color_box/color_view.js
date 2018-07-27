@@ -603,8 +603,8 @@ var ColorView = Editor.inherit({
     _renderHexInput: function() {
         this._hexInput = TextBox.getInstance(
             this._renderEditorWithLabel(this.hexInputOptions())
-            .appendTo(this._$controlsContainer)
-            .find(".dx-textbox")
+                .appendTo(this._$controlsContainer)
+                .find(".dx-textbox")
         );
     },
 

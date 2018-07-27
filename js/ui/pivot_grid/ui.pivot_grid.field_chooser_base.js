@@ -137,7 +137,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     renderField: function(field, showColumnLines) {
         var that = this,
             $fieldContent = $(DIV).addClass("dx-area-field-content")
-                        .text(field.caption || field.dataField),
+                .text(field.caption || field.dataField),
             $fieldElement = $(DIV)
                 .addClass("dx-area-field")
                 .addClass("dx-area-box")

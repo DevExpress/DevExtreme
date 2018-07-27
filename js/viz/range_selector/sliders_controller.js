@@ -451,7 +451,7 @@ SlidersController.prototype = {
         }
         sliders[1 - index].setDisplayValue(selectClosestValue(newValue, that._values));
         sliders[index]._setValid(true);
-        sliders[index]._marker._update();   // This is to update "text" element
+        sliders[index]._marker._update(); // This is to update "text" element
         sliders[0]._position = sliders[1]._position = position;
     },
 

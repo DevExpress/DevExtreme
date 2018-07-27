@@ -615,7 +615,7 @@ exports.XmlaStore = Class.inherit((function() {
         var grandTotalIndex;
         if(parentItem.children.length === 1 && parentItem.children[0].parentName === "") {
             grandTotalIndex = parentItem.children[0].index;
-        // TODO - refactoring
+            // TODO - refactoring
             var grandTotalHash = parentItem.children.grandTotalHash;
             parentItem.children = parentItem.children[0].children || [];
 

@@ -277,8 +277,8 @@ var ODataStore = Store.inherit({
 
     _byKeyUrl: function(value, useOriginalHost) {
         var baseUrl = useOriginalHost
-                ? proxyUrlFormatter.formatLocalUrl(this._url)
-                : this._url;
+            ? proxyUrlFormatter.formatLocalUrl(this._url)
+            : this._url;
 
         var convertedKey = this._convertKey(value);
 

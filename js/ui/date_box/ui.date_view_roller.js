@@ -121,10 +121,7 @@ var DateViewRoller = Scrollable.inherit({
     _renderSelectedItemFrame: function() {
         $("<div>")
             .addClass(DATEVIEW_ROLLER_ITEM_SELECTED_FRAME_CLASS)
-            .append(
-            $("<div>")
-                .addClass(DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS)
-                )
+            .append($("<div>").addClass(DATEVIEW_ROLLER_ITEM_SELECTED_BORDER_CLASS))
             .appendTo(this._$container);
     },
 
