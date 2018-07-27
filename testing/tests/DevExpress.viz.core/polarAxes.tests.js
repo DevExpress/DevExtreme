@@ -816,7 +816,7 @@ QUnit.test("adjust constant line labels", function(assert) {
     this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
 
     assert.ok(this.renderer.text.called);
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.firstCall.args, [{
         align: "center"
     }]);
 });
