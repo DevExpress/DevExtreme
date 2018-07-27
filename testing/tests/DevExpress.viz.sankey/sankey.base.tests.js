@@ -80,6 +80,23 @@ QUnit.test("Process values from dataSource and pass them to layout builder", fun
     assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[0].length, data.length);
 });
 
+QUnit.test("Process values from dataSource with custom sourceField, targetField, weightField and pass them to layout builder", function(assert) {
+    var data = [{ src: 'A', destination: 'B', value: 1 }, { src: 'B', destination: 'C', value: 1 }];
+    createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: data,
+        sourceField: 'src',
+        targetField: 'destination',
+        weightField: 'value',
+    });
+
+    assert.ok(spiesLayoutBuilder.computeLayout.calledOnce);
+    assert.deepEqual(spiesLayoutBuilder.computeLayout.lastCall.args[0][0], ['A', 'B', 1]);
+    assert.deepEqual(spiesLayoutBuilder.computeLayout.lastCall.args[0][1], ['B', 'C', 1]);
+    assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[0].length, data.length);
+});
+
+
 QUnit.test("Trigger error on invalid source data", function(assert) {
     var invalidDataSets = [
         [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C' }],
