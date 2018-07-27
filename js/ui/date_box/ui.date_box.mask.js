@@ -18,7 +18,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys(e) {
         if(!this._useMaskBehavior() || this.option("opened") || e.altKey) {
-            return this.callBase();
+            return this.callBase(e);
         }
 
         let that = this;
@@ -328,7 +328,6 @@ let DateBoxMask = DateBoxBase.inherit({
         if(this._useMaskBehavior()) {
             this._saveValueChangeEvent(e);
             this._saveMaskValue();
-            this._saveValueChangeEvent(undefined);
         } else {
             this.callBase(e);
         }

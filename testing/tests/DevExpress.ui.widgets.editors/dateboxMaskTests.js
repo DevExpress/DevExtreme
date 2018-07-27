@@ -697,6 +697,10 @@ if(devices.real().deviceType === "desktop") {
 
             assert.equal(valueChangedHandler.callCount, 1, "handler has been called once");
             assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
+
+            this.instance.option("value", new Date(2012, 4, 5));
+            assert.equal(valueChangedHandler.callCount, 2, "handler has been called twice");
+            assert.strictEqual(valueChangedHandler.getCall(1).args[0].event, undefined, "event has been cleared");
         });
 
         QUnit.test("It should be possible to set a value via calendar", (assert) => {
