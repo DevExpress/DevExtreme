@@ -93,7 +93,7 @@ Node.prototype = {
 
         if(state) {
             this.linksIn.concat(this.linksOut).forEach(adjacentLink => {
-                this.widget._links[adjacentLink.idx].setAdjacentNodeHover(true);
+                this.widget._links[adjacentLink.index].setAdjacentNodeHover(true);
             });
         } else {
             this.widget._links.forEach(function(link) {

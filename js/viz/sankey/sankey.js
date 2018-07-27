@@ -378,7 +378,7 @@ var dxSankey = require("../core/base_widget").inherit({
             attrName = linkType === 'in' ? '_to' : '_from',
             invertedAttrName = linkType === 'in' ? '_from' : '_to';
         layout.links.map((link) => { return link[attrName]._name === nodeName; }).forEach((connected, idx) => {
-            connected && result.push({ idx: idx, weight: layout.links[idx]._weight, node: layout.links[idx][invertedAttrName]._name });
+            connected && result.push({ index: idx, weight: layout.links[idx]._weight, node: layout.links[idx][invertedAttrName]._name });
         });
         return result;
     },
