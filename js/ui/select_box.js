@@ -436,9 +436,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _items: function() {
-        var items = this._list
-            ? this.option("items")
-            : this._dataSource.items();
+        var items = this._getPlainItems(!this._list && this._dataSource.items());
 
         var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
 
