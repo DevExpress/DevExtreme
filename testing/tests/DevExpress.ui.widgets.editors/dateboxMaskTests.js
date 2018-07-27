@@ -346,6 +346,11 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("up");
             assert.equal(this.$input.val(), "October 10 2012", "text was not changed");
         });
+
+        QUnit.test("alt+down should open dxDateBox", (assert) => {
+            this.keyboard.keyDown("down", { altKey: true });
+            assert.ok(this.instance.option("opened"), "datebox is opened");
+        });
     });
 
     QUnit.module("Pointer events", setupModule, () => {
