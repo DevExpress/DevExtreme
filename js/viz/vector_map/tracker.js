@@ -308,7 +308,7 @@ Tracker.prototype = {
             if(isTouch && !that._isTouchEnabled) { return; }
             if(data) {
                 event.preventDefault();
-                event.stopPropagation();    // T322560
+                event.stopPropagation(); // T322560
             }
 
             that._startClick(event, data);
@@ -350,7 +350,7 @@ Tracker.prototype = {
             var data = getData(event);
             if(data) {
                 event.preventDefault();
-                event.stopPropagation();    // T249548
+                event.stopPropagation(); // T249548
                 that._wheelZoom(event, data);
             }
         };
@@ -366,7 +366,7 @@ Tracker.prototype = {
 
     _createProjectionHandlers: function(projection) {
         var that = this;
-        projection.on({ "center": handler, "zoom": handler });  // T247841
+        projection.on({ "center": handler, "zoom": handler }); // T247841
         function handler() {
             // `_cancelHover` probably should also be called here but for now let it not be so
             that._cancelFocus();

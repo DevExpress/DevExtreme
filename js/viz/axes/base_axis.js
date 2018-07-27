@@ -272,7 +272,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
             undefined,
             undefined,
             breaks
-            );
+        );
     };
 }
 

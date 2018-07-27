@@ -550,14 +550,14 @@ module.exports = {
                  */
                 selectAllMode: "allPages",
 
-                 /**
+                /**
                  * @name dxDataGridOptions.selection.maxFilterLengthInRequest
                  * @type number
                  * @hidden
                  * @default 1500
                  */
                 maxFilterLengthInRequest: 1500,
-                 /**
+                /**
                  * @name dxDataGridOptions.selection.deferred
                  * @type boolean
                  * @default false
@@ -760,8 +760,8 @@ module.exports = {
 
                 _renderSelectCheckBox: function(container, options) {
                     var groupElement = $("<div>")
-                            .addClass(SELECT_CHECKBOX_CLASS)
-                            .appendTo(container);
+                        .addClass(SELECT_CHECKBOX_CLASS)
+                        .appendTo(container);
 
                     this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",

@@ -48,15 +48,15 @@ var FilterMaker = Class.inherit({
 
             this._filterRegistry.date = [
                 [
-                        [endDate, ">", min],
-                        [startDate, "<", max]
+                    [endDate, ">", min],
+                    [startDate, "<", max]
                 ],
                 "or",
-                    [recurrenceRule, "startswith", "freq"],
+                [recurrenceRule, "startswith", "freq"],
                 "or",
                 [
-                        [endDate, min],
-                        [startDate, min]
+                    [endDate, min],
+                    [startDate, min]
                 ]
             ];
 

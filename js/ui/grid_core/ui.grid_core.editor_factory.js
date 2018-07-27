@@ -111,7 +111,7 @@ var EditorFactory = modules.ViewController.inherit({
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
                 var $focusOverlay = that._$focusOverlay = that._$focusOverlay || $("<div>")
-                    .addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS),
+                        .addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS),
                     focusOverlayPosition;
 
                 if(hideBorder) {

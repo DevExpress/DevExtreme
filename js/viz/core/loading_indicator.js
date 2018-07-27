@@ -76,7 +76,7 @@ LoadingIndicator.prototype = {
             state = that._states[stateId];
             that._rect.stopAnimation().animate({ opacity: state.opacity }, {
                 complete: state.complete, easing: ANIMATION_EASING, duration: ANIMATION_DURATION,
-                unstoppable: true    // T261694
+                unstoppable: true // T261694
             });
             that._noHiding = true;
             state.start();

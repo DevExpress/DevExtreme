@@ -254,7 +254,7 @@ var AdvancedChart = BaseChart.inherit({
     _appendAdditionalSeriesGroups: function() {
         this._crosshairCursorGroup.linkAppend();
         // this._legendGroup.linkAppend();
-        this._scrollBar && this._scrollBarGroup.linkAppend();   // TODO: Must be appended in the same place where removed (chart)
+        this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
         var that = this;
@@ -476,7 +476,7 @@ var AdvancedChart = BaseChart.inherit({
 
         this._valueAxes.forEach(function(axis) {
             if(axesWithFullStackedFormat.indexOf(axis) === -1) {
-                axis.resetAutoLabelFormat();  // B239299
+                axis.resetAutoLabelFormat(); // B239299
             }
         });
     },

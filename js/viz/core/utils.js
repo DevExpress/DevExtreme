@@ -205,10 +205,10 @@ function rotateBBox(bBox, center, angle) {
         centerY = bBox.y + h2,
         w2_ = abs(w2 * cos) + abs(h2 * sin),
         h2_ = abs(w2 * sin) + abs(h2 * cos),
-    // Note that the following slightly differs from theoretical formula:
-    // x' = x * cos - y * sin, y' = x * sin + y * cos
-    // That is because in svg y goes down (not up) - so sign of sin is reverted
-    // x' = x * cos + y * sin, y' = -x * sin + y * cos
+        // Note that the following slightly differs from theoretical formula:
+        // x' = x * cos - y * sin, y' = x * sin + y * cos
+        // That is because in svg y goes down (not up) - so sign of sin is reverted
+        // x' = x * cos + y * sin, y' = -x * sin + y * cos
         centerX_ = center[0] + (centerX - center[0]) * cos + (centerY - center[1]) * sin,
         centerY_ = center[1] - (centerX - center[0]) * sin + (centerY - center[1]) * cos;
     return normalizeBBox({

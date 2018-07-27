@@ -156,7 +156,7 @@ var Accordion = CollectionWidget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                     /**
+                    /**
                     * @name dxAccordionOptions.animationDuration
                     * @type number
                     * @default 200 @for Material
@@ -202,8 +202,8 @@ var Accordion = CollectionWidget.inherit({
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             var $templateContainer = $("<div>")
-                    .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS)
-                    .appendTo($container);
+                .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS)
+                .appendTo($container);
 
             if(isPlainObject(data)) {
                 if(data.title) {
@@ -374,8 +374,8 @@ var Accordion = CollectionWidget.inherit({
 
         var startItemHeight = $item.outerHeight(),
             finalItemHeight = $item.hasClass(ACCORDION_ITEM_OPENED_CLASS)
-            ? itemHeight + $title.outerHeight() || $item.height("auto").outerHeight()
-            : $title.outerHeight();
+                ? itemHeight + $title.outerHeight() || $item.height("auto").outerHeight()
+                : $title.outerHeight();
 
         return this._animateItem($item, startItemHeight, finalItemHeight, skipAnimation, !!itemHeight);
     },

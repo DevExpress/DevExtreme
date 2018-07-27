@@ -155,7 +155,7 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
         markersSettings["class"] = "dxc-markers";
         that._applyMarkerClipRect(markersSettings);
         groupSettings = _extend({}, markersSettings);
-        delete groupSettings.opacity;                   // T110796
+        delete groupSettings.opacity; // T110796
         that._markersGroup.attr(groupSettings);
     },
 

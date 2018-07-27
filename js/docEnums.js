@@ -80,7 +80,7 @@
  * @enum {'hide'|'none'}
  */
 
- /**
+/**
  * @typedef {string} Enums.OverlappingBehavior
  * @enum {'rotate'|'stagger'|'none'|'hide'}
  */
@@ -640,12 +640,12 @@
  * @enum {'standard'|'virtual'}
  */
 
- /**
+/**
  * @typedef {string} Enums.GridRowRenderingMode
  * @enum {'standard'|'virtual'}
  */
 
- /**
+/**
  * @typedef {string} Enums.GridColumnRenderingMode
  * @enum {'standard'|'virtual'}
  */
@@ -820,7 +820,7 @@
  * @enum {'fit'|'flip'|'flipfit'|'none'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartSeriesAggregationMethod
  * @enum {'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'}
  */
@@ -830,27 +830,27 @@
  * @enum {'avg'|'count'|'max'|'min'|'sum'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartFinancialSeriesAggregationMethod
  * @enum {'ohlc'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartRangeSeriesAggregationMethod
  * @enum {'range'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
  * @enum {'avg'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.DataSourceStoreType
  * @enum {'array'|'local'|'odata'}
  */
 
- /**
+/**
  * @typedef {string} Enums.PivotGridStoreType
  * @enum {'array'|'local'|'odata'|'xmla'}
  */
