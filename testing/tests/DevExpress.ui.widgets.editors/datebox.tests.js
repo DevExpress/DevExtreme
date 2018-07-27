@@ -2713,6 +2713,10 @@ QUnit.test("Reset seconds and milliseconds when DateBox has no value for time vi
 });
 
 QUnit.test("DateBox renders the right stylingMode for editors in time view overlay (default)", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
     var dateBox = $("#dateBox").dxDateBox({
         type: "datetime",
         value: new Date("2015/1/25")
@@ -2730,6 +2734,10 @@ QUnit.test("DateBox renders the right stylingMode for editors in time view overl
 });
 
 QUnit.test("DateBox renders the right stylingMode for editors in time view overlay (custom)", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
     var dateBox = $("#dateBox").dxDateBox({
         type: "datetime",
         value: new Date("2015/1/25"),
