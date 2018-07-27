@@ -16,7 +16,7 @@ var NgTemplate = TemplateBase.inherit({
     _renderCore: function(options) {
         var compiledTemplate = this._compiledTemplate,
             result = isFunction(compiledTemplate) ? compiledTemplate(options) : compiledTemplate;
-
+        options.onRendered && options.onRendered();
         return result;
     },
 
