@@ -1152,7 +1152,13 @@ var Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, value);
                 this._appointments.repaint();
                 this._filterAppointmentsByDate();
-                this._reloadDataSource();
+
+                var deferred = this.getDeferred();
+
+                deferred.done((function() {
+                    this._reloadDataSource();
+                }).bind(this));
+                this._makeHard = true;
                 break;
             case "onAppointmentAdding":
             case "onAppointmentAdded":
@@ -1285,6 +1291,13 @@ var Scheduler = Widget.inherit({
         }
     },
 
+    // _makeHardOperation: function() {
+    //     debugger;
+    //     if(this._makeHard) {
+    //         this._reloadDataSource();
+    //         this._makeHard = false;
+    //     }
+    // },
     _dateOption: function(optionName) {
         var optionValue = this._getCurrentViewOption(optionName);
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var Config = require("./config"),
+    Deferred = require("../core/utils/deferred").Deferred,
     domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
@@ -269,6 +270,7 @@ var Component = Class.inherit({
      * @publicName beginUpdate()
      */
     beginUpdate: function() {
+        this._makeHardOperation = new Deferred();
         this._updateLockCount++;
     },
 
@@ -279,6 +281,7 @@ var Component = Class.inherit({
     endUpdate: function() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
+            this._makeHardOperation.resolve();
             if(!this._initializing && !this._initialized) {
                 this._initializing = true;
                 try {
@@ -292,6 +295,10 @@ var Component = Class.inherit({
                 }
             }
         }
+    },
+
+    getDeferred: function() {
+        return this._makeHardOperation;
     },
 
     _logWarningIfDeprecated: function(option) {
