@@ -704,6 +704,26 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value").getDate(), 11, "value is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
+
+        QUnit.test("Internal _maskValue and public value should be different objects", (assert) => {
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different on init");
+
+            this.instance.option("value", new Date(2012, 1, 2));
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different when setting by value");
+
+            this.keyboard.press("up").press("esc");
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after revert changes");
+
+            this.keyboard.press("5").press("enter");
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after enter");
+
+            this.keyboard.press("4");
+            this.$input.trigger("focusout");
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after focusout");
+
+            this.keyboard.press("7").change();
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after change event");
+        });
     });
 
     QUnit.module("Advanced caret", setupModule, () => {

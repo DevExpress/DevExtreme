@@ -150,13 +150,16 @@ let DateBoxMask = DateBoxBase.inherit({
             this._activePartIndex = 0;
             this._attachMaskEvents();
 
-            const value = this.dateOption("value");
-            this._maskValue = value && new Date(value);
+            this._loadMaskValue();
             this._renderDateParts();
         }
     },
 
     _renderDateParts() {
+        if(!this._useMaskBehavior()) {
+            return;
+        }
+
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
@@ -233,8 +236,18 @@ let DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
+    _loadMaskValue() {
+        const value = this.dateOption("value");
+        this._maskValue = value && new Date(value);
+    },
+
+    _saveMaskValue() {
+        const value = this._maskValue && new Date(this._maskValue);
+        this.dateOption("value", value);
+    },
+
     _revertChanges() {
-        this._maskValue = this.dateOption("value");
+        this._loadMaskValue();
         this._renderDisplayText(this._getDisplayedText(this._maskValue));
         this._renderDateParts();
     },
@@ -296,7 +309,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _valueChangeEventHandler(e) {
         if(this._useMaskBehavior()) {
             this._saveValueChangeEvent(e);
-            this.dateOption("value", this._maskValue);
+            this._saveMaskValue();
             this._saveValueChangeEvent(undefined);
         } else {
             this.callBase(e);
@@ -314,13 +327,9 @@ let DateBoxMask = DateBoxBase.inherit({
                 this._renderMask();
                 break;
             case "value":
-                if(this._useMaskBehavior() && args.value) {
-                    this._maskValue = new Date(args.value);
-                    this.callBase(args);
-                    this._renderDateParts();
-                } else {
-                    this.callBase(args);
-                }
+                this._loadMaskValue();
+                this.callBase(args);
+                this._renderDateParts();
                 break;
             case "searchTimeout":
                 clearTimeout(this._searchTimeout);
