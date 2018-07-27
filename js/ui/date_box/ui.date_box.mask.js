@@ -35,6 +35,32 @@ let DateBoxMask = DateBoxBase.inherit({
         });
     },
 
+    _getDefaultOptions() {
+        return extend(this.callBase(), {
+
+            /**
+             * @name dxDateBoxOptions.useMaskBehavior
+             * @type boolean
+             * @default false
+             */
+            useMaskBehavior: false,
+
+            /**
+             * @name dxDateBoxOptions.searchTimeout
+             * @type number
+             * @default 1500
+             */
+            searchTimeout: 1500,
+
+            /**
+             * @name dxDateBoxOptions.advancedCaret
+             * @type boolean
+             * @default false
+             */
+            advancedCaret: false
+        });
+    },
+
     _isSingleCharKey(e) {
         const key = e.originalEvent.key;
         return typeof key === "string" && key.length === 1 && !e.ctrl && !e.alt;
@@ -131,32 +157,6 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _useMaskBehavior() {
         return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
-    },
-
-    _getDefaultOptions() {
-        return extend(this.callBase(), {
-
-            /**
-             * @name dxDateBoxOptions.useMaskBehavior
-             * @type boolean
-             * @default false
-             */
-            useMaskBehavior: false,
-
-            /**
-             * @name dxDateBoxOptions.searchTimeout
-             * @type number
-             * @default 1500
-             */
-            searchTimeout: 1500,
-
-            /**
-             * @name dxDateBoxOptions.advancedCaret
-             * @type boolean
-             * @default false
-             */
-            advancedCaret: false
-        });
     },
 
     _renderMask() {
