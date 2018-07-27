@@ -31,7 +31,7 @@ function parseValue(column, text) {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
+        /**
          * @name GridBaseOptions.searchPanel
          * @type object
          */
