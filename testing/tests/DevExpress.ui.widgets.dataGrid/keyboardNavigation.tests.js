@@ -4877,7 +4877,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
-    QUnit.testInActiveWindow("Cell should not have focus after click if allowediting=false and edit mode == 'cell || batch' (T657612)", function(assert) {
+    QUnit.testInActiveWindow("The first cell should not have focus after click if column allowEditing is false and edit mode is 'cell' or 'batch' (T657612)", function(assert) {
         // arrange
         this.$element = function() {
             return $("#container");
@@ -4899,7 +4899,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         // assert
         assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
-        assert.ok($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.ok($cell.hasClass("dx-cell-focus-disabled"), "cell has .dx-cell-focus-disabled");
         assert.notOk($cell.hasClass("dx-focused"), "cell has no .dx-focused");
     });
 
