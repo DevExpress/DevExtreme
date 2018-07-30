@@ -1047,10 +1047,30 @@ var Scheduler = Widget.inherit({
         ]);
     },
 
+    _postponeDataSourceLoading: function(promise) {
+        this._postponedOperations["_reloadDataSource"] = {
+            func: this._reloadDataSource.bind(this),
+            promise: promise
+        };
+    },
+
+    _postponeResourceLoading: function() {
+        var d = new Deferred();
+
+        this._postponedOperations["_loadResources"] = {
+            func: this._loadResources.bind(this),
+            done: (function(resources) {
+                this._resourceLoadedCallbacks.fire(resources);
+                d.resolve();
+            }).bind(this)
+        };
+
+        this._postponeDataSourceLoading(d.promise());
+    },
+
     _optionChanged: function(args) {
         var value = args.value,
-            name = args.name,
-            d;
+            name = args.name;
 
         switch(args.name) {
             case "firstDayOfWeek":
@@ -1065,10 +1085,7 @@ var Scheduler = Widget.inherit({
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
 
-                this._postponedOperations["_reloadDataSource"] = {
-                    func: this._reloadDataSource.bind(this),
-                    promise: null
-                };
+                this._postponeDataSourceLoading();
                 break;
             case "dataSource":
                 this._initDataSource();
@@ -1080,20 +1097,7 @@ var Scheduler = Widget.inherit({
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
                 }).bind(this));
 
-                d = new Deferred();
-
-                this._postponedOperations["_loadResources"] = {
-                    func: this._loadResources.bind(this),
-                    done: (function(resources) {
-                        this._resourceLoadedCallbacks.fire(resources);
-                        d.resolve();
-                    }).bind(this)
-                };
-
-                this._postponedOperations["_reloadDataSource"] = {
-                    func: this._reloadDataSource.bind(this),
-                    promise: d.promise()
-                };
+                this._postponeResourceLoading();
                 break;
             case "min":
             case "max":
@@ -1132,20 +1136,7 @@ var Scheduler = Widget.inherit({
                     this._appointments.option("allowAllDayResize", value !== "day");
                 }).bind(this));
 
-                d = new Deferred();
-
-                this._postponedOperations["_loadResources"] = {
-                    func: this._loadResources.bind(this),
-                    done: (function(resources) {
-                        this._resourceLoadedCallbacks.fire(resources);
-                        d.resolve();
-                    }).bind(this)
-                };
-
-                this._postponedOperations["_reloadDataSource"] = {
-                    func: this._reloadDataSource.bind(this),
-                    promise: d.promise()
-                };
+                this._postponeResourceLoading();
 
                 break;
             case "appointmentTemplate":
@@ -1159,22 +1150,24 @@ var Scheduler = Widget.inherit({
                 this.repaint();
                 break;
             case "groups":
-                this._loadResources().done((function(resources) {
+                this._resourceLoadedCallbacks.add((function(resources) {
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
-                    this._reloadDataSource();
                 }).bind(this));
+
+                this._postponeResourceLoading();
                 break;
             case "resources":
                 this._resourcesManager.setResources(this.option("resources"));
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
-                this._loadResources().done((function(resources) {
+
+                this._resourceLoadedCallbacks.add((function(resources) {
                     this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
-
-                    this._reloadDataSource();
                 }).bind(this));
+
+                this._postponeResourceLoading();
                 break;
             case "startDayHour":
             case "endDayHour":
@@ -1183,10 +1176,7 @@ var Scheduler = Widget.inherit({
                 this._appointments.repaint();
                 this._filterAppointmentsByDate();
 
-                this._postponedOperations["_reloadDataSource"] = {
-                    func: this._reloadDataSource.bind(this),
-                    promise: null
-                };
+                this._postponeDataSourceLoading();
                 break;
             case "onAppointmentAdding":
             case "onAppointmentAdded":
@@ -1220,13 +1210,16 @@ var Scheduler = Widget.inherit({
                 this._workSpace.option(name, value);
                 break;
             case "crossScrollingEnabled":
-                this._loadResources().done((function(resources) {
+                this._resourceLoadedCallbacks.add((function(resources) {
                     this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
                     if(this._readyToRenderAppointments) {
                         this._appointments.option("items", this._getAppointmentsToRepaint());
                     }
                 }).bind(this));
+
+                this._postponeResourceLoading();
+
                 break;
             case "cellDuration":
                 this._appointments.option("items", []);
@@ -1265,13 +1258,13 @@ var Scheduler = Widget.inherit({
                 this._cleanPopup();
                 break;
             case "showAllDayPanel":
-                this._loadResources().done((function() {
+                this._resourceLoadedCallbacks.add((function(resources) {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "allDayExpanded", value);
                     this._updateOption("workSpace", name, value);
-
-                    this._reloadDataSource();
                 }).bind(this));
+
+                this._postponeResourceLoading();
                 break;
             case "showCurrentTimeIndicator":
             case "indicatorTime":
