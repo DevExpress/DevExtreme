@@ -1689,7 +1689,8 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
-        var counter = 0;
+        var counter = 0,
+            resourceCounter = 0;
 
         this.createInstance({
             dataSource: new DataSource({
@@ -1699,15 +1700,29 @@ QUnit.testStart(function() {
                         return [];
                     }
                 })
-            })
+            }),
+            groups: ["owner.id"],
+            resources: [{
+                fieldExpr: "owner.id",
+                dataSource: new DataSource({
+                    store: new CustomStore({
+                        load: function() {
+                            resourceCounter++;
+                            return [];
+                        }
+                    })
+                })
+            }],
         });
 
         assert.equal(counter, 1);
+        assert.equal(resourceCounter, 1);
         this.instance.beginUpdate();
         this.instance.option("currentView", "timelineDay");
         this.instance.option("currentView", "timelineMonth");
         this.instance.endUpdate();
         assert.equal(counter, 2);
+        assert.equal(resourceCounter, 2);
     });
 
 })("Options");

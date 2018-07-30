@@ -1128,16 +1128,19 @@ var Scheduler = Widget.inherit({
                     this._appointments.option("allowAllDayResize", value !== "day");
                 }).bind(this));
 
+                var d = new Deferred();
+
                 this._deferredOperations["_loadResources"] = {
                     func: this._loadResources.bind(this),
                     done: (function(resources) {
                         this._resourceLoadedCallbacks.fire(resources);
+                        d.resolve();
                     }).bind(this)
                 };
 
                 this._deferredOperations["_reloadDataSource"] = {
                     func: this._reloadDataSource.bind(this),
-                    promise: this._loadResources()
+                    promise: d.promise()
                 };
 
                 break;
