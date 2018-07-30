@@ -1,7 +1,6 @@
 "use strict";
 
 var Config = require("./config"),
-    Deferred = require("../core/utils/deferred").Deferred,
     domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
@@ -272,7 +271,6 @@ var Component = Class.inherit({
      * @publicName beginUpdate()
      */
     beginUpdate: function() {
-        this._makeHardOperation = new Deferred();
         this._updateLockCount++;
     },
 
@@ -305,15 +303,15 @@ var Component = Class.inherit({
         };
 
         for(var key in this._postponedOperations) {
-            var object = this._postponedOperations[key];
-            if(!object.promise) {
-                if(object.done) {
-                    object.func.call().done(doneHandler.bind(this, object.done));
+            var operation = this._postponedOperations[key];
+            if(!operation.promise) {
+                if(operation.done) {
+                    operation.func.call().done(doneHandler.bind(this, operation.done));
                 } else {
-                    object.func.call();
+                    operation.func.call();
                 }
             } else {
-                object.promise.done(doneHandler.bind(this, object.func));
+                operation.promise.done(doneHandler.bind(this, operation.func));
             }
         }
     },
