@@ -91,8 +91,9 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     CELL_DATA = "dxCellData",
 
-    DATE_TABLE_MIN_CELL_WIDTH = 75,
     DATE_TABLE_CELL_BORDER = 1,
+
+    DATE_TABLE_MIN_CELL_WIDTH = 75,
 
     DAY_MS = toMs("day"),
     HOUR_MS = toMs("hour");
@@ -643,15 +644,15 @@ var SchedulerWorkSpace = Widget.inherit({
             }
         } else {
             this._$allDayTitle = $("<div>")
-            .addClass(ALL_DAY_TITLE_CLASS)
-            .text(messageLocalization.format("dxScheduler-allDay"))
-            .appendTo(this.$element());
+                .addClass(ALL_DAY_TITLE_CLASS)
+                .text(messageLocalization.format("dxScheduler-allDay"))
+                .appendTo(this.$element());
 
             this._$allDayTable = $("<table>");
 
             this._$allDayPanel = $("<div>")
-            .addClass(ALL_DAY_PANEL_CLASS)
-            .append(this._$allDayTable);
+                .addClass(ALL_DAY_PANEL_CLASS)
+                .append(this._$allDayTable);
         }
     },
 
@@ -751,8 +752,8 @@ var SchedulerWorkSpace = Widget.inherit({
     _createHeaderScrollable: function() {
         var dateTableScrollableOnScroll,
             $headerScrollable = $("<div>")
-            .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
-            .appendTo(this.$element());
+                .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
+                .appendTo(this.$element());
 
         this._headerScrollable = this._createComponent($headerScrollable, Scrollable, {
             useKeyboard: false,
@@ -780,8 +781,8 @@ var SchedulerWorkSpace = Widget.inherit({
     _createSidebarScrollable: function() {
         var dateTableScrollableOnScroll,
             $timePanelScrollable = $("<div>")
-            .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
-            .appendTo(this.$element());
+                .addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS)
+                .appendTo(this.$element());
 
         this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
             useKeyboard: false,
@@ -843,8 +844,8 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var cellWidth = this.getCellWidth();
 
-        if(cellWidth < DATE_TABLE_MIN_CELL_WIDTH) {
-            cellWidth = DATE_TABLE_MIN_CELL_WIDTH;
+        if(cellWidth < this.getCellMinWidth()) {
+            cellWidth = this.getCellMinWidth();
         }
 
         var minWidth = this._groupedStrategy.getWorkSpaceMinWidth(),
@@ -1261,8 +1262,8 @@ var SchedulerWorkSpace = Widget.inherit({
             for(var i = 0; i < count; i++) {
                 var text = this._getHeaderText(i),
                     $cell = $("<th>")
-                            .addClass(this._getHeaderPanelCellClass(i))
-                            .attr("title", text);
+                        .addClass(this._getHeaderPanelCellClass(i))
+                        .attr("title", text);
 
                 if(cellTemplate && cellTemplate.render) {
                     templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
@@ -2104,6 +2105,10 @@ var SchedulerWorkSpace = Widget.inherit({
         var cell = this._getCells().first().get(0);
 
         return cell && cell.getBoundingClientRect().width;
+    },
+
+    getCellMinWidth: function() {
+        return DATE_TABLE_MIN_CELL_WIDTH;
     },
 
     getRoundedCellWidth: function(groupIndex, startIndex, cellCount) {

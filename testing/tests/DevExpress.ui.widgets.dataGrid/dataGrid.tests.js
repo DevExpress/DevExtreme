@@ -7547,6 +7547,43 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
 });
 
+QUnit.testInActiveWindow("dataGrid resize generates exception if fixed column presents and validation applied in cell edit mode (T629168)", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "a", c1: "b" }, { Test: "c", c1: "d" }],
+            showColumnHeaders: false,
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: "Test",
+                    fixed: true,
+                    validationRules: [{ type: "required" }]
+                }, "c1"
+            ]
+        }),
+        that = this;
+
+    that.clock.tick();
+
+    // act
+    dataGrid.cellValue(0, 0, "");
+
+    that.clock.tick();
+
+    $(dataGrid.getCellElement(0, 0)).trigger("dxclick");
+
+    that.clock.tick();
+
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.ok(true, "no exceptions");
+});
+
 QUnit.test("expandAll", function(assert) {
     // arrange, act
     var expandAllGroupIndex,

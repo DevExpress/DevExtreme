@@ -100,6 +100,12 @@ var ColorBox = DropDownEditor.inherit({
             */
 
             /**
+             * @name dxColorBoxOptions.showDropDownButton
+             * @inheritdoc
+             * @hidden
+             */
+
+            /**
             * @name dxColorBoxOptions.cancelButtonText
             * @type string
             * @default "Cancel"
@@ -232,6 +238,7 @@ var ColorBox = DropDownEditor.inherit({
             editAlphaChannel: that.option("editAlphaChannel"),
             applyValueMode: that.option("applyValueMode"),
             focusStateEnabled: that.option("focusStateEnabled"),
+            stylingMode: this.option("stylingMode"),
             onEnterKeyPressed: function() {
                 that._colorViewEnterKeyPressed = true;
                 if(that._colorView.option("value") !== that.option("value")) {

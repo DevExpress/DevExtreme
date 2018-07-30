@@ -471,9 +471,10 @@ Series.prototype = {
             if(p.hasValue() && pointHasCoords) {
                 translateAllPoints && that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
                 segment.push(p);
-            } else {
-                !pointHasCoords && p.setInvisibility();
+            } else if(!p.hasValue()) {
                 segment.length && segments.push([]);
+            } else {
+                p.setInvisibility();
             }
 
             return segments;

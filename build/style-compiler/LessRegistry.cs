@@ -208,6 +208,7 @@ namespace StyleCompiler
                 "spa",
                 "filterBuilder",
                 "recurrenceEditor",
+                "drawer",
                 "card"
             });
 

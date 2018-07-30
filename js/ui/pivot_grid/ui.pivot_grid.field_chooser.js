@@ -182,7 +182,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             * @type Enums.ApplyChangesMode
             * @default "instantly"
             */
-           /**
+            /**
             * @name dxPivotGridFieldChooserOptions.state
             * @type object
             * @default null

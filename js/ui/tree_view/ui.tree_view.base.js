@@ -307,6 +307,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
              */
             selectionMode: "multiple",
 
+            /**
+             * @name dxTreeViewOptions.expandEvent
+             * @type Enums.TreeViewExpandEvent
+             * @default "dblclick"
+             */
             expandEvent: 'dblclick',
 
             /**
@@ -1723,46 +1728,46 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName getNodes()
     * @return Array<dxTreeViewNode>
     */
-         /**
+    /**
          * @name dxTreeViewNode
          * @type object
          */
-         /**
+    /**
          * @name dxTreeViewNode.children
          * @type Array<dxTreeViewNode>
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.disabled
          * @type boolean
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.expanded
          * @type boolean
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.itemData
          * @type object
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.key
          * @type any
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.parent
          * @type dxTreeViewNode
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.selected
          * @type boolean
          */
 
-         /**
+    /**
          * @name dxTreeViewNode.text
          * @type string
          */

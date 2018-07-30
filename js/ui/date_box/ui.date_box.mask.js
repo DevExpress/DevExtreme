@@ -12,8 +12,7 @@ import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
     FORWARD = 1,
-    BACKWARD = -1,
-    SEARCH_TIMEOUT = 1500;
+    BACKWARD = -1;
 
 let DateBoxMask = DateBoxBase.inherit({
 
@@ -46,7 +45,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
         let result = this.callBase(e);
 
-        if(!this._useMaskBehavior() || this.option("opened") || !this._isSingleCharKey(e)) {
+        if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
             return result;
         }
 
@@ -68,13 +67,16 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _startSearchTimeout() {
         clearTimeout(this._searchTimeout);
-        this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), SEARCH_TIMEOUT);
+
+        if(this.option("searchTimeout")) {
+            this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), this.option("searchTimeout"));
+        }
     },
 
     _searchNumber(char) {
         this._searchValue += char;
 
-        var limits = this._getActivePartLimits(),
+        let limits = this._getActivePartLimits(),
             setter = this._getActivePartProp("setter"),
             newValue = parseInt(this._searchValue);
 
@@ -85,10 +87,20 @@ let DateBoxMask = DateBoxBase.inherit({
         if(!inRange(newValue, limits.min, limits.max)) {
             this._searchValue = char;
             newValue = parseInt(char);
+            if(this.option("advancedCaret")) {
+                clearTimeout(this._searchTimeout);
+            }
         }
 
         this._setActivePartValue(newValue);
         this._startSearchTimeout();
+
+        if(this.option("advancedCaret")) {
+            if(parseInt(this._searchValue + "0") > limits.max) {
+                this._selectNextPart(FORWARD);
+                clearTimeout(this._searchTimeout);
+            }
+        }
     },
 
     _searchString(char) {
@@ -96,7 +108,7 @@ let DateBoxMask = DateBoxBase.inherit({
             startString = this._searchValue + char.toLowerCase(),
             endLimit = limits.max - limits.min;
 
-        if(endLimit === Infinity) {
+        if(endLimit > 11) {
             return;
         }
 
@@ -118,12 +130,14 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior() {
-        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
+        return this.option("useMaskBehavior") && !this.option("opened") && this.option("mode") === "text" && this.option("displayFormat");
     },
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            useMaskBehavior: false
+            useMaskBehavior: false,
+            searchTimeout: 1500,
+            advancedCaret: false
         });
     },
 
@@ -175,7 +189,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _selectNextPart(step, e) {
-        var index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
+        let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
             this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);
             return;
@@ -235,7 +249,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _partIncrease(step, e) {
         this._setNewDateIfEmpty();
 
-        var limits = this._getActivePartLimits(),
+        let limits = this._getActivePartLimits(),
             newValue = step + this._getActivePartValue();
 
         newValue = newValue > limits.max ? limits.min : newValue;
@@ -246,9 +260,10 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler() {
-        this._setNewDateIfEmpty();
-        this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
-        this._caret(this._getActivePartProp("caret"));
+        if(this.option("text")) {
+            this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
+            this._caret(this._getActivePartProp("caret"));
+        }
     },
 
     _isValueDirty() {
@@ -281,7 +296,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _valueChangeEventHandler(e) {
         this.callBase(e);
         if(this._useMaskBehavior()) {
-            this.option("value", this._maskValue);
+            this.dateOption("value", this._maskValue);
         }
     },
 
@@ -294,6 +309,11 @@ let DateBoxMask = DateBoxBase.inherit({
             case "mode":
                 this.callBase(args);
                 this._renderMask();
+                break;
+            case "searchTimeout":
+                clearTimeout(this._searchTimeout);
+                break;
+            case "advancedCaret":
                 break;
             default:
                 this.callBase(args);
@@ -310,6 +330,7 @@ let DateBoxMask = DateBoxBase.inherit({
     reset() {
         this.callBase();
         this._clearState();
+        this._activePartIndex = 0;
     },
 
     _clean() {

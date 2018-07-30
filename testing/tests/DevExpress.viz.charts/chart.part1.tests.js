@@ -606,6 +606,22 @@ QUnit.test("Transform argument after reset transform", function(assert) {
 
 });
 
+QUnit.test("Can call public API on onInitialized", function(assert) {
+    this.createChart({
+        onInitialized: function(e) {
+            var chart = e.component;
+
+            // act, assert
+            chart.zoomArgument(1, 3);
+            assert.deepEqual(chart.getAllSeries(), []);
+            assert.equal(chart.getSeriesByName("non_existent_series"), undefined);
+            assert.equal(chart.getSeriesByPos(1), undefined);
+            assert.equal(chart.getValueAxis(), undefined);
+            assert.equal(chart.getArgumentAxis(), undefined);
+        }
+    });
+});
+
 QUnit.module("LoadingIndicator", $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);

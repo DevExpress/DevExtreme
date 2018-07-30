@@ -66,23 +66,23 @@ function getValueForArgument(point, extraPoint, x) {
 }
 
 function getViewPortFilter(viewport) {
-    if(!_isDefined(viewport.max) && !_isDefined(viewport.min)) {
+    if(!_isDefined(viewport[1]) && !_isDefined(viewport[0])) {
         return function() {
             return true;
         };
     }
-    if(!_isDefined(viewport.max)) {
+    if(!_isDefined(viewport[1])) {
         return function(argument) {
-            return argument >= viewport.min;
+            return argument >= viewport[0];
         };
     }
-    if(!_isDefined(viewport.min)) {
+    if(!_isDefined(viewport[0])) {
         return function(argument) {
-            return argument <= viewport.max;
+            return argument <= viewport[1];
         };
     }
     return function(argument) {
-        return argument >= viewport.min && argument <= viewport.max;
+        return argument >= viewport[0] && argument <= viewport[1];
     };
 }
 
@@ -97,7 +97,7 @@ function isLineSeries(series) {
 
 function getViewportReducer(series) {
     var rangeCalculator = getRangeCalculator(series.valueAxisType),
-        viewport = series.getArgumentAxis() && series.getArgumentAxis().getViewport() || {},
+        viewport = series.getArgumentAxis() && series.getArgumentAxis().visualRange() || [],
         viewportFilter,
         calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
 
@@ -113,15 +113,15 @@ function getViewportReducer(series) {
         if(viewportFilter(argument)) {
             if(!range.startCalc) {
                 range.startCalc = true;
-                calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.min);
+                calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport[0]);
             }
             rangeCalculator(range, point.getMinValue(), point.getMaxValue());
-        } else if(_isDefined(viewport.max) && argument > viewport.max) {
+        } else if(_isDefined(viewport[1]) && argument > viewport[1]) {
             if(!range.startCalc) {
-                calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.min);
+                calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport[0]);
             }
             range.endCalc = true;
-            calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.max);
+            calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport[1]);
         }
 
         return range;
@@ -201,8 +201,8 @@ module.exports = {
     },
 
     getPointsInViewPort: function(series) {
-        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().getViewport() || {}),
-            valueViewPort = series.getValueAxis().getViewport() || {},
+        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().visualRange() || []),
+            valueViewPort = series.getValueAxis().visualRange() || [],
             valueViewPortFilter = getViewPortFilter(valueViewPort),
             points = series.getPoints(),
             addValue = function(values, point, isEdge) {
@@ -219,9 +219,9 @@ module.exports = {
                 }
                 if(isEdge && !isMinValueInViewPort && !isMaxValueInViewPort) {
                     if(!values.length) {
-                        values.push(valueViewPort.min);
+                        values.push(valueViewPort[0]);
                     } else {
-                        values.push(valueViewPort.max);
+                        values.push(valueViewPort[1]);
                     }
                 }
             },

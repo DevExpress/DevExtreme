@@ -517,7 +517,7 @@ var Sortable = DOMComponent.inherit({
     }
 });
 
-  ///#DEBUG
+///#DEBUG
 Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 ///#ENDDEBUG
 

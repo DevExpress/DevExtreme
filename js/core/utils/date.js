@@ -583,7 +583,7 @@ var dateUtils = {
     getNextDateUnit: getNextDateUnit,
     convertDateUnitToMilliseconds: convertDateUnitToMilliseconds,
     getDateUnitInterval: getDateUnitInterval,
-    getDateFormatByTickInterval: getDateFormatByTickInterval,   // T375972
+    getDateFormatByTickInterval: getDateFormatByTickInterval, // T375972
     getDatesDifferences: getDatesDifferences,
     correctDateWithUnitBeginning: correctDateWithUnitBeginning,
     trimTime: trimTime,

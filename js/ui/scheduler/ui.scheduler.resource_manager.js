@@ -154,8 +154,8 @@ var ResourceManager = Class.inherit({
                 that._resourceLoader[field]
                     .done(function(data) {
                         var filteredData = query(data)
-                                            .filter(valueExpr, value)
-                                            .toArray();
+                            .filter(valueExpr, value)
+                            .toArray();
 
                         delete that._resourceLoader[field];
                         result.resolve(filteredData[0]);

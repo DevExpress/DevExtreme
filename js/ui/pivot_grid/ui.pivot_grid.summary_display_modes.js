@@ -431,7 +431,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return sliceCell;
     },
 
-   /**
+    /**
    * @name dxPivotGridSummaryCell.value
    * @publicName value()
    * @return any

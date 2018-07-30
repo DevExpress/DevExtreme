@@ -80,7 +80,7 @@
  * @enum {'hide'|'none'}
  */
 
- /**
+/**
  * @typedef {string} Enums.OverlappingBehavior
  * @enum {'rotate'|'stagger'|'none'|'hide'}
  */
@@ -586,6 +586,21 @@
  */
 
 /**
+ * @typedef {string} Enums.DrawerMode
+ * @enum {'persistent'|'temporary'|'push'}
+ */
+
+/**
+ * @typedef {string} Enums.DrawerMenuPosition
+ * @enum {'left'|'right'}
+ */
+
+/**
+ * @typedef {string} Enums.DrawerShowMode
+ * @enum {'slide'|'shrink'}
+ */
+
+/**
  * @typedef {string} Enums.TextBoxMode
  * @enum {'email'|'password'|'search'|'tel'|'text'|'url'}
  */
@@ -625,12 +640,12 @@
  * @enum {'standard'|'virtual'}
  */
 
- /**
+/**
  * @typedef {string} Enums.GridRowRenderingMode
  * @enum {'standard'|'virtual'}
  */
 
- /**
+/**
  * @typedef {string} Enums.GridColumnRenderingMode
  * @enum {'standard'|'virtual'}
  */
@@ -663,6 +678,11 @@
 /**
  * @typedef {string} Enums.TreeViewCheckBoxMode
  * @enum {'none'|'normal'|'selectAll'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeViewExpandEvent
+ * @enum {'dblclick'|'click'}
  */
 
 /**
@@ -805,7 +825,7 @@
  * @enum {'fit'|'flip'|'flipfit'|'none'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartSeriesAggregationMethod
  * @enum {'avg'|'count'|'max'|'min'|'ohlc'|'range'|'sum'|'custom'}
  */
@@ -815,27 +835,27 @@
  * @enum {'avg'|'count'|'max'|'min'|'sum'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartFinancialSeriesAggregationMethod
  * @enum {'ohlc'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartRangeSeriesAggregationMethod
  * @enum {'range'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartBubbleSeriesAggregationMethod
  * @enum {'avg'|'custom'}
  */
 
- /**
+/**
  * @typedef {string} Enums.DataSourceStoreType
  * @enum {'array'|'local'|'odata'}
  */
 
- /**
+/**
  * @typedef {string} Enums.PivotGridStoreType
  * @enum {'array'|'local'|'odata'|'xmla'}
  */

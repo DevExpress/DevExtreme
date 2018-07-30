@@ -763,7 +763,7 @@ function createTspans(items, element, fieldName) {
         item[fieldName] = createElement("tspan");
         item[fieldName].appendChild(domAdapter.createTextNode(item.value));
         item.style && baseCss({ element: item[fieldName], _styles: {} }, item.style);
-        item.className && item[fieldName].setAttribute("class", item.className);    // EXPERIMENTAL
+        item.className && item[fieldName].setAttribute("class", item.className); // EXPERIMENTAL
         element.appendChild(item[fieldName]);
     }
 }
@@ -900,7 +900,7 @@ function createTextNodes(wrapper, text, isStroked) {
         items = [{ value: text.trim(), height: 0 }];
     }
     if(items) {
-        if(items.length) {     // T227388
+        if(items.length) { // T227388
             wrapper._texts = items;
             if(isStroked) {
                 createTspans(items, wrapper.element, KEY_STROKE);
@@ -930,7 +930,7 @@ function locateTextNodes(wrapper) {
         item = items[i];
         if(_parseFloat(item.height) >= 0) {
             setTextNodeAttribute(item, "x", x);
-            setTextNodeAttribute(item, "dy", item.inherits ? maxLengthFontSize(item.height, lineHeight) : (item.height || lineHeight));   // T177039
+            setTextNodeAttribute(item, "dy", item.inherits ? maxLengthFontSize(item.height, lineHeight) : (item.height || lineHeight)); // T177039
         }
     }
 }
@@ -1351,7 +1351,7 @@ SvgElement.prototype = {
             bBox = _rotateBBox(bBox, [
                 (("rotateX" in transformation) ? transformation.rotateX : transformation.x) || 0,
                 (("rotateY" in transformation) ? transformation.rotateY : transformation.y) || 0
-            ], -transformation.rotate);     // Angle is transformed from svg to right-handed cartesian space
+            ], -transformation.rotate); // Angle is transformed from svg to right-handed cartesian space
         } else {
             bBox = _normalizeBBox(bBox);
         }
@@ -1925,7 +1925,7 @@ Renderer.prototype = {
             hash = storage.refToHash[ref],
             storageItem = storage.byHash[hash];
 
-        if(--storageItem.count === 0) {
+        if(storageItem && --storageItem.count === 0) {
             storageItem.pattern.dispose();
             delete storage.byHash[hash];
             delete storage.refToHash[ref];

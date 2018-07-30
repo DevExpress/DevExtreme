@@ -1,4 +1,3 @@
-@MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
 .dx-searchbox {
     .dx-icon-search {
         .dx-icon-search;
@@ -10,21 +9,49 @@
             color: @textbox-search-icon-color;
         }
         color: @texteditor-placeholder-color;
-        left: @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+    }
 
-        .dx-rtl &,
-        .dx-rtl& {
-            right: @MATERIAL_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+    
+
+    &.dx-editor-standard {
+        .dx-icon-search {
+            left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            .dx-rtl &,
+            .dx-rtl& {
+                left: initial;
+                right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
+        }
+        .dx-texteditor-input,
+        .dx-placeholder:before {
+            padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                padding-left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
         }
     }
 
-    .dx-texteditor-input,
-    .dx-placeholder:before {
-        padding-left: @MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING;
+    &.dx-editor-filled {
+        .dx-icon-search {
+            left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            .dx-rtl &,
+            .dx-rtl& {
+                left: initial;
+                right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
+        }
+        .dx-texteditor-input,
+        .dx-placeholder:before {
+            padding-left: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
 
-        .dx-rtl &,
-        .dx-rtl& {
-            padding-right: @MATERIAL_SEARCHBOX_ICON_HORIZONTAL_PADDING;
+            .dx-rtl &,
+            .dx-rtl& {
+                padding-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
         }
     }
 }

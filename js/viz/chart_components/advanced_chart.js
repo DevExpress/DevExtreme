@@ -180,13 +180,16 @@ var AdvancedChart = BaseChart.inherit({
         }
 
         _each(axesBasis, (index, basis) => {
+            let axis = basis.axis;
             if(basis.axis && isArgumentAxes) {
                 that._displayedArgumentAxisIndex = index;
             } else if(basis.options) {
-                axes.push(that._createAxis(isArgumentAxes ? "argumentAxis" : "valueAxis", basis.options,
+                axis = that._createAxis(isArgumentAxes, basis.options,
                     isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined,
-                    isArgumentAxes ? index : undefined));
+                    isArgumentAxes ? index : undefined);
+                axes.push(axis);
             }
+            axis.applyVisualRangeSetter(that._getVisualRangeSetter(isArgumentAxes, true, index));
         });
     },
 
@@ -251,7 +254,7 @@ var AdvancedChart = BaseChart.inherit({
     _appendAdditionalSeriesGroups: function() {
         this._crosshairCursorGroup.linkAppend();
         // this._legendGroup.linkAppend();
-        this._scrollBar && this._scrollBarGroup.linkAppend();   // TODO: Must be appended in the same place where removed (chart)
+        this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
         var that = this;
@@ -426,11 +429,11 @@ var AdvancedChart = BaseChart.inherit({
     },
 
     getArgumentAxis: function() {
-        return this._argumentAxes[this._displayedArgumentAxisIndex];
+        return (this._argumentAxes || [])[this._displayedArgumentAxisIndex];
     },
 
     getValueAxis: function(name) {
-        return this._valueAxes.filter(_isDefined(name) ? a => a.name === name : a => a.pane === this.defaultPane)[0];
+        return (this._valueAxes || []).filter(_isDefined(name) ? a => a.name === name : a => a.pane === this.defaultPane)[0];
     },
 
     _getGroupsData: function() {
@@ -473,7 +476,7 @@ var AdvancedChart = BaseChart.inherit({
 
         this._valueAxes.forEach(function(axis) {
             if(axesWithFullStackedFormat.indexOf(axis) === -1) {
-                axis.resetAutoLabelFormat();  // B239299
+                axis.resetAutoLabelFormat(); // B239299
             }
         });
     },
@@ -490,12 +493,13 @@ var AdvancedChart = BaseChart.inherit({
         return options;
     },
 
-    _createAxis(typeSelector, options, virtual, index) {
+    _createAxis(isArgumentAxes, options, virtual, index) {
         const that = this;
+        const typeSelector = isArgumentAxes ? "argumentAxis" : "valueAxis";
         const renderingSettings = _extend({
             renderer: that._renderer,
             incidentOccurred: that._incidentOccurred,
-            axisClass: typeSelector === "argumentAxis" ? "arg" : "val",
+            axisClass: isArgumentAxes ? "arg" : "val",
             widgetClass: "dxc",
             stripsGroup: that._stripsGroup,
             labelAxesGroup: that._labelAxesGroup,
@@ -503,7 +507,7 @@ var AdvancedChart = BaseChart.inherit({
             scaleBreaksGroup: that._scaleBreaksGroup,
             axesContainerGroup: that._axesGroup,
             gridGroup: that._gridGroup,
-            isArgumentAxis: typeSelector === "argumentAxis"
+            isArgumentAxis: isArgumentAxes
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new axisModule.Axis(renderingSettings);
         axis.updateOptions(options);
@@ -514,6 +518,8 @@ var AdvancedChart = BaseChart.inherit({
 
         return axis;
     },
+
+    _getVisualRangeSetter: _noop,
 
     _getTrackerSettings: function() {
         return _extend(this.callBase(), {

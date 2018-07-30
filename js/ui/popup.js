@@ -90,6 +90,7 @@ var getButtonPlace = function(name) {
 /**
  * @name dxPopup
  * @inherits dxOverlay
+ * @hasTranscludedContent
  * @module ui/popup
  * @export default
  */

@@ -105,8 +105,8 @@ var getAcceptHeader = function(options) {
     extendFromObject(accepts, options.accepts, true);
 
     return accepts[dataType] ?
-            accepts[dataType] + (dataType !== "*" ? ", */*; q=0.01" : "") :
-            accepts["*"];
+        accepts[dataType] + (dataType !== "*" ? ", */*; q=0.01" : "") :
+        accepts["*"];
 };
 
 var getContentTypeHeader = function(options) {
@@ -121,8 +121,8 @@ var getContentTypeHeader = function(options) {
 
 var getDataFromResponse = function(xhr) {
     return xhr.responseType && xhr.responseType !== "text" || typeof xhr.responseText !== "string"
-            ? xhr.response
-            : xhr.responseText;
+        ? xhr.response
+        : xhr.responseText;
 };
 
 var postProcess = function(deferred, xhr, dataType) {

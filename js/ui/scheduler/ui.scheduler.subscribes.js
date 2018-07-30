@@ -200,7 +200,7 @@ var subscribes = {
     appointmentTakesSeveralDays: function(appointment) {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
-        // NOTE: T312051, remove after fix scrollable bug T324196
+    // NOTE: T312051, remove after fix scrollable bug T324196
     appointmentFocused: function() {
         this._workSpace.restoreScrollTop();
     },
@@ -326,8 +326,8 @@ var subscribes = {
                     startDateString = dateLocalization.format(startDate, dateTimeFormat) + " - ";
 
                 var endDateString = (startDate.getDate() === endDate.getDate()) ?
-                        dateLocalization.format(endDate, "shorttime") :
-                        dateLocalization.format(endDate, dateTimeFormat);
+                    dateLocalization.format(endDate, "shorttime") :
+                    dateLocalization.format(endDate, dateTimeFormat);
 
                 return startDateString + endDateString;
             },
@@ -340,8 +340,8 @@ var subscribes = {
                     isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > 24 * 3600000;
 
                 var endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                        " - " + dateLocalization.format(endDate, dateTimeFormat) :
-                        "";
+                    " - " + dateLocalization.format(endDate, dateTimeFormat) :
+                    "";
 
                 return startDateString + endDateString;
             }
@@ -705,7 +705,7 @@ var subscribes = {
 
         this._convertDatesByTimezoneBack(false, result);
 
-            // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
+        // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;

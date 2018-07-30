@@ -1462,11 +1462,11 @@ QUnit.test('No synchronization for 2 axis. Both axis has discrete type', functio
     checkAxesSynchronization(assert, {
         axesOptions: [
             {
-                range: { min: 5, max: 11, axisType: 'discrete', categories: ['5', '6', '7', '8', '9', '10', '11'] }, tickValues: ['5', '6', '7', '8', '9', '10', '11'],
+                range: { min: '5', max: '11', axisType: 'discrete', categories: ['5', '6', '7', '8', '9', '10', '11'] }, tickValues: ['5', '6', '7', '8', '9', '10', '11'],
                 type: 'discrete'
             },
             {
-                range: { min: 0, max: 10, axisType: 'discrete', categories: ['0', '2', '4', '6', '8', '10'] }, tickValues: ['0', '2', '4', '6', '8', '10'],
+                range: { min: '0', max: '10', axisType: 'discrete', categories: ['0', '2', '4', '6', '8', '10'] }, tickValues: ['0', '2', '4', '6', '8', '10'],
                 type: 'discrete'
             }
         ],
@@ -1474,10 +1474,10 @@ QUnit.test('No synchronization for 2 axis. Both axis has discrete type', functio
             {
                 range: {
                     axisType: 'discrete',
-                    min: 5,
-                    minVisible: 5,
-                    max: 11,
-                    maxVisible: 11,
+                    min: '5',
+                    minVisible: '5',
+                    max: '11',
+                    maxVisible: '11',
                     categories: ['5', '6', '7', '8', '9', '10', '11']
                 },
                 tickValues: ['5', '6', '7', '8', '9', '10', '11']
@@ -1486,10 +1486,10 @@ QUnit.test('No synchronization for 2 axis. Both axis has discrete type', functio
             {
                 range: {
                     axisType: 'discrete',
-                    min: 0,
-                    minVisible: 0,
-                    max: 10,
-                    maxVisible: 10,
+                    min: '0',
+                    minVisible: '0',
+                    max: '10',
+                    maxVisible: '10',
                     categories: ['0', '2', '4', '6', '8', '10']
                 },
                 tickValues: ['0', '2', '4', '6', '8', '10']
