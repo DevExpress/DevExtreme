@@ -298,20 +298,16 @@ var Component = Class.inherit({
     },
 
     _callPostponedOperations: function() {
-        var doneHandler = function(func, args) {
-            func.call(this, args);
-        };
-
         for(var key in this._postponedOperations) {
             var operation = this._postponedOperations[key];
             if(!operation.promise) {
                 if(operation.done) {
-                    operation.func.call().done(doneHandler.bind(this, operation.done));
+                    operation.func.call().done(operation.done);
                 } else {
                     operation.func.call();
                 }
             } else {
-                operation.promise.done(doneHandler.bind(this, operation.func));
+                operation.promise.done(operation.func);
             }
         }
     },
