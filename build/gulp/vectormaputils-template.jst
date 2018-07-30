@@ -1,0 +1,16 @@
+(function(root, factory) {
+    if(typeof define === "function" && define.amd) {
+        define(function(require, exports, module) {
+            factory(exports);
+        });
+    } else if(typeof module === "object" && module.exports) {
+        factory(exports);
+    } else {
+        var exports = root.DevExpress = root.DevExpress || {};
+        exports = exports.viz = exports.viz || {};
+        exports = exports.vectormaputils = {};
+        factory(exports);
+    }
+}(this, function(exports) {
+<%= data %>
+}));

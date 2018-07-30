@@ -8,9 +8,7 @@
         "fileName": "dx.vectormaputils",
         "files": [
             "js-stream"
-        ],
-        "header": "(function(root, factory) {\nif(typeof define === 'function' && define.amd) {\ndefine(function(require, exports, module) {\nfactory(exports);\n});\n} else if(typeof module === 'object' && module.exports) {\nfactory(exports);\n} else {\nvar exports = root.DevExpress = root.DevExpress || {};\nexports = exports.viz = exports.viz || {};\nexports = exports.vectormaputils = {};\nfactory(exports);\n}\n}(this, function(exports) {",
-        "footer": "\n}));"
+        ]
     },
     "node": {
         "fileName": "dx.vectormaputils.node",
