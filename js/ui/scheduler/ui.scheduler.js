@@ -1064,18 +1064,32 @@ var Scheduler = Widget.inherit({
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
 
-                this._reloadDataSource();
+                this._deferredOperations["_reloadDataSource"] = {
+                    func: this._reloadDataSource.bind(this),
+                    promise: null
+                };
                 break;
             case "dataSource":
                 this._initDataSource();
                 this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
-                this._loadResources().done((function() {
+
+                this._resourceLoadedCallbacks.add((function(resources) {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
-
-                    this._reloadDataSource();
                 }).bind(this));
+
+                this._deferredOperations["_loadResources"] = {
+                    func: this._loadResources.bind(this),
+                    done: (function(resources) {
+                        this._resourceLoadedCallbacks.fire(resources);
+                    }).bind(this)
+                };
+
+                this._deferredOperations["_reloadDataSource"] = {
+                    func: this._reloadDataSource.bind(this),
+                    promise: this._loadResources()
+                };
                 break;
             case "min":
             case "max":
