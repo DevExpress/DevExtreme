@@ -3,7 +3,7 @@ import { Service } from './app.service';
 import { DxButtonComponent } from "devextreme-angular";
 
 @Component({
-  selector: 'app-root',
+  selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
