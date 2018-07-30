@@ -1426,10 +1426,11 @@ var Scheduler = Widget.inherit({
     _resourceLoadedCallbacks: Callbacks(),
 
     _reloadDataSource: function() {
-        this._resourceLoadedCallbacks.empty();
         if(this._dataSource) {
 
             this._dataSource.load().done((function() {
+                this._resourceLoadedCallbacks.empty();
+                this._deferredOperations = [];
                 loading.hide();
 
                 this._fireContentReadyAction();
