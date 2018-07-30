@@ -300,8 +300,21 @@ var Component = Class.inherit({
     },
 
     _callDeferredOperations: function() {
+        var doneHandler = function(func, args) {
+            func.call(this, args);
+        };
+
         for(var key in this._deferredOperations) {
-            this._deferredOperations[key].call();
+            var object = this._deferredOperations[key];
+            if(!object.promise) {
+                if(object.done) {
+                    object.func.call().done(doneHandler.bind(this, object.done));
+                } else {
+                    object.func.call();
+                }
+            } else {
+                object.promise.done(doneHandler.bind(this, object.func));
+            }
         }
     },
 
