@@ -702,16 +702,18 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         return this.callBase.apply(this, arguments);
     },
 
-    _updateFixedTablePosition: function(scrollTop) {
+    _updateFixedTablePosition: function(scrollTop, needFocus) {
         if(this._fixedTableElement && this._tableElement) {
-            var editorFactory = this.getController("editorFactory"),
-                $focusedElement = editorFactory.focus(),
+            var $focusedElement,
+                editorFactory = this.getController("editorFactory"),
                 dataController = this._dataController,
                 offset = dataController.getContentOffset ? dataController.getContentOffset() : 0;
+
             this._fixedTableElement.css("top", scrollTop + offset);
 
-            if($focusedElement) {
-                editorFactory.focus($focusedElement);
+            if(needFocus) {
+                $focusedElement = editorFactory.focus();
+                $focusedElement && editorFactory.focus($focusedElement);
             }
         }
     },
@@ -730,7 +732,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     },
 
     _handleScroll: function(e) {
-        this._updateFixedTablePosition(-e.scrollOffset.top);
+        this._updateFixedTablePosition(-e.scrollOffset.top, true);
         this.callBase(e);
     },
 
