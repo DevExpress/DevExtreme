@@ -1065,7 +1065,7 @@ var Scheduler = Widget.inherit({
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
 
-                this._deferredOperations["_reloadDataSource"] = {
+                this._postponedOperations["_reloadDataSource"] = {
                     func: this._reloadDataSource.bind(this),
                     promise: null
                 };
@@ -1082,7 +1082,7 @@ var Scheduler = Widget.inherit({
 
                 d = new Deferred();
 
-                this._deferredOperations["_loadResources"] = {
+                this._postponedOperations["_loadResources"] = {
                     func: this._loadResources.bind(this),
                     done: (function(resources) {
                         this._resourceLoadedCallbacks.fire(resources);
@@ -1090,7 +1090,7 @@ var Scheduler = Widget.inherit({
                     }).bind(this)
                 };
 
-                this._deferredOperations["_reloadDataSource"] = {
+                this._postponedOperations["_reloadDataSource"] = {
                     func: this._reloadDataSource.bind(this),
                     promise: d.promise()
                 };
@@ -1134,7 +1134,7 @@ var Scheduler = Widget.inherit({
 
                 d = new Deferred();
 
-                this._deferredOperations["_loadResources"] = {
+                this._postponedOperations["_loadResources"] = {
                     func: this._loadResources.bind(this),
                     done: (function(resources) {
                         this._resourceLoadedCallbacks.fire(resources);
@@ -1142,7 +1142,7 @@ var Scheduler = Widget.inherit({
                     }).bind(this)
                 };
 
-                this._deferredOperations["_reloadDataSource"] = {
+                this._postponedOperations["_reloadDataSource"] = {
                     func: this._reloadDataSource.bind(this),
                     promise: d.promise()
                 };
@@ -1183,7 +1183,7 @@ var Scheduler = Widget.inherit({
                 this._appointments.repaint();
                 this._filterAppointmentsByDate();
 
-                this._deferredOperations["_reloadDataSource"] = {
+                this._postponedOperations["_reloadDataSource"] = {
                     func: this._reloadDataSource.bind(this),
                     promise: null
                 };
@@ -1434,7 +1434,7 @@ var Scheduler = Widget.inherit({
 
     _reloadDataSource: function() {
         this._resourceLoadedCallbacks.empty();
-        this._deferredOperations = [];
+        this._postponedOperations = [];
 
         if(this._dataSource) {
 

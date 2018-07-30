@@ -226,7 +226,7 @@ var Component = Class.inherit({
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
 
-        this._deferredOperations = {};
+        this._postponedOperations = {};
     },
 
     _createOptionChangedAction: function() {
@@ -283,7 +283,7 @@ var Component = Class.inherit({
     endUpdate: function() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
-            this._callDeferredOperations();
+            this._callPostponedOperations();
             if(!this._initializing && !this._initialized) {
                 this._initializing = true;
                 try {
@@ -299,13 +299,13 @@ var Component = Class.inherit({
         }
     },
 
-    _callDeferredOperations: function() {
+    _callPostponedOperations: function() {
         var doneHandler = function(func, args) {
             func.call(this, args);
         };
 
-        for(var key in this._deferredOperations) {
-            var object = this._deferredOperations[key];
+        for(var key in this._postponedOperations) {
+            var object = this._postponedOperations[key];
             if(!object.promise) {
                 if(object.done) {
                     object.func.call().done(doneHandler.bind(this, object.done));
