@@ -121,14 +121,23 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var event = e.event,
             $target = $(event.currentTarget),
             $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
-            data = event.data;
+            data = event.data,
+            isCellEditMode = this._isCellEditMode(),
+            columnIndex,
+            column;
 
         if($grid.is(this.component.$element()) && this._isCellValid($target)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
-            if(!this._editingController.isEditing() && !this._isCellEditMode() && !this._isMasterDetailCell($target)) {
-                this._focus($target, true);
+            if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
+                columnIndex = this.getView("rowsView").getCellIndex($target);
+                column = this._columnsController.getVisibleColumns()[columnIndex];
+                if(isCellEditMode && column && column.allowEditing) {
+                    this._isHiddenFocus = false;
+                } else {
+                    this._focus($target, true);
+                }
             }
         } else if($target.is("td")) {
             this._resetFocusedCell();
