@@ -1049,7 +1049,8 @@ var Scheduler = Widget.inherit({
 
     _optionChanged: function(args) {
         var value = args.value,
-            name = args.name;
+            name = args.name,
+            d;
 
         switch(args.name) {
             case "firstDayOfWeek":
@@ -1079,16 +1080,19 @@ var Scheduler = Widget.inherit({
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
                 }).bind(this));
 
+                d = new Deferred();
+
                 this._deferredOperations["_loadResources"] = {
                     func: this._loadResources.bind(this),
                     done: (function(resources) {
                         this._resourceLoadedCallbacks.fire(resources);
+                        d.resolve();
                     }).bind(this)
                 };
 
                 this._deferredOperations["_reloadDataSource"] = {
                     func: this._reloadDataSource.bind(this),
-                    promise: this._loadResources()
+                    promise: d.promise()
                 };
                 break;
             case "min":
@@ -1128,7 +1132,7 @@ var Scheduler = Widget.inherit({
                     this._appointments.option("allowAllDayResize", value !== "day");
                 }).bind(this));
 
-                var d = new Deferred();
+                d = new Deferred();
 
                 this._deferredOperations["_loadResources"] = {
                     func: this._loadResources.bind(this),
@@ -1429,11 +1433,12 @@ var Scheduler = Widget.inherit({
     _resourceLoadedCallbacks: Callbacks(),
 
     _reloadDataSource: function() {
+        this._resourceLoadedCallbacks.empty();
+        this._deferredOperations = [];
+
         if(this._dataSource) {
 
             this._dataSource.load().done((function() {
-                this._resourceLoadedCallbacks.empty();
-                this._deferredOperations = [];
                 loading.hide();
 
                 this._fireContentReadyAction();
