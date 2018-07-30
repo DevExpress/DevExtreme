@@ -210,7 +210,8 @@ exports.DataController = Class.inherit((function() {
                         item.depthSize = depthSize - items.length + 1;
                     }
                 })).done(function() {
-                    if(cellDescriptionsCount > 1) {
+                    const isHeadersOptionDefined = typeUtils.isDefined(options.showDataFieldHeaders);
+                    if(isHeadersOptionDefined || (!isHeadersOptionDefined && cellDescriptionsCount > 1)) {
                         addMetricHeaderItems(viewHeaderItems, cellDescriptions, options);
                     }
 
@@ -903,7 +904,8 @@ exports.DataController = Class.inherit((function() {
                     fields: rowFields,
                     dataFields: dataFields,
                     progress: 0,
-                    notifyProgress: notifyProgress
+                    notifyProgress: notifyProgress,
+                    showDataFieldHeaders: options.showDataFieldHeaders
                 },
                 columnOptions = {
                     isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
@@ -919,7 +921,8 @@ exports.DataController = Class.inherit((function() {
                     fields: columnFields,
                     dataFields: dataFields,
                     progress: 0,
-                    notifyProgress: notifyProgress
+                    notifyProgress: notifyProgress,
+                    showDataFieldHeaders: options.showDataFieldHeaders
                 };
 
             if(!typeUtils.isDefined(data.grandTotalRowIndex)) {
@@ -958,7 +961,7 @@ exports.DataController = Class.inherit((function() {
             });
         },
 
-        getRowsInfo: function(getAllData) {
+        getRowsInfo: function(getAllData, saveMetric) {
             var that = this,
                 rowsInfo = that._rowsInfo,
                 scrollController = that._rowsScrollController,
@@ -1011,10 +1014,16 @@ exports.DataController = Class.inherit((function() {
                 return newRowsInfo;
             }
 
+            if(that._options.dataFieldArea === "row" && this._options.showDataFieldHeaders === false && !saveMetric) {
+                for(let i = 0; i < rowsInfo.length; i++) {
+                    rowsInfo[i] = rowsInfo[i].slice(0, rowsInfo[i].length - 1);
+                }
+            }
+
             return rowsInfo;
         },
 
-        getColumnsInfo: function(getAllData) {
+        getColumnsInfo: function(getAllData, saveMetric) {
             var that = this,
                 info = that._columnsInfo,
                 scrollController = that._columnsScrollController;
@@ -1024,6 +1033,10 @@ exports.DataController = Class.inherit((function() {
                     endIndex = scrollController.endPageIndex() * that.columnPageSize() + that.columnPageSize();
 
                 info = virtualColumnsCore.createColumnsInfo(info, startIndex, endIndex);
+            }
+
+            if(that._options.dataFieldArea !== "row" && this._options.showDataFieldHeaders === false && !saveMetric) {
+                info = info.slice(0, info.length - 1);
             }
 
             return info;
@@ -1073,8 +1086,8 @@ exports.DataController = Class.inherit((function() {
         },
 
         getCellsInfo: function(getAllData) {
-            var rowsInfo = this.getRowsInfo(getAllData),
-                columnsInfo = this.getColumnsInfo(getAllData),
+            var rowsInfo = this.getRowsInfo(getAllData, true),
+                columnsInfo = this.getColumnsInfo(getAllData, true),
                 data = this._dataSource.getData(),
                 texts = this._options.texts || {};
 
