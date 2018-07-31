@@ -80,7 +80,7 @@ function createMajorTick(axis, renderer, skippedCategory) {
         options.tick,
         options.grid,
         skippedCategory,
-        axis._translator.getBusinessRange().stubData
+        false
     );
 }
 

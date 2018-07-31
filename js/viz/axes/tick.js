@@ -102,7 +102,8 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this.coords.angle && axis._rotateTick(this.mark, this.coords);
             },
             drawLabel: function(range) {
-                const labelIsVisible = labelOptions.visible && !skipLabels && !axis.areCoordsOutsideAxis(this.labelCoords);
+                const stubData = axis.getTranslator().getBusinessRange().stubData;
+                const labelIsVisible = labelOptions.visible && !skipLabels && !stubData && !axis.areCoordsOutsideAxis(this.labelCoords);
 
                 if(!labelIsVisible) {
                     if(this.label) {

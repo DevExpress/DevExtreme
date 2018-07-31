@@ -10553,3 +10553,37 @@ QUnit.test("Animate strip to new position on second drawing", function(assert) {
         y: 30
     }]);
 });
+
+QUnit.test("Draw label after stub data", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true,
+            opacity: 1
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(10);
+    this.axis.setBusinessRange({});
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.axis.setBusinessRange({ min: 0, max: 30 });
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    const text = renderer.text.lastCall.returnValue;
+    assert.deepEqual(text.attr.lastCall.args, [{
+        x: 10,
+        y: 30,
+        opacity: 1
+    }]);
+});
