@@ -16,6 +16,7 @@ import { noop as _noop } from "../../core/utils/common";
 import xyMethods from "./xy_axes";
 import polarMethods from "./polar_axes";
 import createConstantLine from "./constant_line";
+import createStrip from "./strip";
 
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
@@ -498,60 +499,8 @@ Axis.prototype = {
         };
     },
 
-    _createStrip: function(fromPoint, toPoint, attr) {
-        var attrs = this._getStripGraphicAttributes(fromPoint, toPoint);
-
-        return this._renderer.rect(attrs.x, attrs.y, attrs.width, attrs.height).attr(attr);
-    },
-
-    _drawStrips: function() {
-        var that = this,
-            options = that._options,
-            stripData = options.strips,
-            canvas = this._getCanvasStartEnd(),
-            i,
-            stripOptions,
-            stripPos,
-            stripLabelOptions,
-            attr,
-            range = that._translator.getBusinessRange(),
-            labelCoords,
-            strips = [];
-
-        if(!stripData || range.stubData) {
-            return [];
-        }
-
-        for(i = 0; i < stripData.length; i++) {
-            stripOptions = stripData[i];
-            stripLabelOptions = stripOptions.label || {};
-            attr = { fill: stripOptions.color };
-
-            if((isDefined(stripOptions.startValue) || isDefined(stripOptions.endValue)) && isDefined(stripOptions.color)) {
-                stripPos = that._getStripPos(stripOptions.startValue, stripOptions.endValue, canvas.start, canvas.end, range);
-                labelCoords = stripLabelOptions.text ? that._getStripLabelCoords(stripPos.from, stripPos.to, stripLabelOptions) : null;
-
-                if((stripPos.to - stripPos.from === 0) || (!isDefined(stripPos.to)) || (!isDefined(stripPos.from))) {
-                    continue;
-                }
-                strips.push({
-                    rect: that._createStrip(stripPos.from, stripPos.to, attr).append(that._axisStripGroup),
-                    options: stripOptions,
-                    label: stripLabelOptions.text ? that._drawStripLabel(stripLabelOptions, labelCoords) : null,
-                    labelCoords: labelCoords
-                });
-            }
-        }
-
-        return strips;
-    },
-
-    _drawStripLabel: function(stripLabelOptions, coords) {
-        return this._renderer
-            .text(stripLabelOptions.text, coords.x, coords.y)
-            .css(patchFontOptions(extend({}, this._options.label.font, stripLabelOptions.font)))
-            .attr({ align: "center" })
-            .append(this._axisStripLabelGroup);
+    _createStrip: function(attrs) {
+        return this._renderer.rect(attrs.x, attrs.y, attrs.width, attrs.height);
     },
 
     _adjustStripLabels: function() {
@@ -932,6 +881,7 @@ Axis.prototype = {
 
         that._updateTranslator();
         that._createConstantLines();
+        that._strips = (options.strips || []).map(o => createStrip(that, o));
     },
 
     calculateInterval: function(value, prevValue) {
@@ -1588,7 +1538,8 @@ Axis.prototype = {
 
         callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");
 
-        that._strips = that._drawStrips();
+        callAction(that._strips, "draw");
+
         that._dateMarkers = that._drawDateMarkers() || [];
 
         that._axisGroup.append(that._axesContainerGroup);
@@ -1636,8 +1587,6 @@ Axis.prototype = {
 
         const animationEnabled = !that._firstDrawing && animate;
 
-        var canvasStartEnd = that._getCanvasStartEnd();
-
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks);
@@ -1656,14 +1605,7 @@ Axis.prototype = {
 
         that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(l => l.updatePosition(animationEnabled));
 
-        (that._strips || []).forEach(function(item) {
-            var range = that._translator.getBusinessRange(),
-                stripPos = that._getStripPos(item.options.startValue, item.options.endValue, canvasStartEnd.start, canvasStartEnd.end, range);
-
-            item.label && item.label.attr(that._getStripLabelCoords(stripPos.from, stripPos.to, item.options.label));
-
-            item.rect && item.rect.attr(that._getStripGraphicAttributes(stripPos.from, stripPos.to));
-        });
+        callAction(that._strips, "updatePosition", animationEnabled);
 
         that._updateTitleCoords();
         that._checkTitleOverflow();
@@ -1684,7 +1626,12 @@ Axis.prototype = {
 
     prepareAnimation() {
         const that = this;
-        callAction(that._majorTicks.concat(that._minorTicks).concat(that._insideConstantLines).concat(that._outsideConstantLines), "saveCoords");
+        const action = "saveCoords";
+        callAction(that._majorTicks, action);
+        callAction(that._minorTicks, action);
+        callAction(that._insideConstantLines, action);
+        callAction(that._outsideConstantLines, action);
+        callAction(that._strips, action);
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {

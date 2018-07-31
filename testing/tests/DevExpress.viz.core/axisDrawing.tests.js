@@ -10421,3 +10421,95 @@ QUnit.test("Animate constant line on second drawing", function(assert) {
     }]);
 });
 
+QUnit.test("Do not animate strip on first drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        strips: [{
+            color: "lightgray",
+            startValue: 1,
+            endValue: 4,
+            label: {
+                text: "text"
+            }
+        }]
+    });
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(4).returns(50);
+
+    this.axis.draw(this.zeroMarginCanvas);
+
+    // act
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    const rect = renderer.rect.lastCall.returnValue;
+    const text = renderer.text.lastCall.returnValue;
+
+    assert.equal(rect.stub("animate").callCount, 0);
+    assert.equal(text.stub("animate").callCount, 0);
+});
+
+QUnit.test("Animate strip to new position on second drawing", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        strips: [{
+            color: "lightgray",
+            startValue: 1,
+            endValue: 4,
+            label: {
+                text: "text",
+                horizontalAlignment: "left"
+            }
+        }]
+    });
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(4).returns(50);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.zeroMarginCanvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(60);
+    this.translator.stub("translate").withArgs(4).returns(80);
+    this.axis.draw(this.zeroMarginCanvas);
+    const rect = renderer.rect.lastCall.returnValue;
+    const text = renderer.text.lastCall.returnValue;
+
+    rect.attr.reset();
+    text.attr.reset();
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.deepEqual(rect.attr.lastCall.args, [{
+        x: 40,
+        y: 30,
+        width: 10,
+        height: 40
+    }]);
+
+    assert.deepEqual(text.attr.lastCall.args, [{
+        x: 40,
+        y: 30
+    }]);
+
+    assert.deepEqual(rect.animate.lastCall.args, [{
+        x: 60,
+        y: 30,
+        width: 20,
+        height: 40
+    }]);
+    assert.deepEqual(text.animate.lastCall.args, [{
+        x: 60,
+        y: 30
+    }]);
+});
