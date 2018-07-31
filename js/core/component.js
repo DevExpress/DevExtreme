@@ -301,26 +301,27 @@ var Component = Class.inherit({
     },
 
     _addPostponedOperation: function(key, fn, promise) {
-        var d = new Deferred();
         // NOTE: check
         if(this._postponedOperations[key]) {
             promise && this._postponedOperations[key].promises.push(promise);
         } else {
+            var donePromise = new Deferred();
             this._postponedOperations[key] = {
                 fn: fn,
+                donePromise: donePromise,
                 promises: promise ? [promise] : []
             };
         }
 
-        return d.promise();
+        return this._postponedOperations[key].donePromise.promise();
     },
 
     _callPostponedOperations: function() {
         for(var key in this._postponedOperations) {
             var operation = this._postponedOperations[key];
-            when(...operation.promises).then(operation.fn.call());
+            when(...operation.promises).then(operation.fn.call()).then(operation.donePromise.resolve);
         }
-        this._postponedOperations = [];
+        this._postponedOperations = {};
     },
 
     _logWarningIfDeprecated: function(option) {
