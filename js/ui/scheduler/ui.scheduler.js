@@ -1048,22 +1048,31 @@ var Scheduler = Widget.inherit({
     },
 
     _postponeDataSourceLoading: function(promise) {
-        this._postponedOperations["_reloadDataSource"] = {
-            func: this._reloadDataSource.bind(this),
-            promise: promise
-        };
+        this._addPostponedOperation("_reloadDataSource", this._reloadDataSource.bind(this), promise);
+
+        // this._postponedOperations["_reloadDataSource"] = {
+        //     func: this._reloadDataSource.bind(this),
+        //     promise: promise
+        // };
     },
 
     _postponeResourceLoading: function() {
         var d = new Deferred();
 
-        this._postponedOperations["_loadResources"] = {
-            func: this._loadResources.bind(this),
-            done: (function(resources) {
+        this._addPostponedOperation("_loadResources", () => {
+            this._loadResources().done((resources) => {
                 this._resourceLoadedCallbacks.fire(resources);
                 d.resolve();
-            }).bind(this)
-        };
+            });
+        });
+
+        // this._postponedOperations["_loadResources"] = {
+        //     func: this._loadResources.bind(this),
+        //     done: (function(resources) {
+        //         this._resourceLoadedCallbacks.fire(resources);
+        //         d.resolve();
+        //     }).bind(this)
+        // };
 
         this._postponeDataSourceLoading(d.promise());
     },
@@ -1426,8 +1435,8 @@ var Scheduler = Widget.inherit({
     _resourceLoadedCallbacks: Callbacks(),
 
     _reloadDataSource: function() {
-        this._resourceLoadedCallbacks.empty();
-        this._postponedOperations = [];
+        // this._resourceLoadedCallbacks.empty();
+        // this._postponedOperations = [];
 
         if(this._dataSource) {
 

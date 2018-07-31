@@ -9,6 +9,9 @@ var Config = require("./config"),
     coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred,
+    when = deferredUtils.when,
     map = require("../core/utils/iterator").map,
     Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
@@ -297,19 +300,27 @@ var Component = Class.inherit({
         }
     },
 
+    _addPostponedOperation: function(key, fn, promise) {
+        var d = new Deferred();
+        // NOTE: check
+        if(this._postponedOperations[key]) {
+            promise && this._postponedOperations[key].promises.push(promise);
+        } else {
+            this._postponedOperations[key] = {
+                fn: fn,
+                promises: promise ? [promise] : []
+            };
+        }
+
+        return d.promise();
+    },
+
     _callPostponedOperations: function() {
         for(var key in this._postponedOperations) {
             var operation = this._postponedOperations[key];
-            if(!operation.promise) {
-                if(operation.done) {
-                    operation.func.call().done(operation.done);
-                } else {
-                    operation.func.call();
-                }
-            } else {
-                operation.promise.done(operation.func);
-            }
+            when(...operation.promises).then(operation.fn.call());
         }
+        this._postponedOperations = [];
     },
 
     _logWarningIfDeprecated: function(option) {
