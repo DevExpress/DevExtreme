@@ -3,12 +3,12 @@
 
   "multistr": true,
 
-  "predef": [
-    "define",
-    "Promise",
-    "SystemJS",
-    "DevExpress",
-    "QUnit",
-    "sinon"
-  ]
+  "predef": {
+    "define": true,
+    "Promise": true,
+    "SystemJS": true,
+    "DevExpress": true,
+    "QUnit": true,
+    "sinon": true
+  }
 }
