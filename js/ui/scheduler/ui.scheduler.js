@@ -1435,7 +1435,7 @@ var Scheduler = Widget.inherit({
     _resourceLoadedCallbacks: Callbacks(),
 
     _reloadDataSource: function() {
-        // this._resourceLoadedCallbacks.empty();
+        this._resourceLoadedCallbacks.empty();
         // this._postponedOperations = [];
 
         if(this._dataSource) {
