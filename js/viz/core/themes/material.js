@@ -16,7 +16,12 @@ registerTheme({
         family: FONT_FAMILY
     },
     title: {
-        margin: 20,
+        margin: {
+            top: 20,
+            bottom: 20,
+            left: 0,
+            right: 0
+        },
         font: {
             size: 20,
             family: FONT_FAMILY,
@@ -83,6 +88,15 @@ registerTheme({
     },
 
     gauge: {
+        title: {
+            horizontalAlignment: "center",
+            subtitle: {
+                horizontalAlignment: "center"
+            }
+        }
+    },
+
+    barGauge: {
         title: {
             horizontalAlignment: "center",
             subtitle: {

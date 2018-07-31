@@ -224,7 +224,8 @@ var Validator = DOMComponent.inherit({
             value = adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
             rules = map(that.option("validationRules"), function(rule) {
-                return extend({}, rule, { validator: that });
+                rule.validator = that;
+                return rule;
             }),
 
             result;

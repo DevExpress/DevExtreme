@@ -1,18 +1,19 @@
 "use strict";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import fx from "animation/fx";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+
+const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 QUnit.testStart(function() {
-    var markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
+    var markup = `<div>
+        <div class="dx-datagrid">
+            <div id="container"></div>
+        </div>
+    </div>`;
 
     $("#qunit-fixture").html(markup);
 });
@@ -221,5 +222,83 @@ QUnit.module("Common", {
 
         // assert
         assert.ok($(".dx-popup-content .dx-filterbuilder-item-operation").length, 1);
+    });
+
+    // T646561
+    QUnit.test("the field mustn't be in filterBuilder if allowFiltering = false", function(assert) {
+        let filterBuilderFields;
+        this.initFilterBuilderView({
+            columns: [
+                { dataField: "field" },
+                { dataField: "hiddenField", allowFiltering: false }
+            ],
+            filterBuilder: {
+                onInitialized: (e) => {
+                    filterBuilderFields = e.component.option("fields");
+                }
+            },
+            filterBuilderPopup: { visible: true },
+        });
+
+
+        assert.deepEqual(filterBuilderFields.length, 1);
+        assert.deepEqual(filterBuilderFields[0].dataField, "field");
+    });
+
+    // T642913
+    QUnit.test("the field mustn't be in filterBuilder if this does not contain dataField", function(assert) {
+        let filterBuilderFields;
+        this.initFilterBuilderView({
+            columns: [
+                { caption: "field text" },
+                { dataField: "field" }
+            ],
+            filterBuilder: {
+                onInitialized: (e) => {
+                    filterBuilderFields = e.component.option("fields");
+                }
+            },
+            filterBuilderPopup: { visible: true },
+        });
+
+
+        assert.deepEqual(filterBuilderFields.length, 1);
+        assert.deepEqual(filterBuilderFields[0].dataField, "field");
+    });
+});
+
+QUnit.module("Real dataGrid", {
+    beforeEach: function() {
+        this.initDataGrid = function(options) {
+            this.dataGrid = $("#container").dxDataGrid($.extend({
+                dataSource: [{}]
+            }, options)).dxDataGrid("instance");
+            return this.dataGrid;
+        };
+
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+    },
+    afterEach: function() {
+        this.dataGrid.dispose();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, function() {
+    // T646013
+    QUnit.test("the 'any of' doesn't throw exception when popup is hiding (without jQuery)", function(assert) {
+        // arrange, act
+        this.initDataGrid({
+            columns: [{ dataField: "field", dataType: "string", defaultFilterOperations: ["anyof"] }],
+            filterValue: ["field", "anyof", ["text"]],
+            filterBuilderPopup: { visible: true },
+        });
+
+        $(".dx-popup-content .dx-filterbuilder-item-value-text").trigger("dxclick");
+        this.clock.tick();
+        $(".dx-header-filter-menu.dx-popup").dxPopup("instance").hide();
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder-item-value-text").text(), "text");
     });
 });
