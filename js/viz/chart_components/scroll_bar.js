@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     pointerEvents = require("../../events/pointer"),
     isDefined = require("../../core/utils/type").isDefined,
     _min = Math.min,
-    _max = Math.max;
+    _max = Math.max,
+    noop = require("../../core/utils/common").noop;
 
 var ScrollBar = function(renderer, group) {
     this._translator = new translator2DModule.Translator2D({}, {}, {});
@@ -174,13 +175,15 @@ ScrollBar.prototype = {
     },
 
     // Axis like functions
-    draw: function() {},
+    draw: noop,
 
-    shift: function() {},
+    shift: noop,
 
-    hideTitle: function() {},
+    hideTitle: noop,
 
-    hideOuterElements: function() {},
+    hideOuterElements: noop,
+
+    prepareAnimation: noop,
     // Axis like functions
 
     setPosition: function(min, max) {

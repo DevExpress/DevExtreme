@@ -93,7 +93,8 @@ function createAxisStubs() {
         shift: sinon.spy(function(arg) { this.shift_test_arg = $.extend({}, arg); }),
         hideTitle: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
-        hideOuterElements: sinon.spy()
+        hideOuterElements: sinon.spy(),
+        prepareAnimation: sinon.spy()
     };
 
     axisFakes
@@ -1451,6 +1452,9 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
 
     assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
     assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+
+    assert.ok(valAxisStub.prepareAnimation.called);
+    assert.ok(argAxisStub.prepareAnimation.called);
 });
 
 QUnit.test("Draw scale breaks", function(assert) {

@@ -109,8 +109,8 @@ function createBoundaryTick(axis, renderer, isFirst) {
     );
 }
 
-function callAction(ticks, action, actionArgument) {
-    ticks.forEach(function(tick) { tick[action](actionArgument); });
+function callAction(elements, action, actionArgument) {
+    (elements || []).forEach(e => e[action](actionArgument));
 }
 
 function initTickCoords(ticks) {
