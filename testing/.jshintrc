@@ -1,14 +1,13 @@
 {
-  "extends": "../.jshintrc",
+    "extends": "../.jshintrc",
 
-  "multistr": true,
-
-  "predef": {
-    "define": true,
-    "Promise": true,
-    "SystemJS": true,
-    "DevExpress": true,
-    "QUnit": true,
-    "sinon": true
-  }
+    "multistr": true,
+    "predef": {
+        "define": true,
+        "Promise": true,
+        "SystemJS": true,
+        "DevExpress": true,
+        "QUnit": true,
+        "sinon": true
+    }
 }
