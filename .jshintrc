@@ -16,10 +16,9 @@
 
     "-W069": true,
     "-W079": true,
-
-    "predef": [
-        "require",
-        "module",
-        "exports"
-    ]
+    "predef": {
+        "require": true,
+        "module": true,
+        "exports": true
+    }
 }
