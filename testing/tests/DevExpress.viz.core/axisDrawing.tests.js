@@ -10421,6 +10421,46 @@ QUnit.test("Animate constant line on second drawing", function(assert) {
     }]);
 });
 
+QUnit.test("Do not animate constant line if it position go out from canvas", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        constantLines: [{
+            value: 1,
+            label: {
+                position: "inside",
+                visible: true
+            }
+        }]
+    });
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(null);
+    this.axis.draw(this.zeroMarginCanvas);
+    const line = renderer.path.lastCall.returnValue;
+    const text = renderer.text.lastCall.returnValue;
+
+    line.attr.reset();
+    text.attr.reset();
+
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(line.stub("animate").callCount, 0);
+    assert.equal(text.stub("animate").callCount, 0);
+
+    assert.equal(line.attr.callCount, 0);
+    assert.equal(text.attr.callCount, 0);
+});
+
 QUnit.test("Do not animate strip on first drawing", function(assert) {
     // arrange
     var renderer = this.renderer;

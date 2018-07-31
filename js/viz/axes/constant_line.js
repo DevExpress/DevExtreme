@@ -61,8 +61,13 @@ export default function createConstantLine(axis, options) {
         updatePosition(animate) {
             const canvas = axis._getCanvasStartEnd();
 
-            this.coord = axis._getConstantLinePos(this.options.value, canvas.start, canvas.end).value;
+            const coord = axis._getConstantLinePos(this.options.value, canvas.start, canvas.end).value;
 
+            if(!isDefined(coord)) {
+                return;
+            }
+
+            this.coord = coord;
             if(animate && storedCoord) {
                 this.label && this.label.attr(axis._getConstantLineLabelsCoords(storedCoord, this.labelOptions));
                 this.line && this.line.attr(axis._getConstantLineGraphicAttributes(storedCoord));
