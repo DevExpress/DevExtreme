@@ -9810,7 +9810,9 @@ QUnit.test("Animate label to the new position on second drawing", function(asser
 
     assert.equal(renderer.text.callCount, 1);
 
-    assert.deepEqual(label.attr.firstCall.args[0], {
+    assert.deepEqual(label.attr.firstCall.args[0], { text: "1" });
+
+    assert.deepEqual(label.attr.secondCall.args[0], {
         x: 45,
         y: 0
     });

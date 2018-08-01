@@ -112,14 +112,13 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
+                const text = axis.formatLabel(value, labelOptions, range);
+
                 if(this.label) {
-                    this.label.append(elementsGroup);
+                    this.label.attr({ text }).append(elementsGroup);
                     this.updateLabelPosition();
                     return;
                 }
-
-                var text = axis.formatLabel(value, labelOptions, range),
-                    labelHint;
 
                 if(isDefined(text) && text !== "" && !emptyStrRegExp.test(text)) {
                     this.label = renderer
@@ -132,7 +131,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                     this.updateLabelPosition();
 
-                    labelHint = axis.formatHint(this.value, labelOptions, range);
+                    const labelHint = axis.formatHint(this.value, labelOptions, range);
                     if(isDefined(labelHint) && labelHint !== "") {
                         this.label.setTitle(labelHint);
                     }
