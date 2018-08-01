@@ -1053,11 +1053,12 @@ var Scheduler = Widget.inherit({
 
     _postponeResourceLoading: function() {
         var d = this._addPostponedOperation("_loadResources", () => {
-            this._loadResources().done((resources) => {
-                this._resourceLoadedCallbacks.fire(resources);
-            });
+            return this._loadResources();
         });
 
+        d.done((resources) => {
+            this._resourceLoadedCallbacks.fire(resources);
+        });
         this._postponeDataSourceLoading(d);
     },
 
@@ -1128,9 +1129,7 @@ var Scheduler = Widget.inherit({
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
                 }).bind(this));
-
                 this._postponeResourceLoading();
-
                 break;
             case "appointmentTemplate":
                 this._appointments.option("itemTemplate", value);
@@ -1419,6 +1418,8 @@ var Scheduler = Widget.inherit({
     _resourceLoadedCallbacks: Callbacks(),
 
     _reloadDataSource: function() {
+        var result = new Deferred();
+
         this._resourceLoadedCallbacks.empty();
         // this._postponedOperations = [];
 
@@ -1428,8 +1429,10 @@ var Scheduler = Widget.inherit({
                 loading.hide();
 
                 this._fireContentReadyAction();
+                result.resolve();
             }).bind(this)).fail(function() {
                 loading.hide();
+                result.reject();
             });
 
             this._dataSource.isLoading() && loading.show({
@@ -1438,7 +1441,11 @@ var Scheduler = Widget.inherit({
                     of: this.$element()
                 }
             });
+        } else {
+            result.resolve();
         }
+
+        return result.promise();
     },
 
     _dimensionChanged: function() {

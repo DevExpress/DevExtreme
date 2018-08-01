@@ -1707,21 +1707,26 @@ QUnit.testStart(function() {
                 dataSource: new DataSource({
                     store: new CustomStore({
                         load: function() {
-                            resourceCounter++;
-                            return [];
+                            var d = $.Deferred();
+                            setTimeout(function() {
+                                resourceCounter++;
+                                assert.equal(counter, resourceCounter - 1);
+                                d.resolve([]);
+                            }, 100);
+
+                            return d.promise();
                         }
                     })
                 })
             }],
         });
-
-        assert.equal(counter, 1);
+        this.clock.tick(100);
         assert.equal(resourceCounter, 1);
         this.instance.beginUpdate();
         this.instance.option("currentView", "timelineDay");
         this.instance.option("currentView", "timelineMonth");
         this.instance.endUpdate();
-        assert.equal(counter, 2);
+        this.clock.tick(100);
         assert.equal(resourceCounter, 2);
     });
 

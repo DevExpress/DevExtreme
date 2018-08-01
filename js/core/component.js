@@ -1,6 +1,7 @@
 "use strict";
 
-var Config = require("./config"),
+var $ = require("jquery"),
+    Config = require("./config"),
     domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
@@ -319,7 +320,11 @@ var Component = Class.inherit({
     _callPostponedOperations: function() {
         for(var key in this._postponedOperations) {
             var operation = this._postponedOperations[key];
-            when(...operation.promises).then(operation.fn.call()).then(operation.donePromise.resolve);
+            if(operation.promises.length) {
+                when.apply($, operation.promises).done(operation.fn).then(operation.donePromise.resolve);
+            } else {
+                operation.fn.call().done(operation.donePromise.resolve);
+            }
         }
         this._postponedOperations = {};
     },
