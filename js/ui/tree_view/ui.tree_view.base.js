@@ -1106,7 +1106,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(that._useCustomChildrenLoader()) {
             var publicNode = this._dataAdapter.getPublicNode(node);
             return that._loadChildrenByCustomLoader(publicNode).done(function(newItems) {
-                that._appendItems(newItems);
+                if(!that._areNodesExists(newItems)) {
+                    that._appendItems(newItems);
+                }
             });
         }
 
