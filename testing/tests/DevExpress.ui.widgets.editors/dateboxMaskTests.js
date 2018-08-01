@@ -55,6 +55,11 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "October 10 2012", "mask behavior does not work");
         });
+
+        QUnit.test("Rendering with non-ldml format", (assert) => {
+            this.instance.option("displayFormat", "shortdate");
+            assert.equal(this.instance.option("text"), "10/10/2012", "format works");
+        });
     });
 
     QUnit.module("Date parts rendering", setupModule, () => {

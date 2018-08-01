@@ -8,6 +8,8 @@ import { inRange } from "../../core/utils/math";
 import eventsEngine from "../../events/core/events_engine";
 import wheelEvent from "../../events/core/wheel";
 import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.parts";
+import dateLocalization from "../../localization/date";
+import { getFormat } from "../../localization/ldml/date.format";
 import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
@@ -71,6 +73,19 @@ let DateBoxMask = DateBoxBase.inherit({
         e.originalEvent.preventDefault();
 
         return result;
+    },
+
+    _getFormatPattern() {
+        var format = this.option("displayFormat"),
+            isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
+
+        if(isLDMLPattern) {
+            return format;
+        } else {
+            return getFormat(function(value) {
+                return dateLocalization.format(value, format);
+            });
+        }
     },
 
     _setNewDateIfEmpty() {
@@ -170,7 +185,7 @@ let DateBoxMask = DateBoxBase.inherit({
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this.option("displayFormat"));
+            this._dateParts = renderDateParts(text, this._getFormatPattern());
             this._selectNextPart(0);
         }
     },
