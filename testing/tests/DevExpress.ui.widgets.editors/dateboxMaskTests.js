@@ -413,6 +413,14 @@ if(devices.real().deviceType === "desktop") {
             this.pointer.wheel(-10);
             assert.equal(this.$input.val(), "October 10 2012", "decrement works");
         });
+
+        QUnit.test("it should not be possible to drag text in the editor", (assert) => {
+            this.keyboard.type("3");
+            assert.equal(this.$input.val(), "March 10 2012", "text has been changed");
+
+            this.$input.trigger("dragend");
+            assert.equal(this.$input.val(), "October 10 2012", "text has been reverted");
+        });
     });
 
 
