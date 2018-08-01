@@ -220,7 +220,7 @@ var LayoutManager = Widget.inherit({
                             that.repaint();
                         },
                         { skipImmediate: true }
-                ));
+                    ));
             }
         });
     },
@@ -773,15 +773,16 @@ var LayoutManager = Widget.inherit({
 
         this._replaceDataOptions(options.editorOptions, editorOptions);
 
-        this._createEditor(options.$container, {
+        let renderOptions = {
             editorType: options.editorType,
             dataField: options.dataField,
             template: options.template,
             name: options.name,
             helpID: options.helpID,
             isRequired: options.isRequired
-        },
-            editorOptions);
+        };
+
+        this._createEditor(options.$container, renderOptions, editorOptions);
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -921,7 +922,7 @@ var LayoutManager = Widget.inherit({
                 deep: true,
                 skipImmediate: true
             }
-         );
+        );
 
         eventsEngine.on($container, removeEvent, dispose);
     },

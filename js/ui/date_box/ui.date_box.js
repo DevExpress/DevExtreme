@@ -188,7 +188,7 @@ var DateBox = DropDownEditor.inherit({
             */
             maxZoomLevel: "month",
 
-           /**
+            /**
            * @name dxDateBoxOptions.minZoomLevel
            * @type Enums.CalendarZoomLevel
            * @default 'century'

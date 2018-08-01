@@ -67,35 +67,35 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-                /**
+            /**
                 * @name dxTextEditorOptions.mask
                 * @type string
                 * @default ""
                 */
             mask: "",
 
-                /**
+            /**
                 * @name dxTextEditorOptions.maskChar
                 * @type string
                 * @default "_"
                 */
             maskChar: "_",
 
-                /**
+            /**
                 * @name dxTextEditorOptions.maskRules
                 * @type Object
                 * @default "{}"
                 */
             maskRules: {},
 
-                /**
+            /**
                 * @name dxTextEditorOptions.maskInvalidMessage
                 * @type string
                 * @default "Value is invalid"
                 */
             maskInvalidMessage: messageLocalization.format("validation-mask"),
 
-                /**
+            /**
                 * @name dxTextEditorOptions.useMaskedValue
                 * @type boolean
                 * @default false
@@ -246,8 +246,8 @@ var TextEditorMask = TextEditorBase.inherit({
         var currentMaskChar = mask[index];
         var isEscapedChar = currentMaskChar === ESCAPED_CHAR;
         var result = isEscapedChar
-        ? new MaskRules.StubMaskRule({ maskChar: mask[index + 1] })
-                : this._getMaskRule(currentMaskChar);
+            ? new MaskRules.StubMaskRule({ maskChar: mask[index + 1] })
+            : this._getMaskRule(currentMaskChar);
 
         result.next(this._parseMaskRule(index + 1 + isEscapedChar));
         return result;
@@ -267,8 +267,8 @@ var TextEditorMask = TextEditorBase.inherit({
         });
 
         return isDefined(ruleConfig)
-                ? new MaskRules.MaskRule(extend({ maskChar: this.option("maskChar") }, ruleConfig))
-                : new MaskRules.StubMaskRule({ maskChar: pattern });
+            ? new MaskRules.MaskRule(extend({ maskChar: this.option("maskChar") }, ruleConfig))
+            : new MaskRules.StubMaskRule({ maskChar: pattern });
     },
 
     _renderMaskedValue: function() {
@@ -411,7 +411,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._input().val(oldValue);
 
-            // NOTE: WP8 can not to handle setCaret immediately after setting value
+        // NOTE: WP8 can not to handle setCaret immediately after setting value
         this._inputHandlerTimer = setTimeout((function() {
             this._caret({ start: caret.start, end: caret.start });
 
@@ -611,8 +611,8 @@ var TextEditorMask = TextEditorBase.inherit({
         var maskRuleIndex = currentCaret + (this._isForwardDirection() ? 0 : -1);
 
         var caret = this._maskRulesChain.isAccepted(maskRuleIndex)
-                ? currentCaret + (this._isForwardDirection() ? 1 : -1)
-                : currentCaret;
+            ? currentCaret + (this._isForwardDirection() ? 1 : -1)
+            : currentCaret;
 
         this._caret({ start: caret, end: caret });
     },

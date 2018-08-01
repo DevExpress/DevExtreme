@@ -691,8 +691,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(!that._editPopup) {
                 var $popupContainer = $("<div>")
-                        .appendTo(that.component.$element())
-                        .addClass(that.addWidgetPrefix(EDIT_POPUP_CLASS));
+                    .appendTo(that.component.$element())
+                    .addClass(that.addWidgetPrefix(EDIT_POPUP_CLASS));
 
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hidden", that._getEditPopupHiddenHandler());

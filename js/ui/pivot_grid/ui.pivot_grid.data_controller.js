@@ -508,7 +508,7 @@ exports.DataController = Class.inherit((function() {
                         * @type string
                         */
                         text: formatCellValue(cellValue, dataField, errorText),
-                       /**
+                        /**
                        * @name dxPivotGridPivotGridCell.value
                        */
                         value: cellValue,

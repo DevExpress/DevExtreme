@@ -752,8 +752,8 @@ var TagBox = SelectBox.inherit({
 
     _renderMultiTag: function($input) {
         var $tag = $("<div>")
-                .addClass(TAGBOX_TAG_CLASS)
-                .addClass(TAGBOX_MULTI_TAG_CLASS);
+            .addClass(TAGBOX_TAG_CLASS)
+            .addClass(TAGBOX_MULTI_TAG_CLASS);
 
         var args = {
             multiTagElement: getPublicElement($tag),

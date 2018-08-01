@@ -245,12 +245,12 @@ exports.custom = function(options) {
  */
 exports.alert = function(message, title, showTitle) {
     var options = isPlainObject(message)
-            ? message
-            : {
-                title: title,
-                message: message,
-                showTitle: showTitle
-            };
+        ? message
+        : {
+            title: title,
+            message: message,
+            showTitle: showTitle
+        };
 
     return exports.custom(options).show();
 };
@@ -267,16 +267,16 @@ exports.alert = function(message, title, showTitle) {
  */
 exports.confirm = function(message, title, showTitle) {
     var options = isPlainObject(message)
-            ? message
-            : {
-                title: title,
-                message: message,
-                showTitle: showTitle,
-                buttons: [
-                    { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
-                    { text: messageLocalization.format("No"), onClick: function() { return false; } }
-                ]
-            };
+        ? message
+        : {
+            title: title,
+            message: message,
+            showTitle: showTitle,
+            buttons: [
+                { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
+                { text: messageLocalization.format("No"), onClick: function() { return false; } }
+            ]
+        };
 
     return exports.custom(options).show();
 };

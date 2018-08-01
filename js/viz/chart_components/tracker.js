@@ -544,7 +544,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             that._gestureEndHandler = function() {
                 // Check is added because callback can be triggered after unsubscribing which is done during tracker disposing
                 // That occurs for example when container is removed on swipe end (T235643)
-                that._gestureEnd && that._gestureEnd();     // T235643
+                that._gestureEnd && that._gestureEnd(); // T235643
             };
 
             eventsEngine.on(domAdapter.getDocument(), addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
@@ -562,7 +562,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             that._chart.zoomArgument(zoom.min, zoom.max, true);
 
             e.preventDefault();
-            e.stopPropagation();    // T249548
+            e.stopPropagation(); // T249548
         });
 
         root.on(addNamespace("dxc-scroll-start", EVENT_NS), function(e) {

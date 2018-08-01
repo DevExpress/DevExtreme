@@ -515,7 +515,7 @@ module.exports = {
                             deep: true,
                             skipImmediate: true
                         }
-                     );
+                    );
 
                     eventsEngine.on(arg.rowElement, removeEvent, dispose);
                 },

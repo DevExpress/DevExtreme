@@ -411,7 +411,7 @@ Point.prototype = {
             ((visibleArea.minY) > (y + (height || 0))) || ((visibleArea.maxY) < y)) ||
             (rotated && _isDefined(width) && width !== 0 && (visibleArea.minX === (x + width) || visibleArea.maxX === x)) ||
         (!rotated && _isDefined(height) && height !== 0 && (visibleArea.minY === (y + height) || visibleArea.maxY === y))
-            ) {
+        ) {
             that.inVisibleArea = false;
         } else {
             that.inVisibleArea = true;

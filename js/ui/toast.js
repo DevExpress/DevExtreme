@@ -208,7 +208,7 @@ var Toast = Overlay.inherit({
                     return device.platform === "win" && device.version && device.version[0] === 10;
                 },
                 options: {
-                   /**
+                    /**
                    * @name dxToastOptions.position
                    * @default 'bottom right' @for Windows_10_Mobile
                    * @inheritdoc
