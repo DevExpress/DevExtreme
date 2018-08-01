@@ -288,8 +288,7 @@ _extend(exports.ExportMenu.prototype, {
 
     draw: function(width, height, canvas) {
         var layoutOptions;
-        this._options.exportOptions.width = canvas.width;
-        this._options.exportOptions.height = canvas.height;
+        this.updateCanvasSize(canvas);
         this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
 
         layoutOptions = this.getLayoutOptions();
@@ -332,6 +331,12 @@ _extend(exports.ExportMenu.prototype, {
         } else {
             that.hide();
         }
+    },
+
+    updateCanvasSize: function(canvas) {
+        var exportOptions = this._options.exportOptions;
+        exportOptions.width = canvas.width;
+        exportOptions.height = canvas.height;
     },
 
     dispose: function() {
@@ -555,7 +560,7 @@ exports.plugin = {
     extenders: {
         _change_LAYOUT: function() {
             if(this._exportMenu) {
-                this._exportMenu.setOptions(this._getExportMenuOptions());
+                this._exportMenu.updateCanvasSize(this._canvas);
             }
         }
     },

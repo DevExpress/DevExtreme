@@ -345,7 +345,7 @@ QUnit.test("Depends on theme", function(assert) {
 
     widget.option("theme", "test-theme");
 
-    assert.strictEqual(this.exportMenu.setOptions.callCount, 2);
+    assert.strictEqual(this.exportMenu.setOptions.callCount, 1);
 });
 
 QUnit.test('Print method', function(assert) {
@@ -377,16 +377,19 @@ QUnit.test('Print method', function(assert) {
     window.open.restore();
 });
 
-QUnit.test("Widget updates exportOptions on resize", function(assert) {
+QUnit.test("Export with right size after resize", function(assert) {
+    var exportFunc = clientExporter.export;
     var widget = this.createWidget();
-    this.exportMenu.setOptions.reset();
 
     widget.option({
         size: {
-            width: 100
+            width: 100,
+            height: 200
         }
     });
+    widget.exportTo("testName", "jpeg");
 
-    assert.equal(this.exportMenu.setOptions.callCount, 1);
-    assert.deepEqual(this.exportMenu.setOptions.lastCall.args[0].exportOptions.width, 100);
+    // assert
+    assert.equal(exportFunc.getCall(0).args[1].width, 100, "width");
+    assert.equal(exportFunc.getCall(0).args[1].height, 200, "height");
 });
