@@ -21,6 +21,7 @@ if(devices.real().deviceType === "desktop") {
             this.$element = $("#dateBox").dxDateBox({
                 value: new Date("10/10/2012 13:07"),
                 useMaskBehavior: true,
+                searchTimeout: SEARCH_TIMEOUT,
                 mode: "text",
                 displayFormat: "MMMM d yyyy"
             });
@@ -738,7 +739,7 @@ if(devices.real().deviceType === "desktop") {
     QUnit.module("Advanced caret", setupModule, () => {
         QUnit.test("Move caret to the next group before timeout", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "dd.MM"
             });
 
@@ -749,7 +750,7 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Move caret to the next group when next digit will overflow", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "MM.dd"
             });
 
@@ -760,7 +761,7 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Don't move caret to the next group after timeout", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "dd.MM"
             });
 
@@ -772,7 +773,7 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Move caret to the next group after limit overflow", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "dd.MM"
             });
 

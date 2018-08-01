@@ -45,19 +45,8 @@ let DateBoxMask = DateBoxBase.inherit({
              */
             useMaskBehavior: false,
 
-            /**
-             * @name dxDateBoxOptions.searchTimeout
-             * @type number
-             * @default 1500
-             */
-            searchTimeout: 1500,
-
-            /**
-             * @name dxDateBoxOptions.advancedCaret
-             * @type boolean
-             * @default false
-             */
-            advancedCaret: false
+            searchTimeout: null,
+            advanceCaret: false
         });
     },
 
@@ -113,7 +102,7 @@ let DateBoxMask = DateBoxBase.inherit({
         if(!inRange(newValue, limits.min, limits.max)) {
             this._searchValue = char;
             newValue = parseInt(char);
-            if(this.option("advancedCaret")) {
+            if(this.option("advanceCaret")) {
                 clearTimeout(this._searchTimeout);
             }
         }
@@ -121,7 +110,7 @@ let DateBoxMask = DateBoxBase.inherit({
         this._setActivePartValue(newValue);
         this._startSearchTimeout();
 
-        if(this.option("advancedCaret")) {
+        if(this.option("advanceCaret")) {
             if(parseInt(this._searchValue + "0") > limits.max) {
                 this._selectNextPart(FORWARD);
                 clearTimeout(this._searchTimeout);
@@ -351,7 +340,7 @@ let DateBoxMask = DateBoxBase.inherit({
             case "searchTimeout":
                 clearTimeout(this._searchTimeout);
                 break;
-            case "advancedCaret":
+            case "advanceCaret":
                 break;
             default:
                 this.callBase(args);

@@ -128,7 +128,11 @@ testComponentDefaults(NumberBox,
 
 testComponentDefaults(DateBox,
     {},
-    { adaptivityEnabled: false }
+    {
+        useMaskBehavior: false,
+        advanceCaret: true,
+        adaptivityEnabled: false
+    }
 );
 
 testComponentDefaults(DateBox,
