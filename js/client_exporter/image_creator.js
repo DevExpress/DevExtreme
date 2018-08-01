@@ -686,3 +686,17 @@ exports.imageCreator = {
 exports.getData = function(data, options, callback) {
     exports.imageCreator.getData(data, options).done(callback);
 };
+
+exports.testFormats = function(formats) {
+    var canvas = createCanvas(100, 100, 0);
+    return formats.reduce(function(r, f) {
+        var mimeType = ("image/" + f).toLowerCase();
+
+        if(canvas.toDataURL(mimeType).indexOf(mimeType) !== -1) {
+            r.supported.push(f);
+        } else {
+            r.unsupported.push(f);
+        }
+        return r;
+    }, { supported: [], unsupported: [] });
+};

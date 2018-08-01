@@ -24,10 +24,14 @@ QUnit.module("Export", {
         exportModule.ExportMenu = sinon.spy(function() { return exportMenu; });
 
         sinon.stub(clientExporter, "export");
+
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        this.toDataURLStub.returnsArg(0);
     },
 
     afterEach: function() {
         clientExporter.export.restore();
+        this.toDataURLStub.restore();
     },
 
     createWidget: function(options) {
@@ -211,7 +215,8 @@ QUnit.test('Export method. PDF format', function(assert) {
 
 QUnit.test('Export method. invalid format', function(assert) {
     // arrange
-    var exportFunc = clientExporter.export,
+    var incidentOccurred = sinon.spy(),
+        exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
         fileSavingStub = sinon.spy(),
@@ -221,7 +226,8 @@ QUnit.test('Export method. invalid format', function(assert) {
             },
             onExporting: exportingStub,
             onExported: exportedStub,
-            onFileSaving: fileSavingStub
+            onFileSaving: fileSavingStub,
+            onIncidentOccurred: incidentOccurred
         });
 
     widget.$element().css("backgroundСolor", "#ff0000");
@@ -233,6 +239,40 @@ QUnit.test('Export method. invalid format', function(assert) {
     var firstExportCall = exportFunc.getCall(0);
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "PNG", "format");
+    assert.equal(incidentOccurred.callCount, 0);
+});
+
+QUnit.test('Export method. unsopported image format', function(assert) {
+    // arrange
+    this.toDataURLStub.withArgs("image/jpeg").returns("image/png");
+
+    var incidentOccurred = sinon.spy(),
+        exportFunc = clientExporter.export,
+        exportedStub = sinon.spy(),
+        exportingStub = sinon.spy(),
+        fileSavingStub = sinon.spy(),
+        widget = this.createWidget({
+            "export": {
+                proxyUrl: "testProxy"
+            },
+            onExporting: exportingStub,
+            onExported: exportedStub,
+            onFileSaving: fileSavingStub,
+            onIncidentOccurred: incidentOccurred
+        });
+
+    widget.$element().css("backgroundСolor", "#ff0000");
+
+    // act
+    widget.exportTo("testName", "jpeg");
+
+    // assert
+    var firstExportCall = exportFunc.getCall(0);
+    assert.ok(exportFunc.callCount, 1, "export was called one time");
+    assert.equal(firstExportCall.args[1].format, "PNG", "format");
+    assert.equal(incidentOccurred.callCount, 1);
+    assert.deepEqual(incidentOccurred.getCall(0).args[0].target.id, "W2401");
+    assert.deepEqual(incidentOccurred.getCall(0).args[0].target.args, ["JPEG"]);
 });
 
 QUnit.test('Export method. Undefined options', function(assert) {
@@ -257,7 +297,7 @@ QUnit.test('Export menu creation', function(assert) {
     // arrange, act
     var incidentOccurred = sinon.spy();
     this.createWidget({
-        incidentOccurred: incidentOccurred,
+        onIncidentOccurred: incidentOccurred,
         rtlEnabled: "rtl option"
     });
 

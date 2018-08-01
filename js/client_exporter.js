@@ -47,7 +47,8 @@ exports.excel.__internals = require("./client_exporter/excel_creator").__interna
 ///#ENDDEBUG
 exports.image = {
     creator: require("./client_exporter/image_creator").imageCreator,
-    getData: require("./client_exporter/image_creator").getData
+    getData: require("./client_exporter/image_creator").getData,
+    testFormats: require("./client_exporter/image_creator").testFormats
 };
 exports.pdf = {
     getData: require("./client_exporter/pdf_creator").getData
