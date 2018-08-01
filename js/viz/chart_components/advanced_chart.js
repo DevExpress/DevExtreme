@@ -396,11 +396,12 @@ var AdvancedChart = BaseChart.inherit({
         that._argumentAxes.forEach(a => a.setMarginOptions(argumentMarginOptions));
     },
 
-    _populateBusinessRange(useZoom) {
+    _populateBusinessRange(updatedAxis) {
         const that = this;
         const rotated = that._isRotated();
         const argRange = new rangeModule.Range({ rotated: !!rotated });
         const groupsData = that._groupsData;
+        const series = that._getVisibleSeries();
 
         that._valueAxes.forEach(valueAxis => {
             var groupRange = new rangeModule.Range({
@@ -408,7 +409,7 @@ var AdvancedChart = BaseChart.inherit({
                     pane: valueAxis.pane,
                     axis: valueAxis.name
                 }),
-                groupSeries = that.series.filter(series => series.getValueAxis() === valueAxis);
+                groupSeries = series.filter(series => series.getValueAxis() === valueAxis);
 
             groupSeries.forEach(series => {
                 var seriesRange = series.getRangeData();
@@ -417,11 +418,15 @@ var AdvancedChart = BaseChart.inherit({
                 argRange.addRange(seriesRange.arg);
             });
 
-            valueAxis.setGroupSeries(groupSeries);
-            valueAxis.setBusinessRange(groupRange);
+            if(!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
+                valueAxis.setGroupSeries(groupSeries);
+                valueAxis.setBusinessRange(groupRange);
+            }
         });
 
-        that._argumentAxes.forEach(a => a.setBusinessRange(argRange, groupsData.categories));
+        if(!updatedAxis || updatedAxis && series.length) {
+            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, groupsData.categories));
+        }
 
         that._populateMarginOptions();
     },
