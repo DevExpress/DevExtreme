@@ -213,13 +213,17 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _selectLastPart(e) {
-        this._activePartIndex = this._dateParts.length;
-        this._selectNextPart(BACKWARD, e);
+        if(this.option("text")) {
+            this._activePartIndex = this._dateParts.length;
+            this._selectNextPart(BACKWARD, e);
+        }
     },
 
     _selectFirstPart(e) {
-        this._activePartIndex = -1;
-        this._selectNextPart(FORWARD, e);
+        if(this.option("text")) {
+            this._activePartIndex = -1;
+            this._selectNextPart(FORWARD, e);
+        }
     },
 
     _mouseWheelHandler(e) {
@@ -227,6 +231,10 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _selectNextPart(step, e) {
+        if(!this.option("text")) {
+            return;
+        }
+
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
             this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);

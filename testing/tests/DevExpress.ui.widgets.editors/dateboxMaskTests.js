@@ -704,11 +704,19 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "", "value is correct");
         });
 
-        QUnit.test("Backspace and delete should do nothing in an empty datebox", (assert) => {
+        QUnit.test("navigation keys should do nothing in an empty datebox", (assert) => {
+            this.keyboard.press("home");
+            this.keyboard.press("end");
             this.keyboard.press("del");
             this.keyboard.press("backspace");
+            this.keyboard.press("esc");
+            this.keyboard.press("left");
+            this.keyboard.press("right");
+            this.keyboard.press("enter");
 
-            assert.equal(this.$input.val(), "", "value is correct");
+            assert.deepEqual(this.instance.option("value"), null, "value is good");
+            assert.deepEqual(this.$input.val(), "", "text is good");
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is good");
         });
     });
 
