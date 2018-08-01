@@ -16,6 +16,7 @@
 
     "-W069": true,
     "-W079": true,
+
     "predef": {
         "require": true,
         "module": true,
