@@ -353,6 +353,8 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _valueChangeEventHandler(e) {
         if(this._useMaskBehavior()) {
+            this._clearSearchValue();
+            this._selectNextPart(FORWARD, e);
             this._saveValueChangeEvent(e);
             this._saveMaskValue();
         } else {
