@@ -1104,16 +1104,28 @@ QUnit.module("Custom filter expressions", {
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
     });
 
-    QUnit.test("calculateFilterExpression for isBlank", function(assert) {
+    QUnit.test("calculateFilterExpression for isBlank (string field)", function(assert) {
         var value = ["field", "=", null],
             normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
         assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), [["field", "=", null], "or", ["field", "=", ""]]);
     });
 
-    QUnit.test("calculateFilterExpression for isNotBlank", function(assert) {
+    QUnit.test("calculateFilterExpression for isNotBlank (string field)", function(assert) {
         var value = ["field", "<>", null],
             normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
         assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), [["field", "<>", null], "and", ["field", "<>", ""]]);
+    });
+
+    QUnit.test("calculateFilterExpression for isBlank", function(assert) {
+        var value = ["field", "=", null],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field", dataType: "number" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["field", "=", null]);
+    });
+
+    QUnit.test("calculateFilterExpression for isNotBlank", function(assert) {
+        var value = ["field", "<>", null],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field", dataType: "number" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["field", "<>", null]);
     });
 
     QUnit.test("calculateFilterExpression for fieldValue = array", function(assert) {
