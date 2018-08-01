@@ -182,7 +182,13 @@ var DropDownEditor = TextBox.inherit({
 
             openOnFieldClick: false,
 
+            /**
+             * @name dxDropDownEditorOptions.showDropDownButton
+             * @type boolean
+             * @default true
+             */
             showDropDownButton: true,
+
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
             applyButtonText: messageLocalization.format("OK"),
