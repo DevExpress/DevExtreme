@@ -46,7 +46,7 @@ let DateBoxMask = DateBoxBase.inherit({
             useMaskBehavior: false,
 
             searchTimeout: null,
-            advanceCaret: false
+            advanceCaret: true
         });
     },
 
