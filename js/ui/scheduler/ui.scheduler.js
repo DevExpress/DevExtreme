@@ -1420,7 +1420,6 @@ var Scheduler = Widget.inherit({
         var result = new Deferred();
 
         this._resourceLoadedCallbacks.empty();
-        // this._postponedOperations = [];
 
         if(this._dataSource) {
 
