@@ -8,6 +8,8 @@ import { inRange } from "../../core/utils/math";
 import eventsEngine from "../../events/core/events_engine";
 import wheelEvent from "../../events/core/wheel";
 import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.parts";
+import dateLocalization from "../../localization/date";
+import { getFormat } from "../../localization/ldml/date.format";
 import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
@@ -16,14 +18,14 @@ const MASK_EVENT_NAMESPACE = "dateBoxMask",
 
 let DateBoxMask = DateBoxBase.inherit({
 
-    _supportedKeys() {
-        if(!this._useMaskBehavior()) {
-            return this.callBase();
+    _supportedKeys(e) {
+        if(!this._useMaskBehavior() || this.option("opened") || e.altKey) {
+            return this.callBase(e);
         }
 
         let that = this;
 
-        return extend(this.callBase(), {
+        return extend(this.callBase(e), {
             home: this._selectFirstPart.bind(that),
             end: this._selectLastPart.bind(that),
             escape: that._revertChanges.bind(that),
@@ -32,6 +34,21 @@ let DateBoxMask = DateBoxBase.inherit({
             rightArrow: that._selectNextPart.bind(that, FORWARD),
             upArrow: that._partIncrease.bind(that, FORWARD),
             downArrow: that._partIncrease.bind(that, BACKWARD)
+        });
+    },
+
+    _getDefaultOptions() {
+        return extend(this.callBase(), {
+
+            /**
+             * @name dxDateBoxOptions.useMaskBehavior
+             * @type boolean
+             * @default false
+             */
+            useMaskBehavior: false,
+
+            searchTimeout: null,
+            advanceCaret: true
         });
     },
 
@@ -45,7 +62,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
         let result = this.callBase(e);
 
-        if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
+        if(!this._useMaskBehavior() || this.option("opened") || !this._isSingleCharKey(e)) {
             return result;
         }
 
@@ -56,6 +73,19 @@ let DateBoxMask = DateBoxBase.inherit({
         e.originalEvent.preventDefault();
 
         return result;
+    },
+
+    _getFormatPattern() {
+        var format = this.option("displayFormat"),
+            isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
+
+        if(isLDMLPattern) {
+            return format;
+        } else {
+            return getFormat(function(value) {
+                return dateLocalization.format(value, format);
+            });
+        }
     },
 
     _setNewDateIfEmpty() {
@@ -87,7 +117,7 @@ let DateBoxMask = DateBoxBase.inherit({
         if(!inRange(newValue, limits.min, limits.max)) {
             this._searchValue = char;
             newValue = parseInt(char);
-            if(this.option("advancedCaret")) {
+            if(this.option("advanceCaret")) {
                 clearTimeout(this._searchTimeout);
             }
         }
@@ -95,7 +125,7 @@ let DateBoxMask = DateBoxBase.inherit({
         this._setActivePartValue(newValue);
         this._startSearchTimeout();
 
-        if(this.option("advancedCaret")) {
+        if(this.option("advanceCaret")) {
             if(parseInt(this._searchValue + "0") > limits.max) {
                 this._selectNextPart(FORWARD);
                 clearTimeout(this._searchTimeout);
@@ -130,15 +160,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior() {
-        return this.option("useMaskBehavior") && !this.option("opened") && this.option("mode") === "text" && this.option("displayFormat");
-    },
-
-    _getDefaultOptions() {
-        return extend(this.callBase(), {
-            useMaskBehavior: false,
-            searchTimeout: 1500,
-            advancedCaret: false
-        });
+        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
     },
 
     _renderMask() {
@@ -150,17 +172,20 @@ let DateBoxMask = DateBoxBase.inherit({
             this._activePartIndex = 0;
             this._attachMaskEvents();
 
-            const value = this.dateOption("value");
-            this._maskValue = value && new Date(value);
+            this._loadMaskValue();
             this._renderDateParts();
         }
     },
 
     _renderDateParts() {
+        if(!this._useMaskBehavior()) {
+            return;
+        }
+
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this.option("displayFormat"));
+            this._dateParts = renderDateParts(text, this._getFormatPattern());
             this._selectNextPart(0);
         }
     },
@@ -233,8 +258,18 @@ let DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
+    _loadMaskValue() {
+        const value = this.dateOption("value");
+        this._maskValue = value && new Date(value);
+    },
+
+    _saveMaskValue() {
+        const value = this._maskValue && new Date(this._maskValue);
+        this.dateOption("value", value);
+    },
+
     _revertChanges() {
-        this._maskValue = this.dateOption("value");
+        this._loadMaskValue();
         this._renderDisplayText(this._getDisplayedText(this._maskValue));
         this._renderDateParts();
     },
@@ -294,9 +329,11 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _valueChangeEventHandler(e) {
-        this.callBase(e);
         if(this._useMaskBehavior()) {
-            this.dateOption("value", this._maskValue);
+            this._saveValueChangeEvent(e);
+            this._saveMaskValue();
+        } else {
+            this.callBase(e);
         }
     },
 
@@ -310,10 +347,15 @@ let DateBoxMask = DateBoxBase.inherit({
                 this.callBase(args);
                 this._renderMask();
                 break;
+            case "value":
+                this._loadMaskValue();
+                this.callBase(args);
+                this._renderDateParts();
+                break;
             case "searchTimeout":
                 clearTimeout(this._searchTimeout);
                 break;
-            case "advancedCaret":
+            case "advanceCaret":
                 break;
             default:
                 this.callBase(args);

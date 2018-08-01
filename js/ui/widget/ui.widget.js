@@ -650,7 +650,7 @@ var Widget = DOMComponent.inherit({
         var e = options.originalEvent,
             key = options.key;
 
-        var keys = this._supportedKeys(),
+        var keys = this._supportedKeys(e),
             func = keys[key];
 
         if(func !== undefined) {

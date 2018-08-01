@@ -1204,6 +1204,26 @@ require("common.css!");
         }
     });
 
+    QUnit.test("supported keys should have an event as a parameter", function(assert) {
+        var supportedKeysHandler = sinon.stub().returns({
+                "a": function() {
+                }
+            }),
+            TestWidget = Widget.inherit({
+                NAME: "TestWidget",
+                _supportedKeys: supportedKeysHandler
+            }),
+            $element = $("#widget");
+
+        new TestWidget($element, { focusStateEnabled: true });
+
+        var kb = keyboardMock($element);
+        kb.press("a");
+
+        assert.equal(supportedKeysHandler.callCount, 1, "supportedKeys was called");
+        assert.equal(supportedKeysHandler.getCall(0).args[0].type, "keydown", "event is correct");
+    });
+
     QUnit.test("focus state", function(assert) {
         var $element = $("#widget").dxWidget({ focusStateEnabled: true });
 

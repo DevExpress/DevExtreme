@@ -21,6 +21,7 @@ if(devices.real().deviceType === "desktop") {
             this.$element = $("#dateBox").dxDateBox({
                 value: new Date("10/10/2012 13:07"),
                 useMaskBehavior: true,
+                searchTimeout: SEARCH_TIMEOUT,
                 mode: "text",
                 displayFormat: "MMMM d yyyy"
             });
@@ -53,6 +54,11 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("mode", "date");
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "October 10 2012", "mask behavior does not work");
+        });
+
+        QUnit.test("Rendering with non-ldml format", (assert) => {
+            this.instance.option("displayFormat", "shortdate");
+            assert.equal(this.instance.option("text"), "10/10/2012", "format works");
         });
     });
 
@@ -345,6 +351,11 @@ if(devices.real().deviceType === "desktop") {
             this.instance.open();
             this.keyboard.press("up");
             assert.equal(this.$input.val(), "October 10 2012", "text was not changed");
+        });
+
+        QUnit.test("alt+down should open dxDateBox", (assert) => {
+            this.keyboard.keyDown("down", { altKey: true });
+            assert.ok(this.instance.option("opened"), "datebox is opened");
         });
     });
 
@@ -684,12 +695,60 @@ if(devices.real().deviceType === "desktop") {
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
         });
+
+        QUnit.test("onValueChanged should have event", (assert) => {
+            const valueChangedHandler = sinon.spy();
+
+            this.instance.option({
+                onValueChanged: valueChangedHandler
+            });
+
+            this.keyboard.press("up").press("enter");
+
+            assert.equal(valueChangedHandler.callCount, 1, "handler has been called once");
+            assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
+
+            this.instance.option("value", new Date(2012, 4, 5));
+            assert.equal(valueChangedHandler.callCount, 2, "handler has been called twice");
+            assert.strictEqual(valueChangedHandler.getCall(1).args[0].event, undefined, "event has been cleared");
+        });
+
+        QUnit.test("It should be possible to set a value via calendar", (assert) => {
+            this.instance.option({
+                opened: true
+            });
+
+            this.keyboard.press("right").press("enter");
+            assert.equal(this.$input.val(), "October 11 2012", "text is correct");
+            assert.equal(this.instance.option("value").getDate(), 11, "value is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
+        });
+
+        QUnit.test("Internal _maskValue and public value should be different objects", (assert) => {
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different on init");
+
+            this.instance.option("value", new Date(2012, 1, 2));
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different when setting by value");
+
+            this.keyboard.press("up").press("esc");
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after revert changes");
+
+            this.keyboard.press("5").press("enter");
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after enter");
+
+            this.keyboard.press("4");
+            this.$input.trigger("focusout");
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after focusout");
+
+            this.keyboard.press("7").change();
+            assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after change event");
+        });
     });
 
     QUnit.module("Advanced caret", setupModule, () => {
         QUnit.test("Move caret to the next group before timeout", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "dd.MM"
             });
 
@@ -700,7 +759,7 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Move caret to the next group when next digit will overflow", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "MM.dd"
             });
 
@@ -711,7 +770,7 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Don't move caret to the next group after timeout", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "dd.MM"
             });
 
@@ -723,7 +782,7 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Move caret to the next group after limit overflow", (assert) => {
             this.instance.option({
-                advancedCaret: true,
+                advanceCaret: true,
                 displayFormat: "dd.MM"
             });
 
