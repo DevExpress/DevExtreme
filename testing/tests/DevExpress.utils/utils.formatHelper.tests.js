@@ -1,5 +1,3 @@
-"use strict";
-
 var formatHelper = require("format_helper"),
     getDateFormatByTickInterval = formatHelper.getDateFormatByTickInterval;
 

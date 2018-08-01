@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     domAdapter = require("../../core/dom_adapter"),
     ready = require("../../core/utils/ready_callbacks").add,

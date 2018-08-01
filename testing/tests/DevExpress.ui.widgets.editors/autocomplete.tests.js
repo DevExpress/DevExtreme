@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Autocomplete = require("ui/autocomplete"),
     devices = require("core/devices"),

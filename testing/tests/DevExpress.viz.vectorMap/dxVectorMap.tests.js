@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     commons = require("./vectorMapParts/commons.js"),
     rendererModule = require("viz/core/renderers/renderer"),

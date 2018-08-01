@@ -1,5 +1,3 @@
-"use strict";
-
 var isDefined = require("../../core/utils/type").isDefined,
     map = require("../../core/utils/iterator").map,
     odataUtils = require("./utils"),

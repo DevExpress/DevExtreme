@@ -1,5 +1,3 @@
-"use strict";
-
 var pointerMock = require("../../helpers/pointerMock.js"),
     vizMocks = require("../../helpers/vizMocks.js"),
     shutterPlugin = require("viz/chart_components/shutter_zoom");

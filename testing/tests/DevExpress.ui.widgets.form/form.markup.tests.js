@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import consoleUtils from "core/utils/console";

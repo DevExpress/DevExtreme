@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("../../../core/utils/iterator").each,
     extend = require("../../../core/utils/extend").extend,
     noop = require("../../../core/utils/common").noop,

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     TransitionExecutorModule = require("animation/transition_executor/transition_executor"),
     dataUtils = require("core/element_data");

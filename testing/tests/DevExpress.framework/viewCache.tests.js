@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ViewCache = require("framework/view_cache"),
     ConditionalViewCacheDecorator = require("framework/view_cache").ConditionalViewCacheDecorator,

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     notify = require("ui/notify"),
     viewPort = require("core/utils/view_port").value,

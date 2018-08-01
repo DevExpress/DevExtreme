@@ -1,5 +1,3 @@
-"use strict";
-
 var setPublicElementWrapper = require("../../core/utils/dom").setPublicElementWrapper;
 var useJQuery = require("./use_jquery")();
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var domAdapter = require("core/dom_adapter");
 var readyCallbacks = require("core/utils/ready_callbacks");
 

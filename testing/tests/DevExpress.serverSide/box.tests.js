@@ -1,5 +1,3 @@
-"use strict";
-
 import "../DevExpress.ui.widgets/box.markup.tests.js";
 import Box from "ui/box";
 import DOMAdapter from "core/dom_adapter";

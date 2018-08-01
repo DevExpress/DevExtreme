@@ -34,6 +34,7 @@
         "no-irregular-whitespace": "error",
         "no-multi-spaces": "error",
         "no-trailing-spaces": "error",
+        "strict": 2,
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "semi-spacing": "error",

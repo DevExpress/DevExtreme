@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),

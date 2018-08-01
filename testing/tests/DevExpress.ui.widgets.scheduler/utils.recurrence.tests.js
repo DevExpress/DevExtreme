@@ -1,5 +1,3 @@
-"use strict";
-
 var recurrenceUtils = require("ui/scheduler/utils.recurrence");
 
 QUnit.module('Recurrences');

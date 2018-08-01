@@ -1,5 +1,3 @@
-"use strict";
-
 var vizMocks = require("../../helpers/vizMocks.js"),
     exportModule = require("viz/core/export"),
     clientExporter = require("client_exporter");

@@ -1,5 +1,3 @@
-"use strict";
-
 var OPERATION_ICONS = {
         "=": "equal",
         "<>": "notequal",

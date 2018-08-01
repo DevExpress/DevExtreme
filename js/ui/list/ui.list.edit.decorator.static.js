@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Button = require("../button"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,

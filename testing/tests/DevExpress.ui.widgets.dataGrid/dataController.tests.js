@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     config = require("core/config"),
     formatHelper = require("format_helper"),

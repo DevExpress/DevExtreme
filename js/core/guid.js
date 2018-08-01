@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("./class");
 
 /**

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     treeListCore = require("./ui.tree_list.core"),
     rowsViewModule = require("../grid_core/ui.grid_core.rows");

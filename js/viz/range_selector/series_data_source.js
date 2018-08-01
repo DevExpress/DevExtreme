@@ -1,5 +1,3 @@
-"use strict";
-
 var seriesModule = require("../series/base_series"),
     seriesFamilyModule = require("../core/series_family"),
     typeUtils = require("../../core/utils/type"),

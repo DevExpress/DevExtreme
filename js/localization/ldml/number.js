@@ -1,5 +1,3 @@
-"use strict";
-
 var fitIntoRange = require("../../core/utils/math").fitIntoRange;
 
 var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },

@@ -1,5 +1,3 @@
-"use strict";
-
 var isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,

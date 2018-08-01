@@ -1,5 +1,3 @@
-"use strict";
-
 var math = Math,
     mathAbs = math.abs,
     mathMin = math.min,

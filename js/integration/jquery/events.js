@@ -1,5 +1,3 @@
-"use strict";
-
 var jQuery = require("jquery");
 var eventsEngine = require("../../events/core/events_engine");
 var useJQuery = require("./use_jquery")();

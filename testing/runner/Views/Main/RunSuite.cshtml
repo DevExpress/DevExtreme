@@ -77,9 +77,7 @@
 
     <script>
         (function() {
-            "use strict";
-
-            var doneCount = 0,
+                        var doneCount = 0,
                 parentWindow = window.opener || window.parent;
 
             QUnit.done(function(data) {
@@ -152,9 +150,7 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script>
         (function() {
-            "use strict";
-
-            jQuery.noConflict();
+                        jQuery.noConflict();
 
             var cacheBuster = '@Url.CacheBuster()';
             if(cacheBuster.length) {
@@ -253,9 +249,7 @@
 
 <script>
     (function() {
-        "use strict";
-
-        // IE11 hack for promises error (http://stackoverflow.com/questions/35651193/ie11-promise-strange-behaviour)
+                // IE11 hack for promises error (http://stackoverflow.com/questions/35651193/ie11-promise-strange-behaviour)
         jQuery.each([1, 2, 3, 5, 8, 13, 20, 40, 100], function(_, timeout) {
             new Promise(function (resolve) {
                 window.setTimeout(resolve, timeout * 1000);

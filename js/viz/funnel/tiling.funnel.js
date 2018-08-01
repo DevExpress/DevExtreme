@@ -1,5 +1,3 @@
-"use strict";
-
 var CENTER = 0.5;
 
 module.exports = {

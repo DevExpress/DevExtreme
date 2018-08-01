@@ -1,7 +1,5 @@
 /* jshint node: true */
 
-"use strict";
-
 var baseConfig = require("../webpack.config.js");
 
 module.exports = Object.assign({

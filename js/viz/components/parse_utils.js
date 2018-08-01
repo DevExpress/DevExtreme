@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     dateSerialization = require("../../core/utils/date_serialization"),
     isDefined = require("../../core/utils/type").isDefined,

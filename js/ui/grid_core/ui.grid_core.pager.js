@@ -1,5 +1,3 @@
-"use strict";
-
 var modules = require("./ui.grid_core.modules"),
     Pager = require("../pager"),
     inArray = require("../../core/utils/array").inArray,

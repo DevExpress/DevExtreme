@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     BaseIndicator = require("viz/gauges/base_indicators").BaseIndicator,

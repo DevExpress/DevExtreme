@@ -1,5 +1,3 @@
-"use strict";
-
 var DefaultEventsStrategy = require("./events_strategy"),
     each = require("./utils/iterator").each,
     isPlainObject = require("./utils/type").isPlainObject;

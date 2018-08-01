@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     imageCreator = require("client_exporter").image.creator,
     typeUtils = require("core/utils/type"),

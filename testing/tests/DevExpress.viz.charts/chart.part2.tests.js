@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     commons = require("./chartParts/commons.js"),
     vizUtils = require("viz/core/utils"),

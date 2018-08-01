@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     translator = require("animation/translator"),
     pointerMock = require("../../helpers/pointerMock.js"),

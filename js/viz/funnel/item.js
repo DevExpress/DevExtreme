@@ -1,5 +1,3 @@
-"use strict";
-
 var states = ["normal", "hover", "selection", "selection"],
     isDefined = require("../../core/utils/type").isDefined;
 

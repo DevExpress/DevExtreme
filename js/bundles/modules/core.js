@@ -1,5 +1,3 @@
-"use strict";
-
 var windowUtils = require("../../core/utils/window");
 var window = windowUtils.getWindow();
 

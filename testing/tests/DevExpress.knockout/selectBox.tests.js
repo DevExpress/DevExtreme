@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     SelectBox = require("ui/select_box"),
     fx = require("animation/fx"),

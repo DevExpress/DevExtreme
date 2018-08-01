@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     devices = require("core/devices"),
     DataSource = require("data/data_source/data_source").DataSource;

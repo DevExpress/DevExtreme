@@ -1,5 +1,3 @@
-"use strict";
-
 var dependencyInjector = require("core/utils/dependency_injector");
 
 QUnit.module("dependencyInjector");

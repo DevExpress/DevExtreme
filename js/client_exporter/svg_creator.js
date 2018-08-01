@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     ajax = require("../core/utils/ajax"),
     window = require("../core/utils/window").getWindow(),

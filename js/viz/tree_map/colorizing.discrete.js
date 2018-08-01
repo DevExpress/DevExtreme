@@ -1,5 +1,3 @@
-"use strict";
-
 function discreteColorizer(options, themeManager, root) {
     var palette = themeManager.createPalette(options.palette, {
         useHighlight: true,

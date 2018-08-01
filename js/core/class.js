@@ -1,5 +1,3 @@
-"use strict";
-
 var errors = require("./errors"),
     typeUtils = require("./utils/type");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 /* global DATA, data2, internals, initTree, makeSlowDataSource */
 
 var $ = require("jquery"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var gridBaseMock;
 
 /* global jQuery */

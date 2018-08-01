@@ -1,5 +1,3 @@
-"use strict";
-
 var isDefined = require("../../core/utils/type").isDefined,
     adjust = require("../../core/utils/math").adjust,
     round = Math.round;

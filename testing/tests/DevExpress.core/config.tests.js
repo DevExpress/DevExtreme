@@ -1,5 +1,3 @@
-"use strict";
-
 var config = require("core/config");
 
 require("bundles/modules/core");

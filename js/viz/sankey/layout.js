@@ -1,5 +1,3 @@
-"use strict";
-
 const _SPLINE_TENSION = 0.3;
 const _ALIGNMENT_CENTER = 'center';
 const _ALIGNMENT_BOTTOM = 'bottom';

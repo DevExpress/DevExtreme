@@ -1,5 +1,3 @@
-"use strict";
-
 var TOOLTIP_OFFSET = 12;
 
 // TODO: Somehow it should be merged with the core.Tooltip

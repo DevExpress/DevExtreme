@@ -1,5 +1,3 @@
-"use strict";
-
 var errors = require("../errors"),
     domUtils = require("../../core/utils/dom"),
     registerComponent = require("../../core/component_registrator"),

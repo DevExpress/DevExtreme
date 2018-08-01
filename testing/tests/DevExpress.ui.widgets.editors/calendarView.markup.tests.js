@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     BaseView = require("ui/calendar/ui.calendar.base_view"),

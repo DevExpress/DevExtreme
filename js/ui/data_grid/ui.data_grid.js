@@ -1,5 +1,3 @@
-"use strict";
-
 var DataGrid = require("./ui.data_grid.base");
 
 module.exports = DataGrid;

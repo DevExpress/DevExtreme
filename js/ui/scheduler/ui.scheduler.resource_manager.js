@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../../core/class"),
     arrayUtils = require("../../core/utils/array"),
     grep = require("../../core/utils/common").grep,

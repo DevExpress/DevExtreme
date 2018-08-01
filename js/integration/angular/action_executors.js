@@ -1,5 +1,3 @@
-"use strict";
-
 var Action = require("../../core/action");
 
 Action.registerExecutor({

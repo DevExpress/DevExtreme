@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     getTextCloudInfo = require("viz/gauges/base_indicators").getTextCloudInfo;
 

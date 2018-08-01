@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     DataController = require("ui/pivot_grid/ui.pivot_grid.data_controller").DataController,
     virtualScrolling = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),

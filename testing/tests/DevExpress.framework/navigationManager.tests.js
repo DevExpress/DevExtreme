@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     MemoryKeyValueStorage = require("framework/state_manager").MemoryKeyValueStorage,
     processHardwareBackButton = require("mobile/process_hardware_back_button"),

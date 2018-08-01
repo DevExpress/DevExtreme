@@ -1,5 +1,3 @@
-"use strict";
-
 exports.compare = function(x, y, maxLevel) {
 
     function normalizeArg(value) {

@@ -1,5 +1,3 @@
-"use strict";
-
 var inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     Class = require("../core/class"),

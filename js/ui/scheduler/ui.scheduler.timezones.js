@@ -1,5 +1,3 @@
-"use strict";
-
 var query = require("../../data/query"),
     errors = require("../../core/errors"),
     tzData = require("./ui.scheduler.timezones_data");

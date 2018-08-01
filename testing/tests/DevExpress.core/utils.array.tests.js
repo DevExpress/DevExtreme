@@ -1,5 +1,3 @@
-"use strict";
-
 var arrayUtils = require("core/utils/array");
 
 QUnit.module("array utils");

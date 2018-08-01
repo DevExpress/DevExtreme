@@ -1,5 +1,3 @@
-"use strict";
-
 var stringUtils = require("core/utils/string");
 
 QUnit.module("String utils");

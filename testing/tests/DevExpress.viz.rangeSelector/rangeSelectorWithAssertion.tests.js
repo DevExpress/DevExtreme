@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 require("viz/range_selector/range_selector");

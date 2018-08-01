@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     dataUtils = require("../core/element_data"),
     wrapToArray = require("../core/utils/array").wrapToArray,

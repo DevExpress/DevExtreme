@@ -1,5 +1,3 @@
-"use strict";
-
 var headerBlockModule = require("viz/chart_components/header_block");
 
 QUnit.module("Creation");

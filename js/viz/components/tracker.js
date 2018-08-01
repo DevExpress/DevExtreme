@@ -1,5 +1,3 @@
-"use strict";
-
 var _eventData = require("../../events/utils").eventData,
     domAdapter = require("../../core/dom_adapter"),
     clickEventName = require("../../events/click").name,

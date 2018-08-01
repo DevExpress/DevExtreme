@@ -1,5 +1,3 @@
-"use strict";
-
 var _map = require("../core/utils").map;
 
 module.exports = {

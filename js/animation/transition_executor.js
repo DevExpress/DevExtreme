@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name TransitionExecutor
 * @namespace DevExpress

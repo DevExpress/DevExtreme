@@ -1,5 +1,3 @@
-"use strict";
-
 var proxyUrlFormatter = require("data/proxy_url_formatter");
 
 QUnit.module("proxyUrlFormatter util");

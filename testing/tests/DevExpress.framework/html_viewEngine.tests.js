@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ViewEngine = require("framework/html/view_engine").ViewEngine,
     MemoryKeyValueStorage = require("framework/state_manager").MemoryKeyValueStorage,

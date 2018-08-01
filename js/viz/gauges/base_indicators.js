@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
     _isFinite = isFinite,

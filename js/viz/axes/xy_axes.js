@@ -1,4 +1,3 @@
-"use strict";
 import rangeModule from "../translators/range";
 import { getDateFormatByDifferences } from "../../format_helper";
 import dateUtils from "../../core/utils/date";

@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import typeUtils from "../../core/utils/type";

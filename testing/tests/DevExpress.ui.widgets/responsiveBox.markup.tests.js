@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import errors from "ui/widget/ui.errors";
 import registerComponent from "core/component_registrator";

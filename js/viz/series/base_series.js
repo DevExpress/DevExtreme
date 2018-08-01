@@ -1,5 +1,3 @@
-"use strict";
-
 var seriesNS = {},
     typeUtils = require("../../core/utils/type"),
     _extend = require("../../core/utils/extend").extend,

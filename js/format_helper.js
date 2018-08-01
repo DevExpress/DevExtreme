@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("./core/utils/type"),
     dateUtils = require("./core/utils/date"),
     numberLocalization = require("./localization/number"),

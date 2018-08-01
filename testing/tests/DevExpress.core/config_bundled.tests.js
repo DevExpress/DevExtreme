@@ -1,5 +1,3 @@
-"use strict";
-
 var useJQuery = !QUnit.urlParams["nojquery"];
 
 window.DevExpress = window.DevExpress || {};

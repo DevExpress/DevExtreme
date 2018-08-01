@@ -1,5 +1,3 @@
-"use strict";
-
 window.includeThemesLinks();
 
 require("common.css!");

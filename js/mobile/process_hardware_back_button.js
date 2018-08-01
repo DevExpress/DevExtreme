@@ -1,5 +1,3 @@
-"use strict";
-
 var hardwareBack = require("../core/utils/callbacks")();
 
 /**

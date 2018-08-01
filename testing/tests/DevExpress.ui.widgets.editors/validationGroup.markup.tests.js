@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Class = require("core/class"),
     DefaultAdapter = require("ui/validation/default_adapter"),

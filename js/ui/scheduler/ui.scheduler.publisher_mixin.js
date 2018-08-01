@@ -1,5 +1,3 @@
-"use strict";
-
 var publisherMixin = {
     notifyObserver: function(subject, args) {
         var observer = this.option("observer");

@@ -1,5 +1,3 @@
-"use strict";
-
 var proto = require("./funnel").prototype,
     Tracker = require("../components/tracker").Tracker,
     DATA_KEY_BASE = "__funnel_data_",

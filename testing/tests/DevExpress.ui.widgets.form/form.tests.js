@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),

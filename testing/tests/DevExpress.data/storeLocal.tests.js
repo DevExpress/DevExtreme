@@ -1,5 +1,3 @@
-"use strict";
-
 var LocalStore = require("data/local_store");
 
 var TEST_NAME = "65DFE188-D178-11E1-A097-51216288709B";

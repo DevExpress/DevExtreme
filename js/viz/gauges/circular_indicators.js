@@ -1,5 +1,3 @@
-"use strict";
-
 var baseIndicatorsModule = require("./base_indicators"),
     BaseIndicator = baseIndicatorsModule.BaseIndicator,
     BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker,

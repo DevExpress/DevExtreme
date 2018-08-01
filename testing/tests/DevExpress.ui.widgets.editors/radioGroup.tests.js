@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     devices = require("core/devices"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),

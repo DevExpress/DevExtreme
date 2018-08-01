@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer");
 var eventsEngine = require("./core/events_engine");
 var errors = require("../core/errors");

@@ -1,5 +1,3 @@
-"use strict";
-
 /// BUNDLER_PARTS
 
 /* Core (dx.module-core.js) */

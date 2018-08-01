@@ -1,5 +1,3 @@
-"use strict";
-
 var Guid = require("core/guid");
 
 QUnit.module("Guid");

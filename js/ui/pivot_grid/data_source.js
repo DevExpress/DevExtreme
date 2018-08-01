@@ -1,5 +1,3 @@
-"use strict";
-
 var DataSourceModule = require("../../data/data_source/data_source"),
     Store = require("../../data/abstract_store"),
     commonUtils = require("../../core/utils/common"),

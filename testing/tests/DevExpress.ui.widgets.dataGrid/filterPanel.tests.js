@@ -1,5 +1,3 @@
-"use strict";
-
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
