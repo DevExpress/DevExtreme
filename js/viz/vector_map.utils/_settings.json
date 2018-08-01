@@ -8,9 +8,7 @@
         "fileName": "dx.vectormaputils",
         "files": [
             "js-stream"
-        ],
-        "header": "(function (wnd) {\n\nvar exports = wnd.DevExpress = wnd.DevExpress || {};\nexports = exports.viz = exports.viz || {};\nexports = exports.vectormaputils = {};\n\n",
-        "footer": "\n}(window));"
+        ]
     },
     "node": {
         "fileName": "dx.vectormaputils.node",
