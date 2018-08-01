@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     caretWorkaround = require("./caretWorkaround.js");

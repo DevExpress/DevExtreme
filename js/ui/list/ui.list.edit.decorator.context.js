@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     EditDecoratorMenuHelperMixin = require("./ui.list.edit.decorator_menu_helper"),
     messageLocalization = require("../../localization/message"),

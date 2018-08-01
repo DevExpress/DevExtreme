@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ko = require("knockout"),
     DataSource = require("data/data_source/data_source").DataSource,

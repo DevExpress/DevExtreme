@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 var ajax = require("core/utils/ajax");
 var browser = require("core/utils/browser");

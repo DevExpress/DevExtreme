@@ -1,5 +1,3 @@
-"use strict";
-
 var errors = require("../../core/errors"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,

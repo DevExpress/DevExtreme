@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     NumberBox = require("ui/number_box");
 

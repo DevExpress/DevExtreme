@@ -1,5 +1,3 @@
-"use strict";
-
 var StateManager = require("framework/state_manager"),
     frameworkMocks = require("../../helpers/frameworkMocks.js");
 

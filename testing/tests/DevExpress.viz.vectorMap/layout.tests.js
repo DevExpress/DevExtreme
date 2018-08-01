@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     layoutModule = require("viz/vector_map/layout");
 

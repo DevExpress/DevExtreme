@@ -1,5 +1,3 @@
-"use strict";
-
 import { Deferred, when } from "../../core/utils/deferred";
 import { errors as dataErrors } from "../../data/errors";
 import errors from "../widget/ui.errors";

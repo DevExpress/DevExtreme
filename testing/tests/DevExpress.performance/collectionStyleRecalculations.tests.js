@@ -1,5 +1,3 @@
-"use strict";
-
 require("../../helpers/qunitPerformanceExtension.js");
 
 require("common.css!");

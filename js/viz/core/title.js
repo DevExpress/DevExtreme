@@ -1,5 +1,3 @@
-"use strict";
-
 var _Number = Number,
     _isString = require("../../core/utils/type").isString,
     extend = require("../../core/utils/extend").extend,

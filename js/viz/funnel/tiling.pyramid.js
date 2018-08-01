@@ -1,5 +1,3 @@
-"use strict";
-
 var CENTER = 0.5,
     LEFTCORNER = 0,
     RIGHTCORNER = 1;

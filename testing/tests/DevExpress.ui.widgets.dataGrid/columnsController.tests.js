@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),

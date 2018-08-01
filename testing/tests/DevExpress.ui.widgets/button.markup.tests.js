@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config");

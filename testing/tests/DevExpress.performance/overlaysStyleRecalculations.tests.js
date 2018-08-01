@@ -1,5 +1,3 @@
-"use strict";
-
 require("../../helpers/qunitPerformanceExtension.js");
 require("ui/overlay");
 require("ui/popup");

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     TextBox = require("ui/text_box"),
     devices = require("core/devices"),

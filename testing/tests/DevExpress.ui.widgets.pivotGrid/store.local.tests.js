@@ -1,5 +1,3 @@
-"use strict";
-
 require("../../../testing/content/orders.js");
 require("data/odata/store");
 

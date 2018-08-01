@@ -1,5 +1,3 @@
-"use strict";
-
 var queryAdapters = require("./query_adapters"),
     errorsModule = require("./errors"),
     each = require("../core/utils/iterator").each,

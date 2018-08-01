@@ -1,5 +1,3 @@
-"use strict";
-
 var domAdapter = require("../../core/dom_adapter"),
     windowUtils = require("../../core/utils/window"),
     inflector = require("../../core/utils/inflector"),

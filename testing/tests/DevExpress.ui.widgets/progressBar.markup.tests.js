@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 require("ui/progress_bar");

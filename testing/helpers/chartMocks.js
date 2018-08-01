@@ -1,5 +1,3 @@
-"use strict";
-
 /* global currentAssert */
 import $ from "jquery";
 import Class from "core/class";

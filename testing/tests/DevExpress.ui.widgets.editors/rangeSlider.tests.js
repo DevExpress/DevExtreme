@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
     config = require("core/config"),

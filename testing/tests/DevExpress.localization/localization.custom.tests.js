@@ -1,5 +1,3 @@
-"use strict";
-
 var numberLocalization = require("localization/number"),
     dateLocalization = require("localization/date");
 

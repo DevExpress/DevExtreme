@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     SchedulerTimeline = require("./ui.scheduler.timeline");

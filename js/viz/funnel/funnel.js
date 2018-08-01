@@ -1,5 +1,3 @@
-"use strict";
-
 var tiling = require("./tiling"),
     dynamicSlope = require("./tiling.funnel"),
     dynamicHeight = require("./tiling.pyramid"),

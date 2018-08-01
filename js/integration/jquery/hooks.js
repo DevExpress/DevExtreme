@@ -1,5 +1,3 @@
-"use strict";
-
 var jQuery = require("jquery");
 var useJQuery = require("./use_jquery")();
 var compareVersion = require("../../core/utils/version").compare;

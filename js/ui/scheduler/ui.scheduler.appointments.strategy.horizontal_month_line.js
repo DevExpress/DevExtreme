@@ -1,5 +1,3 @@
-"use strict";
-
 var HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
     dateUtils = require("../../core/utils/date"),
     query = require("../../data/query");

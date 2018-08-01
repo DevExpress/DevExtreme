@@ -1,5 +1,3 @@
-"use strict";
-
 /* global document, Node */
 
 var injector = require("./utils/dependency_injector");

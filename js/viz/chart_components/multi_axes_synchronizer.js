@@ -1,5 +1,3 @@
-"use strict";
-
 var debug = require("../../core/utils/console").debug,
     typeUtils = require("../../core/utils/type"),
     _each = require("../../core/utils/iterator").each,

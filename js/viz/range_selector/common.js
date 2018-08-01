@@ -1,5 +1,3 @@
-"use strict";
-
 var _format = require("../axes/smart_formatter").smartFormatter,
     isFunction = require("../../core/utils/type").isFunction,
     HEIGHT_COMPACT_MODE = 24,

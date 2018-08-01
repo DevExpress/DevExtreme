@@ -1,5 +1,3 @@
-"use strict";
-
 var commonModule = require("./common"),
     animationSettings = commonModule.utils.animationSettings,
     formatValue = commonModule.formatValue,

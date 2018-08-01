@@ -1,5 +1,3 @@
-"use strict";
-
 var clientExporter = require("client_exporter"),
     fileSaver = clientExporter.fileSaver;
 

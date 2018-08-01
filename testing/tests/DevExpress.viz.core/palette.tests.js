@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import Color from "color";
 import { registerPalette, getPalette, Palette, DiscretePalette, _DEBUG_palettes, currentPalette, GradientPalette, getAccentColor } from "viz/palette";

@@ -1,5 +1,3 @@
-"use strict";
-
 var hideTopOverlay = require("mobile/hide_top_overlay"),
     hideTopOverlayCallback = hideTopOverlay.hideCallback;
 

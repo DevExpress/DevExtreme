@@ -1,5 +1,3 @@
-"use strict";
-
 /* global currentAssert */
 
 var $ = require("jquery"),

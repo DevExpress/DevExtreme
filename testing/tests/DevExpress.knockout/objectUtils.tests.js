@@ -1,5 +1,3 @@
-"use strict";
-
 var ko = require("knockout"),
     variableWrapper = require("core/utils/variable_wrapper"),
     objectUtils = require("core/utils/object");

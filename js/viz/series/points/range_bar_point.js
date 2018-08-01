@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../../core/utils/common").noop,
     extend = require("../../../core/utils/extend").extend,
     barPoint = require("./bar_point"),

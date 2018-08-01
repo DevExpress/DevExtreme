@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     _extend = extend,
     BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager;

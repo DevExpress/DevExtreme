@@ -1,5 +1,3 @@
-"use strict";
-
 var DevExpress = require("./core");
 require("./data");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var errorUtils = require("./utils/error");
 
 /**

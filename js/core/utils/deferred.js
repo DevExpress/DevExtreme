@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("../utils/type");
 var isPromise = typeUtils.isPromise;
 var isDeferred = typeUtils.isDeferred;

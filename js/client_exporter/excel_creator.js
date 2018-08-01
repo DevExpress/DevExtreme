@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../core/class"),
     window = require("../core/utils/window").getWindow(),
     typeUtils = require("../core/utils/type"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("../../core/utils/iterator").each,
     readyCallbacks = require("../../core/utils/ready_callbacks"),
     domAdapter = require("../../core/dom_adapter");

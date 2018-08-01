@@ -1,5 +1,3 @@
-"use strict";
-
 var dataUtils = require("core/element_data");
 
 QUnit.module("Data");

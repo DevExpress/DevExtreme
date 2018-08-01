@@ -1,5 +1,3 @@
-"use strict";
-
 SystemJS.config({
     map: {
         'jqueryify': SystemJS.map.jquery

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     isFunction = require("core/utils/type").isFunction,
     svgCreator = require("client_exporter").svg.creator;

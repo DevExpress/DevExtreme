@@ -1,5 +1,3 @@
-"use strict";
-
 function leftPad(text, length) {
     while(text.length < length) {
         text = "0" + text;

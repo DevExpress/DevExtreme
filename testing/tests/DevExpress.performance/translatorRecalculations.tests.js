@@ -1,5 +1,3 @@
-"use strict";
-
 require("common.css!");
 require("../../helpers/qunitPerformanceExtension.js");
 var $ = require("jquery"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     themeModule = require("viz/themes"),
     BaseThemeManager = require("viz/core/base_theme_manager").BaseThemeManager,

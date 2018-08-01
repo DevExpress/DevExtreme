@@ -1,5 +1,3 @@
-"use strict";
-
 var DATE_PARTS = [
     {
         name: "year",

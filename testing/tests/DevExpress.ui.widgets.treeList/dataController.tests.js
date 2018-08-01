@@ -1,5 +1,3 @@
-"use strict";
-
 require("ui/tree_list/ui.tree_list");
 
 var $ = require("jquery"),

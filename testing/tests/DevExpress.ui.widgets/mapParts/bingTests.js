@@ -1,5 +1,3 @@
-"use strict";
-
 /* global Microsoft */
 
 var $ = require("jquery"),

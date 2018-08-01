@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name Utils.compileGetter
 * @publicName compileGetter(expr)

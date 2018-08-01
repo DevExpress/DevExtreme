@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Lookup = require("ui/lookup"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),

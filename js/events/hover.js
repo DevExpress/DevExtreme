@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
     Class = require("../core/class"),

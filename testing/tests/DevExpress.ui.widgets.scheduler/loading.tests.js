@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     loading = require("ui/scheduler/ui.loading"),
     viewPort = require("core/utils/view_port").value,

@@ -1,5 +1,3 @@
-"use strict";
-
 /* global jQuery */
 
 var Microsoft = window.Microsoft = {};

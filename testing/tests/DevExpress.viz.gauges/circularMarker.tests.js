@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     circularIndicatorsModule = require("viz/gauges/circular_indicators"),

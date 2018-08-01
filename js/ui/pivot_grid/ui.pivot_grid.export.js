@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../../core/class"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,

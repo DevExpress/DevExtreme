@@ -1,5 +1,3 @@
-"use strict";
-
 var eventUtils = require("./utils"),
     Emitter = require("./core/emitter"),
     registerEmitter = require("./core/emitter_registrator"),

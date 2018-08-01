@@ -1,5 +1,3 @@
-"use strict";
-
 /* global createTestContainer */
 
 var themeManagerModule = require("viz/range_selector/theme_manager"),

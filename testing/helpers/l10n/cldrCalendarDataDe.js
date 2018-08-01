@@ -1,5 +1,3 @@
-"use strict";
-
 var Globalize = require("globalize");
 
 Globalize.load({

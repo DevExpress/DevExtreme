@@ -1,5 +1,3 @@
-"use strict";
-
 var dataUtils = require("./element_data");
 var domAdapter = require("./dom_adapter");
 var windowUtils = require("./utils/window");

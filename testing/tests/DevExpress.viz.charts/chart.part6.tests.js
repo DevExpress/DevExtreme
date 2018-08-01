@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     commons = require("./chartParts/commons.js"),

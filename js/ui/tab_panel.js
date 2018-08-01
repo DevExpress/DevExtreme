@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     support = require("../core/utils/support"),
     extend = require("../core/utils/extend").extend,

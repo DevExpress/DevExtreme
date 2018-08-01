@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     HierarchicalDataAdapter = require("ui/hierarchical_collection/ui.data_adapter");
 

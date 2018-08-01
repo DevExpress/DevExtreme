@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type");

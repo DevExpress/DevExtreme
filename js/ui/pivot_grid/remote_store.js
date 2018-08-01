@@ -1,5 +1,3 @@
-"use strict";
-
 import { isString, isDefined } from "../../core/utils/type";
 import Class from "../../core/class";
 import { extend } from "../../core/utils/extend";

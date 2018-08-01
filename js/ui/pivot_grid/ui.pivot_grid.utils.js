@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),

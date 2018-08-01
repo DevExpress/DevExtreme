@@ -1,5 +1,3 @@
-"use strict";
-
 var compare = require("core/utils/version").compare;
 
 QUnit.module("version");

@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
 import "ui/data_grid/ui.data_grid";

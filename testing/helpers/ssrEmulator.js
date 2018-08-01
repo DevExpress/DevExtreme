@@ -1,5 +1,3 @@
-"use strict";
-
 var domAdapter = require("core/dom_adapter");
 var windowUtils = require("core/utils/window");
 var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");

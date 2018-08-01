@@ -1,5 +1,3 @@
-"use strict";
-
 var dateUtils = require("core/utils/date");
 
 QUnit.module('normalizeDate', {

@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../../core/class"),
     compileGetter = require("../../core/utils/data").compileGetter,
     isFunction = require("../../core/utils/type").isFunction,

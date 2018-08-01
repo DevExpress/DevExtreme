@@ -1,5 +1,3 @@
-"use strict";
-
 var iteratorUtils = require("../core/utils/iterator");
 
 var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],

@@ -1,5 +1,3 @@
-"use strict";
-
 var TabsItem = require("../tabs/item");
 
 var TABS_ITEM_BADGE_CLASS = "dx-tabs-item-badge",

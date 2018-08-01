@@ -1,5 +1,3 @@
-"use strict";
-
 // there are stock, candlestick
 var scatterSeries = require("./scatter_series").chart,
     barSeries = require("./bar_series").chart.bar,

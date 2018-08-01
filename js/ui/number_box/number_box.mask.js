@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     isNumeric = require("../../core/utils/type").isNumeric,

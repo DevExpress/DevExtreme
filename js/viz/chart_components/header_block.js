@@ -1,5 +1,3 @@
-"use strict";
-
 var LayoutElementModule = require("../core/layout_element"),
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator");

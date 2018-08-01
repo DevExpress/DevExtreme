@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     mapLayerModule = require("viz/vector_map/map_layer"),

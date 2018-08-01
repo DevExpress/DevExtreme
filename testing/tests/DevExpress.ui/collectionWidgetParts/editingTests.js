@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
     DataSource = require("data/data_source/data_source").DataSource,

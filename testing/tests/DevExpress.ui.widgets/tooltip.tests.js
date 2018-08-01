@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     viewPort = require("core/utils/view_port").value,
     fx = require("animation/fx"),

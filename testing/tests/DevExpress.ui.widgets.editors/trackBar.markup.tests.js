@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 require("ui/track_bar");

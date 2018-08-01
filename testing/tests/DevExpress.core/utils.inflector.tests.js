@@ -1,5 +1,3 @@
-"use strict";
-
 var inflector = require("core/utils/inflector");
 
 QUnit.module("inflector");

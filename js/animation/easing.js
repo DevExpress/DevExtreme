@@ -1,5 +1,3 @@
-"use strict";
-
 var isFunction = require("../core/utils/type").isFunction,
 
     CSS_TRANSITION_EASING_REGEX = /cubic-bezier\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)/;

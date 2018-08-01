@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 var sizeUtils = require("core/utils/size");
 

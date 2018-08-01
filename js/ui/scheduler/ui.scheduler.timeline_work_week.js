@@ -1,5 +1,3 @@
-"use strict";
-
 var registerComponent = require("../../core/component_registrator"),
     SchedulerTimelineWeek = require("./ui.scheduler.timeline_week"),
     dateUtils = require("../../core/utils/date"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     devices = require("core/devices"),
     FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",

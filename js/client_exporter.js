@@ -1,5 +1,3 @@
-"use strict";
-
 var fileSaver = require("./client_exporter/file_saver").fileSaver,
     _isFunction = require("./core/utils/type").isFunction;
 

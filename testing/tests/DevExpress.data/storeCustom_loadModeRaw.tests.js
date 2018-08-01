@@ -1,5 +1,3 @@
-"use strict";
-
 var CustomStore = require("data/custom_store"),
     ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");
 

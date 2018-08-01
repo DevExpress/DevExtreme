@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("core/utils/common").noop,
     config = require("core/config"),
     parseUtils = require("viz/components/parse_utils");

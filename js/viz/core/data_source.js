@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     DataHelperMixin = require("../../data_helper"),
     postCtor = DataHelperMixin.postCtor,

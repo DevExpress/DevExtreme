@@ -1,5 +1,3 @@
-"use strict";
-
 // there are rangebar, rangearea
 var extend = require("../../core/utils/extend").extend,
     _extend = extend,

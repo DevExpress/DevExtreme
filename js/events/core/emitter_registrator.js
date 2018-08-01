@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     readyCallbacks = require("../../core/utils/ready_callbacks"),
     domAdapter = require("../../core/dom_adapter"),

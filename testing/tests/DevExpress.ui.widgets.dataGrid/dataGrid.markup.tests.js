@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     windowUtils = require("core/utils/window");
 

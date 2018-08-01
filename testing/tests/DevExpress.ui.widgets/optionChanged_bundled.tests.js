@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     var $ = require("jquery"),
         Component = require("core/component"),

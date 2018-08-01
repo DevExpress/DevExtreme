@@ -1,5 +1,3 @@
-"use strict";
-
 import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";
 import pointModule from "viz/series/points/base_point";
