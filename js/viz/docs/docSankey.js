@@ -69,6 +69,24 @@ var dxSankey = {
     */
     sortData: undefined,
     /**
+    * @name dxSankeyOptions.sourceField
+    * @type string
+    * @default 'source'
+    */
+    sourceField: 'source',
+    /**
+    * @name dxSankeyOptions.targetField
+    * @type string
+    * @default 'target'
+    */
+    sourceField: 'target',
+    /**
+    * @name dxSankeyOptions.weightField
+    * @type string
+    * @default 'weight'
+    */
+    weightField: 'weight',
+    /**
     * @name dxSankeyOptions.label
     * @type object
     */
