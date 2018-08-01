@@ -8,6 +8,12 @@
       "args": [ "run", "build" ],
       "group": "build",
       "problemMatcher": []
+    },
+    {
+      "label": "launch testing",
+      "type": "shell",
+      "command": "./testing/launch",
+      "group": "test"
     }
   ]
 }
