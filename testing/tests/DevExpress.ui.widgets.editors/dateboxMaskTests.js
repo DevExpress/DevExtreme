@@ -347,10 +347,18 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value").getMonth(), 10, "month did not changed in the value after commit");
         });
 
-        QUnit.test("Mask should not handle keyboard events on opened dateBox", (assert) => {
+        QUnit.test("Mask should not catch arrows on opened dateBox", (assert) => {
             this.instance.open();
             this.keyboard.press("up");
+            this.keyboard.press("right");
+            this.keyboard.press("down");
             assert.equal(this.$input.val(), "October 10 2012", "text was not changed");
+        });
+
+        QUnit.test("Mask should catch char input on opened dateBox", (assert) => {
+            this.instance.open();
+            this.keyboard.type("3");
+            assert.equal(this.$input.val(), "March 10 2012", "text has been changed");
         });
 
         QUnit.test("alt+down should open dxDateBox", (assert) => {

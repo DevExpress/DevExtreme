@@ -62,7 +62,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
         let result = this.callBase(e);
 
-        if(!this._useMaskBehavior() || this.option("opened") || !this._isSingleCharKey(e)) {
+        if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
             return result;
         }
 
