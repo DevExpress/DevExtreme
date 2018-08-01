@@ -4877,6 +4877,32 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
+    QUnit.testInActiveWindow("The first cell should not have focus after click if column allowEditing is false and edit mode is 'cell' or 'batch' (T657612)", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell' }
+        };
+        this.columns = [{ dataField: "name", allowEditing: false }, "phone", "room"];
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        var keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        var $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(0));
+        $cell.trigger(CLICK_EVENT);
+
+        // assert
+        assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+        assert.ok($cell.hasClass("dx-cell-focus-disabled"), "cell has .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has no .dx-focused");
+    });
+
     QUnit.testInActiveWindow("Reset focused cell when click on expand column of master detail", function(assert) {
         // arrange
         this.$element = function() {
