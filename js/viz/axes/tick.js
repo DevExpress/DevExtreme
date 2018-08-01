@@ -73,6 +73,8 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 } else {
                     if(animate) {
                         settings.opacity = 0;
+                    } else {
+                        settings.opacity = 1;
                     }
 
                     lineElement.attr(settings);
@@ -174,6 +176,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 } else {
                     this.label.attr({
+                        opacity: 1,
                         x: this.labelCoords.x,
                         y: this.labelCoords.y
                     });
