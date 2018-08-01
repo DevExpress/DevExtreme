@@ -34,6 +34,14 @@ var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
 };
 
+var getFilterBuilderGroups = function(container) {
+    return container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+};
+
+var getFilterBuilderItems = function(container) {
+    return container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+};
+
 var clickByOutside = function() {
     $("body").trigger("dxpointerdown"); // use dxpointerdown because T600142
 };
@@ -298,27 +306,6 @@ QUnit.module("Rendering", function() {
         clickByOutside();
 
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), VALUE);
-    });
-
-    QUnit.test("Add and remove condition", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: ["State", "<>", "Test"],
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
-
-        assert.ok($(".dx-filterbuilder-add-condition").length > 0);
-
-        selectMenuItem(0);
-
-        assert.ok($(".dx-filterbuilder-add-condition").length === 0);
-        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], "and", ["CompanyName", "contains", ""]]);
-
-        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
-        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
     QUnit.test("Add and remove group", function(assert) {
@@ -999,64 +986,46 @@ QUnit.module("on value changed", function() {
 
     QUnit.test("add/remove group with condition", function(assert) {
         var container = $("#container"),
-            value = [["CompanyName", "K&S Music"]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
+            value = [["CompanyName", "K&S Music"]];
+
+        container.dxFilterBuilder({
+            value: value,
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        assert.equal(getFilterBuilderGroups(container).length, 1);
 
         // add group
-        value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
-        assert.equal(instance.option("value"), value);
+        assert.equal(getFilterBuilderGroups(container).length, 2);
 
         // add inner condition
-        value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 0);
-        assert.notEqual(instance.option("value"), value);
+        assert.equal(getFilterBuilderGroups(container).length, 2);
 
         // remove group
-        value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
-        assert.notEqual(instance.option("value"), value);
+        assert.equal(getFilterBuilderGroups(container).length, 1);
 
     });
 
     QUnit.test("add/remove conditions", function(assert) {
         var container = $("#container"),
-            value = [["CompanyName", "K&S Music"]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
+            value = [["CompanyName", "K&S Music"]];
+        container.dxFilterBuilder({
+            value: value,
+            fields: fields
+        });
+
+        assert.equal(getFilterBuilderItems(container).length, 1);
 
         // add condition
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
-
-        assert.notEqual(instance.option("value"), value);
+        assert.equal(getFilterBuilderItems(container).length, 2);
 
         // remove condition
-        value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
-
-        assert.notEqual(instance.option("value"), value);
-    });
-
-    QUnit.test("add/remove condition for field without datatype", function(assert) {
-        var container = $("#container"),
-            instance = container.dxFilterBuilder({
-                fields: [{ dataField: "Field" }]
-            }).dxFilterBuilder("instance");
-
-        // add condition
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
-
-        assert.deepEqual(instance.option("value"), ["Field", "contains", ""]);
-
-        // remove condition
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
-
-        assert.deepEqual(instance.option("value"), null);
+        assert.equal(getFilterBuilderItems(container).length, 1);
     });
 
     QUnit.test("add/remove not valid conditions", function(assert) {
@@ -1295,27 +1264,26 @@ QUnit.module("Group operations", function() {
     });
 
     QUnit.test("adding of groups is disabled", function(assert) {
-        let container = $("#container"),
-            filterBuilderInstance = container.dxFilterBuilder({
-                fields: fields,
-                maxGroupLevel: 0,
-                groupOperations: undefined
-            }).dxFilterBuilder("instance");
+        let container = $("#container");
+        container.dxFilterBuilder({
+            fields: fields,
+            maxGroupLevel: 0,
+            groupOperations: undefined
+        }).dxFilterBuilder("instance");
 
         $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
         let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
 
         assert.equal(popup.length, 0);
-        assert.deepEqual(filterBuilderInstance.option("value"), ["CompanyName", "contains", ""]);
     });
 
     QUnit.test("nested level of groups = 1", function(assert) {
-        let container = $("#container"),
-            filterBuilderInstance = container.dxFilterBuilder({
-                fields: fields,
-                maxGroupLevel: 1,
-                groupOperations: undefined
-            }).dxFilterBuilder("instance");
+        let container = $("#container");
+        container.dxFilterBuilder({
+            fields: fields,
+            maxGroupLevel: 1,
+            groupOperations: undefined
+        });
 
         $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
         selectMenuItem(1);
@@ -1324,6 +1292,5 @@ QUnit.module("Group operations", function() {
 
         let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
         assert.equal(popup.length, 0);
-        assert.deepEqual(filterBuilderInstance.option("value"), ["CompanyName", "contains", ""]);
     });
 });
