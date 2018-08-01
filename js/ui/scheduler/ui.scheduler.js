@@ -1052,14 +1052,14 @@ var Scheduler = Widget.inherit({
     },
 
     _postponeResourceLoading: function() {
-        var d = this._addPostponedOperation("_loadResources", () => {
+        var whenLoaded = this._addPostponedOperation("_loadResources", () => {
             return this._loadResources();
         });
 
-        d.done((resources) => {
+        whenLoaded.done((resources) => {
             this._resourceLoadedCallbacks.fire(resources);
         });
-        this._postponeDataSourceLoading(d);
+        this._postponeDataSourceLoading(whenLoaded);
     },
 
     _optionChanged: function(args) {
