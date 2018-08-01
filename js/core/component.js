@@ -301,29 +301,28 @@ var Component = Class.inherit({
         }
     },
 
-    _addPostponedOperation: function(key, fn, promise) {
-        // NOTE: check
-        if(this._postponedOperations[key]) {
-            promise && this._postponedOperations[key].promises.push(promise);
+    _addPostponedOperation: function(key, fn, postponedPromise) {
+        if(key in this._postponedOperations) {
+            postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
         } else {
-            var donePromise = new Deferred();
+            var completePromise = new Deferred();
             this._postponedOperations[key] = {
                 fn: fn,
-                donePromise: donePromise,
-                promises: promise ? [promise] : []
+                completePromise: completePromise,
+                promises: postponedPromise ? [postponedPromise] : []
             };
         }
 
-        return this._postponedOperations[key].donePromise.promise();
+        return this._postponedOperations[key].completePromise.promise();
     },
 
     _callPostponedOperations: function() {
         for(var key in this._postponedOperations) {
             var operation = this._postponedOperations[key];
             if(operation.promises.length) {
-                when.apply($, operation.promises).done(operation.fn).then(operation.donePromise.resolve);
+                when.apply($, operation.promises).done(operation.fn).then(operation.completePromise.resolve);
             } else {
-                operation.fn.call().done(operation.donePromise.resolve);
+                operation.fn.call().done(operation.completePromise.resolve);
             }
         }
         this._postponedOperations = {};
