@@ -1,7 +1,6 @@
 {
-  "extends": "../.jshintrc",
-
-  "multistr": true,
+    "extends": "../.jshintrc",
+    "multistr": true,
     "predef": {
         "define": true,
         "Promise": true,
