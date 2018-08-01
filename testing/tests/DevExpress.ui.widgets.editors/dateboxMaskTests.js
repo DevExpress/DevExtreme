@@ -365,6 +365,27 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.keyDown("down", { altKey: true });
             assert.ok(this.instance.option("opened"), "datebox is opened");
         });
+
+        QUnit.test("delete should revert group to initial value and go to the next one", (assert) => {
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
+
+            this.keyboard.press("del");
+
+            assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret is good");
+        });
+
+        QUnit.test("backspace should revert group to initial value and go to the previous one", (assert) => {
+            this.keyboard.press("right");
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "October 11 2012", "text has been changed");
+
+            this.keyboard.press("backspace");
+
+            assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
+        });
     });
 
     QUnit.module("Pointer events", setupModule, () => {
@@ -679,6 +700,13 @@ if(devices.real().deviceType === "desktop") {
             this.$input.trigger("dxclick");
             this.keyboard.press("enter");
             this.$input.trigger("focusout");
+
+            assert.equal(this.$input.val(), "", "value is correct");
+        });
+
+        QUnit.test("Backspace and delete should do nothing in an empty datebox", (assert) => {
+            this.keyboard.press("del");
+            this.keyboard.press("backspace");
 
             assert.equal(this.$input.val(), "", "value is correct");
         });

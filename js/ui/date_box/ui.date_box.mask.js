@@ -26,8 +26,10 @@ let DateBoxMask = DateBoxBase.inherit({
         let that = this;
 
         return extend(this.callBase(e), {
-            home: this._selectFirstPart.bind(that),
-            end: this._selectLastPart.bind(that),
+            del: that._revertPart.bind(that, FORWARD),
+            backspace: that._revertPart.bind(that, BACKWARD),
+            home: that._selectFirstPart.bind(that),
+            end: that._selectLastPart.bind(that),
             escape: that._revertChanges.bind(that),
             enter: that._fireChangeEvent.bind(that),
             leftArrow: that._selectNextPart.bind(that, BACKWARD),
@@ -159,6 +161,17 @@ let DateBoxMask = DateBoxBase.inherit({
         this._searchValue = "";
     },
 
+    _revertPart: function(direction, e) {
+        var value = this.dateOption("value");
+
+        if(value) {
+            const actual = this._getActivePartValue(value);
+
+            this._setActivePartValue(actual);
+            this._selectNextPart(direction, e);
+        }
+    },
+
     _useMaskBehavior() {
         return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
     },
@@ -233,19 +246,21 @@ let DateBoxMask = DateBoxBase.inherit({
         return limitFunction(this._maskValue);
     },
 
-    _getActivePartValue() {
+    _getActivePartValue(dateValue) {
+        dateValue = dateValue || this._maskValue;
         const getter = this._getActivePartProp("getter");
-        return isFunction(getter) ? getter(this._maskValue) : this._maskValue[getter]();
+        return isFunction(getter) ? getter(dateValue) : dateValue[getter]();
     },
 
-    _setActivePartValue(value) {
+    _setActivePartValue(value, dateValue) {
+        dateValue = dateValue || this._maskValue;
         const setter = this._getActivePartProp("setter"),
             limits = this._getActivePartLimits();
 
         value = fitIntoRange(value, limits.min, limits.max);
 
-        isFunction(setter) ? setter(this._maskValue, value) : this._maskValue[setter](value);
-        this._renderDisplayText(this._getDisplayedText(this._maskValue));
+        isFunction(setter) ? setter(dateValue, value) : dateValue[setter](value);
+        this._renderDisplayText(this._getDisplayedText(dateValue));
 
         this._renderDateParts();
     },
