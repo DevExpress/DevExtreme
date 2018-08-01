@@ -3,7 +3,6 @@
 var extend = require("../../core/utils/extend").extend,
     windowUtils = require("../../core/utils/window"),
     patchFontOptions = require("./utils").patchFontOptions,
-    _extend = extend,
 
     clientExporter = require("../../client_exporter"),
     messageLocalization = require("../../localization/message"),
@@ -255,7 +254,7 @@ exports.ExportMenu = function(params) {
     that._subscribeEvents();
 };
 
-_extend(exports.ExportMenu.prototype, {
+extend(exports.ExportMenu.prototype, {
 
     getLayoutOptions: function() {
         if(this._hiddenDueToLayout) {
@@ -439,7 +438,7 @@ _extend(exports.ExportMenu.prototype, {
                 that.show();
                 that._hideList();
             } else if(elementType === "exporting") {
-                exportOptions = _extend({}, options.exportOptions, { format: e.target[FORMAT_DATA_KEY] });
+                exportOptions = extend({}, options.exportOptions, { format: e.target[FORMAT_DATA_KEY] });
                 doExport(that, function() { return that._svgMethod(); }, exportOptions);
                 that._hideList();
             }
@@ -570,7 +569,7 @@ exports.plugin = {
             var userOptions = this._getOption("export") || {},
                 options = getExportOptions(this, userOptions);
 
-            return _extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
+            return extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
         },
         exportTo: function(fileName, format) {
             var that = this,

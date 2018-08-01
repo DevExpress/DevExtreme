@@ -24,7 +24,6 @@ var $ = require("../core/renderer"),
     _sin = _math.sin,
 
     _each = iteratorUtils.each,
-    _extend = extend,
     _number = Number,
 
     IMAGE_QUALITY = 1,
@@ -83,7 +82,7 @@ function arcTo(x1, y1, x2, y2, radius, largeArcFlag, clockwise, context) {
 function getElementOptions(element) {
     var attr = parseAttributes(element.attributes || {}),
         style = element.style || {},
-        options = _extend({}, attr, {
+        options = extend({}, attr, {
             text: element.textContent.replace(/\s+/g, " "),
             textAlign: attr["text-anchor"] === "middle" ? "center" : attr["text-anchor"]
         }),
@@ -306,7 +305,7 @@ function drawTextElement(childNodes, context, options) {
             drawElement(element, context, options);
         } else if(element.tagName === "tspan" || element.tagName === "text") {
             var elementOptions = getElementOptions(element),
-                mergedOptions = _extend({}, options, elementOptions);
+                mergedOptions = extend({}, options, elementOptions);
 
             if(element.tagName === "tspan" && hasTspan(element)) {
                 drawTextElement(element.childNodes, context, mergedOptions);
@@ -369,7 +368,7 @@ function drawElement(element, context, parentOptions) {
     var tagName = element.tagName,
         isText = tagName === "text" || tagName === "tspan" || tagName === undefined,
         isImage = tagName === "image",
-        options = _extend({}, parentOptions, getElementOptions(element));
+        options = extend({}, parentOptions, getElementOptions(element));
 
     if(options.visibility === "hidden") {
         return;
@@ -503,7 +502,7 @@ function drawCanvasElements(elements, context, parentOptions) {
     _each(elements, function(_, element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
             case "g":
-                options = _extend({}, parentOptions, getElementOptions(element));
+                options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();
 
