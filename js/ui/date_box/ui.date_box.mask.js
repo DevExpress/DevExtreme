@@ -162,9 +162,11 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _revertPart: function(direction, e) {
-        var value = this.dateOption("value");
+        const value = this.dateOption("value");
+        const caret = this._caret();
+        const isAllSelected = caret.end - caret.start === this.option("text").length;
 
-        if(value) {
+        if(value && !isAllSelected) {
             const actual = this._getActivePartValue(value);
 
             this._setActivePartValue(actual);
@@ -357,6 +359,9 @@ let DateBoxMask = DateBoxBase.inherit({
             this._clearSearchValue();
             this._selectNextPart(FORWARD, e);
             this._saveValueChangeEvent(e);
+            if(!this.option("text")) {
+                this._maskValue = null;
+            }
             this._saveMaskValue();
         } else {
             this.callBase(e);

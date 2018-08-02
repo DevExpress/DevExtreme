@@ -387,6 +387,16 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
 
+        QUnit.test("removing all text should be possible", (assert) => {
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .press("del")
+                .change();
+
+            assert.equal(this.instance.option("text"), "", "text has been changed");
+            assert.equal(this.instance.option("value"), null, "value has been cleared");
+        });
+
         QUnit.test("value change event should clear search value", (assert) => {
             this.keyboard.type("1");
             assert.equal(this.instance.option("text"), "January 10 2012", "text has been changed");
