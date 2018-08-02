@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-env node */
 
 var path = require("path"),
     http = require("http"),

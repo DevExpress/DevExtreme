@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 var fs = require('fs');
 var argv = require('yargs')
     .default('uglify', false)

@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 var fs = require('fs');
 var lazyPipe = require('lazypipe');
 var header = require('gulp-header');

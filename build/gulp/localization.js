@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 var gulp = require('gulp');
 var path = require('path');
 var rename = require('gulp-rename');
