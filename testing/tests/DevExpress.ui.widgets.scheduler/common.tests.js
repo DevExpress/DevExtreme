@@ -1666,6 +1666,69 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.option("selectedCellData"), []);
     });
 
+    QUnit.test("Multiple reloading should be avoided after some options changing (T656320)", function(assert) {
+        var counter = 0;
+
+        this.createInstance();
+
+        this.instance.option("dataSource", new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    counter++;
+                    return [];
+                }
+            })
+        }));
+        assert.equal(counter, 1, "Data source was reloaded after dataSource option changing");
+        this.instance.beginUpdate();
+        this.instance.option("startDayHour", 10);
+        this.instance.option("endDayHour", 18);
+        this.instance.endUpdate();
+        assert.equal(counter, 2, "Data source was reloaded one more time after some options changing");
+    });
+
+    QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
+        var counter = 0,
+            resourceCounter = 0;
+
+        this.createInstance({
+            dataSource: new DataSource({
+                store: new CustomStore({
+                    load: function() {
+                        counter++;
+                        return [];
+                    }
+                })
+            }),
+            groups: ["owner.id"],
+            resources: [{
+                fieldExpr: "owner.id",
+                dataSource: new DataSource({
+                    store: new CustomStore({
+                        load: function() {
+                            var d = $.Deferred();
+                            setTimeout(function() {
+                                resourceCounter++;
+                                assert.equal(counter, resourceCounter - 1);
+                                d.resolve([]);
+                            }, 100);
+
+                            return d.promise();
+                        }
+                    })
+                })
+            }],
+        });
+        this.clock.tick(100);
+        assert.equal(resourceCounter, 1, "Resources was reloaded after dataSource option changing");
+        this.instance.beginUpdate();
+        this.instance.option("currentView", "timelineDay");
+        this.instance.option("currentView", "timelineMonth");
+        this.instance.endUpdate();
+        this.clock.tick(100);
+        assert.equal(resourceCounter, 2, "Resources was reloaded one more time after dataSource option changing");
+    });
+
 })("Options");
 
 (function() {
