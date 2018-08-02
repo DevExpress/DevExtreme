@@ -309,7 +309,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             /**
              * @name dxTreeViewOptions.expandEvent
-             * @type String
+             * @type string
              * @default "dblclick"
              */
             expandEvent: 'dblclick',
