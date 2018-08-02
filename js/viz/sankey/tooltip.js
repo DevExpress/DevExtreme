@@ -8,9 +8,9 @@ var _extend = require("../../core/utils/extend").extend,
     },
     generateCustomCallback = function(customCallback, defaultCallback) {
         return function(objectInfo) {
-            var res = isFunction(customCallback) ? customCallback(objectInfo) : {};
+            var res = isFunction(customCallback) ? customCallback.call(objectInfo, objectInfo) : {};
             if(!res.hasOwnProperty('html') && !res.hasOwnProperty('text')) {
-                res = _extend(res, defaultCallback(objectInfo));
+                res = _extend(res, defaultCallback.call(objectInfo, objectInfo));
             }
             return res;
         };
