@@ -191,7 +191,7 @@ var FilterSyncController = modules.Controller.inherit((function() {
                 headerFilter && utils.addItem(headerFilter, filterValue);
                 filterRow && utils.addItem(filterRow, filterValue);
             });
-            return utils.getNormalizedFilter(filterValue, columns);
+            return utils.getNormalizedFilter(filterValue);
         },
 
         syncFilterRow: function(column, value) {
