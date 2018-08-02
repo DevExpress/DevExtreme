@@ -4812,7 +4812,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "masterDetail"], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"], {
             initViews: true
         });
     },
@@ -5213,5 +5213,92 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // arrange, assert
         assert.notOk($testElement.hasClass("dx-cell-focus-disabled"), "no keyboard interaction with cell template element");
         assert.ok($testElement.find("input").is(":focus"), 'input has focus');
+    });
+
+    QUnit.test("After apply the edit value with the ENTER key do not display the revert button when the save process, if editing mode is cell (T657148)", function(assert) {
+        // arrange
+        var that = this,
+            $input;
+
+        that.$element = function() {
+            return $("#container");
+        };
+        that.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "cell"
+            },
+            showColumnHeaders: false,
+            dataSource: {
+                load: function() {
+                    return [ { name: "name" } ];
+                },
+                update: function() {
+                    var d = $.Deferred();
+                    return d.promise();
+                }
+            }
+        };
+        that.columns = ["name" ];
+
+        that.setupModule();
+        that.gridView.render($("#container"));
+
+        that.clock.tick();
+
+        // act
+        that.editCell(0, 0);
+        that.clock.tick();
+
+        $input = $(that.getCellElement(0, 0)).find("input");
+        $input.val("test").trigger("change");
+
+        that.clock.tick();
+
+        $input.trigger($.Event("keydown", { which: 13 }));
+
+        that.clock.tick();
+
+        // assert
+        assert.equal($(".dx-revert-button").length, 0, "has no revert button");
+    }),
+
+    QUnit.test("After apply the edit value and focus the editor do not display the revert button when the save process, if editing mode is cell (T657148)", function(assert) {
+        // arrange
+        var that = this;
+
+        that.$element = function() {
+            return $("#container");
+        };
+        that.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "cell"
+            },
+            dataSource: {
+                load: function() {
+                    return that.data;
+                },
+                update: function() {
+                    var d = $.Deferred();
+                    setTimeout(() => d.resolve(), 30);
+                    return d.promise();
+                }
+            }
+        };
+        that.columns = [ "name", "phone", "room" ];
+
+        that.setupModule();
+        that.gridView.render($("#container"));
+
+        // act
+        that.cellValue(0, 1, "");
+        that.saveEditData();
+        that.getController("keyboardNavigation").focus(that.getCellElement(0, 1));
+
+        that.clock.tick();
+
+        // assert
+        assert.equal($(".dx-revert-button").length, 0, "has no revert button");
     });
 });
