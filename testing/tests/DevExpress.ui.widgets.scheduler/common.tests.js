@@ -1686,7 +1686,7 @@ QUnit.testStart(function() {
         this.instance.option("startDayHour", 10);
         this.instance.option("endDayHour", 18);
         this.instance.endUpdate();
-        assert.equal(counter, 2, "Data source was reloaded after some options changing");
+        assert.equal(counter, 2, "Data source was reloaded one more time after some options changing");
     });
 
     QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
@@ -1728,7 +1728,7 @@ QUnit.testStart(function() {
         this.instance.option("currentView", "timelineMonth");
         this.instance.endUpdate();
         this.clock.tick(100);
-        assert.equal(resourceCounter, 2, "Resources was reloaded after dataSource option changing");
+        assert.equal(resourceCounter, 2, "Resources was reloaded one more time after dataSource option changing");
     });
 
 })("Options");

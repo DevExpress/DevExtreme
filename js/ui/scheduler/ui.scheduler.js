@@ -1059,7 +1059,6 @@ var Scheduler = Widget.inherit({
 
         whenLoaded.done((resources) => {
             resolveCallbacks.resolve(resources);
-            this._resourceLoadedCallbacks.fire(resources);
         });
         this._postponeDataSourceLoading(whenLoaded);
 
@@ -1406,12 +1405,9 @@ var Scheduler = Widget.inherit({
     },
 
     _dataSourceLoadedCallback: Callbacks(),
-    _resourceLoadedCallbacks: Callbacks(),
 
     _reloadDataSource: function() {
         var result = new Deferred();
-
-        this._resourceLoadedCallbacks.empty();
 
         if(this._dataSource) {
 

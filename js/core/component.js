@@ -262,8 +262,6 @@ var Component = Class.inherit({
         this.on("disposing", function(args) {
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
-
-        // this._postponedOperations = {};
     },
 
     _createOptionChangedAction: function() {
