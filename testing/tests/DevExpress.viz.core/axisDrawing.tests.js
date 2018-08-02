@@ -1,4 +1,3 @@
-"use strict";
 import $ from "jquery";
 import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
 import translator2DModule from "viz/translators/translator2d";
