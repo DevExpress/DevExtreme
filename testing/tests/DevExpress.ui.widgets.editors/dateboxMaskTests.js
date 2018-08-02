@@ -429,7 +429,8 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "March 10 2012", "text has been changed");
 
             this.$input.trigger("dragend");
-            assert.equal(this.$input.val(), "October 10 2012", "text has been reverted");
+            assert.equal(this.$input.val(), "March 10 2012", "text has not reverted");
+            assert.deepEqual(this.keyboard.caret(), { start: 6, end: 8 }, "caret is good");
         });
     });
 

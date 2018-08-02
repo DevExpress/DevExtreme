@@ -211,7 +211,10 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _attachMaskEvents() {
         eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("dragend", MASK_EVENT_NAMESPACE), this._revertChanges.bind(this));
+        eventsEngine.on(this._input(), eventsUtils.addNamespace("dragend", MASK_EVENT_NAMESPACE), (e) => {
+            this._renderDisplayText(this._getDisplayedText(this._maskValue));
+            this._selectNextPart(0, e);
+        });
         eventsEngine.on(this._input(), eventsUtils.addNamespace(wheelEvent.name, MASK_EVENT_NAMESPACE), this._mouseWheelHandler.bind(this));
     },
 
