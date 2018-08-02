@@ -1606,7 +1606,7 @@ registerTheme({
                 return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
             },
             customizeNodeTooltip: function(info) {
-                return { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
+                return { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outgoing weight: ${info.weightOut}` };
             }
         },
         node: {
