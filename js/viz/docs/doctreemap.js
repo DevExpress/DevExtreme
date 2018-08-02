@@ -1,6 +1,6 @@
 /**
 * @name dxTreeMap
-* @inherits BaseWidget
+* @inherits BaseWidget, DataHelperMixin
 * @module viz/tree_map
 * @export default
 */
@@ -541,11 +541,5 @@ var dxTreeMap = {
     * @publicName getCurrentNode()
     * @return dxTreeMapNode
     */
-    getCurrentNode: function() { },
-    /**
-    * @name dxTreeMapMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
-    getDataSource: function() { },
+    getCurrentNode: function() { }
 };

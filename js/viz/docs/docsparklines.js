@@ -89,7 +89,7 @@ var BaseSparkline = {
 
 /**
 * @name dxSparkline
-* @inherits BaseSparkline
+* @inherits BaseSparkline, DataHelperMixin
 * @module viz/sparkline
 * @export default
 */
@@ -229,13 +229,7 @@ var dxSparkline = {
     * @type number
     * @default undefined
     */
-    maxValue: undefined,
-    /**
-    * @name dxSparkLineMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
-    getDataSource: function() { },
+    maxValue: undefined
 };
 
 /**
