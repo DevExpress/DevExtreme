@@ -338,6 +338,12 @@ module.exports = {
                     }
                 },
 
+                getVisibleColumnIndex: function(columnIndex, rowIndex) {
+                    var column = this.getColumns()[columnIndex];
+
+                    return column ? this._columnsController.getVisibleIndex(column.index, rowIndex) : -1;
+                },
+
                 getColumnWidths: function() {
                     var $columnElements = this.getColumnElements();
 
