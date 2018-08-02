@@ -1505,48 +1505,29 @@ MapLayerCollection.prototype = {
         });
     },
 
-    setOptions: function(options) {
-        var optionList = options ? (_isArray(options) ? options : [options]) : [],
-            layers = this._layers,
-            layerByName = this._layerByName,
-            params = this._params,
-            container = this._container,
-            name,
-            layer,
-            i,
-            ii;
-        for(i = optionList.length, ii = layers.length; i < ii; ++i) {
-            layer = layers[i];
-            delete layerByName[layer.proxy.name];
-            layer.dispose();
-        }
-        layers.splice(optionList.length, layers.length - optionList.length);
-        for(i = layers.length, ii = optionList.length; i < ii; ++i) {
-            name = (optionList[i] || {}).name || ("map-layer-" + i);
-            layer = layers[i] = new MapLayer(params, container, name, i);
-            layerByName[name] = layer;
-        }
-        for(i = 0, ii = optionList.length; i < ii; ++i) {
-            name = optionList[i] && optionList[i].name;
-            layer = layers[i];
-            /*
-             * Note that when layer name is changed and hence new layer replaces the old one the order of layer groups becomes broken -
-             * group of the new layer is the last among its siblings which is wrong if the layer is not the last also (generally it isn't).
-             * However let it stay so for now because except for internal nonintegrity it does not cause side effects -
-             * there no any promises about layer groups order.
-             * Note also that when layer name is changed new layer is created - though the old one could just adopt the new name.
-             * That is so because layer name is unique identifier both for internal communications and for external.
-             * Layer index is a more appropriate identifier for internal communication. When it is used instead of layer name there will be no reasons
-             * to recreate layer when its "name" option is changed (at least it seems so now).
-             */
-            if(name && name !== layer.proxy.name) {
-                delete layerByName[layer.proxy.name];
-                layer.dispose();
-                layer = layers[i] = new MapLayer(params, container, name, i);
+    setOptions(options) {
+        const optionList = options ? (_isArray(options) ? options : [options]) : [];
+        const layerByName = this._layerByName;
+        let layers = this._layers;
+        let i;
+        let ii;
+
+        if(optionList.length !== layers.length || layers.some((l, i) => { return optionList[i].name !== l.proxy.name; })) {
+            layers.forEach(l => {
+                delete layerByName[l.proxy.name];
+                l.dispose();
+            });
+            this._layers = layers = [];
+            for(i = 0, ii = optionList.length; i < ii; ++i) {
+                const name = (optionList[i] || {}).name || ("map-layer-" + i);
+                const layer = layers[i] = new MapLayer(this._params, this._container, name, i);
                 layerByName[name] = layer;
             }
-            layer.setOptions(optionList[i]);
         }
+
+        layers.forEach((l, i) => {
+            l.setOptions(optionList[i]);
+        });
     },
 
     _updateClip: function() {
