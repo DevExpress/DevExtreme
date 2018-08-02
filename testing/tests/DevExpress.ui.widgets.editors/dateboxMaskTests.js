@@ -8,8 +8,6 @@ import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 
-let SEARCH_TIMEOUT = 1500;
-
 QUnit.testStart(() => {
     $("#qunit-fixture").html("<div id='dateBox'></div>");
 });
@@ -21,7 +19,6 @@ if(devices.real().deviceType === "desktop") {
             this.$element = $("#dateBox").dxDateBox({
                 value: new Date("10/10/2012 13:07"),
                 useMaskBehavior: true,
-                searchTimeout: SEARCH_TIMEOUT,
                 mode: "text",
                 displayFormat: "MMMM d yyyy"
             });
@@ -408,6 +405,11 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("text"), "January 2 2012", "search value was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
         });
+
+        QUnit.test("incorrect input should clear search value", (assert) => {
+            this.keyboard.type("jqwed");
+            assert.equal(this.instance.option("text"), "December 10 2012", "text has been changed");
+        });
     });
 
     QUnit.module("Pointer events", setupModule, () => {
@@ -444,13 +446,8 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("a");
             assert.equal(this.$input.val(), "AM", "select on typing");
 
-            this.clock.tick(SEARCH_TIMEOUT - 1);
             this.keyboard.type("p");
-            assert.equal(this.$input.val(), "PM", "revert incorrect changes before timeout");
-
-            this.clock.tick(1);
-            this.keyboard.type("a");
-            assert.equal(this.$input.val(), "AM", "don't revert after timeout");
+            assert.equal(this.$input.val(), "PM", "revert incorrect changes");
         });
 
         QUnit.test("Hour", (assert) => {
@@ -459,13 +456,8 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("31");
             assert.equal(this.$input.val(), "01", "don't accept out-of-limit values");
 
-            this.clock.tick(SEARCH_TIMEOUT - 1);
             this.keyboard.type("2");
-            assert.equal(this.$input.val(), "12", "add values before timeout");
-
-            this.clock.tick(1);
-            this.keyboard.type("1");
-            assert.equal(this.$input.val(), "01", "set new value after timeout");
+            assert.equal(this.$input.val(), "12", "set new value");
         });
 
         QUnit.test("Day of week", (assert) => {
@@ -474,13 +466,8 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("monda");
             assert.equal(this.$input.val(), "Monday", "select on typing");
 
-            this.clock.tick(SEARCH_TIMEOUT - 1);
             this.keyboard.type("s");
-            assert.equal(this.$input.val(), "Wednesday", "revert incorrect changes before timeout");
-
-            this.clock.tick(1);
-            this.keyboard.type("s");
-            assert.equal(this.$input.val(), "Saturday", "don't revert after timeout");
+            assert.equal(this.$input.val(), "Saturday", "revert incorrect changes");
         });
 
         QUnit.test("Day of week by a number", (assert) => {
@@ -513,16 +500,12 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("Month", (assert) => {
             this.instance.option("displayFormat", "MMMM");
 
-            this.keyboard.type("jan");
+            this.keyboard.type("janu");
             assert.equal(this.$input.val(), "January", "select on typing");
-
-            this.clock.tick(SEARCH_TIMEOUT - 1);
-            this.keyboard.type("d");
-            assert.equal(this.$input.val(), "October", "revert incorrect changes before timeout");
 
             this.clock.tick(1);
             this.keyboard.type("d");
-            assert.equal(this.$input.val(), "December", "don't ignore chars after timeout");
+            assert.equal(this.$input.val(), "December", "revert incorrect chars");
         });
 
         QUnit.test("Short month", (assert) => {
@@ -531,13 +514,8 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("jan");
             assert.equal(this.$input.val(), "Jan", "select on typing");
 
-            this.clock.tick(SEARCH_TIMEOUT - 1);
             this.keyboard.type("d");
-            assert.equal(this.$input.val(), "Oct", "revert incorrect changes before timeout");
-
-            this.clock.tick(1);
-            this.keyboard.type("d");
-            assert.equal(this.$input.val(), "Dec", "don't ignore chars after timeout");
+            assert.equal(this.$input.val(), "Dec", "revert incorrect chars");
         });
 
         QUnit.test("Month by a number", (assert) => {
@@ -546,11 +524,6 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("1");
             assert.equal(this.$input.val(), "January");
 
-            this.clock.tick(SEARCH_TIMEOUT - 1);
-            this.keyboard.type("2");
-            assert.equal(this.$input.val(), "December");
-
-            this.clock.tick(1);
             this.keyboard.type("30");
             assert.equal(this.$input.val(), "January");
         });
@@ -598,16 +571,6 @@ if(devices.real().deviceType === "desktop") {
             } catch(e) {
                 assert.notOk(true, "Infinite loop detected");
             }
-        });
-
-        QUnit.test("Null timeout should mean no timeout", (assert) => {
-            this.instance.option("searchTimeout", null);
-
-            this.keyboard.type("1");
-            this.clock.tick(SEARCH_TIMEOUT);
-            this.keyboard.type("2");
-
-            assert.equal(this.$input.val(), "December 10 2012", "timeout is disabled");
         });
     });
 
@@ -666,10 +629,10 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "January 14 2015", "text is correct after clearing");
         });
 
-        QUnit.test("Incorrect search on empty input should be prevented", (assert) => {
+        QUnit.test("Incorrect search on empty input should render current date", (assert) => {
             this.keyboard.type("qq");
 
-            assert.equal(this.$input.val(), "", "text is correct");
+            assert.equal(this.$input.val(), "April 14 2015", "text is correct");
             assert.equal(this.instance.option("value"), null, "value is correct");
         });
 
@@ -821,7 +784,7 @@ if(devices.real().deviceType === "desktop") {
     });
 
     QUnit.module("Advanced caret", setupModule, () => {
-        QUnit.test("Move caret to the next group before timeout", (assert) => {
+        QUnit.test("Move caret to the next group", (assert) => {
             this.instance.option({
                 advanceCaret: true,
                 displayFormat: "dd.MM"
@@ -841,18 +804,6 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("5");
 
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved");
-        });
-
-        QUnit.test("Don't move caret to the next group after timeout", (assert) => {
-            this.instance.option({
-                advanceCaret: true,
-                displayFormat: "dd.MM"
-            });
-
-            this.keyboard.type("1");
-
-            this.clock.tick(SEARCH_TIMEOUT);
-            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, "caret was not moved");
         });
 
         QUnit.test("Move caret to the next group after limit overflow", (assert) => {

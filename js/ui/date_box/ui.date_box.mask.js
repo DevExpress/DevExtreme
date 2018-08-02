@@ -49,7 +49,6 @@ let DateBoxMask = DateBoxBase.inherit({
              */
             useMaskBehavior: false,
 
-            searchTimeout: null,
             advanceCaret: true
         });
     },
@@ -97,14 +96,6 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _startSearchTimeout() {
-        clearTimeout(this._searchTimeout);
-
-        if(this.option("searchTimeout")) {
-            this._searchTimeout = setTimeout(this._clearSearchValue.bind(this), this.option("searchTimeout"));
-        }
-    },
-
     _searchNumber(char) {
         this._searchValue += char;
 
@@ -119,45 +110,43 @@ let DateBoxMask = DateBoxBase.inherit({
         if(!inRange(newValue, limits.min, limits.max)) {
             this._searchValue = char;
             newValue = parseInt(char);
-            if(this.option("advanceCaret")) {
-                clearTimeout(this._searchTimeout);
-            }
         }
 
         this._setActivePartValue(newValue);
-        this._startSearchTimeout();
 
         if(this.option("advanceCaret")) {
             if(parseInt(this._searchValue + "0") > limits.max) {
                 this._selectNextPart(FORWARD);
-                clearTimeout(this._searchTimeout);
             }
         }
     },
 
     _searchString(char) {
+        if(!isNaN(parseInt(this._getActivePartProp("text")))) {
+            return;
+        }
+
         let limits = this._getActivePartProp("limits")(this._maskValue),
             startString = this._searchValue + char.toLowerCase(),
             endLimit = limits.max - limits.min;
-
-        if(endLimit > 11) {
-            return;
-        }
 
         for(let i = 0; i <= endLimit; i++) {
             this._partIncrease(1);
             if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
-                this._startSearchTimeout();
                 return;
             }
         }
 
-        this._revertChanges();
+        this._revertPart(0);
+
+        if(this._searchValue) {
+            this._clearSearchValue();
+            this._searchString(char);
+        }
     },
 
     _clearSearchValue() {
-        clearTimeout(this._searchTimeout);
         this._searchValue = "";
     },
 
@@ -377,9 +366,6 @@ let DateBoxMask = DateBoxBase.inherit({
                 this._loadMaskValue();
                 this.callBase(args);
                 this._renderDateParts();
-                break;
-            case "searchTimeout":
-                clearTimeout(this._searchTimeout);
                 break;
             case "advanceCaret":
                 break;
