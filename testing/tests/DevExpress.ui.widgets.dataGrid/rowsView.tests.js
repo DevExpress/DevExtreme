@@ -249,8 +249,8 @@ QUnit.test('Render scrollable', function(assert) {
     assert.strictEqual(scrollable.option("useNative"), false, 'scrollable useNative');
     assert.strictEqual(scrollable.option("showScrollbar"), "always", 'scrollable showScrollbar');
     assert.strictEqual(scrollable.option("test"), "test", 'scrollable test');
-    // T572392
-    assert.strictEqual(scrollable.option("updateManually"), true, 'scrollable updateManually');
+    // T654402
+    assert.strictEqual(scrollable.option("updateManually"), false, 'scrollable updateManually');
 });
 
 QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
