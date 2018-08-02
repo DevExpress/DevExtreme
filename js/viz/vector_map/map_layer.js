@@ -1507,16 +1507,14 @@ MapLayerCollection.prototype = {
 
     setOptions(options) {
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
-        const layerByName = this._layerByName;
+        let layerByName = this._layerByName;
         let layers = this._layers;
         let i;
         let ii;
 
         if(optionList.length !== layers.length || layers.some((l, i) => { return optionList[i].name !== l.proxy.name; })) {
-            layers.forEach(l => {
-                delete layerByName[l.proxy.name];
-                l.dispose();
-            });
+            layers.forEach(l => l.dispose());
+            this._layerByName = layerByName = {};
             this._layers = layers = [];
             for(i = 0, ii = optionList.length; i < ii; ++i) {
                 const name = (optionList[i] || {}).name || ("map-layer-" + i);
