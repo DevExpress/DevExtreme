@@ -1,5 +1,3 @@
-"use strict";
-
 var callOnce = function(handler) {
     var result;
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseStrategy = require("./base"),
     Observer = require("./observer"),
     windowUtils = require("../../core/utils/window"),

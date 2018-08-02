@@ -1,5 +1,3 @@
-"use strict";
-
 var registerEventCallbacks = require("events/core/event_registrator_callbacks");
 
 var special = {};

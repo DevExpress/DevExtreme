@@ -1,5 +1,3 @@
-"use strict";
-
 var proto = require("./tree_map.base").prototype,
     _expand = require("../core/helpers").expand;
 

@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import "ui/radio_group";

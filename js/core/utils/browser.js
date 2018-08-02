@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("./extend").extend,
     windowUtils = require("./window"),
     navigator = windowUtils.getNavigator();

@@ -1,5 +1,3 @@
-"use strict";
-
 var fitIntoRange = require("../../core/utils/math").fitIntoRange,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
     number = require("../../localization/number");

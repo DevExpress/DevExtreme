@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("../../core/utils/iterator").each,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),

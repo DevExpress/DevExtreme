@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     ToolbarStrategy = require("./ui.toolbar.strategy"),
     ToolbarMenu = require("./ui.toolbar.menu"),

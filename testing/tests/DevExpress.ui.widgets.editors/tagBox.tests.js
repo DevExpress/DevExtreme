@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     TagBox = require("ui/tag_box"),
     devices = require("core/devices"),

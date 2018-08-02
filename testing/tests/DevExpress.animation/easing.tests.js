@@ -1,5 +1,3 @@
-"use strict";
-
 var easing = require("animation/easing");
 
 QUnit.module("easing");

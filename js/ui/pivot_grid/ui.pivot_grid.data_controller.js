@@ -1,5 +1,3 @@
-"use strict";
-
 var Callbacks = require("../../core/utils/callbacks"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,

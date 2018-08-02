@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("./renderer");
 var callbacks = require("./component_registrator_callbacks");
 var errors = require("./errors");

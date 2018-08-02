@@ -1,5 +1,3 @@
-"use strict";
-
 var _normalizeEnum = require("./utils").normalizeEnum,
     _min = Math.min,
     _max = Math.max,

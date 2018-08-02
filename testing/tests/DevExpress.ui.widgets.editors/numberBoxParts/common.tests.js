@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     SpinButton = require("ui/number_box/number_box.spin"),
     devices = require("core/devices"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var tiling = require("./tiling"),
     sliceAndDiceAlgorithm = tiling.getAlgorithm("sliceanddice");
 

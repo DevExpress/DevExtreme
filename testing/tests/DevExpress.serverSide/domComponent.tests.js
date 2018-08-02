@@ -1,4 +1,3 @@
-"use strict";
 require("../DevExpress.core/domComponent.markup.tests.js");
 
 var DOMComponent = require("core/dom_component");

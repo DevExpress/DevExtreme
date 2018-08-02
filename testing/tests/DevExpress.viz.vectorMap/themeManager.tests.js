@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("core/utils/common").noop,
     themeManagerModule = require("viz/vector_map/theme_manager"),
     themeModule = require("viz/themes");

@@ -1,5 +1,3 @@
-"use strict";
-
 var logicModule = require("viz/sankey/graph"),
     common = require("./commonParts/common.js"),
     environment = common.environment;

@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     commonModule = require("./common"),
     animationSettings = commonModule.utils.animationSettings,

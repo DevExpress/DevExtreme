@@ -1,5 +1,3 @@
-"use strict";
-
 var swipeEvents = require("../swipe"),
     eventsEngine = require("../../events/core/events_engine"),
     DOMComponent = require("../../core/dom_component"),

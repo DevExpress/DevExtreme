@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     common = require("./common.js"),
     labelModule = require("viz/series/points/label"),

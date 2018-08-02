@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseRangeContainer = require("./base_range_container"),
 
     _Number = Number,

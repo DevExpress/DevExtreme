@@ -1,5 +1,3 @@
-"use strict";
-
 require("ui/action_sheet");
 require("ui/drop_down_menu");
 

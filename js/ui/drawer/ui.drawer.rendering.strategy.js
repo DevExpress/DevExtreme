@@ -1,5 +1,3 @@
-"use strict";
-
 import Class from "../../core/class";
 import { Deferred } from "../../core/utils/deferred";
 import deferredUtils from "../../core/utils/deferred";

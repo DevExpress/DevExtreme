@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import Box from "ui/box";
 import registerComponent from "core/component_registrator";

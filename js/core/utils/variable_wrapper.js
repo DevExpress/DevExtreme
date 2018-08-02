@@ -1,5 +1,3 @@
-"use strict";
-
 var logger = require("./console").logger,
     dependencyInjector = require("./dependency_injector");
 

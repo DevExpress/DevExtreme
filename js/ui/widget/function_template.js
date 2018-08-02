@@ -1,5 +1,3 @@
-"use strict";
-
 var TemplateBase = require("./ui.template_base"),
     domUtils = require("../../core/utils/dom");
 

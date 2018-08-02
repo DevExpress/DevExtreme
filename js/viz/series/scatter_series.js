@@ -1,5 +1,3 @@
-"use strict";
-
 var _extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     _each = require("../../core/utils/iterator").each,

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     positionUtils = require("animation/position"),
     setupPosition = positionUtils.setup,

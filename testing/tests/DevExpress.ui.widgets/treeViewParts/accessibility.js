@@ -1,5 +1,3 @@
-"use strict";
-
 /* global initTree */
 
 QUnit.module("aria accessibility", {

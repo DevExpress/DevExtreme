@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     iconUtils = require("../../core/utils/icon"),
     hasWindow = require("../../core/utils/window").hasWindow(),

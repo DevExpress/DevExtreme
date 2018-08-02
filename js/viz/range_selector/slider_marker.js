@@ -1,5 +1,3 @@
-"use strict";
-
 var patchFontOptions = require("../core/utils").patchFontOptions,
 
     SLIDER_MARKER_UPDATE_DELAY = 75,

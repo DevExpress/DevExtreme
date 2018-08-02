@@ -1,5 +1,3 @@
-"use strict";
-
 var widgets = {
     Accordion: require("ui/accordion"),
     ActionSheet: require("ui/action_sheet"),

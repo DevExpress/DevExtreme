@@ -1,5 +1,3 @@
-"use strict";
-
 var jQuery = require("jquery"),
     easing = require("../../animation/easing");
 

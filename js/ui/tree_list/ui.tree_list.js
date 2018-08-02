@@ -1,5 +1,3 @@
-"use strict";
-
 var TreeList = require("./ui.tree_list.base");
 
 module.exports = TreeList;

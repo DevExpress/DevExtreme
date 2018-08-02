@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
     each = require("../../core/utils/iterator").each,

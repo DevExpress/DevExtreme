@@ -1,5 +1,3 @@
-"use strict";
-
 require("../integration/jquery");
 
 var $ = require("jquery"),

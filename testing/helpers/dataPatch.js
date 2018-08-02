@@ -1,7 +1,5 @@
 /* global jQuery */
 
-"use strict";
-
 var dataStrategy = require("core/element_data");
 
 var originalCleanData;

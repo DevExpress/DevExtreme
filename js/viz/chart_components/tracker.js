@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
     domAdapter = require("../../core/dom_adapter"),

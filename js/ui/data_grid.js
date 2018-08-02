@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name GridBase
 * @inherits Widget, DataHelperMixin

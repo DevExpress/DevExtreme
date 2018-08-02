@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     renderer = require("core/renderer"),
     keyboardMock = require("../../helpers/keyboardMock.js"),

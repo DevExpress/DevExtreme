@@ -1,5 +1,3 @@
-"use strict";
-
 import utils from "ui/filter_builder/utils";
 import between from "ui/filter_builder/between";
 import CustomStore from "data/custom_store";
@@ -418,7 +416,7 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isValidCondition(["ZipCode", "=", 1], fields[3]));
         assert.ok(utils.isValidCondition(["ZipCode", "=", null], fields[3]));
         assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
-        assert.ok(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
+        assert.notOk(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
         assert.notOk(utils.isValidCondition(["Field", "customOperation", ""], { dataField: "Field" }));
     });
 
@@ -711,54 +709,54 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from empty group", function(assert) {
         var group = [];
 
-        assert.equal(utils.getNormalizedFilter(group, fields), null);
+        assert.equal(utils.getNormalizedFilter(group), null);
     });
 
     QUnit.test("get normalized filter from group without conditions", function(assert) {
         var group = ["and"];
 
-        assert.equal(utils.getNormalizedFilter(group, fields), null);
+        assert.equal(utils.getNormalizedFilter(group), null);
     });
 
     QUnit.test("get normalized filter from group with condition", function(assert) {
         var group = [condition1, "and"];
 
-        assert.equal(utils.getNormalizedFilter(group, fields), condition1);
+        assert.equal(utils.getNormalizedFilter(group), condition1);
     });
 
     QUnit.test("get normalized filter from group with short condition", function(assert) {
         var group = [["CompanyName", "DevExpress"], "and"];
 
-        assert.equal(utils.getNormalizedFilter(group, fields), group[0]);
+        assert.equal(utils.getNormalizedFilter(group), group[0]);
     });
 
     QUnit.test("get normalized filter from inner group with one condition", function(assert) {
         var group = [[condition1, "and"], "and"];
 
-        assert.equal(utils.getNormalizedFilter(group, fields), condition1);
+        assert.equal(utils.getNormalizedFilter(group), condition1);
     });
 
     QUnit.test("get normalized filter from group with inner group", function(assert) {
         var group = [condition1, "and", [condition2, "and"], "and"];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.equal(group[0], condition1);
         assert.equal(group[1], "and");
         assert.equal(group[2], condition2);
 
         group = [condition1, "or", [condition2, "or"], "or"];
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, [condition1, "or", condition2]);
 
         group = [condition1, "and", condition2, "and", ["and"], "and"];
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, [condition1, "and", condition2]);
 
         group = [condition1, "and", ["and"], "and"];
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, condition1);
     });
@@ -767,7 +765,7 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from group with empty inner group", function(assert) {
         var group = [["and"], "and"];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.equal(group, null);
     });
@@ -775,7 +773,7 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from group with condition and empty inner group", function(assert) {
         var group = [condition1, "or", ["and"], "or"];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.equal(group, condition1);
     });
@@ -783,7 +781,7 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from group with many inner groups", function(assert) {
         var group = [condition1, "and", condition2, "and", ["and"], "and", ["and"], "and", ["and"], "and", ["and"], "and"];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, [condition1, "and", condition2]);
         assert.equal(group[0], condition1);
@@ -792,12 +790,12 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from negative group", function(assert) {
         var group = ["!", [condition1, "and", ["and"], "and"]];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, ["!", condition1]);
 
         group = ["!", [condition1, "and", condition2, "and"]];
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, ["!", [condition1, "and", condition2]]);
         assert.equal(group[1][0], condition1);
@@ -812,7 +810,7 @@ QUnit.module("Filter normalization", function() {
                 ["!", [condition3, "and", notValidCondition, "and"]],
                 "and"];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, [condition2, "and", ["!", condition3]]);
     });
@@ -821,7 +819,7 @@ QUnit.module("Filter normalization", function() {
         var notValidCondition = ["Zipcode", "=", ""],
             group = [notValidCondition, "and"];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.equal(group, null);
     });
@@ -830,7 +828,7 @@ QUnit.module("Filter normalization", function() {
         var notValidCondition = ["Zipcode", "=", ""],
             group = [notValidCondition, [notValidCondition]];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.equal(group, null);
     });
@@ -843,7 +841,7 @@ QUnit.module("Filter normalization", function() {
             "and"
         ];
 
-        group = utils.getNormalizedFilter(group, fields);
+        group = utils.getNormalizedFilter(group);
 
         assert.deepEqual(group, [[condition1, "and", condition2], "and", [condition3, "and", condition2]]);
         assert.equal(group[2][0], condition3);
@@ -1070,6 +1068,7 @@ QUnit.module("Custom filter expressions", {
     beforeEach: function() {
         this.fields = utils.getNormalizedFields([{
             dataField: "field1",
+            dataType: "number",
             calculateFilterExpression: function(filterValue, selectedFilterOperation) {
                 if(selectedFilterOperation === "between") {
                     return this.defaultCalculateFilterExpression.apply(this, arguments);
@@ -1077,7 +1076,7 @@ QUnit.module("Custom filter expressions", {
                 return [
                     [this.dataField, "<>", filterValue],
                     "or",
-                    [this.dataField, "=", "10"]
+                    [this.dataField, "=", 10]
                 ];
             }
         },
@@ -1103,6 +1102,30 @@ QUnit.module("Custom filter expressions", {
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
     });
 
+    QUnit.test("calculateFilterExpression for isBlank (string field)", function(assert) {
+        var value = ["field", "=", null],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), [["field", "=", null], "or", ["field", "=", ""]]);
+    });
+
+    QUnit.test("calculateFilterExpression for isNotBlank (string field)", function(assert) {
+        var value = ["field", "<>", null],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), [["field", "<>", null], "and", ["field", "<>", ""]]);
+    });
+
+    QUnit.test("calculateFilterExpression for isBlank", function(assert) {
+        var value = ["field", "=", null],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field", dataType: "number" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["field", "=", null]);
+    });
+
+    QUnit.test("calculateFilterExpression for isNotBlank", function(assert) {
+        var value = ["field", "<>", null],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field", dataType: "number" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["field", "<>", null]);
+    });
+
     QUnit.test("calculateFilterExpression for fieldValue = array", function(assert) {
         // arrange
         var value = ["field1", "range", [2, 3]],
@@ -1123,19 +1146,19 @@ QUnit.module("Custom filter expressions", {
 
     QUnit.test("calculateFilterExpression for condition", function(assert) {
         // arrange
-        var value = ["field1", "1"];
+        var value = ["field1", 1];
 
         // act, assert
-        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [["field1", "<>", "1"], "or", ["field1", "=", "10"]]);
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [["field1", "<>", 1], "or", ["field1", "=", 10]]);
     });
 
     QUnit.test("calculateFilterExpression for group", function(assert) {
         // arrange
         var value = [
-            ["field1", "1"],
+            ["field1", 1],
             "and",
             [
-                ["field1", "=", "20"],
+                ["field1", "=", 20],
                 "or",
                 ["field2", "30"]
             ]
@@ -1144,12 +1167,12 @@ QUnit.module("Custom filter expressions", {
         // act, assert
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
             [
-                ["field1", "<>", "1"], "or", ["field1", "=", "10"]
+                ["field1", "<>", 1], "or", ["field1", "=", 10]
             ],
             "and",
             [
                 [
-                    ["field1", "<>", "20"], "or", ["field1", "=", "10"]
+                    ["field1", "<>", 20], "or", ["field1", "=", 10]
                 ],
                 "or",
                 ["field2", "=", "30"]
@@ -1160,9 +1183,9 @@ QUnit.module("Custom filter expressions", {
     QUnit.test("calculateFilterExpression for short form of group", function(assert) {
         // arrange
         var value = [
-            ["field1", "1"],
+            ["field1", 1],
             [
-                ["field1", "=", "20"],
+                ["field1", "=", 20],
                 ["field2", "30"]
             ]
         ];
@@ -1170,12 +1193,12 @@ QUnit.module("Custom filter expressions", {
         // act, assert
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
             [
-                ["field1", "<>", "1"], "or", ["field1", "=", "10"]
+                ["field1", "<>", 1], "or", ["field1", "=", 10]
             ],
             "and",
             [
                 [
-                    ["field1", "<>", "20"], "or", ["field1", "=", "10"]
+                    ["field1", "<>", 20], "or", ["field1", "=", 10]
                 ],
                 "and",
                 ["field2", "=", "30"]
@@ -1509,7 +1532,7 @@ QUnit.module("Between operation", function() {
     QUnit.test("between.calculateFilterExpression", function(assert) {
         // arrange
         var customOperations = [],
-            fields = utils.getNormalizedFields([{ dataField: "field" }]);
+            fields = utils.getNormalizedFields([{ dataField: "field", dataType: "number" }]);
 
         // act
         var filterExpression = utils.getFilterExpression(["field", "between", [1, 2]], fields, customOperations);

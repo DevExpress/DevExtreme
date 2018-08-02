@@ -1,5 +1,3 @@
-"use strict";
-
 var dxSankey = require("viz/sankey");
 
 QUnit.module("Plugins");

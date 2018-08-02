@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     TemplateBase = require("ui/widget/ui.template_base"),
     templateRendered = require("ui/widget/ui.template_base").renderedCallbacks;

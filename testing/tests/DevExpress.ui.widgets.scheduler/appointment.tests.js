@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     SchedulerAppointment = require("ui/scheduler/ui.scheduler.appointment"),
     fx = require("animation/fx");

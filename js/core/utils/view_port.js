@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../renderer"),
     readyCallbacks = require("./ready_callbacks"),
     ready = readyCallbacks.add,

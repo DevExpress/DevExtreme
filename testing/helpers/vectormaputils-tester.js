@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 /* jshint node:true */
 
-"use strict";
-
 process.on("uncaughtException", function(e) {
     console.log("!!! Uncaught exception !!!");
     console.log(e.message);

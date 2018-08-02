@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),

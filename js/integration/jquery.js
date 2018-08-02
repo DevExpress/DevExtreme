@@ -1,5 +1,3 @@
-"use strict";
-
 var jQuery = require("jquery");
 var compareVersions = require("../core/utils/version").compare;
 var errors = require("../core/utils/error");

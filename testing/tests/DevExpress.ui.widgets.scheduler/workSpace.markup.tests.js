@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import SchedulerWorkSpace from "ui/scheduler/ui.scheduler.work_space";
 import SchedulerWorkSpaceHorizontalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.horizontal";

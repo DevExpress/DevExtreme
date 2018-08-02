@@ -1,5 +1,3 @@
-"use strict";
-
 var _format = require("../../../format_helper").format,
     vizUtils = require("../../core/utils"),
     each = require("../../../core/utils/iterator").each,

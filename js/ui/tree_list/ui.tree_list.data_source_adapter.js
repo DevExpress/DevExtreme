@@ -1,5 +1,3 @@
-"use strict";
-
 var treeListCore = require("./ui.tree_list.core"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),

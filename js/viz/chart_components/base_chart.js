@@ -1,5 +1,3 @@
-"use strict";
-
 var commonUtils = require("../../core/utils/common"),
     noop = commonUtils.noop,
     eventsEngine = require("../../events/core/events_engine"),

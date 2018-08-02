@@ -1,5 +1,3 @@
-"use strict";
-
 /* global ROOT_URL */
 
 import { parse } from "../../../artifacts/js/vectormap-utils/dx.vectormaputils.js";

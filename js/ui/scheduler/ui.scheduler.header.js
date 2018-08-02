@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     noop = require("../../core/utils/common").noop,

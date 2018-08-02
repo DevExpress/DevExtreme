@@ -1,5 +1,3 @@
-"use strict";
-
 var ui = require("./widgets-base");
 
 /// BUNDLER_PARTS

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     errors = require("ui/widget/ui.errors"),
     Selection = require("ui/selection/selection"),

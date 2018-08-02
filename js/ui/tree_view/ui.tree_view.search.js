@@ -1,5 +1,3 @@
-"use strict";
-
 var registerComponent = require("../../core/component_registrator"),
     searchBoxMixin = require("../widget/ui.search_box_mixin"),
     extend = require("../../core/utils/extend").extend,

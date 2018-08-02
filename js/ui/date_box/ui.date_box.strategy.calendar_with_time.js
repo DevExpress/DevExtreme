@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
     CalendarStrategy = require("./ui.date_box.strategy.calendar"),

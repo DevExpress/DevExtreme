@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("../../core/utils/type"),
     isNumber = typeUtils.isNumeric,
     isDefined = typeUtils.isDefined,

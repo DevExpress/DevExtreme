@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");

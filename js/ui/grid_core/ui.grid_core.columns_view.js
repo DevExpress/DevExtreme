@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
@@ -97,7 +95,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var options = extend({}, scrollingOptions, {
             direction: "both",
-            updateManually: true,
             bounceEnabled: false,
             useKeyboard: false
         });

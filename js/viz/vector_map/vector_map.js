@@ -1,5 +1,3 @@
-"use strict";
-
 var _parseScalar = require("../core/utils").parseScalar,
     projectionModule = require("./projection.main"),
     controlBarModule = require("./control_bar"),

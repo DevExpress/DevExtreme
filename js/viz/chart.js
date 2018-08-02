@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../core/utils/common").noop,
     _extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,

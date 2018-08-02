@@ -1,5 +1,3 @@
-"use strict";
-
 var ko = require("knockout"),
     compareVersion = require("../../core/utils/version").compare,
     strategyChanging = require("../../core/element_data").strategyChanging;

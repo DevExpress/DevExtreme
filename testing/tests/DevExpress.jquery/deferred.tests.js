@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 var deferredUtils = require("core/utils/deferred");
 var useJQuery = require("core/config")().useJQuery;

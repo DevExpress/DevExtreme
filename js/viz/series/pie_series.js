@@ -1,5 +1,3 @@
-"use strict";
-
 // there are pie, doughnut
 var noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,

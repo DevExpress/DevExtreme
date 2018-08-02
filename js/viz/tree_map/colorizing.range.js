@@ -1,5 +1,3 @@
-"use strict";
-
 var _createColorCodeGetter = require("./colorizing").createColorCodeGetter;
 
 function getPaletteIndex(value, items) {

@@ -1,5 +1,3 @@
-"use strict";
-
 require("localization/globalize/core");
 require("localization/globalize/number");
 require("localization/globalize/currency");

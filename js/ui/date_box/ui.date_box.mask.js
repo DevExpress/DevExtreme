@@ -1,5 +1,3 @@
-"use strict";
-
 import eventsUtils from "../../events/utils";
 import { isFunction } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";

@@ -1,5 +1,3 @@
-"use strict";
-
 var dateUtils = require("../../core/utils/date"),
     days = [0, 1, 2, 3, 4, 5, 6];
 

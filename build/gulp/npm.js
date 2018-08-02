@@ -1,7 +1,5 @@
 // jshint node:true
 
-"use strict";
-
 var gulp = require('gulp');
 var footer = require('gulp-footer');
 var eol = require('gulp-eol');

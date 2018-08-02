@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = {
     events: {
         "mouseover": "mouseover",

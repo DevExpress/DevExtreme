@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     viewPortUtils = require("../../core/utils/view_port"),
     LoadPanel = require("../load_panel"),

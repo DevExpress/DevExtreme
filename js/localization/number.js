@@ -1,5 +1,3 @@
-"use strict";
-
 var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     escapeRegExp = require("../core/utils/common").escapeRegExp,

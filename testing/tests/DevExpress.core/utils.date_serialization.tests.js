@@ -1,5 +1,3 @@
-"use strict";
-
 var dateSerialization = require("core/utils/date_serialization");
 var config = require("core/config");
 

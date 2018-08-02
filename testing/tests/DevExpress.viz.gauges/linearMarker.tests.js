@@ -1,5 +1,3 @@
-"use strict";
-
 var vizMocks = require("../../helpers/vizMocks.js"),
     linearIndicatorsModule = require("viz/gauges/linear_indicators"),
     getTextCloudInfo = require("viz/gauges/base_indicators").getTextCloudInfo,

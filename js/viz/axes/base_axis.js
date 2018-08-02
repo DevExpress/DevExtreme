@@ -1,5 +1,3 @@
-"use strict";
-
 import { smartFormatter as _format, formatRange } from "./smart_formatter";
 import vizUtils from "../core/utils";
 import { isDefined, isFunction, isNumeric } from "../../core/utils/type";

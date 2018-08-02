@@ -1,5 +1,3 @@
-"use strict";
-
 var _extend = require("../../core/utils/extend").extend;
 var windowUtils = require("../../core/utils/window");
 var noop = require("../../core/utils/common").noop;

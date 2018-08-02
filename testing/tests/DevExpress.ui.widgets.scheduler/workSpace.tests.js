@@ -1,5 +1,3 @@
-"use strict";
-
 var pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 

@@ -1,13 +1,9 @@
-"use strict";
-
 import $ from "jquery";
 import SchedulerNavigator from "ui/scheduler/ui.scheduler.navigator";
 import dateLocalization from "localization/date";
 import devices from "core/devices";
 import noop from "core/utils/common";
 import "ui/scheduler/ui.scheduler";
-
-"use strict";
 
 QUnit.testStart(() => {
     const markup =

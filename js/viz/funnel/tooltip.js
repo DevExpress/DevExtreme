@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop;
 
 function getCoords(figureCoords, renderer) {

@@ -1,5 +1,3 @@
-"use strict";
-
 import { isDefined } from "../../core/utils/type";
 
 var modules = require("./ui.grid_core.modules"),
@@ -193,7 +191,7 @@ var FilterSyncController = modules.Controller.inherit((function() {
                 headerFilter && utils.addItem(headerFilter, filterValue);
                 filterRow && utils.addItem(filterRow, filterValue);
             });
-            return utils.getNormalizedFilter(filterValue, columns);
+            return utils.getNormalizedFilter(filterValue);
         },
 
         syncFilterRow: function(column, value) {
@@ -255,6 +253,20 @@ var DataControllerFilterSyncExtender = {
     _parseColumnPropertyName: function(fullName) {
         var matched = fullName.match(/.*\.(.*)/);
         return matched[1];
+    },
+
+    clearFilter: function(filterName) {
+        this.component.beginUpdate();
+        if(arguments.length > 0) {
+            if(filterName === "filterValue") {
+                this.option("filterValue", null);
+            }
+            this.callBase(filterName);
+        } else {
+            this.option("filterValue", null);
+            this.callBase();
+        }
+        this.component.endUpdate();
     },
 
     optionChanged: function(args) {

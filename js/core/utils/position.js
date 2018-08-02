@@ -1,5 +1,3 @@
-"use strict";
-
 var config = require("../config");
 
 var getDefaultAlignment = function(isRtlEnabled) {

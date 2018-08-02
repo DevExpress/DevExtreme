@@ -1,5 +1,3 @@
-"use strict";
-
 var common = require("./commonParts/common.js"),
     createSankey = common.createSankey,
     environment = common.environment,

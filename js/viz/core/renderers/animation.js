@@ -1,5 +1,3 @@
-"use strict";
-
 var animationFrame = require("../../../animation/frame"),
     noop = function() { },
     easingFunctions = {

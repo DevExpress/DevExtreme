@@ -1,5 +1,3 @@
-"use strict";
-
 let core = require("./localization/core");
 let message = require("./localization/message");
 let number = require("./localization/number");

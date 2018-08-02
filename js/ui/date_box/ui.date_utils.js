@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     dateSerialization = require("../../core/utils/date_serialization"),
     isDate = require("../../core/utils/type").isDate,

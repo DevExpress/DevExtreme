@@ -1,5 +1,3 @@
-"use strict";
-
 require("ui/drop_down_menu");
 
 var $ = require("jquery"),

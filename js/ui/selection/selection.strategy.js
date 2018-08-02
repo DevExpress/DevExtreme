@@ -1,5 +1,3 @@
-"use strict";
-
 var dataQuery = require("../../data/query"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),

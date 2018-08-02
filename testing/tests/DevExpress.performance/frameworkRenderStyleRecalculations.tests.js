@@ -1,5 +1,3 @@
-"use strict";
-
 require("../../helpers/frameworkMocks.js");
 require("../../helpers/htmlFrameworkMocks.js");
 require("../../helpers/qunitPerformanceExtension.js");

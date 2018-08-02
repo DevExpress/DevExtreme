@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     MsPointerStrategy = require("events/pointer/mspointer"),
     registerEvent = require("events/core/event_registrator"),

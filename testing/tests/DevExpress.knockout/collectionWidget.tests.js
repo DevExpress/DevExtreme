@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ko = require("knockout"),
     registerComponent = require("core/component_registrator"),

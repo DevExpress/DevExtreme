@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 import customOperations from "ui/grid_core/ui.grid_core.filter_custom_operations";
@@ -28,7 +26,7 @@ QUnit.module("Sync with FilterValue", {
                 filterSyncEnabled: true,
                 filterValue: null
             }, options);
-            setupDataGridModules(this, ["data", "columns", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
+            setupDataGridModules(this, ["data", "search", "columns", "columnHeaders", "filterRow", "headerFilter", "filterSync"], {
                 initViews: false
             });
         };
@@ -175,6 +173,40 @@ QUnit.module("Sync with FilterValue", {
         // assert
         assert.deepEqual(this.option("filterValue"), null);
         assert.deepEqual(this.columnOption("field", "filterValue"), undefined);
+    });
+
+    // T659816
+    QUnit.test("clearFilter() clears filterValue", function(assert) {
+        var dataSourceFilter = ["field", "=", 0];
+        this.setupDataGrid({
+            dataSource: {
+                store: [],
+                filter: dataSourceFilter
+            },
+            columns: [{ dataField: "field", dataType: "number", filterValue: false }],
+            filterValue: [[["field", "=", 1], "and", ["field", "=", 2]], "or", ["field", "=", 3]]
+        });
+
+        this.dataController.clearFilter();
+        assert.equal(this.option("filterValue"), null);
+        assert.equal(this.dataController.getDataSource().filter(), null);
+    });
+
+    // T659816
+    QUnit.test("clearFilter('filterValue') clears only filterValue", function(assert) {
+        var dataSourceFilter = ["field", "=", 0];
+        this.setupDataGrid({
+            dataSource: {
+                store: [],
+                filter: dataSourceFilter
+            },
+            columns: [{ dataField: "field", dataType: "number", filterValue: false }],
+            filterValue: [[["field", "=", 1], "and", ["field", "=", 2]], "or", ["field", "=", 3]]
+        });
+
+        this.dataController.clearFilter("filterValue");
+        assert.equal(this.option("filterValue"), null);
+        assert.deepEqual(this.dataController.getDataSource().filter(), dataSourceFilter);
     });
 
     // T639390

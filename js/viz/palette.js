@@ -1,5 +1,3 @@
-"use strict";
-
 import { normalizeEnum } from "./core/utils";
 import { extend } from "../core/utils/extend";
 import errors from "../core/errors";

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 var noop = require("core/utils/common").noop;
 var BaseStrategy = require("events/pointer/base");

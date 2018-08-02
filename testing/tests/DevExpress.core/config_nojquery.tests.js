@@ -1,5 +1,3 @@
-"use strict";
-
 var config = require("core/config");
 
 QUnit.module("config.useJQuery");

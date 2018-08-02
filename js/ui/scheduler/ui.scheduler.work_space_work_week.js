@@ -1,5 +1,3 @@
-"use strict";
-
 var registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
     toMs = dateUtils.dateToMilliseconds,

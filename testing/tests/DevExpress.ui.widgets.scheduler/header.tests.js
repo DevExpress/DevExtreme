@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     SchedulerHeader = require("ui/scheduler/ui.scheduler.header"),
     Tabs = require("ui/tabs"),

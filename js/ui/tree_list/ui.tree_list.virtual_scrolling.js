@@ -1,5 +1,3 @@
-"use strict";
-
 var gridCore = require("./ui.tree_list.core"),
     dataSourceAdapter = require("./ui.tree_list.data_source_adapter"),
     virtualScrollingModule = require("../grid_core/ui.grid_core.virtual_scrolling"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var tiling = require("./tiling");
 
 function sliceAndDice(data) {

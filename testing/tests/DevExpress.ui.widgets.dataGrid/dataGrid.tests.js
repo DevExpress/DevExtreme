@@ -1,5 +1,3 @@
-"use strict";
-
 QUnit.testStart(function() {
     var markup =
 '<style>\
@@ -10014,7 +10012,7 @@ QUnit.test("Group cell should not have width style", function(assert) {
     assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "150px", "width style is defined for data cell");
 });
 
-QUnit.test("Detail cell should not have width style", function(assert) {
+QUnit.test("Detail cell should not have width and max-width styles", function(assert) {
     var dataSource = [
         { id: 1, firstName: "Alex", lastName: "Black", room: 903 },
         { id: 2, firstName: "Alex", lastName: "White", room: 904 }
@@ -10044,6 +10042,8 @@ QUnit.test("Detail cell should not have width style", function(assert) {
     // assert
     assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "100px", "width style is defined for data cell");
     assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "", "width style is not defined for detail cell");
+    // T650963
+    assert.equal($(dataGrid.getCellElement(1, 1)).css("maxWidth"), "none", "max width style for detail cell");
 });
 
 QUnit.test("Check table params with set width", function(assert) {

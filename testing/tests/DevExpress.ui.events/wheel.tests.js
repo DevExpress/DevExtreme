@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     wheelEvent = require("events/core/wheel"),
     nativePointerMock = require("../../helpers/nativePointerMock.js");

@@ -1,5 +1,3 @@
-"use strict";
-
 var testGlobalExports = require("../../helpers/publicModulesHelper.js"),
     AdvancedChartModule = require("viz/chart_components/advanced_chart"),
     baseChartModule = require("viz/chart_components/base_chart"),
