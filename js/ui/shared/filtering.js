@@ -144,7 +144,7 @@ module.exports = (function() {
                 dataType = isSearchByDisplayValue && column.lookup && column.lookup.dataType || column.dataType,
                 filter = null;
 
-            if(target === "headerFilter" && filterValue === null) {
+            if((target === "headerFilter" || target === "filterBuilder") && filterValue === null) {
                 filter = [selector, selectedFilterOperation || "=", null];
                 if(dataType === "string") {
                     filter = [filter, selectedFilterOperation === "=" ? "or" : "and", [selector, selectedFilterOperation || "=", ""]];

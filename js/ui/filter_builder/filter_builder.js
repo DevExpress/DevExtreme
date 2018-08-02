@@ -1,18 +1,18 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    Class = require("../../core/class"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Widget = require("../widget/ui.widget"),
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    messageLocalization = require("../../localization/message"),
-    utils = require("./utils"),
-    deferredUtils = require("../../core/utils/deferred"),
-    TreeView = require("../tree_view"),
-    Popup = require("../popup"),
-    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import Class from "../../core/class";
+import eventsEngine from "../../events/core/events_engine";
+import Widget from "../widget/ui.widget";
+import registerComponent from "../../core/component_registrator";
+import { extend } from "../../core/utils/extend";
+import messageLocalization from "../../localization/message";
+import utils from "./utils";
+import deferredUtils from "../../core/utils/deferred";
+import TreeView from "../tree_view";
+import Popup from "../popup";
+import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
 
-var FILTER_BUILDER_CLASS = "dx-filterbuilder",
+const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
     FILTER_BUILDER_GROUP_ITEM_CLASS = FILTER_BUILDER_GROUP_CLASS + "-item",
     FILTER_BUILDER_GROUP_CONTENT_CLASS = FILTER_BUILDER_GROUP_CLASS + "-content",
@@ -523,7 +523,7 @@ var FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value, fields), fields, this._customOperations, SOURCE);
+        return utils.getFilterExpression(utils.getNormalizedFilter(value), fields, this._customOperations, SOURCE);
     },
 
     _getNormalizedFields: function() {
@@ -533,7 +533,7 @@ var FilterBuilder = Widget.inherit({
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
         var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value, this._getNormalizedFields()));
+        this.option("value", utils.getNormalizedFilter(value));
         this._disableInvalidateForValue = false;
     },
 
@@ -631,7 +631,7 @@ var FilterBuilder = Widget.inherit({
                 newCondition = utils.createCondition(field, that._customOperations);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
-            if(utils.isValidCondition(newCondition, field)) {
+            if(utils.isValidCondition(newCondition)) {
                 that._updateFilter();
             }
         }).appendTo($groupItem);
@@ -838,7 +838,7 @@ var FilterBuilder = Widget.inherit({
         this._createRemoveButton(function() {
             utils.removeItem(parent, condition);
             $item.remove();
-            if(utils.isValidCondition(condition, field)) {
+            if(utils.isValidCondition(condition)) {
                 that._updateFilter();
             }
         }).appendTo($item);
