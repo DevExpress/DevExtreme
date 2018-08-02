@@ -257,6 +257,20 @@ var DataControllerFilterSyncExtender = {
         return matched[1];
     },
 
+    clearFilter: function(filterName) {
+        this.component.beginUpdate();
+        if(arguments.length > 0) {
+            if(filterName === "filterValue") {
+                this.option("filterValue", null);
+            }
+            this.callBase(filterName);
+        } else {
+            this.option("filterValue", null);
+            this.callBase();
+        }
+        this.component.endUpdate();
+    },
+
     optionChanged: function(args) {
         switch(args.name) {
             case "filterValue":
