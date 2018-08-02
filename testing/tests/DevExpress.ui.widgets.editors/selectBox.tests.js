@@ -1349,7 +1349,7 @@ QUnit.test("'clear' button should reset selectedValue if 'acceptCustomValue' is 
     $($clearButton).trigger("dxclick");
 
     assert.equal(selectBox.option("value"), null, "value is reset after click on 'clear' button");
-    assert.equal(selectBox.option("text"), undefined, "text is reset after click on 'clear' button");
+    assert.equal(selectBox.option("text"), "", "text is reset after click on 'clear' button");
 
     var $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 

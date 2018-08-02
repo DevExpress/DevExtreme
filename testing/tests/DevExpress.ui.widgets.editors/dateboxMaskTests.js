@@ -235,11 +235,6 @@ if(devices.real().deviceType === "desktop") {
     });
 
     QUnit.module("Date parts find", setupModule, () => {
-        QUnit.test("First group should be selected on focus", (assert) => {
-            this.keyboard.focus();
-            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
-        });
-
         QUnit.test("Find day of week", (assert) => {
             assert.equal(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
             assert.equal(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
@@ -284,9 +279,6 @@ if(devices.real().deviceType === "desktop") {
 
     QUnit.module("Keyboard navigation", setupModule, () => {
         QUnit.test("Right and left arrows should move the selection", (assert) => {
-            this.keyboard.focus();
-            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "first group is active on init");
-
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
 
