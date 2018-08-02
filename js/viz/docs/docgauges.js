@@ -656,8 +656,7 @@ var dxCircularGauge = {
     },
     /**
     * @name dxCircularGaugeOptions.valueIndicator
-    * @inherits CommonIndicator
-    * @type object
+    * @type GaugeIndicator
     * @inheritAll
     */
     valueIndicator: {
@@ -671,8 +670,7 @@ var dxCircularGauge = {
     },
     /**
     * @name dxCircularGaugeOptions.subvalueIndicator
-    * @inherits CommonIndicator
-    * @type object
+    * @type GaugeIndicator
     * @inheritAll
     */
     subvalueIndicator: {
@@ -793,8 +791,7 @@ var dxLinearGauge = {
     },
     /**
     * @name dxLinearGaugeOptions.valueIndicator
-    * @inherits CommonIndicator
-    * @type object
+    * @type GaugeIndicator
     * @inheritAll
     */
     valueIndicator: {
@@ -808,8 +805,7 @@ var dxLinearGauge = {
     },
     /**
     * @name dxLinearGaugeOptions.subvalueIndicator
-    * @inherits CommonIndicator
-    * @type object
+    * @type GaugeIndicator
     * @inheritAll
     */
     subvalueIndicator: {

@@ -1,4 +1,15 @@
 /**
+* @name GaugeIndicator
+* @inherits CommonIndicator
+* @hidden
+*/
+/**
+ * @name GaugeIndicator.type
+ * @type string
+ * @acceptValues 'circle'|'rangeBar'|'rectangle'|'rectangleNeedle'|'rhombus'|'textCloud'|'triangleMarker'|'triangleNeedle'|'twoColorNeedle'
+ */
+
+/**
 * @name CommonIndicator
 * @section CommonIndicators
 * @type object
@@ -207,8 +218,7 @@ var CommonIndicator = {
 * @name circularRectangleNeedle
 * @publicName RectangleNeedle
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var circularRectangleNeedle = {
@@ -224,8 +234,7 @@ var circularRectangleNeedle = {
 * @name circularTriangleNeedle
 * @publicName TriangleNeedle
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var circularTriangleNeedle = {
@@ -241,8 +250,7 @@ var circularTriangleNeedle = {
 * @name circularTwoColorNeedle
 * @publicName TwoColorNeedle
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var circularTwoColorNeedle = {
@@ -258,8 +266,7 @@ var circularTwoColorNeedle = {
 * @name circularRangeBar
 * @publicName RangeBar
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var circularRangeBar = {
@@ -282,8 +289,7 @@ var circularRangeBar = {
 * @name circularTriangleMarker
 * @publicName TriangleMarker
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var circularTriangleMarker = {
@@ -320,8 +326,7 @@ var circularTriangleMarker = {
 * @name circularTextCloud
 * @publicName TextCloud
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var circularTextCloud = {
@@ -373,8 +378,7 @@ var circularTextCloud = {
 * @name linearRectangle
 * @publicName Rectangle
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var linearRectangle = {
@@ -404,8 +408,7 @@ var linearRectangle = {
 * @name linearCircle
 * @publicName Circle
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var linearCircle = {
@@ -428,8 +431,7 @@ var linearCircle = {
 * @name linearRhombus
 * @publicName Rhombus
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var linearRhombus = {
@@ -459,8 +461,7 @@ var linearRhombus = {
 * @name linearRangeBar
 * @publicName RangeBar
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var linearRangeBar = {
@@ -483,8 +484,7 @@ var linearRangeBar = {
 * @name linearTriangleMarker
 * @publicName TriangleMarker
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var linearTriangleMarker = {
@@ -521,8 +521,7 @@ var linearTriangleMarker = {
 * @name linearTextCloud
 * @publicName TextCloud
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
 */
 var linearTextCloud = {
