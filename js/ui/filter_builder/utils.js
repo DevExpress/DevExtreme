@@ -1,5 +1,6 @@
 import { Deferred, when } from "../../core/utils/deferred";
 import { errors as dataErrors } from "../../data/errors";
+import { isDefined } from "../../core/utils/type";
 import errors from "../widget/ui.errors";
 import filterUtils from "../shared/filtering";
 import formatHelper from "../../format_helper";
@@ -358,7 +359,7 @@ function convertToInnerStructure(value, customOperations) {
 
 function getNormalizedFields(fields) {
     return fields.reduce(function(result, field) {
-        if(typeof field.dataField !== "undefined") {
+        if(isDefined(field.dataField)) {
             var normalizedField = {};
             for(var key in field) {
                 if(field[key] && AVAILABLE_FIELD_PROPERTIES.indexOf(key) > -1) {
@@ -366,6 +367,9 @@ function getNormalizedFields(fields) {
                 }
             }
             normalizedField.defaultCalculateFilterExpression = filterUtils.defaultCalculateFilterExpression;
+            if(!isDefined(normalizedField.dataType)) {
+                normalizedField.dataType = DEFAULT_DATA_TYPE;
+            }
             result.push(normalizedField);
         }
         return result;
@@ -401,7 +405,7 @@ function getFilterExpression(value, fields, customOperations, target) {
             groupValue = getGroupValue(criteria);
         for(var i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
-                filterExpression = getFilterExpression(criteria[i], fields, customOperations);
+                filterExpression = getFilterExpression(criteria[i], fields, customOperations, target);
                 if(filterExpression) {
                     i && result.push(groupValue);
                     result.push(filterExpression);
@@ -418,7 +422,7 @@ function getFilterExpression(value, fields, customOperations, target) {
     }
 }
 
-function getNormalizedFilter(group, fields) {
+function getNormalizedFilter(group) {
     var criteria = getGroupCriteria(group),
         i;
 
@@ -429,15 +433,14 @@ function getNormalizedFilter(group, fields) {
     var itemsForRemove = [];
     for(i = 0; i < criteria.length; i++) {
         if(isGroup(criteria[i])) {
-            var normalizedGroupValue = getNormalizedFilter(criteria[i], fields);
+            var normalizedGroupValue = getNormalizedFilter(criteria[i]);
             if(normalizedGroupValue) {
                 criteria[i] = normalizedGroupValue;
             } else {
                 itemsForRemove.push(criteria[i]);
             }
         } else if(isCondition(criteria[i])) {
-            var field = getField(criteria[i][0], fields);
-            if(!isValidCondition(criteria[i], field)) {
+            if(!isValidCondition(criteria[i])) {
                 itemsForRemove.push(criteria[i]);
             }
         }
@@ -648,13 +651,8 @@ function getOperationValue(condition) {
     return caption;
 }
 
-function isValidCondition(condition, field) {
-    var isCustomOperation = condition.length > 2 && !filterOperationsDictionary.getNameByFilterOperation(condition[1]);
-    if((field.dataType && field.dataType !== "string")
-        || isCustomOperation) {
-        return condition[2] !== "";
-    }
-    return true;
+function isValidCondition(condition) {
+    return condition[2] !== "";
 }
 
 function getMergedOperations(customOperations, betweenCaption) {
