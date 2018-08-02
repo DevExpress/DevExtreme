@@ -421,6 +421,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 totalItemsCount = that._dataSource.totalItemsCount();
 
             Object.keys(that._itemSizes).forEach(itemIndex => {
+                if(!itemCount) return;
                 if(isEnd ? (itemIndex >= totalItemsCount - virtualItemsCount.end) : (itemIndex < virtualItemsCount.begin)) {
                     offset += that._itemSizes[itemIndex];
                     itemCount--;
