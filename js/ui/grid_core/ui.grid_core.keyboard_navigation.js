@@ -353,7 +353,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 } else {
                     var $target = $(eventArgs.originalEvent.target);
                     eventsEngine.trigger($target, "blur");
-                    eventsEngine.trigger($target, "focus");
                     this._editingController.closeEditCell();
                     eventArgs.originalEvent.preventDefault();
                 }
