@@ -112,5 +112,9 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsViz.W2301
     */
-    W2301: "Invalid value range"
+    W2301: "Invalid value range",
+    /**
+    * @name ErrorsViz.W2401
+    */
+    W2401: "The browser does not support exporting images to {0} format."
 });
