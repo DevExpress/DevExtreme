@@ -509,6 +509,16 @@ QUnit.test("Layers shouldn't be created on updating when name not set", function
     assert.ok(map.getLayers()[0] === oldLayer);
 });
 
+QUnit.test("No crush on updating when on of layer in null", function(assert) {
+    var map = this.createLayers([
+        { color: "some_color_1" }
+    ]);
+
+    map.option("layers", [null]);
+
+    assert.strictEqual(map.getLayers().length, 1);
+});
+
 QUnit.test("Get layer by name", function(assert) {
     var map = this.createLayers([
         { name: "layer-a" },

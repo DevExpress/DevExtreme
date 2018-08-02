@@ -47,6 +47,10 @@ function getSelection(selectionMode) {
     return selection;
 }
 
+function getName(opt, index) {
+    return (opt[index] || {}).name;
+}
+
 function EmptySource() { }
 EmptySource.prototype.count = function() { return 0; };
 
@@ -1556,13 +1560,17 @@ MapLayerCollection.prototype = {
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
         let layerByName = this._layerByName;
         let layers = this._layers;
+        const needToCreateLayers = optionList.length !== layers.length || layers.some((l, i) => {
+            const name = getName(optionList, i);
+            return _isDefined(name) && name !== l.proxy.name;
+        });
 
-        if(optionList.length !== layers.length || layers.some((l, i) => { return _isDefined(optionList[i].name) && optionList[i].name !== l.proxy.name; })) {
+        if(needToCreateLayers) {
             layers.forEach(l => l.dispose());
             this._layerByName = layerByName = {};
             this._layers = layers = [];
             for(let i = 0, ii = optionList.length; i < ii; ++i) {
-                const name = (optionList[i] || {}).name || ("map-layer-" + i);
+                const name = getName(optionList, i) || ("map-layer-" + i);
                 const layer = layers[i] = new MapLayer(this._params, this._container, name, i);
                 layerByName[name] = layer;
             }
