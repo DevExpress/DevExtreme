@@ -5481,6 +5481,44 @@ QUnit.test("Runtime operation should be asynchronously", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-data-row").length, 1, "filtered data rows are rendered");
 });
 
+// T655083
+QUnit.test("Virtual rows should be hidden after filtering if cellTemplate is asynchronous", function(assert) {
+    var items = [];
+    for(var i = 0; i < 100; i++) {
+        items.push({ id: i + 1 });
+    }
+
+    var dataGrid = createDataGrid({
+        height: 500,
+        dataSource: items,
+        scrolling: {
+            mode: "virtual"
+        },
+        columns: [{
+            dataField: "id",
+            cellTemplate: function($container, options) {
+                setTimeout(function() {
+                    $("<div>").text(options.text).appendTo($container);
+                });
+            }
+        }]
+    });
+
+    // act
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.$element().find(".dx-virtual-row").length, 1, "1 virtual rows");
+
+    // act
+    dataGrid.columnOption("id", "filterValue", "99");
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 1, "1 visible row");
+    assert.equal(dataGrid.$element().find(".dx-virtual-row").length, 0, "no virtual rows");
+});
+
 // T621703
 QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
     // arrange
