@@ -498,6 +498,17 @@ QUnit.test("Change name of one layer", function(assert) {
     });
 });
 
+QUnit.test("Layers shouldn't be created on updating when name not set", function(assert) {
+    var map = this.createLayers([
+        { color: "some_color_1" }
+    ]);
+
+    var oldLayer = map.getLayers()[0];
+    map.option("layers", [{ color: "some_color_1" }]);
+
+    assert.ok(map.getLayers()[0] === oldLayer);
+});
+
 QUnit.test("Get layer by name", function(assert) {
     var map = this.createLayers([
         { name: "layer-a" },

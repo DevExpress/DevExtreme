@@ -10,6 +10,7 @@ var noop = require("../../core/utils/common").noop,
     _sqrt = Math.sqrt,
     DataHelperMixin = require("../../data_helper"),
     _isFunction = require("../../core/utils/type").isFunction,
+    _isDefined = require("../../core/utils/type").isDefined,
     _isArray = Array.isArray,
     vizUtils = require("../core/utils"),
     _parseScalar = vizUtils.parseScalar,
@@ -1555,14 +1556,12 @@ MapLayerCollection.prototype = {
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
         let layerByName = this._layerByName;
         let layers = this._layers;
-        let i;
-        let ii;
 
-        if(optionList.length !== layers.length || layers.some((l, i) => { return optionList[i].name !== l.proxy.name; })) {
+        if(optionList.length !== layers.length || layers.some((l, i) => { return _isDefined(optionList[i].name) && optionList[i].name !== l.proxy.name; })) {
             layers.forEach(l => l.dispose());
             this._layerByName = layerByName = {};
             this._layers = layers = [];
-            for(i = 0, ii = optionList.length; i < ii; ++i) {
+            for(let i = 0, ii = optionList.length; i < ii; ++i) {
                 const name = (optionList[i] || {}).name || ("map-layer-" + i);
                 const layer = layers[i] = new MapLayer(this._params, this._container, name, i);
                 layerByName[name] = layer;
