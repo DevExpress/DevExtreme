@@ -1286,11 +1286,14 @@ QUnit.module("Group operations", function() {
         });
 
         $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
+        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+        assert.equal(popup.length, 1);
+
         selectMenuItem(1);
 
         $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1).trigger("dxclick");
 
-        let popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
+        popup = container.find(`.${FILTER_BUILDER_OVERLAY_CLASS}`);
         assert.equal(popup.length, 0);
     });
 });
