@@ -37,6 +37,7 @@ class PostponedOperations {
     constructor() {
         this._postponedOperations = {};
     }
+
     add(key, fn, postponedPromise) {
         if(key in this._postponedOperations) {
             postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
@@ -58,7 +59,7 @@ class PostponedOperations {
             if(operation.promises.length) {
                 when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
             } else {
-                operation.fn.call().done(operation.completePromise.resolve);
+                operation.fn().done(operation.completePromise.resolve);
             }
         }
         this._postponedOperations = {};
