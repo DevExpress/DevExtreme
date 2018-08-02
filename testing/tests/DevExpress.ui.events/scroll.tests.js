@@ -180,7 +180,7 @@ QUnit.module("scroll move");
 QUnit.test("dxscroll fired on pointer move", function(assert) {
     var fired = 0,
         args,
-        initEventData,
+        initEventData, // eslint-disable-line no-unused-vars
         moveEventData;
 
     var $scrollable = $("#scrollable")
@@ -200,7 +200,7 @@ QUnit.test("dxscroll fired on pointer move", function(assert) {
     assert.equal(fired, 1, "dxscroll fired once");
     assert.ok($scrollable.is(args.target), "event target specified");
     assert.ok(args.originalEvent, "original event specified");
-    assert.deepEqual(args.delta, eventUtils.eventDelta(initEventData, moveEventData), "delta specified");
+    assert.deepEqual(args.delta, eventUtils.eventDelta(moveEventData, moveEventData), "delta specified");
 });
 
 QUnit.test("dxscroll fired on every move", function(assert) {

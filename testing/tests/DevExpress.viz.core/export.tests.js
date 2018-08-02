@@ -1060,6 +1060,8 @@ QUnit.test("Printing by menu", function(assert) {
         };
     });
 
+    this.createExportMenu();
+
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
