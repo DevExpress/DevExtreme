@@ -1,6 +1,6 @@
 /**
 * @name dxSankey
-* @inherits BaseWidget
+* @inherits BaseWidget, DataHelperMixin
 * @module viz/sankey
 * @export default
 */
