@@ -1,3 +1,3 @@
 {
-    "*.js": ["jshint --verbose", "eslint"]
+    "*.js": ["eslint"]
 }

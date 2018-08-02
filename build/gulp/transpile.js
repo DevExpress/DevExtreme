@@ -1,4 +1,4 @@
-// jshint node:true
+/* eslint-env node */
 
 var gulp = require('gulp');
 var babel = require('gulp-babel');

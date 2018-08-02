@@ -1,4 +1,3 @@
-// jshint strict:implied, -W098, -W117
 /* eslint-disable no-unused-vars*/
 function parseDBF(stream, errors) {
     var timeStart,

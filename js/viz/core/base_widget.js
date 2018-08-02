@@ -59,10 +59,8 @@ function defaultOnIncidentOccurred(e) {
     }
 }
 
-// TODO: Such ugly declaration is because of jshint
 var createIncidentOccurred = function(widgetName, eventTrigger) {
-    return incidentOccurred;
-    function incidentOccurred(id, args) {
+    return function incidentOccurred(id, args) {
         eventTrigger("incidentOccurred", {
             target: {
                 id: id,

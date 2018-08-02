@@ -1,4 +1,4 @@
-// jshint node:true
+/* eslint-env node */
 
 const gulp = require('gulp');
 const rename = require('gulp-rename');

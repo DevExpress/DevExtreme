@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* jshint node: true */
+/* eslint-env node */
 
 var path = require("path"),
     webpack = require("webpack"),

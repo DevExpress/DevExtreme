@@ -1,5 +1,5 @@
+/* eslint-env node */
 /* eslint-disable no-console */
-/* jshint node:true */
 
 process.on("uncaughtException", function(e) {
     console.log("!!! Uncaught exception !!!");

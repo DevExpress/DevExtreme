@@ -1,4 +1,4 @@
-// jshint node:true
+/* eslint-env node */
 
 var lazyPipe = require('lazypipe');
 var replace = require('gulp-replace');

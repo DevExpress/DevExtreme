@@ -1,4 +1,3 @@
-// jshint strict:implied, -W098, -W117
 /* eslint-disable no-undef, no-unused-vars*/
 
 function wrapBuffer(arrayBuffer) {
