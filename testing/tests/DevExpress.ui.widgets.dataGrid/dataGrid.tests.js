@@ -2408,6 +2408,48 @@ QUnit.test("Column widths should be correct after resize column to show scroll i
     assert.strictEqual($colGroups.eq(1).children().get(2).style.width, "100px");
 });
 
+// T659247
+QUnit.test("Column widths for header cells should be correctly if columnAutoWidth is enabled and banded columns are used", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        width: 400,
+        columnAutoWidth: true,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: 'ID',
+            width: 60
+        }, {
+            dataField: 'prop1',
+            ownerBand: 4,
+            width: 70,
+        }, {
+            dataField: 'prop2',
+            ownerBand: 4,
+            width: 80
+        }, {
+            dataField: 'prop3',
+            ownerBand: 4,
+            width: 90
+        }, {
+            caption: 'Band',
+            isBand: true
+        }],
+    });
+
+
+    var getHeaderCellWidth = function(rowIndex, columnIndex) {
+        return $dataGrid.find(".dx-header-row").eq(rowIndex).children().get(columnIndex).style.width;
+    };
+
+    // assert
+    assert.strictEqual(getHeaderCellWidth(0, 0), "60px");
+    assert.strictEqual(getHeaderCellWidth(0, 1), "", "band column has no width");
+    assert.strictEqual(getHeaderCellWidth(1, 0), "70px");
+    assert.strictEqual(getHeaderCellWidth(1, 1), "80px");
+    assert.strictEqual(getHeaderCellWidth(1, 2), "", "last column has no width");
+});
+
 QUnit.test("Last cell should have correct width after resize column to hide scroll if fixed column is exists and columnAutoWidth is enabled", function(assert) {
     // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
