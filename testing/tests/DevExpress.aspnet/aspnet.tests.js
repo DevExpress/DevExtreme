@@ -1,5 +1,3 @@
-"use strict";
-
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {

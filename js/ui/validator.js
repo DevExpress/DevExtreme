@@ -1,5 +1,3 @@
-"use strict";
-
 var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),

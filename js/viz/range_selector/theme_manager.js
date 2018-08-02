@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager;
 
 exports.ThemeManager = BaseThemeManager.inherit({

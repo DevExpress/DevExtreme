@@ -1,5 +1,3 @@
-"use strict";
-
 /* global $ */
 
 var RealXMLHttpRequest = window.XMLHttpRequest;

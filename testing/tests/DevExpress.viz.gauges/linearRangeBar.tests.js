@@ -1,5 +1,3 @@
-"use strict";
-
 /* global currentTest */
 
 var vizMocks = require("../../helpers/vizMocks.js"),

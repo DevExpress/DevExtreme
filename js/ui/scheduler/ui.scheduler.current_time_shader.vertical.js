@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Shader = require("./ui.scheduler.current_time_shader");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
     _each = require("../../core/utils/iterator").each,

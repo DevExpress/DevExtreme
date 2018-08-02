@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     Color = require("../color"),
     isFunction = require("../core/utils/type").isFunction,

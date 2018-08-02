@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     if(QUnit.urlParams["nojquery"]) {
         return;

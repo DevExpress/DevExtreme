@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,

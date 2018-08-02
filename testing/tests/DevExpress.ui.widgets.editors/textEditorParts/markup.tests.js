@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 require("ui/text_box/ui.text_editor");

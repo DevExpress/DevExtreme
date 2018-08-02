@@ -1,5 +1,3 @@
-"use strict";
-
 var common = require("./commonParts/common.js"),
     createFunnel = common.createFunnel,
     environment = common.environment;

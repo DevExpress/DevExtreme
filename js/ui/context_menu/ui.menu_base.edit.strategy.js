@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     map = require("../../core/utils/iterator").map,
     PlainEditStrategy = require("../collection/ui.collection_widget.edit.strategy.plain");

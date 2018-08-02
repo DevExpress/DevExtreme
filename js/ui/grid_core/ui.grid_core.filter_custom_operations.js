@@ -1,5 +1,3 @@
-"use strict";
-
 import { renderValueText } from "../filter_builder/filter_builder";
 
 var $ = require("../../core/renderer"),

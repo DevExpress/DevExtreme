@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
     devices = require("core/devices"),

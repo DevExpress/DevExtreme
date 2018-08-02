@@ -1,5 +1,3 @@
-"use strict";
-
 var browser, focused;
 
 (function(root, factory) {

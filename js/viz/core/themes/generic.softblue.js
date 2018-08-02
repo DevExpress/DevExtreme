@@ -1,5 +1,3 @@
-"use strict";
-
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
     ACCENT_COLOR = "#7ab8eb",

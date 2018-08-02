@@ -1,5 +1,3 @@
-"use strict";
-
 var isExponential = require("./type").isExponential;
 
 var sign = function(value) {

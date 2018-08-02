@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     DropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),

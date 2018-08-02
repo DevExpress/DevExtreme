@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 import customOperations from "ui/grid_core/ui.grid_core.filter_custom_operations";

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     variableWrapper = require("../../core/utils/variable_wrapper"),
     dataCoreUtils = require("../../core/utils/data"),

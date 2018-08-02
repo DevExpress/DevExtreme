@@ -1,5 +1,3 @@
-"use strict";
-
 var registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,

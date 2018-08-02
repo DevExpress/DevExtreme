@@ -1,5 +1,3 @@
-"use strict";
-
 var _normalizeEnum = require("../core/utils").normalizeEnum,
 
     algorithms = {},

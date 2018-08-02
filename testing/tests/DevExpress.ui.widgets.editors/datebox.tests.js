@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     renderer = require("core/renderer"),
     noop = require("core/utils/common").noop,

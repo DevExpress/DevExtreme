@@ -1,5 +1,3 @@
-"use strict";
-
 var WHITE = "#ffffff",
     BLACK = "#000000",
     LIGHT_GREY = "#d3d3d3",

@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     var WeakMap = require("core/polyfills/weak_map");
 

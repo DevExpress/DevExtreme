@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../../core/class"),
     config = require("../../core/config"),
     iteratorUtils = require("../../core/utils/iterator"),

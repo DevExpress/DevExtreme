@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     errors = require("core/errors");
 

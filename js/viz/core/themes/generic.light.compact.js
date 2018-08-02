@@ -1,5 +1,3 @@
-"use strict";
-
 var registerTheme = require("../../themes").registerTheme;
 
 registerTheme({

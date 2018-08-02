@@ -1,5 +1,3 @@
-"use strict";
-
 var map = require("./iterator").map;
 
 var _normalize = function(text) {

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");

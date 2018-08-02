@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
     domAdapter = require("../../core/dom_adapter"),

@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";

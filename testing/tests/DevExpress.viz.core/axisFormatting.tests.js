@@ -1,4 +1,3 @@
-"use strict";
 import $ from "jquery";
 import translator2DModule from "viz/translators/translator2d";
 import tickGeneratorModule from "viz/axes/tick_generator";

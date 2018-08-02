@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 var dataUtils = require("core/element_data");
 

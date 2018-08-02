@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     ScrollBar = require("viz/chart_components/scroll_bar").ScrollBar,

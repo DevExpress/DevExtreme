@@ -1,5 +1,3 @@
-"use strict";
-
 // TODO: Move this tests to localization module
 
 require("../../helpers/l10n/cldrNumberDataRu.js");

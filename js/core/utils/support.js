@@ -1,5 +1,3 @@
-"use strict";
-
 var inArray = require("./array").inArray,
     domAdapter = require("../dom_adapter"),
     callOnce = require("./call_once"),

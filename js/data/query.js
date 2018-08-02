@@ -1,5 +1,3 @@
-"use strict";
-
 var arrayQueryImpl = require("./array_query"),
     remoteQueryImpl = require("./remote_query");
 

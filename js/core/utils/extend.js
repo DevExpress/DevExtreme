@@ -1,5 +1,3 @@
-"use strict";
-
 var isPlainObject = require("./type").isPlainObject;
 
 var extendFromObject = function(target, source, overrideExistingValues) {

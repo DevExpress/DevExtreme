@@ -1,5 +1,3 @@
-"use strict";
-
 var windowUtils = require("./window"),
     domAdapter = require("../dom_adapter"),
     Callbacks = require("./callbacks"),

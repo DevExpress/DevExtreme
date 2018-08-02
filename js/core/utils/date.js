@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("./type"),
     adjust = require("./math").adjust,
     each = require("./iterator").each,

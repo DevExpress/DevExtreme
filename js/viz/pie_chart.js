@@ -1,5 +1,3 @@
-"use strict";
-
 var errors = require("../core/errors"),
     seriesConsts = require("./components/consts"),
     vizUtils = require("./core/utils"),

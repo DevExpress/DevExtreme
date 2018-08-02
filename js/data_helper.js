@@ -1,5 +1,3 @@
-"use strict";
-
 var DataSource = require("./data/data_source/data_source").DataSource,
     extend = require("./core/utils/extend").extend,
     normalizeDataSourceOptions = require("./data/data_source/data_source").normalizeDataSourceOptions;

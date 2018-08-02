@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     registerComponent = require("../../core/component_registrator"),

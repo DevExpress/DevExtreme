@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     animation = require("viz/core/renderers/animation"),
     renderers = require("viz/core/renderers/renderer"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var Promise = require("../../core/polyfills/promise"),
     Class = require("../../core/class"),
     map = require("../../core/utils/iterator").map,

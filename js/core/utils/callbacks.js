@@ -1,5 +1,3 @@
-"use strict";
-
 var Callback = function(options) {
     this._options = options || {};
     this._list = [];

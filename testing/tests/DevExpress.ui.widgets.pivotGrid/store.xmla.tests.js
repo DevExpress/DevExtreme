@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     if('callPhantom' in window) return;
 

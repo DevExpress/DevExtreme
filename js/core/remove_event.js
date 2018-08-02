@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("./renderer");
 var beforeCleanData = require("./element_data").beforeCleanData;
 var eventsEngine = require("../events/core/events_engine");

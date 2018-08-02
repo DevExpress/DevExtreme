@@ -1,5 +1,3 @@
-"use strict";
-
 var numericTranslator = require("./numeric_translator");
 
 module.exports = {

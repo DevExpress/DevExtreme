@@ -1,4 +1,3 @@
-"use strict";
 /**
 * @name dxSlider
 * @isEditor

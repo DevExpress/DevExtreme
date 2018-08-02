@@ -1,5 +1,3 @@
-"use strict";
-
 var ValidationMixin = {
     _findGroup: function() {
         var group = this.option("validationGroup"),

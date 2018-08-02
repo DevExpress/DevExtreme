@@ -1,5 +1,3 @@
-"use strict";
-
 var maskCaret = require("ui/number_box/number_box.caret");
 
 QUnit.module("format caret");

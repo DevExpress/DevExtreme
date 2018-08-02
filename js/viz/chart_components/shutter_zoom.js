@@ -1,5 +1,3 @@
-"use strict";
-
 var dragEvents = require("../../events/drag"),
     SHUTTER_EVENTS_NS = ".shutter-zoom",
     DRAG_START_EVENT_NAME = dragEvents.start + SHUTTER_EVENTS_NS,

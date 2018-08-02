@@ -1,5 +1,3 @@
-"use strict";
-
 var Callbacks = require("../../core/utils/callbacks"),
     Class = require("../../core/class");
 

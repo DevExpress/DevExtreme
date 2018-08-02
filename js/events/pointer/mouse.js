@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     BaseStrategy = require("./base"),
     Observer = require("./observer");

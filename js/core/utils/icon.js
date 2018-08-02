@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer");
 
 var getImageSourceType = function(source) {

@@ -1,5 +1,3 @@
-"use strict";
-
 var Callbacks = require("../../core/utils/callbacks"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     commonUtils = require("../../core/utils/common"),

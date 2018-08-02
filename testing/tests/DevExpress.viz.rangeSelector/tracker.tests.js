@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     pointerEvents = require("events/pointer"),
     trackerModule = require("viz/range_selector/tracker");

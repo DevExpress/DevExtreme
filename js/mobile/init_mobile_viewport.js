@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @name utils.initMobileViewport
  * @publicName initMobileViewport(options)

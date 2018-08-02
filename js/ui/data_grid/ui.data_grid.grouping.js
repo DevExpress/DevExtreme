@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     gridCore = require("./ui.data_grid.core"),
     ExpandedGroupingHelper = require("./ui.data_grid.grouping.expanded").GroupingHelper,

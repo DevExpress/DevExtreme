@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     translator = require("animation/translator"),
     styleUtils = require("core/utils/style"),

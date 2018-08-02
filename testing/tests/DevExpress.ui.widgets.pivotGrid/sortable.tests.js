@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     HORIZONTAL_WIDTH_LARGE = 1500,

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     DataSource = require("ui/pivot_grid/data_source"),
     ArrayStore = require("data/array_store"),

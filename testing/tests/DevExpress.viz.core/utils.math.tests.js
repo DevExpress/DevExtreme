@@ -1,5 +1,3 @@
-"use strict";
-
 var vizUtils = require("viz/core/utils");
 
 var EPSILON = 1E-8,

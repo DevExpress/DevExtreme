@@ -1,5 +1,3 @@
-"use strict";
-
 var commonUtils = require("../../core/utils/common"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,

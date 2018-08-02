@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name dxTreeList
 * @inherits GridBase

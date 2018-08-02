@@ -1,5 +1,3 @@
-"use strict";
-
 var proto = require("./tree_map.base").prototype,
     Tracker = require("../components/tracker").Tracker,
     expand = require("../core/helpers").expand,

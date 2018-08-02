@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     trackerModule = require("viz/range_selector/tracker"),
     dataSourceModule = require("data/data_source/data_source"),

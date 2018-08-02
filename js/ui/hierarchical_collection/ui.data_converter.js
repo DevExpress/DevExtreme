@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),

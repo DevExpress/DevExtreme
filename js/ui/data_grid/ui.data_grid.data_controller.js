@@ -1,5 +1,3 @@
-"use strict";
-
 var gridCore = require("./ui.data_grid.core"),
     errors = require("../widget/ui.errors"),
     dataSourceAdapterProvider = require("./ui.data_grid.data_source_adapter"),

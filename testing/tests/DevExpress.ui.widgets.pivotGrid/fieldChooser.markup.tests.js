@@ -1,5 +1,3 @@
-"use strict";
-
 require("common.css!");
 require("generic_light.css!");
 require("ui/pivot_grid/ui.pivot_grid.field_chooser");

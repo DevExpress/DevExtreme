@@ -1,5 +1,3 @@
-"use strict";
-
 var browserAdapters = require("framework/browser_adapters"),
     frameworkMocks = require("../../helpers/frameworkMocks.js"),
     ROOT_PAGE_URL = "__root__";

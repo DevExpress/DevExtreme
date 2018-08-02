@@ -1,5 +1,3 @@
-"use strict";
-
 var errors = require("../errors");
 
 var Locker = function() {

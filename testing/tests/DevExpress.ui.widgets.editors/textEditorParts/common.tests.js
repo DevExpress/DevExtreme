@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     eventsEngine = require("events/core/events_engine"),
     domUtils = require("core/utils/dom"),

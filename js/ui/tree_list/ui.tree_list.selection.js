@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     treeListCore = require("./ui.tree_list.core"),
     commonUtils = require("../../core/utils/common"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     Deferred = require("../../core/utils/deferred").Deferred,
     treeListCore = require("./ui.tree_list.core"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     _parseScalar = require("../core/utils").parseScalar,
     extend = require("../../core/utils/extend").extend,

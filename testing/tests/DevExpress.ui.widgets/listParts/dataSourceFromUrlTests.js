@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     List = require("ui/list"),
     ajaxMock = require("../../../helpers/ajaxMock.js");

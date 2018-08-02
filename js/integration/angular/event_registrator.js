@@ -1,5 +1,3 @@
-"use strict";
-
 var eventRegistratorCallbacks = require("../../events/core/event_registrator_callbacks"),
     eventsEngine = require("../../events/core/events_engine"),
     ngModule = require("./module");

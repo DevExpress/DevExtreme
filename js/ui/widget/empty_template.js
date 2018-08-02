@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     TemplateBase = require("./ui.template_base");
 

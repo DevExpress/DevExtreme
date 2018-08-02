@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("../../core/utils/iterator").each,
     callbacks = require("./event_registrator_callbacks");
 

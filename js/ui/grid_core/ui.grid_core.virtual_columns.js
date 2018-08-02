@@ -1,5 +1,3 @@
-"use strict";
-
 var windowUtils = require("../../core/utils/window");
 var virtualColumnsCore = require("./ui.grid_core.virtual_columns_core");
 

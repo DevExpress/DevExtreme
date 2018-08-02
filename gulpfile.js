@@ -1,7 +1,5 @@
 // jshint node:true
 
-"use strict";
-
 var gulp = require('gulp');
 var os = require('os');
 var runSequence = require('run-sequence');

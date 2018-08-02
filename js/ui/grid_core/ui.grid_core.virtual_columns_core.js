@@ -1,5 +1,3 @@
-"use strict";
-
 import { extend } from "../../core/utils/extend";
 
 function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastProcessedIndexes) {

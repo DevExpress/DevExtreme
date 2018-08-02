@@ -1,5 +1,3 @@
-"use strict";
-
 var ListStrategy = require("./ui.toolbar.strategy.list_base"),
     Swipeable = require("../../events/gesture/swipeable");
 

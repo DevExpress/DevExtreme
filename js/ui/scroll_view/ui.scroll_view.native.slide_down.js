@@ -1,5 +1,3 @@
-"use strict";
-
 var Callbacks = require("../../core/utils/callbacks"),
     NativeStrategy = require("./ui.scrollable.native"),
     Deferred = require("../../core/utils/deferred").Deferred;

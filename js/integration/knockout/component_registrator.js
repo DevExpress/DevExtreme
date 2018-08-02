@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     ko = require("knockout"),
     Callbacks = require("../../core/utils/callbacks"),

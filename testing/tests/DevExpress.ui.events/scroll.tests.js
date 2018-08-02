@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     scrollEvents = require("ui/scroll_view/ui.events.emitter.gesture.scroll"),

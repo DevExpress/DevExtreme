@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ko = require("knockout"),
     domUtils = require("core/utils/dom"),

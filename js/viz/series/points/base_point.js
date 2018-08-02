@@ -1,5 +1,3 @@
-"use strict";
-
 var mixins = {},
     statesConsts = require("../../components/consts").states,
     symbolPoint = require("./symbol_point"),

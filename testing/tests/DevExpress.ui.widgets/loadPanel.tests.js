@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
     keyboardMock = require("../../helpers/keyboardMock.js"),

@@ -1,7 +1,5 @@
 // jshint node:true
 
-"use strict";
-
 var fs = require('fs');
 var argv = require('yargs')
     .default('uglify', false)

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     SchedulerRecurrenceEditor = require("ui/scheduler/ui.scheduler.recurrence_editor"),

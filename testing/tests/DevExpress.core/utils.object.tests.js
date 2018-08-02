@@ -1,5 +1,3 @@
-"use strict";
-
 var objectUtils = require("core/utils/object");
 
 QUnit.test("orderEach", function(assert) {

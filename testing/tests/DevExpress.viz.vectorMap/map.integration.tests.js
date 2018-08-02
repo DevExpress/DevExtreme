@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     simpleProjection = require("viz/vector_map/projection").projection({
         aspectRatio: 4 / 3,

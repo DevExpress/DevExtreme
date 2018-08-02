@@ -1,5 +1,3 @@
-"use strict";
-
 var errorUtils = require("core/utils/error"),
     consoleUtils = require("core/utils/console");
 

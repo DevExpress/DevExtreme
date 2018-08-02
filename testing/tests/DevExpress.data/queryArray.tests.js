@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     QUERY = require("data/query"),
     ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");

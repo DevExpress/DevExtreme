@@ -1,5 +1,3 @@
-"use strict";
-
 /* global internals */
 
 var $ = require("jquery");

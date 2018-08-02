@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     version = require("core/version"),
     getData = require("client_exporter").pdf.getData,

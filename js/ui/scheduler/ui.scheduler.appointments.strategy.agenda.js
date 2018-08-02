@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     dateUtils = require("../../core/utils/date"),
     each = require("../../core/utils/iterator").each,
