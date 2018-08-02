@@ -1,6 +1,6 @@
 /**
 * @name dxRangeSelector
-* @inherits BaseWidget
+* @inherits BaseWidget, DataHelperMixin
 * @module viz/range_selector
 * @export default
 */
@@ -825,11 +825,5 @@ var dxRangeSelector = {
     * @publicName render(skipChartAnimation)
     * @param1 skipChartAnimation:boolean
     */
-    render: function(skipChartAnimation) { },
-    /**
-    * @name dxRangeSelectorMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
-    getDataSource: function() { },
+    render: function(skipChartAnimation) { }
 };
