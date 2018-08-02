@@ -1048,11 +1048,11 @@ var Scheduler = Widget.inherit({
     },
 
     _postponeDataSourceLoading: function(promise) {
-        this._addPostponedOperation("_reloadDataSource", this._reloadDataSource.bind(this), promise);
+        this.postponedOperations.add("_reloadDataSource", this._reloadDataSource.bind(this), promise);
     },
 
     _postponeResourceLoading: function() {
-        var whenLoaded = this._addPostponedOperation("_loadResources", () => {
+        var whenLoaded = this.postponedOperations.add("_loadResources", () => {
             return this._loadResources();
         });
 
