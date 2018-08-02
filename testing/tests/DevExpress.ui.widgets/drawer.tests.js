@@ -423,6 +423,71 @@ QUnit.test("maxWidth should be rendered correctly in push mode", assert => {
     fx.off = false;
 });
 
+QUnit.test("Drawer should be rendered correctly in push mode, right menu position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        menuVisible: true,
+        menuPosition: "right",
+        mode: "push"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().left, -200, "content has correct left when minWidth is set");
+
+    instance.toggleMenuVisibility();
+
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+
+    fx.off = false;
+});
+
+QUnit.test("minWidth should be rendered correctly in push mode, right menu position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minWidth: 50,
+        menuPosition: "right",
+        menuVisible: true,
+        mode: "push"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().left, -200, "content has correct left when minWidth is set");
+
+    instance.toggleMenuVisibility();
+
+    assert.equal($content.position().left, -50, "content has correct left when minWidth is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxWidth should be rendered correctly in push mode, right menu position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxWidth: 300,
+        menuPosition: "right",
+        menuVisible: true,
+        mode: "push"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().left, -300, "content has correct left when maxWidth is set");
+
+    instance.toggleMenuVisibility();
+
+    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
+
+    fx.off = false;
+});
+
 QUnit.module("persistent mode");
 
 QUnit.test("minWidth should be rendered correctly in persistent mode, shrink", assert => {
