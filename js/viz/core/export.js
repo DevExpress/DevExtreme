@@ -333,9 +333,11 @@ extend(exports.ExportMenu.prototype, {
     },
 
     updateCanvasSize: function(canvas) {
-        var exportOptions = this._options.exportOptions;
-        exportOptions.width = canvas.width;
-        exportOptions.height = canvas.height;
+        if(this._options && this._options.exportOptions) {
+            var exportOptions = this._options.exportOptions;
+            exportOptions.width = canvas.width;
+            exportOptions.height = canvas.height;
+        }
     },
 
     dispose: function() {
