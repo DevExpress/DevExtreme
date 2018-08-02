@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     dxSchedulerResourceManager = require("ui/scheduler/ui.scheduler.resource_manager"),
     DataSource = require("data/data_source/data_source").DataSource,

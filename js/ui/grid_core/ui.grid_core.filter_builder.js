@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "../../core/renderer";
 import modules from "./ui.grid_core.modules";
 import { extend } from "../../core/utils/extend";

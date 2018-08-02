@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("../core/utils/type"),
     stringUtils = require("../core/utils/string"),
     numberFormatter = require("../localization/number"),

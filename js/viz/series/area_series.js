@@ -1,5 +1,3 @@
-"use strict";
-
 // there are area, steparea, stackedarea, fullstackedarea, splinearea
 var objectUtils = require("../../core/utils/object"),
     extend = require("../../core/utils/extend").extend,

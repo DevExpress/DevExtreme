@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,

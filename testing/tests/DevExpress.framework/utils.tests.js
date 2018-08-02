@@ -1,5 +1,3 @@
-"use strict";
-
 var dxCommand = require("framework/command"),
     utils = require("framework/utils").utils,
     mergeCommands = utils.mergeCommands,

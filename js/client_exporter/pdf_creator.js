@@ -1,5 +1,3 @@
-"use strict";
-
 var VERSION = require("../core/version"),
     window = require("../core/utils/window").getWindow(),
     imageCreator = require("./image_creator").imageCreator,

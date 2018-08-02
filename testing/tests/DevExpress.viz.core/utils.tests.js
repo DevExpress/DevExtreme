@@ -1,5 +1,3 @@
-"use strict";
-
 var utils = require("viz/core/utils");
 
 QUnit.module("decreaseGaps", {

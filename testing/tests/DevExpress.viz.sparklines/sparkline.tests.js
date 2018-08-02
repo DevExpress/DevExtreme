@@ -1,5 +1,3 @@
-"use strict";
-
 /* global currentTest, createTestContainer */
 
 var $ = require("jquery"),

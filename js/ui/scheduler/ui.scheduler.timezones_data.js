@@ -1,5 +1,3 @@
-"use strict";
-
 var displayNames = [
     "(UTC) Monrovia, Reykjavik",
     "(UTC+03:00) Nairobi",

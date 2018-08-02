@@ -1,5 +1,3 @@
-"use strict";
-
 var locale = require("./core").locale,
     LANGUAGE_CODES = {
         "ar": 1,

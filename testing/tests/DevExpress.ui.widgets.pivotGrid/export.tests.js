@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     DataProvider = require("ui/pivot_grid/ui.pivot_grid.export").DataProvider,
     clientExporter = require("client_exporter"),

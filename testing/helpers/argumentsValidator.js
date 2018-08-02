@@ -1,5 +1,3 @@
-"use strict";
-
 var renderer = require("core/renderer");
 var typeUtils = require("core/utils/type");
 

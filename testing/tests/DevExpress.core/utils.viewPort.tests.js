@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     viewPortUtils = require("core/utils/view_port"),
     viewPort = viewPortUtils.value,

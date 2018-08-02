@@ -1,5 +1,3 @@
-"use strict";
-
 var config = require("../config"),
     getLDMLFormatter = require("../../localization/ldml/date.formatter").getFormatter,
     defaultDateNames = require("../../localization/default_date_names"),

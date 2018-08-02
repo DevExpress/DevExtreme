@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     windowUtils = require("../../core/utils/window"),
     domAdapter = require("../../core/dom_adapter"),

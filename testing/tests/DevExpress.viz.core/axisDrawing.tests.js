@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     errors = require("viz/core/errors_warnings"),
     translator2DModule = require("viz/translators/translator2d"),

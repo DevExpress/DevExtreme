@@ -1,5 +1,3 @@
-"use strict";
-
 var inArray = require("../core/utils/array").inArray;
 
 var hideCallback = (function() {

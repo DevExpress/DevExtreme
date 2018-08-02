@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     _round = Math.round,
     objectUtils = require("../../core/utils/object"),

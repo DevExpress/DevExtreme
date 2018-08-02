@@ -1,5 +1,3 @@
-"use strict";
-
 import utils from "ui/filter_builder/utils";
 import between from "ui/filter_builder/between";
 import CustomStore from "data/custom_store";

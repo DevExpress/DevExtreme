@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "../../core/renderer";
 import domAdapter from "../../core/dom_adapter";
 import Class from "../../core/class";

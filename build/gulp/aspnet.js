@@ -1,7 +1,5 @@
 // jshint node:true
 
-"use strict";
-
 var gulp = require('gulp');
 var merge = require('merge-stream');
 var rename = require('gulp-rename');

@@ -1,7 +1,5 @@
 // jshint node:true
 
-"use strict";
-
 var gulp = require('gulp');
 var replace = require('gulp-replace');
 var concat = require('gulp-concat');

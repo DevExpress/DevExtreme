@@ -1,5 +1,3 @@
-"use strict";
-
 require("ui/action_sheet");
 
 var $ = require("jquery"),

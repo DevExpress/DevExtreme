@@ -1,5 +1,3 @@
-"use strict";
-
 var vizUtils = require("../core/utils"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,

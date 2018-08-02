@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = function(object) {
     var extend = require("./extend").extend,
         isFunction = require("./type").isFunction,

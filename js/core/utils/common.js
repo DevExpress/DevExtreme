@@ -1,5 +1,3 @@
-"use strict";
-
 var config = require("../config"),
     deferredUtils = require("../utils/deferred"),
     when = deferredUtils.when,

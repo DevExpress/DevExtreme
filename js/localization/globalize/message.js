@@ -1,5 +1,3 @@
-"use strict";
-
 require("./core");
 
 var Globalize = require("globalize"),

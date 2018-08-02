@@ -1,5 +1,3 @@
-"use strict";
-
 var dxSankey = require("./sankey/sankey"),
     setTooltipCustomOptions = require("./sankey/tooltip").setTooltipCustomOptions;
 

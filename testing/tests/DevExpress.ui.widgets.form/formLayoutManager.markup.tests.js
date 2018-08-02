@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import consoleUtils from "core/utils/console";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";

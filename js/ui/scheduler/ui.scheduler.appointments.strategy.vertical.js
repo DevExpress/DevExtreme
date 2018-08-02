@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
     extend = require("../../core/utils/extend").extend,
     isNumeric = require("../../core/utils/type").isNumeric,

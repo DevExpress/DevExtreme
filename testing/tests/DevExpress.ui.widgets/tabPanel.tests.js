@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     fx = require("animation/fx"),
     support = require("core/utils/support"),

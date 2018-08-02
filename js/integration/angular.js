@@ -1,5 +1,3 @@
-"use strict";
-
 var angular = require("angular");
 
 // Check availability in global environment

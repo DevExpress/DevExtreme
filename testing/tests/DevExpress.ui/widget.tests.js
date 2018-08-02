@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Widget = require("ui/widget/ui.widget"),
     registerComponent = require("core/component_registrator"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
     CollectionWidgetItem = require("ui/collection/item");

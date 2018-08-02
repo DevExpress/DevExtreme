@@ -1,5 +1,3 @@
-"use strict";
-
 var themes = require("ui/themes"),
     viewportUtils = require("core/utils/view_port");
 

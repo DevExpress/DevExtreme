@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import baseWidgetModule from "viz/core/base_widget";
 import commons from "./rangeSelectorParts/commons.js";

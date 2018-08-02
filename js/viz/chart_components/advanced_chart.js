@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorModule = require("../../core/utils/iterator"),

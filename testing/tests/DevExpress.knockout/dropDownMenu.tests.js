@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ko = require("knockout"),
     fx = require("animation/fx"),

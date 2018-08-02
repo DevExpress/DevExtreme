@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     FileUploader = require("ui/file_uploader"),
     devices = require("core/devices"),

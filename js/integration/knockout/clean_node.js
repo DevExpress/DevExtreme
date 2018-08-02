@@ -1,5 +1,3 @@
-"use strict";
-
 var elementData = require("../../core/element_data"),
     afterCleanData = elementData.afterCleanData,
     strategyChanging = elementData.strategyChanging,

@@ -1,5 +1,3 @@
-"use strict";
-
 /* global ROOT_URL */
 
 var $ = require("jquery"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var browser = require("core/utils/browser"),
     devices = require("core/devices"),
     caret = require("ui/text_box/utils.caret");

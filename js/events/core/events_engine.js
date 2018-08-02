@@ -1,5 +1,3 @@
-"use strict";
-
 var registerEventCallbacks = require("./event_registrator_callbacks");
 var extend = require("../../core/utils/extend").extend;
 var domAdapter = require("../../core/dom_adapter");

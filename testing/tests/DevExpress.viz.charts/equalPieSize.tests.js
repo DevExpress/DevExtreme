@@ -1,6 +1,4 @@
 
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     commons = require("./chartParts/commons.js"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     localization = require("localization"),

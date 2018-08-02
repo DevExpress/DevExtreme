@@ -1,5 +1,3 @@
-"use strict";
-
 /* global Windows */
 var $ = require("../core/renderer"),
     domAdapter = require("../core/dom_adapter"),

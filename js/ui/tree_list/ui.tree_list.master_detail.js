@@ -1,5 +1,3 @@
-"use strict";
-
 var treeListCore = require("./ui.tree_list.core"),
     masterDetailModule = require("../grid_core/ui.grid_core.master_detail"),
     extend = require("../../core/utils/extend").extend;

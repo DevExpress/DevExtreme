@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../../core/class"),
     deferredStrategy = require("./selection.strategy.deferred"),
     standardStrategy = require("./selection.strategy.standard"),

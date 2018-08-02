@@ -1,5 +1,3 @@
-"use strict";
-
 var errorUtils = require("../core/utils/error"),
     coreErrors = require("../core/errors"),
     handlers = {};

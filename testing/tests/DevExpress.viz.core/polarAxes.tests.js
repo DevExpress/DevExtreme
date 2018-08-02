@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
 import translator2DModule from "viz/translators/translator2d";

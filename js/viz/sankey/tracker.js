@@ -1,5 +1,3 @@
-"use strict";
-
 var proto = require("./sankey").prototype,
     Tracker = require("../components/tracker").Tracker,
     DATA_KEY_BASE = "__sankey_data_",

@@ -1,5 +1,3 @@
-"use strict";
-
 SystemJS.config({
     meta: {
         "/testing/*": { format: "global" },

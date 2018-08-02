@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     isFunction = require("../../core/utils/type").isFunction,

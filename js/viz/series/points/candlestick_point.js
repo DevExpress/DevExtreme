@@ -1,5 +1,3 @@
-"use strict";
-
 var _extend = require("../../../core/utils/extend").extend,
     symbolPoint = require("./symbol_point"),
     barPoint = require("./bar_point"),

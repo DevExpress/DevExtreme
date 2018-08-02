@@ -1,5 +1,3 @@
-"use strict";
-
 var isDefined = require("../../core/utils/type").isDefined;
 
 var SORT_CLASS = "dx-sort",

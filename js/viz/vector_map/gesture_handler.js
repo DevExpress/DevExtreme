@@ -1,5 +1,3 @@
-"use strict";
-
 var _ln = Math.log,
     _LN2 = Math.LN2;
 

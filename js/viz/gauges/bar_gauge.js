@@ -1,5 +1,3 @@
-"use strict";
-
 var PI_DIV_180 = Math.PI / 180,
     _abs = Math.abs,
     _round = Math.round,

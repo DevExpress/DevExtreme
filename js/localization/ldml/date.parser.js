@@ -1,5 +1,3 @@
-"use strict";
-
 var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
 var FORMAT_TYPES = {

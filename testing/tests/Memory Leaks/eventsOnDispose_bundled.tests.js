@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     GoogleProvider = require("ui/map/provider.dynamic.google"),
     memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js");

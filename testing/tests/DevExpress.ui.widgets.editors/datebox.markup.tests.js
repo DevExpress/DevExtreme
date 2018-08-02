@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     support = require("core/utils/support"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),

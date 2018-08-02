@@ -1,5 +1,3 @@
-"use strict";
-
 /* global data2, dataID, internals, makeSlowDataSource */
 
 var $ = require("jquery"),

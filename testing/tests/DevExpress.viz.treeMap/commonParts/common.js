@@ -1,5 +1,3 @@
-"use strict";
-
 var vizMocks = require("../../../helpers/vizMocks.js"),
 
     rendererModule = require("viz/core/renderers/renderer"),

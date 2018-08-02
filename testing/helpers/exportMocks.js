@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 exports.MockDataProvider = function(data, columns) {

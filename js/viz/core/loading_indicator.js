@@ -1,5 +1,3 @@
-"use strict";
-
 var _patchFontOptions = require("./utils").patchFontOptions,
 
     STATE_HIDDEN = 0,

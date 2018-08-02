@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     treeListCore = require("./ui.tree_list.core"),
     validatingModule = require("../grid_core/ui.grid_core.validating");

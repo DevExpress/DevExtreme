@@ -1,5 +1,3 @@
-"use strict";
-
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
 var noop = require("../../core/utils/common").noop,

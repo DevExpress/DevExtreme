@@ -1,5 +1,3 @@
-"use strict";
-
 var renderer = require("core/renderer");
 
 QUnit.module("renderer");

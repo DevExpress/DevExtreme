@@ -1,5 +1,3 @@
-"use strict";
-
 var domAdapter = require("core/dom_adapter");
 
 QUnit.module("DOM Adapter", {

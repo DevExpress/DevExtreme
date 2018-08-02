@@ -1,5 +1,3 @@
-"use strict";
-
 var jQuery = require("jquery"),
     themes_callback = require("../../ui/themes_callback"),
     ready = require("../../core/utils/ready_callbacks").add;

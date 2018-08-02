@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     CollectionWidgetItem = require("../collection/item");
 

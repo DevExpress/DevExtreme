@@ -1,5 +1,3 @@
-"use strict";
-
 var pointerMock = require("../../helpers/pointerMock.js");
 
 var $ = require("jquery"),

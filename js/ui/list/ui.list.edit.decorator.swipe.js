@@ -1,5 +1,3 @@
-"use strict";
-
 var translator = require("../../animation/translator"),
     fx = require("../../animation/fx"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,

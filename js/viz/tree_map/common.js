@@ -1,5 +1,3 @@
-"use strict";
-
 var _patchFontOptions = require("../core/utils").patchFontOptions;
 
 exports.buildRectAppearance = function(option) {

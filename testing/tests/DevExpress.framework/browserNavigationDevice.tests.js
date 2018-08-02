@@ -1,5 +1,3 @@
-"use strict";
-
 var HistoryBasedNavigationDevice = require("framework/navigation_devices").HistoryBasedNavigationDevice,
 
     frameworkMocks = require("../../helpers/frameworkMocks.js"),

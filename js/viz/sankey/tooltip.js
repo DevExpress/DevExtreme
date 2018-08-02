@@ -1,5 +1,3 @@
-"use strict";
-
 var _extend = require("../../core/utils/extend").extend,
     isFunction = require("../../core/utils/type").isFunction;
 

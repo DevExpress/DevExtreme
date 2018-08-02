@@ -1,4 +1,3 @@
-"use strict";
 var $ = require("jquery"),
     vizMocks = require("../../../helpers/vizMocks.js"),
     labelModule = require("viz/series/points/label"),

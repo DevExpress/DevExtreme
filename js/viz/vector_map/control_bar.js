@@ -1,5 +1,3 @@
-"use strict";
-
 var _math = Math,
     _min = _math.min,
     _max = _math.max,

@@ -1,5 +1,3 @@
-"use strict";
-
 var _createColorCodeGetter = require("./colorizing").createColorCodeGetter,
     _min = Math.min,
     _max = Math.max;

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     caret = require("ui/text_box/utils.caret"),
     keyboardMock = require("../../helpers/keyboardMock.js");

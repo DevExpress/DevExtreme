@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseVizWidget = require("viz/core/base_widget");
 
 QUnit.module("Viz", {

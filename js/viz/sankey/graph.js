@@ -1,5 +1,3 @@
-"use strict";
-
 const WHITE = 'white';
 const GRAY = 'gray';
 const BLACK = 'black';

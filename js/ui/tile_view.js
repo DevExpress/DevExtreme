@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),

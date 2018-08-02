@@ -1,5 +1,3 @@
-"use strict";
-
 import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";

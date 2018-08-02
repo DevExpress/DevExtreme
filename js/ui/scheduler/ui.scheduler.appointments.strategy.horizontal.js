@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
     dateUtils = require("../../core/utils/date");
 

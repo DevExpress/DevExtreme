@@ -1,5 +1,3 @@
-"use strict";
-
 var Guid = require("core/guid"),
     dataUtils = require("data/utils"),
     keysEqual = dataUtils.keysEqual,

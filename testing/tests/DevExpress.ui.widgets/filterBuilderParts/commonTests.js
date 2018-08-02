@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import { isRenderer } from "core/utils/type";
 import devices from "core/devices";

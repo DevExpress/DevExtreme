@@ -1,5 +1,3 @@
-"use strict";
-
 import * as vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";

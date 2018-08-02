@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Router = require("framework/router"),
     JSON_URI_PREFIX = require("framework/router").Route.__internals.JSON_URI_PREFIX;

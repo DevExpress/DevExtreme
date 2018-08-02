@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("core/utils/common").noop,
     themeModule = require("viz/themes"),
     ThemeManager = require("viz/gauges/theme_manager");

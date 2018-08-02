@@ -1,5 +1,3 @@
-"use strict";
-
 var eventEmitterModule = require("viz/vector_map/event_emitter");
 
 QUnit.module("eventEmitterMethods", {

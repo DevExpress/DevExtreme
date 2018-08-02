@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     iconUtils = require("core/utils/icon");
 

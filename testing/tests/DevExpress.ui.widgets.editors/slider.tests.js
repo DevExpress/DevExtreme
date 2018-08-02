@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
     resizeCallbacks = require("core/utils/resize_callbacks"),

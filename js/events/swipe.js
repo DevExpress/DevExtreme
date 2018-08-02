@@ -1,5 +1,3 @@
-"use strict";
-
 var eventUtils = require("./utils"),
     GestureEmitter = require("./gesture/emitter.gesture"),
     registerEmitter = require("./core/emitter_registrator");

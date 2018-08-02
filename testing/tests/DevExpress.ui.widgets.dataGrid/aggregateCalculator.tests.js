@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     AggregateCalculator = require("ui/data_grid/aggregate_calculator");
 

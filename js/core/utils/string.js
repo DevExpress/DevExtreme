@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("./type"),
     commonUtils = require("./common");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 import "../DevExpress.ui.widgets/tabs.markup.tests.js";
 
 import $ from "jquery";

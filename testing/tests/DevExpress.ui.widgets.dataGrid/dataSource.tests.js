@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     logger = require("core/utils/console").logger,
     DataSource = require("data/data_source/data_source").DataSource,

@@ -1,5 +1,3 @@
-"use strict";
-
 var errors = require("../errors"),
     when = require("../../core/utils/deferred").when;
 

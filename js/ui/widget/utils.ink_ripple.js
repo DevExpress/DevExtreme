@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer");
 var INKRIPPLE_CLASS = "dx-inkripple",
     INKRIPPLE_WAVE_CLASS = "dx-inkripple-wave",

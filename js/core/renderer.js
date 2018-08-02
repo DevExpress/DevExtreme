@@ -1,5 +1,3 @@
-"use strict";
-
 var rendererBase = require("./renderer_base");
 
 /**

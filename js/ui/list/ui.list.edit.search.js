@@ -1,5 +1,3 @@
-"use strict";
-
 var ListEdit = require("./ui.list.edit"),
     searchBoxMixin = require("../widget/ui.search_box_mixin");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     getKeyHash = commonUtils.getKeyHash,

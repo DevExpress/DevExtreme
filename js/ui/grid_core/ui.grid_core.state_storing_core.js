@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     window = require("../../core/utils/window").getWindow(),
     modules = require("./ui.grid_core.modules"),

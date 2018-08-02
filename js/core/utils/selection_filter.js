@@ -1,5 +1,3 @@
-"use strict";
-
 var getKeyHash = require("./common").getKeyHash,
     equalByValue = require("./common").equalByValue,
     typeUtils = require("./type");

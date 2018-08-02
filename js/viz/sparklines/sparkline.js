@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseSparkline = require("./base_sparkline"),
 
     dataValidatorModule = require("../components/data_validator"),

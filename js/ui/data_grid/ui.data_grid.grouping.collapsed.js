@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     gridCore = require("./ui.data_grid.core"),

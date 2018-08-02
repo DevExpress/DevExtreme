@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name dxFilterBuilder
 * @inherits Widget

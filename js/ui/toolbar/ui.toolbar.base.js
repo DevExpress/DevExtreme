@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     themes = require("../themes"),
     commonUtils = require("../../core/utils/common"),

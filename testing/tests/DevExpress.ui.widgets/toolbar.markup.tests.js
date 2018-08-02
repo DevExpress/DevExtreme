@@ -1,5 +1,3 @@
-"use strict";
-
 import "ui/action_sheet";
 import "ui/button";
 import "ui/tabs";

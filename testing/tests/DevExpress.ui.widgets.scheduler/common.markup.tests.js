@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import fx from "animation/fx";
 import dxScheduler from "ui/scheduler/ui.scheduler";

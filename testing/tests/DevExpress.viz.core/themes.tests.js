@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     themeModule = require("viz/themes"),
     uiThemeModule = require("ui/themes");

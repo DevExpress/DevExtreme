@@ -1,5 +1,3 @@
-"use strict";
-
 var mathUtils = require("../core/utils/math"),
     iteratorUtils = require("../core/utils/iterator"),
     errors = require("../core/errors"),

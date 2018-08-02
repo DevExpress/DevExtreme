@@ -1,5 +1,3 @@
-"use strict";
-
 var common = require("./common"),
     Node = require("./node"),
 

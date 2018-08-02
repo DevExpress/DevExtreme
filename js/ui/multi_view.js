@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),

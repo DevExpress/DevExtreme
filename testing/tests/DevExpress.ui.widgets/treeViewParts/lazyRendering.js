@@ -1,5 +1,3 @@
-"use strict";
-
 /* global internals, initTree */
 
 QUnit.module("Lazy rendering");

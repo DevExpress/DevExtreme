@@ -1,5 +1,3 @@
-"use strict";
-
 var DevExpress = require("./core");
 
 /// BUNDLER_PARTS

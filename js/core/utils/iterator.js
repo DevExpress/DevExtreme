@@ -1,5 +1,3 @@
-"use strict";
-
 var applyCallback = function(index, values, callback, result) {
     var value = callback(values[index], index);
 

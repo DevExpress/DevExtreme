@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     dateSerialization = require("core/utils/date_serialization"),
     isDefined = require("core/utils/type").isDefined,

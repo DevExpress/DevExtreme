@@ -1,5 +1,3 @@
-"use strict";
-
 var DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
 
 module.exports = {

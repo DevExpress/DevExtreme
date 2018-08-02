@@ -1,5 +1,3 @@
-"use strict";
-
 var types = {
     "[object Array]": "array",
     "[object Date]": "date",

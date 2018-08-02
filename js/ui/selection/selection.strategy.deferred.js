@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("../../core/utils/type"),
     SelectionStrategy = require("./selection.strategy"),
     errors = require("../widget/ui.errors"),

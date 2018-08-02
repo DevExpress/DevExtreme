@@ -1,5 +1,3 @@
-"use strict";
-
 var registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     NavBarItem = require("./nav_bar/item"),
