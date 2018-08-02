@@ -389,11 +389,21 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("value"), null, "value has been cleared");
         });
 
-        QUnit.test("value change event should clear search value", (assert) => {
+        QUnit.test("focusout should clear search value", (assert) => {
             this.keyboard.type("1");
             assert.equal(this.instance.option("text"), "January 10 2012", "text has been changed");
 
-            this.keyboard.change();
+            this.$input.trigger("focusout");
+            this.keyboard.type("2");
+            assert.equal(this.instance.option("text"), "January 2 2012", "search value was cleared");
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
+        });
+
+        QUnit.test("enter should clear search value", (assert) => {
+            this.keyboard.type("1");
+            assert.equal(this.instance.option("text"), "January 10 2012", "text has been changed");
+
+            this.keyboard.press("enter");
             this.keyboard.type("2");
             assert.equal(this.instance.option("text"), "January 2 2012", "search value was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
@@ -786,7 +796,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("right").press("enter");
             assert.equal(this.$input.val(), "October 11 2012", "text is correct");
             assert.equal(this.instance.option("value").getDate(), 11, "value is correct");
-            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret is good");
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
 
         QUnit.test("Internal _maskValue and public value should be different objects", (assert) => {
