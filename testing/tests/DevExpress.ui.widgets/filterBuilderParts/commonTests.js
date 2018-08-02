@@ -998,13 +998,16 @@ QUnit.module("on value changed", function() {
         // add group
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
         assert.equal(getFilterBuilderGroups(container).length, 2);
+        assert.equal(getFilterBuilderItems(container).length, 1);
 
         // add inner condition
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 0);
+        assert.equal(getFilterBuilderItems(container).length, 2);
         assert.equal(getFilterBuilderGroups(container).length, 2);
 
         // remove group
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
+        assert.equal(getFilterBuilderItems(container).length, 1);
         assert.equal(getFilterBuilderGroups(container).length, 1);
 
     });
