@@ -13,18 +13,16 @@ var VERSION = require("../core/version"),
     imageStartTemplate = "5 0 obj\r\n<</Type/XObject/Subtype/Image/Width _width_/Height _height_/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length _length_>>stream\r\n",
     imageEndTemplate = "\r\nendstream\r\nendobj\r\n",
     trailerTemplate = "trailer\r\n<<\r\n/Size 8\r\n/Root 7 0 R\r\n/Info 6 0 R\r\n>>\r\nstartxref\r\n_length_\r\n%%EOF",
-    xrefTemplate = "xref\r\n0 8\r\n0000000000 65535 f\r\n0000000241 00000 n\r\n0000000010 00000 n\r\n_main_ 00000 n\r\n0000000089 00000 n\r\n_image_ 00000 n\r\n_info_ 00000 n\r\n0000000143 00000 n\r\n",
-
-    DEFAULT_MARGIN_X = 60,
-    DEFAULT_MARGIN_Y = 40;
+    xrefTemplate = "xref\r\n0 8\r\n0000000000 65535 f\r\n0000000241 00000 n\r\n0000000010 00000 n\r\n_main_ 00000 n\r\n0000000089 00000 n\r\n_image_ 00000 n\r\n_info_ 00000 n\r\n0000000143 00000 n\r\n";
 
 var pad = function(str, len) {
     return str.length < len ? pad("0" + str, len) : str;
 };
 
 var composePdfString = function(imageString, options, curDate) {
-    var width = options.width + DEFAULT_MARGIN_X,
-        height = options.height + DEFAULT_MARGIN_Y,
+    var margin = (options.margin || 0) * 2,
+        width = options.width + margin,
+        height = options.height + margin,
         widthPt = (width * 0.75).toFixed(2),
         heightPt = (height * 0.75).toFixed(2);
 
@@ -66,7 +64,7 @@ var getBase64 = function(binaryData) {
 };
 
 exports.getData = function(data, options, callback) {
-    var imageData = imageCreator.getImageData(data, extend({}, options, { format: "jpeg" })),
+    var imageData = imageCreator.getImageData(data, extend({}, options, { format: "JPEG" })),
         blob = new Deferred();
 
     blob.done(callback);
