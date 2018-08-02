@@ -777,8 +777,7 @@ QUnit.test("expandItem public method", function(assert) {
     }).dxAccordion("instance");
 
     instance.expandItem(2);
-    var $items = this.$element.find("." + ACCORDION_ITEM_CLASS),
-        itemsVisible = this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length;
+    var $items = this.$element.find("." + ACCORDION_ITEM_CLASS);
 
     assert.ok($items.eq(2).hasClass(ACCORDION_ITEM_OPENED_CLASS), "specified item is opened");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "only one item is opened");
@@ -787,7 +786,6 @@ QUnit.test("expandItem public method", function(assert) {
     instance.option("multiple", true);
     instance.expandItem(0);
     $items = this.$element.find("." + ACCORDION_ITEM_CLASS);
-    itemsVisible = this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length;
 
     assert.ok($items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "specified item is opened in multiple mode");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 2, "two items are opened in multiple mode");

@@ -1,6 +1,5 @@
 // jshint strict:implied, -W098, -W117
-/* eslint-disable no-undef*/
-
+/* eslint-disable no-undef, no-unused-vars*/
 function parseShape(stream, errors) {
     var timeStart,
         timeEnd,

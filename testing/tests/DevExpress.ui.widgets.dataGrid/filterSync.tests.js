@@ -1424,15 +1424,14 @@ QUnit.module("Custom operations", {
 
     QUnit.test("anyof editor", function(assert) {
         // arrange
-        var result,
-            $container = $("<div>"),
+        var $container = $("<div>"),
             field = {
                 dataField: "field",
             },
             anyOfOperation = this.getAnyOfOperation(field);
 
         // act
-        result = anyOfOperation.editorTemplate({
+        anyOfOperation.editorTemplate({
             value: [1],
             field: field
         }, $container);

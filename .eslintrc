@@ -37,7 +37,7 @@
         "no-trailing-spaces": "error",
         "strict": 2,
         "no-unused-expressions": 0,
-        "no-unused-vars": 2,
+        "no-unused-vars": ["error", { "args": "none" }],
         "no-extend-native": 2,
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],

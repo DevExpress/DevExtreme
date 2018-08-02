@@ -448,7 +448,6 @@ QUnit.test('Save changes button click call saveEditData', function(assert) {
     // arrange
     var headerPanel = this.headerPanel,
         rowsView = this.rowsView,
-        headerPanelElement,
         saveEditDataCallCount = 0,
         testElement = $('#container');
 
@@ -472,8 +471,6 @@ QUnit.test('Save changes button click call saveEditData', function(assert) {
 
     headerPanel.render(testElement);
     rowsView.render(testElement);
-
-    headerPanelElement = testElement.find('.dx-datagrid-header-panel').first();
 
     // act
     testElement.find(".dx-datagrid-save-button").trigger("dxclick");
@@ -1383,8 +1380,7 @@ QUnit.test('Save Row', function(assert) {
     var that = this,
         rowsView = this.rowsView,
         testElement = $('#container'),
-        updateArgs,
-        cells;
+        updateArgs;
 
     that.options.editing = {
         allowUpdating: true,
@@ -1416,7 +1412,7 @@ QUnit.test('Save Row', function(assert) {
 
     // act
     this.click(testElement.find('tbody > tr').first(), '.dx-link-save');
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -1428,8 +1424,7 @@ QUnit.test('Save Row for calculated column', function(assert) {
     var that = this,
         rowsView = this.rowsView,
         testElement = $('#container'),
-        updateArgs,
-        cells;
+        updateArgs;
 
     that.options.editing = {
         allowUpdating: true,
@@ -1455,7 +1450,7 @@ QUnit.test('Save Row for calculated column', function(assert) {
 
     // act
     this.click(testElement.find('tbody > tr').first(), 'a:contains(Save)');
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -1496,8 +1491,7 @@ QUnit.test('Serialize value before saving', function(assert) {
         rowsView = this.rowsView,
         testElement = $('#container'),
         updateArgs,
-        serializingValue,
-        cells;
+        serializingValue;
 
     that.options.editing = {
         allowUpdating: true,
@@ -1528,7 +1522,7 @@ QUnit.test('Serialize value before saving', function(assert) {
 
     // act
     this.click(testElement.find('tbody > tr').first(), 'a:contains(Save)');
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -3494,7 +3488,6 @@ QUnit.test('Insert Row when "cell" edit mode', function(assert) {
     var that = this,
         headerPanel = that.headerPanel,
         rowsView = that.rowsView,
-        headerPanelElement,
         testElement = $('#container');
 
     that.options.editing = {
@@ -3504,8 +3497,6 @@ QUnit.test('Insert Row when "cell" edit mode', function(assert) {
     };
     headerPanel.render(testElement);
     rowsView.render(testElement);
-
-    headerPanelElement = testElement.find('.dx-datagrid-header-panel');
 
     // act
     that.addRow();

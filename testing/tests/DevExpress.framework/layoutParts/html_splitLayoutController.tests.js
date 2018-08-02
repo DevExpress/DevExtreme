@@ -138,7 +138,7 @@
     function objectKeysLength(obj) {
         var length = 0;
 
-        for(var key in obj) { // jshint ignore:line
+        for(var key in obj) { // eslint-disable-line no-unused-vars
             length++;
         }
 

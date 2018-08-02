@@ -1040,8 +1040,7 @@ QUnit.test("Open list after exporting - previously clicked item is unhovered. T5
 
 QUnit.test("Printing by menu", function(assert) {
     // assert
-    var exportMenu,
-        svgNode = { style: {} },
+    var svgNode = { style: {} },
         docStub = {
             open: sinon.stub(),
             write: sinon.stub(),
@@ -1060,8 +1059,6 @@ QUnit.test("Printing by menu", function(assert) {
             close: closeStub
         };
     });
-
-    exportMenu = this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
@@ -1093,8 +1090,7 @@ QUnit.test("Printing by menu", function(assert) {
 // T397838
 QUnit.test("Localization", function(assert) {
     // assert
-    var exportMenu,
-        localization = require("localization");
+    var localization = require("localization");
 
     localization.loadMessages({
         it: {
@@ -1107,7 +1103,7 @@ QUnit.test("Localization", function(assert) {
     this.options.formats = ["PNG"];
 
     localization.locale('it');
-    exportMenu = this.createExportMenu();
+    this.createExportMenu();
 
     assert.deepEqual(this.renderer.text.getCall(0).args, ["Stampa"], "Printing button text");
     assert.deepEqual(this.renderer.text.getCall(1).args, ["PNG formato"], "Export button text");

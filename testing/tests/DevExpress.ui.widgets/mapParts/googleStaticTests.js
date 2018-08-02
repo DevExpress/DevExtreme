@@ -416,15 +416,12 @@ QUnit.test("routeAdded", function(assert) {
 });
 
 QUnit.test("routeRemoved", function(assert) {
-    var routeRemovedFired = 0;
-
     return new Promise(function(resolve) {
         new Map($("#map"), {
             provider: "googleStatic",
             routes: [ROUTES[0]],
             onRouteRemoved: function(args) {
                 assert.equal(args.options, ROUTES[0], "correct options passed as parameter");
-                routeRemovedFired++;
             },
             onReady: function(e) {
                 resolve(e.component);

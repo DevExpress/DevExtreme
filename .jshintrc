@@ -2,6 +2,7 @@
     "esversion": 6,
     "expr": true,
     "laxbreak": true,
+    "eqnull": true,
 
     "browser": true,
     "devel": true,

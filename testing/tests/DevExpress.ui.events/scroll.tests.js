@@ -122,16 +122,10 @@ QUnit.module("scroll start");
 
 QUnit.test("dxscrollstart fired on first pointer move", function(assert) {
     var fired = 0,
-        args,
-        initEventData,
-        startEventData;
+        args;
 
     var $scrollable = $("#scrollable")
-        .on(scrollEvents.init, function(e) {
-            initEventData = eventUtils.eventData(e.originalEvent);
-        })
         .on(scrollEvents.start, function(e) {
-            startEventData = eventUtils.eventData(e.originalEvent);
             args = e;
             fired++;
         });
@@ -206,7 +200,7 @@ QUnit.test("dxscroll fired on pointer move", function(assert) {
     assert.equal(fired, 1, "dxscroll fired once");
     assert.ok($scrollable.is(args.target), "event target specified");
     assert.ok(args.originalEvent, "original event specified");
-    assert.deepEqual(args.delta, eventUtils.eventDelta(moveEventData, moveEventData), "delta specified");
+    assert.deepEqual(args.delta, eventUtils.eventDelta(initEventData, moveEventData), "delta specified");
 });
 
 QUnit.test("dxscroll fired on every move", function(assert) {

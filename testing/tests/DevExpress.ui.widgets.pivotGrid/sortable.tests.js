@@ -150,15 +150,11 @@ QUnit.test("set onChanged arg's fields", function(assert) {
 QUnit.test("horizontal dragging - right", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE);
 
-    var changedArgs,
-        $sortable = $("#sortable").dxSortable({
-            itemSelector: ".test-item",
-            direction: "horizontal",
-            itemContainerSelector: ".test-container",
-            onChanged: function(e) {
-                changedArgs = e;
-            }
-        });
+    var $sortable = $("#sortable").dxSortable({
+        itemSelector: ".test-item",
+        direction: "horizontal",
+        itemContainerSelector: ".test-container"
+    });
 
     var $item = $sortable.find(".test-item").eq(0);
     var offset = $item.offset();
