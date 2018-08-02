@@ -1053,13 +1053,17 @@ var Scheduler = Widget.inherit({
 
     _postponeResourceLoading: function() {
         var whenLoaded = this.postponedOperations.add("_loadResources", () => {
-            return this._loadResources();
-        });
+                return this._loadResources();
+            }),
+            resolveCallbacks = new Deferred();
 
         whenLoaded.done((resources) => {
+            resolveCallbacks.resolve(resources);
             this._resourceLoadedCallbacks.fire(resources);
         });
         this._postponeDataSourceLoading(whenLoaded);
+
+        return resolveCallbacks.promise();
     },
 
     _optionChanged: function(args) {
@@ -1086,12 +1090,15 @@ var Scheduler = Widget.inherit({
                 this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
 
-                this._resourceLoadedCallbacks.add((function(resources) {
+                // this._resourceLoadedCallbacks.add((function(resources) {
+                //     this._filterAppointmentsByDate();
+                //     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
+                // }).bind(this));
+
+                this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
-                }).bind(this));
-
-                this._postponeResourceLoading();
+                });
                 break;
             case "min":
             case "max":
@@ -1123,13 +1130,20 @@ var Scheduler = Widget.inherit({
 
                 this._updateHeader();
 
-                this._resourceLoadedCallbacks.add((function(resources) {
+                this._postponeResourceLoading().done((resources) => {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
-                }).bind(this));
-                this._postponeResourceLoading();
+                });
+
+                // this._resourceLoadedCallbacks.add((function(resources) {
+                //     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
+                //     this._refreshWorkSpace(resources);
+                //     this._filterAppointmentsByDate();
+                //     this._appointments.option("allowAllDayResize", value !== "day");
+                // }).bind(this));
+                // this._postponeResourceLoading();
                 break;
             case "appointmentTemplate":
                 this._appointments.option("itemTemplate", value);
@@ -1142,24 +1156,35 @@ var Scheduler = Widget.inherit({
                 this.repaint();
                 break;
             case "groups":
-                this._resourceLoadedCallbacks.add((function(resources) {
+                this._postponeResourceLoading().done((resources) => {
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
-                }).bind(this));
+                });
 
-                this._postponeResourceLoading();
+                // this._resourceLoadedCallbacks.add((function(resources) {
+                //     this._refreshWorkSpace(resources);
+                //     this._filterAppointmentsByDate();
+                // }).bind(this));
+
+                // this._postponeResourceLoading();
                 break;
             case "resources":
                 this._resourcesManager.setResources(this.option("resources"));
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
-                this._resourceLoadedCallbacks.add((function(resources) {
+                this._postponeResourceLoading().done((resources) => {
                     this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
-                }).bind(this));
+                });
 
-                this._postponeResourceLoading();
+                // this._resourceLoadedCallbacks.add((function(resources) {
+                //     this._appointments.option("items", []);
+                //     this._refreshWorkSpace(resources);
+                //     this._filterAppointmentsByDate();
+                // }).bind(this));
+
+                // this._postponeResourceLoading();
                 break;
             case "startDayHour":
             case "endDayHour":
@@ -1202,15 +1227,22 @@ var Scheduler = Widget.inherit({
                 this._workSpace.option(name, value);
                 break;
             case "crossScrollingEnabled":
-                this._resourceLoadedCallbacks.add((function(resources) {
+                this._postponeResourceLoading().done((resources) => {
                     this._appointments.option("items", []);
                     this._refreshWorkSpace(resources);
                     if(this._readyToRenderAppointments) {
                         this._appointments.option("items", this._getAppointmentsToRepaint());
                     }
-                }).bind(this));
+                });
+                // this._resourceLoadedCallbacks.add((function(resources) {
+                //     this._appointments.option("items", []);
+                //     this._refreshWorkSpace(resources);
+                //     if(this._readyToRenderAppointments) {
+                //         this._appointments.option("items", this._getAppointmentsToRepaint());
+                //     }
+                // }).bind(this));
 
-                this._postponeResourceLoading();
+                // this._postponeResourceLoading();
 
                 break;
             case "cellDuration":
@@ -1250,13 +1282,18 @@ var Scheduler = Widget.inherit({
                 this._cleanPopup();
                 break;
             case "showAllDayPanel":
-                this._resourceLoadedCallbacks.add((function(resources) {
+                this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "allDayExpanded", value);
                     this._updateOption("workSpace", name, value);
-                }).bind(this));
+                });
+                // this._resourceLoadedCallbacks.add((function(resources) {
+                //     this._filterAppointmentsByDate();
+                //     this._updateOption("workSpace", "allDayExpanded", value);
+                //     this._updateOption("workSpace", name, value);
+                // }).bind(this));
 
-                this._postponeResourceLoading();
+                // this._postponeResourceLoading();
                 break;
             case "showCurrentTimeIndicator":
             case "indicatorTime":
