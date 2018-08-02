@@ -55,6 +55,10 @@
         "dxFileUploader-uploaded": "アップロード済み",
         "dxFileUploader-readyToUpload": "アップロードの準備中",
         "dxFileUploader-uploadFailedMessage": "アップロードに失敗しました",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
+
         "dxRangeSlider-ariaFrom": "から",
         "dxRangeSlider-ariaTill": "まで",
         "dxSwitch-onText": "オン",

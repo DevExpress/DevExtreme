@@ -55,6 +55,10 @@
         "dxFileUploader-uploaded": "Загружено",
         "dxFileUploader-readyToUpload": "Готово к загрузке",
         "dxFileUploader-uploadFailedMessage": "Загрузка не удалась",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
+
         "dxRangeSlider-ariaFrom": "От",
         "dxRangeSlider-ariaTill": "До",
         "dxSwitch-onText": "ВКЛ",
