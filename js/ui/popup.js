@@ -38,6 +38,8 @@ var POPUP_CLASS = "dx-popup",
 
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
+    WIDGET_CLASS = "dx-widget",
+
     ALLOWED_TOOLBAR_ITEM_ALIASES = ["cancel", "clear", "done"];
 
 var getButtonPlace = function(name) {
@@ -604,30 +606,22 @@ var Popup = Overlay.inherit({
             this._$bottom && this._$bottom.remove();
             var $bottom = $("<div>").addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
             this._$bottom = this._renderTemplateByType("bottomTemplate", items, $bottom).addClass(POPUP_BOTTOM_CLASS);
-            this.$bottomToolbarContentItems = this._$bottom.find(".dx-toolbar-items-container > div");
+            if(this._$bottom.hasClass(WIDGET_CLASS)) {
+                this.$bottomToolbarContentItems = this._$bottom.dxToolbarBase("instance").itemElements();
+            } else {
+                this.$bottomToolbarContentItems = null;
+            }
             this._toggleClasses();
         } else {
             this._$bottom && this._$bottom.detach();
         }
     },
 
-    _getBottomToolbarWidth: function() {
-        var width = 0;
-
-        if(this.$bottomToolbarContentItems) {
-            this.$bottomToolbarContentItems.each(function(index, item) {
-                width += $(item).outerWidth();
-            });
-        }
-
-        return width;
-    },
-
     _updateBottomToolbarCompactMode: function() {
         if(this._$bottom) {
             this._$bottom.removeClass(POPUP_TOOLBAR_COMPACT_CLASS);
 
-            if(this._$bottom.width() < this._getBottomToolbarWidth()) {
+            if(this._$bottom.width() < domUtils.getSummaryItemsWidth(this.$bottomToolbarContentItems)) {
                 this._$bottom.addClass(POPUP_TOOLBAR_COMPACT_CLASS);
             }
         }
