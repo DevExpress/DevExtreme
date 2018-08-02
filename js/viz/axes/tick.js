@@ -71,11 +71,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     lineElement.attr(storedSettings);
                     lineElement.animate(settings);
                 } else {
-                    if(animate) {
-                        settings.opacity = 0;
-                    } else {
-                        settings.opacity = 1;
-                    }
+                    settings.opacity = animate ? 0 : 1;
 
                     lineElement.attr(settings);
 

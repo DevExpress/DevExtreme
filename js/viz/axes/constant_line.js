@@ -1,5 +1,3 @@
-"use strict";
-
 import { isDefined } from "../../core/utils/type";
 
 export default function createConstantLine(axis, options) {

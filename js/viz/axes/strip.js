@@ -1,5 +1,3 @@
-"use strict";
-
 import { isDefined } from "../../core/utils/type";
 import { patchFontOptions } from "../core/utils";
 import { extend } from "../../core/utils/extend";
@@ -69,7 +67,6 @@ export default function createStrip(axis, options) {
                 this.rect && this.rect.animate(axis._getStripGraphicAttributes(stripPos.from, stripPos.to));
 
             } else {
-
                 this.label && this.label.attr(axis._getStripLabelCoords(stripPos.from, stripPos.to, options.label));
                 this.rect && this.rect.attr(axis._getStripGraphicAttributes(stripPos.from, stripPos.to));
             }
