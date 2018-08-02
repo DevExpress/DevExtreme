@@ -1090,11 +1090,6 @@ var Scheduler = Widget.inherit({
                 this._customizeStoreLoadOptions();
                 this._appointmentModel.setDataSource(this._dataSource);
 
-                // this._resourceLoadedCallbacks.add((function(resources) {
-                //     this._filterAppointmentsByDate();
-                //     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
-                // }).bind(this));
-
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));
@@ -1136,14 +1131,6 @@ var Scheduler = Widget.inherit({
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
                 });
-
-                // this._resourceLoadedCallbacks.add((function(resources) {
-                //     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
-                //     this._refreshWorkSpace(resources);
-                //     this._filterAppointmentsByDate();
-                //     this._appointments.option("allowAllDayResize", value !== "day");
-                // }).bind(this));
-                // this._postponeResourceLoading();
                 break;
             case "appointmentTemplate":
                 this._appointments.option("itemTemplate", value);
@@ -1160,13 +1147,6 @@ var Scheduler = Widget.inherit({
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                 });
-
-                // this._resourceLoadedCallbacks.add((function(resources) {
-                //     this._refreshWorkSpace(resources);
-                //     this._filterAppointmentsByDate();
-                // }).bind(this));
-
-                // this._postponeResourceLoading();
                 break;
             case "resources":
                 this._resourcesManager.setResources(this.option("resources"));
@@ -1177,14 +1157,6 @@ var Scheduler = Widget.inherit({
                     this._refreshWorkSpace(resources);
                     this._filterAppointmentsByDate();
                 });
-
-                // this._resourceLoadedCallbacks.add((function(resources) {
-                //     this._appointments.option("items", []);
-                //     this._refreshWorkSpace(resources);
-                //     this._filterAppointmentsByDate();
-                // }).bind(this));
-
-                // this._postponeResourceLoading();
                 break;
             case "startDayHour":
             case "endDayHour":
@@ -1234,16 +1206,6 @@ var Scheduler = Widget.inherit({
                         this._appointments.option("items", this._getAppointmentsToRepaint());
                     }
                 });
-                // this._resourceLoadedCallbacks.add((function(resources) {
-                //     this._appointments.option("items", []);
-                //     this._refreshWorkSpace(resources);
-                //     if(this._readyToRenderAppointments) {
-                //         this._appointments.option("items", this._getAppointmentsToRepaint());
-                //     }
-                // }).bind(this));
-
-                // this._postponeResourceLoading();
-
                 break;
             case "cellDuration":
                 this._appointments.option("items", []);
@@ -1287,13 +1249,6 @@ var Scheduler = Widget.inherit({
                     this._updateOption("workSpace", "allDayExpanded", value);
                     this._updateOption("workSpace", name, value);
                 });
-                // this._resourceLoadedCallbacks.add((function(resources) {
-                //     this._filterAppointmentsByDate();
-                //     this._updateOption("workSpace", "allDayExpanded", value);
-                //     this._updateOption("workSpace", name, value);
-                // }).bind(this));
-
-                // this._postponeResourceLoading();
                 break;
             case "showCurrentTimeIndicator":
             case "indicatorTime":
