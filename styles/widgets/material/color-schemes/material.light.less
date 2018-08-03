@@ -661,7 +661,7 @@
 * @type color
 * @group overlays.common
 */
-@overlay-shader-bg: fade(@base-inverted-bg, 32%);
+@overlay-shader-bg: fade(@base-shadow-color, 32%);
 
 // Popup
 /**
@@ -1220,6 +1220,7 @@
 * @group datagrid
 */
 @datagrid-columnchooser-bg: @base-element-bg;
+@datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
 
 /**
 * @name 100. Row alternation background color
@@ -1227,7 +1228,6 @@
 * @group datagrid
 */
 @datagrid-row-alternation-bg: darken(@datagrid-base-background-color, 4%);
-@datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
 
 /**
 * @name 178. Summary item color
@@ -1443,6 +1443,7 @@
 * @group treelist
 */
 @treelist-columnchooser-bg: @base-element-bg;
+@treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
 
 /**
 * @name 100. Row alternation background color
@@ -1450,7 +1451,6 @@
 * @group treelist
 */
 @treelist-row-alternation-bg: darken(@treelist-base-background-color, 4%);
-@treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
 
 /**
 * @name 170. Summary item color
