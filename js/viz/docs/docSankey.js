@@ -523,7 +523,7 @@ var dxSankey = {
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxSankeyNode
+    * @type_function_param1_field4 target:dxSankeyNode
     * @notUsedInTheme
     * @action
     */
@@ -533,7 +533,7 @@ var dxSankey = {
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxSankeyLink
+    * @type_function_param1_field4 target:dxSankeyLink
     * @notUsedInTheme
     * @action
     */
@@ -549,5 +549,10 @@ var dxSankey = {
     * @publicName getAllLinks()
     * @return Array<dxSankeyLink>
     */
-    getAllLinks: function() { }
+    getAllLinks: function() { },
+    /**
+    * @name dxSankeyMethods.hideTooltip
+    * @publicName hideTooltip()
+    */
+    hideTooltip: function() { }
 }
