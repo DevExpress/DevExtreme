@@ -2421,6 +2421,21 @@ QUnit.test("Widget should works correctly after setting dataSource to null", fun
     assert.equal($list.dxList("option", "noDataText"), "No data to display", "SelectBox works correctly");
 });
 
+QUnit.test("search should stay opened after the search when focus state is disabled", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            items: ["item 1"],
+            focusStateEnabled: false,
+            searchEnabled: true,
+            searchTimeout: 0
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("item");
+    assert.ok(selectBox.option("opened"), "selectBox should be opened");
+});
+
 QUnit.testInActiveWindow("Value should be null after input is cleared and enter key is tapped", function(assert) {
     var items = [1, 2],
         $selectBox = $("#selectBox").dxSelectBox({

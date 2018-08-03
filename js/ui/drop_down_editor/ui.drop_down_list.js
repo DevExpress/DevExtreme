@@ -753,7 +753,7 @@ var DropDownList = DropDownEditor.inherit({
         var resultAmount = resultItems.length;
         var isMinSearchLengthExceeded = this._needPassDataSourceToList();
 
-        return isMinSearchLengthExceeded && resultAmount && this._hasFocusClass();
+        return !!(isMinSearchLengthExceeded && resultAmount);
     },
 
     _clearSearchTimer: function() {
