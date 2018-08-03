@@ -246,13 +246,13 @@ var ColorBox = DropDownEditor.inherit({
             },
 
             onValueChanged: function(args) {
-                var instantlyMode = that.option("applyValueMode") === "instantly";
-
-                if(!instantlyMode && !that._colorViewEnterKeyPressed) {
+                if(this.option("editAlphaChannel") && colorUtils.makeRgba(args.value) === args.previousValue) {
                     return;
                 }
 
-                if(this.option("editAlphaChannel") && colorUtils.makeRgba(args.value) === args.previousValue) {
+                var instantlyMode = that.option("applyValueMode") === "instantly";
+
+                if(!instantlyMode && !that._colorViewEnterKeyPressed) {
                     return;
                 }
 
