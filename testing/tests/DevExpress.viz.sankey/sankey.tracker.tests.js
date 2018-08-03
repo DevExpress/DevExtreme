@@ -161,8 +161,8 @@ QUnit.test("Show tooltip on hovered link", function(assert) {
     assert.ok(widget.getAllLinks()[0].showTooltip.called);
 });
 
-QUnit.test("Show custom tooltip on hovered node", function(assert) {
-    var stub = sinon.stub();
+QUnit.test("Show custom tooltip (text) on hovered node", function(assert) {
+    var stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -176,8 +176,38 @@ QUnit.test("Show custom tooltip on hovered node", function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test("Show custom tooltip on hovered link", function(assert) {
-    var stub = sinon.stub();
+QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
+    var stub = sinon.stub().returns({ text: 'custom text' });
+    createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        tooltip: {
+            enabled: true,
+            customizeLinkTooltip: stub
+        }
+    });
+
+    this.trigger(pointerEvents.move, 3);
+    assert.ok(stub.called);
+    assert.deepEqual(stub.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
+});
+
+QUnit.test("Show custom tooltip (html) on hovered node", function(assert) {
+    var stub = sinon.stub().returns({ html: 'custom html' });
+    createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        tooltip: {
+            enabled: true,
+            customizeNodeTooltip: stub
+        }
+    });
+
+    this.trigger(pointerEvents.move, 2);
+    assert.ok(stub.called);
+    assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
+});
+
+QUnit.test("Show custom tooltip (html) on hovered link", function(assert) {
+    var stub = sinon.stub().returns({ html: 'custom html' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
