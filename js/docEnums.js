@@ -682,7 +682,7 @@
 
 /**
  * @typedef {string} Enums.TreeViewExpandEvent
- * @enum {'dblclick'|'click'}
+ * @enum {'dblClick'|'click'}
  */
 
 /**
