@@ -23,6 +23,22 @@ QUnit.test("parse dd/MM/yyyy format", function(assert) {
     assert.deepEqual(parser("31/12/2017"), new Date(2017, 11, 31), "parse date with last day of month");
 });
 
+QUnit.test("case insensitive date parsing for months", function(assert) {
+    var parser = getDateParser("MMM", dateParts);
+
+    assert.deepEqual(parser("nov").getMonth(), 10, "small register");
+    assert.deepEqual(parser("Nov").getMonth(), 10, "normal register");
+    assert.deepEqual(parser("nOv").getMonth(), 10, "random register");
+});
+
+QUnit.test("case insensitive date parsing for days of week", function(assert) {
+    var parser = getDateParser("EEE", dateParts);
+
+    assert.deepEqual(parser("mon").getDay(), 1, "small register");
+    assert.deepEqual(parser("Mon").getDay(), 1, "normal register");
+    assert.deepEqual(parser("mOn").getDay(), 1, "random register");
+});
+
 QUnit.test("getFormat", function(assert) {
     var checkFormat = function(format, customDateParts) {
         var formatter = getDateFormatter(format, customDateParts || dateParts);
