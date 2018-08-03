@@ -2153,6 +2153,7 @@ QUnit.test('Save changes when batch mode when one the changes is canceled from e
 
     // act
     this.editingController.saveEditData();
+    this.clock.tick();
 
     // assert
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }]]);
@@ -2499,6 +2500,7 @@ QUnit.test("The cell should be editable after cancel removing the row", function
     that.editingController.optionChanged({ name: "onRowRemoving" });
 
     that.deleteRow(0);
+    that.clock.tick();
 
     // act
     that.editCell(0, 0);
@@ -4362,6 +4364,38 @@ QUnit.test("oldData on rowUpdating for checkbox editor", function(assert) {
     assert.equal(rowUpdatingCallCount, 1, "rowUpdating call count");
 });
 
+QUnit.test("onRowUpdating should raise once if eventArgs.cancel is true for the checkBox data editor in cell edit mode (T656376)", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        rowUpdatingCallCount = 0,
+        testElement = $("#container"),
+        $checkbox;
+
+    that.options.editing = {
+        mode: "cell",
+        allowUpdating: true
+    };
+
+    that.options.onRowUpdating = function(e) {
+        ++rowUpdatingCallCount;
+        e.cancel = true;
+    };
+    that.options.columns.push({ dataField: "booleanField", dataType: "boolean" });
+
+    that.columnsController.reset();
+    that.editingController.optionChanged({ name: "onRowUpdating" });
+    rowsView.render(testElement);
+
+    // act
+    $checkbox = testElement.find(".dx-row").first().find(".dx-checkbox");
+    $($checkbox).trigger("dxclick");
+
+    // assert
+    assert.ok($checkbox.length, "checkbox found");
+    assert.equal(rowUpdatingCallCount, 1, "rowUpdating call count");
+});
+
 // T172738
 QUnit.test("Highlight modified with option showEditorAlways true on column", function(assert) {
     // arrange
@@ -4578,6 +4612,7 @@ QUnit.test("Remove row when set onRowRemoving", function(assert) {
 
     // act
     that.deleteRow(0);
+    that.clock.tick();
     $(".dx-dialog-button").first().trigger("dxclick");
 
     // assert
