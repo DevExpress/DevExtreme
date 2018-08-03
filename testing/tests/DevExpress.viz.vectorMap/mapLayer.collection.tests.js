@@ -23,7 +23,8 @@ QUnit.module("Basic", {
             renderer: new vizMocks.Renderer(),
             dataKey: "data-key",
             tracker: {
-                on: sinon.spy(function() { return noop; })
+                on: sinon.spy(function() { return noop; }),
+                reset: sinon.spy()
             },
             eventTrigger: sinon.spy()
         };
@@ -150,4 +151,14 @@ QUnit.test("Items collection should be empty after updating to empty array", fun
     this.target.setOptions([]);
 
     assert.strictEqual(this.target.items().length, 0);
+});
+
+// T660942
+QUnit.test("Update hovered layer", function(assert) {
+    this.target.setOptions([{ name: "layer-2" }]);
+    this.params.tracker.reset.reset();
+
+    this.target.setOptions([{ name: "layer-1" }, { name: "layer-2" }]);
+
+    assert.strictEqual(this.params.tracker.reset.callCount, 1);
 });
