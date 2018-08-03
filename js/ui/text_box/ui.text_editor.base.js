@@ -267,7 +267,7 @@ var TextEditorBase = Editor.inherit({
             text: undefined,
 
             valueFormat: function(value) {
-                return value;
+                return isDefined(value) && value !== false ? value : "";
             },
 
             /**
