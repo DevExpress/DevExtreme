@@ -153,6 +153,7 @@ QUnit.module("validation rendrering", moduleConfig, function() {
         simulateFileChoose($fileUploader, [fakeFile2, fakeFile3, fakeFile4]);
         assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS + "." + FILEUPLOADER_INVALID_CLASS).length, 1, "One file is invalid");
         assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS).not("." + FILEUPLOADER_INVALID_CLASS).length, 2, "Two files is valid");
+
         var invalidFileName = $filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS + "." + FILEUPLOADER_INVALID_CLASS).find("." + FILEUPLOADER_FILE_NAME_CLASS).text();
         assert.equal(invalidFileName, fakeFile2.name, fakeFile2.name + "is invalid file name");
     });
@@ -164,6 +165,7 @@ QUnit.module("validation rendrering", moduleConfig, function() {
         });
         var fileUploader = $fileUploader.dxFileUploader("instance");
         simulateFileChoose($fileUploader, [fakeFile2]);
+
         var statusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
         assert.equal(statusMessage, fileUploader.option("validation.invalidFileExtensionMessage"), "validation text is correct");
     });
@@ -185,6 +187,7 @@ QUnit.module("validation rendrering", moduleConfig, function() {
         });
         var fileUploader = $fileUploader.dxFileUploader("instance");
         simulateFileChoose($fileUploader, [bigSizeFakeFile]);
+
         var statusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
         assert.equal(statusMessage, fileUploader.option("validation.invalidMaxFileSizeMessage"), "validation text is correct");
     });
@@ -206,6 +209,7 @@ QUnit.module("validation rendrering", moduleConfig, function() {
         });
         var fileUploader = $fileUploader.dxFileUploader("instance");
         simulateFileChoose($fileUploader, [smallSizeFakeFile]);
+
         var statusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
         assert.equal(statusMessage, fileUploader.option("validation.invalidMinFileSizeMessage"), "validation text is correct");
     });
