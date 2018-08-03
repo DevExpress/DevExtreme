@@ -252,6 +252,10 @@ var ColorBox = DropDownEditor.inherit({
                     return;
                 }
 
+                if(this.option("editAlphaChannel") && colorUtils.makeRgba(args.value) === args.previousValue) {
+                    return;
+                }
+
                 that._applyNewColor(args.value);
             },
             _keyboardProcessor: that._colorViewProcessor
