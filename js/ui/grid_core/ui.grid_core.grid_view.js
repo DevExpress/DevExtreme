@@ -51,6 +51,13 @@ var getContainerHeight = function($container) {
     return clientHeight - paddingTop - paddingBottom;
 };
 
+var calculateDiffWidth = function(that, widths) {
+    var contentWidth = that._rowsView.contentWidth(),
+        totalWidth = that._getTotalWidth(widths, contentWidth);
+
+    return contentWidth - totalWidth;
+};
+
 var ResizingController = modules.ViewController.inherit({
     _initPostRenderHandlers: function() {
         var that = this,
@@ -278,11 +285,10 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
-        var contentWidth = this._rowsView.contentWidth(),
-            totalWidth = this._getTotalWidth(resultWidths, contentWidth),
+        var diffWidth = calculateDiffWidth(this, resultWidths),
             columnCountWithoutWidth = resultWidths.filter(function(width) { return width === undefined; }).length;
 
-        return (contentWidth - totalWidth) / columnCountWithoutWidth;
+        return diffWidth / columnCountWithoutWidth;
     },
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {
@@ -302,9 +308,17 @@ var ResizingController = modules.ViewController.inherit({
                 isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH,
                 width = resultWidths[index];
 
-            if(width === undefined && column.minWidth) {
-                averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
-                width = averageColumnsWidth;
+            if(column.minWidth) {
+                if(width === undefined) {
+                    averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
+                    width = averageColumnsWidth;
+                } else if(isPercentWidth(width)) {
+                    var diffWidth = calculateDiffWidth(that, resultWidths.map((width, index) => i === index ? column.minWidth : width));
+
+                    if(diffWidth < 0) {
+                        width = -1;
+                    }
+                }
             }
             if(width < column.minWidth && !isHiddenColumn) {
                 resultWidths[index] = column.minWidth;
