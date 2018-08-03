@@ -246,6 +246,10 @@ var ColorBox = DropDownEditor.inherit({
             },
 
             onValueChanged: function(args) {
+                if(colorUtils.makeRgba(args.value) === args.previousValue) {
+                    return;
+                }
+
                 var instantlyMode = that.option("applyValueMode") === "instantly";
 
                 if(!instantlyMode && !that._colorViewEnterKeyPressed) {
