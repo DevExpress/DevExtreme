@@ -153,19 +153,19 @@ function isConjunctiveOperator(condition) {
 }
 
 var keysEqual = function(keyExpr, key1, key2) {
-    /* jshint eqeqeq:false */
-
     if(Array.isArray(keyExpr)) {
         var names = map(key1, function(v, k) { return k; }),
             name;
         for(var i = 0; i < names.length; i++) {
             name = names[i];
+            // eslint-disable-next-line eqeqeq
             if(toComparable(key1[name], true) != toComparable(key2[name], true)) {
                 return false;
             }
         }
         return true;
     }
+    // eslint-disable-next-line eqeqeq
     return toComparable(key1, true) == toComparable(key2, true);
 };
 

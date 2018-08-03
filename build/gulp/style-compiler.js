@@ -1,5 +1,3 @@
-// jshint node:true
-
 var gulp = require('gulp');
 var path = require('path');
 var context = require('./context.js');

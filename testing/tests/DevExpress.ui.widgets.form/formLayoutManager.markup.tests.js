@@ -1511,10 +1511,9 @@ QUnit.module("Layout manager", () => {
 
     test("Render help text", (assert) => {
         // arrange, act
-        let $testContainer = $("#container"),
-            layoutManager;
+        let $testContainer = $("#container");
 
-        layoutManager = $testContainer.dxLayoutManager({
+        $testContainer.dxLayoutManager({
             layoutData: {
                 name: "Alex",
                 lastName: "Johnson",
@@ -1526,7 +1525,7 @@ QUnit.module("Layout manager", () => {
             }, {
                 dataField: "lastName"
             }]
-        }).dxLayoutManager("instance");
+        });
 
         let $fieldItems = $testContainer.find("." + internals.FIELD_ITEM_CLASS);
 
@@ -1546,10 +1545,9 @@ QUnit.module("Layout manager", () => {
                 name: "Alex",
                 age: 40,
                 gender: "male"
-            },
-            layoutManager;
+            };
 
-        layoutManager = $testContainer.dxLayoutManager({
+        $testContainer.dxLayoutManager({
             layoutData: data,
             items: [{
                 visibleIndex: 1,
@@ -1564,7 +1562,7 @@ QUnit.module("Layout manager", () => {
                 dataField: "gender",
                 editorType: "dxTextBox"
             }]
-        }).dxLayoutManager("instance");
+        });
 
         let $labels = $testContainer.find("label"),
             $inputs = $testContainer.find("input");
@@ -1589,10 +1587,9 @@ QUnit.module("Layout manager", () => {
                 age: 40,
                 gender: "male",
                 hasAuto: "Yes"
-            },
-            layoutManager;
+            };
 
-        layoutManager = $testContainer.dxLayoutManager({
+        $testContainer.dxLayoutManager({
             layoutData: data,
             items: [{
                 dataField: "name",
@@ -1609,7 +1606,7 @@ QUnit.module("Layout manager", () => {
                 dataField: "hasAuto",
                 editorType: "dxTextBox"
             }]
-        }).dxLayoutManager("instance");
+        });
 
         let $labels = $testContainer.find("label"),
             $inputs = $testContainer.find("input");
@@ -1710,10 +1707,9 @@ QUnit.module("Layout manager", () => {
     test("Set value to the dxSelectBox editor from data option", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
-            selectBox,
-            layoutManager;
+            selectBox;
 
-        layoutManager = $testContainer.dxLayoutManager({
+        $testContainer.dxLayoutManager({
             layoutData: {
                 simpleProducts: "SuperLCD 70"
             },
@@ -1733,7 +1729,7 @@ QUnit.module("Layout manager", () => {
                     ]
                 };
             }
-        }).dxLayoutManager("instance");
+        });
 
         selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
 
@@ -1853,10 +1849,9 @@ QUnit.module("Layout manager", () => {
     test("Set value to the dxTagBox editor from data option", (assert) => {
         // arrange, act
         let $testContainer = $("#container"),
-            tagBox,
-            layoutManager;
+            tagBox;
 
-        layoutManager = $testContainer.dxLayoutManager({
+        $testContainer.dxLayoutManager({
             layoutData: {
                 simpleProducts: ["HD Video Player", "SuperLCD 70"]
             },
@@ -1876,7 +1871,7 @@ QUnit.module("Layout manager", () => {
                     ]
                 };
             }
-        }).dxLayoutManager("instance");
+        });
 
         tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
 

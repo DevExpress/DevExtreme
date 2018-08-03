@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* jshint node: true */
 
 var path = require("path"),
     webpack = require("webpack"),

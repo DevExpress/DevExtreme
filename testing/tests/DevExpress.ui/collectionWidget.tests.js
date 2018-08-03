@@ -711,15 +711,13 @@ QUnit.test("onItemClick should be fired when item is clicked", function(assert) 
 });
 
 QUnit.test("onItemClick should have correct item index when placed near another collection", function(assert) {
-    var actionFired,
-        actionData;
+    var actionData;
 
     var $element = $("#cmp");
 
     new TestComponent($element, {
         items: ["0", "1", "2"],
         onItemClick: function(args) {
-            actionFired = true;
             actionData = args;
         }
     });

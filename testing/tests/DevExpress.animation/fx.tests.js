@@ -943,15 +943,14 @@ if(support.transition()) {
         sinon.spy(eventsEngine, "off");
 
         var animation = fx.createAnimation($test, {
-                type: 'slide',
-                from: { left: 0 },
-                to: { left: 100 },
-                duration: 100
-            }),
-            result;
+            type: 'slide',
+            from: { left: 0 },
+            to: { left: 100 },
+            duration: 100
+        });
 
         animation.setup();
-        result = animation.start()
+        animation.start()
             .done(function() {
                 assert.fail("Should be rejected when the element is removed from DOM");
             }).fail(function() {
@@ -989,15 +988,14 @@ if(support.transition()) {
         sinon.spy(eventsEngine, "off");
 
         var animation = fx.createAnimation($test, {
-                type: 'slide',
-                from: { left: 0 },
-                to: { left: 100 },
-                duration: 100
-            }),
-            result;
+            type: 'slide',
+            from: { left: 0 },
+            to: { left: 100 },
+            duration: 100
+        });
 
         animation.setup();
-        result = animation.start()
+        animation.start()
             .done(function() {
                 assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
                 assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 2);

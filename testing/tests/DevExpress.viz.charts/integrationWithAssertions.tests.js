@@ -1169,13 +1169,12 @@ QUnit.module("T576725", $.extend({}, moduleSetup, {
 
 QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
     // arrange
-    var dataSource = [],
-        chart;
+    var dataSource = [];
 
     for(var i = 0; i < 15; i++) {
         dataSource.push({ arg: i + "", val: i * 100 });
     }
-    chart = this.createPieChart({
+    this.createPieChart({
         series: [{ label: { visible: true } }],
         dataSource: dataSource,
         legend: { visible: true, horizontalAlignment: "center" },

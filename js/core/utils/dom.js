@@ -80,7 +80,6 @@ var uniqueId = (function() {
 var dataOptionsAttributeName = "data-options";
 
 var getElementOptions = function(element) {
-    /* jshint evil:true */
     var optionsString = $(element).attr(dataOptionsAttributeName) || "",
         result;
 
@@ -88,6 +87,7 @@ var getElementOptions = function(element) {
         optionsString = "{" + optionsString + "}";
     }
     try {
+        // eslint-disable-next-line no-new-func
         result = (new Function("return " + optionsString))();
     } catch(ex) {
         throw errors.Error("E3018", ex, optionsString);

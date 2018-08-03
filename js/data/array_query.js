@@ -307,8 +307,8 @@ var compileCriteria = (function() {
 
     function compileEquals(getter, value, negate) {
         return function(obj) {
-            /* jshint eqeqeq:false */
             obj = toComparable(getter(obj));
+            // eslint-disable-next-line eqeqeq
             var result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
                 result = !result;

@@ -1348,9 +1348,6 @@ QUnit.testInActiveWindow("Down arrow keys for navigate to grouped row", function
     // arrange
     setupModules(this);
 
-    // assert
-    var isGroupedRowFocused;
-
     // act
     this.gridView.render($("#container"));
 
@@ -1361,9 +1358,7 @@ QUnit.testInActiveWindow("Down arrow keys for navigate to grouped row", function
         columnIndex: 0
     };
 
-    this.keyboardNavigationController._focusGroupRow = function() {
-        isGroupedRowFocused = true;
-    };
+    this.keyboardNavigationController._focusGroupRow = function() {};
 
     this.triggerKeyDown("downArrow");
 
@@ -2841,8 +2836,7 @@ QUnit.testInActiveWindow("Escape for cancel row editing", function(assert) {
 
 QUnit.testInActiveWindow("Escape for cancel batch editing", function(assert) {
     // arrange
-    var $container = $("#container"),
-        isPreventDefaultCalled;
+    var $container = $("#container");
 
     setupModules(this);
 
@@ -2864,7 +2858,7 @@ QUnit.testInActiveWindow("Escape for cancel batch editing", function(assert) {
     $($input).trigger('change');
 
     // act
-    isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
+    this.triggerKeyDown("escape", false, false, $container.find("input")[0]);
     this.clock.tick();
 
     // assert
@@ -2874,8 +2868,7 @@ QUnit.testInActiveWindow("Escape for cancel batch editing", function(assert) {
 
 QUnit.testInActiveWindow("Escape for cancel cell editing", function(assert) {
     // arrange
-    var $container = $("#container"),
-        isPreventDefaultCalled;
+    var $container = $("#container");
 
     setupModules(this);
 
@@ -2897,7 +2890,7 @@ QUnit.testInActiveWindow("Escape for cancel cell editing", function(assert) {
     $($input).trigger('change');
 
     // act
-    isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
+    this.triggerKeyDown("escape", false, false, $container.find("input")[0]);
     this.clock.tick();
 
     // assert

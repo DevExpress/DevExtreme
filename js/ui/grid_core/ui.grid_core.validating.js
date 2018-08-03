@@ -320,7 +320,6 @@ module.exports = {
                     var that = this,
                         i,
                         itemsCount,
-                        insertCount = 0,
                         editData = that._editData,
                         dataController = that.getController("data"),
                         getIndexByEditData = function(editData, items) {
@@ -351,7 +350,6 @@ module.exports = {
 
                             data[INSERT_INDEX] = 1;
                             items.splice(rowIndex, 0, data);
-                            insertCount++;
                         };
 
                     items = that.callBase(items, changeType);

@@ -280,8 +280,7 @@ QUnit.test("Loading indicator showing", function(assert) {
 
 QUnit.test("Export with empty cellsInfo", function(assert) {
     // arrange
-    var items,
-        columnsInfo,
+    var columnsInfo,
         rowsInfo,
         cellsInfo,
         _getCellsInfo = this.pivotGrid._dataController.getCellsInfo,
@@ -295,7 +294,7 @@ QUnit.test("Export with empty cellsInfo", function(assert) {
     rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
     cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
 
-    items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
+    this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
 
     // act
     dataProvider.ready();

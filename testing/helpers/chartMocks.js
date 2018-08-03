@@ -11,7 +11,6 @@ import seriesFamilyModule from "viz/core/series_family";
 import seriesModule from "viz/series/base_series";
 import vizMocks from "./vizMocks.js";
 
-let pointsMockData;
 const firstCategory = "First";
 const secondCategory = "Second";
 const thirdCategory = "Third";
@@ -293,11 +292,6 @@ export const insertMockFactory = function insertMockFactory() {
         currentSeries: 0
     };
 
-    pointsMockData = {
-        points: [],
-        args: []
-    };
-
     mockItem("Point", pointModule, function(series, data, options) {
         var opt = $.extend(true, {}, data, options);
         opt.series = series;
@@ -350,7 +344,6 @@ export const restoreMockFactory = function() {
 
 export const resetMockFactory = function resetMockFactory() {
     seriesMockData = null;
-    pointsMockData = null;
 };
 
 export const setupSeriesFamily = function() {
@@ -557,7 +550,7 @@ export const MockSeries = function MockSeries(options) {
         getPointsByArg: function(arg) {
             var f = [];
             $.each(options.points, function(_, point) {
-                // jshint eqeqeq:false
+                // eslint-disable-next-line eqeqeq
                 if(point.argument.valueOf() == arg.valueOf()) {
                     f.push(point);
                 }
