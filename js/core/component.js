@@ -7,6 +7,9 @@ var Config = require("./config"),
     coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred,
+    when = deferredUtils.when,
     map = require("../core/utils/iterator").map,
     Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
@@ -27,6 +30,40 @@ var cachedSetters = {};
 * @namespace DevExpress
 * @hidden
 */
+
+class PostponedOperations {
+    constructor() {
+        this._postponedOperations = {};
+    }
+
+    add(key, fn, postponedPromise) {
+        if(key in this._postponedOperations) {
+            postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
+        } else {
+            var completePromise = new Deferred();
+            this._postponedOperations[key] = {
+                fn: fn,
+                completePromise: completePromise,
+                promises: postponedPromise ? [postponedPromise] : []
+            };
+        }
+
+        return this._postponedOperations[key].completePromise.promise();
+    }
+
+    callPostponedOperations() {
+        for(var key in this._postponedOperations) {
+            var operation = this._postponedOperations[key];
+            if(operation.promises.length) {
+                when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
+            } else {
+                operation.fn().done(operation.completePromise.resolve);
+            }
+        }
+        this._postponedOperations = {};
+    }
+}
+
 var Component = Class.inherit({
 
     _setDeprecatedOptions: function() {
@@ -171,6 +208,7 @@ var Component = Class.inherit({
 
         this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
         this._disposingCallbacks = options._disposingCallbacks || Callbacks();
+        this.postponedOperations = new PostponedOperations();
 
         this.beginUpdate();
 
@@ -277,6 +315,7 @@ var Component = Class.inherit({
     endUpdate: function() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
+            this.postponedOperations.callPostponedOperations();
             if(!this._initializing && !this._initialized) {
                 this._initializing = true;
                 try {
