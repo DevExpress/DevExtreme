@@ -50,7 +50,7 @@ function validateFormat(format, incidentOccurred, validFormats) {
         return format;
     }
     if(validFormats.unsupported.indexOf(format) !== -1) {
-        incidentOccurred && incidentOccurred("W2401", [format]);
+        incidentOccurred && incidentOccurred("W2108", [format]);
     }
 }
 
