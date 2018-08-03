@@ -10596,3 +10596,54 @@ QUnit.test("Draw label after stub data", function(assert) {
         opacity: 1
     }]);
 });
+
+QUnit.test("Recreate ticks on update option", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: false,
+            opacity: 1
+        }
+    });
+    this.generatedTicks = [1];
+    this.generatedMinorTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(10);
+    this.axis.draw(this.zeroMarginCanvas);
+
+    this.axis.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true
+        },
+        minorGrid: {
+            visible: true
+        }
+    });
+
+    // act
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    const text = renderer.text.lastCall.returnValue;
+    assert.deepEqual(text.attr.lastCall.args, [{
+        x: 10,
+        y: 30,
+        opacity: 1
+    }]);
+    assert.equal(text.stub("animate").callCount, 0);
+
+    const minorGrid = renderer.path.lastCall.returnValue;
+    assert.deepEqual(minorGrid.attr.lastCall.args, [{
+        points: [10, 30, 10, 70],
+        opacity: 1
+    }]);
+    assert.equal(minorGrid.stub("animate").callCount, 0);
+});
