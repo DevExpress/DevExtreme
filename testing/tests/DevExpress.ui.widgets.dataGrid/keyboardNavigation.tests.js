@@ -5048,6 +5048,56 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
     });
 
+    QUnit.testInActiveWindow("virtual row cells should not have focus", function(assert) {
+        // arrange
+        var that = this,
+            $cell;
+
+        that.$element = function() {
+            return $("#container");
+        };
+        that.options = {
+            height: 200,
+            loadPanel: {
+                enabled: false
+            },
+            scrolling: {
+                mode: "virtual"
+            }
+        };
+        that.dataSource = {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+                if(loadOptions.skip === 0) {
+                    d.resolve(
+                        [{ name: "Alex", phone: "555555", room: 0 }],
+                        { totalCount: 100 }
+                    );
+                } else {
+                    d.resolve();
+                }
+                return d.promise();
+            }
+        };
+
+        that.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+
+        $cell = $(that.rowsView.element().find(".dx-virtual-row").eq(0).find("td").eq(1)).trigger(CLICK_EVENT);
+        $cell.trigger(CLICK_EVENT);
+
+        this.clock.tick();
+
+        // assert
+        $cell = $(that.rowsView.element().find(".dx-virtual-row").eq(0).find("td").eq(1));
+        assert.equal($cell.attr("tabIndex"), undefined, "virtual row cell has no tabindex");
+        assert.notOk($cell.is(":focus"), "focus", "virtual row cell has no focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "virtual row cell has no .dx-cell-focus-disabled class");
+        assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
+    });
+
     QUnit.testInActiveWindow("Focus must be saved after paging if last row cell selected and rowCount of the last page < then of the previus page", function(assert) {
         // arrange
         var that = this;
