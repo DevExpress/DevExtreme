@@ -288,5 +288,30 @@ registerTheme({
                 opacity: 1
             }
         }
+    },
+    sankey: {
+        label: {
+            font: {
+                color: WHITE
+            }
+        },
+        node: {
+            border: {
+                visible: true,
+                width: 1,
+                color: WHITE
+            }
+        },
+        link: {
+            opacity: 0.5,
+            border: {
+                visible: true,
+                width: 1,
+                color: WHITE
+            },
+            hoverStyle: {
+                opacity: 0.9
+            }
+        }
     }
 }, "generic.light");
