@@ -60,13 +60,14 @@
 
 // TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
 .dx-fieldset-sizing-base() {
-    .dx-field-label {
-        padding: @MATERIAL_FIELD_VALUE_TOP_PADDING @MATERIAL_FIELD_LABELVALUE_SPACING @MATERIAL_FIELD_VALUE_BOTTOM_PADDING 0;
+    .dx-field {
+        padding: 0;
+        display: flex;
     }
 
-    .dx-field {
-        min-height: @MATERIAL_FIELD_MIN_HEIGHT;
-        padding: 0;
+    .dx-field-label {
+        align-self: center;
+        padding-right: @MATERIAL_FIELD_LABELVALUE_SPACING;
     }
 
     .dx-field-value {
@@ -86,8 +87,8 @@
         .dx-field-value-widget-position(@name, @size) {
             &.@{name},
             &:not(.dx-widget) > .@{name} {
-    margin: (@MATERIAL_FIELD_MIN_HEIGHT - @size)/2 0;
-}
+                margin: (@MATERIAL_FIELD_MIN_HEIGHT - @size)/2 0;
+            }
 }
 .dx-field-value-widget-position(dx-checkbox, @MATERIAL_CHECKBOX_SIZE);
 .dx-field-value-widget-position(dx-switch, @MATERIAL_SWITCH_HEIGHT);
