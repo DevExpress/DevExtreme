@@ -305,8 +305,8 @@ QUnit.test("List creation with unsupported image format in options - do not crea
     // assert
     assert.equal(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "SUPPORTED text params");
-    assert.deepEqual(this.incidentOccurred.getCall(0).args, ["W2401", ["GIF"]]);
-    assert.deepEqual(this.incidentOccurred.getCall(1).args, ["W2401", ["JPEG"]]);
+    assert.deepEqual(this.incidentOccurred.getCall(0).args, ["W2108", ["GIF"]]);
+    assert.deepEqual(this.incidentOccurred.getCall(1).args, ["W2108", ["JPEG"]]);
 });
 
 QUnit.test("Without printing and formats", function(assert) {

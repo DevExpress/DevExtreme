@@ -269,7 +269,7 @@ QUnit.test('Export method. unsopported image format', function(assert) {
     assert.ok(exportFunc.callCount, 1, "export was called one time");
     assert.equal(firstExportCall.args[1].format, "PNG", "format");
     assert.equal(incidentOccurred.callCount, 1);
-    assert.deepEqual(incidentOccurred.getCall(0).args[0].target.id, "W2401");
+    assert.deepEqual(incidentOccurred.getCall(0).args[0].target.id, "W2108");
     assert.deepEqual(incidentOccurred.getCall(0).args[0].target.args, ["JPEG"]);
 });
 
