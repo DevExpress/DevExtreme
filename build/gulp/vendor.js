@@ -1,5 +1,3 @@
-// jshint node:true
-
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const merge = require('merge-stream');

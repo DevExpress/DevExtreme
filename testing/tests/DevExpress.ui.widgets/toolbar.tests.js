@@ -575,11 +575,7 @@ QUnit.test("close win8 appbar on 'back' button click", function(assert) {
 });
 
 QUnit.test("close win8 appbar on menu item click", function(assert) {
-    var count = 0;
     this.$element.dxToolbar({
-        onItemClick: function() {
-            count++;
-        },
         items: [
             { location: 'menu', text: 'item1' },
             { location: 'menu', text: 'item2' }

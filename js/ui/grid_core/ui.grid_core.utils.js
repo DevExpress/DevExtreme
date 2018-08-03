@@ -204,7 +204,7 @@ module.exports = (function() {
             } else if(typeUtils.isFunction(filter1) && filter1.columnIndex >= 0 && typeUtils.isFunction(filter2) && filter2.columnIndex >= 0) {
                 return filter1.columnIndex === filter2.columnIndex;
             } else {
-                return toComparable(filter1) == toComparable(filter2); // jshint ignore:line
+                return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
             }
         },
 

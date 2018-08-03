@@ -292,13 +292,11 @@ QUnit.test("Context menu with option onContextMenuPreparing when no data and scr
     var that = this,
         $rowsViewElement,
         contextMenuInstance,
-        contextMenuOptions,
         $testElement = $("#secondContainer");
 
     that.options = {
         onContextMenuPreparing: function(options) {
             if(options.target === "content") {
-                contextMenuOptions = options;
                 options.items = [
                     { text: "Test1" },
                     { text: "Test2" },

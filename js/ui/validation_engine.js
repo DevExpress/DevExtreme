@@ -264,9 +264,9 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
 
         switch(type) {
             case "==":
-                return value == otherValue; // jshint ignore:line
+                return value == otherValue; // eslint-disable-line eqeqeq
             case "!=":
-                return value != otherValue; // jshint ignore:line
+                return value != otherValue; // eslint-disable-line eqeqeq
             case "===":
                 return value === otherValue;
             case "!==":

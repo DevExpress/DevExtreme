@@ -67,7 +67,6 @@
     "jquery.1": "^1.0.0",
     "jquery.2": "^1.0.0",
     "jquery.tmpl": "0.0.2",
-    "jshint": "^2.9.3",
     "jsrender": "0.9.90",
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
@@ -96,7 +95,7 @@
     "devextreme-bundler": "bin/bundler.js"
   },
   "scripts": {
-    "lint": "jshint --verbose . && eslint .",
+    "lint": "eslint .",
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",

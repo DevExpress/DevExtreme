@@ -3292,14 +3292,11 @@ function getEvent(options) {
     QUnit.test("Check dragging header visibility after loading", function(assert) {
         // arrange
         var testElement = $("#container"),
-            options,
             draggingHeader,
             $draggingHeader,
             controller = this.createDraggingHeaderViewController();
 
-        controller.dock = function(params) {
-            options = params;
-        };
+        controller.dock = function() { };
         draggingHeader = new TestDraggingHeader(this.component);
         draggingHeader.init();
         draggingHeader.render(testElement);
@@ -4992,16 +4989,11 @@ function getEvent(options) {
     QUnit.test('Highlight column headers with allowReordering false, allowGrouping true when move the column from group panel in headers', function(assert) {
         // arrange
         var that = this,
-            testElement = $('#container'),
-            columnIndexOpacity,
-            opacityValue;
+            testElement = $('#container');
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = {};
-        that.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
-            columnIndexOpacity = columnIndex;
-            opacityValue = value;
-        };
+        that.controller._rowsView.setRowsOpacity = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5064,16 +5056,11 @@ function getEvent(options) {
     QUnit.test('Highlight column headers when move the column with allowReordering false from group panel in headers', function(assert) {
         // arrange
         var that = this,
-            testElement = $('#container'),
-            columnIndexOpacity,
-            opacityValue;
+            testElement = $('#container');
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = {};
-        that.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
-            columnIndexOpacity = columnIndex;
-            opacityValue = value;
-        };
+        that.controller._rowsView.setRowsOpacity = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5118,16 +5105,11 @@ function getEvent(options) {
     QUnit.test('Not highlight column headers with allowReordering false, allowGrouping true when drop the column from group panel in headers', function(assert) {
         // arrange
         var that = this,
-            testElement = $('#container'),
-            columnIndexOpacity,
-            opacityValue;
+            testElement = $('#container');
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = { setRowsOpacity: noop };
-        that.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
-            columnIndexOpacity = columnIndex;
-            opacityValue = value;
-        };
+        that.controller._rowsView.setRowsOpacity = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5187,16 +5169,11 @@ function getEvent(options) {
     QUnit.test('Not highlight column headers with allowReordering false, allowGrouping true when move the column from headers in headers', function(assert) {
         // arrange
         var that = this,
-            testElement = $('#container'),
-            columnIndexOpacity,
-            opacityValue;
+            testElement = $('#container');
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = { setRowsOpacity: noop };
-        that.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
-            columnIndexOpacity = columnIndex;
-            opacityValue = value;
-        };
+        that.controller._rowsView.setRowsOpacity = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
@@ -5241,16 +5218,11 @@ function getEvent(options) {
     QUnit.test('Not highlight column headers with allowReordering true, allowGrouping true', function(assert) {
         // arrange
         var that = this,
-            testElement = $('#container'),
-            columnIndexOpacity,
-            opacityValue;
+            testElement = $('#container');
 
         that.controller._rowsView = {};
         that.controller._columnHeadersView = {};
-        that.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
-            columnIndexOpacity = columnIndex;
-            opacityValue = value;
-        };
+        that.controller._rowsView.setRowsOpacity = function() {};
         that.controller._columnHeadersView.element = function() {
             return that.draggingPanels[0].element().append($('<div />').addClass('dx-header-row'));
         };
