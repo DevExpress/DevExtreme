@@ -261,7 +261,7 @@ function getVerticalAxesMargins(axes) {
 
 function performActionOnAxes(axes, action, actionArgument1, actionArgument2) {
     axes.forEach(function(axis) {
-        axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane]);
+        axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane] || actionArgument2);
     });
 }
 
@@ -333,6 +333,13 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
         performActionOnAxes(axes, "hideOuterElements");
     }
 }
+
+function axisAnimationEnabled(drawOptions, series) {
+    const pointsCount = series.reduce((sum, s) => sum += s.getPoints().length, 0) / series.length;
+
+    return drawOptions.animate && pointsCount <= drawOptions.animationPointsLimit;
+}
+
 // utilities used in axes rendering
 
 var dxChart = AdvancedChart.inherit({
@@ -726,6 +733,7 @@ var dxChart = AdvancedChart.inherit({
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
+            performActionOnAxes(allAxes, "prepareAnimation");
             that._renderScaleBreaks();
             return false;
         }
@@ -746,7 +754,7 @@ var dxChart = AdvancedChart.inherit({
         hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
 
-        performActionOnAxes(allAxes, "updateSize", panesCanvases);
+        performActionOnAxes(allAxes, "updateSize", panesCanvases, axisAnimationEnabled(drawOptions, that._getVisibleSeries()));
 
         horizontalAxes.forEach(shiftAxis("top", "bottom"));
         verticalAxes.forEach(shiftAxis("left", "right"));

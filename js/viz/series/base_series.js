@@ -726,7 +726,7 @@ Series.prototype = {
         that._visible = that._options.visible = visibility;
         that._updatePointsVisibility();
         that.hidePointTooltip();
-        that._options.visibilityChanged();
+        that._options.visibilityChanged(that);
     },
 
     // TODO. Problem related to 'point' option for bar-like series. Revisit this code once options parsing is changed

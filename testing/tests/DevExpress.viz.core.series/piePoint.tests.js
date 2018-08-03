@@ -1414,6 +1414,7 @@ QUnit.test("hide point", function(assert) {
     point.hide();
     assert.ok(!point.isVisible());
     assert.ok(this.visibilityChanged.calledOnce);
+    assert.ok(!this.visibilityChanged.lastCall.args[0]);
     assert.ok(hideTooltipSpy.calledOnce);
     assert.ok(point.isInVisibleArea());
 });
@@ -1449,4 +1450,5 @@ QUnit.test("show after hide point", function(assert) {
     assert.ok(point.isVisible());
     assert.ok(point.isInVisibleArea());
     assert.ok(this.visibilityChanged.calledOnce);
+    assert.ok(!this.visibilityChanged.lastCall.args[0]);
 });

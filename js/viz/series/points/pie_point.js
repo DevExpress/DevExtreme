@@ -336,7 +336,7 @@ module.exports = _extend({}, symbolPoint, {
         if(that._visible) {
             that._visible = false;
             that.hideTooltip();
-            that._options.visibilityChanged(that);
+            that._options.visibilityChanged();
         }
     },
 
@@ -344,7 +344,7 @@ module.exports = _extend({}, symbolPoint, {
         var that = this;
         if(!that._visible) {
             that._visible = true;
-            that._options.visibilityChanged(that);
+            that._options.visibilityChanged();
         }
     },
 

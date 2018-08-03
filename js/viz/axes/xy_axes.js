@@ -339,9 +339,8 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(tick, length) {
-            var coords = tick.coords,
-                isHorizontal = this._isHorizontal,
+        _getTickMarkPoints: function(coords, length) {
+            var isHorizontal = this._isHorizontal,
                 tickCorrection = {
                     left: -1,
                     top: -1,
@@ -769,10 +768,7 @@ module.exports = {
                 ticks = ticksData.ticks,
                 tickInterval = ticksData.tickInterval,
                 options = this._options,
-                constantLineOptions = (options.constantLines || []).filter(function(options) {
-                    that._checkAlignmentConstantLineLabels(options.label);
-                    return options.label.position === "outside" && options.label.visible;
-                }),
+                constantLineOptions = that._outsideConstantLines.filter(l => l.labelOptions.visible).map(l => l.options),
                 rootElement = that._renderer.root,
                 labelIsVisible = options.label.visible && !range.stubData && ticks.length,
                 labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),

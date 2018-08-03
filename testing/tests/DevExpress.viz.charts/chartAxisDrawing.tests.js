@@ -93,7 +93,8 @@ function createAxisStubs() {
         shift: sinon.spy(function(arg) { this.shift_test_arg = $.extend({}, arg); }),
         hideTitle: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
-        hideOuterElements: sinon.spy()
+        hideOuterElements: sinon.spy(),
+        prepareAnimation: sinon.spy()
     };
 
     axisFakes
@@ -1451,6 +1452,9 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
 
     assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
     assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+
+    assert.ok(valAxisStub.prepareAnimation.called);
+    assert.ok(argAxisStub.prepareAnimation.called);
 });
 
 QUnit.test("Draw scale breaks", function(assert) {
@@ -2088,7 +2092,7 @@ QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
         originalBottom: 0,
         width: 800,
         height: 600
-    }, undefined]);
+    }, true]);
 });
 
 QUnit.module("Adaptive layout rendering", environment);
@@ -2450,4 +2454,91 @@ QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T62444
 
     assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
     assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+});
+
+QUnit.test("Pass animate true flag to the updateSize method", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        series: {},
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    // assert
+    assert.deepEqual(argAxis.updateSize.lastCall.args[1], true);
+    assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
+});
+
+QUnit.test("Pass animate false flag to the updateSize method if animation is disabled", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        animation: {
+            enabled: false
+        },
+        series: {},
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    // assert
+    assert.deepEqual(argAxis.updateSize.lastCall.args[1], false);
+    assert.deepEqual(valAxis.updateSize.lastCall.args[1], false);
+});
+
+QUnit.test("Pass animate false flag to the updateSize method if points limit is exceeded", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    var dataSource = [];
+
+    for(var i = 0; i < 12; i++) {
+        dataSource.push({ arg: i, val: 1 });
+    }
+
+    new dxChart(this.container, {
+        animation: {
+            enabled: true,
+            maxPointCountSupported: 10
+        },
+        series: [{}, {}],
+        dataSource: dataSource
+    });
+
+    // assert
+    assert.deepEqual(argAxis.updateSize.lastCall.args[1], false);
+    assert.deepEqual(valAxis.updateSize.lastCall.args[1], false);
+});
+
+QUnit.test("Pass animate false flag to the updateSize method if points limit is not exceeded", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    var dataSource = [];
+
+    for(var i = 0; i < 15; i++) {
+        dataSource.push({ arg: i, val: 1 });
+    }
+
+    new dxChart(this.container, {
+        animation: {
+            enabled: true,
+            maxPointCountSupported: 10
+        },
+        series: [{}, { valueField: "val2" }],
+        dataSource: dataSource
+    });
+
+    // assert
+    assert.deepEqual(argAxis.updateSize.lastCall.args[1], true);
+    assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
 });
