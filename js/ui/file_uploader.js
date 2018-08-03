@@ -714,15 +714,22 @@ var FileUploader = Editor.inherit({
         if(file.isValid()) {
             file.$statusMessage.text(this.option("readyToUploadMessage"));
         } else {
-            $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
+            var validationMessage = "";
             if(!file.isValidFileExtension) {
-                file.$statusMessage.text(this.option("validation.invalidFileExtensionMessage"));
-            } else if(!file.isValidMaxSize) {
-                file.$statusMessage.text(this.option("validation.invalidMaxFileSizeMessage"));
-            } else if(!file.isValidMinSize) {
-                file.$statusMessage.text(this.option("validation.invalidMinFileSizeMessage"));
+                validationMessage += this._getValidationMessage("validation.invalidFileExtensionMessage");
             }
+            if(!file.isValidMaxSize) {
+                validationMessage += this._getValidationMessage("validation.invalidMaxFileSizeMessage");
+            }
+            if(!file.isValidMinSize) {
+                validationMessage += this._getValidationMessage("validation.invalidMinFileSizeMessage");
+            }
+            $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
+            file.$statusMessage.html(validationMessage);
         }
+    },
+    _getValidationMessage: function(key) {
+        return this.option(key) + "<br />";
     },
 
     _updateFileNameMaxWidth: function() {
