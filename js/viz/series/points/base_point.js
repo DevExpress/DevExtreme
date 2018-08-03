@@ -226,15 +226,12 @@ Point.prototype = {
     },
 
     resetView: function(style) {
-        --this._viewCounters[style];
+        var viewCounters = this._viewCounters;
 
-        ///#DEBUG
-        if(this._viewCounters[style] < 0) {
-            var debug = require("../../../core/utils/console").debug;
-            debug.assert(false, "incorrect view style couinter " + this._viewCounters[style] + " " + style);
+        --viewCounters[style];
+        if(viewCounters[style] < 0) { // T661080
+            viewCounters[style] = 0;
         }
-        ///#ENDDEBUG
-
         this.applyView();
     },
 
