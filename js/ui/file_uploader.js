@@ -44,6 +44,8 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_CANCEL_BUTTON_CLASS = "dx-fileuploader-cancel-button",
     FILEUPLOADER_UPLOAD_BUTTON_CLASS = "dx-fileuploader-upload-button",
 
+    FILEUPLOADER_INVALID_CLASS = "dx-fileuploader-invalid",
+
     FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 
 
@@ -272,6 +274,57 @@ var FileUploader = Editor.inherit({
             * @action
             */
             onUploadAborted: null,
+
+
+            /**
+            * @name dxFileUploaderOptions.validation
+            * @type Object
+            * @default { allowedFileExtensions: [], maxFileSize: 0, minFileSize: 0, invalidFileExtensionMessage: "", invalidMaxFileSizeMessage: "", invalidMinFileSizeMessage: ""}
+            */
+            validation: {
+                /**
+                * @name dxFileUploaderOptions.validation.allowedFileExtensions
+                * @type Array<string>
+                * @default []
+                */
+                allowedFileExtensions: [],
+
+                /**
+                * @name dxFileUploaderOptions.validation.maxFileSize
+                * @type number
+                * @default 0
+                */
+                maxFileSize: 0,
+
+                /**
+                * @name dxFileUploaderOptions.validation.minFileSize
+                * @type number
+                * @default 0
+                */
+                minFileSize: 0,
+
+                /**
+                * @name dxFileUploaderOptions.validation.invalidFileExtensionMessage
+                * @type string
+                * @default "File type not allowed"
+                */
+                invalidFileExtensionMessage: messageLocalization.format("dxFileUploader-invalidFileExtension"),
+
+                /**
+                * @name dxFileUploaderOptions.validation.invalidMaxFileSizeMessage
+                * @type string
+                * @default "File size too large"
+                */
+                invalidMaxFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMaxFileSize"),
+
+                /**
+                * @name dxFileUploaderOptions.validation.invalidMinFileSizeMessage
+                * @type string
+                * @default "File size too small"
+                */
+                invalidMinFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMinFileSize")
+            },
+
 
             /**
             * @name dxFileUploaderOptions.extendSelection
@@ -521,8 +574,40 @@ var FileUploader = Editor.inherit({
         }
 
         each(value.slice(this._files.length), (function(_, value) {
-            this._files.push(this._createFile(value));
+            var file = this._createFile(value);
+            this._validateFile(file);
+            this._files.push(file);
         }).bind(this));
+    },
+    _validateFile: function(file) {
+        file.isValidFileExtension = this._validateFileExtension(file);
+        file.isValidMinSize = this._validateMinFileSize(file);
+        file.isValidMaxSize = this._validateMaxFileSize(file);
+    },
+    _validateFileExtension: function(file) {
+        var allowedExtensions = this.option("validation.allowedFileExtensions");
+        var fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.'));
+        if(allowedExtensions.length === 0) {
+            return true;
+        }
+        for(var i = 0; i < allowedExtensions.length; i++) {
+            if(fileExtension === allowedExtensions[i]) {
+                return true;
+            }
+        }
+        return false;
+    },
+    _validateMaxFileSize: function(file) {
+        var fileSize = file.value.size;
+        var maxFileSize = this.option("validation.maxFileSize");
+        maxFileSize = maxFileSize === 0 ? fileSize : maxFileSize;
+        return fileSize <= maxFileSize;
+    },
+    _validateMinFileSize: function(file) {
+        var fileSize = file.value.size;
+        var minFileSize = this.option("validation.minFileSize");
+        minFileSize = minFileSize === 0 ? fileSize : minFileSize;
+        return fileSize >= minFileSize;
     },
 
     _createUploadStartedAction: function() {
@@ -553,7 +638,13 @@ var FileUploader = Editor.inherit({
             onAbort: Callbacks(),
             onLoad: Callbacks(),
             onError: Callbacks(),
-            onLoadStart: Callbacks()
+            onLoadStart: Callbacks(),
+            isValidFileExtension: true,
+            isValidMaxSize: true,
+            isValidMinSize: true,
+            isValid: function() {
+                return this.isValidFileExtension && this.isValidMaxSize && this.isValidMinSize;
+            }
         };
     },
 
@@ -569,7 +660,6 @@ var FileUploader = Editor.inherit({
         }
 
         var showFileList = this.option("showFileList");
-
         if(showFileList) {
             var that = this;
 
@@ -581,7 +671,7 @@ var FileUploader = Editor.inherit({
         }
 
         this.$element().toggleClass(FILEUPLOADER_SHOW_FILE_LIST_CLASS, showFileList);
-        this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
+        this._toggleFileUploaderEmptyClassName();
         this._updateFileNameMaxWidth();
 
         this._$validationMessage && this._$validationMessage.dxOverlay("instance").repaint();
@@ -620,6 +710,26 @@ var FileUploader = Editor.inherit({
                 .text(this._getFileSize(value.size))
                 .appendTo($fileInfo);
         }
+
+        if(file.isValid()) {
+            file.$statusMessage.text(this.option("readyToUploadMessage"));
+        } else {
+            var validationMessage = "";
+            if(!file.isValidFileExtension) {
+                validationMessage += this._getValidationMessage("validation.invalidFileExtensionMessage");
+            }
+            if(!file.isValidMaxSize) {
+                validationMessage += this._getValidationMessage("validation.invalidMaxFileSizeMessage");
+            }
+            if(!file.isValidMinSize) {
+                validationMessage += this._getValidationMessage("validation.invalidMinFileSizeMessage");
+            }
+            $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
+            file.$statusMessage.html(validationMessage);
+        }
+    },
+    _getValidationMessage: function(key) {
+        return this.option(key) + "<br />";
     },
 
     _updateFileNameMaxWidth: function() {
@@ -669,7 +779,7 @@ var FileUploader = Editor.inherit({
     },
 
     _getUploadButton: function(file) {
-        if(this.option("uploadMode") !== "useButtons") {
+        if(!file.isValid() || this.option("uploadMode") !== "useButtons") {
             return null;
         }
 
@@ -705,11 +815,23 @@ var FileUploader = Editor.inherit({
         this.option("value", value);
         this._preventRecreatingFiles = false;
 
-        this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
+        this._toggleFileUploaderEmptyClassName();
 
         this._doPreventInputChange = true;
         this._$fileInput.val("");
         this._doPreventInputChange = false;
+    },
+
+    _toggleFileUploaderEmptyClassName: function() {
+        this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length || this._hasInvalidFile(this._files));
+    },
+    _hasInvalidFile: function(files) {
+        for(var i = 0; i < files.length; i++) {
+            if(!files[i].isValid()) {
+                return true;
+            }
+        }
+        return false;
     },
 
     _getFileSize: function(size) {
@@ -1010,7 +1132,7 @@ var FileUploader = Editor.inherit({
     },
 
     _uploadFile: function(file) {
-        if(file.uploadStarted) {
+        if(!file.isValid() || file.uploadStarted) {
             return;
         }
 
