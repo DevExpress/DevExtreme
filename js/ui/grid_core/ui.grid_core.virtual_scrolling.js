@@ -810,6 +810,8 @@ module.exports = {
                             var visibleItems = this._visibleItems;
                             var isRefresh = change.changeType === "refresh";
 
+                            if(change.changeType === "append" && change.items && !change.items.length) return;
+
                             if(isRefresh || change.changeType === "append" || change.changeType === "prepend") {
                                 change.cancel = true;
                                 isRefresh && rowsScrollController.reset();
