@@ -5397,6 +5397,43 @@ QUnit.test("ungrouping after grouping should works correctly if row rendering mo
     });
 });
 
+// T641931
+QUnit.test("Infinite scrolling should works correctly", function(assert) {
+    // arrange, act
+    var data = [];
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: data,
+        loadingTimeout: undefined,
+        scrolling: {
+            updateTimeout: 0,
+            useNative: false,
+            mode: "infinite",
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo(10000);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, "top visible row");
+    assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 1, "bottom loading exists");
+
+    // act
+    dataGrid.getScrollable().scrollTo(10000);
+
+    // assert
+    assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
+});
 
 QUnit.module("Rendered on server", {
     beforeEach: function() {
