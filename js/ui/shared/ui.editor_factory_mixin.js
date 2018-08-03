@@ -214,7 +214,7 @@ var EditorFactoryMixin = (function() {
             focusStateEnabled: !options.readOnly,
             activeStateEnabled: false,
             onValueChanged: function(e) {
-                options.setValue && options.setValue(e.value, e);
+                options.setValue && options.setValue(e.value, e /* for selection */);
             },
         }, options);
     };
