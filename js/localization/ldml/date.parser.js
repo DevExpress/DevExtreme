@@ -1,4 +1,5 @@
-var escapeRegExp = require("../../core/utils/common").escapeRegExp;
+var escapeRegExp = require("../../core/utils/common").escapeRegExp,
+    humanize = require("../../core/utils/inflector").humanize;
 
 var FORMAT_TYPES = {
     "3": "abbreviated",
@@ -184,7 +185,7 @@ var getRegExpInfo = function(format, dateParts) {
     }
     return {
         patterns: patterns,
-        regexp: new RegExp("^" + regexpText + "$")
+        regexp: new RegExp("^" + regexpText + "$", "i")
     };
 };
 
@@ -194,7 +195,7 @@ var setPatternPart = function(date, pattern, text, dateParts) {
         partParser = PATTERN_PARSERS[patternChar];
 
     if(partSetter && partParser) {
-        var value = partParser(text, pattern.length, dateParts);
+        var value = partParser(humanize(text.toLowerCase()), pattern.length, dateParts);
         if(date[partSetter]) {
             date[partSetter](value);
         } else {
