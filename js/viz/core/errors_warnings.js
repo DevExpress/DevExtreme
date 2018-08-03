@@ -94,11 +94,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     W2107: "The export menu was hidden due to the container size",
     /**
+    * @name ErrorsViz.W2108
+    */
+    W2108: "The browser does not support exporting images to {0} format.",
+    /**
     * @name ErrorsViz.W2301
     */
-    W2301: "Invalid value range",
-    /**
-    * @name ErrorsViz.W2401
-    */
-    W2401: "The browser does not support exporting images to {0} format."
+    W2301: "Invalid value range"
 });
