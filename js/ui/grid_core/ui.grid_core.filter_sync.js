@@ -103,6 +103,9 @@ var FilterSyncController = modules.Controller.inherit((function() {
         var filterRowOptions,
             selectedFilterOperation = condition && condition[1];
         if(FILTER_ROW_OPERATIONS.indexOf(selectedFilterOperation) >= 0) {
+            if(selectedFilterOperation === column.defaultFilterOperation && !isDefined(column.selectedFilterOperation)) {
+                selectedFilterOperation = column.selectedFilterOperation;
+            }
             filterRowOptions = {
                 filterValue: condition[2],
                 selectedFilterOperation: selectedFilterOperation
