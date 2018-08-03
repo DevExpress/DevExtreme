@@ -1,5 +1,3 @@
-// jshint node:true
-
 var fs = require('fs');
 var lazyPipe = require('lazypipe');
 var header = require('gulp-header');

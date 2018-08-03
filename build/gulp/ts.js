@@ -1,5 +1,3 @@
-// jshint node:true
-
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var replace = require('gulp-replace');

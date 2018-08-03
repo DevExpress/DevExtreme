@@ -594,8 +594,7 @@ exports.applyRunningTotal = function(descriptions, data) {
                 expression,
                 expressionArg,
                 cell,
-                field,
-                value;
+                field;
 
             processDataCell(data, rowItem.index, columnItem.index, true);
 
@@ -606,7 +605,7 @@ exports.applyRunningTotal = function(descriptions, data) {
                 if(expression) {
                     expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
                     cell = expressionArg.cell();
-                    value = cell[i] = expression(expressionArg);
+                    cell[i] = expression(expressionArg);
                 }
             }
         }, false);

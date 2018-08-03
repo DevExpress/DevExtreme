@@ -539,10 +539,8 @@ QUnit.test("option value returns object when valueExpr is 'this'", function(asse
             return dataArray;
         },
         byKey: function(key) {
-            var result;
             $.each(dataArray, function() {
                 if(this.id === key) {
-                    result = this;
                     return false;
                 }
             });

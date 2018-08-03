@@ -1129,21 +1129,18 @@ QUnit.test("add route should extend bounds", function(assert) {
     var done = assert.async();
     var d = $.Deferred();
 
-    var firstPoint,
-        secondPoint,
-        thirdPoint,
-        fourthPoint;
+    var points = [];
 
     var $map = $("#map").dxMap({
             provider: "bing",
             routes: [ROUTES[0]],
             onReady: function() {
-                firstPoint = new Microsoft.Maps.Location(ROUTES[0].locations[0][0], ROUTES[0].locations[0][1]);
-                secondPoint = new Microsoft.Maps.Location(ROUTES[0].locations[2][0], ROUTES[0].locations[2][1]);
-                thirdPoint = new Microsoft.Maps.Location(ROUTES[1].locations[0].lat, ROUTES[1].locations[0].lng);
-                fourthPoint = new Microsoft.Maps.Location(ROUTES[1].locations[2][0], ROUTES[1].locations[2][1]);
+                points.push(new Microsoft.Maps.Location(ROUTES[0].locations[0][0], ROUTES[0].locations[0][1]),
+                    new Microsoft.Maps.Location(ROUTES[0].locations[2][0], ROUTES[0].locations[2][1]),
+                    new Microsoft.Maps.Location(ROUTES[1].locations[0].lat, ROUTES[1].locations[0].lng),
+                    new Microsoft.Maps.Location(ROUTES[1].locations[2][0], ROUTES[1].locations[2][1]));
 
-                assert.deepEqual(Microsoft.locationRectInstances.pop().points, [firstPoint, firstPoint, secondPoint], "bound extended and fitted correctly");
+                assert.deepEqual(Microsoft.locationRectInstances.pop().points, [points[0], points[0], points[1]], "bound extended and fitted correctly");
 
                 d.resolve();
             }
@@ -1152,7 +1149,7 @@ QUnit.test("add route should extend bounds", function(assert) {
 
     d.done(function() {
         map.option("onUpdated", function() {
-            assert.deepEqual(Microsoft.locationRectInstances.pop().points, [firstPoint, firstPoint, fourthPoint], "bound extended and fitted correctly");
+            assert.deepEqual(Microsoft.locationRectInstances.pop().points, [points[0], points[0], points[3]], "bound extended and fitted correctly");
 
             done();
         });

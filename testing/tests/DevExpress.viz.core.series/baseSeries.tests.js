@@ -552,13 +552,12 @@ QUnit.test("Update series data when points are not empty. Old points length > ne
     var options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } },
         series = createSeries(options),
         data = [{ arg: 1, val: 10 }, { arg: 2, val: 11 }],
-        newData = [{ arg: 3, val: 4 }],
-        points;
+        newData = [{ arg: 3, val: 4 }];
 
     series.updateData(data);
     series.createPoints();
 
-    points = series.getAllPoints().slice();
+    series.getAllPoints().slice();
     series._points = [];
     series.updateData(newData);
     series.createPoints();
@@ -670,15 +669,14 @@ QUnit.test("Pass errorBars options to point (on creation). ErrorBars are not vis
                 someErrorBarsProperty: true
             }
         }),
-        data = [{ arg: 1, val: 2 }],
-        points;
+        data = [{ arg: 1, val: 2 }];
 
     series.areErrorBarsVisible = function() { return false; };
     // act
     series.updateData(data);
     series.createPoints();
     // assert
-    points = series.getPoints();
+    series.getPoints();
 
     assert.equal(this.createPoint.callCount, 1);
     assert.deepEqual(this.createPoint.firstCall.args[2].errorBars, undefined, "error bars options do not passed to point");
@@ -692,14 +690,13 @@ QUnit.test("Pass errorBars options to point (on creation). ErrorBars are visible
                 someErrorBarsProperty: true
             }
         }),
-        data = [{ arg: 1, val: 2 }],
-        points;
+        data = [{ arg: 1, val: 2 }];
     series.areErrorBarsVisible = function() { return true; };
     // act
     series.updateData(data);
     series.createPoints();
     // assert
-    points = series.getPoints();
+    series.getPoints();
 
     assert.equal(this.createPoint.callCount, 1);
     assert.deepEqual(this.createPoint.firstCall.args[2].errorBars, { someErrorBarsProperty: true }, "error bars options passed to point");

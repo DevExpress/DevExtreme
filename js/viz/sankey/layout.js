@@ -78,10 +78,8 @@ let layout = {
     },
 
     _getWeightForCascade: function(cascades, cascadeIdx) {
-        let wIn = 0, wOut = 0, wMax = 0, cascade = cascades[cascadeIdx];
+        let wMax = 0, cascade = cascades[cascadeIdx];
         Object.keys(cascade).forEach(nodeTitle => {
-            wIn += cascade[nodeTitle].inWeight;
-            wOut += cascade[nodeTitle].outWeight;
             wMax += Math.max(cascade[nodeTitle].inWeight, cascade[nodeTitle].outWeight);
         });
         return wMax;
@@ -90,11 +88,9 @@ let layout = {
     _getMaxWeightThroughCascades: function(cascades) {
         let max = [];
         cascades.forEach(cascade => {
-            let inW = 0, outW = 0, mW = 0;
+            let mW = 0;
             Object.keys(cascade).forEach(nodeTitle => {
                 let node = cascade[nodeTitle];
-                inW += node.inWeight;
-                outW += node.outWeight;
                 mW += Math.max(node.inWeight, node.outWeight);
             });
             max.push(mW);

@@ -209,12 +209,9 @@ QUnit.test("Missing command id", function(assert) {
     var manager = new CommandManager({
         commandMapping: mapping
     });
-    var result;
     var canWork = true;
     var model = {
-        work: function() {
-            result = "work done";
-        },
+        work: function() {},
         cantWork: function() {
             return !canWork;
         }

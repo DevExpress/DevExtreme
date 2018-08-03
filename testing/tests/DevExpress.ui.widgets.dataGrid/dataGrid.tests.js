@@ -5620,8 +5620,7 @@ QUnit.test("dataSource change", function(assert) {
 // T216940
 QUnit.test("dataSource change to equal instance", function(assert) {
     // arrange, act
-    var loadCount,
-        dataSourceInstance;
+    var dataSourceInstance;
 
     var dataSource = [{ id: 1 }];
 
@@ -5631,7 +5630,6 @@ QUnit.test("dataSource change to equal instance", function(assert) {
     });
 
     dataSourceInstance = dataGrid.getController("data")._dataSource;
-    loadCount = 0;
 
     // act
     dataSource.push({ id: 2 });
@@ -6063,7 +6061,6 @@ QUnit.test("group command column width after grouping column with showWhenGroupe
 QUnit.test("columns change when changed dataSource parameters", function(assert) {
     // arrange, act
     var loadingCount = 0,
-        loadingOptions,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -6071,7 +6068,6 @@ QUnit.test("columns change when changed dataSource parameters", function(assert)
                 store: {
                     type: "array",
                     onLoading: function(options) {
-                        loadingOptions = options;
                         loadingCount++;
                     },
                     data: [{ a: 1, b: 2 }, { a: 2, b: 1 }]

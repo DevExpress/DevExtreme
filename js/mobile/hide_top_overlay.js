@@ -1,7 +1,6 @@
 var inArray = require("../core/utils/array").inArray;
 
 var hideCallback = (function() {
-    /* jshint laxcomma:true */
     var callbacks = [];
     return {
         add: function(callback) {
@@ -27,6 +26,7 @@ var hideCallback = (function() {
             return callbacks.length > 0;
         }
         ///#DEBUG
+        // eslint-disable-next-line comma-style
         , reset: function() {
             callbacks = [];
         }

@@ -8,16 +8,6 @@
             {
                 "patterns": ["*.js"]
             }
-        ],
-        "no-undef": "error"
-    },
-    "globals": {
-        "setInterval": true,
-        "setTimeout": true,
-        "clearInterval": true,
-        "clearTimeout": true,
-        "require": true,
-        "module": true,
-        "exports": true
+        ]
     }
 }

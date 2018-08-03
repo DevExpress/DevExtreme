@@ -560,7 +560,7 @@ export const MockSeries = function MockSeries(options) {
         getPointsByArg: function(arg) {
             var f = [];
             $.each(options.points, function(_, point) {
-                // jshint eqeqeq:false
+                // eslint-disable-next-line eqeqeq
                 if(point.argument.valueOf() == arg.valueOf()) {
                     f.push(point);
                 }
