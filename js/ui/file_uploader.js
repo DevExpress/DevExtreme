@@ -1417,6 +1417,7 @@ var FileUploader = Editor.inherit({
             case "_uploadButtonType":
                 this._uploadButton && this._uploadButton.option("type", value);
                 break;
+            case "validation":
             case "readyToUploadMessage":
             case "uploadedMessage":
             case "uploadFailedMessage":
