@@ -246,7 +246,7 @@ var ColorBox = DropDownEditor.inherit({
             },
 
             onValueChanged: function(args) {
-                if(this.option("editAlphaChannel") && colorUtils.makeRgba(args.value) === args.previousValue) {
+                if(colorUtils.makeRgba(args.value) === args.previousValue) {
                     return;
                 }
 
