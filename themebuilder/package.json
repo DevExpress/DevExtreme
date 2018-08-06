@@ -1,0 +1,23 @@
+{
+  "name": "devextreme-themebuilder",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "devextreme",
+    "devexpress"
+  ],
+  "homepage": "https://js.devexpress.com/",
+  "bugs": "https://www.devexpress.com/support/",
+  "author": "Developer Express Inc.",
+  "repository": "",
+  "license": "SEE LICENSE IN README.md",
+  "dependencies": {
+    "bootstrap": "^4.1.2",
+    "less": "^2.6.1",
+    "node-sass": "^4.9.2"
+  },
+  "scripts": {
+    "build-theme": "node cli/build-theme.js",
+    "build-base-theming": "node cli/build-base-theming.js"
+  }
+}

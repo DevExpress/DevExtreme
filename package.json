@@ -99,7 +99,8 @@
     "lint-staged": "lint-staged",
     "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
-    "build-themes": "gulp style-compiler-themes"
+    "build-themes": "gulp style-compiler-themes",
+    "build-themebuilder-assets": "gulp style-compiler-tb-assets"
   },
   "pre-commit": "lint-staged"
 }
