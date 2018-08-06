@@ -1,5 +1,4 @@
-var escapeRegExp = require("../../core/utils/common").escapeRegExp,
-    humanize = require("../../core/utils/inflector").humanize;
+var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
 var FORMAT_TYPES = {
     "3": "abbreviated",
@@ -58,12 +57,16 @@ var PATTERN_REGEXPS = {
 
 var parseNumber = Number;
 
+var caseInsensitiveIndexOf = function(haystack, needle) {
+    return haystack.join(" ").toLowerCase().split(" ").indexOf(needle.toLowerCase());
+};
+
 var monthPatternParser = function(text, count, dateParts) {
-    text = humanize(text.toLowerCase());
     if(count > 2) {
         return ["format", "standalone"].map(function(type) {
             return Object.keys(FORMAT_TYPES).map(function(count) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], type).indexOf(text);
+                var monthNames = dateParts.getMonthNames(FORMAT_TYPES[count], type);
+                return caseInsensitiveIndexOf(monthNames, text);
             });
         }).reduce(function(a, b) {
             return a.concat(b);
@@ -91,8 +94,8 @@ var PATTERN_PARSERS = {
         return parseNumber(text) - 1;
     },
     E: function(text, count, dateParts) {
-        text = humanize(text.toLowerCase());
-        return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
+        var dayNames = dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format");
+        return caseInsensitiveIndexOf(dayNames, text);
     },
     a: function(text, count, dateParts) {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text.toUpperCase());
