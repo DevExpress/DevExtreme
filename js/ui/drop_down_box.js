@@ -280,7 +280,9 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupConfig: function() {
         return extend(this.callBase(), {
-            width: this.$element().outerWidth(),
+            width: function() {
+                return this.$element().outerWidth();
+            }.bind(this),
             height: "auto",
             tabIndex: -1,
             dragEnabled: false,
