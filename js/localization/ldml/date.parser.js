@@ -59,6 +59,7 @@ var PATTERN_REGEXPS = {
 var parseNumber = Number;
 
 var monthPatternParser = function(text, count, dateParts) {
+    text = humanize(text.toLowerCase());
     if(count > 2) {
         return ["format", "standalone"].map(function(type) {
             return Object.keys(FORMAT_TYPES).map(function(count) {
@@ -90,10 +91,11 @@ var PATTERN_PARSERS = {
         return parseNumber(text) - 1;
     },
     E: function(text, count, dateParts) {
+        text = humanize(text.toLowerCase());
         return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
     },
     a: function(text, count, dateParts) {
-        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
+        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text.toUpperCase());
     },
     d: parseNumber,
     H: parseNumber,
@@ -198,7 +200,7 @@ var setPatternPart = function(date, pattern, text, dateParts) {
         partParser = PATTERN_PARSERS[patternChar];
 
     if(partSetter && partParser) {
-        var value = partParser(humanize(text.toLowerCase()), pattern.length, dateParts);
+        var value = partParser(text, pattern.length, dateParts);
         if(date[partSetter]) {
             date[partSetter](value);
         } else {
