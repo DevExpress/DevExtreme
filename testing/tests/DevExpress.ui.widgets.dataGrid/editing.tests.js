@@ -725,10 +725,16 @@ QUnit.test('Cancel changes button click call cancelEditData', function(assert) {
     headerPanelElement = testElement.find('.dx-datagrid-header-panel').first();
 
     // act
-    this.click(headerPanelElement, '.dx-datagrid-cancel-button');
+    $(headerPanelElement).find(".dx-datagrid-cancel-button").trigger("dxclick");
 
     // assert
-    assert.equal(cancelEditDataCallCount, 1, 'cancelEditData called');
+    assert.equal(cancelEditDataCallCount, 0, 'cancelEditData is not called'); // T630875
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(cancelEditDataCallCount, 1, 'cancelEditData is called');
 });
 
 QUnit.test('Edit Row', function(assert) {
@@ -2045,6 +2051,8 @@ QUnit.test('Save changes on save button click when batch mode', function(assert)
     mouse.down();
     getInputElements(testElement).eq(0).trigger('change');
     mouse.up();
+
+    this.clock.tick();
 
     // assert
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }], ['test2', { "name": "Test2" }]], "changed rows are saved");
