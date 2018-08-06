@@ -14,24 +14,22 @@ const PersistentStrategy = DrawerStrategy.inherit({
 
         translator.move($(this._drawer.content()), { left: 0 });
 
-        if(animate) {
-            animation.padding($(this._drawer.content()), width, this._drawer.option("animationDuration"), direction, () => {
-                this._contentAnimation.resolve();
-            });
-        } else {
-            if(direction === "left") {
-                $(this._drawer.content()).css("paddingLeft", width);
-            } else {
-                $(this._drawer.content()).css("paddingRight", width);
-            }
-        }
+        this._animateContent(animate, offset, width, direction);
 
         if(this._drawer.option("showMode") === "slide") {
             const menuPos = this._getMenuOffset(offset);
             if(animate) {
-                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), direction, () => {
-                    this._menuAnimation.resolve();
-                });
+
+                let animationConfig = {
+                    $element: $(this._drawer._$menu),
+                    position: menuPos,
+                    duration: this._drawer.option("animationDuration"),
+                    direction: direction,
+                    complete: () => {
+                        this._menuAnimation.resolve();
+                    }
+                };
+                animation.moveTo(animationConfig);
             } else {
                 translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getRTLSignCorrection() });
             }
@@ -44,6 +42,29 @@ const PersistentStrategy = DrawerStrategy.inherit({
                 });
             } else {
                 $(this._drawer._$menu).css("width", width);
+            }
+        }
+    },
+
+    _animateContent(animate, offset, width, direction) {
+        translator.move($(this._drawer.content()), { left: 0 });
+
+        if(animate) {
+            let animationConfig = {
+                $element: $(this._drawer.content()),
+                padding: width,
+                direction: direction,
+                duration: this._drawer.option("animationDuration"),
+                complete: () => {
+                    this._contentAnimation.resolve();
+                }
+            };
+            animation.padding(animationConfig);
+        } else {
+            if(direction === "left") {
+                $(this._drawer.content()).css("paddingLeft", width);
+            } else {
+                $(this._drawer.content()).css("paddingRight", width);
             }
         }
     }

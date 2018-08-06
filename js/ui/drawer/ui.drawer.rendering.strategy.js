@@ -8,8 +8,11 @@ const when = deferredUtils.when;
 import fx from "../../animation/fx";
 
 const animation = {
-    moveTo($element, position, duration, direction, completeAction) {
-        let toConfig = {},
+    moveTo(config) {
+        let $element = config.$element,
+            position = config.position,
+            direction = config.direction || "left",
+            toConfig = {},
             animationType;
 
         if(direction === "right") {
@@ -23,12 +26,15 @@ const animation = {
         fx.animate($element, {
             type: animationType,
             to: toConfig,
-            duration,
-            complete: completeAction
+            duration: config.duration,
+            complete: config.complete
         });
     },
-    padding($element, padding, duration, direction, completeAction) {
-        const toConfig = {};
+    padding(config) {
+        let $element = config.$element,
+            padding = config.padding,
+            direction = config.direction || "left",
+            toConfig = {};
 
         if(direction === "left") {
             toConfig["paddingLeft"] = padding;
@@ -38,8 +44,8 @@ const animation = {
 
         fx.animate($element, {
             to: toConfig,
-            duration,
-            complete: completeAction
+            duration: config.duration,
+            complete: config.complete
         });
     },
 

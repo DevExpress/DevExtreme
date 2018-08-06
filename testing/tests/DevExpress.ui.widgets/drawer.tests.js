@@ -19,21 +19,22 @@ const DRAWER_SHADER_CLASS = "dx-drawer-shader";
 const position = $element => $element.position().left;
 
 const mockFxAnimate = (animations, type, output) => {
-    animations[type] = ($element, position, duration, direction, endAction) => {
-        position = position || 0;
+    animations[type] = (config) => {
+        let position = config.position || 0,
+            $element = config.$element;
 
         output.push({
             $element,
             type,
             start: translator.locate($element).left,
-            duration,
+            duration: config.duration,
             end: position
         });
 
         translator.move($element, { left: position });
 
-        if(endAction) {
-            endAction();
+        if(config.endAction) {
+            config.endAction();
         }
     };
 };

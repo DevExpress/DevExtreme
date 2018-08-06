@@ -18,10 +18,18 @@ const TemporaryStrategy = DrawerStrategy.inherit({
 
         if(this._drawer.option("showMode") === "slide") {
             if(animate) {
-                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), direction, () => {
-                    this._contentAnimation.resolve();
-                    this._menuAnimation.resolve();
-                });
+                let animationConfig = {
+                    $element: $(this._drawer._$menu),
+                    position: menuPos,
+                    duration: this._drawer.option("animationDuration"),
+                    direction: direction,
+                    complete: () => {
+                        this._contentAnimation.resolve();
+                        this._menuAnimation.resolve();
+                    }
+                };
+
+                animation.moveTo(animationConfig);
             } else {
                 translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getRTLSignCorrection() });
             }

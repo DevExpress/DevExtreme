@@ -11,15 +11,22 @@ const PushStrategy = DrawerStrategy.inherit({
 
         $(this._drawer.content()).css("paddingLeft", 0);
 
-        const pos = this._getMenuWidth(offset) * this._drawer._getRTLSignCorrection();
+        const contentPosition = this._getMenuWidth(offset) * this._drawer._getRTLSignCorrection();
 
         if(animate) {
-            animation.moveTo($(this._drawer.content()), pos, this._drawer.option("animationDuration"), "left", () => {
-                this._contentAnimation.resolve();
-                this._menuAnimation.resolve();
-            });
+            let animationConfig = {
+                $element: $(this._drawer.content()),
+                position: contentPosition,
+                duration: this._drawer.option("animationDuration"),
+                complete: () => {
+                    this._contentAnimation.resolve();
+                    this._menuAnimation.resolve();
+                }
+            };
+
+            animation.moveTo(animationConfig);
         } else {
-            translator.move($(this._drawer.content()), { left: pos });
+            translator.move($(this._drawer.content()), { left: contentPosition });
         }
     }
 });
