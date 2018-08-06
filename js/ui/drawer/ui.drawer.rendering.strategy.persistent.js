@@ -9,26 +9,31 @@ const PersistentStrategy = DrawerStrategy.inherit({
     renderPosition(offset, animate) {
         this.callBase(offset, animate);
 
-        const width = this._getMenuWidth(offset);
+        const width = this._getMenuWidth(offset),
+            direction = this._drawer.option("menuPosition");
 
         translator.move($(this._drawer.content()), { left: 0 });
 
         if(animate) {
-            animation.paddingLeft($(this._drawer.content()), width, this._drawer.option("animationDuration"), () => {
+            animation.padding($(this._drawer.content()), width, this._drawer.option("animationDuration"), direction, () => {
                 this._contentAnimation.resolve();
             });
         } else {
-            $(this._drawer.content()).css("paddingLeft", width);
+            if(direction === "left") {
+                $(this._drawer.content()).css("paddingLeft", width);
+            } else {
+                $(this._drawer.content()).css("paddingRight", width);
+            }
         }
 
         if(this._drawer.option("showMode") === "slide") {
-            const menuPos = this._getMenuOffset(offset) * this._drawer._getRTLSignCorrection();
+            const menuPos = this._getMenuOffset(offset);
             if(animate) {
-                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), () => {
+                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), direction, () => {
                     this._menuAnimation.resolve();
                 });
             } else {
-                translator.move($(this._drawer._$menu), { left: menuPos });
+                translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getRTLSignCorrection() });
             }
         }
 

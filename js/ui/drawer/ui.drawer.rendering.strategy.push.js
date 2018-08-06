@@ -14,7 +14,7 @@ const PushStrategy = DrawerStrategy.inherit({
         const pos = this._getMenuWidth(offset) * this._drawer._getRTLSignCorrection();
 
         if(animate) {
-            animation.moveTo($(this._drawer.content()), pos, this._drawer.option("animationDuration"), () => {
+            animation.moveTo($(this._drawer.content()), pos, this._drawer.option("animationDuration"), "left", () => {
                 this._contentAnimation.resolve();
                 this._menuAnimation.resolve();
             });

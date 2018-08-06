@@ -10,18 +10,20 @@ const TemporaryStrategy = DrawerStrategy.inherit({
     renderPosition(offset, animate) {
         this.callBase(offset, animate);
 
-        const menuPos = this._getMenuOffset(offset) * this._drawer._getRTLSignCorrection();
+        const direction = this._drawer.option("menuPosition");
 
-        $(this._drawer.content()).css("paddingLeft", this._drawer.option("minWidth"));
+        const menuPos = this._getMenuOffset(offset);
+
+        $(this._drawer.content()).css("paddingLeft", this._drawer.option("minWidth") * this._drawer._getRTLSignCorrection());
 
         if(this._drawer.option("showMode") === "slide") {
             if(animate) {
-                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), () => {
+                animation.moveTo($(this._drawer._$menu), menuPos, this._drawer.option("animationDuration"), direction, () => {
                     this._contentAnimation.resolve();
                     this._menuAnimation.resolve();
                 });
             } else {
-                translator.move($(this._drawer._$menu), { left: menuPos });
+                translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getRTLSignCorrection() });
             }
         }
 
