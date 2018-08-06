@@ -600,7 +600,6 @@ var Slider = TrackBar.inherit({
 
     _renderValue: function() {
         this.callBase();
-        this._setRangeStyles(this._rangeStylesConfig());
 
         var value = this.option("value");
 
