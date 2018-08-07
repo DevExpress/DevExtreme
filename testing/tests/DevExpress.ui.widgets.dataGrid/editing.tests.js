@@ -8293,6 +8293,7 @@ QUnit.testInActiveWindow("Show the revert button when an edit cell, server retur
     this.rowsView.render(testElement);
 
     this.applyOptions({
+        showColumnHeaders: true,
         editing: {
             mode: "cell"
         },
