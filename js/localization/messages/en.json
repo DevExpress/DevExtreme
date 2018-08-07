@@ -62,6 +62,9 @@
         "dxFileUploader-uploaded": "Uploaded",
         "dxFileUploader-readyToUpload": "Ready to upload",
         "dxFileUploader-uploadFailedMessage": "Upload failed",
+        "dxFileUploader-invalidFileExtension": "File type not allowed",
+        "dxFileUploader-invalidMaxFileSize": "File size too large",
+        "dxFileUploader-invalidMinFileSize": "File size too small",
 
         "dxRangeSlider-ariaFrom": "From",
         "dxRangeSlider-ariaTill": "Till",

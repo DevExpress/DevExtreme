@@ -55,6 +55,10 @@
         "dxFileUploader-uploaded": "Subido",
         "dxFileUploader-readyToUpload": "Listo para subir",
         "dxFileUploader-uploadFailedMessage": "Falla ao subir",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
+
         "dxRangeSlider-ariaFrom": "Desde",
         "dxRangeSlider-ariaTill": "Hasta",
         "dxSwitch-onText": "ENCENDIDO",

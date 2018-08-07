@@ -62,6 +62,9 @@
         "dxFileUploader-uploaded": "Uppladdad",
         "dxFileUploader-readyToUpload": "Klar att ladda upp",
         "dxFileUploader-uploadFailedMessage": "Uppladdning misslyckades",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
 
         "dxRangeSlider-ariaFrom": "Från",
         "dxRangeSlider-ariaTill": "Till",

@@ -55,6 +55,10 @@
         "dxFileUploader-uploaded": "Hochgeladen",
         "dxFileUploader-readyToUpload": "Bereit zum hochladen",
         "dxFileUploader-uploadFailedMessage": "Fehler beim hochladen",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
+
         "dxRangeSlider-ariaFrom": "Von",
         "dxRangeSlider-ariaTill": "Bis",
         "dxSwitch-onText": "EIN",
