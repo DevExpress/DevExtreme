@@ -1,4 +1,5 @@
 var $ = require("../../core/renderer"),
+    AsyncTemplateMixin = require("../shared/async_template_mixin"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -355,20 +356,21 @@ var DropDownEditor = TextBox.inherit({
         this._$dropDownButton = null;
         this._$clearButton = null;
 
-        fieldTemplate.render({
+        this._renderAsyncTemplate(fieldTemplate, {
             model: data,
-            container: domUtils.getPublicElement($container)
+            container: domUtils.getPublicElement($container),
+            onRendered: () => {
+                if(!this._input().length) {
+                    throw errors.Error("E1010");
+                }
+
+                this._refreshEvents();
+                this._refreshValueChangeEvent();
+                this._renderFocusState();
+
+                isFocused && eventsEngine.trigger(this._input(), "focus");
+            }
         });
-
-        if(!this._input().length) {
-            throw errors.Error("E1010");
-        }
-
-        this._refreshEvents();
-        this._refreshValueChangeEvent();
-        this._renderFocusState();
-
-        isFocused && eventsEngine.trigger(this._input(), "focus");
     },
 
     _resetFocus: function(isFocused) {
@@ -853,7 +855,7 @@ var DropDownEditor = TextBox.inherit({
     content: function() {
         return this._popup ? this._popup.content() : null;
     }
-});
+}).include(AsyncTemplateMixin);
 
 registerComponent("dxDropDownEditor", DropDownEditor);
 
