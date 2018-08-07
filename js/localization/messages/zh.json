@@ -62,6 +62,9 @@
     "dxFileUploader-uploaded": "上传",
     "dxFileUploader-readyToUpload": "准备上传",
     "dxFileUploader-uploadFailedMessage": "上传失败",
+    "dxFileUploader-invalidFileExtension": "",
+    "dxFileUploader-invalidMaxFileSize": "",
+    "dxFileUploader-invalidMinFileSize": "",
 
     "dxRangeSlider-ariaFrom": "从",
     "dxRangeSlider-ariaTill": "至",

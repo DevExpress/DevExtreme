@@ -62,6 +62,9 @@
         "dxFileUploader-uploaded": "Caricato",
         "dxFileUploader-readyToUpload": "Pronto per caricare",
         "dxFileUploader-uploadFailedMessage": "Caricamento fallito",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
 
         "dxRangeSlider-ariaFrom": "Da",
         "dxRangeSlider-ariaTill": "fino a",

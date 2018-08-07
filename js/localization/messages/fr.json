@@ -62,6 +62,9 @@
         "dxFileUploader-uploaded": "Téléchargé",
         "dxFileUploader-readyToUpload": "Pret à télécharger",
         "dxFileUploader-uploadFailedMessage": "Echec du téléchargement",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
 
         "dxRangeSlider-ariaFrom": "De {0}",
         "dxRangeSlider-ariaTill": "à {0}",

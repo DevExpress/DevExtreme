@@ -62,6 +62,9 @@
         "dxFileUploader-uploaded": "Nahráno",
         "dxFileUploader-readyToUpload": "Připraveno k nahrání",
         "dxFileUploader-uploadFailedMessage": "Nahrávání selhalo",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
 
         "dxRangeSlider-ariaFrom": "Od",
         "dxRangeSlider-ariaTill": "Do",
