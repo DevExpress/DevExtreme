@@ -449,12 +449,12 @@ var Popup = Overlay.inherit({
         }
     },
 
-    _renderTemplateByType: function(optionName, data, $container, additionToolbarOptions) {
+    _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
         var template = this._getTemplateByOption(optionName),
             toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
-            var toolbarOptions = extend(additionToolbarOptions, {
+            var toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
                 rtlEnabled: this.option("rtlEnabled")
             });
