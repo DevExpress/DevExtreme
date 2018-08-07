@@ -10660,3 +10660,49 @@ QUnit.test("Recreate ticks on update option", function(assert) {
     }]);
     assert.equal(minorGrid.stub("animate").callCount, 0);
 });
+
+QUnit.test("Hidden constant line label doesn't reflect on the layout", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        label: {
+            visible: true
+        },
+        constantLines: [{
+            value: 1,
+            paddingTopBottom: 10,
+            label: {
+                position: "outside",
+                visible: true
+            }
+        }]
+    });
+    this.generatedTicks = [2];
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(60);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(null);
+    const constantLineLabel = renderer.text.secondCall.returnValue;
+
+    constantLineLabel.getBBox = () => {
+        return { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
+    };
+    this.axis.draw(this.zeroMarginCanvas);
+    // assert
+
+    const axisLabel = renderer.text.firstCall.returnValue;
+
+    assert.deepEqual(axisLabel.attr.lastCall.args[0], {
+        translateX: 49,
+        translateY: -22
+    });
+});
