@@ -268,7 +268,7 @@ const Drawer = Widget.inherit({
     },
 
     _isRightMenuPosition() {
-        const invertedPosition = this.option("menuPosition") === "inverted";
+        const invertedPosition = this.option("menuPosition") === "right";
         const rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
@@ -317,7 +317,7 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _getRTLSignCorrection() {
+    _getPositionCorrection() {
         return this._isRightMenuPosition() ? -1 : 1;
     },
 
