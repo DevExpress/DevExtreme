@@ -1327,13 +1327,15 @@ Axis.prototype = {
         }, {});
 
 
+        const skippedCategory = that._getSkippedCategory(ticks.ticks);
         const majorTicks = ticks.ticks.map(v => {
             const tick = majorTicksByValues[v.valueOf()];
             delete majorTicksByValues[v.valueOf()];
             if(tick) {
+                tick.setSkippedCategory(skippedCategory);
                 return tick;
             } else {
-                return createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks))(v);
+                return createMajorTick(that, renderer, skippedCategory)(v);
             }
         });
 

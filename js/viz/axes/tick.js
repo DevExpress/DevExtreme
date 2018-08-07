@@ -62,6 +62,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 }
             },
 
+            setSkippedCategory(category) {
+                skippedCategory = category;
+            },
+
             _updateLine(lineElement, settings, storedSettings, animate) {
                 if(!lineElement) {
                     return;
