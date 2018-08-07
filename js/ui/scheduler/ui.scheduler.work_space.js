@@ -2227,11 +2227,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var daylightDiff = this.invoke("getDaylightOffset", dateOfLastViewCell, endDateOfLastViewCell) * toMs("minute") || 0;
 
-        if(daylightDiff < 0) {
-            endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() + daylightDiff);
-        } else {
-            endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() - daylightDiff);
-        }
+        endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() + daylightDiff);
 
         return new Date(endDateOfLastViewCell.getTime() - 60000);
     },
