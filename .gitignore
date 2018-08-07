@@ -4,6 +4,7 @@
 /js/bundles/dx.custom.js
 /js/localization/default_messages.js
 /js/localization/cldr-data
+/playground/angular-app/dist
 bin
 node_modules
 obj
