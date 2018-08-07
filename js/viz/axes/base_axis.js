@@ -882,6 +882,8 @@ Axis.prototype = {
         that._updateTranslator();
         that._createConstantLines();
         that._strips = (options.strips || []).map(o => createStrip(that, o));
+        that._majorTicks = that._minorTicks = null;
+        that._firstDrawing = true;
     },
 
     calculateInterval: function(value, prevValue) {
@@ -1621,7 +1623,9 @@ Axis.prototype = {
 
         that._ticksToRemove = null;
 
-        that._firstDrawing = false;
+        if(!that._translator.getBusinessRange().stubData) {
+            that._firstDrawing = false;
+        }
     },
 
     prepareAnimation() {

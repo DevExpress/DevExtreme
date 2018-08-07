@@ -677,8 +677,7 @@ QUnit.test("draw labels", function(assert) {
         assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1, align: "center" });
         assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(1).args, [{
             x: Math.round(20 + axis.getRadius() * Math.cos(33 * Math.PI / 180)),
-            y: Math.round(50 + axis.getRadius() * Math.sin(33 * Math.PI / 180)),
-            opacity: 1
+            y: Math.round(50 + axis.getRadius() * Math.sin(33 * Math.PI / 180))
         }]);
         assert.deepEqual(this.renderer.text.getCall(i).returnValue.css.firstCall.args[0], { "font-size": 12, fill: "black" });
         assert.equal(this.renderer.text.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[0]);
@@ -1094,7 +1093,7 @@ QUnit.test("draw labels", function(assert) {
     assert.equal(this.renderer.text.callCount, 3);
     for(var i = 1; i < this.renderer.text.callCount; i++) {
         assert.deepEqual(this.renderer.text.getCall(i).args, ["" + 500 * i]);
-        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(1).args, [{ x: 20, y: 50, opacity: 1 }]);
+        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(1).args, [{ x: 20, y: 50 }]);
         assert.equal(this.renderer.text.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[0], "Created elements attached to the group");
     }
 });

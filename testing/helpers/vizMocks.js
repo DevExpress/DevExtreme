@@ -125,7 +125,19 @@
                 removeEventListener: function() {}
             };
         },
-        $thisReturnFunctions: ["toBackground", "sharp", "rotate", "enableLinks", "virtualLink", "linkOn", "linkOff", "linkAppend", "linkRemove", "data"]
+        $thisReturnFunctions: [
+            "toBackground",
+            "sharp",
+            "rotate",
+            "enableLinks",
+            "virtualLink",
+            "linkOn",
+            "linkOff",
+            "linkAppend",
+            "linkRemove",
+            "data",
+            "animate"
+        ]
     });
 
     var patternCounter = 0,
