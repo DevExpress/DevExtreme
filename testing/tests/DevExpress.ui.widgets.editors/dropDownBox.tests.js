@@ -176,6 +176,20 @@ QUnit.test("popup and editor width should be equal", function(assert) {
     assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
 });
 
+QUnit.test("popup and editor width should be eual when the editor rendered in the hidden content", function(assert) {
+    this.$element.hide();
+    var instance = new DropDownBox(this.$element, {
+        deferRendering: false,
+        contentTemplate: function() {
+            return "Test content";
+        }
+    });
+
+    this.$element.show();
+    instance.open();
+    assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal");
+});
+
 QUnit.test("dropDownBox should work with the slow dataSource", function(assert) {
     var items = [{ key: 1, text: "Item 1" }, { key: 2, text: "Item 2" }],
         instance = new DropDownBox(this.$element, {
