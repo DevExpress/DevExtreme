@@ -11,8 +11,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
         this.callBase(offset, animate);
 
         const direction = this._drawer.option("menuPosition");
-
-        const menuPos = this._getMenuOffset(offset);
+        const menuPosition = this._getMenuOffset(offset);
 
         $(this._drawer.content()).css("paddingLeft", this._drawer.option("minWidth") * this._drawer._getPositionCorrection());
 
@@ -20,7 +19,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
             if(animate) {
                 let animationConfig = {
                     $element: $(this._drawer._$menu),
-                    position: menuPos,
+                    position: menuPosition,
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
@@ -31,7 +30,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
 
                 animation.moveTo(animationConfig);
             } else {
-                translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getPositionCorrection() });
+                translator.move($(this._drawer._$menu), { left: menuPosition * this._drawer._getPositionCorrection() });
             }
         }
 

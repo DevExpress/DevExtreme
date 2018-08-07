@@ -17,7 +17,7 @@ const animation = {
 
         if(direction === "right") {
             toConfig["right"] = position;
-            toConfig["transform"] = " translate(" + 0 + ", 0)";
+            toConfig["transform"] = " translate(0, 0)";
             animationType = "custom";
         } else {
             toConfig["left"] = position;
