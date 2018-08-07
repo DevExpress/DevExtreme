@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 var typeUtils = require("core/utils/type");
 var Deferred = require("core/utils/deferred").Deferred;

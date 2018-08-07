@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     gridCore = require("./ui.data_grid.core"),

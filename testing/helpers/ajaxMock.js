@@ -1,5 +1,3 @@
-"use strict";
-
 var ajax = require("core/utils/ajax");
 var extend = require("core/utils/extend").extend;
 var $ = require("jquery");

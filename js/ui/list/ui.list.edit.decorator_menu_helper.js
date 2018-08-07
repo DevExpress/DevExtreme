@@ -1,5 +1,3 @@
-"use strict";
-
 var EditDecoratorMenuHelperMixin = {
 
     _menuEnabled: function() {

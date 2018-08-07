@@ -1,5 +1,3 @@
-"use strict";
-
 var domAdapter = require("../dom_adapter");
 
 function getMarkup(element) {

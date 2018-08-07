@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     converters = require("data/odata/utils").keyConverters,
     interpretJsonFormat = require("data/odata/utils").OData__internals.interpretJsonFormat,

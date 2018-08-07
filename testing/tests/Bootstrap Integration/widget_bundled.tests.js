@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     GoogleStaticProvider = require("ui/map/provider.google_static"),
     fx = require("animation/fx"),

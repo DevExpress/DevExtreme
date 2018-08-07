@@ -1,5 +1,3 @@
-"use strict";
-
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
@@ -280,7 +278,9 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupConfig: function() {
         return extend(this.callBase(), {
-            width: this.$element().outerWidth(),
+            width: function() {
+                return this.$element().outerWidth();
+            }.bind(this),
             height: "auto",
             tabIndex: -1,
             dragEnabled: false,

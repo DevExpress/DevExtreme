@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
     GoogleProvider = require("ui/map/provider.dynamic.google"),

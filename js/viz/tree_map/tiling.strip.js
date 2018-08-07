@@ -1,5 +1,3 @@
-"use strict";
-
 var _squarify = require("./tiling.squarified.base");
 
 function accumulate(total, current, count) {

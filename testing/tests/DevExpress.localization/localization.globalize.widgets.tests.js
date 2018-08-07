@@ -1,5 +1,3 @@
-"use strict";
-
 var likelySubtags = require("../../../node_modules/cldr-core/supplemental/likelySubtags.json!"),
     numberingSystems = require("../../../node_modules/cldr-core/supplemental/numberingSystems.json!"),
     Globalize = require("globalize");

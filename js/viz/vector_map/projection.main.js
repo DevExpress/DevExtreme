@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     eventEmitterModule = require("./event_emitter");
 

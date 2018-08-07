@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     MenuBase = require("ui/context_menu/ui.menu_base");
 

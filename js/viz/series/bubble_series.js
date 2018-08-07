@@ -1,5 +1,3 @@
-"use strict";
-
 var lineSeries = require("./line_series").chart.line,
     scatterSeries = require("./scatter_series").chart,
     areaSeries = require("./area_series").chart.area,

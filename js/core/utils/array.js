@@ -1,5 +1,3 @@
-"use strict";
-
 var isDefined = require("./type").isDefined,
     each = require("./iterator").each,
     objectUtils = require("./object");

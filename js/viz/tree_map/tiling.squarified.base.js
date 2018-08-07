@@ -1,5 +1,3 @@
-"use strict";
-
 var _max = Math.max,
     _round = Math.round,
     tiling = require("./tiling");

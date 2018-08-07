@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Form = require("../form"),
     dateSerialization = require("../../core/utils/date_serialization"),

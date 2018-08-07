@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     devices = require("core/devices"),
     tooltip = require("ui/tooltip/ui.tooltip"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     version = require("core/version"),
     getData = require("client_exporter").pdf.getData,
@@ -28,9 +26,9 @@ QUnit.test("PDF 'main page' populated with correct size in pt", function(assert)
     var done = assert.async();
 
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
         // assert
-        assert.ok(data.indexOf("/MediaBox[0 0 495.08 330.15]/") !== -1);
+        assert.ok(data.indexOf("/MediaBox[0 0 465.08 315.15]/") !== -1);
         done();
     });
 });
@@ -40,9 +38,9 @@ QUnit.test("PDF 'content stream' populated with correct size in pt", function(as
     var done = assert.async();
 
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
         // assert
-        assert.ok(data.indexOf("q 495.08 0 0 330.15 0.00 0.00 cm /I0 Do Q") !== -1);
+        assert.ok(data.indexOf("q 465.08 0 0 315.15 0.00 0.00 cm /I0 Do Q") !== -1);
         done();
     });
 });
@@ -59,13 +57,13 @@ QUnit.test("PDF 'info' has correct date and dx version", function(assert) {
     });
 });
 
-QUnit.test("PDF 'image' populated with correct size in ps, length and image string", function(assert) {
+QUnit.test("PDF 'image' populated with correct size in px, length and image string", function(assert) {
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
         // assert
-        assert.ok(data.indexOf("/Image/Width 660.1/Height 440.2/") !== -1);
+        assert.ok(data.indexOf("/Image/Width 620.1/Height 420.2/") !== -1);
         assert.ok(data.indexOf("/Length 26>>stream\r\n_test_image_markup_string_\r\n") !== -1);
         done();
     });
@@ -149,9 +147,9 @@ QUnit.test("pass correct options to imageCreator", function(assert) {
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
         // assert
-        assert.deepEqual(imageCreator.getImageData.lastCall.args, ["image_markup", { width: 600.1, height: 400.2, format: "jpeg" }]);
+        assert.deepEqual(imageCreator.getImageData.lastCall.args, ["image_markup", { width: 600.1, height: 400.2, margin: 10, format: "JPEG" }]);
         done();
     });
 });

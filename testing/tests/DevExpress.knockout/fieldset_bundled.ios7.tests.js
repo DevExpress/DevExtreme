@@ -1,5 +1,3 @@
-"use strict";
-
 require("common.css!");
 require("ios7_default.css!");
 

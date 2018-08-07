@@ -1,7 +1,5 @@
 /* global jQuery */
 
-"use strict";
-
 var eventsEngine = require("events/core/events_engine");
 
 var originalJQueryEvent;

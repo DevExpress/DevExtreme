@@ -1,5 +1,3 @@
-"use strict";
-
 var data = require("./data");
 var ui = require("./widgets-base");
 

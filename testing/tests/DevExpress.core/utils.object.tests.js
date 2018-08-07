@@ -1,5 +1,3 @@
-"use strict";
-
 var objectUtils = require("core/utils/object");
 
 QUnit.test("orderEach", function(assert) {
@@ -23,7 +21,7 @@ QUnit.test("orderEach", function(assert) {
 
 // T396670
 QUnit.test("orderEach when there is custom method in prototype of the array", function(assert) {
-    // jshint freeze:false
+    /* eslint-disable no-extend-native */
     // arrange
     var array = [1, 2, 3],
         keys = [];

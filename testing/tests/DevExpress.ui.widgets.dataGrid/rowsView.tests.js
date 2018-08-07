@@ -1,5 +1,3 @@
-"use strict";
-
 QUnit.testStart(function() {
     var markup =
 '<style>\
@@ -249,8 +247,8 @@ QUnit.test('Render scrollable', function(assert) {
     assert.strictEqual(scrollable.option("useNative"), false, 'scrollable useNative');
     assert.strictEqual(scrollable.option("showScrollbar"), "always", 'scrollable showScrollbar');
     assert.strictEqual(scrollable.option("test"), "test", 'scrollable test');
-    // T572392
-    assert.strictEqual(scrollable.option("updateManually"), true, 'scrollable updateManually');
+    // T654402
+    assert.strictEqual(scrollable.option("updateManually"), false, 'scrollable updateManually');
 });
 
 QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
@@ -430,7 +428,6 @@ QUnit.test('Resized event on second resize when container resized and columns wi
             { dataField: 'test2', resizedCallbacks: $.Callbacks().add(function() { resizedColumns.push('test2'); }) },
             { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function() { resizedColumns.push('test3'); }) }
         ]),
-        cells,
         resizedColumns = [],
         testElement = $('#container');
 
@@ -441,7 +438,7 @@ QUnit.test('Resized event on second resize when container resized and columns wi
     this.setColumnWidths([100, 50, 50]);
     // act
     rowsView.resize();
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.deepEqual(resizedColumns, ['test2', 'test3'], 'resized event raised for columns with changed width after change container width ');
@@ -3917,14 +3914,12 @@ QUnit.test("Calculate widths when there is only group rows", function(assert) {
     ];
 
     var rowsView = this.createRowsView(this.items, null, [{ allowCollapsing: true, cssClass: "dx-command-expand", groupIndex: 0, command: "expand" }, { width: 100 }, { width: 100 }]),
-        $tableElement,
         $testElement = $("#container").width(230);
 
     // act
     rowsView.render($testElement);
 
     // assert
-    $tableElement = $testElement.find("table");
     assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], "calculate widths");
 });
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     noop = require("../../core/utils/common").noop,

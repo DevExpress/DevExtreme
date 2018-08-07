@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,

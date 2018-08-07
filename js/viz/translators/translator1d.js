@@ -1,5 +1,3 @@
-"use strict";
-
 var _Number = Number;
 
 function Translator1D() {

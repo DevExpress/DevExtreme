@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
@@ -602,7 +600,6 @@ var Slider = TrackBar.inherit({
 
     _renderValue: function() {
         this.callBase();
-        this._setRangeStyles(this._rangeStylesConfig());
 
         var value = this.option("value");
 

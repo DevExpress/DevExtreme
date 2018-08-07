@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     DateBoxStrategy = require("./ui.date_box.strategy"),
     support = require("../../core/utils/support"),

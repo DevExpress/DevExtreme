@@ -1,5 +1,3 @@
-"use strict";
-
 var _Number = Number,
     _getAppropriateFormat = require("../core/utils").getAppropriateFormat,
     extend = require("../../core/utils/extend").extend,

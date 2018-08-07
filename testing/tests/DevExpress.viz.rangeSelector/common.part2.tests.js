@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     commons = require("./rangeSelectorParts/commons.js"),
     seriesDataSourceModule = require("viz/range_selector/series_data_source"),

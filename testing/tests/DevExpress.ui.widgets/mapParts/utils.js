@@ -1,5 +1,3 @@
-"use strict";
-
 exports.LOCATIONS = [
     "Brooklyn Bridge,New York,NY",
     { lat: 40.537102, lng: -73.990318 },

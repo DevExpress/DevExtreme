@@ -1,5 +1,3 @@
-"use strict";
-
 var camelize = require("./inflector").camelize,
     callOnce = require("./call_once"),
     typeUtils = require("./type"),

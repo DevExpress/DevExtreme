@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-"use strict";
-// jshint esversion:6
-
-
 var path = require("path"),
     http = require("http"),
     gulp = require("gulp"),
@@ -12,8 +8,9 @@ var path = require("path"),
 
 var PORT = require("./../ports.json").qunit;
 
-if(parseInt(process.versions.node.split('.')[0]) < 6)
+if(parseInt(process.versions.node.split('.')[0]) < 6) {
     throw "Node version is too low";
+}
 
 watchForTests();
 

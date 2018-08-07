@@ -1,5 +1,3 @@
-"use strict";
-
 /* global jQuery, includeLayout */
 
 (function(root, factory) {

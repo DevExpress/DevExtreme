@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     angular = require("angular"),
     registerComponent = require("core/component_registrator"),

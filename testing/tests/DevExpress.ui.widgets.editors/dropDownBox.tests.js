@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     renderer = require("core/renderer"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
@@ -176,6 +174,20 @@ QUnit.test("popup and editor width should be equal", function(assert) {
     instance.option("width", 700);
     assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal after option change");
     assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
+});
+
+QUnit.test("popup and editor width should be eual when the editor rendered in the hidden content", function(assert) {
+    this.$element.hide();
+    var instance = new DropDownBox(this.$element, {
+        deferRendering: false,
+        contentTemplate: function() {
+            return "Test content";
+        }
+    });
+
+    this.$element.show();
+    instance.open();
+    assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal");
 });
 
 QUnit.test("dropDownBox should work with the slow dataSource", function(assert) {

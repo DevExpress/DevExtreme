@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     dataUtils = require("../../core/element_data"),
     Callbacks = require("../../core/utils/callbacks"),
@@ -305,7 +303,7 @@ var Editor = Widget.inherit({
                     this._raiseValueChangeAction(args.value, args.previousValue);
                     this._saveValueChangeEvent(undefined);
                 }
-                if(args.value != args.previousValue) { // jshint ignore:line
+                if(args.value != args.previousValue) { // eslint-disable-line eqeqeq
                     this.validationRequest.fire({
                         value: args.value,
                         editor: this

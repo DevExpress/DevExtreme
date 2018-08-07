@@ -1,5 +1,3 @@
-"use strict";
-
 var isDefined = require("../../core/utils/type").isDefined,
     treeListCore = require("./ui.tree_list.core"),
     columnsControllerModule = require("../grid_core/ui.grid_core.columns_controller");

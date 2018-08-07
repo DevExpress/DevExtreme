@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Accordion = require("ui/accordion");
 

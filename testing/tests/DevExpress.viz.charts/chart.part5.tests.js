@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     commons = require("./chartParts/commons.js"),
@@ -1426,7 +1424,6 @@ QUnit.module("Map events", $.extend({}, commons.environment, {
 
 QUnit.test("chart events", function(assert) {
     var events = {},
-        chart,
         target = { isTarget: true },
         event = { isEvent: true },
         targetArg = { target: target, event: event, argument: "argument" };
@@ -1434,7 +1431,7 @@ QUnit.test("chart events", function(assert) {
     $.each(OldEventsName, function(oldName, newName) {
         events[newName] = sinon.stub();
     });
-    chart = this.createChart(events);
+    this.createChart(events);
     // acts
     $.each(OldEventsName, function(eventName) {
         trackerModule.ChartTracker.lastCall.args[0].eventTrigger(eventName, targetArg);

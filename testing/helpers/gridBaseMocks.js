@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, typeUtils, ArrayStore, nameWidget) {
     var exports = {};
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var _format = require("../../format_helper").format;
 
 module.exports = function(value, options) {

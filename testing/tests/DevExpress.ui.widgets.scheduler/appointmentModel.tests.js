@@ -1,5 +1,3 @@
-"use strict";
-
 var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
     dataCoreUtils = require("core/utils/data"),
     compileGetter = dataCoreUtils.compileGetter,

@@ -1,5 +1,3 @@
-"use strict";
-
 // there are line, stepline, stackedline, fullstackedline, spline
 var series = require("./scatter_series"),
     chartScatterSeries = series.chart,

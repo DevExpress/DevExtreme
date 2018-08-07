@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     fx = require("animation/fx"),
     positionUtils = require("animation/position"),
@@ -1310,7 +1308,6 @@ QUnit.test("flipping with right position", function(assert) {
 QUnit.module("animation");
 
 QUnit.test("content position with animation type = 'slide'", function(assert) {
-    var count = 0;
     fixtures.collisionTopLeft.create();
     fx.off = true;
     try {
@@ -1324,10 +1321,7 @@ QUnit.test("content position with animation type = 'slide'", function(assert) {
                 },
                 width: 50,
                 height: 50,
-                visible: false,
-                shownAction: function() {
-                    count++;
-                }
+                visible: false
             });
 
         popover.option("visible", true);

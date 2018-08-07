@@ -1,5 +1,3 @@
-"use strict";
-
 var formatHelper = require("../../format_helper"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,

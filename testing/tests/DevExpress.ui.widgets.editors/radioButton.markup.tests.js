@@ -1,5 +1,3 @@
-"use strict";
-
 const RADIO_BUTTON_CLASS = "dx-radiobutton",
     RADIO_BUTTON_ICON_CLASS = "dx-radiobutton-icon",
     RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked";

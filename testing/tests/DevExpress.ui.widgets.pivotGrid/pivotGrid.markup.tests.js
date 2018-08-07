@@ -1,5 +1,3 @@
-"use strict";
-
 require("ui/pivot_grid/ui.pivot_grid");
 
 QUnit.module("PivotGrid markup tests");

@@ -1,5 +1,3 @@
-"use strict";
-
 // TODO: Move this tests to localization module
 
 require("../../helpers/l10n/cldrNumberDataRu.js");
@@ -426,7 +424,7 @@ QUnit.test('Case insensitive currency', function(assert) {
 });
 
 QUnit.test("not execute formatNumberEx for string with set format", function(assert) {
-    // jshint freeze:false
+    /* eslint-disable no-extend-native */
 
     // arrange
     String.prototype.format = noop;

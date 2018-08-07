@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     eventEmitterModule = require("viz/vector_map/event_emitter"),

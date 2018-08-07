@@ -1,5 +1,3 @@
-"use strict";
-
 QUnit.testStart(function() {
     var markup =
 '<div>\
@@ -110,8 +108,7 @@ QUnit.test('Hide items without descriptions', function(assert) {
     var $testElement = $('#container'),
         $filterMenu,
         $filterMenuItems,
-        rootMenuItem,
-        $cell;
+        rootMenuItem;
 
     $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>', 'isblank'] }]);
 
@@ -122,7 +119,7 @@ QUnit.test('Hide items without descriptions', function(assert) {
     rootMenuItem = $filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
 
-    $cell = $filterMenu.parent();
+    $filterMenu.parent();
     $filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
 
     // assert
@@ -1020,7 +1017,6 @@ QUnit.test("Set highlight when filter operation is changed", function(assert) {
 QUnit.test("Apply filter button is changed enabled state when filter operation is changed", function(assert) {
     // arrange
     var testElement = $('#container'),
-        filterMenu,
         $button,
         filterMenuItems;
 
@@ -1031,7 +1027,6 @@ QUnit.test("Apply filter button is changed enabled state when filter operation i
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
-    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
 
     $(filterMenuItems.find('.dx-menu-item')[1]).trigger('dxclick');

@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name dxPivotGrid
 * @inherits Widget

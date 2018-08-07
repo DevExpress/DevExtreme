@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
@@ -10,6 +8,7 @@ var $ = require("../core/renderer"),
     hideTopOverlayCallback = require("../mobile/hide_top_overlay").hideCallback,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
+    AsyncTemplateMixin = require("./shared/async_template_mixin"),
     Widget = require("./widget/ui.widget"),
     Swipeable = require("../events/gesture/swipeable"),
     EmptyTemplate = require("./widget/empty_template"),
@@ -163,7 +162,8 @@ var SlideOutView = Widget.inherit({
         this.callBase();
         this.$element().addClass(SLIDEOUTVIEW_CLASS);
 
-        this._deferredAnimate = undefined;
+        this._whenAnimationComplete = undefined;
+        this._whenMenuRendered = undefined;
         this._initHideTopOverlayHandler();
     },
 
@@ -182,10 +182,14 @@ var SlideOutView = Widget.inherit({
         this.callBase();
 
         this._renderMarkup();
+        this._whenMenuRendered = new Deferred();
 
         const menuTemplate = this._getTemplate(this.option("menuTemplate"));
-        menuTemplate && menuTemplate.render({
-            container: this.menuContent()
+        this._renderAsyncTemplate(menuTemplate, {
+            container: this.menuContent(),
+            onRendered: () => {
+                this._whenMenuRendered.resolve();
+            }
         });
 
         const contentTemplateOption = this.option("contentTemplate"),
@@ -204,9 +208,10 @@ var SlideOutView = Widget.inherit({
 
     _render: function() {
         this.callBase();
-
-        this._initSwipeHandlers();
-        this._dimensionChanged();
+        this._whenMenuRendered.always(() => {
+            this._initSwipeHandlers();
+            this._dimensionChanged();
+        });
     },
 
     _renderMarkup: function() {
@@ -323,8 +328,8 @@ var SlideOutView = Widget.inherit({
     _animationCompleteHandler: function() {
         this._toggleShieldVisibility(this.option("menuVisible"));
 
-        if(this._deferredAnimate) {
-            this._deferredAnimate.resolveWith(this);
+        if(this._whenAnimationComplete) {
+            this._whenAnimationComplete.resolveWith(this);
         }
     },
 
@@ -433,10 +438,10 @@ var SlideOutView = Widget.inherit({
     toggleMenuVisibility: function(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;
 
-        this._deferredAnimate = new Deferred();
+        this._whenAnimationComplete = new Deferred();
         this.option("menuVisible", showing);
 
-        return this._deferredAnimate.promise();
+        return this._whenAnimationComplete.promise();
     }
 
     /**
@@ -452,7 +457,7 @@ var SlideOutView = Widget.inherit({
     * @hidden
     * @inheritdoc
     */
-});
+}).include(AsyncTemplateMixin);
 
 registerComponent("dxSlideOutView", SlideOutView);
 

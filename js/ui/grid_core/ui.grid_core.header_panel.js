@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Toolbar = require("../toolbar"),
     columnsView = require("./ui.grid_core.columns_view"),

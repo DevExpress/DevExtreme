@@ -1,5 +1,3 @@
-"use strict";
-
 var deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,

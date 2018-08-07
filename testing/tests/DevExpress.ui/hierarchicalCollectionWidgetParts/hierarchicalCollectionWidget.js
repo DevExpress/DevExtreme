@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     HierarchicalCollectionWidget = require("ui/hierarchical_collection/ui.hierarchical_collection_widget"),
     DataSource = require("data/data_source/data_source").DataSource;

@@ -1,5 +1,3 @@
-"use strict";
-
 QUnit.testStart(function() {
     var markup =
 '<style>\
@@ -1427,7 +1425,6 @@ if(device.deviceType === "desktop") {
         // arrange
         var that = this,
             $fixTable,
-            $table,
             scrollableInstance,
             countCallScrollOffsetChanged = 0,
             $testElement = $("#container");
@@ -1446,7 +1443,6 @@ if(device.deviceType === "desktop") {
 
 
         $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-        $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
         scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         that.editorFactoryController.focus($fixTable.find("tr").eq(1).find("td").first());
@@ -1485,7 +1481,6 @@ if(device.deviceType === "desktop") {
         // arrange
         var that = this,
             $fixTable,
-            $table,
             scrollableInstance,
             countCallWheelEventOnDocument = 0,
             countCallScrollOffsetChanged = 0,
@@ -1507,7 +1502,6 @@ if(device.deviceType === "desktop") {
         that.rowsView.resize();
 
         $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-        $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
         scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         // assert
@@ -1543,7 +1537,6 @@ if(device.deviceType === "desktop") {
         // arrange
         var that = this,
             $fixTable,
-            $table,
             scrollableInstance,
             countCallWheelEventOnDocument = 0,
             countCallScrollOffsetChanged = 0,
@@ -1565,7 +1558,6 @@ if(device.deviceType === "desktop") {
         that.rowsView.resize();
 
         $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-        $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
         scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         // assert

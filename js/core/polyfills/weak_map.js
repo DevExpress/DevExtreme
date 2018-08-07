@@ -1,5 +1,3 @@
-"use strict";
-
 /* global WeakMap */
 var inArray = require("../../core/utils/array").inArray,
     windowUtils = require("../../core/utils/window"),

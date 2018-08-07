@@ -1,5 +1,3 @@
-"use strict";
-
 var stringUtils = require("../../core/utils/string"),
     iteratorUtils = require("../../core/utils/iterator"),
     odataUtils = require("./utils");

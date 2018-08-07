@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     queueUtils = require("core/utils/queue");
 

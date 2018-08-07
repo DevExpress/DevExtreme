@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     columnsView = require("./ui.grid_core.columns_view"),
@@ -338,6 +336,12 @@ module.exports = {
                             return that.getCellElements(index || 0);
                         }
                     }
+                },
+
+                getVisibleColumnIndex: function(columnIndex, rowIndex) {
+                    var column = this.getColumns()[columnIndex];
+
+                    return column ? this._columnsController.getVisibleIndex(column.index, rowIndex) : -1;
                 },
 
                 getColumnWidths: function() {

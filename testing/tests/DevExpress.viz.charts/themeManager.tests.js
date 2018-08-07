@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     themeManagerModule = require("viz/components/chart_theme_manager"),
     backgroundColor = '#ffffff',

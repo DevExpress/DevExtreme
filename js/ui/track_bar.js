@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     Editor = require("./editor/editor"),
     registerComponent = require("../core/component_registrator"),
@@ -96,6 +94,7 @@ var TrackBar = Editor.inherit({
         }
 
         var ratio = (min === max) ? 0 : (val - min) / (max - min);
+        !this._needPreventAnimation && this._setRangeStyles({ width: ratio * 100 + "%" });
 
         this.setAria({
             "valuemin": this.option("min"),
@@ -133,13 +132,11 @@ var TrackBar = Editor.inherit({
         switch(args.name) {
             case "value":
                 this._renderValue();
-                this._setRangeStyles(this._rangeStylesConfig());
                 this.callBase(args);
                 break;
             case "max":
             case "min":
                 this._renderValue();
-                this._setRangeStyles(this._rangeStylesConfig());
                 break;
             default:
                 this.callBase(args);

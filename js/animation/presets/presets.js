@@ -1,5 +1,3 @@
-"use strict";
-
 var Component = require("../../core/component"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,

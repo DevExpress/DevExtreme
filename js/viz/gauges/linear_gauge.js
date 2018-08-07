@@ -1,5 +1,3 @@
-"use strict";
-
 var _each = require("../../core/utils/iterator").each,
     _max = Math.max,
     _min = Math.min,

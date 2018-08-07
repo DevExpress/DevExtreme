@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     window = require("../../core/utils/window").getWindow(),
     Promise = require("../../core/polyfills/promise"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     chartThemeManagerModule = require("viz/components/chart_theme_manager"),

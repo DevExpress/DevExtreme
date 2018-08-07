@@ -1,11 +1,8 @@
-// jshint node:true
-
-"use strict";
-
 var gulp = require('gulp');
 var merge = require('merge-stream');
 var prettify = require('gulp-jsbeautifier');
 var compressionPipes = require('./compression-pipes');
+var headerPipes = require('./header-pipes.js');
 
 gulp.task('layouts', function() {
     return merge(
@@ -13,6 +10,7 @@ gulp.task('layouts', function() {
         gulp.src('./layouts/*/*.js')
             .pipe(compressionPipes.removeDebug())
             .pipe(prettify())
+            .pipe(headerPipes.useStrict())
             .pipe(gulp.dest('artifacts/layouts'))
     );
 });

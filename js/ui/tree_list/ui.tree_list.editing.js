@@ -1,5 +1,3 @@
-"use strict";
-
 require("./ui.tree_list.editor_factory");
 
 var $ = require("../../core/renderer"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var iterateUtils = require("../../core/utils/iterator"),
     BaseElement = require("./base_indicators").BaseElement,
 

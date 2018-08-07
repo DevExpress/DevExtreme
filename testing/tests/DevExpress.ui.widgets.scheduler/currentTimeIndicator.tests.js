@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
     resizeCallbacks = require("core/utils/resize_callbacks");

@@ -1,5 +1,3 @@
-"use strict";
-
 var toComparable = require("../../core/utils/data").toComparable,
     dataUtils = require("../../data/utils"),
     each = require("../../core/utils/iterator").each,

@@ -1,5 +1,3 @@
-"use strict";
-
 /* global google */
 
 var $ = require("../../core/renderer"),

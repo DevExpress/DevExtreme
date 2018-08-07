@@ -1,5 +1,3 @@
-"use strict";
-
 var grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
     each = require("../core/utils/iterator").each,

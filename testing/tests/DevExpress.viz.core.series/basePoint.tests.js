@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
@@ -1094,6 +1092,15 @@ QUnit.test("reset hover view. selected point", function(assert) {
     this.point.resetView("hover");
 
     assert.strictEqual(this.getCurrentStyle(), "selection");
+});
+
+// T661080
+QUnit.test("Point has hover view after call resetView + setView", function(assert) {
+    this.point.resetView("hover");
+
+    this.point.setView("hover");
+
+    assert.strictEqual(this.getCurrentStyle(), "hover");
 });
 
 QUnit.test("apply hover view in 'none' mode", function(assert) {

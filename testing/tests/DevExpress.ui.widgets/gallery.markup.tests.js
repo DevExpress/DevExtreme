@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import Gallery from "ui/gallery";
 import windowUtils from "core/utils/window";

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     ValidationEngine = require("ui/validation_engine"),
     Validator = require("ui/validator"),

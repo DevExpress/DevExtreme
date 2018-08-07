@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     translator = require("../../animation/translator"),
@@ -314,8 +312,7 @@ var dropDownAppointments = Class.inherit({
 
     _createButtons: function(appointmentData) {
         var editing = this.instance.option("editing"),
-            allowDeleting = false,
-            allowUpdating = false;
+            allowDeleting = false;
 
         if(!editing) {
             return "";
@@ -323,12 +320,10 @@ var dropDownAppointments = Class.inherit({
 
         if(editing === true) {
             allowDeleting = true;
-            allowUpdating = true;
         }
 
         if(typeUtils.isObject(editing)) {
             allowDeleting = editing.allowDeleting;
-            allowUpdating = editing.allowUpdating;
         }
 
         var $container = $("<div>").addClass(DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS),

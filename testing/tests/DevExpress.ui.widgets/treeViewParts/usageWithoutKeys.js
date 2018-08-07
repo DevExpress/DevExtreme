@@ -1,5 +1,3 @@
-"use strict";
-
 /* global internals, initTree, $ */
 
 var commonUtils = require("core/utils/common");

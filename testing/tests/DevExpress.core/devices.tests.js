@@ -1,5 +1,3 @@
-"use strict";
-
 window.includeThemesLinks();
 
 var $ = require("jquery"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var dxTreeMap = module.exports = require("./tree_map.base");
 
 require("./tiling.squarified");

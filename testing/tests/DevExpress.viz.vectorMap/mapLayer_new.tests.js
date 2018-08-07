@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     loadingIndicatorModule = require("viz/core/loading_indicator"),
@@ -456,8 +454,8 @@ QUnit.test("Change option - increase layers count", function(assert) {
 
     var layers = map.getLayers();
     assert.strictEqual(layers.length, 3, "count");
-    assert.strictEqual(layers[0].name, "layer-1", "layer 1 name");
-    assert.strictEqual(layers[1].name, "layer-2", "layer 2 name");
+    assert.strictEqual(layers[0].name, "map-layer-0", "layer 1 name");
+    assert.strictEqual(layers[1].name, "map-layer-1", "layer 2 name");
     assert.strictEqual(layers[2].name, "layer-3", "layer 3 name");
 });
 
@@ -475,8 +473,50 @@ QUnit.test("Change option - decrease layers count", function(assert) {
 
     var layers = map.getLayers();
     assert.strictEqual(layers.length, 2, "count");
-    assert.strictEqual(layers[0].name, "layer-1", "layer 1 name");
-    assert.strictEqual(layers[1].name, "layer-2", "layer 2 name");
+    assert.strictEqual(layers[0].name, "map-layer-0", "layer 1 name");
+    assert.strictEqual(layers[1].name, "map-layer-1", "layer 2 name");
+});
+
+QUnit.test("Change name of one layer", function(assert) {
+    var map = this.createLayers([
+        { name: "layer-1" },
+        { name: "layer-2" },
+        { name: "layer-3" }
+    ]);
+
+    var oldLayers = map.getLayers();
+    map.option("layers", [
+        { name: "layer-1" },
+        { name: "new_layer-2" },
+        { name: "layer-3" }
+    ]);
+
+    var updatedLayers = map.getLayers();
+
+    updatedLayers.forEach(function(l, i) {
+        assert.ok(l !== oldLayers[i]);
+    });
+});
+
+QUnit.test("Layers shouldn't be created on updating when name not set", function(assert) {
+    var map = this.createLayers([
+        { color: "some_color_1" }
+    ]);
+
+    var oldLayer = map.getLayers()[0];
+    map.option("layers", [{ color: "some_color_1" }]);
+
+    assert.ok(map.getLayers()[0] === oldLayer);
+});
+
+QUnit.test("No crush on updating when on of layer in null", function(assert) {
+    var map = this.createLayers([
+        { color: "some_color_1" }
+    ]);
+
+    map.option("layers", [null]);
+
+    assert.strictEqual(map.getLayers().length, 1);
 });
 
 QUnit.test("Get layer by name", function(assert) {

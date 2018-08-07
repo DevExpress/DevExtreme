@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
@@ -1390,6 +1388,34 @@ QUnit.test("The error should not be thrown if value is null", function(assert) {
     } catch(e) {
         assert.ok(false, e);
     }
+});
+
+QUnit.test("Value is not jumping when the slider handler is moved", function(assert) {
+    var left = $("#qunit-fixture").css("left");
+
+    $("#qunit-fixture").css("left", "0px");
+    var $element = $("#slider").dxSlider({
+        min: 0,
+        max: 3,
+        width: 500,
+        value: 0
+    });
+
+    var $handle = $element.find("." + SLIDER_HANDLE_CLASS),
+        mouse = pointerMock($handle);
+
+    mouse.start().down();
+    this.clock.tick(FEEDBACK_SHOW_TIMEOUT);
+
+    mouse.move(99);
+
+    var $range = $element.find("." + SLIDER_RANGE_CLASS);
+    assert.ok($range.width() < 160, "range width is not jumping");
+
+    mouse.up();
+    this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
+
+    $("#qunit-fixture").css("left", left);
 });
 
 QUnit.module("RTL", moduleOptions);

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Color = require("../../color"),
@@ -248,6 +246,10 @@ var ColorBox = DropDownEditor.inherit({
             },
 
             onValueChanged: function(args) {
+                if(colorUtils.makeRgba(args.value) === args.previousValue) {
+                    return;
+                }
+
                 var instantlyMode = that.option("applyValueMode") === "instantly";
 
                 if(!instantlyMode && !that._colorViewEnterKeyPressed) {

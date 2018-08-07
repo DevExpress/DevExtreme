@@ -1,5 +1,3 @@
-"use strict";
-
 var jQuery = require("jquery");
 var componentRegistratorCallbacks = require("../../core/component_registrator_callbacks");
 var errors = require("../../core/errors");

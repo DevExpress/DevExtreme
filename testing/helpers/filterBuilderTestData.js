@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = [{
     caption: "Company Name",
     dataField: "CompanyName",

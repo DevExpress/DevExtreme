@@ -1,5 +1,3 @@
-"use strict";
-
 (function(root, factory) {
     root.DevExpress = root.DevExpress || {};
     root.DevExpress.testing = root.DevExpress.testing || {};

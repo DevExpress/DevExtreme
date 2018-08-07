@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
@@ -97,7 +95,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var options = extend({}, scrollingOptions, {
             direction: "both",
-            updateManually: true,
             bounceEnabled: false,
             useKeyboard: false
         });
@@ -680,6 +677,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return result;
     },
 
+    getVisibleColumnIndex: function(columnIndex, rowIndex) {
+        return columnIndex;
+    },
+
     setColumnWidths: function(widths, $tableElement, columns, fixed) {
         var $cols,
             i,
@@ -707,7 +708,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         minWidth = getWidthStyle(columns[i].minWidth || width);
                         var $rows = $rows || $tableElement.children().children(".dx-row").not("." + GROUP_ROW_CLASS).not("." + DETAIL_ROW_CLASS);
                         for(var rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-                            var cell = $rows[rowIndex].cells[i];
+                            var visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
+                            var cell = $rows[rowIndex].cells[visibleIndex];
                             if(cell) {
                                 cell.style.width = cell.style.maxWidth = width;
                                 cell.style.minWidth = minWidth;

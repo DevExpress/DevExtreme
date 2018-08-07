@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),

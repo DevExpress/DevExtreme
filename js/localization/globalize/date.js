@@ -1,5 +1,3 @@
-"use strict";
-
 require("./core");
 require("./number");
 require("globalize/date");

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     windowUtils = require("../../core/utils/window"),

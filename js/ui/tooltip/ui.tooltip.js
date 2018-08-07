@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Tooltip = require("./tooltip"),
     extend = require("../../core/utils/extend").extend,

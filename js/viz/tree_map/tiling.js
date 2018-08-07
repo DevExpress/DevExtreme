@@ -1,5 +1,3 @@
-"use strict";
-
 var _isFunction = require("../../core/utils/type").isFunction,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _round = Math.round,

@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     abstract = Class.abstract,

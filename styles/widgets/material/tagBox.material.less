@@ -16,20 +16,20 @@
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 7px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 1px;
 }
-
 .dx-tagbox {
-    &.dx-state-hover,
-    &.dx-state-focused,
-    &.dx-state-active,
-    &.dx-state-disabled,
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover,
-    & {
-        background: transparent;
+    &.dx-editor-filled {
+        .dx-texteditor-input {
+            padding: 0;
+        }
+
+        .dx-tag-container {
+            padding: 12px 12px 4px 12px;
+            min-height: 56px;
+        }
     }
 }
 
-.dx-tagbox:not(.dx-texteditor-empty) {
+.dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled) {
     .dx-texteditor-input {
         padding-left: 0;
 
@@ -119,7 +119,7 @@
 }
 
 .dx-tag {
-    margin: 0 8px 2px 0;
+    margin: 0 8px 8px 0;
 
     &:hover {
         .dx-tag-content {

@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     windowUtils = require("../../core/utils/window"),
     domAdapter = require("../../core/dom_adapter"),
@@ -61,10 +59,8 @@ function defaultOnIncidentOccurred(e) {
     }
 }
 
-// TODO: Such ugly declaration is because of jshint
 var createIncidentOccurred = function(widgetName, eventTrigger) {
-    return incidentOccurred;
-    function incidentOccurred(id, args) {
+    return function incidentOccurred(id, args) {
         eventTrigger("incidentOccurred", {
             target: {
                 id: id,

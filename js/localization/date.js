@@ -1,5 +1,3 @@
-"use strict";
-
 var dependencyInjector = require("../core/utils/dependency_injector"),
     isString = require("../core/utils/type").isString,
     iteratorUtils = require("../core/utils/iterator"),

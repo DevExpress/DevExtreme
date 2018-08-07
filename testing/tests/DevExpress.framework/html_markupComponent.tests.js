@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     registerComponent = require("core/component_registrator"),
     MarkupComponent = require("framework/html/markup_component").MarkupComponent;

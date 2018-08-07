@@ -1,5 +1,3 @@
-"use strict";
-
 var Shader = require("./ui.scheduler.current_time_shader");
 
 var HorizontalCurrentTimeShader = Shader.inherit({

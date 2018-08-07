@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     themes = require("../themes"),
     commonUtils = require("../../core/utils/common"),
@@ -8,6 +6,7 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
+    AsyncTemplateMixin = require("../shared/async_template_mixin"),
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     BindableTemplate = require("../widget/bindable_template");
 
@@ -149,6 +148,10 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
+        this._waitAsyncTemplates(this._renderAsync);
+    },
+
+    _renderAsync: function() {
         this._arrangeItems();
     },
 
@@ -354,6 +357,7 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderEmptyMessage: commonUtils.noop,
 
     _clean: function() {
+        this._cleanAsyncTemplatesTimer();
         this._$toolbarItemsContainer.children().empty();
         this.$element().empty();
     },
@@ -408,7 +412,7 @@ var ToolbarBase = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-});
+}).include(AsyncTemplateMixin);
 
 registerComponent("dxToolbarBase", ToolbarBase);
 

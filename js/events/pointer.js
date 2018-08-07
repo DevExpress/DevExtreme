@@ -1,5 +1,3 @@
-"use strict";
-
 var support = require("../core/utils/support"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),

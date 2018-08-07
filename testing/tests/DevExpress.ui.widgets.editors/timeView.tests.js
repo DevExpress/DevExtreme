@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 require("ui/date_box/ui.time_view");

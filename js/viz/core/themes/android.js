@@ -1,5 +1,3 @@
-"use strict";
-
 var ANDROID5_LIGHT = "android5.light",
     themeModule = require("../../themes"),
     registerThemeAlias = themeModule.registerThemeAlias,

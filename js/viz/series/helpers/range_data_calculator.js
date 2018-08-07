@@ -1,4 +1,3 @@
-"use strict";
 var unique = require("../../core/utils").unique,
     _isDefined = require("../../../core/utils/type").isDefined,
     noop = require("../../../core/utils/common").noop,

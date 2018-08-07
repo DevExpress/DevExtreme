@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../../core/utils/extend").extend,
     isNumeric = require("../../../core/utils/type").isNumeric,
     candlestickPoint = require("./candlestick_point"),

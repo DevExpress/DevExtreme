@@ -1,6 +1,4 @@
-// jshint node:true
-
-"use strict";
+/* eslint-env node */
 
 var gulp = require('gulp');
 var os = require('os');

@@ -1,5 +1,3 @@
-"use strict";
-
 /* global DevExpress */
 
 var extendUtils = require("./utils/extend");

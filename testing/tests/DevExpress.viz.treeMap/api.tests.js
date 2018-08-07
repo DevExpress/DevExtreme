@@ -1,5 +1,3 @@
-"use strict";
-
 var common = require("./commonParts/common.js");
 
 require("viz/tree_map/api");

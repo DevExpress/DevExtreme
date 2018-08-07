@@ -1,5 +1,3 @@
-"use strict";
-
 var vizMocks = require("../../helpers/vizMocks.js"),
     circularIndicatorsModule = require("viz/gauges/circular_indicators"),
     Translator1D = require("viz/translators/translator1d").Translator1D;

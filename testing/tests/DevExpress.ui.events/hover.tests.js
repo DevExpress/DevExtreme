@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     devices = require("core/devices"),
     hoverEvents = require("events/hover");

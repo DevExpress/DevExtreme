@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     processRequestResultLock = require("data/utils").processRequestResultLock,

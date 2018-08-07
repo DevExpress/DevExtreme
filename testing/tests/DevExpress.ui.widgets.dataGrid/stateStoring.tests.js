@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,

@@ -1,5 +1,3 @@
-"use strict";
-
 var GETTER = require("core/utils/data").compileGetter,
     SETTER = require("core/utils/data").compileSetter,
     variableWrapper = require("core/utils/variable_wrapper");

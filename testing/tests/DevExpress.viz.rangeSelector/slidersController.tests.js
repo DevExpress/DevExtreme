@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     SlidersController = require("viz/range_selector/sliders_controller").SlidersController,

@@ -1,5 +1,3 @@
-"use strict";
-
 var mathUtils = require("core/utils/math"),
     adjust = mathUtils.adjust;
 

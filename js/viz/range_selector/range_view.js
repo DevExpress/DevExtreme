@@ -1,4 +1,3 @@
-"use strict";
 // TODO: Move it inside the "SeriesDataSource"
 function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
     let seriesList = seriesDataSource.getSeries();

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery");
 
 var FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",

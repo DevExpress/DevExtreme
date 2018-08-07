@@ -1,5 +1,3 @@
-"use strict";
-
 var proto = require("./tree_map.base").prototype;
 
 proto._optionChangesMap.idField = proto._optionChangesMap.parentField = "NODES_CREATE";

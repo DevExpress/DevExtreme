@@ -1,5 +1,3 @@
-"use strict";
-
 var ko = require("knockout"),
     each = require("../core/utils/iterator").each,
     KoTemplate = require("../integration/knockout/template");

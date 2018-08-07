@@ -1,5 +1,3 @@
-"use strict";
-
 var Callbacks = require("./utils/callbacks"),
     isFunction = require("./utils/type").isFunction,
     each = require("./utils/iterator").each,

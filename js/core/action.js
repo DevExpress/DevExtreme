@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("./renderer"),
     config = require("./config"),
     window = require("./utils/window").getWindow(),

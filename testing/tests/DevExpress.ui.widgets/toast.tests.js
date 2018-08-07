@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,

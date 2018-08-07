@@ -1,5 +1,3 @@
-"use strict";
-
 var pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
@@ -42,6 +40,12 @@ var stubInvokeMethod = function(instance, options) {
         }
         if(subscribe === "getTimezoneOffset") {
             return -180 * 60000;
+        }
+        if(subscribe === "getDaylightOffset") {
+            var startDate = arguments[1],
+                endDate = arguments[2];
+
+            return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
         }
         if(subscribe === "convertDateByTimezone") {
             var date = new Date(arguments[1]);
@@ -933,9 +937,9 @@ QUnit.testStart(function() {
 
     QUnit.test("Get date range", function(assert) {
         this.instance.option("firstDayOfWeek", 1);
-        this.instance.option("currentDate", new Date(2015, 2, 16));
+        this.instance.option("currentDate", new Date(2018, 8, 5));
 
-        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 1, 23, 0, 0), new Date(2015, 3, 5, 23, 59)], "Range is OK");
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 7, 27, 0, 0), new Date(2018, 9, 7, 23, 59)], "Range is OK");
     });
 
     QUnit.test("Get date range when startDayHour & endDayHour are specified", function(assert) {

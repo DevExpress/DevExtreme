@@ -1,5 +1,3 @@
-"use strict";
-
 /* global window */
 
 var domAdapter = require("../dom_adapter");

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     grep = require("../../core/utils/common").grep,

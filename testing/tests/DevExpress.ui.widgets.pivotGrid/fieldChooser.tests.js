@@ -1,5 +1,3 @@
-"use strict";
-
 QUnit.testStart(function() {
     var markup = '<div id="container"></div><div id="pgfc"></div>';
     $("#qunit-fixture").html(markup);

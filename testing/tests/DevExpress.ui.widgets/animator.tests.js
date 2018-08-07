@@ -1,5 +1,3 @@
-"use strict";
-
 var Animator = require("ui/scroll_view/animator"),
     animationFrame = require("animation/frame");
 

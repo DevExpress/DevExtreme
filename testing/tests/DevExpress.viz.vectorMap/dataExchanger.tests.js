@@ -1,5 +1,3 @@
-"use strict";
-
 var dataExchangerModule = require("viz/vector_map/data_exchanger");
 
 QUnit.module('DataExchanger', {

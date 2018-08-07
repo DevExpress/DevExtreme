@@ -1,5 +1,3 @@
-"use strict";
-
 var callOnce = require("core/utils/call_once");
 
 QUnit.module("callOnce");

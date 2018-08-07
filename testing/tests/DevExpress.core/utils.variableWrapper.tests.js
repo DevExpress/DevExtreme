@@ -1,5 +1,3 @@
-"use strict";
-
 var variableWrapper = require("core/utils/variable_wrapper");
 
 QUnit.test("Base wrapper methods", function(assert) {

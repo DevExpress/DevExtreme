@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     CommandMapping = require("framework/command_mapping");
 

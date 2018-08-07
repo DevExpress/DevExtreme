@@ -1,5 +1,3 @@
-"use strict";
-
 import { isDefined } from "../../core/utils/type";
 
 var $ = require("../../core/renderer"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     renderer = require("core/renderer"),
@@ -659,7 +657,6 @@ QUnit.test('Save changes button click call saveEditData', function(assert) {
     // arrange
     var headerPanel = this.headerPanel,
         rowsView = this.rowsView,
-        headerPanelElement,
         saveEditDataCallCount = 0,
         testElement = $('#container');
 
@@ -683,8 +680,6 @@ QUnit.test('Save changes button click call saveEditData', function(assert) {
 
     headerPanel.render(testElement);
     rowsView.render(testElement);
-
-    headerPanelElement = testElement.find('.dx-datagrid-header-panel').first();
 
     // act
     testElement.find(".dx-datagrid-save-button").trigger("dxclick");
@@ -725,10 +720,16 @@ QUnit.test('Cancel changes button click call cancelEditData', function(assert) {
     headerPanelElement = testElement.find('.dx-datagrid-header-panel').first();
 
     // act
-    this.click(headerPanelElement, '.dx-datagrid-cancel-button');
+    $(headerPanelElement).find(".dx-datagrid-cancel-button").trigger("dxclick");
 
     // assert
-    assert.equal(cancelEditDataCallCount, 1, 'cancelEditData called');
+    assert.equal(cancelEditDataCallCount, 0, 'cancelEditData is not called'); // T630875
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(cancelEditDataCallCount, 1, 'cancelEditData is called');
 });
 
 QUnit.test('Edit Row', function(assert) {
@@ -1594,8 +1595,7 @@ QUnit.test('Save Row', function(assert) {
     var that = this,
         rowsView = this.rowsView,
         testElement = $('#container'),
-        updateArgs,
-        cells;
+        updateArgs;
 
     that.options.editing = {
         allowUpdating: true,
@@ -1627,7 +1627,7 @@ QUnit.test('Save Row', function(assert) {
 
     // act
     this.click(testElement.find('tbody > tr').first(), '.dx-link-save');
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -1639,8 +1639,7 @@ QUnit.test('Save Row for calculated column', function(assert) {
     var that = this,
         rowsView = this.rowsView,
         testElement = $('#container'),
-        updateArgs,
-        cells;
+        updateArgs;
 
     that.options.editing = {
         allowUpdating: true,
@@ -1666,7 +1665,7 @@ QUnit.test('Save Row for calculated column', function(assert) {
 
     // act
     this.click(testElement.find('tbody > tr').first(), 'a:contains(Save)');
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -1707,8 +1706,7 @@ QUnit.test('Serialize value before saving', function(assert) {
         rowsView = this.rowsView,
         testElement = $('#container'),
         updateArgs,
-        serializingValue,
-        cells;
+        serializingValue;
 
     that.options.editing = {
         allowUpdating: true,
@@ -1739,7 +1737,7 @@ QUnit.test('Serialize value before saving', function(assert) {
 
     // act
     this.click(testElement.find('tbody > tr').first(), 'a:contains(Save)');
-    cells = getCells(testElement);
+    getCells(testElement);
 
     // assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
@@ -2045,6 +2043,8 @@ QUnit.test('Save changes on save button click when batch mode', function(assert)
     mouse.down();
     getInputElements(testElement).eq(0).trigger('change');
     mouse.up();
+
+    this.clock.tick();
 
     // assert
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }], ['test2', { "name": "Test2" }]], "changed rows are saved");
@@ -3705,7 +3705,6 @@ QUnit.test('Insert Row when "cell" edit mode', function(assert) {
     var that = this,
         headerPanel = that.headerPanel,
         rowsView = that.rowsView,
-        headerPanelElement,
         testElement = $('#container');
 
     that.options.editing = {
@@ -3715,8 +3714,6 @@ QUnit.test('Insert Row when "cell" edit mode', function(assert) {
     };
     headerPanel.render(testElement);
     rowsView.render(testElement);
-
-    headerPanelElement = testElement.find('.dx-datagrid-header-panel');
 
     // act
     that.addRow();

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     Color = require("color"),
@@ -417,6 +415,19 @@ QUnit.test("In 'instantly' mode value should be updated if some input was update
     this.updateColorInput("hex", "0000ff");
     assert.equal(colorBox.option("value"), "#0000ff");
 });
+
+QUnit.test("In 'instantly' mode value should be updated correctly if some input was updated and editAlphaChannel = true", function(assert) {
+    var colorBox = showColorBox.call(this, {
+        value: "#ff0000",
+        editAlphaChannel: true,
+        applyValueMode: "instantly"
+    }).dxColorBox("instance");
+
+    colorBox.option("value", "rgba(100, 0, 0, 75)");
+    this.updateColorInput("red", 100);
+    assert.equal(colorBox.option("value"), "rgba(100, 0, 0, 1)");
+});
+
 
 QUnit.test("Option changes", function(assert) {
     var colorBox = showColorBox.call(this).dxColorBox("instance"),
