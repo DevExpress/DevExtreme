@@ -1702,7 +1702,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         icon: "edit-button-" + className,
                         disabled: isButtonDisabled,
                         onClick: function() {
-                            that[methodName]();
+                            setTimeout(function() {
+                                that[methodName]();
+                            });
                         },
                         text: hintText,
                         hint: hintText
