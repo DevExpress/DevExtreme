@@ -121,7 +121,7 @@ QUnit.test("show and hide functions", assert => {
     instance.show();
     assert.equal(instance.option("menuVisible"), true, "menu was shown");
 
-    instance.hideMenu();
+    instance.hide();
     assert.equal(instance.option("menuVisible"), false, "menu was hidden");
 });
 
@@ -919,7 +919,7 @@ QUnit.test("content should have correct position if menu is visible in rtl mode"
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const $menu = $(instance.menuContent());
 
     assert.equal(position($content), -$menu.width(), "container rendered at correct position");

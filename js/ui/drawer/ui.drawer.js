@@ -170,7 +170,7 @@ const Drawer = Widget.inherit({
     },
 
     _initHideTopOverlayHandler() {
-        this._hideMenuHandler = this.hideMenu.bind(this);
+        this._hideMenuHandler = this.hide.bind(this);
     },
 
     _initTemplates() {
@@ -245,7 +245,7 @@ const Drawer = Widget.inherit({
         this._$shader = this._$shader || $("<div>").addClass(DRAWER_SHADER_CLASS);
         this._$shader.appendTo(this.viewContent());
         eventsEngine.off(this._$shader, clickEvent.name);
-        eventsEngine.on(this._$shader, clickEvent.name, this.hideMenu.bind(this));
+        eventsEngine.on(this._$shader, clickEvent.name, this.hide.bind(this));
         this._toggleShaderVisibility(this.option("menuVisible"));
     },
 

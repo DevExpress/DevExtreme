@@ -7,13 +7,13 @@ const PushStrategy = DrawerStrategy.inherit({
     renderPosition(offset, animate) {
         this.callBase(offset, animate);
 
-        $(this._drawer.content()).css("paddingLeft", 0);
+        $(this._drawer.viewContent()).css("paddingLeft", 0);
 
         const contentPosition = this._getMenuWidth(offset) * this._drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = {
-                $element: $(this._drawer.content()),
+                $element: $(this._drawer.viewContent()),
                 position: contentPosition,
                 duration: this._drawer.option("animationDuration"),
                 complete: () => {
@@ -24,7 +24,7 @@ const PushStrategy = DrawerStrategy.inherit({
 
             animation.moveTo(animationConfig);
         } else {
-            translator.move($(this._drawer.content()), { left: contentPosition });
+            translator.move($(this._drawer.viewContent()), { left: contentPosition });
         }
     }
 });

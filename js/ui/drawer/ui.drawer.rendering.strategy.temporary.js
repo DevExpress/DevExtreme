@@ -11,7 +11,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
         const direction = this._drawer.option("menuPosition");
         const menuPosition = this._getMenuOffset(offset);
 
-        $(this._drawer.content()).css("paddingLeft", this._drawer.option("minWidth") * this._drawer._getPositionCorrection());
+        $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minWidth") * this._drawer._getPositionCorrection());
 
         if(this._drawer.option("showMode") === "slide") {
             if(animate) {

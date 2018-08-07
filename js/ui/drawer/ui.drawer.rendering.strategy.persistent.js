@@ -10,7 +10,7 @@ const PersistentStrategy = DrawerStrategy.inherit({
         const width = this._getMenuWidth(offset),
             direction = this._drawer.option("menuPosition");
 
-        translator.move($(this._drawer.content()), { left: 0 });
+        translator.move($(this._drawer.viewContent()), { left: 0 });
 
         this._animateContent(animate, offset, width, direction);
 
@@ -45,11 +45,11 @@ const PersistentStrategy = DrawerStrategy.inherit({
     },
 
     _animateContent(animate, offset, width, direction) {
-        translator.move($(this._drawer.content()), { left: 0 });
+        translator.move($(this._drawer.viewContent()), { left: 0 });
 
         if(animate) {
             let animationConfig = {
-                $element: $(this._drawer.content()),
+                $element: $(this._drawer.viewContent()),
                 padding: width,
                 direction: direction,
                 duration: this._drawer.option("animationDuration"),
@@ -60,9 +60,9 @@ const PersistentStrategy = DrawerStrategy.inherit({
             animation.padding(animationConfig);
         } else {
             if(direction === "left") {
-                $(this._drawer.content()).css("paddingLeft", width);
+                $(this._drawer.viewContent()).css("paddingLeft", width);
             } else {
-                $(this._drawer.content()).css("paddingRight", width);
+                $(this._drawer.viewContent()).css("paddingRight", width);
             }
         }
     }
