@@ -2093,20 +2093,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getDateRange: function() {
-        var startDate = this.getStartViewDate(),
-            endDate = this.getEndViewDate();
-
-        var daylightDiff = this.invoke("getDaylightOffset", startDate, endDate) * toMs("minute");
-
-        if(daylightDiff < 0) {
-            endDate = new Date(endDate.getTime() + daylightDiff);
-        } else {
-            endDate = new Date(endDate.getTime() - daylightDiff);
-        }
-
         return [
-            startDate,
-            endDate
+            this.getStartViewDate(),
+            this.getEndViewDate()
         ];
     },
 
@@ -2233,8 +2222,18 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getEndViewDate: function() {
-        var dateOfLastViewCell = this.getDateOfLastViewCell();
-        return new Date(dateOfLastViewCell.getTime() + this.getCellDuration() - 60000);
+        var dateOfLastViewCell = this.getDateOfLastViewCell(),
+            endDateOfLastViewCell = new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
+
+        var daylightDiff = this.invoke("getDaylightOffset", dateOfLastViewCell, endDateOfLastViewCell) * toMs("minute");
+
+        if(daylightDiff < 0) {
+            endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() + daylightDiff);
+        } else {
+            endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() - daylightDiff);
+        }
+
+        return new Date(endDateOfLastViewCell.getTime() - 60000);
     },
 
     getDateOfLastViewCell: function() {
