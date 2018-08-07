@@ -116,6 +116,12 @@
     &.dx-state-disabled {
         opacity: 1;
     }
+
+    &.dx-toolbar-compact { 
+        .dx-button {
+            min-width: auto;
+        }
+    }
 }
 
 .dx-toolbar-after {
@@ -156,12 +162,4 @@
 
 .dx-toolbar .dx-tab {
     padding: 4px;
-}
-
-.dx-toolbar-compact { 
-    &.dx-popup-bottom {
-        .dx-button {
-            min-width: auto;
-        }
-    }
 }
