@@ -172,6 +172,17 @@ let layout = {
         return null;
     },
 
+    _findIndexByName: function(rects, nodeTitle) {
+        let index = 0;
+        for(let c = 0; c < rects.length; c++) {
+            for(let r = 0; r < rects[c].length; r++) {
+                if(nodeTitle === rects[c][r]._name) return index;
+                index++;
+            }
+        }
+        return null;
+    },
+
     _computeLinks: function(links, rects, cascades) {
         let yOffsets = {}, paths = [], result = [];
 
@@ -188,9 +199,8 @@ let layout = {
                     linksFromNode = links.filter(link => { return link[0] === nodeTitle }); // all outgoing links from the node
 
                 // all outgoing links should be sorted according to the order of their target nodes
-                // sort field added to each link
                 linksFromNode.forEach(link => {
-                    link.sort = this._sort && this._sort.hasOwnProperty(link[1]) ? this._sort[link[1]] : 1;
+                    link.sort = this._findIndexByName(rects, link[1]);
                 });
                 linksFromNode.sort((a, b) => { return a.sort - b.sort; }).forEach(link => {
                     let rectTo = this._findRectByName(rects, link[1]),
