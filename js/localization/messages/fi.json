@@ -62,6 +62,9 @@
         "dxFileUploader-uploaded": "Lähetetty",
         "dxFileUploader-readyToUpload": "Valmis lähetettäväksi",
         "dxFileUploader-uploadFailedMessage": "Lähetys epäonnistui",
+        "dxFileUploader-invalidFileExtension": "",
+        "dxFileUploader-invalidMaxFileSize": "",
+        "dxFileUploader-invalidMinFileSize": "",
 
         "dxRangeSlider-ariaFrom": "Alkaen",
         "dxRangeSlider-ariaTill": "Asti",

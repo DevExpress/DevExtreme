@@ -279,7 +279,7 @@ var FileUploader = Editor.inherit({
             /**
             * @name dxFileUploaderOptions.validation
             * @type Object
-            * @default { allowedFileExtensions: [], maxFileSize: 0, minFileSize: 0, invalidFileExtensionMessage: "", invalidMaxFileSizeMessage: "", invalidMinFileSizeMessage: ""}
+            * @default undefined
             */
             validation: {
                 /**
@@ -306,21 +306,21 @@ var FileUploader = Editor.inherit({
                 /**
                 * @name dxFileUploaderOptions.validation.invalidFileExtensionMessage
                 * @type string
-                * @default "File type not allowed"
+                * @default "File type is not allowed"
                 */
                 invalidFileExtensionMessage: messageLocalization.format("dxFileUploader-invalidFileExtension"),
 
                 /**
                 * @name dxFileUploaderOptions.validation.invalidMaxFileSizeMessage
                 * @type string
-                * @default "File size too large"
+                * @default "File is too large"
                 */
                 invalidMaxFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMaxFileSize"),
 
                 /**
                 * @name dxFileUploaderOptions.validation.invalidMinFileSizeMessage
                 * @type string
-                * @default "File size too small"
+                * @default "File is too small"
                 */
                 invalidMinFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMinFileSize")
             },
@@ -600,14 +600,12 @@ var FileUploader = Editor.inherit({
     _validateMaxFileSize: function(file) {
         var fileSize = file.value.size;
         var maxFileSize = this.option("validation.maxFileSize");
-        maxFileSize = maxFileSize === 0 ? fileSize : maxFileSize;
-        return fileSize <= maxFileSize;
+        return maxFileSize > 0 ? fileSize <= maxFileSize : true;
     },
     _validateMinFileSize: function(file) {
         var fileSize = file.value.size;
         var minFileSize = this.option("validation.minFileSize");
-        minFileSize = minFileSize === 0 ? fileSize : minFileSize;
-        return fileSize >= minFileSize;
+        return minFileSize > 0 ? fileSize >= minFileSize : true;
     },
 
     _createUploadStartedAction: function() {
