@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     common = require("./commonParts/common.js"),
     createSankey = common.createSankey,

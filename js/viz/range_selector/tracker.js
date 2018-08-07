@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     pointerEvents = require("../../events/pointer"),
     window = require("../../core/utils/window").getWindow(),

@@ -1,5 +1,3 @@
-"use strict";
-
 var utils = require("../core/utils"),
     dateUtils = require("../../core/utils/date"),
     typeUtils = require("../../core/utils/type"),

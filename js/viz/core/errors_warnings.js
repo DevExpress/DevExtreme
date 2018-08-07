@@ -1,5 +1,3 @@
-"use strict";
-
 var errorUtils = require("../../core/utils/error"),
     errors = require("../../core/errors");
 /**
@@ -111,6 +109,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsViz.W2107
     */
     W2107: "The export menu was hidden due to the container size",
+    /**
+    * @name ErrorsViz.W2108
+    */
+    W2108: "The browser does not support exporting images to {0} format.",
     /**
     * @name ErrorsViz.W2301
     */

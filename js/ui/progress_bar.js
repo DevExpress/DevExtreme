@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     TrackBar = require("./track_bar"),
     extend = require("../core/utils/extend").extend,

@@ -1,5 +1,3 @@
-"use strict";
-
 require("events/pointer/touch");
 require("events/pointer");
 require("events/core/event_registrator");

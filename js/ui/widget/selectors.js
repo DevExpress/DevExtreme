@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter");
 

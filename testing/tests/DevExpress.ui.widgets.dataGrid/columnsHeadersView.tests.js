@@ -1,5 +1,3 @@
-"use strict";
-
 import "common.css!";
 import "generic_light.css!";
 

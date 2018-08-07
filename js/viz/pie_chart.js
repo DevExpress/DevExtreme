@@ -1,5 +1,3 @@
-"use strict";
-
 var seriesConsts = require("./components/consts"),
     vizUtils = require("./core/utils"),
     extend = require("../core/utils/extend").extend,

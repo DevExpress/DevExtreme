@@ -1,7 +1,3 @@
-// jshint node:true
-
-"use strict";
-
 var fs = require('fs');
 var lazyPipe = require('lazypipe');
 var header = require('gulp-header');

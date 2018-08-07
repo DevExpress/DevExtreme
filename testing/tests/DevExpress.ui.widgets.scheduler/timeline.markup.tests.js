@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import SchedulerTimeline from "ui/scheduler/ui.scheduler.timeline";
 import SchedulerTimelineDay from "ui/scheduler/ui.scheduler.timeline_day";

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     NavBar = require("ui/nav_bar");
 

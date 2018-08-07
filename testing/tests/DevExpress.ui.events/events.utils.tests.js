@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     compareVersion = require("core/utils/version").compare,
     eventUtils = require("events/utils"),

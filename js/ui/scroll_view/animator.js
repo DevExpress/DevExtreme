@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
     abstract = Class.abstract,

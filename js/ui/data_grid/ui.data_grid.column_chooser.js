@@ -1,5 +1,3 @@
-"use strict";
-
 var gridCore = require("./ui.data_grid.core"),
     columnChooserModule = require("../grid_core/ui.grid_core.column_chooser");
 

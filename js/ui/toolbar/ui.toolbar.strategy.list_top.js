@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     ListStrategy = require("./ui.toolbar.strategy.list_base"),
     extend = require("../../core/utils/extend").extend,

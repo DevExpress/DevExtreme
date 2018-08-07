@@ -1,5 +1,3 @@
-"use strict";
-
 var tableCreator = require("ui/scheduler/ui.scheduler.table_creator");
 
 var FIXTURE_DATA = [{

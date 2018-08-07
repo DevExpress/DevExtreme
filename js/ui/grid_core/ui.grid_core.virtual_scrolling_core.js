@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
@@ -17,7 +15,7 @@ var isVirtualMode = function(that) {
 };
 
 var isAppendMode = function(that) {
-    return that.option("scrolling.mode") === SCROLLING_MODE_INFINITE;
+    return that.option("scrolling.mode") === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
 exports.getContentHeightLimit = function(browser) {
@@ -421,6 +419,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 totalItemsCount = that._dataSource.totalItemsCount();
 
             Object.keys(that._itemSizes).forEach(itemIndex => {
+                if(!itemCount) return;
                 if(isEnd ? (itemIndex >= totalItemsCount - virtualItemsCount.end) : (itemIndex < virtualItemsCount.begin)) {
                     offset += that._itemSizes[itemIndex];
                     itemCount--;
@@ -453,7 +452,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._viewportItemIndex = itemIndex;
 
             if(pageSize && (virtualMode || appendMode) && totalItemsCount >= 0) {
-                if(that._viewportSize && (itemIndex + that._viewportSize) >= totalItemsCount) {
+                if(that._viewportSize && (itemIndex + that._viewportSize) >= totalItemsCount && !that._isVirtual) {
                     if(that._dataSource.hasKnownLastPage()) {
                         newPageIndex = pageCount - 1;
                         lastPageSize = totalItemsCount % pageSize;

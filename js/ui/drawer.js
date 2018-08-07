@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name dxDrawer
 * @inherits Widget

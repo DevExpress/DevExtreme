@@ -1,5 +1,3 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
     layoutElementModule = require("../core/layout_element"),
     _isNumber = require("../../core/utils/type").isNumeric,

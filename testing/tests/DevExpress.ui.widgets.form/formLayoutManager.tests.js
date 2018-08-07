@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     internals = require("ui/form/ui.form.layout_manager").__internals;
 

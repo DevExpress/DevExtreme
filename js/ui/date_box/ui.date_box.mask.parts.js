@@ -1,5 +1,3 @@
-"use strict";
-
 import { getPatternSetters, getRegExpInfo } from "../../localization/ldml/date.parser";
 import dateLocalization from "../../localization/date";
 import { extend } from "../../core/utils/extend";

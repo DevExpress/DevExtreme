@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
@@ -1212,7 +1210,7 @@ QUnit.test("calculateFilterExpression for column with boolean type dataField", f
 
 // T396670
 QUnit.test("getVisibleColumns when there is custom method in prototype of the array", function(assert) {
-    // jshint freeze:false
+    /* eslint-disable no-extend-native */
 
     // arrange
     Array.prototype.add = function(item) {

@@ -1,5 +1,3 @@
-"use strict";
-
 var _isFinite = isFinite,
     registerComponent = require("../../core/component_registrator"),
     objectUtils = require("../../core/utils/object"),

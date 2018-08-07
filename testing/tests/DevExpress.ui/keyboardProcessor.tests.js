@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     KeyboardProcessor = require("ui/widget/ui.keyboard_processor");
 

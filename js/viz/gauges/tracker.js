@@ -1,5 +1,3 @@
-"use strict";
-
 var eventsEngine = require("../../events/core/events_engine"),
     _abs = Math.abs,
     Class = require("../../core/class"),

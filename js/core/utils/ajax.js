@@ -1,5 +1,3 @@
-"use strict";
-
 var Deferred = require("./deferred").Deferred;
 var domAdapter = require("../../core/dom_adapter");
 var httpRequest = require("../../core/http_request");

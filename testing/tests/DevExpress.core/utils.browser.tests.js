@@ -1,5 +1,3 @@
-"use strict";
-
 var browser = require("core/utils/browser");
 
 var userAgents = {

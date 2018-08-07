@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),
@@ -809,6 +807,8 @@ module.exports = {
                         if(rowsScrollController) {
                             var visibleItems = this._visibleItems;
                             var isRefresh = change.changeType === "refresh";
+
+                            if(change.changeType === "append" && change.items && !change.items.length) return;
 
                             if(isRefresh || change.changeType === "append" || change.changeType === "prepend") {
                                 change.cancel = true;

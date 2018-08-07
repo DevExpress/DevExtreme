@@ -1,5 +1,3 @@
-"use strict";
-
 var testGlobalExports = require("../../helpers/publicModulesHelper.js"),
     version = require("core/version");
 

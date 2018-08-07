@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     require("/artifacts/transpiled/bundles/dx.mobile.js");
 

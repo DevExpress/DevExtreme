@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name dxScheduler
 * @inherits Widget, DataHelperMixin

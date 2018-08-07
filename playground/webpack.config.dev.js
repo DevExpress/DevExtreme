@@ -1,6 +1,4 @@
-/* jshint node: true */
-
-"use strict";
+/* eslint-env node */
 
 var baseConfig = require("../webpack.config.js");
 

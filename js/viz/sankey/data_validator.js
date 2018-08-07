@@ -1,5 +1,3 @@
-"use strict";
-
 var graphModule = require('./graph');
 
 var validator = {

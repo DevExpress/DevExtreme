@@ -1,5 +1,3 @@
-"use strict";
-
 (function(factory) {
     /* global define, DevExpress, window */
     if(typeof define === "function" && define.amd) {
@@ -63,8 +61,6 @@
         }
 
         return function(text) {
-            // jshint evil:true
-
             var bag = ["var _ = [];", "with(obj||{}) {"],
                 chunks = text.split(OPEN_TAG);
 
@@ -81,6 +77,7 @@
 
             bag.push("}", "return _.join('')");
 
+            // eslint-disable-next-line no-new-func
             return new Function("obj", bag.join(''));
         };
     }

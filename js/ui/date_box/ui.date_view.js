@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     DateViewRoller = require("./ui.date_view_roller"),

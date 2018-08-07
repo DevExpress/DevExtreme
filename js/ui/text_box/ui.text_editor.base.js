@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
@@ -269,7 +267,7 @@ var TextEditorBase = Editor.inherit({
             text: undefined,
 
             valueFormat: function(value) {
-                return value;
+                return isDefined(value) && value !== false ? value : "";
             },
 
             /**

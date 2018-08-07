@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
     config = require("core/config"),
@@ -770,12 +768,12 @@ QUnit.test("only one handler must be highlighted on pressing (B230410)", functio
 });
 
 QUnit.test("B231116", function(assert) {
-    var mouse = pointerMock(this.leftHandle).start().move(this.leftHandle.offset().left).down().move(100).up();
+    pointerMock(this.leftHandle).start().move(this.leftHandle.offset().left).down().move(100).up();
     assert.equal(this.instance.option("start"), 60);
     assert.equal(this.instance.option("end"), 100);
 
     this.instance.option("start", 20);
-    mouse = pointerMock(this.rightHandle).start().move(this.rightHandle.offset().left).down().move(-100).up();
+    pointerMock(this.rightHandle).start().move(this.rightHandle.offset().left).down().move(-100).up();
     assert.equal(this.instance.option("start"), 0);
     assert.equal(this.instance.option("end"), 20);
 

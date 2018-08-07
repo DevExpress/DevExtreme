@@ -1,5 +1,3 @@
-"use strict";
-
 window.DevExpress = { viz: { map: { sources: {} } } };
 
 var $ = require("jquery"),

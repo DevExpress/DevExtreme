@@ -1,5 +1,3 @@
-"use strict";
-
 var dataUtils = require("../core/element_data"),
     type = require("../core/utils/type").type;
 

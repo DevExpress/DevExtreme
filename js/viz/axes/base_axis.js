@@ -1,5 +1,3 @@
-"use strict";
-
 import { smartFormatter as _format, formatRange } from "./smart_formatter";
 import vizUtils from "../core/utils";
 import { isDefined, isFunction, isNumeric } from "../../core/utils/type";
@@ -17,6 +15,8 @@ import { dateToMilliseconds } from "../../core/utils/date";
 import { noop as _noop } from "../../core/utils/common";
 import xyMethods from "./xy_axes";
 import polarMethods from "./polar_axes";
+import createConstantLine from "./constant_line";
+import createStrip from "./strip";
 
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
@@ -80,7 +80,7 @@ function createMajorTick(axis, renderer, skippedCategory) {
         options.tick,
         options.grid,
         skippedCategory,
-        axis._translator.getBusinessRange().stubData
+        false
     );
 }
 
@@ -109,8 +109,8 @@ function createBoundaryTick(axis, renderer, isFirst) {
     );
 }
 
-function callAction(ticks, action, actionArgument) {
-    ticks.forEach(function(tick) { tick[action](actionArgument); });
+function callAction(elements, action, actionArgument) {
+    (elements || []).forEach(e => e[action](actionArgument));
 }
 
 function initTickCoords(ticks) {
@@ -125,12 +125,12 @@ function drawGrids(ticks, drawLine) {
     callAction(ticks, "drawGrid", drawLine);
 }
 
-function updateTicksPosition(ticks) {
-    callAction(ticks, "updateTickPosition");
+function updateTicksPosition(ticks, animate) {
+    callAction(ticks, "updateTickPosition", animate);
 }
 
-function updateGridsPosition(ticks) {
-    callAction(ticks, "updateGridPosition");
+function updateGridsPosition(ticks, animate) {
+    callAction(ticks, "updateGridPosition", animate);
 }
 
 function measureLabels(items) {
@@ -295,6 +295,8 @@ const Axis = exports.Axis = function(renderSettings) {
     that._translator = that._createTranslator();
     that.isArgumentAxis = renderSettings.isArgumentAxis;
     that._viewport = [];
+
+    that._firstDrawing = true;
 };
 
 Axis.prototype = {
@@ -389,53 +391,6 @@ Axis.prototype = {
 
     _createConstantLine: function(value, attr) {
         return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
-    },
-
-    _drawConstantLinesAndLabels: function(position, lineOptions, canvasStart, canvasEnd) {
-        if(!isDefined(lineOptions.value)) {
-            return { line: null, label: null, options: lineOptions };
-        }
-        var that = this,
-            pos = that._getConstantLinePos(lineOptions.value, canvasStart, canvasEnd),
-            labelOptions = lineOptions.label || {},
-            value = pos.value,
-            attr = { stroke: lineOptions.color, "stroke-width": lineOptions.width, dashStyle: lineOptions.dashStyle },
-            group = that._axisConstantLineGroups[position],
-            side;
-
-        if(!group) {
-            side = that._isHorizontal ? labelOptions.verticalAlignment : labelOptions.horizontalAlignment;
-            group = that._axisConstantLineGroups[side];
-        }
-
-        if(!isDefined(value)) {
-            return { line: null, label: null, options: lineOptions };
-        }
-
-        return {
-            line: that._createConstantLine(value, attr).append(that._axisConstantLineGroups.inside),
-            label: labelOptions.visible ? that._drawConstantLineLabels(pos.parsedValue, labelOptions, value, group) : null,
-            options: lineOptions,
-            labelOptions: labelOptions,
-            coord: value
-        };
-    },
-
-    _drawConstantLines: function(position) {
-        var that = this,
-            canvas = that._getCanvasStartEnd();
-
-        if(that._translator.getBusinessRange().stubData) {
-            return [];
-        }
-
-        return (that._options.constantLines || []).reduce(function(result, constantLine) {
-            var labelPos = constantLine.label.position;
-            if(labelPos === position || (!labelPos && position === "inside")) {
-                result.push(that._drawConstantLinesAndLabels(position, constantLine, canvas.start, canvas.end));
-            }
-            return result;
-        }, []);
     },
 
     _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
@@ -544,60 +499,8 @@ Axis.prototype = {
         };
     },
 
-    _createStrip: function(fromPoint, toPoint, attr) {
-        var attrs = this._getStripGraphicAttributes(fromPoint, toPoint);
-
-        return this._renderer.rect(attrs.x, attrs.y, attrs.width, attrs.height).attr(attr);
-    },
-
-    _drawStrips: function() {
-        var that = this,
-            options = that._options,
-            stripData = options.strips,
-            canvas = this._getCanvasStartEnd(),
-            i,
-            stripOptions,
-            stripPos,
-            stripLabelOptions,
-            attr,
-            range = that._translator.getBusinessRange(),
-            labelCoords,
-            strips = [];
-
-        if(!stripData || range.stubData) {
-            return [];
-        }
-
-        for(i = 0; i < stripData.length; i++) {
-            stripOptions = stripData[i];
-            stripLabelOptions = stripOptions.label || {};
-            attr = { fill: stripOptions.color };
-
-            if((isDefined(stripOptions.startValue) || isDefined(stripOptions.endValue)) && isDefined(stripOptions.color)) {
-                stripPos = that._getStripPos(stripOptions.startValue, stripOptions.endValue, canvas.start, canvas.end, range);
-                labelCoords = stripLabelOptions.text ? that._getStripLabelCoords(stripPos.from, stripPos.to, stripLabelOptions) : null;
-
-                if((stripPos.to - stripPos.from === 0) || (!isDefined(stripPos.to)) || (!isDefined(stripPos.from))) {
-                    continue;
-                }
-                strips.push({
-                    rect: that._createStrip(stripPos.from, stripPos.to, attr).append(that._axisStripGroup),
-                    options: stripOptions,
-                    label: stripLabelOptions.text ? that._drawStripLabel(stripLabelOptions, labelCoords) : null,
-                    labelCoords: labelCoords
-                });
-            }
-        }
-
-        return strips;
-    },
-
-    _drawStripLabel: function(stripLabelOptions, coords) {
-        return this._renderer
-            .text(stripLabelOptions.text, coords.x, coords.y)
-            .css(patchFontOptions(extend({}, this._options.label.font, stripLabelOptions.font)))
-            .attr({ align: "center" })
-            .append(this._axisStripLabelGroup);
+    _createStrip: function(attrs) {
+        return this._renderer.rect(attrs.x, attrs.y, attrs.width, attrs.height);
     },
 
     _adjustStripLabels: function() {
@@ -977,6 +880,8 @@ Axis.prototype = {
         }
 
         that._updateTranslator();
+        that._createConstantLines();
+        that._strips = (options.strips || []).map(o => createStrip(that, o));
     },
 
     calculateInterval: function(value, prevValue) {
@@ -1021,13 +926,12 @@ Axis.prototype = {
 
     hideOuterElements: function() {
         var that = this,
-            options = that._options,
-            constantLineLabels = that._outsideConstantLines.map(function(line) { return line.label; });
+            options = that._options;
 
-        if((options.label.visible || constantLineLabels.length) && !that._translator.getBusinessRange().stubData) {
+        if((options.label.visible || that._outsideConstantLines.length) && !that._translator.getBusinessRange().stubData) {
             that._incidentOccurred("W2106", [that._isHorizontal ? "horizontal" : "vertical"]);
             that._axisElementsGroup.clear();
-            constantLineLabels.forEach(function(label) { label && label.remove(); });
+            callAction(that._outsideConstantLines, "removeLabel");
         }
     },
 
@@ -1415,8 +1319,38 @@ Axis.prototype = {
         that._tickInterval = ticks.tickInterval;
         that._minorTickInterval = ticks.minorTickInterval;
 
-        that._majorTicks = ticks.ticks.map(createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks)));
-        that._minorTicks = minors.map(createMinorTick(that, renderer));
+        const majorTicksByValues = (that._majorTicks || []).reduce((r, t) => {
+            r[t.value.valueOf()] = t;
+            return r;
+        }, {});
+
+
+        const majorTicks = ticks.ticks.map(v => {
+            const tick = majorTicksByValues[v.valueOf()];
+            delete majorTicksByValues[v.valueOf()];
+            if(tick) {
+                return tick;
+            } else {
+                return createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks))(v);
+            }
+        });
+
+        that._majorTicks = majorTicks;
+
+        const oldMinorTicks = that._minorTicks || [];
+
+        that._minorTicks = minors.map((v, i) => {
+            const minorTick = oldMinorTicks[i];
+            if(minorTick) {
+                minorTick.updateValue(v);
+                return minorTick;
+            }
+            return createMinorTick(that, renderer)(v);
+        });
+
+        that._ticksToRemove = Object.keys(majorTicksByValues)
+            .map(k => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
+
         that._correctedBreaks = ticks.breaks;
 
         that._reinitTranslator(range);
@@ -1575,6 +1509,13 @@ Axis.prototype = {
         return range;
     },
 
+    _createConstantLines() {
+        const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
+
+        this._outsideConstantLines = constantLines.filter(l => l.labelPosition === "outside");
+        this._insideConstantLines = constantLines.filter(l => l.labelPosition === "inside");
+    },
+
     draw: function(canvas, borderOptions) {
         var that = this,
             drawGridLine = that._getGridLineDrawer(borderOptions || { visible: false });
@@ -1594,9 +1535,11 @@ Axis.prototype = {
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
-        that._outsideConstantLines = that._drawConstantLines("outside");
-        that._insideConstantLines = that._drawConstantLines("inside");
-        that._strips = that._drawStrips();
+
+        callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");
+
+        callAction(that._strips, "draw");
+
         that._dateMarkers = that._drawDateMarkers() || [];
 
         that._axisGroup.append(that._axesContainerGroup);
@@ -1633,13 +1576,16 @@ Axis.prototype = {
 
     _measureTitle: _noop,
 
-    updateSize: function(canvas) {
-        var that = this;
+    animate() {
+        callAction(this._majorTicks, "animateLabels");
+    },
 
+    updateSize: function(canvas, animate) {
+        var that = this;
         that.updateCanvas(canvas);
         that._reinitTranslator(that._getViewportRange());
 
-        var canvasStartEnd = that._getCanvasStartEnd();
+        const animationEnabled = !that._firstDrawing && animate;
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
@@ -1651,34 +1597,41 @@ Axis.prototype = {
 
         that._updateAxisElementPosition();
 
-        updateTicksPosition(that._majorTicks);
-        updateTicksPosition(that._minorTicks);
+        updateTicksPosition(that._majorTicks, animationEnabled);
+        updateTicksPosition(that._minorTicks, animationEnabled);
         updateTicksPosition(that._boundaryTicks);
 
-        callAction(that._majorTicks, "updateLabelPosition");
+        callAction(that._majorTicks, "updateLabelPosition", animationEnabled);
 
-        that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(function(item) {
-            var coord = that._getConstantLinePos(item.options.value, canvasStartEnd.start, canvasStartEnd.end).value;
+        that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(l => l.updatePosition(animationEnabled));
 
-            item.label && item.label.attr(that._getConstantLineLabelsCoords(coord, item.labelOptions));
-
-            item.line && item.line.attr(that._getConstantLineGraphicAttributes(coord));
-        });
-
-        (that._strips || []).forEach(function(item) {
-            var range = that._translator.getBusinessRange(),
-                stripPos = that._getStripPos(item.options.startValue, item.options.endValue, canvasStartEnd.start, canvasStartEnd.end, range);
-
-            item.label && item.label.attr(that._getStripLabelCoords(stripPos.from, stripPos.to, item.options.label));
-
-            item.rect && item.rect.attr(that._getStripGraphicAttributes(stripPos.from, stripPos.to));
-        });
+        callAction(that._strips, "updatePosition", animationEnabled);
 
         that._updateTitleCoords();
         that._checkTitleOverflow();
 
-        updateGridsPosition(that._majorTicks);
-        updateGridsPosition(that._minorTicks);
+        updateGridsPosition(that._majorTicks, animationEnabled);
+        updateGridsPosition(that._minorTicks, animationEnabled);
+
+        if(animationEnabled) {
+            callAction(that._ticksToRemove || [], "fadeOutElements");
+        }
+
+        that.prepareAnimation();
+
+        that._ticksToRemove = null;
+
+        that._firstDrawing = false;
+    },
+
+    prepareAnimation() {
+        const that = this;
+        const action = "saveCoords";
+        callAction(that._majorTicks, action);
+        callAction(that._minorTicks, action);
+        callAction(that._insideConstantLines, action);
+        callAction(that._outsideConstantLines, action);
+        callAction(that._strips, action);
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {

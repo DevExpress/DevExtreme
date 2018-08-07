@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("core/class"),
     ValidationEngine = require("ui/validation_engine");
 

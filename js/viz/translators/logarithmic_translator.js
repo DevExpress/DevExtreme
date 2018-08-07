@@ -1,5 +1,3 @@
-"use strict";
-
 var numericTranslator = require("./numeric_translator"),
     vizUtils = require("../core/utils"),
     isDefined = require("../../core/utils/type").isDefined,

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     SelectBox = require("ui/select_box"),
     DataSource = require("data/data_source/data_source").DataSource,

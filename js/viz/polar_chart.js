@@ -1,5 +1,3 @@
-"use strict";
-
 var _noop = require("../core/utils/common").noop,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop;
 
@@ -2789,8 +2787,7 @@ QUnit.test("Export context menu items", function(assert) {
     }, true);
 
     var $container = $("#container"),
-        menuItems,
-        $exportButton;
+        menuItems;
 
     this.$element = function() {
         return $container;
@@ -2798,8 +2795,6 @@ QUnit.test("Export context menu items", function(assert) {
 
     // act
     this.headerPanel.render($container);
-
-    $exportButton = $container.find(".dx-datagrid-export-button").first();
 
     var $menu = $container.find(".dx-datagrid-export-menu"),
         menuInstance = $menu.dxContextMenu("instance");

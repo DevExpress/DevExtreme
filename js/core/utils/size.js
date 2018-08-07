@@ -1,5 +1,3 @@
-"use strict";
-
 var window = require("../../core/utils/window").getWindow();
 
 var getSizeByStyles = function(elementStyles, styles) {

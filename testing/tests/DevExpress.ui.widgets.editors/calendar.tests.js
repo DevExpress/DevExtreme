@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     inflector = require("core/utils/inflector"),
     translator = require("animation/translator"),

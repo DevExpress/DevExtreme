@@ -1,5 +1,3 @@
-"use strict";
-
 var windowUtils = require("../core/utils/window"),
     window = windowUtils.hasWindow() ? windowUtils.getWindow() : {},
     callOnce = require("../core/utils/call_once");

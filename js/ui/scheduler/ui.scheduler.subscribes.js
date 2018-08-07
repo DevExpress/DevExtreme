@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     array = require("../../core/utils/array"),
     recurrenceUtils = require("./utils.recurrence"),

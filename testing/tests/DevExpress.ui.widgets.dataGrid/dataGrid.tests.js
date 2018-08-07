@@ -1,5 +1,3 @@
-"use strict";
-
 QUnit.testStart(function() {
     var markup =
 '<style>\
@@ -2408,6 +2406,48 @@ QUnit.test("Column widths should be correct after resize column to show scroll i
     assert.strictEqual($colGroups.eq(1).children().get(0).style.width, "auto");
     assert.strictEqual($colGroups.eq(1).children().get(1).style.width, "auto");
     assert.strictEqual($colGroups.eq(1).children().get(2).style.width, "100px");
+});
+
+// T659247
+QUnit.test("Column widths for header cells should be correctly if columnAutoWidth is enabled and banded columns are used", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        width: 400,
+        columnAutoWidth: true,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: 'ID',
+            width: 60
+        }, {
+            dataField: 'prop1',
+            ownerBand: 4,
+            width: 70,
+        }, {
+            dataField: 'prop2',
+            ownerBand: 4,
+            width: 80
+        }, {
+            dataField: 'prop3',
+            ownerBand: 4,
+            width: 90
+        }, {
+            caption: 'Band',
+            isBand: true
+        }],
+    });
+
+
+    var getHeaderCellWidth = function(rowIndex, columnIndex) {
+        return $dataGrid.find(".dx-header-row").eq(rowIndex).children().get(columnIndex).style.width;
+    };
+
+    // assert
+    assert.strictEqual(getHeaderCellWidth(0, 0), "60px");
+    assert.strictEqual(getHeaderCellWidth(0, 1), "", "band column has no width");
+    assert.strictEqual(getHeaderCellWidth(1, 0), "70px");
+    assert.strictEqual(getHeaderCellWidth(1, 1), "80px");
+    assert.strictEqual(getHeaderCellWidth(1, 2), "", "last column has no width");
 });
 
 QUnit.test("Last cell should have correct width after resize column to hide scroll if fixed column is exists and columnAutoWidth is enabled", function(assert) {
@@ -5397,6 +5437,43 @@ QUnit.test("ungrouping after grouping should works correctly if row rendering mo
     });
 });
 
+// T641931
+QUnit.test("Infinite scrolling should works correctly", function(assert) {
+    // arrange, act
+    var data = [];
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: data,
+        loadingTimeout: undefined,
+        scrolling: {
+            updateTimeout: 0,
+            useNative: false,
+            mode: "infinite",
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo(10000);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, "top visible row");
+    assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 1, "bottom loading exists");
+
+    // act
+    dataGrid.getScrollable().scrollTo(10000);
+
+    // assert
+    assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
+});
 
 QUnit.module("Rendered on server", {
     beforeEach: function() {
@@ -5481,6 +5558,44 @@ QUnit.test("Runtime operation should be asynchronously", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-data-row").length, 1, "filtered data rows are rendered");
 });
 
+// T655083
+QUnit.test("Virtual rows should be hidden after filtering if cellTemplate is asynchronous", function(assert) {
+    var items = [];
+    for(var i = 0; i < 100; i++) {
+        items.push({ id: i + 1 });
+    }
+
+    var dataGrid = createDataGrid({
+        height: 500,
+        dataSource: items,
+        scrolling: {
+            mode: "virtual"
+        },
+        columns: [{
+            dataField: "id",
+            cellTemplate: function($container, options) {
+                setTimeout(function() {
+                    $("<div>").text(options.text).appendTo($container);
+                });
+            }
+        }]
+    });
+
+    // act
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.$element().find(".dx-virtual-row").length, 1, "1 virtual rows");
+
+    // act
+    dataGrid.columnOption("id", "filterValue", "99");
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 1, "1 visible row");
+    assert.equal(dataGrid.$element().find(".dx-virtual-row").length, 0, "no virtual rows");
+});
+
 // T621703
 QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
     // arrange
@@ -5542,8 +5657,7 @@ QUnit.test("dataSource change", function(assert) {
 // T216940
 QUnit.test("dataSource change to equal instance", function(assert) {
     // arrange, act
-    var loadCount,
-        dataSourceInstance;
+    var dataSourceInstance;
 
     var dataSource = [{ id: 1 }];
 
@@ -5553,7 +5667,6 @@ QUnit.test("dataSource change to equal instance", function(assert) {
     });
 
     dataSourceInstance = dataGrid.getController("data")._dataSource;
-    loadCount = 0;
 
     // act
     dataSource.push({ id: 2 });
@@ -5985,7 +6098,6 @@ QUnit.test("group command column width after grouping column with showWhenGroupe
 QUnit.test("columns change when changed dataSource parameters", function(assert) {
     // arrange, act
     var loadingCount = 0,
-        loadingOptions,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -5993,7 +6105,6 @@ QUnit.test("columns change when changed dataSource parameters", function(assert)
                 store: {
                     type: "array",
                     onLoading: function(options) {
-                        loadingOptions = options;
                         loadingCount++;
                     },
                     data: [{ a: 1, b: 2 }, { a: 2, b: 1 }]
@@ -10014,7 +10125,7 @@ QUnit.test("Group cell should not have width style", function(assert) {
     assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "150px", "width style is defined for data cell");
 });
 
-QUnit.test("Detail cell should not have width style", function(assert) {
+QUnit.test("Detail cell should not have width and max-width styles", function(assert) {
     var dataSource = [
         { id: 1, firstName: "Alex", lastName: "Black", room: 903 },
         { id: 2, firstName: "Alex", lastName: "White", room: 904 }
@@ -10044,6 +10155,8 @@ QUnit.test("Detail cell should not have width style", function(assert) {
     // assert
     assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "100px", "width style is defined for data cell");
     assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "", "width style is not defined for detail cell");
+    // T650963
+    assert.equal($(dataGrid.getCellElement(1, 1)).css("maxWidth"), "none", "max width style for detail cell");
 });
 
 QUnit.test("Check table params with set width", function(assert) {

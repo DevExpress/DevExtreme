@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     registerComponent = require("core/component_registrator"),
     DOMComponent = require("core/dom_component"),

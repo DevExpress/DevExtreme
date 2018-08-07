@@ -1,5 +1,3 @@
-"use strict";
-
 var ko = require("knockout");
 
 // Check availability in global environment

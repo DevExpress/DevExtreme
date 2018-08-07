@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     translator2DModule = require("viz/translators/translator2d"),
     adjust = require("core/utils/math").adjust,

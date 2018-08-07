@@ -1,5 +1,3 @@
-"use strict";
-
 var standardColorNames = {
     'aliceblue': 'f0f8ff',
     'antiquewhite': 'faebd7',

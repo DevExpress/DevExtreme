@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     scrollEvents = require("ui/scroll_view/ui.events.emitter.gesture.scroll"),
@@ -124,16 +122,10 @@ QUnit.module("scroll start");
 
 QUnit.test("dxscrollstart fired on first pointer move", function(assert) {
     var fired = 0,
-        args,
-        initEventData,
-        startEventData;
+        args;
 
     var $scrollable = $("#scrollable")
-        .on(scrollEvents.init, function(e) {
-            initEventData = eventUtils.eventData(e.originalEvent);
-        })
         .on(scrollEvents.start, function(e) {
-            startEventData = eventUtils.eventData(e.originalEvent);
             args = e;
             fired++;
         });
@@ -188,7 +180,7 @@ QUnit.module("scroll move");
 QUnit.test("dxscroll fired on pointer move", function(assert) {
     var fired = 0,
         args,
-        initEventData,
+        initEventData, // eslint-disable-line no-unused-vars
         moveEventData;
 
     var $scrollable = $("#scrollable")

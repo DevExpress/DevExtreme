@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     dialog = require("ui/dialog"),
     viewPort = require("core/utils/view_port").value,

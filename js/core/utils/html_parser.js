@@ -1,5 +1,3 @@
-"use strict";
-
 var merge = require("./array").merge,
     domAdapter = require("../dom_adapter");
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     Action = require("../core/action"),
     viewPortUtils = require("../core/utils/view_port"),

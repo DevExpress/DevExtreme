@@ -1,5 +1,3 @@
-"use strict";
-
 /* global data2, dataID, internals, makeSlowDataSource */
 
 var $ = require("jquery"),
@@ -1329,6 +1327,26 @@ QUnit.test("arrow should not be rendered for item which is explicitly has 'hasIt
         }
     });
 
+    assert.equal($treeView.find(".dx-treeview-toggle-item-visibility").length, 0, "arrow is not rendered");
+});
+
+QUnit.test("the 'createChildren' callback should not create duplicate items when search is used", function(assert) {
+    var $treeView = $("#treeView").dxTreeView({
+            dataStructure: "plain",
+            searchEnabled: true,
+            createChildren: function(parent) {
+                if(!parent) {
+                    return [{ id: 1, text: "Root", hasItems: true, expanded: true }];
+                } else {
+                    return [{ id: 2, text: "Child", parentId: parent.key, hasItems: false }];
+                }
+            }
+        }),
+        treeView = $treeView.dxTreeView("instance");
+
+    treeView.option("searchValue", "Ro");
+
+    assert.equal($treeView.find(".dx-treeview-item").length, 1, "only one item is rendered");
     assert.equal($treeView.find(".dx-treeview-toggle-item-visibility").length, 0, "arrow is not rendered");
 });
 

@@ -1,5 +1,3 @@
-"use strict";
-
 var dxFunnel = require("./funnel/funnel");
 
 dxFunnel.addPlugin(require("./funnel/label").plugin);

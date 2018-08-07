@@ -1,7 +1,3 @@
-// jshint node:true
-
-"use strict";
-
 var lazyPipe = require('lazypipe');
 var replace = require('gulp-replace');
 var uglify = require('gulp-uglify');

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
@@ -139,7 +137,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(chartMocks.seriesMockData.args[1][1], "Options passed");
     });
 
-    QUnit.test("dxChart with two Series request default type visibilityChanged", function(assert) {
+    QUnit.test("Actions sequence after visibilityChanged is triggered", function(assert) {
         // arrange
         var stubSeries1 = new MockSeries({}),
             stubSeries2 = new MockSeries({});
@@ -167,7 +165,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(chart.series);
 
         assert.ok(chartMocks.seriesMockData.args[0][1].visibilityChanged, "Options passed");
-        chartMocks.seriesMockData.args[0][1].visibilityChanged();
+        chartMocks.seriesMockData.args[0][1].visibilityChanged(chart.getAllSeries()[0]);
         assert.ok(processSeriesFamilySpy.calledOnce);
         assert.ok(populateBusinessRangeSpy.calledOnce);
         assert.ok(renderSpy.calledOnce);

@@ -1,5 +1,3 @@
-"use strict";
-
 var _max = Math.max,
     _squarify = require("./tiling.squarified.base");
 

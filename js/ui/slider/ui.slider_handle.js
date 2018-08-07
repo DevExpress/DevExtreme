@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Widget = require("../widget/ui.widget"),
     Tooltip = require("../tooltip"),

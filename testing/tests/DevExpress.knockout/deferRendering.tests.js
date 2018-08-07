@@ -1,5 +1,3 @@
-"use strict";
-
 require("integration/knockout");
 
 var $ = require("jquery"),

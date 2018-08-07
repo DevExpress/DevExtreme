@@ -1,5 +1,3 @@
-"use strict";
-
 var WHITE = "#ffffff",
     BLACK = "#000000",
     LIGHT_GREY = "#d3d3d3",
@@ -1603,13 +1601,7 @@ registerTheme({
             }
         },
         tooltip: {
-            enabled: true,
-            customizeLinkTooltip: function(info) {
-                return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
-            },
-            customizeNodeTooltip: function(info) {
-                return { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outcoming weight: ${info.weightOut}` };
-            }
+            enabled: true
         },
         node: {
             padding: 30,

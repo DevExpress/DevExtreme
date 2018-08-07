@@ -1,5 +1,3 @@
-"use strict";
-
 import formatHelper from "../../format_helper";
 import { isDefined, isFunction, isExponential, isObject } from "../../core/utils/type";
 import dateUtils from "../../core/utils/date";

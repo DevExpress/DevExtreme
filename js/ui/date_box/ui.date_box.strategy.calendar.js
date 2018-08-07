@@ -1,5 +1,3 @@
-"use strict";
-
 var Calendar = require("../calendar"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     dateUtils = require("../../core/utils/date"),

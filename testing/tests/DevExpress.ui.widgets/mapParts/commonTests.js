@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     testing = require("./utils.js"),
     Map = require("ui/map"),

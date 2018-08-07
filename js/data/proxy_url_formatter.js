@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("../core/utils/iterator").each,
     domAdapter = require("../core/dom_adapter"),
     window = require("../core/utils/window").getWindow(),

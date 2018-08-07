@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     fx = require("animation/fx"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),

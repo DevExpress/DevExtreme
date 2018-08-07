@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
@@ -1312,13 +1310,12 @@ QUnit.module("T576725", $.extend({}, moduleSetup, {
 
 QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
     // arrange
-    var dataSource = [],
-        chart;
+    var dataSource = [];
 
     for(var i = 0; i < 15; i++) {
         dataSource.push({ arg: i + "", val: i * 100 });
     }
-    chart = this.createPieChart({
+    this.createPieChart({
         series: [{ label: { visible: true } }],
         dataSource: dataSource,
         legend: { visible: true, horizontalAlignment: "center" },
@@ -1328,4 +1325,89 @@ QUnit.test("Overlapping of the labels should be taken into account canvas with l
     });
 
     assert.ok(baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
+});
+
+QUnit.module("Series visibility changed", moduleSetup);
+
+QUnit.test("Do not set stub data when all series were hidden", function(assert) {
+    var chart = this.createChart({
+        argumentAxis: {
+            valueMarginsEnabled: false,
+        },
+        valueAxis: {
+            valueMarginsEnabled: false,
+        },
+        dataSource: [
+            { arg: 1, val: 400 },
+            { arg: 2, val: 200 },
+            { arg: 3, val: 900 },
+            { arg: 4, val: 100 },
+            { arg: 5, val: 340 }],
+        series: {}
+    });
+
+    chart.getAllSeries()[0].hide();
+
+    var argRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
+    assert.equal(argRange.min, 1);
+    assert.equal(argRange.max, 5);
+    assert.ok(!argRange.stubData);
+
+    var valRange = chart.getValueAxis().getTranslator().getBusinessRange();
+    assert.equal(valRange.min, 100);
+    assert.equal(valRange.max, 900);
+    assert.ok(!valRange.stubData);
+});
+
+QUnit.test("Recalculate range data when one series is hidden", function(assert) {
+    var chart = this.createChart({
+        argumentAxis: {
+            valueMarginsEnabled: false,
+        },
+        valueAxis: {
+            valueMarginsEnabled: false,
+        },
+        dataSource: [
+            { arg: 1, val: 400 },
+            { arg1: 2, val1: 1 },
+            { arg1: 3, val1: 10 },
+            { arg: 4, val: 100 },
+            { arg: 5, val: 340 }],
+        series: [{}, { argumentField: "arg1", valueField: "val1" }]
+    });
+
+    chart.getAllSeries()[0].hide();
+
+    var argRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
+    assert.equal(argRange.min, 2);
+    assert.equal(argRange.max, 3);
+
+    var valRange = chart.getValueAxis().getTranslator().getBusinessRange();
+    assert.equal(valRange.min, 1);
+    assert.equal(valRange.max, 10);
+});
+
+QUnit.test("Recalculate argument range data from all visible series", function(assert) {
+    var chart = this.createChart({
+        argumentAxis: {
+            valueMarginsEnabled: false,
+        },
+        valueAxis: {
+            valueMarginsEnabled: false,
+        },
+        dataSource: [
+            { arg: 1, val: 400 },
+            { arg1: 2, val1: 1 },
+            { arg1: 3, val1: 10 },
+            { arg: 4, val: 100 },
+            { arg: 5, val: 340 }],
+        series: [{ axis: "axis1" }, { argumentField: "arg1", valueField: "val1" }]
+    });
+
+    chart.getAllSeries()[0].hide();
+
+    var argRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
+    assert.equal(argRange.min, 2);
+    assert.equal(argRange.max, 3);
+    assert.ok(!argRange.stubData);
 });

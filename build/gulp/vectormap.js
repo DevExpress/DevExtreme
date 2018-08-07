@@ -1,14 +1,9 @@
-// jshint node:true
-
-"use strict";
-
 var gulp = require('gulp');
 var path = require('path');
 var fs = require('fs');
 var rename = require('gulp-rename');
 var concat = require('gulp-concat');
-var header = require('gulp-header');
-var footer = require('gulp-footer');
+var tap = require('gulp-tap');
 var gulpIf = require('gulp-if');
 var merge = require('merge-stream');
 var template = require('gulp-template');
@@ -54,19 +49,28 @@ gulp.task('vectormap-data', ['vectormap-utils'], function() {
     return streams;
 });
 
-function createVectorMapUtilsStream(name, suffix, isMinify) {
-    var settings = require(path.join('../..', VECTORMAP_UTILS_PATH, '_settings.json')),
-        part = settings[name];
-
-    return gulp.src(settings.commonFiles.concat(part.files).map(transformFileName))
-        .pipe(concat(part.fileName + suffix + '.js'))
-        .pipe(header(part.header || ''))
-        .pipe(footer(part.footer || ''))
-        .pipe(headerPipes.useStrict())
+function patchVectorMapUtilsStream(stream, isMinify) {
+    return stream.pipe(headerPipes.useStrict())
         .pipe(headerPipes.bangLicense())
         .pipe(gulpIf(isMinify, compressionPipes.minify()))
         .pipe(gulpIf(!isMinify, compressionPipes.beautify()))
         .pipe(gulp.dest(VECTORMAP_UTILS_RESULT_PATH));
+}
+
+function createVectorMapUtilsStream(name, suffix, isMinify) {
+    const settings = require(path.join('../..', VECTORMAP_UTILS_PATH, '_settings.json'));
+    const part = settings[name];
+    const stream = gulp.src(settings.commonFiles.concat(part.files).map(transformFileName))
+        .pipe(concat(part.fileName + suffix + '.js'));
+
+    if(name === 'browser') {
+        return stream.pipe(tap(file => {
+            patchVectorMapUtilsStream(gulp.src('build/gulp/vectormaputils-template.jst')
+                .pipe(template({ data: file.contents }))
+                .pipe(rename(path.basename(file.path))), isMinify);
+        }));
+    }
+    return patchVectorMapUtilsStream(stream, isMinify);
 }
 
 gulp.task('vectormap-utils', function() {

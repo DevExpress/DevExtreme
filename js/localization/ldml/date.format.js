@@ -1,5 +1,3 @@
-"use strict";
-
 var ARABIC_COMMA = "\u060C",
     FORMAT_SEPARATORS = " .,:;/\\<>()-[]" + ARABIC_COMMA,
     ARABIC_ZERO_CODE = 1632;

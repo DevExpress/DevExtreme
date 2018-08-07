@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     domUtils = require("core/utils/dom");
 

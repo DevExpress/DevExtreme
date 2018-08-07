@@ -1,5 +1,3 @@
-"use strict";
-
 var domAdapter = require("../dom_adapter");
 var injector = require("./dependency_injector");
 var windowUtils = require("./window");

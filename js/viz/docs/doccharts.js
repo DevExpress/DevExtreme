@@ -3212,7 +3212,7 @@ var dxPolarChart = {
 * @name BaseChart
 * @type object
 * @hidden
-* @inherits BaseWidget
+* @inherits BaseWidget, DataHelperMixin
 */
 var BaseChart = {
     /**
@@ -3612,12 +3612,6 @@ var BaseChart = {
     * @return chartSeriesObject
     */
     getSeriesByPos: function() { },
-    /**
-    * @name BaseChartMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
-    getDataSource: function() { },
     /**
     * @name BaseChartOptions.adaptiveLayout
     * @type object

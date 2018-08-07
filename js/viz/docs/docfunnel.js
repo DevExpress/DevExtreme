@@ -1,6 +1,6 @@
 /**
 * @name dxFunnel
-* @inherits BaseWidget
+* @inherits BaseWidget, DataHelperMixin
 * @module viz/funnel
 * @export default
 */
@@ -713,11 +713,5 @@ var dxFunnel = {
     * @name dxFunnelMethods.hideTooltip
     * @publicName hideTooltip()
     */
-    hideTooltip: function() { },
-    /**
-    * @name dxFunnelMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
-    getDataSource: function() { }
+    hideTooltip: function() { }
 };

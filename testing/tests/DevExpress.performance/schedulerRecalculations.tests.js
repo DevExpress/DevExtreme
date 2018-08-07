@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
 
-"use strict";
-
 require("../../helpers/qunitPerformanceExtension.js");
 
 require("common.css!");

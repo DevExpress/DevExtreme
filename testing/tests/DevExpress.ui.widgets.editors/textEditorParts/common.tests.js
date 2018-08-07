@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     eventsEngine = require("events/core/events_engine"),
     domUtils = require("core/utils/dom"),
@@ -286,6 +284,17 @@ QUnit.test("T220209 - the 'valueFormat' option when value is changed using keybo
 
     assert.equal($textEditor.dxTextEditor("option", "value"), "First format2", "value is correct");
     assert.equal($textEditor.find(".dx-texteditor-input").val(), "First format2 format", "input value is correct");
+});
+
+QUnit.test("default valueFormat of null should return an empty string", function(assert) {
+    var textEditor = $("#texteditor").dxTextEditor({}).dxTextEditor("instance"),
+        valueFormat = textEditor.option("valueFormat");
+
+    assert.strictEqual(valueFormat(null), "", "null value formatted correctly");
+    assert.strictEqual(valueFormat(0), 0, "0 value formatted correctly");
+    assert.strictEqual(valueFormat(), "", "undefined value formatted correctly");
+    assert.strictEqual(valueFormat(false), "", "false value formatted correctly");
+    assert.strictEqual(valueFormat(""), "", "empty value formatted correctly");
 });
 
 QUnit.test("dxTextEditor with height option should have min-height auto style on input", function(assert) {

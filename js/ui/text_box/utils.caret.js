@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     browser = require("../../core/utils/browser"),

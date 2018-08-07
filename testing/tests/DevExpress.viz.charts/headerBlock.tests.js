@@ -1,5 +1,3 @@
-"use strict";
-
 var headerBlockModule = require("viz/chart_components/header_block");
 
 QUnit.module("Creation");
@@ -183,13 +181,12 @@ QUnit.test("Get layout options. One element", function(assert) {
 
 QUnit.test("Probe draw", function(assert) {
     // arrange
-    var headerBlock = new headerBlockModule.HeaderBlock(),
-        layout;
+    var headerBlock = new headerBlockModule.HeaderBlock();
 
     headerBlock.update(this.laidOutElements);
 
     // act
-    layout = headerBlock.probeDraw(100, 20);
+    headerBlock.probeDraw(100, 20);
 
     // assert
     assert.equal(this.laidOutElements[0].probeDraw.callCount, 1, "first element with probe draw");
@@ -203,13 +200,12 @@ QUnit.test("Probe draw", function(assert) {
 
 QUnit.test("Draw", function(assert) {
     // arrange
-    var headerBlock = new headerBlockModule.HeaderBlock(),
-        layout;
+    var headerBlock = new headerBlockModule.HeaderBlock();
 
     headerBlock.update(this.laidOutElements, { width: 30 });
 
     // act
-    layout = headerBlock.draw(100, 20);
+    headerBlock.draw(100, 20);
 
     // assert
     assert.equal(this.laidOutElements[0].draw.callCount, 1, "first element with draw");
@@ -224,13 +220,12 @@ QUnit.test("Draw", function(assert) {
 QUnit.test("Hide all element if at least one of them is hidden", function(assert) {
     // arrange
     this.laidOutElements[1].getLayoutOptions.returns({ width: 0 });
-    var headerBlock = new headerBlockModule.HeaderBlock(),
-        layout;
+    var headerBlock = new headerBlockModule.HeaderBlock();
 
     headerBlock.update(this.laidOutElements, { width: 30 });
 
     // act
-    layout = headerBlock.draw(100, 20);
+    headerBlock.draw(100, 20);
 
     // assert
     assert.equal(this.laidOutElements[0].freeSpace.callCount, 1, "first element is hidden");
@@ -241,13 +236,12 @@ QUnit.test("Hide all element if at least one of them is hidden", function(assert
 QUnit.test("Hide all element if common elements width greater then allowed with", function(assert) {
     // arrange
     this.laidOutElements[1].getLayoutOptions.returns({ width: 30 });
-    var headerBlock = new headerBlockModule.HeaderBlock(),
-        layout;
+    var headerBlock = new headerBlockModule.HeaderBlock();
 
     headerBlock.update(this.laidOutElements, { width: 30 });
 
     // act
-    layout = headerBlock.draw(70, 20);
+    headerBlock.draw(70, 20);
 
     // assert
     assert.equal(this.laidOutElements[0].freeSpace.callCount, 1, "first element is hidden");
@@ -257,13 +251,12 @@ QUnit.test("Hide all element if common elements width greater then allowed with"
 
 QUnit.test("Shift", function(assert) {
     // arrange
-    var headerBlock = new headerBlockModule.HeaderBlock(),
-        layout;
+    var headerBlock = new headerBlockModule.HeaderBlock();
 
     headerBlock.update(this.laidOutElements, { width: 400 });
 
     // act
-    layout = headerBlock.shift(10, 20);
+    headerBlock.shift(10, 20);
 
     // assert
     assert.deepEqual(this.laidOutElements[0].shift.getCall(0).args, [10, 20], "first element with shift");

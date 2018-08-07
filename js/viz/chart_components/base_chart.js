@@ -1,5 +1,3 @@
-"use strict";
-
 var commonUtils = require("../../core/utils/common"),
     noop = commonUtils.noop,
     eventsEngine = require("../../events/core/events_engine"),
@@ -983,7 +981,7 @@ var BaseChart = BaseWidget.inherit({
 
     _change_REFRESH_SERIES_FAMILIES: function() {
         this._processSeriesFamilies();
-        this._populateBusinessRange(true);
+        this._populateBusinessRange();
         this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
     },
 
@@ -1075,7 +1073,7 @@ var BaseChart = BaseWidget.inherit({
         }
         that._repopulateSeries();
         that._seriesPopulatedHandlerCore();
-        that._populateBusinessRange(true);
+        that._populateBusinessRange();
         that._tracker.updateSeries(that.series);
         that._updateLegend();
         needRedraw && that._forceRender();
@@ -1189,9 +1187,9 @@ var BaseChart = BaseWidget.inherit({
         let particularSeriesOptions;
         let seriesTheme;
         let seriesThemes = [];
-        const seriesVisibilityChanged = () => {
+        const seriesVisibilityChanged = (target) => {
             that._specialProcessSeries();
-            that._populateBusinessRange(false);
+            that._populateBusinessRange(target && target.getValueAxis());
             that._renderer.stopAllAnimations(true);
             that._updateLegend();
             that._doRender({ force: true });

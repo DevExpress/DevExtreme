@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     isRenderer = require("core/utils/type").isRenderer,
@@ -573,7 +571,7 @@ QUnit.test("scrollView should update its position after a group has been collaps
                         return d.promise();
                     },
                     group: "key",
-                    pageSize: 1,
+                    pageSize: 1
                 },
                 grouped: true,
                 collapsibleGroups: true,
@@ -1084,7 +1082,7 @@ QUnit.test("dataSource change should save filter", function(assert) {
         instance = $("#list").dxList({
             dataSource: getDataSource(data1),
             searchExpr: "text",
-            searchValue: "2",
+            searchValue: "2"
         }).dxList("instance");
 
     assert.deepEqual(instance.option("items"), [{ text: "test 2" }], "initial items");
@@ -1517,7 +1515,7 @@ QUnit.test("first item rendered when pageSize is 1 and dataSource set as array",
     List.mockScrollView(ScrollViewMock.inherit({
         isFull: function() {
             return false;
-        },
+        }
     }));
 
     var $list = this.element.dxList({
@@ -1725,14 +1723,13 @@ QUnit.test("should not expect appending items if all items loaded", function(ass
 });
 
 QUnit.test("should not expect appending items if load error handled", function(assert) {
-    // jshint evil:true
-
     var element = this.element.dxList({
         pageLoadMode: "scrollBottom",
         scrollingEnabled: true,
         dataSource: {
             store: new ArrayStore([1, 2, 3]),
             pageSize: 2,
+            // eslint-disable-next-line no-eval
             map: function(item, index) { return eval(item); }
         }
     });

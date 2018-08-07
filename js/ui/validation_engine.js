@@ -1,5 +1,3 @@
-"use strict";
-
 var Class = require("../core/class"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
@@ -266,9 +264,9 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
 
         switch(type) {
             case "==":
-                return value == otherValue; // jshint ignore:line
+                return value == otherValue; // eslint-disable-line eqeqeq
             case "!=":
-                return value != otherValue; // jshint ignore:line
+                return value != otherValue; // eslint-disable-line eqeqeq
             case "===":
                 return value === otherValue;
             case "!==":

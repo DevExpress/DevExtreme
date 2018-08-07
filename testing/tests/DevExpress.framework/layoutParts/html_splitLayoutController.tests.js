@@ -1,5 +1,3 @@
-"use strict";
-
 /* global jQuery, ko, includeLayout */
 
 (function(root, factory) {
@@ -140,7 +138,7 @@
     function objectKeysLength(obj) {
         var length = 0;
 
-        for(var key in obj) { // jshint ignore:line
+        for(var key in obj) { // eslint-disable-line no-unused-vars
             length++;
         }
 

@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 /* global jQuery */
 
-"use strict";
-
 !function() {
     var module = QUnit.module;
 

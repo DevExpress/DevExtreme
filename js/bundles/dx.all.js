@@ -1,5 +1,3 @@
-"use strict";
-
 require("./modules/parts/widgets-all");
 require("./modules/parts/viz");
 

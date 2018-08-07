@@ -1,5 +1,3 @@
-"use strict";
-
 var browser, focused;
 
 (function(root, factory) {
@@ -405,6 +403,8 @@ var browser, focused;
             },
 
             press: function(keysString, actionCallback) {
+                this.focus();
+
                 // NOTE: we should separate symbol '+' that concats other keys and key '+' to support commands like the 'ctrl++'
                 var keys = keysString.replace(/^\+/g, 'plus').replace(/\+\+/g, '+plus').split('+');
 

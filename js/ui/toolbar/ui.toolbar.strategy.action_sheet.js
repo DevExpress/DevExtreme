@@ -1,5 +1,3 @@
-"use strict";
-
 var ToolbarStrategy = require("./ui.toolbar.strategy"),
     extend = require("../../core/utils/extend").extend,
     ActionSheet = require("../action_sheet");

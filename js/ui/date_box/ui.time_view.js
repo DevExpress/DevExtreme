@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     NumberBox = require("../number_box"),

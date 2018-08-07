@@ -1,6 +1,6 @@
 /**
 * @name dxSankey
-* @inherits BaseWidget
+* @inherits BaseWidget, DataHelperMixin
 * @module viz/sankey
 * @export default
 */
@@ -68,6 +68,24 @@ var dxSankey = {
     * @default undefined
     */
     sortData: undefined,
+    /**
+    * @name dxSankeyOptions.sourceField
+    * @type string
+    * @default 'source'
+    */
+    sourceField: 'source',
+    /**
+    * @name dxSankeyOptions.targetField
+    * @type string
+    * @default 'target'
+    */
+    sourceField: 'target',
+    /**
+    * @name dxSankeyOptions.weightField
+    * @type string
+    * @default 'weight'
+    */
+    weightField: 'weight',
     /**
     * @name dxSankeyOptions.label
     * @type object
@@ -505,7 +523,7 @@ var dxSankey = {
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxSankeyNode
+    * @type_function_param1_field4 target:dxSankeyNode
     * @notUsedInTheme
     * @action
     */
@@ -515,7 +533,7 @@ var dxSankey = {
     * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxSankeyLink
+    * @type_function_param1_field4 target:dxSankeyLink
     * @notUsedInTheme
     * @action
     */
@@ -531,5 +549,10 @@ var dxSankey = {
     * @publicName getAllLinks()
     * @return Array<dxSankeyLink>
     */
-    getAllLinks: function() { }
+    getAllLinks: function() { },
+    /**
+    * @name dxSankeyMethods.hideTooltip
+    * @publicName hideTooltip()
+    */
+    hideTooltip: function() { }
 }

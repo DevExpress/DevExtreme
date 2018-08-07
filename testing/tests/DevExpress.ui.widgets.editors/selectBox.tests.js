@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     SelectBox = require("ui/select_box"),
@@ -1349,7 +1347,7 @@ QUnit.test("'clear' button should reset selectedValue if 'acceptCustomValue' is 
     $($clearButton).trigger("dxclick");
 
     assert.equal(selectBox.option("value"), null, "value is reset after click on 'clear' button");
-    assert.equal(selectBox.option("text"), undefined, "text is reset after click on 'clear' button");
+    assert.equal(selectBox.option("text"), "", "text is reset after click on 'clear' button");
 
     var $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
@@ -2421,6 +2419,21 @@ QUnit.test("Widget should works correctly after setting dataSource to null", fun
 
     var $list = $(".dx-list");
     assert.equal($list.dxList("option", "noDataText"), "No data to display", "SelectBox works correctly");
+});
+
+QUnit.test("search should stay opened after the search when focus state is disabled", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            items: ["item 1"],
+            focusStateEnabled: false,
+            searchEnabled: true,
+            searchTimeout: 0
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("item");
+    assert.ok(selectBox.option("opened"), "selectBox should be opened");
 });
 
 QUnit.testInActiveWindow("Value should be null after input is cleared and enter key is tapped", function(assert) {

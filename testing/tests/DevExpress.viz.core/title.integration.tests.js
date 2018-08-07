@@ -1,5 +1,3 @@
-"use strict";
-
 require("viz/tree_map/tree_map");
 
 var $ = require("jquery"),

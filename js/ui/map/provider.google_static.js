@@ -1,5 +1,3 @@
-"use strict";
-
 var each = require("../../core/utils/iterator").each,
     eventsEngine = require("../../events/core/events_engine"),
     Promise = require("../../core/polyfills/promise"),

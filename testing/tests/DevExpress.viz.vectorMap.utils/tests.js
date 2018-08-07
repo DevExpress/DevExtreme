@@ -1,16 +1,14 @@
-"use strict";
-
 /* global ROOT_URL */
 
-require("../../../artifacts/js/vectormap-utils/dx.vectormaputils.js");
-
-var $ = require("jquery"),
-    utils = DevExpress.viz["vectormaputils"];
+import { parse } from "../../../artifacts/js/vectormap-utils/dx.vectormaputils.js";
+import $ from "jquery";
 
 var CONTROLLER_URL = ROOT_URL + "TestVectorMapData/",
     TEST_DATA_URL = ROOT_URL + "testing/content/VectorMapData/";
 
-var testData = JSON.parse(require("../../../TestVectorMapData/GetTestData!text"));
+import data from "../../../TestVectorMapData/GetTestData!text";
+
+var testData = JSON.parse(data);
 
 testData.forEach(function(testDataItem) {
     testDataItem.expected = JSON.parse(testDataItem.expected);
@@ -31,7 +29,7 @@ if(typeof ArrayBuffer !== "undefined") {
                 var func,
                     data,
                     errors;
-                func = utils.parse({ "shp": shapeData, "dbf": dataBaseFileData }, function(data_, errors_) {
+                func = parse({ "shp": shapeData, "dbf": dataBaseFileData }, function(data_, errors_) {
                     data = data_;
                     errors = errors_;
                 });
@@ -49,7 +47,7 @@ if(typeof ArrayBuffer !== "undefined") {
         QUnit.test(testDataItem.name, function(assert) {
             var done = assert.async(),
                 func;
-            func = utils.parse(TEST_DATA_URL + testDataItem.name, function(data, errors) {
+            func = parse(TEST_DATA_URL + testDataItem.name, function(data, errors) {
                 assert.strictEqual(func, undefined, "function result");
                 assert.deepEqual(data, testDataItem.expected, "parsing result");
                 checkErrors(assert, errors, testDataItem.name);

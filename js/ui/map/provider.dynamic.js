@@ -1,5 +1,3 @@
-"use strict";
-
 var Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),

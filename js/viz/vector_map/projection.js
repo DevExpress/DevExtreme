@@ -1,5 +1,3 @@
-"use strict";
-
 var projectionModule = require("./projection.main"),
     projection = projectionModule.projection,
 

@@ -1,5 +1,3 @@
-"use strict";
-
 /**
   * @name ui events.dxdblclick
   * @type eventType

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     MemoryKeyValueStorage = require("framework/state_manager").MemoryKeyValueStorage,
     processHardwareBackButton = require("mobile/process_hardware_back_button"),
@@ -883,12 +881,8 @@ QUnit.test("navigation after restoreState", function(assert) {
         }),
         store = new MemoryKeyValueStorage();
 
-    var navigatingCount = 0,
-        navigatedCount = 0;
+    var navigatedCount = 0;
 
-    manager.on("navigating", function(args) {
-        navigatingCount++;
-    });
     manager.on("navigated", function(args) {
         navigatedCount++;
     });
@@ -901,9 +895,6 @@ QUnit.test("navigation after restoreState", function(assert) {
         assert.equal(navigatedCount, 1);
 
         manager = new frameworkMocks.MockStackBasedNavigationManager({ navigationDevice: device });
-        manager.on("navigating", function(args) {
-            navigatingCount++;
-        });
         manager.on("navigated", function(args) {
             navigatedCount++;
         });

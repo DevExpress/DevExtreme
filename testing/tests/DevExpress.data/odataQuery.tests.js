@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     query = require("data/query"),
     EdmLiteral = require("data/odata/utils").EdmLiteral,

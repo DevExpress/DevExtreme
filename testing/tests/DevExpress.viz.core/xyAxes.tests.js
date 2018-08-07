@@ -1,5 +1,3 @@
-"use strict";
-
 import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
 import tickGeneratorModule from "viz/axes/tick_generator";
@@ -1221,7 +1219,6 @@ QUnit.test("Alignment of labels after their rotation and updating width of canva
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 40 } });
 
-    this.renderer.text.reset();
     // updating
     this.translator.translate.withArgs(1).returns(10);
     this.translator.translate.withArgs(3).returns(40);

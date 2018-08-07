@@ -1,5 +1,3 @@
-"use strict";
-
 window.includeThemesLinks();
 
 var $ = require("jquery"),
@@ -46,7 +44,7 @@ var $ = require("jquery"),
     ScrollView = require("ui/scroll_view"),
     SelectBox = require("ui/select_box"),
     Slider = require("ui/slider"),
-    Swipeable = require("events/gesture/swipeable"), // jshint ignore:line
+    Swipeable = require("events/gesture/swipeable"), // eslint-disable-line no-unused-vars
     Switch = require("ui/switch"),
     Tabs = require("ui/tabs"),
     TabPanel = require("ui/tab_panel"),
@@ -128,7 +126,11 @@ testComponentDefaults(NumberBox,
 
 testComponentDefaults(DateBox,
     {},
-    { adaptivityEnabled: false }
+    {
+        useMaskBehavior: false,
+        advanceCaret: true,
+        adaptivityEnabled: false
+    }
 );
 
 testComponentDefaults(DateBox,

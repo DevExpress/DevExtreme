@@ -1,7 +1,3 @@
-// jshint node:true
-
-"use strict";
-
 var path = require('path');
 var gulp = require('gulp');
 var gulpIf = require('gulp-if');

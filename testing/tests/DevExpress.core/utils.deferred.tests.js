@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     var isFunction = require("core/utils/type").isFunction,
         deferredUtils = require("core/utils/deferred"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,

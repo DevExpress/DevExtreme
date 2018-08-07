@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
@@ -322,7 +320,6 @@ module.exports = {
                     var that = this,
                         i,
                         itemsCount,
-                        insertCount = 0,
                         editData = that._editData,
                         dataController = that.getController("data"),
                         getIndexByEditData = function(editData, items) {
@@ -353,7 +350,6 @@ module.exports = {
 
                             data[INSERT_INDEX] = 1;
                             items.splice(rowIndex, 0, data);
-                            insertCount++;
                         };
 
                     items = that.callBase(items, changeType);
@@ -688,7 +684,7 @@ module.exports = {
                         }
                     }
 
-                    if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
+                    if((validationResult && !validationResult.isValid) || (editData && editData.type === "update" && !that._editingController.isSaving())) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
                             revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
                         }

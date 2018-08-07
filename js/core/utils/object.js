@@ -1,5 +1,3 @@
-"use strict";
-
 var typeUtils = require("./type"),
     variableWrapper = require("./variable_wrapper");
 

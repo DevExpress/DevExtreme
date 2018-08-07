@@ -1,5 +1,3 @@
-"use strict";
-
 var registerComponent = require("../core/component_registrator"),
     eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,

@@ -1,5 +1,3 @@
-"use strict";
-
 define(function(require) {
     var noop = require("core/utils/common").noop;
 

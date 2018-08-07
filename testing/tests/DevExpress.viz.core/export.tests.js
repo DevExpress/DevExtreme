@@ -1,5 +1,3 @@
-"use strict";
-
 var vizMocks = require("../../helpers/vizMocks.js"),
     exportModule = require("viz/core/export"),
     clientExporter = require("client_exporter");
@@ -7,6 +5,7 @@ var vizMocks = require("../../helpers/vizMocks.js"),
 QUnit.module("Creation", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
+        this.incidentOccurred = sinon.spy();
 
         this.options = {
             enabled: true,
@@ -45,6 +44,12 @@ QUnit.module("Creation", {
 
             shadowColor: "#ababab"
         };
+
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        this.toDataURLStub.returnsArg(0);
+    },
+    afterEach: function() {
+        this.toDataURLStub.restore();
     },
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
@@ -267,6 +272,43 @@ QUnit.test("List creation, without formats", function(assert) {
     }, "Printing text style");
 });
 
+QUnit.test("List creation with unsupported image format - do not create item nor throw incident", function(assert) {
+    // arrange
+    this.toDataURLStub.withArgs("image/jpeg").returns("image/png");
+    this.toDataURLStub.withArgs("image/gif").returns("image/png");
+
+    this.options.formats = null;
+    this.options.printingEnabled = false;
+
+    // act
+    this.createExportMenu();
+
+    // assert
+    assert.equal(this.renderer.text.callCount, 3);
+    assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "PNG text params");
+    assert.deepEqual(this.renderer.text.getCall(1).args, ["PDF file"], "PDF text params");
+    assert.deepEqual(this.renderer.text.getCall(2).args, ["SVG file"], "SVG text params");
+    assert.equal(this.incidentOccurred.callCount, 0);
+});
+
+QUnit.test("List creation with unsupported image format in options - do not create item but throw incident", function(assert) {
+    // arrange
+    this.toDataURLStub.withArgs("image/jpeg").returns("image/png");
+    this.toDataURLStub.withArgs("image/gif").returns("image/png");
+
+    this.options.formats = ["PNG", "GIF", "JPEG"];
+    this.options.printingEnabled = false;
+
+    // act
+    this.createExportMenu();
+
+    // assert
+    assert.equal(this.renderer.text.callCount, 1);
+    assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "SUPPORTED text params");
+    assert.deepEqual(this.incidentOccurred.getCall(0).args, ["W2108", ["GIF"]]);
+    assert.deepEqual(this.incidentOccurred.getCall(1).args, ["W2108", ["JPEG"]]);
+});
+
 QUnit.test("Without printing and formats", function(assert) {
     // arrange, act
     this.options.formats = [];
@@ -295,6 +337,8 @@ QUnit.test("Enabled options is false", function(assert) {
 QUnit.module("API", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
+        this.incidentOccurred = sinon.spy();
+
         sinon.stub(clientExporter, "export");
         this.options = {
             printingEnabled: true,
@@ -329,9 +373,12 @@ QUnit.module("API", {
                 height: 200
             }
         };
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        this.toDataURLStub.returnsArg(0);
     },
     afterEach: function() {
         clientExporter.export.restore();
+        this.toDataURLStub.restore();
     },
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
@@ -395,6 +442,47 @@ QUnit.test("exportFromMarkup method. Set options", function(assert) {
     assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
     assert.deepEqual(clientExporter.export.getCall(0).args[1], {
         format: "JPEG",
+        fileName: "file1",
+        proxyUrl: "testUrl",
+        width: 600,
+        height: 400,
+        margin: 0,
+        forceProxy: true,
+        backgroundColor: "#00ff00",
+        onFileSaving: "file saving callback",
+        onExporting: "exporting callback",
+        onExported: "exported callback",
+        fileSavingAction: "file saving callback",
+        exportingAction: "exporting callback",
+        exportedAction: "exported callback"
+    }, "Export options");
+});
+
+QUnit.test("exportFromMarkup unsupported image format - export as PNG", function(assert) {
+    // arrange
+    this.toDataURLStub.withArgs("image/gif").returns("image/png");
+
+    var options = {
+            format: "gif",
+            fileName: "file1",
+            proxyUrl: "testUrl",
+            width: 600,
+            height: 400,
+            margin: 0,
+            backgroundColor: "#00ff00",
+            onFileSaving: "file saving callback",
+            onExporting: "exporting callback",
+            onExported: "exported callback",
+            forceProxy: true
+        },
+        markup = "testMarkup";
+
+    // act
+    exportModule.exportFromMarkup(markup, options);
+
+    // assert
+    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
+        format: "PNG",
         fileName: "file1",
         proxyUrl: "testUrl",
         width: 600,
@@ -593,6 +681,7 @@ QUnit.test("Dispose", function(assert) {
 QUnit.module("Events", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
+        this.incidentOccurred = sinon.spy();
 
         sinon.stub(clientExporter, "export");
 
@@ -951,8 +1040,7 @@ QUnit.test("Open list after exporting - previously clicked item is unhovered. T5
 
 QUnit.test("Printing by menu", function(assert) {
     // assert
-    var exportMenu,
-        svgNode = { style: {} },
+    var svgNode = { style: {} },
         docStub = {
             open: sinon.stub(),
             write: sinon.stub(),
@@ -972,7 +1060,7 @@ QUnit.test("Printing by menu", function(assert) {
         };
     });
 
-    exportMenu = this.createExportMenu();
+    this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
     this.renderer.g.getCall(0).returnValue.linkAppend.reset();
@@ -1004,8 +1092,7 @@ QUnit.test("Printing by menu", function(assert) {
 // T397838
 QUnit.test("Localization", function(assert) {
     // assert
-    var exportMenu,
-        localization = require("localization");
+    var localization = require("localization");
 
     localization.loadMessages({
         it: {
@@ -1018,7 +1105,7 @@ QUnit.test("Localization", function(assert) {
     this.options.formats = ["PNG"];
 
     localization.locale('it');
-    exportMenu = this.createExportMenu();
+    this.createExportMenu();
 
     assert.deepEqual(this.renderer.text.getCall(0).args, ["Stampa"], "Printing button text");
     assert.deepEqual(this.renderer.text.getCall(1).args, ["PNG formato"], "Export button text");

@@ -1,5 +1,3 @@
-"use strict";
-
 var noop = require("core/utils/common").noop,
     themeManagerModule = require("viz/range_selector/theme_manager"),
     ThemeManager = themeManagerModule.ThemeManager,

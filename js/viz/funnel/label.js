@@ -1,5 +1,3 @@
-"use strict";
-
 var labelModule = require("../series/points/label"),
     _normalizeEnum = require("../core/utils").normalizeEnum,
     extend = require("../../core/utils/extend").extend,

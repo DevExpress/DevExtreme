@@ -1,10 +1,6 @@
-"use strict";
-
 var extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
     windowUtils = require("../../core/utils/window"),
     patchFontOptions = require("./utils").patchFontOptions,
-    _extend = extend,
 
     clientExporter = require("../../client_exporter"),
     messageLocalization = require("../../localization/message"),
@@ -30,17 +26,31 @@ var extend = require("../../core/utils/extend").extend,
     SHADOW_OFFSET = 2,
     SHADOW_BLUR = 3,
 
-    ALLOWED_EXPORT_FORMATS = ["PNG", "PDF", "JPEG", "SVG", "GIF"],
+    DEFAULT_EXPORT_FORMAT = "PNG",
+    ALLOWED_IMAGE_FORMATS = [DEFAULT_EXPORT_FORMAT, "JPEG", "GIF"],
+    ALLOWED_EXTRA_FORMATS = ["PDF", "SVG"],
     EXPORT_CSS_CLASS = "dx-export-menu",
 
     EXPORT_DATA_KEY = "export-element-type",
     FORMAT_DATA_KEY = "export-element-format";
 
-function validateFormat(format) {
-    var validatedFormat = String(format).toUpperCase();
+function getValidFormats() {
+    var imageFormats = imageExporter.testFormats(ALLOWED_IMAGE_FORMATS);
+    return {
+        unsupported: imageFormats.unsupported,
+        supported: imageFormats.supported.concat(ALLOWED_EXTRA_FORMATS)
+    };
+}
 
-    if(inArray(validatedFormat, ALLOWED_EXPORT_FORMATS) !== -1) {
-        return validatedFormat;
+function validateFormat(format, incidentOccurred, validFormats) {
+    validFormats = validFormats || getValidFormats();
+    format = String(format).toUpperCase();
+
+    if(validFormats.supported.indexOf(format) !== -1) {
+        return format;
+    }
+    if(validFormats.unsupported.indexOf(format) !== -1) {
+        incidentOccurred && incidentOccurred("W2108", [format]);
     }
 }
 
@@ -177,19 +187,13 @@ function createMenuItems(renderer, options) {
             itemIndex: items.length
         }));
     }
-
     items = formats.reduce(function(r, format) {
-        format = validateFormat(format);
-
-        if(format) {
-            r.push(createMenuItem(renderer, options, {
-                type: "exporting",
-                text: messageLocalization.getFormatter("vizExport-exportButtonText")(format),
-                format: format,
-                itemIndex: r.length
-            }));
-        }
-
+        r.push(createMenuItem(renderer, options, {
+            type: "exporting",
+            text: messageLocalization.getFormatter("vizExport-exportButtonText")(format),
+            format: format,
+            itemIndex: r.length
+        }));
         return r;
     }, items);
 
@@ -197,7 +201,7 @@ function createMenuItems(renderer, options) {
 }
 
 exports.exportFromMarkup = function(markup, options) {
-    options.format = validateFormat(options.format) || "PNG";
+    options.format = validateFormat(options.format) || DEFAULT_EXPORT_FORMAT;
     options.fileName = options.fileName || "file";
 
     options.exportingAction = options.onExporting;
@@ -243,11 +247,12 @@ exports.ExportMenu = function(params) {
         filter: that._shadow.id
     });
     that._overlay.data({ "export-element-type": "list" });
+    that.validFormats = getValidFormats();
 
     that._subscribeEvents();
 };
 
-_extend(exports.ExportMenu.prototype, {
+extend(exports.ExportMenu.prototype, {
 
     getLayoutOptions: function() {
         if(this._hiddenDueToLayout) {
@@ -280,8 +285,7 @@ _extend(exports.ExportMenu.prototype, {
 
     draw: function(width, height, canvas) {
         var layoutOptions;
-        this._options.exportOptions.width = canvas.width;
-        this._options.exportOptions.height = canvas.height;
+        this.updateCanvasSize(canvas);
         this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
 
         layoutOptions = this.getLayoutOptions();
@@ -301,18 +305,36 @@ _extend(exports.ExportMenu.prototype, {
     },
 
     setOptions: function(options) {
-        this._options = options;
+        var that = this;
+        that._options = options;
 
-        options.formats = options.formats || ALLOWED_EXPORT_FORMATS;
+        if(options.formats) {
+            options.formats = options.formats.reduce(function(r, format) {
+                format = validateFormat(format, that._incidentOccurred, that.validFormats);
+                format && r.push(format);
+                return r;
+            }, []);
+        } else {
+            options.formats = that.validFormats.supported.slice();
+        }
+
         options.printingEnabled = options.printingEnabled === undefined ? true : options.printingEnabled;
 
         if(options.enabled && (options.formats.length || options.printingEnabled)) {
-            this.show();
-            this._updateButton();
-            this._updateList();
-            this._hideList();
+            that.show();
+            that._updateButton();
+            that._updateList();
+            that._hideList();
         } else {
-            this.hide();
+            that.hide();
+        }
+    },
+
+    updateCanvasSize: function(canvas) {
+        if(this._options && this._options.exportOptions) {
+            var exportOptions = this._options.exportOptions;
+            exportOptions.width = canvas.width;
+            exportOptions.height = canvas.height;
         }
     },
 
@@ -416,7 +438,7 @@ _extend(exports.ExportMenu.prototype, {
                 that.show();
                 that._hideList();
             } else if(elementType === "exporting") {
-                exportOptions = _extend({}, options.exportOptions, { format: e.target[FORMAT_DATA_KEY] });
+                exportOptions = extend({}, options.exportOptions, { format: e.target[FORMAT_DATA_KEY] });
                 doExport(that, function() { return that._svgMethod(); }, exportOptions);
                 that._hideList();
             }
@@ -500,8 +522,11 @@ _extend(exports.ExportMenu.prototype, {
 
 // BaseWidget.js
 function getExportOptions(widget, exportOptions, fileName, format) {
+    if(format || exportOptions.format) {
+        format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
+    }
     return {
-        format: validateFormat(format || exportOptions.format) || "PNG",
+        format: format || DEFAULT_EXPORT_FORMAT,
         fileName: fileName || exportOptions.fileName || "file",
         proxyUrl: exportOptions.proxyUrl,
         backgroundColor: exportOptions.backgroundColor,
@@ -534,7 +559,7 @@ exports.plugin = {
     extenders: {
         _change_LAYOUT: function() {
             if(this._exportMenu) {
-                this._exportMenu.setOptions(this._getExportMenuOptions());
+                this._exportMenu.updateCanvasSize(this._canvas);
             }
         }
     },
@@ -544,7 +569,7 @@ exports.plugin = {
             var userOptions = this._getOption("export") || {},
                 options = getExportOptions(this, userOptions);
 
-            return _extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
+            return extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
         },
         exportTo: function(fileName, format) {
             var that = this,

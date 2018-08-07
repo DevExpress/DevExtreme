@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../core/renderer"),
     dependencyInjector = require("../core/utils/dependency_injector"),
     extend = require("../core/utils/extend").extend,

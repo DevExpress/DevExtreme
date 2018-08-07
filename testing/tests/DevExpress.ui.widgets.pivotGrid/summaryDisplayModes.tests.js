@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     summaryDisplayModes = require("ui/pivot_grid/ui.pivot_grid.summary_display_modes"),
     applyDisplaySummaryMode = summaryDisplayModes.applyDisplaySummaryMode, // arguments: description, data

@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @name dxTooltip
  * @inherits dxPopover

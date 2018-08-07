@@ -1,5 +1,3 @@
-"use strict";
-
 var treeListCore = require("./ui.tree_list.core"),
     extend = require("../../core/utils/extend").extend,
     stateStoringModule = require("../grid_core/ui.grid_core.state_storing"),

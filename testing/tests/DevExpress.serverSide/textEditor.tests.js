@@ -1,5 +1,3 @@
-"use strict";
-
 require("common.css!");
 
 QUnit.testStart(function() {

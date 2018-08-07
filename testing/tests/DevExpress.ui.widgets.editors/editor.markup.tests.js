@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Editor = require("ui/editor/editor"),
     Class = require("core/class");

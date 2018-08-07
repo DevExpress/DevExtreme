@@ -1,5 +1,3 @@
-"use strict";
-
 /* global DATA, internals, initTree */
 
 var $ = require("jquery"),

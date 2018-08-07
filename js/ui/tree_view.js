@@ -1,5 +1,3 @@
-"use strict";
-
 /**
 * @name dxTreeView
 * @inherits HierarchicalCollectionWidget, SearchBoxMixin

@@ -1,5 +1,3 @@
-"use strict";
-
 var getNumberFormatter = require("localization/ldml/number").getFormatter;
 var getNumberFormat = require("localization/ldml/number").getFormat;
 var getDateParser = require("localization/ldml/date.parser").getParser;

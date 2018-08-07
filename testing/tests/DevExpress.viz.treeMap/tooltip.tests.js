@@ -1,5 +1,3 @@
-"use strict";
-
 var common = require("./commonParts/common.js"),
     vizMocks = require("../../helpers/vizMocks.js"),
     tooltipModule = require("viz/core/tooltip");

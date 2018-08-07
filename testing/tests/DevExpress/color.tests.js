@@ -1,5 +1,3 @@
-"use strict";
-
 var Color = require("color");
 
 QUnit.module('Colors parsing', {

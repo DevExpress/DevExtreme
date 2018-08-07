@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     TouchStrategy = require("events/pointer/touch"),
     registerEvent = require("events/core/event_registrator"),

@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("./ui.errors"),
@@ -650,7 +648,7 @@ var Widget = DOMComponent.inherit({
         var e = options.originalEvent,
             key = options.key;
 
-        var keys = this._supportedKeys(),
+        var keys = this._supportedKeys(e),
             func = keys[key];
 
         if(func !== undefined) {

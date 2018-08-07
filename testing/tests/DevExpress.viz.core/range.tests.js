@@ -1,5 +1,3 @@
-"use strict";
-
 var rangeModule = require("viz/translators/range");
 
 QUnit.module('Life cycle');

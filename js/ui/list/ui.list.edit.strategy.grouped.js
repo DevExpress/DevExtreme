@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("../../core/renderer"),
     isNumeric = require("../../core/utils/type").isNumeric,
     each = require("../../core/utils/iterator").each,

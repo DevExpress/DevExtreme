@@ -1,5 +1,3 @@
-"use strict";
-
 var $ = require("jquery"),
     Autocomplete = require("ui/autocomplete"),
     devices = require("core/devices"),
@@ -554,15 +552,12 @@ QUnit.testInActiveWindow("enter - prevent default", function(assert) {
 
 
 QUnit.test("try to autocomplete current value when type missing searchValue", function(assert) {
-    var $list,
-        keyboard = this.keyboard;
+    var keyboard = this.keyboard;
 
     this.element.dxAutocomplete({
         value: "",
         dataSource: ["item 1", "item 2", "item 3"]
     });
-
-    $list = this.instance._list._$element;
 
     keyboard
         .type("l")
@@ -586,7 +581,6 @@ QUnit.testInActiveWindow("esc_key close list", function(assert) {
 
 QUnit.test("filter with non-default searchMode", function(assert) {
     var instance = this.instance,
-        $list,
         keyboard = this.keyboard;
 
     this.element.dxAutocomplete({
@@ -594,8 +588,6 @@ QUnit.test("filter with non-default searchMode", function(assert) {
         dataSource: ["item 1", "thing", "item 3"],
         searchMode: "startswith"
     });
-
-    $list = this.instance._list._$element;
 
     keyboard.type("t");
     assert.deepEqual(instance._dataSource.items(), ["thing"], "element that starts with 't' letter was found");
@@ -758,8 +750,7 @@ QUnit.testInActiveWindow("using multifield datasource with template", function(a
 });
 
 QUnit.test("Manual datasource - search in datasource", function(assert) {
-    var $list,
-        keyboard = this.keyboard,
+    var keyboard = this.keyboard,
         searchedString = null;
 
 
@@ -773,8 +764,6 @@ QUnit.test("Manual datasource - search in datasource", function(assert) {
         },
         filterOperator: "startswith"
     });
-
-    $list = this.instance._list._$element;
 
     // act
     keyboard.type("t");
@@ -1098,7 +1087,6 @@ QUnit.testInActiveWindow("when updating value option, input.val() do not updatin
 
 QUnit.test("big dataSource loading", function(assert) {
     var instance = this.instance,
-        $list,
         longArray = [],
         arrayLength = 100;
 
@@ -1112,8 +1100,6 @@ QUnit.test("big dataSource loading", function(assert) {
             store: longArray
         }
     });
-
-    $list = this.instance._list._$element;
 
     assert.equal(instance._list._dataSource, null, "no dataSource before changing value");
 
