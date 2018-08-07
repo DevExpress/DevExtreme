@@ -138,10 +138,10 @@ QUnit.test("shader should be rendered by default if menu is visible", assert => 
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
 });
 
-QUnit.test("shader should not be rendered if showShader = false", assert => {
+QUnit.test("shader should not be rendered if shading = false", assert => {
     const $element = $("#drawer").dxDrawer({
         menuVisible: true,
-        showShader: false
+        shading: false
     });
 
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");

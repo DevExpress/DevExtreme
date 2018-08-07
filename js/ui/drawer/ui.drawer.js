@@ -60,11 +60,11 @@ const Drawer = Widget.inherit({
             maxWidth: null,
 
             /**
-            * @name dxDrawerOptions.showShader
+            * @name dxDrawerOptions.shading
             * @type boolean
             * @default true
             */
-            showShader: true,
+            shading: true,
 
             /**
             * @name dxDrawerOptions.menuTemplate
@@ -339,7 +339,7 @@ const Drawer = Widget.inherit({
     },
 
     _toggleShaderVisibility(visible) {
-        if(this.option("showShader")) {
+        if(this.option("shading")) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
@@ -396,7 +396,7 @@ const Drawer = Widget.inherit({
                 // NOTE: temporary fix
                 this.repaint();
                 break;
-            case "showShader":
+            case "shading":
                 this._refreshModeClass(args.previousValue);
                 break;
             case "animationEnabled":
