@@ -51,11 +51,17 @@ var getContainerHeight = function($container) {
     return clientHeight - paddingTop - paddingBottom;
 };
 
-var calculateDiffWidth = function(that, widths) {
+var calculateFreeWidth = function(that, widths) {
     var contentWidth = that._rowsView.contentWidth(),
         totalWidth = that._getTotalWidth(widths, contentWidth);
 
     return contentWidth - totalWidth;
+};
+
+var calculateFreeWidthWithCurrentMinWidth = function(that, columnIndex, currentMinWidth, widths) {
+    return calculateFreeWidth(that, widths.map(function(width, index) {
+        return index === columnIndex ? currentMinWidth : width;
+    }));
 };
 
 var ResizingController = modules.ViewController.inherit({
@@ -285,10 +291,10 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
-        var diffWidth = calculateDiffWidth(this, resultWidths),
+        var freeWidth = calculateFreeWidth(this, resultWidths),
             columnCountWithoutWidth = resultWidths.filter(function(width) { return width === undefined; }).length;
 
-        return diffWidth / columnCountWithoutWidth;
+        return freeWidth / columnCountWithoutWidth;
     },
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {
@@ -306,22 +312,23 @@ var ResizingController = modules.ViewController.inherit({
             var index = i,
                 column = visibleColumns[index],
                 isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH,
-                width = resultWidths[index];
+                width = resultWidths[index],
+                minWidth = column.minWidth;
 
-            if(column.minWidth) {
+            if(minWidth) {
                 if(width === undefined) {
                     averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
                     width = averageColumnsWidth;
                 } else if(isPercentWidth(width)) {
-                    var diffWidth = calculateDiffWidth(that, resultWidths.map((width, index) => i === index ? column.minWidth : width));
+                    var freeWidth = calculateFreeWidthWithCurrentMinWidth(that, index, minWidth, resultWidths);
 
-                    if(diffWidth < 0) {
+                    if(freeWidth < 0) {
                         width = -1;
                     }
                 }
             }
-            if(width < column.minWidth && !isHiddenColumn) {
-                resultWidths[index] = column.minWidth;
+            if(width < minWidth && !isHiddenColumn) {
+                resultWidths[index] = minWidth;
                 isColumnWidthsCorrected = true;
                 i = -1;
             }
