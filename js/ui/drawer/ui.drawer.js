@@ -431,7 +431,7 @@ const Drawer = Widget.inherit({
     * @return Promise<void>
     */
     showMenu() {
-        return this.toggleMenuVisibility(true);
+        return this.toggle(true);
     },
 
     /**
@@ -440,15 +440,15 @@ const Drawer = Widget.inherit({
     * @return Promise<void>
     */
     hideMenu() {
-        return this.toggleMenuVisibility(false);
+        return this.toggle(false);
     },
 
     /**
-    * @name dxDrawerMethods.toggleMenuVisibility
-    * @publicName toggleMenuVisibility()
+    * @name dxDrawerMethods.toggle
+    * @publicName toggle()
     * @return Promise<void>
     */
-    toggleMenuVisibility(showing) {
+    toggle(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;
 
         this._deferredAnimate = new Deferred();

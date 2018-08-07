@@ -125,19 +125,19 @@ QUnit.test("showMenu and hideMenu functions", assert => {
     assert.equal(instance.option("menuVisible"), false, "menu was hidden");
 });
 
-QUnit.test("toggleMenuVisibility function", assert => {
+QUnit.test("toggle function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const menuVisible = instance.option("menuVisible");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
     assert.equal(instance.option("menuVisible"), !menuVisible, "menu was shown");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
     assert.equal(instance.option("menuVisible"), menuVisible, "menu was hidden");
 });
 
-QUnit.test("subscribe on toggleMenuVisibility function should fired at the end of animation", assert => {
+QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
     const $element = $("#drawer").dxDrawer({
         menuVisible: false
     });
@@ -146,7 +146,7 @@ QUnit.test("subscribe on toggleMenuVisibility function should fired at the end o
     let count = 0;
     const done = assert.async();
 
-    instance.toggleMenuVisibility().done(() => {
+    instance.toggle().done(() => {
         count++;
         assert.equal(count, 1, "callback not fired at animation start");
         done();
@@ -296,10 +296,10 @@ QUnit.test("animationDuration option test", function(assert) {
 
     drawer.option("animationDuration", 300);
 
-    drawer.toggleMenuVisibility();
+    drawer.toggle();
     assert.equal(this.capturedAnimations[0].duration, 300, "duration is correct");
     drawer.option("animationDuration", 10000);
-    drawer.toggleMenuVisibility();
+    drawer.toggle();
     assert.equal(this.capturedAnimations[1].duration, 10000, "duration is correct");
 });
 
@@ -394,7 +394,7 @@ QUnit.test("minWidth should be rendered correctly in push mode", assert => {
 
     assert.equal($content.position().left, 200, "content has correct left when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 50, "content has correct left when minWidth is set");
 
@@ -415,7 +415,7 @@ QUnit.test("maxWidth should be rendered correctly in push mode", assert => {
 
     assert.equal($content.position().left, 300, "content has correct left when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
 
@@ -436,7 +436,7 @@ QUnit.test("Drawer should be rendered correctly in push mode, right menu positio
 
     assert.equal($content.position().left, -200, "content has correct left when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
 
@@ -458,7 +458,7 @@ QUnit.test("minWidth should be rendered correctly in push mode, right menu posit
 
     assert.equal($content.position().left, -200, "content has correct left when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, -50, "content has correct left when minWidth is set");
 
@@ -480,7 +480,7 @@ QUnit.test("maxWidth should be rendered correctly in push mode, right menu posit
 
     assert.equal($content.position().left, -300, "content has correct left when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
 
@@ -508,7 +508,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, shrink", a
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-left"), "200px", "content has correct left when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
@@ -538,7 +538,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-right"), "200px", "content has correct left when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
@@ -567,7 +567,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, shrink", a
     assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-left"), "100px", "content has correct left when maxWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
@@ -597,7 +597,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-right"), "100px", "content has correct left when maxWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
@@ -625,7 +625,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -652,7 +652,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -679,7 +679,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", as
     assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
@@ -707,7 +707,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
@@ -735,7 +735,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
@@ -764,7 +764,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, shrink", as
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -791,7 +791,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, shrink", as
     assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
@@ -818,7 +818,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, slide", ass
     assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -845,7 +845,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", ass
     assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
@@ -873,7 +873,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
@@ -901,7 +901,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu 
     assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
