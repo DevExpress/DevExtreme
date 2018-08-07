@@ -181,22 +181,33 @@ let layout = {
             });
         });
 
-        links.forEach(link => {
-            let rectFrom = this._findRectByName(rects, link[0]),
-                rectTo = this._findRectByName(rects, link[1]),
-                height = Math.round(link[2] / this._weightPerPixel),
-                yOffsetFrom = yOffsets[link[0]].out,
-                yOffsetTo = yOffsets[link[1]].in,
-                // heights of left and right parts of the link must fit the nodes on it's left and right
-                heightFrom = (yOffsets[link[0]].out + height > rectFrom.height) ? rectFrom.height - yOffsets[link[0]].out : height,
-                heightTo = (yOffsets[link[1]].in + height > rectTo.height) ? rectTo.height - yOffsets[link[1]].in : height;
+        rects.forEach(rectsOfCascade => {
+            rectsOfCascade.forEach(nodeRect => {
+                let nodeTitle = nodeRect._name,
+                    rectFrom = this._findRectByName(rects, nodeTitle),
+                    linksFromNode = links.filter(link => { return link[0] === nodeTitle }); // all outgoing links from the node
 
-            paths.push({
-                from: { x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: heightFrom, node: rectFrom, weight: link[2] },
-                to: { x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: heightTo, node: rectTo }
+                // all outgoing links should be sorted according to the order of their target nodes
+                // sort field added to each link
+                linksFromNode.forEach(link => {
+                    link.sort = this._sort && this._sort.hasOwnProperty(link[1]) ? this._sort[link[1]] : 1;
+                });
+                linksFromNode.sort((a, b) => { return a.sort - b.sort; }).forEach(link => {
+                    let rectTo = this._findRectByName(rects, link[1]),
+                        height = Math.round(link[2] / this._weightPerPixel),
+                        yOffsetFrom = yOffsets[link[0]].out,
+                        yOffsetTo = yOffsets[link[1]].in,
+                        // heights of left and right parts of the link must fit the nodes on it's left and right
+                        heightFrom = (yOffsets[link[0]].out + height > rectFrom.height) ? rectFrom.height - yOffsets[link[0]].out : height,
+                        heightTo = (yOffsets[link[1]].in + height > rectTo.height) ? rectTo.height - yOffsets[link[1]].in : height;
+                    paths.push({
+                        from: { x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: heightFrom, node: rectFrom, weight: link[2] },
+                        to: { x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: heightTo, node: rectTo }
+                    });
+                    yOffsets[link[0]].out += height;
+                    yOffsets[link[1]].in += height;
+                });
             });
-            yOffsets[link[0]].out += height;
-            yOffsets[link[1]].in += height;
         });
 
         paths.forEach(link => {
