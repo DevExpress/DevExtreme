@@ -426,20 +426,20 @@ const Drawer = Widget.inherit({
     },
 
     /**
-    * @name dxDrawerMethods.showMenu
-    * @publicName showMenu()
+    * @name dxDrawerMethods.show
+    * @publicName show()
     * @return Promise<void>
     */
-    showMenu() {
+    show() {
         return this.toggle(true);
     },
 
     /**
-    * @name dxDrawerMethods.hideMenu
-    * @publicName hideMenu()
+    * @name dxDrawerMethods.hide
+    * @publicName hide()
     * @return Promise<void>
     */
-    hideMenu() {
+    hide() {
         return this.toggle(false);
     },
 

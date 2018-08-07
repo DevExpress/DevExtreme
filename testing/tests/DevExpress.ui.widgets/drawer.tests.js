@@ -114,11 +114,11 @@ QUnit.test("content() function", assert => {
     assert.equal($content.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
 });
 
-QUnit.test("showMenu and hideMenu functions", assert => {
+QUnit.test("show and hide functions", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
 
-    instance.showMenu();
+    instance.show();
     assert.equal(instance.option("menuVisible"), true, "menu was shown");
 
     instance.hideMenu();
@@ -345,7 +345,7 @@ QUnit.test("shader should be visible during animation", assert => {
     const instance = $element.dxDrawer("instance");
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    instance.showMenu();
+    instance.show();
     assert.ok($shader.is(":visible"), "shader is visible during animation");
 });
 
