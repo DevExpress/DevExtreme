@@ -85,7 +85,7 @@ QUnit.test("custom content template for menu should be rendered correctly", asse
         menuTemplate: "customMenu"
     });
 
-    const $menu = $($element.dxDrawer("instance").menuContent());
+    const $menu = $($element.dxDrawer("instance").content());
 
     assert.equal($.trim($menu.text()), "Test Menu Template", "menu content text is correct");
 });
@@ -119,7 +119,7 @@ QUnit.test("render menu positions", assert => {
     });
 
     const instance = $element.dxDrawer("instance");
-    const $menuContent = $(instance.menuContent());
+    const $menuContent = $(instance.content());
 
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "there is no left menu position class");
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class added");

@@ -192,7 +192,7 @@ const Drawer = Widget.inherit({
         const menuTemplate = this._getTemplate(this.option("menuTemplate"));
 
         menuTemplate && menuTemplate.render({
-            container: this.menuContent()
+            container: this.content()
         });
 
         const contentTemplateOption = this.option("contentTemplate"),
@@ -408,11 +408,11 @@ const Drawer = Widget.inherit({
     },
 
     /**
-    * @name dxDrawerMethods.menuContent
-    * @publicName menuContent()
+    * @name dxDrawerMethods.content
+    * @publicName content()
     * @return dxElement
     */
-    menuContent() {
+    content() {
         return getPublicElement(this._$menu);
     },
 

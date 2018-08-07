@@ -91,12 +91,12 @@ QUnit.test("defaults", assert => {
     assert.equal(instance.option("mode"), "push", "mode is OK");
 });
 
-QUnit.test("menuContent() function", assert => {
+QUnit.test("content() function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
-    assert.equal(typeUtils.isRenderer(instance.menuContent()), !!config().useJQuery, "menu element");
-    assert.equal($menu.get(0), $(instance.menuContent()).get(0), "menuContent function return correct DOMNode");
+    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
+    assert.equal($menu.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
 });
 
 QUnit.test("drawer preserve content", assert => {
@@ -176,7 +176,7 @@ QUnit.test("content container should have correct position if menu is visible", 
 
     const instance = $element.dxDrawer("instance");
     const $content = $(instance.viewContent());
-    const $menu = $(instance.menuContent());
+    const $menu = $(instance.content());
 
     assert.equal(position($content), $menu.width(), "container rendered at correct position");
 });
@@ -194,7 +194,7 @@ QUnit.test("content container should have correct position after resize", assert
     $("#drawerContainer").width(elementWidth * 2);
     resizeCallbacks.fire();
 
-    assert.equal(position($content), $(instance.menuContent()).width(), "container rendered at correct position");
+    assert.equal(position($content), $(instance.content()).width(), "container rendered at correct position");
 });
 
 QUnit.test("content container should have correct position if it is rendered in invisible container", assert => {
@@ -370,7 +370,7 @@ QUnit.test("shader should have correct position after widget resize", assert => 
     const instance = $element.dxDrawer("instance");
     const $content = $(instance.viewContent());
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
-    const menuWidth = $(instance.menuContent()).width();
+    const menuWidth = $(instance.content()).width();
 
     $("#drawerContainer").width(menuWidth * 2);
     resizeCallbacks.fire();
@@ -920,7 +920,7 @@ QUnit.test("content should have correct position if menu is visible in rtl mode"
 
     const instance = $element.dxDrawer("instance");
     const $content = $(instance.viewContent());
-    const $menu = $(instance.menuContent());
+    const $menu = $(instance.content());
 
     assert.equal(position($content), -$menu.width(), "container rendered at correct position");
 });
