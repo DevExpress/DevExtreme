@@ -1623,7 +1623,9 @@ Axis.prototype = {
 
         that._ticksToRemove = null;
 
-        that._firstDrawing = false;
+        if(!that._translator.getBusinessRange().stubData) {
+            that._firstDrawing = false;
+        }
     },
 
     prepareAnimation() {

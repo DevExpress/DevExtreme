@@ -10706,3 +10706,42 @@ QUnit.test("Hidden constant line label doesn't reflect on the layout", function(
         translateY: -22
     });
 });
+
+QUnit.test("Do not animate on second drawing if on first one stub data was rendered", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        tick: {
+            visible: true,
+            length: 6
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(40);
+
+    this.axis.setBusinessRange({});
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // act
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 100
+    });
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
+    const tick = renderer.path.lastCall.returnValue;
+
+    assert.equal(tick.stub("animate").callCount, 0);
+    assert.deepEqual(tick.attr.lastCall.args[0], {
+        points: [40, 27, 40, 33],
+        opacity: 1
+    });
+});
