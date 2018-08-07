@@ -2093,9 +2093,20 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getDateRange: function() {
+        var startDate = this.getStartViewDate(),
+            endDate = this.getEndViewDate();
+
+        var daylightDiff = this.invoke("getDaylightOffset", startDate, endDate) * toMs("minute");
+
+        if(daylightDiff < 0) {
+            endDate = new Date(endDate.getTime() + daylightDiff);
+        } else {
+            endDate = new Date(endDate.getTime() - daylightDiff);
+        }
+
         return [
-            this.getStartViewDate(),
-            this.getEndViewDate()
+            startDate,
+            endDate
         ];
     },
 
