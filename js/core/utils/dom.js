@@ -175,18 +175,6 @@ var getPublicElement = function($element) {
     return elementStrategy($element);
 };
 
-var getSummaryItemsWidth = function(items) {
-    var result = 0;
-
-    if(items) {
-        items.each(function(_, item) {
-            result += $(item).outerWidth(true);
-        });
-    }
-
-    return result;
-};
-
 var setPublicElementWrapper = function(value) {
     elementStrategy = value;
 };
@@ -210,5 +198,4 @@ exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.toggleAttr = toggleAttr;
 exports.contains = contains;
-exports.getSummaryItemsWidth = getSummaryItemsWidth;
 exports.getPublicElement = getPublicElement;
