@@ -376,7 +376,7 @@ QUnit.test("Some links configuration with big dataSource", function(assert) {
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[27]._to._name, 'Angola');
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[27]._weight, 1);
 
-    assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[45]._from._name, 'Morocco');
+    assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[45]._from._name, 'Mali');
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[45]._to._name, 'Japan');
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].links[45]._weight, 3);
 });
@@ -512,11 +512,11 @@ QUnit.test("Draw Links", function(assert) {
     assert.equal(this.link(0)[0].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 73 C 694 73 306 42 15 42 Z');
     assert.equal(this.link(0)[1].attr.firstCall.args[0].d, 'M 15 0 C 306 0 694 30 985 30 L 985 73 C 694 73 306 42 15 42 Z');
 
-    assert.equal(this.link(1)[0].attr.firstCall.args[0].d, 'M 15 72 C 306 72 694 73 985 73 L 985 158 C 694 158 306 157 15 157 Z');
-    assert.equal(this.link(1)[1].attr.firstCall.args[0].d, 'M 15 72 C 306 72 694 73 985 73 L 985 158 C 694 158 306 157 15 157 Z');
+    assert.equal(this.link(1)[0].attr.firstCall.args[0].d, 'M 15 72 C 156 72 344 94 485 94 L 485 264 C 344 264 156 242 15 242 Z');
+    assert.equal(this.link(1)[1].attr.firstCall.args[0].d, 'M 15 72 C 156 72 344 94 485 94 L 485 264 C 344 264 156 242 15 242 Z');
 
-    assert.equal(this.link(2)[0].attr.firstCall.args[0].d, 'M 15 157 C 156 157 344 94 485 94 L 485 264 C 344 264 156 327 15 327 Z');
-    assert.equal(this.link(2)[1].attr.firstCall.args[0].d, 'M 15 157 C 156 157 344 94 485 94 L 485 264 C 344 264 156 327 15 327 Z');
+    assert.equal(this.link(2)[0].attr.firstCall.args[0].d, 'M 15 242 C 306 242 694 73 985 73 L 985 158 C 694 158 306 327 15 327 Z');
+    assert.equal(this.link(2)[1].attr.firstCall.args[0].d, 'M 15 242 C 306 242 694 73 985 73 L 985 158 C 694 158 306 327 15 327 Z');
 
     assert.equal(this.link(3)[0].attr.firstCall.args[0].d, 'M 15 357 C 156 357 344 264 485 264 L 485 306 C 344 306 156 399 15 399 Z');
     assert.equal(this.link(3)[1].attr.firstCall.args[0].d, 'M 15 357 C 156 357 344 264 485 264 L 485 306 C 344 306 156 399 15 399 Z');
