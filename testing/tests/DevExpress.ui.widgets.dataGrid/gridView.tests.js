@@ -1879,6 +1879,33 @@ function createGridView(options, userOptions) {
         assert.notOk($(that.getCellElement(0, "field4"))[0].style.maxWidth, "the fourth column has no maxWidth");
         assert.notOk($(that.getCellElement(0, "field4"))[0].style.minWidth, "the fourth column has no minWidth");
     });
+
+    // T626875
+    QUnit.test("Column with percentage width and fixed min-width when columnWidth is auto", function(assert) {
+        // arrange
+        var defaultOptions = {
+                columnsController: new MockColumnsController([{ caption: "Column 1" }, { caption: "Column 2", width: "30%", minWidth: 130 }, { caption: "Column 3" }, { caption: "Column 4" }, { caption: "Column 5" }, { caption: "Column 6" }]),
+                dataController: new MockDataController({
+                    items: [{ values: ["Test1", "Test222222222", "Test3333333", "Test44", "Test55555555", "Test666"] }]
+                })
+            },
+            gridView = this.createGridView(defaultOptions, { columnAutoWidth: true }),
+            $testElement = $("<div />").width(560).appendTo($("#container")),
+            $colElements;
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+        defaultOptions.columnsController.columnsChanged.fire({
+            changeTypes: { columns: true, length: 1 },
+            optionNames: { visibleWidth: true, length: 1 }
+        });
+
+        $colElements = $testElement.find(".dx-datagrid-rowsview table").find("colgroup > col");
+
+        // assert
+        assert.strictEqual($colElements[1].style.width, "130px", "column width");
+    });
 }());
 
 // Fixed columns///
