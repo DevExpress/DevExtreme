@@ -319,7 +319,7 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _getRTLSignCorrection() {
+    _getPositionCorrection() {
         return this._isRightMenuPosition() ? -1 : 1;
     },
 

@@ -31,7 +31,7 @@ const PersistentStrategy = DrawerStrategy.inherit({
                 };
                 animation.moveTo(animationConfig);
             } else {
-                translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getRTLSignCorrection() });
+                translator.move($(this._drawer._$menu), { left: menuPos * this._drawer._getPositionCorrection() });
             }
         }
 

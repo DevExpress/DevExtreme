@@ -11,7 +11,7 @@ const PushStrategy = DrawerStrategy.inherit({
 
         $(this._drawer.content()).css("paddingLeft", 0);
 
-        const contentPosition = this._getMenuWidth(offset) * this._drawer._getRTLSignCorrection();
+        const contentPosition = this._getMenuWidth(offset) * this._drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = {
