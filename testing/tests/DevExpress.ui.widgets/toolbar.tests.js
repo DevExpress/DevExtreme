@@ -224,6 +224,34 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
     assert.equal(margin, "0px auto", "aligned by center");
 });
 
+var TOOLBAR_COMPACT_CLASS = "dx-toolbar-compact";
+
+QUnit.test("Toolbar with compact mode has the compact class", function(assert) {
+    var $toolbar = this.element.dxToolbar({
+            items: [
+                { location: 'before', text: 'before' },
+                { location: 'center', text: 'center' }
+            ],
+            compactMode: true,
+            width: 20
+        }),
+        toolbar = $toolbar.dxToolbar("instance");
+
+    assert.ok($toolbar.hasClass(TOOLBAR_COMPACT_CLASS), "toolbar with compact mode and small width has the compact class");
+
+    toolbar.option("compactMode", false);
+
+    assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), "toolbar without compact mode hasn't the compact class");
+
+    toolbar.option("compactMode", true);
+
+    assert.ok($toolbar.hasClass(TOOLBAR_COMPACT_CLASS), "compact class has been added to the toolbar");
+
+    toolbar.option("width", 400);
+
+    assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), "toolbar with compact mode hasn't the compact class if widget has a large width");
+});
+
 
 QUnit.module("option change handlers", {
     beforeEach: function() {

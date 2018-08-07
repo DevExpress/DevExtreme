@@ -15,8 +15,7 @@ var $ = require("../../core/renderer"),
     Overlay = require("../overlay"),
     Submenu = require("./ui.submenu"),
     Button = require("../button"),
-    TreeView = require("../tree_view"),
-    domUtils = require("../../core/utils/dom");
+    TreeView = require("../tree_view");
 
 var DX_MENU_CLASS = "dx-menu",
     DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + "-vertical",
@@ -347,7 +346,7 @@ var Menu = MenuBase.inherit({
         }
 
         var $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS),
-            menuItemsWidth = domUtils.getSummaryItemsWidth($menuItems),
+            menuItemsWidth = this._getSummaryItemsWidth($menuItems, true),
             containerWidth = this.$element().outerWidth();
 
         this._toggleAdaptiveMode(menuItemsWidth > containerWidth);

@@ -21,11 +21,13 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_BUTTON_CLASS = "dx-toolbar-button",
     TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container",
     TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
+    TOOLBAR_COMPACT_CLASS = "dx-toolbar-compact",
     TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS,
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
 var ToolbarBase = CollectionWidget.inherit({
+    compactMode: false,
     /**
     * @name dxToolbarItemTemplate
     * @publicName dxToolbarItemTemplate
@@ -97,6 +99,7 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _dimensionChanged: function() {
         this._arrangeItems();
+        this._applyCompactMode();
     },
 
     _render: function() {
@@ -233,6 +236,14 @@ var ToolbarBase = CollectionWidget.inherit({
         }
     },
 
+    _applyCompactMode: function() {
+        var $element = this.$element();
+        $element.removeClass(TOOLBAR_COMPACT_CLASS);
+
+        if(this.option("compactMode") && this._getSummaryItemsWidth(this.itemElements(), true) > $element.width()) {
+            $element.addClass(TOOLBAR_COMPACT_CLASS);
+        }
+    },
 
     _getCurrentLabelsWidth: function(labels) {
         var width = 0;
@@ -304,6 +315,8 @@ var ToolbarBase = CollectionWidget.inherit({
         } else {
             this._renderItems(items);
         }
+
+        this._applyCompactMode();
     },
 
     _renderEmptyMessage: commonUtils.noop,
@@ -342,6 +355,9 @@ var ToolbarBase = CollectionWidget.inherit({
                 break;
             case "renderAs":
                 this._invalidate();
+                break;
+            case "compactMode":
+                this._dimensionChanged();
                 break;
             default:
                 this.callBase.apply(this, arguments);

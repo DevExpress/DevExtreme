@@ -958,8 +958,7 @@ QUnit.module("rendering", {
     }
 });
 
-var POPUP_TOOLBAR_COMPACT_CLASS = "dx-popup-toolbar-compact",
-    POPUP_BOTTOM_CLASS = "dx-popup-bottom";
+var POPUP_BOTTOM_CLASS = "dx-popup-bottom";
 
 QUnit.test("anonymous content template rendering", function(assert) {
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({
@@ -1026,7 +1025,7 @@ QUnit.test("dx-popup-fullscreen-width class should be attached when width is equ
     assert.ok(!this.instance.overlayContent().hasClass("dx-popup-fullscreen-width"), "fullscreen width class is detached");
 });
 
-QUnit.test("popup with toolbarCompactMode should have a compact class for small widget width", function(assert) {
+QUnit.test("popup with toolbar should have compactMode option for the bottom toolbar", function(assert) {
     var popup = $("#popup").dxPopup({
         toolbarItems: [
             {
@@ -1034,14 +1033,12 @@ QUnit.test("popup with toolbarCompactMode should have a compact class for small 
                 toolbar: "bottom",
                 location: "after"
             }
-        ],
-        width: 10,
-        toolbarCompactMode: true
+        ]
     }).dxPopup("instance");
 
     popup.show();
 
-    assert.ok($("." + POPUP_BOTTOM_CLASS + "." + POPUP_TOOLBAR_COMPACT_CLASS).length === 1, "compact class has been added");
+    assert.ok($("." + POPUP_BOTTOM_CLASS).dxToolbarBase("instance").option("compactMode"), "bottom toolbar has the compact option");
 });
 
 
