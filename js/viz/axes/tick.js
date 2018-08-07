@@ -139,10 +139,12 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             fadeOutElements() {
                 const startSettings = { opacity: 1 };
                 const endSettings = { opacity: 0 };
-                const animationSettings = { partitionDuration: 0.5 };
+                const animationSettings = {
+                    partitionDuration: 0.5
+                };
 
                 if(this.label) {
-                    this.label.append(elementsGroup).attr(startSettings).animate(endSettings, animationSettings);
+                    this._fadeOutLabel();
                 }
                 if(this.grid) {
                     this.grid.append(axis._axisGridGroup).attr(startSettings).animate(endSettings, animationSettings);
@@ -150,6 +152,27 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(this.mark) {
                     this.mark.append(axis._axisLineGroup).attr(startSettings).animate(endSettings, animationSettings);
                 }
+            },
+
+            _fadeInLabel() {
+                const group = axis._renderer.g().attr({
+                    opacity: 0
+                }).append(axis._axisElementsGroup)
+                    .animate({ opacity: 1 }, {
+                        delay: 0.5,
+                        partitionDuration: 0.5
+                    });
+
+                this.label.append(group);
+            },
+
+            _fadeOutLabel() {
+                const group = axis._renderer.g().attr({
+                    opacity: 1
+                }).animate({ opacity: 0 }, {
+                    partitionDuration: 0.5
+                }).append(axis._axisElementsGroup);
+                this.label.append(group);
             },
 
             updateLabelPosition: function(animate) {
@@ -160,34 +183,22 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(animate && this._storedLabelsCoords) {
                     this.label.attr({
                         x: this._storedLabelsCoords.x,
-                        y: this._storedLabelsCoords.y,
-                        opacity: labelStyle.opacity
+                        y: this._storedLabelsCoords.y
                     });
 
                     this.label.animate({
                         x: this.labelCoords.x,
-                        y: this.labelCoords.y,
-                        opacity: labelStyle.opacity
+                        y: this.labelCoords.y
                     });
 
                 } else {
                     this.label.attr({
-                        opacity: 1,
                         x: this.labelCoords.x,
                         y: this.labelCoords.y
                     });
 
                     if(animate) {
-                        this.label.attr({
-                            opacity: 0
-                        });
-
-                        this.label.animate({
-                            opacity: labelStyle.opacity
-                        }, {
-                            delay: 0.5,
-                            partitionDuration: 0.5
-                        });
+                        this._fadeInLabel();
                     }
                 }
             },
