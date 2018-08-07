@@ -208,7 +208,7 @@ var Toolbar = ToolbarBase.inherit({
         this._renderMenu();
     },
 
-    _render: function() {
+    _renderAsync: function() {
         this._hideOverflowItems();
         this._menuStrategy._updateMenuVisibility();
         this.callBase();
