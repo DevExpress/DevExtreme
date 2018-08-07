@@ -1,5 +1,5 @@
-var fs = require("fs");
 var readFile = require("./adapters/node-file-reader");
+var lessCompiler = require("less/lib/less-node");
 
 var MetadataLoader = require("../modules/metadata-loader.js");
 var MetadataRepository = require("../modules/metadata-repository.js");
@@ -7,11 +7,11 @@ var LessTemplateLoader = require("../modules/less-template-loader.js");
 var themes = require("../modules/themes.js");
 
 var processTheme = function(config, metadata, data) {
-    var lessTemplateLoader = new LessTemplateLoader(readFile);
+    var lessTemplateLoader = new LessTemplateLoader(readFile, lessCompiler);
     if(config.isBootstrap) {
         var bootstrapMetadata = config.bootstrapVersion === 3 ?
-            require("../data/bootstrap/bootstrap-metadata.js") :
-            require("../data/bootstrap/bootstrap4-metadata.js");
+            require("../data/bootstrap-metadata/bootstrap-metadata.js") :
+            require("../data/bootstrap-metadata/bootstrap4-metadata.js");
 
         return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, data, config.bootstrapVersion);
     } else {
@@ -35,15 +35,7 @@ var processTheme = function(config, metadata, data) {
 
 var buildTheme = function(config) {
     var metadataRepository = new MetadataRepository(new MetadataLoader());
-
-    var dataPromise = new Promise(function(resolve, reject) {
-        if(!config.metadataFilePath) resolve("{}");
-        fs.readFile(config.metadataFilePath, 'utf8', function(error, data) {
-            if(error) reject(error);
-            else resolve(data);
-        });
-    });
-
+    var dataPromise = readFile(config.metadataFilePath);
     var repositoryPromise = metadataRepository.init(themes);
 
     return Promise.all([dataPromise, repositoryPromise]).then(function(resolves) {
@@ -58,4 +50,6 @@ var buildTheme = function(config) {
     });
 }
 
-exports.buildTheme = buildTheme;
+module.exports = {
+    buildTheme: buildTheme
+};

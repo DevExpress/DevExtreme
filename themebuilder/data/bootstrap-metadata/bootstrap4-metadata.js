@@ -57,4 +57,4 @@ module.exports = {
     "list-item-selected-bg": "$list-group-active-bg",
 
     "badge-bg": "$primary"
-}
+};

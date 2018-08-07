@@ -1,5 +1,4 @@
-var lessCompiler = require("less/lib/less-node");
-var sassCompiler = require("node-sass");
+var sassCompiler = require("sass");
 
 var LESS_DIR_PATH = "data/less/";
 var LessFontPlugin = function() {};
@@ -59,7 +58,7 @@ var getCompiledRule = function(cssString) {
     return result;
 };
 
-var LessTemplateLoader = function(readFile) {
+var LessTemplateLoader = function(readFile, lessCompiler) {
     this.load = function(theme, colorScheme, metadata) {
         var that = this;
         return new Promise(function(resolve, reject) {
@@ -142,7 +141,7 @@ var LessTemplateLoader = function(readFile) {
         var preLessString = "";
         for(var key in bootstrapMetadata) {
             if(bootstrapMetadata.hasOwnProperty(key)) {
-                preLessString += bootstrapMetadata(key) + ": dx-empty" + (version === 4 ? " !default" : "") + ";";
+                preLessString += bootstrapMetadata[key] + ": dx-empty" + (version === 4 ? " !default" : "") + ";";
             }
         }
 
@@ -170,11 +169,11 @@ var LessTemplateLoader = function(readFile) {
                         }
                     }
 
-                    that.compileLess(less, modifyVars, metadataVariables).then(function(compiledMetadata, css) {
+                    that.compileLess(less, modifyVars, metadataVariables).then(function(data) {
                         resolve({
-                            compiledMetadata: compiledMetadata,
+                            compiledMetadata: data.compiledMetadata,
                             modifyVars: modifyVars,
-                            css: css
+                            css: data.css
                         });
                     });
                 });
@@ -188,9 +187,9 @@ var LessTemplateLoader = function(readFile) {
 
                 Promise.all([readFile(defaultBootstrapFunctionsUrl), readFile(defaultBootstrapVariablesUrl)])
                     .then(function(files) {
-                        that.compileScss(files[0] + customLessContent + files[1] + preLessString, bootstrapMetadata).done(processDxTheme);
+                        that.compileScss(files[0] + customLessContent + files[1] + preLessString, bootstrapMetadata).then(processDxTheme);
                     }, function() {
-                        that.compileScss(customLessContent + preLessString, bootstrapMetadata).done(processDxTheme);
+                        that.compileScss(customLessContent + preLessString, bootstrapMetadata).then(processDxTheme);
                     });
             }
         });

@@ -63,4 +63,4 @@ module.exports = {
 
     "badge-bg": "@badge-bg",
     "badge-color": "@badge-color"
-}
+};
