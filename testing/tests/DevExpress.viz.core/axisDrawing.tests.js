@@ -10745,3 +10745,43 @@ QUnit.test("Do not animate on second drawing if on first one stub data was rende
         opacity: 1
     });
 });
+
+
+QUnit.test("Update skikipped categories on second drawing", function(assert) {
+    // arrange
+    const categories = ["a", "b", "c", "d"];
+    const startCategories = categories.slice(0, 3);
+    this.createAxis();
+    this.updateOptions({
+        type: "discrete",
+        isHorizontal: true,
+        position: "top",
+        categories: startCategories,
+        discreteAxisDivisionMode: "betweenLabels",
+        tick: {
+            visible: true,
+            color: "#123456",
+            opacity: 0.3,
+            width: 5,
+            length: 10
+        }
+    });
+
+    this.generatedTicks = startCategories;
+
+    categories.forEach(function(cat, i) {
+        this.translator.stub("translate").withArgs(cat).returns(10 + (i + 1) * 20);
+    }.bind(this));
+
+    this.axis.draw(this.canvas);
+    this.renderer.path.reset();
+
+    // act
+    this.generatedTicks = categories;
+    this.axis.setBusinessRange({ categories: categories });
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+    assert.equal(path.callCount, 1);
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
+});
