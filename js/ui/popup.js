@@ -36,13 +36,9 @@ var POPUP_CLASS = "dx-popup",
 
     POPUP_BOTTOM_CLASS = "dx-popup-bottom",
 
-    POPUP_TOOLBAR_COMPACT_CLASS = "dx-popup-toolbar-compact",
-
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
     ALLOWED_TOOLBAR_ITEM_ALIASES = ["cancel", "clear", "done"],
-
-    WIDGET_CLASS = "dx-widget",
 
     BUTTON_DEFAULT_TYPE = "default",
     BUTTON_NORMAL_TYPE = "normal",
@@ -249,8 +245,7 @@ var Popup = Overlay.inherit({
 
             bottomTemplate: "bottom",
             useDefaultToolbarButtons: false,
-            useFlatToolbarButtons: false,
-            toolbarCompactMode: false
+            useFlatToolbarButtons: false
         });
     },
 
@@ -452,17 +447,17 @@ var Popup = Overlay.inherit({
         }
     },
 
-    _renderTemplateByType: function(optionName, data, $container) {
+    _renderTemplateByType: function(optionName, data, $container, additionToolbarOptions) {
         var template = this._getTemplateByOption(optionName),
             toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
-            var toolbarOptions = {
+            var toolbarOptions = extend(additionToolbarOptions, {
                 items: data,
                 rtlEnabled: this.option("rtlEnabled"),
                 useDefaultButtons: this.option("useDefaultToolbarButtons"),
                 useFlatButtons: this.option("useFlatToolbarButtons")
-            };
+            });
 
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
@@ -609,36 +604,11 @@ var Popup = Overlay.inherit({
         if(items.length) {
             this._$bottom && this._$bottom.remove();
             var $bottom = $("<div>").addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
-            this._$bottom = this._renderTemplateByType("bottomTemplate", items, $bottom).addClass(POPUP_BOTTOM_CLASS);
-            if(this._$bottom.hasClass(WIDGET_CLASS)) {
-                this.$bottomToolbarContentItems = this._$bottom.dxToolbarBase("instance").itemElements();
-            } else {
-                this.$bottomToolbarContentItems = null;
-            }
+            this._$bottom = this._renderTemplateByType("bottomTemplate", items, $bottom, { compactMode: true }).addClass(POPUP_BOTTOM_CLASS);
             this._toggleClasses();
         } else {
             this._$bottom && this._$bottom.detach();
         }
-    },
-
-    _updateBottomToolbarCompactMode: function() {
-        if(this._$bottom) {
-            this._$bottom.removeClass(POPUP_TOOLBAR_COMPACT_CLASS);
-
-            if(this._$bottom.width() < domUtils.getSummaryItemsWidth(this.$bottomToolbarContentItems)) {
-                this._$bottom.addClass(POPUP_TOOLBAR_COMPACT_CLASS);
-            }
-        }
-    },
-
-    _show: function() {
-        var result = this.callBase.apply(this, arguments);
-
-        if(this.option("toolbarCompactMode")) {
-            this._updateBottomToolbarCompactMode();
-        }
-
-        return result;
     },
 
     _toggleClasses: function() {
@@ -771,7 +741,6 @@ var Popup = Overlay.inherit({
                 this._renderGeometry();
                 break;
             case "bottomTemplate":
-            case "toolbarCompactMode":
                 this._renderBottom();
                 this._renderGeometry();
                 break;

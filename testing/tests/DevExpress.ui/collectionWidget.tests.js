@@ -676,6 +676,17 @@ QUnit.test("item.disabled property changing should not re-render whole item", fu
     assert.ok($item.is(instance.$element().find(".item")));
 });
 
+QUnit.test("_getSummaryItemsWidth function returns right values", function(assert) {
+    var instance = new TestComponent("#cmp", {
+        items: [
+            { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
+            { html: '<div class="test-width" style="width: 10px; margin-left: 5px"></div>' }
+        ]
+    });
+
+    assert.equal(instance._getSummaryItemsWidth($("#cmp .test-width")), 37, "done");
+    assert.equal(instance._getSummaryItemsWidth($("#cmp .test-width"), true), 42, "done");
+});
 
 QUnit.module("events", {
     beforeEach: function() {
