@@ -13,7 +13,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
 
         $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minWidth") * this._drawer._getPositionCorrection());
 
-        if(this._drawer.option("showMode") === "slide") {
+        if(this._drawer.option("revealMode") === "slide") {
             if(animate) {
                 let animationConfig = {
                     $element: $(this._drawer._$menu),
@@ -32,7 +32,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
             }
         }
 
-        if(this._drawer.option("showMode") === "shrink") {
+        if(this._drawer.option("revealMode") === "expand") {
             const width = this._getMenuWidth(offset);
             if(animate) {
                 animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), () => {

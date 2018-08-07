@@ -90,11 +90,11 @@ const Drawer = Widget.inherit({
             mode: "push",
 
             /**
-            * @name dxDrawerOptions.showMode
+            * @name dxDrawerOptions.revealMode
             * @type Enums.DrawerMode
             * @default "slide"
             */
-            showMode: "slide",
+            revealMode: "slide",
 
             /**
             * @name dxDrawerOptions.animationEnabled
@@ -187,7 +187,7 @@ const Drawer = Widget.inherit({
         this._renderMarkup();
 
         this._refreshModeClass();
-        this._refreshShowModeClass();
+        this._refreshRevealModeClass();
 
         const menuTemplate = this._getTemplate(this.option("menuTemplate"));
 
@@ -234,11 +234,11 @@ const Drawer = Widget.inherit({
         this.$element().addClass(DRAWER_CLASS + "-" + this.option("mode"));
     },
 
-    _refreshShowModeClass(prevClass) {
+    _refreshRevealModeClass(prevClass) {
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
-        this.$element().addClass(DRAWER_CLASS + "-" + this.option("showMode"));
+        this.$element().addClass(DRAWER_CLASS + "-" + this.option("revealMode"));
     },
 
     _renderShader() {
@@ -390,8 +390,8 @@ const Drawer = Widget.inherit({
                 // NOTE: temporary fix
                 this.repaint();
                 break;
-            case "showMode":
-                this._refreshShowModeClass(args.previousValue);
+            case "revealMode":
+                this._refreshRevealModeClass(args.previousValue);
 
                 // NOTE: temporary fix
                 this.repaint();

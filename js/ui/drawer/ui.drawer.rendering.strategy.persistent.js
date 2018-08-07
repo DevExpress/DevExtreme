@@ -14,7 +14,7 @@ const PersistentStrategy = DrawerStrategy.inherit({
 
         this._animateContent(animate, offset, width, direction);
 
-        if(this._drawer.option("showMode") === "slide") {
+        if(this._drawer.option("revealMode") === "slide") {
             const menuPos = this._getMenuOffset(offset);
             if(animate) {
 
@@ -33,7 +33,7 @@ const PersistentStrategy = DrawerStrategy.inherit({
             }
         }
 
-        if(this._drawer.option("showMode") === "shrink") {
+        if(this._drawer.option("revealMode") === "expand") {
             if(animate) {
                 animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), () => {
                     this._menuAnimation.resolve();
