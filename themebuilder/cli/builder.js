@@ -7,7 +7,7 @@ var LessTemplateLoader = require("../modules/less-template-loader.js");
 var themes = require("../modules/themes.js");
 
 var processTheme = function(config, metadata, data) {
-    var lessTemplateLoader = new LessTemplateLoader(readFile, lessCompiler);
+    var lessTemplateLoader = new LessTemplateLoader(readFile, lessCompiler, config.swatchSelector);
     if(config.isBootstrap) {
         var bootstrapMetadata = config.bootstrapVersion === 3 ?
             require("../data/bootstrap-metadata/bootstrap-metadata.js") :

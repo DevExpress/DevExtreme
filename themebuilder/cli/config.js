@@ -3,6 +3,7 @@ var path = require("path");
 var theme = process.env["npm_config_theme_name"] || "generic.light";
 var metadataFilePath = process.env["npm_config_metadata_file_path"] || "";
 var fileFormat = process.env["npm_config_file_format"];
+var swatchSelector = process.env["npm_config_swatch_selector"];
 
 var themeName = theme.split(".")[0];
 var colorScheme = theme.split(".")[1] + (theme.split(".")[2] ? "-" + theme.split(".")[2] : "");
@@ -33,6 +34,7 @@ module.exports = {
     bootstrapVersion: bootstrapVersion,
 
     cssFileName: cssFileName,
-    cssFolderPath: cssFolderPath
+    cssFolderPath: cssFolderPath,
+    swatchSelector: swatchSelector
 };
 

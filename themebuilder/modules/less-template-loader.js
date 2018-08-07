@@ -1,19 +1,27 @@
 var sassCompiler = require("sass");
 
 var LESS_DIR_PATH = "data/less/";
+
+var addSwatchClass = function(less, swatchSelector) {
+    if(!swatchSelector) return less;
+    less += ".dx-swatch-marker { font-family: \"" + swatchSelector + "\"; }";
+    return swatchSelector + "{" + less + "}";
+}
+
 var LessFontPlugin = function() {};
 LessFontPlugin.prototype = {
-    process: function(css, extra) {
+    process: function(css) {
         return css.replace(/(\f)(\d+)/g, "\\f$2");
     }
 };
 
-var LessMetadataPreCompilerPlugin = function(less, metadata) {
+var LessMetadataPreCompilerPlugin = function(metadata, swatchSelector) {
     this._metadata = metadata;
+    this.swatchSelector = swatchSelector;
 };
 
 LessMetadataPreCompilerPlugin.prototype = {
-    process: function(less, config) {
+    process: function(less) {
         less += "#devexpress-metadata-compiler{";
         for(var key in this._metadata) {
             if(this._metadata.hasOwnProperty(key)) {
@@ -22,17 +30,18 @@ LessMetadataPreCompilerPlugin.prototype = {
             }
         }
         less += "}";
-        return less;
+        return addSwatchClass(less, this.swatchSelector);
     }
 };
 
-var LessMetadataPostCompilerPlugin = function(less, compiledMetadata) {
+var LessMetadataPostCompilerPlugin = function(compiledMetadata, swatchSelector) {
     this._metadata = compiledMetadata;
+    this.swatchSelector = swatchSelector;
 };
 LessMetadataPostCompilerPlugin.prototype = {
-    process: function(css, config) {
+    process: function(css) {
         var that = this;
-        var metadataRegex = /#devexpress-metadata-compiler\s*\{((.|\n|\r)*)\}/;
+        var metadataRegex = new RegExp("(?:" + this.swatchSelector + "\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}");
         metadataRegex.exec(css)[1].split(";").forEach(function(item) {
             var rule = getCompiledRule(item);
             for(var key in rule) {
@@ -41,6 +50,8 @@ LessMetadataPostCompilerPlugin.prototype = {
                 }
             }
         });
+
+        if(this.swatchSelector) css = css.replace(/\s\.dx-theme-generic-typography/g, "");
 
         return css.replace(metadataRegex, "");
     }
@@ -58,7 +69,7 @@ var getCompiledRule = function(cssString) {
     return result;
 };
 
-var LessTemplateLoader = function(readFile, lessCompiler) {
+var LessTemplateLoader = function(readFile, lessCompiler, swatchSelector) {
     this.load = function(theme, colorScheme, metadata) {
         var that = this;
         return new Promise(function(resolve, reject) {
@@ -94,11 +105,11 @@ var LessTemplateLoader = function(readFile, lessCompiler) {
                     }
                 }, {
                     install: function(less, pluginManager) {
-                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(less, metadata));
+                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, swatchSelector));
                     }
                 }, {
                     install: function(less, pluginManager) {
-                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(less, compiledMetadata));
+                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, swatchSelector));
                     }
                 }]
             }).then(function(output) {
