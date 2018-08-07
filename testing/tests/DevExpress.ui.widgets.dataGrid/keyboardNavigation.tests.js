@@ -5309,4 +5309,59 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.equal($(".dx-revert-button").length, 0, "has no revert button");
     });
+
+    // T661049
+    QUnit.test("The calculated column should be updated when Tab is pressed after editing", function(assert) {
+        // arrange
+        var that = this,
+            TAB_KEY = 9,
+            $inputElement,
+            countCallCalculateCellValue = 0,
+            $testElement = $("#container");
+
+        that.$element = function() {
+            return $testElement;
+        };
+        that.data = [{ name: 'Alex', lastName: "John" }, { name: 'Dan', lastName: "Skip" }],
+        that.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "batch"
+            },
+            columns: [
+                { dataField: "name", showEditorAlways: true },
+                { dataField: "lasName", allowEditing: false },
+                { caption: "FullName", allowEditing: false,
+                    calculateCellValue: function(e) {
+                        countCallCalculateCellValue++;
+                        return e.name + " " + e.lastName;
+                    }
+                }
+            ]
+        };
+
+        that.setupModule();
+        that.gridView.render($testElement);
+
+        // assert
+        assert.strictEqual($testElement.find(".dx-texteditor-input").length, 2, "input count");
+
+        // arrange
+        that.editCell(0, 0);
+        that.clock.tick();
+
+        $inputElement = $testElement.find(".dx-texteditor-input").first();
+        $inputElement.val("Bob");
+        $inputElement.change();
+
+        // act
+        countCallCalculateCellValue = 0;
+        $testElement.find(".dx-datagrid-rowsview").trigger($.Event("keydown", { which: TAB_KEY, target: $inputElement }));
+        that.clock.tick();
+
+        // assert
+        assert.strictEqual(countCallCalculateCellValue, 3, "calculateCellValue call count");
+        assert.strictEqual($testElement.find(".dx-datagrid-rowsview td").eq(2).text(), "Bob John", "text of the third column of the first row");
+        assert.ok(that.editingController.isEditCell(1, 0), "the first cell of the second row is editable");
+    });
 });
