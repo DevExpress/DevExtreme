@@ -106,12 +106,12 @@ QUnit.test("drawer preserve content", assert => {
     assert.equal($content[0], $element.find("#content")[0]);
 });
 
-QUnit.test("content() function", assert => {
+QUnit.test("viewContent() function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
+    assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
 });
 
 QUnit.test("show and hide functions", assert => {
@@ -164,7 +164,7 @@ QUnit.test("content container should have correct position if menu isn't visible
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
 
     assert.equal(position($content), 0, "container rendered at correct position");
 });
@@ -175,7 +175,7 @@ QUnit.test("content container should have correct position if menu is visible", 
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const $menu = $(instance.menuContent());
 
     assert.equal(position($content), $menu.width(), "container rendered at correct position");
@@ -188,7 +188,7 @@ QUnit.test("content container should have correct position after resize", assert
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const elementWidth = $element.width();
 
     $("#drawerContainer").width(elementWidth * 2);
@@ -209,7 +209,7 @@ QUnit.test("content container should have correct position if it is rendered in 
         maxWidth: 50
     }).dxDrawer("instance");
 
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
 
     $container.appendTo("#qunit-fixture");
     $element.trigger("dxshown");
@@ -355,7 +355,7 @@ QUnit.test("shader should have correct position", assert => {
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
@@ -368,7 +368,7 @@ QUnit.test("shader should have correct position after widget resize", assert => 
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
     const menuWidth = $(instance.menuContent()).width();
 

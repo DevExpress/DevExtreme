@@ -200,7 +200,7 @@ const Drawer = Widget.inherit({
             transclude = this._getAnonymousTemplateName() === contentTemplateOption;
 
         contentTemplate && contentTemplate.render({
-            container: this.content(),
+            container: this.viewContent(),
             noModel: true,
             transclude
         });
@@ -220,10 +220,10 @@ const Drawer = Widget.inherit({
     _renderMarkup() {
         const $wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
         this._$menu = $("<div>").addClass(DRAWER_MENU_CONTENT_CLASS);
-        this._$container = $("<div>").addClass(DRAWER_CONTENT_CLASS);
+        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
 
         $wrapper.append(this._$menu);
-        $wrapper.append(this._$container);
+        $wrapper.append(this._$contentWrapper);
         this.$element().append($wrapper);
     },
 
@@ -243,7 +243,7 @@ const Drawer = Widget.inherit({
 
     _renderShader() {
         this._$shader = this._$shader || $("<div>").addClass(DRAWER_SHADER_CLASS);
-        this._$shader.appendTo(this.content());
+        this._$shader.appendTo(this.viewContent());
         eventsEngine.off(this._$shader, clickEvent.name);
         eventsEngine.on(this._$shader, clickEvent.name, this.hideMenu.bind(this));
         this._toggleShaderVisibility(this.option("menuVisible"));
@@ -322,7 +322,7 @@ const Drawer = Widget.inherit({
     },
 
     _dispose() {
-        animation.complete($(this.content()));
+        animation.complete($(this.viewContent()));
         this._toggleHideMenuCallback(false);
         this.callBase();
     },
@@ -417,12 +417,12 @@ const Drawer = Widget.inherit({
     },
 
     /**
-    * @name dxDrawerMethods.content
-    * @publicName content()
+    * @name dxDrawerMethods.viewContent
+    * @publicName viewContent()
     * @return dxElement
     */
-    content() {
-        return getPublicElement(this._$container);
+    viewContent() {
+        return getPublicElement(this._$contentWrapper);
     },
 
     /**

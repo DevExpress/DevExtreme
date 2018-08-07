@@ -107,7 +107,7 @@ QUnit.test("custom content template for content should be rendered correctly", a
         contentTemplate: "customContent"
     });
 
-    const $content = $($element.dxDrawer("instance").content());
+    const $content = $($element.dxDrawer("instance").viewContent());
 
     assert.equal($.trim($content.text()), "Test Content Template", "content text is correct");
 });
