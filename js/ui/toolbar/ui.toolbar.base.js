@@ -404,7 +404,7 @@ var ToolbarBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case "compactMode":
-                this._dimensionChanged();
+                this._applyCompactMode();
                 break;
             default:
                 this.callBase.apply(this, arguments);
