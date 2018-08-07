@@ -5304,7 +5304,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         // assert
         assert.equal($(".dx-revert-button").length, 0, "has no revert button");
-    }),
+    });
 
     QUnit.test("After apply the edit value and focus the editor do not display the revert button when the save process, if editing mode is cell (T657148)", function(assert) {
         // arrange
@@ -5324,7 +5324,9 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
                 },
                 update: function() {
                     var d = $.Deferred();
-                    setTimeout(() => d.resolve(), 30);
+                    setTimeout(function() {
+                        d.resolve();
+                    }, 30);
                     return d.promise();
                 }
             }
