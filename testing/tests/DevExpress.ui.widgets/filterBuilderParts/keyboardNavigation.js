@@ -176,25 +176,22 @@ QUnit.module("Keyboard navigation", {
     });
 
     // T653968
-    QUnit.testInActiveWindow("editor.value is changed after 'keyup' and saved in filterBulder.value by outer click", function(assert) {
+    QUnit.testInActiveWindow("editor.value is changed after 'keyup' and saved in filterBulder.value by outer click (T653968)", function(assert) {
         this.showTextEditor();
 
         var textEditorElement = this.getTextEditorElement(),
             textEditorInput = textEditorElement.find("input"),
             textEditorInstance = textEditorElement.dxTextBox("instance");
 
+        textEditorInput.focus();
         textEditorInput.val("Test");
         assert.equal(textEditorInput.val(), "Test");
         assert.equal(textEditorInstance.option("value"), "");
 
-        keyboardMock(textEditorInput).keyUp();
-
-        assert.deepEqual(this.instance.option("value"), [["State", "=", ""]]);
-        assert.equal(textEditorInstance.option("value"), "Test");
-        assert.equal(textEditorInput.val(), "Test");
-
         $("body").trigger("dxpointerdown");
 
         assert.deepEqual(this.instance.option("value"), ["State", "=", "Test"]);
+        assert.equal(textEditorInstance.option("value"), "Test");
+        assert.equal(textEditorInput.val(), "Test");
     });
 });

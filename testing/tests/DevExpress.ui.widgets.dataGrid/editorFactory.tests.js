@@ -85,17 +85,17 @@ QUnit.test('Text editor', function(assert) {
     textBox.option('value', 'B');
 
     // assert
-    if((browser.msie && parseInt(browser.version) <= 11) || browser.mozilla || devices.real().ios) {
-        assert.equal(valueChangeEvent, 'change keyup', 'value change event is correct for ie <= 11 and ios');
-    } else {
-        assert.equal(valueChangeEvent, 'change', 'value change event is correct');
-    }
+    assert.equal(valueChangeEvent, 'change', 'value change event is correct');
 
     assert.equal(value, 'B', 'value after change');
 });
 
-// T344096
-QUnit.test('Text editor enter in ios', function(assert) {
+QUnit.test('Text editor enter in ios (T344096)', function(assert) {
+    if(!browser.webkit) {
+        assert.ok(true, "Not webkit browser");
+        return;
+    }
+
     var $container = $('#container'),
         value = 'A';
 
@@ -117,21 +117,25 @@ QUnit.test('Text editor enter in ios', function(assert) {
     assert.ok(textBox, 'dxTextBox created');
     assert.equal(textBox.option('value'), 'A', 'text editor value');
 
+    // mock for real blur
+    $container.find("input").on("blur", function(e) {
+        $(e.target).trigger("change");
+    });
+
     // act
+    $container.find("input").focus();
     $container.find("input").val('AB');
-    $container.find("input").trigger($.Event("keyup"));
     $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
 
     // assert
-    assert.equal(valueChangeEvent, 'change keyup', 'value change event for ios');
+    assert.equal(valueChangeEvent, 'change', 'value change event for ios');
     assert.equal(value, 'AB', 'value after change');
 
     devices.real(originalDevice);
 });
 
-if(browser.msie && parseInt(browser.version) === 11) {
-    // T305674
-    QUnit.test('Text editor enter work in IE', function(assert) {
+if(browser.msie) {
+    QUnit.test("Enter does not change the text editor value in IE, EDGE (T305674, T336478, T635192)", function(assert) {
         var $container = $('#container'),
             value = 'A',
             setValueCallCount = 0;
@@ -150,13 +154,18 @@ if(browser.msie && parseInt(browser.version) === 11) {
         assert.ok(textBox, 'dxTextBox created');
         assert.equal(textBox.option('value'), 'A', 'text editor value');
 
+        // mock for real blur
+        $($container.find("input")).get(0).blur = function() {
+            $container.find("input").trigger("change");
+        };
+
         // act
+        $container.find("input").focus();
         $container.find("input").val("AB");
-        $container.find("input").trigger($.Event("keyup"));
-        // T336478
         $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
 
         this.clock.tick();
+
         // assert
         assert.equal(value, 'AB', 'value after enter key');
         assert.equal(setValueCallCount, 1, 'setValue call count');
@@ -224,11 +233,13 @@ if(browser.msie && parseInt(browser.version) === 11) {
         $container.find("input").val("AB");
         $container.find("input").trigger($.Event("keyup"));
         $(window).trigger("focus");
+        // mock change on focus change
+        $container.find("input").trigger("change");
 
         this.clock.tick();
-
         // assert
-        assert.equal(value, 'AB', 'value after enter key');
+        assert.equal(textBox.option('valueChangeEvent'), 'change', 'valueChangeEvent');
+        assert.equal(textBox.option('value'), 'AB', 'value');
         assert.equal(setValueCallCount, 1, 'setValue call count');
     });
 }
