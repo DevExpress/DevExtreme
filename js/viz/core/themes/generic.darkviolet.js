@@ -133,5 +133,17 @@ registerTheme({
                 color: ACCENT_COLOR
             }
         }
+    },
+    sankey: {
+        link: {
+            border: {
+                color: BACKGROUND_COLOR
+            }
+        },
+        node: {
+            border: {
+                color: BACKGROUND_COLOR
+            }
+        }
     }
 }, "generic.dark");
