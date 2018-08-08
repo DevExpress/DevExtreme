@@ -6564,6 +6564,27 @@ if(!devices.win8) {
     });
 }
 
+QUnit.test("hasChanges with rowIndex", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+
+    rowsView.render($testElement);
+
+    // act
+    that.cellValue(1, 0, "test");
+
+    // assert
+    assert.notOk(that.editingController.hasChanges(0), "the first row hasn't changed");
+    assert.ok(that.editingController.hasChanges(1), "the second row has changed");
+});
+
 QUnit.module('Editing with validation', {
     beforeEach: function() {
         this.array = [
