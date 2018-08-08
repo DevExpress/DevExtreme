@@ -51,7 +51,14 @@ LessMetadataPostCompilerPlugin.prototype = {
             }
         });
 
-        if(this.swatchSelector) css = css.replace(/\s\.dx-theme-generic-typography/g, "");
+        if(this.swatchSelector) {
+            var escapedSelector = this.swatchSelector.replace(".", "\\.");
+            var customStylesRegex = new RegExp("(" + escapedSelector + "\\s+)(\\.dx-viewport\\.dx-theme-(?:.*?)\\s)", "g");
+            css = css
+                .replace(/\s\.dx-theme-(?:.*?)-typography/g, "")
+                .replace(customStylesRegex, "$2$1");
+
+        }
 
         return css.replace(metadataRegex, "");
     }
