@@ -744,16 +744,16 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.module("temporary mode");
+QUnit.module("overlap mode");
 
-QUnit.test("minWidth should be rendered correctly in temporary mode, expand", assert => {
+QUnit.test("minWidth should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         opened: false,
         revealMode: "expand",
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -773,14 +773,14 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, expand", as
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in temporary mode, expand", assert => {
+QUnit.test("maxWidth should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
         opened: false,
         revealMode: "expand",
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -800,14 +800,14 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, expand", as
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in temporary mode, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in overlap mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         opened: false,
         revealMode: "slide",
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -827,14 +827,14 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, slide", ass
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in overlap mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
         opened: false,
         revealMode: "slide",
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -854,7 +854,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", ass
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in temporary mode, right menu position, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in overlap mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -862,7 +862,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
         opened: false,
         position: "right",
         revealMode: "slide",
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -882,7 +882,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu position, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in overlap mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -890,7 +890,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu 
         opened: false,
         revealMode: "slide",
         position: "right",
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");

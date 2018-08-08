@@ -157,12 +157,12 @@ QUnit.test("drawer should have correct class depending on mode", assert => {
     assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
 });
 
-QUnit.module("temporary mode");
+QUnit.module("overlap mode");
 
 QUnit.test("drawer should have correct class depending on mode", assert => {
     const $element = $("#drawer").dxDrawer({
-        openedStateMode: "temporary"
+        openedStateMode: "overlap"
     });
 
-    assert.ok($element.hasClass(DRAWER_CLASS + "-temporary"), "drawer class is correct");
+    assert.ok($element.hasClass(DRAWER_CLASS + "-overlap"), "drawer class is correct");
 });

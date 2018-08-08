@@ -13,7 +13,7 @@ import { Deferred } from "../../core/utils/deferred";
 import windowUtils from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import PersistentStrategy from "./ui.drawer.rendering.strategy.persistent";
-import TemporaryStrategy from "./ui.drawer.rendering.strategy.temporary";
+import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 
 const DRAWER_CLASS = "dx-drawer";
@@ -162,8 +162,8 @@ const Drawer = Widget.inherit({
         if(mode === "persistent") {
             Strategy = PersistentStrategy;
         }
-        if(mode === "temporary") {
-            Strategy = TemporaryStrategy;
+        if(mode === "overlap") {
+            Strategy = OverlapStrategy;
         }
 
         this._strategy = new Strategy(this);
