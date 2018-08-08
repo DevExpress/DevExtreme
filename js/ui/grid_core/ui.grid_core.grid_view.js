@@ -397,8 +397,13 @@ var ResizingController = modules.ViewController.inherit({
                 }
                 resultSizes[i] += diffElement;
                 if(onePixelElementsCount > 0) {
-                    resultSizes[i]++;
-                    onePixelElementsCount--;
+                    if(onePixelElementsCount < 1) {
+                        resultSizes[i] += onePixelElementsCount;
+                        onePixelElementsCount = 0;
+                    } else {
+                        resultSizes[i]++;
+                        onePixelElementsCount--;
+                    }
                 }
             }
         }
@@ -412,7 +417,7 @@ var ResizingController = modules.ViewController.inherit({
         for(i = 0; i < widths.length; i++) {
             width = widths[i];
             if(width && width !== HIDDEN_COLUMNS_WIDTH) {
-                result += isPercentWidth(width) ? (parseInt(width) * groupWidth / 100) : parseInt(width);
+                result += isPercentWidth(width) ? (parseFloat(width) * groupWidth / 100) : parseFloat(width);
             }
         }
 
