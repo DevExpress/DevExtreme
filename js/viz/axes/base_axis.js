@@ -322,45 +322,47 @@ Axis.prototype = {
     },
 
     _getGridLineDrawer: function(borderOptions) {
-        var that = this,
-            isHorizontal = that._isHorizontal;
+        var that = this;
 
         return function(tick, gridStyle) {
-            that.borderOptions = borderOptions;
-            var canvasStart = isHorizontal ? LEFT : TOP,
-                canvasEnd = isHorizontal ? RIGHT : BOTTOM,
-                axisCanvas = that.getCanvas(),
-                canvas = {
-                    left: axisCanvas.left,
-                    right: axisCanvas.width - axisCanvas.right,
-                    top: axisCanvas.top,
-                    bottom: axisCanvas.height - axisCanvas.bottom
-                },
-                firstBorderLinePosition = (borderOptions.visible && borderOptions[canvasStart]) ? canvas[canvasStart] : undefined,
-                lastBorderLinePosition = (borderOptions.visible && borderOptions[canvasEnd]) ? canvas[canvasEnd] : undefined,
-                tickPositionField = isHorizontal ? "x" : "y",
-                minDelta = MAX_GRID_BORDER_ADHENSION + firstBorderLinePosition,
-                maxDelta = lastBorderLinePosition - MAX_GRID_BORDER_ADHENSION,
-                element;
-
-            if(that.areCoordsOutsideAxis(tick.coords) || tick.coords[tickPositionField] === undefined || (tick.coords[tickPositionField] < minDelta || tick.coords[tickPositionField] > maxDelta)) {
-                return;
-            }
             var grid = that._getGridPoints(tick.coords);
 
             if(grid.points) {
-                element = that._createPathElement(grid.points, gridStyle);
+                return that._createPathElement(grid.points, gridStyle);
             }
-            return element;
+            return null;
         };
     },
 
     _getGridPoints: function(coords) {
-        var isHorizontal = this._isHorizontal,
+        var that = this,
+            isHorizontal = this._isHorizontal,
             tickPositionField = isHorizontal ? "x" : "y",
             orthogonalPositions = this._orthogonalPositions,
             positionFrom = orthogonalPositions.start,
             positionTo = orthogonalPositions.end;
+
+        const borderOptions = that.borderOptions;
+
+        var canvasStart = isHorizontal ? LEFT : TOP,
+            canvasEnd = isHorizontal ? RIGHT : BOTTOM,
+            axisCanvas = that.getCanvas(),
+            canvas = {
+                left: axisCanvas.left,
+                right: axisCanvas.width - axisCanvas.right,
+                top: axisCanvas.top,
+                bottom: axisCanvas.height - axisCanvas.bottom
+            },
+            firstBorderLinePosition = (borderOptions.visible && borderOptions[canvasStart]) ? canvas[canvasStart] : undefined,
+            lastBorderLinePosition = (borderOptions.visible && borderOptions[canvasEnd]) ? canvas[canvasEnd] : undefined,
+            minDelta = MAX_GRID_BORDER_ADHENSION + firstBorderLinePosition,
+            maxDelta = lastBorderLinePosition - MAX_GRID_BORDER_ADHENSION;
+
+        if(that.areCoordsOutsideAxis(coords) ||
+            coords[tickPositionField] === undefined ||
+            (coords[tickPositionField] < minDelta || coords[tickPositionField] > maxDelta)) {
+            return { points: null };
+        }
 
         return {
             points: isHorizontal
@@ -1521,8 +1523,8 @@ Axis.prototype = {
     },
 
     draw: function(canvas, borderOptions) {
-        var that = this,
-            drawGridLine = that._getGridLineDrawer(borderOptions || { visible: false });
+        const that = this;
+        that.borderOptions = borderOptions || { visible: false };
 
         that.createTicks(canvas);
         that._clearAxisGroups();
@@ -1536,8 +1538,11 @@ Axis.prototype = {
         drawTickMarks(that._majorTicks);
         drawTickMarks(that._minorTicks);
         drawTickMarks(that._boundaryTicks);
+
+        const drawGridLine = that._getGridLineDrawer();
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
+
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
 
         callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");

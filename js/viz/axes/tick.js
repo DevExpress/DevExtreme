@@ -70,7 +70,11 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(!lineElement) {
                     return;
                 }
-                if(animate && storedSettings) {
+                if(!settings.points) {
+                    lineElement.remove();
+                    return;
+                }
+                if(animate && storedSettings && storedSettings.points) {
                     settings.opacity = 1;
                     lineElement.attr(storedSettings);
                     lineElement.animate(settings);

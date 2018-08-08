@@ -8707,7 +8707,7 @@ QUnit.test("Update grid points", function(assert) {
     assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30, 70, 70], opacity: 1 });
 });
 
-QUnit.test("Update grid points, but distance between grids and borders less than 4px - update all grids", function(assert) {
+QUnit.test("Update grid points, but distance between grids and borders less than 4px - remove grids", function(assert) {
     // arrange
     this.createAxis();
     this.updateOptions({
@@ -8731,13 +8731,30 @@ QUnit.test("Update grid points, but distance between grids and borders less than
     this.translator.stub("translate").withArgs(2).returns(50);
     this.translator.stub("translate").withArgs(3).returns(88);
 
+    const path = this.renderer.path;
+    const grid1 = path.getCall(0).returnValue;
+    const grid2 = path.getCall(1).returnValue;
+    const grid3 = path.getCall(2).returnValue;
+
+    grid1.attr.reset();
+    grid2.attr.reset();
+    grid3.attr.reset();
+
+    grid1.stub("remove").reset();
+    grid2.stub("remove").reset();
+    grid3.stub("remove").reset();
+
     // act
     this.axis.updateSize(this.canvas);
 
-    var path = this.renderer.path;
-    assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [12, 30, 12, 70], opacity: 1 });
-    assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30, 50, 70], opacity: 1 });
-    assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [88, 30, 88, 70], opacity: 1 });
+
+    assert.equal(grid1.attr.callCount, 0);
+    assert.deepEqual(grid2.attr.lastCall.args[0], { points: [50, 30, 50, 70], opacity: 1 });
+    assert.equal(grid3.attr.callCount, 0);
+
+    assert.equal(grid1.remove.callCount, 1);
+    assert.deepEqual(grid2.remove.callCount, 0);
+    assert.equal(grid3.remove.callCount, 1);
 });
 
 QUnit.test("Update minor grid points", function(assert) {
@@ -9667,7 +9684,7 @@ QUnit.test("Animate grid line to the new position on second drawing", function(a
     });
 });
 
-QUnit.test("Fade in new grid line on second drawing", function(assert) {
+QUnit.test("Fade-in new grid line on second drawing", function(assert) {
     // arrange
     var renderer = this.renderer;
     this.createAxis();
@@ -9695,6 +9712,48 @@ QUnit.test("Fade in new grid line on second drawing", function(assert) {
     // assert
 
     assert.equal(renderer.path.callCount, 2);
+    const gridLine = renderer.path.lastCall.returnValue;
+
+    assert.equal(gridLine.stub("animate").callCount, 1);
+    assert.deepEqual(gridLine.attr.lastCall.args[0], {
+        points: [70, 30, 70, 70],
+        opacity: 0
+    });
+
+    assert.deepEqual(gridLine.animate.lastCall.args, [{
+        opacity: 1
+    }, {
+        delay: 0.5,
+        partitionDuration: 0.5
+    }]);
+});
+
+QUnit.test("Fade-in grid line if distance was less then 4px from border, now greater then 4px", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        visible: false,
+        grid: {
+            visible: true
+        }
+    });
+    this.generatedTicks = [1];
+    this.translator.stub("translate").withArgs(1).returns(3);
+
+    this.axis.draw(this.zeroMarginCanvas, { visible: true, left: true, right: true, top: true, bottom: true });
+    this.axis.updateSize(this.canvas, true);
+
+    // act
+    this.translator.stub("translate").withArgs(1).returns(70);
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.axis.updateSize(this.canvas, true);
+    // assert
+
+    assert.equal(renderer.path.callCount, 1);
     const gridLine = renderer.path.lastCall.returnValue;
 
     assert.equal(gridLine.stub("animate").callCount, 1);
