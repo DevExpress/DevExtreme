@@ -231,11 +231,6 @@ var DropDownBox = DropDownEditor.inherit({
         return deferred.promise();
     },
 
-    _clearValueHandler: function(e) {
-        e.stopPropagation();
-        this.reset();
-    },
-
     _updatePopupWidth: function() {
         this._setPopupOption("width", this.$element().outerWidth());
     },
