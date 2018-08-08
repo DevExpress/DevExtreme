@@ -67,12 +67,12 @@ const Drawer = Widget.inherit({
             shading: true,
 
             /**
-            * @name dxDrawerOptions.menuTemplate
-            * @type_function_param1 menuElement:dxElement
+            * @name dxDrawerOptions.template
+            * @type_function_param1 Element:dxElement
             * @type template|function
             * @default null
             */
-            menuTemplate: "menu",
+            template: "menu",
 
             /**
             * @name dxDrawerOptions.contentTemplate
@@ -189,7 +189,7 @@ const Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshRevealModeClass();
 
-        const menuTemplate = this._getTemplate(this.option("menuTemplate"));
+        const menuTemplate = this._getTemplate(this.option("template"));
 
         menuTemplate && menuTemplate.render({
             container: this.content()
@@ -369,7 +369,7 @@ const Drawer = Widget.inherit({
                 this._renderPosition(this.option("menuVisible"));
                 break;
             case "contentTemplate":
-            case "menuTemplate":
+            case "template":
                 this._invalidate();
                 break;
             case "mode":

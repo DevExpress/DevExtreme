@@ -82,7 +82,7 @@ QUnit.test("opened class should be applied correctly", assert => {
 
 QUnit.test("custom content template for menu should be rendered correctly", assert => {
     const $element = $("#contentTemplate").dxDrawer({
-        menuTemplate: "customMenu"
+        template: "customMenu"
     });
 
     const $menu = $($element.dxDrawer("instance").content());
@@ -93,7 +93,7 @@ QUnit.test("custom content template for menu should be rendered correctly", asse
 QUnit.test("templates should be dom nodes without jQuery", assert => {
     assert.expect(2);
     $("#contentTemplate").dxDrawer({
-        menuTemplate(element) {
+        template(element) {
             assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, "element is correct");
         },
         contentTemplate(element) {
