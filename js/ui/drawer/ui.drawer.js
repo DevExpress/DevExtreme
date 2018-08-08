@@ -420,6 +420,8 @@ const Drawer = Widget.inherit({
     * @name dxDrawerMethods.viewContent
     * @publicName viewContent()
     * @return dxElement
+    * @hidden
+    * @inheritdoc
     */
     viewContent() {
         return getPublicElement(this._$contentWrapper);
