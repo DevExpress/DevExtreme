@@ -39,11 +39,11 @@ const Drawer = Widget.inherit({
             position: "left",
 
             /**
-            * @name dxDrawerOptions.menuVisible
+            * @name dxDrawerOptions.opened
             * @type boolean
             * @default false
             */
-            menuVisible: false,
+            opened: false,
 
             /**
              * @name dxDrawerOptions.minWidth
@@ -183,7 +183,7 @@ const Drawer = Widget.inherit({
     _initMarkup() {
         this.callBase();
 
-        this._toggleVisibleClass(this.option("menuVisible"));
+        this._toggleVisibleClass(this.option("opened"));
         this._renderMarkup();
 
         this._refreshModeClass();
@@ -246,7 +246,7 @@ const Drawer = Widget.inherit({
         this._$shader.appendTo(this.viewContent());
         eventsEngine.off(this._$shader, clickEvent.name);
         eventsEngine.on(this._$shader, clickEvent.name, this.hide.bind(this));
-        this._toggleShaderVisibility(this.option("menuVisible"));
+        this._toggleShaderVisibility(this.option("opened"));
     },
 
     _initWidth() {
@@ -335,7 +335,7 @@ const Drawer = Widget.inherit({
 
     _dimensionChanged() {
         delete this._menuWidth;
-        this._renderPosition(this.option("menuVisible"), false);
+        this._renderPosition(this.option("opened"), false);
     },
 
     _toggleShaderVisibility(visible) {
@@ -346,8 +346,8 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _toggleVisibleClass(menuVisible) {
-        this.$element().toggleClass(OPENED_STATE_CLASS, menuVisible);
+    _toggleVisibleClass(opened) {
+        this.$element().toggleClass(OPENED_STATE_CLASS, opened);
     },
 
 
@@ -360,13 +360,13 @@ const Drawer = Widget.inherit({
             case "contentOffset":
                 this._dimensionChanged();
                 break;
-            case "menuVisible":
+            case "opened":
                 this._renderPosition(args.value);
                 this._toggleVisibleClass(args.value);
                 break;
             case "position":
                 this._togglePositionClass();
-                this._renderPosition(this.option("menuVisible"));
+                this._renderPosition(this.option("opened"));
                 break;
             case "contentTemplate":
             case "template":
@@ -376,7 +376,7 @@ const Drawer = Widget.inherit({
                 this._initStrategy();
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("menuVisible"));
+                this._renderPosition(this.option("opened"));
 
                 // NOTE: temporary fix
                 this.repaint();
@@ -385,7 +385,7 @@ const Drawer = Widget.inherit({
             case "maxWidth":
                 this._initWidth();
                 translator.move(this._$menu, { left: 0 });
-                this._renderPosition(this.option("menuVisible"));
+                this._renderPosition(this.option("opened"));
 
                 // NOTE: temporary fix
                 this.repaint();
@@ -451,10 +451,10 @@ const Drawer = Widget.inherit({
     * @return Promise<void>
     */
     toggle(showing) {
-        showing = showing === undefined ? !this.option("menuVisible") : showing;
+        showing = showing === undefined ? !this.option("opened") : showing;
 
         this._deferredAnimate = new Deferred();
-        this.option("menuVisible", showing);
+        this.option("opened", showing);
 
         return this._deferredAnimate.promise();
     }

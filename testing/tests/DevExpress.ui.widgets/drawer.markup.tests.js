@@ -68,14 +68,14 @@ QUnit.test("render drawer content", assert => {
 
 QUnit.test("opened class should be applied correctly", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
 
     assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "drawer has opened class");
 
-    instance.option("menuVisible", false);
+    instance.option("opened", false);
 
     assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
 });
@@ -115,7 +115,7 @@ QUnit.test("custom content template for content should be rendered correctly", a
 QUnit.test("render menu positions", assert => {
     const $element = $("#contentTemplate").dxDrawer({
         position: "right",
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
@@ -132,7 +132,7 @@ QUnit.test("render menu positions", assert => {
 
 QUnit.test("shader should be rendered by default if menu is visible", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
@@ -140,7 +140,7 @@ QUnit.test("shader should be rendered by default if menu is visible", assert => 
 
 QUnit.test("shader should not be rendered if shading = false", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true,
+        opened: true,
         shading: false
     });
 
