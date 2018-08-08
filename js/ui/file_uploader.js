@@ -724,7 +724,7 @@ var FileUploader = Editor.inherit({
         }
     },
     _createValidationElement: function(key) {
-        return $("<span />").text(this.option(key));
+        return $("<span>").text(this.option(key));
     },
 
     _updateFileNameMaxWidth: function() {
