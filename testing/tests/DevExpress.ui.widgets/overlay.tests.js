@@ -248,6 +248,22 @@ QUnit.test("RTL markup - rtlEnabled by default", function(assert) {
     assert.ok($content.hasClass("dx-rtl"));
 });
 
+QUnit.test("Color swatches - overlay should be rendered on viewport by default", function(assert) {
+    var overlay = $("#overlay").dxOverlay().dxOverlay("instance");
+    overlay.show();
+    var $wrapper = overlay.$content().parent();
+    assert.ok($wrapper.parent().hasClass("dx-viewport"));
+});
+
+QUnit.test("Color swatches - overlay should be rendered on swatch container if custom css present", function(assert) {
+    $("<style>#customTargetContainer .dx-swatch-marker { font-family: '#customTargetContainer'; }</style>").appendTo("head");
+    var overlay = $("#overlay").dxOverlay().dxOverlay("instance");
+    overlay.show();
+    var $wrapper = overlay.$content().parent();
+    var elementRenderedOn = $wrapper.parent().get(0);
+    assert.equal(elementRenderedOn.id, "customTargetContainer", "rendered on the right container");
+});
+
 QUnit.module("option", moduleConfig);
 
 QUnit.test("RTL markup - rtlEnabled by option", function(assert) {

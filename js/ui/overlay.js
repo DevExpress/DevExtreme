@@ -39,6 +39,8 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
+    SWATCH_MARKER_CLASS = "dx-swatch-marker",
+    DEFAULT_SWATCH = "default",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
 
@@ -490,7 +492,9 @@ var Overlay = Widget.inherit({
     },
 
     _initContainer: function(container) {
-        container = container === undefined ? viewPortUtils.value() : container;
+        if(container === undefined) {
+            container = this._getSwatchContainer() || viewPortUtils.value();
+        }
 
         var $element = this.$element(),
             $container = $element.closest(container);
@@ -500,6 +504,15 @@ var Overlay = Widget.inherit({
         }
 
         this._$container = $container.length ? $container : $element.parent();
+    },
+
+    _getSwatchContainer: function() {
+        var $element = this.$element();
+
+        $element.addClass(SWATCH_MARKER_CLASS);
+        var containerSelector = $element.css("fontFamily").replace(/"/g, "");
+        $element.removeClass(SWATCH_MARKER_CLASS);
+        return containerSelector === DEFAULT_SWATCH ? null : containerSelector;
     },
 
     _initHideTopOverlayHandler: function(handler) {
