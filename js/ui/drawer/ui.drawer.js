@@ -84,14 +84,14 @@ const Drawer = Widget.inherit({
 
             /**
             * @name dxDrawerOptions.openedStateMode
-            * @type Enums.DrawerMode
+            * @type Enums.DrawerOpenedStateMode
             * @default "push"
             */
             openedStateMode: "push",
 
             /**
             * @name dxDrawerOptions.revealMode
-            * @type Enums.DrawerMode
+            * @type Enums.DrawerRevealMode
             * @default "slide"
             */
             revealMode: "slide",
