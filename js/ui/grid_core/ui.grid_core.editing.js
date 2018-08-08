@@ -119,8 +119,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 width: null,
                 readOnly: !options.setValue,
                 isOnForm: options.isOnForm,
-                id: options.id,
-                updateValueImmediately: isRowEditMode(that)
+                id: options.id
             }));
         };
     };
@@ -1011,7 +1010,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 when(deferredUtils.fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
-                        deferred.resolve("cancel");
+                        setTimeout(function() {
+                            deferred.resolve("cancel");
+                        });
                     } else {
                         func(params).done(deferred.resolve).fail(createFailureHandler(deferred));
                     }
