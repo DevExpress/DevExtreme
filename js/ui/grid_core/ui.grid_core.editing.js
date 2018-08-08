@@ -284,12 +284,12 @@ var EditingController = modules.ViewController.inherit((function() {
             return getIndexByKey(key, items);
         },
 
-        hasChanges: function() {
+        hasChanges: function(rowIndex) {
             var that = this,
                 result = false;
 
             for(var i = 0; i < that._editData.length; i++) {
-                if(that._editData[i].type) {
+                if(that._editData[i].type && (!typeUtils.isDefined(rowIndex) || that._dataController.getRowIndexByKey(that._editData[i].key) === rowIndex)) {
                     result = true;
                     break;
                 }
@@ -829,17 +829,20 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
             var that = this,
-                rowsView = that._rowsView;
+                repaintOldRowOnly,
+                rowsView = that._rowsView,
+                columns = that._columnsController.getVisibleColumns(),
+                hasCalculableColumn = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
 
-            if(!column || !column.showEditorAlways || (oldColumn && !oldColumn.showEditorAlways)) {
+            if(!column || !column.showEditorAlways || (oldColumn && (!oldColumn.showEditorAlways || (repaintOldRowOnly = hasCalculableColumn && that.hasChanges(oldEditRowIndex))))) {
                 that._editCellInProgress = true;
 
                 // T316439
-                that.getController("editorFactory").loseFocus();
+                !repaintOldRowOnly && that.getController("editorFactory").loseFocus();
 
                 that._dataController.updateItems({
                     changeType: "update",
-                    rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                    rowIndices: repaintOldRowOnly ? [oldEditRowIndex] : [oldEditRowIndex, that._getVisibleEditRowIndex()]
                 });
             }
 
