@@ -487,9 +487,9 @@ QUnit.test("maxWidth should be rendered correctly in push mode, right menu posit
     fx.off = false;
 });
 
-QUnit.module("persistent mode");
+QUnit.module("shrink mode");
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, expand", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -497,7 +497,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, expand", a
         opened: false,
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -518,7 +518,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, expand", a
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, right menu position, expand", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, right menu position, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -527,7 +527,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
         position: "right",
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -548,7 +548,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, expand", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -556,7 +556,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, expand", a
         opened: false,
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -577,7 +577,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, expand", a
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu position, expand", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu position, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -586,7 +586,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
         revealMode: "expand",
         position: "right",
         contentTemplate: 'contentTemplate',
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -607,14 +607,14 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         opened: false,
         revealMode: "slide",
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -634,14 +634,14 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         opened: false,
         revealMode: "slide",
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -661,14 +661,14 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
         opened: false,
         revealMode: "slide",
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -688,7 +688,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", as
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, right menu position, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -696,7 +696,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
         opened: false,
         position: "right",
         revealMode: "slide",
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -716,7 +716,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu position, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -724,7 +724,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
         opened: false,
         position: "right",
         revealMode: "slide",
-        openedStateMode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");

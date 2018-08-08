@@ -12,7 +12,7 @@ import EmptyTemplate from "../widget/empty_template";
 import { Deferred } from "../../core/utils/deferred";
 import windowUtils from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
-import PersistentStrategy from "./ui.drawer.rendering.strategy.persistent";
+import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 
@@ -159,8 +159,8 @@ const Drawer = Widget.inherit({
         if(mode === "push") {
             Strategy = PushStrategy;
         }
-        if(mode === "persistent") {
-            Strategy = PersistentStrategy;
+        if(mode === "shrink") {
+            Strategy = ShrinkStrategy;
         }
         if(mode === "overlap") {
             Strategy = OverlapStrategy;
