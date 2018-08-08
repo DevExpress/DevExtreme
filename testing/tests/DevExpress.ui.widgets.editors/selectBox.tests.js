@@ -1287,7 +1287,7 @@ QUnit.test("'clear' button should clear value when items is object and searchEna
     assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), "", "text is cleared");
 });
 
-QUnit.test("'clear' button should save valueChange event instance", function(assert) {
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
     var valueChangedHandler = sinon.spy(),
         $selectBox = $("#selectBox").dxSelectBox({
             items: [1],

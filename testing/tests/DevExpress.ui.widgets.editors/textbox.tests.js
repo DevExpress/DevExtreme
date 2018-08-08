@@ -105,6 +105,21 @@ QUnit.test("T218573 - clearButton should be hidden if mode is 'search' and the '
     assert.equal($(".dx-clear-button-area").length, 0, "clear button is not rendered");
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy(),
+        $element = $("#textbox").dxTextBox({
+            showClearButton: true,
+            value: "123",
+            onValueChanged: valueChangedHandler
+        });
+
+    var $clearButton = $element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 
 QUnit.module("options changing", {
     beforeEach: function() {

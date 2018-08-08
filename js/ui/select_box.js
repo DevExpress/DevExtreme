@@ -662,11 +662,6 @@ var SelectBox = DropDownList.inherit({
         this._setValue(value);
     },
 
-    _clearValueHandler: function(e) {
-        this._saveValueChangeEvent(e);
-        this.reset();
-    },
-
     _loadItem: function(value, cache) {
         var that = this,
             deferred = new Deferred();

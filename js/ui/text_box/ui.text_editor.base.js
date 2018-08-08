@@ -548,7 +548,7 @@ var TextEditorBase = Editor.inherit({
         var $input = this._input();
         e.stopPropagation();
 
-        this._valueChangeEventHandler(e);
+        this._saveValueChangeEvent(e);
         this.reset();
 
         !focused($input) && eventsEngine.trigger($input, "focus");
@@ -781,7 +781,12 @@ var TextEditorBase = Editor.inherit({
     },
 
     reset: function() {
-        this.option("value", "");
+        var defaultOptions = this._getDefaultOptions();
+        if(this.option("value") === defaultOptions.value) {
+            this._renderInputValue(defaultOptions.value);
+        } else {
+            this.option("value", defaultOptions.value);
+        }
     },
 
     on: function(eventName, eventHandler) {
