@@ -81,6 +81,27 @@ QUnit.test("Render error row in column headers view", function(assert) {
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
 });
 
+// T653307
+QUnit.test("Render error row in rows view if column headers are hidden", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $("#container"),
+        $firstRow;
+
+    this.options.showColumnHeaders = false;
+
+    that.rowsView.render($testElement);
+
+    // act
+    that.errorHandlingController.renderErrorRow("Test");
+
+    // assert
+    assert.equal($testElement.find('tbody > tr').length, 5, "row count");
+    $firstRow = $testElement.find('tbody > tr').first();
+    assert.ok($firstRow.hasClass("dx-error-row"), "first row is error row");
+    assert.strictEqual($firstRow.find("td").first().text(), "Test", "error message");
+});
+
 QUnit.test("Render error row in rows view", function(assert) {
     // arrange
     var that = this,
