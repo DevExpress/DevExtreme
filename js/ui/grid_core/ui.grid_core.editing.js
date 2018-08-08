@@ -119,8 +119,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 width: null,
                 readOnly: !options.setValue,
                 isOnForm: options.isOnForm,
-                id: options.id,
-                updateValueImmediately: isRowEditMode(that)
+                id: options.id
             }));
         };
     };
