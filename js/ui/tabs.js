@@ -14,6 +14,7 @@ var $ = require("../core/renderer"),
     Scrollable = require("./scroll_view/ui.scrollable"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     iconUtils = require("../core/utils/icon"),
+    domUtils = require("../core/utils/dom"),
     BindableTemplate = require("./widget/bindable_template");
 
 var TABS_CLASS = "dx-tabs",
@@ -363,10 +364,8 @@ var Tabs = CollectionWidget.inherit({
             return false;
         }
 
-        var tabItemsWidth = 0;
-        this._getAvailableItems().each(function(_, tabItem) {
-            tabItemsWidth += $(tabItem).outerWidth(true);
-        });
+        var tabItemsWidth = domUtils.getSummaryItemsWidth(this._getAvailableItems());
+
         // NOTE: "-1" is a hack fix for IE (T190044)
         return tabItemsWidth - 1 > this.$element().width();
     },

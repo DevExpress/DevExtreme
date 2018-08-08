@@ -13,7 +13,8 @@ var $ = require("../../core/renderer"),
     Overlay = require("../overlay"),
     Submenu = require("./ui.submenu"),
     Button = require("../button"),
-    TreeView = require("../tree_view");
+    TreeView = require("../tree_view"),
+    domUtils = require("../../core/utils/dom");
 
 var DX_MENU_CLASS = "dx-menu",
     DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + "-vertical",
@@ -325,12 +326,8 @@ var Menu = MenuBase.inherit({
         }
 
         var $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS),
-            menuItemsWidth = 0,
+            menuItemsWidth = domUtils.getSummaryItemsWidth($menuItems),
             containerWidth = this.$element().outerWidth();
-
-        $menuItems.each(function(_, menuItem) {
-            menuItemsWidth += $(menuItem).outerWidth(true);
-        });
 
         this._toggleAdaptiveMode(menuItemsWidth > containerWidth);
     },
