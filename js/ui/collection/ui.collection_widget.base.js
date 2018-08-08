@@ -1079,6 +1079,18 @@ var CollectionWidget = Widget.inherit({
         return $(itemElement).data(this._itemDataKey());
     },
 
+    _getSummaryItemsWidth: function(items, includeMargin) {
+        var result = 0;
+
+        if(items) {
+            iteratorUtils.each(items, function(_, item) {
+                result += $(item).outerWidth(includeMargin || false);
+            });
+        }
+
+        return result;
+    },
+
     /**
     * @name CollectionWidgetmethods_getFocusedItemId
     * @publicName getFocusedItemId()

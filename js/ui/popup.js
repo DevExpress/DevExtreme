@@ -449,15 +449,15 @@ var Popup = Overlay.inherit({
         }
     },
 
-    _renderTemplateByType: function(optionName, data, $container) {
+    _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
         var template = this._getTemplateByOption(optionName),
             toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
-            var toolbarOptions = {
+            var toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
                 rtlEnabled: this.option("rtlEnabled")
-            };
+            });
 
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
@@ -600,7 +600,7 @@ var Popup = Overlay.inherit({
         if(items.length) {
             this._$bottom && this._$bottom.remove();
             var $bottom = $("<div>").addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
-            this._$bottom = this._renderTemplateByType("bottomTemplate", items, $bottom).addClass(POPUP_BOTTOM_CLASS);
+            this._$bottom = this._renderTemplateByType("bottomTemplate", items, $bottom, { compactMode: true }).addClass(POPUP_BOTTOM_CLASS);
             this._toggleClasses();
         } else {
             this._$bottom && this._$bottom.detach();

@@ -958,6 +958,8 @@ QUnit.module("rendering", {
     }
 });
 
+var POPUP_BOTTOM_CLASS = "dx-popup-bottom";
+
 QUnit.test("anonymous content template rendering", function(assert) {
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({
         visible: true
@@ -1021,6 +1023,22 @@ QUnit.test("dx-popup-fullscreen-width class should be attached when width is equ
 
     this.instance.option("width", function() { return $(window).width() - 1; });
     assert.ok(!this.instance.overlayContent().hasClass("dx-popup-fullscreen-width"), "fullscreen width class is detached");
+});
+
+QUnit.test("popup with toolbar should have compactMode option for the bottom toolbar", function(assert) {
+    var popup = $("#popup").dxPopup({
+        toolbarItems: [
+            {
+                shortcut: "done",
+                toolbar: "bottom",
+                location: "after"
+            }
+        ]
+    }).dxPopup("instance");
+
+    popup.show();
+
+    assert.ok($("." + POPUP_BOTTOM_CLASS).dxToolbarBase("instance").option("compactMode"), "bottom toolbar has the compact option");
 });
 
 
