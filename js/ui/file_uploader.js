@@ -694,7 +694,6 @@ var FileUploader = Editor.inherit({
 
         file.$statusMessage = $("<div>")
             .addClass(FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS)
-            .text(this.option("readyToUploadMessage"))
             .appendTo(file.$file);
 
         $("<div>")
@@ -712,22 +711,20 @@ var FileUploader = Editor.inherit({
         if(file.isValid()) {
             file.$statusMessage.text(this.option("readyToUploadMessage"));
         } else {
-            var validationMessage = "";
             if(!file.isValidFileExtension) {
-                validationMessage += this._getValidationMessage("validation.invalidFileExtensionMessage");
+                file.$statusMessage.append(this._createValidationElement("validation.invalidFileExtensionMessage"));
             }
             if(!file.isValidMaxSize) {
-                validationMessage += this._getValidationMessage("validation.invalidMaxFileSizeMessage");
+                file.$statusMessage.append(this._createValidationElement("validation.invalidMaxFileSizeMessage"));
             }
             if(!file.isValidMinSize) {
-                validationMessage += this._getValidationMessage("validation.invalidMinFileSizeMessage");
+                file.$statusMessage.append(this._createValidationElement("validation.invalidMinFileSizeMessage"));
             }
             $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
-            file.$statusMessage.html(validationMessage);
         }
     },
-    _getValidationMessage: function(key) {
-        return this.option(key) + "<br />";
+    _createValidationElement: function(key) {
+        return $("<span />").text(this.option(key));
     },
 
     _updateFileNameMaxWidth: function() {
