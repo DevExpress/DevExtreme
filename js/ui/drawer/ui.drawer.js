@@ -83,11 +83,11 @@ const Drawer = Widget.inherit({
             contentTemplate: "content",
 
             /**
-            * @name dxDrawerOptions.mode
+            * @name dxDrawerOptions.openedStateMode
             * @type Enums.DrawerMode
             * @default "push"
             */
-            mode: "push",
+            openedStateMode: "push",
 
             /**
             * @name dxDrawerOptions.revealMode
@@ -153,7 +153,7 @@ const Drawer = Widget.inherit({
     },
 
     _initStrategy() {
-        const mode = this.option("mode");
+        const mode = this.option("openedStateMode");
         let Strategy;
 
         if(mode === "push") {
@@ -231,7 +231,7 @@ const Drawer = Widget.inherit({
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
-        this.$element().addClass(DRAWER_CLASS + "-" + this.option("mode"));
+        this.$element().addClass(DRAWER_CLASS + "-" + this.option("openedStateMode"));
     },
 
     _refreshRevealModeClass(prevClass) {
@@ -372,7 +372,7 @@ const Drawer = Widget.inherit({
             case "template":
                 this._invalidate();
                 break;
-            case "mode":
+            case "openedStateMode":
                 this._initStrategy();
                 translator.move(this._$menu, { left: 0 });
                 this._refreshModeClass(args.previousValue);

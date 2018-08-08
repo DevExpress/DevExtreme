@@ -88,7 +88,7 @@ QUnit.test("defaults", assert => {
     const instance = $element.dxDrawer("instance");
 
     assert.equal(instance.option("revealMode"), "slide", "revealMode is OK");
-    assert.equal(instance.option("mode"), "push", "mode is OK");
+    assert.equal(instance.option("openedStateMode"), "push", "mode is OK");
 });
 
 QUnit.test("content() function", assert => {
@@ -288,7 +288,7 @@ QUnit.test("animationDuration option test", function(assert) {
     const $drawer = $("#drawer").dxDrawer({
         menuVisible: false,
         animationEnabled: true,
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const drawer = $drawer.dxDrawer("instance");
@@ -386,7 +386,7 @@ QUnit.test("minWidth should be rendered correctly in push mode", assert => {
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         menuVisible: true,
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -407,7 +407,7 @@ QUnit.test("maxWidth should be rendered correctly in push mode", assert => {
     const $element = $("#drawer").dxDrawer({
         maxWidth: 300,
         menuVisible: true,
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -428,7 +428,7 @@ QUnit.test("Drawer should be rendered correctly in push mode, right menu positio
     const $element = $("#drawer").dxDrawer({
         menuVisible: true,
         position: "right",
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -450,7 +450,7 @@ QUnit.test("minWidth should be rendered correctly in push mode, right menu posit
         minWidth: 50,
         position: "right",
         menuVisible: true,
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -472,7 +472,7 @@ QUnit.test("maxWidth should be rendered correctly in push mode, right menu posit
         maxWidth: 300,
         position: "right",
         menuVisible: true,
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -497,7 +497,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, expand", a
         menuVisible: false,
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -527,7 +527,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
         position: "right",
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -556,7 +556,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, expand", a
         menuVisible: false,
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -586,7 +586,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
         revealMode: "expand",
         position: "right",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -614,7 +614,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
         minWidth: 50,
         menuVisible: false,
         revealMode: "slide",
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -641,7 +641,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
         minWidth: 50,
         menuVisible: false,
         revealMode: "slide",
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -668,7 +668,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", as
         maxWidth: 100,
         menuVisible: false,
         revealMode: "slide",
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -696,7 +696,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
         menuVisible: false,
         position: "right",
         revealMode: "slide",
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -724,7 +724,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
         menuVisible: false,
         position: "right",
         revealMode: "slide",
-        mode: "persistent"
+        openedStateMode: "persistent"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -753,7 +753,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, expand", as
         minWidth: 50,
         menuVisible: false,
         revealMode: "expand",
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -780,7 +780,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, expand", as
         maxWidth: 100,
         menuVisible: false,
         revealMode: "expand",
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -807,7 +807,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, slide", ass
         minWidth: 50,
         menuVisible: false,
         revealMode: "slide",
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -834,7 +834,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", ass
         maxWidth: 100,
         menuVisible: false,
         revealMode: "slide",
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -862,7 +862,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
         menuVisible: false,
         position: "right",
         revealMode: "slide",
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -890,7 +890,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu 
         menuVisible: false,
         revealMode: "slide",
         position: "right",
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     const instance = $element.dxDrawer("instance");

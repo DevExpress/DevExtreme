@@ -151,7 +151,7 @@ QUnit.module("push mode");
 
 QUnit.test("drawer should have correct class depending on mode", assert => {
     const $element = $("#drawer").dxDrawer({
-        mode: "push"
+        openedStateMode: "push"
     });
 
     assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
@@ -161,7 +161,7 @@ QUnit.module("temporary mode");
 
 QUnit.test("drawer should have correct class depending on mode", assert => {
     const $element = $("#drawer").dxDrawer({
-        mode: "temporary"
+        openedStateMode: "temporary"
     });
 
     assert.ok($element.hasClass(DRAWER_CLASS + "-temporary"), "drawer class is correct");
