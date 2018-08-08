@@ -3,18 +3,18 @@ import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 
-const PersistentStrategy = DrawerStrategy.inherit({
+const ShrinkStrategy = DrawerStrategy.inherit({
     renderPosition(offset, animate) {
         this.callBase(offset, animate);
 
         const width = this._getMenuWidth(offset),
-            direction = this._drawer.option("menuPosition");
+            direction = this._drawer.option("position");
 
-        translator.move($(this._drawer.content()), { left: 0 });
+        translator.move($(this._drawer.viewContent()), { left: 0 });
 
         this._animateContent(animate, offset, width, direction);
 
-        if(this._drawer.option("showMode") === "slide") {
+        if(this._drawer.option("revealMode") === "slide") {
             const menuPos = this._getMenuOffset(offset);
             if(animate) {
 
@@ -33,7 +33,7 @@ const PersistentStrategy = DrawerStrategy.inherit({
             }
         }
 
-        if(this._drawer.option("showMode") === "shrink") {
+        if(this._drawer.option("revealMode") === "expand") {
             if(animate) {
                 animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), () => {
                     this._menuAnimation.resolve();
@@ -45,11 +45,11 @@ const PersistentStrategy = DrawerStrategy.inherit({
     },
 
     _animateContent(animate, offset, width, direction) {
-        translator.move($(this._drawer.content()), { left: 0 });
+        translator.move($(this._drawer.viewContent()), { left: 0 });
 
         if(animate) {
             let animationConfig = {
-                $element: $(this._drawer.content()),
+                $element: $(this._drawer.viewContent()),
                 padding: width,
                 direction: direction,
                 duration: this._drawer.option("animationDuration"),
@@ -60,12 +60,12 @@ const PersistentStrategy = DrawerStrategy.inherit({
             animation.padding(animationConfig);
         } else {
             if(direction === "left") {
-                $(this._drawer.content()).css("paddingLeft", width);
+                $(this._drawer.viewContent()).css("paddingLeft", width);
             } else {
-                $(this._drawer.content()).css("paddingRight", width);
+                $(this._drawer.viewContent()).css("paddingRight", width);
             }
         }
     }
 });
 
-module.exports = PersistentStrategy;
+module.exports = ShrinkStrategy;

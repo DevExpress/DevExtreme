@@ -87,16 +87,26 @@ QUnit.test("defaults", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
 
-    assert.equal(instance.option("showMode"), "slide", "showMode is OK");
-    assert.equal(instance.option("mode"), "push", "mode is OK");
+    assert.equal(instance.option("revealMode"), "slide", "revealMode is OK");
+    assert.equal(instance.option("openedStateMode"), "push", "mode is OK");
+    assert.equal(instance.option("position"), "left", "position is OK");
+    assert.equal(instance.option("shading"), true, "shading is OK");
 });
 
-QUnit.test("menuContent() function", assert => {
+QUnit.test("content() function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
-    assert.equal(typeUtils.isRenderer(instance.menuContent()), !!config().useJQuery, "menu element");
-    assert.equal($menu.get(0), $(instance.menuContent()).get(0), "menuContent function return correct DOMNode");
+    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
+    assert.equal($menu.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
+});
+
+QUnit.test("viewContent() function", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
 });
 
 QUnit.test("drawer preserve content", assert => {
@@ -106,47 +116,39 @@ QUnit.test("drawer preserve content", assert => {
     assert.equal($content[0], $element.find("#content")[0]);
 });
 
-QUnit.test("content() function", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-
-    assert.equal($content.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
-});
-
-QUnit.test("showMenu and hideMenu functions", assert => {
+QUnit.test("show and hide functions", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
 
-    instance.showMenu();
-    assert.equal(instance.option("menuVisible"), true, "menu was shown");
+    instance.show();
+    assert.equal(instance.option("opened"), true, "menu was shown");
 
-    instance.hideMenu();
-    assert.equal(instance.option("menuVisible"), false, "menu was hidden");
+    instance.hide();
+    assert.equal(instance.option("opened"), false, "menu was hidden");
 });
 
-QUnit.test("toggleMenuVisibility function", assert => {
+QUnit.test("toggle function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
-    const menuVisible = instance.option("menuVisible");
+    const opened = instance.option("opened");
 
-    instance.toggleMenuVisibility();
-    assert.equal(instance.option("menuVisible"), !menuVisible, "menu was shown");
+    instance.toggle();
+    assert.equal(instance.option("opened"), !opened, "menu was shown");
 
-    instance.toggleMenuVisibility();
-    assert.equal(instance.option("menuVisible"), menuVisible, "menu was hidden");
+    instance.toggle();
+    assert.equal(instance.option("opened"), opened, "menu was hidden");
 });
 
-QUnit.test("subscribe on toggleMenuVisibility function should fired at the end of animation", assert => {
+QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: false
+        opened: false
     });
 
     const instance = $element.dxDrawer("instance");
     let count = 0;
     const done = assert.async();
 
-    instance.toggleMenuVisibility().done(() => {
+    instance.toggle().done(() => {
         count++;
         assert.equal(count, 1, "callback not fired at animation start");
         done();
@@ -160,23 +162,23 @@ QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if menu isn't visible", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: false
+        opened: false
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
 
     assert.equal(position($content), 0, "container rendered at correct position");
 });
 
 QUnit.test("content container should have correct position if menu is visible", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
-    const $menu = $(instance.menuContent());
+    const $content = $(instance.viewContent());
+    const $menu = $(instance.content());
 
     assert.equal(position($content), $menu.width(), "container rendered at correct position");
 });
@@ -184,17 +186,17 @@ QUnit.test("content container should have correct position if menu is visible", 
 QUnit.test("content container should have correct position after resize", assert => {
     const $element = $("#drawer2").dxDrawer({
         width: "100%",
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const elementWidth = $element.width();
 
     $("#drawerContainer").width(elementWidth * 2);
     resizeCallbacks.fire();
 
-    assert.equal(position($content), $(instance.menuContent()).width(), "container rendered at correct position");
+    assert.equal(position($content), $(instance.content()).width(), "container rendered at correct position");
 });
 
 QUnit.test("content container should have correct position if it is rendered in invisible container", assert => {
@@ -205,11 +207,11 @@ QUnit.test("content container should have correct position if it is rendered in 
 
     const instance = $element.dxDrawer({
         width: "100%",
-        menuVisible: true,
+        opened: true,
         maxWidth: 50
     }).dxDrawer("instance");
 
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
 
     $container.appendTo("#qunit-fixture");
     $element.trigger("dxshown");
@@ -217,27 +219,27 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
-QUnit.test("menu should be hidden after back button click", assert => {
+QUnit.test("menu should be hidden after hideTopOverlayCallback calling", assert => {
     const instance = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     }).dxDrawer("instance");
 
     hideCallback.fire();
-    assert.equal(instance.option("menuVisible"), false, "hidden after back button event");
+    assert.equal(instance.option("opened"), false, "hidden after back button event");
 });
 
-QUnit.test("handle back button should be removed on dispose", assert => {
+QUnit.test("hideTopOverlayCallback be removed on dispose", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     $element.remove();
     assert.ok(!hideCallback.hasCallback());
 });
 
-QUnit.test("menu should not handle back button click if it isn't visible", assert => {
+QUnit.test("drawer should not handle hideTopOverlayCallback if it isn't visible", assert => {
     $("#drawer").dxDrawer({
-        menuVisible: false
+        opened: false
     });
 
     assert.ok(!hideCallback.hasCallback());
@@ -265,18 +267,18 @@ QUnit.test("animationEnabled option test", assert => {
 
     try {
         const $drawer = $("#drawer").dxDrawer({
-            menuVisible: true,
+            opened: true,
             animationEnabled: false
         });
 
         const drawer = $drawer.dxDrawer("instance");
 
-        drawer.option("menuVisible", false);
+        drawer.option("opened", false);
 
         assert.equal(animated, false, "animation was not present");
 
         drawer.option("animationEnabled", true);
-        drawer.option("menuVisible", true);
+        drawer.option("opened", true);
 
         assert.equal(animated, true, "animation present");
     } finally {
@@ -286,9 +288,9 @@ QUnit.test("animationEnabled option test", assert => {
 
 QUnit.test("animationDuration option test", function(assert) {
     const $drawer = $("#drawer").dxDrawer({
-        menuVisible: false,
+        opened: false,
         animationEnabled: true,
-        mode: "push"
+        openedStateMode: "push"
     });
 
     const drawer = $drawer.dxDrawer("instance");
@@ -296,10 +298,10 @@ QUnit.test("animationDuration option test", function(assert) {
 
     drawer.option("animationDuration", 300);
 
-    drawer.toggleMenuVisibility();
+    drawer.toggle();
     assert.equal(this.capturedAnimations[0].duration, 300, "duration is correct");
     drawer.option("animationDuration", 10000);
-    drawer.toggleMenuVisibility();
+    drawer.toggle();
     assert.equal(this.capturedAnimations[1].duration, 10000, "duration is correct");
 });
 
@@ -307,7 +309,7 @@ QUnit.module("shader");
 
 QUnit.test("shader should be visible if menu is opened", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
@@ -317,7 +319,7 @@ QUnit.test("shader should be visible if menu is opened", assert => {
 
 QUnit.test("shader should not be visible if menu is closed", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: false
+        opened: false
     });
 
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
@@ -327,35 +329,35 @@ QUnit.test("shader should not be visible if menu is closed", assert => {
 
 QUnit.test("click on shader should not close menu", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
     $shader.trigger("dxclick");
-    assert.ok(!instance.option("menuVisible"), "menu was closed");
+    assert.ok(!instance.option("opened"), "menu was closed");
 });
 
 QUnit.test("shader should be visible during animation", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: false
+        opened: false
     });
 
     const instance = $element.dxDrawer("instance");
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    instance.showMenu();
+    instance.show();
     assert.ok($shader.is(":visible"), "shader is visible during animation");
 });
 
 QUnit.test("shader should have correct position", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
@@ -364,13 +366,13 @@ QUnit.test("shader should have correct position", assert => {
 QUnit.test("shader should have correct position after widget resize", assert => {
     const $element = $("#drawer2").dxDrawer({
         width: "100%",
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
+    const $content = $(instance.viewContent());
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
-    const menuWidth = $(instance.menuContent()).width();
+    const menuWidth = $(instance.content()).width();
 
     $("#drawerContainer").width(menuWidth * 2);
     resizeCallbacks.fire();
@@ -385,8 +387,8 @@ QUnit.test("minWidth should be rendered correctly in push mode", assert => {
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: true,
-        mode: "push"
+        opened: true,
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -394,7 +396,7 @@ QUnit.test("minWidth should be rendered correctly in push mode", assert => {
 
     assert.equal($content.position().left, 200, "content has correct left when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 50, "content has correct left when minWidth is set");
 
@@ -406,8 +408,8 @@ QUnit.test("maxWidth should be rendered correctly in push mode", assert => {
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 300,
-        menuVisible: true,
-        mode: "push"
+        opened: true,
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -415,7 +417,7 @@ QUnit.test("maxWidth should be rendered correctly in push mode", assert => {
 
     assert.equal($content.position().left, 300, "content has correct left when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
 
@@ -426,9 +428,9 @@ QUnit.test("Drawer should be rendered correctly in push mode, right menu positio
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true,
-        menuPosition: "right",
-        mode: "push"
+        opened: true,
+        position: "right",
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -436,7 +438,7 @@ QUnit.test("Drawer should be rendered correctly in push mode, right menu positio
 
     assert.equal($content.position().left, -200, "content has correct left when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
 
@@ -448,9 +450,9 @@ QUnit.test("minWidth should be rendered correctly in push mode, right menu posit
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuPosition: "right",
-        menuVisible: true,
-        mode: "push"
+        position: "right",
+        opened: true,
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -458,7 +460,7 @@ QUnit.test("minWidth should be rendered correctly in push mode, right menu posit
 
     assert.equal($content.position().left, -200, "content has correct left when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, -50, "content has correct left when minWidth is set");
 
@@ -470,9 +472,9 @@ QUnit.test("maxWidth should be rendered correctly in push mode, right menu posit
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 300,
-        menuPosition: "right",
-        menuVisible: true,
-        mode: "push"
+        position: "right",
+        opened: true,
+        openedStateMode: "push"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -480,24 +482,24 @@ QUnit.test("maxWidth should be rendered correctly in push mode, right menu posit
 
     assert.equal($content.position().left, -300, "content has correct left when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
 
     fx.off = false;
 });
 
-QUnit.module("persistent mode");
+QUnit.module("shrink mode");
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, shrink", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        showMode: "shrink",
+        opened: false,
+        revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -508,7 +510,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, shrink", a
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-left"), "200px", "content has correct left when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
@@ -518,16 +520,16 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, shrink", a
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, right menu position, shrink", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, right menu position, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        menuPosition: "right",
-        showMode: "shrink",
+        opened: false,
+        position: "right",
+        revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -538,7 +540,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-right"), "200px", "content has correct left when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
@@ -548,15 +550,15 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, shrink", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        showMode: "shrink",
+        opened: false,
+        revealMode: "expand",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -567,7 +569,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, shrink", a
     assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-left"), "100px", "content has correct left when maxWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
@@ -577,16 +579,16 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, shrink", a
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu position, shrink", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu position, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        showMode: "shrink",
-        menuPosition: "right",
+        opened: false,
+        revealMode: "expand",
+        position: "right",
         contentTemplate: 'contentTemplate',
-        mode: "persistent"
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -597,7 +599,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.css("padding-right"), "100px", "content has correct left when maxWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
@@ -607,14 +609,14 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        showMode: "slide",
-        mode: "persistent"
+        opened: false,
+        revealMode: "slide",
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -625,7 +627,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -634,14 +636,14 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        showMode: "slide",
-        mode: "persistent"
+        opened: false,
+        revealMode: "slide",
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -652,7 +654,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -661,14 +663,14 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, slide", as
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        showMode: "slide",
-        mode: "persistent"
+        opened: false,
+        revealMode: "slide",
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -679,7 +681,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", as
     assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
@@ -688,15 +690,15 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, slide", as
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in persistent mode, right menu position, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in shrink mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        menuPosition: "right",
-        showMode: "slide",
-        mode: "persistent"
+        opened: false,
+        position: "right",
+        revealMode: "slide",
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -707,7 +709,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
@@ -716,15 +718,15 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu position, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        menuPosition: "right",
-        showMode: "slide",
-        mode: "persistent"
+        opened: false,
+        position: "right",
+        revealMode: "slide",
+        openedStateMode: "shrink"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -735,7 +737,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
@@ -744,16 +746,16 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     fx.off = false;
 });
 
-QUnit.module("temporary mode");
+QUnit.module("overlap mode");
 
-QUnit.test("minWidth should be rendered correctly in temporary mode, shrink", assert => {
+QUnit.test("minWidth should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        showMode: "shrink",
-        mode: "temporary"
+        opened: false,
+        revealMode: "expand",
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -764,7 +766,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, shrink", as
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -773,14 +775,14 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, shrink", as
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in temporary mode, shrink", assert => {
+QUnit.test("maxWidth should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        showMode: "shrink",
-        mode: "temporary"
+        opened: false,
+        revealMode: "expand",
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -791,7 +793,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, shrink", as
     assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
@@ -800,14 +802,14 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, shrink", as
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in temporary mode, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in overlap mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        showMode: "slide",
-        mode: "temporary"
+        opened: false,
+        revealMode: "slide",
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -818,7 +820,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, slide", ass
     assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
@@ -827,14 +829,14 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, slide", ass
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in overlap mode, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        showMode: "slide",
-        mode: "temporary"
+        opened: false,
+        revealMode: "slide",
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -845,7 +847,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", ass
     assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
@@ -854,15 +856,15 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, slide", ass
     fx.off = false;
 });
 
-QUnit.test("minWidth should be rendered correctly in temporary mode, right menu position, slide", assert => {
+QUnit.test("minWidth should be rendered correctly in overlap mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuVisible: false,
-        menuPosition: "right",
-        showMode: "slide",
-        mode: "temporary"
+        opened: false,
+        position: "right",
+        revealMode: "slide",
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -873,7 +875,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
@@ -882,15 +884,15 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
     fx.off = false;
 });
 
-QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu position, slide", assert => {
+QUnit.test("maxWidth should be rendered correctly in overlap mode, right menu position, slide", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
-        menuVisible: false,
-        showMode: "slide",
-        menuPosition: "right",
-        mode: "temporary"
+        opened: false,
+        revealMode: "slide",
+        position: "right",
+        openedStateMode: "overlap"
     });
 
     const instance = $element.dxDrawer("instance");
@@ -901,7 +903,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu 
     assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
-    instance.toggleMenuVisibility();
+    instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
     assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
@@ -914,13 +916,13 @@ QUnit.module("rtl");
 
 QUnit.test("content should have correct position if menu is visible in rtl mode", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true,
+        opened: true,
         rtlEnabled: true
     });
 
     const instance = $element.dxDrawer("instance");
-    const $content = $(instance.content());
-    const $menu = $(instance.menuContent());
+    const $content = $(instance.viewContent());
+    const $menu = $(instance.content());
 
     assert.equal(position($content), -$menu.width(), "container rendered at correct position");
 });
