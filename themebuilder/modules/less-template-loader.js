@@ -4,7 +4,7 @@ var LESS_DIR_PATH = "data/less/";
 
 var addSwatchClass = function(less, swatchSelector) {
     if(!swatchSelector) return less;
-    less += ".dx-swatch-marker { font-family: \"" + swatchSelector + "\"; }";
+    less += ".dx-swatch-marker { font-family: \"" + swatchSelector + "\" !important; }";
     return swatchSelector + "{" + less + "}";
 }
 
@@ -76,7 +76,11 @@ var getCompiledRule = function(cssString) {
     return result;
 };
 
-var LessTemplateLoader = function(readFile, lessCompiler, swatchSelector) {
+var LessTemplateLoader = function(config) {
+    var readFile = config.reader;
+    var lessCompiler = config.lessCompiler;
+    var swatchSelector = config.swatchSelector;
+
     this.load = function(theme, colorScheme, metadata) {
         var that = this;
         return new Promise(function(resolve, reject) {
@@ -134,7 +138,7 @@ var LessTemplateLoader = function(readFile, lessCompiler, swatchSelector) {
         return new Promise(function(resolve, reject) {
             var compiledMetadata = {};
 
-            var preCompiler = new LessMetadataPreCompilerPlugin(less, metadata);
+            var preCompiler = new LessMetadataPreCompilerPlugin(metadata, swatchSelector);
             var sassContent = preCompiler.process(less);
 
             sassCompiler.render({
@@ -143,7 +147,7 @@ var LessTemplateLoader = function(readFile, lessCompiler, swatchSelector) {
                 if(error) {
                     reject(error);
                 } else {
-                    var postCompiler = new LessMetadataPostCompilerPlugin(less, compiledMetadata);
+                    var postCompiler = new LessMetadataPostCompilerPlugin(compiledMetadata, swatchSelector);
                     var resultCss = result.css.toString();
 
                     postCompiler.process(resultCss);

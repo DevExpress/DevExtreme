@@ -1,5 +1,5 @@
 var config = require("./config.js");
-var builder = require("./builder.js");
+var builder = require("../modules/builder.js");
 var fs = require("fs");
 
 builder.buildTheme(config).then(function(result) {

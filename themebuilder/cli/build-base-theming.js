@@ -1,5 +1,5 @@
 var config = require("./config.js");
-var builder = require("./builder.js");
+var builder = require("../modules/builder.js");
 var fs = require("fs");
 
 var filePath = config.cssFolderPath + config.themeName + "." + config.colorScheme.replace(/-/, ".") + ".base." + config.fileFormat;
