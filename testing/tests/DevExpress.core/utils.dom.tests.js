@@ -149,3 +149,17 @@ QUnit.test("dont prevent touch move on win10 devices", function(assert) {
         devices.real(originalRealDevice);
     }
 });
+
+QUnit.module("getSummaryItemsWidth");
+
+QUnit.test("getSummaryItemsWidth returns right result", function(assert) {
+    var $container = $("<div>")
+        .append($("<div>").css("width", "10px").css("padding-right", "7px"))
+        .append($("<div>").css("width", "20px").css("margin-left", "5px"));
+
+    $container.appendTo("#qunit-fixture");
+
+    var result = domUtils.getSummaryItemsWidth($container.find("div"));
+
+    assert.equal(result, 42, "getSummaryItemsWidth returns right result");
+});
