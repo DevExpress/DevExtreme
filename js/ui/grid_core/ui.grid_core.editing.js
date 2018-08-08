@@ -1010,7 +1010,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 when(deferredUtils.fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
-                        deferred.resolve("cancel");
+                        setTimeout(function() {
+                            deferred.resolve("cancel");
+                        });
                     } else {
                         func(params).done(deferred.resolve).fail(createFailureHandler(deferred));
                     }
