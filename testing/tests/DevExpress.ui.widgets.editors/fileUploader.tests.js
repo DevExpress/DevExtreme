@@ -198,7 +198,7 @@ QUnit.module("validation rendrering", moduleConfig, function() {
         var fileUploader = $fileUploader.dxFileUploader("instance");
         simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
 
-        var bigFileWithInvalidExtStatusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
+        var bigFileWithInvalidExtStatusMessage = $($fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).get(0)).text();
         assert.ok(bigFileWithInvalidExtStatusMessage.indexOf(fileUploader.option("validation.invalidMaxFileSizeMessage")) > -1, "has invalidMaxFileSizeMessage");
         assert.ok(bigFileWithInvalidExtStatusMessage.indexOf(fileUploader.option("validation.invalidFileExtensionMessage")) > -1, "has invalidFileExtensionMessage");
 
