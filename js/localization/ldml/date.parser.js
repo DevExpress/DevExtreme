@@ -57,11 +57,16 @@ var PATTERN_REGEXPS = {
 
 var parseNumber = Number;
 
+var caseInsensitiveIndexOf = function(array, value) {
+    return array.map((item) => item.toLowerCase()).indexOf(value.toLowerCase())
+};
+
 var monthPatternParser = function(text, count, dateParts) {
     if(count > 2) {
         return ["format", "standalone"].map(function(type) {
             return Object.keys(FORMAT_TYPES).map(function(count) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], type).indexOf(text);
+                var monthNames = dateParts.getMonthNames(FORMAT_TYPES[count], type);
+                return caseInsensitiveIndexOf(monthNames, text);
             });
         }).reduce(function(a, b) {
             return a.concat(b);
@@ -89,10 +94,11 @@ var PATTERN_PARSERS = {
         return parseNumber(text) - 1;
     },
     E: function(text, count, dateParts) {
-        return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
+        var dayNames = dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format");
+        return caseInsensitiveIndexOf(dayNames, text);
     },
     a: function(text, count, dateParts) {
-        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
+        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text.toUpperCase());
     },
     d: parseNumber,
     H: parseNumber,
@@ -184,7 +190,7 @@ var getRegExpInfo = function(format, dateParts) {
     }
     return {
         patterns: patterns,
-        regexp: new RegExp("^" + regexpText + "$")
+        regexp: new RegExp("^" + regexpText + "$", "i")
     };
 };
 
