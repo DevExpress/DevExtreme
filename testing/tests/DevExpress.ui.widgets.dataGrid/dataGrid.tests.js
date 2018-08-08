@@ -8845,7 +8845,9 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
 // T648744
 QUnit.test("Scrollbar should not be shown if column hiding is enabled and all columns are visible", function(assert) {
     // arrange, act
-    $('#container').css("zoom", 1.25);
+    if(browser.webkit) {
+        $('#container').css("zoom", 1.25);
+    }
 
     var dataGrid = createDataGrid({
         width: "700.1px",
