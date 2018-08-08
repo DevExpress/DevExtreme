@@ -5360,7 +5360,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         that.clock.tick();
 
         // assert
-        assert.strictEqual(countCallCalculateCellValue, 3, "calculateCellValue call count");
+        assert.ok(countCallCalculateCellValue, "calculateCellValue is called");
         assert.strictEqual($testElement.find(".dx-datagrid-rowsview td").eq(2).text(), "Bob John", "text of the third column of the first row");
         assert.ok(that.editingController.isEditCell(1, 0), "the first cell of the second row is editable");
     });

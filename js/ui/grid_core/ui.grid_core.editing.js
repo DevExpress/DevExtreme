@@ -829,20 +829,20 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
             var that = this,
-                needRepaint,
+                repaintOldRowOnly,
                 rowsView = that._rowsView,
                 columns = that._columnsController.getVisibleColumns(),
                 hasCalculableColumn = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
 
-            if(!column || !column.showEditorAlways || (oldColumn && (!oldColumn.showEditorAlways || (needRepaint = hasCalculableColumn && that.hasChanges(oldEditRowIndex))))) {
+            if(!column || !column.showEditorAlways || (oldColumn && (!oldColumn.showEditorAlways || (repaintOldRowOnly = hasCalculableColumn && that.hasChanges(oldEditRowIndex))))) {
                 that._editCellInProgress = true;
 
                 // T316439
-                !needRepaint && that.getController("editorFactory").loseFocus();
+                !repaintOldRowOnly && that.getController("editorFactory").loseFocus();
 
                 that._dataController.updateItems({
                     changeType: "update",
-                    rowIndices: needRepaint ? [oldEditRowIndex] : [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                    rowIndices: repaintOldRowOnly ? [oldEditRowIndex] : [oldEditRowIndex, that._getVisibleEditRowIndex()]
                 });
             }
 
