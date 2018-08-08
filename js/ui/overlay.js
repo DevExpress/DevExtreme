@@ -507,6 +507,8 @@ var Overlay = Widget.inherit({
     },
 
     _getSwatchContainer: function() {
+        if(!windowUtils.hasWindow()) return null;
+
         var $element = this.$element();
 
         $element.addClass(SWATCH_MARKER_CLASS);
