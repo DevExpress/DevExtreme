@@ -32,11 +32,11 @@ const Drawer = Widget.inherit({
         return extend(this.callBase(), {
 
             /**
-            * @name dxDrawerOptions.menuPosition
-            * @type Enums.DrawerMenuPosition
+            * @name dxDrawerOptions.position
+            * @type Enums.DrawerPosition
             * @default "left"
             */
-            menuPosition: "left",
+            position: "left",
 
             /**
             * @name dxDrawerOptions.menuVisible
@@ -183,7 +183,7 @@ const Drawer = Widget.inherit({
     _initMarkup() {
         this.callBase();
 
-        this._togglePositionClass(this.option("menuVisible"));
+        this._toggleVisibleClass(this.option("menuVisible"));
         this._renderMarkup();
 
         this._refreshModeClass();
@@ -208,7 +208,7 @@ const Drawer = Widget.inherit({
         this._initWidth();
 
         this._renderShader();
-        this._toggleMenuPositionClass();
+        this._togglePositionClass();
     },
 
     _render() {
@@ -267,21 +267,21 @@ const Drawer = Widget.inherit({
         return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
     },
 
-    _isRightMenuPosition() {
-        const invertedPosition = this.option("menuPosition") === "right";
+    _isRightPosition() {
+        const invertedPosition = this.option("position") === "right";
         const rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
     },
 
-    _toggleMenuPositionClass() {
-        const menuPosition = this.option("menuPosition");
+    _togglePositionClass() {
+        const position = this.option("position");
 
         this._$menu.removeClass(DRAWER_CLASS + "-left");
         this._$menu.removeClass(DRAWER_CLASS + "-right");
         this._$menu.removeClass(DRAWER_CLASS + "-top");
 
-        this._$menu.addClass(DRAWER_CLASS + "-" + menuPosition);
+        this._$menu.addClass(DRAWER_CLASS + "-" + position);
     },
 
     _renderPosition(offset, animate) {
@@ -318,7 +318,7 @@ const Drawer = Widget.inherit({
     },
 
     _getPositionCorrection() {
-        return this._isRightMenuPosition() ? -1 : 1;
+        return this._isRightPosition() ? -1 : 1;
     },
 
     _dispose() {
@@ -346,7 +346,7 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _togglePositionClass(menuVisible) {
+    _toggleVisibleClass(menuVisible) {
         this.$element().toggleClass(OPENED_STATE_CLASS, menuVisible);
     },
 
@@ -362,10 +362,10 @@ const Drawer = Widget.inherit({
                 break;
             case "menuVisible":
                 this._renderPosition(args.value);
-                this._togglePositionClass(args.value);
+                this._toggleVisibleClass(args.value);
                 break;
-            case "menuPosition":
-                this._toggleMenuPositionClass();
+            case "position":
+                this._togglePositionClass();
                 this._renderPosition(this.option("menuVisible"));
                 break;
             case "contentTemplate":

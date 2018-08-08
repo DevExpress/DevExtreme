@@ -427,7 +427,7 @@ QUnit.test("Drawer should be rendered correctly in push mode, right menu positio
 
     const $element = $("#drawer").dxDrawer({
         menuVisible: true,
-        menuPosition: "right",
+        position: "right",
         mode: "push"
     });
 
@@ -448,7 +448,7 @@ QUnit.test("minWidth should be rendered correctly in push mode, right menu posit
 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
-        menuPosition: "right",
+        position: "right",
         menuVisible: true,
         mode: "push"
     });
@@ -470,7 +470,7 @@ QUnit.test("maxWidth should be rendered correctly in push mode, right menu posit
 
     const $element = $("#drawer").dxDrawer({
         maxWidth: 300,
-        menuPosition: "right",
+        position: "right",
         menuVisible: true,
         mode: "push"
     });
@@ -524,7 +524,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         menuVisible: false,
-        menuPosition: "right",
+        position: "right",
         revealMode: "expand",
         contentTemplate: 'contentTemplate',
         mode: "persistent"
@@ -584,7 +584,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
         maxWidth: 100,
         menuVisible: false,
         revealMode: "expand",
-        menuPosition: "right",
+        position: "right",
         contentTemplate: 'contentTemplate',
         mode: "persistent"
     });
@@ -694,7 +694,7 @@ QUnit.test("minWidth should be rendered correctly in persistent mode, right menu
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         menuVisible: false,
-        menuPosition: "right",
+        position: "right",
         revealMode: "slide",
         mode: "persistent"
     });
@@ -722,7 +722,7 @@ QUnit.test("maxWidth should be rendered correctly in persistent mode, right menu
     const $element = $("#drawer").dxDrawer({
         maxWidth: 100,
         menuVisible: false,
-        menuPosition: "right",
+        position: "right",
         revealMode: "slide",
         mode: "persistent"
     });
@@ -860,7 +860,7 @@ QUnit.test("minWidth should be rendered correctly in temporary mode, right menu 
     const $element = $("#drawer").dxDrawer({
         minWidth: 50,
         menuVisible: false,
-        menuPosition: "right",
+        position: "right",
         revealMode: "slide",
         mode: "temporary"
     });
@@ -889,7 +889,7 @@ QUnit.test("maxWidth should be rendered correctly in temporary mode, right menu 
         maxWidth: 100,
         menuVisible: false,
         revealMode: "slide",
-        menuPosition: "right",
+        position: "right",
         mode: "temporary"
     });
 

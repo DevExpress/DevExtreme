@@ -114,7 +114,7 @@ QUnit.test("custom content template for content should be rendered correctly", a
 
 QUnit.test("render menu positions", assert => {
     const $element = $("#contentTemplate").dxDrawer({
-        menuPosition: "right",
+        position: "right",
         menuVisible: true
     });
 
@@ -124,7 +124,7 @@ QUnit.test("render menu positions", assert => {
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "there is no left menu position class");
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class added");
 
-    instance.option("menuPosition", "top");
+    instance.option("position", "top");
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class has been removed");
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "right menu position class has been removed");
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-top"), "top menu position class added");

@@ -8,7 +8,7 @@ const PersistentStrategy = DrawerStrategy.inherit({
         this.callBase(offset, animate);
 
         const width = this._getMenuWidth(offset),
-            direction = this._drawer.option("menuPosition");
+            direction = this._drawer.option("position");
 
         translator.move($(this._drawer.viewContent()), { left: 0 });
 

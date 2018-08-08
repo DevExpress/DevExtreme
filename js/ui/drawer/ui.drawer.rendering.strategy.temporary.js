@@ -8,7 +8,7 @@ const TemporaryStrategy = DrawerStrategy.inherit({
     renderPosition(offset, animate) {
         this.callBase(offset, animate);
 
-        const direction = this._drawer.option("menuPosition");
+        const direction = this._drawer.option("position");
         const menuPosition = this._getMenuOffset(offset);
 
         $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minWidth") * this._drawer._getPositionCorrection());
