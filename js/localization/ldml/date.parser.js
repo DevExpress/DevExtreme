@@ -57,16 +57,8 @@ var PATTERN_REGEXPS = {
 
 var parseNumber = Number;
 
-var caseInsensitiveIndexOf = function(haystack, needle) {
-    needle = needle.toLowerCase();
-
-    for(var index = 0; index < haystack.length; index++) {
-        if(haystack[index].toLowerCase() === needle) {
-            return index;
-        }
-    }
-
-    return -1;
+var caseInsensitiveIndexOf = function(array, value) {
+    return array.map((item) => item.toLowerCase()).indexOf(value.toLowerCase())
 };
 
 var monthPatternParser = function(text, count, dateParts) {
