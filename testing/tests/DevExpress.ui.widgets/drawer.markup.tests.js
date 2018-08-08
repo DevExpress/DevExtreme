@@ -80,7 +80,7 @@ QUnit.test("opened class should be applied correctly", assert => {
     assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
 });
 
-QUnit.test("custom content template for menu should be rendered correctly", assert => {
+QUnit.test("custom template for menu should be rendered correctly", assert => {
     const $element = $("#contentTemplate").dxDrawer({
         template: "customMenu"
     });

@@ -75,14 +75,6 @@ const Drawer = Widget.inherit({
             template: "menu",
 
             /**
-            * @name dxDrawerOptions.contentTemplate
-            * @type_function_param1 contentElement:dxElement
-            * @type template|function
-            * @default "content"
-            */
-            contentTemplate: "content",
-
-            /**
             * @name dxDrawerOptions.openedStateMode
             * @type Enums.DrawerOpenedStateMode
             * @default "push"
@@ -109,6 +101,15 @@ const Drawer = Widget.inherit({
             * @default 400
             */
             animationDuration: 400,
+
+            /**
+            * @name dxDrawerOptions.contentTemplate
+            * @type_function_param1 contentElement:dxElement
+            * @type template|function
+            * @hidden
+            * @default "content"
+            */
+            contentTemplate: "content",
 
             /**
             * @name dxDrawerOptions.onContentReady
@@ -194,6 +195,7 @@ const Drawer = Widget.inherit({
         menuTemplate && menuTemplate.render({
             container: this.content()
         });
+
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
@@ -357,9 +359,6 @@ const Drawer = Widget.inherit({
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
-            case "contentOffset":
-                this._dimensionChanged();
-                break;
             case "opened":
                 this._renderPosition(args.value);
                 this._toggleVisibleClass(args.value);
@@ -421,7 +420,6 @@ const Drawer = Widget.inherit({
     * @publicName viewContent()
     * @return dxElement
     * @hidden
-    * @inheritdoc
     */
     viewContent() {
         return getPublicElement(this._$contentWrapper);

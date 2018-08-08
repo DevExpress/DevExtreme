@@ -89,6 +89,8 @@ QUnit.test("defaults", assert => {
 
     assert.equal(instance.option("revealMode"), "slide", "revealMode is OK");
     assert.equal(instance.option("openedStateMode"), "push", "mode is OK");
+    assert.equal(instance.option("position"), "left", "position is OK");
+    assert.equal(instance.option("shading"), true, "shading is OK");
 });
 
 QUnit.test("content() function", assert => {
@@ -99,19 +101,19 @@ QUnit.test("content() function", assert => {
     assert.equal($menu.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
 });
 
-QUnit.test("drawer preserve content", assert => {
-    const $content = $("#drawer #content"),
-        $element = $("#drawer").dxDrawer({});
-
-    assert.equal($content[0], $element.find("#content")[0]);
-});
-
 QUnit.test("viewContent() function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
 
     assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
+});
+
+QUnit.test("drawer preserve content", assert => {
+    const $content = $("#drawer #content"),
+        $element = $("#drawer").dxDrawer({});
+
+    assert.equal($content[0], $element.find("#content")[0]);
 });
 
 QUnit.test("show and hide functions", assert => {
@@ -217,7 +219,7 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
-QUnit.test("menu should be hidden after back button click", assert => {
+QUnit.test("menu should be hidden after hideTopOverlayCallback calling", assert => {
     const instance = $("#drawer").dxDrawer({
         opened: true
     }).dxDrawer("instance");
@@ -226,7 +228,7 @@ QUnit.test("menu should be hidden after back button click", assert => {
     assert.equal(instance.option("opened"), false, "hidden after back button event");
 });
 
-QUnit.test("handle back button should be removed on dispose", assert => {
+QUnit.test("hideTopOverlayCallback be removed on dispose", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true
     });
@@ -235,7 +237,7 @@ QUnit.test("handle back button should be removed on dispose", assert => {
     assert.ok(!hideCallback.hasCallback());
 });
 
-QUnit.test("menu should not handle back button click if it isn't visible", assert => {
+QUnit.test("drawer should not handle hideTopOverlayCallback if it isn't visible", assert => {
     $("#drawer").dxDrawer({
         opened: false
     });
