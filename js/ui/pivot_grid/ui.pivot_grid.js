@@ -1834,6 +1834,8 @@ var PivotGrid = Widget.inherit({
                 if(descriptionCellHeight > columnsAreaHeight) {
                     adjustSizeArray(columnsAreaRowHeights, columnsAreaHeight - descriptionCellHeight);
                     columnsArea.setRowsHeight(columnsAreaRowHeights);
+                } else if(needSynchronizeFieldPanel) {
+                    rowFieldsHeader.groupElement().css("marginTop", columnsAreaHeight - descriptionCellHeight);
                 }
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
