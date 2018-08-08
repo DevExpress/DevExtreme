@@ -8842,6 +8842,33 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
     assert.notOk($masterDetailRows.is(":visible"), "master-detail rows are not visible");
 });
 
+// T648744
+QUnit.test("Scrollbar should not be shown if column hiding is enabled and all columns are visible", function(assert) {
+    // arrange, act
+    $('#container').css("zoom", 1.25);
+
+    var dataGrid = createDataGrid({
+        width: "700.1px",
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columnAutoWidth: true,
+        columnHidingEnabled: true,
+        columns: [{
+            cellTemplate: function($container) { $($container).css("width", "129.6px"); }
+        }, {
+            cellTemplate: function($container) { $($container).css("width", "96.8px"); }
+        }, {
+            cellTemplate: function($container) { $($container).css("width", "104px"); }
+        }, {
+            cellTemplate: function($container) { $($container).css("width", "111.2px"); }
+        }]
+    });
+
+    // assert
+    var scrollable = dataGrid.getScrollable();
+    assert.equal(scrollable.$content().width(), scrollable._container().width(), "no scrollbar");
+});
+
 QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editing", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard navigation is not actual for not desktop devices");
