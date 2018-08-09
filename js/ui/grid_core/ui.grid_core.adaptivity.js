@@ -990,7 +990,8 @@ module.exports = {
                 },
 
                 _needStretch: function() {
-                    return this.callBase.apply(this, arguments) || this._adaptiveColumnsController.getHidingColumnsQueue().length;
+                    var adaptiveColumnsController = this._adaptiveColumnsController;
+                    return this.callBase.apply(this, arguments) || adaptiveColumnsController.getHidingColumnsQueue().length || adaptiveColumnsController.hasHiddenColumns();
                 },
 
                 init: function() {
