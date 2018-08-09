@@ -134,6 +134,25 @@ QUnit.test("value clearing", function(assert) {
     assert.equal($input.val(), "", "input was cleared");
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy();
+
+    new DropDownBox(this.$element, {
+        items: this.simpleItems,
+        showClearButton: true,
+        onValueChanged: valueChangedHandler,
+        valueExpr: "id",
+        displayExpr: "name",
+        value: [1]
+    });
+
+    var $clearButton = this.$element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 QUnit.test("content template should work", function(assert) {
     assert.expect(4);
 
