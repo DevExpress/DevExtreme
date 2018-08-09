@@ -70,11 +70,11 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(!lineElement) {
                     return;
                 }
-                if(!settings.points) {
+                if(settings.points === null) {
                     lineElement.remove();
                     return;
                 }
-                if(animate && storedSettings && storedSettings.points) {
+                if(animate && storedSettings && storedSettings.points !== null) {
                     settings.opacity = 1;
                     lineElement.attr(storedSettings);
                     lineElement.animate(settings);
@@ -90,13 +90,11 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                         partitionDuration: 0.5
                     });
                 }
+
+                this.coords.angle && axis._rotateTick(lineElement, this.coords);
             },
 
             updateTickPosition: function(animate) {
-                if(!this.mark) {
-                    return;
-                }
-
                 this._updateLine(this.mark, {
                     points: axis._getTickMarkPoints(tick.coords, tickOptions.length)
                 },
@@ -104,8 +102,6 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                         points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length)
                     },
                     animate);
-
-                this.coords.angle && axis._rotateTick(this.mark, this.coords);
             },
             drawLabel: function(range) {
                 const stubData = axis.getTranslator().getBusinessRange().stubData;

@@ -729,6 +729,32 @@ QUnit.test("draw grid", function(assert) {
     }
 });
 
+QUnit.test("Update grid on second draw", function(assert) {
+    this.generatedTicks = [500];
+
+    const axis = this.createDrawnAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+
+    const grid = this.renderer.path.lastCall.returnValue;
+    grid.attr.reset();
+    grid.rotate.reset();
+
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 400,
+        width: 1000
+    });
+
+    assert.deepEqual(grid.attr.lastCall.args[0], {
+        points: [465, 200, 665, 200],
+        opacity: 1
+    });
+
+    assert.deepEqual(grid.rotate.lastCall.args, [33, 465, 200]);
+});
+
 QUnit.test("create strips", function(assert) {
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
     assert.ok(this.renderer.arc.called);
@@ -1127,6 +1153,31 @@ QUnit.test("draw grid", function(assert) {
         assert.equal(this.renderer.circle.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.gridGroup.children[0], 'Created elements attached to the group');
         assert.ok(this.renderer.circle.getCall(i).returnValue.sharp.calledOnce);
     }
+});
+
+QUnit.test("Update grid on second draw", function(assert) {
+    this.generatedTicks = [500];
+
+    const axis = this.createDrawnAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+
+    const grid = this.renderer.circle.lastCall.returnValue;
+    grid.attr.reset();
+
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 400,
+        width: 1000
+    });
+
+    assert.deepEqual(grid.attr.lastCall.args[0], {
+        cx: 465,
+        cy: 200,
+        r: 0,
+        opacity: 1
+    });
 });
 
 QUnit.test("draw spider grid", function(assert) {
