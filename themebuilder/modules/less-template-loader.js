@@ -4,7 +4,6 @@ var LESS_DIR_PATH = "data/less/";
 
 var addSwatchClass = function(less, swatchSelector) {
     if(!swatchSelector) return less;
-    less += ".dx-swatch-marker { font-family: \"" + swatchSelector + "\" !important; }";
     return swatchSelector + "{" + less + "}";
 }
 
