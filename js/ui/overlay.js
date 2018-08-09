@@ -511,8 +511,8 @@ var Overlay = Widget.inherit({
         var viewport = viewPortUtils.value();
         if(!swatchContainer.length) return viewport;
 
-        var swatchClassRegex = new RegExp(`(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);
-        var swatchClass = swatchContainer[0].className.match(swatchClassRegex)[1];
+        var swatchClassRegex = new RegExp(`(\\s|^)(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);
+        var swatchClass = swatchContainer[0].className.match(swatchClassRegex)[2];
         var swatchContainer = viewport.children("." + swatchClass);
 
         if(!swatchContainer.length) {
