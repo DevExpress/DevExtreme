@@ -175,7 +175,9 @@
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxTextBox", { }, "test-id", { validationGroup: "my-group" }) %>\
                     </div>\
-                    </script>'
+                    </script>\
+                    \
+                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script><script type="text/html">BUTTON_CONTENT</script></div>'
                 );
 
                 if(!window.DevExpress || !window.DevExpress.aspnet) {
@@ -233,6 +235,11 @@
             QUnit.test("Exotic characters in component ID should be escaped (T531137)", function(assert) {
                 var $result = renderTemplate("#templateWithExoticId");
                 assert.ok($result.dxButton("instance"));
+            });
+
+            QUnit.test("Inner template is rendered correctly when another script tags exist", function(assert) {
+                var $buttonElement = $("#buttonWithInnerTemplate").dxButton();
+                assert.equal($buttonElement.text(), "BUTTON_CONTENT");
             });
         }
     );

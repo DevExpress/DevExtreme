@@ -8,7 +8,8 @@
                 require("./ui/widget/ui.template_base").renderedCallbacks,
                 require("./core/guid"),
                 require("./ui/validation_engine"),
-                require("./core/utils/iterator")
+                require("./core/utils/iterator"),
+                require("./core/utils/dom").extractTemplateMarkup
             );
         });
     } else {
@@ -20,10 +21,11 @@
             ui && ui.templateRendered,
             DevExpress.data.Guid,
             DevExpress.validationEngine,
-            DevExpress.utils.iterator
+            DevExpress.utils.iterator,
+            DevExpress.utils.dom.extractTemplateMarkup
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup) {
     var templateCompiler = createTemplateCompiler();
 
     function createTemplateCompiler() {
@@ -84,21 +86,9 @@
 
     function createTemplateEngine() {
 
-        function outerHtml(element) {
-            element = $(element);
-
-            var templateTag = element.length && element[0].nodeName.toLowerCase();
-            if(templateTag === "script") {
-                return element.html();
-            } else {
-                element = $("<div>").append(element);
-                return element.html();
-            }
-        }
-
         return {
             compile: function(element) {
-                return templateCompiler(outerHtml(element));
+                return templateCompiler(extractTemplateMarkup(element));
             },
             render: function(template, data) {
                 return template(data);
