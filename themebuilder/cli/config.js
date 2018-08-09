@@ -1,10 +1,12 @@
 var path = require("path");
 var readFile = require("./adapters/node-file-reader");
+var createRecursive = require("./helpers/recursive-path-creator");
 
 var theme = process.env["npm_config_theme_name"] || "generic.light";
 var metadataFilePath = process.env["npm_config_metadata_file_path"] || "";
-var fileFormat = process.env["npm_config_file_format"];
+var fileFormat = process.env["npm_config_file_format"] || "less";
 var swatchSelector = process.env["npm_config_swatch_selector"];
+var out = process.env["npm_config_out"];
 
 var themeName = theme.split(".")[0];
 var colorScheme = theme.split(".")[1] + (theme.split(".")[2] ? "-" + theme.split(".")[2] : "");
@@ -24,8 +26,7 @@ switch(path.extname(metadataFilePath)) {
         break;
 }
 
-var cssFileName = themeName + "." + colorScheme.replace(/-/, ".") + ".custom.css";
-var cssFolderPath = "cli/artifacts/";
+if(out) createRecursive(out);
 
 module.exports = {
     metadataPromise: metadataPromise,
@@ -36,9 +37,8 @@ module.exports = {
     isBootstrap: isBootstrap,
     bootstrapVersion: bootstrapVersion,
 
-    cssFileName: cssFileName,
-    cssFolderPath: cssFolderPath,
     swatchSelector: swatchSelector,
+    out: out,
 
     reader: readFile,
     lessCompiler: require("less/lib/less-node")

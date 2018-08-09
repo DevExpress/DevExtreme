@@ -2,7 +2,7 @@ var config = require("./config.js");
 var builder = require("../modules/builder.js");
 var fs = require("fs");
 
-var filePath = config.cssFolderPath + config.themeName + "." + config.colorScheme.replace(/-/, ".") + ".base." + config.fileFormat;
+var filePath = config.out || config.themeName + "." + config.colorScheme.replace(/-/, ".") + ".base." + config.fileFormat;
 var baseParameters = ["@base-accent", "@base-text-color", "@base-bg", "@base-border-color", "@base-border-radius"];
 
 builder.buildTheme(config).then(function(result) {

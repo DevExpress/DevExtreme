@@ -3,11 +3,9 @@ var builder = require("../modules/builder.js");
 var fs = require("fs");
 
 builder.buildTheme(config).then(function(result) {
-    if(!fs.existsSync(config.cssFolderPath)) {
-        fs.mkdirSync(config.cssFolderPath);
-    }
+    var outputPath = config.out || config.themeName + "." + config.colorScheme.replace(/-/, ".") + ".custom.css";
 
-    fs.writeFile(config.cssFolderPath + config.cssFileName, result.css, "utf8", function(error) {
+    fs.writeFile(outputPath, result.css, "utf8", function(error) {
         if(error) throw error;
     });
 }).catch(function(error) {

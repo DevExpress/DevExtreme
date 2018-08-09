@@ -360,6 +360,7 @@
                     "prev",
                     "pre",  // ThemeBuilder
                     "scss", // ThemeBuilder
+                    "sep", // path.sep
                     "proj",
                     "proto",
                     "proxied",
