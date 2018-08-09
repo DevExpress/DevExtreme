@@ -1,4 +1,15 @@
 /**
+* @name GaugeIndicator
+* @inherits CommonIndicator
+* @hidden
+*/
+/**
+ * @name GaugeIndicator.type
+ * @type string
+ * @acceptValues 'circle'|'rangeBar'|'rectangle'|'rectangleNeedle'|'rhombus'|'textCloud'|'triangleMarker'|'triangleNeedle'|'twoColorNeedle'
+ */
+
+/**
 * @name CommonIndicator
 * @section CommonIndicators
 * @type object
@@ -201,165 +212,84 @@ var CommonIndicator = {
 * @name circularRectangleNeedle
 * @publicName RectangleNeedle
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#C2C2C2' @prop color
 */
 var circularRectangleNeedle = {
-    /**
-    * @name circularRectangleNeedle.color
-    * @type string
-    * @inheritdoc
-    * @default '#C2C2C2'
-    */
     color: '#C2C2C2'
 }
 /**
 * @name circularTriangleNeedle
 * @publicName TriangleNeedle
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#C2C2C2' @prop color
 */
 var circularTriangleNeedle = {
-    /**
-    * @name circularTriangleNeedle.color
-    * @type string
-    * @inheritdoc
-    * @default '#C2C2C2'
-    */
     color: '#C2C2C2'
 }
 /**
 * @name circularTwoColorNeedle
 * @publicName TwoColorNeedle
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#C2C2C2' @prop color
 */
 var circularTwoColorNeedle = {
-    /**
-    * @name circularTwoColorNeedle.color
-    * @type string
-    * @inheritdoc
-    * @default '#C2C2C2'
-    */
     color: '#C2C2C2'
 }
 /**
 * @name circularRangeBar
 * @publicName RangeBar
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#CBC5CF' @prop color
+* @default 30 @prop offset
 */
 var circularRangeBar = {
-    /**
-    * @name circularRangeBar.color
-    * @type string
-    * @inheritdoc
-    * @default '#CBC5CF'
-    */
     color: '#CBC5CF',
-    /**
-    * @name circularRangeBar.offset
-    * @type number
-    * @default 30
-    * @inheritdoc
-    */
     offset: 30
 }
 /**
 * @name circularTriangleMarker
 * @publicName TriangleMarker
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#8798A5' @prop color
+* @default 13 @prop width
+* @default 14 @prop length
+* @default 6 @prop offset
 */
 var circularTriangleMarker = {
-    /**
-    * @name circularTriangleMarker.color
-    * @type string
-    * @inheritdoc
-    * @default '#8798A5'
-    */
     color: '#8798A5',
-    /**
-    * @name circularTriangleMarker.width
-    * @type number
-    * @default 13
-    * @inheritdoc
-    */
     width: 13,
-    /**
-    * @name circularTriangleMarker.length
-    * @type number
-    * @default 14
-    * @inheritdoc
-    */
     length: 14,
-    /**
-     * @name circularTriangleMarker.offset
-     * @type number
-     * @default 6
-     * @inheritdoc
-     */
-     offset: 6
+    offset: 6
 }
 /**
 * @name circularTextCloud
 * @publicName TextCloud
 * @section circularIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#679EC5' @prop color
+* @default '#FFFFFF' @prop text.font.color
+* @default 18 @prop text.font.size
+* @default -6 @prop offset
 */
 var circularTextCloud = {
-    /**
-    * @name circularTextCloud.color
-    * @type string
-    * @inheritdoc
-    * @default '#679EC5'
-    */
     color: '#679EC5',
-    /**
-    * @name circularTextCloud.text
-    * @type object
-    * @inheritdoc
-    */
     text: {
-        /**
-        * @name circularTextCloud.text.font
-        * @type object
-        * @inheritdoc
-        */
         font: {
-            /**
-            * @name circularTextCloud.text.font.color
-            * @type string
-            * @default '#FFFFFF'
-            * @inheritdoc
-            */
             color: '#FFFFFF',
-            /**
-            * @name circularTextCloud.text.font.size
-            * @type number|string
-            * @default 18
-            * @inheritdoc
-            */
             size: 18,
         }
     },
-    /**
-     * @name circularTextCloud.offset
-     * @type number
-     * @default -6
-     * @inheritdoc
-     */
      offset: -6
 };
 
@@ -367,199 +297,93 @@ var circularTextCloud = {
 * @name linearRectangle
 * @publicName Rectangle
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#C2C2C2' @prop color
+* @default 15 @prop width
+* @default 2.5 @prop offset
 */
 var linearRectangle = {
-    /**
-    * @name linearRectangle.color
-    * @type string
-    * @inheritdoc
-    * @default '#C2C2C2'
-    */
     color: '#C2C2C2',
-    /**
-    * @name linearRectangle.width
-    * @type number
-    * @default 15
-    * @inheritdoc
-    */
     width: 15,
-    /**
-    * @name linearRectangle.offset
-  * @type number
-    * @default 2.5
-    * @inheritdoc
-    */
     offset: 2.5
 }
 /**
 * @name linearCircle
 * @publicName Circle
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#C2C2C2' @prop color
+* @default 2.5 @prop offset
 */
 var linearCircle = {
-    /**
-    * @name linearCircle.color
-    * @type string
-    * @inheritdoc
-    * @default '#C2C2C2'
-    */
     color: '#C2C2C2',
-    /**
-    * @name linearCircle.offset
-  * @type number
-    * @default 2.5
-    * @inheritdoc
-    */
     offset: 2.5
 }
 /**
 * @name linearRhombus
 * @publicName Rhombus
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#C2C2C2' @prop color
+* @default 15 @prop width
+* @default 2.5 @prop offset
 */
 var linearRhombus = {
-    /**
-    * @name linearRhombus.color
-    * @type string
-    * @inheritdoc
-    * @default '#C2C2C2'
-    */
     color: '#C2C2C2',
-    /**
-    * @name linearRhombus.width
-    * @type number
-    * @default 15
-    * @inheritdoc
-    */
     width: 15,
-    /**
-    * @name linearRhombus.offset
-  * @type number
-    * @default 2.5
-    * @inheritdoc
-    */
     offset: 2.5
 }
 /**
 * @name linearRangeBar
 * @publicName RangeBar
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#CBC5CF' @prop color
+* @default 10 @prop offset
 */
 var linearRangeBar = {
-    /**
-    * @name linearRangeBar.color
-    * @type string
-    * @default '#CBC5CF'
-    * @inheritdoc
-    */
     color: '#CBC5CF',
-    /**
-    * @name linearRangeBar.offset
-  * @type number
-    * @default 10
-    * @inheritdoc
-    */
     offset: 10
 }
 /**
 * @name linearTriangleMarker
 * @publicName TriangleMarker
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#8798A5' @prop color
+* @default 13 @prop width
+* @default 14 @prop length
+* @default 10 @prop offset
 */
 var linearTriangleMarker = {
-    /**
-    * @name linearTriangleMarker.color
-    * @type string
-    * @inheritdoc
-    * @default '#8798A5'
-    */
     color: '#8798A5',
-    /**
-    * @name linearTriangleMarker.width
-    * @type number
-    * @default 13
-    * @inheritdoc
-    */
     width: 13,
-    /**
-    * @name linearTriangleMarker.length
-    * @type number
-    * @default 14
-    * @inheritdoc
-    */
     length: 14,
-    /**
-    * @name linearTriangleMarker.offset
-  * @type number
-    * @default 10
-    * @inheritdoc
-    */
     offset: 10
 }
 /**
 * @name linearTextCloud
 * @publicName TextCloud
 * @section linearIndicators
-* @type object
-* @inherits CommonIndicator
+* @type CommonIndicator
 * @hidePropertyOf
+* @default '#679EC5' @prop color
+* @default '#FFFFFF' @prop text.font.color
+* @default 18 @prop text.font.size
+* @default -1 @prop offset
 */
 var linearTextCloud = {
-    /**
-    * @name linearTextCloud.color
-    * @type string
-    * @inheritdoc
-    * @default '#679EC5'
-    */
     color: '#679EC5',
-    /**
-    * @name linearTextCloud.text
-    * @type object
-    * @inheritdoc
-    */
     text: {
-        /**
-        * @name linearTextCloud.text.font
-        * @type object
-        * @inheritdoc
-        */
         font: {
-            /**
-            * @name linearTextCloud.text.font.color
-            * @type string
-            * @default '#FFFFFF'
-            * @inheritdoc
-            */
         color: '#FFFFFF',
-            /**
-            * @name linearTextCloud.text.font.size
-            * @type number|string
-            * @default 18
-            * @inheritdoc
-            */
         size: 18,
-    }
+        }
     },
-    /**
-    * @name linearTextCloud.offset
-    * @type number
-    * @default -1
-    * @inheritdoc
-    */
     offset: -1
 }
