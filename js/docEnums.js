@@ -587,7 +587,7 @@
 
 /**
  * @typedef {string} Enums.DrawerOpenedStateMode
- * @enum {'overlap '|'shrink'|'push'}
+ * @enum {'overlap'|'shrink'|'push'}
  */
 
 /**
