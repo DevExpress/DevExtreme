@@ -3885,7 +3885,7 @@ QUnit.test("Place row fields on the bottom of description cell. Without wxport m
             value: 'CY 2012', index: 1
         }],
         values: [
-            [[1], [1], [15]],
+            [[1], [1], [15]]
         ]
     };
     this.testOptions.fieldPanel.showFilterFields = false;
