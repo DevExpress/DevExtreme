@@ -1,8 +1,8 @@
 /**
-* @name GaugeIndicator
-* @inherits CommonIndicator
-* @hidden
-*/
+ * @name GaugeIndicator
+ * @inherits CommonIndicator
+ * @hidden
+ */
 /**
  * @name GaugeIndicator.type
  * @type string
