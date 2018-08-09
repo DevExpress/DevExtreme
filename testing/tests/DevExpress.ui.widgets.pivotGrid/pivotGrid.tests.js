@@ -3842,6 +3842,90 @@ QUnit.test("Synchronize rowsFields and row headers", function(assert) {
     assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 1);
 });
 
+QUnit.test("Place row fields on the bottom of description cell. Without export menu", function(assert) {
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Place row fields on the bottom of description cell. With export menu in description cell", function(assert) {
+    this.testOptions.fieldChooser = {
+        enabled: true
+    };
+
+    this.testOptions.export = {
+        enabled: true
+    };
+
+    this.testOptions.fieldPanel.showFilterFields = false;
+    this.testOptions.fieldPanel.showColumnFields = false;
+    this.testOptions.fieldPanel.showDataFields = false;
+
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Place row fields on the bottom of description cell. Without wxport menu and small columns area height", function(assert) {
+    this.testOptions.dataSource = {
+        fields: [
+            { area: "row" },
+            { area: "column" },
+            { caption: 'Sum1', area: "data" }
+        ],
+        rows: [
+            { value: 'Accessories_1', index: 0 }
+        ],
+        columns: [{
+            value: 'CY 2010', index: 0
+        }, {
+            value: 'CY 2012', index: 1
+        }],
+        values: [
+            [[1], [1], [15]]
+        ]
+    };
+    this.testOptions.fieldPanel.showFilterFields = false;
+    this.testOptions.fieldPanel.showColumnFields = false;
+    this.testOptions.fieldPanel.showDataFields = false;
+
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Description cell doesn't accumulate height", function(assert) {
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var expectedHeight = pivotGrid.$element().find(".dx-area-description-cell").height();
+
+    pivotGrid.repaint();
+
+    assert.equal(pivotGrid.$element().find(".dx-area-description-cell").height(), expectedHeight);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
 QUnit.test("synchronize rowsFields and row headers when rowHeaderLayout is tree", function(assert) {
     this.testOptions.dataSource.fields.push({ area: "row", caption: "Row Field 3" });
 
