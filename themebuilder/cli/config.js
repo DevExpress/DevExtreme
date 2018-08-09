@@ -13,7 +13,9 @@ var colorScheme = theme.split(".")[1] + (theme.split(".")[2] ? "-" + theme.split
 var isBootstrap = false;
 var bootstrapVersion = 0;
 
-var metadataPromise = readFile(metadataFilePath);
+var metadataPromise = metadataFilePath
+    ? readFile(metadataFilePath)
+    : new Promise(function(resolve) { resolve("{}"); });
 
 switch(path.extname(metadataFilePath)) {
     case ".scss":
