@@ -39,8 +39,7 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
-    SWATCH_MARKER_CLASS = "dx-swatch-marker",
-    DEFAULT_SWATCH = "default",
+    SWATCH_CONTAINER_CLASS_PREFIX = "dx-additional-color-scheme-",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
 
@@ -493,7 +492,7 @@ var Overlay = Widget.inherit({
 
     _initContainer: function(container) {
         if(container === undefined) {
-            container = this._getSwatchContainer() || viewPortUtils.value();
+            container = this._getSwatchContainer();
         }
 
         var $element = this.$element(),
@@ -507,14 +506,20 @@ var Overlay = Widget.inherit({
     },
 
     _getSwatchContainer: function() {
-        if(!windowUtils.hasWindow()) return null;
-
         var $element = this.$element();
+        var swatchContainer = $element.closest(`[class^="${SWATCH_CONTAINER_CLASS_PREFIX}"], [class*=" ${SWATCH_CONTAINER_CLASS_PREFIX}"]`);
+        var viewport = viewPortUtils.value();
+        if(!swatchContainer.length) return viewport;
 
-        $element.addClass(SWATCH_MARKER_CLASS);
-        var containerSelector = $element.css("fontFamily").replace(/"/g, "");
-        $element.removeClass(SWATCH_MARKER_CLASS);
-        return containerSelector === DEFAULT_SWATCH ? null : containerSelector;
+        var swatchClassRegex = new RegExp(`(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);
+        var swatchClass = swatchContainer[0].className.match(swatchClassRegex)[1];
+        var swatchContainer = viewport.children("." + swatchClass);
+
+        if(!swatchContainer.length) {
+            swatchContainer = $("<div>").addClass(swatchClass).appendTo(viewport);
+        }
+
+        return swatchContainer;
     },
 
     _initHideTopOverlayHandler: function(handler) {
