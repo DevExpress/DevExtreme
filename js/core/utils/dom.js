@@ -133,7 +133,11 @@ var createMarkupFromString = function(str) {
 var extractTemplateMarkup = function(element) {
     element = $(element);
 
-    var templateTag = element.length && element.filter("script[type='text/html']");
+    var templateTag = element.length && element.filter(function isNotExecutableScript() {
+        var $node = $(this);
+        return $node.is("script[type]") && !(/\/(java|ecma)script/i.test($node.attr("type")));
+    });
+
     if(templateTag.length) {
         return templateTag.eq(0).html();
     } else {
