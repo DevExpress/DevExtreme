@@ -1,6 +1,6 @@
-var fullMetadata = require("../data/metadata/dx-theme-builder-metadata");
-
 var MetadataLoader = function() {
+    var fullMetadata = require("../data/metadata/dx-theme-builder-metadata");
+
     this.groupMetadata = function(metadata) {
         var groups = {};
         metadata.forEach(function(item) {

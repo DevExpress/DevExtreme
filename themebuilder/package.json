@@ -22,7 +22,13 @@
     "build-theme": "cli/build-theme.js",
     "build-base-theming": "cli/build-base-theming.js"
   },
-  "scripts":{
-      "prepare": "cd .. && npm i && dotnet build build/build-dotnet.sln && gulp style-compiler-tb-assets"
+  "scripts": {
+    "prepare": "cd .. && npm i && dotnet build build/build-dotnet.sln && gulp style-compiler-tb-assets",
+    "test": "mocha -R spec tests/*-spec.js"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "mock-require": "^3.0.2"
   }
 }
