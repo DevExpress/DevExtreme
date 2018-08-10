@@ -833,10 +833,6 @@ var DropDownEditor = TextBox.inherit({
     * @name dxDropDownEditorMethods.reset
     * @publicName reset()
     */
-    reset: function() {
-        this.option("value", null);
-        this._input().val("");
-    },
 
     /**
     * @name dxDropDownEditorMethods.field

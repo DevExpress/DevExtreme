@@ -517,6 +517,20 @@ QUnit.test("correct order of buttons when spin buttons option is set after rende
     assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "clear button is the second");
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy(),
+        $element = $("#numberbox").dxNumberBox({
+            showClearButton: true,
+            onValueChanged: valueChangedHandler
+        });
+
+    var $clearButton = $element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 QUnit.test("T220209 - the 'valueFormat' option", function(assert) {
     var $numberBox = $("#numberbox").dxNumberBox({
         value: 5,

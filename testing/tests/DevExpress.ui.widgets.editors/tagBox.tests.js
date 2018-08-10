@@ -476,6 +476,22 @@ QUnit.test("removing tags after clicking the 'clear' button", function(assert) {
     assert.equal($element.find("." + TAGBOX_TAG_CLASS).length, 1, "one item is chosen");
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy(),
+        $element = $("#tagBox").dxTagBox({
+            items: [1],
+            showClearButton: true,
+            value: [1],
+            onValueChanged: valueChangedHandler
+        });
+
+    var $clearButton = $element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 
 QUnit.module("multi tag support", {
     beforeEach: function() {

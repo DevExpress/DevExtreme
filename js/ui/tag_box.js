@@ -1375,13 +1375,6 @@ var TagBox = SelectBox.inherit({
     _popupHidingHandler: function() {
         this.callBase();
         this._clearFilter();
-    },
-
-    reset: function() {
-        this.option("value", []);
-
-        this._clearFilter();
-        this._clearSelectedItem();
     }
 });
 

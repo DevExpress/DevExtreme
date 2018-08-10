@@ -1264,6 +1264,23 @@ QUnit.test("onValueChanged callback", function(assert) {
     assert.equal(called, 6);
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy();
+
+    this.instance.option({
+        items: ["item 1"],
+        value: "item 1",
+        onValueChanged: valueChangedHandler,
+        showClearButton: true
+    });
+
+    var $clearButton = this.element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 QUnit.test("item initialization scenario", function(assert) {
     var instance = $("#autocomplete").dxAutocomplete({
         items: ["a", "b", "c"]

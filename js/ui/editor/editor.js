@@ -327,7 +327,8 @@ var Editor = Widget.inherit({
     * @publicName reset()
     */
     reset: function() {
-        this.option("value", null);
+        var defaultOptions = this._getDefaultOptions();
+        this.option("value", defaultOptions.value);
     }
 }).include(ValidationMixin);
 
