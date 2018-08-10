@@ -135,7 +135,7 @@ var extractTemplateMarkup = function(element) {
 
     var templateTag = element.length && element.filter(function isNotExecutableScript() {
         var $node = $(this);
-        return $node.is("script[type]") && !(/\/(java|ecma)script/i.test($node.attr("type")));
+        return $node.is("script[type]") && ($node.attr("type").indexOf("script") < 0);
     });
 
     if(templateTag.length) {
