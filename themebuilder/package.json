@@ -1,11 +1,12 @@
 {
   "name": "devextreme-themebuilder",
   "version": "0.0.1",
-  "description": "",
+  "description": "DevExtreme ThemeBuilder",
   "keywords": [
     "devextreme",
     "devexpress"
   ],
+  "main": "modules/builder.js",
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
@@ -14,10 +15,14 @@
   "dependencies": {
     "bootstrap": "^4.1.2",
     "less": "^2.6.1",
+    "minimalist": "^1.0.0",
     "sass": "^1.10.3"
   },
-  "scripts": {
-    "build-theme": "node cli/build-theme.js",
-    "build-base-theming": "node cli/build-base-theming.js"
+  "bin": {
+    "build-theme": "cli/build-theme.js",
+    "build-base-theming": "cli/build-base-theming.js"
+  },
+  "scripts":{
+      "prepare": "cd .. && npm i && dotnet build build/build-dotnet.sln && gulp style-compiler-tb-assets"
   }
 }

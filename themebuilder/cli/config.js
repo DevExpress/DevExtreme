@@ -1,12 +1,14 @@
 var path = require("path");
 var readFile = require("./adapters/node-file-reader");
 var createRecursive = require("./helpers/recursive-path-creator");
+var parseCommandLine = require('minimist');
 
-var theme = process.env["npm_config_theme_name"] || "generic.light";
-var metadataFilePath = process.env["npm_config_metadata_file_path"] || "";
-var fileFormat = process.env["npm_config_file_format"] || "less";
-var swatchSelector = process.env["npm_config_swatch_selector"];
-var out = process.env["npm_config_out"];
+var config = parseCommandLine(process.argv.slice(2));
+var theme = config["theme-name"] || "generic.light";
+var metadataFilePath = config["metadata-file-path"] || "";
+var fileFormat = config["file-format"] || "less";
+var swatchSelector = config["swatch-selector"];
+var out = config["out"];
 
 var themeName = theme.split(".")[0];
 var colorScheme = theme.split(".")[1] + (theme.split(".")[2] ? "-" + theme.split(".")[2] : "");

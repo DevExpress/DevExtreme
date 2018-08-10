@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 var config = require("./config.js");
 var builder = require("../modules/builder.js");
 var fs = require("fs");
