@@ -150,7 +150,10 @@ var LessTemplateLoader = function(config) {
                     var resultCss = result.css.toString();
 
                     postCompiler.process(resultCss);
-                    resolve(compiledMetadata);
+                    resolve({
+                        compiledMetadata: compiledMetadata,
+                        css: resultCss
+                    });
                 }
             });
         });
@@ -167,7 +170,8 @@ var LessTemplateLoader = function(config) {
         }
 
         return new Promise(function(resolve, reject) {
-            var processDxTheme = function(compiledMetadata) {
+            var processDxTheme = function(data) {
+                var compiledMetadata = data.compiledMetadata;
                 var modifyVars = {};
                 for(var key in compiledMetadata) {
                     if(compiledMetadata.hasOwnProperty(key)) {
