@@ -1404,6 +1404,8 @@ module.exports = {
                                 } else {
                                     this._columnOptionChanged(args);
                                 }
+                            } else {
+                                this._updateRequireResize(args);
                             }
                             break;
                         case "commonColumnSettings":
@@ -1443,11 +1445,15 @@ module.exports = {
                         } else {
                             columnOptionValue = args.value;
                         }
-
                         this.columnOption(column.index, columnOptionValue);
-                        if(columnOptionName === "width") {
-                            this.component._requireResize = true;
-                        }
+                    }
+                },
+
+                _updateRequireResize: function(args) {
+                    var component = this.component;
+
+                    if(args.fullName.replace(regExp, "") === "width" && component._updateLockCount) {
+                        component._requireResize = true;
                     }
                 },
 
