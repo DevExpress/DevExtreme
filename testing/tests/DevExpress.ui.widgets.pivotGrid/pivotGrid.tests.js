@@ -34,6 +34,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     dateLocalization = require("localization/date"),
     devices = require("core/devices"),
+    browser = require("core/utils/browser"),
     dataUtils = require("core/element_data");
 
 function sumArray(array) {
@@ -3793,6 +3794,7 @@ QUnit.test("pivot grid has correct size", function(assert) {
 
     assert.strictEqual($(".dx-pivotgrid-toolbar").parent()[0], pivotGrid.$element().find(".dx-filter-header")[0]);
     assert.ok(pivotGrid.$element().find(".dx-area-description-cell").hasClass("dx-pivotgrid-background"), "description with background");
+    assert.strictEqual(pivotGrid.$element().find(".dx-area-description-cell").hasClass("dx-ie"), !!browser.msie);
     assert.ok(pivotGrid.$element().find(".dx-filter-header").hasClass("dx-bottom-border"));
     assert.ok(pivotGrid.$element().find(".dx-column-header").hasClass("dx-bottom-border"));
 });
@@ -3909,6 +3911,19 @@ QUnit.test("Place row fields on the bottom of description cell. Without wxport m
     assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
 });
 
+QUnit.test("Place row fields on the bottom of description cell. Treeview layout", function(assert) {
+    this.testOptions.rowHeaderLayout = "tree";
+
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
 QUnit.test("Description cell doesn't accumulate height", function(assert) {
     var pivotGrid = createPivotGrid(this.testOptions, assert);
 
@@ -3940,7 +3955,7 @@ QUnit.test("synchronize rowsFields and row headers when rowHeaderLayout is tree"
     assert.strictEqual(rowAreaColumnWidth.length, 2, "rows area has two columns");
     assert.strictEqual(rowFieldsAreaColumnWidth.length, 3, "rows area has two columns");
 
-    assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 1);
+    assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 2);
     assert.ok(rowFieldsAreaColumnWidth[0] - rowAreaColumnWidth[0] > 100);
 });
 
