@@ -1658,6 +1658,25 @@ QUnit.test("Change column width via option method", function(assert) {
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
+QUnit.test("Change column width via columnOption method", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{ dataField: "column1", width: 100 }, { dataField: "column2", width: 100 }]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.beginUpdate();
+    dataGrid.columnOption(0, "width", 1);
+    dataGrid.endUpdate();
+
+    // assert
+    assert.strictEqual(dataGrid.$element().width(), 101);
+    assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 1);
+    assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
+});
+
 function isColumnHidden($container, index) {
     var $colsHeadersView = $container.find(".dx-datagrid-headers col"),
         $colsRowsView = $container.find(".dx-datagrid-headers col"),
@@ -8869,6 +8888,42 @@ QUnit.test("Scrollbar should not be shown if column hiding is enabled and all co
     // assert
     var scrollable = dataGrid.getScrollable();
     assert.equal(scrollable.$content().width(), scrollable._container().width(), "no scrollbar");
+});
+
+QUnit.test("Should apply column width if it was set between beginUpdate / endUpdate methods in onContentReady callback (T628065)", function(assert) {
+    // arrange
+    var columns,
+        adaptiveColumnWidth,
+        dataGrid = createDataGrid({
+            width: 250,
+            dataSource: [{ C0: 0, C1: 1, C2: 2 }],
+            columnHidingEnabled: true,
+            onContentReady: function(e) {
+                e.component.beginUpdate();
+                e.component.columnOption(0, 'width', 100);
+                e.component.columnOption(1, 'width', 100);
+                e.component.columnOption(2, 'width', 100);
+                e.component.endUpdate();
+            }
+        });
+
+    this.clock.tick();
+
+    columns = dataGrid.getController("columns").getColumns();
+    adaptiveColumnWidth = dataGrid.getController("adaptiveColumns")._getCommandColumnsWidth();
+
+    // assert
+    assert.equal(columns[0].visibleWidth, 100, "1st column width");
+    assert.equal(columns[1].visibleWidth, "auto", "2nd column width is auto");
+    assert.equal(columns[2].visibleWidth, "adaptiveHidden", "3rd column is hidden");
+
+    // act
+    dataGrid.option("width", 200 + adaptiveColumnWidth);
+
+    // assert
+    assert.equal(columns[0].visibleWidth, 100, "1st column width");
+    assert.equal(columns[1].visibleWidth, 100, "2nd column width");
+    assert.equal(columns[2].visibleWidth, "adaptiveHidden", "3rd column is hidden");
 });
 
 QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editing", function(assert) {
