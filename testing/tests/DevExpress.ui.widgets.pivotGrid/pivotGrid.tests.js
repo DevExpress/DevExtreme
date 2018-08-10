@@ -34,6 +34,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     dateLocalization = require("localization/date"),
     devices = require("core/devices"),
+    browser = require("core/utils/browser"),
     dataUtils = require("core/element_data");
 
 function sumArray(array) {
@@ -3793,6 +3794,7 @@ QUnit.test("pivot grid has correct size", function(assert) {
 
     assert.strictEqual($(".dx-pivotgrid-toolbar").parent()[0], pivotGrid.$element().find(".dx-filter-header")[0]);
     assert.ok(pivotGrid.$element().find(".dx-area-description-cell").hasClass("dx-pivotgrid-background"), "description with background");
+    assert.strictEqual(pivotGrid.$element().find(".dx-area-description-cell").hasClass("dx-ie"), !!browser.msie);
     assert.ok(pivotGrid.$element().find(".dx-filter-header").hasClass("dx-bottom-border"));
     assert.ok(pivotGrid.$element().find(".dx-column-header").hasClass("dx-bottom-border"));
 });
@@ -3842,6 +3844,103 @@ QUnit.test("Synchronize rowsFields and row headers", function(assert) {
     assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 1);
 });
 
+QUnit.test("Place row fields on the bottom of description cell. Without export menu", function(assert) {
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Place row fields on the bottom of description cell. With export menu in description cell", function(assert) {
+    this.testOptions.fieldChooser = {
+        enabled: true
+    };
+
+    this.testOptions.export = {
+        enabled: true
+    };
+
+    this.testOptions.fieldPanel.showFilterFields = false;
+    this.testOptions.fieldPanel.showColumnFields = false;
+    this.testOptions.fieldPanel.showDataFields = false;
+
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Place row fields on the bottom of description cell. Without wxport menu and small columns area height", function(assert) {
+    this.testOptions.dataSource = {
+        fields: [
+            { area: "row" },
+            { area: "column" },
+            { caption: 'Sum1', area: "data" }
+        ],
+        rows: [
+            { value: 'Accessories_1', index: 0 }
+        ],
+        columns: [{
+            value: 'CY 2010', index: 0
+        }, {
+            value: 'CY 2012', index: 1
+        }],
+        values: [
+            [[1], [1], [15]]
+        ]
+    };
+    this.testOptions.fieldPanel.showFilterFields = false;
+    this.testOptions.fieldPanel.showColumnFields = false;
+    this.testOptions.fieldPanel.showDataFields = false;
+
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Place row fields on the bottom of description cell. Treeview layout", function(assert) {
+    this.testOptions.rowHeaderLayout = "tree";
+
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
+QUnit.test("Description cell doesn't accumulate height", function(assert) {
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    var expectedHeight = pivotGrid.$element().find(".dx-area-description-cell").height();
+
+    pivotGrid.repaint();
+
+    assert.equal(pivotGrid.$element().find(".dx-area-description-cell").height(), expectedHeight);
+
+    var commonHeight = 0;
+    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
+        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
+    });
+
+    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
+});
+
 QUnit.test("synchronize rowsFields and row headers when rowHeaderLayout is tree", function(assert) {
     this.testOptions.dataSource.fields.push({ area: "row", caption: "Row Field 3" });
 
@@ -3856,7 +3955,7 @@ QUnit.test("synchronize rowsFields and row headers when rowHeaderLayout is tree"
     assert.strictEqual(rowAreaColumnWidth.length, 2, "rows area has two columns");
     assert.strictEqual(rowFieldsAreaColumnWidth.length, 3, "rows area has two columns");
 
-    assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 1);
+    assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 2);
     assert.ok(rowFieldsAreaColumnWidth[0] - rowAreaColumnWidth[0] > 100);
 });
 

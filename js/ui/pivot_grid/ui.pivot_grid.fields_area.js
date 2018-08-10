@@ -150,5 +150,10 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
         }
     },
 
+    reset: function() {
+        this.callBase();
+        this.groupElement().css("marginTop", 0);
+    },
+
     _renderVirtualContent: noop
 });
