@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     stringUtils = require("../../core/utils/string"),
+    browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
@@ -1610,6 +1611,10 @@ var PivotGrid = Widget.inherit({
             columnHeaderContainer = $(TD).addClass("dx-column-header");
             rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
 
+            if(browser.msie) { // T656699 - use alternative rendering in IE browser
+                rowHeaderContainer.addClass("dx-ie");
+            }
+
             $(TR)
                 .append(filterHeaderContainer)
                 .appendTo(tableElement);
@@ -1879,8 +1884,8 @@ var PivotGrid = Widget.inherit({
                 if(descriptionCellHeight > columnsAreaHeight) {
                     adjustSizeArray(columnsAreaRowHeights, columnsAreaHeight - descriptionCellHeight);
                     columnsArea.setRowsHeight(columnsAreaRowHeights);
-                } else if(needSynchronizeFieldPanel) {
-                    rowFieldsHeader.groupElement().css("marginTop", columnsAreaHeight - descriptionCellHeight);
+                } else if(rowFieldsHeader.isVisible()) {
+                    rowFieldsHeader.groupElement().css("marginTop", columnsAreaHeight - descriptionCellHeight); // T656699
                 }
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);

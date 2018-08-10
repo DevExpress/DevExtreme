@@ -66,7 +66,19 @@
     }
 
     .dx-area-description-cell {
+        position: relative;
         .background-clip(padding-box);  // T379462
+        .dx-pivotgrid-fields-area {
+            position: absolute;
+            bottom: 0;
+        }
+    }
+
+    .dx-area-description-cell.dx-ie { // T656699
+        position: static;
+        .dx-pivotgrid-fields-area {
+            position: static;
+        }
     }
 
     .dx-area-field-content {
