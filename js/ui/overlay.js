@@ -39,6 +39,7 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
+    SWATCH_CONTAINER_CLASS_PREFIX = "dx-additional-color-scheme-",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
 
@@ -490,7 +491,9 @@ var Overlay = Widget.inherit({
     },
 
     _initContainer: function(container) {
-        container = container === undefined ? viewPortUtils.value() : container;
+        if(container === undefined) {
+            container = this._getSwatchContainer();
+        }
 
         var $element = this.$element(),
             $container = $element.closest(container);
@@ -500,6 +503,23 @@ var Overlay = Widget.inherit({
         }
 
         this._$container = $container.length ? $container : $element.parent();
+    },
+
+    _getSwatchContainer: function() {
+        var $element = this.$element();
+        var swatchContainer = $element.closest(`[class^="${SWATCH_CONTAINER_CLASS_PREFIX}"], [class*=" ${SWATCH_CONTAINER_CLASS_PREFIX}"]`);
+        var viewport = viewPortUtils.value();
+        if(!swatchContainer.length) return viewport;
+
+        var swatchClassRegex = new RegExp(`(\\s|^)(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);
+        var swatchClass = swatchContainer[0].className.match(swatchClassRegex)[2];
+        var swatchContainer = viewport.children("." + swatchClass);
+
+        if(!swatchContainer.length) {
+            swatchContainer = $("<div>").addClass(swatchClass).appendTo(viewport);
+        }
+
+        return swatchContainer;
     },
 
     _initHideTopOverlayHandler: function(handler) {

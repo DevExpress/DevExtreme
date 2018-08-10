@@ -84,7 +84,17 @@ QUnit.testStart(function() {
             <div tabindex=\'-1\'></div>\
             <a href="#" class="lastTabbable">something</a>\
         </script>\
-        <input class="outsideTabbable" />';
+        <input class="outsideTabbable" />\
+        \
+        <div>\
+            <div class="dx-additional-color-scheme-my-color_scheme1 some-class some-class2">\
+                <div id="swatchOverlay1"></div>\
+            </div>\
+            <div class="some-class some-class2 dx-additional-color-scheme-my-color_scheme2 some-class3">\
+                <div id="swatchOverlay2"></div>\
+                <div id="swatchOverlay3"></div>\
+            </div>\
+        <div>';
 
     $("#qunit-fixture").html(markup);
 });
@@ -246,6 +256,34 @@ QUnit.test("RTL markup - rtlEnabled by default", function(assert) {
     var $content = $(overlay.$content());
 
     assert.ok($content.hasClass("dx-rtl"));
+});
+
+QUnit.test("Color swatches - overlay should be rendered on viewport by default", function(assert) {
+    var overlay = $("#overlay").dxOverlay().dxOverlay("instance");
+    overlay.show();
+    var $wrapper = overlay.$content().parent();
+    assert.ok($wrapper.parent().hasClass("dx-viewport"));
+});
+
+QUnit.test("Color swatches - overlay should be rendered on the child of viewport with special class", function(assert) {
+    var containers = [];
+
+    for(var i = 1; i <= 3; i++) {
+        var overlay = $("#swatchOverlay" + i).dxOverlay().dxOverlay("instance");
+        overlay.show();
+        containers[i] = overlay.$content().parent().parent();
+    }
+
+    assert.ok(containers[1].hasClass("dx-additional-color-scheme-my-color_scheme1"), "overlay's container has right class");
+    assert.ok(containers[1].parent().hasClass("dx-viewport"), "overlay's container is the viewport's child");
+
+    assert.ok(containers[2].hasClass("dx-additional-color-scheme-my-color_scheme2"), "overlay's container has right class");
+    assert.ok(containers[2].parent().hasClass("dx-viewport"), "overlay's container is the viewport's child");
+
+    assert.ok(containers[3].hasClass("dx-additional-color-scheme-my-color_scheme2"), "overlay's container has right class");
+    assert.ok(containers[3].parent().hasClass("dx-viewport"), "overlay's container is the viewport's child");
+
+    assert.equal($(".dx-viewport > .dx-additional-color-scheme-my-color_scheme2").length, 1, "one container for different overlays from the same swatch");
 });
 
 QUnit.module("option", moduleConfig);
