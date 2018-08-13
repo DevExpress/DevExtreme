@@ -179,6 +179,10 @@ registerTheme({
     primaryTitleColor: DARK_TITLE_COLOR,
     secondaryTitleColor: DARK_TITLE_COLOR,
 
+    tooltip: {
+        color: "#000"
+    },
+
     "export": {
         backgroundColor: DARK_BACKGROUND_COLOR,
         font: {
