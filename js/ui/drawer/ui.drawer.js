@@ -207,13 +207,13 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        this._initWidth();
-
         this._renderShader();
         this._togglePositionClass();
     },
 
     _render() {
+        this._initWidth();
+
         this.callBase();
 
         this._dimensionChanged();
