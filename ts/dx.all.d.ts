@@ -1747,6 +1747,8 @@ declare module DevExpress.ui {
         maxItemCount?: number;
         /** The minimum number of characters that must be entered into the text box to begin a search. */
         minSearchLength?: number;
+        /** Specifies whether the drop-down button is visible. */
+        showDropDownButton?: boolean;
         /** Specifies the current value displayed by the widget. */
         value?: string;
     }
@@ -2339,7 +2341,7 @@ declare module DevExpress.ui {
         collapseAll(groupIndex?: number): void;
         /** Collapses a group or a master row with a specific key. */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
-        /** Expands master rows or groups of a specific level. */
+        /** Expands master rows or groups of a specific level. Does not apply if data is remote. */
         expandAll(groupIndex?: number): void;
         /** Expands a group or a master row with a specific key. */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
@@ -2407,6 +2409,8 @@ declare module DevExpress.ui {
         showAnalogClock?: boolean;
         /** A format used to display date/time information. */
         type?: 'date' | 'datetime' | 'time';
+        /** Specifies whether to use an input mask converted from the displayFormat. */
+        useMaskBehavior?: boolean;
         /** An object or a value specifying the date and time currently selected using the date box. */
         value?: Date | number | string;
     }
@@ -2441,25 +2445,22 @@ declare module DevExpress.ui {
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
         animationDuration?: number;
         animationEnabled?: boolean;
-        contentTemplate?: template | ((contentElement: DevExpress.core.dxElement) => any);
         maxWidth?: number;
-        menuPosition?: 'left' | 'right';
-        menuTemplate?: template | ((menuElement: DevExpress.core.dxElement) => any);
-        menuVisible?: boolean;
         minWidth?: number;
-        mode?: 'persistent' | 'temporary' | 'push';
-        showMode?: 'persistent' | 'temporary' | 'push';
-        showShader?: boolean;
+        opened?: boolean;
+        openedStateMode?: 'overlap' | 'shrink' | 'push';
+        position?: 'left' | 'right';
+        revealMode?: 'slide' | 'expand';
+        shading?: boolean;
+        template?: template | ((Element: DevExpress.core.dxElement) => any);
     }
-    /** The base class for widgets. */
     export class dxDrawer extends Widget {
         constructor(element: Element, options?: dxDrawerOptions)
         constructor(element: JQuery, options?: dxDrawerOptions)
         content(): DevExpress.core.dxElement;
-        hideMenu(): Promise<void> & JQueryPromise<void>;
-        menuContent(): DevExpress.core.dxElement;
-        showMenu(): Promise<void> & JQueryPromise<void>;
-        toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
+        hide(): Promise<void> & JQueryPromise<void>;
+        show(): Promise<void> & JQueryPromise<void>;
+        toggle(): Promise<void> & JQueryPromise<void>;
     }
     export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
         /** Specifies whether the widget allows a user to enter a custom value. */
@@ -2564,6 +2565,7 @@ declare module DevExpress.ui {
         uploadMode?: 'instantly' | 'useButtons' | 'useForm';
         /** Specifies a target Url for the upload request. */
         uploadUrl?: string;
+        validation?: { allowedFileExtensions?: Array<string>, maxFileSize?: number, minFileSize?: number, invalidFileExtensionMessage?: string, invalidMaxFileSizeMessage?: string, invalidMinFileSizeMessage?: string };
         /** Specifies a File instance representing the selected file. Read-only when uploadMode is "useForm". */
         value?: Array<File>;
     }
@@ -3749,6 +3751,8 @@ declare module DevExpress.ui {
         onCustomItemCreating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
         /** The text that is provided as a hint in the select box editor. */
         placeholder?: string;
+        /** Specifies whether the drop-down button is visible. */
+        showDropDownButton?: boolean;
         /** Specifies whether or not to display selection controls. */
         showSelectionControls?: boolean;
         /** Specifies DOM event names that update a widget's value. */
@@ -3943,6 +3947,8 @@ declare module DevExpress.ui {
         selectAllMode?: 'allPages' | 'page';
         /** Gets the currently selected items. */
         selectedItems?: Array<string | number | any>;
+        /** Specifies whether the drop-down button is visible. */
+        showDropDownButton?: boolean;
         /** Specifies whether the multi-tag is shown without ordinary tags. */
         showMultiTagOnly?: boolean;
         /** Specifies a custom template for tags. */
@@ -4238,8 +4244,10 @@ declare module DevExpress.ui {
         dataStructure?: 'plain' | 'tree';
         /** Specifies whether or not a user can expand all tree view items by the "*" hot key. */
         expandAllEnabled?: boolean;
-        /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget item is displayed expanded. */
+        /** Specifies which data source field specifies whether an item is expanded. */
         expandedExpr?: string | Function;
+        /** Specifies the event on which to expand/collapse a node. */
+        expandEvent?: 'dblclick' | 'click';
         /** Specifies whether or not all parent nodes of an initially expanded node are displayed expanded. */
         expandNodesRecursive?: boolean;
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding node includes child nodes. */
@@ -4615,6 +4623,8 @@ declare module DevExpress.ui {
         onOpened?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies whether or not the drop-down editor is displayed. */
         opened?: boolean;
+        /** Specifies whether the drop-down button is visible. */
+        showDropDownButton?: boolean;
         /** Specifies the currently selected value. */
         value?: any;
     }
@@ -5370,7 +5380,7 @@ declare module DevExpress.ui {
         children?: Array<dxTreeViewNode>;
         /** Equals to true if the node is disabled; otherwise false. */
         disabled?: boolean;
-        /** Equals to true if the node is expanded; false if collapsed. */
+        /** Equals true if the node is expanded; false if collapsed. */
         expanded?: boolean;
         /** Contains the data source object corresponding to the node. */
         itemData?: any;
@@ -6535,10 +6545,13 @@ declare module DevExpress.viz {
         clearSelection(): void;
         /** Provides access to all funnel items. */
         getAllItems(): Array<dxFunnelItem>;
-        /** Provides access to the DataSource instance. */
+        /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
         /** Hides all widget tooltips. */
         hideTooltip(): void;
+    }
+    export interface GaugeIndicator extends CommonIndicator {
+        type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
     }
     /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
     export interface CommonIndicator {
@@ -6573,127 +6586,36 @@ declare module DevExpress.viz {
         /** Specifies the spindle's diameter in pixels for the indicator of a needle-like type. */
         spindleSize?: number;
         /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-        text?: CommonIndicatorText;
+        text?: { indent?: number, format?: DevExpress.ui.format, customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string), font?: Font };
         /** Specifies the orientation of the rangeBar indicator. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: 'bottom' | 'top';
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-    export interface CommonIndicatorText {
-        /** Specifies a callback function that returns the text to be displayed in an indicator. */
-        customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string);
-        /** Specifies font options for the text displayed by the indicator. */
-        font?: Font;
-        /** Formats a value before it is displayed in an indicator. Accepts only numeric formats. */
-        format?: DevExpress.ui.format;
-        /** Specifies the range bar's label indent in pixels. */
-        indent?: number;
-    }
     /** An object that defines a gauge indicator of the rectangleNeedle type. */
-    interface circularRectangleNeedle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-    }
+    export var circularRectangleNeedle: CommonIndicator;
     /** An object that defines a gauge indicator of the triangleNeedle type. */
-    interface circularTriangleNeedle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-    }
+    export var circularTriangleNeedle: CommonIndicator;
     /** An object that defines a gauge indicator of the twoColorNeedle type. */
-    interface circularTwoColorNeedle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-    }
+    export var circularTwoColorNeedle: CommonIndicator;
     /** An object that defines a gauge indicator of the rangeBar type. */
-    interface circularRangeBar extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-    }
+    export var circularRangeBar: CommonIndicator;
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    interface circularTriangleMarker extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the indicator length. */
-        length?: number;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export var circularTriangleMarker: CommonIndicator;
     /** An object that defines a gauge indicator of the textCloud type. */
-    interface circularTextCloud extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-        text?: circularTextCloudText;
-    }
-    /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-    interface circularTextCloudText extends CommonIndicatorText {
-        /** Specifies font options for the text displayed by the indicator. */
-        font?: Font;
-    }
+    export var circularTextCloud: CommonIndicator;
     /** An object defining a gauge indicator of the rectangle type. */
-    export interface linearRectangle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export var linearRectangle: CommonIndicator;
     /** An object that defines a gauge indicator of the circle type. */
-    export interface linearCircle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-    }
+    export var linearCircle: CommonIndicator;
     /** An object defining a gauge indicator of the rhombus type. */
-    export interface linearRhombus extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export var linearRhombus: CommonIndicator;
     /** An object that defines a gauge indicator of the rangeBar type. */
-    export interface linearRangeBar extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-    }
+    export var linearRangeBar: CommonIndicator;
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    export interface linearTriangleMarker extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the indicator length. */
-        length?: number;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export var linearTriangleMarker: CommonIndicator;
     /** An object that defines a gauge indicator of the textCloud type. */
-    export interface linearTextCloud extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-        text?: linearTextCloudText;
-    }
-    /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-    export interface linearTextCloudText extends CommonIndicatorText {
-        /** Specifies font options for the text displayed by the indicator. */
-        font?: Font;
-    }
+    export var linearTextCloud: CommonIndicator;
     /** A gauge widget. */
     export class BaseGauge extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.gauges.BaseGaugeOptions)
@@ -6913,25 +6835,42 @@ declare module DevExpress.viz {
     /** This section describes the Point object, which represents a series point. */
     export class polarPointObject extends basePointObject {
     }
+    /** A sankey node's structure. */
     export class dxSankeyNode {
+        /** The node's title. */
         title: string;
+        /** The node's incoming links. */
         linksIn: Array<any>;
+        /** The node's outgoing links. */
         linksOut: Array<any>;
+        /** Hides the sankey node's tooltip. */
         hideTooltip(): void;
+        /** Changes the sankey node's hover state. */
         hover(state: boolean): void;
+        /** Indicates whether the sankey node is in the hover state. */
         isHovered(): boolean;
+        /** Shows the sankey node's tooltip. */
         showTooltip(): void;
     }
+    /** A sankey link's structure. */
     export class dxSankeyLink {
+        /** An object that describes the connection. */
         connection: dxSankeyConnectionInfoObject;
+        /** Hides the sankey link's tooltip. */
         hideTooltip(): void;
+        /** Changes the sankey link's hover state. */
         hover(state: boolean): void;
+        /** Indicates whether the sankey link is in the hover state. */
         isHovered(): boolean;
+        /** Shows the sankey link's tooltip. */
         showTooltip(): void;
     }
     export interface dxSankeyConnectionInfoObject {
+        /** The title of the link's source node. */
         source?: string;
+        /** The title of the link's target node. */
         target?: string;
+        /** The link's weight. */
         weight?: number;
     }
     /** This section describes the Node object, which represents a treemap node. */
@@ -7222,11 +7161,18 @@ declare module DevExpress.viz {
         /** Sets the selected range. */
         setValue(value: Array<number | string | Date>): void;
     }
+    /** The Sankey is a widget that visualizes the flow magnitude between value sets. The values being connected are called nodes; the connections - links. The higher the flow magnitude, the wider the link is. */
     export class dxSankey extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.sankey.dxSankeyOptions)
         constructor(element: JQuery, options?: DevExpress.viz.sankey.dxSankeyOptions)
+        /** Gets all sankey links. */
         getAllLinks(): Array<dxSankeyLink>;
+        /** Gets all sankey nodes. */
         getAllNodes(): Array<dxSankeyNode>;
+        /** Gets the DataSource instance. */
+        getDataSource(): DevExpress.data.DataSource;
+        /** Hides all widget tooltips. */
+        hideTooltip(): void;
     }
     /** Overridden by descriptions for particular widgets. */
     export class BaseSparkline extends BaseWidget {
@@ -8493,9 +8439,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies a gauge's scale options. */
         scale?: dxCircularGaugeScale;
         /** Specifies the appearance options of subvalue indicators. */
-        subvalueIndicator?: dxCircularGaugeSubvalueIndicator;
+        subvalueIndicator?: GaugeIndicator;
         /** Specifies the appearance options of the value indicator. */
-        valueIndicator?: dxCircularGaugeValueIndicator;
+        valueIndicator?: GaugeIndicator;
     }
     /** Specifies gauge range container options. */
     export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -8518,16 +8464,6 @@ declare module DevExpress.viz.gauges {
         /** Specifies the spacing between scale labels and ticks. */
         indentFromTick?: number;
     }
-    /** Specifies the appearance options of subvalue indicators. */
-    export interface dxCircularGaugeSubvalueIndicator extends CommonIndicator {
-        /** Specifies the type of subvalue indicators. */
-        type?: 'rectangleNeedle' | 'triangleNeedle' | 'twoColorNeedle' | 'rangeBar' | 'triangleMarker' | 'textCloud';
-    }
-    /** Specifies the appearance options of the value indicator. */
-    export interface dxCircularGaugeValueIndicator extends CommonIndicator {
-        /** Specifies the value indicator type. */
-        type?: 'rectangleNeedle' | 'triangleNeedle' | 'twoColorNeedle' | 'rangeBar' | 'triangleMarker' | 'textCloud';
-    }
     export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
         /** Specifies the options required to set the geometry of the LinearGauge widget. */
         geometry?: { orientation?: 'horizontal' | 'vertical' };
@@ -8536,9 +8472,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies the gauge's scale options. */
         scale?: dxLinearGaugeScale;
         /** Specifies the appearance options of subvalue indicators. */
-        subvalueIndicator?: dxLinearGaugeSubvalueIndicator;
+        subvalueIndicator?: GaugeIndicator;
         /** Specifies the appearance options of the value indicator. */
-        valueIndicator?: dxLinearGaugeValueIndicator;
+        valueIndicator?: GaugeIndicator;
     }
     /** Specifies gauge range container options. */
     export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -8562,16 +8498,6 @@ declare module DevExpress.viz.gauges {
     export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
         /** Specifies the spacing between scale labels and ticks. */
         indentFromTick?: number;
-    }
-    /** Specifies the appearance options of subvalue indicators. */
-    export interface dxLinearGaugeSubvalueIndicator extends CommonIndicator {
-        /** Specifies the type of subvalue indicators. */
-        type?: 'rectangle' | 'circle' | 'rhombus' | 'rangeBar' | 'triangleMarker' | 'textCloud';
-    }
-    /** Specifies the appearance options of the value indicator. */
-    export interface dxLinearGaugeValueIndicator extends CommonIndicator {
-        /** Specifies the type of the value indicator. */
-        type?: 'rectangle' | 'circle' | 'rhombus' | 'rangeBar' | 'triangleMarker' | 'textCloud';
     }
     export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
         /** Specifies animation options. */
@@ -8645,26 +8571,48 @@ declare module DevExpress.viz.rangeSelector {
 }
 declare module DevExpress.viz.sankey {
     export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
+        /** Specifies adaptive layout options. */
         adaptiveLayout?: { width?: number, height?: number, keepLabels?: boolean };
+        /** Specifies nodes' vertical alignment. */
         alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
+        /** Specifies the widget's data source. */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
+        /** Specifies whether nodes and links change their style when they are hovered over or pressed. */
         hoverEnabled?: boolean;
+        /** Configures sankey nodes' labels. */
         label?: { overlappingBehavior?: 'ellipsis' | 'hide' | 'none', useNodeColors?: boolean, visible?: boolean, horizontalOffset?: number, verticalOffset?: number, border?: { visible?: boolean, width?: number, color?: string }, shadow?: { color?: string, blur?: number, opacity?: number, offsetX?: number, offsetY?: number }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font };
+        /** Configures sankey links' appearance. */
         link?: { colorMode?: 'none' | 'source' | 'target' | 'gradient', color?: string, opacity?: number, border?: { visible?: boolean, width?: number, color?: string }, hoverStyle?: { opacity?: number, color?: number, border?: { visible?: boolean, width?: number, color?: string }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
+        /** Configures sankey nodes' appearance. */
         node?: { color?: number, width?: number, padding?: number, opacity?: number, border?: { visible?: boolean, width?: number, color?: string }, hoverStyle?: { border?: { visible?: boolean, width?: number, color?: string }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
+        /** A function that is executed when a sankey link is clicked or tapped. */
         onLinkClick?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, event?: event, target?: dxSankeyLink }) => any) | string;
-        onLinkHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, item?: dxSankeyLink }) => any);
+        /** A function that is executed after the pointer enters or leaves a sankey link. */
+        onLinkHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, target?: dxSankeyLink }) => any);
+        /** A function that is executed when a sankey node is clicked or tapped. */
         onNodeClick?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, event?: event, target?: dxSankeyNode }) => any) | string;
-        onNodeHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, item?: dxSankeyNode }) => any);
+        /** A function that is executed after the pointer enters or leaves a sankey node. */
+        onNodeHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, target?: dxSankeyNode }) => any);
+        /** Sets the palette to be used to colorize sankey nodes. */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        /** Specifies how to extend the palette when it contains less colors than the number of sankey nodes. */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+        /** Specifies nodes' sorting order. */
         sortData?: any;
+        /** Specifies which data source field provides links' source nodes. */
+        sourceField?: string;
+        /** Specifies which data source field provides links' target nodes. */
+        targetField?: string;
         /** Configures tooltips - small pop-up rectangles that display information about a data-visualizing widget element being pressed or hovered over with the mouse pointer. */
         tooltip?: dxSankeyTooltip;
+        /** Specifies which data source field provides links' weights. */
+        weightField?: string;
     }
     /** Configures tooltips - small pop-up rectangles that display information about a data-visualizing widget element being pressed or hovered over with the mouse pointer. */
     export interface dxSankeyTooltip extends BaseWidgetTooltip {
+        /** Customizes link tooltips' appearance. */
         customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
+        /** Customizes node tooltips' appearance. */
         customizeNodeTooltip?: ((info: { title?: string, weightIn?: number, weightOut?: number }) => any);
         /** Enables tooltips. */
         enabled?: boolean;
