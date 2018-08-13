@@ -40,14 +40,14 @@ const mockFxAnimate = (animations, type, output) => {
 const animationCapturing = {
     start() {
         this._capturedAnimations = [];
-        this._animation = $.extend({}, animation);
+        this._animation = Object.assign({}, animation);
 
         mockFxAnimate(animation, "moveTo", this._capturedAnimations);
 
         return this._capturedAnimations;
     },
     teardown() {
-        $.extend(animation, this._animation);
+        Object.assign(animation, this._animation);
 
         delete this._capturedAnimations;
         delete this._animations;
@@ -262,7 +262,7 @@ QUnit.test("animationEnabled option test", assert => {
 
     fx.animate = () => {
         animated = true;
-        return $.Deferred().resolve().promise();
+        return Promise.resolve();
     };
 
     try {
