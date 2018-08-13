@@ -2,7 +2,6 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import typeUtils from "../../core/utils/type";
 import clickEvent from "../../events/click";
-import translator from "../../animation/translator";
 import { getPublicElement } from "../../core/utils/dom";
 import { hideCallback } from "../../mobile/hide_top_overlay";
 import registerComponent from "../../core/component_registrator";
@@ -155,7 +154,7 @@ const Drawer = Widget.inherit({
 
     _initStrategy() {
         const mode = this.option("openedStateMode");
-        let Strategy;
+        let Strategy = this._getDefaultStrategy();
 
         if(mode === "push") {
             Strategy = PushStrategy;
@@ -168,6 +167,10 @@ const Drawer = Widget.inherit({
         }
 
         this._strategy = new Strategy(this);
+    },
+
+    _getDefaultStrategy() {
+        return PushStrategy;
     },
 
     _initHideTopOverlayHandler() {
@@ -207,13 +210,13 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        this._initWidth();
-
         this._renderShader();
         this._togglePositionClass();
     },
 
     _render() {
+        this._initWidth();
+
         this.callBase();
 
         this._dimensionChanged();
@@ -265,8 +268,12 @@ const Drawer = Widget.inherit({
     },
 
     getRealMenuWidth() {
-        const $menu = this._$menu;
-        return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
+        if(windowUtils.hasWindow()) {
+            const $menu = this._$menu;
+            return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
+        } else {
+            return 0;
+        }
     },
 
     _isRightPosition() {
@@ -373,7 +380,7 @@ const Drawer = Widget.inherit({
                 break;
             case "openedStateMode":
                 this._initStrategy();
-                translator.move(this._$menu, { left: 0 });
+                this._$menu.css("left", 0);
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("opened"));
 
@@ -383,7 +390,7 @@ const Drawer = Widget.inherit({
             case "minWidth":
             case "maxWidth":
                 this._initWidth();
-                translator.move(this._$menu, { left: 0 });
+                this._$menu.css("left", 0);
                 this._renderPosition(this.option("opened"));
 
                 // NOTE: temporary fix
