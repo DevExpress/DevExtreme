@@ -101,7 +101,7 @@
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
     "build-themes": "gulp style-compiler-themes",
     "dev": "gulp dev",
-    "test": "node testing/launch"
+    "test-env": "node testing/launch"
   },
   "pre-commit": "lint-staged"
 }
