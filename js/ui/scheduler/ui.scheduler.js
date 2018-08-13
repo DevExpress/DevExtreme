@@ -2465,6 +2465,8 @@ var Scheduler = Widget.inherit({
             startDate = new Date(this.fire("getField", "startDate", resultAppointmentData)),
             endDate = new Date(this.fire("getField", "endDate", resultAppointmentData)),
             appointmentDuration = endDate.getTime() - startDate.getTime(),
+            recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData),
+            isRecurrence = recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid,
             updatedStartDate;
 
         if(typeUtils.isDefined($appointment) && this._needUpdateAppointmentData($appointment)) {
@@ -2476,7 +2478,7 @@ var Scheduler = Widget.inherit({
                 var coordinates = translator.locate($appointment);
                 updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
 
-                if($appointment.hasClass("dx-scheduler-appointment-reduced")) {
+                if($appointment.hasClass("dx-scheduler-appointment-reduced") || isRecurrence) {
                     var appointmentStartDate = $appointment.data("dxAppointmentStartDate");
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
