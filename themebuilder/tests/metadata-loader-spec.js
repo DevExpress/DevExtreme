@@ -46,11 +46,17 @@ describe("MetadataLoader", function() {
         var groupedMetadata = metadataLoader.groupMetadata(metadata["generic_light_metadata"]);
         assert.deepEqual(groupedMetadata, expectedGroupedLightMetadata, "group function works");
     });
+
     it("Load metadata", function() {
         var metadataLoader = new MetadataLoader();
         return metadataLoader.load("generic", "dark").then(function(data) {
             assert.deepEqual(data, expectedGroupedDarkMetadata, "load function works");
         });
+    });
+
+    it("Version", function() {
+        var metadataLoader = new MetadataLoader();
+        assert.equal(metadataLoader.version(), "18.2.0");
     });
 });
 

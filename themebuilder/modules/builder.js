@@ -3,8 +3,8 @@ var MetadataRepository = require("../modules/metadata-repository.js");
 var LessTemplateLoader = require("../modules/less-template-loader.js");
 var themes = require("../modules/themes.js");
 
-var processTheme = function(config, metadata, data) {
-    var lessTemplateLoader = new LessTemplateLoader(config);
+var processTheme = function(config, metadata, data, version) {
+    var lessTemplateLoader = new LessTemplateLoader(config, version);
     if(config.isBootstrap) {
         var bootstrapMetadata = config.bootstrapVersion === 3 ?
             require("../data/bootstrap-metadata/bootstrap-metadata.js") :
@@ -42,7 +42,9 @@ var buildTheme = function(config) {
             colorScheme: config.colorScheme
         });
 
-        return processTheme(config, metadata, data);
+        var version = metadataRepository.getVersion();
+
+        return processTheme(config, metadata, data, version);
     });
 }
 

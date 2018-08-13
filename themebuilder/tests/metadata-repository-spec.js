@@ -70,4 +70,9 @@ describe("MetadataRepository", function() {
         });
     });
 
+    it("Version", function() {
+        var metadataRepository = new MetadataRepository(new MetadataLoader());
+        assert.equal(metadataRepository.getVersion(), "18.2.0");
+    });
+
 });

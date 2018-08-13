@@ -16,5 +16,6 @@ module.exports = {
         "Name": "51. Background color",
         "Key": "@base-bg",
         "Group": "base.common",
-    }]
+    }],
+    _metadata_version: "18.2.0",
 };

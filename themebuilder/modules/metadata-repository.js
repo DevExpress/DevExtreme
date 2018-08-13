@@ -56,6 +56,10 @@ var MetadataRepository = function(metadataLoader) {
             if(item) dataItem.Value = item.value;
         });
     };
+
+    this.getVersion = function() {
+        return metadataLoader.version();
+    };
 };
 
 module.exports = MetadataRepository;

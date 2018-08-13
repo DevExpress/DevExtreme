@@ -21,6 +21,10 @@ var MetadataLoader = function() {
             resolve(that.groupMetadata(metadata));
         });
     };
+
+    this.version = function() {
+        return fullMetadata["_metadata_version"];
+    };
 };
 
 module.exports = MetadataLoader;
