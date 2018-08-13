@@ -91,7 +91,7 @@
 */
 @base-icon-color: fade(@base-text-color, 54%);
 
-@base-inverted-text-color: #363640;
+@base-inverted-text-color: rgba(0, 0, 0, 0.87);
 @base-inverted-icon-color: @base-inverted-text-color;
 
 /**
@@ -305,7 +305,7 @@
 
 @button-disabled-icon-opacity: .6;
 
-@button-shadow-color: rgba(0, 0, 0, 0.24);
+@button-shadow-color: rgba(0, 0, 0, 0.4);
 @button-hover-shadow-color: @button-shadow-color;
 @button-focused-shadow-color: fadein(@button-shadow-color, 8%);
 @button-active-shadow-color: fadein(@button-shadow-color, 8%);
@@ -661,7 +661,7 @@
 * @type color
 * @group overlays.common
 */
-@overlay-shader-bg: fade(@base-inverted-bg, 32%);
+@overlay-shader-bg: fade(@base-shadow-color, 61%);
 
 // Popup
 /**
@@ -705,7 +705,7 @@
 * @group editors.selectbox
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(@base-shadow-color, 20%);
+@selectbox-shadow-color: fade(@base-shadow-color, 40%);
 
 // Tabs
 /**
@@ -887,7 +887,7 @@
 
 
 // LoadPanel
-@loadpanel-border-color: @overlay-border-color;
+@loadpanel-border-color: rgba(0, 0, 0, 0.2);
 @loadpanel-content-shadow-color: fade(@base-shadow-color, 25%);
 
 /**
@@ -1072,8 +1072,8 @@
 * @group datagrid
 */
 @datagrid-columnchooser-font-weight: 500;
-@datagrid-drag-header-shadow-color: fade(@base-shadow-color, 10%);
-@datagrid-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
+@datagrid-drag-header-shadow-color: fade(@base-shadow-color, 30%);
+@datagrid-drag-header-second-shadow-color: fade(@base-shadow-color, 40%);
 @datagrid-header-drag-bg: @datagrid-base-background-color;
 
 @HEADER_FILTER_COLOR: @datagrid-columnchooser-item-color;
@@ -1180,7 +1180,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-row-error-color: @base-inverted-text-color;
+@datagrid-row-error-color: rgba(255, 255, 255, 1);
 
 /**
 * @name 175. Error row background color
@@ -1220,6 +1220,7 @@
 * @group datagrid
 */
 @datagrid-columnchooser-bg: @base-element-bg;
+@datagrid-columnchooser-item-bg: lighten(@datagrid-columnchooser-bg, 3%);
 
 /**
 * @name 100. Row alternation background color
@@ -1227,7 +1228,6 @@
 * @group datagrid
 */
 @datagrid-row-alternation-bg: lighten(@datagrid-base-background-color, 4%);
-@datagrid-columnchooser-item-bg: @datagrid-columnchooser-bg;
 
 /**
 * @name 178. Summary item color
@@ -1298,8 +1298,8 @@
 * @group treelist
 */
 @treelist-columnchooser-font-weight: 500;
-@treelist-drag-header-shadow-color: fade(@base-shadow-color, 10%);
-@treelist-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
+@treelist-drag-header-shadow-color: fade(@base-shadow-color, 30%);
+@treelist-drag-header-second-shadow-color: fade(@base-shadow-color, 40%);
 @treelist-header-drag-bg: @treelist-base-background-color;
 
 /**
@@ -1443,6 +1443,7 @@
 * @group treelist
 */
 @treelist-columnchooser-bg: @base-element-bg;
+@treelist-columnchooser-item-bg: lighten(@treelist-columnchooser-bg, 3%);
 
 /**
 * @name 100. Row alternation background color
@@ -1450,7 +1451,6 @@
 * @group treelist
 */
 @treelist-row-alternation-bg: lighten(@treelist-base-background-color, 4%);
-@treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
 
 /**
 * @name 170. Summary item color
@@ -1721,7 +1721,7 @@
 @menu-item-selected-color: @base-text-color;
 @menu-item-focused-selected-bg: fade(@base-focus-color, 70%);
 
-@menu-container-shadow-color: fade(@base-shadow-color, 20%);
+@menu-container-shadow-color: fade(@base-shadow-color, 40%);
 
 //Calendar
 /**
@@ -1801,7 +1801,7 @@
 * @type color
 * @group overlays.tooltip
 */
-@tooltip-bg: #616161;
+@tooltip-bg: rgba(0, 0, 0, 1);
 @tooltip-border-radius: @base-border-radius;
 
 // NumberBox
