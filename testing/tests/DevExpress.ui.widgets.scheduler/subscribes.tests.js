@@ -415,6 +415,25 @@ QUnit.test("'mapAppointmentFields' should call getTargetedAppointmentData", func
     }, "Appointment data is OK");
 });
 
+QUnit.test("'getTargetedAppointmentData' should return correct data for recurrence appointments (T660901)", function(assert) {
+    var appointmentData = {
+        startDate: new Date(2015, 1, 1, 5, 11),
+        endDate: new Date(2015, 1, 1, 6),
+        recurrenceRule: "FREQ=HOURLY;INTERVAL=2"
+    };
+    this.createInstance({
+        currentDate: new Date(2015, 1, 1),
+        currentView: "day",
+        dataSource: [appointmentData]
+    });
+
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+    var targetedData = this.instance.fire("getTargetedAppointmentData", appointmentData, $appointments.eq(1), 1);
+
+    assert.equal(targetedData.startDate.getTime(), appointmentData.startDate.getTime() + 2 * 3600000, "Targeted startDate is OK");
+    assert.equal(targetedData.endDate.getTime(), appointmentData.endDate.getTime() + 2 * 3600000, "Targeted endDate is OK");
+});
+
 QUnit.test("'formatDates' should work correct with custom data fields", function(assert) {
     this.createInstance({
         startDateExpr: "Start",
