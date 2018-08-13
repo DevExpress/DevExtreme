@@ -46,5 +46,10 @@
   {
     "widgetName": "dxFunnel",
     "optionsPath": "viz.funnel.dxFunnelOptions"
+  },
+  {
+    "widgetName": "dxSankey",
+    "optionsPath": "viz.sankey.dxSankeyOptions"
   }
+
 ]
