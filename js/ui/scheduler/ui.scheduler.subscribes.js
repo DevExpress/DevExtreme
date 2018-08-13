@@ -695,7 +695,7 @@ var subscribes = {
         var recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
                 $appointment: $(appointmentElement),
-                skipHoursProcessing: false
+                skipHoursProcessing: true
             }),
             result = {};
 
