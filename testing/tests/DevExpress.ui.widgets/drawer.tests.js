@@ -157,7 +157,38 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
     assert.equal(count, 0, "callback not fired at animation start");
 });
 
+QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
+    let origFxStop = fx.stop,
+        menuStopCalls = 0,
+        contentStopCalls = 0;
 
+    const $element = $("#drawer").dxDrawer({
+        opened: false
+    });
+
+    const instance = $element.dxDrawer("instance");
+    fx.stop = function($element) {
+        if($element.hasClass("dx-drawer-menu-content")) {
+            menuStopCalls++;
+        }
+        if($element.hasClass("dx-drawer-content")) {
+            contentStopCalls++;
+        }
+    };
+
+    try {
+        fx.off = false;
+
+        instance.toggle();
+        instance.toggle();
+
+        assert.equal(menuStopCalls, 2, "animation should stops before toggling visibility");
+        assert.equal(contentStopCalls, 2, "animation should stops before toggling visibility");
+    } finally {
+        fx.off = true;
+        fx.stop = origFxStop;
+    }
+});
 QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if menu isn't visible", assert => {

@@ -81,6 +81,7 @@ const DrawerStrategy = Class.inherit({
     },
 
     renderPosition(offset, animate) {
+        this._stopAnimations();
         this._contentAnimation = new Deferred(),
         this._menuAnimation = new Deferred();
         this._shaderAnimation = new Deferred();
@@ -94,6 +95,12 @@ const DrawerStrategy = Class.inherit({
                 this._animationCompleteHandler();
             }).bind(this._drawer));
         }
+    },
+
+    _stopAnimations() {
+        fx.stop(this._drawer._$shader, true);
+        fx.stop(this._drawer.content(), true);
+        fx.stop(this._drawer.viewContent(), true);
     },
 
     _getMenuOffset(offset) {
