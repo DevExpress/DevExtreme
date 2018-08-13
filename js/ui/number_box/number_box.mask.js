@@ -285,7 +285,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
-    _parseFloatValue: function(value, decimalSeparator, maxPrecision) {
+    _truncateToPrecision: function(value, decimalSeparator, maxPrecision) {
         if(typeUtils.isDefined(value)) {
             var strValue = value.toString(),
                 decimalSeparatorIndex = strValue.indexOf(decimalSeparator);
@@ -323,7 +323,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var value = parsed === null ? this._parsedValue : parsed;
-        parsed = this._parseFloatValue(value, decimalSeparator, maxPrecision);
+        parsed = this._truncateToPrecision(value, decimalSeparator, maxPrecision);
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
