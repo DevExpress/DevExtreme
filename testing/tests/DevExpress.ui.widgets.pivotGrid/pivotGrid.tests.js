@@ -3307,6 +3307,54 @@ QUnit.test('Stretch columns when scrolling has size', function(assert) {
     assert.strictEqual(table.width(), 1005, "table width");
 });
 
+
+// T651805
+QUnit.test('Stretch columns when scrolling has size and horizontal scrollbar may cause vertical scrollbar', function(assert) {
+    var pivotGrid = createPivotGrid({
+        scrolling: {
+            useNative: true
+        },
+        width: 500,
+        dataSource: {
+            fields: [
+                { area: "row" }, { area: "row" },
+                { format: 'decimal', area: "column" }, { format: { format: 'quarter', dateType: 'full' }, area: "column" },
+                { caption: 'Sum1', format: 'currency', area: "data" }, { caption: 'Sum2', format: 'percent', area: "data" }
+            ],
+            rows: [
+                {
+                    value: 'C1', index: 1
+                }],
+            columns: [
+                {
+                    value: '2010', index: 2,
+                    children: [
+                        { value: '1', index: 0 },
+                        { value: '2', index: 1 }
+                    ]
+                }, {
+                    value: '2012', index: 5,
+                    children: [
+                        { value: '2', index: 3 },
+                        { value: '3', index: 4 }
+                    ]
+                }],
+            values: [
+                [[10, 0.1], [8, 0.8], [15, 0.15], [22, 0.22], [29, 0.29], [36, 0.36], [43, 0.43]],
+                [[7, 0.7], [14, 0.14], [21, 0.21], [28, 0.28], [35, 0.35], [42, 0.42], [49, 0.49]]
+            ]
+        }
+    }, assert);
+
+    this.clock.tick();
+    // assert
+    assert.ok(pivotGrid);
+    var columnsArea = pivotGrid._columnsArea;
+    assert.ok(!pivotGrid._rowsArea.hasScroll());
+    assert.ok(columnsArea.hasScroll());
+    assert.roughEqual($(columnsArea._getScrollable().content()).parent().get(0).clientWidth, $(pivotGrid._dataArea._getScrollable().content()).parent().get(0).clientWidth, 0.01, "stretched");
+});
+
 QUnit.test('Stretch columns when scrolling has size. Virtual scrolling', function(assert) {
     var createPivotGridOptions = function(options) {
         var rowItems = [
