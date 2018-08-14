@@ -62,7 +62,7 @@ QUnit.test("render drawer content", assert => {
     const $element = $("#drawer").dxDrawer({});
     const $content = $element.find("." + DRAWER_CONTENT_CLASS);
 
-    assert.equal($.trim($content.text()), "Test Content", "drawer content was rendered");
+    assert.equal($content.text().trim(), "Test Content", "drawer content was rendered");
 });
 
 
@@ -87,7 +87,7 @@ QUnit.test("custom template for menu should be rendered correctly", assert => {
 
     const $menu = $($element.dxDrawer("instance").content());
 
-    assert.equal($.trim($menu.text()), "Test Menu Template", "menu content text is correct");
+    assert.equal($menu.text().trim(), "Test Menu Template", "menu content text is correct");
 });
 
 QUnit.test("templates should be dom nodes without jQuery", assert => {
@@ -109,7 +109,7 @@ QUnit.test("custom content template for content should be rendered correctly", a
 
     const $content = $($element.dxDrawer("instance").viewContent());
 
-    assert.equal($.trim($content.text()), "Test Content Template", "content text is correct");
+    assert.equal($content.text().trim(), "Test Content Template", "content text is correct");
 });
 
 QUnit.test("render menu positions", assert => {
