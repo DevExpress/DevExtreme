@@ -24,7 +24,7 @@ const ShrinkStrategy = DrawerStrategy.inherit({
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
-                        this._menuAnimation.resolve();
+                        this._menuAnimationResolve();
                     }
                 };
                 animation.moveTo(animationConfig);
@@ -36,7 +36,7 @@ const ShrinkStrategy = DrawerStrategy.inherit({
         if(this._drawer.option("revealMode") === "expand") {
             if(animate) {
                 animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), () => {
-                    this._menuAnimation.resolve();
+                    this._menuAnimationResolve();
                 });
             } else {
                 $(this._drawer._$menu).css("width", width);
@@ -54,7 +54,7 @@ const ShrinkStrategy = DrawerStrategy.inherit({
                 direction: direction,
                 duration: this._drawer.option("animationDuration"),
                 complete: () => {
-                    this._contentAnimation.resolve();
+                    this._contentAnimationResolve();
                 }
             };
             animation.padding(animationConfig);

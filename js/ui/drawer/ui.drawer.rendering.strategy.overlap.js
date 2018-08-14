@@ -21,8 +21,8 @@ const OverlapStrategy = DrawerStrategy.inherit({
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
-                        this._contentAnimation.resolve();
-                        this._menuAnimation.resolve();
+                        this._contentAnimationResolve();
+                        this._menuAnimationResolve();
                     }
                 };
 
@@ -36,8 +36,8 @@ const OverlapStrategy = DrawerStrategy.inherit({
             const width = this._getMenuWidth(offset);
             if(animate) {
                 animation.width($(this._drawer._$menu), width, this._drawer.option("animationDuration"), () => {
-                    this._contentAnimation.resolve();
-                    this._menuAnimation.resolve();
+                    this._contentAnimationResolve();
+                    this._menuAnimationResolve();
                 });
             } else {
                 $(this._drawer._$menu).css("width", width);

@@ -17,8 +17,8 @@ const PushStrategy = DrawerStrategy.inherit({
                 position: contentPosition,
                 duration: this._drawer.option("animationDuration"),
                 complete: () => {
-                    this._contentAnimation.resolve();
-                    this._menuAnimation.resolve();
+                    this._contentAnimationResolve();
+                    this._menuAnimationResolve();
                 }
             };
 

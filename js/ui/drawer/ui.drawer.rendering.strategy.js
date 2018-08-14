@@ -1,8 +1,5 @@
 import Class from "../../core/class";
-import { Deferred } from "../../core/utils/deferred";
-import deferredUtils from "../../core/utils/deferred";
 import $ from "../../core/renderer";
-const when = deferredUtils.when;
 import fx from "../../animation/fx";
 
 const animation = {
@@ -82,18 +79,21 @@ const DrawerStrategy = Class.inherit({
 
     renderPosition(offset, animate) {
         this._stopAnimations();
-        this._contentAnimation = new Deferred(),
-        this._menuAnimation = new Deferred();
-        this._shaderAnimation = new Deferred();
+
+        this._drawer._animations.push(new Promise((resolve) => {
+            this._contentAnimationResolve = resolve;
+        }));
+        this._drawer._animations.push(new Promise((resolve) => {
+            this._menuAnimationResolve = resolve;
+        }));
+        this._drawer._animations.push(new Promise((resolve) => {
+            this._shaderAnimationResolve = resolve;
+        }));
 
         if(animate) {
-            this._drawer._animations.push(this._contentAnimation);
-            this._drawer._animations.push(this._menuAnimation);
-            this._drawer._animations.push(this._shaderAnimation);
-
-            when.apply($, this._drawer._animations).done((function() {
-                this._animationCompleteHandler();
-            }).bind(this._drawer));
+            Promise.all(this._drawer._animations).then(() => {
+                this._drawer._animationCompleteHandler();
+            });
         }
     },
 
@@ -120,7 +120,7 @@ const DrawerStrategy = Class.inherit({
 
         if(animate) {
             animation.fade($(this._drawer._$shader), fadeConfig, duration, () => {
-                this._shaderAnimation.resolve();
+                this._shaderAnimationResolve();
             });
         } else {
             this._drawer._$shader.css("opacity", fadeConfig.to);
