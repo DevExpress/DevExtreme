@@ -1470,6 +1470,7 @@ QUnit.module("Custom operations", {
         // act
         anyOfOperation.editorTemplate({
             value: [1],
+            text: "1",
             field: field
         }, $container);
 
@@ -1490,6 +1491,7 @@ QUnit.module("Custom operations", {
         // act
         editorTemplate = this.getAnyOfOperation(left).editorTemplate({
             value: [1],
+            text: "1",
             field: left
         }, $container);
 
