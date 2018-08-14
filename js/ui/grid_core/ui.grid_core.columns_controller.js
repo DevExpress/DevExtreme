@@ -1409,6 +1409,8 @@ module.exports = {
                                 } else {
                                     this._columnOptionChanged(args);
                                 }
+                            } else {
+                                this._updateRequireResize(args);
                             }
                             break;
                         case "commonColumnSettings":
@@ -1448,11 +1450,19 @@ module.exports = {
                         } else {
                             columnOptionValue = args.value;
                         }
-
                         this.columnOption(column.index, columnOptionValue);
-                        if(columnOptionName === "width") {
-                            this.component._requireResize = true;
-                        }
+
+                        this._updateRequireResize(args, column);
+                    }
+                },
+
+                _updateRequireResize: function(args, column) {
+                    if(this.component._requireResize) {
+                        return;
+                    }
+                    column = column ? column : this.getColumnByPath(args.fullName);
+                    if(column && args.fullName.replace(regExp, "") === "width") {
+                        this.component._requireResize = true;
                     }
                 },
 
