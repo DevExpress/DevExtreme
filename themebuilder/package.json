@@ -15,7 +15,7 @@
   "dependencies": {
     "bootstrap": "^4.1.2",
     "less": "^2.6.1",
-    "minimalist": "^1.0.0",
+    "minimist": "^1.2.0",
     "sass": "^1.10.3"
   },
   "bin": {
