@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     isFunction = require("../../core/utils/type").isFunction,
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
+    eventsEngine = require("../../events/core/events_engine"),
     Popup = require("../popup"),
     TreeView = require("../tree_view"),
     List = require("../list");
@@ -191,6 +192,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 closeOnTargetScroll: true,
                 dragEnabled: false,
                 closeOnOutsideClick: true,
+                focusStateEnabled: false,
                 toolbarItems: [
                     {
                         toolbar: "bottom", location: "after", widget: "dxButton", options: {
@@ -212,6 +214,9 @@ exports.HeaderFilterView = modules.View.inherit({
                     e.component.$content().parent().addClass("dx-dropdowneditor-overlay");
                     that._initializeListContainer(options);
                     options.onShowing && options.onShowing(e);
+                },
+                onShown: function(e) {
+                    eventsEngine.trigger(e.component.$content().find(".dx-checkbox").first(), "focus");
                 },
                 onHidden: options.onHidden,
                 onInitialized: function(e) {
