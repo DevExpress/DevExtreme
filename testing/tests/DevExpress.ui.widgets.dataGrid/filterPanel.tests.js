@@ -225,6 +225,35 @@ QUnit.module("Filter Panel", {
         });
     });
 
+    // T663205
+    QUnit.test("from anyof build-in operation and lookup", function(assert) {
+        // arrange
+        var filter = ["field", "anyof", [1, 2]];
+        this.initFilterPanelView({
+            filterValue: filter,
+            headerFilter: {
+                texts: {}
+            },
+            columns: [{
+                dataField: "field",
+                lookup: {
+                    dataSource: [
+                        { id: 1, text: "Text 1" },
+                        { id: 2, text: "Text 2" }
+                    ],
+                    valueExpr: "id",
+                    displayExpr: "text"
+                }
+            }]
+        });
+
+        // act
+        assert.expect(1);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, "[Field] Is any of('Text 1', 'Text 2')");
+        });
+    });
+
     QUnit.test("from custom operation with value = array", function(assert) {
         // arrange
         var filter = [
