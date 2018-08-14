@@ -45,12 +45,19 @@ exports.DataArea = areaItem.AreaItem.inherit({
         this.callBase();
     },
 
-    processScroll: function(useNativeScrolling) {
+    processScroll: function(useNativeScrolling, horizontalScroll, verticalScroll) {
+        let direction = "both";
+        if(horizontalScroll && !verticalScroll) {
+            direction = "horizontal";
+        } else if(!horizontalScroll && verticalScroll) {
+            direction = "vertical";
+        }
+
         this._groupElement.css('borderTopWidth', 0)
             .dxScrollable({
                 useNative: !!useNativeScrolling,
                 useSimulatedScrollbar: !useNativeScrolling,
-                direction: "both",
+                direction,
                 bounceEnabled: false,
                 updateManually: true
             });
