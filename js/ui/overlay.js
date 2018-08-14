@@ -547,10 +547,10 @@ var Overlay = Widget.inherit({
                 }
 
                 this.hide();
+                return this.option("propagateOutsideClick");
             }
         }
-
-        return this.option("propagateOutsideClick");
+        return false;
     },
 
     _initTemplates: function() {

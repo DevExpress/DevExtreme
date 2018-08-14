@@ -1340,19 +1340,6 @@ QUnit.test("context menu should not hide after outsideclick when event is cancel
     assert.ok(instance.option("visible"), "menu is visible");
 });
 
-QUnit.test("context menu should not block outside click for other overlays on outside click", function(assert) {
-    var otherOverlay = $("<div>").appendTo("#qunit-fixture").dxOverlay({
-            closeOnOutsideClick: true,
-            visible: true
-        }).dxOverlay("instance"),
-        contextMenu = new ContextMenu(this.$element, { items: [{ text: "item 1" }], visible: true });
-
-    $(document).trigger("dxpointerdown");
-
-    assert.notOk(otherOverlay.option("visible"), "other overlay was hidden");
-    assert.notOk(contextMenu.option("visible"), "context menu was hidden");
-});
-
 QUnit.test("context menu should prevent default behavior if it shows", function(assert) {
     new ContextMenu(this.$element, {
         items: [{ text: "item 1" }],
