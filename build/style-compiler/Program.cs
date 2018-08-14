@@ -31,6 +31,20 @@ namespace StyleCompiler
                     });
                 });
 
+                cli.Command("theme", c =>
+                {
+                    var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
+                    var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
+                    var themeName = c.Option("--theme-name", "", CommandOptionType.SingleValue);
+                    var colorSchemeName = c.Option("--color-scheme-name", "", CommandOptionType.SingleValue);
+                    c.OnExecute(delegate
+                    {
+                        EnsureRequiredOptions(versionOption, outputPathOption, themeName, colorSchemeName);
+                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), themeName.Value(), colorSchemeName.Value());
+                        return 0;
+                    });
+                });
+
                 cli.Command("tb-assets", c =>
                 {
                     var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
@@ -119,7 +133,7 @@ namespace StyleCompiler
             }
         }
 
-        static void CreateThemes(string sourcePath, string version, string outputPath)
+        static void CreateThemes(string sourcePath, string version, string outputPath, string themeName = null, string colorSchemeName = null)
         {
             Directory.CreateDirectory(outputPath);
 
@@ -128,7 +142,10 @@ namespace StyleCompiler
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {
-                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName);
+                var aggregate = (themeName != null && colorSchemeName != null) ?
+                    LessAggregation.EnumerateThemeItems(sourcePath, distributionName, themeName, colorSchemeName) :
+                    LessAggregation.EnumerateAllItems(sourcePath, distributionName);
+
                 foreach (var item in aggregate)
                 {
 

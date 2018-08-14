@@ -242,6 +242,24 @@ namespace StyleCompiler
             return LessRegistry.ResolveRequiredModules(dist.Modules);
         }
 
+        public static IEnumerable<Item> EnumerateThemeItems(string sourcePath, string distributionName, string themeName, string colorSchemeName)
+        {
+            var distribution = LessRegistry.CssDistributions[distributionName];
+
+            if (distribution.CommonsInExternalFiles)
+                yield return CreateCommonItem(distributionName);
+
+            if (distribution.SupportedThemes != null && distribution.SupportedThemes.Contains(themeName))
+            {
+                var theme = LessRegistry.KnownThemeMap[themeName];
+                if(theme.ColorSchemeNames.Contains(colorSchemeName))
+                {
+                    foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
+                        yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
+                } 
+            }
+        }
+
     }
 
 }
