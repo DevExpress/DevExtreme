@@ -285,15 +285,29 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
+    _truncateToPrecision: function(value, decimalSeparator, maxPrecision) {
+        if(typeUtils.isDefined(value)) {
+            var strValue = value.toString(),
+                decimalSeparatorIndex = strValue.indexOf(decimalSeparator);
+
+            if(strValue && decimalSeparatorIndex > -1) {
+                var parsedValue = parseFloat(strValue.substr(0, decimalSeparatorIndex + maxPrecision + 1));
+                return isNaN(parsedValue) ? value : parsedValue;
+            }
+        }
+        return value;
+    },
+
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
             maxPrecision = this._getPrecisionLimits(format, editedText).max,
-            isValueChanged = parsed !== this._parsedValue;
+            isValueChanged = parsed !== this._parsedValue,
+            decimalSeparator = number.getDecimalSeparator();
 
-        var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
+        var isDecimalPointRestricted = char === decimalSeparator && maxPrecision === 0,
             isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText) && this._isStub(char);
 
         if(isDecimalPointRestricted || isUselessCharRestricted) {
@@ -308,10 +322,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return undefined;
         }
 
-        var pow = Math.pow(10, maxPrecision),
-            value = (parsed === null ? this._parsedValue : parsed);
-
-        parsed = Math.floor(Math.round(value * pow * 10) / 10) / pow;
+        var value = parsed === null ? this._parsedValue : parsed;
+        parsed = this._truncateToPrecision(value, decimalSeparator, maxPrecision);
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },

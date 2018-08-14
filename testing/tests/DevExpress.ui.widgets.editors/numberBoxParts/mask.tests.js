@@ -343,6 +343,20 @@ QUnit.test("removed digits should not be replaced to 0 when they are not require
     assert.equal(this.input.val(), "1", "decimal point was removed together with last float digit");
 });
 
+QUnit.test("value is not changed when using the big float part", function(assert) {
+    this.instance.option({
+        format: "#,##0.##############################",
+        value: ""
+    });
+
+    this.keyboard.caret(0)
+        .type("3.4")
+        .press("enter")
+        .change();
+
+    assert.equal(this.instance.option("value"), "3.4");
+});
+
 
 QUnit.module("format: minimum and maximum", moduleConfig);
 
