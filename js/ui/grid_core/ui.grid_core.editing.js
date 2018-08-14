@@ -828,20 +828,17 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
             var that = this,
-                repaintOldRowOnly,
-                rowsView = that._rowsView,
-                columns = that._columnsController.getVisibleColumns(),
-                hasCalculableColumn = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
+                rowsView = that._rowsView;
 
-            if(!column || !column.showEditorAlways || (oldColumn && (!oldColumn.showEditorAlways || (repaintOldRowOnly = hasCalculableColumn && that.hasChanges(oldEditRowIndex))))) {
+            if(!column || !column.showEditorAlways || oldColumn && !oldColumn.showEditorAlways) {
                 that._editCellInProgress = true;
 
                 // T316439
-                !repaintOldRowOnly && that.getController("editorFactory").loseFocus();
+                that.getController("editorFactory").loseFocus();
 
                 that._dataController.updateItems({
                     changeType: "update",
-                    rowIndices: repaintOldRowOnly ? [oldEditRowIndex] : [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                    rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
                 });
             }
 
@@ -1379,7 +1376,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 rowKey = options.key,
                 $cellElement = $(options.cellElement),
                 editMode = getEditMode(that),
-                params;
+                params,
+                columns;
 
             if(rowKey === undefined) {
                 that._dataController.dataErrorOccurred.fire(errors.Error("E1043"));
@@ -1406,9 +1404,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._addEditData(params, options.row);
                 that._updateEditButtons();
 
-                if(options.column.showEditorAlways && getEditMode(that) === EDIT_MODE_CELL && options.row && !options.row.inserted) {
-                    that.saveEditData();
-                } else if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
+                if(options.column.showEditorAlways) {
+                    if(editMode === EDIT_MODE_CELL && options.row && !options.row.inserted) {
+                        return that.saveEditData();
+                    } else if(editMode === EDIT_MODE_BATCH && !forceUpdateRow) {
+                        columns = that._columnsController.getVisibleColumns();
+                        forceUpdateRow = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
+                    }
+                }
+
+                if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
                     that._updateEditRow(options.row, forceUpdateRow);
                 }
             }
