@@ -176,10 +176,10 @@ class LessTemplateLoader {
     analyzeBootstrapTheme(theme, colorScheme, metadata, bootstrapMetadata, customLessContent, version) {
         let that = this;
 
-        let preLessString = "";
+        let metadataVariables = "";
         for(let key in bootstrapMetadata) {
             if(bootstrapMetadata.hasOwnProperty(key)) {
-                preLessString += bootstrapMetadata[key] + ": dx-empty" + (version === 4 ? " !default" : "") + ";";
+                metadataVariables += bootstrapMetadata[key] + ": dx-empty" + (version === 4 ? " !default" : "") + ";";
             }
         }
 
@@ -219,16 +219,16 @@ class LessTemplateLoader {
             };
 
             if(version === 3) {
-                that.compileLess(preLessString + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
+                that.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
             } else if(version === 4) {
                 let defaultBootstrapVariablesUrl = "node_modules/bootstrap/scss/_variables.scss",
                     defaultBootstrapFunctionsUrl = "node_modules/bootstrap/scss/_functions.scss";
 
                 Promise.all([that.readFile(defaultBootstrapFunctionsUrl), that.readFile(defaultBootstrapVariablesUrl)])
                     .then(files => {
-                        that.compileScss(files[0] + customLessContent + files[1] + preLessString, bootstrapMetadata).then(processDxTheme);
+                        that.compileScss(files[0] + customLessContent + files[1] + metadataVariables, bootstrapMetadata).then(processDxTheme);
                     }, () => {
-                        that.compileScss(customLessContent + preLessString, bootstrapMetadata).then(processDxTheme);
+                        that.compileScss(customLessContent + metadataVariables, bootstrapMetadata).then(processDxTheme);
                     });
             }
         });
