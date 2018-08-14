@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var file = require('gulp-file');
+var concat = require('gulp-concat');
 var runSequence = require('run-sequence');
 var ts = require('gulp-typescript');
 
@@ -7,7 +8,6 @@ var headerPipes = require('./header-pipes.js');
 
 var OUTPUT_DIR = 'artifacts/ts';
 var MODULES = require('./modules_metadata.json');
-var TS = require('./ts_metadata.json');
 
 var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
     if(widgetPath.startsWith('ui.dx') || widgetPath.startsWith('viz.dx')) {
@@ -16,17 +16,9 @@ var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
     }
 };
 
-exports.getAugmentationOptionsPath = function(widgetPath) {
-    var widgetName = widgetNameByPath(widgetPath);
+exports.getAugmentationOptionsPath = (widgetPath) => widgetNameByPath(widgetPath) ? getWidgetOptionsPath(widgetPath) : '';
 
-    return widgetName ? getWidgetOptionsPath(widgetName, widgetPath) : '';
-};
-
-var getWidgetOptionsPath = function(widgetName, widgetPath) {
-    var tsWidgetMetadata = TS.filter((d) => d.widgetName === widgetName)[0];
-
-    return tsWidgetMetadata ? tsWidgetMetadata.optionsPath : `${widgetPath}Options`;
-};
+var getWidgetOptionsPath = (widgetPath) => `${widgetPath}Options`;
 
 exports.generateJQueryAugmentation = function(exportName, globalWidgetPath) {
     var widgetName = widgetNameByPath(globalWidgetPath);
@@ -37,7 +29,7 @@ exports.generateJQueryAugmentation = function(exportName, globalWidgetPath) {
            `    ${widgetName}(options: "instance"): DevExpress.${globalWidgetPath};\n` +
            `    ${widgetName}(options: string): any;\n` +
            `    ${widgetName}(options: string, ...params: any[]): any;\n` +
-           `    ${widgetName}(options: DevExpress.${getWidgetOptionsPath(widgetName, globalWidgetPath)}): JQuery;\n` +
+           `    ${widgetName}(options: DevExpress.${getWidgetOptionsPath(globalWidgetPath)}): JQuery;\n` +
            `}\n`;
 };
 
@@ -47,7 +39,8 @@ gulp.task('ts-vendor', function() {
 });
 
 gulp.task('ts-sources', function() {
-    return gulp.src('./ts/dx.all.d.ts')
+    return gulp.src(['./ts/dx.all.d.ts', './ts/aliases.d.ts'])
+        .pipe(concat("dx.all.d.ts"))
         .pipe(headerPipes.bangLicense())
         .pipe(gulp.dest(OUTPUT_DIR));
 });

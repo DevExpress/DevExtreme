@@ -6,11 +6,6 @@
 */
 var dxSankey = {
     /**
-    * @name dxSankey.Options
-    * @namespace DevExpress.viz.sankey
-    * @hidden
-    */
-    /**
     * @name dxSankeyOptions.hoverEnabled
     * @type boolean
     * @default true
