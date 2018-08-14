@@ -992,7 +992,6 @@ var FilterBuilder = Widget.inherit({
         var options = {
             value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
-            updateValueImmediately: true,
             setValue: function(data) {
                 value = data === null ? "" : data;
             },

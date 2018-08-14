@@ -134,6 +134,25 @@ QUnit.test("value clearing", function(assert) {
     assert.equal($input.val(), "", "input was cleared");
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy();
+
+    new DropDownBox(this.$element, {
+        items: this.simpleItems,
+        showClearButton: true,
+        onValueChanged: valueChangedHandler,
+        valueExpr: "id",
+        displayExpr: "name",
+        value: [1]
+    });
+
+    var $clearButton = this.$element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 QUnit.test("content template should work", function(assert) {
     assert.expect(4);
 
@@ -174,6 +193,20 @@ QUnit.test("popup and editor width should be equal", function(assert) {
     instance.option("width", 700);
     assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal after option change");
     assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
+});
+
+QUnit.test("popup and editor width should be eual when the editor rendered in the hidden content", function(assert) {
+    this.$element.hide();
+    var instance = new DropDownBox(this.$element, {
+        deferRendering: false,
+        contentTemplate: function() {
+            return "Test content";
+        }
+    });
+
+    this.$element.show();
+    instance.open();
+    assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal");
 });
 
 QUnit.test("dropDownBox should work with the slow dataSource", function(assert) {

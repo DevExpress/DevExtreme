@@ -34,6 +34,8 @@ var FILEUPLOADER_EMPTY_CLASS = "dx-fileuploader-empty",
     FILEUPLOADER_UPLOAD_BUTTON_CLASS = "dx-fileuploader-upload-button",
     FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = "dx-fileuploader-file-status-message",
 
+    FILEUPLOADER_INVALID_CLASS = "dx-fileuploader-invalid",
+
     FILEUPLOADER_AFTER_LOAD_DELAY = 500;
 
 
@@ -53,16 +55,21 @@ var simulateFileChoose = function($fileUploader, files) {
 };
 
 var fakeFile = {
-    name: "fakefile",
+    name: "fakefile.png",
     size: 100023,
     type: "image/png",
     lastModifiedDate: $.now()
 };
-
 var fakeFile1 = {
-    name: "fakefile1",
+    name: "fakefile1.jpeg",
     size: 1063,
     type: "image/jpeg",
+    lastModifiedDate: $.now()
+};
+var fakeFile2 = {
+    name: "document.pdf",
+    size: 4000,
+    type: "application/pdf",
     lastModifiedDate: $.now()
 };
 
@@ -108,6 +115,100 @@ var moduleConfig = {
         this.clock.restore();
     }
 };
+
+QUnit.module("validation rendrering", moduleConfig, function() {
+    QUnit.test("file with .pdf Extension should be rendered as invalid", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: true,
+            validation: {
+                allowedFileExtensions: ['.jpeg', '.png']
+            }
+        });
+        var $filesContainer = $fileUploader.find("." + FILEUPLOADER_FILES_CONTAINER_CLASS);
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
+        assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS + "." + FILEUPLOADER_INVALID_CLASS).length, 1, "One file is invalid");
+        assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS).not("." + FILEUPLOADER_INVALID_CLASS).length, 2, "Two files is valid");
+
+        var invalidFileName = $filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS + "." + FILEUPLOADER_INVALID_CLASS).find("." + FILEUPLOADER_FILE_NAME_CLASS).text();
+        assert.equal(invalidFileName, fakeFile2.name, fakeFile2.name + "is invalid file name");
+    });
+    QUnit.test("file with .pdf Extension should be rendered with validation text", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            validation: {
+                allowedFileExtensions: ['.jpeg']
+            }
+        });
+        var fileUploader = $fileUploader.dxFileUploader("instance");
+        simulateFileChoose($fileUploader, [fakeFile2]);
+
+        var statusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
+        assert.equal(statusMessage, fileUploader.option("validation.invalidFileExtensionMessage"), "validation text is correct");
+    });
+    QUnit.test("File with size more than 100 kb is invalid ", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            validation: {
+                maxFileSize: 100000
+            }
+        });
+        simulateFileChoose($fileUploader, [fakeFile]);
+        assert.equal($fileUploader.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS + "." + FILEUPLOADER_INVALID_CLASS).length, 1, "One file is invalid");
+        assert.equal($fileUploader.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS).not("." + FILEUPLOADER_INVALID_CLASS).length, 0, "No has valid files");
+    });
+    QUnit.test("File with size more than 100 kb should be rendered with validation text ", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            validation: {
+                maxFileSize: 100000
+            }
+        });
+        var fileUploader = $fileUploader.dxFileUploader("instance");
+        simulateFileChoose($fileUploader, [fakeFile]);
+
+        var statusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
+        assert.equal(statusMessage, fileUploader.option("validation.invalidMaxFileSizeMessage"), "validation text is correct");
+    });
+    QUnit.test("File with size less than 2 kb is invalid ", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            validation: {
+                minFileSize: 2000
+            }
+        });
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
+        assert.equal($fileUploader.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS + "." + FILEUPLOADER_INVALID_CLASS).length, 1, "Big file is invalid");
+        assert.equal($fileUploader.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS).not("." + FILEUPLOADER_INVALID_CLASS).length, 1, "Small file is valid");
+    });
+    QUnit.test("File with size less than 2 kb should be rendered with validation text ", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            validation: {
+                minFileSize: 2000
+            }
+        });
+        var fileUploader = $fileUploader.dxFileUploader("instance");
+        simulateFileChoose($fileUploader, [fakeFile1]);
+
+        var statusMessage = $fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).text();
+        assert.equal(statusMessage, fileUploader.option("validation.invalidMinFileSizeMessage"), "validation text is correct");
+    });
+    QUnit.test("Files with size more than 4 kb and file extension not contains in allowedFileExtensions should be invalid", function(assert) {
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            validation: {
+                allowedFileExtensions: [".pdf"],
+                maxFileSize: 4000
+            }
+        });
+        var fileUploader = $fileUploader.dxFileUploader("instance");
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
+
+        var bigFileWithInvalidExtStatusMessage = $($fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).get(0)).text();
+        assert.ok(bigFileWithInvalidExtStatusMessage.indexOf(fileUploader.option("validation.invalidMaxFileSizeMessage")) > -1, "has invalidMaxFileSizeMessage");
+        assert.ok(bigFileWithInvalidExtStatusMessage.indexOf(fileUploader.option("validation.invalidFileExtensionMessage")) > -1, "has invalidFileExtensionMessage");
+
+        var imageFileStatusMessage = $($fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).get(1)).text();
+        assert.equal(imageFileStatusMessage, fileUploader.option("validation.invalidFileExtensionMessage"), "has invalidFileExtensionMessage");
+
+        var pdfFileStatusMessage = $($fileUploader.find("." + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS).get(2)).text();
+        assert.equal(pdfFileStatusMessage, fileUploader.option("readyToUploadMessage"), "validation passed");
+    });
+});
 
 
 QUnit.module("rendering");
@@ -612,7 +713,7 @@ QUnit.test("value should present in the file name", function(assert) {
 
     var $fileName = $fileUploader.find("." + FILEUPLOADER_FILE_NAME_CLASS).eq(0);
 
-    assert.equal($fileName.text(), "fakefile", "file name represent value correctly");
+    assert.equal($fileName.text(), fakeFile.name, "file name represent value correctly");
 });
 
 QUnit.test("empty class should be present when value is empty", function(assert) {
@@ -677,7 +778,7 @@ QUnit.test("file input should not be rerendered if widget repainted", function(a
     $fileUploader.dxFileUploader("repaint");
 
     var $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
-    assert.equal($fileInput.val(), "fakefile", "value was not set to empty string");
+    assert.equal($fileInput.val(), fakeFile.name, "value was not set to empty string");
 });
 
 
@@ -957,12 +1058,11 @@ QUnit.test("files count should be correct after value reset", function(assert) {
 QUnit.test("input should be cleared after value reset", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
             extendSelection: true,
-            value: ["fakefile"],
+            value: [fakeFile],
             multiple: true
         }),
         fileUploader = $fileUploader.dxFileUploader("instance"),
         $input = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
-
     $input.val("fakefile");
     fileUploader.reset();
 
@@ -975,7 +1075,6 @@ QUnit.test("input value should not be cleared after the file selection", functio
             uploadMode: 'useForm'
         }),
         $input = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
-
     $input.val("fakeFile").trigger("change");
 
     assert.equal($input.val(), "fakeFile", "value was cleared in input");

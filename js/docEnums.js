@@ -586,18 +586,18 @@
  */
 
 /**
- * @typedef {string} Enums.DrawerMode
- * @enum {'persistent'|'temporary'|'push'}
+ * @typedef {string} Enums.DrawerOpenedStateMode
+ * @enum {'overlap'|'shrink'|'push'}
  */
 
 /**
- * @typedef {string} Enums.DrawerMenuPosition
+ * @typedef {string} Enums.DrawerPosition
  * @enum {'left'|'right'}
  */
 
 /**
- * @typedef {string} Enums.DrawerShowMode
- * @enum {'slide'|'shrink'}
+ * @typedef {string} Enums.DrawerRevealMode
+ * @enum {'slide'|'expand'}
  */
 
 /**

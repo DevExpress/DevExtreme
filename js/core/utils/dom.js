@@ -130,6 +130,21 @@ var createMarkupFromString = function(str) {
     return tempElement.contents();
 };
 
+var extractTemplateMarkup = function(element) {
+    element = $(element);
+
+    var templateTag = element.length && element.filter(function isNotExecutableScript() {
+        var $node = $(this);
+        return $node.is("script[type]") && ($node.attr("type").indexOf("script") < 0);
+    });
+
+    if(templateTag.length) {
+        return templateTag.eq(0).html();
+    } else {
+        element = $("<div>").append(element);
+        return element.html();
+    }
+};
 
 var normalizeTemplateElement = function(element) {
     var $element = isDefined(element) && (element.nodeType || isRenderer(element))
@@ -191,6 +206,7 @@ exports.triggerHidingEvent = triggerVisibilityChangeEvent("dxhiding");
 exports.triggerResizeEvent = triggerVisibilityChangeEvent("dxresize");
 exports.getElementOptions = getElementOptions;
 exports.createComponents = createComponents;
+exports.extractTemplateMarkup = extractTemplateMarkup;
 exports.normalizeTemplateElement = normalizeTemplateElement;
 exports.clearSelection = clearSelection;
 exports.uniqueId = uniqueId;

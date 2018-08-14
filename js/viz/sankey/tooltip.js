@@ -32,4 +32,7 @@ export function setTooltipCustomOptions(sankey) {
             enabled: options.enabled
         }));
     };
+    sankey.prototype.hideTooltip = function() {
+        this._tooltip && this._tooltip.hide();
+    };
 }

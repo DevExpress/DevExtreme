@@ -325,12 +325,8 @@ var Menu = MenuBase.inherit({
         }
 
         var $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS),
-            menuItemsWidth = 0,
+            menuItemsWidth = this._getSummaryItemsWidth($menuItems, true),
             containerWidth = this.$element().outerWidth();
-
-        $menuItems.each(function(_, menuItem) {
-            menuItemsWidth += $(menuItem).outerWidth(true);
-        });
 
         this._toggleAdaptiveMode(menuItemsWidth > containerWidth);
     },

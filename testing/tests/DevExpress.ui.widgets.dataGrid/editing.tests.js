@@ -511,10 +511,16 @@ QUnit.test('Cancel changes button click call cancelEditData', function(assert) {
     headerPanelElement = testElement.find('.dx-datagrid-header-panel').first();
 
     // act
-    this.click(headerPanelElement, '.dx-datagrid-cancel-button');
+    $(headerPanelElement).find(".dx-datagrid-cancel-button").trigger("dxclick");
 
     // assert
-    assert.equal(cancelEditDataCallCount, 1, 'cancelEditData called');
+    assert.equal(cancelEditDataCallCount, 0, 'cancelEditData is not called'); // T630875
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(cancelEditDataCallCount, 1, 'cancelEditData is called');
 });
 
 QUnit.test('Edit Row', function(assert) {
@@ -1829,6 +1835,8 @@ QUnit.test('Save changes on save button click when batch mode', function(assert)
     getInputElements(testElement).eq(0).trigger('change');
     mouse.up();
 
+    this.clock.tick();
+
     // assert
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }], ['test2', { "name": "Test2" }]], "changed rows are saved");
 });
@@ -1938,6 +1946,7 @@ QUnit.test('Save changes when batch mode when one the changes is canceled from e
 
     // act
     this.editingController.saveEditData();
+    this.clock.tick();
 
     // assert
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }]]);
@@ -2284,6 +2293,7 @@ QUnit.test("The cell should be editable after cancel removing the row", function
     that.editingController.optionChanged({ name: "onRowRemoving" });
 
     that.deleteRow(0);
+    that.clock.tick();
 
     // act
     that.editCell(0, 0);
@@ -4143,6 +4153,38 @@ QUnit.test("oldData on rowUpdating for checkbox editor", function(assert) {
     assert.equal(rowUpdatingCallCount, 1, "rowUpdating call count");
 });
 
+QUnit.test("onRowUpdating should raise once if eventArgs.cancel is true for the checkBox data editor in cell edit mode (T656376)", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        rowUpdatingCallCount = 0,
+        testElement = $("#container"),
+        $checkbox;
+
+    that.options.editing = {
+        mode: "cell",
+        allowUpdating: true
+    };
+
+    that.options.onRowUpdating = function(e) {
+        ++rowUpdatingCallCount;
+        e.cancel = true;
+    };
+    that.options.columns.push({ dataField: "booleanField", dataType: "boolean" });
+
+    that.columnsController.reset();
+    that.editingController.optionChanged({ name: "onRowUpdating" });
+    rowsView.render(testElement);
+
+    // act
+    $checkbox = testElement.find(".dx-row").first().find(".dx-checkbox");
+    $($checkbox).trigger("dxclick");
+
+    // assert
+    assert.ok($checkbox.length, "checkbox found");
+    assert.equal(rowUpdatingCallCount, 1, "rowUpdating call count");
+});
+
 // T172738
 QUnit.test("Highlight modified with option showEditorAlways true on column", function(assert) {
     // arrange
@@ -4359,6 +4401,7 @@ QUnit.test("Remove row when set onRowRemoving", function(assert) {
 
     // act
     that.deleteRow(0);
+    that.clock.tick();
     $(".dx-dialog-button").first().trigger("dxclick");
 
     // assert
@@ -6556,6 +6599,27 @@ if(!devices.win8) {
     });
 }
 
+QUnit.test("hasChanges with rowIndex", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+
+    rowsView.render($testElement);
+
+    // act
+    that.cellValue(1, 0, "test");
+
+    // assert
+    assert.notOk(that.editingController.hasChanges(0), "the first row hasn't changed");
+    assert.ok(that.editingController.hasChanges(1), "the second row has changed");
+});
+
 QUnit.module('Editing with validation', {
     beforeEach: function() {
         this.array = [
@@ -8285,6 +8349,7 @@ QUnit.testInActiveWindow("Show the revert button when an edit cell, server retur
     this.rowsView.render(testElement);
 
     this.applyOptions({
+        showColumnHeaders: true,
         editing: {
             mode: "cell"
         },

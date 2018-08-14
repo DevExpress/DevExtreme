@@ -1094,6 +1094,15 @@ QUnit.test("reset hover view. selected point", function(assert) {
     assert.strictEqual(this.getCurrentStyle(), "selection");
 });
 
+// T661080
+QUnit.test("Point has hover view after call resetView + setView", function(assert) {
+    this.point.resetView("hover");
+
+    this.point.setView("hover");
+
+    assert.strictEqual(this.getCurrentStyle(), "hover");
+});
+
 QUnit.test("apply hover view in 'none' mode", function(assert) {
     this.options.hoverMode = "none";
     this.point.update(this.options);

@@ -1154,6 +1154,26 @@ QUnit.test("Popup with Done Button hide after one click on item", function(asser
     assert.ok(lookup._popup.option("visible"), "popup hide after click by no selected item after hide->show events");
 });
 
+QUnit.test("clear button should save valueChangeEvent", function(assert) {
+    var valueChangedHandler = sinon.spy();
+
+    var lookup = this.element
+        .dxLookup({
+            dataSource: [1],
+            value: 1,
+            opened: true,
+            onValueChanged: valueChangedHandler,
+            showClearButton: true
+        })
+        .dxLookup("instance");
+
+    var $clearButton = $(lookup.content()).parent().find(".dx-popup-clear");
+    $clearButton.trigger("dxclick");
+
+    assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
+    assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
+});
+
 QUnit.test("B238773 - dxLookup does not work properly if the valueExpr option is set to this", function(assert) {
     executeAsyncMock.teardown();
 

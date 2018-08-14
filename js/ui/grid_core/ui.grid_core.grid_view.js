@@ -51,6 +51,19 @@ var getContainerHeight = function($container) {
     return clientHeight - paddingTop - paddingBottom;
 };
 
+var calculateFreeWidth = function(that, widths) {
+    var contentWidth = that._rowsView.contentWidth(),
+        totalWidth = that._getTotalWidth(widths, contentWidth);
+
+    return contentWidth - totalWidth;
+};
+
+var calculateFreeWidthWithCurrentMinWidth = function(that, columnIndex, currentMinWidth, widths) {
+    return calculateFreeWidth(that, widths.map(function(width, index) {
+        return index === columnIndex ? currentMinWidth : width;
+    }));
+};
+
 var ResizingController = modules.ViewController.inherit({
     _initPostRenderHandlers: function() {
         var that = this,
@@ -278,11 +291,10 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
-        var contentWidth = this._rowsView.contentWidth(),
-            totalWidth = this._getTotalWidth(resultWidths, contentWidth),
+        var freeWidth = calculateFreeWidth(this, resultWidths),
             columnCountWithoutWidth = resultWidths.filter(function(width) { return width === undefined; }).length;
 
-        return (contentWidth - totalWidth) / columnCountWithoutWidth;
+        return freeWidth / columnCountWithoutWidth;
     },
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {
@@ -300,14 +312,23 @@ var ResizingController = modules.ViewController.inherit({
             var index = i,
                 column = visibleColumns[index],
                 isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH,
-                width = resultWidths[index];
+                width = resultWidths[index],
+                minWidth = column.minWidth;
 
-            if(width === undefined && column.minWidth) {
-                averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
-                width = averageColumnsWidth;
+            if(minWidth) {
+                if(width === undefined) {
+                    averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
+                    width = averageColumnsWidth;
+                } else if(isPercentWidth(width)) {
+                    var freeWidth = calculateFreeWidthWithCurrentMinWidth(that, index, minWidth, resultWidths);
+
+                    if(freeWidth < 0) {
+                        width = -1;
+                    }
+                }
             }
-            if(width < column.minWidth && !isHiddenColumn) {
-                resultWidths[index] = column.minWidth;
+            if(width < minWidth && !isHiddenColumn) {
+                resultWidths[index] = minWidth;
                 isColumnWidthsCorrected = true;
                 i = -1;
             }
@@ -376,8 +397,13 @@ var ResizingController = modules.ViewController.inherit({
                 }
                 resultSizes[i] += diffElement;
                 if(onePixelElementsCount > 0) {
-                    resultSizes[i]++;
-                    onePixelElementsCount--;
+                    if(onePixelElementsCount < 1) {
+                        resultSizes[i] += onePixelElementsCount;
+                        onePixelElementsCount = 0;
+                    } else {
+                        resultSizes[i]++;
+                        onePixelElementsCount--;
+                    }
                 }
             }
         }
@@ -391,7 +417,7 @@ var ResizingController = modules.ViewController.inherit({
         for(i = 0; i < widths.length; i++) {
             width = widths[i];
             if(width && width !== HIDDEN_COLUMNS_WIDTH) {
-                result += isPercentWidth(width) ? (parseInt(width) * groupWidth / 100) : parseInt(width);
+                result += isPercentWidth(width) ? (parseFloat(width) * groupWidth / 100) : parseFloat(width);
             }
         }
 

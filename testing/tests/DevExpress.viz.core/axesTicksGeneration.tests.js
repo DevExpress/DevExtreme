@@ -2077,16 +2077,18 @@ QUnit.test("Hours tickInterval (4)", function(assert) {
         endOnTick: false
     });
 
-    this.axis.setBusinessRange({ min: new Date(2012, 3, 1, 3), max: new Date(2012, 3, 1, 21) });
+    this.axis.setBusinessRange({ min: new Date(2012, 5, 1, 3), max: new Date(2012, 5, 1, 21) });
 
     // act
     this.axis.createTicks(canvas(250));
 
-    assert.deepEqual(this.axis._majorTicks.map(value), [new Date(2012, 3, 1, 4),
-        new Date(2012, 3, 1, 8),
-        new Date(2012, 3, 1, 12),
-        new Date(2012, 3, 1, 16),
-        new Date(2012, 3, 1, 20)].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._majorTicks.map(value), [
+        new Date(2012, 5, 1, 4),
+        new Date(2012, 5, 1, 8),
+        new Date(2012, 5, 1, 12),
+        new Date(2012, 5, 1, 16),
+        new Date(2012, 5, 1, 20)
+    ].map(function(d) { return d.valueOf(); }));
     assert.deepEqual(this.axis._tickInterval, { "hours": 4 });
 });
 

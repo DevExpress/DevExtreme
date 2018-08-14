@@ -658,7 +658,7 @@ module.exports = {
                     translateX,
                     translateY;
 
-                if(label === null) {
+                if(label === null || box.isEmpty) {
                     return;
                 }
 

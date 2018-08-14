@@ -684,7 +684,7 @@ module.exports = {
                         }
                     }
 
-                    if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
+                    if((validationResult && !validationResult.isValid) || (editData && editData.type === "update" && !that._editingController.isSaving())) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
                             revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
                         }

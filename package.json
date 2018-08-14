@@ -100,7 +100,9 @@
     "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
     "build-themes": "gulp style-compiler-themes",
-    "build-themebuilder-assets": "gulp style-compiler-tb-assets"
+    "build-themebuilder-assets": "gulp style-compiler-tb-assets",
+    "dev": "gulp dev",
+    "test-env": "node testing/launch"
   },
   "pre-commit": "lint-staged"
 }

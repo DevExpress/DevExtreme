@@ -6,23 +6,44 @@ const when = deferredUtils.when;
 import fx from "../../animation/fx";
 
 const animation = {
-    moveTo($element, position, duration, completeAction) {
+    moveTo(config) {
+        let $element = config.$element,
+            position = config.position,
+            direction = config.direction || "left",
+            toConfig = {},
+            animationType;
+
+        if(direction === "right") {
+            toConfig["right"] = position;
+            toConfig["transform"] = " translate(0, 0)";
+            animationType = "custom";
+        } else {
+            toConfig["left"] = position;
+            animationType = "slide";
+        }
         fx.animate($element, {
-            type: "slide",
-            to: { left: position },
-            duration,
-            complete: completeAction
+            type: animationType,
+            to: toConfig,
+            duration: config.duration,
+            complete: config.complete
         });
     },
-    paddingLeft($element, padding, duration, completeAction) {
-        const toConfig = {};
+    padding(config) {
+        let $element = config.$element,
+            padding = config.padding,
+            direction = config.direction || "left",
+            toConfig = {};
 
-        toConfig["padding-left"] = padding;
+        if(direction === "left") {
+            toConfig["paddingLeft"] = padding;
+        } else {
+            toConfig["paddingRight"] = padding;
+        }
 
         fx.animate($element, {
-            to: { paddingLeft: padding },
-            duration,
-            complete: completeAction
+            to: toConfig,
+            duration: config.duration,
+            complete: config.complete
         });
     },
 
@@ -99,6 +120,9 @@ const DrawerStrategy = Class.inherit({
         }
     },
 
+    getWidth() {
+        return this._drawer.$element().get(0).getBoundingClientRect().width;
+    },
     _getFadeConfig(offset) {
         if(offset) {
             return {

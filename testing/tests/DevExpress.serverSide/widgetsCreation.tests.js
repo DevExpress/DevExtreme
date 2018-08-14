@@ -15,6 +15,7 @@ var widgets = {
     DataGrid: require("ui/data_grid"),
     DateBox: require("ui/date_box"),
     DeferRendering: require("ui/defer_rendering"),
+    Drawer: require("ui/drawer"),
     DropDownBox: require("ui/drop_down_box"),
     FileUploader: require("ui/file_uploader"),
     FilterBuilder: require("ui/filter_builder"),

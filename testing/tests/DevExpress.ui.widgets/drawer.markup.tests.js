@@ -52,7 +52,7 @@ QUnit.test("drawer should have correct mode class by default", assert => {
     assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
 });
 
-QUnit.test("drawer should have correct showMode class by default", assert => {
+QUnit.test("drawer should have correct revealMode class by default", assert => {
     const $element = $("#drawer").dxDrawer();
 
     assert.ok($element.hasClass(DRAWER_CLASS + "-slide"), "drawer class is correct");
@@ -68,24 +68,24 @@ QUnit.test("render drawer content", assert => {
 
 QUnit.test("opened class should be applied correctly", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
 
     assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, "drawer has opened class");
 
-    instance.option("menuVisible", false);
+    instance.option("opened", false);
 
     assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
 });
 
-QUnit.test("custom content template for menu should be rendered correctly", assert => {
+QUnit.test("custom template for menu should be rendered correctly", assert => {
     const $element = $("#contentTemplate").dxDrawer({
-        menuTemplate: "customMenu"
+        template: "customMenu"
     });
 
-    const $menu = $($element.dxDrawer("instance").menuContent());
+    const $menu = $($element.dxDrawer("instance").content());
 
     assert.equal($.trim($menu.text()), "Test Menu Template", "menu content text is correct");
 });
@@ -93,7 +93,7 @@ QUnit.test("custom content template for menu should be rendered correctly", asse
 QUnit.test("templates should be dom nodes without jQuery", assert => {
     assert.expect(2);
     $("#contentTemplate").dxDrawer({
-        menuTemplate(element) {
+        template(element) {
             assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, "element is correct");
         },
         contentTemplate(element) {
@@ -107,24 +107,24 @@ QUnit.test("custom content template for content should be rendered correctly", a
         contentTemplate: "customContent"
     });
 
-    const $content = $($element.dxDrawer("instance").content());
+    const $content = $($element.dxDrawer("instance").viewContent());
 
     assert.equal($.trim($content.text()), "Test Content Template", "content text is correct");
 });
 
 QUnit.test("render menu positions", assert => {
     const $element = $("#contentTemplate").dxDrawer({
-        menuPosition: "right",
-        menuVisible: true
+        position: "right",
+        opened: true
     });
 
     const instance = $element.dxDrawer("instance");
-    const $menuContent = $(instance.menuContent());
+    const $menuContent = $(instance.content());
 
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "there is no left menu position class");
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class added");
 
-    instance.option("menuPosition", "top");
+    instance.option("position", "top");
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class has been removed");
     assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "right menu position class has been removed");
     assert.ok($menuContent.hasClass(DRAWER_CLASS + "-top"), "top menu position class added");
@@ -132,16 +132,16 @@ QUnit.test("render menu positions", assert => {
 
 QUnit.test("shader should be rendered by default if menu is visible", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true
+        opened: true
     });
 
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
 });
 
-QUnit.test("shader should not be rendered if showShader = false", assert => {
+QUnit.test("shader should not be rendered if shading = false", assert => {
     const $element = $("#drawer").dxDrawer({
-        menuVisible: true,
-        showShader: false
+        opened: true,
+        shading: false
     });
 
     assert.equal($element.find("." + DRAWER_SHADER_CLASS).length, 1, "drawer has shader");
@@ -151,18 +151,18 @@ QUnit.module("push mode");
 
 QUnit.test("drawer should have correct class depending on mode", assert => {
     const $element = $("#drawer").dxDrawer({
-        mode: "push"
+        openedStateMode: "push"
     });
 
     assert.ok($element.hasClass(DRAWER_CLASS + "-push"), "drawer class is correct");
 });
 
-QUnit.module("temporary mode");
+QUnit.module("overlap mode");
 
 QUnit.test("drawer should have correct class depending on mode", assert => {
     const $element = $("#drawer").dxDrawer({
-        mode: "temporary"
+        openedStateMode: "overlap"
     });
 
-    assert.ok($element.hasClass(DRAWER_CLASS + "-temporary"), "drawer class is correct");
+    assert.ok($element.hasClass(DRAWER_CLASS + "-overlap"), "drawer class is correct");
 });

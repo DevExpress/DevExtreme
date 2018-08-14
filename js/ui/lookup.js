@@ -1174,7 +1174,8 @@ var Lookup = DropDownList.inherit({
             : this._list.option("selectedItems[0]");
     },
 
-    _resetValue: function() {
+    _resetValue: function(e) {
+        this._saveValueChangeEvent(e.event);
         this.option("value", null);
         this.option("opened", false);
     },

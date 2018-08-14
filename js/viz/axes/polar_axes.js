@@ -502,7 +502,7 @@ polarAxes.linear = {
         return function(tick, gridStyle) {
             var grid = that._getGridPoints(tick.coords);
 
-            return that._renderer.circle(grid.x, grid.y, grid.r)
+            return that._renderer.circle(grid.cx, grid.cy, grid.r)
                 .attr(gridStyle)
                 .sharp();
         };
@@ -512,8 +512,8 @@ polarAxes.linear = {
         var pos = this.getCenter();
 
         return {
-            x: pos.x,
-            y: pos.y,
+            cx: pos.x,
+            cy: pos.y,
             r: vizUtils.getDistance(pos.x, pos.y, coords.x, coords.y)
         };
     },

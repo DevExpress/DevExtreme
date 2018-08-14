@@ -2149,10 +2149,10 @@ QUnit.test("Reset editor's value", function(assert) {
     form.resetValues();
 
         // assert
-    assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
-    assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
-    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
-    assert.equal(form.getEditor("isDeveloper").option("value"), undefined, "editor for the isDeveloper dataField");
+    assert.strictEqual(form.getEditor("name").option("value"), "", "editor for the name dataField");
+    assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
+    assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
+    assert.strictEqual(form.getEditor("isDeveloper").option("value"), false, "editor for the isDeveloper dataField");
 });
 
 QUnit.module("Adaptivity");

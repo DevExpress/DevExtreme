@@ -119,8 +119,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 width: null,
                 readOnly: !options.setValue,
                 isOnForm: options.isOnForm,
-                id: options.id,
-                updateValueImmediately: isRowEditMode(that)
+                id: options.id
             }));
         };
     };
@@ -284,12 +283,12 @@ var EditingController = modules.ViewController.inherit((function() {
             return getIndexByKey(key, items);
         },
 
-        hasChanges: function() {
+        hasChanges: function(rowIndex) {
             var that = this,
                 result = false;
 
             for(var i = 0; i < that._editData.length; i++) {
-                if(that._editData[i].type) {
+                if(that._editData[i].type && (!typeUtils.isDefined(rowIndex) || that._dataController.getRowIndexByKey(that._editData[i].key) === rowIndex)) {
                     result = true;
                     break;
                 }
@@ -829,17 +828,20 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
             var that = this,
-                rowsView = that._rowsView;
+                repaintOldRowOnly,
+                rowsView = that._rowsView,
+                columns = that._columnsController.getVisibleColumns(),
+                hasCalculableColumn = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
 
-            if(!column || !column.showEditorAlways || (oldColumn && !oldColumn.showEditorAlways)) {
+            if(!column || !column.showEditorAlways || (oldColumn && (!oldColumn.showEditorAlways || (repaintOldRowOnly = hasCalculableColumn && that.hasChanges(oldEditRowIndex))))) {
                 that._editCellInProgress = true;
 
                 // T316439
-                that.getController("editorFactory").loseFocus();
+                !repaintOldRowOnly && that.getController("editorFactory").loseFocus();
 
                 that._dataController.updateItems({
                     changeType: "update",
-                    rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                    rowIndices: repaintOldRowOnly ? [oldEditRowIndex] : [oldEditRowIndex, that._getVisibleEditRowIndex()]
                 });
             }
 
@@ -1008,7 +1010,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 when(deferredUtils.fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
-                        deferred.resolve("cancel");
+                        setTimeout(function() {
+                            deferred.resolve("cancel");
+                        });
                     } else {
                         func(params).done(deferred.resolve).fail(createFailureHandler(deferred));
                     }
@@ -1702,7 +1706,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         icon: "edit-button-" + className,
                         disabled: isButtonDisabled,
                         onClick: function() {
-                            that[methodName]();
+                            setTimeout(function() {
+                                that[methodName]();
+                            });
                         },
                         text: hintText,
                         hint: hintText

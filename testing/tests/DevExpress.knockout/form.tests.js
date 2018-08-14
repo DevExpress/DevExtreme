@@ -395,11 +395,11 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     vm.formData({});
 
     // assert
-    assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
-    assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
-    assert.equal(form.getEditor("sex").option("value"), "", "editor for the sex dataField");
-    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
-    assert.equal(form.getEditor("isDeveloper").option("value"), undefined, "editor for the isDeveloper dataField");
+    assert.strictEqual(form.getEditor("name").option("value"), "", "editor for the name dataField");
+    assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
+    assert.strictEqual(form.getEditor("sex").option("value"), "", "editor for the sex dataField");
+    assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
+    assert.strictEqual(form.getEditor("isDeveloper").option("value"), false, "editor for the isDeveloper dataField");
 });
 
 QUnit.test("Form is not crashed when numberbox is used (T369550)", function(assert) {

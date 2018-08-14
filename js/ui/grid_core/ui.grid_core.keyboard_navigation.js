@@ -19,6 +19,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
     MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
     FREESPACE_ROW_CLASS = "dx-freespace-row",
+    VIRTUAL_ROW_CLASS = "dx-virtual-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
@@ -41,8 +42,8 @@ function isDetailRow($row) {
     return $row && $row.hasClass(MASTER_DETAIL_ROW_CLASS);
 }
 
-function isFreeSpaceRow($row) {
-    return $row && $row.hasClass(FREESPACE_ROW_CLASS);
+function isNotFocusedRow($row) {
+    return $row && ($row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS));
 }
 
 function isCellElement($element) {
@@ -288,7 +289,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _focus: function($cell, disableFocus) {
         var $row = $cell.parent();
 
-        if(isFreeSpaceRow($row)) {
+        if(isNotFocusedRow($row)) {
             return;
         }
 
@@ -353,7 +354,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 } else {
                     var $target = $(eventArgs.originalEvent.target);
                     eventsEngine.trigger($target, "blur");
-                    eventsEngine.trigger($target, "focus");
                     this._editingController.closeEditCell();
                     eventArgs.originalEvent.preventDefault();
                 }
