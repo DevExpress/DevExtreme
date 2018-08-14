@@ -2115,7 +2115,7 @@ module.exports = {
                         column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option("rtlEnabled"));
                         column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
-                        column.defaultFilterOperations = !lookup && DATATYPE_OPERATIONS[dataType] || [];
+                        column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
                             column.filterOperations = column.defaultFilterOperations;
                         }

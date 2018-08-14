@@ -346,4 +346,31 @@ QUnit.module("Real dataGrid", {
         // assert
         assert.equal(this.dataGrid.option("filterBuilderPopup.visible"), true);
     });
+
+    // T663205
+    QUnit.test("the 'any of' doesn't throw exception when column is lookup", function(assert) {
+        // arrange, act
+        this.initDataGrid({
+            dataSource: [{ field: 1 }],
+            loadingTimeout: null,
+            columns: [{ dataField: "field",
+                lookup: {
+                    dataSource: [{ id: 1, text: "Text 1" }, { id: 2, text: "Text 2" }],
+                    valueExpr: "id",
+                    displayExpr: "text"
+                }
+            }],
+            filterValue: ["field", "anyof", [1, 2]]
+        });
+
+        // act
+        this.dataGrid.option("filterBuilderPopup.visible", true);
+        $(".dx-popup-content .dx-filterbuilder-item-value-text").trigger("dxclick");
+
+        // assert
+        var $valueText = $(".dx-popup-content .dx-filterbuilder-item-value-text");
+        assert.equal($valueText.text(), "Text 1|Text 2");
+        assert.equal($valueText.children().length, 3, "three children items");
+    });
+
 });
