@@ -1,27 +1,9 @@
 var gulp = require('gulp');
-var concat = require('gulp-concat');
-var replace = require('gulp-replace');
 var file = require('gulp-file');
 var runSequence = require('run-sequence');
 var ts = require('gulp-typescript');
 
 var headerPipes = require('./header-pipes.js');
-
-var definitionSources = [
-    'core',
-    'widgets-base',
-    'widgets-mobile',
-    'widgets-web',
-    'framework',
-    'viz-core',
-    'viz-charts',
-    'viz-gauges',
-    'viz-funnel',
-    'viz-rangeselector',
-    'viz-vectormap',
-    'viz-sparklines',
-    'viz-treemap'
-].map(i => './ts/legacy/' + i + '.d.ts');
 
 var OUTPUT_DIR = 'artifacts/ts';
 var MODULES = require('./modules_metadata.json');
@@ -46,7 +28,7 @@ var getWidgetOptionsPath = function(widgetName, widgetPath) {
     return tsWidgetMetadata ? tsWidgetMetadata.optionsPath : `${widgetPath}Options`;
 };
 
-var generateJQueryAugmentation = exports.generateJQueryAugmentation = function(exportName, globalWidgetPath) {
+exports.generateJQueryAugmentation = function(exportName, globalWidgetPath) {
     var widgetName = widgetNameByPath(globalWidgetPath);
     if(!widgetName) return '';
 
@@ -66,22 +48,6 @@ gulp.task('ts-vendor', function() {
 
 gulp.task('ts-sources', function() {
     return gulp.src('./ts/dx.all.d.ts')
-        .pipe(headerPipes.bangLicense())
-        .pipe(gulp.dest(OUTPUT_DIR));
-});
-
-gulp.task('ts-sources-legacy', function() {
-    var jQueryAugmentation = MODULES.map(function(moduleMeta) {
-        return Object.keys(moduleMeta.exports || []).map(function(name) {
-            return generateJQueryAugmentation(name, moduleMeta.exports[name]);
-        }).join('');
-    }).join('\n');
-
-    return gulp.src(definitionSources)
-        .pipe(file('jquery-augmentation.d.ts', jQueryAugmentation))
-        .pipe(concat('dx.all.legacy.d.ts'))
-        .pipe(replace(/\/\/[^\r\n]+/g, ''))
-        .pipe(replace(/^\s*[\r\n]+/gm, ''))
         .pipe(headerPipes.bangLicense())
         .pipe(gulp.dest(OUTPUT_DIR));
 });
@@ -110,7 +76,6 @@ gulp.task('ts', function(callback) {
     return runSequence(
         'ts-vendor',
         'ts-sources',
-        'ts-sources-legacy',
         'ts-check',
         callback);
 });
