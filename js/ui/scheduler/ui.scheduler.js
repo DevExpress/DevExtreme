@@ -1737,6 +1737,8 @@ var Scheduler = Widget.inherit({
         this._loadResources().done((function(resources) {
             this._readyToRenderAppointments = windowUtils.hasWindow();
 
+            this._workSpace && this._cleanWorkspace();
+
             this._renderWorkSpace(resources);
 
             var $fixedContainer = this._workSpace.getFixedContainer(),
@@ -1973,9 +1975,7 @@ var Scheduler = Widget.inherit({
     },
 
     _refreshWorkSpace: function(groups) {
-        this._appointments.$element().detach();
-        this._workSpace._dispose();
-        this._workSpace.$element().remove();
+        this._cleanWorkspace();
 
         delete this._workSpace;
 
@@ -1988,6 +1988,12 @@ var Scheduler = Widget.inherit({
                 allDayContainer: this._workSpace.getAllDayContainer()
             });
         }
+    },
+
+    _cleanWorkspace: function() {
+        this._appointments.$element().detach();
+        this._workSpace._dispose();
+        this._workSpace.$element().remove();
     },
 
     getWorkSpaceScrollable: function() {
