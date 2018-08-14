@@ -550,7 +550,9 @@ var Overlay = Widget.inherit({
                 return this.option("propagateOutsideClick");
             }
         }
-        return false;
+
+        var isOverlayClicked = !!($(e.target).closest("." + OVERLAY_CONTENT_CLASS).length);
+        return !isOverlayClicked;
     },
 
     _initTemplates: function() {
