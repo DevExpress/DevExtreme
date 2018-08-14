@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
-var config = require("./config.js");
-var builder = require("../modules/builder.js");
-var fs = require("fs");
+const config = require("./config.js");
+const builder = require("../modules/builder.js");
+const fs = require("fs");
 
 builder.buildTheme(config).then(result => {
     const outputPath = config.out || config.themeName + "." + config.colorScheme.replace(/-/, ".") + ".custom.css";

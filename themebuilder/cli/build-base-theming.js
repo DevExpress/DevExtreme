@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
-var config = require("./config.js");
-var builder = require("../modules/builder.js");
-var fs = require("fs");
+const config = require("./config.js");
+const builder = require("../modules/builder.js");
+const fs = require("fs");
 
 const filePath = config.out || config.themeName + "." + config.colorScheme.replace(/-/, ".") + ".base." + config.fileFormat;
 const baseParameters = ["@base-accent", "@base-text-color", "@base-bg", "@base-border-color", "@base-border-radius"];

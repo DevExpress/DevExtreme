@@ -1,23 +1,24 @@
-var path = require("path");
-var readFile = require("./adapters/node-file-reader");
-var createRecursive = require("./helpers/recursive-path-creator");
-var parseCommandLine = require('minimist');
+const path = require("path");
+const readFile = require("./adapters/node-file-reader");
+const createRecursive = require("./helpers/recursive-path-creator");
+const parseCommandLine = require('minimist');
 
-var config = parseCommandLine(process.argv.slice(2));
-var theme = config["theme-name"] || "generic.light";
-var metadataFilePath = config["metadata-file-path"] || "";
-var fileFormat = config["file-format"] || "less";
-var swatchSelector = config["swatch-selector"];
-var out = config["out"];
+let config = parseCommandLine(process.argv.slice(2));
+let theme = config["theme-name"] || "generic.light";
+let metadataFilePath = config["metadata-file-path"] || "";
+let fileFormat = config["file-format"] || "less";
+let swatchSelector = config["swatch-selector"];
+let out = config["out"];
 
-var themeName = theme.split(".")[0];
-var colorScheme = theme.split(".")[1] + (theme.split(".")[2] ? "-" + theme.split(".")[2] : "");
-var isBootstrap = false;
-var bootstrapVersion = 0;
+let themeParts = theme.split(".");
+let themeName = themeParts[0];
+let colorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
+let isBootstrap = false;
+let bootstrapVersion = 0;
 
-var metadataPromise = metadataFilePath
+let metadataPromise = metadataFilePath
     ? readFile(metadataFilePath)
-    : new Promise(function(resolve) { resolve("{}"); });
+    : new Promise(resolve => resolve("{}"));
 
 switch(path.extname(metadataFilePath)) {
     case ".scss":
