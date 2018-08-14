@@ -23,7 +23,9 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+    MockColumnsController = dataGridMocks.MockColumnsController,
+    viewPortUtils = require("core/utils/view_port"),
+    fx = require("animation/fx");
 
 QUnit.module("Header Filter dataController", {
     beforeEach: function() {
@@ -2043,6 +2045,49 @@ QUnit.test("No exceptions on an attempt to filter a lookup column when valueExpr
     }
 });
 
+// T644753
+QUnit.test("No scroll on opening the header filter when the popup is cropped", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent,
+        done = assert.async(),
+        viewPort = viewPortUtils.value(),
+        $testElement = $("#container").wrap($("<div/>").css({
+            position: "absolute",
+            width: "100%",
+            height: "300px",
+            overflowY: "scroll",
+            top: 10000,
+            left: 10000
+        }));
+
+    fx.off = true;
+    viewPortUtils.value($testElement.parent());
+    that.clock.restore();
+
+    that.items = [{ Test1: "test1", Test2: "test2" }, { Test1: "test3", Test2: "test4" }];
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+
+    // assert
+    assert.equal($testElement.find(".dx-header-filter-menu").length, 1, "has header filter menu");
+
+    // act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    setTimeout(function() {
+        // assert
+        $popupContent = that.headerFilterView.getPopupContainer().$content();
+        assert.strictEqual($testElement.parent().scrollTop(), 0, "scrollTop");
+        assert.ok($popupContent.is(":visible"), "visible popup");
+        assert.ok($popupContent.find(".dx-checkbox").first().hasClass("dx-state-focused"));
+
+        fx.off = false;
+        viewPortUtils.value(viewPort);
+        done();
+    });
+});
 
 QUnit.module("Header Filter with real columnsController", {
     beforeEach: function() {
