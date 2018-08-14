@@ -1173,8 +1173,7 @@ var dxChart = AdvancedChart.inherit({
     _riseVisualRangeOptionChange(visualRange, isArgumentAxis, index) {
         const that = this;
         const axisType = isArgumentAxis ? "argumentAxis" : "valueAxis";
-        const optionName = "visualRange";
-        const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + "." + optionName;
+        const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + ".visualRange";
         const previousVisualRange = that.option(optionFullName);
 
         if(!_isDefined(previousVisualRange) || visualRange[0] !== previousVisualRange[0] || visualRange[1] !== previousVisualRange[1]) {

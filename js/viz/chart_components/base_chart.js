@@ -918,21 +918,14 @@ var BaseChart = BaseWidget.inherit({
 
     _simulateOptionChange(fullName, value, previousValue) {
         const that = this;
-        const optionNames = fullName.split(/[.\[\d+\]]/);
-        const args = {
-            name: optionNames[0],
-            fullName: fullName,
-            value: value,
-            previousValue: previousValue
-        };
+        const optionSetter = coreDataUtils.compileSetter(fullName);
 
-        coreDataUtils.compileSetter(fullName)(that._options, value, {
+        optionSetter(that._options, value, {
             functionsAsIs: true,
-            merge: !that._getOptionsByReference()[fullName],
-            unwrapObservables: optionNames.length > 1 && !!that._getOptionsByReference()[optionNames[0]]
+            merge: !that._getOptionsByReference()[fullName]
         });
 
-        that._optionChangedAction(args);
+        that._notifyOptionChanged(fullName, value, previousValue);
     },
 
     _optionChanged: function(arg) {
