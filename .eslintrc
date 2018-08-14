@@ -144,6 +144,7 @@
                     "msie",
                     "odata",      // OData
                     "rtl",        // Right-to-Left
+                    "scss",
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",
@@ -354,13 +355,11 @@
                     "postfix",
                     "postfixes",
                     "postprocess",
+                    "pre",
                     "preload",
                     "prepend",
                     "prerender",
                     "prev",
-                    "pre",  // ThemeBuilder
-                    "scss", // ThemeBuilder
-                    "sep", // path.sep
                     "proj",
                     "proto",
                     "proxied",
@@ -400,6 +399,7 @@
                     "seg",
                     "selectable",
                     "semidiscrete",
+                    "sep",
                     "serializers",
                     "shader",
                     "sortable",
