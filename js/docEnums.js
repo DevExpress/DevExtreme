@@ -211,6 +211,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VisualRangeOnDataUpdate
+ * @enum {'auto'|'keep'|'reset'|'shift}
+ */
+
+/**
  * @typedef {string} Enums.AxisScaleType
  * @enum {'continuous'|'discrete'|'logarithmic'}
  */

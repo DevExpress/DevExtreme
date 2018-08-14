@@ -106,7 +106,7 @@ QUnit.test("chart with single value axis. Zooming with one null/undefined values
     assert.equal(chartRenderSpy.callCount, 1);
 });
 
-QUnit.test("Reset zooming on dataSource Changed", function(assert) {
+QUnit.test("Adjust value axis on dataSource changed", function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
     chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
@@ -131,10 +131,6 @@ QUnit.test("Reset zooming on dataSource Changed", function(assert) {
 
     assert.strictEqual(chart.getAllSeries()[0].getValueAxis().adjust.firstCall.args[0], true);
     assert.strictEqual(chart.getAllSeries()[1].getValueAxis().adjust.firstCall.args[0], true);
-
-    assert.strictEqual(chart.getAllSeries()[0].getValueAxis().resetZoom.called, true);// T602156
-    assert.strictEqual(chart.getAllSeries()[1].getValueAxis().resetZoom.called, true);// T602156
-    assert.strictEqual(chart.getAllSeries()[0].getArgumentAxis().resetZoom.called, true);
 });
 
 QUnit.test("No reset zooming on series changed", function(assert) {

@@ -1570,6 +1570,11 @@ var dxChart = {
         */
         visualRangeLength: {},
         /**
+        * @name dxChartOptions.argumentAxis.visualRangeOnDataUpdate
+        * @type Enums.VisualRangeOnDataUpdate
+        */
+        visualRangeOnDataUpdate: "auto",
+        /**
         * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
         * @default 70

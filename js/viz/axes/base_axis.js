@@ -35,6 +35,10 @@ const LEFT = constants.left;
 const RIGHT = constants.right;
 const CENTER = constants.center;
 
+const KEEP = "keep";
+const SHIFT = "shift";
+const RESET = "reset";
+
 const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 
@@ -989,12 +993,12 @@ Axis.prototype = {
                 if(options.dataType === "datetime" && !isNumeric(rangeLength)) {
                     rangeLength = dateToMilliseconds(rangeLength);
                 }
-                if(!maxDefined) {
-                    currentMax = add(minVisible, rangeLength);
-                    maxVisible = currentMax > result.max ? result.max : currentMax;
-                } else if(!minDefined) {
+                if(maxDefined && !minDefined || !maxDefined && !minDefined) {
                     currentMin = add(maxVisible, rangeLength, -1);
                     minVisible = currentMin < result.min ? result.min : currentMin;
+                } else if(minDefined && !maxDefined) {
+                    currentMax = add(minVisible, rangeLength);
+                    maxVisible = currentMax > result.max ? result.max : currentMax;
                 }
             } else {
                 rangeLength = parseInt(rangeLength);
@@ -1042,12 +1046,77 @@ Axis.prototype = {
         return range;
     },
 
+    _getVisualRangeOnUpdateValue(range) {
+        let value = this._options.visualRangeOnDataUpdate;
+        if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
+            if(range.axisType === constants.discrete) {
+                value = RESET;
+            } else {
+                const translator = this._translator;
+                const minPoint = translator.translate(range.min);
+                const minVisiblePoint = translator.translate(range.minVisible);
+
+                const maxPoint = translator.translate(range.max);
+                const maxVisiblePoint = translator.translate(range.maxVisible);
+
+                if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
+                    value = RESET;
+                } else if(minPoint !== minVisiblePoint && maxPoint === maxVisiblePoint) {
+                    value = SHIFT
+                } else {
+                    value = KEEP;
+                }
+            }
+        }
+        return value;
+    },
+
+    _handleBusinessRangeChanged(seriesData) {
+        const currentBusinessRange = new rangeModule.Range(this._translator.getBusinessRange());
+        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || !this.isArgumentAxis) {
+            return;
+        }
+        const that = this;
+        const options = that._options;
+
+        const visualRangeOnDataUpdateValue = this._getVisualRangeOnUpdateValue(currentBusinessRange);
+
+        if(visualRangeOnDataUpdateValue === KEEP) {
+            that._setVisualRange(currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+        }
+        if(visualRangeOnDataUpdateValue === RESET) {
+            that.resetZoom();
+        }
+        if(visualRangeOnDataUpdateValue === SHIFT) {
+            const currentBusinessRange = this._translator.getBusinessRange();
+            if(options.type !== constants.discrete) {
+                const add = getAddFunction({
+                    base: options.logarithmBase,
+                    axisType: options.type,
+                    dataType: options.dataType
+                }, false);
+                that._setVisualRange(add(seriesData.max, currentBusinessRange.maxVisible - currentBusinessRange.minVisible, -1), seriesData.max);
+            } else {
+                const categories = currentBusinessRange.categories;
+                let minIndex = categories.indexOf(currentBusinessRange.minVisible);
+                let maxIndex = categories.indexOf(currentBusinessRange.maxVisible);
+                minIndex = minIndex > -1 ? minIndex : 0;
+                maxIndex = maxIndex > 0 ? maxIndex : categories.length - 1;
+                const rangeLength = maxIndex - minIndex;
+                const newCategories = seriesData.categories;
+                that._setVisualRange(newCategories[newCategories.length - 1 - rangeLength], newCategories[newCategories.length - 1]);
+            }
+        }
+    },
+
     setBusinessRange(range, categoriesOrder) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
 
         that._seriesData = new rangeModule.Range(range);
+
+        that._handleBusinessRangeChanged(that._seriesData);
 
         that._seriesData.addRange({
             categories: options.categories,

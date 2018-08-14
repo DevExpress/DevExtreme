@@ -2714,9 +2714,7 @@ QUnit.test("Set visualRange and visualRangeLength (numeric, visualRange[1] === n
 
     this.axis.setBusinessRange({
         min: 0,
-        max: 100,
-        minVisible: 2,
-        maxVisible: 50
+        max: 100
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
@@ -2730,9 +2728,7 @@ QUnit.test("Set visualRange and visualRangeLength (numeric, visualRange[0] === n
 
     this.axis.setBusinessRange({
         min: 0,
-        max: 100,
-        minVisible: 2,
-        maxVisible: 50
+        max: 100
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
@@ -2746,9 +2742,7 @@ QUnit.test("Set visualRange and visualRangeLength (numeric)", function(assert) {
 
     this.axis.setBusinessRange({
         min: 0,
-        max: 100,
-        minVisible: 2,
-        maxVisible: 50
+        max: 100
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
@@ -2762,9 +2756,7 @@ QUnit.test("Set visualRange, visualRangeLength and wholeRange (numeric)", functi
 
     this.axis.setBusinessRange({
         min: 0,
-        max: 100,
-        minVisible: 2,
-        maxVisible: 50
+        max: 100
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
@@ -2778,14 +2770,12 @@ QUnit.test("Set visualRangeLength (numeric)", function(assert) {
 
     this.axis.setBusinessRange({
         min: 0,
-        max: 100,
-        minVisible: 2,
-        maxVisible: 50
+        max: 100
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.equal(businessRange.minVisible, 2);
-    assert.equal(businessRange.maxVisible, 12);
+    assert.equal(businessRange.minVisible, 90);
+    assert.equal(businessRange.maxVisible, 100);
 });
 
 QUnit.test("Set visualRange and visualRangeLength (datetime, visualRange[1] === null)", function(assert) {
@@ -2853,34 +2843,31 @@ QUnit.test("Set visualRange, visualRangeLength and wholeRange (datetime)", funct
 });
 
 QUnit.test("Set visualRangeLength (datetime)", function(assert) {
-    this.updateOptions({ argumentType: "datetime", visualRangeLength: 217728000000 });
+    this.updateOptions({ argumentType: "datetime", visualRangeLength: 1000 * 60 * 60 * 24 });
     this.axis.validate();
 
     this.axis.setBusinessRange({
-        min: new Date(2000, 0, 1),
-        max: new Date(2020, 0, 1)
+        min: new Date(2020, 0, 1),
+        max: new Date(2020, 0, 5)
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.deepEqual(businessRange.minVisible, new Date(2000, 0, 1));
-    assert.deepEqual(businessRange.maxVisible, new Date(2006, 10, 25));
+    assert.deepEqual(businessRange.minVisible, new Date(2020, 0, 4));
+    assert.deepEqual(businessRange.maxVisible, new Date(2020, 0, 5));
 });
 
 QUnit.test("Set visualRangeLength (logarithmic)", function(assert) {
-    this.updateOptions({ logarithmBase: 10, type: "logarithmic", visualRangeLength: 4 });
+    this.updateOptions({ logarithmBase: 10, type: "logarithmic", visualRangeLength: 2 });
     this.axis.validate();
-    this.axis._translator._businessRange = { minVisible: 0.1, maxVisible: 100000 };
 
     this.axis.setBusinessRange({
-        min: 0.01,
-        max: 200000000,
-        minVisible: 0.1,
-        maxVisible: 10000000
+        min: 1,
+        max: 1000,
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.deepEqual(businessRange.minVisible, 0.1);
-    assert.deepEqual(businessRange.maxVisible, 1000);
+    assert.roughEqual(businessRange.minVisible, 10, 0.1);
+    assert.equal(businessRange.maxVisible, 1000);
 });
 
 QUnit.test("viewport can go out from series data range", function(assert) {
@@ -3348,4 +3335,295 @@ QUnit.test("Correct zero level if showZero is true", function(assert) {
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.min, 0);
     assert.equal(businessRange.max, 120);
+});
+
+QUnit.test("Value axis ignores visual range on update option", function(assert) {
+    this.updateOptions({
+        visualRangeOnDataUpdate: "reset"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.zoom(115, 118);
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 115);
+    assert.equal(businessRange.maxVisible, 118);
+});
+
+QUnit.module("Visual range on update", {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        sinon.spy(translator2DModule, "Translator2D");
+
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "xyAxes",
+            drawingType: "linear",
+            isArgumentAxis: true
+        });
+
+        this.canvas = {
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            width: 100,
+            height: 100
+        };
+
+        this.axis.updateCanvas(this.canvas);
+
+        this.updateOptions({});
+        this.translator = translator2DModule.Translator2D.lastCall.returnValue;
+        sinon.spy(this.translator, "updateBusinessRange");
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+        translator2DModule.Translator2D.restore();
+    },
+    updateOptions: environment.updateOptions
+});
+
+QUnit.test("Reset viewport on data update", function(assert) {
+    this.updateOptions({ visualRangeOnDataUpdate: "reset" });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.setBusinessRange({
+        min: -100,
+        max: 100
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, 100);
+    assert.equal(businessRange.minVisible, -100);
+    assert.equal(businessRange.maxVisible, 100);
+});
+
+QUnit.test("Keep viewport on data update", function(assert) {
+    this.updateOptions({ visualRangeOnDataUpdate: "keep", visualRange: [10, 40] });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.setBusinessRange({
+        min: 200,
+        max: 300
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 200);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 10);
+    assert.equal(businessRange.maxVisible, 40);
+});
+
+QUnit.test("Shift viewport on data update", function(assert) {
+    this.updateOptions({ visualRangeOnDataUpdate: "shift", visualRangeLength: 10 });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+
+    this.axis.setBusinessRange({
+        min: 200,
+        max: 300
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 200);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 290);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Shift viewport on data update. Datetime axis", function(assert) {
+    this.updateOptions({
+        visualRangeOnDataUpdate: "shift",
+        visualRangeLength: {
+            minutes: 15
+        },
+        argumentType: "datetime"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: new Date(2018, 7, 15, 10, 0),
+        max: new Date(2018, 7, 15, 10, 45)
+    });
+
+    this.axis.setBusinessRange({
+        min: new Date(2018, 7, 15, 10, 0),
+        max: new Date(2018, 7, 15, 12, 0)
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.min, new Date(2018, 7, 15, 10, 0));
+    assert.deepEqual(businessRange.max, new Date(2018, 7, 15, 12, 0));
+    assert.deepEqual(businessRange.minVisible, new Date(2018, 7, 15, 11, 45));
+    assert.deepEqual(businessRange.maxVisible, new Date(2018, 7, 15, 12, 0));
+});
+
+QUnit.test("Shift viewport on data update. logarithmic axis", function(assert) {
+    this.updateOptions({
+        visualRangeOnDataUpdate: "shift",
+        visualRangeLength: 2,
+        logarithmBase: 10,
+        type: "logarithmic"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 1,
+        max: 1000
+    });
+
+    this.axis.setBusinessRange({
+        min: 1,
+        max: 100000
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.min, 1);
+    assert.deepEqual(businessRange.max, 100000);
+    assert.deepEqual(businessRange.minVisible, 1000);
+    assert.deepEqual(businessRange.maxVisible, 100000);
+});
+
+QUnit.test("Shift viewport on data update", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRangeOnDataUpdate: "shift"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: ["a", "b", "c", "d"]
+    });
+
+    this.axis.zoom("b", "c");
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4, 5]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.categories, [1, 2, 3, 4, 5]);
+    assert.equal(businessRange.minVisible, 4);
+    assert.equal(businessRange.maxVisible, 5);
+});
+
+QUnit.test("Auto visualRangeOnUpdate mode. visualRange is equal wholeRange - reset", function(assert) {
+    this.updateOptions({});
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.setBusinessRange({
+        min: -100,
+        max: 100
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, 100);
+    assert.equal(businessRange.minVisible, -100);
+    assert.equal(businessRange.maxVisible, 100);
+});
+
+QUnit.test("Auto visualRangeOnUpdate mode. visualRange is not equal wholeRange - keep", function(assert) {
+    this.updateOptions({});
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.zoom(115, 118);
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 115);
+    assert.equal(businessRange.maxVisible, 118);
+});
+
+QUnit.test("Auto visualRangeOnUpdate mode. visualRange shows the end of data - shift", function(assert) {
+    this.updateOptions({
+        visualRange: [115, 120]
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 295);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Auto visualRangeOnUpdate mode. Discrete axis - reset", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4]
+    });
+
+    this.axis.zoom(2, 3);
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4, 5]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.categories, [1, 2, 3, 4, 5]);
+    assert.equal(businessRange.minVisible, undefined);
+    assert.equal(businessRange.maxVisible, undefined);
 });
