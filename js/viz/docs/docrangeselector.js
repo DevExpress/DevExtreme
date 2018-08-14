@@ -6,11 +6,6 @@
 */
 var dxRangeSelector = {
     /**
-    * @name dxRangeSelector.Options
-    * @namespace DevExpress.viz.rangeSelector
-    * @hidden
-    */
-    /**
     * @name dxRangeSelectorOptions.scale
     * @type object
     */

@@ -6,11 +6,6 @@
 */
 var dxChart = {
     /**
-    * @name dxChart.Options
-    * @namespace DevExpress.viz.charts
-    * @hidden
-    */
-    /**
     * @name dxChartOptions.seriesTemplate
     * @type object
     * @default undefined
@@ -2028,11 +2023,6 @@ var dxChart = {
 */
 var dxPieChart = {
     /**
-    * @name dxPieChart.Options
-    * @namespace DevExpress.viz.charts
-    * @hidden
-    */
-    /**
     * @name dxPieChartOptions.seriesTemplate
     * @type object
     * @default undefined
@@ -2192,11 +2182,6 @@ var dxPieChart = {
 * @export default
 */
 var dxPolarChart = {
-    /**
-    * @name dxPolarChart.Options
-    * @namespace DevExpress.viz.charts
-    * @hidden
-    */
     /**
     * @name dxPolarChartOptions.seriesTemplate
     * @type object
@@ -3215,11 +3200,6 @@ var dxPolarChart = {
 * @inherits BaseWidget, DataHelperMixin
 */
 var BaseChart = {
-    /**
-    * @name BaseChart.Options
-    * @namespace DevExpress.viz.charts
-    * @hidden
-    */
     /**
     * @name BaseChartOptions.onDone
     * @extends Action

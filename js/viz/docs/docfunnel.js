@@ -6,11 +6,6 @@
 */
 var dxFunnel = {
     /**
-    * @name dxFunnel.Options
-    * @namespace DevExpress.viz.funnel
-    * @hidden
-    */
-    /**
     * @name dxFunnelOptions.adaptiveLayout
     * @type object
     */

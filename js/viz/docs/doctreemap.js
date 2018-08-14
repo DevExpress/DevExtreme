@@ -6,11 +6,6 @@
 */
 var dxTreeMap = {
     /**
-    * @name dxTreeMap.Options
-    * @namespace DevExpress.viz.treeMap
-    * @hidden
-    */
-    /**
     * @name dxTreeMapOptions.margin
     * @hidden
     * @inheritdoc

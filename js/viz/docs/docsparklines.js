@@ -6,11 +6,6 @@
 */
 var BaseSparkline = {
     /**
-    * @name BaseSparkline.Options
-    * @namespace DevExpress.viz.sparklines
-    * @hidden
-    */
-    /**
     * @name BaseSparklineOptions.redrawOnResize
     * @hidden
     * @inheritdoc
@@ -94,12 +89,7 @@ var BaseSparkline = {
 * @export default
 */
 var dxSparkline = {
-    /**
-    * @name dxSparkline.Options
-    * @namespace DevExpress.viz.sparklines
-    * @hidden
-    */
-    /**
+   /**
    * @name dxSparkLineOptions.dataSource
    * @extends CommonVizDataSource
    */
@@ -239,11 +229,6 @@ var dxSparkline = {
 * @export default
 */
 var dxBullet = {
-    /**
-    * @name dxBullet.Options
-    * @namespace DevExpress.viz.sparklines
-    * @hidden
-    */
     /**
     * @name dxBulletOptions.value
     * @type number

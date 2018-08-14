@@ -6,11 +6,6 @@
 */
 var dxVectorMap = {
     /**
-    * @name dxVectorMap.Options
-    * @namespace DevExpress.viz.map
-    * @hidden
-    */
-    /**
     * @name dxVectorMapOptions.margin
     * @hidden
     * @inheritdoc
