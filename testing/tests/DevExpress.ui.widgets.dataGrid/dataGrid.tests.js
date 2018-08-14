@@ -8796,7 +8796,6 @@ QUnit.test("Scrollable should be updated after expand master detail row with nes
     assert.ok(dataGrid.getScrollable().scrollTop() > 100, "vertical scroll is exists");
 });
 
-
 QUnit.test("Column hiding should works with masterDetail and column fixing", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
@@ -8869,6 +8868,34 @@ QUnit.test("Scrollbar should not be shown if column hiding is enabled and all co
     // assert
     var scrollable = dataGrid.getScrollable();
     assert.equal(scrollable.$content().width(), scrollable._container().width(), "no scrollbar");
+});
+
+QUnit.test("Column hiding should work if the last not fixed column was hiden with redundant space when columnAutoWidth is true and columns has minWidth (T656342)", function(assert) {
+    // arrange
+    var columns,
+        adaptiveColumnWidth,
+        dataGrid = createDataGrid({
+            width: 200,
+            dataSource: [{ C0: 0, C1: 1, C2: 2 }],
+            columnHidingEnabled: true,
+            columnAutoWidth: true,
+            showColumnHeaders: false,
+            columns: [
+                { dataField: "C0", minWidth: 100, fixed: true },
+                { dataField: "C1", minWidth: 100 },
+                { dataField: "C2", minWidth: 100 }
+            ]
+        });
+
+    this.clock.tick();
+
+    columns = dataGrid.getController("columns").getVisibleColumns();
+    adaptiveColumnWidth = columns[3].visibleWidth;
+
+    // assert
+    assert.equal(columns[0].visibleWidth + adaptiveColumnWidth, 200, "width of the 1st and last columns");
+    assert.equal(columns[1].visibleWidth, "adaptiveHidden", "2nd column is hidden");
+    assert.equal(columns[2].visibleWidth, "adaptiveHidden", "3rd column is hidden");
 });
 
 QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editing", function(assert) {
