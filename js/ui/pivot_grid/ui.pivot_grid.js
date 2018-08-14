@@ -1912,7 +1912,7 @@ var PivotGrid = Widget.inherit({
 
                 var updateScrollableResults = [];
 
-                dataArea.processScroll(scrollBarInfo.scrollBarUseNative);
+                dataArea.processScroll(scrollBarInfo.scrollBarUseNative, hasColumnsScroll, hasRowsScroll);
                 each([columnsArea, rowsArea, dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
