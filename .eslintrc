@@ -477,6 +477,7 @@
                     "workspace",
                     "writeable",
                     "xhr",
+                    "xlsx",
                     "xml",
                     "xmlns"
                 ]
