@@ -99,8 +99,8 @@ const DrawerStrategy = Class.inherit({
 
     _stopAnimations() {
         fx.stop(this._drawer._$shader, true);
-        fx.stop(this._drawer.content(), true);
-        fx.stop(this._drawer.viewContent(), true);
+        fx.stop($(this._drawer.content()), true);
+        fx.stop($(this._drawer.viewContent()), true);
     },
 
     _getMenuOffset(offset) {
