@@ -10,7 +10,7 @@
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
-  "repository": "",
+  "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "bootstrap": "^4.1.2",

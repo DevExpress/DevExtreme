@@ -1,9 +1,12 @@
-var MetadataRepository = function(metadataLoader) {
-    var repositoryData = {};
+class MetadataRepository {
+    constructor(metadataLoader) {
+        this.repositoryData = {};
+        this.metadataLoader = metadataLoader;
+    }
 
-    var findDataItemInGroupItems = function(key, items) {
-        var result = null;
-        items.forEach(function(item) {
+    findDataItemInGroupItems(key, items) {
+        let result = null;
+        items.forEach(item => {
             if(item.Key === key) {
                 result = item;
                 return false;
@@ -13,14 +16,14 @@ var MetadataRepository = function(metadataLoader) {
         return result;
     };
 
-    var getDataItemByKey = function(key, theme) {
-        var result = null;
-        var themeData = repositoryData[theme.name + "-" + theme.colorScheme];
+    getDataItemByKey(key, theme) {
+        let result = null;
+        let themeData = this.repositoryData[theme.name + "-" + theme.colorScheme];
 
-        for(var theme in themeData) {
+        for(let theme in themeData) {
             if(themeData.hasOwnProperty(theme)) {
-                var groups = themeData[theme];
-                result = findDataItemInGroupItems(key, groups);
+                let groups = themeData[theme];
+                result = this.findDataItemInGroupItems(key, groups);
                 if(result) break;
             }
         }
@@ -28,15 +31,16 @@ var MetadataRepository = function(metadataLoader) {
         return result;
     };
 
-    this.init = function(themes) {
-        var promises = [];
+    init(themes) {
+        let that = this;
+        let promises = [];
 
-        themes.forEach(function(theme) {
-            promises.push(new Promise(function(resolve, reject) {
-                metadataLoader
+        themes.forEach(theme => {
+            promises.push(new Promise(resolve => {
+                that.metadataLoader
                     .load(theme.name, theme.colorScheme)
-                    .then(function(metadata) {
-                        repositoryData[theme.name + "-" + theme.colorScheme] = metadata;
+                    .then(metadata => {
+                        that.repositoryData[theme.name + "-" + theme.colorScheme] = metadata;
                         resolve();
                     });
             }));
@@ -45,20 +49,21 @@ var MetadataRepository = function(metadataLoader) {
         return Promise.all(promises);
     };
 
-    this.getData = function(theme) {
-        if(!theme) return repositoryData;
-        return repositoryData[theme.name + "-" + theme.colorScheme];
+    getData(theme) {
+        if(!theme) return this.repositoryData;
+        return this.repositoryData[theme.name + "-" + theme.colorScheme];
     };
 
-    this.updateData = function(data, theme) {
-        data.forEach(function(item) {
-            var dataItem = getDataItemByKey(item.key, theme);
+    updateData(data, theme) {
+        let that = this;
+        data.forEach(item => {
+            let dataItem = that.getDataItemByKey(item.key, theme);
             if(item) dataItem.Value = item.value;
         });
     };
 
-    this.getVersion = function() {
-        return metadataLoader.version();
+    getVersion() {
+        return this.metadataLoader.version();
     };
 };
 

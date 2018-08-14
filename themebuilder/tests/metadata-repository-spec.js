@@ -1,11 +1,11 @@
-var mock = require("mock-require");
-var assert = require("chai").assert;
-var MetadataLoader = require("../modules/metadata-loader");
-var MetadataRepository = require("../modules/metadata-repository");
-var themes = require("./test-themes");
-var metadata = require("./test-metadata");
+const mock = require("mock-require");
+const assert = require("chai").assert;
+const MetadataLoader = require("../modules/metadata-loader");
+const MetadataRepository = require("../modules/metadata-repository");
+const themes = require("./test-themes");
+const metadata = require("./test-metadata");
 
-var expectedLightMetadata = {
+let expectedLightMetadata = {
     "base.common": [
         {
             "Name": "50. Background color",
@@ -22,7 +22,7 @@ var expectedLightMetadata = {
     ]
 };
 
-var expectedLightMetadataAfterUpdate = {
+let expectedLightMetadataAfterUpdate = {
     "base.common": [
         {
             "Name": "50. Background color",
@@ -40,14 +40,14 @@ var expectedLightMetadataAfterUpdate = {
     ]
 };
 
-describe("MetadataRepository", function() {
-    this.beforeEach(function() {
+describe("MetadataRepository", () => {
+    beforeEach(() => {
         mock("../data/metadata/dx-theme-builder-metadata", metadata);
     });
-    it("Init", function() {
-        var metadataRepository = new MetadataRepository(new MetadataLoader());
-        return metadataRepository.init(themes).then(function() {
-            var genericLightMetadata = metadataRepository.getData({
+    it("Init", () => {
+        let metadataRepository = new MetadataRepository(new MetadataLoader());
+        return metadataRepository.init(themes).then(() => {
+            let genericLightMetadata = metadataRepository.getData({
                 name: "generic",
                 colorScheme: "light"
             });
@@ -70,8 +70,8 @@ describe("MetadataRepository", function() {
         });
     });
 
-    it("Version", function() {
-        var metadataRepository = new MetadataRepository(new MetadataLoader());
+    it("Version", () => {
+        let metadataRepository = new MetadataRepository(new MetadataLoader());
         assert.equal(metadataRepository.getVersion(), "18.2.0");
     });
 

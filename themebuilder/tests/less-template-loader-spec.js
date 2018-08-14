@@ -1,8 +1,8 @@
-var assert = require("chai").assert;
-var LessTemplateLoader = require("../modules/less-template-loader");
-var themeName = "generic";
-var colorScheme = "light";
-var metadata = {
+const assert = require("chai").assert;
+const LessTemplateLoader = require("../modules/less-template-loader");
+const themeName = "generic";
+const colorScheme = "light";
+let metadata = {
     "base.common": [
         {
             "Name": "50. Background color",
@@ -24,24 +24,24 @@ var metadata = {
     ]
 };
 
-var emptyHeader = function() { return ""; };
+const emptyHeader = () => { return ""; };
 
-describe("LessTemplateLoader", function() {
-    it("analyzeBootstrapTheme - bootstrap 3", function() {
-        var lessFileContent = "@body-bg: #000;";
-        var config = {
+describe("LessTemplateLoader", () => {
+    it("analyzeBootstrapTheme - bootstrap 3", () => {
+        let lessFileContent = "@body-bg: #000;";
+        let config = {
             isBootstrap: true,
             bootstrapVersion: 3,
             lessCompiler: require("less/lib/less-node"),
-            reader: function() {
+            reader: () => {
                 // data/less/theme-builder-generic-light.less
-                return new Promise(function(resolve) {
+                return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
             }
         };
-        var bootstrapMetadata = require("../data/bootstrap-metadata/bootstrap-metadata.js");
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let bootstrapMetadata = require("../data/bootstrap-metadata/bootstrap-metadata.js");
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.analyzeBootstrapTheme(
             themeName,
@@ -49,7 +49,7 @@ describe("LessTemplateLoader", function() {
             metadata,
             bootstrapMetadata,
             lessFileContent,
-            config.bootstrapVersion).then(function(data) {
+            config.bootstrapVersion).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "#000");
                 assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
                 assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
@@ -57,14 +57,14 @@ describe("LessTemplateLoader", function() {
             });
     });
 
-    it("analyzeBootstrapTheme - bootstrap 4", function() {
-        var sassFileContent = "$body-bg: #000;";
-        var config = {
+    it("analyzeBootstrapTheme - bootstrap 4", () => {
+        let sassFileContent = "$body-bg: #000;";
+        let config = {
             isBootstrap: true,
             bootstrapVersion: 4,
             lessCompiler: require("less/lib/less-node"),
-            reader: function(filename) {
-                var content = "";
+            reader: (filename) => {
+                let content = "";
                 switch(filename) {
                     case "data/less/theme-builder-generic-light.less":
                         content = "@base-bg: #fff;@base-font-family:'default';@base-text-color: #fff;div { color: @base-bg; background: @base-text-color; }";
@@ -76,13 +76,13 @@ describe("LessTemplateLoader", function() {
                         break;
                 }
 
-                return new Promise(function(resolve) {
+                return new Promise((resolve) => {
                     resolve(content);
                 });
             }
         };
-        var bootstrapMetadata = require("../data/bootstrap-metadata/bootstrap4-metadata.js");
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let bootstrapMetadata = require("../data/bootstrap-metadata/bootstrap4-metadata.js");
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.analyzeBootstrapTheme(
             themeName,
@@ -90,7 +90,7 @@ describe("LessTemplateLoader", function() {
             metadata,
             bootstrapMetadata,
             sassFileContent,
-            config.bootstrapVersion).then(function(data) {
+            config.bootstrapVersion).then((data) => {
                 assert.equal(data.compiledMetadata["@base-bg"], "#000");
                 assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
                 assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
@@ -98,26 +98,26 @@ describe("LessTemplateLoader", function() {
             });
     });
 
-    it("load - variable change", function() {
-        var config = {
+    it("load - variable change", () => {
+        let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
-            reader: function() {
+            reader: () => {
                 // data/less/theme-builder-generic-light.less
-                return new Promise(function(resolve) {
+                return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
             }
         };
 
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         metadata["base.common"][0].Value = "green";
         metadata["base.common"][0].isModified = true;
         return lessTemplateLoader.load(
             themeName,
             colorScheme,
-            metadata).then(function(data) {
+            metadata).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
                 assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
                 assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
@@ -128,27 +128,27 @@ describe("LessTemplateLoader", function() {
             });
     });
 
-    it("load - variable change, color swatch", function() {
-        var config = {
+    it("load - variable change, color swatch", () => {
+        let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
             swatchSelector: ".swatch-class",
-            reader: function() {
+            reader: () => {
                 // data/less/theme-builder-generic-light.less
-                return new Promise(function(resolve) {
+                return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
             }
         };
 
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         metadata["base.common"][0].Value = "green";
         metadata["base.common"][0].isModified = true;
         return lessTemplateLoader.load(
             themeName,
             colorScheme,
-            metadata).then(function(data) {
+            metadata).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
                 assert.equal(data.css, ".swatch-class div {\n  color: green;\n}\n\n");
                 delete metadata["base.common"][0].Value;
@@ -156,14 +156,14 @@ describe("LessTemplateLoader", function() {
             });
     });
 
-    it("load - variable change, color swatch, typography and special classes", function() {
-        var config = {
+    it("load - variable change, color swatch, typography and special classes", () => {
+        let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
             swatchSelector: ".swatch-class",
-            reader: function() {
+            reader: () => {
                 // data/less/theme-builder-generic-light.less
-                return new Promise(function(resolve) {
+                return new Promise(resolve => {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     div { color: @base-bg; }
                     .dx-theme-generic-typography { color: @base-bg; }
@@ -176,12 +176,12 @@ describe("LessTemplateLoader", function() {
             }
         };
 
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
             colorScheme,
-            metadata).then(function(data) {
+            metadata).then(data => {
                 assert.equal(data.css, `.swatch-class div {
   color: #fff;
 }
@@ -196,14 +196,14 @@ describe("LessTemplateLoader", function() {
             });
     });
 
-    it("compileLess", function() {
-        var config = {
+    it("compileLess", () => {
+        let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
             swatchSelector: ".swatch-class"
         };
 
-        var less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+        let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
         div { color: @base-bg; }
         .dx-theme-generic-typography { color: @base-bg; }
         .dx-viewport.dx-theme-generic {
@@ -212,20 +212,20 @@ describe("LessTemplateLoader", function() {
             }
         }`;
 
-        var metadataVariables = {};
+        let metadataVariables = {};
 
-        for(var key in metadata) {
+        for(let key in metadata) {
             if(metadata.hasOwnProperty(key)) {
-                var group = metadata[key];
-                group.forEach(function(groupItem) {
+                let group = metadata[key];
+                group.forEach(groupItem => {
                     metadataVariables[groupItem.Key.replace("@", "")] = groupItem.Key;
                 });
             }
         }
 
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
-        return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(function(data) {
+        return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
             assert.equal(data.css, `.swatch-class div {
   color: #fff;
 }
@@ -240,12 +240,12 @@ describe("LessTemplateLoader", function() {
         });
     });
 
-    it("compileScss", function() {
-        var config = {
+    it("compileScss", () => {
+        let config = {
             isBootstrap: false
         };
 
-        var scss = `$body-bg: #fff; $body-color:#0f0;
+        let scss = `$body-bg: #fff; $body-color:#0f0;
         div { color: $body-bg; }
         .dx-theme-generic-typography { color: $body-color; }
         .dx-viewport.dx-theme-generic {
@@ -254,12 +254,12 @@ describe("LessTemplateLoader", function() {
             }
         }`;
 
-        var lessTemplateLoader = new LessTemplateLoader(config);
+        let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileScss(scss, {
             "base-bg": "$body-bg",
             "base-text-color": "$body-color"
-        }).then(function(data) {
+        }).then(data => {
 
             assert.equal(data.css, `div {
   color: #fff;
@@ -280,9 +280,9 @@ describe("LessTemplateLoader", function() {
         });
     });
 
-    it("_makeInfoHeader", function() {
-        var lessTemplateLoader = new LessTemplateLoader({}, "18.2.0");
-        var expectedHeader = "/*\n* Generated by the DevExpress Theme Builder\n* Version: 18.2.0\n* http://js.devexpress.com/themebuilder/\n*/\n\n";
+    it("_makeInfoHeader", () => {
+        let lessTemplateLoader = new LessTemplateLoader({}, "18.2.0");
+        let expectedHeader = "/*\n* Generated by the DevExpress Theme Builder\n* Version: 18.2.0\n* http://js.devexpress.com/themebuilder/\n*/\n\n";
         assert.equal(lessTemplateLoader._makeInfoHeader(), expectedHeader);
     });
 });

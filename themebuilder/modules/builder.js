@@ -1,22 +1,22 @@
-var MetadataLoader = require("../modules/metadata-loader.js");
-var MetadataRepository = require("../modules/metadata-repository.js");
-var LessTemplateLoader = require("../modules/less-template-loader.js");
-var themes = require("../modules/themes.js");
+const MetadataLoader = require("../modules/metadata-loader.js");
+const MetadataRepository = require("../modules/metadata-repository.js");
+const LessTemplateLoader = require("../modules/less-template-loader.js");
+const themes = require("../modules/themes.js");
 
-var processTheme = function(config, metadata, data, version) {
-    var lessTemplateLoader = new LessTemplateLoader(config, version);
+const processTheme = (config, metadata, data, version) => {
+    let lessTemplateLoader = new LessTemplateLoader(config, version);
     if(config.isBootstrap) {
-        var bootstrapMetadata = config.bootstrapVersion === 3 ?
+        let bootstrapMetadata = config.bootstrapVersion === 3 ?
             require("../data/bootstrap-metadata/bootstrap-metadata.js") :
             require("../data/bootstrap-metadata/bootstrap4-metadata.js");
 
         return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, data, config.bootstrapVersion);
     } else {
-        var metadataJSON = JSON.parse(data);
+        let metadataJSON = JSON.parse(data);
         if(metadataJSON.items) {
-            metadataJSON.items.forEach(function(item) {
-                for(var group in metadata) {
-                    metadata[group].forEach(function(metadataItem) {
+            metadataJSON.items.forEach(item => {
+                for(let group in metadata) {
+                    metadata[group].forEach(metadataItem => {
                         if(metadataItem.Key === item.key) {
                             metadataItem.Value = item.value;
                             metadataItem.isModified = true;
@@ -30,19 +30,19 @@ var processTheme = function(config, metadata, data, version) {
     }
 }
 
-var buildTheme = function(config) {
-    var metadataRepository = new MetadataRepository(new MetadataLoader());
-    var repositoryPromise = metadataRepository.init(themes);
+const buildTheme = config => {
+    let metadataRepository = new MetadataRepository(new MetadataLoader());
+    let repositoryPromise = metadataRepository.init(themes);
 
-    return Promise.all([config.metadataPromise, repositoryPromise]).then(function(resolves) {
-        var data = resolves[0];
+    return Promise.all([config.metadataPromise, repositoryPromise]).then(resolves => {
+        let data = resolves[0];
 
-        var metadata = metadataRepository.getData({
+        let metadata = metadataRepository.getData({
             name: config.themeName,
             colorScheme: config.colorScheme
         });
 
-        var version = metadataRepository.getVersion();
+        let version = metadataRepository.getVersion();
 
         return processTheme(config, metadata, data, version);
     });

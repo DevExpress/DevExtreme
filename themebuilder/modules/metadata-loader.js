@@ -1,9 +1,11 @@
-var MetadataLoader = function() {
-    var fullMetadata = require("../data/metadata/dx-theme-builder-metadata");
+class MetadataLoader {
+    constructor() {
+        this.fullMetadata = require("../data/metadata/dx-theme-builder-metadata");
+    }
 
-    this.groupMetadata = function(metadata) {
-        var groups = {};
-        metadata.forEach(function(item) {
+    groupMetadata(metadata) {
+        let groups = {};
+        metadata.forEach(item => {
             if(!groups[item.Group]) {
                 groups[item.Group] = [];
             }
@@ -14,16 +16,16 @@ var MetadataLoader = function() {
         return groups;
     };
 
-    this.load = function(theme, colorScheme) {
-        var that = this;
-        return new Promise(function(resolve, reject) {
-            var metadata = fullMetadata[theme + "_" + colorScheme.replace("-", "_") + "_metadata"];
+    load(theme, colorScheme) {
+        let that = this;
+        return new Promise((resolve) => {
+            var metadata = this.fullMetadata[theme + "_" + colorScheme.replace("-", "_") + "_metadata"];
             resolve(that.groupMetadata(metadata));
         });
     };
 
-    this.version = function() {
-        return fullMetadata["_metadata_version"];
+    version() {
+        return this.fullMetadata["_metadata_version"];
     };
 };
 
