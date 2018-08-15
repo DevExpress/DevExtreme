@@ -494,7 +494,7 @@ var serializeKey = function(key, protocolVersion) {
 };
 
 /**
-* @name Utils.keyConverters
+* @const Utils.keyConverters
 * @publicName odata.keyConverters
 * @type object
 * @namespace DevExpress.data.utils.odata

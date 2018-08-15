@@ -450,7 +450,7 @@ if(!devices.isForced() && devices.current().platform === "win") {
 }
 
 /**
- * @name devices
+ * @const devices
  * @type DevicesObject
  * @namespace DevExpress
  * @hidden
