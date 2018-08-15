@@ -142,9 +142,7 @@ namespace StyleCompiler
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {
-                var aggregate = (themeName != null && colorSchemeName != null) ?
-                    LessAggregation.EnumerateThemeItems(sourcePath, distributionName, themeName, colorSchemeName) :
-                    LessAggregation.EnumerateAllItems(sourcePath, distributionName);
+                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName, themeName, colorSchemeName);
 
                 foreach (var item in aggregate)
                 {

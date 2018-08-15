@@ -8,7 +8,7 @@
       "cwd": "${workspaceFolder}",
       "program": "bin/style-compiler.dll",
       "args": [
-        "theme", "--version=18.2.0", "--output-path=./out/", "--theme-name=generic", "--color-scheme-name=light"
+        "TODO"
       ],
       "stopAtEntry": true,
       "console": "integratedTerminal"

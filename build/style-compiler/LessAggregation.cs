@@ -195,7 +195,7 @@ namespace StyleCompiler
             };
         }
 
-        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName)
+        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, string neededThemeName = null, string neededColorSchemeName = null)
         {
             var distribution = LessRegistry.CssDistributions[distributionName];
 
@@ -206,10 +206,12 @@ namespace StyleCompiler
             {
                 foreach (var themeName in distribution.SupportedThemes)
                 {
+                    if(neededThemeName != null && neededThemeName != themeName) continue;
                     var theme = LessRegistry.KnownThemeMap[themeName];
 
                     foreach (var colorSchemeName in theme.ColorSchemeNames)
                     {
+                        if(neededColorSchemeName != null && neededColorSchemeName != colorSchemeName) continue;
                         foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
                             yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
                     }
@@ -242,23 +244,7 @@ namespace StyleCompiler
             return LessRegistry.ResolveRequiredModules(dist.Modules);
         }
 
-        public static IEnumerable<Item> EnumerateThemeItems(string sourcePath, string distributionName, string themeName, string colorSchemeName)
-        {
-            var distribution = LessRegistry.CssDistributions[distributionName];
-
-            if (distribution.CommonsInExternalFiles)
-                yield return CreateCommonItem(distributionName);
-
-            if (distribution.SupportedThemes != null && distribution.SupportedThemes.Contains(themeName))
-            {
-                var theme = LessRegistry.KnownThemeMap[themeName];
-                if(theme.ColorSchemeNames.Contains(colorSchemeName))
-                {
-                    foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
-                        yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
-                } 
-            }
-        }
+        
 
     }
 
