@@ -1438,6 +1438,23 @@ QUnit.test("outside click should close several overlays if propagateOutsideClick
     assert.equal(overlay2.option("visible"), true, "Second overlay is visible");
 });
 
+QUnit.test("outside click should not close several overlays if other overlay content clicked", function(assert) {
+    var overlay1 = $("#overlay").dxOverlay({
+            closeOnOutsideClick: true,
+            visible: true
+        }).dxOverlay("instance"),
+        overlay2 = $("#overlay2").dxOverlay({
+            closeOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay("instance");
+
+    $(overlay2.content()).trigger("dxpointerdown");
+
+    assert.equal(overlay1.option("visible"), true, "First overlay is visible");
+    assert.equal(overlay2.option("visible"), true, "Second overlay is visible");
+});
+
 QUnit.test("overlays' priority", function(assert) {
     var $overlay1 = $("#overlay").dxOverlay({
             closeOnOutsideClick: true,
