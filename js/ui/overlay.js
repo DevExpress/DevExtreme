@@ -537,17 +537,20 @@ var Overlay = Widget.inherit({
         if(typeUtils.isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
+
+        var $container = this._$content,
+            outsideClick = !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+
+        if(!outsideClick) {
+            return false;
+        }
+
         if(closeOnOutsideClick) {
-            var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(window.document).length);
-
-            if(outsideClick) {
-                if(this.option("shading")) {
-                    e.preventDefault();
-                }
-
-                this.hide();
+            if(this.option("shading")) {
+                e.preventDefault();
             }
+
+            this.hide();
         }
 
         return this.option("propagateOutsideClick");
