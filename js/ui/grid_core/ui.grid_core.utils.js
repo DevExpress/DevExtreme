@@ -435,6 +435,17 @@ module.exports = (function() {
             };
         },
 
-        isDateType: isDateType
+        isDateType: isDateType,
+
+        getSelectionRange: function(focusedElement) {
+            return focusedElement ? {
+                selectionStart: focusedElement.selectionStart,
+                selectionEnd: focusedElement.selectionEnd
+            } : {};
+        },
+
+        setSelectionRange: function(focusedElement, selectionRange) {
+            focusedElement && focusedElement.setSelectionRange && focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
+        }
     };
 })();

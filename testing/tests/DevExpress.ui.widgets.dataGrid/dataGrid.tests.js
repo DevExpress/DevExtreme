@@ -4501,6 +4501,7 @@ QUnit.test("pageSize state is applied when scrolling mode is not virtual", funct
 
     // assert
     assert.equal(dataGrid.pageSize(), 10, "pageSize from stateStoring is applied");
+    clock.restore();
 });
 
 // T152307
@@ -4886,6 +4887,7 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     // assert
     var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok(!$loadPanel.length, "load panel is visible");
+    clock.restore();
 });
 
 // T389866
@@ -9218,8 +9220,10 @@ QUnit.test("update focus border on resize", function(assert) {
     assert.ok(newFocusWidth < oldFocusWidth, "new focus width less than old focus width");
 });
 
-QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
-    // arrange, act
+QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)", function(assert) {
+    // arrange
+    this.clock.restore();
+
     var dataGrid = createDataGrid({
             filterRow: { visible: true },
             editing: { allowAdding: true },
@@ -9227,21 +9231,32 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
                 { dataField: "field1" },
                 { dataField: "field2" }
             ],
-            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
+            loadingTimeout: undefined
         }),
-        navigationController = dataGrid.getController("keyboardNavigation");
+        $inputElement,
+        done = assert.async();
 
-    this.clock.tick();
+    $inputElement = $(dataGrid.$element()).find(".dx-editor-cell").first().find(".dx-texteditor-input");
 
-    var filterEditor = $(dataGrid.$element()).find(".dx-editor-cell").first();
-    navigationController._focus(filterEditor);
-    filterEditor.find("input").val("1").trigger("change");
+    // act
+    $inputElement.focus();
+    $inputElement.val("1");
+    $inputElement.trigger("change");
 
-    this.clock.tick();
+    setTimeout(function() {
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
+        assert.ok(dataGrid.$element().find(".dx-editor-cell").first().hasClass("dx-focused"), "filter cell has focus after filter applyed");
 
-    // assert
-    assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
-    assert.ok(dataGrid.$element().find(".dx-editor-cell:focus").length, "filter cell has focus after filter applyed");
+        // T662207
+        if(devices.real().deviceType === "desktop") {
+            $inputElement = dataGrid.$element().find(".dx-editor-cell").first().find(".dx-texteditor-input");
+            assert.equal($inputElement.get(0).selectionStart, 1, "selectionStart is correct");
+            assert.equal($inputElement.get(0).selectionEnd, 1, "selectionEnd is correct");
+        }
+        done();
+    }, 100);
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
