@@ -58,6 +58,7 @@ module.exports = {
     uglify: argv.uglify,
     RESULT_JS_PATH: 'artifacts/js',
     RESULT_NPM_PATH: 'artifacts/npm',
+    RESULT_THEMEBUILDER_NPM_PATH: 'artifacts/themebuilder-npm',
     TRANSPILED_PATH: 'artifacts/transpiled',
     EULA_URL: 'https://js.devexpress.com/Licensing/'
 };

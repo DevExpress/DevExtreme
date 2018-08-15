@@ -17,6 +17,7 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
+require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
 require('./build/gulp/ts');
@@ -42,6 +43,7 @@ gulp.task('default', function(callback) {
         'style-compiler-themes',
         'style-compiler-tb-assets',
         'npm',
+        'themebuilder-npm',
         'style-compiler-generic-legacy',
         callback);
 });
