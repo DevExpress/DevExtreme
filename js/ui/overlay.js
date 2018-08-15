@@ -559,7 +559,8 @@ var Overlay = Widget.inherit({
         }
 
         var $container = this._$content,
-            outsideClick = !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+            isDetachedTarget = !$(e.target).closest(window.document).length,
+            outsideClick = !isDetachedTarget && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(!outsideClick) {
             return false;
