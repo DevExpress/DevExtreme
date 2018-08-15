@@ -148,7 +148,7 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
     let count = 0;
     const done = assert.async();
 
-    instance.toggle().done(() => {
+    instance.toggle().then(() => {
         count++;
         assert.equal(count, 1, "callback not fired at animation start");
         done();

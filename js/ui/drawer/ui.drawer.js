@@ -8,7 +8,6 @@ import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
 import EmptyTemplate from "../widget/empty_template";
-import { Deferred } from "../../core/utils/deferred";
 import windowUtils from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
@@ -148,7 +147,7 @@ const Drawer = Widget.inherit({
         this.$element().addClass(DRAWER_CLASS);
 
         this._animations = [];
-        this._deferredAnimate = undefined;
+        this._animationPromise = undefined;
         this._initHideTopOverlayHandler();
     },
 
@@ -312,8 +311,8 @@ const Drawer = Widget.inherit({
     },
 
     _animationCompleteHandler() {
-        if(this._deferredAnimate) {
-            this._deferredAnimate.resolveWith(this);
+        if(this._animationPromise) {
+            this._toggleResolve();
             this._animations = [];
         }
     },
@@ -458,10 +457,12 @@ const Drawer = Widget.inherit({
     toggle(showing) {
         showing = showing === undefined ? !this.option("opened") : showing;
 
-        this._deferredAnimate = new Deferred();
+        this._animationPromise = new Promise((resolve) => {
+            this._toggleResolve = resolve;
+        });
         this.option("opened", showing);
 
-        return this._deferredAnimate.promise();
+        return this._animationPromise;
     }
 
     /**
