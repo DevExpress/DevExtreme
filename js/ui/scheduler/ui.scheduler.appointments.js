@@ -529,7 +529,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
-                startDate: settings.startDate,
+                startDate: new Date(settings.startDate),
                 cellWidth: this.invoke("getCellWidth"),
                 cellHeight: this.invoke("getCellHeight"),
                 resizableConfig: this._resizableConfig(data, settings)
