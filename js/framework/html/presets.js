@@ -1,12 +1,12 @@
 /**
- * @name layoutSets
+ * @const layoutSets
  * @type Array<string>
  * @namespace DevExpress.framework.html
  * @hidden
  */
 exports.layoutSets = {};
 /**
- * @name animationSets
+ * @const animationSets
  * @type Any
  * @namespace DevExpress.framework.html
  * @hidden
