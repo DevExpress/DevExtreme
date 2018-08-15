@@ -783,7 +783,8 @@ var TextEditorBase = Editor.inherit({
     reset: function() {
         var defaultOptions = this._getDefaultOptions();
         if(this.option("value") === defaultOptions.value) {
-            this._renderInputValue(defaultOptions.value);
+            this.option("text", "");
+            this._renderValue();
         } else {
             this.option("value", defaultOptions.value);
         }
