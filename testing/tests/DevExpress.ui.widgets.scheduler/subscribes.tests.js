@@ -927,6 +927,25 @@ QUnit.test("'getAppointmentDurationInMs' should return visible allDay appointmen
     });
 });
 
+QUnit.test("'getAppointmentDurationInMs' should return visible appointment duration if last cell has small duration (T664073)", function(assert) {
+    this.createInstance();
+
+    this.instance.option({
+        startDayHour: 8,
+        currentView: "timelineDay",
+        cellDuration: 61
+    });
+
+    this.instance.fire("getAppointmentDurationInMs", {
+        startDate: new Date(2015, 2, 2, 7),
+        endDate: new Date(2015, 2, 4, 21),
+        allDay: true,
+        callback: function(result) {
+            assert.equal(result / dateUtils.dateToMilliseconds("hour"), 48.8, "'getAppointmentDurationInMs' works fine");
+        }
+    });
+});
+
 QUnit.test("'getAppointmentColor' by certain group", function(assert) {
     var appointmentColor;
 
