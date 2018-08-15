@@ -206,7 +206,7 @@ var dxSankey = require("../core/base_widget").inherit({
                 } else if(!_isNumber(item[weightField]) || item[weightField] <= 0) {
                     that._incidentOccurred("E2009", weightField);
                 } else {
-                    processedData.push([ item[sourceField], item[targetField], item[weightField] ]);
+                    processedData.push([item[sourceField], item[targetField], item[weightField]]);
                 }
 
             }
@@ -241,6 +241,7 @@ var dxSankey = require("../core/base_widget").inherit({
                 }, that._incidentOccurred
             );
         that._layoutMap = layout;
+        that._rtlEnabled = that._getOption('rtlEnabled', true);
 
         if(!layout.hasOwnProperty('error')) {
             let nodeColors = {},
@@ -328,7 +329,7 @@ var dxSankey = require("../core/base_widget").inherit({
             // emtpy space between cascades with 'labelOptions.horizontalOffset' subtracted
             var availableLabelWidth = (availableWidth - (nodeOptions.width + labelOptions.horizontalOffset) - (that._layoutMap.cascades.length * nodeOptions.width)) / (that._layoutMap.cascades.length - 1) - labelOptions.horizontalOffset;
             that._nodes.forEach(function(node) {
-                that._createLabel(node, labelOptions, that._shadowFilter.id, availableLabelWidth);
+                that._createLabel(node, labelOptions, that._shadowFilter.id, availableLabelWidth, nodeOptions);
             });
 
             // test and handle labels overlapping here
@@ -352,7 +353,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
     },
 
-    _createLabel: function(node, labelOptions, filter, availableLabelWidth) {
+    _createLabel: function(node, labelOptions, filter, availableLabelWidth, nodeOptions) {
         var textData = labelOptions.customizeText(node),
             settings = node.getLabelAttributes(labelOptions, filter, this._rect);
         if(textData) {
@@ -361,8 +362,19 @@ var dxSankey = require("../core/base_widget").inherit({
                 .css(settings.css);
             node.label.append(this._groupLabels);
 
-            var bBox = node.label.getBBox();
-            node.label.attr({ y: 2 * settings.attr.y - bBox.y - Math.round(bBox.height / 2) + labelOptions.verticalOffset });
+            var bBox = node.label.getBBox(),
+                labelY = 2 * settings.attr.y - bBox.y - Math.round(bBox.height / 2) + labelOptions.verticalOffset,
+                labelX;
+
+            if(settings.attr.x + bBox.width >= this._rect[2] - this._rect[1]) {
+                labelX = this._rtlEnabled ?
+                    settings.attr.x - 2 * labelOptions.horizontalOffset - nodeOptions.width :
+                    settings.attr.x - bBox.width - 2 * labelOptions.horizontalOffset - nodeOptions.width;
+            } else {
+                labelX = this._rtlEnabled ? settings.attr.x + bBox.width : settings.attr.x;
+            }
+
+            node.label.attr({ x: labelX, y: labelY });
 
             if(bBox.width > availableLabelWidth) {
                 node.label.applyEllipsis(availableLabelWidth);
