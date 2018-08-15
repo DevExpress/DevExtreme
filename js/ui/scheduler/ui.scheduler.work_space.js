@@ -1781,10 +1781,6 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._hiddenInterval;
     },
 
-    _getDayDurationInMs: function() {
-        return this.option("hoursInterval") * this._getCellCountInDay() * HOUR_MS;
-    },
-
     _getIntervalBetween: function(currentDate, allDay) {
         var startDayTime = this.option("startDayHour") * HOUR_MS,
             firstViewDate = this.getStartViewDate(),
@@ -2238,6 +2234,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getCellDuration: function() {
         return 3600000 * this.option("hoursInterval");
+    },
+
+    getDayDurationInMs: function() {
+        return this.option("hoursInterval") * this._getCellCountInDay() * HOUR_MS;
     },
 
     getGroupBounds: function(coordinates) {

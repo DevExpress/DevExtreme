@@ -1846,10 +1846,6 @@ var Scheduler = Widget.inherit({
         return VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
     },
 
-    _getDayDuration: function() {
-        return this._getCurrentViewOption("endDayHour") - this._getCurrentViewOption("startDayHour");
-    },
-
     _renderWorkSpace: function(groups) {
         this._readyToRenderAppointments && this._toggleSmallClass();
         var $workSpace = $("<div>").appendTo(this.$element());
