@@ -52,8 +52,19 @@
         z-index: 1;
     }
 }
-.dx-drawer-persistent {
+
+.dx-drawer-shrink {
+    .dx-drawer-menu-content {
+        flex: 0 0 auto;
+        position: relative;
+    }
+    .dx-drawer-wrapper {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: row;
+    }
     .dx-drawer-content {
-        width: auto;
+        position: relative;
+        flex: 1 1 auto;
     }
 }

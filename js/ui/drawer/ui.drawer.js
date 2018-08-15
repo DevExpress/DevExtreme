@@ -222,13 +222,13 @@ const Drawer = Widget.inherit({
     },
 
     _renderMarkup() {
-        const $wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
+        this._$wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
         this._$menu = $("<div>").addClass(DRAWER_MENU_CONTENT_CLASS);
         this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
 
-        $wrapper.append(this._$menu);
-        $wrapper.append(this._$contentWrapper);
-        this.$element().append($wrapper);
+        this._$wrapper.append(this._$menu);
+        this._$wrapper.append(this._$contentWrapper);
+        this.$element().append(this._$wrapper);
     },
 
     _refreshModeClass(prevClass) {
@@ -290,6 +290,14 @@ const Drawer = Widget.inherit({
         this._$menu.removeClass(DRAWER_CLASS + "-top");
 
         this._$menu.addClass(DRAWER_CLASS + "-" + position);
+
+        if(position === "right") {
+            this._reverseElements();
+        }
+    },
+
+    _reverseElements() {
+        this._$wrapper.prepend(this._$contentWrapper);
     },
 
     _renderPosition(offset, animate) {

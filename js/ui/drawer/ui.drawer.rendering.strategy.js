@@ -25,16 +25,16 @@ const animation = {
             complete: config.complete
         });
     },
-    padding(config) {
+    margin(config) {
         let $element = config.$element,
-            padding = config.padding,
+            margin = config.margin,
             direction = config.direction || "left",
             toConfig = {};
 
         if(direction === "left") {
-            toConfig["paddingLeft"] = padding;
+            toConfig["marginLeft"] = margin;
         } else {
-            toConfig["paddingRight"] = padding;
+            toConfig["marginRight"] = margin;
         }
 
         fx.animate($element, {
@@ -43,7 +43,6 @@ const animation = {
             complete: config.complete
         });
     },
-
     fade($element, config, duration, completeAction) {
         fx.animate($element, {
             type: "fade",

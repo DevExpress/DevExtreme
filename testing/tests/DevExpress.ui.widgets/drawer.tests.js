@@ -537,14 +537,14 @@ QUnit.test("minWidth should be rendered correctly in shrink mode, expand", asser
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.css("padding-left"), "50px", "content has correct left when minWidth is set");
+
+    assert.equal($content.position().left, 50, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
-    assert.equal($content.css("padding-left"), "200px", "content has correct left when minWidth is set");
-    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($content.position().left, 200, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
@@ -567,13 +567,12 @@ QUnit.test("minWidth should be rendered correctly in shrink mode, right menu pos
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.css("padding-right"), "50px", "content has correct left when minWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
-    assert.equal($content.css("padding-right"), "200px", "content has correct left when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
@@ -596,16 +595,15 @@ QUnit.test("maxWidth should be rendered correctly in shrink mode, expand", asser
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.css("padding-left"), "0px", "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 0, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
-    assert.equal($content.css("padding-left"), "100px", "content has correct left when maxWidth is set");
-    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($content.position().left, 100, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 100, "menu has correct width when minWidth is set");
 
     fx.off = false;
 });
@@ -626,16 +624,15 @@ QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu pos
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.css("padding-right"), "0px", "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 1000, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 0, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
-    assert.equal($content.css("padding-right"), "100px", "content has correct left when maxWidth is set");
-    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 900, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 100, "menu has correct width when minWidth is set");
 
     fx.off = false;
 });
@@ -654,40 +651,15 @@ QUnit.test("minWidth should be rendered correctly in shrink mode, slide", assert
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
-    assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
-
-    instance.toggle();
-
-    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.css("margin-left"), "-150px", "menu has correct margin when minWidth is set");
+    assert.equal($content.position().left, 50, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
-    fx.off = false;
-});
-
-QUnit.test("minWidth should be rendered correctly in shrink mode, slide", assert => {
-    fx.off = true;
-
-    const $element = $("#drawer").dxDrawer({
-        minWidth: 50,
-        opened: false,
-        revealMode: "slide",
-        openedStateMode: "shrink"
-    });
-
-    const instance = $element.dxDrawer("instance");
-    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
-
-    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
-    assert.equal($menu.position().left, -150, "menu has correct left when minWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
-
     instance.toggle();
 
-    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.css("margin-left"), "0px", "menu has correct margin when minWidth is set");
+    assert.equal($content.position().left, 200, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
@@ -708,15 +680,17 @@ QUnit.test("maxWidth should be rendered correctly in shrink mode, slide", assert
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, -200, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
+    assert.equal($menu.css("margin-left"), "-200px", "menu has correct margin when minWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
-    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, -100, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
+    assert.equal($menu.css("margin-left"), "-100px", "menu has correct margin when minWidth is set");
+    assert.equal($content.position().left, 100, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     fx.off = false;
 });
@@ -736,12 +710,14 @@ QUnit.test("minWidth should be rendered correctly in shrink mode, right menu pos
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
+    assert.equal($menu.css("margin-right"), "-150px", "menu has correct margin when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
+    assert.equal($menu.css("margin-right"), "0px", "menu has correct margin when minWidth is set");
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
     assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
@@ -764,15 +740,17 @@ QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu pos
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_MENU_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
+    assert.equal($menu.css("margin-right"), "-200px", "menu has correct margin when minWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 1000, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
-    assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
+    assert.equal($menu.css("margin-right"), "-100px", "menu has correct margin when minWidth is set");
+    assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
+    assert.equal($menu.position().left, 900, "menu has correct left when minWidth is set");
+    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     fx.off = false;
 });
