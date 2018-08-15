@@ -40,6 +40,7 @@ gulp.task('default', function(callback) {
             'layouts'
         ],
         'style-compiler-themes',
+        'style-compiler-tb-assets',
         'npm',
         'style-compiler-generic-legacy',
         callback);
