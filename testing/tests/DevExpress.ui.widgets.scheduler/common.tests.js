@@ -3881,21 +3881,6 @@ QUnit.testStart(function() {
         assert.notEqual(countCallTemplate2, 0, "count call second template");
     });
 
-    QUnit.test("Scheduler should have correct dayDuration by certain startDayHour and endDayHour", function(assert) {
-        this.createInstance({
-            startDayHour: 7,
-            endDayHour: 23,
-            views: [{
-                type: "workWeek",
-                startDayHour: 9,
-                endDayHour: 18
-            }],
-            currentView: "workWeek"
-        });
-
-        assert.equal(this.instance._getDayDuration(), 9, "correct dayDuration");
-    });
-
     QUnit.test("Check appointment takes all day by certain startDayHour and endDayHour", function(assert) {
         this.createInstance({
             startDayHour: 9,
