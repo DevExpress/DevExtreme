@@ -438,6 +438,7 @@ gridCore.registerModule("summary", {
                  * @type_function_param1_field3 summaryProcess:string
                  * @type_function_param1_field4 value:any
                  * @type_function_param1_field5 totalValue:any
+                 * @type_function_param1_field6 groupIndex:number
                  */
                 calculateCustomSummary: undefined,
                 /**
@@ -737,9 +738,10 @@ gridCore.registerModule("summary", {
                                     calculateCustomSummary(options);
                                     options.summaryProcess = "calculate";
                                     aggregator = {
-                                        seed: function() {
+                                        seed: function(groupIndex) {
                                             options.summaryProcess = "start";
                                             options.totalValue = undefined;
+                                            options.groupIndex = groupIndex;
                                             delete options.value;
                                             calculateCustomSummary(options);
                                             return options.totalValue;
