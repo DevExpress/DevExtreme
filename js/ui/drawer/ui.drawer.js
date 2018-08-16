@@ -16,7 +16,7 @@ import { animation } from "./ui.drawer.rendering.strategy";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
-const DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content";
+const DRAWER_PANEL_CONTENT_CLASS = "dx-drawer-panel-content";
 const DRAWER_CONTENT_CLASS = "dx-drawer-content";
 const DRAWER_SHADER_CLASS = "dx-drawer-shader";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
@@ -70,7 +70,7 @@ const Drawer = Widget.inherit({
             * @type template|function
             * @default null
             */
-            template: "menu",
+            template: "panel",
 
             /**
             * @name dxDrawerOptions.openedStateMode
@@ -179,7 +179,7 @@ const Drawer = Widget.inherit({
     _initTemplates() {
         this.callBase();
 
-        this._defaultTemplates["menu"] = new EmptyTemplate(this);
+        this._defaultTemplates["panel"] = new EmptyTemplate(this);
         this._defaultTemplates["content"] = new EmptyTemplate(this);
     },
 
@@ -192,9 +192,9 @@ const Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshRevealModeClass();
 
-        const menuTemplate = this._getTemplate(this.option("template"));
+        const panelTemplate = this._getTemplate(this.option("template"));
 
-        menuTemplate && menuTemplate.render({
+        panelTemplate && panelTemplate.render({
             container: this.content()
         });
 
@@ -223,10 +223,10 @@ const Drawer = Widget.inherit({
 
     _renderMarkup() {
         this._$wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
-        this._$menu = $("<div>").addClass(DRAWER_MENU_CONTENT_CLASS);
+        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
         this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
 
-        this._$wrapper.append(this._$menu);
+        this._$wrapper.append(this._$panel);
         this._$wrapper.append(this._$contentWrapper);
         this.$element().append(this._$wrapper);
     },
@@ -255,7 +255,7 @@ const Drawer = Widget.inherit({
 
     _initWidth() {
         this._minWidth = this.option("minWidth") || 0;
-        this._maxWidth = this.option("maxWidth") || this.getRealMenuWidth();
+        this._maxWidth = this.option("maxWidth") || this.getRealPanelWidth();
     },
 
     getMaxWidth() {
@@ -266,10 +266,10 @@ const Drawer = Widget.inherit({
         return this._minWidth;
     },
 
-    getRealMenuWidth() {
+    getRealPanelWidth() {
         if(windowUtils.hasWindow()) {
-            const $menu = this._$menu;
-            return $menu.get(0).hasChildNodes() ? $menu.get(0).childNodes[0].getBoundingClientRect().width : $menu.get(0).getBoundingClientRect().width;
+            const $panel = this._$panel;
+            return $panel.get(0).hasChildNodes() ? $panel.get(0).childNodes[0].getBoundingClientRect().width : $panel.get(0).getBoundingClientRect().width;
         } else {
             return 0;
         }
@@ -285,11 +285,11 @@ const Drawer = Widget.inherit({
     _togglePositionClass() {
         const position = this.option("position");
 
-        this._$menu.removeClass(DRAWER_CLASS + "-left");
-        this._$menu.removeClass(DRAWER_CLASS + "-right");
-        this._$menu.removeClass(DRAWER_CLASS + "-top");
+        this._$panel.removeClass(DRAWER_CLASS + "-left");
+        this._$panel.removeClass(DRAWER_CLASS + "-right");
+        this._$panel.removeClass(DRAWER_CLASS + "-top");
 
-        this._$menu.addClass(DRAWER_CLASS + "-" + position);
+        this._$panel.addClass(DRAWER_CLASS + "-" + position);
 
         if(position === "right") {
             this._reverseElements();
@@ -350,7 +350,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
-        delete this._menuWidth;
+        delete this._panelWidth;
         this._renderPosition(this.option("opened"), false);
     },
 
@@ -387,7 +387,7 @@ const Drawer = Widget.inherit({
                 break;
             case "openedStateMode":
                 this._initStrategy();
-                this._$menu.css("left", 0);
+                this._$panel.css("left", 0);
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("opened"));
 
@@ -397,7 +397,7 @@ const Drawer = Widget.inherit({
             case "minWidth":
             case "maxWidth":
                 this._initWidth();
-                this._$menu.css("left", 0);
+                this._$panel.css("left", 0);
                 this._renderPosition(this.option("opened"));
 
                 // NOTE: temporary fix
@@ -426,7 +426,7 @@ const Drawer = Widget.inherit({
     * @return dxElement
     */
     content() {
-        return getPublicElement(this._$menu);
+        return getPublicElement(this._$panel);
     },
 
     /**

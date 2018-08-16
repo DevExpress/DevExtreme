@@ -6,7 +6,7 @@ import "ui/drawer";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
-const DRAWER_MENU_CONTENT_CLASS = "dx-drawer-menu-content";
+const DRAWER_PANEL_CONTENT_CLASS = "dx-drawer-panel-content";
 const DRAWER_CONTENT_CLASS = "dx-drawer-content";
 const DRAWER_SHADER_CLASS = "dx-drawer-shader";
 const OPENED_STATE_CLASS = "dx-drawer-opened";
@@ -15,7 +15,7 @@ const OPENED_STATE_CLASS = "dx-drawer-opened";
 QUnit.testStart(() => {
     const markup = '\
     <style>\
-        .dx-drawer-menu-content {\
+        .dx-drawer-panel-content {\
             width: 200px;\
         }\
     </style>\
@@ -42,7 +42,7 @@ QUnit.test("render drawer", assert => {
 
     assert.ok($element.hasClass(DRAWER_CLASS), "drawer rendered");
     assert.equal($element.find("." + DRAWER_WRAPPER_CLASS).length, 1, "drawer has wrapper");
-    assert.equal($element.find("." + DRAWER_MENU_CONTENT_CLASS).length, 1, "drawer has menu container");
+    assert.equal($element.find("." + DRAWER_PANEL_CONTENT_CLASS).length, 1, "drawer has menu container");
     assert.equal($element.find("." + DRAWER_CONTENT_CLASS).length, 1, "drawer has content");
 });
 

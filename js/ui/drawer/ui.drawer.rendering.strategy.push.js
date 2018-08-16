@@ -9,7 +9,7 @@ class PushStrategy extends DrawerStrategy {
 
         $(this._drawer.viewContent()).css("paddingLeft", 0);
 
-        const contentPosition = this._getMenuWidth(offset) * this._drawer._getPositionCorrection();
+        const contentPosition = this._getPanelWidth(offset) * this._drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = {
@@ -18,7 +18,7 @@ class PushStrategy extends DrawerStrategy {
                 duration: this._drawer.option("animationDuration"),
                 complete: () => {
                     this._contentAnimationResolve();
-                    this._menuAnimationResolve();
+                    this._panelAnimationResolve();
                 }
             };
 

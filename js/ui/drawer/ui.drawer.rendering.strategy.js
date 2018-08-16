@@ -82,7 +82,7 @@ class DrawerStrategy {
             this._contentAnimationResolve = resolve;
         }));
         this._drawer._animations.push(new Promise((resolve) => {
-            this._menuAnimationResolve = resolve;
+            this._panelAnimationResolve = resolve;
         }));
         this._drawer._animations.push(new Promise((resolve) => {
             this._shaderAnimationResolve = resolve;
@@ -101,15 +101,15 @@ class DrawerStrategy {
         fx.stop($(this._drawer.viewContent()), true);
     }
 
-    _getMenuOffset(offset) {
+    _getPanelOffset(offset) {
         if(offset) {
-            return -(this._drawer.getRealMenuWidth() - this._drawer.getMaxWidth());
+            return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxWidth());
         } else {
-            return -(this._drawer.getRealMenuWidth() - this._drawer.getMinWidth());
+            return -(this._drawer.getRealPanelWidth() - this._drawer.getMinWidth());
         }
     }
 
-    _getMenuWidth(offset) {
+    _getPanelWidth(offset) {
         return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
     }
 
