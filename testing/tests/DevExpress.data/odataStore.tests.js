@@ -1595,10 +1595,12 @@ QUnit.test("error handlers (check params)", function(assert) {
         errorHandler: helper.optionalHandler
     });
 
-    helper.extraChecker = function(error, xhr, requestOptions) {
-        assert.equal(error.message, "Not Found");
-        assert.equal(xhr.statusText, "Not Found");
-        assert.equal(requestOptions.url, "odata.org");
+    helper.extraChecker = function(error) {
+        debugger;
+        var params = ["message", "xhr", "requestOptions", "errorDetails", "httpStatus"];
+        params.forEach((param) => {
+            assert.ok(param in error);
+        });
     };
 
     helper.run(function() {

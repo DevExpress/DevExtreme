@@ -89,6 +89,15 @@ var ODataStore = Store.inherit({
          * @type boolean
          */
         /**
+         * @name ODataContextOptions.errorHandler
+         * @type function
+         * @type_function_param1 e:Error
+         * @type_function_param1_field1 httpStatus:number
+         * @type_function_param1_field2 errorDetails:boolean
+         * @type_function_param1_field3 request:XMLHttpRequest
+         * @type_function_param1_field4 requestOptions:object
+         */
+        /**
          * @name ODataStoreOptions.onLoading
          * @action
          * @inheritdoc

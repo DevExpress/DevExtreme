@@ -208,7 +208,7 @@ var sendRequest = function(protocolVersion, request, options) {
                 deserializeDates: options.deserializeDates,
                 fieldTypes: options.fieldTypes
             },
-            tuple = interpretJsonFormat(obj, textStatus, transformOptions),
+            tuple = interpretJsonFormat(obj, textStatus, transformOptions, requestOptions),
             error = tuple.error,
             data = tuple.data,
             nextUrl = tuple.nextUrl,
@@ -216,7 +216,7 @@ var sendRequest = function(protocolVersion, request, options) {
 
         if(error) {
             if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
-                d.reject(error, obj, requestOptions);
+                d.reject(error);
             }
         } else if(options.countOnly) {
 
@@ -269,7 +269,7 @@ var formatDotNetError = function(errorObj) {
 };
 
 // TODO split: decouple HTTP errors from OData errors
-var errorFromResponse = function(obj, textStatus) {
+var errorFromResponse = function(obj, textStatus, requestOptions) {
     if(textStatus === "nocontent") {
         return null; // workaround for http://bugs.jquery.com/ticket/13292
     }
@@ -301,16 +301,16 @@ var errorFromResponse = function(obj, textStatus) {
         if(errorObj.code) {
             httpStatus = Number(errorObj.code);
         }
-        return extend(Error(message), { httpStatus: httpStatus, errorDetails: errorObj });
+        return extend(Error(message), { httpStatus: httpStatus, errorDetails: errorObj, xhr: obj, requestOptions: requestOptions });
     } else {
         if(httpStatus !== 200) {
-            return extend(Error(message), { httpStatus: httpStatus });
+            return extend(Error(message), { httpStatus: httpStatus, xhr: obj, requestOptions: requestOptions });
         }
     }
 };
 
-var interpretJsonFormat = function(obj, textStatus, transformOptions) {
-    var error = errorFromResponse(obj, textStatus),
+var interpretJsonFormat = function(obj, textStatus, transformOptions, requestOptions) {
+    var error = errorFromResponse(obj, textStatus, requestOptions),
         value;
 
     if(error) {

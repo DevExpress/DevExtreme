@@ -158,20 +158,18 @@ function handleError(error) {
 * @name Utils.errorHandler
 * @type function
 * @type_function_param1 e:Error
-* @type_function_param2 xhr:object
-* @type_function_param3 requestOptions:object
 * @module data/errors
 * @export errorHandler
 * @namespace DevExpress.data
 */
 var errorHandler = null;
-var _errorHandler = function(...args) {
+var _errorHandler = function(error) {
     ///#DEBUG
-    handleError(...args);
+    handleError(error);
     ///#ENDDEBUG
 
     if(handlers.errorHandler) {
-        handlers.errorHandler(...args);
+        handlers.errorHandler(error);
     }
 };
 

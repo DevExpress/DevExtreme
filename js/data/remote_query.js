@@ -21,14 +21,14 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
             _currentTask,
             _mergedSortArgs;
 
-        var rejectWithNotify = function(...args) {
+        var rejectWithNotify = function(error) {
             var handler = queryOptions.errorHandler;
             if(handler) {
-                handler(...args);
+                handler(error);
             }
 
-            errorsModule._errorHandler(...args);
-            d.reject(...args);
+            errorsModule._errorHandler(error);
+            d.reject(error);
         };
 
         function mergeSortTask(task) {
