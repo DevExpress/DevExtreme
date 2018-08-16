@@ -388,7 +388,7 @@ var SelectBox = DropDownList.inherit({
 
     _setSubmitValue: function() {
         var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
+            submitValue = this.option("valueExpr") === "this" ? this._displayValue(value) : value;
 
         this._$submitElement.val(submitValue);
     },
@@ -509,7 +509,7 @@ var SelectBox = DropDownList.inherit({
         var fieldTemplate = this._getTemplateByOption("fieldTemplate");
 
         if(!(fieldTemplate && this.option("fieldTemplate"))) {
-            this._renderDisplayText(this._displayGetter(item));
+            this._renderDisplayText(this._displayValue(item));
             return;
         }
 
@@ -583,7 +583,7 @@ var SelectBox = DropDownList.inherit({
             }
 
             var oldSelectedItem = this.option("selectedItem");
-            if((this._displayGetter(oldSelectedItem) || "").toString() === this._searchValue()) {
+            if((this._displayValue(oldSelectedItem) || "").toString() === this._searchValue()) {
                 return;
             }
 
@@ -691,7 +691,7 @@ var SelectBox = DropDownList.inherit({
     _isCustomItemSelected: function() {
         var selectedItem = this.option("selectedItem"),
             searchValue = this._searchValue(),
-            selectedItemText = this._displayGetter(selectedItem);
+            selectedItemText = this._displayValue(selectedItem);
 
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
@@ -746,7 +746,7 @@ var SelectBox = DropDownList.inherit({
         item = item || null;
         this.option("selectedItem", item);
         this._setValue(this._valueGetter(item));
-        this._renderDisplayText(this._displayGetter(item));
+        this._renderDisplayText(this._displayValue(item));
         if(item === null && this._wasSearch()) {
             this._filterDataSource(null);
         }
@@ -826,7 +826,7 @@ var SelectBox = DropDownList.inherit({
         }
 
         var inputElement = $input.get(0),
-            displayValue = this._displayGetter(item).toString();
+            displayValue = this._displayValue(item).toString();
 
         inputElement.value = displayValue;
         this._caret({ start: valueLength, end: displayValue.length });
