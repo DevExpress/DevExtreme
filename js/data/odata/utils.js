@@ -216,11 +216,7 @@ var sendRequest = function(protocolVersion, request, options) {
 
         if(error) {
             if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
-                if("statusText" in obj && requestOptions) {
-                    d.reject(error, obj, requestOptions);
-                } else {
-                    d.reject(error);
-                }
+                d.reject(error, obj, requestOptions);
             }
         } else if(options.countOnly) {
 
