@@ -2103,7 +2103,6 @@ declare module DevExpress.ui {
         /** Specifies the selection mode. */
         mode?: 'multiple' | 'none' | 'single';
     }
-    /** The base class for widgets. */
     export class GridBase extends Widget {
         constructor(element: Element, options?: GridBaseOptions)
         constructor(element: JQuery, options?: GridBaseOptions)
@@ -4503,7 +4502,6 @@ declare module DevExpress.ui {
         /** Specifies options of submenu showing and hiding. */
         showSubmenuMode?: { name?: 'onClick' | 'onHover', delay?: { show?: number, hide?: number } | number } | 'onClick' | 'onHover';
     }
-    /** The base class for widgets containing an item collection. */
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
         constructor(element: JQuery, options?: dxMenuBaseOptions)
@@ -5023,7 +5021,6 @@ declare module DevExpress.ui {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget items is selected. */
         selectedExpr?: string | Function;
     }
-    /** The base class for widgets containing an item collection. */
     export class HierarchicalCollectionWidget extends CollectionWidget {
         constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
@@ -5221,7 +5218,6 @@ declare module DevExpress.ui {
         /** Configures a tooltip. */
         tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
     }
-    /** A base class for track bar widgets. */
     export class dxSliderBase extends dxTrackBar {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
