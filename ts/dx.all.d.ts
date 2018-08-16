@@ -7623,29 +7623,29 @@ declare module DevExpress.viz {
         width?: number;
     }
     /** An object that defines a gauge indicator of the rectangleNeedle type. */
-    export var circularRectangleNeedle: CommonIndicator;
+    export type circularRectangleNeedle = CommonIndicator; 
     /** An object that defines a gauge indicator of the triangleNeedle type. */
-    export var circularTriangleNeedle: CommonIndicator;
+    export type circularTriangleNeedle = CommonIndicator; 
     /** An object that defines a gauge indicator of the twoColorNeedle type. */
-    export var circularTwoColorNeedle: CommonIndicator;
+    export type circularTwoColorNeedle = CommonIndicator; 
     /** An object that defines a gauge indicator of the rangeBar type. */
-    export var circularRangeBar: CommonIndicator;
+    export type circularRangeBar = CommonIndicator; 
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    export var circularTriangleMarker: CommonIndicator;
+    export type circularTriangleMarker = CommonIndicator; 
     /** An object that defines a gauge indicator of the textCloud type. */
-    export var circularTextCloud: CommonIndicator;
+    export type circularTextCloud = CommonIndicator; 
     /** An object defining a gauge indicator of the rectangle type. */
-    export var linearRectangle: CommonIndicator;
+    export type linearRectangle = CommonIndicator; 
     /** An object that defines a gauge indicator of the circle type. */
-    export var linearCircle: CommonIndicator;
+    export type linearCircle = CommonIndicator; 
     /** An object defining a gauge indicator of the rhombus type. */
-    export var linearRhombus: CommonIndicator;
+    export type linearRhombus = CommonIndicator; 
     /** An object that defines a gauge indicator of the rangeBar type. */
-    export var linearRangeBar: CommonIndicator;
+    export type linearRangeBar = CommonIndicator; 
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    export var linearTriangleMarker: CommonIndicator;
+    export type linearTriangleMarker = CommonIndicator; 
     /** An object that defines a gauge indicator of the textCloud type. */
-    export var linearTextCloud: CommonIndicator;
+    export type linearTextCloud = CommonIndicator; 
     export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
         /** Specifies animation options. */
         animation?: BaseGaugeAnimation;
