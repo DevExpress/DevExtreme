@@ -1776,7 +1776,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getHiddenInterval: function() {
         if(this._hiddenInterval === undefined) {
-            this._hiddenInterval = DAY_MS - this.getDayDurationInMs();
+            this._hiddenInterval = DAY_MS - this.getVisibleDayDuration();
         }
         return this._hiddenInterval;
     },
@@ -1791,7 +1791,7 @@ var SchedulerWorkSpace = Widget.inherit({
             result = (days - weekendsCount) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - days * this._getHiddenInterval() - weekendsCount * this.getDayDurationInMs();
+            result = fullInterval - days * this._getHiddenInterval() - weekendsCount * this.getVisibleDayDuration();
         }
 
         return result;
@@ -2236,7 +2236,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return 3600000 * this.option("hoursInterval");
     },
 
-    getDayDurationInMs: function() {
+    getVisibleDayDuration: function() {
         return this.option("hoursInterval") * this._getCellCountInDay() * HOUR_MS;
     },
 
