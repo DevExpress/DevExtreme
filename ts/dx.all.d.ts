@@ -627,11 +627,11 @@ declare module DevExpress {
         stop(): void;
     }
     export interface ComponentOptions<T = Component> {
-        /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
+        /** A function that is executed before the widget is disposed of. */
         onDisposing?: ((e: { component?: T }) => any);
-        /** A handler for the initialized event. Executed only once, after the widget is initialized. */
+        /** A function that is executed only once, after the widget is initialized. */
         onInitialized?: ((e: { component?: T, element?: DevExpress.core.dxElement }) => any);
-        /** A handler for the optionChanged event. Executed after an option of the widget is changed. */
+        /** A function that is executed after a widget option is changed. */
         onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
     }
     /** A base class for all components and widgets. */
@@ -668,7 +668,7 @@ declare module DevExpress {
     export interface globalConfig {
         /** A decimal separator. Applies only if you do not use the Globalize or Intl library. */
         decimalSeparator?: string;
-        /** The default currency. Accepts a 3-letter code specified by ISO 4217. */
+        /** The default currency. Accepts a 3-letter ISO 4217 code. */
         defaultCurrency?: string;
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
@@ -733,9 +733,9 @@ declare module DevExpress {
         elementAttr?: any;
         /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
-        /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
+        /** A function that is executed before the widget is disposed of. */
         onDisposing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the optionChanged event. Executed after an option of the widget is changed. */
+        /** A function that is executed after a widget option is changed. */
         onOptionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
         /** Switches the widget to a right-to-left representation. */
         rtlEnabled?: boolean;
@@ -1363,7 +1363,7 @@ declare module DevExpress.data {
         selector?: Function;
         /** Specifies whether to display the field's grand totals. Applies only if the field is in the data area. */
         showGrandTotals?: boolean;
-        /** Specifies whether to display the field's totals. Applies only if the field is in the data area. */
+        /** Specifies whether to display the field's totals. */
         showTotals?: boolean;
         /** Specifies whether to display the field's summary values. Applies only if the field is in the data area. Inherits the showTotals' value by default. */
         showValues?: boolean;
@@ -1380,7 +1380,7 @@ declare module DevExpress.data {
         /** Specifies a predefined post-processing function. Does not apply when the calculateSummaryValue option is set. */
         summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
         /** Specifies how to aggregate the field's data. Cannot be used with an XmlaStore. */
-        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
+        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
         /** Specifies whether the field is visible in the pivot grid and field chooser. */
         visible?: boolean;
         /** Specifies the field's width in pixels when the field is displayed in the pivot grid. */
@@ -1662,7 +1662,7 @@ declare module DevExpress.ui {
         itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies whether the widget can expand several items or only a single item at once. */
         multiple?: boolean;
-        /** A handler for the itemTitleClick event. */
+        /** A function that is executed when an accordion item's title is clicked or tapped. */
         onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
         /** The index number of the currently selected item. */
         selectedIndex?: number;
@@ -1688,7 +1688,7 @@ declare module DevExpress.ui {
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** The text displayed in the button that closes the action sheet. */
         cancelText?: string;
-        /** A handler for the cancelClick event. */
+        /** A function that is executed when the Cancel button is clicked or tapped. */
         onCancelClick?: ((e: { component?: dxActionSheet, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any) | string;
         /** Specifies whether or not to display the Cancel button in action sheet. */
         showCancelButton?: boolean;
@@ -1728,6 +1728,8 @@ declare module DevExpress.ui {
         maxItemCount?: number;
         /** The minimum number of characters that must be entered into the text box to begin a search. */
         minSearchLength?: number;
+        /** Specifies whether to show the drop-down button. */
+        showDropDownButton?: boolean;
         /** Specifies the current value displayed by the widget. */
         value?: string;
     }
@@ -1769,7 +1771,7 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** Specifies the icon to be displayed on the button. */
         icon?: string;
-        /** A handler for the click event. */
+        /** A function that is executed when the Button is clicked or tapped. */
         onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
         /** Specifies a custom template for the Button widget. */
         template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
@@ -1876,15 +1878,15 @@ declare module DevExpress.ui {
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** Holds an array of menu items. */
         items?: Array<dxContextMenuItemTemplate>;
-        /** A handler for the hidden event. */
+        /** A function that is executed after the ContextMenu is hidden. */
         onHidden?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the hiding event. */
+        /** A function that is executed before the ContextMenu is hidden. */
         onHiding?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
-        /** A handler for the positioning event. */
+        /** A function that is executed before the ContextMenu is positioned. */
         onPositioning?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, position?: positionConfig }) => any);
-        /** A handler for the showing event. */
+        /** A function that is executed before the ContextMenu is shown. */
         onShowing?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
-        /** A handler for the shown event. */
+        /** A function that is executed after the ContextMenu is shown. */
         onShown?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** An object defining widget positioning options. */
         position?: positionConfig;
@@ -2248,13 +2250,13 @@ declare module DevExpress.ui {
         keyExpr?: string | Array<string>;
         /** Allows you to build a master-detail interface in the grid. */
         masterDetail?: { enabled?: boolean, autoExpandAll?: boolean, template?: template | ((detailElement: DevExpress.core.dxElement, detailInfo: { key?: any, data?: any }) => any) };
-        /** A function that is executed when a user clicks a cell. */
+        /** A function that is executed when a cell is clicked or tapped. Executed before onRowClick. */
         onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a cell. */
         onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
-        /** A function that is executed after the widget creates a cell. */
+        /** A function that is executed after a cell is created. */
         onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => any);
-        /** A function that is executed before a context menu is rendered. */
+        /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A function that is executed before a cell or row switches to the editing state. */
         onEditingStart?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
@@ -2268,9 +2270,9 @@ declare module DevExpress.ui {
         onExporting?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** A function that is executed before a file with exported data is saved to the user's local storage. */
         onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
-        /** A function that is executed when a user clicks a row. */
+        /** A function that is executed when a row is clicked or tapped. */
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
-        /** A function that is executed after the widget creates a row. */
+        /** A function that is executed after a row is created. */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** Notifies the DataGrid of the server's data processing operations. */
         remoteOperations?: boolean | { sorting?: boolean, filtering?: boolean, paging?: boolean, grouping?: boolean, groupPaging?: boolean, summary?: boolean } | 'auto';
@@ -2285,7 +2287,7 @@ declare module DevExpress.ui {
         /** Allows you to sort groups according to the values of group summary items. */
         sortByGroupSummaryInfo?: Array<{ summaryItem?: string | number, groupColumn?: string, sortOrder?: 'asc' | 'desc' }>;
         /** Specifies the options of the grid summary. */
-        summary?: { groupItems?: Array<{ name?: string, column?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum', valueFormat?: format, precision?: number, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), showInGroupFooter?: boolean, alignByColumn?: boolean, showInColumn?: string, skipEmptyValues?: boolean }>, totalItems?: Array<{ name?: string, column?: string, showInColumn?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum', valueFormat?: format, precision?: number, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), alignment?: 'center' | 'left' | 'right', cssClass?: string, skipEmptyValues?: boolean }>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any }) => any), skipEmptyValues?: boolean, texts?: { sum?: string, sumOtherColumn?: string, min?: string, minOtherColumn?: string, max?: string, maxOtherColumn?: string, avg?: string, avgOtherColumn?: string, count?: string } };
+        summary?: { groupItems?: Array<{ name?: string, column?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format, precision?: number, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), showInGroupFooter?: boolean, alignByColumn?: boolean, showInColumn?: string, skipEmptyValues?: boolean }>, totalItems?: Array<{ name?: string, column?: string, showInColumn?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format, precision?: number, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), alignment?: 'center' | 'left' | 'right', cssClass?: string, skipEmptyValues?: boolean }>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any }) => any), skipEmptyValues?: boolean, texts?: { sum?: string, sumOtherColumn?: string, min?: string, minOtherColumn?: string, max?: string, maxOtherColumn?: string, avg?: string, avgOtherColumn?: string, count?: string } };
     }
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
@@ -2320,7 +2322,7 @@ declare module DevExpress.ui {
         collapseAll(groupIndex?: number): void;
         /** Collapses a group or a master row with a specific key. */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
-        /** Expands master rows or groups of a specific level. */
+        /** Expands master rows or groups of a specific level. Does not apply if data is remote. */
         expandAll(groupIndex?: number): void;
         /** Expands a group or a master row with a specific key. */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
@@ -2403,9 +2405,9 @@ declare module DevExpress.ui {
     export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
         /** Specifies the animation to be used to show the rendered content. */
         animation?: animationConfig;
-        /** Specifies a callback function that is called when the widget's content has finished rendering but is not yet shown. */
+        /** A function that is executed when the content is rendered but not yet displayed. */
         onRendered?: ((e: { component?: dxDeferRendering, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** Specifies a callback function that is called when widget content is shown and animation has completed. */
+        /** A function that is executed when the content is displayed and animation is completed. */
         onShown?: ((e: { component?: dxDeferRendering, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies when the widget content is rendered. */
         renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
@@ -2453,9 +2455,9 @@ declare module DevExpress.ui {
         items?: Array<any>;
         /** Specifies a custom template for items. */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** A handler for the buttonClick event. */
+        /** A function that is executed when the button that opens the drop-down menu is clicked or tapped. */
         onButtonClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
-        /** A handler for the itemClick event. */
+        /** A function that is executed when a menu item is clicked or tapped. */
         onItemClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
         /** Specifies whether or not the drop-down menu is displayed. */
         opened?: boolean;
@@ -2488,17 +2490,17 @@ declare module DevExpress.ui {
         multiple?: boolean;
         /** Specifies the value passed to the name attribute of the underlying input element. */
         name?: string;
-        /** A handler for the uploaded event. */
+        /** A function that is executed when a file segment is uploaded. */
         onProgress?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
-        /** A handler for the uploadAborted event. */
+        /** A function that is executed when the file upload is aborted. */
         onUploadAborted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: any, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
-        /** A handler for the uploaded event. */
+        /** A function that is executed when a file is successfully uploaded. */
         onUploaded?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
-        /** A handler for the uploadError event. */
+        /** A function that is executed when an error occurs during the file upload. */
         onUploadError?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
-        /** A handler for the uploadStarted event. */
+        /** A function that is executed when the file upload is started. */
         onUploadStarted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
-        /** A handler for the valueChanged event. */
+        /** A function that is executed when one or several files are added to or removed from the selection. */
         onValueChanged?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, value?: Array<File>, previousValue?: Array<File>, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Gets the current progress in percentages. */
         progress?: number;
@@ -2541,11 +2543,11 @@ declare module DevExpress.ui {
         filterOperationDescriptions?: { between?: string, equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, isBlank?: string, isNotBlank?: string };
         /** Specifies group operation descriptions. */
         groupOperationDescriptions?: { and?: string, or?: string, notAnd?: string, notOr?: string };
-        /** A handler for the editorPrepared event. Executed after an editor is created. */
+        /** A function that is executed after an editor is created. */
         onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
-        /** A handler for the editorPreparing event. Executed before an editor is created. */
+        /** A function that is executed before an editor is created. */
         onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: DevExpress.core.dxElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
-        /** A handler for the valueChanged event. Executed after the widget's value is changed. */
+        /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any }) => any);
         /** Allows you to specify a filter. */
         value?: string | Array<any> | Function;
@@ -2576,9 +2578,9 @@ declare module DevExpress.ui {
         labelLocation?: 'left' | 'right' | 'top';
         /** The minimum column width used for calculating column count in the form layout. */
         minColWidth?: number;
-        /** A handler for the editorEnterKey event. */
+        /** A function that is executed when the Enter key has been pressed while an editor is focused. */
         onEditorEnterKey?: ((e: { component?: dxForm, element?: DevExpress.core.dxElement, model?: any, dataField?: string }) => any);
-        /** A handler for the fieldDataChanged event. */
+        /** A function that is executed when the value of a formData object field is changed. */
         onFieldDataChanged?: ((e: { component?: dxForm, element?: DevExpress.core.dxElement, model?: any, dataField?: string, value?: any }) => any);
         /** The text displayed for optional fields. */
         optionalMark?: string;
@@ -2701,29 +2703,29 @@ declare module DevExpress.ui {
         menuMode?: 'context' | 'slide';
         /** The text displayed on the button used to load the next page from the data source. */
         nextButtonText?: string;
-        /** A handler for the groupRendered event. */
+        /** A function that is executed when a group element is rendered. */
         onGroupRendered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, groupData?: any, groupElement?: DevExpress.core.dxElement, groupIndex?: number }) => any);
-        /** A handler for the itemClick event. */
+        /** A function that is executed when a list item is clicked or tapped. Applies only if the selectionMode is "none". */
         onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any }) => any) | string;
-        /** A handler for the itemContextMenu event. */
+        /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any);
-        /** A handler for the itemDeleted event. */
+        /** A function that is executed after a list item is deleted from the data source. */
         onItemDeleted?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any }) => any);
-        /** A handler for the itemDeleting event. Executed before an item is deleted from the data source. */
+        /** A function that is executed before a collection item is deleted from the data source. */
         onItemDeleting?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
-        /** A handler for the itemHold event. */
+        /** A function that is executed when a collection item has been held for a specified period. */
         onItemHold?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any);
-        /** A handler for the itemReordered event. */
+        /** A function that is executed after a list item is moved to another position. */
         onItemReordered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
-        /** A handler for the itemSwipe event. */
+        /** A function that is executed when a list item is swiped. */
         onItemSwipe?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, direction?: string }) => any);
-        /** A handler for the pageLoading event. */
+        /** A function that is executed before the next page is loaded. */
         onPageLoading?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the pullRefresh event. */
+        /** A function that is executed when the "pull to refresh" gesture is performed. Supported in mobile themes only. */
         onPullRefresh?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the scroll event. */
+        /** A function that is executed on each scroll gesture. */
         onScroll?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
-        /** A handler for the selectAllValueChanged event. */
+        /** A function that is executed when the "Select All" check box value is changed. Applies only if the selectionMode is "all". */
         onSelectAllValueChanged?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /** Specifies the text shown in the pullDown panel, which is displayed when the list is scrolled to the bottom. */
         pageLoadingText?: string;
@@ -2883,15 +2885,15 @@ declare module DevExpress.ui {
         groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** The text displayed on the button used to load the next page from the data source. */
         nextButtonText?: string;
-        /** A handler for the pageLoading event. */
+        /** A function that is executed before the next page is loaded. */
         onPageLoading?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the pullRefresh event. */
+        /** A function that is executed when the "pull to refresh" gesture is performed on the drop-down item list. Supported in mobile themes only. */
         onPullRefresh?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the scroll event. */
+        /** A function that is executed on each scroll gesture performed on the drop-down item list. */
         onScroll?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
-        /** A handler for the titleRendered event. */
+        /** A function that is executed when the drop-down list's title is rendered. */
         onTitleRendered?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, titleElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the valueChanged event. */
+        /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Specifies the text shown in the pullDown panel, which is displayed when the widget is scrolled to the bottom. */
         pageLoadingText?: string;
@@ -2956,17 +2958,17 @@ declare module DevExpress.ui {
         markerIconSrc?: string;
         /** An array of markers displayed on a map. */
         markers?: Array<{ location?: any | string | Array<number>, tooltip?: string | { text?: string, isShown?: boolean }, onClick?: Function, iconSrc?: string }>;
-        /** A handler for the click event. */
+        /** A function that is executed when any location on the map is clicked or tapped. */
         onClick?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, location?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
-        /** A handler for the markerAdded event. */
+        /** A function that is executed when a marker is created on the map. */
         onMarkerAdded?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any, originalMarker?: any }) => any);
-        /** A handler for the markerRemoved event. */
+        /** A function that is executed when a marker is removed from the map. */
         onMarkerRemoved?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any }) => any);
-        /** A handler for the ready event. */
+        /** A function that is executed when the map is ready. */
         onReady?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, originalMap?: any }) => any);
-        /** A handler for the routeAdded event. */
+        /** A function that is executed when a route is created on the map. */
         onRouteAdded?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any, originalRoute?: any }) => any);
-        /** A handler for the routeRemoved event. */
+        /** A function that is executed when a route is removed from the map. */
         onRouteRemoved?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any }) => any);
         /** The name of the current map data provider. */
         provider?: 'bing' | 'google' | 'googleStatic';
@@ -3005,13 +3007,13 @@ declare module DevExpress.ui {
         hideSubmenuOnMouseLeave?: boolean;
         /** Holds an array of menu items. */
         items?: Array<dxMenuItemTemplate>;
-        /** A handler for the submenuHidden event. */
+        /** A function that is executed after a submenu is hidden. */
         onSubmenuHidden?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
-        /** A handler for the submenuHiding event. */
+        /** A function that is executed before a submenu is hidden. */
         onSubmenuHiding?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement, cancel?: boolean }) => any);
-        /** A handler for the submenuShowing event. */
+        /** A function that is executed before a submenu is displayed. */
         onSubmenuShowing?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
-        /** A handler for the submenuShown event. */
+        /** A function that is executed after a submenu is displayed. */
         onSubmenuShown?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
         /** Specifies whether the menu has horizontal or vertical orientation. */
         orientation?: 'horizontal' | 'vertical';
@@ -3109,13 +3111,13 @@ declare module DevExpress.ui {
         minHeight?: number | string | (() => number | string);
         /** Specifies the minimum width the widget can reach while resizing. */
         minWidth?: number | string | (() => number | string);
-        /** A handler for the hidden event. */
+        /** A function that is executed after the widget is hidden. */
         onHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the hiding event. */
+        /** A function that is executed before the widget is hidden. */
         onHiding?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
-        /** A handler for the showing event. */
+        /** A function that is executed before the widget is displayed. */
         onShowing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the shown event. */
+        /** A function that is executed after the widget is displayed. */
         onShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Positions the widget. */
         position?: any;
@@ -3217,17 +3219,17 @@ declare module DevExpress.ui {
         hideEmptySummaryCells?: boolean;
         /** Specifies options configuring the load panel. */
         loadPanel?: { enabled?: boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
-        /** A handler for the cellClick event. */
+        /** A function that is executed when a pivot grid cell is clicked or tapped. */
         onCellClick?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any);
-        /** A handler for the cellPrepared event. */
+        /** A function that is executed after a pivot grid cell is created. */
         onCellPrepared?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
-        /** A handler for the contextMenuPreparing event. */
+        /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, field?: DevExpress.data.PivotGridDataSourceField }) => any);
-        /** A handler for the exported event. */
+        /** A function that is executed after data is exported. */
         onExported?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the exporting event. */
+        /** A function that is executed before data is exported. */
         onExporting?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
-        /** A handler for the fileSaving event. */
+        /** A function that is executed before a file with exported data is saved to the user's local storage. */
         onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** Specifies the layout of items in the row header. */
         rowHeaderLayout?: 'standard' | 'tree';
@@ -3280,7 +3282,7 @@ declare module DevExpress.ui {
         height?: number | string | (() => number | string);
         /** Specifies the field chooser layout. */
         layout?: 0 | 1 | 2;
-        /** A handler for the contextMenuPreparing event. */
+        /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Specifies a delay in milliseconds between when a user finishes typing in the field chooser's search panel, and when the search is executed. */
         searchTimeout?: number;
@@ -3353,13 +3355,13 @@ declare module DevExpress.ui {
         fullScreen?: boolean;
         /** Specifies the widget's height in pixels. */
         height?: number | string | (() => number | string);
-        /** A handler for the resize event. */
+        /** A function that is executed each time the widget is resized by one pixel. */
         onResize?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the resizeEnd event. */
+        /** A function that is executed when resizing ends. */
         onResizeEnd?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the resizeStart event. */
+        /** A function that is executed when resizing starts. */
         onResizeStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the titleRendered event. */
+        /** A function that is executed when the widget's title is rendered. */
         onTitleRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, titleElement?: DevExpress.core.dxElement }) => any);
         /** Positions the widget. */
         position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
@@ -3412,7 +3414,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxPopupOptions)
     }
     export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
-        /** A handler for the complete event. */
+        /** A function that is executed when the value reaches the maximum. */
         onComplete?: ((e: { component?: dxProgressBar, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Specifies whether or not the widget displays a progress status. */
         showStatus?: boolean;
@@ -3452,7 +3454,7 @@ declare module DevExpress.ui {
         end?: number;
         /** The value to be assigned to the name attribute of the underlying `` element. */
         endName?: string;
-        /** A handler for the valueChanged event. */
+        /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: dxRangeSlider, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** The left edge of the interval currently selected using the range slider. */
         start?: number;
@@ -3470,7 +3472,7 @@ declare module DevExpress.ui {
     }
     export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
         /** Specifies which borders of the widget element are used as a handle. */
-        handles?: 'top' | 'bottom' | 'right' | 'left' | 'all';
+        handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
         /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
         /** Specifies the upper height boundary for resizing. */
@@ -3481,11 +3483,11 @@ declare module DevExpress.ui {
         minHeight?: number;
         /** Specifies the lower width boundary for resizing. */
         minWidth?: number;
-        /** A handler for the resize event. */
+        /** A function that is executed each time the widget is resized by one pixel. */
         onResize?: ((e: { component?: dxResizable, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
-        /** A handler for the resizeEnd event. */
+        /** A function that is executed when resizing ends. */
         onResizeEnd?: ((e: { component?: dxResizable, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
-        /** A handler for the resizeStart event. */
+        /** A function that is executed when resizing starts. */
         onResizeStart?: ((e: { component?: dxResizable, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, width?: number, height?: number }) => any);
         /** Specifies the widget's width. */
         width?: number | string | (() => number | string);
@@ -3570,31 +3572,31 @@ declare module DevExpress.ui {
         min?: Date | number | string;
         /** The text or HTML markup displayed by the widget if the item collection is empty. Available for the Agenda view only. */
         noDataText?: string;
-        /** A handler for the appointmentAdded event. */
+        /** A function that is executed after an appointment is added to the data source. */
         onAppointmentAdded?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
-        /** A handler for the AppointmentAdding event. */
+        /** A function that is executed before an appointment is added to the data source. */
         onAppointmentAdding?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** A handler for the appointmentClick event. */
+        /** A function that is executed when an appointment is clicked or tapped. */
         onAppointmentClick?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any) | string;
-        /** A function that is executed when a user attempts to open the browser's context menu for an appointment. Allows you to replace this context menu with a custom one. */
+        /** A function that is executed when a user attempts to open the browser's context menu for an appointment. Allows you to replace this context menu with a custom context menu. */
         onAppointmentContextMenu?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
-        /** A handler for the appointmentDblClick event. */
+        /** A function that is executed when an appointment is double-clicked or double-tapped. */
         onAppointmentDblClick?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any) | string;
-        /** A handler for the appointmentDeleted event. */
+        /** A function that is executed after an appointment is deleted from the data source. */
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
-        /** A handler for the AppointmentDeleting event. */
+        /** A function that is executed before an appointment is deleted from the data source. */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** A handler for the appointmentFormCreated event. */
+        /** A function that is executed when an appointment's edit form is created. */
         onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
-        /** A handler for the appointmentRendered event. */
+        /** A function that is executed when an appointment is rendered. */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the appointmentUpdated event. */
+        /** A function that is executed after an appointment is updated in the data source. */
         onAppointmentUpdated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
-        /** A handler for the AppointmentUpdating event. */
+        /** A function that is executed before an appointment is updated in the data source. */
         onAppointmentUpdating?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** A handler for the cellClick event. */
+        /** A function that is executed when a view cell is clicked. */
         onCellClick?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, cellData?: any, cellElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any) | string;
-        /** A function that is executed when a user attempts to open the browser's context menu for a cell. Allows you to replace this context menu with a custom one. */
+        /** A function that is executed when a user attempts to open the browser's context menu for a cell. Allows you to replace this context menu with a custom context menu. */
         onCellContextMenu?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, cellData?: any, cellElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** Specifies the edit mode for recurring appointments. */
         recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
@@ -3663,9 +3665,9 @@ declare module DevExpress.ui {
         updateAppointment(target: any, appointment: any): void;
     }
     export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
-        /** A handler for the pullDown event. */
+        /** A function that is executed when the "pull to refresh" gesture is performed. Supported in mobile themes only. */
         onPullDown?: ((e: { component?: dxScrollView, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the reachBottom event. */
+        /** A function that is executed when the content is scrolled down to the bottom. */
         onReachBottom?: ((e: { component?: dxScrollView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the text shown in the pullDown panel when pulling the content down lowers the refresh threshold. */
         pulledDownText?: string;
@@ -3690,10 +3692,12 @@ declare module DevExpress.ui {
         acceptCustomValue?: boolean;
         /** Specifies a custom template for the text field. Must contain the TextBox widget. */
         fieldTemplate?: template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** A handler for the customItemCreating event. Executed when a user adds a custom item. Requires acceptCustomValue to be set to true. */
+        /** A function that is executed when a user adds a custom item. Requires acceptCustomValue to be set to true. */
         onCustomItemCreating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
         /** The text that is provided as a hint in the select box editor. */
         placeholder?: string;
+        /** Specifies whether to show the drop-down button. */
+        showDropDownButton?: boolean;
         /** Specifies whether or not to display selection controls. */
         showSelectionControls?: boolean;
         /** Specifies DOM event names that update a widget's value. */
@@ -3728,9 +3732,9 @@ declare module DevExpress.ui {
         menuPosition?: 'inverted' | 'normal';
         /** Specifies whether or not the slide-out menu is displayed. */
         menuVisible?: boolean;
-        /** A handler for the menuGroupRendered event. */
+        /** A function that is executed when a group menu item is rendered. */
         onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the menuItemRendered event. */
+        /** A function that is executed when a regular menu item is rendered. */
         onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** The index number of the currently selected item. */
         selectedIndex?: number;
@@ -3838,11 +3842,11 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** Specifies a custom template for item titles. */
         itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** A handler for the titleClick event. */
+        /** A function that is executed when a tab is clicked or tapped. */
         onTitleClick?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
-        /** A handler for the titleHold event. */
+        /** A function that is executed when a tab has been held for a specified period. */
         onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the titleRendered event. */
+        /** A function that is executed after a tab is rendered. */
         onTitleRendered?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
         /** A Boolean value specifying if tabs in the title are scrolled by content. */
         scrollByContent?: boolean;
@@ -3878,16 +3882,18 @@ declare module DevExpress.ui {
         maxDisplayedTags?: number;
         /** A Boolean value specifying whether or not the widget is multiline. */
         multiline?: boolean;
-        /** A handler for the multiTagPreparing event. Executed before the multi-tag is rendered. */
+        /** A function that is executed before the multi-tag is rendered. */
         onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, multiTagElement?: DevExpress.core.dxElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
-        /** A handler for the selectAllValueChanged event. */
+        /** A function that is executed when the "Select All" check box value is changed. Applies only if showSelectionControls is true. */
         onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
-        /** A handler for the selectionChanged event. */
+        /** A function that is executed when a list item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
         /** Specifies the mode in which all items are selected. */
         selectAllMode?: 'allPages' | 'page';
         /** Gets the currently selected items. */
         selectedItems?: Array<string | number | any>;
+        /** Specifies whether to show the drop-down button. */
+        showDropDownButton?: boolean;
         /** Specifies whether the multi-tag is shown without ordinary tags. */
         showMultiTagOnly?: boolean;
         /** Specifies a custom template for tags. */
@@ -4069,13 +4075,13 @@ declare module DevExpress.ui {
         itemsExpr?: string | Function;
         /** Specifies which data field provides keys for nodes. */
         keyExpr?: string | Function;
-        /** A function that is executed after a user clicks a cell. */
+        /** A function that is executed when a cell is clicked or tapped. Executed before onRowClick. */
         onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a cell. */
         onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
-        /** A function that is executed after the widget creates a cell. */
+        /** A function that is executed after a grid cell is created. */
         onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => any);
-        /** A function that is executed before a context menu is rendered. */
+        /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A function that is executed before a cell or row switches to the editing state. */
         onEditingStart?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
@@ -4085,9 +4091,9 @@ declare module DevExpress.ui {
         onEditorPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
         /** A function that is executed after the loaded nodes are initialized. */
         onNodesInitialized?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
-        /** A function that is executed when a user clicks a row. */
+        /** A function that is executed when a grid row is clicked or tapped. */
         onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
-        /** A function that is executed after the widget creates a row. */
+        /** A function that is executed after a row is created. */
         onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** Configures paging. */
         paging?: dxTreeListPaging;
@@ -4191,23 +4197,23 @@ declare module DevExpress.ui {
         hasItemsExpr?: string | Function;
         /** An array of items displayed by the widget. */
         items?: Array<dxTreeViewItemTemplate>;
-        /** A handler for the itemClick event. */
+        /** A function that is executed when a collection item is clicked or tapped. */
         onItemClick?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
-        /** A handler for the itemCollapsed event. */
+        /** A function that is executed when a tree view item is collapsed. */
         onItemCollapsed?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
-        /** A handler for the itemContextMenu event. */
+        /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
-        /** A handler for the itemExpanded event. */
+        /** A function that is executed when a tree view item is expanded. */
         onItemExpanded?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
-        /** A handler for the itemHold event. */
+        /** A function that is executed when a collection item has been held for a specified period. */
         onItemHold?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
-        /** A handler for the itemRendered event. */
+        /** A function that is executed after a collection item is rendered. */
         onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
-        /** A handler for the itemSelectionChanged event. */
+        /** A function that is executed when a tree view item is selected or the selection is canceled. */
         onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
-        /** A function that is executed after the "Select All" check box's state changes. Applies only if showCheckBoxesMode is "selectAll" and selectionMode is "multiple". */
+        /** A function that is executed when the "Select All" check box value is changed. Applies only if showCheckBoxesMode is "selectAll" and selectionMode is "multiple". */
         onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
-        /** A handler for the selectionChanged event. Executed after selecting an item or clearing its selection. */
+        /** A function that is executed when a tree view item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
         parentIdExpr?: string | Function;
@@ -4232,12 +4238,16 @@ declare module DevExpress.ui {
     export class dxTreeView extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxTreeViewOptions)
         constructor(element: JQuery, options?: dxTreeViewOptions)
+        /** Collapses all items. */
+        collapseAll(): void;
         /** Collapses an item with a specific key. */
         collapseItem(itemData: any): void;
         /** Collapses an item found using its DOM node. */
         collapseItem(itemElement: Element): void;
         /** Collapses an item with a specific key. */
         collapseItem(key: any): void;
+        /** Expands all items. If you load items on demand, this method expands only the loaded items. */
+        expandAll(): void;
         /** Expands an item found using its data object. */
         expandItem(itemData: any): void;
         /** Expands an item found using its DOM node. */
@@ -4392,7 +4402,7 @@ declare module DevExpress.ui {
         adapter?: { getValue?: Function, validationRequestsCallbacks?: Array<Function> | JQueryCallback, applyValidationResults?: Function, reset?: Function, focus?: Function, bypass?: Function };
         /** Specifies the editor name to be used in the validation default messages. */
         name?: string;
-        /** A handler for the validated event. */
+        /** A function that is executed after a value is validated. */
         onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule }) => any);
         /** Specifies the validation group the editor will be related to. */
         validationGroup?: string;
@@ -4432,15 +4442,15 @@ declare module DevExpress.ui {
         keyExpr?: string | Function;
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
-        /** A handler for the itemClick event. */
+        /** A function that is executed when a collection item is clicked or tapped. */
         onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
-        /** A handler for the itemContextMenu event. */
+        /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the itemHold event. */
+        /** A function that is executed when a collection item has been held for a specified period. */
         onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
-        /** A handler for the itemRendered event. */
+        /** A function that is executed after a collection item is rendered. */
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
-        /** A handler for the selectionChanged event. Raised after an item is selected or unselected. */
+        /** A function that is executed when a collection item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** The index of the currently selected widget item. */
         selectedIndex?: number;
@@ -4552,12 +4562,14 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** Specifies a custom template for the drop-down button. */
         dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** A handler for the closed event. */
+        /** A function that is executed once the drop-down editor is closed. */
         onClosed?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the opened event. */
+        /** A function that is executed once the drop-down editor is opened. */
         onOpened?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies whether or not the drop-down editor is displayed. */
         opened?: boolean;
+        /** Specifies whether to show the drop-down button. */
+        showDropDownButton?: boolean;
         /** Specifies the currently selected value. */
         value?: any;
     }
@@ -4587,11 +4599,11 @@ declare module DevExpress.ui {
         minSearchLength?: number;
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
-        /** A handler for the itemClick event. */
+        /** A function that is executed when a list item is clicked or tapped. */
         onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any }) => any);
-        /** A handler for the selectionChanged event. */
+        /** A function that is executed when a list item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
-        /** A handler for the valueChanged event. */
+        /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Specifies whether to allow searching. */
         searchEnabled?: boolean;
@@ -4620,7 +4632,7 @@ declare module DevExpress.ui {
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
         /** Specifies whether the editor's value is valid. */
         isValid?: boolean;
-        /** A handler for the valueChanged event. */
+        /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** A Boolean value specifying whether or not the widget is read-only. */
         readOnly?: boolean;
@@ -4828,11 +4840,13 @@ declare module DevExpress.ui {
         colSpan?: number;
         /** Specifies a CSS class to be applied to the item. */
         cssClass?: string;
+        /** Specifies the button's horizontal alignment. */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /** Specifies the item's type. Set it to "button" to create a button item. */
         itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
         /** Specifies the item's identifier. */
         name?: string;
+        /** Specifies the button's vertical alignment. */
         verticalAlignment?: 'bottom' | 'center' | 'top';
         /** Specifies whether the item is visible. */
         visible?: boolean;
@@ -5138,9 +5152,9 @@ declare module DevExpress.ui {
         direction?: 'both' | 'horizontal' | 'vertical';
         /** A Boolean value specifying whether or not the widget can respond to user interaction. */
         disabled?: boolean;
-        /** A handler for the scroll event. */
+        /** A function that is executed on each scroll gesture. */
         onScroll?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
-        /** A handler for the update event. */
+        /** A function that is executed each time the widget is updated. */
         onUpdated?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
         /** A Boolean value specifying whether or not an end-user can scroll the widget content swiping it up or down. Applies only if useNative is false */
         scrollByContent?: boolean;
@@ -5225,27 +5239,27 @@ declare module DevExpress.ui {
         maskRules?: any;
         /** The value to be assigned to the `name` attribute of the underlying HTML element. */
         name?: string;
-        /** A handler for the change event. */
+        /** A function that is executed when the widget loses focus after the content has been changed. */
         onChange?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the copy event. */
+        /** A function that is executed when the widget's input has been copied. */
         onCopy?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the cut event. */
+        /** A function that is executed when the widget's input has been cut. */
         onCut?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the enterKey event. */
+        /** A function that is executed when the Enter key has been pressed while the widget is focused. */
         onEnterKey?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the focusIn event. */
+        /** A function that is executed when the widget gets focus. */
         onFocusIn?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the focusOut event. */
+        /** A function that is executed when the widget loses focus. */
         onFocusOut?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the input event. */
+        /** A function that is executed each time the widget's input is changed while the widget is focused. */
         onInput?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the keyDown event. */
+        /** A function that is executed when a user is pressing a key on the keyboard. */
         onKeyDown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the keyPress event. */
+        /** A function that is executed when a user presses a key on the keyboard. */
         onKeyPress?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the keyUp event. */
+        /** A function that is executed when a user releases a key on the keyboard. */
         onKeyUp?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** A handler for the paste event. */
+        /** A function that is executed when the widget's input has been pasted. */
         onPaste?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** The text displayed by the widget when the widget value is empty. */
         placeholder?: string;
@@ -5364,7 +5378,7 @@ declare module DevExpress.ui {
         hint?: string;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
+        /** A function that is executed when the widget's content is ready and each time the content is changed. */
         onContentReady?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the number of the element when the Tab key is used for navigating. */
         tabIndex?: number;
@@ -5392,8 +5406,8 @@ declare module DevExpress.ui {
         static alert(message: string, title: string): Promise<void> & JQueryPromise<void>;
         /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
         static confirm(message: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
-        /** Creates a custom dialog. */
-        static custom(options: { title?: string, message?: string, buttons?: Array<any>, showTitle?: boolean }): any;
+        /** Creates a dialog with custom buttons. */
+        static custom(options: { title?: string, message?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean }): any;
     }
     /** An object that serves as a namespace for the methods that work with DevExtreme CSS Themes. */
     export class themes {
@@ -5415,13 +5429,13 @@ declare module DevExpress.viz {
         margin?: BaseWidgetMargin;
         /** A function that is executed when the widget's rendering has finished. */
         onDrawn?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the exported event. Executed after data from the widget is exported. */
+        /** A function that is executed after the widget is exported. */
         onExported?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the exporting event. Executed before data from the widget is exported. */
+        /** A function that is executed before the widget is exported. */
         onExporting?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
-        /** A handler for the fileSaving event. Executed before a file with exported data is saved on the user's local storage. */
+        /** A function that is executed before a file with exported widget is saved to the user's local storage. */
         onFileSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
-        /** A handler for the incidentOccurred event. Executed when an error or warning appears in the widget. */
+        /** A function that is executed when an error or warning occurs. */
         onIncidentOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** Notifies the widget that it is embedded into an HTML page that uses a tag modifying the path. */
         pathModified?: boolean;
@@ -5446,7 +5460,7 @@ declare module DevExpress.viz {
         enabled?: boolean;
         /** Specifies a default name for the file to which the widget will be exported. */
         fileName?: string;
-        /** Specifies a set of formats available for exporting into. */
+        /** Specifies a set of export formats. */
         formats?: Array<'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'>;
         /** Adds an empty space around the exported widget; measured in pixels. */
         margin?: number;
@@ -5557,26 +5571,7 @@ declare module DevExpress.viz {
         startValue?: number | Date | string;
     }
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
-    export interface VizTimeInterval {
-        /** Specifies the time interval measured in days. Available only for an axis/scale displaying date-time values. */
-        days?: number;
-        /** Specifies the time interval measured in hours. Available only for an axis/scale displaying date-time values. */
-        hours?: number;
-        /** Specifies the time interval measured in milliseconds. Available only for an axis/scale displaying date-time values. */
-        milliseconds?: number;
-        /** Specifies the time interval measured in minutes. Available only for an axis/scale displaying date-time values. */
-        minutes?: number;
-        /** Specifies the time interval measured in months. Available only for an axis/scale displaying date-time values. */
-        months?: number;
-        /** Specifies the time interval measured in quarters. Available only for an axis/scale displaying date-time values. */
-        quarters?: number;
-        /** Specifies the time interval measured in seconds. Available only for an axis/scale displaying date-time values. */
-        seconds?: number;
-        /** Specifies the time interval measured in weeks. Available only for an axis/scale displaying date-time values. */
-        weeks?: number;
-        /** Specifies the time interval measured in years. Available only for an axis/scale displaying date-time values. */
-        years?: number;
-    }
+    export type VizTimeInterval = number | { years?: number, quarters?: number, months?: number, weeks?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year'; 
     /** The Chart is a widget that visualizes data from a local or remote storage using a great variety of series types along with different interactive elements, such as tooltips, crosshair pointer, legend, etc. */
     export class dxChart extends BaseChart {
         constructor(element: Element, options?: DevExpress.viz.charts.dxChartOptions)
@@ -7333,22 +7328,31 @@ declare module DevExpress.viz {
     }
 }
 declare module DevExpress.events {
-    /** Attaches an event handler to the specified elements. */
+    /** Attaches an event handler to the specified elements' descendants. Allows you to pass custom data to the handler. */
     export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+    /** Attaches an event handler to the specified elements' descendants. */
     export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** Attaches an event handler to the specified elements. Allows you to pass custom data to the handler. */
     export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
+    /** Attaches an event handler to the specified elements. */
     export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
-    /** Attaches an event handler to be executed only once to the specified elements. */
+    /** Attaches an event handler that is executed only once to the specified elements' descendants. Allows you to pass custom data to the handler. */
     export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+    /** Attaches an event handler that is executed only once to the specified elements' descendants. */
     export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** Attaches an event handler that is executed only once to the specified elements. Allows you to pass custom data to the handler. */
     export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
+    /** Attaches an event handler that is executed only once to the specified elements. */
     export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
-    /** Detaches an event handler from the specified elements. */
+    /** Detaches the specified event handler attached using the on(element, eventName, selector, data, handler) or on(element, eventName, selector, handler) method. */
     export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** Detaches all event handlers of the specified type attached using the on(element, eventName, selector, data, handler) or on(element, eventName, selector, handler) method. */
     export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
+    /** Detaches an event handler from the specified elements. */
     export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
-    /** Executes all handlers of a given event type attached to the specified elements. */
+    /** Triggers an event for the specified elements. Allows you to pass custom parameters to event handlers. */
     export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
+    /** Triggers an event for the specified elements. */
     export function trigger(element: Element | Array<Element>, event: string | event): void;
     export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
     export function triggerHandler(element: Element | Array<Element>, event: string | event): void;
@@ -7419,19 +7423,19 @@ declare module DevExpress.viz.charts {
         minBubbleSize?: number;
         /** Forces the widget to treat negative values as zeroes. Applies to stacked-like series only. */
         negativesAsZeroes?: boolean;
-        /** A handler for the argumentAxisClick event. */
+        /** A function that is executed when a label on the argument axis is clicked or tapped. */
         onArgumentAxisClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, argument?: Date | number | string }) => any) | string;
-        /** A handler for the legendClick event. */
+        /** A function that is executed when a legend item is clicked or tapped. */
         onLegendClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: chartSeriesObject }) => any) | string;
-        /** A handler for the seriesClick event. */
+        /** A function that is executed when a series is clicked or tapped. */
         onSeriesClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: chartSeriesObject }) => any) | string;
-        /** A handler for the seriesHoverChanged event. */
+        /** A function that is executed after the pointer enters or leaves a series. */
         onSeriesHoverChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
-        /** A handler for the seriesSelectionChanged event. */
+        /** A function that is executed when a series is selected or the selection is canceled. */
         onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
-        /** A handler for the zoomEnd event. */
+        /** A function that is executed when zooming or scrolling ends. */
         onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, rangeStart?: Date | number, rangeEnd?: Date | number }) => any);
-        /** A handler for the zoomStart event. */
+        /** A function that is executed when zooming or scrolling begins. */
         onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Declares a collection of panes. */
         panes?: dxChartPanes | Array<dxChartPanes>;
@@ -7465,7 +7469,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the length of aggregation intervals in pixels. May be ignored in favor of the aggregationInterval option. */
         aggregationGroupWidth?: number;
         /** Specifies the length of aggregation intervals in axis units. Applies only to axes of continuous and logarithmic types. */
-        aggregationInterval?: any;
+        aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Casts arguments to a specified data type. */
         argumentType?: 'datetime' | 'numeric' | 'string';
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
@@ -7495,7 +7499,7 @@ declare module DevExpress.viz.charts {
         /** Specifies how many minor ticks to place between two neighboring major ticks. */
         minorTickCount?: number;
         /** Specifies the interval between minor ticks. Applies only to the axes of the "continuous" type. */
-        minorTickInterval?: any;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Relocates the argument axis. */
         position?: 'bottom' | 'left' | 'right' | 'top';
         /** Dates to be included on the axis when workdaysOnly is true. */
@@ -7503,7 +7507,7 @@ declare module DevExpress.viz.charts {
         /** Declares a collection of strips belonging to the argument axis. */
         strips?: Array<dxChartArgumentAxisStrips>;
         /** Specifies the interval between major ticks. */
-        tickInterval?: any;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Configures the axis title. */
         title?: dxChartArgumentAxisTitle;
         /** Specifies the type of the argument axis. */
@@ -7807,7 +7811,7 @@ declare module DevExpress.viz.charts {
         /** Specifies how many minor ticks to place between two neighboring major ticks. */
         minorTickCount?: number;
         /** Specifies the interval between minor ticks. Applies only to continuous axes. */
-        minorTickInterval?: any;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Adds a pixel-measured empty space between two side-by-side value axes. Applies if several value axes are located on one side of the chart. */
         multipleAxesSpacing?: number;
         /** Specifies the name of the value axis. */
@@ -7823,7 +7827,7 @@ declare module DevExpress.viz.charts {
         /** Synchronizes two or more value axes with each other at a specific value. */
         synchronizedValue?: number;
         /** Specifies the interval between major ticks. Does not apply to discrete axes. */
-        tickInterval?: any;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Configures the axis title. */
         title?: dxChartValueAxisTitle;
         /** Specifies the type of the value axis. */
@@ -7904,7 +7908,7 @@ declare module DevExpress.viz.charts {
         legend?: dxPieChartLegend;
         /** Specifies the minimum diameter of the pie. */
         minDiameter?: number;
-        /** A handler for the legendClick event. */
+        /** A function that is executed when a legend item is clicked or tapped. */
         onLegendClick?: ((e: { component?: dxPieChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
         /** Sets the palette to be used to colorize series and their elements. */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
@@ -7976,15 +7980,15 @@ declare module DevExpress.viz.charts {
         legend?: dxPolarChartLegend;
         /** Forces the widget to treat negative values as zeroes. Applies to stacked-like series only. */
         negativesAsZeroes?: boolean;
-        /** A handler for the argumentAxisClick event. */
+        /** A function that is executed when a label on the argument axis is clicked or tapped. */
         onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, argument?: Date | number | string }) => any) | string;
-        /** A handler for the legendClick event. */
+        /** A function that is executed when a legend item is clicked or tapped. */
         onLegendClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
-        /** A handler for the seriesClick event. */
+        /** A function that is executed when a series is clicked or tapped. */
         onSeriesClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
-        /** A handler for the seriesHoverChanged event. */
+        /** A function that is executed after the pointer enters or leaves a series. */
         onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
-        /** A handler for the seriesSelectionChanged event. */
+        /** A function that is executed when a series is selected or the selection is canceled. */
         onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: 'hide' | 'none';
@@ -8029,7 +8033,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the number of minor ticks between two neighboring major ticks. */
         minorTickCount?: number;
         /** Specifies the interval between minor ticks. */
-        minorTickInterval?: any;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Specifies the value to be used as the origin for the argument axis. */
         originValue?: number;
         /** Specifies the period of the argument values in the data source. */
@@ -8039,7 +8043,7 @@ declare module DevExpress.viz.charts {
         /** Specifies options for argument axis strips. */
         strips?: Array<dxPolarChartArgumentAxisStrips>;
         /** Specifies an interval between axis ticks/grid lines. */
-        tickInterval?: any;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Specifies the required type of the argument axis. */
         type?: 'continuous' | 'discrete' | 'logarithmic';
     }
@@ -8226,7 +8230,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the number of minor ticks between two neighboring major ticks. */
         minorTickCount?: number;
         /** Specifies the interval between minor ticks. */
-        minorTickInterval?: any;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Specifies a coefficient that determines the spacing between the minimum series point and the axis. */
         minValueMargin?: number;
         /** Specifies whether or not to indicate a zero value on the value axis. */
@@ -8236,7 +8240,7 @@ declare module DevExpress.viz.charts {
         /** An object defining the configuration options for axis ticks. */
         tick?: dxPolarChartValueAxisTick;
         /** Specifies an interval between axis ticks/grid lines. */
-        tickInterval?: any;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Specifies the required type of the value axis. */
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /** Indicates whether to display series with indents from axis boundaries. */
@@ -8303,15 +8307,15 @@ declare module DevExpress.viz.charts {
         legend?: BaseChartLegend;
         /** A function that is executed when all series are ready. */
         onDone?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the pointClick event. */
+        /** A function that is executed when a series point is clicked or tapped. */
         onPointClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
-        /** A handler for the pointHoverChanged event. */
+        /** A function that is executed after the pointer enters or leaves a series point. */
         onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
-        /** A handler for the pointSelectionChanged event. */
+        /** A function that is executed when a series point is selected or the selection is canceled. */
         onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
-        /** A handler for the tooltipHidden event. */
+        /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject }) => any);
-        /** A handler for the tooltipShown event. */
+        /** A function that is executed when a tooltip appears. */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject }) => any);
         /** Sets the palette to be used for colorizing series and their elements. */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
@@ -8408,13 +8412,13 @@ declare module DevExpress.viz.funnel {
         neckHeight?: number;
         /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckWidth?: number;
-        /** A handler for the hoverChanged event. Executed after a funnel item's hover state is changed in the UI or programmatically. */
+        /** A function that is executed after the pointer enters or leaves a funnel item. */
         onHoverChanged?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
-        /** A handler for the itemClick event. Executed when a user clicks a funnel item. */
+        /** A function that is executed when a funnel item is clicked or tapped. */
         onItemClick?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
-        /** A handler for the legendClick event. Executed when a user clicks a legend item. */
+        /** A function that is executed when a legend item is clicked or tapped. */
         onLegendClick?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
-        /** A handler for the selectionChanged event. Executed after a funnel item's selection state is changed in the UI or programmatically. */
+        /** A function that is executed when a funnel item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /** Sets the palette to be used to colorize funnel items. */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
@@ -8441,9 +8445,9 @@ declare module DevExpress.viz.gauges {
         animation?: BaseGaugeAnimation;
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
-        /** A handler for the tooltipHidden event. */
+        /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
-        /** A handler for the tooltipShown event. */
+        /** A function that is executed when a tooltip appears. */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** Specifies options of the gauge's range container. */
         rangeContainer?: BaseGaugeRangeContainer;
@@ -8671,9 +8675,9 @@ declare module DevExpress.viz.gauges {
         geometry?: { startAngle?: number, endAngle?: number };
         /** Specifies the options of the labels that accompany gauge bars. */
         label?: { visible?: boolean, indent?: number, connectorWidth?: number, connectorColor?: string, format?: DevExpress.ui.format, precision?: number, customizeText?: ((barValue: { value?: number, valueText?: string }) => string), font?: Font };
-        /** A handler for the tooltipHidden event. */
+        /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: dxBarGauge, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
-        /** A handler for the tooltipShown event. */
+        /** A function that is executed when a tooltip appears. */
         onTooltipShown?: ((e: { component?: dxBarGauge, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** Sets the palette to be used for colorizing bars in the gauge. */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
@@ -8721,10 +8725,10 @@ declare module DevExpress.viz.rangeSelector {
         indent?: { left?: number, right?: number };
         /** @deprecated Use the onValueChanged option instead. */
         onSelectedRangeChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, startValue?: Date | number, endValue?: Date | number }) => any);
-        /** A handler for the valueChanged event. */
+        /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
         /** Specifies options of the range selector's scale. */
-        scale?: { valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', logarithmBase?: number, minorTickCount?: number, showCustomBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year', breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: { width?: number, color?: string, line?: 'straight' | 'waved' }, majorTickInterval?: number | { years?: number, months?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', tickInterval?: number | any | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year', useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year', maxRange?: number | any | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year', label?: { visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), topIndent?: number, overlappingBehavior?: 'hide' | 'none', font?: Font }, tick?: { width?: number, color?: string, opacity?: number }, minorTick?: { width?: number, color?: string, opacity?: number, visible?: boolean }, marker?: { visible?: boolean, separatorHeight?: number, topIndent?: number, textLeftIndent?: number, textTopIndent?: number, label?: { format?: DevExpress.ui.format, customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string) } }, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year' };
+        scale?: { valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', logarithmBase?: number, minorTickCount?: number, showCustomBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: { width?: number, color?: string, line?: 'straight' | 'waved' }, majorTickInterval?: number | { years?: number, months?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', label?: { visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), topIndent?: number, overlappingBehavior?: 'hide' | 'none', font?: Font }, tick?: { width?: number, color?: string, opacity?: number }, minorTick?: { width?: number, color?: string, opacity?: number, visible?: boolean }, marker?: { visible?: boolean, separatorHeight?: number, topIndent?: number, textLeftIndent?: number, textTopIndent?: number, label?: { format?: DevExpress.ui.format, customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string) } }, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year' };
         /** @deprecated Use the value option instead. */
         selectedRange?: { startValue?: number | Date | string, endValue?: number | Date | string };
         /** Specifies the color of the selected range. */
@@ -8741,9 +8745,9 @@ declare module DevExpress.viz.rangeSelector {
 }
 declare module DevExpress.viz.sparklines {
     export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptions<T> {
-        /** A handler for the tooltipHidden event. */
+        /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** A handler for the tooltipShown event. */
+        /** A function that is executed when a tooltip appears. */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Configures the tooltip. */
         tooltip?: BaseSparklineTooltip;
@@ -8856,21 +8860,21 @@ declare module DevExpress.viz.map {
         onAreaClick?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: areaObjects }) => any) | string;
         /** @deprecated Use the onSelectionChanged option instead. */
         onAreaSelectionChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: areaObjects }) => any);
-        /** A handler for the centerChanged event. */
+        /** A function that is executed each time the center coordinates are changed. */
         onCenterChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, center?: Array<number> }) => any);
-        /** A handler for the click event. */
+        /** A function that is executed when any location on the map is clicked or tapped. */
         onClick?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: MapLayerElement }) => any) | string;
         /** @deprecated Use the onClick option instead. */
         onMarkerClick?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: markerObjects }) => any) | string;
         /** @deprecated Use the onSelectionChanged option instead. */
         onMarkerSelectionChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: markerObjects }) => any);
-        /** A handler for the selectionChanged event. */
+        /** A function that is executed when a layer element is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
-        /** A handler for the tooltipHidden event. */
+        /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
-        /** A handler for the tooltipShown event. */
+        /** A function that is executed when a tooltip appears. */
         onTooltipShown?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
-        /** A handler for the zoomFactorChanged event. */
+        /** A function that is executed each time the zoom factor is changed. */
         onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, zoomFactor?: number }) => any);
         /** Disables the panning capability. */
         panningEnabled?: boolean;
@@ -9011,17 +9015,17 @@ declare module DevExpress.viz.treeMap {
         layoutDirection?: 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
         /** Specifies how many hierarchical levels must be visualized. */
         maxDepth?: number;
-        /** A handler for the click event. */
+        /** A function that is executed when a node is clicked or tapped. */
         onClick?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeMapNode }) => any) | string;
-        /** A handler for the drill event. */
+        /** A function that is executed when a user drills up or down. */
         onDrill?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
-        /** A handler for the hoverChanged event. */
+        /** A function that is executed after the pointer enters or leaves a node. */
         onHoverChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
-        /** A handler for the nodesInitialized event. */
+        /** A function that is executed only once, after the nodes are initialized. */
         onNodesInitialized?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeMapNode }) => any);
-        /** A handler for the nodesRendering event. */
+        /** A function that is executed before the nodes are displayed and each time the collection of active nodes is changed. */
         onNodesRendering?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
-        /** A handler for the selectionChanged event. */
+        /** A function that is executed when a node is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** Specifies the name of the data source field that provides parent IDs for items. Applies to plain data sources only. */
         parentField?: string;
