@@ -1,7 +1,6 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import typeUtils from "../../core/utils/type";
-import clickEvent from "../../events/click";
 import { getPublicElement } from "../../core/utils/dom";
 import { hideCallback } from "../../mobile/hide_top_overlay";
 import registerComponent from "../../core/component_registrator";
@@ -13,6 +12,7 @@ import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
+import pointerEvents from "../../events/pointer";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -101,6 +101,15 @@ const Drawer = Widget.inherit({
             animationDuration: 400,
 
             /**
+            * @name dxDrawerOptions.closeOnOutsideClick
+            * @type boolean|function
+            * @default false
+            * @type_function_param1 event:event
+            * @type_function_return Boolean
+            */
+            closeOnOutsideClick: false,
+
+            /**
             * @name dxDrawerOptions.contentTemplate
             * @type_function_param1 contentElement:dxElement
             * @type template|function
@@ -148,6 +157,7 @@ const Drawer = Widget.inherit({
 
         this._animations = [];
         this._animationPromise = undefined;
+
         this._initHideTopOverlayHandler();
     },
 
@@ -183,6 +193,29 @@ const Drawer = Widget.inherit({
         this._defaultTemplates["content"] = new EmptyTemplate(this);
     },
 
+    _initCloseOnOutsideClickHandler() {
+        eventsEngine.off(this._$contentWrapper, pointerEvents.down);
+        eventsEngine.on(this._$contentWrapper, pointerEvents.down, this._pointerDownHandler.bind(this));
+    },
+
+    _pointerDownHandler(e) {
+        this._strategy._stopAnimations();
+
+        var closeOnOutsideClick = this.option("closeOnOutsideClick");
+
+        if(typeUtils.isFunction(closeOnOutsideClick)) {
+            closeOnOutsideClick = closeOnOutsideClick(e);
+        }
+
+        if(closeOnOutsideClick && this.option("opened")) {
+            if(this.option("shading")) {
+                e.preventDefault();
+            }
+
+            this.hide();
+        }
+    },
+
     _initMarkup() {
         this.callBase();
 
@@ -210,6 +243,7 @@ const Drawer = Widget.inherit({
         });
 
         this._renderShader();
+        this._initCloseOnOutsideClickHandler();
         this._togglePositionClass();
     },
 
@@ -248,8 +282,7 @@ const Drawer = Widget.inherit({
     _renderShader() {
         this._$shader = this._$shader || $("<div>").addClass(DRAWER_SHADER_CLASS);
         this._$shader.appendTo(this.viewContent());
-        eventsEngine.off(this._$shader, clickEvent.name);
-        eventsEngine.on(this._$shader, clickEvent.name, this.hide.bind(this));
+
         this._toggleShaderVisibility(this.option("opened"));
     },
 
