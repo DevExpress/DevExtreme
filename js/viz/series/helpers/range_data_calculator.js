@@ -173,8 +173,14 @@ module.exports = {
                 viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
             });
 
-        if(useAggregation && series.argumentAxisType === DISCRETE) {
-            range.arg = this.getArgumentRange(series);
+        if(useAggregation) {
+            const argumentRange = this.getArgumentRange(series);
+            if(series.argumentAxisType === DISCRETE) {
+                range.arg = argumentRange
+            } else {
+                argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
+                argumentCalculator(range.arg, argumentRange.max, argumentRange.max);
+            }
         }
 
         processCategories(range.arg);

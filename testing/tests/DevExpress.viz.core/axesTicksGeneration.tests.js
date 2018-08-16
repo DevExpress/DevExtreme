@@ -56,9 +56,6 @@ var environment = {
         }, options));
     },
     afterEach: function() {
-        if(this.getCategoriesInfo !== undefined) {
-            this.getCategoriesInfo.restore();
-        }
         translator2DModule.Translator2D.restore();
         this.axis.dispose();
         this.axis = null;
@@ -151,18 +148,14 @@ QUnit.test("Calculate tickInterval if ratio of (categories count) to (count by s
 QUnit.test("Return categories between min and max", function(assert) {
     var categories = ["cat1", "cat2", "cat3", "cat4", "cat5"];
 
-    this.getCategoriesInfo = sinon.stub(vizUtilsModule, "getCategoriesInfo");
-    this.getCategoriesInfo.withArgs(categories, "cat2", "cat4").returns({ categories: ["cat2", "cat3", "cat4"] });
-
     this.createAxis();
     this.updateOptions({
         argumentType: "string",
         type: "discrete",
-        min: "cat2",
-        max: "cat4"
+        visualRange: ["cat2", "cat4"]
     });
 
-    this.axis.setBusinessRange({ categories: ["cat1", "cat2", "cat3", "cat4", "cat5"] });
+    this.axis.setBusinessRange({ categories });
 
     // act
     this.axis.createTicks(canvas(1000));

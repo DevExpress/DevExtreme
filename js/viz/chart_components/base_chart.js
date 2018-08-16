@@ -1046,7 +1046,6 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        this._resetZoom();
         this._dataInit();
     },
 
