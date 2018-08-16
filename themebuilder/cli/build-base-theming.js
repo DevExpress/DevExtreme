@@ -14,8 +14,7 @@ builder.buildTheme(config).then(result => {
     for(let metadataKey in metadata) {
         if(baseParameters.indexOf(metadataKey) === -1) continue;
 
-        let formatKey = metadataKey;
-        if(config.fileFormat === "scss") formatKey = metadataKey.replace("@", "$");
+        const formatKey = config.fileFormat === "scss" ? metadataKey.replace("@", "$") : metadataKey;
         content += formatKey + ": " + metadata[metadataKey] + ";\n";
     }
 

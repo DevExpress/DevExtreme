@@ -19,7 +19,7 @@ class MetadataLoader {
     load(theme, colorScheme) {
         let that = this;
         return new Promise((resolve) => {
-            var metadata = this.fullMetadata[theme + "_" + colorScheme.replace("-", "_") + "_metadata"];
+            let metadata = this.fullMetadata[theme + "_" + colorScheme.replace("-", "_") + "_metadata"];
             resolve(that.groupMetadata(metadata));
         });
     };
