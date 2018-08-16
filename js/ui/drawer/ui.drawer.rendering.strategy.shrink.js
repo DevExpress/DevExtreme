@@ -2,9 +2,9 @@ import { animation } from "./ui.drawer.rendering.strategy";
 import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 
-const ShrinkStrategy = DrawerStrategy.inherit({
+class ShrinkStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
-        this.callBase(offset, animate);
+        super.renderPosition(offset, animate);
 
         const direction = this._drawer.option("position");
 
@@ -45,6 +45,6 @@ const ShrinkStrategy = DrawerStrategy.inherit({
             }
         }
     }
-});
+};
 
 module.exports = ShrinkStrategy;

@@ -4,9 +4,9 @@ import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 
 
-const OverlapStrategy = DrawerStrategy.inherit({
+class OverlapStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
-        this.callBase(offset, animate);
+        super.renderPosition(offset, animate);
 
         const direction = this._drawer.option("position");
         const menuPosition = this._getMenuOffset(offset);
@@ -44,6 +44,6 @@ const OverlapStrategy = DrawerStrategy.inherit({
             }
         }
     }
-});
+};
 
 module.exports = OverlapStrategy;

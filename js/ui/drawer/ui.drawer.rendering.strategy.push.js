@@ -3,9 +3,9 @@ import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 
-const PushStrategy = DrawerStrategy.inherit({
+class PushStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
-        this.callBase(offset, animate);
+        super.renderPosition(offset, animate);
 
         $(this._drawer.viewContent()).css("paddingLeft", 0);
 
@@ -27,6 +27,6 @@ const PushStrategy = DrawerStrategy.inherit({
             translator.move($(this._drawer.viewContent()), { left: contentPosition });
         }
     }
-});
+};
 
 module.exports = PushStrategy;
