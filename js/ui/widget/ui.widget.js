@@ -64,7 +64,7 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
  */
 
 /**
-* @name dxItem
+* @const dxItem
 * @type object
 * @section uiWidgetMarkupComponents
 */
