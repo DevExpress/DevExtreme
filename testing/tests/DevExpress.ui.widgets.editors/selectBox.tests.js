@@ -503,7 +503,7 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening", func
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
 });
 
-QUnit.test("dxSelectBox automatically scrolls to selected item on opening after item serach", function(assert) {
+QUnit.test("dxSelectBox automatically scrolls to selected item on opening after item search", function(assert) {
     var items = [];
     for(var i = 0; i <= 100; i++) {
         items.push(i);
