@@ -366,7 +366,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _scrollToSelectedItem: function() {
-        this._list.scrollToItem(this._list.option("selectedItem"));
+        this._list && this._list.scrollToItem(this._list.option("selectedItem"));
     },
 
     _listContentReadyHandler: function() {
@@ -553,6 +553,10 @@ var SelectBox = DropDownList.inherit({
             } else {
                 this._setListOption("items", []);
             }
+        }
+
+        if(isVisible) {
+            this._scrollToSelectedItem();
         }
 
         this.callBase(isVisible);
