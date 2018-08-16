@@ -141,20 +141,39 @@ QUnit.test("Labels customize text", function(assert) {
 
 QUnit.test("Labels alignment through cascades", function(assert) {
     createSankey({
-        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
     });
 
     var labels = this.labels(),
         nodes = this.nodes();
 
-    assert.equal(labels[0].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
-    assert.equal(labels[1].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
-    assert.equal(labels[2].attr.firstCall.args[0]["text-anchor"], 'end', 'Alignment in last cascade');
+    assert.equal(labels[0].attr.lastCall.args[0].x, 23, 'Alignment in first cascade');
+    assert.equal(labels[1].attr.lastCall.args[0].x, 23, 'Alignment in first cascade');
+    assert.equal(labels[2].attr.lastCall.args[0].x, 957, 'Alignment in last cascade');
 
-    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.firstCall.args[0].x, 'First cascade');
-    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.firstCall.args[0].x, 'First cascade');
-    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x, 'Last cascade');
+    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.lastCall.args[0].x, 'First cascade');
+    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.lastCall.args[0].x, 'First cascade');
+    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.lastCall.args[0].x, 'Last cascade');
 });
+
+QUnit.test("Labels alignment through cascades with rtlEnabled", function(assert) {
+    createSankey({
+        rtlEnabled: true,
+        dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
+    });
+
+    var labels = this.labels(),
+        nodes = this.nodes();
+
+    assert.equal(labels[0].attr.lastCall.args[0].x, 43, 'Alignment in first cascade');
+    assert.equal(labels[1].attr.lastCall.args[0].x, 43, 'Alignment in first cascade');
+    assert.equal(labels[2].attr.lastCall.args[0].x, 977, 'Alignment in last cascade');
+
+    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.lastCall.args[0].x, 'First cascade');
+    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.lastCall.args[0].x, 'First cascade');
+    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.lastCall.args[0].x, 'Last cascade');
+});
+
 
 QUnit.test("Labels offsets", function(assert) {
     createSankey({
@@ -165,7 +184,7 @@ QUnit.test("Labels offsets", function(assert) {
         }
     });
 
-    var x = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
+    var x = this.labels().map(function(label) { return label.attr.lastCall.args[0].x; }),
         y = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; });
 
     createSankey({
@@ -176,7 +195,7 @@ QUnit.test("Labels offsets", function(assert) {
         }
     });
 
-    var xOffset = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
+    var xOffset = this.labels().map(function(label) { return label.attr.lastCall.args[0].x; }),
         yOffset = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; }),
         xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]],
         yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
