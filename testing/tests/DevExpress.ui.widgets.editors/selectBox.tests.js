@@ -583,7 +583,35 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening", func
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
 });
 
-QUnit.test("dxSelectBox scrolls to the top when pagingEnabled=true and selectbox is editable and item is out of page", function(assert) {
+QUnit.test("dxSelectBox automatically scrolls to selected item on opening after item search", function(assert) {
+    var items = [];
+    for(var i = 0; i <= 100; i++) {
+        items.push(i);
+    }
+
+    var $selectBox = $("#selectBox").dxSelectBox({
+        items: items,
+        searchTimeout: 0,
+        searchEnabled: true
+    });
+
+    var selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+    selectBox.option("opened", true);
+    var $popupContent = $(selectBox.content());
+
+    keyboardMock($input)
+        .focus()
+        .type("50")
+        .change();
+    $popupContent.find("." + LIST_ITEM_CLASS).eq(0).trigger("dxclick");
+    selectBox.option("opened", true);
+
+    var $selectedItem = $popupContent.find("." + LIST_ITEM_SELECTED_CLASS);
+    assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible after search");
+});
+
+QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox is editable and item is out of page", function(assert) {
     var items = [];
     for(var i = 0; i <= 200; i++) {
         items.push(i);
