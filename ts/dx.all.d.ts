@@ -2103,6 +2103,7 @@ declare module DevExpress.ui {
         /** Specifies the selection mode. */
         mode?: 'multiple' | 'none' | 'single';
     }
+    /** The base class for widgets. */
     export class GridBase extends Widget {
         constructor(element: Element, options?: GridBaseOptions)
         constructor(element: JQuery, options?: GridBaseOptions)
@@ -4502,6 +4503,7 @@ declare module DevExpress.ui {
         /** Specifies options of submenu showing and hiding. */
         showSubmenuMode?: { name?: 'onClick' | 'onHover', delay?: { show?: number, hide?: number } | number } | 'onClick' | 'onHover';
     }
+    /** The base class for widgets containing an item collection. */
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
         constructor(element: JQuery, options?: dxMenuBaseOptions)
@@ -5021,6 +5023,7 @@ declare module DevExpress.ui {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget items is selected. */
         selectedExpr?: string | Function;
     }
+    /** The base class for widgets containing an item collection. */
     export class HierarchicalCollectionWidget extends CollectionWidget {
         constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
@@ -5218,6 +5221,7 @@ declare module DevExpress.ui {
         /** Configures a tooltip. */
         tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
     }
+    /** A base class for track bar widgets. */
     export class dxSliderBase extends dxTrackBar {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
@@ -6526,6 +6530,10 @@ declare module DevExpress.viz {
         hideTooltip(): void;
     }
     /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
+    export interface GaugeIndicator extends CommonIndicator {
+        type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
+    }
+    /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
     export interface CommonIndicator {
         /** Specifies the length of an arrow for the indicator of the textCloud type in pixels. */
         arrowLength?: number;
@@ -6558,129 +6566,36 @@ declare module DevExpress.viz {
         /** Specifies the spindle's diameter in pixels for the indicator of a needle-like type. */
         spindleSize?: number;
         /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-        text?: CommonIndicatorText;
+        text?: { indent?: number, format?: DevExpress.ui.format, precision?: number, customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string), font?: Font };
         /** Specifies the orientation of the rangeBar indicator. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: 'bottom' | 'top';
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-    export interface CommonIndicatorText {
-        /** Specifies a callback function that returns the text to be displayed in an indicator. */
-        customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string);
-        /** Specifies font options for the text displayed by the indicator. */
-        font?: Font;
-        /** Formats a value before it is displayed in an indicator. Accepts only numeric formats. */
-        format?: DevExpress.ui.format;
-        /** Specifies the range bar's label indent in pixels. */
-        indent?: number;
-        /** @deprecated Use the text.format.precision option instead. */
-        precision?: number;
-    }
     /** An object that defines a gauge indicator of the rectangleNeedle type. */
-    interface circularRectangleNeedle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-    }
+    export type circularRectangleNeedle = CommonIndicator; 
     /** An object that defines a gauge indicator of the triangleNeedle type. */
-    interface circularTriangleNeedle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-    }
+    export type circularTriangleNeedle = CommonIndicator; 
     /** An object that defines a gauge indicator of the twoColorNeedle type. */
-    interface circularTwoColorNeedle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-    }
+    export type circularTwoColorNeedle = CommonIndicator; 
     /** An object that defines a gauge indicator of the rangeBar type. */
-    interface circularRangeBar extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-    }
+    export type circularRangeBar = CommonIndicator; 
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    interface circularTriangleMarker extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the indicator length. */
-        length?: number;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export type circularTriangleMarker = CommonIndicator; 
     /** An object that defines a gauge indicator of the textCloud type. */
-    interface circularTextCloud extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-        text?: circularTextCloudText;
-    }
-    /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-    interface circularTextCloudText extends CommonIndicatorText {
-        /** Specifies font options for the text displayed by the indicator. */
-        font?: Font;
-    }
+    export type circularTextCloud = CommonIndicator; 
     /** An object defining a gauge indicator of the rectangle type. */
-    export interface linearRectangle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export type linearRectangle = CommonIndicator; 
     /** An object that defines a gauge indicator of the circle type. */
-    export interface linearCircle extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-    }
+    export type linearCircle = CommonIndicator; 
     /** An object defining a gauge indicator of the rhombus type. */
-    export interface linearRhombus extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export type linearRhombus = CommonIndicator; 
     /** An object that defines a gauge indicator of the rangeBar type. */
-    export interface linearRangeBar extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-    }
+    export type linearRangeBar = CommonIndicator; 
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    export interface linearTriangleMarker extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the indicator length. */
-        length?: number;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the width of an indicator in pixels. */
-        width?: number;
-    }
+    export type linearTriangleMarker = CommonIndicator; 
     /** An object that defines a gauge indicator of the textCloud type. */
-    export interface linearTextCloud extends CommonIndicator {
-        /** Specifies a color of the indicator. */
-        color?: string;
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
-        /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-        text?: linearTextCloudText;
-    }
-    /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
-    export interface linearTextCloudText extends CommonIndicatorText {
-        /** Specifies font options for the text displayed by the indicator. */
-        font?: Font;
-    }
+    export type linearTextCloud = CommonIndicator; 
     /** A gauge widget. */
     export class BaseGauge extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.gauges.BaseGaugeOptions)
@@ -8566,9 +8481,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies a gauge's scale options. */
         scale?: dxCircularGaugeScale;
         /** Specifies the appearance options of subvalue indicators. */
-        subvalueIndicator?: dxCircularGaugeSubvalueIndicator;
+        subvalueIndicator?: GaugeIndicator;
         /** Specifies the appearance options of the value indicator. */
-        valueIndicator?: dxCircularGaugeValueIndicator;
+        valueIndicator?: GaugeIndicator;
     }
     /** Specifies gauge range container options. */
     export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -8598,16 +8513,6 @@ declare module DevExpress.viz.gauges {
         /** @deprecated Use the scale.label.hideFirstOrLast option instead. */
         hideFirstOrLast?: 'first' | 'last';
     }
-    /** Specifies the appearance options of subvalue indicators. */
-    export interface dxCircularGaugeSubvalueIndicator extends CommonIndicator {
-        /** Specifies the type of subvalue indicators. */
-        type?: 'rectangleNeedle' | 'triangleNeedle' | 'twoColorNeedle' | 'rangeBar' | 'triangleMarker' | 'textCloud';
-    }
-    /** Specifies the appearance options of the value indicator. */
-    export interface dxCircularGaugeValueIndicator extends CommonIndicator {
-        /** Specifies the value indicator type. */
-        type?: 'rectangleNeedle' | 'triangleNeedle' | 'twoColorNeedle' | 'rangeBar' | 'triangleMarker' | 'textCloud';
-    }
     export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
         /** Specifies the options required to set the geometry of the LinearGauge widget. */
         geometry?: { orientation?: 'horizontal' | 'vertical' };
@@ -8616,9 +8521,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies the gauge's scale options. */
         scale?: dxLinearGaugeScale;
         /** Specifies the appearance options of subvalue indicators. */
-        subvalueIndicator?: dxLinearGaugeSubvalueIndicator;
+        subvalueIndicator?: GaugeIndicator;
         /** Specifies the appearance options of the value indicator. */
-        valueIndicator?: dxLinearGaugeValueIndicator;
+        valueIndicator?: GaugeIndicator;
     }
     /** Specifies gauge range container options. */
     export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -8649,16 +8554,6 @@ declare module DevExpress.viz.gauges {
     export interface dxLinearGaugeScaleLabelOverlappingBehavior extends BaseGaugeScaleLabelOverlappingBehavior {
         /** @deprecated This functionality is deprecated as redundant. */
         hideFirstOrLast?: 'first' | 'last';
-    }
-    /** Specifies the appearance options of subvalue indicators. */
-    export interface dxLinearGaugeSubvalueIndicator extends CommonIndicator {
-        /** Specifies the type of subvalue indicators. */
-        type?: 'rectangle' | 'circle' | 'rhombus' | 'rangeBar' | 'triangleMarker' | 'textCloud';
-    }
-    /** Specifies the appearance options of the value indicator. */
-    export interface dxLinearGaugeValueIndicator extends CommonIndicator {
-        /** Specifies the type of the value indicator. */
-        type?: 'rectangle' | 'circle' | 'rhombus' | 'rangeBar' | 'triangleMarker' | 'textCloud';
     }
     export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
         /** Specifies animation options. */
