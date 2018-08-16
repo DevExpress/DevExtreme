@@ -2871,3 +2871,55 @@ QUnit.test("Calculate interval in range data when aggregation is enabled", funct
     assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
     assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
 });
+
+QUnit.test("Calculate range data when aggregation enabled. Points range less than data range - get range from data", function(assert) {
+    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
+        rangeData,
+        series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
+
+    series.getArgumentAxis().getAggregationInfo = function() {
+        return {
+            interval: 1,
+            ticks: [5, 10, 15]
+        };
+    }
+
+    series.updateData(data);
+
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
+    assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
+});
+
+QUnit.test("Calculate range data when aggregation enabled. Points range greater than data range - get range from point", function(assert) {
+    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
+        rangeData,
+        series = createSeries({
+            type: "scatter",
+            argumentAxisType: "continuous",
+            aggregation: { enabled: true, method: "count" }
+        });
+
+    series.getArgumentAxis().getAggregationInfo = function() {
+        return {
+            interval: 1,
+            ticks: [0, 5, 10, 15, 25, 30]
+        };
+    }
+
+    series.updateData(data);
+
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, 0, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.max, 25, "Max arg should be correct");
+    assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
+});
