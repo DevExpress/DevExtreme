@@ -76,7 +76,7 @@ var environment = {
     },
 
     label: function(index) {
-        return this.labels[index];
+        return this.labels()[index].children[0];
     }
 };
 
