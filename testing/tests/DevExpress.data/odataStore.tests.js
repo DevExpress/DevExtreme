@@ -1585,6 +1585,27 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
         .always(done);
 });
 
+QUnit.test("error handlers (check params)", function(assert) {
+    var done = assert.async();
+
+    var helper = new ErrorHandlingHelper();
+
+    var store = new ODataStore({
+        url: "odata.org",
+        errorHandler: helper.optionalHandler
+    });
+
+    helper.extraChecker = function(error, xhr, requestOptions) {
+        assert.equal(error.message, "Not Found");
+        assert.equal(xhr.statusText, "Not Found");
+        assert.equal(requestOptions.url, "odata.org");
+    };
+
+    helper.run(function() {
+        return store.load();
+    }, done, assert);
+});
+
 QUnit.test("error handlers (query evaluation)", function(assert) {
     var done = assert.async();
 

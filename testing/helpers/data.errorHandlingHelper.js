@@ -15,8 +15,8 @@
 
         ctor: function() {
             this.optionalHandler = $.proxy(
-                function(arg) {
-                    this.optionalHandlerImpl(arg);
+                function(...args) {
+                    this.optionalHandlerImpl(...args);
                 },
                 this
             );
@@ -27,24 +27,26 @@
                 optionalFired = $.Deferred(),
                 failFired = $.Deferred();
 
-            var globalHandlerArg,
-                optionalHandlerArg,
-                failHandlerArg;
+            var globalHandlerArgs,
+                optionalHandlerArgs,
+                failHandlerArgs;
 
             var log = [],
                 that = this;
 
             var prevGlobalHandler = errorsModule.errorHandler;
 
-            errorsModule.errorHandler = function(arg) {
+            errorsModule.errorHandler = function() {
+                debugger;
                 log.push("global");
-                globalHandlerArg = arg;
+                globalHandlerArgs = arguments;
                 globalFired.resolve();
             };
 
-            this.optionalHandlerImpl = function(arg) {
+            this.optionalHandlerImpl = function() {
+                debugger;
                 log.push("optional");
-                optionalHandlerArg = arg;
+                optionalHandlerArgs = arguments;
                 optionalFired.resolve();
             };
 
@@ -53,20 +55,22 @@
                 throw Error("Deferred result is expected");
             }
 
-            actionResult.fail(function(arg) {
+            actionResult.fail(function() {
                 log.push("fail");
-                failHandlerArg = arg;
+                failHandlerArgs = arguments;
                 failFired.resolve();
             });
 
             $.when(globalFired, failFired, optionalFired).done(function() {
-                assert.strictEqual(globalHandlerArg, optionalHandlerArg);
-                assert.strictEqual(optionalHandlerArg, failHandlerArg);
-                assert.ok("message" in globalHandlerArg);
+                for(var i = 0; i <= optionalHandlerArgs.length; i++) {
+                    assert.equal(globalHandlerArgs[i], optionalHandlerArgs[i]);
+                    assert.equal(optionalHandlerArgs[i], failHandlerArgs[i]);
+                }
+                assert.ok("message" in globalHandlerArgs[0]);
                 assert.deepEqual(log, ["optional", "global", "fail"]);
 
                 if(that.extraChecker) {
-                    that.extraChecker(globalHandlerArg);
+                    that.extraChecker.apply(null, globalHandlerArgs);
                 }
 
                 errorsModule.errorHandler = prevGlobalHandler;

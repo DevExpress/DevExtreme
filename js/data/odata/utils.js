@@ -203,7 +203,7 @@ var sendRequest = function(protocolVersion, request, options) {
     var d = new Deferred();
     var ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
-    ajax.sendRequest(ajaxOptions).always(function(obj, textStatus) {
+    ajax.sendRequest(ajaxOptions).always(function(obj, textStatus, requestOptions) {
         var transformOptions = {
                 deserializeDates: options.deserializeDates,
                 fieldTypes: options.fieldTypes
@@ -216,7 +216,11 @@ var sendRequest = function(protocolVersion, request, options) {
 
         if(error) {
             if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
-                d.reject(error);
+                if("statusText" in obj && requestOptions) {
+                    d.reject(error, obj, requestOptions);
+                } else {
+                    d.reject(error);
+                }
             }
         } else if(options.countOnly) {
 

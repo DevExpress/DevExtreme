@@ -163,13 +163,13 @@ function handleError(error) {
 * @namespace DevExpress.data
 */
 var errorHandler = null;
-var _errorHandler = function(error) {
+var _errorHandler = function(...args) {
     ///#DEBUG
-    handleError(error);
+    handleError(...args);
     ///#ENDDEBUG
 
     if(handlers.errorHandler) {
-        handlers.errorHandler(error);
+        handlers.errorHandler(...args);
     }
 };
 

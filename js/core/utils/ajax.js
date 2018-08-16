@@ -272,7 +272,7 @@ var sendRequest = function(options) {
 
     if(options.crossDomain && needScriptEvaluation) {
         var reject = function() {
-                d.reject(xhr, ERROR);
+                d.reject(xhr, ERROR, options);
             },
             resolve = function() {
                 if(dataType === "jsonp") return;
@@ -284,7 +284,7 @@ var sendRequest = function(options) {
     }
 
     if(options.crossDomain && !("withCredentials" in xhr)) {
-        d.reject(xhr, ERROR);
+        d.reject(xhr, ERROR, options);
         return result;
     }
 
@@ -310,7 +310,7 @@ var sendRequest = function(options) {
                     d.resolve(null, NO_CONTENT, xhr);
                 }
             } else {
-                d.reject(xhr, xhr.customStatus || ERROR);
+                d.reject(xhr, xhr.customStatus || ERROR, options);
             }
         }
     };
