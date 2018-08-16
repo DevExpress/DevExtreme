@@ -3397,7 +3397,7 @@ QUnit.module("Visual range on update", {
     updateOptions: environment.updateOptions
 });
 
-QUnit.test("Reset viewport on data update", function(assert) {
+QUnit.test("Reset", function(assert) {
     this.updateOptions({ visualRangeOnDataUpdate: "reset" });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3418,7 +3418,7 @@ QUnit.test("Reset viewport on data update", function(assert) {
     assert.equal(businessRange.maxVisible, 100);
 });
 
-QUnit.test("Keep viewport on data update", function(assert) {
+QUnit.test("Keep", function(assert) {
     this.updateOptions({ visualRangeOnDataUpdate: "keep", visualRange: [10, 40] });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3439,7 +3439,7 @@ QUnit.test("Keep viewport on data update", function(assert) {
     assert.equal(businessRange.maxVisible, 40);
 });
 
-QUnit.test("Shift viewport on data update", function(assert) {
+QUnit.test("Shift", function(assert) {
     this.updateOptions({ visualRangeOnDataUpdate: "shift", visualRangeLength: 10 });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3460,7 +3460,7 @@ QUnit.test("Shift viewport on data update", function(assert) {
     assert.equal(businessRange.maxVisible, 300);
 });
 
-QUnit.test("Shift viewport on data update. Datetime axis", function(assert) {
+QUnit.test("Shift. Datetime axis", function(assert) {
     this.updateOptions({
         visualRangeOnDataUpdate: "shift",
         visualRangeLength: {
@@ -3487,7 +3487,7 @@ QUnit.test("Shift viewport on data update. Datetime axis", function(assert) {
     assert.deepEqual(businessRange.maxVisible, new Date(2018, 7, 15, 12, 0));
 });
 
-QUnit.test("Shift viewport on data update. logarithmic axis", function(assert) {
+QUnit.test("Shift. logarithmic axis", function(assert) {
     this.updateOptions({
         visualRangeOnDataUpdate: "shift",
         visualRangeLength: 2,
@@ -3513,7 +3513,7 @@ QUnit.test("Shift viewport on data update. logarithmic axis", function(assert) {
     assert.deepEqual(businessRange.maxVisible, 100000);
 });
 
-QUnit.test("Shift viewport on data update", function(assert) {
+QUnit.test("Shift. Discrete", function(assert) {
     this.updateOptions({
         type: "discrete",
         visualRangeOnDataUpdate: "shift"
@@ -3537,7 +3537,7 @@ QUnit.test("Shift viewport on data update", function(assert) {
     assert.equal(businessRange.maxVisible, 5);
 });
 
-QUnit.test("Auto visualRangeOnUpdate mode. visualRange is equal wholeRange - reset", function(assert) {
+QUnit.test("Auto mode. visualRange is equal wholeRange - reset", function(assert) {
     this.updateOptions({});
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3558,8 +3558,10 @@ QUnit.test("Auto visualRangeOnUpdate mode. visualRange is equal wholeRange - res
     assert.equal(businessRange.maxVisible, 100);
 });
 
-QUnit.test("Auto visualRangeOnUpdate mode. visualRange is not equal wholeRange - keep", function(assert) {
-    this.updateOptions({});
+QUnit.test("Auto mode. visualRange is not equal wholeRange - keep", function(assert) {
+    this.updateOptions({
+        visualRangeOnDataUpdate: "auto"
+    });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3582,7 +3584,7 @@ QUnit.test("Auto visualRangeOnUpdate mode. visualRange is not equal wholeRange -
     assert.equal(businessRange.maxVisible, 118);
 });
 
-QUnit.test("Auto visualRangeOnUpdate mode. visualRange shows the end of data - shift", function(assert) {
+QUnit.test("Auto. visualRange shows the end of data - shift", function(assert) {
     this.updateOptions({
         visualRange: [115, 120]
     });
@@ -3605,7 +3607,7 @@ QUnit.test("Auto visualRangeOnUpdate mode. visualRange shows the end of data - s
     assert.equal(businessRange.maxVisible, 300);
 });
 
-QUnit.test("Auto visualRangeOnUpdate mode. Discrete axis - reset", function(assert) {
+QUnit.test("Auto. Discrete axis - reset", function(assert) {
     this.updateOptions({
         type: "discrete"
     });
