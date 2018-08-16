@@ -1,10 +1,10 @@
-var gulp = require('gulp');
-var replace = require('gulp-replace');
-var merge = require('merge-stream');
-var context = require('./context.js');
-var version = require('../../themebuilder/package.json').version;
+const gulp = require('gulp');
+const replace = require('gulp-replace');
+const merge = require('merge-stream');
+const context = require('./context.js');
+const version = require('../../themebuilder/package.json').version;
 
-var SCRIPTS = [
+const SCRIPTS = [
     'themebuilder/**/*.*',
     '!themebuilder/tests/**/*.*',
     '!themebuilder/node_modules/**/*',
@@ -13,7 +13,7 @@ var SCRIPTS = [
     '!themebuilder/package.json'
 ];
 
-gulp.task('themebuilder-npm', function() {
+gulp.task('themebuilder-npm', () => {
     return merge(
         gulp.src(SCRIPTS)
             .pipe(gulp.dest(context.RESULT_THEMEBUILDER_NPM_PATH)),
