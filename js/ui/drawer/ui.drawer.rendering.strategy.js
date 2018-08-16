@@ -1,4 +1,3 @@
-import Class from "../../core/class";
 import $ from "../../core/renderer";
 import fx from "../../animation/fx";
 
@@ -70,11 +69,11 @@ const animation = {
     }
 };
 
-const DrawerStrategy = Class.inherit({
+class DrawerStrategy {
 
-    ctor(drawer) {
+    constructor(drawer) {
         this._drawer = drawer;
-    },
+    }
 
     renderPosition(offset, animate) {
         this._stopAnimations();
@@ -94,13 +93,13 @@ const DrawerStrategy = Class.inherit({
                 this._drawer._animationCompleteHandler();
             });
         }
-    },
+    }
 
     _stopAnimations() {
         fx.stop(this._drawer._$shader, true);
         fx.stop($(this._drawer.content()), true);
         fx.stop($(this._drawer.viewContent()), true);
-    },
+    }
 
     _getMenuOffset(offset) {
         if(offset) {
@@ -108,11 +107,11 @@ const DrawerStrategy = Class.inherit({
         } else {
             return -(this._drawer.getRealMenuWidth() - this._drawer.getMinWidth());
         }
-    },
+    }
 
     _getMenuWidth(offset) {
         return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
-    },
+    }
 
     renderShaderVisibility(offset, animate, duration) {
         const fadeConfig = this._getFadeConfig(offset);
@@ -124,11 +123,11 @@ const DrawerStrategy = Class.inherit({
         } else {
             this._drawer._$shader.css("opacity", fadeConfig.to);
         }
-    },
+    }
 
     getWidth() {
         return this._drawer.$element().get(0).getBoundingClientRect().width;
-    },
+    }
     _getFadeConfig(offset) {
         if(offset) {
             return {
@@ -141,8 +140,8 @@ const DrawerStrategy = Class.inherit({
                 from: 0.5
             };
         }
-    },
-});
+    }
+};
 
 module.exports = DrawerStrategy;
 module.exports.animation = animation;
