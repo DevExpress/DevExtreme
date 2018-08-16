@@ -241,7 +241,6 @@ var dxSankey = require("../core/base_widget").inherit({
                 }, that._incidentOccurred
             );
         that._layoutMap = layout;
-        that._rtlEnabled = that._getOption('rtlEnabled', true);
 
         if(!layout.hasOwnProperty('error')) {
             let nodeColors = {},
