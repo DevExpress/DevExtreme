@@ -135,10 +135,10 @@ Node.prototype = {
         this.widget._tooltip && this.widget._tooltip.hide();
     },
 
-    getLabelAttributes: function(labelSettings, filter, diagramRect) {
+    getLabelAttributes: function(labelSettings, filter) {
         var attributes = compileLabelAttrs(labelSettings, filter, this);
-        attributes.attr.x = this.rect.x + this.rect.width + labelSettings.horizontalOffset;
-        attributes.attr.y = this.rect.y + this.rect.height / 2;
+        attributes.attr.x = 0;
+        attributes.attr.y = 0;
         return attributes;
     }
 
