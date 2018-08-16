@@ -716,7 +716,7 @@ var subscribes = {
             appointmentDuration = endDate.getTime() - startDate.getTime();
 
         var dayDuration = toMs("day"),
-            visibleDayDuration = this._workSpace.getDayDurationInMs(),
+            visibleDayDuration = this._workSpace.getVisibleDayDuration(),
             result = 0;
 
         if(allDay) {
