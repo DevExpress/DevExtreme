@@ -51,6 +51,18 @@ QUnit.test("empty value should not be formatted", function(assert) {
     assert.equal(this.input.val(), "", "value is empty");
 });
 
+QUnit.test("placeholder should disappear when an empty value has been changed", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: null,
+        placeholder: "Test"
+    });
+
+    this.keyboard.press("up");
+    assert.equal(this.input.val(), "1.00", "text is correct");
+    assert.notOk(this.$element.find(".dx-placeholder").is(":visible"), "placeholder is hidden");
+});
+
 QUnit.test("format should be applied on value change", function(assert) {
     this.instance.option("value", 12.34);
     assert.equal(this.input.val(), "12.34", "value is correct");

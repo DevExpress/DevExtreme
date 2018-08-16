@@ -367,6 +367,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         this._input().val(newValue);
+        this._toggleEmptinessEventHandler();
         this._formattedValue = text;
 
         if(!this._focusOutOccurs) {
