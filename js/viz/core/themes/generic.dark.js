@@ -215,6 +215,27 @@ registerTheme({
                 color: "#2a2a2a"
             }
         }
+    },
+    sankey: {
+        label: {
+            font: {
+                color: WHITE
+            }
+        },
+        node: {
+            border: {
+                color: "#2a2a2a"
+            }
+        },
+        link: {
+            color: "#888888",
+            border: {
+                color: "#2a2a2a"
+            },
+            hoverStyle: {
+                color: "#bbbbbb"
+            }
+        }
     }
 }, "generic.light");
 
