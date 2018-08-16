@@ -9256,7 +9256,7 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
             assert.equal($inputElement.get(0).selectionEnd, 1, "selectionEnd is correct");
         }
         done();
-    }, 100);
+    }, 200);
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
@@ -9998,7 +9998,8 @@ QUnit.test("rowElement argument of rowTemplate option is correct", function(asse
 // T484419
 QUnit.test("rowTemplate via dxTemplate should works with masterDetail template", function(assert) {
     // arrange, act
-    var $rowElements,
+    var clock = sinon.useFakeTimers(),
+        $rowElements,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [
@@ -10017,6 +10018,7 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
 
     // act
     $($(dataGrid.$element()).find(".dx-datagrid-expand").eq(0)).trigger("dxclick");
+    clock.tick();
 
     // assert
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
@@ -10025,6 +10027,7 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
     assert.strictEqual($rowElements.eq(1).children().eq(1).text(), "Test Details", "row 1 content");
     assert.strictEqual($rowElements.eq(2).text(), "Row Content More info", "row 2 content");
     assert.strictEqual($rowElements.eq(3).text(), "Row Content More info", "row 3 content");
+    clock.restore();
 });
 
 // T120698
@@ -10328,19 +10331,22 @@ QUnit.test("SelectAll when allowSelectAll is false", function(assert) {
 // T628315
 QUnit.test("Click near selectAll doesn't generate infinite loop", function(assert) {
     // arrange, act
-    var dataGrid = createDataGrid({
-        selection: { mode: "multiple" },
-        loadingTimeout: undefined,
-        dataSource: [{ id: 1111 }]
-    });
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            selection: { mode: "multiple" },
+            loadingTimeout: undefined,
+            dataSource: [{ id: 1111 }]
+        });
 
     var $selectAllElement = $(dataGrid.element()).find(".dx-header-row .dx-command-select");
     $selectAllElement.trigger("dxclick");
+    clock.tick();
 
     // assert
     assert.equal(dataGrid.getSelectedRowKeys().length, 1);
     assert.equal($selectAllElement.find(".dx-datagrid-text-content").length, 0);
     assert.ok($($selectAllElement).find(".dx-select-checkbox").hasClass("dx-checkbox-checked"));
+    clock.restore();
 });
 
 QUnit.module("Modules", {
