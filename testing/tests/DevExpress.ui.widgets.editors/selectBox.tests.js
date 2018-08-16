@@ -515,28 +515,17 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening after 
         searchEnabled: true
     });
 
-    $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger("dxclick");
-
-    this.clock.tick(TIME_TO_WAIT);
-
     var $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+    $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON)).trigger("dxclick");
+    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
 
     keyboardMock($input)
         .type("50")
         .change();
-
-    this.clock.tick(TIME_TO_WAIT);
-
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-
-    $($popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(0)).trigger("dxclick");
-
-    this.clock.tick(TIME_TO_WAIT);
-
-    $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger("dxclick");
+    $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(0).trigger("dxclick");
+    $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON)).trigger("dxclick");
 
     var $selectedItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));
-
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
 });
 
