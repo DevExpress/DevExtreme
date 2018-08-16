@@ -358,7 +358,7 @@ var dxSankey = require("../core/base_widget").inherit({
         }
 
         var bBox = node.label.getBBox(),
-            labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2),
+            labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2) + labelOptions.verticalOffset,
             labelOffsetX = node.rect.x + labelOptions.horizontalOffset + node.rect.width - bBox.x;
 
         if(labelOffsetX + bBox.width >= this._rect[2] - this._rect[0]) {
