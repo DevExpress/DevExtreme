@@ -1596,10 +1596,8 @@ QUnit.test("error handlers (check params)", function(assert) {
     });
 
     helper.extraChecker = function(error) {
-        var params = ["message", "request", "requestOptions", "httpStatus"];
-        params.forEach((param) => {
-            assert.ok(param in error);
-        });
+        assert.equal(error.requestOptions.url, "odata.org");
+        assert.equal(error.httpStatus, 404);
     };
 
     helper.run(function() {
