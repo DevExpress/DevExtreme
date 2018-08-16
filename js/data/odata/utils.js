@@ -304,7 +304,7 @@ var errorFromResponse = function(obj, textStatus, requestOptions) {
         return extend(Error(message), { httpStatus: httpStatus, errorDetails: errorObj, xhr: obj, requestOptions: requestOptions });
     } else {
         if(httpStatus !== 200) {
-            return extend(Error(message), { httpStatus: httpStatus, xhr: obj, requestOptions: requestOptions });
+            return extend(Error(message), { httpStatus: httpStatus, request: obj, requestOptions: requestOptions });
         }
     }
 };

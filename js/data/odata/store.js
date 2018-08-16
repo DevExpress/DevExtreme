@@ -89,7 +89,7 @@ var ODataStore = Store.inherit({
          * @type boolean
          */
         /**
-         * @name ODataContextOptions.errorHandler
+         * @name ODataStoreOptions.errorHandler
          * @type function
          * @type_function_param1 e:Error
          * @type_function_param1_field1 httpStatus:number

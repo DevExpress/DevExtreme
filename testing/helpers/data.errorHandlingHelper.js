@@ -60,8 +60,8 @@
             });
 
             $.when(globalFired, failFired, optionalFired).done(function() {
-                assert.equal(globalHandlerArg, optionalHandlerArg);
-                assert.equal(optionalHandlerArg, failHandlerArg);
+                assert.strictEqual(globalHandlerArg, optionalHandlerArg);
+                assert.strictEqual(optionalHandlerArg, failHandlerArg);
                 assert.ok("message" in globalHandlerArg);
                 assert.deepEqual(log, ["optional", "global", "fail"]);
 
