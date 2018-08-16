@@ -9222,8 +9222,6 @@ QUnit.test("update focus border on resize", function(assert) {
 
 QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)", function(assert) {
     // arrange
-    this.clock.restore();
-
     var dataGrid = createDataGrid({
             filterRow: { visible: true },
             editing: { allowAdding: true },
@@ -9243,6 +9241,8 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
     $inputElement.focus();
     $inputElement.val("1");
     $inputElement.trigger("change");
+    this.clock.tick();
+    this.clock.restore();
 
     setTimeout(function() {
         // assert
@@ -9256,7 +9256,7 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
             assert.equal($inputElement.get(0).selectionEnd, 1, "selectionEnd is correct");
         }
         done();
-    }, 200);
+    });
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
