@@ -330,21 +330,16 @@ var dxSankey = require("../core/base_widget").inherit({
             var availableLabelWidth = (availableWidth - (nodeOptions.width + labelOptions.horizontalOffset) - (that._layoutMap.cascades.length * nodeOptions.width)) / (that._layoutMap.cascades.length - 1) - labelOptions.horizontalOffset;
             that._nodes.forEach(function(node) {
                 that._createLabel(node, labelOptions, that._shadowFilter.id, availableLabelWidth);
-                that._moveLabel(node, labelOptions);
+                that._moveLabel(node, labelOptions, availableLabelWidth);
             });
-            /*
+
             // test and handle labels overlapping here
             if(labelOptions.overlappingBehavior !== 'none') {
                 that._nodes.forEach(function(thisNode) {
-                    var thisBox = thisNode.labelText.getBBox();
+                    var thisBox = thisNode.label.getBBox();
                     that._nodes.forEach(function(otherNode) {
-                        var otherBox = otherNode.labelText.getBBox();
+                        var otherBox = otherNode.label.getBBox();
                         if(thisNode.id !== otherNode.id && defaultLayoutBuilder.overlap(thisBox, otherBox)) {
-
-                            console.log(thisNode, thisBox);
-                            console.log(otherNode, otherBox);
-                            console.log('-----------------------');
-
                             if(labelOptions.overlappingBehavior === 'ellipsis') {
                                 thisNode.labelText.applyEllipsis(otherBox.x - thisBox.x);
                             } else if(labelOptions.overlappingBehavior === 'hide') {
@@ -354,40 +349,37 @@ var dxSankey = require("../core/base_widget").inherit({
                     });
                 });
             }
-            */
         }
-
     },
 
-    _moveLabel: function(node, labelOptions) {
-        var bBox = node.labelText.getBBox(),
+    _moveLabel: function(node, labelOptions, availableLabelWidth) {
+        if(node.label.getBBox().width > availableLabelWidth) {
+            node.labelText.applyEllipsis(availableLabelWidth);
+        }
+
+        var bBox = node.label.getBBox(),
             labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2),
             labelOffsetX = node.rect.x + labelOptions.horizontalOffset + node.rect.width - bBox.x;
 
-        if(labelOffsetX + bBox.width >= this._rect[2] - this._rect[1]) {
+        if(labelOffsetX + bBox.width >= this._rect[2] - this._rect[0]) {
             labelOffsetX = node.rect.x - labelOptions.horizontalOffset - bBox.x - bBox.width;
         }
-        node.label.attr({
+
+        node.labelText.attr({
             translateX: labelOffsetX,
             translateY: labelOffsetY
         });
     },
 
-    _createLabel: function(node, labelOptions, filter, availableLabelWidth) {
+    _createLabel: function(node, labelOptions, filter) {
         var textData = labelOptions.customizeText(node),
-            settings = node.getLabelAttributes(labelOptions, filter, this._rect);
+            settings = node.getLabelAttributes(labelOptions, filter);
         if(textData) {
             node.label = this._renderer.g().append(this._groupLabels);
             node.labelText = this._renderer.text(textData)
                 .attr(settings.attr)
                 .css(settings.css)
             node.labelText.append(node.label);
-
-            /*
-            if(bBox.width > availableLabelWidth) {
-                node.label.applyEllipsis(availableLabelWidth);
-            }
-            */
         }
 
     },
