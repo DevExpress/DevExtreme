@@ -557,7 +557,7 @@ declare module DevExpress {
         /** Stops the event's propagation up the DOM tree, keeping parent handlers unnotified of the event. */
         stopPropagation(): void;
     }
-    export type event = dxEvent | JQueryEventObject; 
+    export type event = dxEvent | JQueryEventObject;
     /** An object that serves as a namespace for the methods that are used to localize an application. */
     export class localization {
         /** Converts a Date object to a string using the specified format. */
@@ -1420,11 +1420,11 @@ declare module DevExpress.core {
         /** Subscribes to events. */
         on(events: any): this;
     }
-    export type dxElement = Element & JQuery; 
+    export type dxElement = Element & JQuery;
 }
 declare module DevExpress.framework {
     /** @deprecated #include spa-deprecated-note */
-    export type dxAction = ((e: { element?: JQuery, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string | any; 
+    export type dxAction = ((e: { element?: JQuery, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string | any;
     export interface dxCommandOptions extends DOMComponentOptions<dxCommand> {
         /** Indicates whether or not the widget that displays this command is disabled. */
         disabled?: boolean;
@@ -2122,6 +2122,7 @@ declare module DevExpress.ui {
         /** Specifies the selection mode. */
         mode?: 'multiple' | 'none' | 'single';
     }
+    /** The base class for widgets. */
     export class GridBase extends Widget {
         constructor(element: Element, options?: GridBaseOptions)
         constructor(element: JQuery, options?: GridBaseOptions)
@@ -2169,11 +2170,11 @@ declare module DevExpress.ui {
         deselectAll(): Promise<void> & JQueryPromise<void>;
         /** Cancels the selection of rows with specific keys. */
         deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
-        /** Switches a cell with a specific row index and a data field to the editing state. Takes effect only if the editing mode is 'batch' or 'cell'. */
+        /** Switches a cell with a specific row index and a data field to the editing state. Takes effect only if the editing mode is "batch" or "cell". */
         editCell(rowIndex: number, dataField: string): void;
-        /** Switches a cell with specific row and column indexes to the editing state. Takes effect only if the editing mode is 'batch' or 'cell'. */
+        /** Switches a cell with specific row and column indexes to the editing state. Takes effect only if the editing mode is "batch" or "cell". */
         editCell(rowIndex: number, visibleColumnIndex: number): void;
-        /** Switches a row with a specific index to the editing state. Takes effect only if the editing mode is 'row', 'popup' or 'form'. */
+        /** Switches a row with a specific index to the editing state. Takes effect only if the editing mode is "row", "popup" or "form". */
         editRow(rowIndex: number): void;
         /** Hides the load panel. */
         endCustomLoading(): void;
@@ -2387,7 +2388,7 @@ declare module DevExpress.ui {
         dateSerializationFormat?: string;
         /** Specifies dates to be disabled. Applies only if pickerType is "calendar". */
         disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
-        /** Specifies the date display format. Ignored if the pickerType option is 'native' */
+        /** Specifies the date display format. Ignored if the pickerType option is "native" */
         displayFormat?: format;
         /** Specifies the interval between neighboring values in the popup list in minutes. */
         interval?: number;
@@ -2454,6 +2455,7 @@ declare module DevExpress.ui {
         shading?: boolean;
         template?: template | ((Element: DevExpress.core.dxElement) => any);
     }
+    /** The base class for widgets. */
     export class dxDrawer extends Widget {
         constructor(element: Element, options?: dxDrawerOptions)
         constructor(element: JQuery, options?: dxDrawerOptions)
@@ -3519,8 +3521,10 @@ declare module DevExpress.ui {
     export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         startDate?: Date;
+        /** Specifies the currently selected value. */
         value?: string;
     }
+    /** A base class for editors. */
     export class dxRecurrenceEditor extends Editor {
         constructor(element: Element, options?: dxRecurrenceEditorOptions)
         constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
@@ -4156,7 +4160,7 @@ declare module DevExpress.ui {
         parentIdExpr?: string | Function;
         /** Notifies the TreeList of the server's data processing operations. Applies only if data has a plain structure. */
         remoteOperations?: { sorting?: boolean, filtering?: boolean, grouping?: boolean } | 'auto';
-        /** Specifies the root node's identifier. Applies if dataStructure is 'plain'. */
+        /** Specifies the root node's identifier. Applies if dataStructure is "plain". */
         rootValue?: any;
         /** Configures scrolling. */
         scrolling?: dxTreeListScrolling;
@@ -4559,6 +4563,7 @@ declare module DevExpress.ui {
         /** Specifies options of submenu showing and hiding. */
         showSubmenuMode?: { name?: 'onClick' | 'onHover', delay?: { show?: number, hide?: number } | number } | 'onClick' | 'onHover';
     }
+    /** The base class for widgets containing an item collection. */
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
         constructor(element: JQuery, options?: dxMenuBaseOptions)
@@ -5076,6 +5081,7 @@ declare module DevExpress.ui {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget items is selected. */
         selectedExpr?: string | Function;
     }
+    /** The base class for widgets containing an item collection. */
     export class HierarchicalCollectionWidget extends CollectionWidget {
         constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
@@ -5273,6 +5279,7 @@ declare module DevExpress.ui {
         /** Configures a tooltip. */
         tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
     }
+    /** A base class for track bar widgets. */
     export class dxSliderBase extends dxTrackBar {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
@@ -5452,9 +5459,9 @@ declare module DevExpress.ui {
         repaint(): void;
     }
     /** A template notation used to specify templates for widget elements. */
-    export type template = string | Function | Element | JQuery; 
+    export type template = string | Function | Element | JQuery;
     /** Formats values. */
-    export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime', precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) }; 
+    export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime', precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) };
     /** An object that serves as a namespace for methods displaying a message in an application/site. */
     export class dialog {
         /** Creates an alert dialog message containing a single "OK" button. */
@@ -5624,7 +5631,7 @@ declare module DevExpress.viz {
         startValue?: number | Date | string;
     }
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
-    export type VizTimeInterval = number | { years?: number, quarters?: number, months?: number, weeks?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year'; 
+    export type VizTimeInterval = number | { years?: number, quarters?: number, months?: number, weeks?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
         /** Specifies whether or not to adjust the value axis when zooming the widget. */
         adjustOnZoom?: boolean;
@@ -5750,6 +5757,7 @@ declare module DevExpress.viz {
         /** Specifies the type of the argument axis. */
         type?: 'continuous' | 'discrete' | 'logarithmic';
         visualRange?: Array<number | string | Date>;
+        /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
         visualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis' argumentType is "datetime". */
         workdaysOnly?: boolean;
@@ -7580,6 +7588,7 @@ declare module DevExpress.viz {
         /** Hides all widget tooltips. */
         hideTooltip(): void;
     }
+    /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
     export interface GaugeIndicator extends CommonIndicator {
         type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
     }
@@ -7623,29 +7632,29 @@ declare module DevExpress.viz {
         width?: number;
     }
     /** An object that defines a gauge indicator of the rectangleNeedle type. */
-    export type circularRectangleNeedle = CommonIndicator; 
+    export type circularRectangleNeedle = CommonIndicator;
     /** An object that defines a gauge indicator of the triangleNeedle type. */
-    export type circularTriangleNeedle = CommonIndicator; 
+    export type circularTriangleNeedle = CommonIndicator;
     /** An object that defines a gauge indicator of the twoColorNeedle type. */
-    export type circularTwoColorNeedle = CommonIndicator; 
+    export type circularTwoColorNeedle = CommonIndicator;
     /** An object that defines a gauge indicator of the rangeBar type. */
-    export type circularRangeBar = CommonIndicator; 
+    export type circularRangeBar = CommonIndicator;
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    export type circularTriangleMarker = CommonIndicator; 
+    export type circularTriangleMarker = CommonIndicator;
     /** An object that defines a gauge indicator of the textCloud type. */
-    export type circularTextCloud = CommonIndicator; 
+    export type circularTextCloud = CommonIndicator;
     /** An object defining a gauge indicator of the rectangle type. */
-    export type linearRectangle = CommonIndicator; 
+    export type linearRectangle = CommonIndicator;
     /** An object that defines a gauge indicator of the circle type. */
-    export type linearCircle = CommonIndicator; 
+    export type linearCircle = CommonIndicator;
     /** An object defining a gauge indicator of the rhombus type. */
-    export type linearRhombus = CommonIndicator; 
+    export type linearRhombus = CommonIndicator;
     /** An object that defines a gauge indicator of the rangeBar type. */
-    export type linearRangeBar = CommonIndicator; 
+    export type linearRangeBar = CommonIndicator;
     /** An object that defines a gauge indicator of the triangleMarker type. */
-    export type linearTriangleMarker = CommonIndicator; 
+    export type linearTriangleMarker = CommonIndicator;
     /** An object that defines a gauge indicator of the textCloud type. */
-    export type linearTextCloud = CommonIndicator; 
+    export type linearTextCloud = CommonIndicator;
     export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
         /** Specifies animation options. */
         animation?: BaseGaugeAnimation;
