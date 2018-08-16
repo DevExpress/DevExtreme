@@ -301,7 +301,7 @@ var errorFromResponse = function(obj, textStatus, requestOptions) {
         if(errorObj.code) {
             httpStatus = Number(errorObj.code);
         }
-        return extend(Error(message), { httpStatus: httpStatus, errorDetails: errorObj, xhr: obj, requestOptions: requestOptions });
+        return extend(Error(message), { httpStatus: httpStatus, errorDetails: errorObj, request: obj, requestOptions: requestOptions });
     } else {
         if(httpStatus !== 200) {
             return extend(Error(message), { httpStatus: httpStatus, request: obj, requestOptions: requestOptions });

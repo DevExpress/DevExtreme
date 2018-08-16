@@ -1596,7 +1596,6 @@ QUnit.test("error handlers (check params)", function(assert) {
     });
 
     helper.extraChecker = function(error) {
-        debugger;
         var params = ["message", "request", "requestOptions", "httpStatus"];
         params.forEach((param) => {
             assert.ok(param in error);
