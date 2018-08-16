@@ -2957,17 +2957,13 @@ QUnit.test("visualRange can't go out from whole range (discrete)", function(asse
     this.axis.validate();
 
     this.axis.setBusinessRange({
-        categories: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
-        minVisible: "A",
-        maxVisible: "I"
+        categories: ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.min, undefined);
     assert.equal(businessRange.max, undefined);
     assert.deepEqual(businessRange.categories, ["C", "D", "E", "F", "G", "H"]);
-    assert.equal(businessRange.minVisible, "C");
-    assert.equal(businessRange.maxVisible, "H");
 });
 
 QUnit.test("Whole range length greater then data range", function(assert) {
@@ -3165,19 +3161,6 @@ QUnit.test("Do not set min/max for discrete axis (via visualRange)", function(as
     assert.deepEqual(businessRange.max, undefined);
     assert.equal(businessRange.minVisible, "D");
     assert.equal(businessRange.maxVisible, "E");
-});
-
-QUnit.test("Do not set minVisible/maxVisible out of categories (via visualRange)", function(assert) {
-    this.updateOptions({ type: "discrete", visualRange: ["x", "y"] });
-    this.axis.validate();
-
-    this.axis.setBusinessRange({
-        categories: ["A", "B", "C", "D", "E", "F"]
-    });
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.equal(businessRange.minVisible, "A");
-    assert.equal(businessRange.maxVisible, "F");
 });
 
 QUnit.test("Do not set wholeRange out of categories", function(assert) {
@@ -3524,6 +3507,31 @@ QUnit.test("Shift. Discrete", function(assert) {
     });
 
     this.axis.zoom("b", "c");
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4, 5]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.categories, [1, 2, 3, 4, 5]);
+    assert.equal(businessRange.minVisible, 4);
+    assert.equal(businessRange.maxVisible, 5);
+});
+
+
+QUnit.test("Shift. Discrete datetime", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRangeOnDataUpdate: "shift"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: [new Date(0), new Date(1), new Date(2), new Date(3)]
+    });
+
+    this.axis.zoom(new Date(1), new Date(2));
     this.axis.createTicks(this.canvas);
 
     this.axis.setBusinessRange({

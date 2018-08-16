@@ -969,14 +969,10 @@ Axis.prototype = {
             result.min = isDefined(wholeRange[0]) ? wholeRange[0] : result.min;
             result.max = isDefined(wholeRange[1]) ? wholeRange[1] : result.max;
         } else {
-            const minBoundIndex = isDefined(wholeRange[0]) && categories.indexOf(wholeRange[0]) > -1 ? categories.indexOf(wholeRange[0]) : 0;
-            const maxBoundIndex = isDefined(wholeRange[1]) && categories.indexOf(wholeRange[1]) > -1 ? categories.indexOf(wholeRange[1]) + 1 : categories.length;
+            const categoriesInfo = vizUtils.getCategoriesInfo(categories, wholeRange[0], wholeRange[1]);
 
-            categories = categories.slice(minBoundIndex, maxBoundIndex);
+            categories = categoriesInfo.categories;
             result.categories = categories;
-
-            isDefined(minVisible) && (minVisible = categories.indexOf(minVisible) > -1 ? minVisible : categories[0]);
-            isDefined(maxVisible) && (maxVisible = categories.indexOf(maxVisible) > -1 ? maxVisible : categories[categories.length - 1]);
         }
 
         if(!isDiscrete && (isDefined(minVisible) || isDefined(maxVisible)) && wholeRange.length > 0) {
@@ -1098,13 +1094,10 @@ Axis.prototype = {
                 that._setVisualRange(add(seriesData.max, currentBusinessRange.maxVisible - currentBusinessRange.minVisible, -1), seriesData.max);
             } else {
                 const categories = currentBusinessRange.categories;
-                let minIndex = categories.indexOf(currentBusinessRange.minVisible);
-                let maxIndex = categories.indexOf(currentBusinessRange.maxVisible);
-                minIndex = minIndex > -1 ? minIndex : 0;
-                maxIndex = maxIndex > 0 ? maxIndex : categories.length - 1;
-                const rangeLength = maxIndex - minIndex;
+                const categoriesInfo = vizUtils.getCategoriesInfo(categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+                const rangeLength = categoriesInfo.categories.length;
                 const newCategories = seriesData.categories;
-                that._setVisualRange(newCategories[newCategories.length - 1 - rangeLength], newCategories[newCategories.length - 1]);
+                that._setVisualRange(newCategories[newCategories.length - rangeLength], newCategories[newCategories.length - 1]);
             }
         }
     },
