@@ -8490,6 +8490,55 @@ QUnit.test("group custom summary item", function(assert) {
     assert.strictEqual(finalizeCount, 2, "finalize count");
 });
 
+QUnit.test("group custom summary item depends on groupIndex", function(assert) {
+    this.options = {
+        columns: ['name', 'age'],
+        dataSource: {
+            group: ['name', 'age'],
+            store: [
+                { name: 'Alex', age: 19 },
+                { name: 'Alex', age: 20 },
+                { name: 'Alex', age: 15 },
+                { name: 'Dan', age: 25 }
+            ]
+        },
+        summary: {
+            groupItems: [{
+                name: 'CountForFirstGroup',
+                summaryType: 'custom'
+            }],
+            calculateCustomSummary: function(options) {
+                if(options.name === 'CountForFirstGroup' && options.groupIndex === 0) {
+                    if(options.summaryProcess === 'start') {
+                        options.totalValue = 0;
+                    }
+                    if(options.summaryProcess === 'calculate') {
+                        options.totalValue++;
+                    }
+                }
+            }
+        }
+    };
+
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    this.dataController.expandRow(['Alex']);
+
+    // assert
+    assert.strictEqual(this.dataController.items().length, 5);
+    assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        value: 3,
+        name: 'CountForFirstGroup',
+        summaryType: 'custom'
+    }], [], []], "summary value is calculated for first group");
+    assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [{
+        name: 'CountForFirstGroup',
+        summaryType: 'custom'
+    }], []], "summary value is not calculated for second group");
+});
+
 QUnit.test("group summary item alignByColumn", function(assert) {
     this.options = {
         dataSource: {
