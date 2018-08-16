@@ -203,12 +203,12 @@ var sendRequest = function(protocolVersion, request, options) {
     var d = new Deferred();
     var ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
-    ajax.sendRequest(ajaxOptions).always(function(obj, textStatus, requestOptions) {
+    ajax.sendRequest(ajaxOptions).always(function(obj, textStatus) {
         var transformOptions = {
                 deserializeDates: options.deserializeDates,
                 fieldTypes: options.fieldTypes
             },
-            tuple = interpretJsonFormat(obj, textStatus, transformOptions, requestOptions),
+            tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions),
             error = tuple.error,
             data = tuple.data,
             nextUrl = tuple.nextUrl,
