@@ -32,15 +32,14 @@ class MetadataRepository {
     };
 
     init(themes) {
-        let that = this;
         let promises = [];
 
         themes.forEach(theme => {
             promises.push(new Promise(resolve => {
-                that.metadataLoader
+                this.metadataLoader
                     .load(theme.name, theme.colorScheme)
                     .then(metadata => {
-                        that.repositoryData[theme.name + "-" + theme.colorScheme] = metadata;
+                        this.repositoryData[theme.name + "-" + theme.colorScheme] = metadata;
                         resolve();
                     });
             }));
@@ -55,9 +54,8 @@ class MetadataRepository {
     };
 
     updateData(data, theme) {
-        let that = this;
         data.forEach(item => {
-            let dataItem = that.getDataItemByKey(item.key, theme);
+            let dataItem = this.getDataItemByKey(item.key, theme);
             if(item) dataItem.Value = item.value;
         });
     };

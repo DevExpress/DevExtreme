@@ -50,13 +50,12 @@ class LessMetadataPostCompilerPlugin {
     }
 
     process(css) {
-        let that = this;
         let metadataRegex = new RegExp("(?:" + this.swatchSelector + "\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}");
         metadataRegex.exec(css)[1].split(";").forEach(item => {
             let rule = getCompiledRule(item);
             for(let key in rule) {
                 if(rule.hasOwnProperty(key)) {
-                    that._metadata[key] = rule[key];
+                    this._metadata[key] = rule[key];
                 }
             }
         });
@@ -96,9 +95,7 @@ class LessTemplateLoader {
     }
 
     load(theme, colorScheme, metadata) {
-        let that = this;
-
-        return that._loadLess(theme, colorScheme).then(less => {
+        return this._loadLess(theme, colorScheme).then(less => {
             let modifyVars = {};
             let metadataVariables = {};
             for(let key in metadata) {
@@ -113,32 +110,31 @@ class LessTemplateLoader {
                 }
             }
 
-            return that.compileLess(less, modifyVars, metadataVariables);
+            return this.compileLess(less, modifyVars, metadataVariables);
         });
     };
 
     compileLess(less, modifyVars, metadata) {
-        let that = this;
         return new Promise((resolve, reject) => {
             let compiledMetadata = {};
-            that.lessCompiler.render(less, {
+            this.lessCompiler.render(less, {
                 modifyVars: modifyVars, plugins: [{
                     install: (less, pluginManager) => {
                         pluginManager.addPostProcessor(new LessFontPlugin(this.options));
                     }
                 }, {
                     install: (less, pluginManager) => {
-                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, that.swatchSelector, modifyVars));
+                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
                     }
                 }, {
                     install: (less, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, that.swatchSelector));
+                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector));
                     }
                 }]
             }).then(output => {
                 resolve({
                     compiledMetadata: compiledMetadata,
-                    css: that._makeInfoHeader() + output.css
+                    css: this._makeInfoHeader() + output.css
                 });
             }, error => {
                 reject(error);
@@ -147,11 +143,10 @@ class LessTemplateLoader {
     };
 
     compileScss(less, metadata) {
-        let that = this;
         return new Promise((resolve, reject) => {
             let compiledMetadata = {};
 
-            let preCompiler = new LessMetadataPreCompilerPlugin(metadata, that.swatchSelector);
+            let preCompiler = new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector);
             let sassContent = preCompiler.process(less);
 
             sassCompiler.render({
@@ -160,7 +155,7 @@ class LessTemplateLoader {
                 if(error) {
                     reject(error);
                 } else {
-                    let postCompiler = new LessMetadataPostCompilerPlugin(compiledMetadata, that.swatchSelector);
+                    let postCompiler = new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector);
                     let resultCss = result.css.toString();
 
                     postCompiler.process(resultCss);
@@ -174,8 +169,6 @@ class LessTemplateLoader {
     };
 
     analyzeBootstrapTheme(theme, colorScheme, metadata, bootstrapMetadata, customLessContent, version) {
-        let that = this;
-
         let metadataVariables = "";
         for(let key in bootstrapMetadata) {
             if(bootstrapMetadata.hasOwnProperty(key)) {
@@ -196,7 +189,7 @@ class LessTemplateLoader {
                     }
                 }
 
-                that._loadLess(theme, colorScheme).then(less => {
+                this._loadLess(theme, colorScheme).then(less => {
                     let metadataVariables = {};
 
                     for(let key in metadata) {
@@ -208,7 +201,7 @@ class LessTemplateLoader {
                         }
                     }
 
-                    that.compileLess(less, modifyVars, metadataVariables).then(data => {
+                    this.compileLess(less, modifyVars, metadataVariables).then(data => {
                         resolve({
                             compiledMetadata: data.compiledMetadata,
                             modifyVars: modifyVars,
@@ -219,16 +212,16 @@ class LessTemplateLoader {
             };
 
             if(version === 3) {
-                that.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
+                this.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
             } else if(version === 4) {
                 let defaultBootstrapVariablesUrl = "node_modules/bootstrap/scss/_variables.scss",
                     defaultBootstrapFunctionsUrl = "node_modules/bootstrap/scss/_functions.scss";
 
-                Promise.all([that.readFile(defaultBootstrapFunctionsUrl), that.readFile(defaultBootstrapVariablesUrl)])
+                Promise.all([this.readFile(defaultBootstrapFunctionsUrl), this.readFile(defaultBootstrapVariablesUrl)])
                     .then(files => {
-                        that.compileScss(files[0] + customLessContent + files[1] + metadataVariables, bootstrapMetadata).then(processDxTheme);
+                        this.compileScss(files[0] + customLessContent + files[1] + metadataVariables, bootstrapMetadata).then(processDxTheme);
                     }, () => {
-                        that.compileScss(customLessContent + metadataVariables, bootstrapMetadata).then(processDxTheme);
+                        this.compileScss(customLessContent + metadataVariables, bootstrapMetadata).then(processDxTheme);
                     });
             }
         });
