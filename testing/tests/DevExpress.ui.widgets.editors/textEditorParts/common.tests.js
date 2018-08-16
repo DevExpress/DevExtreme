@@ -643,6 +643,22 @@ QUnit.test("'Clear' button visibility depends on value", function(assert) {
     assert.ok($clearButton.is(":visible"), "TextEditor has clear button again");
 });
 
+QUnit.test("clear button should disappear when text changed without value change", function(assert) {
+    var $element = $("#texteditor").dxTextEditor({ showClearButton: true, value: "" }),
+        instance = $element.dxTextEditor("instance"),
+        $input = $element.find("." + INPUT_CLASS),
+        kb = keyboardMock($input);
+
+    kb.type("123");
+    var $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+    $clearButton.trigger("dxclick");
+
+    assert.strictEqual($input.val(), "", "input value is correct");
+    assert.strictEqual(instance.option("text"), "", "text option is correct");
+    assert.strictEqual(instance.option("value"), "", "value is correct");
+    assert.notOk($clearButton.is(":visible"), "clear button was hidden");
+});
+
 QUnit.test("click on clear button should not reset active focus (T241583)", function(assert) {
     var $element = $("#texteditor").dxTextEditor({ showClearButton: true, value: "foo" }),
         $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
