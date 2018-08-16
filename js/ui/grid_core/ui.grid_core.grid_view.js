@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
+    gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
     when = require("../../core/utils/deferred").when,
     domAdapter = require("../../core/dom_adapter"),
@@ -62,6 +63,11 @@ var calculateFreeWidthWithCurrentMinWidth = function(that, columnIndex, currentM
     return calculateFreeWidth(that, widths.map(function(width, index) {
         return index === columnIndex ? currentMinWidth : width;
     }));
+};
+
+var restoreFocus = function(focusedElement, selectionRange) {
+    focusedElement.focus();
+    gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
 var ResizingController = modules.ViewController.inherit({
@@ -197,6 +203,7 @@ var ResizingController = modules.ViewController.inherit({
             isColumnWidthsCorrected = false,
             resultWidths = [],
             focusedElement,
+            selectionRange,
             normalizeWidthsByExpandColumns = function() {
                 var expandColumnWidth;
 
@@ -231,6 +238,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if(needBestFit) {
             focusedElement = domAdapter.getActiveElement();
+            selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
@@ -261,7 +269,7 @@ var ResizingController = modules.ViewController.inherit({
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
                 if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
-                    browser.msie ? setTimeout(function() { focusedElement.focus(); }) : focusedElement.focus();
+                    browser.msie ? setTimeout(function() { restoreFocus(focusedElement, selectionRange); }) : restoreFocus(focusedElement, selectionRange);
                 }
             }
 
