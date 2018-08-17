@@ -630,6 +630,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _dispose: function() {
         clearTimeout(this._updateTimer);
+        this._clearItemNodeTemplates();
         this._cleanUnusedRoots();
         this.callBase.apply(this, arguments);
     },
