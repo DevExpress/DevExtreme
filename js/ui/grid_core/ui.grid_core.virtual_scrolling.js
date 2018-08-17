@@ -280,13 +280,16 @@ var VirtualScrollingRowsViewExtender = (function() {
             that.scrollTo({ y: scrollPosition, x: that._scrollLeft });
         },
 
+        renderDelayedTemplates: function(e) {
+            this._updateContentPosition(true);
+            this.callBase.apply(this, arguments);
+        },
+
         _renderCore: function(e) {
             var that = this,
                 startRenderDate = new Date();
 
             that.callBase.apply(that, arguments);
-
-            that._updateContentPosition(true);
 
             var dataSource = that._dataController._dataSource;
             if(dataSource && e) {
