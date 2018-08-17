@@ -403,7 +403,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _displayValue: function(item) {
-        return this._displayGetter(item);
+        return typeUtils.isDefined(item) ? this._displayGetter(item) : item;
     },
 
     _refreshSelected: function() {
