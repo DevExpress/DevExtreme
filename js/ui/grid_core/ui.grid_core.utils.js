@@ -437,19 +437,6 @@ module.exports = (function() {
             };
         },
 
-        isDateType: isDateType,
-
-        getSelectionRange: function(focusedElement) {
-            return focusedElement ? {
-                selectionStart: focusedElement.selectionStart,
-                selectionEnd: focusedElement.selectionEnd
-            } : {};
-        },
-
-        setSelectionRange: function(focusedElement, selectionRange) {
-            if(selectionRange && typeUtils.isNumeric(selectionRange.selectionStart) && typeUtils.isNumeric(selectionRange.selectionEnd)) {
-                focusedElement && focusedElement.setSelectionRange && focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
-            }
-        }
+        isDateType: isDateType
     };
 })();
