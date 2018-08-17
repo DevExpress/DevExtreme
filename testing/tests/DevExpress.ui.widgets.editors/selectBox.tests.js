@@ -643,7 +643,7 @@ QUnit.test("selectBox should display value when item is 0 or boolean false", fun
     assert.equal($input.val(), "False", "False value is shown correctly");
 
     $($selectBox.find(toSelector(LIST_ITEM_CLASS) + ":eq(0)")).trigger("dxclick");
-    assert.equal($input.val(), "None", "Null value is shown correctly");
+    assert.equal($input.val(), "", "Null value should not be handled by displayExpr method");
 });
 
 QUnit.test("dxList has empty message", function(assert) {
