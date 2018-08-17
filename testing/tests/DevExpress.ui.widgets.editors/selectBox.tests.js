@@ -609,7 +609,7 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening after 
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible after search");
 });
 
-QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox is editable and item is out of page", function(assert) {
+QUnit.test("dxSelectBox scrolls to the top when pagingEnabled=true and selectbox is editable and item is out of page", function(assert) {
     var items = [];
     for(var i = 0; i <= 200; i++) {
         items.push(i);
