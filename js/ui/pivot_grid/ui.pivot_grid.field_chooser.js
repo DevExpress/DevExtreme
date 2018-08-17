@@ -312,6 +312,8 @@ var FieldChooser = BaseFieldChooser.inherit({
             layout = that.option("layout"),
             $col1,
             $col2,
+            $col3,
+            $col4,
             $row1,
             $row2;
 
@@ -332,12 +334,15 @@ var FieldChooser = BaseFieldChooser.inherit({
             $col1 = $(DIV).addClass("dx-col").appendTo($row1);
             $col2 = $(DIV).addClass("dx-col").appendTo($row1);
 
+            $col3 = $(DIV).addClass("dx-col").appendTo($row2);
+            $col4 = $(DIV).addClass("dx-col").appendTo($row2);
+
             that._renderArea($col1, "all");
             that._renderArea($col2, "row");
             that._renderArea($col2, "column");
 
-            that._renderArea($row2, "filter");
-            that._renderArea($row2, "data");
+            that._renderArea($col3, "filter");
+            that._renderArea($col4, "data");
 
         } else if(layout === 1) {
             $col1 = $(DIV).addClass("dx-col").appendTo($container);
@@ -350,11 +355,13 @@ var FieldChooser = BaseFieldChooser.inherit({
             that._renderArea($col2, "data");
         } else {
             $container.addClass("dx-layout-2");
-            this._renderArea($container, "all");
-            var $layout2Container = $(DIV).addClass("dx-fields-container").appendTo($container);
 
-            $col1 = $(DIV).addClass("dx-col").appendTo($layout2Container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($layout2Container);
+            $row1 = $(DIV).addClass("dx-row").appendTo($container);
+            this._renderArea($row1, "all");
+
+            $row2 = $(DIV).addClass("dx-row").appendTo($container);
+            $col1 = $(DIV).addClass("dx-col").appendTo($row2);
+            $col2 = $(DIV).addClass("dx-col").appendTo($row2);
 
             that._renderArea($col1, "filter");
             that._renderArea($col1, "row");

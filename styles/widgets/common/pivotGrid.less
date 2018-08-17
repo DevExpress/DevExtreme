@@ -173,14 +173,12 @@
 
     .dx-pivotgridfieldchooser-container.dx-layout-2 {
         flex-direction: column;
-    }
 
-    .dx-layout-2 {
-        .dx-all-fields {
+        .dx-row:nth-child(1) {
             flex-grow: 1;
         }
 
-        .dx-fields-container {
+        .dx-row:nth-child(2) {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
@@ -197,6 +195,7 @@
     .dx-row {
         display: flex;
         flex-direction: row;
+        height: 0;
     }
 
     .dx-pivotgridfieldchooser-container {
