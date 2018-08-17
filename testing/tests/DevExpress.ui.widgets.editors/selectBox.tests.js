@@ -595,17 +595,15 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening after 
         searchEnabled: true
     });
 
-    var selectBox = $selectBox.dxSelectBox("instance"),
-        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
-    selectBox.option("opened", true);
-    var $popupContent = $(selectBox.content());
+    var $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+    $selectBox.find("." + DX_DROP_DOWN_BUTTON).trigger("dxclick");
+    var $popupContent = $(".dx-popup-content");
 
     keyboardMock($input)
-        .focus()
         .type("50")
         .change();
     $popupContent.find("." + LIST_ITEM_CLASS).eq(0).trigger("dxclick");
-    selectBox.option("opened", true);
+    $selectBox.find("." + DX_DROP_DOWN_BUTTON).trigger("dxclick");
 
     var $selectedItem = $popupContent.find("." + LIST_ITEM_SELECTED_CLASS);
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible after search");
