@@ -3214,6 +3214,41 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
     this.clock.restore();
 });
 
+QUnit.test("scroll position should not be reseted if virtual scrolling and cell template cause relayout", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 100; i++) {
+        array.push({ id: i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        dataSource: array,
+        keyExpr: "id",
+        paging: { pageSize: 10 },
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        },
+        columns: [{
+            dataField: "id",
+            cellTemplate: function(container, options) {
+                $(container).width();
+                $(container).text(options.text);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 2000 });
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), 2000, "scrollTop is not reseted");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row key");
+});
+
 QUnit.test("height from extern styles", function(assert) {
     // arrange, act
     var $dataGrid = $("#dataGrid").addClass("fixed-height").dxDataGrid({
