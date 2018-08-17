@@ -404,7 +404,7 @@ QUnit.test("items have no unsafe modifications after dispose", function(assert) 
         {
             location: { row: 0, col: 0, screen: 'md' }, template: "template"
         }
-    ]
+    ];
 
     var result = [
         {
@@ -419,7 +419,7 @@ QUnit.test("items have no unsafe modifications after dispose", function(assert) 
             },
             template: "template"
         }
-    ]
+    ];
 
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
@@ -427,7 +427,7 @@ QUnit.test("items have no unsafe modifications after dispose", function(assert) 
         items: items
     });
 
-    assert.ok(items[0].node, "node exists on rendering (unsafe)")
+    assert.ok(items[0].node, "node exists on rendering (unsafe)");
 
     $responsiveBox.dxResponsiveBox("instance").dispose();
 
