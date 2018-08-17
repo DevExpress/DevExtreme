@@ -65,7 +65,7 @@ var ODataContext = Class.inherit({
          * @type function
          * @type_function_param1 e:Error
          * @type_function_param1_field1 httpStatus:number
-         * @type_function_param1_field2 errorDetails:boolean
+         * @type_function_param1_field2 errorDetails:object
          * @type_function_param1_field3 requestOptions:object
          */
         that._errorHandler = options.errorHandler;
