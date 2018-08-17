@@ -1446,7 +1446,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     var $focusedElement = $(domAdapter.getActiveElement()),
                         columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex),
                         focusedElement = $focusedElement.get(0),
-                        selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
+                        selectionStart = focusedElement && focusedElement.selectionStart,
+                        selectionEnd = focusedElement && focusedElement.selectionEnd;
 
                     that._updateEditRowCore(row);
 
@@ -1455,8 +1456,10 @@ var EditingController = modules.ViewController.inherit((function() {
                         that._delayedInputFocus($focusedItem, function() {
                             setTimeout(function() {
                                 focusedElement = domAdapter.getActiveElement();
-                                if(selectionRange.selectionStart >= 0) {
-                                    gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
+                                if(selectionStart >= 0 && focusedElement && focusedElement.setSelectionRange) {
+                                    try {
+                                        focusedElement.setSelectionRange(selectionStart, selectionEnd);
+                                    } catch(e) {}
                                 }
                             });
                         });
