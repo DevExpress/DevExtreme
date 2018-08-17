@@ -1420,7 +1420,7 @@ QUnit.test("server error via JSONP with 200 status", function(assert) {
         responseText: {
             error: {
                 message: "error via jsonp",
-                code: 123
+                code: 456
             }
         }
     });
@@ -1429,7 +1429,7 @@ QUnit.test("server error via JSONP with 200 status", function(assert) {
         .enumerate()
         .fail(function(error) {
             assert.equal(error.message, "error via jsonp");
-            assert.equal(error.httpStatus, 123);
+            assert.equal(error.httpStatus, 456);
         })
         .done(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
