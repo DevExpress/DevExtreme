@@ -953,3 +953,23 @@ QUnit.test("drawer should be hidden after click on content", (assert) => {
     $($content).trigger("dxpointerdown");
     assert.equal(drawer.option("opened"), false, "drawer is hidden");
 });
+
+QUnit.test("closeOnOutsideClick as function should be processed correctly", (assert) => {
+    var drawer = $("#drawer").dxDrawer({
+            closeOnOutsideClick: () => {
+                return false;
+            },
+            opened: true
+        })
+        .dxDrawer("instance"),
+        $content = drawer.viewContent();
+
+    $($content).trigger("dxpointerdown");
+    assert.equal(drawer.option("opened"), true, "drawer is not hidden");
+    drawer.option("closeOnOutsideClick", () => {
+        return true;
+    });
+
+    $($content).trigger("dxpointerdown");
+    assert.equal(drawer.option("opened"), false, "drawer is hidden");
+});
