@@ -338,7 +338,7 @@ QUnit.test("animationDuration option test", function(assert) {
 
 QUnit.module("shader");
 
-QUnit.test("shader should be visible if menu is opened", assert => {
+QUnit.test("shader should be visible if drawer is opened", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true
     });
@@ -348,7 +348,7 @@ QUnit.test("shader should be visible if menu is opened", assert => {
     assert.ok($shader.is(":visible"), "shader is visible");
 });
 
-QUnit.test("shader should not be visible if menu is closed", assert => {
+QUnit.test("shader should not be visible if drawer is closed", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: false
     });
@@ -358,7 +358,7 @@ QUnit.test("shader should not be visible if menu is closed", assert => {
     assert.ok($shader.is(":hidden"), "shader is visible");
 });
 
-QUnit.test("click on shader should not close menu", assert => {
+QUnit.test("click on shader should not close drawer", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true
     });
@@ -367,7 +367,7 @@ QUnit.test("click on shader should not close menu", assert => {
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
     $shader.trigger("dxclick");
-    assert.ok(!instance.option("opened"), "menu was closed");
+    assert.ok(instance.option("opened"), "drawer is opened");
 });
 
 QUnit.test("shader should be visible during animation", assert => {
@@ -936,3 +936,20 @@ QUnit.test("content should have correct position if menu is visible in rtl mode"
     assert.equal(position($content), -$menu.width(), "container rendered at correct position");
 });
 
+QUnit.module("closeOnOutsideClick");
+
+QUnit.test("drawer should be hidden after click on content", (assert) => {
+    var drawer = $("#drawer").dxDrawer({
+            closeOnOutsideClick: false,
+            opened: true
+        })
+        .dxDrawer("instance"),
+        $content = drawer.viewContent();
+
+    $($content).trigger("dxpointerdown");
+    assert.equal(drawer.option("opened"), true, "drawer is not hidden");
+    drawer.option("closeOnOutsideClick", true);
+
+    $($content).trigger("dxpointerdown");
+    assert.equal(drawer.option("opened"), false, "drawer is hidden");
+});
