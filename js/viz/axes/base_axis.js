@@ -1058,7 +1058,7 @@ Axis.prototype = {
                 if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
                     value = RESET;
                 } else if(minPoint !== minVisiblePoint && maxPoint === maxVisiblePoint) {
-                    value = SHIFT
+                    value = SHIFT;
                 } else {
                     value = KEEP;
                 }
@@ -1069,7 +1069,7 @@ Axis.prototype = {
 
     _handleBusinessRangeChanged(seriesData) {
         const currentBusinessRange = new rangeModule.Range(this._translator.getBusinessRange());
-        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || !this.isArgumentAxis) {
+        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || !this.isArgumentAxis || currentBusinessRange.isEstimatedRange) {
             return;
         }
         const that = this;

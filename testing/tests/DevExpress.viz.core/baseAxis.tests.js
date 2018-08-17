@@ -3637,3 +3637,25 @@ QUnit.test("Auto. Discrete axis - reset", function(assert) {
     assert.equal(businessRange.minVisible, undefined);
     assert.equal(businessRange.maxVisible, undefined);
 });
+
+QUnit.test("Do not reset initial viewport if current bussiness range has isEstimatedRange flag", function(assert) {
+    this.updateOptions({ visualRangeOnDataUpdate: "reset", visualRange: [10, 20] });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120,
+        isEstimatedRange: true
+    });
+
+    this.axis.setBusinessRange({
+        min: -100,
+        max: 100
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, 100);
+    assert.equal(businessRange.minVisible, 10);
+    assert.equal(businessRange.maxVisible, 20);
+});
