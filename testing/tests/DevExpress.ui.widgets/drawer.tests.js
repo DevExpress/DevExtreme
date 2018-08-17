@@ -40,14 +40,14 @@ const mockFxAnimate = (animations, type, output) => {
 const animationCapturing = {
     start() {
         this._capturedAnimations = [];
-        this._animation = Object.assign({}, animation);
+        this._animation = $.extend({}, animation);
 
         mockFxAnimate(animation, "moveTo", this._capturedAnimations);
 
         return this._capturedAnimations;
     },
     teardown() {
-        Object.assign(animation, this._animation);
+        $.extend(animation, this._animation);
 
         delete this._capturedAnimations;
         delete this._animations;
