@@ -447,7 +447,9 @@ module.exports = (function() {
         },
 
         setSelectionRange: function(focusedElement, selectionRange) {
-            focusedElement && focusedElement.setSelectionRange && focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
+            if(selectionRange && typeUtils.isNumeric(selectionRange.selectionStart) && typeUtils.isNumeric(selectionRange.selectionEnd)) {
+                focusedElement && focusedElement.setSelectionRange && focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
+            }
         }
     };
 })();
