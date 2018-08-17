@@ -492,12 +492,13 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening", func
         items: items,
         value: 100
     });
+    var selectBox = $selectBox.dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
 
-    $selectBox.dxSelectBox("option", "opened", true);
+    selectBox.option("opened", true)
 
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
+    var $popupContent = $(selectBox.content());
     var $selectedItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));
 
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
@@ -515,15 +516,17 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening after 
         searchEnabled: true
     });
 
-    var $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-    $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON)).trigger("dxclick");
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
+    var selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+    selectBox.option("opened", true);
+    var $popupContent = $(selectBox.content());
 
     keyboardMock($input)
+        .focus()
         .type("50")
         .change();
     $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(0).trigger("dxclick");
-    $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON)).trigger("dxclick");
+    selectBox.option("opened", true);
 
     var $selectedItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));
     assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible after search");
@@ -535,7 +538,7 @@ QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox 
         items.push(i);
     }
 
-    var $selectBox = $("#selectBox").dxSelectBox({
+    var selectBox = $("#selectBox").dxSelectBox({
         searchEnabled: true,
         dataSource: {
             paginate: true,
@@ -543,13 +546,13 @@ QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox 
             pageSize: 100
         },
         value: 101
-    });
+    }).dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
 
-    $selectBox.dxSelectBox("option", "opened", true);
+    selectBox.option("opened", true);
 
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
+    var $popupContent = $(selectBox.content());
     var $firstItem = $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(0);
 
     assert.ok($popupContent.offset().top <= $firstItem.offset().top, "first item is visible");
@@ -570,12 +573,13 @@ QUnit.test("dxSelectBox scroll to selected item when paging is enabled and selec
         },
         value: 99
     });
+    var selectBox = $selectBox.dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
 
-    $selectBox.dxSelectBox("option", "opened", true);
+    selectBox.option("opened", true);
 
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS)),
+    var $popupContent = $(selectBox.content()),
         $selectedItem = $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(98),
         itemBottom = $selectedItem.offset().top + $selectedItem.outerHeight(),
         contentBottom = $popupContent.offset().top + $popupContent.outerHeight();
@@ -3451,10 +3455,11 @@ QUnit.testInActiveWindow("selectbox does not hide self after input blur", functi
     var $selectBox = $("#selectBoxWithoutScroll").dxSelectBox({
         dataSource: [100, 200, 300]
     });
+    var selectBox = $selectBox.dxSelectBox("instance");
 
     var $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
     pointerMock($input).start().click();
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
+    var $popupContent = $(selectBox.content());
     assert.equal($popupContent.is(":visible"), true, "popup visible after click");
     $input.blur();
     assert.equal($popupContent.is(":visible"), true, "popup visible after focus out");
