@@ -1,22 +1,46 @@
 var gulp = require('gulp');
 var path = require('path');
 var context = require('./context.js');
+var autoPrefix = require('gulp-autoprefixer');
 
 function runStyleCompiler(command, params, callback) {
-    var spawn = require('child_process').spawn;
-    var process = spawn(
-        'dotnet',
-        ['build/style-compiler/bin/style-compiler.dll', command].concat(params),
-        { stdio: 'inherit' }
-    );
+    var spawn = require('child_process').spawn,
+        process = spawn(
+            'dotnet',
+            ['build/style-compiler/bin/style-compiler.dll', command].concat(params),
+            { stdio: 'inherit' }
+        );
 
     process.on('exit', function(code) {
         if(code === 0) {
-            callback();
+            addCssPrefixes(params, callback);
         } else {
             callback('Style compiler failed');
         }
     });
+}
+
+function addCssPrefixes(params, callback) {
+    var outputPath,
+        dateStart;
+
+    if(params.length > 0) {
+        outputPath = params.find(param => !!param.match("--output-path"));
+        outputPath = outputPath && outputPath.replace("--output-path=", "");
+    }
+    if(outputPath) {
+        dateStart = new Date();
+        gulp.src(outputPath + "/*.css")
+            .pipe(autoPrefix())
+            .pipe(gulp.dest(function(file) { return file.base; })
+                .on('end', function() {
+                    console.log(`  Autoprefixer finished after ${(new Date() - dateStart) / 1000}s`);
+                    callback();
+                }))
+            .on('error', function() {
+                callback('  Autoprefixer failed');
+            });
+    }
 }
 
 function generateCustomTheme(baseTheme, baseColorScheme, baseSizeScheme, customMetaPath, outputPath, callback) {

@@ -61,6 +61,7 @@
     "gulp-typescript": "^3.0.2",
     "gulp-uglify": "^1.5.3",
     "gulp-watch": "^5.0.0",
+    "gulp-autoprefixer": "^5.0.0",
     "handlebars": "4.0.11",
     "hogan.js": "3.0.2",
     "jquery": "3.1.1",
@@ -103,5 +104,11 @@
     "dev": "gulp dev",
     "test-env": "node testing/launch"
   },
+  "browserslist": [
+    "last 1 version",
+    "ios > 6",
+    "ie > 10",
+    "> 1%"
+  ],
   "pre-commit": "lint-staged"
 }
