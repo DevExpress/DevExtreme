@@ -447,6 +447,7 @@ const Drawer = Widget.inherit({
                 break;
             case "animationEnabled":
             case "animationDuration":
+            case "closeOnOutsideClick":
                 break;
             default:
                 this.callBase(args);
