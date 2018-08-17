@@ -637,6 +637,7 @@ var dxChart = AdvancedChart.inherit({
 
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
+            viewport.isEstimatedRange = true;
             axis.setBusinessRange(viewport);
         });
 

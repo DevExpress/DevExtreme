@@ -190,15 +190,17 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
         argumentAxis = chart._argumentAxes[0];
 
     assert.ok(updateSeriesData.lastCall.calledBefore(argumentAxis.setBusinessRange.firstCall));
-    assert.deepEqual(argumentAxis.setBusinessRange.firstCall.args[0].min, 5);
-    assert.deepEqual(argumentAxis.setBusinessRange.firstCall.args[0].max, 20);
+    assert.equal(argumentAxis.setBusinessRange.firstCall.args[0].min, 5);
+    assert.equal(argumentAxis.setBusinessRange.firstCall.args[0].max, 20);
+    assert.strictEqual(argumentAxis.setBusinessRange.firstCall.args[0].isArgumentRange, true);
     assert.deepEqual(argumentAxis.updateCanvas.firstCall.args[0], chart._canvas);
 
     assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.updateCanvas.firstCall));
     assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.setBusinessRange.firstCall));
     assert.ok(argumentAxis.setBusinessRange.lastCall.calledAfter(stubSeries.createPoints.lastCall), "axis.setBusiness range should be after create points");
-    assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].min, 0);
-    assert.deepEqual(argumentAxis.setBusinessRange.lastCall.args[0].max, 30);
+    assert.equal(argumentAxis.setBusinessRange.lastCall.args[0].min, 0);
+    assert.equal(argumentAxis.setBusinessRange.lastCall.args[0].max, 30);
+    assert.ok(!argumentAxis.setBusinessRange.lastCall.args[0].isArgumentRange);
 });
 
 QUnit.test("Set stub data for argument range if no data", function(assert) {
