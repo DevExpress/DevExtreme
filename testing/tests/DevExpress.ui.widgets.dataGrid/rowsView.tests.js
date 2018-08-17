@@ -1471,11 +1471,14 @@ QUnit.test('Custom extern column template without allowRenderToDetachedContainer
     // act
 
     var contentPositionUpdated = false;
-    rowsView._updateContentPosition = function() {
-        contentPositionUpdated = true;
+    rowsView._updateContentPosition = function(isRender) {
+        if(!isRender) {
+            contentPositionUpdated = true;
+        }
     };
 
     rowsView.render(testElement);
+    rowsView.resize();
     cells = testElement.find('td');
 
     // assert
