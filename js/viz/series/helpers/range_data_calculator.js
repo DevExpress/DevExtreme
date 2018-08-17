@@ -178,8 +178,13 @@ module.exports = {
             if(series.argumentAxisType === DISCRETE) {
                 range.arg = argumentRange
             } else {
-                argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
-                argumentCalculator(range.arg, argumentRange.max, argumentRange.max);
+                const viewport = series.getArgumentAxis().visualRange() || [];
+                const viewportLength = (viewport[1] - viewport[0]) || 0;
+                const dataRangeLength = argumentRange.max - argumentRange.min;
+                if(viewportLength < dataRangeLength) {
+                    argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
+                    argumentCalculator(range.arg, argumentRange.max, argumentRange.max);
+                }
             }
         }
 
