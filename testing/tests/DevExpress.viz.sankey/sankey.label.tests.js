@@ -31,7 +31,7 @@ QUnit.test("Create labels", function(assert) {
     labels.forEach(function(label) {
         assert.equal(label.renderer, that.renderer, 'renderer');
         assert.equal(label.append.callCount, 1, 'appended once');
-        assert.equal(label.attr.callCount, 2, 'Two calls: setting all attrs and adjusting y coordinate');
+        assert.equal(label.children[0].attr.callCount, 2, 'Two calls: setting all attrs and adjusting x,y coordinates');
     });
 
     assert.equal(that.renderer.text.getCall(0).args[0], 'A');
@@ -71,9 +71,9 @@ QUnit.test("Create labels with styles", function(assert) {
             },
         }
     });
-    var labels = this.labels(),
-        css = labels[0].css.firstCall.args[0],
-        attrs = labels[0].attr.firstCall.args[0];
+    var label = this.label(0),
+        css = label.css.firstCall.args[0],
+        attrs = label.attr.firstCall.args[0];
 
     assert.deepEqual(css, {
         fill: "red",
@@ -100,9 +100,7 @@ QUnit.test("Create labels with styles and invisible borders", function(assert) {
             }
         }
     });
-    var labels = this.labels(),
-        attrs = labels[0].attr.firstCall.args[0];
-
+    var attrs = this.label(0).attr.firstCall.args[0];
     assert.equal(attrs["stroke-width"], 0);
 });
 
@@ -113,12 +111,11 @@ QUnit.test("Label color if useNodeColors set to true", function(assert) {
             useNodeColors: true
         }
     });
-    var labels = this.labels(),
-        nodes = this.nodes();
+    var nodes = this.nodes();
 
-    assert.equal(nodes[0].attr.lastCall.args[0].fill, labels[0].css.firstCall.args[0].fill);
-    assert.equal(nodes[1].attr.lastCall.args[0].fill, labels[1].css.firstCall.args[0].fill);
-    assert.equal(nodes[2].attr.lastCall.args[0].fill, labels[2].css.firstCall.args[0].fill);
+    assert.equal(nodes[0].attr.lastCall.args[0].fill, this.label(0).css.firstCall.args[0].fill);
+    assert.equal(nodes[1].attr.lastCall.args[0].fill, this.label(1).css.firstCall.args[0].fill);
+    assert.equal(nodes[2].attr.lastCall.args[0].fill, this.label(2).css.firstCall.args[0].fill);
 });
 
 QUnit.test("Labels customize text", function(assert) {
@@ -141,20 +138,37 @@ QUnit.test("Labels customize text", function(assert) {
 
 QUnit.test("Labels alignment through cascades", function(assert) {
     createSankey({
-        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
     });
 
-    var labels = this.labels(),
-        nodes = this.nodes();
+    var nodes = this.nodes();
 
-    assert.equal(labels[0].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
-    assert.equal(labels[1].attr.firstCall.args[0]["text-anchor"], 'start', 'Alignment in first cascade');
-    assert.equal(labels[2].attr.firstCall.args[0]["text-anchor"], 'end', 'Alignment in last cascade');
+    assert.equal(this.label(0).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
+    assert.equal(this.label(1).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
+    assert.equal(this.label(2).attr.lastCall.args[0].translateX, 956, 'Alignment in last cascade');
 
-    assert.ok(nodes[0].attr.firstCall.args[0].x < labels[0].attr.firstCall.args[0].x, 'First cascade');
-    assert.ok(nodes[1].attr.firstCall.args[0].x < labels[1].attr.firstCall.args[0].x, 'First cascade');
-    assert.ok(nodes[2].attr.firstCall.args[0].x > labels[2].attr.firstCall.args[0].x, 'Last cascade');
+    assert.ok(nodes[0].attr.firstCall.args[0].x < this.label(0).attr.lastCall.args[0].translateX, 'First cascade');
+    assert.ok(nodes[1].attr.firstCall.args[0].x < this.label(1).attr.lastCall.args[0].translateX, 'First cascade');
+    assert.ok(nodes[2].attr.firstCall.args[0].x > this.label(2).attr.lastCall.args[0].translateX, 'Last cascade');
 });
+
+QUnit.test("Labels alignment through cascades with rtlEnabled", function(assert) {
+    createSankey({
+        rtlEnabled: true,
+        dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
+    });
+
+    var nodes = this.nodes();
+
+    assert.equal(this.label(0).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
+    assert.equal(this.label(1).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
+    assert.equal(this.label(2).attr.lastCall.args[0].translateX, 956, 'Alignment in last cascade');
+
+    assert.ok(nodes[0].attr.firstCall.args[0].x < this.label(0).attr.lastCall.args[0].translateX, 'First cascade');
+    assert.ok(nodes[1].attr.firstCall.args[0].x < this.label(1).attr.lastCall.args[0].translateX, 'First cascade');
+    assert.ok(nodes[2].attr.firstCall.args[0].x > this.label(2).attr.lastCall.args[0].translateX, 'Last cascade');
+});
+
 
 QUnit.test("Labels offsets", function(assert) {
     createSankey({
@@ -165,8 +179,8 @@ QUnit.test("Labels offsets", function(assert) {
         }
     });
 
-    var x = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
-        y = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; });
+    var x = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; }),
+        y = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; });
 
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -176,8 +190,8 @@ QUnit.test("Labels offsets", function(assert) {
         }
     });
 
-    var xOffset = this.labels().map(function(label) { return label.attr.firstCall.args[0].x; }),
-        yOffset = this.labels().map(function(label) { return label.attr.lastCall.args[0].y; }),
+    var xOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; }),
+        yOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; }),
         xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]],
         yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
 

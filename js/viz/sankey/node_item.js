@@ -135,18 +135,8 @@ Node.prototype = {
         this.widget._tooltip && this.widget._tooltip.hide();
     },
 
-    getLabelAttributes: function(labelSettings, filter, diagramRect) {
-        var attributes = compileLabelAttrs(labelSettings, filter, this);
-
-        if(this.rect.x + this.rect.width + labelSettings.horizontalOffset >= diagramRect[2] - diagramRect[1]) {
-            attributes.attr.x = this.rect.x - labelSettings.horizontalOffset;
-            attributes.attr['text-anchor'] = 'end';
-        } else {
-            attributes.attr.x = this.rect.x + this.rect.width + labelSettings.horizontalOffset;
-            attributes.attr['text-anchor'] = 'start';
-        }
-        attributes.attr.y = this.rect.y + this.rect.height / 2;
-        return attributes;
+    getLabelAttributes: function(labelSettings, filter) {
+        return compileLabelAttrs(labelSettings, filter, this);
     }
 
 };
