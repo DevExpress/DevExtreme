@@ -307,10 +307,12 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         }
     }
 
-    if(httpStatus !== 200) {
+    if(httpStatus >= 400) {
         errorData.httpStatus = httpStatus;
         return extend(Error(message), errorData);
     }
+
+    return null;
 };
 
 var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOptions) {
