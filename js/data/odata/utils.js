@@ -305,11 +305,10 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         if(errorObj.code) {
             errorData.httpStatus = Number(errorObj.code);
         }
+    }
+
+    if(errorData.httpStatus !== 200) {
         return extend(Error(message), errorData);
-    } else {
-        if(errorData.httpStatus !== 200) {
-            return extend(Error(message), errorData);
-        }
     }
 };
 
