@@ -5394,7 +5394,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         countCallCalculateCellValue = 0;
         $inputElement.change();
         that.clock.tick();
-        $inputElement = $testElement.find(".dx-texteditor-input").first()
+        $inputElement = $testElement.find(".dx-texteditor-input").first();
         $testElement.find(".dx-datagrid-rowsview").trigger($.Event("keydown", { which: TAB_KEY, target: $inputElement }));
         that.clock.tick();
 
