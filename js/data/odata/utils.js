@@ -269,17 +269,20 @@ var formatDotNetError = function(errorObj) {
 };
 
 // TODO split: decouple HTTP errors from OData errors
-var errorFromResponse = function(obj, textStatus, requestOptions) {
+var errorFromResponse = function(obj, textStatus, ajaxOptions) {
     if(textStatus === "nocontent") {
         return null; // workaround for http://bugs.jquery.com/ticket/13292
     }
 
-    var httpStatus = 200,
-        message = "Unknown error",
-        response = obj;
+    var message = "Unknown error",
+        response = obj,
+        errorData = {
+            httpStatus: 200,
+            requestOptions: ajaxOptions
+        };
 
     if(textStatus !== "success") {
-        httpStatus = obj.status;
+        errorData.httpStatus = obj.status;
         message = dataUtils.errorMessageFromXhr(obj, textStatus);
         try {
             response = JSON.parse(obj.responseText);
@@ -294,23 +297,24 @@ var errorFromResponse = function(obj, textStatus, requestOptions) {
 
     if(errorObj) {
         message = formatDotNetError(errorObj) || message;
+        errorData.errorDetails = errorObj;
 
-        if(httpStatus === 200) {
-            httpStatus = 500;
+        if(errorData.httpStatus === 200) {
+            errorData.httpStatus = 500;
         }
         if(errorObj.code) {
-            httpStatus = Number(errorObj.code);
+            errorData.httpStatus = Number(errorObj.code);
         }
-        return extend(Error(message), { httpStatus: httpStatus, errorDetails: errorObj, request: obj, requestOptions: requestOptions });
+        return extend(Error(message), errorData);
     } else {
-        if(httpStatus !== 200) {
-            return extend(Error(message), { httpStatus: httpStatus, request: obj, requestOptions: requestOptions });
+        if(errorData.httpStatus !== 200) {
+            return extend(Error(message), errorData);
         }
     }
 };
 
-var interpretJsonFormat = function(obj, textStatus, transformOptions, requestOptions) {
-    var error = errorFromResponse(obj, textStatus, requestOptions),
+var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOptions) {
+    var error = errorFromResponse(obj, textStatus, ajaxOptions),
         value;
 
     if(error) {
