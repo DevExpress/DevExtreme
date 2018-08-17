@@ -276,13 +276,13 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
 
     var message = "Unknown error",
         response = obj,
+        httpStatus = 200,
         errorData = {
-            httpStatus: 200,
             requestOptions: ajaxOptions
         };
 
     if(textStatus !== "success") {
-        errorData.httpStatus = obj.status;
+        httpStatus = obj.status;
         message = dataUtils.errorMessageFromXhr(obj, textStatus);
         try {
             response = JSON.parse(obj.responseText);
@@ -299,15 +299,16 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         message = formatDotNetError(errorObj) || message;
         errorData.errorDetails = errorObj;
 
-        if(errorData.httpStatus === 200) {
-            errorData.httpStatus = 500;
+        if(httpStatus === 200) {
+            httpStatus = 500;
         }
         if(errorObj.code) {
-            errorData.httpStatus = Number(errorObj.code);
+            httpStatus = Number(errorObj.code);
         }
     }
 
-    if(errorData.httpStatus !== 200) {
+    if(httpStatus !== 200) {
+        errorData.httpStatus = httpStatus;
         return extend(Error(message), errorData);
     }
 };
