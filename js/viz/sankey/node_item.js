@@ -136,10 +136,7 @@ Node.prototype = {
     },
 
     getLabelAttributes: function(labelSettings, filter) {
-        var attributes = compileLabelAttrs(labelSettings, filter, this);
-        attributes.attr.x = 0;
-        attributes.attr.y = 0;
-        return attributes;
+        return compileLabelAttrs(labelSettings, filter, this);
     }
 
 };
