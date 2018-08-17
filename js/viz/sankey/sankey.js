@@ -377,7 +377,7 @@ var dxSankey = require("../core/base_widget").inherit({
             node.label = this._renderer.g().append(this._groupLabels);
             node.labelText = this._renderer.text(textData)
                 .attr(settings.attr)
-                .css(settings.css)
+                .css(settings.css);
             node.labelText.append(node.label);
         }
 

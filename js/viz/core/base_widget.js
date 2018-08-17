@@ -71,7 +71,7 @@ var createIncidentOccurred = function(widgetName, eventTrigger) {
                 version: version
             }
         });
-    }
+    };
 };
 
 function pickPositiveValue(values) {

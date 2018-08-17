@@ -176,7 +176,7 @@ module.exports = {
         if(useAggregation) {
             const argumentRange = this.getArgumentRange(series);
             if(series.argumentAxisType === DISCRETE) {
-                range.arg = argumentRange
+                range.arg = argumentRange;
             } else {
                 const viewport = series.getArgumentAxis().visualRange() || [];
                 const viewportLength = (viewport[1] - viewport[0]) || 0;
