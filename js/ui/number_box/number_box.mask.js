@@ -242,6 +242,22 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return noEscapedFormat.indexOf("%") !== -1;
     },
 
+    _parse: function(text, format) {
+        var formatOption = this.option("format"),
+            isCustomParser = typeUtils.isFunction(formatOption.formatter),
+            parser = isCustomParser ? formatOption.parser : number.parse;
+
+        return parser(text, format);
+    },
+
+    _format: function(value, format) {
+        var formatOption = this.option("format"),
+            isCustomFormatter = typeUtils.isFunction(formatOption.formatter),
+            formatter = isCustomFormatter ? formatOption.formatter : number.format;
+
+        return formatter(value, format);
+    },
+
     _getFormatPattern: function() {
         var format = this.option("format"),
             isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
@@ -250,8 +266,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return format;
         } else {
             return getLDMLFormat(function(value) {
-                return number.format(value, format);
-            });
+                return this._format(value, format);
+            }.bind(this));
         }
     },
 
@@ -302,7 +318,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var editedText = this._getEditedText(text, selection, char),
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
-            parsed = number.parse(editedText, format),
+            parsed = this._parse(editedText, format),
             maxPrecision = this._getPrecisionLimits(format, editedText).max,
             isValueChanged = parsed !== this._parsedValue,
             decimalSeparator = number.getDecimalSeparator();
@@ -505,7 +521,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _setTextByParsedValue: function() {
         var format = this._getFormatPattern(),
             parsed = this._parseValue(),
-            formatted = number.format(parsed, format) || "";
+            formatted = this._format(parsed, format) || "";
 
         this._setInputText(formatted);
     },
@@ -556,6 +572,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _adjustParsedValue: function() {
+        if(!this._useMaskBehavior()) {
+            return;
+        }
+
         var clearedText = this._removeStubs(this._getInputVal()),
             parsedValue = clearedText ? this._parseValue() : null;
 
