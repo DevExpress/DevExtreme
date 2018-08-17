@@ -2885,7 +2885,7 @@ QUnit.test("Calculate range data when aggregation enabled. Add data range if vis
             interval: 1,
             ticks: [5, 10, 15]
         };
-    }
+    };
 
     series.updateData(data);
 
@@ -2910,7 +2910,7 @@ QUnit.test("Calculate range data when aggregation enabled. Do not inculde data r
             interval: 1,
             ticks: [5, 10, 15]
         };
-    }
+    };
 
     series.updateData(data);
 
