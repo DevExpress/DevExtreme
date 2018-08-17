@@ -1456,7 +1456,9 @@ var EditingController = modules.ViewController.inherit((function() {
                             setTimeout(function() {
                                 focusedElement = domAdapter.getActiveElement();
                                 if(selectionRange.selectionStart >= 0) {
-                                    gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
+                                    try {
+                                        gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
+                                    } catch(e) {}
                                 }
                             });
                         });
