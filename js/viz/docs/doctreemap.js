@@ -181,37 +181,18 @@ var dxTreeMap = {
             visible: true,
             /**
             * @name dxTreeMapOptions.tile.label.font
-            * @type object
+            * @type Font
+            * @default '#ffffff' @prop color
+            * @default undefined @prop opacity
+            * @default 12 @prop size
+            * @default 300 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxTreeMapOptions.tile.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxTreeMapOptions.tile.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: undefined,
-                /**
-                * @name dxTreeMapOptions.tile.label.font.color
-                * @type string
-                * @default "#ffffff"
-                */
                 color: undefined,
-                /**
-                * @name dxTreeMapOptions.tile.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined,
-                /**
-                * @name dxTreeMapOptions.tile.label.font.weight
-                * @type number
-                * @default 300
-                */
                 weight: undefined
             }
         }
@@ -324,37 +305,18 @@ var dxTreeMap = {
             visible: undefined,
             /**
             * @name dxTreeMapOptions.group.label.font
-            * @type object
+            * @type Font
+            * @default '#767676' @prop color
+            * @default undefined @prop opacity
+            * @default 12 @prop size
+            * @default 600 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxTreeMapOptions.group.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxTreeMapOptions.group.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: undefined,
-                /**
-                * @name dxTreeMapOptions.group.label.font.color
-                * @type string
-                * @default "#767676"
-                */
                 color: undefined,
-                /**
-                * @name dxTreeMapOptions.group.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined,
-                /**
-                * @name dxTreeMapOptions.group.label.font.weight
-                * @type number
-                * @default 600
-                */
                 weight: undefined
             }
         },

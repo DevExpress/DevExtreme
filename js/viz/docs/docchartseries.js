@@ -768,37 +768,18 @@ var commonSeries = {
         position: 'outside',
         /**
         * @name dxChartSeriesTypes.CommonSeries.label.font
-        * @type object
+        * @type Font
+        * @default '#FFFFFF' @prop color
+        * @default undefined @prop opacity
+        * @default 14 @prop size
+        * @default 400 @prop weight
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxChartSeriesTypes.CommonSeries.label.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxChartSeriesTypes.CommonSeries.label.font.weight
-            * @type number
-            * @default 400
-            */
             weight: 400,
-            /**
-            * @name dxChartSeriesTypes.CommonSeries.label.font.color
-            * @type string
-            * @default '#FFFFFF'
-            */
             color: '#FFFFFF',
-            /**
-            * @name dxChartSeriesTypes.CommonSeries.label.font.size
-            * @type number|string
-            * @default 14
-            */
             size: 14,
-            /**
-            * @name dxChartSeriesTypes.CommonSeries.label.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**

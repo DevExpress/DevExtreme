@@ -68,43 +68,19 @@ var BaseGauge = {
         text: undefined,
         /**
         * @name BaseGaugeOptions.subtitle.font
-        * @type object
         * @deprecated BaseWidgetOptions.title.subtitle.font
+        * @type Font
+        * @default '#232323' @prop color
+        * @default 1 @prop opacity
+        * @default 16 @prop size
+        * @default 200 @prop weight
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name BaseGaugeOptions.subtitle.font.family
-            * @extends CommonVizFontFamily
-            * @deprecated BaseWidgetOptions.title.subtitle.font.family
-            */
             family: undefined,
-            /**
-            * @name BaseGaugeOptions.subtitle.font.weight
-            * @type number
-            * @default 200
-            * @deprecated BaseWidgetOptions.title.subtitle.font.weight
-            */
             weight: 200,
-            /**
-            * @name BaseGaugeOptions.subtitle.font.color
-            * @type string
-            * @default '#232323'
-            * @deprecated BaseWidgetOptions.title.subtitle.font.color
-            */
             color: '#232323',
-            /**
-            * @name BaseGaugeOptions.subtitle.font.size
-            * @type number|string
-            * @default 16
-            * @deprecated BaseWidgetOptions.title.subtitle.font.size
-            */
             size: 16,
-            /**
-            * @name BaseGaugeOptions.subtitle.font.opacity
-            * @type number
-            * @default 1
-            * @deprecated BaseWidgetOptions.title.subtitle.font.opacity
-            */
             opacity: 1
         }
     },
@@ -393,37 +369,18 @@ var BaseGauge = {
             visible: true,
             /**
             * @name BaseGaugeOptions.scale.label.font
-            * @type object
+            * @type Font
+            * @default '#767676' @prop color
+            * @default 1 @prop opacity
+            * @default 12 @prop size
+            * @default 400 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name BaseGaugeOptions.scale.label.font.color
-                * @type string
-                * @default '#767676'
-                */
                 color: '#767676',
-                /**
-                * @name BaseGaugeOptions.scale.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: 12,
-                /**
-                * @name BaseGaugeOptions.scale.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name BaseGaugeOptions.scale.label.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name BaseGaugeOptions.scale.label.font.opacity
-                * @type number
-                * @default 1
-                */
                 opacity: 1
             }
         },
@@ -972,37 +929,18 @@ var dxBarGauge = {
         customizeText: undefined,
         /**
         * @name dxBarGaugeOptions.label.font
-        * @type object
+        * @type Font
+        * @default undefined @prop color
+        * @default 1 @prop opacity
+        * @default 16 @prop size
+        * @default 400 @prop weight
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxBarGaugeOptions.label.font.color
-            * @type string
-            * @default undefined
-            */
             color: undefined,
-            /**
-            * @name dxBarGaugeOptions.label.font.size
-            * @type number|string
-            * @default 16
-            */
             size: 16,
-            /**
-            * @name dxBarGaugeOptions.label.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxBarGaugeOptions.label.font.weight
-            * @type number
-            * @default 400
-            */
             weight: 400,
-            /**
-            * @name dxBarGaugeOptions.label.font.opacity
-            * @type number
-            * @default 1
-            */
             opacity: 1
         }
     },
