@@ -642,6 +642,7 @@ var tickInterval = {
 
 /**
  * @name Font
+ * @type object
  * @hidden
  */
 /**
