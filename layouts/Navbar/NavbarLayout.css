@@ -273,3 +273,49 @@
     overflow: visible;
 }
 
+/* material */
+
+.dx-theme-material .navbar-layout .layout-content {
+    top: 76px;
+    bottom: 0px;
+}
+
+.dx-theme-material.dx-device-mobile .navbar-layout .layout-header {
+    height: 56px;
+}
+
+.dx-theme-material.dx-device-mobile .navbar-layout .layout-header .dx-toolbar {
+    background: none;
+}
+
+.dx-theme-material .navbar-layout .layout-header .dx-toolbar {
+    padding: 0 10px;
+}
+
+.dx-theme-material .navbar-layout .layout-header .dx-toolbar-items-container {
+    height: 56px;
+}
+
+.dx-theme-material .navbar-layout.has-navbar .layout-content {
+    bottom: 72px;
+}
+
+.dx-theme-material .navbar-layout .layout-footer,
+.dx-theme-material .navbar-layout .layout-footer .dx-navbar {
+    bottom: 0;
+    height: 72px;
+}
+
+.dx-theme-material .navbar-layout.has-toolbar .layout-footer {
+    display: block;
+}
+
+.dx-theme-material .navbar-layout .dx-tabs.dx-navbar {
+    padding: 0;
+}
+
+.dx-theme-material .navbar-layout .view-footer .dx-button {
+    width: 97%;
+    overflow: visible;
+}
+

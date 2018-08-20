@@ -230,3 +230,31 @@
 .dx-theme-win10 .simple-layout.dx-animating:not(.dx-enter):not(.dx-leave) {
     display: none;
 }
+
+/* material */
+
+.dx-theme-material .simple-layout .layout-content {
+    top: 56px;
+    bottom: 0;
+}
+
+.dx-theme-material.dx-device-mobile .simple-layout .layout-header {
+    height: 56px;
+}
+
+.dx-theme-material.dx-device-mobile .simple-layout .layout-header .dx-toolbar {
+    background: none;
+}
+
+.dx-theme-material .simple-layout .layout-header .dx-toolbar {
+    padding: 0 10px;
+}
+
+.dx-theme-material .simple-layout .layout-header .dx-toolbar-items-container {
+    height: 56px;
+}
+
+.dx-theme-material .simple-layout .view-footer .dx-button {
+    width: 97%;
+    overflow: visible;
+}
