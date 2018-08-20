@@ -2870,6 +2870,73 @@ QUnit.test("Set visualRangeLength (logarithmic)", function(assert) {
     assert.equal(businessRange.maxVisible, 1000);
 });
 
+QUnit.test("Set visualRangeLength. Discrete", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRangeLength: 2
+    });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.minVisible, 3);
+    assert.deepEqual(businessRange.maxVisible, 4);
+});
+
+QUnit.test("Set visualRangeLength. Discrete. visual range min is defened", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRangeLength: 2,
+        visualRange: [new Date(2), null]
+    });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.minVisible, new Date(2));
+    assert.deepEqual(businessRange.maxVisible, new Date(3));
+});
+
+QUnit.test("Set visualRangeLength. Discrete. visual range max is defened. Datetime", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRangeLength: 2,
+        visualRange: [null, new Date(3)]
+    });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.minVisible, new Date(2));
+    assert.deepEqual(businessRange.maxVisible, new Date(3));
+});
+
+QUnit.test("Set visualRangeLength. Discrete. visual range max is defened. visual range length is great number", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRangeLength: 10,
+        visualRange: [null, 3]
+    });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.minVisible, undefined);
+    assert.deepEqual(businessRange.maxVisible, 3);
+});
+
 QUnit.test("viewport can go out from series data range", function(assert) {
     this.updateOptions({ min: -200, max: 150 });
     this.axis.validate();
@@ -3519,7 +3586,6 @@ QUnit.test("Shift. Discrete", function(assert) {
     assert.equal(businessRange.minVisible, 4);
     assert.equal(businessRange.maxVisible, 5);
 });
-
 
 QUnit.test("Shift. Discrete datetime", function(assert) {
     this.updateOptions({

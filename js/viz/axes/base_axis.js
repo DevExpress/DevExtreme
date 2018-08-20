@@ -1000,14 +1000,15 @@ Axis.prototype = {
                 rangeLength = parseInt(rangeLength);
                 if(!isNaN(rangeLength) && isFinite(rangeLength)) {
                     rangeLength--;
-                    currentMin = categories.indexOf(minVisible);
-                    currentMax = categories.indexOf(maxVisible);
-                    if(!maxDefined) {
-                        currentMax = currentMin + rangeLength;
-                        maxVisible = currentMax > categories.length - 1 ? categories[categories.length - 1] : categories[currentMax];
-                    } else if(!minDefined) {
-                        currentMin = currentMax - rangeLength;
-                        minVisible = currentMin < 0 ? categories[0] : categories[currentMin];
+                    if(!maxDefined && !minDefined) {
+                        maxVisible = categories[categories.length - 1];
+                        minVisible = categories[categories.length - 1 - rangeLength];
+                    } else if(minDefined && !maxDefined) {
+                        const categoriesInfo = vizUtils.getCategoriesInfo(categories, minVisible, undefined);
+                        maxVisible = categoriesInfo.categories[rangeLength];
+                    } else if(!minDefined && maxDefined) {
+                        const categoriesInfo = vizUtils.getCategoriesInfo(categories, undefined, maxVisible);
+                        minVisible = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
                     }
                 }
             }
@@ -1023,7 +1024,6 @@ Axis.prototype = {
         range = range || [];
         const isDiscrete = this._options.type === constants.discrete;
         const isLogarithmic = this._options.type === constants.logarithmic;
-        const categories = this._seriesData && this._seriesData.categories || [];
 
         if(isLogarithmic) {
             range[0] = range[0] <= 0 ? null : range[0];
@@ -1031,12 +1031,6 @@ Axis.prototype = {
         }
         if(!isDiscrete && isDefined(range[0]) && isDefined(range[1]) && range[0] > range[1]) {
             return [range[1], range[0]];
-        } else if(isDiscrete && _isArray(categories)) {
-            const minIndex = isDefined(range[0]) ? categories.indexOf(range[0]) : 0;
-            const maxIndex = isDefined(range[1]) ? categories.indexOf(range[1]) : categories.length - 1;
-            if(minIndex > maxIndex) {
-                return [range[1], range[0]];
-            }
         }
 
         return range;
