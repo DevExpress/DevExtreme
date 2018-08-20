@@ -232,3 +232,30 @@
     overflow: visible;
 }
 
+/* material */
+
+.dx-theme-material .slideout-layout .layout-header {
+    height: 56px;
+}
+
+.dx-theme-material .slideout-layout .layout-content {
+    top: 56px;
+}
+
+.dx-theme-material.dx-device-mobile .slideout-layout .layout-header .dx-toolbar {
+    background: none;
+}
+
+.dx-theme-material .slideout-layout .layout-header .dx-toolbar {
+    padding: 0 10px;
+}
+
+.dx-theme-material .slideout-layout .layout-header .dx-toolbar-items-container {
+    height: 56px;
+}
+
+.dx-theme-material .slideout-layout .view-footer .dx-button {
+    width: 97%;
+    overflow: visible;
+}
+
