@@ -9303,30 +9303,40 @@ QUnit.test("update focus border on resize", function(assert) {
     assert.ok(newFocusWidth < oldFocusWidth, "new focus width less than old focus width");
 });
 
+var realSetTimeout = window.setTimeout;
+
 QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
     // arrange, act
+    var done = assert.async();
     var dataGrid = createDataGrid({
-            filterRow: { visible: true },
-            editing: { allowAdding: true },
-            columns: [
-                { dataField: "field1" },
-                { dataField: "field2" }
-            ],
-            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
-        }),
-        navigationController = dataGrid.getController("keyboardNavigation");
+        filterRow: { visible: true },
+        editing: { allowAdding: true },
+        columns: [
+            { dataField: "field1" },
+            { dataField: "field2" }
+        ],
+        dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+    });
 
     this.clock.tick();
 
-    var filterEditor = $(dataGrid.$element()).find(".dx-editor-cell").first();
-    navigationController._focus(filterEditor);
-    filterEditor.find("input").val("1").trigger("change");
-
+    var $input = $(dataGrid.$element()).find(".dx-editor-cell").first().find(".dx-texteditor-input");
+    $input.focus().val("1").trigger("change");
     this.clock.tick();
+
 
     // assert
     assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
-    assert.ok(dataGrid.$element().find(".dx-editor-cell:focus").length, "filter cell has focus after filter applyed");
+    assert.ok(dataGrid.$element().find(".dx-editor-cell .dx-texteditor-input:focus").length, "filter cell has focus after filter applyed");
+    // T662207
+    realSetTimeout(function() {
+        if(devices.real().deviceType === "desktop") {
+            var $inputElement = dataGrid.$element().find(".dx-editor-cell").first().find(".dx-texteditor-input");
+            assert.equal($inputElement.get(0).selectionStart, 1, "selectionStart is correct");
+            assert.equal($inputElement.get(0).selectionEnd, 1, "selectionEnd is correct");
+        }
+        done();
+    }, 500);
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
