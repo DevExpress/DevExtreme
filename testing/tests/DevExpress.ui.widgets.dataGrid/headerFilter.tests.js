@@ -311,8 +311,8 @@ QUnit.module("Header Filter", {
     },
     afterEach: function() {
         this.clock.restore();
-        this.headerFilterController.hideHeaderFilterMenu();
-        this.dispose();
+        this.headerFilterController && this.headerFilterController.hideHeaderFilterMenu();
+        this.dispose && this.dispose();
     }
 });
 
@@ -2047,6 +2047,10 @@ QUnit.test("No exceptions on an attempt to filter a lookup column when valueExpr
 
 // T644753
 QUnit.test("No scroll on opening the header filter when the popup is cropped", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is disabled for not desktop devices");
+        return;
+    }
     // arrange
     var that = this,
         $popupContent,
