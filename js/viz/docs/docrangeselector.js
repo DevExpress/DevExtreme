@@ -170,37 +170,17 @@ var dxRangeSelector = {
             topIndent: 7,
             /**
             * @name dxRangeSelectorOptions.scale.label.font
-            * @type object
+            * @type Font
+            * @default '#767676' @prop color
+            * @default 11 @prop size
+            * @default 400 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxRangeSelectorOptions.scale.label.font.color
-                * @type string
-                * @default '#767676'
-                */
                 color: '#767676',
-                /**
-                * @name dxRangeSelectorOptions.scale.label.font.size
-                * @type number|string
-                * @default 11
-                */
                 size: 11,
-                /**
-                * @name dxRangeSelectorOptions.scale.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxRangeSelectorOptions.scale.label.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name dxRangeSelectorOptions.scale.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             },
             /**
@@ -409,37 +389,17 @@ var dxRangeSelector = {
         placeholderHeight: undefined,
         /**
         * @name dxRangeSelectorOptions.sliderMarker.font
-        * @type object
+        * @type Font
+        * @default 'white' @prop color
+        * @default 14 @prop size
+        * @default 400 @prop weight
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.font.color
-            * @type string
-            * @default 'white'
-            */
             color: 'white',
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.font.size
-            * @type number|string
-            * @default 14
-            */
             size: 14,
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.font.weight
-            * @type number
-            * @default 400
-            */
             weight: 400,
-            /**
-            * @name dxRangeSelectorOptions.sliderMarker.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         }
     },

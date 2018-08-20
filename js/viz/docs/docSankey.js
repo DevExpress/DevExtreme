@@ -118,38 +118,15 @@ var dxSankey = {
         verticalOffset: 0,
         /**
         * @name dxSankeyOptions.label.font
-        * @type object
+        * @type Font
+        * @default '#ffffff' @prop color
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxSankeyOptions.label.font.color
-            * @type string
-            * @default '#ffffff'
-            */
             color: '#ffffff',
-            /**
-            * @name dxSankeyOptions.label.font.family
-            * @type string
-            * @default undefined
-            */
             family: undefined,
-            /**
-            * @name dxSankeyOptions.label.font.weight
-            * @type number
-            * @default undefined
-            */
             weight: undefined,
-            /**
-            * @name dxSankeyOptions.label.font.size
-            * @type number|string
-            * @default undefined
-            */
             size: undefined,
-            /**
-            * @name dxSankeyOptions.label.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**

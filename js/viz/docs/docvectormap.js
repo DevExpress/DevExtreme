@@ -216,37 +216,17 @@ var dxVectorMap = {
             dataField: undefined,
             /**
             * @name dxVectorMapOptions.layers.label.font
-            * @type object
+            * @type Font
+            * @default '#2b2b2b' @prop color
+            * @default 12 @prop size
+            * @default 400 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxVectorMapOptions.layers.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxVectorMapOptions.layers.label.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name dxVectorMapOptions.layers.label.font.color
-                * @type string
-                * @default '#2b2b2b'
-                */
                 color: '#2b2b2b',
-                /**
-                * @name dxVectorMapOptions.layers.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: 12,
-                /**
-                * @name dxVectorMapOptions.layers.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             }
         }
@@ -423,37 +403,16 @@ var dxVectorMap = {
         itemsAlignment: undefined,
         /**
         * @name dxVectorMapOptions.legends.font
-        * @type object
+        * @type Font
+        * @default '#2b2b2b' @prop color
+        * @default 12 @prop size
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxVectorMapOptions.legends.font.color
-            * @type string
-            * @default '#2b2b2b'
-            */
             color: '#2b2b2b',
-            /**
-            * @name dxVectorMapOptions.legends.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxVectorMapOptions.legends.font.weight
-            * @type number
-            * @default undefined
-            */
             weight: undefined,
-            /**
-            * @name dxVectorMapOptions.legends.font.size
-            * @type number|string
-            * @default 12
-            */
             size: 12,
-            /**
-            * @name dxVectorMapOptions.legends.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**
