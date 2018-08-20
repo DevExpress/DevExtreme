@@ -1466,3 +1466,24 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
 
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
 });
+
+QUnit.module("format: custom parser and formatter", moduleConfig);
+
+QUnit.test("custom parser and formatter should work", function(assert) {
+    this.instance.option({
+        format: {
+            formatter: function(value) {
+                return "$ " + (value * 100);
+            },
+
+            parser: function(text) {
+                return +(text.substr(2)) / 100;
+            }
+        }
+    });
+
+    this.keyboard.type("1234.56").press("enter");
+
+    assert.equal(this.input.val(), "$ 1234.56", "text is correct");
+    assert.equal(this.instance.option("value"), 12.3456, "value is correct");
+});
