@@ -159,7 +159,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         each(that._focusedViews, function(index, view) {
             if(view) {
-                view.renderCompleted.add(function() {
+                view.renderCompleted.add(function(e) {
                     var $element = view.element();
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
                     eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " > td, ." + ROW_CLASS, {
@@ -168,8 +168,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     }, clickAction);
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
-
-                    if(that._focusedView && that._focusedView.name === view.name && (that._isNeedFocus || that._isHiddenFocus)) {
+                    var isPartialUpdate = e && e.changeType === "update";
+                    if(that._focusedView && that._focusedView.name === view.name && (that._isNeedFocus || (that._isHiddenFocus && !isPartialUpdate))) {
                         that._updateFocus();
                     }
                 });

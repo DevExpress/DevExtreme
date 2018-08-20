@@ -256,7 +256,7 @@ var View = ModuleItem.inherit({
             this._renderCore(options);
             this.component._optionCache = undefined;
             this._afterRender($parent);
-            this.renderCompleted.fire();
+            this.renderCompleted.fire(options);
         }
     },
 
