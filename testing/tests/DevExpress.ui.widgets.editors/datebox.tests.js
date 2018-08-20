@@ -1904,6 +1904,32 @@ QUnit.test("dateBox should not change value when setting to an earlier date than
     assert.deepEqual(this.fixture.dateBox.option("value"), lateDate);
 });
 
+QUnit.test("Editor should reevaluate validation state after change text to the current value", function(assert) {
+    this.reinitFixture({
+        min: new Date(2010, 10, 5),
+        value: new Date(2010, 10, 10),
+        type: "date",
+        pickerType: "calendar"
+    });
+
+    var dateBox = this.fixture.dateBox;
+
+    $(dateBox._input())
+        .val("11/3/2010")
+        .change();
+
+    assert.notOk(dateBox.option("isValid"), "Editor isn't valid");
+    assert.equal(dateBox.option("text"), "11/3/2010");
+
+    dateBox.open();
+
+    var $selectedDate = dateBox._popup._wrapper().find(".dx-calendar-selected-date");
+    $($selectedDate).trigger("dxclick");
+
+    assert.ok(dateBox.option("isValid"), "Editor is valid");
+    assert.equal(dateBox.option("text"), "11/10/2010");
+});
+
 QUnit.test("In dateTime strategy buttons should be placed in popup bottom", function(assert) {
     this.reinitFixture({
         type: "datetime",
