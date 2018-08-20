@@ -1042,11 +1042,15 @@ Axis.prototype = {
         return range;
     },
 
-    _getVisualRangeOnUpdateValue(range) {
+    _getVisualRangeOnUpdateValue(range, newRange) {
         let value = this._options.visualRangeOnDataUpdate;
         if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
             if(range.axisType === constants.discrete) {
-                value = RESET;
+                if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
+                    value = KEEP;
+                } else {
+                    value = RESET;
+                }
             } else {
                 const translator = this._translator;
                 const minPoint = translator.translate(range.min);
@@ -1075,7 +1079,7 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
 
-        const visualRangeOnDataUpdateValue = this._getVisualRangeOnUpdateValue(currentBusinessRange);
+        const visualRangeOnDataUpdateValue = this._getVisualRangeOnUpdateValue(currentBusinessRange, seriesData);
 
         if(visualRangeOnDataUpdateValue === KEEP) {
             that._setVisualRange(currentBusinessRange.minVisible, currentBusinessRange.maxVisible);

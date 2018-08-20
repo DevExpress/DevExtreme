@@ -3615,7 +3615,7 @@ QUnit.test("Auto. visualRange shows the end of data - shift", function(assert) {
     assert.equal(businessRange.maxVisible, 300);
 });
 
-QUnit.test("Auto. Discrete axis - reset", function(assert) {
+QUnit.test("Auto. Discrete axis - reset if categories are changed", function(assert) {
     this.updateOptions({
         type: "discrete"
     });
@@ -3636,6 +3636,29 @@ QUnit.test("Auto. Discrete axis - reset", function(assert) {
     assert.deepEqual(businessRange.categories, [1, 2, 3, 4, 5]);
     assert.equal(businessRange.minVisible, undefined);
     assert.equal(businessRange.maxVisible, undefined);
+});
+
+QUnit.test("Auto. Discrete axis - keep if categories aren't changed", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4]
+    });
+
+    this.axis.zoom(2, 3);
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        categories: [1, 2, 3, 4]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.categories, [1, 2, 3, 4]);
+    assert.equal(businessRange.minVisible, 2);
+    assert.equal(businessRange.maxVisible, 3);
 });
 
 QUnit.test("Do not reset initial viewport if current bussiness range has isEstimatedRange flag", function(assert) {
