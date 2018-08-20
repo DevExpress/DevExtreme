@@ -101,8 +101,11 @@ var FilterSyncController = modules.Controller.inherit((function() {
 
     var updateFilterRowCondition = function(columnsController, column, condition) {
         var filterRowOptions,
-            selectedFilterOperation = condition && condition[1];
-        if(FILTER_ROW_OPERATIONS.indexOf(selectedFilterOperation) >= 0) {
+            selectedFilterOperation = condition && condition[1],
+            filterOperations = column.filterOperations || column.defaultFilterOperations;
+
+        if((!filterOperations || filterOperations.indexOf(selectedFilterOperation) >= 0 || selectedFilterOperation === column.defaultFilterOperation)
+            && FILTER_ROW_OPERATIONS.indexOf(selectedFilterOperation) >= 0) {
             if(selectedFilterOperation === column.defaultFilterOperation && !isDefined(column.selectedFilterOperation)) {
                 selectedFilterOperation = column.selectedFilterOperation;
             }
