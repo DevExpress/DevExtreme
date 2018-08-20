@@ -413,6 +413,34 @@
 }
 
 .printable-background() {
-    -webkit-print-color-adjust: exact; 
+    -webkit-print-color-adjust: exact;
     color-adjust: exact;
+}
+
+.flexible-scrollable() {
+    & > .dx-scrollable,
+    & > .dx-treeview,
+    & > .dx-treeview > .dx-scrollable {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-grow: 1;
+        flex-grow: 1;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        height: 0;
+
+        & > .dx-scrollable-wrapper {
+            display: -webkit-flex;
+            display:  flex;
+            -webkit-flex-grow: 1;
+            flex-grow: 1;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            height: 0;
+
+            & > .dx-scrollable-container {
+                height: auto;
+            }
+        }
+    }
 }

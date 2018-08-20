@@ -466,26 +466,24 @@
 
     .dx-area {
         padding: 5px;
+        display: -webkit-flex;
         display: flex;
-        height: 33.33%;
-        flex-direction: column;
-    }
-
-    .dx-layout-2 .dx-fields-container {
-        height: 66%;
-        .dx-area {
-            height: 50%;
-        }
-    }
-
-    .dx-area.dx-all-fields {
+        -webkit-flex-grow: 1;
         flex-grow: 1;
-    }
+        -webkit-flex-direction: column;
+        flex-direction: column;
 
-    .dx-area .dx-area-fields {
-        margin-top: 3px;
-        border: @PIVOTGRID_BORDER;
-        height: 100%;
+        .flexible-scrollable();
+
+        .dx-area-fields {
+            margin-top: 3px;
+            border: @PIVOTGRID_BORDER;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            height: 0;
+        }
     }
 
     .dx-area-fields-header .dx-area-caption {
@@ -495,6 +493,7 @@
     .dx-area-fields[group] {
         padding: 5px;
         background-color: @PIVOTGRID_TOTALCOLOR;
+        display: -webkit-flex;
         display: flex;
     }
 
@@ -681,6 +680,7 @@
     }
 
     .dx-pivotgridfieldchooser-container .dx-col {
+        display: -webkit-flex;
         display: flex;
     }
 
