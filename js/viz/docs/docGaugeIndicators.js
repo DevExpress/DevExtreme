@@ -82,43 +82,19 @@ var CommonIndicator = {
         customizeText: undefined,
         /**
         * @name CommonIndicator.text.font
-        * @type object
+        * @type Font
+        * @default null @prop color
+        * @default 1 @prop opacity
+        * @default 14 @prop size
+        * @default 400 @prop weight
+        * @extends CommonVizFontFamily
         * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
         */
         font: {
-            /**
-            * @name CommonIndicator.text.font.color
-            * @type string
-            * @default null
-            * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-            */
             color: null,
-            /**
-            * @name CommonIndicator.text.font.size
-            * @type number|string
-            * @default 14
-            * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-            */
             size: 14,
-            /**
-            * @name CommonIndicator.text.font.family
-            * @extends CommonVizFontFamily
-            * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-            */
             family: undefined,
-            /**
-            * @name CommonIndicator.text.font.weight
-            * @type number
-            * @default 400
-            * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-            */
             weight: 400,
-            /**
-            * @name CommonIndicator.text.font.opacity
-            * @type number
-            * @default 1
-            * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-            */
             opacity: 1
         }
     },

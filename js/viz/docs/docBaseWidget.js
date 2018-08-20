@@ -21,14 +21,12 @@ var BaseWidget = {
 
     /**
     * @pseudo CommonVizFontFamily
-    * @type string
-    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
+    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" @prop family
     */
 
     /**
     * @pseudo CommonVizLightFontFamily
-    * @type string
-    * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
+    * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" @prop family
     */
 
     /**
@@ -248,37 +246,17 @@ var BaseWidget = {
         },
         /**
         * @name BaseWidgetOptions.title.font
-        * @type object
+        * @type Font
+        * @default '#232323' @prop color
+        * @default 28 @prop size
+        * @default 200 @prop weight
+        * @extends CommonVizLightFontFamily
         */
         font: {
-            /**
-            * @name BaseWidgetOptions.title.font.family
-            * @extends CommonVizLightFontFamily
-            */
             family: undefined,
-            /**
-            * @name BaseWidgetOptions.title.font.weight
-            * @type number
-            * @default 200
-            */
             weight: 200,
-            /**
-            * @name BaseWidgetOptions.title.font.color
-            * @type string
-            * @default '#232323'
-            */
             color: '#232323',
-            /**
-            * @name BaseWidgetOptions.title.font.size
-            * @type number|string
-            * @default 28
-            */
             size: 28,
-            /**
-            * @name BaseWidgetOptions.title.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**
@@ -300,37 +278,17 @@ var BaseWidget = {
             text: null,
             /**
             * @name BaseWidgetOptions.title.subtitle.font
-            * @type object
+            * @type Font
+            * @default '#232323' @prop color
+            * @default 16 @prop size
+            * @default 200 @prop weight
+            * @extends CommonVizLightFontFamily
             */
             font: {
-                /**
-                * @name BaseWidgetOptions.title.subtitle.font.family
-                * @extends CommonVizLightFontFamily
-                */
                 family: undefined,
-                /**
-                * @name BaseWidgetOptions.title.subtitle.font.weight
-                * @type number
-                * @default 200
-                */
                 weight: 200,
-                /**
-                * @name BaseWidgetOptions.title.subtitle.font.color
-                * @type string
-                * @default '#232323'
-                */
                 color: '#232323',
-                /**
-                * @name BaseWidgetOptions.title.subtitle.font.size
-                * @type number|string
-                * @default 16
-                */
                 size: 16,
-                /**
-                * @name BaseWidgetOptions.title.subtitle.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             }
         }
@@ -495,37 +453,17 @@ var BaseWidget = {
         },
         /**
         * @name BaseWidgetOptions.tooltip.font
-        * @type object
+        * @type Font
+        * @default '#232323' @prop color
+        * @default 12 @prop size
+        * @default 400 @prop weight
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name BaseWidgetOptions.tooltip.font.color
-            * @type string
-            * @default '#232323'
-            */
             color: '#232323',
-            /**
-            * @name BaseWidgetOptions.tooltip.font.size
-            * @type number|string
-            * @default 12
-            */
             size: 12,
-            /**
-            * @name BaseWidgetOptions.tooltip.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name BaseWidgetOptions.tooltip.font.weight
-            * @type number
-            * @default 400
-            */
             weight: 400,
-            /**
-            * @name BaseWidgetOptions.tooltip.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**
@@ -608,37 +546,15 @@ var BaseWidget = {
         backgroundColor: '#FFFFFF',
         /**
         * @name BaseWidgetOptions.loadingIndicator.font
-        * @type object
+        * @type Font
+        * @default '#767676' @prop color
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name BaseWidgetOptions.loadingIndicator.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name BaseWidgetOptions.loadingIndicator.font.weight
-            * @type number
-            * @default undefined
-            */
             weight: undefined,
-            /**
-            * @name BaseWidgetOptions.loadingIndicator.font.color
-            * @type string
-            * @default '#767676'
-            */
             color: '#767676',
-            /**
-            * @name BaseWidgetOptions.loadingIndicator.font.size
-            * @type number|string
-            * @default undefined
-            */
             size: undefined,
-            /**
-            * @name BaseWidgetOptions.loadingIndicator.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         }
     }
@@ -717,3 +633,29 @@ var tickInterval = {
     */
     milliseconds: undefined
 };
+
+/**
+ * @name Font
+ * @type object
+ * @hidden
+ */
+/**
+ * @name Font.color
+ * @type string
+ */
+ /**
+ * @name Font.family
+ * @type string
+ */
+ /**
+ * @name Font.opacity
+ * @type number
+ */
+ /**
+ * @name Font.size
+ * @type string|number
+ */
+ /**
+ * @name Font.weight
+ * @type number
+ */

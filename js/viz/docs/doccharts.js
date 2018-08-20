@@ -488,37 +488,17 @@ var dxChart = {
             visible: false,
             /**
              * @name dxChartOptions.crosshair.label.font
-             * @type object
+             * @type Font
+             * @default '#FFFFFF' @prop color
+             * @default 12 @prop size
+             * @default 400 @prop weight
+             * @extends CommonVizFontFamily
              */
             font: {
-                /**
-                * @name dxChartOptions.crosshair.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxChartOptions.crosshair.label.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name dxChartOptions.crosshair.label.font.color
-                * @type string
-                * @default '#FFFFFF'
-                */
                 color: '#FFFFFF',
-                /**
-                * @name dxChartOptions.crosshair.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: 12,
-                /**
-                * @name dxChartOptions.crosshair.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             },
             /**
@@ -597,37 +577,17 @@ var dxChart = {
                 visible: false,
                 /**
                  * @name dxChartOptions.crosshair.verticalLine.label.font
-                 * @type object
+                 * @type Font
+                 * @default '#FFFFFF' @prop color
+                 * @default 12 @prop size
+                 * @default 400 @prop weight
+                 * @extends CommonVizFontFamily
                  */
                 font: {
-                    /**
-                    * @name dxChartOptions.crosshair.verticalLine.label.font.family
-                    * @extends CommonVizFontFamily
-                    */
                     family: undefined,
-                    /**
-                    * @name dxChartOptions.crosshair.verticalLine.label.font.weight
-                    * @type number
-                    * @default 400
-                    */
                     weight: 400,
-                    /**
-                    * @name dxChartOptions.crosshair.verticalLine.label.font.color
-                    * @type string
-                    * @default '#FFFFFF'
-                    */
                     color: '#FFFFFF',
-                    /**
-                    * @name dxChartOptions.crosshair.verticalLine.label.font.size
-                    * @type number|string
-                    * @default 12
-                    */
                     size: 12,
-                    /**
-                    * @name dxChartOptions.crosshair.verticalLine.label.font.opacity
-                    * @type number
-                    * @default undefined
-                    */
                     opacity: undefined
                 },
                 /**
@@ -707,37 +667,17 @@ var dxChart = {
                 visible: false,
                 /**
                  * @name dxChartOptions.crosshair.horizontalLine.label.font
-                 * @type object
+                 * @type Font
+                 * @default '#FFFFFF' @prop color
+                 * @default 12 @prop size
+                 * @default 400 @prop weight
+                 * @extends CommonVizFontFamily
                  */
                 font: {
-                    /**
-                    * @name dxChartOptions.crosshair.horizontalLine.label.font.family
-                    * @extends CommonVizFontFamily
-                    */
                     family: undefined,
-                    /**
-                    * @name dxChartOptions.crosshair.horizontalLine.label.font.weight
-                    * @type number
-                    * @default 400
-                    */
                     weight: 400,
-                    /**
-                    * @name dxChartOptions.crosshair.horizontalLine.label.font.color
-                    * @type string
-                    * @default '#FFFFFF'
-                    */
                     color: '#FFFFFF',
-                    /**
-                    * @name dxChartOptions.crosshair.horizontalLine.label.font.size
-                    * @type number|string
-                    * @default 12
-                    */
                     size: 12,
-                    /**
-                    * @name dxChartOptions.crosshair.horizontalLine.label.font.opacity
-                    * @type number
-                    * @default undefined
-                    */
                     opacity: undefined
                 },
                 /**
@@ -963,37 +903,17 @@ var dxChart = {
             indentFromAxis: 10,
             /**
             * @name dxChartOptions.commonAxisSettings.label.font
-            * @type object
+            * @type Font
+            * @default '#767676' @prop color
+            * @default 12 @prop size
+            * @default 400 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.font.color
-                * @type string
-                * @default '#767676'
-                */
                 color: '#767676',
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: 12,
-                /**
-                * @name dxChartOptions.commonAxisSettings.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             }
         },
@@ -1136,37 +1056,17 @@ var dxChart = {
         title: {
             /**
             * @name dxChartOptions.commonAxisSettings.title.font
-            * @type object
+            * @type Font
+            * @default '#767676' @prop color
+            * @default 16 @prop size
+            * @default 400 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxChartOptions.commonAxisSettings.title.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxChartOptions.commonAxisSettings.title.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name dxChartOptions.commonAxisSettings.title.font.color
-                * @type string
-                * @default '#767676'
-                */
                 color: '#767676',
-                /**
-                * @name dxChartOptions.commonAxisSettings.title.font.size
-                * @type number|string
-                * @default 16
-                */
                 size: 16,
-                /**
-                * @name dxChartOptions.commonAxisSettings.title.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             },
             /**
@@ -1212,37 +1112,17 @@ var dxChart = {
                 verticalAlignment: 'center',
                 /**
                 * @name dxChartOptions.commonAxisSettings.stripStyle.label.font
-                * @type object
+                * @type Font
+                * @default '#767676' @prop color
+                * @default 12 @prop size
+                * @default 400 @prop weight
+                * @extends CommonVizFontFamily
                 */
                 font: {
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.family
-                    * @extends CommonVizFontFamily
-                    */
                     family: undefined,
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.weight
-                    * @type number
-                    * @default 400
-                    */
                     weight: 400,
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.color
-                    * @type string
-                    * @default '#767676'
-                    */
                     color: '#767676',
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.size
-                    * @type number|string
-                    * @default 12
-                    */
                     size: 12,
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.stripStyle.label.font.opacity
-                    * @type number
-                    * @default undefined
-                    */
                     opacity: undefined
                 }
             }
@@ -1301,37 +1181,17 @@ var dxChart = {
                 position: 'inside',
                 /**
                 * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font
-                * @type object
+                * @type Font
+                * @default '#767676' @prop color
+                * @default 12 @prop size
+                * @default 400 @prop weight
+                * @extends CommonVizFontFamily
                 */
                 font: {
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.family
-                    * @extends CommonVizFontFamily
-                    */
                     family: undefined,
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.weight
-                    * @type number
-                    * @default 400
-                    */
                     weight: 400,
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.color
-                    * @type string
-                    * @default '#767676'
-                    */
                     color: '#767676',
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.size
-                    * @type number|string
-                    * @default 12
-                    */
                     size: 12,
-                    /**
-                    * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font.opacity
-                    * @type number
-                    * @default undefined
-                    */
                     opacity: undefined
                 }
             }
@@ -2518,37 +2378,17 @@ var dxPolarChart = {
             indentFromAxis: 5,
             /**
             * @name dxPolarChartOptions.commonAxisSettings.label.font
-            * @type object
+            * @type Font
+            * @default '#767676' @prop color
+            * @default 12 @prop size
+            * @default 400 @prop weight
+            * @extends CommonVizFontFamily
             */
             font: {
-                /**
-                * @name dxPolarChartOptions.commonAxisSettings.label.font.family
-                * @extends CommonVizFontFamily
-                */
                 family: undefined,
-                /**
-                * @name dxPolarChartOptions.commonAxisSettings.label.font.weight
-                * @type number
-                * @default 400
-                */
                 weight: 400,
-                /**
-                * @name dxPolarChartOptions.commonAxisSettings.label.font.color
-                * @type string
-                * @default '#767676'
-                */
                 color: '#767676',
-                /**
-                * @name dxPolarChartOptions.commonAxisSettings.label.font.size
-                * @type number|string
-                * @default 12
-                */
                 size: 12,
-                /**
-                * @name dxPolarChartOptions.commonAxisSettings.label.font.opacity
-                * @type number
-                * @default undefined
-                */
                 opacity: undefined
             }
         },
@@ -2696,37 +2536,17 @@ var dxPolarChart = {
             label: {
                 /**
                 * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
-                * @type object
+                * @type Font
+                * @default '#767676' @prop color
+                * @default 12 @prop size
+                * @default 400 @prop weight
+                * @extends CommonVizFontFamily
                 */
                 font: {
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.family
-                    * @extends CommonVizFontFamily
-                    */
                     family: undefined,
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.weight
-                    * @type number
-                    * @default 400
-                    */
                     weight: 400,
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.color
-                    * @type string
-                    * @default '#767676'
-                    */
                     color: '#767676',
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.size
-                    * @type number|string
-                    * @default 12
-                    */
                     size: 12,
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font.opacity
-                    * @type number
-                    * @default undefined
-                    */
                     opacity: undefined
                 }
             }
@@ -2767,37 +2587,17 @@ var dxPolarChart = {
                 visible: true,
                 /**
                 * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
-                * @type object
+                * @type Font
+                * @default '#767676' @prop color
+                * @default 12 @prop size
+                * @default 400 @prop weight
+                * @extends CommonVizFontFamily
                 */
                 font: {
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.family
-                    * @extends CommonVizFontFamily
-                    */
                     family: undefined,
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.weight
-                    * @type number
-                    * @default 400
-                    */
                     weight: 400,
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.color
-                    * @type string
-                    * @default '#767676'
-                    */
                     color: '#767676',
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.size
-                    * @type number|string
-                    * @default 12
-                    */
                     size: 12,
-                    /**
-                    * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font.opacity
-                    * @type number
-                    * @default undefined
-                    */
                     opacity: undefined
                 }
             }
@@ -3456,37 +3256,15 @@ var BaseChart = {
         itemsAlignment: undefined,
         /**
         * @name BaseChartOptions.legend.font
-        * @type object
+        * @type Font
+        * @default '#767676' @prop color
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name BaseChartOptions.legend.font.color
-            * @type string
-            * @default '#767676'
-            */
             color: '#767676',
-            /**
-            * @name BaseChartOptions.legend.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name BaseChartOptions.legend.font.weight
-            * @type number
-            * @default undefined
-            */
             weight: undefined,
-            /**
-            * @name BaseChartOptions.legend.font.size
-            * @type number|string
-            * @default undefined
-            */
             size: undefined,
-            /**
-            * @name BaseChartOptions.legend.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**

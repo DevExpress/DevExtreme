@@ -269,37 +269,15 @@ var dxFunnel = {
     label: {
         /**
         * @name dxFunnelOptions.label.font
-        * @type object
+        * @type Font
+        * @default '#767676' @prop color
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxFunnelOptions.label.font.color
-            * @type string
-            * @default '#767676'
-            */
             color: '#767676',
-            /**
-            * @name dxFunnelOptions.label.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxFunnelOptions.label.font.weight
-            * @type number
-            * @default undefined
-            */
             weight: undefined,
-            /**
-            * @name dxFunnelOptions.label.font.size
-            * @type number|string
-            * @default undefined
-            */
             size: undefined,
-            /**
-            * @name dxFunnelOptions.label.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**
@@ -454,37 +432,15 @@ var dxFunnel = {
         itemsAlignment: undefined,
         /**
         * @name dxFunnelOptions.legend.font
-        * @type object
+        * @type Font
+        * @default '#767676' @prop color
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxFunnelOptions.legend.font.color
-            * @type string
-            * @default '#767676'
-            */
             color: '#767676',
-            /**
-            * @name dxFunnelOptions.legend.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxFunnelOptions.legend.font.weight
-            * @type number
-            * @default undefined
-            */
             weight: undefined,
-            /**
-            * @name dxFunnelOptions.legend.font.size
-            * @type number|string
-            * @default undefined
-            */
             size: undefined,
-            /**
-            * @name dxFunnelOptions.legend.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**

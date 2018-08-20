@@ -613,37 +613,17 @@ var CommonPolarChartSeries = {
         position: 'outside',
         /**
         * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font
-        * @type object
+        * @type Font
+        * @default '#FFFFFF' @prop color
+        * @default 14 @prop size
+        * @default 400 @prop weight
+        * @extends CommonVizFontFamily
         */
         font: {
-            /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.family
-            * @extends CommonVizFontFamily
-            */
             family: undefined,
-            /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.weight
-            * @type number
-            * @default 400
-            */
             weight: 400,
-            /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.color
-            * @type string
-            * @default '#FFFFFF'
-            */
             color: '#FFFFFF',
-            /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.size
-            * @type number|string
-            * @default 14
-            */
             size: 14,
-            /**
-            * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font.opacity
-            * @type number
-            * @default undefined
-            */
             opacity: undefined
         },
         /**
