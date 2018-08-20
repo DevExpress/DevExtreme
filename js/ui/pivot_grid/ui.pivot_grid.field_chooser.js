@@ -305,13 +305,68 @@ var FieldChooser = BaseFieldChooser.inherit({
         this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
+    _renderLayout0: function($container) {
+        var that = this,
+            $col1, $col2, $col3, $col4,
+            $row1, $row2;
+
+        $container.addClass("dx-layout-0");
+
+        $row1 = $(DIV).addClass("dx-row").appendTo($container);
+        $row2 = $(DIV).addClass("dx-row").appendTo($container);
+
+        $col1 = $(DIV).addClass("dx-col").appendTo($row1);
+        $col2 = $(DIV).addClass("dx-col").appendTo($row1);
+
+        $col3 = $(DIV).addClass("dx-col").appendTo($row2);
+        $col4 = $(DIV).addClass("dx-col").appendTo($row2);
+
+        that._renderArea($col1, "all");
+        that._renderArea($col2, "row");
+        that._renderArea($col2, "column");
+        that._renderArea($col3, "filter");
+        that._renderArea($col4, "data");
+    },
+
+    _renderLayout1: function($container) {
+        var that = this,
+            $col1, $col2;
+
+        $col1 = $(DIV).addClass("dx-col").appendTo($container);
+        $col2 = $(DIV).addClass("dx-col").appendTo($container);
+
+        that._renderArea($col1, "all");
+        that._renderArea($col2, "filter");
+        that._renderArea($col2, "row");
+        that._renderArea($col2, "column");
+        that._renderArea($col2, "data");
+    },
+
+    _renderLayout2: function($container) {
+        var that = this,
+            $col1, $col2,
+            $row1, $row2;
+
+        $container.addClass("dx-layout-2");
+
+        $row1 = $(DIV).addClass("dx-row").appendTo($container);
+        that._renderArea($row1, "all");
+
+        $row2 = $(DIV).addClass("dx-row").appendTo($container);
+        $col1 = $(DIV).addClass("dx-col").appendTo($row2);
+        $col2 = $(DIV).addClass("dx-col").appendTo($row2);
+
+        that._renderArea($col1, "filter");
+        that._renderArea($col1, "row");
+        that._renderArea($col2, "column");
+        that._renderArea($col2, "data");
+    },
+
     _initMarkup: function() {
         var that = this,
             $element = this.$element(),
             $container = $(DIV).addClass(FIELDCHOOSER_CONTAINER_CLASS).appendTo($element),
-            layout = that.option("layout"),
-            $col1,
-            $col2;
+            layout = that.option("layout");
 
         that.callBase();
 
@@ -322,35 +377,11 @@ var FieldChooser = BaseFieldChooser.inherit({
         that._dataChangedHandlers = [];
 
         if(layout === 0) {
-            $col1 = $(DIV).addClass("dx-col").appendTo($container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($container);
-
-            that._renderArea($col1, "all");
-            that._renderArea($col1, "filter");
-            that._renderArea($col2, "row");
-            that._renderArea($col2, "column");
-            that._renderArea($col2, "data");
+            that._renderLayout0($container);
         } else if(layout === 1) {
-            $col1 = $(DIV).addClass("dx-col").appendTo($container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($container);
-
-            that._renderArea($col1, "all");
-            that._renderArea($col2, "filter");
-            that._renderArea($col2, "row");
-            that._renderArea($col2, "column");
-            that._renderArea($col2, "data");
+            that._renderLayout1($container);
         } else {
-            $container.addClass("dx-layout-2");
-            this._renderArea($container, "all");
-            var $layout2Container = $(DIV).addClass("dx-fields-container").appendTo($container);
-
-            $col1 = $(DIV).addClass("dx-col").appendTo($layout2Container);
-            $col2 = $(DIV).addClass("dx-col").appendTo($layout2Container);
-
-            that._renderArea($col1, "filter");
-            that._renderArea($col1, "row");
-            that._renderArea($col2, "column");
-            that._renderArea($col2, "data");
+            that._renderLayout2($container);
         }
     },
 
