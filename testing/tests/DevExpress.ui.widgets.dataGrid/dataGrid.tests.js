@@ -3214,6 +3214,41 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
     this.clock.restore();
 });
 
+QUnit.test("scroll position should not be reseted if virtual scrolling and cell template cause relayout", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 100; i++) {
+        array.push({ id: i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        dataSource: array,
+        keyExpr: "id",
+        paging: { pageSize: 10 },
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        },
+        columns: [{
+            dataField: "id",
+            cellTemplate: function(container, options) {
+                $(container).width();
+                $(container).text(options.text);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 2000 });
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), 2000, "scrollTop is not reseted");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row key");
+});
+
 // T662900
 QUnit.test("scroll position should not be changed after partial update via repaintRows", function(assert) {
     // arrange
@@ -4551,7 +4586,6 @@ QUnit.test("pageSize state is applied when scrolling mode is not virtual", funct
 
     // assert
     assert.equal(dataGrid.pageSize(), 10, "pageSize from stateStoring is applied");
-    clock.restore();
 });
 
 // T152307
@@ -4937,7 +4971,6 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     // assert
     var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok(!$loadPanel.length, "load panel is visible");
-    clock.restore();
 });
 
 // T389866
@@ -9270,8 +9303,8 @@ QUnit.test("update focus border on resize", function(assert) {
     assert.ok(newFocusWidth < oldFocusWidth, "new focus width less than old focus width");
 });
 
-QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)", function(assert) {
-    // arrange
+QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
+    // arrange, act
     var dataGrid = createDataGrid({
             filterRow: { visible: true },
             editing: { allowAdding: true },
@@ -9279,34 +9312,21 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
                 { dataField: "field1" },
                 { dataField: "field2" }
             ],
-            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
-            loadingTimeout: undefined
+            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
         }),
-        $inputElement,
-        done = assert.async();
+        navigationController = dataGrid.getController("keyboardNavigation");
 
-    $inputElement = $(dataGrid.$element()).find(".dx-editor-cell").first().find(".dx-texteditor-input");
-
-    // act
-    $inputElement.focus();
-    $inputElement.val("1");
-    $inputElement.trigger("change");
     this.clock.tick();
-    this.clock.restore();
 
-    setTimeout(function() {
-        // assert
-        assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
-        assert.ok(dataGrid.$element().find(".dx-editor-cell").first().hasClass("dx-focused"), "filter cell has focus after filter applyed");
+    var filterEditor = $(dataGrid.$element()).find(".dx-editor-cell").first();
+    navigationController._focus(filterEditor);
+    filterEditor.find("input").val("1").trigger("change");
 
-        // T662207
-        if(devices.real().deviceType === "desktop") {
-            $inputElement = dataGrid.$element().find(".dx-editor-cell").first().find(".dx-texteditor-input");
-            assert.equal($inputElement.get(0).selectionStart, 1, "selectionStart is correct");
-            assert.equal($inputElement.get(0).selectionEnd, 1, "selectionEnd is correct");
-        }
-        done();
-    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
+    assert.ok(dataGrid.$element().find(".dx-editor-cell:focus").length, "filter cell has focus after filter applyed");
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
@@ -10048,8 +10068,7 @@ QUnit.test("rowElement argument of rowTemplate option is correct", function(asse
 // T484419
 QUnit.test("rowTemplate via dxTemplate should works with masterDetail template", function(assert) {
     // arrange, act
-    var clock = sinon.useFakeTimers(),
-        $rowElements,
+    var $rowElements,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [
@@ -10068,7 +10087,6 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
 
     // act
     $($(dataGrid.$element()).find(".dx-datagrid-expand").eq(0)).trigger("dxclick");
-    clock.tick();
 
     // assert
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
@@ -10077,7 +10095,6 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
     assert.strictEqual($rowElements.eq(1).children().eq(1).text(), "Test Details", "row 1 content");
     assert.strictEqual($rowElements.eq(2).text(), "Row Content More info", "row 2 content");
     assert.strictEqual($rowElements.eq(3).text(), "Row Content More info", "row 3 content");
-    clock.restore();
 });
 
 // T120698
@@ -10381,22 +10398,19 @@ QUnit.test("SelectAll when allowSelectAll is false", function(assert) {
 // T628315
 QUnit.test("Click near selectAll doesn't generate infinite loop", function(assert) {
     // arrange, act
-    var clock = sinon.useFakeTimers(),
-        dataGrid = createDataGrid({
-            selection: { mode: "multiple" },
-            loadingTimeout: undefined,
-            dataSource: [{ id: 1111 }]
-        });
+    var dataGrid = createDataGrid({
+        selection: { mode: "multiple" },
+        loadingTimeout: undefined,
+        dataSource: [{ id: 1111 }]
+    });
 
     var $selectAllElement = $(dataGrid.element()).find(".dx-header-row .dx-command-select");
     $selectAllElement.trigger("dxclick");
-    clock.tick();
 
     // assert
     assert.equal(dataGrid.getSelectedRowKeys().length, 1);
     assert.equal($selectAllElement.find(".dx-datagrid-text-content").length, 0);
     assert.ok($($selectAllElement).find(".dx-select-checkbox").hasClass("dx-checkbox-checked"));
-    clock.restore();
 });
 
 QUnit.module("Modules", {

@@ -496,7 +496,7 @@ QUnit.test("dxSelectBox automatically scrolls to selected item on opening", func
 
     this.clock.tick(TIME_TO_WAIT);
 
-    selectBox.option("opened", true)
+    selectBox.option("opened", true);
 
     var $popupContent = $(selectBox.content());
     var $selectedItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));

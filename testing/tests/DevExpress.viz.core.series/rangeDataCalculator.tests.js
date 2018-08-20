@@ -2872,23 +2872,26 @@ QUnit.test("Calculate interval in range data when aggregation is enabled", funct
     assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
 });
 
-QUnit.test("Calculate range data when aggregation enabled. Points range less than data range - get range from data", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
+QUnit.test("Calculate range data when aggregation enabled. Add data range if visual range less then data range ", function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
 
-    series.getArgumentAxis().getAggregationInfo = function() {
+    const argumentAxis = series.getArgumentAxis();
+
+    argumentAxis.visualRange = () => [3, 18];
+
+    argumentAxis.getAggregationInfo = function() {
         return {
             interval: 1,
             ticks: [5, 10, 15]
         };
-    }
+    };
 
     series.updateData(data);
 
     series.createPoints();
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -2896,30 +2899,27 @@ QUnit.test("Calculate range data when aggregation enabled. Points range less tha
     assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
 });
 
-QUnit.test("Calculate range data when aggregation enabled. Points range greater than data range - get range from point", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({
-            type: "scatter",
-            argumentAxisType: "continuous",
-            aggregation: { enabled: true, method: "count" }
-        });
+QUnit.test("Calculate range data when aggregation enabled. Do not inculde data range if argument vieport is equal to data range", function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
+    const argumentAxis = series.getArgumentAxis();
 
-    series.getArgumentAxis().getAggregationInfo = function() {
+    argumentAxis.visualRange = () => [2, 20];
+    argumentAxis.getAggregationInfo = function() {
         return {
             interval: 1,
-            ticks: [0, 5, 10, 15, 25, 30]
+            ticks: [5, 10, 15]
         };
-    }
+    };
 
     series.updateData(data);
 
     series.createPoints();
 
-    rangeData = series.getRangeData();
+    const rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 0, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 25, "Max arg should be correct");
+    assert.strictEqual(rangeData.arg.min, 5, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.max, 10, "Max arg should be correct");
     assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
 });

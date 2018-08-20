@@ -196,7 +196,7 @@ let layout = {
             rectsOfCascade.forEach(nodeRect => {
                 let nodeTitle = nodeRect._name,
                     rectFrom = this._findRectByName(rects, nodeTitle),
-                    linksFromNode = links.filter(link => { return link[0] === nodeTitle }); // all outgoing links from the node
+                    linksFromNode = links.filter(link => { return link[0] === nodeTitle; }); // all outgoing links from the node
 
                 // all outgoing links should be sorted according to the order of their target nodes
                 linksFromNode.forEach(link => {
