@@ -3214,6 +3214,37 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
     this.clock.restore();
 });
 
+// T662900
+QUnit.test("scroll position should not be changed after partial update via repaintRows", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 10; i++) {
+        array.push({ id: i });
+    }
+
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined
+    }).dxDataGrid("instance");
+
+
+    var clock = sinon.useFakeTimers();
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    dataGrid.getScrollable().scrollTo({ y: 200 });
+    dataGrid.repaintRows(0);
+    clock.tick();
+    clock.restore();
+
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), 200, "scrollTop is not reseted");
+});
+
 QUnit.test("height from extern styles", function(assert) {
     // arrange, act
     var $dataGrid = $("#dataGrid").addClass("fixed-height").dxDataGrid({
