@@ -248,7 +248,6 @@ var BaseWidget = {
         * @name BaseWidgetOptions.title.font
         * @type Font
         * @default '#232323' @prop color
-        * @default undefined @prop opacity
         * @default 28 @prop size
         * @default 200 @prop weight
         * @extends CommonVizLightFontFamily
@@ -281,7 +280,6 @@ var BaseWidget = {
             * @name BaseWidgetOptions.title.subtitle.font
             * @type Font
             * @default '#232323' @prop color
-            * @default undefined @prop opacity
             * @default 16 @prop size
             * @default 200 @prop weight
             * @extends CommonVizLightFontFamily
@@ -457,7 +455,6 @@ var BaseWidget = {
         * @name BaseWidgetOptions.tooltip.font
         * @type Font
         * @default '#232323' @prop color
-        * @default undefined @prop opacity
         * @default 12 @prop size
         * @default 400 @prop weight
         * @extends CommonVizFontFamily
@@ -551,9 +548,6 @@ var BaseWidget = {
         * @name BaseWidgetOptions.loadingIndicator.font
         * @type Font
         * @default '#767676' @prop color
-        * @default undefined @prop opacity
-        * @default undefined @prop size
-        * @default undefined @prop weight
         * @extends CommonVizFontFamily
         */
         font: {

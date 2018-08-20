@@ -253,7 +253,6 @@ var dxRangeSelector = {
             * @name dxRangeSelectorOptions.scale.label.font
             * @type Font
             * @default '#767676' @prop color
-            * @default undefined @prop opacity
             * @default 11 @prop size
             * @default 400 @prop weight
             * @extends CommonVizFontFamily
@@ -518,7 +517,6 @@ var dxRangeSelector = {
         * @name dxRangeSelectorOptions.sliderMarker.font
         * @type Font
         * @default 'white' @prop color
-        * @default undefined @prop opacity
         * @default 14 @prop size
         * @default 400 @prop weight
         * @extends CommonVizFontFamily

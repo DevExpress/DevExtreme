@@ -770,7 +770,6 @@ var commonSeries = {
         * @name dxChartSeriesTypes.CommonSeries.label.font
         * @type Font
         * @default '#FFFFFF' @prop color
-        * @default undefined @prop opacity
         * @default 14 @prop size
         * @default 400 @prop weight
         * @extends CommonVizFontFamily

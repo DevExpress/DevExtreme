@@ -930,7 +930,6 @@ var dxBarGauge = {
         /**
         * @name dxBarGaugeOptions.label.font
         * @type Font
-        * @default undefined @prop color
         * @default 1 @prop opacity
         * @default 16 @prop size
         * @default 400 @prop weight
