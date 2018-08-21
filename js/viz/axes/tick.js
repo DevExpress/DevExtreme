@@ -218,13 +218,20 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     }
                 }
             },
+
             updateGridPosition: function(animate) {
                 this._updateLine(this.grid,
                     axis._getGridPoints(tick.coords),
                     this._storedCoords && axis._getGridPoints(this._storedCoords),
                     animate);
+            },
+
+            removeLabel() {
+                this.label.remove();
+                this.label = null;
             }
         };
+
         return tick;
     };
 }

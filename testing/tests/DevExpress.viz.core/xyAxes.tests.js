@@ -1332,13 +1332,49 @@ QUnit.test("Labels overlap, some of them hide", function(assert) {
     assert.deepEqual(this.arrayRemovedElements, ["3", "7", "11", "15"], "decimated labels");
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 600, "1 text not moved");
     assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 607, "2 text moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 600, "3 text not moved");
     assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
-    assert.equal(texts.getCall(5).returnValue.attr.lastCall.args[0].translateY, 600, "5 text not moved");
     assert.equal(texts.getCall(6).returnValue.attr.lastCall.args[0].translateY, 607, "6 text moved");
-    assert.equal(texts.getCall(7).returnValue.attr.lastCall.args[0].translateY, 600, "7 text not moved");
+});
+
+QUnit.test("Do not update removed label position on update size", function(assert) {
+    var markersBBoxes = [
+        { x: 0, y: 0, width: 20, height: 5 },
+        { x: 15, y: 0, width: 20, height: 6 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 15, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 },
+        { x: 85, y: 0, width: 10, height: 5 },
+        { x: 100, y: 0, width: 10, height: 5 },
+        { x: 115, y: 0, width: 10, height: 5 }
+    ];
+
+    this.generatedTicks = [1, 3, 5, 7, 9, 11, 13, 15];
+
+    this.translator.translate.withArgs(11).returns(60);
+    this.translator.translate.withArgs(13).returns(70);
+    this.translator.translate.withArgs(15).returns(80);
+
+    this.renderer.text = spyRendererText.call(this, markersBBoxes);
+
+    const axis = this.drawAxisWithOptions({
+        min: 1,
+        max: 10,
+        label: {
+            overlappingBehavior: "stagger",
+            staggeringSpacing: 0,
+            indentFromAxis: 0
+        }
+    });
+
+    const removedLabel = this.renderer.text.getCall(1).returnValue;
+
+    removedLabel.attr.reset();
+
+    // act
+    axis.updateSize(this.canvas);
+
+    assert.equal(removedLabel.attr.callCount, 0);
 });
 
 QUnit.test("Axis position is top", function(assert) {
@@ -1670,9 +1706,7 @@ QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are over
     assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels should decimated");
 
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 600, "1 text not moved");
     assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 607, "2 text moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 600, "3 text not moved");
     assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
 });
 
