@@ -31,22 +31,22 @@ module.exports = (function() {
         });
     };
 
-    var getFilterExpressionByRange = function(filterValue) {
+    var getFilterExpressionByRange = function(filterValue, target) {
         var column = this,
             endFilterValue,
             startFilterExpression,
             endFilterExpression,
-            dataField = column.dataField;
+            selector = getFilterSelector(column, target);
 
         if(Array.isArray(filterValue) && typeUtils.isDefined(filterValue[0]) && typeUtils.isDefined(filterValue[1])) {
-            startFilterExpression = [dataField, ">=", filterValue[0]];
-            endFilterExpression = [dataField, "<=", filterValue[1]];
+            startFilterExpression = [selector, ">=", filterValue[0]];
+            endFilterExpression = [selector, "<=", filterValue[1]];
 
             if(isDateType(column.dataType)) {
                 if(isZeroTime(filterValue[1])) {
                     endFilterValue = new Date(filterValue[1].getTime());
                     endFilterValue.setDate(filterValue[1].getDate() + 1);
-                    endFilterExpression = [dataField, "<", endFilterValue];
+                    endFilterExpression = [selector, "<", endFilterValue];
                 }
             }
 
@@ -152,7 +152,7 @@ module.exports = (function() {
             } else if(dataType === "string" && (!column.lookup || isSearchByDisplayValue)) {
                 filter = [selector, selectedFilterOperation || "contains", filterValue];
             } else if(selectedFilterOperation === "between") {
-                return getFilterExpressionByRange.apply(column, arguments);
+                return getFilterExpressionByRange.apply(column, [filterValue, target]);
             } else if(isDateType(dataType) && typeUtils.isDefined(filterValue)) {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === "number") {

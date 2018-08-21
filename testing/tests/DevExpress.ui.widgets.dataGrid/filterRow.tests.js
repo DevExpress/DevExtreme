@@ -2086,6 +2086,31 @@ QUnit.test("Filter by range when column with customizeText and filter value is a
     assert.equal(that.dataController.items().length, 1, "count item");
 });
 
+// T663887
+QUnit.test("Filter by range when column with calculateCellValue and filter value is array", function(assert) {
+    this.options.columns = [{
+        dataType: "date",
+        selectedFilterOperation: "between",
+        allowFiltering: true,
+        filterValue: [new Date(1992, 7, 6), new Date(1992, 7, 8)],
+        calculateCellValue: function(data) {
+            return new Date(data.OrderDate);
+        }
+    }];
+
+    setupDataGridModules(this, ["data", "columns", "filterRow"], {
+        initViews: true
+    });
+
+    // act
+    var filter = this.dataController.getCombinedFilter();
+
+    // assert
+    assert.equal(filter.length, 3, "has filter range content");
+    assert.equal(typeof filter[0][0], "function", "has selector");
+    assert.equal(typeof filter[2][0], "function", "has selector");
+});
+
 QUnit.test("Rows view is not rendered when value is entered to editor of the filter row (applyFilter mode is onClick)", function(assert) {
     // arrange
     var $testElement = $('#container'),
