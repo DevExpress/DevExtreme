@@ -216,7 +216,7 @@ function updateLabels(ticks, step, func) {
     ticks.forEach(function(tick, index) {
         if(tick.label) {
             if(index % step !== 0) {
-                tick.label.remove();
+                tick.removeLabel();
             } else if(func) {
                 func(tick, index);
             }
