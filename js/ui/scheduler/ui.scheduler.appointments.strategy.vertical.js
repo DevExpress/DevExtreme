@@ -306,7 +306,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _calculateDynamicAppointmentCountPerCell: function() {
-        return Math.floor(this._getAppointmentMaxWidth() / APPOINTMENT_DEFAULT_WIDTH);
+        return Math.floor(this._getAppointmentMaxWidth() / APPOINTMENT_DEFAULT_WIDTH) || 1;
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
