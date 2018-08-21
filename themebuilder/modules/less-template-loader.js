@@ -15,7 +15,7 @@ const createModifyVars = modifyVars => {
 const addSwatchClass = (less, swatchSelector, modifyVars) => {
     if(!swatchSelector) return less;
     return swatchSelector + "{" + less + createModifyVars(modifyVars) + "}";
-}
+};
 
 class LessFontPlugin {
     process(css) {
