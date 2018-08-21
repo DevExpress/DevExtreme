@@ -51,6 +51,7 @@ gulp.task('test', function(callback) {
         'localization',
         [
             'js-bundles-debug',
+            'vectormap',
             'vendor'
         ],
         'style-compiler-test-themes',
