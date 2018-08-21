@@ -9338,7 +9338,9 @@ QUnit.testInActiveWindow("Filter row editor should have focus after _synchronize
     assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
     assert.ok($focusedInput.length, "filter cell has focus after filter applyed");
     // T662207
-    assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], "setSelectionRange args");
+    if(devices.real().deviceType === "desktop") {
+        assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], "setSelectionRange args");
+    }
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
