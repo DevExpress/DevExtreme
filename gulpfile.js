@@ -45,6 +45,13 @@ gulp.task('default', function(callback) {
         callback);
 });
 
+gulp.task('test', function(callback) {
+    runSequence(
+        'clean',
+        'vendor',
+        callback);
+});
+
 gulp.task('dev', function(callback) {
     runSequence('bundler-config-dev', ['js-bundles-dev', 'style-compiler-themes-dev'], callback);
 });
