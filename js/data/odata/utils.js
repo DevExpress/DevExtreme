@@ -302,8 +302,10 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         if(httpStatus === 200) {
             httpStatus = 500;
         }
-        if(errorObj.code) {
-            httpStatus = Number(errorObj.code);
+
+        var customCode = Number(errorObj.code);
+        if(isFinite(customCode) && customCode >= 400) {
+            httpStatus = customCode;
         }
     }
 
