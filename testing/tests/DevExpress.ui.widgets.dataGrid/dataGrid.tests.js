@@ -58,6 +58,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     browser = require("core/utils/browser"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     DataSource = require("data/data_source/data_source").DataSource,
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
@@ -9306,27 +9307,38 @@ QUnit.test("update focus border on resize", function(assert) {
 QUnit.testInActiveWindow("Filter row editor should have focus after _synchronizeColumns (T638737)'", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
-            filterRow: { visible: true },
-            editing: { allowAdding: true },
-            columns: [
-                { dataField: "field1" },
-                { dataField: "field2" }
-            ],
-            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
-        }),
-        navigationController = dataGrid.getController("keyboardNavigation");
+        filterRow: { visible: true },
+        editing: { allowAdding: true },
+        columns: [
+            { dataField: "field1" },
+            { dataField: "field2" }
+        ],
+        dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+    });
 
     this.clock.tick();
 
-    var filterEditor = $(dataGrid.$element()).find(".dx-editor-cell").first();
-    navigationController._focus(filterEditor);
-    filterEditor.find("input").val("1").trigger("change");
+    var $input = $(dataGrid.$element()).find(".dx-editor-cell").first().find(".dx-texteditor-input");
+    $input.focus().val("1").trigger("change");
+
+    var selectionRangeArgs = [];
+
+    var oldSetSelectionRange = gridCoreUtils.setSelectionRange;
+    gridCoreUtils.setSelectionRange = function(element, range) {
+        oldSetSelectionRange.apply(this, arguments);
+        selectionRangeArgs.push([element, range]);
+    };
 
     this.clock.tick();
+
+    gridCoreUtils.setSelectionRange = oldSetSelectionRange;
 
     // assert
+    var $focusedInput = dataGrid.$element().find(".dx-editor-cell .dx-texteditor-input:focus");
     assert.equal(dataGrid.getVisibleRows().length, 1, "filter was applied");
-    assert.ok(dataGrid.$element().find(".dx-editor-cell:focus").length, "filter cell has focus after filter applyed");
+    assert.ok($focusedInput.length, "filter cell has focus after filter applyed");
+    // T662207
+    assert.deepEqual(selectionRangeArgs, [[$focusedInput.get(0), { selectionStart: 1, selectionEnd: 1 }]], "setSelectionRange args");
 });
 
 QUnit.test("Clear state when initial options defined", function(assert) {
