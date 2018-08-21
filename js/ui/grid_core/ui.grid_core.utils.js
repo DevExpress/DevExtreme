@@ -447,7 +447,11 @@ module.exports = (function() {
         },
 
         setSelectionRange: function(focusedElement, selectionRange) {
-            focusedElement && focusedElement.setSelectionRange && focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
+            if(focusedElement && focusedElement.setSelectionRange) {
+                try {
+                    focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
+                } catch(e) {}
+            }
         }
     };
 })();
