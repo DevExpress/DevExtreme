@@ -279,6 +279,37 @@ QUnit.module("Sync with FilterValue", {
         // assert
         assert.deepEqual(this.option("filterValue"), [["field", "anyof", ["2", "3"]], "and", ["field2", "=", "1"]]);
     });
+
+    // T662699
+    QUnit.test("filterRow clears value if column.filterOperations do not contain selectedFilterOperation", function(assert) {
+        this.setupDataGrid({
+            columns: [{
+                dataField: "field",
+                dataType: "number",
+                filterOperations: []
+            }],
+            filterValue: ["field", ">", 1]
+        });
+
+        assert.equal(this.columnOption("field", "filterValue"), undefined);
+        assert.equal(this.columnOption("field", "selectedFilterOperation"), undefined);
+    });
+
+    QUnit.test("filterRow does not clear value if selectedFilterOperations equals defaultFilterOperation", function(assert) {
+        this.setupDataGrid({
+            columns: [{
+                dataField: "field",
+                dataType: "number",
+                defaultFilterOperation: "=",
+                selectedFilterOperation: "=",
+                filterOperations: []
+            }],
+            filterValue: ["field", "=", 1]
+        });
+
+        assert.equal(this.columnOption("field", "filterValue"), 1);
+        assert.equal(this.columnOption("field", "selectedFilterOperation"), "=");
+    });
 });
 
 QUnit.module("getCombinedFilter", {
