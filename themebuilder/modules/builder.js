@@ -28,7 +28,7 @@ const processTheme = (config, metadata, data, version) => {
         }
         return lessTemplateLoader.load(config.themeName, config.colorScheme, metadata);
     }
-}
+};
 
 const buildTheme = config => {
     let metadataRepository = new MetadataRepository(new MetadataLoader());
@@ -46,7 +46,7 @@ const buildTheme = config => {
 
         return processTheme(config, metadata, data, version);
     });
-}
+};
 
 module.exports = {
     buildTheme: buildTheme
