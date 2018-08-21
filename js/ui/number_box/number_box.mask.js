@@ -496,9 +496,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var caret = this._caret();
+        var caret = this._caret(),
+            isIeMinusKey = e.key === NUMPUD_MINUS_KEY_IE;
+
         if(caret.start !== caret.end) {
-            this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
+            if(e.key === MINUS || isIeMinusKey) {
+                this.reset();
+            } else {
+                this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
+            }
         }
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);
@@ -506,7 +512,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(this._isValueInRange(newValue)) {
             this._parsedValue = newValue;
 
-            if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
+            if(isIeMinusKey) { // Workaround for IE (T592690)
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }
