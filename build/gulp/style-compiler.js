@@ -95,3 +95,15 @@ gulp.task('style-compiler-generic-legacy', [
     'style-compiler-generic-legacy-light-compact',
     'style-compiler-generic-legacy-dark-compact'
 ]);
+
+gulp.task('style-compiler-tb-assets', function(callback) {
+    var assetsPath = path.join(process.cwd(), 'themebuilder');
+
+    runStyleCompiler(
+        'tb-assets', [
+            '--version=' + context.version.product,
+            '--tb-ui-path=' + assetsPath
+        ],
+        callback
+    );
+});

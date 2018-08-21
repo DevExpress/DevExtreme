@@ -4,6 +4,8 @@
 /js/bundles/dx.custom.js
 /js/localization/default_messages.js
 /js/localization/cldr-data
+/themebuilder/data/less
+/themebuilder/data/metadata
 bin
 node_modules
 obj

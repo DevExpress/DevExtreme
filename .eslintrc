@@ -145,6 +145,7 @@
                     "msie",
                     "odata",      // OData
                     "rtl",        // Right-to-Left
+                    "scss",
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",
@@ -355,6 +356,7 @@
                     "postfix",
                     "postfixes",
                     "postprocess",
+                    "pre",
                     "preload",
                     "prepend",
                     "prerender",
@@ -398,6 +400,7 @@
                     "seg",
                     "selectable",
                     "semidiscrete",
+                    "sep",
                     "serializers",
                     "shader",
                     "sortable",

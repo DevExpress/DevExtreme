@@ -1,0 +1,33 @@
+{
+  "name": "devextreme-themebuilder",
+  "version": "0.0.1",
+  "description": "DevExtreme ThemeBuilder",
+  "keywords": [
+    "devextreme",
+    "devexpress"
+  ],
+  "main": "modules/builder.js",
+  "homepage": "https://js.devexpress.com/",
+  "bugs": "https://www.devexpress.com/support/",
+  "author": "Developer Express Inc.",
+  "repository": "https://github.com/DevExpress/DevExtreme",
+  "license": "SEE LICENSE IN README.md",
+  "dependencies": {
+    "bootstrap": "^4.1.2",
+    "less": "^2.6.1",
+    "minimist": "^1.2.0",
+    "sass": "^1.10.3"
+  },
+  "bin": {
+    "build-theme": "cli/build-theme.js",
+    "build-base-theming": "cli/build-base-theming.js"
+  },
+  "scripts": {
+    "test": "mocha -R spec tests/*-spec.js"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "mock-require": "^3.0.2"
+  }
+}
