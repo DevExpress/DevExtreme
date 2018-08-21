@@ -172,7 +172,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.label.border.color
             * @type string
-            * @default #000000
+            * @default '#000000'
             */
             color: '#000000'
         },
@@ -306,7 +306,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.node.border.color
             * @type string
-            * @default #000000
+            * @default '#000000'
             */
             color: '#000000'
         },
@@ -426,7 +426,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.link.border.color
             * @type string
-            * @default #000000
+            * @default '#000000'
             */
             color: '#000000'
         },
