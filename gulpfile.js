@@ -48,7 +48,10 @@ gulp.task('default', function(callback) {
 gulp.task('test', function(callback) {
     runSequence(
         'clean',
-        'vendor',
+        [
+            'js-bundles-debug',
+            'vendor'
+        ],
         callback);
 });
 
