@@ -31,16 +31,15 @@ namespace StyleCompiler
                     });
                 });
 
-                cli.Command("theme", c =>
+                cli.Command("only-themes", c =>
                 {
                     var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
                     var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
-                    var themeName = c.Option("--theme-name", "", CommandOptionType.SingleValue);
-                    var colorSchemeName = c.Option("--color-scheme-name", "", CommandOptionType.SingleValue);
+                    var themes = c.Option("--themes", "", CommandOptionType.SingleValue);
                     c.OnExecute(delegate
                     {
-                        EnsureRequiredOptions(versionOption, outputPathOption, themeName, colorSchemeName);
-                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), themeName.Value(), colorSchemeName.Value());
+                        EnsureRequiredOptions(versionOption, outputPathOption, themes);
+                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), themes.Value());
                         return 0;
                     });
                 });
@@ -133,7 +132,10 @@ namespace StyleCompiler
             }
         }
 
-        static void CreateThemes(string sourcePath, string version, string outputPath, string themeName = null, string colorSchemeName = null)
+        static void CreateThemes(string sourcePath, string version, string outputPath) {
+            CreateThemes(sourcePath, version, outputPath, null);
+        }
+        static void CreateThemes(string sourcePath, string version, string outputPath, string necessaryThemes)
         {
             Directory.CreateDirectory(outputPath);
 
@@ -142,7 +144,7 @@ namespace StyleCompiler
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {
-                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName, themeName, colorSchemeName);
+                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName, necessaryThemes);
 
                 foreach (var item in aggregate)
                 {

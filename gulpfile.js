@@ -53,6 +53,7 @@ gulp.task('test', function(callback) {
             'js-bundles-debug',
             'vendor'
         ],
+        'style-compiler-test-themes',
         callback);
 });
 

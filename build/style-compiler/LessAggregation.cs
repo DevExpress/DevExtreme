@@ -195,7 +195,7 @@ namespace StyleCompiler
             };
         }
 
-        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, string neededThemeName = null, string neededColorSchemeName = null)
+        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, string necessaryThemes = null)
         {
             var distribution = LessRegistry.CssDistributions[distributionName];
 
@@ -206,17 +206,32 @@ namespace StyleCompiler
             {
                 foreach (var themeName in distribution.SupportedThemes)
                 {
-                    if(neededThemeName != null && neededThemeName != themeName) continue;
                     var theme = LessRegistry.KnownThemeMap[themeName];
 
                     foreach (var colorSchemeName in theme.ColorSchemeNames)
                     {
-                        if(neededColorSchemeName != null && neededColorSchemeName != colorSchemeName) continue;
+                        if(!IsNecessaryTheme(themeName, colorSchemeName, necessaryThemes)) continue;
                         foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
                             yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
                     }
                 }
             }
+        }
+
+        static bool IsNecessaryTheme(string theme, string colorScheme, string themesString)
+        {
+            if(string.IsNullOrEmpty(themesString)) return true;
+
+            foreach(var fullThemeName in themesString.Split(","))
+            {
+                var firstDotIndex = fullThemeName.IndexOf('.');
+                var necessaryTheme = fullThemeName.Substring(0, firstDotIndex);
+                if(theme != necessaryTheme) continue;
+
+                var necessaryColorScheme = fullThemeName.Substring(firstDotIndex + 1).Replace("." + LessRegistry.SIZE_SCHEME_COMPACT, "");
+                if(theme == necessaryTheme && colorScheme == necessaryColorScheme) return true;
+            }
+            return false;
         }
 
         static IEnumerable<string> EnumerateSizeSchemes(string distributionName, string themeName)

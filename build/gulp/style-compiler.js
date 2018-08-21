@@ -53,6 +53,19 @@ gulp.task('style-compiler-themes-dev', function(callback) {
     return gulp.watch("styles/**", ['style-compiler-themes']);
 });
 
+gulp.task('style-compiler-test-themes', function(callback) {
+    var cssArtifactsPath = path.join(process.cwd(), 'artifacts/css');
+
+    runStyleCompiler(
+        'only-themes', [
+            '--version=' + context.version.product,
+            '--output-path=' + cssArtifactsPath,
+            '--themes=generic.light,android5.light,ios7.default'
+        ],
+        callback
+    );
+});
+
 gulp.task('style-compiler-generic-legacy-light', function(callback) {
     generateCustomTheme(
         'generic', 'light', null,
