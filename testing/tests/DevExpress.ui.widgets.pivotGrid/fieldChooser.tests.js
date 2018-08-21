@@ -1338,9 +1338,9 @@ QUnit.test("Layout 2", function(assert) {
     assert.ok($areas.eq(0).outerHeight(true) > $areas.eq(1).outerHeight(true), "area 0>1 outerHeight");
     assert.ok($areas.eq(0).outerHeight(true) < $areas.eq(1).outerHeight(true) + $areas.eq(2).outerHeight(true), "area 0<1+2 outerHeight");
     assert.equal($areas.eq(1).outerHeight(true) + $areas.eq(2).outerHeight(true), $areas.eq(3).outerHeight(true) + $areas.eq(4).outerHeight(true), "area 1+2=3+4 outerHeight");
-    assert.roughEqual($areas.eq(1).outerHeight(true), $areas.eq(2).outerHeight(true), 0.1, "area 1=2 outerHeight");
-    assert.roughEqual($areas.eq(2).outerHeight(true), $areas.eq(3).outerHeight(true), 0.1, "area 2=3 outerHeight");
-    assert.roughEqual($areas.eq(3).outerHeight(true), $areas.eq(4).outerHeight(true), 0.1, "area 3=4 outerHeight");
+    assert.roughEqual($areas.eq(1).outerHeight(true), $areas.eq(2).outerHeight(true), 1.1, "area 1=2 outerHeight");
+    assert.roughEqual($areas.eq(2).outerHeight(true), $areas.eq(3).outerHeight(true), 1.1, "area 2=3 outerHeight");
+    assert.roughEqual($areas.eq(3).outerHeight(true), $areas.eq(4).outerHeight(true), 1.1, "area 3=4 outerHeight");
 
     assert.ok($areas.eq(0).width(), $areas.eq(1).width(), "area 0>1 width");
     assert.equal($areas.eq(1).width(), $areas.eq(2).width(), "area 1=2 width");
