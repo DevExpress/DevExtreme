@@ -150,12 +150,13 @@ var ResizingController = modules.ViewController.inherit({
             $tableBody;
 
         if($viewTable) {
+            var bestFitClassName = this.addWidgetPrefix("best-fit");
             if(isBestFit) {
-                $tableBody = $("<" + tagName + ">").addClass(this.addWidgetPrefix("best-fit"));
+                $tableBody = $("<" + tagName + ">").addClass(bestFitClassName);
                 $tableBody.append($viewTable.children("tbody").children(rowSelector));
                 $tableBody.appendTo($rowsTable);
             } else {
-                $tableBody = $rowsTable.children(tagName);
+                $tableBody = $rowsTable.children(tagName + "." + bestFitClassName);
                 $viewTable.children("tbody").prepend($tableBody.children());
                 $tableBody.remove();
             }
