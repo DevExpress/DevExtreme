@@ -4,8 +4,11 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
+    gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../core/utils/deferred").when;
+    when = require("../../core/utils/deferred").when,
+    domAdapter = require("../../core/dom_adapter"),
+    browser = require("../../core/utils/browser");
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",
@@ -60,6 +63,11 @@ var calculateFreeWidthWithCurrentMinWidth = function(that, columnIndex, currentM
     return calculateFreeWidth(that, widths.map(function(width, index) {
         return index === columnIndex ? currentMinWidth : width;
     }));
+};
+
+var restoreFocus = function(focusedElement, selectionRange) {
+    focusedElement.focus();
+    gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
 var ResizingController = modules.ViewController.inherit({
@@ -142,23 +150,20 @@ var ResizingController = modules.ViewController.inherit({
         columnsController.endUpdate();
     },
 
-    _toggleBestFitModeForView: function(view, rowSelector, tagName, isBestFit) {
+    _toggleBestFitModeForView: function(view, className, isBestFit) {
         if(!view) return;
-
         var $rowsTable = this._rowsView._getTableElement(),
             $viewTable = view._getTableElement(),
             $tableBody;
 
         if($viewTable) {
             if(isBestFit) {
-                $tableBody = $("<" + tagName + ">").addClass(this.addWidgetPrefix("best-fit"));
-                $tableBody.append($viewTable.children("tbody").children(rowSelector));
-                $tableBody.appendTo($rowsTable);
+                $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
             } else {
-                $tableBody = $rowsTable.children(tagName);
-                $viewTable.children("tbody").prepend($tableBody.children());
-                $tableBody.remove();
+                $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
             }
+            $tableBody.toggleClass(className, isBestFit);
+            $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
         }
     },
 
@@ -174,8 +179,8 @@ var ResizingController = modules.ViewController.inherit({
             $rowsTable.children("colgroup").css("display", isBestFit ? "none" : "");
             $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
-            that._toggleBestFitModeForView(that._columnHeadersView, ".dx-header-row", "thead", isBestFit);
-            that._toggleBestFitModeForView(that._footerView, ".dx-row", "tfooter", isBestFit);
+            that._toggleBestFitModeForView(that._columnHeadersView, "dx-header", isBestFit);
+            that._toggleBestFitModeForView(that._footerView, "dx-footer", isBestFit);
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
@@ -197,6 +202,8 @@ var ResizingController = modules.ViewController.inherit({
             resetBestFitMode,
             isColumnWidthsCorrected = false,
             resultWidths = [],
+            focusedElement,
+            selectionRange,
             normalizeWidthsByExpandColumns = function() {
                 var expandColumnWidth;
 
@@ -230,6 +237,8 @@ var ResizingController = modules.ViewController.inherit({
         that._setVisibleWidths(visibleColumns, []);
 
         if(needBestFit) {
+            focusedElement = domAdapter.getActiveElement();
+            selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
@@ -259,6 +268,13 @@ var ResizingController = modules.ViewController.inherit({
             if(resetBestFitMode) {
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
+                if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
+                    if(browser.msie) {
+                        setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
+                    } else {
+                        restoreFocus(focusedElement, selectionRange);
+                    }
+                }
             }
 
             isColumnWidthsCorrected = that._correctColumnWidths(resultWidths, visibleColumns);
