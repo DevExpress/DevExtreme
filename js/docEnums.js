@@ -211,7 +211,7 @@
  */
 
 /**
- * @typedef {string} Enums.VisualRangeOnDataUpdate
+ * @typedef {string} Enums.VisualRangeUpdateMode
  * @enum {'auto'|'keep'|'reset'|'shift'}
  */
 

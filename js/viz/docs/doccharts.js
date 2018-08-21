@@ -1426,7 +1426,7 @@ var dxChart = {
         visualRangeLength: {},
         /**
         * @name dxChartOptions.argumentAxis.visualRangeOnDataUpdate
-        * @type Enums.VisualRangeOnDataUpdate
+        * @type Enums.VisualRangeUpdateMode
         */
         visualRangeOnDataUpdate: "auto",
         /**
