@@ -48,6 +48,7 @@ gulp.task('default', function(callback) {
 gulp.task('test', function(callback) {
     runSequence(
         'clean',
+        'localization',
         [
             'js-bundles-debug',
             'vendor'
