@@ -2382,6 +2382,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return result;
     },
 
+    applyGroupButtonOffset: function() {
+        return false;
+    },
     _supportCompactDropDownAppointments: function() {
         return true;
     },

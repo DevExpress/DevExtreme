@@ -268,6 +268,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return 0;
     },
 
+    applyGroupButtonOffset: function() {
+        return true;
+    },
+
     _getDateTableBorderOffset: function() {
         return this._getDateTableBorder();
     },
