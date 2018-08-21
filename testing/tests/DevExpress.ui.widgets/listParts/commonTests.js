@@ -2678,3 +2678,23 @@ QUnit.test("Selection should not be cleared after searching", function(assert) {
 
     assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
 });
+
+QUnit.test("Delayed search value should be applied on the widget reset", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this",
+            searchTimeout: 500
+        }),
+        instance = $element.dxList("instance"),
+        searchBoxInstance = $element.find(".dx-list-search").dxTextBox("instance");
+
+    $(searchBoxInstance._input()).trigger("input", "test");
+    instance.repaint();
+    clock.tick(600);
+
+    assert.equal(instance.option("searchValue"), "test", "Correct option");
+    assert.equal(searchBoxInstance._input().val(), "test", "Search input has the correct value");
+    clock.restore();
+});
