@@ -37,6 +37,9 @@ function run_test {
         sleep 1
     done
 
+    echo $BROWSER;
+    echo $url;
+
     case "$BROWSER" in
 
         "firefox")
