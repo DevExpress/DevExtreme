@@ -2989,3 +2989,18 @@ QUnit.test('Simple use (logarithmic translator)', function(assert) {
     assert.equal(adjust(translator.checkMinBarSize(5, 2, 8)), 5);
     assert.equal(adjust(translator.checkMinBarSize(5, 7, 12)), 42);
 });
+
+QUnit.module("Change translator type on the fly", environment);
+
+QUnit.test("From discrete to continuous", function(assert) {
+    var translator = this.createTranslator({ categories: [new Date(100000), new Date(200000), new Date(300000), new Date(400000), new Date(500000)], axisType: 'discrete', dataType: 'datetime' });
+
+    assert.equal(translator.translate(new Date(200000)), 800);
+    assert.equal(translator.translate(new Date(400000)), 1200);
+
+    translator.updateBusinessRange({ axisType: 'continuous', dataType: 'numeric', min: 200, max: 700 });
+
+    assert.equal(translator.translate(300), 700);
+    assert.equal(translator.translate(200), 500);
+});
+
