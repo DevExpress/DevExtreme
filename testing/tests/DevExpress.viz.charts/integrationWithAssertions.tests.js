@@ -344,7 +344,7 @@ QUnit.test("Set visualRange for multi axis (exists single option collection for 
             val2: 1
         }, {
             arg: 8,
-            val1: 3,
+            val1: 4,
             val2: 5
         }, {
             arg: 11,
@@ -362,7 +362,7 @@ QUnit.test("Set visualRange for multi axis (exists single option collection for 
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.equal(visualRangeChanged.callCount, 2);
-    assert.deepEqual(chart.option("valueAxis.visualRange"), [2.926, 7.5]);
+    assert.deepEqual(chart.option("valueAxis.visualRange"), [4, 7]);
 });
 
 QUnit.test("Set visualRange for multi axis/pane (exists option collection for each value axis)", function(assert) {
