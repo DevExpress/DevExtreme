@@ -3972,15 +3972,18 @@ QUnit.testStart(function() {
         assert.equal(header.option("_dropDownButtonIcon"), "chevrondown", "header has correct _dropDownButtonIcon");
     });
 
-    QUnit.test("_appointmentGroupButtonOffset option should be passed to SchedulerAppointments", function(assert) {
+    QUnit.test("_appointmentGroupButtonOffset option should be passed to SchedulerAppointments depending on the view", function(assert) {
         this.createInstance({
-            currentView: "week",
+            currentView: "month",
             showCurrentTimeIndicator: false
         });
 
         var appointments = this.instance.getAppointmentsInstance();
 
         assert.equal(appointments.option("_appointmentGroupButtonOffset"), 20, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
+
+        this.instance.option("currentView", "week");
+        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 0, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
     });
 
 })("View with configuration");
