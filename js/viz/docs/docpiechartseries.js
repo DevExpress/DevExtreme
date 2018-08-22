@@ -357,8 +357,6 @@ var commonPieChartSeries = {
         * @type Font
         * @default '#FFFFFF' @prop color
         * @default 14 @prop size
-        * @default 400 @prop weight
-        * @extends CommonVizFontFamily
         */
         font: {
             family: undefined,
