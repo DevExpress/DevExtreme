@@ -1406,7 +1406,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 if(options.column.showEditorAlways) {
                     if(editMode === EDIT_MODE_CELL && options.row && !options.row.inserted) {
-                        return that.saveEditData();
+                        if(!forceUpdateRow) that.saveEditData();
+                        return;
                     } else if(editMode === EDIT_MODE_BATCH && !forceUpdateRow) {
                         columns = that._columnsController.getVisibleColumns();
                         forceUpdateRow = columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
