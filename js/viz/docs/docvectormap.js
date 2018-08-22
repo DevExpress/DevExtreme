@@ -229,10 +229,7 @@ var dxVectorMap = {
             /**
             * @name dxVectorMapOptions.layers.label.font
             * @type Font
-            * @default '#2b2b2b' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
+            * @default '#2B2B2B' @prop color
             */
             font: {
                 family: undefined,
@@ -383,10 +380,7 @@ var dxVectorMap = {
             * @name dxVectorMapOptions.areaSettings.label.font
             * @deprecated dxVectorMapOptions.layers.label.font
             * @type Font
-            * @default '#2b2b2b' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
+            * @default '#2B2B2B' @prop color
             */
             font: {
                 family: undefined,
@@ -605,10 +599,7 @@ var dxVectorMap = {
             * @name dxVectorMapOptions.markerSettings.label.font
             * @deprecated dxVectorMapOptions.layers.label.font
             * @type Font
-            * @default '#2b2b2b' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
+            * @default '#2B2B2B' @prop color
             */
             font: {
                 family: undefined,
@@ -821,9 +812,7 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.font
         * @type Font
-        * @default '#2b2b2b' @prop color
-        * @default 12 @prop size
-        * @extends CommonVizFontFamily
+        * @default '#2B2B2B' @prop color
         */
         font: {
             color: '#2b2b2b',
