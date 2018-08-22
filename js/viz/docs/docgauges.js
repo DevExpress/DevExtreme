@@ -194,10 +194,6 @@ var BaseGauge = {
             * @name BaseGaugeOptions.scale.label.font
             * @type Font
             * @default '#767676' @prop color
-            * @default 1 @prop opacity
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 color: '#767676',
@@ -685,10 +681,7 @@ var dxBarGauge = {
         /**
         * @name dxBarGaugeOptions.label.font
         * @type Font
-        * @extends CommonVizFontFamily
-        * @default 1 @prop opacity
         * @default 16 @prop size
-        * @default 400 @prop weight
         */
         font: {
             color: undefined,

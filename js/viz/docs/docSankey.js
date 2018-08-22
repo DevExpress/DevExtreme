@@ -119,8 +119,7 @@ var dxSankey = {
         /**
         * @name dxSankeyOptions.label.font
         * @type Font
-        * @default '#ffffff' @prop color
-        * @extends CommonVizFontFamily
+        * @default '#FFFFFF' @prop color
         */
         font: {
             color: '#ffffff',

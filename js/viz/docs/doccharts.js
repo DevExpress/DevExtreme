@@ -485,9 +485,6 @@ var dxChart = {
             * @name dxChartOptions.crosshair.label.font
             * @type Font
             * @default '#FFFFFF' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
              */
             font: {
                 family: undefined,
@@ -569,9 +566,6 @@ var dxChart = {
                 * @name dxChartOptions.crosshair.verticalLine.label.font
                 * @type Font
                 * @default '#FFFFFF' @prop color
-                * @default 12 @prop size
-                * @default 400 @prop weight
-                * @extends CommonVizFontFamily
                  */
                 font: {
                     family: undefined,
@@ -654,9 +648,6 @@ var dxChart = {
                 * @name dxChartOptions.crosshair.horizontalLine.label.font
                 * @type Font
                 * @default '#FFFFFF' @prop color
-                * @default 12 @prop size
-                * @default 400 @prop weight
-                * @extends CommonVizFontFamily
                  */
                 font: {
                     family: undefined,
@@ -852,9 +843,6 @@ var dxChart = {
             * @name dxChartOptions.commonAxisSettings.label.font
             * @type Font
             * @default '#767676' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 family: undefined,
@@ -1006,8 +994,6 @@ var dxChart = {
             * @type Font
             * @default '#767676' @prop color
             * @default 16 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 family: undefined,
@@ -1061,9 +1047,6 @@ var dxChart = {
                 * @name dxChartOptions.commonAxisSettings.stripStyle.label.font
                 * @type Font
                 * @default '#767676' @prop color
-                * @default 12 @prop size
-                * @default 400 @prop weight
-                * @extends CommonVizFontFamily
                 */
                 font: {
                     family: undefined,
@@ -1130,9 +1113,6 @@ var dxChart = {
                 * @name dxChartOptions.commonAxisSettings.constantLineStyle.label.font
                 * @type Font
                 * @default '#767676' @prop color
-                * @default 12 @prop size
-                * @default 400 @prop weight
-                * @extends CommonVizFontFamily
                 */
                 font: {
                     family: undefined,
@@ -2327,9 +2307,6 @@ var dxPolarChart = {
             * @name dxPolarChartOptions.commonAxisSettings.label.font
             * @type Font
             * @default '#767676' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 family: undefined,
@@ -2485,9 +2462,6 @@ var dxPolarChart = {
                 * @name dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
                 * @type Font
                 * @default '#767676' @prop color
-                * @default 12 @prop size
-                * @default 400 @prop weight
-                * @extends CommonVizFontFamily
                 */
                 font: {
                     family: undefined,
@@ -2536,9 +2510,6 @@ var dxPolarChart = {
                 * @name dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
                 * @type Font
                 * @default '#767676' @prop color
-                * @default 12 @prop size
-                * @default 400 @prop weight
-                * @extends CommonVizFontFamily
                 */
                 font: {
                     family: undefined,
@@ -3178,7 +3149,6 @@ var BaseChart = {
         * @name BaseChartOptions.legend.font
         * @type Font
         * @default '#767676' @prop color
-        * @extends CommonVizFontFamily
         */
         font: {
             color: '#767676',

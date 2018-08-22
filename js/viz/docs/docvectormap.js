@@ -218,9 +218,6 @@ var dxVectorMap = {
             * @name dxVectorMapOptions.layers.label.font
             * @type Font
             * @default '#2b2b2b' @prop color
-            * @default 12 @prop size
-            * @default 400 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 family: undefined,
@@ -405,8 +402,6 @@ var dxVectorMap = {
         * @name dxVectorMapOptions.legends.font
         * @type Font
         * @default '#2b2b2b' @prop color
-        * @default 12 @prop size
-        * @extends CommonVizFontFamily
         */
         font: {
             color: '#2b2b2b',

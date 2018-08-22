@@ -12,11 +12,6 @@ var BaseWidget = {
     */
 
     /**
-    * @pseudo CommonVizFontFamily
-    * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" @prop family
-    */
-
-    /**
     * @pseudo CommonVizLightFontFamily
     * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" @prop family
     */
@@ -442,9 +437,6 @@ var BaseWidget = {
         * @name BaseWidgetOptions.tooltip.font
         * @type Font
         * @default '#232323' @prop color
-        * @default 12 @prop size
-        * @default 400 @prop weight
-        * @extends CommonVizFontFamily
         */
         font: {
             color: '#232323',
@@ -535,7 +527,6 @@ var BaseWidget = {
         * @name BaseWidgetOptions.loadingIndicator.font
         * @type Font
         * @default '#767676' @prop color
-        * @extends CommonVizFontFamily
         */
         font: {
             family: undefined,
@@ -633,16 +624,20 @@ var tickInterval = {
  /**
  * @name Font.family
  * @type string
+ * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif"
  */
  /**
  * @name Font.opacity
  * @type number
+ * @default 1
  */
  /**
  * @name Font.size
  * @type string|number
+ * @default 12
  */
  /**
  * @name Font.weight
  * @type number
+ * @default 400
  */
