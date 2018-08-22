@@ -457,7 +457,7 @@ _Translator2d.prototype = {
     isValid: function(value) {
         var co = this._canvasOptions;
 
-        value = this._fromValue(value)
+        value = this._fromValue(value);
 
         return value !== null &&
             !isNaN(value) &&
