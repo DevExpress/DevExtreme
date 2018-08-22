@@ -1129,6 +1129,21 @@ var dxChart = AdvancedChart.inherit({
         return this._getOption("crosshair");
     },
 
+    _optionChanged: function(arg) {
+        const that = this;
+
+        that.callBase.apply(that, arguments);
+        if(arg.name === "valueAxis" && arg.fullName.indexOf("visualRange") > 0) {
+            let index = arg.fullName.match(/\d+/g);
+            if(!_isDefined(index)) {
+                that._valueAxes.forEach(va => va._skipVisualRangeApplying = that._valueAxesAdjustedOnZoom);
+            } else {
+                index = parseInt(index[0]);
+                that._valueAxes[index]._skipVisualRangeApplying = that._valueAxesAdjustedOnZoom;
+            }
+        }
+    },
+
     // API
     zoomArgument(min, max) {
         const that = this;
@@ -1149,10 +1164,8 @@ var dxChart = AdvancedChart.inherit({
         const chart = this;
         return function(visualRange) {
             const axes = isArgumentAxis ? chart._argumentAxes : chart._valueAxes.slice(index, index + 1);
-            axes.forEach(function(axis) {
-                axis.zoom(visualRange[0], visualRange[1]);
-                chart._riseVisualRangeOptionChange(visualRange, isArgumentAxis, index);
-            });
+
+            axes.forEach(axis => axis.zoom(visualRange[0], visualRange[1]));
 
             chart._recreateSizeDependentObjects(false);
             chart._doRender({
@@ -1162,6 +1175,11 @@ var dxChart = AdvancedChart.inherit({
                 adjustAxes: !isArgumentAxis,
                 animate: useAnimation
             });
+
+            chart._triggerVisualRangeOptionChange(isArgumentAxis ? chart.getArgumentAxis() : axes[0], isArgumentAxis);
+            if(isArgumentAxis && chart._themeManager.getOptions("adjustOnZoom")) {
+                chart._triggerVisualRangeOptionChange(null, false);
+            }
         };
     },
 
@@ -1170,13 +1188,36 @@ var dxChart = AdvancedChart.inherit({
         this._valueAxes.forEach(axis => axis.resetZoom()); // T602156
     },
 
+    _triggerOptionChanged() {
+        this._triggerVisualRangeOptionChange(this.getArgumentAxis(), true);
+        this._triggerVisualRangeOptionChange(null, false);
+    },
+
+    _triggerVisualRangeOptionChange(sourceAxis, isArgumentAxis) {
+        const that = this;
+
+        if(!isArgumentAxis) {
+            const valueAxes = _isArray(that._options.valueAxis) ? (!_isDefined(sourceAxis) ? that._valueAxes : that._valueAxes.filter(va => va.pane === sourceAxis.pane)) : [that.getValueAxis()];
+            that._valueAxesAdjustedOnZoom = sourceAxis === null && that._themeManager.getOptions("adjustOnZoom");
+            valueAxes.forEach(axis => {
+                const curIndex = that._valueAxes.indexOf(axis);
+                that._riseVisualRangeOptionChange(axis.visualRange(), false, curIndex);
+            });
+            that._valueAxesAdjustedOnZoom = false;
+        } else {
+            that._riseVisualRangeOptionChange(sourceAxis.visualRange(), true);
+        }
+    },
+
     _riseVisualRangeOptionChange(visualRange, isArgumentAxis, index) {
         const that = this;
         const axisType = isArgumentAxis ? "argumentAxis" : "valueAxis";
+        const axes = isArgumentAxis ? that._argumentAxes : that._valueAxes;
         const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + ".visualRange";
         const previousVisualRange = that.option(optionFullName);
 
-        if(!_isDefined(previousVisualRange) || visualRange[0] !== previousVisualRange[0] || visualRange[1] !== previousVisualRange[1]) {
+        if(!_isDefined(previousVisualRange) || JSON.stringify(visualRange[0]) !== JSON.stringify(previousVisualRange[0]) || JSON.stringify(visualRange[1]) !== JSON.stringify(previousVisualRange[1])) {
+            axes.forEach(a => a.refreshVisualRangeOption());
             that._simulateOptionChange(optionFullName, visualRange, previousVisualRange);
         }
     },

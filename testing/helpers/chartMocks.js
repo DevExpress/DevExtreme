@@ -1003,6 +1003,7 @@ export const MockAxis = function(renderOptions) {
         _setVisualRange: sinon.spy(),
         visualRange: sinon.spy(),
         _getAdjustedBusinessRange: sinon.spy(),
+        refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy()
     };
 };

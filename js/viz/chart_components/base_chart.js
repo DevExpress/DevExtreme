@@ -926,6 +926,7 @@ var BaseChart = BaseWidget.inherit({
         });
 
         that._notifyOptionChanged(fullName, value, previousValue);
+        that._changes.reset();
     },
 
     _optionChanged: function(arg) {
@@ -933,12 +934,15 @@ var BaseChart = BaseWidget.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _applyChanges: function() {
-        var that = this;
+    _applyChanges() {
+        const that = this;
         that._themeManager.update(that._options);
         that.callBase.apply(that, arguments);
         that._doRefresh();
+        that._triggerOptionChanged();
     },
+
+    _triggerOptionChanged: noop,
 
     _optionChangesMap: {
         animation: "ANIMATION",
