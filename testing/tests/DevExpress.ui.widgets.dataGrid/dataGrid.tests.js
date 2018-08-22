@@ -10314,6 +10314,33 @@ QUnit.test("Detail cell should not have width and max-width styles", function(as
     assert.equal($(dataGrid.getCellElement(1, 1)).css("maxWidth"), "none", "max width style for detail cell");
 });
 
+// T661361
+QUnit.test("Group space cells should have correct width if data rows are not visible", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ group1: 1, group2: 1, id: 1 }],
+        grouping: {
+            autoExpandAll: false
+        },
+        columns: ["id", {
+            dataField: "group1",
+            groupIndex: 0
+        }, {
+            dataField: "group2",
+            groupIndex: 1
+        }]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.expandRow([1]);
+    dataGrid.updateDimensions();
+
+    // assert
+    var $groupSpaceCells = $(dataGrid.getRowElement(1)).children(".dx-datagrid-group-space");
+    assert.equal($groupSpaceCells.length, 2, "two group space cells in second row");
+    assert.equal($groupSpaceCells.eq(0).width(), $groupSpaceCells.eq(1).width(), "group space cell widths are equals");
+});
+
 QUnit.test("Check table params with set width", function(assert) {
     var dataSource = {
         store: [{ firstField: "Alex_", lastField: "Ziborov_", room: 903 },
