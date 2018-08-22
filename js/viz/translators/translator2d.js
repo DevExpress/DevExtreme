@@ -540,7 +540,7 @@ _Translator2d.prototype = {
 
     // TODO: Rename to getValueRange
     getRange: function() {
-        return [this._canvasOptions.rangeMin, this._canvasOptions.rangeMax];
+        return [this._toValue(this._canvasOptions.rangeMin), this._toValue(this._canvasOptions.rangeMax)];
     },
 
     isEmptyValueRange: function() {

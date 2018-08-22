@@ -422,6 +422,26 @@ QUnit.test("values are not defined", function(assert) {
     this.check(assert, [1000, 3000], [10, 30]);
 });
 
+QUnit.test("values are not defined. Logarithmic", function(assert) {
+    this.translator.update({
+        min: 0.01,
+        max: 10000,
+        axisType: "logarithmic",
+        base: 10,
+        breaks: [{
+            from: 1,
+            to: 10,
+            cumulativeWidth: 0
+        }]
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, breaksSize: 0 });
+
+    this.update();
+
+    this.setRange(undefined, undefined);
+
+    this.check(assert, [1000, 3000], [0.01, 10000]);
+});
+
 QUnit.test("values are not valid", function(assert) {
     this.update();
 
