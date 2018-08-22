@@ -5475,6 +5475,40 @@ QUnit.test("Get correct first editable column index when visible option for item
     assert.equal(editableIndex, 1, "editable index");
 });
 
+// T664284
+QUnit.test("Form should be updated after change editing.form options if editing mode is popup", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.$element = function() {
+        return testElement;
+    };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "popup",
+        form: {
+            items: ["room"]
+        },
+        popup: {
+            animation: false
+        }
+    };
+
+    rowsView.render(testElement);
+
+    that.editRow(0);
+
+    // act
+    this.editingController.option("editing.form.items", ["phone", "room"]);
+    this.editingController.optionChanged({ name: "editing", fullName: "editing.form.items" });
+
+    // assert
+    assert.equal($(".dx-datagrid-edit-form-item").length, 2, "two form items are visible");
+});
+
 // T528580
 QUnit.test("Save edit data when update fails in batch edit mode", function(assert) {
     // arrange
