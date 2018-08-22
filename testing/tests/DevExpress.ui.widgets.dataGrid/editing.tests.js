@@ -6018,7 +6018,8 @@ QUnit.test("repaintRows should be skipped on saving", function(assert) {
     });
 
     // act
-    this.cellValue(0, "selected", true);
+    var checkboxInstance = testElement.find(".dx-checkbox").eq(0).dxCheckBox("instance");
+    checkboxInstance.option("value", true);
     this.saveEditData();
     this.repaintRows([0]);
 
