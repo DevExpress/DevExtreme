@@ -27,7 +27,8 @@ var KeyboardProcessor = Class.inherit({
         "65": "A",
         "106": "asterisk",
         "109": "minus",
-        "189": "minus"
+        "189": "minus",
+        "173": "minus"
     },
 
     ctor: function(options) {

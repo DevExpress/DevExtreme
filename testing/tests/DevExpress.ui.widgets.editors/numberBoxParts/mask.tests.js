@@ -191,6 +191,16 @@ QUnit.test("pressing numpad minus button should revert the number", function(ass
     assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 });
 
+QUnit.test("pressing minus with fireFox keyCode should revert the number", function(assert) {
+    this.instance.option({
+        format: "#.000",
+        value: 123.456
+    });
+
+    this.keyboard.keyDown(173, { key: "-" }).input();
+    assert.equal(this.input.val(), "-123.456", "value is correct");
+});
+
 QUnit.test("pressing '-' button should revert zero number", function(assert) {
     this.instance.option({
         format: "#0",
