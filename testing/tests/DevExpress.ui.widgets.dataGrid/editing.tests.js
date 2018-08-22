@@ -5842,7 +5842,9 @@ QUnit.test("repaintRows should be skipped on saving", function(assert) {
     });
 
     // act
-    this.cellValue(0, "selected", true);
+    var checkboxInstance = testElement.find(".dx-checkbox").eq(0).dxCheckBox("instance");
+    checkboxInstance.option("value", true);
+    this.saveEditData();
     this.repaintRows([0]);
 
     // assert
@@ -5853,6 +5855,33 @@ QUnit.test("repaintRows should be skipped on saving", function(assert) {
 
     // assert
     assert.strictEqual(changeCount, 1, "data is changed once");
+});
+
+// T661354
+QUnit.test("saveEditData is not called automatically after call cellValue", function(assert) {
+    var testElement = $('#container'),
+        onRowUpdatingSpy = sinon.spy();
+
+    this.options.editing = {
+        allowUpdating: true,
+        mode: 'cell'
+    };
+
+    this.options.onRowUpdating = onRowUpdatingSpy;
+
+    this.columns.push({ dataField: "selected", dataType: "boolean" });
+
+    this.columnsController.init();
+
+    this.rowsView.render(testElement);
+    this.editingController.optionChanged({ name: "onRowUpdating" });
+
+    this.cellValue(0, "selected", true);
+    this.cellValue(1, "selected", true);
+    assert.strictEqual(onRowUpdatingSpy.callCount, 0);
+
+    this.saveEditData();
+    assert.strictEqual(onRowUpdatingSpy.callCount, 2);
 });
 
 // T607746
