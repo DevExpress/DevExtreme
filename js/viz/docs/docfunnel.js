@@ -266,7 +266,6 @@ var dxFunnel = {
         * @name dxFunnelOptions.label.font
         * @type Font
         * @default '#767676' @prop color
-        * @extends CommonVizFontFamily
         */
         font: {
             color: '#767676',
@@ -429,7 +428,6 @@ var dxFunnel = {
         * @name dxFunnelOptions.legend.font
         * @type Font
         * @default '#767676' @prop color
-        * @extends CommonVizFontFamily
         */
         font: {
             color: '#767676',

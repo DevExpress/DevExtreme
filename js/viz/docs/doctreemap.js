@@ -177,10 +177,8 @@ var dxTreeMap = {
             /**
             * @name dxTreeMapOptions.tile.label.font
             * @type Font
-            * @default '#ffffff' @prop color
-            * @default 12 @prop size
+            * @default '#FFFFFF' @prop color
             * @default 300 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 family: undefined,
@@ -301,9 +299,7 @@ var dxTreeMap = {
             * @name dxTreeMapOptions.group.label.font
             * @type Font
             * @default '#767676' @prop color
-            * @default 12 @prop size
             * @default 600 @prop weight
-            * @extends CommonVizFontFamily
             */
             font: {
                 family: undefined,

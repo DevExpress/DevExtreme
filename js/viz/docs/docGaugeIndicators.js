@@ -78,11 +78,7 @@ var CommonIndicator = {
         * @name CommonIndicator.text.font
         * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
         * @type Font
-        * @default null @prop color
-        * @default 1 @prop opacity
         * @default 14 @prop size
-        * @default 400 @prop weight
-        * @extends CommonVizFontFamily
         */
         font: {
             color: null,
