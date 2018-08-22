@@ -654,6 +654,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     getColumnWidths: function($tableElement) {
         var that = this,
             result = [],
+            $rows,
             $cells;
 
         (this.option("forceApplyBindings") || noop)();
@@ -661,12 +662,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         $tableElement = $tableElement || that._getTableElement();
 
         if($tableElement) {
-            $cells = $tableElement.children("tbody").children();
+            $rows = $tableElement.children("tbody").children();
 
-            for(var i = 0; i < $cells.length; i++) {
-                var $cell = $cells.eq(i);
-                if(!$cell.is("." + GROUP_ROW_CLASS) && !$cell.is("." + DETAIL_ROW_CLASS)) {
-                    $cells = $cell.children("td");
+            for(var i = 0; i < $rows.length; i++) {
+                var $row = $rows.eq(i);
+                var isRowVisible = $row.get(0).style.display !== "none" && !$row.hasClass("dx-state-invisible");
+                if(!$row.is("." + GROUP_ROW_CLASS) && !$row.is("." + DETAIL_ROW_CLASS) && isRowVisible) {
+                    $cells = $row.children("td");
                     break;
                 }
             }
