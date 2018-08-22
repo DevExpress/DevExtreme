@@ -47,8 +47,6 @@ const dateIntervals = {
     week: 604800000
 };
 
-const SCROLL_THRESHOLD = 5;
-
 function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
     return tickGeneratorModule.tickGenerator({
         axisType: options.type,
@@ -1438,10 +1436,10 @@ Axis.prototype = {
         }
         if(that._options.type !== constants.discrete) {
             if(length && !that._options.skipViewportExtending) {
-                if((!that.isArgumentAxis || translator.checkExtremePosition(range, SCROLL_THRESHOLD, false)) && ticks[0].value < range.minVisible) {
+                if(!that.isArgumentAxis && ticks[0].value < range.minVisible) {
                     minVisible = ticks[0].value;
                 }
-                if((!that.isArgumentAxis || translator.checkExtremePosition(range, SCROLL_THRESHOLD, true)) && length > 1 && ticks[length - 1].value > range.maxVisible) {
+                if(!that.isArgumentAxis && length > 1 && ticks[length - 1].value > range.maxVisible) {
                     maxVisible = ticks[length - 1].value;
                 }
             }
@@ -1769,7 +1767,6 @@ Axis.prototype = {
     zoom(min, max) {
         const that = this;
         const options = that._options;
-        const translator = that.getTranslator();
 
         min = that._validateUnit(min);
         max = that._validateUnit(max);
@@ -1781,10 +1778,6 @@ Axis.prototype = {
             maxVisible: max
         }, that._series, that.isArgumentAxis);
 
-        if(translator.zoomIsEqualCanvas(that.getViewport())) {
-            that.resetZoom();
-        }
-
         return that.getViewport();
     },
 
@@ -1793,11 +1786,8 @@ Axis.prototype = {
     },
 
     isZoomed() {
-        const translator = this.getTranslator();
-        const range = this._getAdjustedBusinessRange();
-
-        return !((translator.checkExtremePosition(range, SCROLL_THRESHOLD, false)) &&
-            (translator.checkExtremePosition(range, SCROLL_THRESHOLD, true)));
+        // TODO Check if visualRange equals wholeRange?
+        return true;
     },
 
     getViewport() {

@@ -181,8 +181,8 @@ QUnit.module("API", {
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup
         });
-        this.translator.stub("untranslate").withArgs(100).returns(20);
-        this.translator.stub("untranslate").withArgs(120).returns("Second");
+        this.translator.stub("from").withArgs(100).returns(20);
+        this.translator.stub("from").withArgs(120).returns("Second");
     },
     afterEach: function() {
         translator2DModule.Translator2D.restore();
@@ -1002,9 +1002,6 @@ QUnit.module("Data margins calculations", {
                 visible: true
             }
         }, options));
-        axis._translator.isEqualRange = function() {
-            return !axis.getViewport();
-        };
         return axis;
     },
     testMargins: function(assert, data) {

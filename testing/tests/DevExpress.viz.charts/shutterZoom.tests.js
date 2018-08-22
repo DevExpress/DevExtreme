@@ -17,7 +17,7 @@ QUnit.module("Shutter zoom plugin", {
             _argumentAxes: [{
                 getTranslator: function() {
                     return {
-                        untranslate: function(val) {
+                        from: function(val) {
                             return {
                                 100: 0,
                                 200: 1,

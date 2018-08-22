@@ -488,32 +488,34 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (negat
 QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (logarithmic axis)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
-            { range: { min: 0, max: 600, axisType: 'logarithmic' }, tickValues: [20, 400, 600, 80], tickInterval: 2 },
-            { range: { min: 20, max: 20, axisType: 'logarithmic' }, tickValues: [20], tickInterval: 0 }
+            { range: { min: 9, max: 10000, axisType: 'logarithmic', base: 10 }, tickValues: [10, 100, 1000, 10000], tickInterval: 1, type: 'logarithmic' },
+            { range: { min: 10, max: 10, axisType: 'logarithmic', base: 10 }, tickValues: [10], tickInterval: 0, type: 'logarithmic' }
         ],
         axesOptionsAfterSync: [
             {
                 range: {
                     axisType: 'logarithmic',
-                    min: 0,
-                    minVisible: 0,
-                    max: 620,
-                    maxVisible: 620
+                    base: 10,
+                    min: 9,
+                    minVisible: 9,
+                    max: 10000,
+                    maxVisible: 10000
                 },
-                tickValues: [20, 400, 600, 80]
+                tickValues: [10, 100, 1000, 10000]
             },
             {
                 range: {
                     axisType: 'logarithmic',
-                    min: 0,
-                    minVisible: 0,
-                    max: 20.6666667,
-                    maxVisible: 20.6666667
+                    base: 10,
+                    min: 1,
+                    minVisible: 1,
+                    max: 30.81885,
+                    maxVisible: 30.81885
                 },
-                tickValues: [20]
+                tickValues: [10]
             }
         ],
-        syncIndexes: [[0, 1]]
+        syncIndexes: [[1, 0]]
     });
 });
 
