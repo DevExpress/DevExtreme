@@ -99,8 +99,6 @@ var createTranslator = function() {
     var tr = new StubTranslator();
     tr.stub("zoom").returns({ min: "minArg", max: "maxArg", translate: 100, scale: 0 });
     tr.stub("getMinScale").returns(1.1);
-    tr.stub("checkGestureEventsForScaleEdges").returns(true);
-    tr.stub("checkScrollForOriginalScale").returns(false);
     return tr;
 };
 

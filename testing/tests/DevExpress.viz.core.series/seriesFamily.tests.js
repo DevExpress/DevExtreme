@@ -464,7 +464,7 @@ function getArgAxis(visibleArea, interval) {
                 interval: interval || 100,
                 getCanvasVisibleArea: visibleArea || { min: 0 },
                 translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
-                untranslate: { 0: 0, 10: 10 }
+                from: { 0: 0, 10: 10 }
             });
         }
     };
@@ -475,13 +475,13 @@ function getValAxes(name, visibleArea) {
             interval: 100,
             getCanvasVisibleArea: visibleArea || { min: 0 },
             translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
-            untranslate: { 0: 0, 10: 10 }
+            from: { 0: 0, 10: 10 }
         }),
         val2Trans = new MockTranslator({
             interval: 200,
             getCanvasVisibleArea: visibleArea || { min: 0 },
             translate: { 20: 311, 21: 312, 22: 313, 30: 222, 31: 310, 32: 223, 40: 114, 41: 112, 42: 218, 0: 315 },
-            untranslate: { 0: 0, 10: 20 }
+            from: { 0: 0, 10: 20 }
         });
 
     val1Trans.getMinBarSize && (val1Trans.getMinBarSize = function() { return arguments[0]; });

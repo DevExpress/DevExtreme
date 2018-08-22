@@ -42,23 +42,9 @@ module.exports = {
         return that.to(bp, direction, interval);
     },
 
-    untranslate: function(pos, direction, enableOutOfCanvas) {
-        var canvasOptions = this._canvasOptions,
-            startPoint = canvasOptions.startPoint;
-
-        if((!enableOutOfCanvas && (pos < startPoint || pos > canvasOptions.endPoint)) || !isDefined(canvasOptions.rangeMin) || !isDefined(canvasOptions.rangeMax)) {
-            return null;
-        }
-
-        return this.from(pos, direction);
-    },
-
-    // TODO
     getInterval: function() {
         return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
     },
-
-    _getValue: function() { },
 
     zoom: function() { },
 
@@ -66,7 +52,17 @@ module.exports = {
 
     getScale: function() { },
 
-    // dxRangeSelector
+    _parse: function(value) {
+        return this._businessRange.dataType === "datetime" ? new Date(value) : Number(value);
+    },
+
+    _fromValue: function(value) {
+        return this._parse(value);
+    },
+
+    _toValue: function(value) {
+        return this._parse(value);
+    },
 
     isValid: function(value, interval) {
         var that = this,
@@ -91,10 +87,6 @@ module.exports = {
         }
 
         return true;
-    },
-
-    _parse: function(value) {
-        return this._businessRange.dataType === "datetime" ? (isNumber(value) ? new Date(value) : value) : Number(value);
     },
 
     to: function(bp, direction, interval) {

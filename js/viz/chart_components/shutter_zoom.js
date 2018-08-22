@@ -82,7 +82,7 @@ function shutterZoom(options) {
                 var tr = chart._argumentAxes[0].getTranslator(),
                     rangeStart = Math.min(this.startCoord, this.curCoord),
                     rangeEnd = Math.max(this.startCoord, this.curCoord);
-                chart._eventTrigger("zoomEnd", { rangeStart: tr.untranslate(rangeStart), rangeEnd: tr.untranslate(rangeEnd) });
+                chart._eventTrigger("zoomEnd", { rangeStart: tr.from(rangeStart), rangeEnd: tr.from(rangeEnd) });
             },
             dispose: function() {
                 renderer.root.off(SHUTTER_EVENTS_NS);
