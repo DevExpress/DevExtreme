@@ -305,7 +305,14 @@ var EditingController = modules.ViewController.inherit((function() {
 
         optionChanged: function(args) {
             if(args.name === "editing") {
-                this.init();
+                if(this._editPopup && this._editPopup.option("visible") && args.fullName.indexOf("editing.form") === 0) {
+                    var rowIndex = this._getVisibleEditRowIndex();
+                    if(rowIndex >= 0) {
+                        this._showEditPopup(rowIndex);
+                    }
+                } else {
+                    this.init();
+                }
                 args.handled = true;
             } else {
                 this.callBase(args);
