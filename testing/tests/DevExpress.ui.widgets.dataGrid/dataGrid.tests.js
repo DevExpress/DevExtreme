@@ -10404,6 +10404,30 @@ QUnit.test("columnAutoWidth when table with one row in safari", function(assert)
     assert.ok(visibleWidth2 > 2 * visibleWidth1, "second column width more then first");
 });
 
+// T654427
+QUnit.test("column with width auto should have minimum size by content", function(assert) {
+    var CONTENT_WIDTH = 50;
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ field1: 1, field2: 2 }],
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            width: "auto",
+            cellTemplate: function(container) {
+                $(container).css("padding", 0);
+                $("<div>").css("width", CONTENT_WIDTH).appendTo(container);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
+});
+
 QUnit.test("SelectAll when allowSelectAll is default", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
