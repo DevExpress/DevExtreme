@@ -432,6 +432,38 @@ QUnit.testStart(function() {
 
 (function() {
 
+    QUnit.module("Work Space Day with grouping by date", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay({
+                currentDate: new Date(2018, 2, 1),
+                groupByDate: true,
+                intervalCount: 2
+            }).dxSchedulerWorkSpaceDay("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Group header should be rendered correct", function(assert) {
+        var $groupRow = this.instance.$element().find(".dx-scheduler-group-row"),
+            $groupHeaderCells = $groupRow.find(".dx-scheduler-group-header");
+
+        assert.equal($groupHeaderCells.length, 4, "Group header cells count is OK");
+        var $groupHeaderContents = this.instance.$element().find(".dx-scheduler-group-header-content");
+
+        resizeCallbacks.fire();
+        assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 19, 5, "Group header content height is OK");
+        assert.roughEqual($groupHeaderContents.eq(3).outerHeight(), 19, 5, "Group header content height is OK");
+    });
+})("Work Space Month with horizontal grouping");
+
+(function() {
+
     QUnit.module("Work Space Week", {
         beforeEach: function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
@@ -1159,7 +1191,7 @@ QUnit.testStart(function() {
         assert.notOk(stub.calledOnce, "Tables weren't updated");
     });
 
-})("Work Space Month");
+})("Work Space Month with horizontal grouping");
 
 (function() {
 
