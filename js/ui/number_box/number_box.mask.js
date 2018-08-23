@@ -501,8 +501,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(caret.start !== caret.end) {
             if((e.key === MINUS || isIeMinusKey)) {
-                var editedText = this._getEditedText(this._input().val(), caret, "");
-                this._parsedValue = this._tryParse(editedText, this._caret());
+                this._parsedValue = this._tryParse(this._getInputVal(), this._caret(), "");
             }
 
             this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
