@@ -108,7 +108,8 @@ module.exports = {
                     },
                     _changeRowExpandCore: function(key) {
                         var that = this,
-                            expandIndex;
+                            expandIndex,
+                            editingController;
 
                         if(Array.isArray(key)) {
                             return that.callBase.apply(that, arguments);
@@ -120,6 +121,11 @@ module.exports = {
                                 that._expandedItems[expandIndex].visible = !visible;
                             } else {
                                 that._expandedItems.push({ key: key, visible: true });
+
+                                editingController = that.getController("editing");
+                                if(editingController) {
+                                    editingController.correctEditRowIndexAfterExpand(key);
+                                }
                             }
 
                             that.updateItems({
