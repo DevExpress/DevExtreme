@@ -482,7 +482,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
-    _getPrecisionLimits: function(format, text) {
+    _getPrecisionLimits: function(text) {
         var currentFormat = this._getFormatForSign(text),
             floatPart = (currentFormat.split(".")[1] || "").replace(/[^#0]/g, ""),
             minPrecision = floatPart.replace(/^(0*)#*/, '$1').length,
@@ -501,7 +501,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(caret.start !== caret.end) {
             if((e.key === MINUS || isIeMinusKey)) {
-                this._parsedValue = this._tryParse(this.getTrimmedValue(caret.start, caret.end), this._caret());
+                var editedText = this._getEditedText(this._input().val(), caret, "");
+                this._parsedValue = this._tryParse(editedText, this._caret());
             }
 
             this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
@@ -516,12 +517,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }
-    },
-
-    getTrimmedValue: function(start, end) {
-        var value = this._getInputVal();
-
-        return value.substr(0, start) + value.substr(end, value.length);
     },
 
     _removeMinusFromText: function(text, caret) {
