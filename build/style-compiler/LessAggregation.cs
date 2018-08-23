@@ -204,14 +204,20 @@ namespace StyleCompiler
 
             if (distribution.SupportedThemes != null)
             {
+                var singleSchemeMode = Utils.IsQUnitCI();
+
                 foreach (var themeName in distribution.SupportedThemes)
                 {
                     var theme = LessRegistry.KnownThemeMap[themeName];
+                    var schemes = from colorSchemeName in theme.ColorSchemeNames
+                                  from sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName)
+                                  select (colorSchemeName, sizeSchemeName);
 
-                    foreach (var colorSchemeName in theme.ColorSchemeNames)
+                    foreach (var s in schemes)
                     {
-                        foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
-                            yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
+                        yield return CreateThemeItem(sourcePath, distributionName, theme, s.colorSchemeName, s.sizeSchemeName);
+                        if (singleSchemeMode)
+                            break;
                     }
                 }
             }
