@@ -57,9 +57,10 @@ gulp.task('style-compiler-test-themes', function(callback) {
     var cssArtifactsPath = path.join(process.cwd(), 'artifacts/css');
 
     runStyleCompiler(
-        'test-themes', [
+        'themes', [
             '--version=' + context.version.product,
-            '--output-path=' + cssArtifactsPath
+            '--output-path=' + cssArtifactsPath,
+            '--unique=true'
         ],
         callback
     );

@@ -23,22 +23,11 @@ namespace StyleCompiler
                 {
                     var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
                     var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
+                    var unique = c.Option("--unique", "", CommandOptionType.SingleValue);
                     c.OnExecute(delegate
                     {
                         EnsureRequiredOptions(versionOption, outputPathOption);
-                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value());
-                        return 0;
-                    });
-                });
-
-                cli.Command("test-themes", c =>
-                {
-                    var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
-                    var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
-                    c.OnExecute(delegate
-                    {
-                        EnsureRequiredOptions(versionOption, outputPathOption);
-                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), true);
+                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), unique.HasValue());
                         return 0;
                     });
                 });
@@ -129,10 +118,6 @@ namespace StyleCompiler
                     }
                 }
             }
-        }
-
-        static void CreateThemes(string sourcePath, string version, string outputPath) {
-            CreateThemes(sourcePath, version, outputPath, false);
         }
         static void CreateThemes(string sourcePath, string version, string outputPath, bool uniqueThemes)
         {
