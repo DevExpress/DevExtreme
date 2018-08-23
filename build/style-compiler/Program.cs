@@ -31,15 +31,14 @@ namespace StyleCompiler
                     });
                 });
 
-                cli.Command("only-themes", c =>
+                cli.Command("test-themes", c =>
                 {
                     var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
                     var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
-                    var themes = c.Option("--themes", "", CommandOptionType.SingleValue);
                     c.OnExecute(delegate
                     {
-                        EnsureRequiredOptions(versionOption, outputPathOption, themes);
-                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), themes.Value());
+                        EnsureRequiredOptions(versionOption, outputPathOption);
+                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), true);
                         return 0;
                     });
                 });
@@ -133,9 +132,9 @@ namespace StyleCompiler
         }
 
         static void CreateThemes(string sourcePath, string version, string outputPath) {
-            CreateThemes(sourcePath, version, outputPath, null);
+            CreateThemes(sourcePath, version, outputPath, false);
         }
-        static void CreateThemes(string sourcePath, string version, string outputPath, string necessaryThemes)
+        static void CreateThemes(string sourcePath, string version, string outputPath, bool uniqueThemes)
         {
             Directory.CreateDirectory(outputPath);
 
@@ -144,7 +143,7 @@ namespace StyleCompiler
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {
-                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName, necessaryThemes);
+                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName, uniqueThemes);
 
                 foreach (var item in aggregate)
                 {

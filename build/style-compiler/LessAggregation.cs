@@ -195,7 +195,7 @@ namespace StyleCompiler
             };
         }
 
-        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, string necessaryThemes = null)
+        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, bool uniqueThemes = false)
         {
             var distribution = LessRegistry.CssDistributions[distributionName];
 
@@ -210,28 +210,24 @@ namespace StyleCompiler
 
                     foreach (var colorSchemeName in theme.ColorSchemeNames)
                     {
-                        if(!IsNecessaryTheme(themeName, colorSchemeName, necessaryThemes)) continue;
                         foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
-                            yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
+                        {
+                            if(!IsNecessaryTheme(distributionName, theme, colorSchemeName, sizeSchemeName, uniqueThemes)) continue;
+                                yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
+                        }
                     }
                 }
             }
         }
 
-        static bool IsNecessaryTheme(string theme, string colorScheme, string themesString)
+        static bool IsNecessaryTheme(string distributionName, LessRegistry.KnownThemeInfo theme, string colorSchemeName, string sizeSchemeName, bool uniqueThemes)
         {
-            if(string.IsNullOrEmpty(themesString)) return true;
+            if(!uniqueThemes) return true;
 
-            foreach(var fullThemeName in themesString.Split(","))
-            {
-                var firstDotIndex = fullThemeName.IndexOf('.');
-                var necessaryTheme = fullThemeName.Substring(0, firstDotIndex);
-                if(theme != necessaryTheme) continue;
+            var uniqueCssFiles = new string[] { "dx.light.css", "dx.material.blue.light.css", "dx.ios7.default.css", "dx.android5.light.css" };
+            var cssFileName = new ThemeCssFileInfo(distributionName, theme, colorSchemeName, sizeSchemeName).GetFileName();
 
-                var necessaryColorScheme = fullThemeName.Substring(firstDotIndex + 1).Replace("." + LessRegistry.SIZE_SCHEME_COMPACT, "");
-                if(theme == necessaryTheme && colorScheme == necessaryColorScheme) return true;
-            }
-            return false;
+            return uniqueCssFiles.Contains(cssFileName);
         }
 
         static IEnumerable<string> EnumerateSizeSchemes(string distributionName, string themeName)
