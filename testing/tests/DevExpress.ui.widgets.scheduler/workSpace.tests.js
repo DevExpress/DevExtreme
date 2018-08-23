@@ -460,6 +460,16 @@ QUnit.testStart(function() {
         assert.roughEqual($groupHeaderContents.eq(0).outerHeight(), 19, 5, "Group header content height is OK");
         assert.roughEqual($groupHeaderContents.eq(3).outerHeight(), 19, 5, "Group header content height is OK");
     });
+
+    QUnit.test("Group header cells shoud have right text", function(assert) {
+        var $groupRow = this.instance.$element().find(".dx-scheduler-group-row"),
+            $groupHeaderCells = $groupRow.find(".dx-scheduler-group-header");
+
+        assert.equal($groupHeaderCells.eq(0).text(), "a", "Group header content height is OK");
+        assert.equal($groupHeaderCells.eq(1).text(), "b", "Group header content height is OK");
+        assert.equal($groupHeaderCells.eq(2).text(), "a", "Group header content height is OK");
+        assert.equal($groupHeaderCells.eq(3).text(), "b", "Group header content height is OK");
+    });
 })("Work Space Month with horizontal grouping");
 
 (function() {
