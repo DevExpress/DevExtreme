@@ -4,10 +4,19 @@ var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
 
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex) {
-        return {
-            rowIndex: cellCoordinates.rowIndex,
-            cellIndex: cellCoordinates.cellIndex + groupIndex * this._workSpace._getCellCount()
-        };
+        var groupByDay = this._workSpace.option("groupByDate");
+
+        if(!groupByDay) {
+            return {
+                rowIndex: cellCoordinates.rowIndex,
+                cellIndex: cellCoordinates.cellIndex + groupIndex * this._workSpace._getCellCount()
+            };
+        } else {
+            return {
+                rowIndex: cellCoordinates.rowIndex,
+                cellIndex: cellCoordinates.cellIndex + groupIndex
+            };
+        }
     },
 
     calculateCellIndex: function(rowIndex, cellIndex) {
