@@ -578,12 +578,12 @@ var FileUploader = Editor.inherit({
     },
     _validateFileExtension: function(file) {
         var allowedExtensions = this.option("allowedFileExtensions");
-        var fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.'));
+        var fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
         if(allowedExtensions.length === 0) {
             return true;
         }
         for(var i = 0; i < allowedExtensions.length; i++) {
-            if(fileExtension.toLowerCase() === allowedExtensions[i].toLowerCase()) {
+            if(fileExtension === allowedExtensions[i].toLowerCase()) {
                 return true;
             }
         }
