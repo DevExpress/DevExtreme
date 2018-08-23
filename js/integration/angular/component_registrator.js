@@ -281,7 +281,10 @@ let ComponentBuilder = Class.inherit({
                 });
             }
 
-            this._applyAsync(this._compile($resultMarkup, this._transcludeFn), templateScope);
+            const ngTemplate = this._compile($resultMarkup, this._transcludeFn);
+            this._applyAsync(scope => {
+                ngTemplate(scope, null, { parentBoundTranscludeFn: this._transcludeFn });
+            }, templateScope);
 
             return $resultMarkup;
         };

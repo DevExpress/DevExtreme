@@ -1566,6 +1566,41 @@ QUnit.test("Transclude inside dxComponent template (T318690). Since angularjs 1.
     assert.equal($markup.children('[dx-test-container]').find(".transcluded-content").length, 1);
 });
 
+QUnit.test("Multi-slot transclusion should work with dx temapltes", function(assert) {
+    const TestContainer = Widget.inherit({
+        _renderContentImpl(template) {
+            template = template || this.option("integrationOptions.templates").template;
+            if(template) {
+                template.render({
+                    container: this.$element()
+                });
+            }
+        }
+    });
+
+    registerComponent("dxTestTranscluded", TestContainer);
+    this.testApp.directive("testMultiTransclude", () => ({
+        restrict: "E",
+        transclude: {
+            "content": '?content',
+        },
+        template: `<div dx-test-transcluded="{}">
+                    <div data-options="dxTemplate: { name: 'template'}">
+                        <div ng-transclude="content"></div>
+                    </div>
+                </div>`
+    }));
+
+    const $container = $("<div/>").appendTo(FIXTURE_ELEMENT());
+    $(`<test-multi-transclude>
+        <content>Test content</content>
+    </test-multi-transclude>`).appendTo($container);
+
+    angular.bootstrap($container, ["testApp"]);
+
+    assert.equal($container.find("[dx-test-transcluded] content").text(), "Test content");
+});
+
 QUnit.module("Widget & CollectionWidget with templates enabled", {
     beforeEach() {
         this.testApp = angular.module("testApp", ["dx"]);
