@@ -788,6 +788,7 @@ module.exports = {
                         {
                             command: null,
                             cssClass: null,
+                            width: null,
                             showWhenGrouped: false,
                             alignment: groupColumnAlignment
                         }
