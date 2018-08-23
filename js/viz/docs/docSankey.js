@@ -148,7 +148,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.label.border.color
             * @type string
-            * @default #000000
+            * @default '#000000'
             */
             color: '#000000'
         },
@@ -240,7 +240,7 @@ var dxSankey = {
     node: {
         /**
         * @name dxSankeyOptions.node.color
-        * @type number
+        * @type string
         * @default undefined
         */
         color: undefined,
@@ -282,7 +282,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.node.border.color
             * @type string
-            * @default #000000
+            * @default '#000000'
             */
             color: '#000000'
         },
@@ -291,6 +291,18 @@ var dxSankey = {
         * @type object
         */
         hoverStyle: {
+            /**
+            * @name dxSankeyOptions.node.hoverStyle.opacity
+            * @type number
+            * @default undefined
+            */
+            opacity: undefined,
+            /**
+            * @name dxSankeyOptions.node.hoverStyle.color
+            * @type string
+            * @default undefined
+            */
+            color: undefined,
             /**
             * @name dxSankeyOptions.node.hoverStyle.border
             * @type object
@@ -390,7 +402,7 @@ var dxSankey = {
             /**
             * @name dxSankeyOptions.link.border.color
             * @type string
-            * @default #000000
+            * @default '#000000'
             */
             color: '#000000'
         },
@@ -407,7 +419,7 @@ var dxSankey = {
             opacity: 0.5,
             /**
             * @name dxSankeyOptions.link.hoverStyle.color
-            * @type number
+            * @type string
             * @default undefined
             */
             color: undefined,
