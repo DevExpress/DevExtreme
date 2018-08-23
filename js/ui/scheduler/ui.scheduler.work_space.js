@@ -406,7 +406,8 @@ var SchedulerWorkSpace = Widget.inherit({
             indicatorUpdateInterval: 5 * toMs("minute"),
             shadeUntilCurrentTime: true,
             groupOrientation: "horizontal",
-            selectedCellData: []
+            selectedCellData: [],
+            groupByDate: false
         });
     },
 

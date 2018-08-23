@@ -340,6 +340,8 @@ var SchedulerTableCreator = {
     },
 
     _makeGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+        repeatByDate = repeatByDate || 1;
+
         var cells = [],
             items = group.items,
             itemCount = items.length;
