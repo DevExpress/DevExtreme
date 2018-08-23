@@ -583,7 +583,7 @@ var FileUploader = Editor.inherit({
             return true;
         }
         for(var i = 0; i < allowedExtensions.length; i++) {
-            if(fileExtension === allowedExtensions[i]) {
+            if(fileExtension.toLowerCase() === allowedExtensions[i].toLowerCase()) {
                 return true;
             }
         }
