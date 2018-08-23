@@ -17,7 +17,14 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupIndex: function(rowIndex, cellIndex) {
-        return Math.floor(cellIndex / this._workSpace._getCellCount());
+        var groupByDay = this._workSpace.option("groupByDate"),
+            groupCount = this._workSpace._getGroupCount();
+
+        if(groupByDay) {
+            return cellIndex % groupCount;
+        } else {
+            return Math.floor(cellIndex / this._workSpace._getCellCount());
+        }
     },
 
     calculateHeaderCellRepeatCount: function() {
