@@ -44,7 +44,7 @@ var environment = {
     },
 
     setCategories: function(values) {
-        this.translator.update({ axisType: "discrete", categories: values }, { left: 1000, width: 3000 }, { isHorizontal: true });
+        this.translator.update({ axisType: "discrete", categories: values, min: values[0], max: values[values.length - 1] }, { left: 1000, width: 3000 }, { isHorizontal: true });
     },
 
     setDateTime: function(values) {
@@ -440,6 +440,16 @@ QUnit.test("values are not defined. Logarithmic", function(assert) {
     this.setRange(undefined, undefined);
 
     this.check(assert, [1000, 3000], [0.01, 10000]);
+});
+
+QUnit.test("values are not defined. Categories", function(assert) {
+    this.setCategories(["a", "b", "c", "d", "e"]);
+
+    this.update();
+
+    this.setRange(undefined, undefined);
+
+    this.check(assert, [1000, 3000], ["a", "e"]);
 });
 
 QUnit.test("values are not valid", function(assert) {

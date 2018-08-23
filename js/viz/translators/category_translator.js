@@ -2,6 +2,8 @@ var isDefined = require("../../core/utils/type").isDefined,
     adjust = require("../../core/utils/math").adjust,
     round = Math.round;
 
+function getValue(value) { return value; }
+
 module.exports = {
     translate: function(category, directionOffset) {
         var that = this,
@@ -109,9 +111,7 @@ module.exports = {
         return isDefined(value) ? this._categoriesToPoints[value.valueOf()] >= 0 : false;
     },
 
-    getCorrectValue: function(value) {
-        return value;
-    },
+    getCorrectValue: getValue,
 
     to: function(value, direction) {
         var canvasOptions = this._canvasOptions,
@@ -147,6 +147,8 @@ module.exports = {
     _add: function() {
         return NaN;
     },
+
+    _toValue: getValue,
 
     isValueProlonged: true
 };
