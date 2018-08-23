@@ -840,6 +840,8 @@ var Scheduler = Widget.inherit({
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
+            groupByDate: false,
+
             allowMultipleCellSelection: true,
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
@@ -1916,7 +1918,8 @@ var Scheduler = Widget.inherit({
             selectedCellData: this.option("selectedCellData"),
             onSelectionChanged: (args) => {
                 this.option("selectedCellData", args.selectedCellData);
-            }
+            },
+            groupByDate: this.option("groupByDate")
         }, currentViewOptions);
 
         result.observer = this;

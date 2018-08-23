@@ -1176,7 +1176,7 @@ var SchedulerWorkSpace = Widget.inherit({
             groupCount = this._getGroupCount(),
             cellTemplates = [];
         if(groupCount) {
-            var groupRows = this._makeGroupRows(this.option("groups"));
+            var groupRows = this._makeGroupRows(this.option("groups"), this.option("groupByDate"));
             this._attachGroupCountAttr(groupCount, groupRows);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
@@ -1229,19 +1229,37 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
     },
 
-    _makeGroupRows: function(groups) {
+    _makeGroupRows: function(groups, groupByDate) {
         var tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
-        return tableCreator.makeGroupedTable(tableCreatorStrategy,
-            groups, {
-                groupHeaderRowClass: this._getGroupRowClass(),
-                groupRowClass: this._getGroupRowClass(),
-                groupHeaderClass: this._getGroupHeaderClass(),
-                groupHeaderContentClass: this._getGroupHeaderContentClass()
-            },
-            this._getCellCount() || 1,
-            this.option("resourceCellTemplate"),
-            this._getGroupCount()
-        );
+
+        if(!groupByDate) {
+            return tableCreator.makeGroupedTable(tableCreatorStrategy,
+                groups, {
+                    groupHeaderRowClass: this._getGroupRowClass(),
+                    groupRowClass: this._getGroupRowClass(),
+                    groupHeaderClass: this._getGroupHeaderClass(),
+                    groupHeaderContentClass: this._getGroupHeaderContentClass()
+                },
+                this._getCellCount() || 1,
+                this.option("resourceCellTemplate"),
+                this._getGroupCount()
+            );
+        } else {
+            return tableCreator.makeGroupedTable(tableCreatorStrategy,
+                groups, {
+                    groupHeaderRowClass: this._getGroupRowClass(),
+                    groupRowClass: this._getGroupRowClass(),
+                    groupHeaderClass: this._getGroupHeaderClass(),
+                    groupHeaderContentClass: this._getGroupHeaderContentClass()
+                },
+                this._getCellCount() || 1,
+                this.option("resourceCellTemplate"),
+                this._getGroupCount(),
+                groupByDate,
+                this._getTotalCellCount(this._getGroupCount())
+            );
+
+        }
     },
 
     _getDateHeaderTemplate: function() {
@@ -1254,14 +1272,44 @@ var SchedulerWorkSpace = Widget.inherit({
             count = this._getCellCount(),
             cellTemplate = this._getDateHeaderTemplate(),
             repeatCount = this._calculateHeaderCellRepeatCount(),
-            templateCallbacks = [];
+            templateCallbacks = [],
+            colspan = this.option("groupByDate") ? this._getGroupCount() : 1,
+            groupByDate = this.option("groupByDate");
 
-        for(var j = 0; j < repeatCount; j++) {
+        if(!groupByDate) {
+            for(var j = 0; j < repeatCount; j++) {
+                for(var i = 0; i < count; i++) {
+                    var text = this._getHeaderText(i),
+                        $cell = $("<th>")
+                            .addClass(this._getHeaderPanelCellClass(i))
+                            .attr("title", text);
+
+                    if(cellTemplate && cellTemplate.render) {
+                        templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
+                            model: {
+                                text: text,
+                                date: this._getDateByIndex(i)
+                            },
+                            index: j * repeatCount + i,
+                            container: getPublicElement($cell)
+                        }));
+                    } else {
+                        $cell.text(text);
+                    }
+
+                    $headerRow.append($cell);
+                }
+            }
+
+            $container.append($headerRow);
+        } else {
             for(var i = 0; i < count; i++) {
                 var text = this._getHeaderText(i),
                     $cell = $("<th>")
-                        .addClass(this._getHeaderPanelCellClass(i))
-                        .attr("title", text);
+                            .addClass(this._getHeaderPanelCellClass(i))
+                            .attr("title", text);
+
+                $cell.attr("colSpan", colspan);
 
                 if(cellTemplate && cellTemplate.render) {
                     templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
@@ -1269,18 +1317,19 @@ var SchedulerWorkSpace = Widget.inherit({
                             text: text,
                             date: this._getDateByIndex(i)
                         },
-                        index: j * repeatCount + i,
+                        index: i * repeatCount,
                         container: getPublicElement($cell)
                     }));
                 } else {
                     $cell.text(text);
                 }
-
                 $headerRow.append($cell);
-            }
-        }
 
-        $container.append($headerRow);
+            }
+
+            $container.prepend($headerRow);
+
+        }
 
         this._applyCellTemplates(templateCallbacks);
 
@@ -1439,7 +1488,8 @@ var SchedulerWorkSpace = Widget.inherit({
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
-            groupCount: groupCount
+            groupCount: groupCount,
+            groupByDate: this.option("groupByDate")
         });
 
         this._attachTablesEvents();
@@ -1754,11 +1804,21 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getDateByCellIndexes: function(rowIndex, cellIndex) {
+        cellIndex = this._patchCellIndex(cellIndex);
+
         var firstViewDate = this.getStartViewDate(),
             currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount(cellIndex));
 
         currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
         return currentDate;
+    },
+
+    _patchCellIndex: function(cellIndex) {
+        if(this.option("groupByDate")) {
+            cellIndex = Math.floor(cellIndex / this._getCellCount());
+        }
+
+        return cellIndex;
     },
 
     _getOffsetByCount: function() {
