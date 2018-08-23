@@ -1479,7 +1479,7 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
 
 QUnit.module("format: custom parser and formatter", moduleConfig);
 
-QUnit.skip("custom parser and formatter should work", function(assert) {
+QUnit.test("custom parser and formatter should work", function(assert) {
     this.instance.option({
         format: {
             formatter: function(value) {
