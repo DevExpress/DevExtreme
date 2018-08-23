@@ -500,11 +500,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             isIeMinusKey = e.key === NUMPUD_MINUS_KEY_IE;
 
         if(caret.start !== caret.end) {
-            if(e.key === MINUS || isIeMinusKey) {
-                this.reset();
-            } else {
-                this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
+            if((e.key === MINUS || isIeMinusKey)) {
+                this._parsedValue = this._tryParse(this.getTrimmedValue(caret.start, caret.end), this._caret());
             }
+
+            this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
         }
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);
@@ -516,6 +516,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }
+    },
+
+    getTrimmedValue: function(start, end) {
+        var value = this._getInputVal();
+
+        return value.substr(0, start) + value.substr(end, value.length);
     },
 
     _removeMinusFromText: function(text, caret) {
