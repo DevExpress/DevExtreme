@@ -1253,6 +1253,7 @@ var Scheduler = Widget.inherit({
             case "indicatorTime":
             case "indicatorUpdateInterval":
             case "shadeUntilCurrentTime":
+            case "groupByDate":
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
