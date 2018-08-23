@@ -87,6 +87,13 @@ var getWidthStyle = function(width) {
     return typeof width === "number" ? width + "px" : width;
 };
 
+var setCellWidth = function(cell, column, width) {
+    cell.style.width = cell.style.maxWidth = width;
+    if(!column.command && column.width === "auto" && width === "") {
+        cell.style.width = "1px";
+    }
+};
+
 exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createScrollableOptions: function() {
         var that = this,
@@ -143,7 +150,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 cell.style.minWidth = getWidthStyle(column.minWidth || column.width);
             }
             if(column.width) {
-                cell.style.width = cell.style.maxWidth = getWidthStyle(column.width);
+                setCellWidth(cell, column, getWidthStyle(column.width));
             }
         }
 
@@ -711,7 +718,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                             var visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
                             var cell = $rows[rowIndex].cells[visibleIndex];
                             if(cell) {
-                                cell.style.width = cell.style.maxWidth = width;
+                                setCellWidth(cell, columns[i], width);
                                 cell.style.minWidth = minWidth;
                             }
                         }
