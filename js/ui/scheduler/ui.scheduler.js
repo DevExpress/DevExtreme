@@ -1808,7 +1808,6 @@ var Scheduler = Widget.inherit({
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option("rtlEnabled"),
-            _appointmentGroupButtonOffset: this.option("_appointmentGroupButtonOffset"),
             onContentReady: function() {
                 that._workSpace && that._workSpace.option("allDayExpanded", that._isAllDayExpanded(that.getFilteredItems()));
             }
@@ -1817,6 +1816,13 @@ var Scheduler = Widget.inherit({
         return config;
     },
 
+    getAppointmentGroupButtonOffset: function() {
+        if(this._workSpace.applyGroupButtonOffset()) {
+            return this.option("_appointmentGroupButtonOffset");
+        } else {
+            return 0;
+        }
+    },
     getAppointmentDurationInMinutes: function() {
         return this._getCurrentViewOption("cellDuration");
     },
@@ -1858,6 +1864,7 @@ var Scheduler = Widget.inherit({
 
         this._recalculateWorkspace();
         countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace._getHeaderDate());
+        this._appointments.option("_appointmentGroupButtonOffset", this.getAppointmentGroupButtonOffset());
     },
 
     _getViewCountConfig: function() {
