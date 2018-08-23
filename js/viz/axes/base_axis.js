@@ -1711,13 +1711,14 @@ Axis.prototype = {
     _mergeViewportOptions() {
         const that = this;
         const options = that._options;
-        let min = _isArray(options.visualRange) && options.visualRange[0] || undefined;
-        let max = _isArray(options.visualRange) && options.visualRange[1] || undefined;
+        let min = _isArray(options.visualRange) && !that._skipVisualRangeApplying && options.visualRange[0] || undefined;
+        let max = _isArray(options.visualRange) && !that._skipVisualRangeApplying && options.visualRange[1] || undefined;
 
         (!isDefined(min) && isDefined(options.min)) && (min = options.min);
         (!isDefined(max) && isDefined(options.max)) && (max = options.max);
 
         that._setVisualRange(min, max);
+        that._skipVisualRangeApplying = false;
     },
 
     _validateOptions(options) {
@@ -1794,6 +1795,10 @@ Axis.prototype = {
         if(isDefined(this._viewport[0]) || isDefined(this._viewport[1])) {
             return { min: this._viewport[0], max: this._viewport[1] };
         }
+    },
+
+    refreshVisualRangeOption() {
+        this._options.visualRange = this.visualRange();
     },
 
     getFullTicks: function() {
@@ -2042,11 +2047,7 @@ Axis.prototype = {
     },
 
     _getAdjustedBusinessRange() {
-        let businessRange = new rangeModule.Range(this._translator.getBusinessRange());
-        if(!this.getViewport()) {
-            businessRange.minVisible = businessRange.min;
-            businessRange.maxVisible = businessRange.max;
-        }
+        const businessRange = new rangeModule.Range(this._translator.getBusinessRange());
         return this.adjustViewport(businessRange);
     },
 

@@ -7,6 +7,7 @@ var commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     eventUtils = require("../../events/utils"),
     BaseWidget = require("../core/base_widget"),
+    coreDataUtils = require("../../core/utils/data"),
     legendModule = require("../components/legend"),
     dataValidatorModule = require("../components/data_validator"),
     seriesModule = require("../series/base_series"),
@@ -915,17 +916,33 @@ var BaseChart = BaseWidget.inherit({
         that._needHandleRenderComplete = true;
     },
 
+    _simulateOptionChange(fullName, value, previousValue) {
+        const that = this;
+        const optionSetter = coreDataUtils.compileSetter(fullName);
+
+        optionSetter(that._options, value, {
+            functionsAsIs: true,
+            merge: !that._getOptionsByReference()[fullName]
+        });
+
+        that._notifyOptionChanged(fullName, value, previousValue);
+        that._changes.reset();
+    },
+
     _optionChanged: function(arg) {
         this._themeManager.resetOptions(arg.name);
         this.callBase.apply(this, arguments);
     },
 
-    _applyChanges: function() {
-        var that = this;
+    _applyChanges() {
+        const that = this;
         that._themeManager.update(that._options);
         that.callBase.apply(that, arguments);
         that._doRefresh();
+        that._triggerOptionChanged();
     },
+
+    _triggerOptionChanged: noop,
 
     _optionChangesMap: {
         animation: "ANIMATION",

@@ -936,7 +936,8 @@ QUnit.test("Single dataField. Numeric", function(assert) {
         },
         name: "Count",
         title: "Count",
-        valueType: "numeric"
+        valueType: "numeric",
+        visualRange: [0, 45]
     }]);
 });
 
@@ -971,6 +972,7 @@ QUnit.test("Single dataField. DateTime", function(assert) {
     this.pivotGridDataSource.load();
 
     this.createBinding({});
+    delete this.valueAxisOptions[0]["visualRange"];
 
     assert.deepEqual(this.valueAxisOptions, [{
         label: {
@@ -994,7 +996,8 @@ QUnit.test("Single dataField. value type is undefined", function(assert) {
         },
         name: "Count",
         title: "Count",
-        valueType: undefined
+        valueType: undefined,
+        visualRange: [0, 45]
     }]);
 });
 
@@ -1015,7 +1018,8 @@ QUnit.test("Several dataField", function(assert) {
         },
         name: "Count",
         title: "Count",
-        valueType: "numeric"
+        valueType: "numeric",
+        visualRange: [0, 45]
     },
     {
         label: {
@@ -1026,7 +1030,8 @@ QUnit.test("Several dataField", function(assert) {
         },
         name: "Avg Freight",
         title: "Avg Freight",
-        valueType: "numeric"
+        valueType: "numeric",
+        visualRange: [0, 180]
     }]);
 });
 
@@ -1040,7 +1045,7 @@ QUnit.test("Several dataField. dataFieldsDisplayMode is 'singleAxis'", function(
         dataFieldsDisplayMode: "singleAxis"
     });
 
-    assert.deepEqual(this.valueAxisOptions, [{}]);
+    assert.deepEqual(this.valueAxisOptions, [{ visualRange: [0, 100] }]);
 });
 
 QUnit.test("Several dataField. dataFieldsDisplayMode is 'splitPanes'", function(assert) {
@@ -1063,7 +1068,8 @@ QUnit.test("Several dataField. dataFieldsDisplayMode is 'splitPanes'", function(
         name: "Count",
         pane: "Count",
         title: "Count",
-        valueType: "numeric"
+        valueType: "numeric",
+        visualRange: [0, 50]
     },
     {
         label: {
@@ -1075,7 +1081,8 @@ QUnit.test("Several dataField. dataFieldsDisplayMode is 'splitPanes'", function(
         pane: "Avg Freight",
         name: "Avg Freight",
         title: "Avg Freight",
-        valueType: "numeric"
+        valueType: "numeric",
+        visualRange: [0, 100]
     }]);
 });
 
@@ -1093,7 +1100,8 @@ QUnit.test("Single dataField is placed on argument Axis", function(assert) {
         },
         name: "Count",
         title: "Count",
-        valueType: "numeric"
+        valueType: "numeric",
+        visualRange: [0, 45]
     }]);
 });
 
@@ -1106,7 +1114,7 @@ QUnit.test("Several dataField. dataFields are placed on argument Axis", function
         putDataFieldsInto: "args"
     });
 
-    assert.deepEqual(this.valueAxisOptions, [{}]);
+    assert.deepEqual(this.valueAxisOptions, [{ visualRange: [0, 100] }]);
 });
 
 
