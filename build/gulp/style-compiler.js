@@ -60,7 +60,7 @@ gulp.task('style-compiler-test-themes', function(callback) {
         'only-themes', [
             '--version=' + context.version.product,
             '--output-path=' + cssArtifactsPath,
-            '--themes=generic.light,android5.light,ios7.default'
+            '--themes=generic.light,generic.dark,android5.light,ios7.default'
         ],
         callback
     );
