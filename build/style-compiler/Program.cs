@@ -139,7 +139,7 @@ namespace StyleCompiler
             Directory.CreateDirectory(outputPath);
 
             var lessCache = new CompiledLessCache(sourcePath);
-            lessCache.Inflate(PersistentCache.Instance);
+            lessCache.Inflate(PersistentCache.Instance, uniqueThemes);
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {

@@ -195,7 +195,7 @@ namespace StyleCompiler
             };
         }
 
-        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, bool uniqueThemes = false)
+        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, bool uniqueThemes)
         {
             var distribution = LessRegistry.CssDistributions[distributionName];
 

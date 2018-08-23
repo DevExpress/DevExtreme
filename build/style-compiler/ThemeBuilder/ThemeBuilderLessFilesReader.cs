@@ -9,7 +9,7 @@ namespace StyleCompiler.ThemeBuilder
 
         public static string[] GetLessPaths(string sourcePath, ThemeId themeId)
         {
-            return LessAggregation.EnumerateAllItems(sourcePath, "")
+            return LessAggregation.EnumerateAllItems(sourcePath, "", false)
                 .First(item => IsCssFileForTheme(item.CssFile, themeId))
                 .Segments
                 .SelectMany(s => s.LessFiles)

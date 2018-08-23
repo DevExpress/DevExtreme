@@ -20,14 +20,14 @@ namespace StyleCompiler
             _sourcePath = sourcePath;
         }
 
-        public void Inflate(PersistentCache persistentCache)
+        public void Inflate(PersistentCache persistentCache, bool uniqueThemes)
         {
             var knownSegments = new HashSet<string>();
             var parallelTasks = new List<Task>();
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {
-                foreach (var item in LessAggregation.EnumerateAllItems(_sourcePath, distributionName))
+                foreach (var item in LessAggregation.EnumerateAllItems(_sourcePath, distributionName, uniqueThemes))
                 {
                     LessAggregation.CheckLessDuplicates(item);
 
