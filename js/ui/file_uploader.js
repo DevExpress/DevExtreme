@@ -1404,7 +1404,12 @@ var FileUploader = Editor.inherit({
             case "_uploadButtonType":
                 this._uploadButton && this._uploadButton.option("type", value);
                 break;
-            case "validation":
+            case "maxFileSize":
+            case "minFileSize":
+            case "allowedFileExtensions":
+            case "invalidFileExtensionMessage":
+            case "invalidMaxFileSizeMessage":
+            case "invalidMinFileSizeMessage":
             case "readyToUploadMessage":
             case "uploadedMessage":
             case "uploadFailedMessage":
