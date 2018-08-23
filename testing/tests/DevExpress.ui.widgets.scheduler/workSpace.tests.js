@@ -461,7 +461,47 @@ QUnit.testStart(function() {
         assert.roughEqual($groupHeaderContents.eq(3).outerHeight(), 19, 5, "Group header content height is OK");
     });
 
-    QUnit.test("Group header cells shoud have right text", function(assert) {
+    QUnit.test("Date table cells shoud have right cellData", function(assert) {
+        var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+
+        assert.deepEqual($cells.eq(0).data("dxCellData"), {
+            startDate: new Date(2018, 2, 1),
+            endDate: new Date(2018, 2, 1, 0, 30),
+            allDay: false,
+            groups: {
+                one: 1
+            }
+        });
+
+        assert.deepEqual($cells.eq(1).data("dxCellData"), {
+            startDate: new Date(2018, 2, 1),
+            endDate: new Date(2018, 2, 1, 0, 30),
+            allDay: false,
+            groups: {
+                one: 2
+            }
+        });
+
+        assert.deepEqual($cells.eq(2).data("dxCellData"), {
+            startDate: new Date(2018, 2, 2),
+            endDate: new Date(2018, 2, 2, 0, 30),
+            allDay: false,
+            groups: {
+                one: 1
+            }
+        });
+
+        assert.deepEqual($cells.eq(3).data("dxCellData"), {
+            startDate: new Date(2018, 2, 2),
+            endDate: new Date(2018, 2, 2, 0, 30),
+            allDay: false,
+            groups: {
+                one: 2
+            }
+        });
+    });
+
+    QUnit.test("Date table cells should have right cellData", function(assert) {
         var $groupRow = this.instance.$element().find(".dx-scheduler-group-row"),
             $groupHeaderCells = $groupRow.find(".dx-scheduler-group-header");
 
