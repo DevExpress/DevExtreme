@@ -3299,7 +3299,7 @@ QUnit.test("onCellPrepared for group rows", function(assert) {
     assert.strictEqual(resultOptions.displayValue, 1, "displayValue");
     assert.deepEqual(resultOptions.data, { isContinuationOnNextPage: true }, "data");
     assert.strictEqual(resultOptions.rowType, "group", "rowType");
-    assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, colspan: 2, "alignment": "left", "index": 0, "cssClass": null, showWhenGrouped: false }, "column");
+    assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, width: null, colspan: 2, "alignment": "left", "index": 0, "cssClass": null, showWhenGrouped: false }, "column");
 });
 
 QUnit.test("onCellPrepared for group rows (RTL)", function(assert) {
@@ -3335,7 +3335,7 @@ QUnit.test("onCellPrepared for group rows (RTL)", function(assert) {
     assert.strictEqual(resultOptions.displayValue, 1, "displayValue");
     assert.deepEqual(resultOptions.data, { isContinuationOnNextPage: true }, "data");
     assert.strictEqual(resultOptions.rowType, "group", "rowType");
-    assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, colspan: 2, "alignment": "right", "index": 0, "cssClass": null, showWhenGrouped: false }, "column");
+    assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, width: null, colspan: 2, "alignment": "right", "index": 0, "cssClass": null, showWhenGrouped: false }, "column");
 });
 
 QUnit.test("onCellPrepared for called for command columns", function(assert) {
