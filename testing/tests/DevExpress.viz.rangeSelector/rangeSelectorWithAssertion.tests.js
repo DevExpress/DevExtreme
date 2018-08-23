@@ -1,6 +1,5 @@
-var $ = require("jquery");
-
-require("viz/range_selector/range_selector");
+import $ from "jquery";
+import "viz/range_selector/range_selector";
 
 QUnit.testStart(function() {
     var markup =
@@ -161,6 +160,63 @@ QUnit.module("Value", function(hook) {
         this.rangeSelector.setValue([1, 12]);
 
         assert.strictEqual(spy.getCall(0).args[0].target.id, "E2203");
+    });
+
+    QUnit.test("Set value using visualRange object", function(assert) {
+        this.rangeSelector.setValue({ startValue: 5, endValue: 7 });
+        assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
+        assert.deepEqual(this.rangeSelector.option("value"), [5, 7]);
+    });
+
+    QUnit.test("Set value via option using visualRange object", function(assert) {
+        this.rangeSelector.option("value", { startValue: 5, endValue: 7 });
+        assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
+        assert.deepEqual(this.rangeSelector.option("value"), { startValue: 5, endValue: 7 });
+    });
+
+    QUnit.test("Change value when options is set by object", function(assert) {
+        this.rangeSelector.option("value", { startValue: 5, endValue: 7 });
+        this.rangeSelector.setValue([8, 9]);
+        assert.deepEqual(this.rangeSelector.getValue(), [8, 9]);
+        assert.deepEqual(this.rangeSelector.option("value"), { startValue: 8, endValue: 9 });
+    });
+
+    QUnit.test("Set value using visualRange only length field in visualRange object", function(assert) {
+        this.rangeSelector.setValue({ length: 2 });
+        assert.deepEqual(this.rangeSelector.getValue(), [9, 11]);
+    });
+
+    QUnit.test("Set value using visualRange object with start and length", function(assert) {
+        this.rangeSelector.setValue({ startValue: 5, length: 2 });
+        assert.deepEqual(this.rangeSelector.getValue(), [5, 7]);
+    });
+
+    QUnit.test("Set value using visualRange object with end and length", function(assert) {
+        this.rangeSelector.setValue({ endValue: 5, length: 2 });
+        assert.deepEqual(this.rangeSelector.getValue(), [3, 5]);
+    });
+
+    QUnit.test("Set value using visualRange only length field in visualRange object. logarithmic", function(assert) {
+        this.rangeSelector.option({
+            value: { length: 2 },
+            scale: {
+                type: "logarithmic",
+                startValue: 100,
+                endValue: 100000
+            }
+        });
+        assert.deepEqual(this.rangeSelector.getValue(), [1000, 100000]);
+    });
+
+    QUnit.test("Set value using visualRange only length field in visualRange object. discrete", function(assert) {
+        this.rangeSelector.option({
+            value: { length: 2 },
+            scale: {
+                type: "discrete",
+                categories: ["a", "b", "c", "d"]
+            }
+        });
+        assert.deepEqual(this.rangeSelector.getValue(), ["c", "d"]);
     });
 });
 

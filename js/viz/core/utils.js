@@ -3,6 +3,7 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     adjust = require("../../core/utils/math").adjust,
+    dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
     isExponential = typeUtils.isExponential,
@@ -401,6 +402,91 @@ extend(exports, {
     }
 });
 
+function getAddFunction(range, correctZeroLevel) {
+    // T170398
+    if(range.dataType === "datetime") {
+        return function(rangeValue, marginValue, sign = 1) {
+            return new Date(rangeValue.getTime() + sign * marginValue);
+        };
+    }
+
+    if(range.axisType === "logarithmic") {
+        return function(rangeValue, marginValue, sign = 1) {
+            var log = getLog(rangeValue, range.base) + sign * marginValue;
+            return raiseTo(log, range.base);
+        };
+    }
+
+    return function(rangeValue, marginValue, sign = 1) {
+        var newValue = rangeValue + sign * marginValue;
+        return correctZeroLevel && newValue * rangeValue <= 0 ? 0 : newValue;
+    };
+}
+
+function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
+    const minDefined = typeUtils.isDefined(visualRange.startValue);
+    const maxDefined = typeUtils.isDefined(visualRange.endValue);
+    const isDiscrete = options.axisType === "discrete";
+
+    dataRange = dataRange || wholeRange;
+
+    const add = getAddFunction(options, false);
+
+    let min = minDefined ? visualRange.startValue : dataRange.min;
+    let max = maxDefined ? visualRange.endValue : dataRange.max;
+    let rangeLength = visualRange.length;
+    const categories = dataRange.categories;
+
+    if(isDefined(visualRange.length)) {
+        if(!isDiscrete) {
+
+            if(options.dataType === "datetime" && !isNumber(rangeLength)) {
+                rangeLength = dateToMilliseconds(rangeLength);
+            }
+
+            if(maxDefined && !minDefined || !maxDefined && !minDefined) {
+                min = add(max, rangeLength, -1);
+
+            } else if(minDefined && !maxDefined) {
+                max = add(min, rangeLength);
+
+            }
+        } else {
+            rangeLength = parseInt(rangeLength);
+            if(!isNaN(rangeLength) && isFinite(rangeLength)) {
+                rangeLength--;
+                if(!maxDefined && !minDefined) {
+                    max = categories[categories.length - 1];
+                    min = categories[categories.length - 1 - rangeLength];
+                } else if(minDefined && !maxDefined) {
+                    const categoriesInfo = exports.getCategoriesInfo(categories, min, undefined);
+                    max = categoriesInfo.categories[rangeLength];
+                } else if(!minDefined && maxDefined) {
+                    const categoriesInfo = exports.getCategoriesInfo(categories, undefined, max);
+                    min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
+                }
+            }
+        }
+    }
+
+    if(!isDiscrete) {
+        if(isDefined(wholeRange.max)) {
+            max = max > wholeRange.max ? wholeRange.max : max;
+        }
+        if(isDefined(wholeRange.min)) {
+            min = min < wholeRange.min ? wholeRange.min : min;
+        }
+    }
+
+    return {
+        startValue: min,
+        endValue: max
+    };
+}
+
+
+exports.adjustVisualRange = adjustVisualRange;
+exports.getAddFunction = getAddFunction;
 exports.getLog = getLog;
 exports.getAdjustedLog10 = getAdjustedLog10;
 exports.raiseTo = raiseTo;

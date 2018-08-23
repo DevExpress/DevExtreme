@@ -165,27 +165,6 @@ function removeInvalidTick(ticks, i) {
     return false;
 }
 
-function getAddFunction(range, correctZeroLevel) {
-    // T170398
-    if(range.dataType === "datetime") {
-        return function(rangeValue, marginValue, sign = 1) {
-            return new Date(rangeValue.getTime() + sign * marginValue);
-        };
-    }
-
-    if(range.axisType === "logarithmic") {
-        return function(rangeValue, marginValue, sign = 1) {
-            var log = vizUtils.getLog(rangeValue, range.base) + sign * marginValue;
-            return vizUtils.raiseTo(log, range.base);
-        };
-    }
-
-    return function(rangeValue, marginValue, sign = 1) {
-        var newValue = rangeValue + sign * marginValue;
-        return correctZeroLevel && newValue * rangeValue <= 0 ? 0 : newValue;
-    };
-}
-
 function validateAxisOptions(options) {
     var labelOptions = options.label,
         position = options.position,
@@ -947,21 +926,14 @@ Axis.prototype = {
         const isDiscrete = options.type === constants.discrete;
         let categories = that._seriesData && that._seriesData.categories || [];
         const wholeRange = that.adjustRange(options.wholeRange);
-        const visualRange = that.getViewport();
+        const visualRange = that.getViewport() || {};
         let rangeLength = options.visualRangeLength;
-        const add = getAddFunction({
-            base: options.logarithmBase,
-            axisType: options.type,
-            dataType: options.dataType
-        }, false);
 
         const result = new rangeModule.Range(businessRange);
         const minDefined = visualRange && isDefined(visualRange.min);
         const maxDefined = visualRange && isDefined(visualRange.max);
         let minVisible = minDefined ? visualRange.min : result.minVisible;
         let maxVisible = maxDefined ? visualRange.max : result.maxVisible;
-        let currentMin;
-        let currentMax;
 
         if(!isDiscrete) {
             result.min = isDefined(wholeRange[0]) ? wholeRange[0] : result.min;
@@ -982,38 +954,26 @@ Axis.prototype = {
             }
         }
 
-        if(that.isArgumentAxis && isDefined(rangeLength)) {
-            if(!isDiscrete) {
-                if(options.dataType === "datetime" && !isNumeric(rangeLength)) {
-                    rangeLength = dateToMilliseconds(rangeLength);
-                }
-                if(maxDefined && !minDefined || !maxDefined && !minDefined) {
-                    currentMin = add(maxVisible, rangeLength, -1);
-                    minVisible = currentMin < result.min ? result.min : currentMin;
-                } else if(minDefined && !maxDefined) {
-                    currentMax = add(minVisible, rangeLength);
-                    maxVisible = currentMax > result.max ? result.max : currentMax;
-                }
-            } else {
-                rangeLength = parseInt(rangeLength);
-                if(!isNaN(rangeLength) && isFinite(rangeLength)) {
-                    rangeLength--;
-                    if(!maxDefined && !minDefined) {
-                        maxVisible = categories[categories.length - 1];
-                        minVisible = categories[categories.length - 1 - rangeLength];
-                    } else if(minDefined && !maxDefined) {
-                        const categoriesInfo = vizUtils.getCategoriesInfo(categories, minVisible, undefined);
-                        maxVisible = categoriesInfo.categories[rangeLength];
-                    } else if(!minDefined && maxDefined) {
-                        const categoriesInfo = vizUtils.getCategoriesInfo(categories, undefined, maxVisible);
-                        minVisible = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
-                    }
-                }
-            }
-        }
+        const adjustedVisualRange = vizUtils.adjustVisualRange({
+            axisType: options.type,
+            dataType: options.dataType,
+            base: options.logarithmBase
+        }, {
+            startValue: visualRange.min,
+            endValue: visualRange.max,
+            length: rangeLength
+        }, {
+            categories,
+            min: wholeRange[0],
+            max: wholeRange[1]
+        }, {
+            categories,
+            min: minVisible,
+            max: maxVisible
+        });
 
-        result.minVisible = minVisible;
-        result.maxVisible = maxVisible;
+        result.minVisible = adjustedVisualRange.startValue;
+        result.maxVisible = adjustedVisualRange.endValue;
 
         return result;
     },
@@ -1082,7 +1042,7 @@ Axis.prototype = {
         if(visualRangeOnDataUpdateValue === SHIFT) {
             const currentBusinessRange = this._translator.getBusinessRange();
             if(options.type !== constants.discrete) {
-                const add = getAddFunction({
+                const add = vizUtils.getAddFunction({
                     base: options.logarithmBase,
                     axisType: options.type,
                     dataType: options.dataType
@@ -1311,7 +1271,7 @@ Axis.prototype = {
             const min = useAllAggregatedPoints ? businessRange.min : minVisible;
             const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
             if(isDefined(min) && isDefined(max)) {
-                const add = getAddFunction({
+                const add = vizUtils.getAddFunction({
                     base: options.logarithmBase,
                     axisType: options.type,
                     dataType: options.dataType
@@ -1510,7 +1470,7 @@ Axis.prototype = {
             valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete && type !== "semidiscrete",
             minValueMargin = options.minValueMargin,
             maxValueMargin = options.maxValueMargin,
-            add = getAddFunction(range, !that.isArgumentAxis),
+            add = vizUtils.getAddFunction(range, !that.isArgumentAxis),
             minVisible = range.minVisible,
             maxVisible = range.maxVisible,
             interval = range.interval,

@@ -61,10 +61,17 @@ function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickInterva
 }
 
 function parseValue(value) {
-    return { startValue: value[0], endValue: value[1] };
+    if(Array.isArray(value)) {
+        return { startValue: value[0], endValue: value[1] };
+    } else {
+        return value;
+    }
 }
 
-function parseSelectedRange(selectedRange) {
+function parseSelectedRange(selectedRange, convertToVisualRange) {
+    if(convertToVisualRange) {
+        return selectedRange;
+    }
     return [selectedRange.startValue, selectedRange.endValue];
 }
 
@@ -615,7 +622,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             trackersGroup: trackersGroup,
             updateSelectedRange: function(range, lastSelectedRange) {
                 if(!that._rangeOption) {
-                    that.option(VALUE, parseSelectedRange(range));
+                    that.option(VALUE, parseSelectedRange(range, typeUtils.isPlainObject(that._options[VALUE])));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
@@ -688,7 +695,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
     _change_VALUE: function() {
         var that = this,
-            option = that._rangeOption && that._rangeOption[VALUE];
+            option = that._rangeOption;
         if(option) {
             that._options[VALUE] = option;
             that.setValue(option);
@@ -725,7 +732,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             value = that._options[VALUE];
 
         if(that._changes.has("VALUE") && value) {
-            that._rangeOption = { "value": [value[0], value[1]] };
+            that._rangeOption = value;
         }
         that.callBase.apply(that, arguments);
         that._rangeOption = null;
@@ -959,11 +966,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
     setValue: function(value) {
         var current;
+        const visualRange = parseValue(value);
         if(!this._isUpdating && value) {
-            this._validateRange(value[0], value[1]);
+            this._validateRange(visualRange.startValue, visualRange.endValue);
             // TODO: Move the check inside the SlidersController
             current = this._slidersController.getSelectedRange();
-            if(!current || current.startValue !== value[0] || current.endValue !== value[1]) {
+            if(!current || current.startValue !== visualRange.startValue || current.endValue !== visualRange.endValue) {
                 this._slidersController.setSelectedRange(parseValue(value));
             }
         }
