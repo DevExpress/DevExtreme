@@ -62,9 +62,6 @@
         "dxFileUploader-uploaded": "Geüpload",
         "dxFileUploader-readyToUpload": "Klaar om te uploaden",
         "dxFileUploader-uploadFailedMessage": "Uploaden is mislukt",
-        "dxFileUploader-invalidFileExtension": "",
-        "dxFileUploader-invalidMaxFileSize": "",
-        "dxFileUploader-invalidMinFileSize": "",
 
         "dxRangeSlider-ariaFrom": "Van",
         "dxRangeSlider-ariaTill": "Tot",
