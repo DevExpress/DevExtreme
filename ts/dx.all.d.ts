@@ -2569,7 +2569,7 @@ declare module DevExpress.ui {
         uploadUrl?: string;
         /** Specifies a File instance representing the selected file. Read-only when uploadMode is "useForm". */
         value?: Array<File>;
-        allowedFileExtensions: Array<string>;
+        allowedFileExtensions?: Array<string>;
         maxFileSize?: number;
         minFileSize?: number;
         invalidFileExtensionMessage?: string;
