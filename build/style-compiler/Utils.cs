@@ -54,5 +54,9 @@ namespace StyleCompiler
         {
             return !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_DOCKER_CI"));
         }
+
+        public static bool IsQUnitCI() {
+            return !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_QUNIT_CI"));
+        }
     }
 }

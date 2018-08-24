@@ -19,6 +19,7 @@
     <OutputPath>bin/</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DebugType>portable</DebugType>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
 </Project>
