@@ -1,35 +1,36 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Config = require("../../core/config"),
-    registerComponentCallbacks = require("../../core/component_registrator_callbacks"),
-    Class = require("../../core/class"),
-    Callbacks = require("../../core/utils/callbacks"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    inArray = require("../../core/utils/array").inArray,
-    Locker = require("../../core/utils/locker"),
-    Widget = require("../../ui/widget/ui.widget"),
-    Editor = require("../../ui/editor/editor"),
-    NgTemplate = require("./template"),
-    ngModule = require("./module"),
-    CollectionWidget = require("../../ui/collection/ui.collection_widget.edit"),
-    compileSetter = require("../../core/utils/data").compileSetter,
-    compileGetter = require("../../core/utils/data").compileGetter,
-    extendFromObject = require("../../core/utils/extend").extendFromObject,
-    inflector = require("../../core/utils/inflector"),
-    errors = require("../../core/errors");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import Config from "../../core/config";
+import registerComponentCallbacks from "../../core/component_registrator_callbacks";
+import Class from "../../core/class";
+import Callbacks from "../../core/utils/callbacks";
+import typeUtils from "../../core/utils/type";
+import iterator from "../../core/utils/iterator";
+const each = iterator.each;
+import arrayUtils from "../../core/utils/array";
+const inArray = arrayUtils.inArray;
+import Locker from "../../core/utils/locker";
+import Widget from "../../ui/widget/ui.widget";
+import Editor from "../../ui/editor/editor";
+import NgTemplate from "./template";
+import ngModule from "./module";
+import CollectionWidget from "../../ui/collection/ui.collection_widget.edit";
+import dataUtils from "../../core/utils/data";
+const compileSetter = dataUtils.compileSetter;
+const compileGetter = dataUtils.compileGetter;
+import extendUtils from "../../core/utils/extend";
+const extendFromObject = extendUtils.extendFromObject;
+import inflector from "../../core/utils/inflector";
+import errors from "../../core/errors";
+const ITEM_ALIAS_ATTRIBUTE_NAME = "dxItemAlias";
+const SKIP_APPLY_ACTION_CATEGORIES = ["rendering"];
+const NG_MODEL_OPTION = "value";
 
-var ITEM_ALIAS_ATTRIBUTE_NAME = "dxItemAlias",
-    SKIP_APPLY_ACTION_CATEGORIES = ["rendering"],
-    NG_MODEL_OPTION = "value";
-
-var safeApply = function(func, scope) {
+const safeApply = (func, scope) => {
     if(scope.$root.$$phase) {
         return func(scope);
     } else {
-        return scope.$apply(function() {
-            return func(scope);
-        });
+        return scope.$apply(() => func(scope));
     }
 };
 
@@ -39,9 +40,9 @@ var safeApply = function(func, scope) {
  * @default {}
  */
 
-var ComponentBuilder = Class.inherit({
+let ComponentBuilder = Class.inherit({
 
-    ctor: function(options) {
+    ctor(options) {
         this._componentDisposing = Callbacks();
         this._optionChangedCallbacks = Callbacks();
         this._ngLocker = new Locker();
@@ -66,88 +67,82 @@ var ComponentBuilder = Class.inherit({
         }
     },
 
-    _addOptionsStringWatcher: function(optionsString) {
-        var that = this;
-
-        var clearOptionsStringWatcher = that._scope.$watch(optionsString, function(newOptions) {
+    _addOptionsStringWatcher(optionsString) {
+        const clearOptionsStringWatcher = this._scope.$watch(optionsString, newOptions => {
             if(!newOptions) {
                 return;
             }
 
             clearOptionsStringWatcher();
 
-            that._normalizeOptions(newOptions);
+            this._normalizeOptions(newOptions);
 
-            that._initComponentBindings();
-            that._component.option(that._evalOptions(that._scope));
+            this._initComponentBindings();
+            this._component.option(this._evalOptions(this._scope));
         });
 
-        that._componentDisposing.add(clearOptionsStringWatcher);
+        this._componentDisposing.add(clearOptionsStringWatcher);
     },
 
-    _normalizeOptions: function(options) {
-        var that = this;
-
-        that._ngOptions = extendFromObject({}, options);
+    _normalizeOptions(options) {
+        this._ngOptions = extendFromObject({}, options);
 
         if(!options) {
             return;
         }
 
         if(!options.hasOwnProperty('bindingOptions') && options.bindingOptions) {
-            that._ngOptions.bindingOptions = options.bindingOptions;
+            this._ngOptions.bindingOptions = options.bindingOptions;
         }
 
         if(options.bindingOptions) {
-            each(options.bindingOptions, function(key, value) {
+            each(options.bindingOptions, (key, value) => {
                 if(typeUtils.type(value) === 'string') {
-                    that._ngOptions.bindingOptions[key] = { dataPath: value };
+                    this._ngOptions.bindingOptions[key] = { dataPath: value };
                 }
             });
         }
     },
 
-    _initComponent: function(scope) {
+    _initComponent(scope) {
         this._component = new this._componentClass(this._$element, this._evalOptions(scope));
         this._component._isHidden = true;
         this._handleDigestPhase();
     },
 
-    _handleDigestPhase: function() {
-        var that = this,
-            beginUpdate = function() {
-                that._component.beginUpdate();
-            },
-            endUpdate = function() {
-                that._component.endUpdate();
-            };
+    _handleDigestPhase() {
+        const beginUpdate = () => {
+            this._component.beginUpdate();
+        };
 
-        that._digestCallbacks.begin.add(beginUpdate);
-        that._digestCallbacks.end.add(endUpdate);
+        const endUpdate = () => {
+            this._component.endUpdate();
+        };
 
-        that._componentDisposing.add(function() {
-            that._digestCallbacks.begin.remove(beginUpdate);
-            that._digestCallbacks.end.remove(endUpdate);
+        this._digestCallbacks.begin.add(beginUpdate);
+        this._digestCallbacks.end.add(endUpdate);
+
+        this._componentDisposing.add(() => {
+            this._digestCallbacks.begin.remove(beginUpdate);
+            this._digestCallbacks.end.remove(endUpdate);
         });
-
     },
 
-    _initComponentBindings: function() {
-        var that = this,
-            optionDependencies = {};
+    _initComponentBindings() {
+        const optionDependencies = {};
 
-        if(!that._ngOptions.bindingOptions) {
+        if(!this._ngOptions.bindingOptions) {
             return;
         }
 
-        each(that._ngOptions.bindingOptions, function(optionPath, value) {
-            var separatorIndex = optionPath.search(/\[|\./),
-                optionForSubscribe = separatorIndex > -1 ? optionPath.substring(0, separatorIndex) : optionPath,
-                prevWatchMethod,
-                clearWatcher,
-                valuePath = value.dataPath,
-                deepWatch = true,
-                forcePlainWatchMethod = false;
+        each(this._ngOptions.bindingOptions, (optionPath, value) => {
+            const separatorIndex = optionPath.search(/\[|\./);
+            const optionForSubscribe = separatorIndex > -1 ? optionPath.substring(0, separatorIndex) : optionPath;
+            let prevWatchMethod;
+            let clearWatcher;
+            const valuePath = value.dataPath;
+            let deepWatch = true;
+            let forcePlainWatchMethod = false;
 
             if(value.deep !== undefined) {
                 forcePlainWatchMethod = deepWatch = !!value.deep;
@@ -159,44 +154,44 @@ var ComponentBuilder = Class.inherit({
 
             optionDependencies[optionForSubscribe][optionPath] = valuePath;
 
-            var watchCallback = function(newValue, oldValue) {
-                if(that._ngLocker.locked(optionPath)) {
+            const watchCallback = (newValue, oldValue) => {
+                if(this._ngLocker.locked(optionPath)) {
                     return;
                 }
 
-                that._ngLocker.obtain(optionPath);
-                that._component.option(optionPath, newValue);
+                this._ngLocker.obtain(optionPath);
+                this._component.option(optionPath, newValue);
                 updateWatcher();
 
-                if(that._component._optionValuesEqual(optionPath, oldValue, newValue) && that._ngLocker.locked(optionPath)) {
-                    that._ngLocker.release(optionPath);
+                if(this._component._optionValuesEqual(optionPath, oldValue, newValue) && this._ngLocker.locked(optionPath)) {
+                    this._ngLocker.release(optionPath);
                 }
             };
 
-            var updateWatcher = function() {
-                var watchMethod = Array.isArray(that._scope.$eval(valuePath)) && !forcePlainWatchMethod ? "$watchCollection" : "$watch";
+            var updateWatcher = () => {
+                const watchMethod = Array.isArray(this._scope.$eval(valuePath)) && !forcePlainWatchMethod ? "$watchCollection" : "$watch";
 
                 if(prevWatchMethod !== watchMethod) {
                     if(clearWatcher) {
                         clearWatcher();
                     }
-                    clearWatcher = that._scope[watchMethod](valuePath, watchCallback, deepWatch);
+                    clearWatcher = this._scope[watchMethod](valuePath, watchCallback, deepWatch);
                     prevWatchMethod = watchMethod;
                 }
             };
 
             updateWatcher();
 
-            that._componentDisposing.add(clearWatcher);
+            this._componentDisposing.add(clearWatcher);
         });
 
-        that._optionChangedCallbacks.add(function(args) {
-            var optionName = args.name,
-                fullName = args.fullName,
-                component = args.component;
+        this._optionChangedCallbacks.add(args => {
+            const optionName = args.name;
+            const fullName = args.fullName;
+            const component = args.component;
 
-            if(that._ngLocker.locked(fullName)) {
-                that._ngLocker.release(fullName);
+            if(this._ngLocker.locked(fullName)) {
+                this._ngLocker.release(fullName);
                 return;
             }
 
@@ -204,55 +199,55 @@ var ComponentBuilder = Class.inherit({
                 return;
             }
 
-            var isActivePhase = that._scope.$root.$$phase;
-            var obtainOption = function() {
-                that._ngLocker.obtain(fullName);
+            const isActivePhase = this._scope.$root.$$phase;
+            const obtainOption = () => {
+                this._ngLocker.obtain(fullName);
             };
 
             if(isActivePhase) {
-                that._digestCallbacks.begin.add(obtainOption);
+                this._digestCallbacks.begin.add(obtainOption);
             } else {
                 obtainOption();
             }
 
-            safeApply(function() {
-                each(optionDependencies[optionName], function(optionPath, valuePath) {
-                    if(!that._optionsAreLinked(fullName, optionPath)) {
+            safeApply(() => {
+                each(optionDependencies[optionName], (optionPath, valuePath) => {
+                    if(!this._optionsAreLinked(fullName, optionPath)) {
                         return;
                     }
 
-                    var value = component.option(optionPath);
-                    that._parse(valuePath).assign(that._scope, value);
+                    const value = component.option(optionPath);
+                    this._parse(valuePath).assign(this._scope, value);
 
-                    var scopeValue = that._parse(valuePath)(that._scope);
+                    const scopeValue = this._parse(valuePath)(this._scope);
                     if(scopeValue !== value) {
                         args.component.option(optionPath, scopeValue);
                     }
                 });
-            }, that._scope);
+            }, this._scope);
 
-            var releaseOption = function() {
-                if(that._ngLocker.locked(fullName)) {
-                    that._ngLocker.release(fullName);
+            const releaseOption = () => {
+                if(this._ngLocker.locked(fullName)) {
+                    this._ngLocker.release(fullName);
                 }
-                that._digestCallbacks.begin.remove(obtainOption);
-                that._digestCallbacks.end.remove(releaseOption);
+                this._digestCallbacks.begin.remove(obtainOption);
+                this._digestCallbacks.end.remove(releaseOption);
             };
 
             if(isActivePhase) {
-                that._digestCallbacks.end.addPrioritized(releaseOption);
+                this._digestCallbacks.end.addPrioritized(releaseOption);
             } else {
                 releaseOption();
             }
         });
     },
 
-    _optionsAreNested: function(optionPath1, optionPath2) {
-        var parentSeparator = optionPath1[optionPath2.length];
+    _optionsAreNested(optionPath1, optionPath2) {
+        const parentSeparator = optionPath1[optionPath2.length];
         return optionPath1.indexOf(optionPath2) === 0 && (parentSeparator === "." || parentSeparator === "[");
     },
 
-    _optionsAreLinked: function(optionPath1, optionPath2) {
+    _optionsAreLinked(optionPath1, optionPath2) {
         if(optionPath1 === optionPath2) return true;
 
         return optionPath1.length > optionPath2.length
@@ -260,24 +255,23 @@ var ComponentBuilder = Class.inherit({
             : this._optionsAreNested(optionPath2, optionPath1);
     },
 
-    _compilerByTemplate: function(template) {
-        var that = this,
-            scopeItemsPath = this._getScopeItemsPath();
+    _compilerByTemplate(template) {
+        const scopeItemsPath = this._getScopeItemsPath();
 
-        return function(options) {
-            var $resultMarkup = $(template).clone(),
-                dataIsScope = options.model && options.model.constructor === that._scope.$root.constructor,
-                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options));
+        return options => {
+            const $resultMarkup = $(template).clone();
+            const dataIsScope = options.model && options.model.constructor === this._scope.$root.constructor;
+            const templateScope = dataIsScope ? options.model : (options.noModel ? this._scope : this._createScopeWithData(options));
 
             if(scopeItemsPath) {
-                that._synchronizeScopes(templateScope, scopeItemsPath, options.index);
+                this._synchronizeScopes(templateScope, scopeItemsPath, options.index);
             }
 
             $resultMarkup.appendTo(options.container);
 
             if(!options.noModel) {
-                eventsEngine.on($resultMarkup, "$destroy", function() {
-                    var destroyAlreadyCalled = !templateScope.$parent;
+                eventsEngine.on($resultMarkup, "$destroy", () => {
+                    const destroyAlreadyCalled = !templateScope.$parent;
 
                     if(destroyAlreadyCalled) {
                         return;
@@ -287,37 +281,38 @@ var ComponentBuilder = Class.inherit({
                 });
             }
 
-            that._applyAsync(that._compile($resultMarkup, that._transcludeFn), templateScope);
+            const ngTemplate = this._compile($resultMarkup, this._transcludeFn);
+            this._applyAsync(scope => {
+                ngTemplate(scope, null, { parentBoundTranscludeFn: this._transcludeFn });
+            }, templateScope);
 
             return $resultMarkup;
         };
     },
 
-    _applyAsync: function(func, scope) {
-        var that = this;
-
+    _applyAsync(func, scope) {
         func(scope);
         if(!scope.$root.$$phase) {
-            if(!that._renderingTimer) {
-                that._renderingTimer = setTimeout(function() {
+            if(!this._renderingTimer) {
+                this._renderingTimer = setTimeout(() => {
                     scope.$apply();
-                    that._renderingTimer = null;
+                    this._renderingTimer = null;
                 });
             }
-            that._componentDisposing.add(function() {
-                clearTimeout(that._renderingTimer);
+            this._componentDisposing.add(() => {
+                clearTimeout(this._renderingTimer);
             });
         }
     },
 
-    _getScopeItemsPath: function() {
+    _getScopeItemsPath() {
         if(this._componentClass.subclassOf(CollectionWidget) && this._ngOptions.bindingOptions && this._ngOptions.bindingOptions.items) {
             return this._ngOptions.bindingOptions.items.dataPath;
         }
     },
 
-    _createScopeWithData: function(options) {
-        var newScope = this._scope.$new();
+    _createScopeWithData(options) {
+        const newScope = this._scope.$new();
 
         if(this._itemAlias) {
             newScope[this._itemAlias] = options.model;
@@ -330,29 +325,28 @@ var ComponentBuilder = Class.inherit({
         return newScope;
     },
 
-    _synchronizeScopes: function(itemScope, parentPrefix, itemIndex) {
+    _synchronizeScopes(itemScope, parentPrefix, itemIndex) {
         if(this._itemAlias && typeof (itemScope[this._itemAlias]) !== "object") {
             this._synchronizeScopeField({
                 parentScope: this._scope,
                 childScope: itemScope,
                 fieldPath: this._itemAlias,
-                parentPrefix: parentPrefix,
-                itemIndex: itemIndex
+                parentPrefix,
+                itemIndex
             });
         }
     },
 
-    _synchronizeScopeField: function(args) {
-        var parentScope = args.parentScope,
-            childScope = args.childScope,
-            fieldPath = args.fieldPath,
-            parentPrefix = args.parentPrefix,
-            itemIndex = args.itemIndex;
-
-        var innerPathSuffix = fieldPath === this._itemAlias ? "" : "." + fieldPath,
-            collectionField = itemIndex !== undefined,
-            optionOuterBag = [parentPrefix],
-            optionOuterPath;
+    _synchronizeScopeField(args) {
+        const parentScope = args.parentScope;
+        const childScope = args.childScope;
+        const fieldPath = args.fieldPath;
+        const parentPrefix = args.parentPrefix;
+        const itemIndex = args.itemIndex;
+        const innerPathSuffix = fieldPath === this._itemAlias ? "" : "." + fieldPath;
+        const collectionField = itemIndex !== undefined;
+        const optionOuterBag = [parentPrefix];
+        let optionOuterPath;
 
         if(collectionField) {
             if(!typeUtils.isNumeric(itemIndex)) return;
@@ -363,13 +357,13 @@ var ComponentBuilder = Class.inherit({
         optionOuterBag.push(innerPathSuffix);
         optionOuterPath = optionOuterBag.join("");
 
-        var clearParentWatcher = parentScope.$watch(optionOuterPath, function(newValue, oldValue) {
+        const clearParentWatcher = parentScope.$watch(optionOuterPath, (newValue, oldValue) => {
             if(newValue !== oldValue) {
                 compileSetter(fieldPath)(childScope, newValue);
             }
         });
 
-        var clearItemWatcher = childScope.$watch(fieldPath, function(newValue, oldValue) {
+        const clearItemWatcher = childScope.$watch(fieldPath, (newValue, oldValue) => {
             if(newValue !== oldValue) {
                 if(collectionField && !compileGetter(parentPrefix)(parentScope)[itemIndex]) {
                     clearItemWatcher();
@@ -382,76 +376,69 @@ var ComponentBuilder = Class.inherit({
         this._componentDisposing.add([clearParentWatcher, clearItemWatcher]); // TODO: test
     },
 
-    _evalOptions: function(scope) {
-        var result = extendFromObject({}, this._ngOptions);
+    _evalOptions(scope) {
+        const result = extendFromObject({}, this._ngOptions);
 
         delete result.bindingOptions;
 
         if(this._ngOptions.bindingOptions) {
-            each(this._ngOptions.bindingOptions, function(key, value) {
+            each(this._ngOptions.bindingOptions, (key, value) => {
                 result[key] = scope.$eval(value.dataPath);
             });
         }
 
         result._optionChangedCallbacks = this._optionChangedCallbacks;
         result._disposingCallbacks = this._componentDisposing;
-        result.onActionCreated = function(component, action, config) {
+        result.onActionCreated = (component, action, config) => {
             if(config && inArray(config.category, SKIP_APPLY_ACTION_CATEGORIES) > -1) {
                 return action;
             }
 
-            var wrappedAction = function() {
-                var that = this,
-                    args = arguments;
+            const wrappedAction = function() {
+                const args = arguments;
 
                 if(!scope || !scope.$root || scope.$root.$$phase) {
-                    return action.apply(that, args);
+                    return action.apply(this, args);
                 }
 
-                return safeApply(function() {
-                    return action.apply(that, args);
-                }, scope);
+                return safeApply(() => action.apply(this, args), scope);
             };
 
             return wrappedAction;
         };
         result.beforeActionExecute = result.onActionCreated;
-        result.nestedComponentOptions = function(component) {
-            return {
-                templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
-                forceApplyBindings: component.option("forceApplyBindings"),
-                modelByElement: component.option("modelByElement"),
-                onActionCreated: component.option("onActionCreated"),
-                beforeActionExecute: component.option("beforeActionExecute"),
-                nestedComponentOptions: component.option("nestedComponentOptions")
-            };
-        };
+        result.nestedComponentOptions = component => ({
+            templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
+            forceApplyBindings: component.option("forceApplyBindings"),
+            modelByElement: component.option("modelByElement"),
+            onActionCreated: component.option("onActionCreated"),
+            beforeActionExecute: component.option("beforeActionExecute"),
+            nestedComponentOptions: component.option("nestedComponentOptions")
+        });
 
         result.templatesRenderAsynchronously = true;
 
         if(Config().wrapActionsBeforeExecute) {
-            result.forceApplyBindings = function() {
-                safeApply(function() {}, scope);
+            result.forceApplyBindings = () => {
+                safeApply(() => {}, scope);
             };
         }
 
         result.integrationOptions = {
-            createTemplate: function(element) {
-                return new NgTemplate(element, this._compilerByTemplate.bind(this));
-            }.bind(this),
-            watchMethod: function(fn, callback, options) {
+            createTemplate: element => new NgTemplate(element, this._compilerByTemplate.bind(this)),
+            watchMethod: (fn, callback, options) => {
                 options = options || {};
 
-                var immediateValue;
-                var skipCallback = options.skipImmediate;
-                var disposeWatcher = scope.$watch(function() {
-                    var value = fn();
+                let immediateValue;
+                let skipCallback = options.skipImmediate;
+                const disposeWatcher = scope.$watch(() => {
+                    let value = fn();
                     if(value instanceof Date) {
                         value = value.valueOf();
                     }
                     return value;
-                }, function(newValue) {
-                    var isSameValue = immediateValue === newValue;
+                }, newValue => {
+                    const isSameValue = immediateValue === newValue;
                     if(!skipCallback && (!isSameValue || isSameValue && options.deep)) {
                         callback(newValue);
                     }
@@ -464,40 +451,38 @@ var ComponentBuilder = Class.inherit({
                 }
 
                 if(Config().wrapActionsBeforeExecute) {
-                    this._applyAsync(function() {}, scope);
+                    this._applyAsync(() => {}, scope);
                 }
 
                 return disposeWatcher;
-            }.bind(this),
+            },
             templates: {
                 "dx-polymorph-widget": {
-                    render: function(options) {
-                        var widgetName = options.model.widget;
+                    render: options => {
+                        let widgetName = options.model.widget;
                         if(!widgetName) {
                             return;
                         }
 
                         if(widgetName === "button" || widgetName === "tabs" || widgetName === "dropDownMenu") {
-                            var deprecatedName = widgetName;
+                            const deprecatedName = widgetName;
                             widgetName = inflector.camelize("dx-" + widgetName);
                             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
                         }
 
-                        var markup = $("<div>").attr(inflector.dasherize(widgetName), "options").get(0);
+                        const markup = $("<div>").attr(inflector.dasherize(widgetName), "options").get(0);
 
-                        var newScope = this._scope.$new();
+                        const newScope = this._scope.$new();
                         newScope.options = options.model.options;
 
                         options.container.append(markup);
                         this._compile(markup)(newScope);
-                    }.bind(this)
+                    }
                 }
             }
         };
 
-        result.modelByElement = function() {
-            return scope;
-        };
+        result.modelByElement = () => scope;
 
         return result;
     }
@@ -505,33 +490,31 @@ var ComponentBuilder = Class.inherit({
 
 ComponentBuilder = ComponentBuilder.inherit({
 
-    ctor: function(options) {
+    ctor(options) {
         this._componentName = options.componentName;
         this._ngModel = options.ngModel;
         this._ngModelController = options.ngModelController;
 
-        this.callBase.apply(this, arguments);
+        this.callBase(...arguments);
     },
 
-    _isNgModelRequired: function() {
+    _isNgModelRequired() {
         return this._componentClass.subclassOf(Editor) && this._ngModel;
     },
 
-    _initComponentBindings: function() {
-        this.callBase.apply(this, arguments);
+    _initComponentBindings(...args) {
+        this.callBase(...args);
 
         this._initNgModelBinding();
     },
 
-    _initNgModelBinding: function() {
+    _initNgModelBinding() {
         if(!this._isNgModelRequired()) {
             return;
         }
 
-        var that = this;
-
-        var clearNgModelWatcher = this._scope.$watch(this._ngModel, function(newValue, oldValue) {
-            if(that._ngLocker.locked(NG_MODEL_OPTION)) {
+        const clearNgModelWatcher = this._scope.$watch(this._ngModel, (newValue, oldValue) => {
+            if(this._ngLocker.locked(NG_MODEL_OPTION)) {
                 return;
             }
 
@@ -539,20 +522,20 @@ ComponentBuilder = ComponentBuilder.inherit({
                 return;
             }
 
-            that._component.option(NG_MODEL_OPTION, newValue);
+            this._component.option(NG_MODEL_OPTION, newValue);
         });
 
-        that._optionChangedCallbacks.add(function(args) {
-            that._ngLocker.obtain(NG_MODEL_OPTION);
+        this._optionChangedCallbacks.add(args => {
+            this._ngLocker.obtain(NG_MODEL_OPTION);
             try {
                 if(args.name !== NG_MODEL_OPTION) {
                     return;
                 }
 
-                that._ngModelController.$setViewValue(args.value);
+                this._ngModelController.$setViewValue(args.value);
             } finally {
-                if(that._ngLocker.locked(NG_MODEL_OPTION)) {
-                    that._ngLocker.release(NG_MODEL_OPTION);
+                if(this._ngLocker.locked(NG_MODEL_OPTION)) {
+                    this._ngLocker.release(NG_MODEL_OPTION);
                 }
             }
         });
@@ -560,58 +543,56 @@ ComponentBuilder = ComponentBuilder.inherit({
         this._componentDisposing.add(clearNgModelWatcher);
     },
 
-    _evalOptions: function() {
+    _evalOptions(...args) {
         if(!this._isNgModelRequired()) {
-            return this.callBase.apply(this, arguments);
+            return this.callBase(...args);
         }
 
-        var result = this.callBase.apply(this, arguments);
+        const result = this.callBase(...args);
         result[NG_MODEL_OPTION] = this._parse(this._ngModel)(this._scope);
         return result;
     }
-
 });
 
-var registeredComponents = {};
+const registeredComponents = {};
 
-var registerComponentDirective = function(name) {
-    var priority = name !== "dxValidator" ? 1 : 10;
-    ngModule.directive(name, ["$compile", "$parse", "dxDigestCallbacks", function($compile, $parse, dxDigestCallbacks) {
-        return {
-            restrict: "A",
-            require: "^?ngModel",
-            priority: priority,
-            compile: function($element) {
-                var componentClass = registeredComponents[name],
-                    $content = componentClass.subclassOf(Widget) ? $element.contents().detach() : null;
+const registerComponentDirective = name => {
+    const priority = name !== "dxValidator" ? 1 : 10;
+    ngModule.directive(name, ["$compile", "$parse", "dxDigestCallbacks", ($compile, $parse, dxDigestCallbacks) => ({
+        restrict: "A",
+        require: "^?ngModel",
+        priority,
 
-                return function(scope, $element, attrs, ngModelController, transcludeFn) {
-                    $element.append($content);
+        compile($element) {
+            const componentClass = registeredComponents[name];
+            const $content = componentClass.subclassOf(Widget) ? $element.contents().detach() : null;
 
-                    safeApply(function() {
-                        new ComponentBuilder({
-                            componentClass: componentClass,
-                            componentName: name,
-                            compile: $compile,
-                            parse: $parse,
-                            $element: $element,
-                            scope: scope,
-                            ngOptionsString: attrs[name],
-                            ngOptions: attrs[name] ? scope.$eval(attrs[name]) : {},
-                            ngModel: attrs.ngModel,
-                            ngModelController: ngModelController,
-                            transcludeFn: transcludeFn,
-                            itemAlias: attrs[ITEM_ALIAS_ATTRIBUTE_NAME],
-                            dxDigestCallbacks: dxDigestCallbacks
-                        });
-                    }, scope);
-                };
-            }
-        };
-    }]);
+            return (scope, $element, attrs, ngModelController, transcludeFn) => {
+                $element.append($content);
+
+                safeApply(() => {
+                    new ComponentBuilder({
+                        componentClass,
+                        componentName: name,
+                        compile: $compile,
+                        parse: $parse,
+                        $element,
+                        scope,
+                        ngOptionsString: attrs[name],
+                        ngOptions: attrs[name] ? scope.$eval(attrs[name]) : {},
+                        ngModel: attrs.ngModel,
+                        ngModelController,
+                        transcludeFn,
+                        itemAlias: attrs[ITEM_ALIAS_ATTRIBUTE_NAME],
+                        dxDigestCallbacks
+                    });
+                }, scope);
+            };
+        }
+    })]);
 };
 
-registerComponentCallbacks.add(function(name, componentClass) {
+registerComponentCallbacks.add((name, componentClass) => {
 
     if(!registeredComponents[name]) {
         registerComponentDirective(name);
