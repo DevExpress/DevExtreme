@@ -285,7 +285,7 @@ module.exports = {
                         columnIndex = that._columnsController.getVisibleIndex(column.index);
                         $items = $parent.children("td").eq(columnIndex).find("*");
                     }
-                    $items = $items || $parent.find("*");
+                    $items = $items && $items.length ? $items : $parent.find("*");
 
                     $items = $items.filter(function(_, element) {
                         var $contents = $(element).contents();
