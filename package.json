@@ -107,7 +107,7 @@
   },
   "browserslist": [
     "last 2 versions",
-    "ios > 7",
+    "ios > 8",
     "ie > 10",
     "> 1%"
   ],
