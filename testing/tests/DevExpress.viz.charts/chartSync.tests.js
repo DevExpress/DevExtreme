@@ -1403,7 +1403,7 @@ var environment = {
         $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
         // act
-        chart.zoomArgument(2, 4);
+        chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 2, endValue: 4 });
 
         // assert
         assert.ok(chart.series);

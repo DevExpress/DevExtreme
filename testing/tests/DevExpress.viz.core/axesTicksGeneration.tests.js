@@ -1063,7 +1063,7 @@ QUnit.test("getAggregationInfo with zooming. min is 0", function(assert) {
     });
 
     this.axis.setBusinessRange({ min: -50, max: 50 });
-    this.axis.zoom(0, 5);
+    this.axis.visualRange(0, 5);
     this.axis.createTicks(canvas(170));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
@@ -1083,7 +1083,7 @@ QUnit.test("getAggregationInfo with zooming. max is 0", function(assert) {
     });
 
     this.axis.setBusinessRange({ min: -50, max: 50 });
-    this.axis.zoom(-5, 0);
+    this.axis.visualRange(-5, 0);
     this.axis.createTicks(canvas(170));
 
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});

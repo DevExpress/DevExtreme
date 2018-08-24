@@ -2236,7 +2236,7 @@ QUnit.module("Zooming range data", {
         };
         this.argumentAxis = {
             visualRange: function() {
-                return viewPort;
+                return { startValue: viewPort[0], endValue: viewPort[1] };
             },
             calculateInterval: function(a, b) {
                 return a - b;
@@ -2346,7 +2346,7 @@ QUnit.module("Zooming range data. Simple", {
         };
         this.argumentAxis = {
             visualRange: function() {
-                return viewPort;
+                return { startValue: viewPort[0], endValue: viewPort[1] };
             },
             calculateInterval: function(a, b) {
                 return a - b;
@@ -2547,7 +2547,7 @@ QUnit.module("Zooming range data. Bar/area", {
         };
         this.argumentAxis = {
             visualRange: function() {
-                return viewPort;
+                return { startValue: viewPort[0], endValue: viewPort[1] };
             },
             calculateInterval: function(a, b) {
                 return a - b;
@@ -2656,12 +2656,12 @@ QUnit.module("Get points in viewport", {
         };
         this.argumentAxis = {
             visualRange: function() {
-                return argumentViewPort;
+                return { startValue: argumentViewPort[0], endValue: argumentViewPort[1] };
             }
         };
         this.valueAxis = {
             visualRange: function() {
-                return valueViewPort;
+                return { startValue: valueViewPort[0], endValue: valueViewPort[1] };
             }
         };
     }
@@ -2878,7 +2878,9 @@ QUnit.test("Calculate range data when aggregation enabled. Add data range if vis
 
     const argumentAxis = series.getArgumentAxis();
 
-    argumentAxis.visualRange = () => [3, 18];
+    argumentAxis.visualRange = () => {
+        return { startValue: 3, endValue: 18 };
+    };
 
     argumentAxis.getAggregationInfo = function() {
         return {
@@ -2904,7 +2906,10 @@ QUnit.test("Calculate range data when aggregation enabled. Do not inculde data r
     const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
     const argumentAxis = series.getArgumentAxis();
 
-    argumentAxis.visualRange = () => [2, 20];
+    argumentAxis.visualRange = () => {
+        return { startValue: 2, endValue: 20 };
+    };
+
     argumentAxis.getAggregationInfo = function() {
         return {
             interval: 1,

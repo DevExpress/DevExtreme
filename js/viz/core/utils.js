@@ -402,6 +402,21 @@ extend(exports, {
     }
 });
 
+function getVizRangeObject(value) {
+    if(Array.isArray(value)) {
+        return { startValue: value[0], endValue: value[1] };
+    } else {
+        return value || {};
+    }
+}
+
+function convertVisualRangeObject(visualRange, convertToVisualRange) {
+    if(convertToVisualRange) {
+        return visualRange;
+    }
+    return [visualRange.startValue, visualRange.endValue];
+}
+
 function getAddFunction(range, correctZeroLevel) {
     // T170398
     if(range.dataType === "datetime") {
@@ -484,7 +499,8 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
-
+exports.getVizRangeObject = getVizRangeObject;
+exports.convertVisualRangeObject = convertVisualRangeObject;
 exports.adjustVisualRange = adjustVisualRange;
 exports.getAddFunction = getAddFunction;
 exports.getLog = getLog;

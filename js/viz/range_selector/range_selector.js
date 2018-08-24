@@ -21,6 +21,8 @@ var registerComponent = require("../../core/component_registrator"),
     seriesDataSourceModule = require("./series_data_source"),
     themeManagerModule = require("./theme_manager"),
     tickGeneratorModule = require("../axes/tick_generator"),
+    parseValue = vizUtils.getVizRangeObject,
+    convertVisualRangeObject = vizUtils.convertVisualRangeObject,
 
     _isDefined = typeUtils.isDefined,
     _isNumber = typeUtils.isNumeric,
@@ -58,21 +60,6 @@ function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickInterva
         textBBox = getTextBBox(renderer, formattedText, scaleOptions.label.font);
 
     return _ceil(textBBox.width / 2);
-}
-
-function parseValue(value) {
-    if(Array.isArray(value)) {
-        return { startValue: value[0], endValue: value[1] };
-    } else {
-        return value;
-    }
-}
-
-function parseSelectedRange(selectedRange, convertToVisualRange) {
-    if(convertToVisualRange) {
-        return selectedRange;
-    }
-    return [selectedRange.startValue, selectedRange.endValue];
 }
 
 function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, tickIntervalsInfo) {
@@ -606,7 +593,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
-            updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); },
+            updateSelectedRange: function(range) { that.setValue(convertVisualRangeObject(range)); },
             incidentOccurred: that._incidentOccurred
         });
 
@@ -622,12 +609,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             trackersGroup: trackersGroup,
             updateSelectedRange: function(range, lastSelectedRange) {
                 if(!that._rangeOption) {
-                    that.option(VALUE, parseSelectedRange(range, typeUtils.isPlainObject(that._options[VALUE])));
+                    that.option(VALUE, convertVisualRangeObject(range, typeUtils.isPlainObject(that._options[VALUE])));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
-                    value: parseSelectedRange(range),
-                    previousValue: parseSelectedRange(lastSelectedRange)
+                    value: convertVisualRangeObject(range),
+                    previousValue: convertVisualRangeObject(lastSelectedRange)
                 });
             },
             translator: that._axis.getTranslator()
@@ -961,7 +948,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     },
 
     getValue: function() {
-        return parseSelectedRange(this._slidersController.getSelectedRange());
+        return convertVisualRangeObject(this._slidersController.getSelectedRange());
     },
 
     setValue: function(value) {

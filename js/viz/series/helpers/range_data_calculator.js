@@ -1,5 +1,6 @@
 var unique = require("../../core/utils").unique,
     _isDefined = require("../../../core/utils/type").isDefined,
+    convertVizRangeObject = require("../../core/utils").convertVisualRangeObject,
     noop = require("../../../core/utils/common").noop,
     DISCRETE = "discrete";
 
@@ -96,7 +97,7 @@ function isLineSeries(series) {
 
 function getViewportReducer(series) {
     var rangeCalculator = getRangeCalculator(series.valueAxisType),
-        viewport = series.getArgumentAxis() && series.getArgumentAxis().visualRange() || [],
+        viewport = series.getArgumentAxis() && convertVizRangeObject(series.getArgumentAxis().visualRange() || {}, false),
         viewportFilter,
         calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
 
@@ -178,7 +179,7 @@ module.exports = {
             if(series.argumentAxisType === DISCRETE) {
                 range.arg = argumentRange;
             } else {
-                const viewport = series.getArgumentAxis().visualRange() || [];
+                const viewport = convertVizRangeObject(series.getArgumentAxis().visualRange() || {}, false);
                 const viewportLength = (viewport[1] - viewport[0]) || 0;
                 const dataRangeLength = argumentRange.max - argumentRange.min;
                 if(viewportLength && viewportLength < dataRangeLength) {
@@ -211,8 +212,8 @@ module.exports = {
     },
 
     getPointsInViewPort: function(series) {
-        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().visualRange() || []),
-            valueViewPort = series.getValueAxis().visualRange() || [],
+        var argumentViewPortFilter = getViewPortFilter(convertVizRangeObject(series.getArgumentAxis().visualRange() || {}, false)),
+            valueViewPort = convertVizRangeObject(series.getValueAxis().visualRange() || {}, false),
             valueViewPortFilter = getViewPortFilter(valueViewPort),
             points = series.getPoints(),
             addValue = function(values, point, isEdge) {

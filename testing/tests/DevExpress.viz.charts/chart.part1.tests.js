@@ -233,15 +233,14 @@ QUnit.test("Recreate series points on zooming if aggregation is enabled", functi
             series: [{ type: "line" }]
         }),
         series = chart.getAllSeries()[0],
-        argumentAxis = chart._argumentAxes[0];
+        argumentAxis = chart.getArgumentAxis();
 
     series.createPoints.reset();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
-    chart.zoomArgument(0, 1);
+    argumentAxis.applyVisualRangeSetter.lastCall.args[0](argumentAxis, { startValue: 0, endValue: 1 });
 
     assert.ok(series.createPoints.called);
-    assert.ok(series.createPoints.lastCall.calledAfter(argumentAxis.zoom.lastCall));
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce);
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.firstCall.calledAfter(series.createPoints.lastCall));
 });
@@ -259,8 +258,8 @@ QUnit.test("Recreate series points on scrolling if aggregation is enabled", func
 
     series.createPoints.reset();
 
-    chart.zoomArgument(0, 1);
-    chart.zoomArgument(1, 2);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 0, endValue: 1 });
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 1, endValue: 2 });
 
     assert.ok(series.createPoints.calledTwice);
 });
@@ -290,8 +289,8 @@ QUnit.test("Recreate series points on zooming if aggregation is enabled (discret
         };
     };
 
-    chart.zoomArgument("a", "b");
-    chart.zoomArgument("b", "d");
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: "a", endValue: "b" });
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: "b", endValue: "d" });
 
     assert.ok(series.createPoints.calledTwice);
 });
@@ -331,7 +330,7 @@ QUnit.test("Do not recreate series points on scrolling if aggregation is enabled
         min: 10,
         max: 100
     });
-    chart.zoomArgument(10, 100);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 10, endValue: 100 });
 
     assert.ok(series.createPoints.calledOnce);
 });
@@ -359,7 +358,7 @@ QUnit.test("Do not recreate series points on scrolling if aggregation is enabled
         min: 1,
         max: 2
     });
-    chart.zoomArgument(1, 2);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 1, endValue: 2 });
 
     assert.ok(series.createPoints.calledOnce);
 });
@@ -377,7 +376,7 @@ QUnit.test("Do not recreate series points on zooming if aggregation is not enabl
 
     series.createPoints.reset();
 
-    chart.zoomArgument(0, 1);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 0, endValue: 1 });
 
     assert.ok(!series.createPoints.called);
 });

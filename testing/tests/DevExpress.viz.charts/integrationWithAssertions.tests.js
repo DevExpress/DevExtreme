@@ -236,11 +236,9 @@ QUnit.test("Set visualRange via arguments", function(assert) {
         series: { type: "line" }
     });
 
-    assert.ok(chart);
-
     chart.getArgumentAxis().visualRange(2.5);
 
-    assert.deepEqual(chart._argumentAxes[0]._viewport, [2.5, null]);
+    assert.deepEqual(chart._argumentAxes[0].getViewport(), { startValue: 2.5, endValue: undefined });
 });
 
 QUnit.test("Set visualRange via array", function(assert) {
@@ -272,14 +270,12 @@ QUnit.test("Set visualRange via array", function(assert) {
         onOptionChanged: visualRangeChanged
     });
 
-    assert.ok(chart);
-
     visualRangeChanged.reset();
     chart.getArgumentAxis().visualRange([3, 6]);
 
-    assert.deepEqual(chart._argumentAxes[0]._viewport, [3, 6]);
-    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
-    assert.deepEqual(chart._valueAxes[0].visualRange(), [5.6, 7.1]);
+    assert.deepEqual(chart._argumentAxes[0].getViewport(), { startValue: 3, endValue: 6 });
+    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 5.6, endValue: 7.1 });
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { startValue: 3, endValue: 6 });
 });
 
 QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)", function(assert) {
@@ -317,8 +313,8 @@ QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)"
     visualRangeChanged.reset();
     chart.getValueAxis().visualRange([3, 6]);
 
-    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
-    assert.deepEqual(chart.option("valueAxis[0].visualRange"), [3, 6]);
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { startValue: 3, endValue: 6 });
+    assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 6 });
 });
 
 QUnit.test("Set visualRange for multi axis (exists single option collection for value axes)", function(assert) {
@@ -362,7 +358,7 @@ QUnit.test("Set visualRange for multi axis (exists single option collection for 
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.equal(visualRangeChanged.callCount, 2);
-    assert.deepEqual(chart.option("valueAxis.visualRange"), [4, 7]);
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 4, endValue: 7 });
 });
 
 QUnit.test("Set visualRange for multi axis/pane (exists option collection for each value axis)", function(assert) {
@@ -407,8 +403,47 @@ QUnit.test("Set visualRange for multi axis/pane (exists option collection for ea
     chart.getArgumentAxis().visualRange([1.5, 10]);
 
     assert.equal(visualRangeChanged.callCount, 3);
-    assert.deepEqual(chart.option("valueAxis[0].visualRange"), [-5, 15]);
-    assert.deepEqual(chart.option("valueAxis[1].visualRange"), [-10, 30]);
+    assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: -5, endValue: 15 });
+    assert.deepEqual(chart.option("valueAxis[1].visualRange"), { startValue: -10, endValue: 30 });
+});
+
+QUnit.test("Pass visualRange array if options is set using array", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var visualRangeChanged = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        adjustOnZoom: false,
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        argumentAxis: {
+            visualRange: [1, 10]
+        },
+        series: { type: "line" },
+        onOptionChanged: visualRangeChanged
+    });
+
+    visualRangeChanged.reset();
+    chart.getArgumentAxis().visualRange([3, 6]);
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
 });
 
 QUnit.test("Set visualRange for multi axis/pane (check option method and adjustOnZoom)", function(assert) {
@@ -447,14 +482,12 @@ QUnit.test("Set visualRange for multi axis/pane (check option method and adjustO
         valueAxis: [{ pane: "p1" }, { pane: "p2" }]
     });
 
-    assert.ok(chart);
-
     chart.getArgumentAxis().visualRange([1.5, 10]);
     chart.option("valueAxis[0].visualRange", [5, 10]);
     chart.getArgumentAxis().visualRange([4, 6]);
 
     assert.deepEqual(chart.option("valueAxis[0].visualRange"), [5, 10]);
-    assert.deepEqual(chart.option("valueAxis[1].visualRange"), [16, 26]);
+    assert.deepEqual(chart.option("valueAxis[1].visualRange"), { startValue: 16, endValue: 26 });
 });
 
 QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {
@@ -500,9 +533,9 @@ QUnit.test("Using the single section of axis options for some panes (check custo
     panes.push({ name: "p2" });
     chart.option("panes", panes);
 
-    assert.deepEqual(chart.option("valueAxis.visualRange"), [16, 26]);
-    assert.deepEqual(chart._valueAxes[0].visualRange(), [5.6, 7.2]);
-    assert.deepEqual(chart._valueAxes[1].visualRange(), [16, 26]);
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 16, endValue: 26 });
+    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 5.6, endValue: 7.2 });
+    assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 16, endValue: 26 });
 });
 
 QUnit.test("Set the visualRange option by the different ways", function(assert) {
@@ -596,12 +629,13 @@ QUnit.test("Set null visualRange", function(assert) {
         argumentAxis: { valueMarginsEnabled: false }
     });
 
-    assert.ok(chart);
-
     chart.getArgumentAxis().visualRange([null, null]);
 
-    assert.deepEqual(chart._argumentAxes[0].visualRange(), [new Date(2010, 0, 1), new Date(2014, 0, 1)], "visualRange is full (argument axis)");
-    assert.deepEqual(chart._valueAxes[0].visualRange(), [2.5, 8.5], "visualRange is full (value axis)");
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), {
+        startValue: new Date(2010, 0, 1),
+        endValue: new Date(2014, 0, 1)
+    }, "visualRange is full (argument axis)");
+    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 2.5, endValue: 8.5 }, "visualRange is full (value axis)");
 });
 
 QUnit.test("Move visual frame by visualRangeLength", function(assert) {
@@ -629,15 +663,21 @@ QUnit.test("Move visual frame by visualRangeLength", function(assert) {
             val: 15
         }],
         series: { type: "line" },
-        argumentAxis: { visualRangeLength: { years: 2 } },
+        argumentAxis: {
+            visualRange: {
+                length: { years: 2 }
+            }
+        },
         valueAxis: { valueMarginsEnabled: false }
     });
 
-    assert.ok(chart);
+    // act
+    chart.getArgumentAxis().visualRange({ startValue: new Date(2010, 3, 1), length: { years: 2 } });
 
-    chart.getArgumentAxis().visualRange([new Date(2010, 3, 1), null]);
-
-    assert.deepEqual(chart._argumentAxes[0].visualRange(), [new Date(2010, 3, 1), new Date(2012, 2, 31)]);
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), {
+        startValue: new Date(2010, 3, 1),
+        endValue: new Date(2012, 2, 31)
+    });
 });
 
 QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
@@ -668,7 +708,6 @@ QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
 
     // assert
     chart = this.$container.dxChart("instance");
-    assert.ok(chart);
     assert.equal(chart.series.length, 1, "Series number");
     assert.equal(chart._legend._data.length, 1, "Legend reinitialized");
 });

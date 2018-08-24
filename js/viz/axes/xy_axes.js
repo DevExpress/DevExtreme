@@ -12,7 +12,6 @@ const getNextDateUnit = dateUtils.getNextDateUnit;
 const correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning;
 const _math = Math;
 const _max = _math.max;
-const _isArray = Array.isArray;
 const TOP = constants.top;
 const BOTTOM = constants.bottom;
 const LEFT = constants.left;
@@ -941,8 +940,9 @@ module.exports = {
             max: true
         },
 
-        _setVisualRange(min, max) {
-            this._viewport = this.adjustRange([min, max]);
+        _setVisualRange(visualRange) {
+            const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
+            this._viewport = range;
         },
 
         applyVisualRangeSetter(visualRangeSetter) {
@@ -1200,28 +1200,6 @@ module.exports = {
                 shiftGroup("left", constantLinesGroups);
                 shiftGroup("right", constantLinesGroups);
             }
-        },
-
-        // API
-        visualRange(range) {
-            const that = this;
-            let newRange = _isArray(range) ? range : arguments;
-            const rangeLength = newRange.length;
-
-            if(arguments.length === 0) {
-                const adjustedRange = this._getAdjustedBusinessRange();
-                return [adjustedRange.minVisible, adjustedRange.maxVisible];
-            }
-
-            if(!rangeLength) {
-                newRange = [null, null];
-            } else if(rangeLength === 1) {
-                newRange = [newRange[0], null];
-            } else {
-                newRange = [newRange[0], newRange[1]];
-            }
-
-            that._visualRange(newRange);
         }
     }
 };
