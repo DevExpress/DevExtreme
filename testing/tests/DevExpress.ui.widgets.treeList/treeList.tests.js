@@ -870,3 +870,22 @@ QUnit.test("Scrollbar position must be kept after expanding node when the treeli
         }, 310);
     });
 });
+
+// T664886
+QUnit.test("Highlight searchText in expandable column", function(assert) {
+    var treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0, name: "Name 1", age: 16 },
+                { id: 2, parentId: 1, name: "Name 2", age: 17 },
+                { id: 3, parentId: 2, name: "Name", age: 18 }
+            ],
+            searchPanel: {
+                text: "3"
+            }
+        }),
+        searchTextSelector = ".dx-treelist-search-text";
+
+    this.clock.tick(30);
+
+    assert.equal(treeList.$element().find(searchTextSelector).length, 1);
+});
