@@ -1843,8 +1843,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getIntervalBetween: function(currentDate, allDay) {
+        var firstViewDate = this.getStartViewDate();
+
         var startDayTime = this.option("startDayHour") * HOUR_MS,
-            firstViewDate = this.getStartViewDate(),
             timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate),
             fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset,
             days = this._getDaysOfInterval(fullInterval, startDayTime),
@@ -1857,6 +1858,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         return result;
     },
+
 
     _getWeekendsCount: function() {
         return 0;
@@ -1892,9 +1894,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth();
     },
 
-    _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
+    _getCellPositionByIndex: function(index, groupIndex, inAllDayRow, intervalIndex) {
         var cellCoordinates = this._getCellCoordinatesByIndex(index),
-            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow),
+            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow, intervalIndex),
             result = this._getCellPosition($cell);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
@@ -1917,8 +1919,8 @@ var SchedulerWorkSpace = Widget.inherit({
         return position;
     },
 
-    _getCellByCoordinates: function(cellCoordinates, groupIndex, inAllDayRow) {
-        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
+    _getCellByCoordinates: function(cellCoordinates, groupIndex, inAllDayRow, intervalIndex) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow, intervalIndex);
 
         return this._$dateTable
             .find("tr")
@@ -2060,8 +2062,10 @@ var SchedulerWorkSpace = Widget.inherit({
     getCoordinatesByDate: function(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
 
+        var intervalIndex = this.getDateIntervalIndex(date);
+
         var index = this.getCellIndexByDate(date, inAllDayRow),
-            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow),
+            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow, intervalIndex),
             shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date));
 
         if(!position) {
@@ -2290,7 +2294,27 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getDateOfLastViewCell: function() {
-        return this._getDateByCellIndexes(this._getRowCount() - 1, this._getCellCount() - 1);
+        var rowIndex = this._getRowCount() - 1,
+            cellIndex = this._getCellCount() - 1;
+
+        if(this.option("groupByDate")) {
+            cellIndex = cellIndex * this._getGroupCount();
+        }
+        return this._getDateByCellIndexes(rowIndex, cellIndex);
+    },
+
+    getDateIntervalIndex: function(date) {
+        if(this.option("intervalCount") === 1) {
+            return 0;
+        }
+
+        var firstViewDate = this.getStartViewDate(),
+            diff = date.getTime() - firstViewDate.getTime(),
+            intervalDuration = this._getCellCount() / this.option("intervalCount");
+
+        var index = Math.floor(diff / (intervalDuration * toMs("day")));
+
+        return index;
     },
 
     getCellDuration: function() {

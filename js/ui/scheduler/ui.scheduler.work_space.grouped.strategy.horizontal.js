@@ -3,7 +3,7 @@ var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
 
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
-    prepareCellIndexes: function(cellCoordinates, groupIndex) {
+    prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDay, intervalIndex) {
         var groupByDay = this._workSpace.option("groupByDate");
 
         if(!groupByDay) {
@@ -14,7 +14,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         } else {
             return {
                 rowIndex: cellCoordinates.rowIndex,
-                cellIndex: cellCoordinates.cellIndex + groupIndex
+                cellIndex: cellCoordinates.cellIndex + groupIndex + intervalIndex
             };
         }
     },

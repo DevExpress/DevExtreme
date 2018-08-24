@@ -447,6 +447,21 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true", func
             assert.equal(result.left, 324, "Coordinates are OK");
         }
     });
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 22, 9, 0),
+            priorityId: 1
+        },
+        startDate: new Date(2018, 4, 22, 9, 0),
+        callback: function(result) {
+            result = result[0];
+            assert.equal(result.cellIndex, 1, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.equal(result.top, 0, "Coordinates are OK");
+            assert.equal(result.left, 548, "Coordinates are OK");
+        }
+    });
 });
 
 QUnit.test("'updateAppointmentStartDate' should work correct with custom data fields", function(assert) {
