@@ -62,9 +62,9 @@
         "dxFileUploader-uploaded": "Geüpload",
         "dxFileUploader-readyToUpload": "Klaar om te uploaden",
         "dxFileUploader-uploadFailedMessage": "Uploaden is mislukt",
-        "dxFileUploader-invalidFileExtension": "",
-        "dxFileUploader-invalidMaxFileSize": "",
-        "dxFileUploader-invalidMinFileSize": "",
+        "dxFileUploader-invalidFileExtension": "Dit bestandstype is niet toegestaan",
+        "dxFileUploader-invalidMaxFileSize": "Het bestand is te groot",
+        "dxFileUploader-invalidMinFileSize": "Het bestand is te klein",
 
         "dxRangeSlider-ariaFrom": "Van",
         "dxRangeSlider-ariaTill": "Tot",
@@ -269,6 +269,6 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Is niet leeg",
         "dxFilterBuilder-filterOperationBetween": "Is tussen",
         "dxFilterBuilder-filterOperationAnyOf": "Is een van",
-        "dxFilterBuilder-filterOperationNoneOf": "Is geen van"
+        "dxFilterBuilder-filterOperationNoneOf": "Is geen van"     
     }
 }
