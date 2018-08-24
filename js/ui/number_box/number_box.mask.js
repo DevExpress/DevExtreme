@@ -496,23 +496,38 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var caret = this._caret(),
-            isIeMinusKey = e.key === NUMPUD_MINUS_KEY_IE;
+        var caret = this._caret();
 
         if(caret.start !== caret.end) {
-            if((e.key === MINUS || isIeMinusKey)) {
-                this._parsedValue = this._tryParse(this._getInputVal(), caret, "");
+            if((e.key === MINUS || e.key === NUMPUD_MINUS_KEY_IE)) {
+                this._applyRevertedSign(e, caret, true);
+                return;
+            } else {
+                this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
             }
 
-            this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
         }
 
+        this._applyRevertedSign(e, caret);
+    },
+
+    _applyRevertedSign: function(e, caret, preserveSelectedText) {
         var newValue = -1 * ensureDefined(this._parsedValue, null);
 
         if(this._isValueInRange(newValue)) {
             this._parsedValue = newValue;
 
-            if(isIeMinusKey) { // Workaround for IE (T592690)
+            if(preserveSelectedText) {
+                this._setTextByParsedValue();
+                e.preventDefault();
+
+                caret = newValue.toString()[0] === "-" ?
+                    { start: ++caret.start, end: ++caret.end } :
+                    { start: --caret.start, end: --caret.end };
+                this._caret(maskCaret.getCaretInBoundaries(caret, this._getInputVal(), this._getFormatPattern()));
+            }
+
+            if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
             }
         }
