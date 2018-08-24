@@ -23,10 +23,11 @@ namespace StyleCompiler
                 {
                     var versionOption = c.Option("--version", "", CommandOptionType.SingleValue);
                     var outputPathOption = c.Option("--output-path", "", CommandOptionType.SingleValue);
+                    var unique = c.Option("--unique", "", CommandOptionType.SingleValue);
                     c.OnExecute(delegate
                     {
                         EnsureRequiredOptions(versionOption, outputPathOption);
-                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value());
+                        CreateThemes(sourcePath, versionOption.Value(), outputPathOption.Value(), unique.HasValue());
                         return 0;
                     });
                 });
@@ -118,17 +119,17 @@ namespace StyleCompiler
                 }
             }
         }
-
-        static void CreateThemes(string sourcePath, string version, string outputPath)
+        static void CreateThemes(string sourcePath, string version, string outputPath, bool uniqueThemes)
         {
             Directory.CreateDirectory(outputPath);
 
             var lessCache = new CompiledLessCache(sourcePath);
-            lessCache.Inflate(PersistentCache.Instance);
+            lessCache.Inflate(PersistentCache.Instance, uniqueThemes);
 
             foreach (var distributionName in LessRegistry.CssDistributions.Keys)
             {
-                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName);
+                var aggregate = LessAggregation.EnumerateAllItems(sourcePath, distributionName, uniqueThemes);
+
                 foreach (var item in aggregate)
                 {
 

@@ -26,7 +26,7 @@ function run_test {
     fi
 
     npm i
-    npm run build
+    npm run build-test
 
     # See https://github.com/DevExpress/DevExtreme/pull/1251
     chmod 755 $(find dotnet_packages -type d)

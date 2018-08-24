@@ -15,7 +15,7 @@ namespace StyleCompiler
         public void KnownCssFiles()
         {
             var paths = from distributionName in LessRegistry.CssDistributions.Keys
-                        from item in LessAggregation.EnumerateAllItems(Utils.GetStylesPath(), distributionName)
+                        from item in LessAggregation.EnumerateAllItems(Utils.GetStylesPath(), distributionName, true)
                         select item.CssFile.GetFileName();
 
             Response.ContentType = "text/javascript";

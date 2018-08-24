@@ -195,7 +195,7 @@ namespace StyleCompiler
             };
         }
 
-        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName)
+        public static IEnumerable<Item> EnumerateAllItems(string sourcePath, string distributionName, bool uniqueThemes)
         {
             var distribution = LessRegistry.CssDistributions[distributionName];
 
@@ -211,10 +211,23 @@ namespace StyleCompiler
                     foreach (var colorSchemeName in theme.ColorSchemeNames)
                     {
                         foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
-                            yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
+                        {
+                            if(!IsNecessaryTheme(distributionName, theme, colorSchemeName, sizeSchemeName, uniqueThemes)) continue;
+                                yield return CreateThemeItem(sourcePath, distributionName, theme, colorSchemeName, sizeSchemeName);
+                        }
                     }
                 }
             }
+        }
+
+        static bool IsNecessaryTheme(string distributionName, LessRegistry.KnownThemeInfo theme, string colorSchemeName, string sizeSchemeName, bool uniqueThemes)
+        {
+            if(!uniqueThemes) return true;
+
+            var uniqueCssFiles = new string[] { "dx.light.css", "dx.material.blue.light.css", "dx.ios7.default.css", "dx.android5.light.css" };
+            var cssFileName = new ThemeCssFileInfo(distributionName, theme, colorSchemeName, sizeSchemeName).GetFileName();
+
+            return uniqueCssFiles.Contains(cssFileName);
         }
 
         static IEnumerable<string> EnumerateSizeSchemes(string distributionName, string themeName)
