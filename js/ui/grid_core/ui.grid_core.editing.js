@@ -699,7 +699,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     .addClass(that.addWidgetPrefix(EDIT_POPUP_CLASS));
 
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
-                that._editPopup.on("hidden", that._getEditPopupHiddenHandler());
+                that._editPopup.on("hiding", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
                     eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 });
