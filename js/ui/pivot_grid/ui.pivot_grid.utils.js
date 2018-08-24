@@ -216,6 +216,8 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
     var result = [];
 
     iteratorUtils.each(fieldsList || [], function(field, value) {
+        if(field && field.indexOf("__") === 0) return;
+
         var dataIndex = 1,
             currentPath = path.length ? path + "." + field : field,
             dataType = fieldsDataType[currentPath],
