@@ -275,55 +275,47 @@ var FileUploader = Editor.inherit({
             */
             onUploadAborted: null,
 
+            /**
+            * @name dxFileUploaderOptions.allowedFileExtensions
+            * @type Array<string>
+            * @default []
+            */
+            allowedFileExtensions: [],
 
             /**
-            * @name dxFileUploaderOptions.validation
-            * @type Object
-            * @default undefined
+            * @name dxFileUploaderOptions.maxFileSize
+            * @type number
+            * @default 0
             */
-            validation: {
-                /**
-                * @name dxFileUploaderOptions.validation.allowedFileExtensions
-                * @type Array<string>
-                * @default []
-                */
-                allowedFileExtensions: [],
+            maxFileSize: 0,
 
-                /**
-                * @name dxFileUploaderOptions.validation.maxFileSize
-                * @type number
-                * @default 0
-                */
-                maxFileSize: 0,
+            /**
+            * @name dxFileUploaderOptions.minFileSize
+            * @type number
+            * @default 0
+            */
+            minFileSize: 0,
 
-                /**
-                * @name dxFileUploaderOptions.validation.minFileSize
-                * @type number
-                * @default 0
-                */
-                minFileSize: 0,
+            /**
+            * @name dxFileUploaderOptions.invalidFileExtensionMessage
+            * @type string
+            * @default "File type is not allowed"
+            */
+            invalidFileExtensionMessage: messageLocalization.format("dxFileUploader-invalidFileExtension"),
 
-                /**
-                * @name dxFileUploaderOptions.validation.invalidFileExtensionMessage
-                * @type string
-                * @default "File type is not allowed"
-                */
-                invalidFileExtensionMessage: messageLocalization.format("dxFileUploader-invalidFileExtension"),
+            /**
+            * @name dxFileUploaderOptions.invalidMaxFileSizeMessage
+            * @type string
+            * @default "File is too large"
+            */
+            invalidMaxFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMaxFileSize"),
 
-                /**
-                * @name dxFileUploaderOptions.validation.invalidMaxFileSizeMessage
-                * @type string
-                * @default "File is too large"
-                */
-                invalidMaxFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMaxFileSize"),
-
-                /**
-                * @name dxFileUploaderOptions.validation.invalidMinFileSizeMessage
-                * @type string
-                * @default "File is too small"
-                */
-                invalidMinFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMinFileSize")
-            },
+            /**
+            * @name dxFileUploaderOptions.invalidMinFileSizeMessage
+            * @type string
+            * @default "File is too small"
+            */
+            invalidMinFileSizeMessage: messageLocalization.format("dxFileUploader-invalidMinFileSize"),
 
 
             /**
@@ -585,13 +577,13 @@ var FileUploader = Editor.inherit({
         file.isValidMaxSize = this._validateMaxFileSize(file);
     },
     _validateFileExtension: function(file) {
-        var allowedExtensions = this.option("validation.allowedFileExtensions");
-        var fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.'));
+        var allowedExtensions = this.option("allowedFileExtensions");
+        var fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
         if(allowedExtensions.length === 0) {
             return true;
         }
         for(var i = 0; i < allowedExtensions.length; i++) {
-            if(fileExtension === allowedExtensions[i]) {
+            if(fileExtension === allowedExtensions[i].toLowerCase()) {
                 return true;
             }
         }
@@ -599,12 +591,12 @@ var FileUploader = Editor.inherit({
     },
     _validateMaxFileSize: function(file) {
         var fileSize = file.value.size;
-        var maxFileSize = this.option("validation.maxFileSize");
+        var maxFileSize = this.option("maxFileSize");
         return maxFileSize > 0 ? fileSize <= maxFileSize : true;
     },
     _validateMinFileSize: function(file) {
         var fileSize = file.value.size;
-        var minFileSize = this.option("validation.minFileSize");
+        var minFileSize = this.option("minFileSize");
         return minFileSize > 0 ? fileSize >= minFileSize : true;
     },
 
@@ -712,13 +704,13 @@ var FileUploader = Editor.inherit({
             file.$statusMessage.text(this.option("readyToUploadMessage"));
         } else {
             if(!file.isValidFileExtension) {
-                file.$statusMessage.append(this._createValidationElement("validation.invalidFileExtensionMessage"));
+                file.$statusMessage.append(this._createValidationElement("invalidFileExtensionMessage"));
             }
             if(!file.isValidMaxSize) {
-                file.$statusMessage.append(this._createValidationElement("validation.invalidMaxFileSizeMessage"));
+                file.$statusMessage.append(this._createValidationElement("invalidMaxFileSizeMessage"));
             }
             if(!file.isValidMinSize) {
-                file.$statusMessage.append(this._createValidationElement("validation.invalidMinFileSizeMessage"));
+                file.$statusMessage.append(this._createValidationElement("invalidMinFileSizeMessage"));
             }
             $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
         }
@@ -1412,7 +1404,12 @@ var FileUploader = Editor.inherit({
             case "_uploadButtonType":
                 this._uploadButton && this._uploadButton.option("type", value);
                 break;
-            case "validation":
+            case "maxFileSize":
+            case "minFileSize":
+            case "allowedFileExtensions":
+            case "invalidFileExtensionMessage":
+            case "invalidMaxFileSizeMessage":
+            case "invalidMinFileSizeMessage":
             case "readyToUploadMessage":
             case "uploadedMessage":
             case "uploadFailedMessage":

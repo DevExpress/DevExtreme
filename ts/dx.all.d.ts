@@ -2567,9 +2567,14 @@ declare module DevExpress.ui {
         uploadMode?: 'instantly' | 'useButtons' | 'useForm';
         /** Specifies a target Url for the upload request. */
         uploadUrl?: string;
-        validation?: { allowedFileExtensions?: Array<string>, maxFileSize?: number, minFileSize?: number, invalidFileExtensionMessage?: string, invalidMaxFileSizeMessage?: string, invalidMinFileSizeMessage?: string };
         /** Specifies a File instance representing the selected file. Read-only when uploadMode is "useForm". */
         value?: Array<File>;
+        allowedFileExtensions?: Array<string>;
+        maxFileSize?: number;
+        minFileSize?: number;
+        invalidFileExtensionMessage?: string;
+        invalidMaxFileSizeMessage?: string;
+        invalidMinFileSizeMessage?: string;
     }
     /** The FileUploader widget enables an end user to upload files to the server. An end user can select files in the file explorer or drag and drop files to the FileUploader area on the page. */
     export class dxFileUploader extends Editor {
