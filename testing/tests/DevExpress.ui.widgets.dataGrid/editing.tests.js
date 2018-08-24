@@ -10131,21 +10131,6 @@ QUnit.test("When showing dxDataGrid in detail, 'select all' function of master g
     assert.equal(testElement.find('.' + rowSelectionClass).length, 6, "7 rows - 1 row that edit, 2 detail row doesn't selected");
 });
 
-// T579296
-QUnit.test("cancel edit row after expand row", function(assert) {
-    var testElement = $('#container');
-
-    this.rowsView.render(testElement);
-
-    this.editingController.editRow(2);
-
-    assert.ok(this.editingController.isEditing(), "editable row is showed");
-
-    this.dataController.expandRow(1);
-
-    assert.notOk(this.editingController.isEditing(), "editable row is removed");
-});
-
 // T174302
 QUnit.test("Insert row without column with group closed", function(assert) {
     // arrange
@@ -10302,6 +10287,31 @@ QUnit.test("Editable data should not be reset in batch edit mode when collapsing
 
     // assert
     assert.strictEqual(that.cellValue(1, "lastName"), "test", "value of the lastName column of the first row");
+});
+
+QUnit.test("Editing controller should correct the editing row index after expand the row above (T660472, T579296)", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $('#container');
+
+    that.rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        }
+    });
+
+    // act
+    that.editRow(1);
+    that.expandRow(that.dataController.getKeyByRowIndex(0));
+    // assert
+    assert.equal(that.editingController.getEditRowIndex(), 2, "editing row index was increased");
+
+    // act
+    that.collapseRow(that.dataController.getKeyByRowIndex(0));
+    // assert
+    assert.equal(that.editingController.getEditRowIndex(), 2, "editing row index was not changed after collapse the above row");
 });
 
 var generateDataSource = function(countItem, countColumn) {
