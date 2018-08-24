@@ -1,6 +1,7 @@
 const sassCompiler = require("sass");
 
 const LESS_DIR_PATH = "data/less/";
+const SWATCH_SELECTOR_PREFIX = ".dx-additional-color-scheme-";
 
 const createModifyVars = modifyVars => {
     let result = "";
@@ -90,7 +91,7 @@ class LessTemplateLoader {
     constructor(config, version) {
         this.readFile = config.reader;
         this.lessCompiler = config.lessCompiler;
-        this.swatchSelector = config.swatchSelector;
+        this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : "";
         this.version = version;
     }
 

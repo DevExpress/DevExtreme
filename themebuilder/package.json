@@ -19,8 +19,7 @@
     "sass": "^1.10.3"
   },
   "bin": {
-    "build-theme": "cli/build-theme.js",
-    "build-base-theming": "cli/build-base-theming.js"
+    "devextreme-themebuilder": "cli/index.js"
   },
   "scripts": {
     "test": "mocha -R spec tests/*-spec.js"

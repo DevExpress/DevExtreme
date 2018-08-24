@@ -132,7 +132,8 @@ describe("LessTemplateLoader", () => {
         let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
-            swatchSelector: ".swatch-class",
+            outColorScheme: "my-custom",
+            makeSwatch: true,
             reader: () => {
                 // data/less/theme-builder-generic-light.less
                 return new Promise(resolve => {
@@ -150,7 +151,7 @@ describe("LessTemplateLoader", () => {
             colorScheme,
             metadata).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.css, ".swatch-class div {\n  color: green;\n}\n\n");
+                assert.equal(data.css, ".dx-additional-color-scheme-my-custom div {\n  color: green;\n}\n\n");
                 delete metadata["base.common"][0].Value;
                 delete metadata["base.common"][0].isModified;
             });
@@ -160,7 +161,8 @@ describe("LessTemplateLoader", () => {
         let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
-            swatchSelector: ".swatch-class",
+            outColorScheme: "my-custom",
+            makeSwatch: true,
             reader: () => {
                 // data/less/theme-builder-generic-light.less
                 return new Promise(resolve => {
@@ -182,13 +184,13 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.swatch-class div {
+                assert.equal(data.css, `.dx-additional-color-scheme-my-custom div {
   color: #fff;
 }
-.swatch-class {
+.dx-additional-color-scheme-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .swatch-class .dx-theme-accent-as-text-color {
+.dx-viewport.dx-theme-generic .dx-additional-color-scheme-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 
@@ -200,7 +202,8 @@ describe("LessTemplateLoader", () => {
         let config = {
             isBootstrap: false,
             lessCompiler: require("less/lib/less-node"),
-            swatchSelector: ".swatch-class"
+            outColorScheme: "my-custom",
+            makeSwatch: true,
         };
 
         let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
@@ -226,13 +229,13 @@ describe("LessTemplateLoader", () => {
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
-            assert.equal(data.css, `.swatch-class div {
+            assert.equal(data.css, `.dx-additional-color-scheme-my-custom div {
   color: #fff;
 }
-.swatch-class {
+.dx-additional-color-scheme-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .swatch-class .dx-theme-accent-as-text-color {
+.dx-viewport.dx-theme-generic .dx-additional-color-scheme-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 
