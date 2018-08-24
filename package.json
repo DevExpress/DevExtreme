@@ -71,6 +71,7 @@
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
     "less": "^2.7.1",
+    "less-plugin-autoprefix": "^2.0.0",
     "lint-staged": "^3.4.0",
     "merge-stream": "^1.0.0",
     "mustache": "2.3.0",
@@ -104,5 +105,11 @@
     "dev": "gulp dev",
     "test-env": "node testing/launch"
   },
+  "browserslist": [
+    "last 2 versions",
+    "ios > 7",
+    "ie > 10",
+    "> 1%"
+  ],
   "pre-commit": "lint-staged"
 }

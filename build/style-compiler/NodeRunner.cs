@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace StyleCompiler
 {
@@ -11,7 +12,13 @@ namespace StyleCompiler
 
         public static string CompileLess(string less)
         {
-            return RunExternalApp(ResolveNodeToolPath("node"), "node_modules/less/bin/lessc -", Utils.GetRepoRootPath(), less);
+            return RunExternalApp(ResolveNodeToolPath("node"), $"node_modules/less/bin/lessc --autoprefix=\"{ReadBrowsersList()}\" -", Utils.GetRepoRootPath(), less);
+        }
+
+        static string ReadBrowsersList()
+        {
+            dynamic manifest = JsonConvert.DeserializeObject(File.ReadAllText(Path.Combine(Utils.GetRepoRootPath(), "package.json")));
+            return string.Join(",", manifest["browserslist"]);
         }
 
         static string RunExternalApp(string path, string arguments, string workingDirectory, string stdIn)
