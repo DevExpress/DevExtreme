@@ -518,13 +518,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
             this._parsedValue = newValue;
 
             if(preserveSelectedText) {
+                var format = this._getFormatPattern(),
+                    previousText = this._getInputVal();
+
                 this._setTextByParsedValue();
                 e.preventDefault();
 
-                caret = newValue.toString()[0] === "-" ?
-                    { start: ++caret.start, end: ++caret.end } :
-                    { start: --caret.start, end: --caret.end };
-                this._caret(maskCaret.getCaretInBoundaries(caret, this._getInputVal(), this._getFormatPattern()));
+                var currentText = this._getInputVal(),
+                    offset = maskCaret.getCaretOffset(previousText, currentText, format);
+
+                caret = maskCaret.getCaretWithOffset(caret, offset);
+                this._caret(maskCaret.getCaretInBoundaries(caret, currentText, format));
             }
 
             if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
