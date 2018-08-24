@@ -244,6 +244,12 @@ var EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        correctEditRowIndexAfterExpand: function(key) {
+            if(this._editRowIndex > this._dataController.getRowIndexByKey(key)) {
+                this._editRowIndex++;
+            }
+        },
+
         isRowEditMode: function() {
             return isRowEditMode(this);
         },
@@ -2029,15 +2035,6 @@ module.exports = {
                 },
                 repaintRows: function() {
                     if(this.getController("editing").isSaving()) return;
-                    return this.callBase.apply(this, arguments);
-                },
-                changeRowExpand: function(key) {
-                    var editingController = this.getController("editing");
-
-                    if(editingController.isEditing() && editingController.isRowEditMode()) {
-                        editingController.cancelEditData();
-                    }
-
                     return this.callBase.apply(this, arguments);
                 },
                 _updateItemsCore: function(change) {
