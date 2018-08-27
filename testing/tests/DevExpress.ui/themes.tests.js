@@ -505,10 +505,12 @@ require("style-compiler-test-server/known-css-files");
     });
 
     QUnit.test("Themes functions return right value if theme file loaded after ready event (T666366)", function(assert) {
-        var themeMarkerStyles = $("<style>.dx-theme-marker { font-family: 'dx.generic.light' }</style>").appendTo($("body"));
+        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='material.blue.light' />");
+        themes.init({ context: this.frameDoc(), theme: "material.blue.light" });
+        themes.resetTheme();
 
+        this.writeToFrame("<style>.dx-theme-marker { font-family: 'dx.generic.light' }</style>");
         assert.equal(themes.isGeneric(), true, "isGeneric returns 'true' if css has been added after themes initialization");
-        themeMarkerStyles.remove();
     });
 })();
 
