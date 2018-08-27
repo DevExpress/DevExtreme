@@ -18,9 +18,6 @@
     "minimist": "^1.2.0",
     "sass": "^1.10.3"
   },
-  "bin": {
-    "devextreme-themebuilder": "cli/index.js"
-  },
   "scripts": {
     "test": "mocha -R spec tests/*-spec.js"
   },
