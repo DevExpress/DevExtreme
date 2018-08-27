@@ -167,17 +167,6 @@
         }
     }
 
-    :not(.dx-rtl) > .dx-gridbase-container {
-        .dx-column-lines > td {
-            &:first-child {
-                border-left: none;
-            }
-            &:last-child {
-                border-right: none;
-            }
-        }
-    }
-
     .dx-@{widgetName}-column-chooser {
         .dx-overlay-content {
             .dx-popup-title {
@@ -971,16 +960,6 @@
     }
 
     .dx-rtl {
-        .dx-@{widgetName} .dx-column-lines > td {
-            &:first-child {
-                border-right: none;
-            }
-
-            &:last-child {
-                border-left: none;
-            }
-        }
-
         .dx-@{widgetName}-content .dx-@{widgetName}-table {
             direction: rtl;
 

@@ -117,6 +117,15 @@
             .dx-datagrid-error-message();
         }
     }
+
+    .dx-column-lines > td {
+        &:first-child {
+            border-left: none;
+        }
+        &:last-child {
+            border-right: none;
+        }
+    }
 }
 
 .dx-datagrid-filter-panel {
@@ -179,6 +188,18 @@
                 &[style*="text-align: left"]:before {
                     .scale(1);
                 }
+            }
+        }
+
+        .dx-column-lines > td {
+            &:first-child {
+                border-right: none;
+                border-left: @datagrid-border;
+            }
+
+            &:last-child {
+                border-left: none;
+                border-right: @datagrid-border;
             }
         }
     }
