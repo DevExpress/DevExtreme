@@ -437,7 +437,8 @@ QUnit.testStart(function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
-                intervalCount: 2
+                intervalCount: 2,
+                showCurrentTimeIndicator: false
             }).dxSchedulerWorkSpaceDay("instance");
 
             stubInvokeMethod(this.instance);
@@ -449,7 +450,15 @@ QUnit.testStart(function() {
         }
     });
 
-    QUnit.test("Group header should be rendered correct", function(assert) {
+    QUnit.test("Get date range", function(assert) {
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 0, 0), new Date(2018, 2, 2, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 3);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 0, 0), new Date(2018, 2, 3, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("Group header should be rendered correct, groupByDate = true", function(assert) {
         var $groupRow = this.instance.$element().find(".dx-scheduler-group-row"),
             $groupHeaderCells = $groupRow.find(".dx-scheduler-group-header");
 
@@ -461,7 +470,7 @@ QUnit.testStart(function() {
         assert.roughEqual($groupHeaderContents.eq(3).outerHeight(), 19, 5, "Group header content height is OK");
     });
 
-    QUnit.test("Date table cells shoud have right cellData", function(assert) {
+    QUnit.test("Date table cells shoud have right cellData, groupByDate = true", function(assert) {
         var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
 
         assert.deepEqual($cells.eq(0).data("dxCellData"), {
@@ -501,7 +510,7 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("Date table cells should have right cellData", function(assert) {
+    QUnit.test("Date table cells should have right cellData, groupByDate = true", function(assert) {
         var $groupRow = this.instance.$element().find(".dx-scheduler-group-row"),
             $groupHeaderCells = $groupRow.find(".dx-scheduler-group-header");
 
@@ -510,7 +519,39 @@ QUnit.testStart(function() {
         assert.equal($groupHeaderCells.eq(2).text(), "a", "Group header content height is OK");
         assert.equal($groupHeaderCells.eq(3).text(), "b", "Group header content height is OK");
     });
-})("Work Space Month with horizontal grouping");
+
+    QUnit.test("Work space should find cell coordinates by date, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+
+        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(17).position().top, "Top cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(17).position().left, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 1, false);
+
+        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(19).position().top, "Top cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(19).position().left, "Left cell coordinates are right");
+    });
+
+    QUnit.test("Work space should find cell coordinates by date in allDay row, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, true);
+
+        assert.equal(coords.top, 0, "Top cell coordinates are right");
+        assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(17).position().left, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
+
+        assert.equal(coords.top, 0, "Top cell coordinates are right");
+        assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(18).position().left, "Left cell coordinates are right");
+    });
+})("Work Space Day with grouping by date");
 
 (function() {
 

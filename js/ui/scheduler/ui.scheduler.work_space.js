@@ -1804,8 +1804,8 @@ var SchedulerWorkSpace = Widget.inherit({
         };
     },
 
-    _getDateByCellIndexes: function(rowIndex, cellIndex) {
-        cellIndex = this._patchCellIndex(cellIndex);
+    _getDateByCellIndexes: function(rowIndex, cellIndex, patchedIndexes) {
+        cellIndex = !patchedIndexes ? this._patchCellIndex(cellIndex) : cellIndex;
 
         var firstViewDate = this.getStartViewDate(),
             currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount(cellIndex));
@@ -2296,12 +2296,15 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getDateOfLastViewCell: function() {
         var rowIndex = this._getRowCount() - 1,
-            cellIndex = this._getCellCount() - 1;
+            cellIndex = this._getCellCount();
 
         if(this.option("groupByDate")) {
-            cellIndex = cellIndex * this._getGroupCount();
+            cellIndex = cellIndex * this._getGroupCount() - 1;
+        } else {
+            cellIndex = cellIndex - 1;
         }
-        return this._getDateByCellIndexes(rowIndex, cellIndex);
+
+        return this._getDateByCellIndexes(rowIndex, cellIndex, true);
     },
 
     getDateIntervalIndex: function(date) {
