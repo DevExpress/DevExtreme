@@ -230,6 +230,8 @@ QUnit.test("pressing minus button should revert selected number", function(asser
     });
 
     this.keyboard.caret({ start: 0, end: 5 }).keyDown(MINUS_KEY);
+    this.clock.tick();
+
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 6 }, "caret is good");
 });
@@ -241,6 +243,7 @@ QUnit.test("pressing '-' should keep selection", function(assert) {
     });
 
     this.keyboard.caret({ start: 0, end: 5 }).keyDown(NUMPAD_MINUS_KEYCODE);
+    this.clock.tick();
     assert.equal(this.input.val(), "-123.5", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 6 }, "caret is good");
 
@@ -251,6 +254,7 @@ QUnit.test("pressing '-' should keep selection", function(assert) {
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is good");
 
     this.keyboard.caret({ start: 0, end: 2 }).keyDown(MINUS_KEY);
+    this.clock.tick();
     assert.equal(this.input.val(), "5", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 1 }, "caret is good");
 
@@ -268,6 +272,7 @@ QUnit.test("pressing '-' correctly remove the selected part of previous value", 
     });
 
     this.keyboard.caret({ start: 1, end: 3 }).keyDown(NUMPAD_MINUS_KEYCODE);
+    this.clock.tick();
     assert.equal(this.input.val(), "-123.4", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 4 }, "caret is good");
 
@@ -282,6 +287,8 @@ QUnit.test("NumberBox keeps correct selection after revert the sign", function(a
     });
 
     this.keyboard.caret({ start: 1, end: 2 }).keyDown(NUMPAD_MINUS_KEYCODE);
+    this.clock.tick();
+
     assert.equal(this.input.val(), "<<123.4>>", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
 });
