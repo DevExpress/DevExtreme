@@ -14,7 +14,7 @@ builder.buildTheme(config).then(result => {
     if(config.command === commands.BUILD_THEME) {
         content = result.css;
         if(result.swatchSelector) {
-            console.log(`Use '${result.swatchSelector}' selector for swatch.`);
+            console.log(`Add the '${result.swatchSelector}' class to a container to apply the swatch styles to the container's inner elements.`);
         }
     } else if(config.command === commands.BUILD_VARS) {
         let metadata = result.compiledMetadata;
