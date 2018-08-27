@@ -476,6 +476,8 @@ var Lookup = DropDownList.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function() {
@@ -571,7 +573,7 @@ var Lookup = DropDownList.inherit({
             },
             {
                 device: function() {
-                    return themes.isAndroid5();
+                    return themes.isAndroid5(themeName);
                 },
                 options: {
                     useInkRipple: true
@@ -579,7 +581,7 @@ var Lookup = DropDownList.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return themes.isMaterial(themeName);
                 },
                 options: {
 

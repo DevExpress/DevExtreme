@@ -79,6 +79,8 @@ var LoadIndicator = Widget.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function() {
@@ -92,7 +94,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isWin8() || themes.isWin10();
+                    return themes.isWin8(themeName) || themes.isWin10(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 5
@@ -100,7 +102,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isIos7();
+                    return themes.isIos7(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 11
@@ -108,7 +110,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial() || themes.isAndroid5();
+                    return themes.isMaterial(themeName) || themes.isAndroid5(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 2,
@@ -117,7 +119,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isGeneric();
+                    return themes.isGeneric(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 7

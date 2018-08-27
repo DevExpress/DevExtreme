@@ -151,10 +151,12 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isIos7();
+                    return themes.isIos7(themeName);
                 },
                 options: {
                     submenuType: "actionSheet"
@@ -162,7 +164,7 @@ var Toolbar = ToolbarBase.inherit({
             },
             {
                 device: function() {
-                    return themes.isAndroid5();
+                    return themes.isAndroid5(themeName);
                 },
                 options: {
                     submenuType: "dropDownMenu"
@@ -170,7 +172,7 @@ var Toolbar = ToolbarBase.inherit({
             },
             {
                 device: function() {
-                    return themes.isWin8();
+                    return themes.isWin8(themeName);
                 },
                 options: {
                     submenuType: "listBottom"
@@ -178,7 +180,7 @@ var Toolbar = ToolbarBase.inherit({
             },
             {
                 device: function() {
-                    return themes.isWin10();
+                    return themes.isWin10(themeName);
                 },
                 options: {
                     submenuType: "listTop"
