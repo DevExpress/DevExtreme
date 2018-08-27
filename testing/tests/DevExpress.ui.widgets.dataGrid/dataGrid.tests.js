@@ -7442,6 +7442,54 @@ QUnit.test("onRowInserted should be called if dataSource is reassigned in loadin
     assert.deepEqual(rowInsertedArgs[0].data, { id: 3 }, "rowInserted data arg");
 });
 
+QUnit.test("The row should be added after the 'addRow' method was called in the 'onRowInserted' event (T650889)", function(assert) {
+    // arrange
+    var $inputElement,
+        needAddRow = true,
+        visibleRows,
+        dataGrid = createDataGrid({
+            editing: {
+                mode: "popup",
+                allowAdding: true,
+                allowUpdating: true
+            },
+            keyExpr: "name",
+            dataSource: [{ name: 'Alex' }],
+            onRowInserted: function(e) {
+                if(needAddRow) {
+                    needAddRow = !needAddRow;
+                    e.component.addRow();
+                }
+            }
+        });
+
+    this.clock.tick();
+
+    fx.off = false;
+
+    // act
+    dataGrid.addRow();
+    $inputElement = $(".dx-popup-content").find("input").first();
+    $inputElement.val("name1").trigger("change");
+    dataGrid.saveEditData();
+
+    this.clock.tick();
+
+    $inputElement = $(".dx-popup-content").find("input").first();
+    $inputElement.val("name2").trigger("change");
+    dataGrid.saveEditData();
+
+    this.clock.tick();
+
+    // assert
+    visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 3, "rows count");
+    assert.equal(visibleRows[1].data.name, "name1", "added cell value");
+    assert.equal(visibleRows[2].data.name, "name2", "added cell value");
+
+    fx.off = true;
+});
+
 QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers();
@@ -7479,6 +7527,8 @@ QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) 
     // assert
     assert.equal($(".dx-loadpanel").length, 2, "We have two loadpanels");
     assert.equal($(".dx-loadpanel.dx-state-invisible").length, 2, "two load panels are invisible");
+
+    clock.restore();
 });
 
 QUnit.test("add column", function(assert) {
