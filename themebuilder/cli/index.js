@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+/* eslint no-console: 0 */
+
 const config = require("./config.js")(process.argv);
 const commands = require("./commands");
 const builder = require("../modules/builder.js");
@@ -11,6 +13,9 @@ builder.buildTheme(config).then(result => {
 
     if(config.command === commands.BUILD_THEME) {
         content = result.css;
+        if(result.swatchSelector) {
+            console.log(`Use '${result.swatchSelector}' selector for swatch.`);
+        }
     } else if(config.command === commands.BUILD_VARS) {
         let metadata = result.compiledMetadata;
 

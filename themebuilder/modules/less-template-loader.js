@@ -135,7 +135,8 @@ class LessTemplateLoader {
             }).then(output => {
                 resolve({
                     compiledMetadata: compiledMetadata,
-                    css: this._makeInfoHeader() + output.css
+                    css: this._makeInfoHeader() + output.css,
+                    swatchSelector: this.swatchSelector
                 });
             }, error => {
                 reject(error);
