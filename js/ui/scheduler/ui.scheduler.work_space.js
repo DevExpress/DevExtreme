@@ -2066,7 +2066,8 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var index = this.getCellIndexByDate(date, inAllDayRow),
             position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow, intervalIndex),
-            shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date));
+            shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date)),
+            horizontalHMax = this.option("groupByDate") ? this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex) : this._groupedStrategy.getHorizontalMax(groupIndex);
 
         if(!position) {
             throw errors.Error("E1039");
@@ -2078,7 +2079,7 @@ var SchedulerWorkSpace = Widget.inherit({
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
-            hMax: this._groupedStrategy.getHorizontalMax(groupIndex),
+            hMax: horizontalHMax,
             vMax: this._groupedStrategy.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
