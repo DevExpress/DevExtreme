@@ -45,7 +45,7 @@ const getOutParameters = (command, themeName, config) => {
     }
 
     if(!outputFile) {
-        outputFile = themeName + "." + outColorScheme + "." + fileFormat;
+        outputFile = "dx." + themeName + "." + outColorScheme + "." + fileFormat;
     }
 
     return {

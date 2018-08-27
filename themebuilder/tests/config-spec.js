@@ -48,7 +48,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.css",
+            "out": "dx.generic.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -68,7 +68,7 @@ describe("config", () => {
             "fileFormat": "less",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.less",
+            "out": "dx.generic.custom-scheme.less",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -90,7 +90,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": true,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.css",
+            "out": "dx.generic.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -109,7 +109,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": true,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.css",
+            "out": "dx.generic.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -131,7 +131,7 @@ describe("config", () => {
             "fileFormat": "less",
             "isBootstrap": true,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.less",
+            "out": "dx.generic.custom-scheme.less",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -150,7 +150,7 @@ describe("config", () => {
             "fileFormat": "less",
             "isBootstrap": true,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.less",
+            "out": "dx.generic.custom-scheme.less",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -209,7 +209,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "generic.green.css",
+            "out": "dx.generic.green.css",
             "outColorScheme": "green",
             "themeName": "generic"
         });
@@ -229,7 +229,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": false,
             "makeSwatch": true,
-            "out": "generic.green.css",
+            "out": "dx.generic.green.css",
             "outColorScheme": "green",
             "themeName": "generic"
         });
@@ -249,7 +249,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "generic.custom-scheme.css",
+            "out": "dx.generic.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "themeName": "generic"
         });
@@ -269,7 +269,7 @@ describe("config", () => {
             "fileFormat": "less",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "generic.green.less",
+            "out": "dx.generic.green.less",
             "outColorScheme": "green",
             "themeName": "generic"
         });
@@ -349,7 +349,7 @@ describe("config", () => {
             "fileFormat": "scss",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "generic.green.scss",
+            "out": "dx.generic.green.scss",
             "outColorScheme": "green",
             "themeName": "generic"
         });
@@ -369,7 +369,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "material.custom-scheme.css",
+            "out": "dx.material.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "themeName": "material"
         });
@@ -389,7 +389,7 @@ describe("config", () => {
             "fileFormat": "css",
             "isBootstrap": false,
             "makeSwatch": false,
-            "out": "material.custom-scheme.css",
+            "out": "dx.material.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "themeName": "material"
         });
