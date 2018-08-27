@@ -38,6 +38,7 @@ var $ = require("../../core/renderer"),
     SchedulerLayoutManager = require("./ui.scheduler.appointments.layout_manager"),
     DropDownAppointments = require("./ui.scheduler.appointments.drop_down"),
     SchedulerTimezones = require("./ui.scheduler.timezones"),
+    AsyncTemplateMixin = require("../shared/async_template_mixin"),
     DataHelperMixin = require("../../data_helper"),
     loading = require("./ui.loading"),
     AppointmentForm = require("./ui.scheduler.appointment_form"),
@@ -1688,7 +1689,7 @@ var Scheduler = Widget.inherit({
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
-        clearTimeout(this._repaintTimer);
+        this._cleanAsyncTemplatesTimer();
 
         this._dataSource && this._dataSource.off("customizeStoreLoadOptions", this._proxiedCustomizeStoreLoadOptionsHandler);
         this.callBase();
@@ -1740,16 +1741,13 @@ var Scheduler = Widget.inherit({
             this._workSpace && this._cleanWorkspace();
 
             this._renderWorkSpace(resources);
-
-            var $fixedContainer = this._workSpace.getFixedContainer(),
-                $allDayContainer = this._workSpace.getAllDayContainer();
-
             this._appointments.option({
-                fixedContainer: $fixedContainer,
-                allDayContainer: $allDayContainer
+                fixedContainer: this._workSpace.getFixedContainer(),
+                allDayContainer: this._workSpace.getAllDayContainer()
             });
-
-            this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
+            this._waitAsyncTemplates(() => {
+                this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
+            });
             this._filterAppointmentsByDate();
             this._reloadDataSource();
         }).bind(this));
@@ -1890,9 +1888,10 @@ var Scheduler = Widget.inherit({
 
     _recalculateWorkspace: function() {
         this._workSpaceRecalculation = new Deferred();
-
-        domUtils.triggerResizeEvent(this._workSpace.$element());
-        this._workSpace._refreshDateTimeIndication();
+        this._waitAsyncTemplates(() => {
+            domUtils.triggerResizeEvent(this._workSpace.$element());
+            this._workSpace._refreshDateTimeIndication();
+        });
     },
 
     _workSpaceConfig: function(groups, countConfig) {
@@ -1985,10 +1984,12 @@ var Scheduler = Widget.inherit({
         this._renderWorkSpace(groups);
 
         if(this._readyToRenderAppointments) {
-            this._workSpaceRecalculation.resolve();
             this._appointments.option({
                 fixedContainer: this._workSpace.getFixedContainer(),
                 allDayContainer: this._workSpace.getAllDayContainer()
+            });
+            this._waitAsyncTemplates(() => {
+                this._workSpaceRecalculation.resolve();
             });
         }
     },
@@ -2981,7 +2982,7 @@ var Scheduler = Widget.inherit({
         * @inheritdoc
         */
 
-}).include(DataHelperMixin);
+}).include(AsyncTemplateMixin, DataHelperMixin);
 
 registerComponent("dxScheduler", Scheduler);
 
