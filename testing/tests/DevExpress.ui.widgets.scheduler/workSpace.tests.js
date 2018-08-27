@@ -471,6 +471,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Date table cells shoud have right cellData, groupByDate = true", function(assert) {
+        this.instance.option("intervalCount", 3);
         var $cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
 
         assert.deepEqual($cells.eq(0).data("dxCellData"), {
@@ -503,6 +504,24 @@ QUnit.testStart(function() {
         assert.deepEqual($cells.eq(3).data("dxCellData"), {
             startDate: new Date(2018, 2, 2),
             endDate: new Date(2018, 2, 2, 0, 30),
+            allDay: false,
+            groups: {
+                one: 2
+            }
+        });
+
+        assert.deepEqual($cells.eq(4).data("dxCellData"), {
+            startDate: new Date(2018, 2, 3),
+            endDate: new Date(2018, 2, 3, 0, 30),
+            allDay: false,
+            groups: {
+                one: 1
+            }
+        });
+
+        assert.deepEqual($cells.eq(5).data("dxCellData"), {
+            startDate: new Date(2018, 2, 3),
+            endDate: new Date(2018, 2, 3, 0, 30),
             allDay: false,
             groups: {
                 one: 2

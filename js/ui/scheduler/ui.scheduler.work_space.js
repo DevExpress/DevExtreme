@@ -1518,7 +1518,6 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _prepareCellData: function(rowIndex, cellIndex) {
-
         var startDate = this._getDateByCellIndexes(rowIndex, cellIndex),
             endDate = this.calculateEndDate(startDate),
             data = {
@@ -1816,7 +1815,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _patchCellIndex: function(cellIndex) {
         if(this.option("groupByDate")) {
-            cellIndex = Math.floor(cellIndex / this._getCellCount());
+            cellIndex = Math.floor(cellIndex / this._getGroupCount());
         }
 
         return cellIndex;
