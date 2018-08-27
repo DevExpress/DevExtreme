@@ -1,6 +1,7 @@
 const sassCompiler = require("sass");
 
 const LESS_DIR_PATH = "data/less/";
+const SWATCH_SELECTOR_PREFIX = ".dx-additional-color-scheme-";
 
 const createModifyVars = modifyVars => {
     let result = "";
@@ -90,7 +91,7 @@ class LessTemplateLoader {
     constructor(config, version) {
         this.readFile = config.reader;
         this.lessCompiler = config.lessCompiler;
-        this.swatchSelector = config.swatchSelector;
+        this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : "";
         this.version = version;
     }
 
@@ -134,7 +135,8 @@ class LessTemplateLoader {
             }).then(output => {
                 resolve({
                     compiledMetadata: compiledMetadata,
-                    css: this._makeInfoHeader() + output.css
+                    css: this._makeInfoHeader() + output.css,
+                    swatchSelector: this.swatchSelector
                 });
             }, error => {
                 reject(error);
@@ -217,7 +219,7 @@ class LessTemplateLoader {
                 let defaultBootstrapVariablesUrl = "node_modules/bootstrap/scss/_variables.scss",
                     defaultBootstrapFunctionsUrl = "node_modules/bootstrap/scss/_functions.scss";
 
-                Promise.all([this.readFile(defaultBootstrapFunctionsUrl), this.readFile(defaultBootstrapVariablesUrl)])
+                Promise.all([this.readFile(defaultBootstrapFunctionsUrl, true), this.readFile(defaultBootstrapVariablesUrl, true)])
                     .then(files => {
                         this.compileScss(files[0] + customLessContent + files[1] + metadataVariables, bootstrapMetadata).then(processDxTheme);
                     }, () => {
@@ -233,7 +235,7 @@ class LessTemplateLoader {
     };
 
     _loadLessByFileName(fileName) {
-        return this.readFile(fileName);
+        return this.readFile(fileName, true);
     };
 
     _makeInfoHeader() {
