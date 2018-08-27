@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = {
     _renderAsyncTemplate(template, args) {
         const result = template && template.render(args);
