@@ -528,7 +528,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
                     offset = maskCaret.getCaretOffset(previousText, currentText, format);
 
                 caret = maskCaret.getCaretWithOffset(caret, offset);
-                this._caret(maskCaret.getCaretInBoundaries(caret, currentText, format));
+
+                var caretInBoundaries = maskCaret.getCaretInBoundaries(caret, currentText, format);
+
+                if(browser.msie) {
+                    clearTimeout(this._ieCaretTimeout);
+                    this._ieCaretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
+                } else {
+                    this._caret(caretInBoundaries);
+                }
             }
 
             if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
