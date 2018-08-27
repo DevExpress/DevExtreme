@@ -464,7 +464,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
-    _getPrecisionLimits: function(format, text) {
+    _getPrecisionLimits: function(text) {
         var currentFormat = this._getFormatForSign(text),
             floatPart = (currentFormat.split(".")[1] || "").replace(/[^#0]/g, ""),
             minPrecision = floatPart.replace(/^(0*)#*/, '$1').length,
@@ -479,14 +479,47 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var caret = this._caret();
+
         if(caret.start !== caret.end) {
-            this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
+            if((e.key === MINUS || e.key === NUMPUD_MINUS_KEY_IE)) {
+                this._applyRevertedSign(e, caret, true);
+                return;
+            } else {
+                this._caret(maskCaret.getCaretInBoundaries(0, this._getInputVal(), this._getFormatPattern()));
+            }
+
         }
 
+        this._applyRevertedSign(e, caret);
+    },
+
+    _applyRevertedSign: function(e, caret, preserveSelectedText) {
         var newValue = -1 * ensureDefined(this._parsedValue, null);
 
         if(this._isValueInRange(newValue)) {
             this._parsedValue = newValue;
+
+            if(preserveSelectedText) {
+                var format = this._getFormatPattern(),
+                    previousText = this._getInputVal();
+
+                this._setTextByParsedValue();
+                e.preventDefault();
+
+                var currentText = this._getInputVal(),
+                    offset = maskCaret.getCaretOffset(previousText, currentText, format);
+
+                caret = maskCaret.getCaretWithOffset(caret, offset);
+
+                var caretInBoundaries = maskCaret.getCaretInBoundaries(caret, currentText, format);
+
+                if(browser.msie) {
+                    clearTimeout(this._ieCaretTimeout);
+                    this._ieCaretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
+                } else {
+                    this._caret(caretInBoundaries);
+                }
+            }
 
             if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
                 eventsEngine.trigger(this._input(), INPUT_EVENT);
