@@ -21,7 +21,7 @@ module.exports = {
     },
 
     _cleanAsyncTemplatesTimer() {
-        const timers = this._asyncTemplatesTimers;
+        const timers = this._asyncTemplatesTimers || [];
 
         for(let i = 0; i < timers.length; i++) {
             clearTimeout(timers[i]);
