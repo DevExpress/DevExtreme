@@ -169,6 +169,10 @@ require("style-compiler-test-server/known-css-files");
             return $("link[rel=stylesheet]", frameDoc());
         }
 
+        function removeFrameStyleLinks() {
+            getFrameStyleLinks().remove();
+        }
+
         return {
             beforeEach: setup,
             afterEach: teardown,
@@ -176,6 +180,7 @@ require("style-compiler-test-server/known-css-files");
             frameDoc: frameDoc,
             writeToFrame: writeToFrame,
             getFrameStyleLinks: getFrameStyleLinks,
+            removeFrameStyleLinks: removeFrameStyleLinks,
             initViewPort: false
         };
     };
@@ -501,6 +506,7 @@ require("style-compiler-test-server/known-css-files");
             themes.current(themeData.themeName);
             assert.ok(themes[themeData.functionName](), themeData.functionName + " after activate " + themeData.themeName);
             themes.resetTheme();
+            that.removeFrameStyleLinks();
         });
     });
 
