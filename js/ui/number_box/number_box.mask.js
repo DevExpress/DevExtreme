@@ -510,11 +510,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
                     offset = maskCaret.getCaretOffset(previousText, currentText, format);
 
                 caret = maskCaret.getCaretWithOffset(caret, offset);
+
+                var caretInBoundaries = maskCaret.getCaretInBoundaries(caret, currentText, format);
+
                 if(browser.msie) {
                     clearTimeout(this._ieCaretTimeout);
-                    this._ieCaretTimeout = setTimeout(this._caret.bind(this, maskCaret.getCaretInBoundaries(caret, currentText, format)));
+                    this._ieCaretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
                 } else {
-                    this._caret(maskCaret.getCaretInBoundaries(caret, currentText, format));
+                    this._caret(caretInBoundaries);
                 }
             }
 
