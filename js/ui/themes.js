@@ -23,13 +23,7 @@ var context,
     $activeThemeLink,
     knownThemes,
     currentThemeName,
-    pendingThemeName,
-    isMaterialTheme,
-    isAndroid5Theme,
-    isIos7Theme,
-    isGenericTheme,
-    isWin8Theme,
-    isWin10Theme;
+    pendingThemeName;
 
 var timerId;
 
@@ -180,15 +174,7 @@ function init(options) {
 
     if(!context) return;
     processMarkup();
-
     currentThemeName = undefined;
-    isMaterialTheme = undefined;
-    isAndroid5Theme = undefined;
-    isGenericTheme = undefined;
-    isIos7Theme = undefined;
-    isWin8Theme = undefined;
-    isWin10Theme = undefined;
-
     current(options);
 }
 
@@ -246,18 +232,6 @@ function current(options) {
             throw errors.Error("E0021", currentThemeName);
         }
     }
-
-    isMaterialTheme = /material/.test(currentThemeName || readThemeMarker());
-
-    isAndroid5Theme = /android5/.test(currentThemeName || readThemeMarker());
-
-    isIos7Theme = /ios7/.test(currentThemeName || readThemeMarker());
-
-    isGenericTheme = /generic/.test(currentThemeName || readThemeMarker());
-
-    isWin8Theme = /win8/.test(currentThemeName || readThemeMarker());
-
-    isWin10Theme = /win10/.test(currentThemeName || readThemeMarker());
 
     checkThemeDeprecation();
 
@@ -336,28 +310,36 @@ function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
-function isMaterial() {
-    return isMaterialTheme;
+function isTheme(themeRegExp, themeName) {
+    if(!themeName) {
+        themeName = currentThemeName || readThemeMarker();
+    }
+
+    return new RegExp(themeRegExp).test(themeName);
 }
 
-function isAndroid5() {
-    return isAndroid5Theme;
+function isMaterial(themeName) {
+    return isTheme("material", themeName);
 }
 
-function isIos7() {
-    return isIos7Theme;
+function isAndroid5(themeName) {
+    return isTheme("android5", themeName);
 }
 
-function isGeneric() {
-    return isGenericTheme;
+function isIos7(themeName) {
+    return isTheme("ios7", themeName);
 }
 
-function isWin8() {
-    return isWin8Theme;
+function isGeneric(themeName) {
+    return isTheme("generic", themeName);
 }
 
-function isWin10() {
-    return isWin10Theme;
+function isWin8(themeName) {
+    return isTheme("win8", themeName);
+}
+
+function isWin10(themeName) {
+    return isTheme("win10", themeName);
 }
 
 function checkThemeDeprecation() {
@@ -453,11 +435,5 @@ exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
     currentThemeName = null;
     pendingThemeName = null;
-    isMaterialTheme = false;
-    isAndroid5Theme = false;
-    isIos7Theme = false;
-    isGenericTheme = false;
-    isWin8Theme = false;
-    isWin10Theme = false;
 };
 

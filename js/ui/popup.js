@@ -248,10 +248,12 @@ var Popup = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function(device) {
-                    return device.phone && themes.isWin8();
+                    return device.phone && themes.isWin8(themeName);
                 },
                 options: {
                     position: {
@@ -326,7 +328,7 @@ var Popup = Overlay.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     useDefaultToolbarButtons: true,
