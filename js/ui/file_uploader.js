@@ -46,7 +46,9 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
 
     FILEUPLOADER_INVALID_CLASS = "dx-fileuploader-invalid",
 
-    FILEUPLOADER_AFTER_LOAD_DELAY = 400;
+    FILEUPLOADER_AFTER_LOAD_DELAY = 400,
+
+    FILEUPLOADER_DEFAULT_CHUNK_SIZE = 20000;
 
 
 var renderFileUploaderInput = function() {
@@ -88,6 +90,8 @@ var FileUploader = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            enabledChunks: false,
+            chunkSize: FILEUPLOADER_DEFAULT_CHUNK_SIZE,
             /**
             * @name dxFileUploaderOptions.value
             * @type Array<File>
@@ -1119,16 +1123,114 @@ var FileUploader = Editor.inherit({
     },
 
     _uploadFile: function(file) {
-        if(!file.isValid() || file.uploadStarted) {
-            return;
+        if(file.isValid() && !file.uploadStarted) {
+            if(this.option("enabledChunks")) {
+                this._uploadFileByChunks(file);
+            } else {
+                this._uploadFileFull(file);
+            }
         }
+    },
+    _uploadFileByChunks: function(file) {
+        var realFile = file.value;
+        var chunksData = {
+            name: realFile.name,
+            loadedBytes: 0,
+            chunks: this._createChunkArray(realFile),
+            count: Math.ceil(realFile.size / this.option("chunkSize")),
+        };
+        this._prepareFileBeforeUpload(file);
+        this._sendFileChunk(file, chunksData);
+    },
+    _createChunkArray: function(file) {
+        var blobPosition = 0;
+        var chunkIndex = 0;
+        var result = [];
+        while(blobPosition <= file.size) {
+            result.push({
+                blob: this._sliceFile(file, blobPosition, this.option("chunkSize")),
+                index: chunkIndex
+            });
+            blobPosition += this.option("chunkSize");
+            chunkIndex++;
+        }
+        return result;
+    },
+    _sendFileChunk: function(file, chunksData) {
+        var that = this;
+        var chunk = chunksData.chunks.shift();
+        if(chunk) {
+            chunksData.loadedBytes += chunk.blob.size;
 
-        var $file = file.$file,
-            value = file.value;
+            ajax.sendRequest({
+                url: this.option("uploadUrl"),
+                method: this.option("uploadMethod"),
+                headers: this.option("uploadHeaders"),
+                beforeSend: function(xhr) {
+                    file.request = xhr;
+                },
+                upload: {
+                    "onloadstart": function() {
+                        if(!file.isStartLoad) {
+                            file.isStartLoad = true;
+                            file.onLoadStart.fire();
+                        }
+                    },
+                    "onabort": function() {
+                        file.onAbort.fire();
+                        chunksData.chunks = [];
+                    }
+                },
+                data: this._createChunkFormData(this.option("name"), chunk.blob, chunk.index, chunksData.count, chunksData.name)
+            }).done(function(e) {
+                file.onProgress.fire({
+                    loaded: chunksData.loadedBytes,
+                    total: file.value.size
+                });
+                if(chunksData.chunks.length === 0) {
+                    file.onLoad.fire();
+                }
+                that._sendFileChunk(file, chunksData);
+            }).fail(function(e) {
+                if(that._isStatusError(e.status)) {
+                    file._isError = true;
+                    file.onError.fire();
+                }
+                chunksData.chunks = [];
+            });
+        }
+    },
+    _createChunkFormData: function(blobName, blob, index, count, name) {
+        var formData = new window.FormData();
+        formData.append(blobName, blob);
+        formData.append("metaData", JSON.stringify({
+            index: index,
+            count: count,
+            name: name
+        }));
+        return formData;
+    },
 
-        if($file) {
-            file.progressBar = this._createProgressBar(value.size);
-            file.progressBar.$element().appendTo($file);
+    _sliceFile: function(file, startPos, length) {
+        if(file.slice) {
+            return file.slice(startPos, startPos + length);
+        }
+        if(file.webkitSlice) {
+            return file.webkitSlice(startPos, startPos + length);
+        }
+        if(file.mozSlice) {
+            return file.mozSlice(startPos, startPos + length);
+        }
+        return null;
+    },
+    _uploadFileFull: function(file) {
+        this._prepareFileBeforeUpload(file);
+        this._sendFileData(file, this._createFormData(this.option("name"), file.value));
+    },
+    _prepareFileBeforeUpload: function(file) {
+        if(file.$file) {
+            file.progressBar = this._createProgressBar(file.value.size);
+            file.progressBar.$element().appendTo(file.$file);
             this._initStatusMessage(file);
             this._initCancelButton(file);
         }
@@ -1138,7 +1240,6 @@ var FileUploader = Editor.inherit({
         file.onError.add(this._onErrorHandler.bind(this, file));
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
-        this._sendFileData(file, this._createFormData(this.option("name"), value));
     },
 
     _onUploadStarted: function(file, e) {
@@ -1194,41 +1295,45 @@ var FileUploader = Editor.inherit({
             request: file.request
         });
     },
-
     _onProgressHandler: function(file, e) {
-        var totalSize = this._getTotalSize(),
-            currentLoadedSize = 0,
-            loadedSize = this._getLoadedSize(),
-            progress = 0;
-
+        var segmentSize = 0;
         if(file) {
-            currentLoadedSize = Math.min(e.loaded, file.value.size);
-            var segmentSize = currentLoadedSize - file.loadedSize;
-            loadedSize += segmentSize;
-
-            file.progressBar && file.progressBar.option({
-                value: currentLoadedSize,
-                showStatus: true
+            var loadedSize = Math.min(e.loaded, file.value.size);
+            segmentSize = loadedSize - file.loadedSize;
+            this._updateProgressBar(file, {
+                loaded: loadedSize,
+                total: e.total,
+                currentSegmentSize: segmentSize,
+                event: this.option("enabledChunks") ? null : e
             });
-
-            this._progressAction({
-                file: file.value,
-                segmentSize: segmentSize,
-                bytesLoaded: e.loaded,
-                bytesTotal: e.total,
-                event: e,
-                request: file.request
-            });
-
-            file.loadedSize = currentLoadedSize;
+            file.loadedSize = loadedSize;
         }
+        this._updateTotalProgress(segmentSize);
+    },
+    _updateProgressBar: function(file, loadedFileData) {
+        file.progressBar && file.progressBar.option({
+            value: loadedFileData.loaded,
+            showStatus: true
+        });
 
-        if(totalSize) {
-            progress = Math.round(loadedSize / totalSize * 100);
+        this._progressAction({
+            file: file.value,
+            segmentSize: loadedFileData.currentSegmentSize,
+            bytesLoaded: loadedFileData.loaded,
+            bytesTotal: loadedFileData.total,
+            event: loadedFileData.event,
+            request: file.request
+        });
+    },
+    _updateTotalProgress: function(currentSegmentSize) {
+        var totalFilesSize = this._getTotalSize();
+        var totalLoadedFilesSize = this._getTotalLoadedSize();
+        totalLoadedFilesSize += currentSegmentSize;
+
+        if(totalFilesSize) {
+            this.option("progress", Math.round(totalLoadedFilesSize / totalFilesSize * 100));
         }
-
-        this.option("progress", progress);
-        this._setLoadedSize(loadedSize);
+        this._setLoadedSize(totalLoadedFilesSize);
     },
 
     _initStatusMessage: function(file) {
@@ -1257,9 +1362,7 @@ var FileUploader = Editor.inherit({
 
     _sendFileData: function(file, data) {
         var that = this;
-
         file.loadedSize = 0;
-
         ajax.sendRequest({
             url: this.option("uploadUrl"),
             method: this.option("uploadMethod"),
@@ -1333,7 +1436,7 @@ var FileUploader = Editor.inherit({
         return this._totalSize;
     },
 
-    _getLoadedSize: function() {
+    _getTotalLoadedSize: function() {
         if(!this._loadedSize) {
             var loadedSize = 0;
 
