@@ -62,12 +62,14 @@ var compileGetter = function(expr) {
         return function(obj, options) {
             options = prepareOptions(options);
             var functionAsIs = options.functionsAsIs,
+                defaultValue = options.defaultValue,
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
                 if(!current) break;
 
-                var next = unwrap(current[path[i]], options);
+                var nextValue = current.hasOwnProperty(path[i]) ? current[path[i]] : defaultValue,
+                    next = unwrap(nextValue, options);
 
                 if(!functionAsIs && typeUtils.isFunction(next)) {
                     next = next.call(current);
