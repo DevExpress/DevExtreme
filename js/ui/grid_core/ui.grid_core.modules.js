@@ -103,14 +103,13 @@ var ModuleItem = Class.inherit({
     setAria: function(name, value, $target) {
         var target = $target.get(0),
             prefix = (name !== "role" && name !== "id") ? "aria-" : "";
-
-        if(target.setAttribute) {
-            target.setAttribute(prefix + name, value);
-        } else {
-            $target.attr(prefix + name, value);
+        if(target) {
+            if(target.setAttribute) {
+                target.setAttribute(prefix + name, value);
+            } else {
+                $target.attr(prefix + name, value);
+            }
         }
-
-        // this.component.setAria.apply(this.component, arguments);
     },
 
     _createComponent: function() {
