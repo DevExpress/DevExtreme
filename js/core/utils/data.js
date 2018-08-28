@@ -68,7 +68,7 @@ var compileGetter = function(expr) {
             for(var i = 0; i < path.length; i++) {
                 if(!current) break;
 
-                var nextValue = current.hasOwnProperty(path[i]) ? current[path[i]] : defaultValue,
+                var nextValue = current[path[i]] || current.hasOwnProperty(path[i]) ? current[path[i]] : defaultValue,
                     next = unwrap(nextValue, options);
 
                 if(!functionAsIs && typeUtils.isFunction(next)) {
