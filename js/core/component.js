@@ -54,7 +54,7 @@ class PostponedOperations {
     callPostponedOperations() {
         for(var key in this._postponedOperations) {
             var operation = this._postponedOperations[key];
-            if(operation.promises.length) {
+            if(operation.promises && operation.promises.length) {
                 when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
             } else {
                 operation.fn().done(operation.completePromise.resolve);
