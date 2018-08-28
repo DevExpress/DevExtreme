@@ -5248,9 +5248,11 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
             rowsView._dataController.getContentOffset = x.getContentOffset;
             rowsView._dataController.getItemSize = x.getItemSize;
+            rowsView._dataController.getItemSizes = x.getItemSizes;
             rowsView._dataController.viewportItemSize = x.viewportItemSize;
             rowsView._dataController.setContentSize = x.setContentSize;
             rowsView._dataController.setViewportPosition = x.setViewportPosition;
+            rowsView._dataController.getItemIndexByPosition = x.getItemIndexByPosition;
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
             rowsView._dataController.option = rowsView.option.bind(rowsView);
             rowsView._dataController._dataSource = {
@@ -5570,7 +5572,9 @@ QUnit.test('setViewportItemIndex to far for virtual scrolling when rowsView heig
     };
 
     // act
-    rowsView.scrollTo({ y: rowHeight * heightRatio * 9000000 });
+    var itemSizes = dataController.getItemSizes();
+    var definedItemSizes = Object.keys(itemSizes).map(function(key) { return itemSizes[key]; });
+    rowsView.scrollTo({ y: rowHeight * heightRatio * (9000000 - definedItemSizes.length) + definedItemSizes[0] * definedItemSizes.length });
 });
 
 // T154003
