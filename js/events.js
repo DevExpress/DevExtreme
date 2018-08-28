@@ -148,6 +148,25 @@ exports.one = eventsEngine.one;
 * @export off
 */
 
+/**
+* @name eventsMethods.off
+* @publicName off(element, eventName)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @param2 eventName:string
+* @module events
+* @export off
+*/
+
+/**
+* @name eventsMethods.off
+* @publicName off(element)
+* @namespace DevExpress.events
+* @param1 element:Node|Array<Node>
+* @module events
+* @export off
+*/
+
 exports.off = eventsEngine.off;
 
 /**
