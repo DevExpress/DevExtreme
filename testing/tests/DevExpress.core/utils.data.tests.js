@@ -55,6 +55,7 @@ QUnit.test("it works", function(assert) {
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
     assert.equal(GETTER("d.a")(obj), "d().a");
     assert.equal(GETTER("e.z")(obj), undefined);
+    assert.equal(GETTER("c.b")(obj, { defaultValue: 1 }), 1);
     assert.equal(GETTER("z.z.z")(obj), undefined);
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
 });
