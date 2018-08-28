@@ -270,7 +270,7 @@ function getCssClasses(themeName) {
         );
 
         if(themeNameParts.length > 1) {
-            result.push("dx-color-scheme-" + themeNameParts[1] + (isMaterial() ? ("-" + themeNameParts[2]) : ""));
+            result.push("dx-color-scheme-" + themeNameParts[1] + (isMaterial(themeName) ? ("-" + themeNameParts[2]) : ""));
         }
     }
 
