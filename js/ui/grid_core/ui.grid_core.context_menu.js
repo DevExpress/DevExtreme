@@ -76,9 +76,12 @@ var ContextMenuController = modules.ViewController.inherit({
 
 var ContextMenuView = modules.View.inherit({
     _renderCore: function() {
-        var that = this;
+        var that = this,
+            $element = that.element().addClass(CONTEXT_MENU);
 
-        this._createComponent(that.element().addClass(CONTEXT_MENU),
+        this.setAria("role", "presentation", $element);
+
+        this._createComponent($element,
             ContextMenu, {
                 onPositioning: function(actionArgs) {
                     var event = actionArgs.event,

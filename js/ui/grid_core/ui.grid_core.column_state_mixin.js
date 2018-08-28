@@ -47,6 +47,8 @@ module.exports = {
             $indicatorsContainer = $("<div>").addClass(COLUMN_INDICATORS_CLASS);
         }
 
+        this.setAria("role", "presentation", $indicatorsContainer);
+
         return $indicatorsContainer.css("float", options.showColumnLines && !ignoreIndicatorAlignment ? indicatorAlignment : null);
     },
 
