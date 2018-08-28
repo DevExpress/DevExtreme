@@ -178,7 +178,7 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     clock.restore();
 });
 
-QUnit.test("Base accessibility structure", function(assert) {
+QUnit.test("Base accessibility structure (T640539)", function(assert) {
     var clock = sinon.useFakeTimers();
 
     createDataGrid({
@@ -191,11 +191,27 @@ QUnit.test("Base accessibility structure", function(assert) {
     clock.tick();
 
     assert.equal($(".dx-widget").attr("role"), "presentation");
+
     assert.equal($(".dx-datagrid").attr("role"), "grid");
-    assert.equal($(".dx-datagrid-headers").attr("role"), "presentation");
+
+    assert.equal($(".dx-datagrid-headers").attr("role"), "rowheader");
+    assert.equal($(".dx-datagrid-headers").find(".dx-column-indicators").attr("role"), "presentation");
+    assert.equal($(".dx-datagrid-headers").find("[id=dx-col-field1]").attr("aria-label"), "column Field 1");
+    assert.equal($(".dx-datagrid-headers").find("[id=dx-col-field1]").text(), "Field 1");
+    assert.equal($(".dx-datagrid-headers").find("[id=dx-col-field2]").attr("aria-label"), "column Field 2");
+    assert.equal($(".dx-datagrid-headers").find("[id=dx-col-field2]").text(), "Field 2");
+
     assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
+
     assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
     assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+
+    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(1)").attr("aria-describedby"), "dx-col-field1");
+    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(2)").attr("aria-describedby"), "dx-col-field2");
+
+    assert.equal($(".dx-datagrid-rowsview .dx-freespace-row").attr("role"), "presentation");
+
+    assert.equal($(".dx-context-menu").attr("role"), "presentation");
 
     clock.restore();
 });

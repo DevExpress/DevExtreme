@@ -27,6 +27,7 @@ var SCROLL_CONTAINER_CLASS = "scroll-container",
     GROUP_ROW_CLASS = "dx-group-row",
     DETAIL_ROW_CLASS = "dx-master-detail-row",
     FILTER_ROW_CLASS = "filter-row",
+    COLUMN_ID_PREFIX = "dx-col",
 
     HIDDEN_COLUMNS_WIDTH = "0.0001px",
 
@@ -128,12 +129,20 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createCell: function(options) {
         var column = options.column,
-            alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled"));
+            alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled")),
+            headerId;
 
         var cell = domAdapter.createElement("td");
         cell.style.textAlign = alignment;
 
         var $cell = $(cell);
+
+        if(options.rowType === "data") {
+            if(options.column && options.column.dataField) {
+                headerId = `${COLUMN_ID_PREFIX}-${options.column.dataField}`;
+                this.setAria("describedby", headerId, $cell);
+            }
+        }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
@@ -159,7 +168,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createRow: function(rowObject) {
         var $element = $("<tr>").addClass(ROW_CLASS);
-        this.setAria("role", "row", $element);
         return $element;
     },
 
@@ -180,7 +188,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             that.setAria("hidden", true, $table);
         }
 
-        $table.append($("<tbody>"));
+        this.setAria("role", "presentation", $("<tbody>").appendTo($table));
 
         if(isAppend) {
             return $table;
@@ -440,6 +448,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         that._renderCells($row, options);
         that._appendRow($table, $row);
         that._rowPrepared($row, extend({ columns: options.columns }, options.row));
+        that._setRowAriaAttributes($row);
+    },
+
+    _setRowAriaAttributes: function($row) {
+        this.setAria("role", "row", $row);
     },
 
     _renderCells: function($row, options) {
