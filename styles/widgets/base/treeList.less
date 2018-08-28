@@ -25,6 +25,17 @@
     word-wrap: break-word;
 }
 
+.dx-treelist {
+    .dx-column-lines > td {
+        &:first-child {
+            border-left: none;
+        }
+        &:last-child {
+            border-right: none;
+        }
+    }
+}
+
 .dx-treelist-container {
     color: @treelist-base-color;
     background-color: @treelist-base-background-color;
@@ -154,6 +165,20 @@
 }
 
 .dx-rtl {
+    &.dx-treelist {
+        .dx-column-lines > td {
+            &:first-child {
+                border-right: none;
+                border-left: @treelist-border;
+            }
+
+            &:last-child {
+                border-left: none;
+                border-right: @treelist-border;
+            }
+        }
+    }
+
     .dx-treelist-container {
         .dx-treelist-rowsview .dx-data-row, .dx-treelist-rowsview .dx-freespace-row, .dx-treelist-headers .dx-row {
             td.dx-pointer-events-none {
