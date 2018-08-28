@@ -62,12 +62,13 @@ var compileGetter = function(expr) {
         return function(obj, options) {
             options = prepareOptions(options);
             var functionAsIs = options.functionsAsIs,
+                defaultValueExists = "defaultValue" in options,
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
                 if(!current) break;
 
-                var useDefaultValue = options.hasOwnProperty("defaultValue") && !current.hasOwnProperty(path[i]) && typeUtils.isPlainObject(current),
+                var useDefaultValue = defaultValueExists && !path[i] in current,
                     nextValue = useDefaultValue ? options.defaultValue : current[path[i]],
                     next = unwrap(nextValue, options);
 
