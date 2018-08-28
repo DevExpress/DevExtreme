@@ -63,12 +63,12 @@ var DataConverter = Class.inherit({
         item.visible !== false && this._visibleItemsCount++;
 
         var that = this,
-            isNodeSelected = that._dataAccessors.getters.selected(item, { defaultValue: null }),
+            isNodeSelected = that._dataAccessors.getters.selected(item, { defaultValue: false }),
             node = {
                 internalFields: {
                     disabled: that._dataAccessors.getters.disabled(item) || false,
                     expanded: that._dataAccessors.getters.expanded(item) || false,
-                    selected: isNodeSelected !== null ? isNodeSelected : false,
+                    selected: isNodeSelected,
                     key: that._getUniqueKey(item),
                     parentKey: typeUtils.isDefined(parentKey) ? parentKey : that._rootValue,
                     item: that._makeObjectFromPrimitive(item),
