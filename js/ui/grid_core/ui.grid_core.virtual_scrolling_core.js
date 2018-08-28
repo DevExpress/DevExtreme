@@ -134,12 +134,11 @@ exports.VirtualScrollController = Class.inherit((function() {
 
             var virtualItemsCount = that.virtualItemsCount();
             var totalItemsCount = that._dataSource.totalItemsCount();
-            var defaultItemSize = that.getItemSize();
 
             for(var itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
                 if(offset >= position + viewportSize) break;
 
-                var itemSize = that._itemSizes[itemIndex] || defaultItemSize;
+                var itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
                 offset += itemSize;
                 if(offset >= position) {
                     realViewportSize++;
@@ -298,6 +297,11 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._cache = [];
             that._isVirtual = isVirtual;
         },
+
+        getItemSizes: function() {
+            return this._itemSizes;
+        },
+
         option: function() {
             return this.component.option.apply(this.component, arguments);
         },
@@ -324,7 +328,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             }
         },
 
-        _setViewportPositionCore: function(position, isNear) {
+        setViewportPosition: function(position) {
             var that = this,
                 result = new Deferred(),
                 scrollingTimeout = Math.min(that.option("scrolling.timeout") || 0, that._dataSource.changingDuration());
@@ -332,18 +336,15 @@ exports.VirtualScrollController = Class.inherit((function() {
             if(scrollingTimeout < that.option("scrolling.renderingThreshold")) {
                 scrollingTimeout = that.option("scrolling.minTimeout") || 0;
             }
-            if(!isNear) {
-                that._itemSizes = {};
-            }
 
             clearTimeout(that._scrollTimeoutID);
             if(scrollingTimeout > 0) {
                 that._scrollTimeoutID = setTimeout(function() {
-                    that.setViewportItemIndex(position);
+                    that._setViewportPositionCore(position);
                     result.resolve();
                 }, scrollingTimeout);
             } else {
-                that.setViewportItemIndex(position);
+                that._setViewportPositionCore(position);
                 result.resolve();
             }
             return result.promise();
@@ -353,29 +354,40 @@ exports.VirtualScrollController = Class.inherit((function() {
             return this._position || 0;
         },
 
-        setViewportPosition: function(position) {
+        getItemIndexByPosition: function() {
             var that = this,
-                virtualItemsCount = that.virtualItemsCount(),
+                position = that._position,
                 defaultItemSize = that.getItemSize(),
-                offset = that.getContentOffset();
+                offset = 0,
+                itemOffset = 0,
+                itemSize;
 
-            that._position = position;
-
-            if(virtualItemsCount && position >= offset && position <= offset + that._contentSize) {
-                var itemOffset = 0,
-                    itemSize;
-
-                do {
-                    itemSize = that._itemSizes[virtualItemsCount.begin + itemOffset] || defaultItemSize;
-                    offset += itemSize;
-                    itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
-                } while(offset < position);
-
-                return that._setViewportPositionCore(virtualItemsCount.begin + itemOffset, true);
-            } else {
-                return that._setViewportPositionCore(position / defaultItemSize);
+            var itemOffsetsWithSize = Object.keys(that._itemSizes).concat(-1);
+            for(var i = 0; i < itemOffsetsWithSize.length && offset < position; i++) {
+                var itemOffsetWithSize = parseInt(itemOffsetsWithSize[i]);
+                var itemOffsetDiff = (position - offset) / defaultItemSize;
+                if(itemOffsetWithSize < 0 || itemOffset + itemOffsetDiff < itemOffsetWithSize) {
+                    itemOffset += itemOffsetDiff;
+                    break;
+                } else {
+                    itemOffsetDiff = itemOffsetWithSize - itemOffset;
+                    offset += itemOffsetDiff * defaultItemSize;
+                    itemOffset += itemOffsetDiff;
+                }
+                itemSize = that._itemSizes[itemOffsetWithSize];
+                offset += itemSize;
+                itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
             }
+            return itemOffset;
         },
+
+        _setViewportPositionCore: function(position) {
+            this._position = position;
+
+            var itemIndex = this.getItemIndexByPosition();
+            return this.setViewportItemIndex(itemIndex);
+        },
+
         setContentSize: function(size) {
             var that = this,
                 sizes = Array.isArray(size) && size,
@@ -472,7 +484,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 if(that.pageIndex() !== newPageIndex || needLoad) {
                     that.pageIndex(newPageIndex);
                 }
-                that.load();
+                return that.load();
             }
         },
         viewportItemSize: function(size) {
@@ -535,7 +547,12 @@ exports.VirtualScrollController = Class.inherit((function() {
             var that = this;
 
             if((isVirtualMode(that) || isAppendMode(that)) && !that._dataSource.isLoading() && !that._isChangedFiring) {
-                that.load();
+                var position = that.getViewportPosition();
+                if(position > 0) {
+                    that._setViewportPositionCore(position);
+                } else {
+                    that.load();
+                }
             }
         },
         handleDataChanged: function(callBase) {
@@ -611,6 +628,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         reset: function() {
             this._cache = [];
+            this._itemSizes = {};
         },
 
         subscribeToWindowScrollEvents: function($element) {
