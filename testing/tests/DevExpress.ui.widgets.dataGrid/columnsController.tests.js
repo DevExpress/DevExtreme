@@ -19,6 +19,8 @@ QUnit.testDone(function() {
 
 var processColumnsForCompare = function(columns, parameterNames, ignoreParameterNames) {
     var processedColumns = $.extend(true, [], columns);
+    ignoreParameterNames = ignoreParameterNames || [];
+    ignoreParameterNames.push("id");
     $.each(processedColumns, function() {
         var propertyName;
         for(propertyName in this) {
@@ -94,7 +96,7 @@ QUnit.test("Initialize from options with field names", function(assert) {
     assert.ok(this.columnsController.isInitialized());
     var visibleColumns = this.columnsController.getVisibleColumns();
 
-    assert.deepEqual(processColumnsForCompare(visibleColumns), [
+    assert.deepEqual(processColumnsForCompare(visibleColumns, null, ["id"]), [
         { index: 0, visible: true, allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1' },
         { index: 1, visible: true, allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2' },
         { index: 2, visible: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3' }
