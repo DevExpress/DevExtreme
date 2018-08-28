@@ -1133,14 +1133,13 @@ var FileUploader = Editor.inherit({
     },
     _uploadFileByChunks: function(file) {
         var realFile = file.value;
-        var chunksData = {
+        this._prepareFileBeforeUpload(file);
+        this._sendFileChunk(file, {
             name: realFile.name,
             loadedBytes: 0,
             chunks: this._createChunkArray(realFile),
             count: Math.ceil(realFile.size / this.option("chunkSize")),
-        };
-        this._prepareFileBeforeUpload(file);
-        this._sendFileChunk(file, chunksData);
+        });
     },
     _createChunkArray: function(file) {
         var blobPosition = 0;
@@ -1182,7 +1181,7 @@ var FileUploader = Editor.inherit({
                     }
                 },
                 data: this._createChunkFormData(this.option("name"), chunk.blob, chunk.index, chunksData.count, chunksData.name)
-            }).done(function(e) {
+            }).done(function() {
                 file.onProgress.fire({
                     loaded: chunksData.loadedBytes,
                     total: file.value.size
