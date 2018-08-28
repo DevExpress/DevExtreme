@@ -5523,6 +5523,135 @@ QUnit.test("ungrouping after grouping should works correctly if row rendering mo
     });
 });
 
+// T644981
+QUnit.test("ungrouping after grouping and scrolling should works correctly with large amount of data if row rendering mode is virtual", function(assert) {
+    var done = assert.async();
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            group: "group",
+            load: function(options) {
+                var result = { data: [], totalCount: 1000000, groupCount: 1000 };
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    if(options.group) {
+                        result.data.push({ key: i + 1, items: null, count: 1000 });
+                    } else {
+                        result.data.push({ id: i + 1, group: (i % 1000 + 1) });
+                    }
+                }
+
+                return $.Deferred().resolve(result);
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            updateTimeout: 0,
+            useNative: false
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        groupPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 100
+        },
+        columns: ["id", "group"]
+    }).dxDataGrid("instance");
+
+    dataGrid.getScrollable().scrollTo({ top: 1000000 });
+
+    realSetTimeout(function() {
+        // act
+        dataGrid.clearGrouping();
+        // assert
+        assert.ok(dataGrid.getTopVisibleRowData().id < 1000, "top visible row is correct");
+        assert.ok($(dataGrid.element()).find(".dx-virtual-row").first().height() <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+        assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
+        done();
+    });
+});
+
+QUnit.test("scrolling after ungrouping should works correctly with large amount of data if row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var result = { data: [], totalCount: 1000000, groupCount: options.requireGroupCount ? 1000 : undefined };
+
+                for(var i = options.skip || 0; i < (options.skip || 0) + options.take; i++) {
+                    if(options.group) {
+                        result.data.push({ key: i + 1, items: null, count: 1000 });
+                    } else {
+                        result.data.push({ id: i + 1, group: (i % 1000 + 1) });
+                    }
+                }
+
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(result);
+                }, 500);
+
+                return d;
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            updateTimeout: 0,
+            useNative: false
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        groupPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 100
+        },
+        columns: ["id", { dataField: "group",
+            cellTemplate: function($container, options) {
+                $($container)
+                    .css("height", 100)
+                    .text(options.text);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+    clock.tick(2000);
+
+    dataGrid.columnOption("group", "groupIndex", 0);
+
+    clock.tick(2000);
+
+    dataGrid.getScrollable().scrollTo(9000);
+
+    clock.tick(200);
+
+    dataGrid.getScrollable().scrollTo(11000);
+
+    // assert
+    assert.ok(dataGrid.getTopVisibleRowData().key > 110, "top visible row is correct");
+    assert.ok($(dataGrid.element()).find(".dx-virtual-row").first().height() <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+    assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
+
+    clock.restore();
+});
+
 // T641931
 QUnit.test("Infinite scrolling should works correctly", function(assert) {
     // arrange, act
@@ -5558,6 +5687,8 @@ QUnit.test("Infinite scrolling should works correctly", function(assert) {
     dataGrid.getScrollable().scrollTo(10000);
 
     // assert
+    assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 11, "top visible row");
     assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
 });
 
@@ -8185,6 +8316,36 @@ QUnit.test("scroll position should not be changed after change sorting if row co
     // assert
     assert.equal(dataGrid.getVisibleRows()[0].data.id, 20 * 1000 + 1, "first visible row is correct");
     assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, "scroll top is not changed");
+});
+
+QUnit.test("top visible row should not be changed after refresh virtual scrolling is enabled without rowRenderingMode", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: createLargeDataSource(1000000),
+        remoteOperations: true,
+        height: 500,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.clock.tick(300);
+
+    dataGrid.pageIndex(1000);
+    this.clock.tick(300);
+    var topVisibleRowData = dataGrid.getTopVisibleRowData();
+
+    // act
+    dataGrid.refresh();
+    this.clock.tick(300);
+
+    // assert
+    assert.deepEqual(dataGrid.getTopVisibleRowData(), topVisibleRowData, "top visible row is not changed");
+    assert.ok(dataGrid.getScrollable().scrollTop() > 0, "content is scrolled");
 });
 
 QUnit.test("scroll to next page several times should works correctly if virtual scrolling is enabled", function(assert) {
