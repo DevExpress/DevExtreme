@@ -56,10 +56,25 @@ QUnit.test("it works", function(assert) {
     assert.equal(GETTER("d.a")(obj), "d().a");
     assert.equal(GETTER("e.z")(obj), undefined);
     assert.equal(GETTER("c.b")(obj, { defaultValue: 1 }), 1);
+    assert.equal(GETTER("a")(null, { defaultValue: 1 }), 1);
+    assert.equal(GETTER("a")(null), null);
     assert.equal(GETTER("z.z.z")(obj), undefined);
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
 });
 
+QUnit.test("inheritance", function(assert) {
+    class Parent {
+    };
+
+    class Child extends Parent {
+    };
+
+    Parent.prototype["a"] = 123;
+    let obj = new Child();
+
+    assert.equal(obj.a, 123, "object has property");
+    assert.equal(GETTER("a")(obj, { defaultValue: false }), 123);
+});
 
 QUnit.test("complex getter", function(assert) {
     var original = {

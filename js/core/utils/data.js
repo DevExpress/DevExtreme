@@ -66,9 +66,12 @@ var compileGetter = function(expr) {
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
-                if(!current) break;
+                if(!current) {
+                    current = defaultValueExists ? options.defaultValue : current;
+                    break;
+                }
 
-                var useDefaultValue = defaultValueExists && !path[i] in current,
+                var useDefaultValue = defaultValueExists && !(path[i] in current),
                     nextValue = useDefaultValue ? options.defaultValue : current[path[i]],
                     next = unwrap(nextValue, options);
 
