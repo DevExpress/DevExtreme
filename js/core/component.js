@@ -695,3 +695,4 @@ var Component = Class.inherit({
 }).include(EventsMixin);
 
 module.exports = Component;
+module.exports.PostponedOperations = PostponedOperations;

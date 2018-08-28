@@ -1,6 +1,8 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     Component = require("core/component"),
+    Component = require("core/component"),
+    PostponedOperations = require("core/component").PostponedOperations,
     errors = require("core/errors"),
     devices = require("core/devices"),
     config = require("core/config");
@@ -183,6 +185,20 @@ QUnit.test("options api - 'onOptionChanged' changing", function(assert) {
     instance.option("option1", "value2");
 
     assert.equal(called, "new handler");
+});
+
+QUnit.test("component should initialize PostponedOperations", function(assert) {
+    var instance = new TestComponent({ a: 1 });
+
+    assert.ok(instance.postponedOperations instanceof PostponedOperations, "Componend initialize PostponedOperations");
+});
+
+QUnit.test("postponedOperations should be called on endUpdate", function(assert) {
+    var instance = new TestComponent({ a: 1 }),
+        callPostponed = sinon.stub(instance.postponedOperations, "callPostponedOperations");
+
+    instance.endUpdate();
+    assert.ok(callPostponed.calledOnce, "Postponed operations are called");
 });
 
 QUnit.test("component lifecycle, changing a couple of options", function(assert) {
