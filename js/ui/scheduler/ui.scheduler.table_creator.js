@@ -346,7 +346,6 @@ var SchedulerTableCreator = {
             items = group.items,
             itemCount = items.length;
 
-       // for(var r = 0; r < repeatByDate; r++) {
         for(var i = 0; i < repeatCount * repeatByDate; i++) {
             for(var j = 0; j < itemCount; j++) {
                 var $container = $("<div>"),
@@ -375,7 +374,6 @@ var SchedulerTableCreator = {
                 cells.push(cell);
             }
         }
-        // }
 
         return cells;
     }
