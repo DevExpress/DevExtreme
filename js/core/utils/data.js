@@ -62,14 +62,13 @@ var compileGetter = function(expr) {
         return function(obj, options) {
             options = prepareOptions(options);
             var functionAsIs = options.functionsAsIs,
-                defaultValue = options.defaultValue,
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
                 if(!current) break;
 
-                var useDefaultValue = typeUtils.isPlainObject(current) && !current.hasOwnProperty(path[i]),
-                    nextValue = useDefaultValue ? defaultValue : current[path[i]],
+                var useDefaultValue = options.hasOwnProperty("defaultValue") && !current.hasOwnProperty(path[i]) && typeUtils.isPlainObject(current),
+                    nextValue = useDefaultValue ? options.defaultValue : current[path[i]],
                     next = unwrap(nextValue, options);
 
                 if(!functionAsIs && typeUtils.isFunction(next)) {
