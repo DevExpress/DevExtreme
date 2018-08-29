@@ -716,7 +716,7 @@ module.exports = {
                                     component = that.component,
                                     scrollable = component.getScrollable && component.getScrollable();
 
-                                if(scrollable) {
+                                if(scrollable && !that.option("legacyRendering")) {
                                     var rowElement = component.getRowElement(rowIndex),
                                         $rowElement = rowElement && rowElement[0] && $(rowElement[0]),
                                         top = $rowElement && $rowElement.position().top;
