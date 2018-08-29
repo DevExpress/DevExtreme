@@ -196,6 +196,17 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(this.rangeSelector.getValue(), [3, 5]);
     });
 
+    QUnit.test("Set value using visualRange object with start and length. datetime", function(assert) {
+        this.rangeSelector.option({
+            scale: {
+                startValue: new Date(2018, 0, 1),
+                endValue: new Date(2024, 0, 1)
+            },
+            value: { length: { years: 2 } }
+        });
+        assert.deepEqual(this.rangeSelector.getValue(), [new Date(2022, 0, 1), new Date(2024, 0, 1)]);
+    });
+
     QUnit.test("Set value using visualRange only length field in visualRange object. logarithmic", function(assert) {
         this.rangeSelector.option({
             value: { length: 2 },
