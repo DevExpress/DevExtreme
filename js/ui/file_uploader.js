@@ -1295,10 +1295,11 @@ var FileUploader = Editor.inherit({
         });
     },
     _onProgressHandler: function(file, e) {
-        var segmentSize = 0;
+        var totalFilesSize = this._getTotalSize();
+        var totalLoadedFilesSize = this._getTotalLoadedSize();
         if(file) {
             var loadedSize = Math.min(e.loaded, file.value.size);
-            segmentSize = loadedSize - file.loadedSize;
+            var segmentSize = loadedSize - file.loadedSize;
             this._updateProgressBar(file, {
                 loaded: loadedSize,
                 total: e.total,
@@ -1306,8 +1307,9 @@ var FileUploader = Editor.inherit({
                 event: this.option("enabledChunks") ? null : e
             });
             file.loadedSize = loadedSize;
+            totalLoadedFilesSize += segmentSize;
         }
-        this._updateTotalProgress(segmentSize);
+        this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize);
     },
     _updateProgressBar: function(file, loadedFileData) {
         file.progressBar && file.progressBar.option({
@@ -1324,11 +1326,7 @@ var FileUploader = Editor.inherit({
             request: file.request
         });
     },
-    _updateTotalProgress: function(currentSegmentSize) {
-        var totalFilesSize = this._getTotalSize();
-        var totalLoadedFilesSize = this._getTotalLoadedSize();
-        totalLoadedFilesSize += currentSegmentSize;
-
+    _updateTotalProgress: function(totalFilesSize, totalLoadedFilesSize) {
         if(totalFilesSize) {
             this.option("progress", Math.round(totalLoadedFilesSize / totalFilesSize * 100));
         }
