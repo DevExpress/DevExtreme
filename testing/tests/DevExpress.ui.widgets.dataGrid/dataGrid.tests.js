@@ -5517,7 +5517,6 @@ QUnit.test("ungrouping after grouping should works correctly if row rendering mo
 
         // assert
         visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, "visible row count");
         assert.deepEqual(visibleRows[0].key, 1, "first visible row key");
         done();
     });

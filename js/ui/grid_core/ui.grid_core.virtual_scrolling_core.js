@@ -378,7 +378,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 offset += itemSize;
                 itemOffset += offset < position ? 1 : (position - offset + itemSize) / itemSize;
             }
-            return itemOffset;
+            return Math.round(itemOffset * 10) / 10;
         },
 
         _setViewportPositionCore: function(position) {
