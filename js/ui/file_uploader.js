@@ -1327,9 +1327,8 @@ var FileUploader = Editor.inherit({
         });
     },
     _updateTotalProgress: function(totalFilesSize, totalLoadedFilesSize) {
-        if(totalFilesSize) {
-            this.option("progress", Math.round(totalLoadedFilesSize / totalFilesSize * 100));
-        }
+        var progress = totalFilesSize ? Math.round(totalLoadedFilesSize / totalFilesSize * 100) : 0;
+        this.option("progress", progress);
         this._setLoadedSize(totalLoadedFilesSize);
     },
 
