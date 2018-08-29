@@ -1291,8 +1291,6 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             });
 
             // assert
-            assert.strictEqual(instance.pageIndex(), 10, "current page index");
-
             setTimeout(function() {
                 assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
                 assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
