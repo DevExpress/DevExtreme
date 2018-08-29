@@ -1064,11 +1064,11 @@ QUnit.testStart(function() {
 
     QUnit.test("Get cell count to last view date", function(assert) {
         this.instance.option({
-            currentDate: new Date(2015, 2, 16),
+            currentDate: new Date(2015, 1, 16),
             firstDayOfWeek: 1
         });
 
-        assert.equal(this.instance.getCellCountToLastViewDate(new Date(2015, 2, 17)), 20, "Cell count is OK");
+        assert.equal(this.instance.getCellCountToLastViewDate(new Date(2015, 1, 17)), 20, "Cell count is OK");
     });
 
     QUnit.test("Get cell count to last view date", function(assert) {
