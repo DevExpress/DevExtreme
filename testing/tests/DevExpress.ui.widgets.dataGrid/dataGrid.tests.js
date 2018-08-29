@@ -1291,8 +1291,6 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             });
 
             // assert
-            assert.strictEqual(instance.pageIndex(), 10, "current page index");
-
             setTimeout(function() {
                 assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
                 assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
@@ -5517,7 +5515,6 @@ QUnit.test("ungrouping after grouping should works correctly if row rendering mo
 
         // assert
         visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, "visible row count");
         assert.deepEqual(visibleRows[0].key, 1, "first visible row key");
         done();
     });
@@ -5690,6 +5687,36 @@ QUnit.test("Infinite scrolling should works correctly", function(assert) {
     assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
     assert.equal(dataGrid.getVisibleRows()[0].data.id, 11, "top visible row");
     assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
+});
+
+QUnit.test("scroll position should not be changed after refresh", function(assert) {
+    // arrange, act
+    var data = [];
+
+    for(var i = 0; i < 50; i++) {
+        data.push({ id: i + 1 });
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: data,
+        loadingTimeout: undefined,
+        scrolling: {
+            updateTimeout: 0,
+            useNative: false,
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo(100);
+    dataGrid.refresh();
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), browser.mozilla ? 101 : 100, "scroll top is not changed");
 });
 
 QUnit.module("Rendered on server", {
