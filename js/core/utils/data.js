@@ -66,9 +66,7 @@ var compileGetter = function(expr) {
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
-                if(!current) {
-                    break;
-                }
+                if(!current) break;
 
                 var pathPart = path[i],
                     useDefaultValue = defaultValueExists && typeUtils.isObject(current) && !(pathPart in current),
