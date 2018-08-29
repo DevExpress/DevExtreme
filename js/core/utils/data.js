@@ -67,7 +67,6 @@ var compileGetter = function(expr) {
 
             for(var i = 0; i < path.length; i++) {
                 if(!current) {
-                    current = defaultValueExists ? options.defaultValue : current;
                     break;
                 }
 
