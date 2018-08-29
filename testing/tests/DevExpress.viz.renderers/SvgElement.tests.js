@@ -1583,6 +1583,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], "font-size:13px;cursor:pointer;");
     });
 
+    QUnit.test("Compose styles, set zero value", function(assert) {
+        // act
+        this.rect.css({ "font-size": 0, opacity: 0 });
+
+        // assert
+        assert.deepEqual(this.rect.element.setAttribute.lastCall.args, ["style", "font-size:0px;opacity:0;"]);
+    });
+
     QUnit.test("Merge existing styles with new ones", function(assert) {
         // arrange
         this.rect.css({ "font-size": 13, "cursor": "pointer" });
