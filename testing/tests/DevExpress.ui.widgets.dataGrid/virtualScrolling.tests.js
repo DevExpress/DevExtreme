@@ -215,7 +215,6 @@ QUnit.test("setViewport position. Scroll in in the viewport area", function(asse
     this.scrollController.setViewportPosition(230);
     this.scrollController.setViewportPosition(0);
     this.scrollController.setViewportPosition(this.contentSize - 1);
-    this.scrollController.setViewportPosition(this.contentSize - 0.01);
 
     assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
@@ -485,15 +484,10 @@ QUnit.test("setViewport position. DataSource with too many items", function(asse
 
     assert.roughEqual(this.scrollController.getVirtualContentSize(), CONTENT_HEIGHT_LIMIT + this.contentSize, 1);
 
-    if(browser.msie || browser.mozilla) {
-        assert.strictEqual(this.scrollController.beginPageIndex(), mockDataSource.pageCount() / 2);
-        assert.strictEqual(this.scrollController.endPageIndex(), mockDataSource.pageCount() / 2 + 1);
-    } else {
-        assert.strictEqual(this.scrollController.beginPageIndex(), mockDataSource.pageCount() / 2 - 1);
-        assert.strictEqual(this.scrollController.endPageIndex(), mockDataSource.pageCount() / 2);
-    }
+    assert.strictEqual(this.scrollController.beginPageIndex(), mockDataSource.pageCount() / 2);
+    assert.strictEqual(this.scrollController.endPageIndex(), mockDataSource.pageCount() / 2 + 1);
 
-    assert.strictEqual(this.scrollController.getContentOffset(), browser.msie ? 2000000 : (browser.mozilla ? 4000000 : 7499999));
+    assert.strictEqual(this.scrollController.getContentOffset(), browser.msie ? 2000000 : (browser.mozilla ? 4000000 : 7500000));
     assert.ok(mockDataSource.load.called);
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);

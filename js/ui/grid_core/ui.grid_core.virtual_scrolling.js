@@ -712,15 +712,17 @@ module.exports = {
                         return result && result.done(function() {
                             if(isVirtualMode(that) || isVirtualRowRendering(that)) {
                                 var rowIndexOffset = that.getRowIndexOffset(),
-                                    rowIndex = Math.round(itemIndex) - rowIndexOffset,
+                                    rowIndex = Math.floor(itemIndex) - rowIndexOffset,
                                     component = that.component,
                                     scrollable = component.getScrollable && component.getScrollable();
 
                                 if(scrollable) {
                                     var rowElement = component.getRowElement(rowIndex),
-                                        top = rowElement && rowElement[0] && $(rowElement[0]).position().top;
+                                        $rowElement = rowElement && rowElement[0] && $(rowElement[0]),
+                                        top = $rowElement && $rowElement.position().top;
 
                                     if(top > 0) {
+                                        top = Math.round(top + $rowElement.outerHeight() * (itemIndex % 1));
                                         scrollable.scrollTo({ y: top });
                                     }
                                 }
