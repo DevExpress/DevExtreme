@@ -1237,6 +1237,7 @@ var BaseChart = BaseWidget.inherit({
     _populateSeries(data) {
         const that = this;
         const seriesBasis = [];
+        const incidentOccurred = that._incidentOccurred;
         let seriesThemes = that._populateSeriesOptions(data);
         let particularSeries;
         let changedStateSeriesCount = 0;
@@ -1285,11 +1286,12 @@ var BaseChart = BaseWidget.inherit({
                     seriesGroup: that._seriesGroup,
                     labelsGroup: that._labelsGroup,
                     eventTrigger: that._eventTrigger,
-                    eventPipe: eventPipe
+                    eventPipe: eventPipe,
+                    incidentOccurred: incidentOccurred
                 }, renderSettings), seriesTheme);
             }
             if(!particularSeries.isUpdated) {
-                that._incidentOccurred("E2101", [seriesTheme.type]);
+                incidentOccurred("E2101", [seriesTheme.type]);
             } else {
                 particularSeries.index = that.series.length;
                 that.series.push(particularSeries);

@@ -96,9 +96,7 @@ SeriesDataSource.prototype = {
         allSeriesOptions = (Array.isArray(allSeriesOptions) ? allSeriesOptions : (allSeriesOptions ? [allSeriesOptions] : []));
 
         for(i = 0; i < allSeriesOptions.length; i++) {
-            particularSeriesOptions = extend(true, {
-                incidentOccurred: options.incidentOccurred
-            }, allSeriesOptions[i]);
+            particularSeriesOptions = extend(true, {}, allSeriesOptions[i]);
 
             particularSeriesOptions.rotated = false;
 
@@ -109,7 +107,8 @@ SeriesDataSource.prototype = {
                 newSeries = new seriesModule.Series({
                     renderer: options.renderer,
                     argumentAxis: options.argumentAxis,
-                    valueAxis: options.valueAxis
+                    valueAxis: options.valueAxis,
+                    incidentOccurred: options.incidentOccurred
                 }, seriesTheme);
                 series.push(newSeries);
             }

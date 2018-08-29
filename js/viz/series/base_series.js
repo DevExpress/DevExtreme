@@ -152,6 +152,7 @@ function Series(settings, options) {
     that._group = settings.renderer.g().attr({ "class": "dxc-series" });
     that._eventTrigger = settings.eventTrigger;
     that._eventPipe = settings.eventPipe;
+    that._incidentOccurred = settings.incidentOccurred;
 
     that._legendCallback = _noop;
     that.updateOptions(options, settings);
@@ -366,16 +367,24 @@ Series.prototype = {
         }
 
         const dataSelector = this._getPointDataSelector();
+        let itemsWithoutArgument = 0;
 
         that._data = data.reduce((data, dataItem, index) => {
             const pointDataItem = dataSelector(dataItem);
-            if(_isDefined(pointDataItem.argument) && (!options.nameField || dataItem[options.nameField] === this.name)) {
-                pointDataItem.index = index;
-                data.push(pointDataItem);
+            if(_isDefined(pointDataItem.argument)) {
+                if((!options.nameField || dataItem[options.nameField] === this.name)) {
+                    pointDataItem.index = index;
+                    data.push(pointDataItem);
+                }
+            } else {
+                itemsWithoutArgument++;
             }
             return data;
         }, []);
 
+        if(itemsWithoutArgument && itemsWithoutArgument === data.length) {
+            that._incidentOccurred("W2002", [that.getArgumentField()]);
+        }
         that._endUpdateData();
     },
 
@@ -414,8 +423,9 @@ Series.prototype = {
 
         that._calculateErrorBars(data);
 
+        const skippedFields = {};
         points = data.reduce((points, pointDataItem) => {
-            if(that._checkData(pointDataItem)) {
+            if(that._checkData(pointDataItem, skippedFields)) {
                 const pointIndex = points.length;
                 const oldPoint = that._getOldPoint(pointDataItem, oldPointsByArgument, pointIndex);
                 const point = that._createPoint(pointDataItem, pointIndex, oldPoint);
@@ -425,6 +435,11 @@ Series.prototype = {
             return points;
         }, []);
 
+        for(let field in skippedFields) {
+            if(skippedFields[field] === data.length) {
+                that._incidentOccurred("W2002", [field]);
+            }
+        }
         Object.keys(oldPointsByArgument).forEach((key) => that._disposePoints(oldPointsByArgument[key]));
 
         that._points = points;
@@ -465,8 +480,7 @@ Series.prototype = {
                 p.translate();
                 !translateAllPoints && p.setDefaultCoords();
             }
-            const pointHasCoords = p.hasCoords();
-            if(p.hasValue() && pointHasCoords) {
+            if(p.hasValue() && p.hasCoords()) {
                 translateAllPoints && that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
                 segment.push(p);
             } else if(!p.hasValue()) {
