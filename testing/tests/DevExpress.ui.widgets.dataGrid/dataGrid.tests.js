@@ -3248,6 +3248,44 @@ QUnit.test("scroll position should not be reseted if virtual scrolling and cell 
     assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row key");
 });
 
+QUnit.test("scroll position should not be reseted after refresh if virtual scrolling with legacyRendering", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 100; i++) {
+        array.push({ id: i });
+    }
+
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        dataSource: array,
+        keyExpr: "id",
+        paging: { pageSize: 10 },
+        legacyRendering: true,
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        },
+        columns: [{
+            dataField: "id"
+        }]
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 2000 });
+    clock.tick();
+    dataGrid.refresh();
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), 2000, "scrollTop is not reseted");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row key");
+    clock.restore();
+});
+
 // T662900
 QUnit.test("scroll position should not be changed after partial update via repaintRows", function(assert) {
     // arrange
