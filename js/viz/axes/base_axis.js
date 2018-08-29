@@ -1711,14 +1711,13 @@ Axis.prototype = {
     _mergeViewportOptions() {
         const that = this;
         const options = that._options;
-        let min = _isArray(options.visualRange) && !that._skipVisualRangeApplying && options.visualRange[0] || undefined;
-        let max = _isArray(options.visualRange) && !that._skipVisualRangeApplying && options.visualRange[1] || undefined;
+        let min = _isArray(options._customVisualRange) && options._customVisualRange[0] || undefined;
+        let max = _isArray(options._customVisualRange) && options._customVisualRange[1] || undefined;
 
         (!isDefined(min) && isDefined(options.min)) && (min = options.min);
         (!isDefined(max) && isDefined(options.max)) && (max = options.max);
 
         that._setVisualRange(min, max);
-        that._skipVisualRangeApplying = false;
     },
 
     _validateOptions(options) {
@@ -1741,14 +1740,14 @@ Axis.prototype = {
         }
         options.wholeRange = wholeRange;
 
-        const visualRange = options.visualRange || [];
+        const visualRange = options._customVisualRange || [];
         if(visualRange[0] !== undefined) {
             visualRange[0] = that._validateUnit(visualRange[0]);
         }
         if(visualRange[1] !== undefined) {
             visualRange[1] = that._validateUnit(visualRange[1]);
         }
-        options.visualRange = visualRange;
+        options.visualRange = options._customVisualRange = visualRange;
 
         that._mergeViewportOptions();
     },
@@ -1795,10 +1794,6 @@ Axis.prototype = {
         if(isDefined(this._viewport[0]) || isDefined(this._viewport[1])) {
             return { min: this._viewport[0], max: this._viewport[1] };
         }
-    },
-
-    refreshVisualRangeOption() {
-        this._options.visualRange = this.visualRange();
     },
 
     getFullTicks: function() {

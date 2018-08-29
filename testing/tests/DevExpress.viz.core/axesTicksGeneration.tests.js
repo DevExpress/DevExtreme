@@ -80,6 +80,7 @@ var environment = {
             title: {},
             marker: {}
         }, options));
+        this.axis._options._customVisualRange = options ? options.visualRange : undefined;
 
         this.axis.validate();
     }
