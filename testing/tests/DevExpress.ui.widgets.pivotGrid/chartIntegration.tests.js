@@ -937,7 +937,7 @@ QUnit.test("Single dataField. Numeric", function(assert) {
         name: "Count",
         title: "Count",
         valueType: "numeric",
-        visualRange: [0, 45]
+        visualRange: { startValue: 0, endValue: 45 }
     }]);
 });
 
@@ -997,7 +997,7 @@ QUnit.test("Single dataField. value type is undefined", function(assert) {
         name: "Count",
         title: "Count",
         valueType: undefined,
-        visualRange: [0, 45]
+        visualRange: { startValue: 0, endValue: 45 }
     }]);
 });
 
@@ -1019,7 +1019,7 @@ QUnit.test("Several dataField", function(assert) {
         name: "Count",
         title: "Count",
         valueType: "numeric",
-        visualRange: [0, 45]
+        visualRange: { startValue: 0, endValue: 45 }
     },
     {
         label: {
@@ -1031,7 +1031,7 @@ QUnit.test("Several dataField", function(assert) {
         name: "Avg Freight",
         title: "Avg Freight",
         valueType: "numeric",
-        visualRange: [0, 180]
+        visualRange: { startValue: 0, endValue: 180 }
     }]);
 });
 
@@ -1045,7 +1045,7 @@ QUnit.test("Several dataField. dataFieldsDisplayMode is 'singleAxis'", function(
         dataFieldsDisplayMode: "singleAxis"
     });
 
-    assert.deepEqual(this.valueAxisOptions, [{ visualRange: [0, 100] }]);
+    assert.deepEqual(this.valueAxisOptions, [{ visualRange: { startValue: 0, endValue: 100 } }]);
 });
 
 QUnit.test("Several dataField. dataFieldsDisplayMode is 'splitPanes'", function(assert) {
@@ -1069,7 +1069,7 @@ QUnit.test("Several dataField. dataFieldsDisplayMode is 'splitPanes'", function(
         pane: "Count",
         title: "Count",
         valueType: "numeric",
-        visualRange: [0, 50]
+        visualRange: { startValue: 0, endValue: 50 }
     },
     {
         label: {
@@ -1082,7 +1082,7 @@ QUnit.test("Several dataField. dataFieldsDisplayMode is 'splitPanes'", function(
         name: "Avg Freight",
         title: "Avg Freight",
         valueType: "numeric",
-        visualRange: [0, 100]
+        visualRange: { startValue: 0, endValue: 100 }
     }]);
 });
 
@@ -1101,7 +1101,7 @@ QUnit.test("Single dataField is placed on argument Axis", function(assert) {
         name: "Count",
         title: "Count",
         valueType: "numeric",
-        visualRange: [0, 45]
+        visualRange: { startValue: 0, endValue: 45 }
     }]);
 });
 
@@ -1114,7 +1114,7 @@ QUnit.test("Several dataField. dataFields are placed on argument Axis", function
         putDataFieldsInto: "args"
     });
 
-    assert.deepEqual(this.valueAxisOptions, [{ visualRange: [0, 100] }]);
+    assert.deepEqual(this.valueAxisOptions, [{ visualRange: { startValue: 0, endValue: 100 } }]);
 });
 
 
