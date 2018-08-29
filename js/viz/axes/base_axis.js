@@ -1245,8 +1245,8 @@ Axis.prototype = {
             marginOptions = that._marginOptions,
             businessRange = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
             visualRange = that.getViewport(),
-            minVisible = visualRange && isDefined(visualRange.min) ? visualRange.min : businessRange.minVisible,
-            maxVisible = visualRange && isDefined(visualRange.max) ? visualRange.max : businessRange.maxVisible,
+            minVisible = visualRange && isDefined(visualRange.startValue) ? visualRange.startValue : businessRange.minVisible,
+            maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible,
             ticks = [];
 
         let aggregationInterval = options.aggregationInterval;
@@ -1720,7 +1720,7 @@ Axis.prototype = {
 
         options.wholeRange = that._validateVisualRange(options.wholeRange);
 
-        options.visualRange =  options._customVisualRange = that._validateVisualRange(options._customVisualRange);
+        options.visualRange = options._customVisualRange = that._validateVisualRange(options._customVisualRange);
 
         that._mergeViewportOptions();
     },
