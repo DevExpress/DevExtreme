@@ -70,8 +70,9 @@ var compileGetter = function(expr) {
                     break;
                 }
 
-                var useDefaultValue = defaultValueExists && typeUtils.isPlainObject(current) && !(path[i] in current),
-                    nextValue = useDefaultValue ? options.defaultValue : current[path[i]],
+                var pathPart = path[i],
+                    useDefaultValue = defaultValueExists && typeUtils.isObject(current) && !(pathPart in current),
+                    nextValue = useDefaultValue ? options.defaultValue : current[pathPart],
                     next = unwrap(nextValue, options);
 
                 if(!functionAsIs && typeUtils.isFunction(next)) {

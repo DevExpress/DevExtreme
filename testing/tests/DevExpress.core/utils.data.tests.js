@@ -74,6 +74,7 @@ QUnit.test("inheritance", function(assert) {
 
     assert.equal(obj.a, 123, "object has property");
     assert.equal(GETTER("a")(obj, { defaultValue: false }), 123);
+    assert.equal(GETTER("b")(obj, { defaultValue: 1 }), 1);
 });
 
 QUnit.test("complex getter", function(assert) {
