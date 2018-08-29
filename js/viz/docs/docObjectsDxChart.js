@@ -115,13 +115,19 @@ var chartAxisObject = {
     /**
     * @name chartAxisObjectMethods.visualRange
     * @publicName visualRange()
-    * @return Array<number,string,Date>
+    * @return VizRange
     */
     visualRange: function() { },
     /**
     * @name chartAxisObjectMethods.visualRange
     * @publicName visualRange(visualRange)
     * @param1 visualRange:Array<number,string,Date>
+    */
+    visualRange: function(visualRange) { },
+    /**
+    * @name chartAxisObjectMethods.visualRange
+    * @publicName visualRange(visualRange)
+    * @param1 visualRange:VizRange
     */
     visualRange: function(visualRange) { }
 };

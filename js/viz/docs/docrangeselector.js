@@ -443,7 +443,7 @@ var dxRangeSelector = {
     },
     /**
     *@name dxRangeSelectorOptions.value
-    * @type Array<number,string,Date>
+    * @type Array<number,string,Date> | VizRange
     * @fires dxRangeSelectorOptions.onValueChanged
     * @notUsedInTheme
     */
@@ -763,6 +763,12 @@ var dxRangeSelector = {
     * @name dxRangeSelectorMethods.setValue
     * @publicName setValue(value)
     * @param1 value:Array<number,string,Date>
+    */
+    setValue: function() { },
+    /**
+    * @name dxRangeSelectorMethods.setValue
+    * @publicName setValue(value)
+    * @param1 value:VizRange
     */
     setValue: function() { },
     /**
