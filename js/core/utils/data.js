@@ -70,7 +70,7 @@ var compileGetter = function(expr) {
                     break;
                 }
 
-                var useDefaultValue = defaultValueExists && !(path[i] in current),
+                var useDefaultValue = defaultValueExists && typeUtils.isPlainObject(current) && !(path[i] in current),
                     nextValue = useDefaultValue ? options.defaultValue : current[path[i]],
                     next = unwrap(nextValue, options);
 
