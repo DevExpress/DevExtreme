@@ -69,12 +69,15 @@ exports.stock = _extend({}, scatterSeries, {
         return creatingPointOptions;
     },
 
-    _checkData: function(data) {
-        return _isDefined(data.argument) &&
-            data.highValue !== undefined &&
-            data.lowValue !== undefined &&
-            data.openValue !== undefined &&
-            data.closeValue !== undefined &&
+    _checkData: function(data, skippedFields) {
+        const valueFields = this.getValueFields();
+
+        return scatterSeries._checkData.call(this, data, skippedFields, {
+            openValue: valueFields[0],
+            highValue: valueFields[1],
+            lowValue: valueFields[2],
+            closeValue: valueFields[3]
+        }) &&
             data.highValue === data.highValue &&
             data.lowValue === data.lowValue;
     },

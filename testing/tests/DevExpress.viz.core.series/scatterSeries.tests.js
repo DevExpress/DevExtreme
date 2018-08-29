@@ -149,6 +149,21 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(this.createPoint.getCall(1).args[1].argument, 3, "argument");
     });
 
+    QUnit.test("IncidentOccurred. Data without value field", function(assert) {
+        const data = [{ arg: 1 }, { arg: 2 }];
+        const incidentOccurred = sinon.spy();
+        const options = { type: "scatter", argumentField: "arg", valueField: "val", label: { visible: false } };
+        const series = createSeries(options, {
+            incidentOccurred: incidentOccurred
+        });
+
+        series.updateData(data);
+        series.createPoints();
+
+        assert.strictEqual(incidentOccurred.callCount, 1);
+        assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
+    });
+
     QUnit.module("Series with valueErrorBar", {
         beforeEach: function() {
             environment.beforeEach.call(this);

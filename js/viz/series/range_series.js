@@ -16,8 +16,13 @@ var baseRangeSeries = {
     areErrorBarsVisible: _noop,
     _createErrorBarGroup: _noop,
 
-    _checkData: function(data) {
-        return scatterSeries._checkData(data) && data.minValue !== undefined && data.minValue === data.minValue;
+    _checkData: function(data, skippedFields) {
+        const valueFields = this.getValueFields();
+
+        return scatterSeries._checkData.call(this, data, skippedFields, {
+            minValue: valueFields[0],
+            value: valueFields[1]
+        }) && data.minValue === data.minValue;
     },
 
     getValueRangeInitialValue: scatterSeries.getValueRangeInitialValue,
