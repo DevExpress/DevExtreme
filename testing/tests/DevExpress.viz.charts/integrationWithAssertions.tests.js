@@ -413,7 +413,7 @@ QUnit.test("Set visualRange for multi axis/pane (exists option collection for ea
 
 QUnit.test("Set visualRange for multi axis/pane (check option method and adjustOnZoom)", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
-    var currentVisualRange = [];
+    var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
         size: {
@@ -443,7 +443,7 @@ QUnit.test("Set visualRange for multi axis/pane (check option method and adjustO
         }],
         panes: [{ name: "p1" }, { name: "p2" }],
         series: [{ type: "line", valueField: "val1", pane: "p1" }, { type: "line", valueField: "val2", pane: "p2" }],
-        onOptionChanged: function(e) { currentVisualRange.push(e.value); },
+        onOptionChanged: visualRangeChanged,
         valueAxis: [{ pane: "p1" }, { pane: "p2" }]
     });
 
@@ -455,6 +455,117 @@ QUnit.test("Set visualRange for multi axis/pane (check option method and adjustO
 
     assert.deepEqual(chart.option("valueAxis[0].visualRange"), [5, 10]);
     assert.deepEqual(chart.option("valueAxis[1].visualRange"), [16, 26]);
+});
+
+QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var visualRangeChanged = sinon.spy();
+    var panes = [{ name: "p1" }];
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val1: -10,
+            val2: 20
+        }, {
+            arg: 2,
+            val1: 5,
+            val2: 3
+        }, {
+            arg: 5,
+            val1: 7,
+            val2: 25
+        }, {
+            arg: 8,
+            val1: 3,
+            val2: 5
+        }, {
+            arg: 11,
+            val1: 20,
+            val2: -10
+        }],
+        panes: panes,
+        series: [{ type: "line", valueField: "val1", pane: "p1", axis: "ax1" }, { type: "line", valueField: "val2", pane: "p2", axis: "ax1" }],
+        onOptionChanged: visualRangeChanged,
+        valueAxis: { name: "ax1" }
+    });
+
+    assert.ok(chart);
+
+    chart.getArgumentAxis().visualRange([4, 6]);
+    panes.push({ name: "p2" });
+    chart.option("panes", panes);
+
+    assert.deepEqual(chart.option("valueAxis.visualRange"), [16, 26]);
+    assert.deepEqual(chart._valueAxes[0].visualRange(), [5.6, 7.2]);
+    assert.deepEqual(chart._valueAxes[1].visualRange(), [16, 26]);
+});
+
+QUnit.test("Set the visualRange option by the different ways", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 5,
+        val: 7
+    }, {
+        arg: 8,
+        val: 3
+    }, {
+        arg: 11,
+        val: 8
+    }];
+    var visualRangeChanged = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        series: { type: "line" },
+        onOptionChanged: visualRangeChanged
+    });
+
+    assert.ok(chart);
+
+    visualRangeChanged.reset();
+    chart.option("valueAxis.visualRange", [3, 6]);
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
+    assert.deepEqual(chart.option("valueAxis.visualRange"), [3, 6]);
+    assert.deepEqual(chart._options.valueAxis._customVisualRange, [3, 6]);
+
+    visualRangeChanged.reset();
+    chart.option("valueAxis", { visualRange: [1, 4] });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: [1, 4] });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), [1, 4]);
+    assert.deepEqual(chart._options.valueAxis._customVisualRange, [1, 4]);
+
+    visualRangeChanged.reset();
+    chart.option({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        series: { type: "line" },
+        onOptionChanged: visualRangeChanged,
+        valueAxis: { visualRange: [2, 7] }
+    });
+
+    assert.deepEqual(visualRangeChanged.getCall(3).args[0].value, { visualRange: [2, 7] });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), [2, 7]);
+    assert.deepEqual(chart._options.valueAxis._customVisualRange, [2, 7]);
 });
 
 QUnit.test("Set null visualRange", function(assert) {

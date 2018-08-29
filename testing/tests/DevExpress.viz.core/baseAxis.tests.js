@@ -54,6 +54,7 @@ var environment = {
             }
         };
         this.axis.updateOptions($.extend(true, defaultOptions, options));
+        this.axis._options._customVisualRange = options ? options.visualRange : undefined;
     }
 };
 
@@ -252,7 +253,8 @@ QUnit.test("Get options", function(assert) {
         tick: {},
         minorTick: {},
         title: {},
-        marker: {}
+        marker: {},
+        _customVisualRange: undefined
     }, "Options should be correct");
 });
 
