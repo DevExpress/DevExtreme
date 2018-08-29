@@ -5567,7 +5567,7 @@ QUnit.test('setViewportItemIndex to far for virtual scrolling when rowsView heig
 
     dataController.setViewportItemIndex = function(itemIndex) {
         assert.ok(heightRatio > 0 && heightRatio < 1, "heightRatio is defined and in (0, 1)");
-        assert.roughEqual(itemIndex, 9000000, 1);
+        assert.roughEqual(itemIndex, 9000000, 2.1);
         done();
     };
 
