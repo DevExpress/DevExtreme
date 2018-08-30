@@ -1,7 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
-'<div id="pivotGrid" style="width: 700px"></div>';
-
+    var markup = '<div id="pivotGrid" style="width: 700px"></div>';
     $("#qunit-fixture").html(markup);
 });
 
