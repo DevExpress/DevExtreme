@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     addNamespace = eventUtils.addNamespace,
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
-    fx = require("../../animation/fx");
+    fx = require("../../animation/fx"),
+    getSwatchContainer = require("../widget/swatch_container");
 
 var COLUMNS_SEPARATOR_CLASS = "columns-separator",
     COLUMNS_SEPARATOR_TRANSPARENT = "columns-separator-transparent",
@@ -448,7 +449,7 @@ var DraggingHeaderView = modules.View.inherit({
             .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
             .text(options.sourceColumn.caption);
 
-        that.element().appendTo($("body"));
+        that.element().appendTo(getSwatchContainer(columnElement));
     },
 
     moveHeader: function(args) {
