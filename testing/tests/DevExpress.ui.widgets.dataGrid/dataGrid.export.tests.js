@@ -37,14 +37,14 @@ function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", s
 };
 
 QUnit.test("Empty grid", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"4\"><xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf><xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf><xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf><xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf></cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="4"><xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf><xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf><xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf><xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf></cellXfs>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles>' +
         '</styleSheet>';
     const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
         '<sheetPr/><dimension ref="A1:C1"/>' +
@@ -59,37 +59,37 @@ QUnit.test("Empty grid", function(assert) {
 });
 
 QUnit.test("Columns - number", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"n\" /></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"n\"><v>0</v></c></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"n\"><v>1</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"n\"><v>2</v></c></row>' +
-        '<row r=\"7\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A7\" s=\"3\" t=\"n\"><v>2</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n" /></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>0</v></c></row>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>1</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>2</v></c></row>' +
+        '<row r="7" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A7" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C7\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"1\" uniqueCount=\"1\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C7" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="1" uniqueCount="1">' +
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
@@ -104,37 +104,37 @@ QUnit.test("Columns - number", function(assert) {
 });
 
 QUnit.test("Columns - string", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"7\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A7\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s" /></row>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>2</v></c></row>' +
+        '<row r="7" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A7" s="3" t="s"><v>2</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C7\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"3\" uniqueCount=\"3\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C7" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="3" uniqueCount="3">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>str1</t></si>' +
         '<si><t>str2</t></si>' +
@@ -151,37 +151,37 @@ QUnit.test("Columns - string", function(assert) {
 });
 
 QUnit.test("Columns - date", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"1\"><numFmt numFmtId=\"165\" formatCode=\"[$-9]M\\/d\\/yyyy\" /></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"1\" numFmtId=\"165\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="1"><numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" /></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles>' +
         '</styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"n\"><v>43435</v></c></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"n\"><v>43436</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"n\"><v>43436</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>43435</v></c></row>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>43436</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>43436</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"1\" uniqueCount=\"1\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="1" uniqueCount="1">' +
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
@@ -196,36 +196,36 @@ QUnit.test("Columns - date", function(assert) {
 });
 
 QUnit.test("Columns - datetime", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"1\"><numFmt numFmtId=\"165\" formatCode=\"[$-9]M\\/d\\/yyyy\, H:mm AM/PM\" /></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"1\" numFmtId=\"165\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="1"><numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy\, H:mm AM/PM" /></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles>' +
         '</styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"n\"><v>43435.67361111111</v></c></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"n\"><v>43436.67361111111</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"n\"><v>43436.67361111111</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>43435.67361111111</v></c></row>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>43436.67361111111</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>43436.67361111111</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"1\" uniqueCount=\"1\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="1" uniqueCount="1">' +
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
@@ -240,35 +240,35 @@ QUnit.test("Columns - datetime", function(assert) {
 });
 
 QUnit.test("Columns - boolean", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>2</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>2</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"3\" uniqueCount=\"3\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="3" uniqueCount="3">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>true</t></si>' +
         '<si><t>false</t></si>' +
@@ -285,35 +285,35 @@ QUnit.test("Columns - boolean", function(assert) {
 });
 
 QUnit.test("Columns - lookup", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\" /></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>2</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>2</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"3\" uniqueCount=\"3\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="3" uniqueCount="3">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>name1</t></si>' +
         '<si><t>name2</t></si>' +
@@ -343,57 +343,57 @@ QUnit.test("Columns - lookup", function(assert) {
 });
 
 QUnit.test("Columns - string, number, date, boolean, object, datetime", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"2\"><numFmt numFmtId=\"165\" formatCode=\"[$-9]M\\/d\\/yyyy\" /><numFmt numFmtId=\"166\" formatCode=\"[$-9]M\\/d\\/yyyy, H:mm AM/PM\" /></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"10\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"1\" numFmtId=\"165\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"1\" numFmtId=\"166\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="2"><numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" /><numFmt numFmtId="166" formatCode="[$-9]M\\/d\\/yyyy, H:mm AM/PM" /></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="10">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width=\"15.86\" min=\"1\" max=\"1\" />' +
-        '<col width=\"15.86\" min=\"2\" max=\"2\" />' +
-        '<col width=\"16\" min=\"3\" max=\"3\" />' +
-        '<col width=\"16\" min=\"4\" max=\"4\" />' +
-        '<col width=\"16\" min=\"5\" max=\"5\" />' +
-        '<col width=\"16\" min=\"6\" max=\"6\" />' +
+        '<col width="15.86" min="1" max="1" />' +
+        '<col width="15.86" min="2" max="2" />' +
+        '<col width="16" min="3" max="3" />' +
+        '<col width="16" min="4" max="4" />' +
+        '<col width="16" min="5" max="5" />' +
+        '<col width="16" min="6" max="6" />' +
         '</cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:6\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\">' +
-        '<c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c>' +
-        '<c r=\"B1\" s=\"0\" t=\"s\"><v>1</v></c>' +
-        '<c r=\"C1\" s=\"0\" t=\"s\"><v>2</v></c>' +
-        '<c r=\"D1\" s=\"0\" t=\"s\"><v>3</v></c>' +
-        '<c r=\"E1\" s=\"0\" t=\"s\"><v>4</v></c>' +
-        '<c r=\"F1\" s=\"0\" t=\"s\"><v>5</v></c>' +
+        '<row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s"><v>0</v></c>' +
+        '<c r="B1" s="0" t="s"><v>1</v></c>' +
+        '<c r="C1" s="0" t="s"><v>2</v></c>' +
+        '<c r="D1" s="0" t="s"><v>3</v></c>' +
+        '<c r="E1" s="0" t="s"><v>4</v></c>' +
+        '<c r="F1" s="0" t="s"><v>5</v></c>' +
         '</row>' +
-        '<row r=\"2\" spans=\"1:6\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\">' +
-        '<c r=\"A2\" s=\"3\" t=\"s\"><v>6</v></c>' +
-        '<c r=\"B2\" s=\"4\" t=\"n\"><v>1</v></c>' +
-        '<c r=\"C2\" s=\"5\" t=\"n\"><v>43435</v></c>' +
-        '<c r=\"D2\" s=\"6\" t=\"s\"><v>7</v></c>' +
-        '<c r=\"E2\" s=\"7\" t=\"s\"><v>8</v></c>' +
-        '<c r=\"F2\" s=\"8\" t=\"n\"><v>43435.67361111111</v></c>' +
+        '<row r="2" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="3" t="s"><v>6</v></c>' +
+        '<c r="B2" s="4" t="n"><v>1</v></c>' +
+        '<c r="C2" s="5" t="n"><v>43435</v></c>' +
+        '<c r="D2" s="6" t="s"><v>7</v></c>' +
+        '<c r="E2" s="7" t="s"><v>8</v></c>' +
+        '<c r="F2" s="8" t="n"><v>43435.67361111111</v></c>' +
         '</row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:F2\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"9\" uniqueCount=\"9\">' +
+        '<ignoredErrors><ignoredError sqref="A1:F2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="9" uniqueCount="9">' +
         "<si><t>String 1</t></si>" +
         "<si><t>Number 1</t></si>" +
         "<si><t>Date 1</t></si>" +
@@ -443,32 +443,32 @@ QUnit.test("Columns - string, number, date, boolean, object, datetime", function
 });
 
 QUnit.test("Columns - selection/editing commands", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"75\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="75" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\"><v>1</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C2\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"2\" uniqueCount=\"2\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="2" uniqueCount="2">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>str1</t></si>' +
         '</sst>';
@@ -486,34 +486,34 @@ QUnit.test("Columns - selection/editing commands", function(assert) {
 });
 
 QUnit.test("Groupping - 1 level", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"1\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"95\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="95" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"4\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\"><v>3</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
+        '<row r="4" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>3</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C4\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"4\" uniqueCount=\"4\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="4" uniqueCount="4">' +
         '<si><t>Field 2</t></si>' +
         '<si><t>Field 1: str1</t></si>' +
         '<si><t>str1_1</t></si>' +
@@ -534,36 +534,36 @@ QUnit.test("Groupping - 1 level", function(assert) {
 });
 
 QUnit.test("Groupping - 2 levels", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"2\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"90.71\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="2" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="90.71" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"4\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"4\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"2\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\"><v>3</v></c></row>' +
-        '<row r=\"5\" spans=\"1:1\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"4\" t=\"s\"><v>4</v></c></row>' +
-        '<row r=\"6\" spans=\"1:1\" outlineLevel=\"2\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"s\"><v>5</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="4" t="s"><v>2</v></c></row>' +
+        '<row r="4" spans="1:1" outlineLevel="2" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>3</v></c></row>' +
+        '<row r="5" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A5" s="4" t="s"><v>4</v></c></row>' +
+        '<row r="6" spans="1:1" outlineLevel="2" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>5</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C6\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"6\" uniqueCount=\"6\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="6" uniqueCount="6">' +
         '<si><t>Field 3</t></si>' +
         '<si><t>Field 1: str1</t></si>' +
         '<si><t>Field 2: str1_1</t></si>' +
@@ -587,36 +587,36 @@ QUnit.test("Groupping - 2 levels", function(assert) {
 });
 
 QUnit.test("Groupping - 'alignByColumn: true'", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"6\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="6">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"2\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"45\" min=\"1\" max=\"1\" /><col width=\"45\" min=\"2\" max=\"2\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="2" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="45" min="1" max="1" /><col width="45" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:2\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"B1\" s=\"0\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"2\" spans=\"1:2\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"5\" t=\"s\"><v>2</v></c><c r=\"B2\" s=\"1\" t=\"s\"><v>3</v></c></row>' +
-        '<row r=\"3\" spans=\"1:2\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"5\" t=\"s\"><v>4</v></c><c r=\"B3\" s=\"1\" t=\"s\"><v>3</v></c></row>' +
-        '<row r=\"4\" spans=\"1:2\" outlineLevel=\"2\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\"><v>5</v></c><c r=\"B4\" s=\"4\" t=\"s\"><v>6</v></c></row>' +
-        '<row r=\"5\" spans=\"1:2\" outlineLevel=\"2\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"3\" t=\"s\"><v>5</v></c><c r=\"B5\" s=\"4\" t=\"s\"><v>6</v></c></row>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="5" t="s"><v>2</v></c><c r="B2" s="1" t="s"><v>3</v></c></row>' +
+        '<row r="3" spans="1:2" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="5" t="s"><v>4</v></c><c r="B3" s="1" t="s"><v>3</v></c></row>' +
+        '<row r="4" spans="1:2" outlineLevel="2" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>5</v></c><c r="B4" s="4" t="s"><v>6</v></c></row>' +
+        '<row r="5" spans="1:2" outlineLevel="2" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>5</v></c><c r="B5" s="4" t="s"><v>6</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C5\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"7\" uniqueCount=\"7\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C5" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="7" uniqueCount="7">' +
         '<si><t>Field 3</t></si>' +
         '<si><t>Field 4</t></si>' +
         '<si><t>Field 1: str1 (Count: 2)</t></si>' +
@@ -645,36 +645,36 @@ QUnit.test("Groupping - 'alignByColumn: true'", function(assert) {
 });
 
 QUnit.test("Bands", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"7\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="7">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"2\" topLeftCell=\"A3\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"32.57\" min=\"1\" max=\"1\" /><col width=\"32.57\" min=\"2\" max=\"2\" /><col width=\"32.71\" min=\"3\" max=\"3\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="32.57" min="1" max="1" /><col width="32.57" min="2" max="2" /><col width="32.71" min="3" max="3" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"B1\" s=\"0\" t=\"s\"><v>1</v></c><c r=\"C1\" s=\"0\" t=\"s\" /></row>' +
-        '<row r=\"2\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"0\" t=\"s\" /><c r=\"B2\" s=\"0\" t=\"s\"><v>2</v></c><c r=\"C2\" s=\"0\" t=\"s\"><v>3</v></c></row>' +
-        '<row r=\"3\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\"><v>4</v></c><c r=\"B3\" s=\"4\" t=\"s\"><v>5</v></c><c r=\"C3\" s=\"5\" t=\"s\"><v>6</v></c></row>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>4</v></c><c r="B3" s="4" t="s"><v>5</v></c><c r="C3" s="5" t="s"><v>6</v></c></row>' +
         '</sheetData>' +
-        '<mergeCells count=\"2\"><mergeCell ref=\"A1:A2\" /><mergeCell ref=\"B1:C1\" /></mergeCells>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C3\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"7\" uniqueCount=\"7\">' +
+        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
+        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="7" uniqueCount="7">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>Band1</t></si>' +
         '<si><t>Field 2</t></si>' +
@@ -704,34 +704,34 @@ QUnit.test("Bands", function(assert) {
 });
 
 QUnit.test("Summary - total", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"n\"><v>1</v></c></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"n\"><v>2</v></c></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"2\" t=\"s\"><v>1</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n"><v>2</v></c></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="2" t="s"><v>1</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C4\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"2\" uniqueCount=\"2\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="2" uniqueCount="2">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>Count: 2</t></si>' +
         '</sst>';
@@ -750,34 +750,34 @@ QUnit.test("Summary - total", function(assert) {
 });
 
 QUnit.test("Summary - groupping", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"1\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"95\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="95" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"4\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"4\" spans=\"1:1\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"3\" t=\"s\"><v>3</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
+        '<row r="4" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>3</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C4\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"4\" uniqueCount=\"4\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="4" uniqueCount="4">' +
         '<si><t>Field 2</t></si>' +
         '<si><t>Field 1: str1 (Count: 2)</t></si>' +
         '<si><t>str1_1</t></si>' +
@@ -801,31 +801,31 @@ QUnit.test("Summary - groupping", function(assert) {
 });
 
 QUnit.test("'showColumnHeaders: false'", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"99.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="99.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"3\" t=\"s\"><v>0</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C1\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"1\" uniqueCount=\"1\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="1" uniqueCount="1">' +
         '<si><t>str1</t></si>' +
         '</sst>';
 
@@ -841,32 +841,32 @@ QUnit.test("'showColumnHeaders: false'", function(assert) {
 });
 
 QUnit.test("'customizeExportData' callback", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
-        '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
-        '<cellXfs count=\"5\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"1\" horizontal=\"right\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"1\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
+    const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
+        '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+        '<borders count="1"><border><left style="thin"><color rgb="FFD3D3D3"/></left><right style="thin"><color rgb="FFD3D3D3"/></right><top style="thin"><color rgb="FFD3D3D3"/></top><bottom style="thin"><color rgb="FFD3D3D3"/></bottom></border></borders>' +
+        '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles></styleSheet>';
-    const worksheet = '<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>' +
-        '<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">' +
-        '<sheetPr/><dimension ref=\"A1:C1\"/>' +
-        '<sheetViews><sheetView tabSelected=\"1\" workbookViewId=\"0\"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"0\" x14ac:dyDescent=\"0.25\"/>' +
-        '<cols><col width=\"89.29\" min=\"1\" max=\"1\" /></cols>' +
+        '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="89.29" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"s\"><v>1</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref=\"A1:C2\" numberStoredAsText=\"1\" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version=\"1.0\" encoding=\"utf-8\"?><sst xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" count=\"2\" uniqueCount=\"2\">' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="2" uniqueCount="2">' +
         '<si><t>Field 1</t></si>' +
         '<si><t>str1_customize</t></si>' +
         '</sst>';
