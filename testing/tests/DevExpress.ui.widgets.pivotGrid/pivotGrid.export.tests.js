@@ -1,15 +1,6 @@
 QUnit.testStart(function() {
     var markup =
-'<style>\
-    table {table-layout: fixed;}/*T428108*/\
-    .dx-scrollable-content {\
-        padding: 0 !important;\
-    }\
-</style>\
-<div id="pivotGrid"></div>\
-<div class="dx-pivotgrid">\
-    <div id="pivotArea" class="dx-pivotgrid-area-data dx-pivotgrid-vertical-headers" />\
-</div>';
+'<div id="pivotGrid" style="width: 700px"></div>';
 
     $("#qunit-fixture").html(markup);
 });
