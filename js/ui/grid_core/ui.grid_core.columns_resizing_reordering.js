@@ -488,6 +488,7 @@ var DraggingHeaderView = modules.View.inherit({
             controller = that._controller,
             i,
             params = that._dropOptions,
+            dragOptions = that._dragOptions,
             centerPosition;
 
         if(targetDraggingPanel) {
@@ -495,16 +496,19 @@ var DraggingHeaderView = modules.View.inherit({
                 isVerticalOrientation = targetDraggingPanel.getName() === "columnChooser",
                 axisName = isVerticalOrientation ? "y" : "x",
                 targetLocation = targetDraggingPanel.getName(),
-                rowIndex = targetLocation === "headers" ? that._dragOptions.rowIndex : undefined,
-                sourceColumn = that._dragOptions.sourceColumn,
+                rowIndex = targetLocation === "headers" ? dragOptions.rowIndex : undefined,
+                sourceColumn = dragOptions.sourceColumn,
                 columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn && sourceColumn.ownerBand) || [],
-                pointsByColumns = targetLocation === "columnChooser" ? [] : controller._generatePointsByColumns(extend({}, that._dragOptions, {
+                pointsByTarget = dragOptions.pointsByTarget = dragOptions.pointsByTarget || {},
+                pointsByColumns = targetLocation === "columnChooser" ? [] : pointsByTarget[targetLocation] || controller._generatePointsByColumns(extend({}, dragOptions, {
                     targetDraggingPanel: targetDraggingPanel,
                     columns: targetDraggingPanel.getColumns(rowIndex),
                     columnElements: columnElements,
                     isVerticalOrientation: isVerticalOrientation,
                     startColumnIndex: targetLocation === "headers" && $(columnElements[0]).index()
                 }));
+
+            pointsByTarget[targetLocation] = pointsByColumns;
 
             ///#DEBUG
             this._testPointsByColumns = pointsByColumns;
@@ -1102,13 +1106,13 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
         return targetLocation === "headers" ? this._columnsSeparatorView : this._blockSeparatorView;
     },
 
-    hideSeparators: function() {
+    hideSeparators: function(type) {
         var blockSeparator = this._blockSeparatorView,
             columnsSeparator = this._columnsSeparatorView;
 
         this._animationColumnIndex = null;
         blockSeparator && blockSeparator.hide();
-        columnsSeparator && columnsSeparator.hide();
+        type !== "block" && columnsSeparator && columnsSeparator.hide();
     },
 
     init: function() {
@@ -1186,7 +1190,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                 if(targetLocation === "group" || targetLocation === "columnChooser") {
                     showSeparator();
                 } else {
-                    that.hideSeparators();
+                    that.hideSeparators("block");
                     that.getController("tablePosition").update(parameters.posY);
                     separator.moveByX(parameters.posX - separator.width());
                     separator.show();
