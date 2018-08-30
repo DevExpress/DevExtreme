@@ -3,7 +3,7 @@ import "common.css!";
 import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
-import {excel as excelCreator} from "client_exporter";
+import { excel as excelCreator } from "client_exporter";
 
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
