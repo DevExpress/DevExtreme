@@ -35,6 +35,7 @@ var createSeries = function(options, renderSettings) {
     renderSettings = $.extend({
         labelsGroup: renderer.g(),
         seriesGroup: renderer.g(),
+        incidentOccurred: $.noop
     }, renderSettings);
 
     renderer.stub("g").reset();
@@ -138,6 +139,21 @@ QUnit.test("getMarginOptions", function(assert) {
         processBubbleSize: true,
         percentStick: false
     });
+});
+
+QUnit.test("IncidentOccurred. Data without size field", function(assert) {
+    const data = [{ val: 1, arg: 1 }, { val: 1, arg: 2 }];
+    const incidentOccurred = sinon.spy();
+    const options = { type: "bubble", argumentField: "arg", valueField: "val", label: { visible: false } };
+    const series = createSeries(options, {
+        incidentOccurred: incidentOccurred
+    });
+
+    series.updateData(data);
+    series.createPoints();
+
+    assert.strictEqual(incidentOccurred.callCount, 1);
+    assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
 });
 
 QUnit.module("Bubble series. Draw", {

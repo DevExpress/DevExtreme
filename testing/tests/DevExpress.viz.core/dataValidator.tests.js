@@ -2137,30 +2137,6 @@ QUnit.test("Incompatible types, semidiscrete axis", function(assert) {
     assert.deepEqual(incidentOccurred.lastCall.args, ["E2002"], "incident");
 });
 
-QUnit.test("Input data without argument field", function(assert) {
-    var incidentOccurred = sinon.spy(),
-        parsedData = testValidateData([{ val: 1 }, { val: 2 }, { val: 3 }, null, { val: 4 }, { val: 5 }], createGroupsData(), incidentOccurred);
-
-    assert.strictEqual(parsedData.arg.length, 5, "data");
-    assert.deepEqual(incidentOccurred.lastCall.args, ["W2002", ["arg"]], "incident");
-});
-
-QUnit.test("Input data without value field", function(assert) {
-    var incidentOccurred = sinon.spy(),
-        parsedData = testValidateData([{ arg: 1 }, { arg: 2 }, { arg: 3 }, { arg: 4 }, { arg: 5 }], createGroupsData(), incidentOccurred);
-
-    assert.strictEqual(parsedData.arg.length, 5, "data");
-    assert.deepEqual(incidentOccurred.lastCall.args, ["W2002", ["val"]], "incident");
-});
-
-QUnit.test("Input data without size field", function(assert) {
-    var incidentOccurred = sinon.spy(),
-        parsedData = testValidateData([{ arg: 1, val: 1 }, { arg: 2, val: 1 }, { arg: 3, val: 1 }, { arg: 4, val: 1 }, { arg: 5, val: 1 }], createGroupsData({ sizeField: "size" }), incidentOccurred);
-
-    assert.strictEqual(parsedData.arg.length, 5, "data");
-    assert.deepEqual(incidentOccurred.lastCall.args, ["W2002", ["size"]], "incident");
-});
-
 QUnit.test("Input data with argument of wrong type", function(assert) {
     var incidentOccurred = sinon.spy(),
         parsedData = testValidateData([
