@@ -13,7 +13,8 @@ require("ui/pivot_grid/ui.pivot_grid");
 var $ = require("jquery"),
     internals = require("client_exporter").excel.__internals,
     SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
-    STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+    STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
+    STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
 
 function testConfiguration(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
     const done = assert.async(3);
@@ -48,8 +49,7 @@ QUnit.test("Empty pivot", function(assert) {
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
-        '</styleSheet>';
+        STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"1\" ySplit=\"1\" topLeftCell=\"B2\" /></sheetView></sheetViews>' +
@@ -76,8 +76,7 @@ QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
-        '</styleSheet>';
+        STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"1\" ySplit=\"1\" topLeftCell=\"B2\" /></sheetView></sheetViews>' +
@@ -121,8 +120,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
         '</cellXfs>' +
-        '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
-        '</styleSheet>';
+        STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"2\" ySplit=\"2\" topLeftCell=\"C3\" /></sheetView></sheetViews>' +
