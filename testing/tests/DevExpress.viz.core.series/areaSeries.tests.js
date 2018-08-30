@@ -44,7 +44,8 @@ var createSeries = function(options, renderSettings) {
         labelsGroup: renderer.g(),
         seriesGroup: renderer.g(),
         eventTrigger: noop,
-        eventPipe: sinon.spy()
+        eventPipe: sinon.spy(),
+        incidentOccurred: noop
     }, renderSettings);
 
     renderer.stub("g").reset();

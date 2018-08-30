@@ -7,7 +7,6 @@ var lineSeries = require("./line_series").chart.line,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
 
-    _isDefined = require("../../core/utils/type").isDefined,
     _extend = extend,
     _each = each,
     _noop = require("../../core/utils/common").noop;
@@ -39,8 +38,8 @@ exports.chart.bubble = _extend({}, scatterSeries, {
 
     _createErrorBarGroup: _noop,
 
-    _checkData: function(data) {
-        return _isDefined(data.argument) && _isDefined(data.size) && data.value !== undefined;
+    _checkData: function(data, skippedFields) {
+        return scatterSeries._checkData.call(this, data, skippedFields, { value: this.getValueFields()[0], size: this.getSizeField() });
     },
 
     _getPointDataSelector: function(data, options) {

@@ -984,6 +984,24 @@ var checkPoints = function(assert, series, argumentArray, valueArray) {
     }
 };
 
+QUnit.test("Names to series", function(assert) {
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [
+            { x: 10, y1: 0 }
+        ],
+        chart: {
+            series: {
+                argumentField: "x",
+                valueField: "y1"
+            }
+        },
+        renderer: new vizMocks.Renderer(),
+        argumentAxis: this.argumentAxis
+    });
+
+    assert.strictEqual(seriesDataSource.getSeries()[0].name, "Series 1");
+});
+
 QUnit.module("SeriesDataSource seriesFamilies", {
     beforeEach: function() {
         environment.beforeEach.call(this);

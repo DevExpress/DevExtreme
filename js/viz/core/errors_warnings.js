@@ -76,7 +76,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsViz.W2002
     */
-    W2002: "The {0} data field is absent",
+    W2002: "The {0} series cannot be drawn because the {1} data field is missing",
     /**
     * @name ErrorsViz.W2003
     */

@@ -46,7 +46,8 @@ var createSeries = function(options, settings) {
         labelsGroup: labelsGroup,
         commonSeriesModes: {},
         eventPipe: commonUtils.noop,
-        eventTrigger: commonUtils.noop
+        eventTrigger: commonUtils.noop,
+        incidentOccurred: commonUtils.noop
     }, settings);
 
     return new Series(settings, options);
@@ -657,6 +658,33 @@ QUnit.test("Update points when series has several points at the same argument", 
     assert.equal(series.getAllPoints()[2].mockOptions.argument, 4, "Arg");
     assert.equal(series.getAllPoints()[2].mockOptions.value, 11, "Val");
     assert.equal(this.pointsCreatingCount, 3);
+});
+
+QUnit.test("IncidentOccurred was not called with empty data", function(assert) {
+    const data = [];
+    const incidentOccurred = sinon.spy();
+    const options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } };
+    const series = createSeries(options, {
+        incidentOccurred: incidentOccurred
+    });
+
+    series.updateData(data);
+
+    assert.strictEqual(incidentOccurred.callCount, 0);
+});
+
+QUnit.test("IncidentOccurred. Data without argument field", function(assert) {
+    const data = [{ val: 1 }, { val: 2 }, { val: 3 }, { val: 4 }, { val: 5 }];
+    const incidentOccurred = sinon.spy();
+    const options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } };
+    const series = createSeries(options, {
+        incidentOccurred: incidentOccurred
+    });
+
+    series.updateData(data);
+
+    assert.strictEqual(incidentOccurred.callCount, 1);
+    assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
 });
 
 QUnit.module("ErrorBars", environmentWithSinonStubPoint);
