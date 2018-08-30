@@ -367,7 +367,7 @@ QUnit.test("invalid type of dataSource arguments (rangeSelector show stubData)",
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
-    assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2002", ["x"]]);
+    assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2002", ["Series 2", "x"]]);
 });
 
 QUnit.test("invalid type of dataSource arguments and set valid values of start and end", function(assert) {
@@ -390,7 +390,7 @@ QUnit.test("invalid type of dataSource arguments and set valid values of start a
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(year, 1));
     assert.deepEqual(options.endValue, new Date(year, 5));
-    assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2002", ["x"]]);
+    assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2002", ["Series 2", "x"]]);
 });
 
 QUnit.test("check safety custom setting of scale after updating dataSource", function(assert) {

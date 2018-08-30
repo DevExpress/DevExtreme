@@ -102,6 +102,9 @@ SeriesDataSource.prototype = {
 
             seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;// B253068
+            if(!seriesTheme.name) {
+                seriesTheme.name = "Series " + (i + 1).toString();
+            }
             if(data && data.length > 0) {
                 // TODO
                 newSeries = new seriesModule.Series({
