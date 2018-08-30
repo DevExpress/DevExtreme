@@ -811,7 +811,7 @@ QUnit.test("Summary - groupping", function(assert) {
     );
 });
 
-QUnit.test("'showColumnHeaders: false'", function(assert) {
+QUnit.test("showColumnHeaders: false", function(assert) {
     const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
         '<numFmts count="0"></numFmts>' +
         '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
@@ -851,7 +851,7 @@ QUnit.test("'showColumnHeaders: false'", function(assert) {
     );
 });
 
-QUnit.test("'customizeExportData' callback", function(assert) {
+QUnit.test("customizeExportData callback", function(assert) {
     const styles = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
         '<numFmts count="0"></numFmts>' +
         '<fonts count="2"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font><font><b/><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>' +
