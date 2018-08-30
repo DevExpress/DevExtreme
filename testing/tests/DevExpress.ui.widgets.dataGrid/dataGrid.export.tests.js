@@ -13,7 +13,6 @@ var $ = require("jquery"),
 function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
     const done = assert.async(3);
     gridOptions.loadingTimeout = undefined;
-    gridOptions.columnWidth = 100; // pixels
     gridOptions.onFileSaving = e => {
         e._zip.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).async("string").then(content => {
             assert.strictEqual(content, styles, "styles");
@@ -33,6 +32,18 @@ function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", s
     };
 
     const dataGrid = $("#dataGrid").dxDataGrid(gridOptions).dxDataGrid("instance");
+
+    const getColumnWidthsHeadersOld = dataGrid.getView("columnHeadersView").getColumnWidths;
+    dataGrid.getView("columnHeadersView").getColumnWidths = function() {
+        const results = getColumnWidthsHeadersOld.apply(this);
+        return results.map(() => 100);
+    };
+
+    const getColumnWidthsRowsOld = dataGrid.getView("rowsView").getColumnWidths;
+    dataGrid.getView("rowsView").getColumnWidths = function() {
+        const results = getColumnWidthsRowsOld.apply(this);
+        return results.map(() => 100);
+    };
     dataGrid.exportToExcel();
 };
 
