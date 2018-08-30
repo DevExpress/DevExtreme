@@ -256,7 +256,7 @@ const Drawer = Widget.inherit({
                 container: this.content()
             });
         }
-    
+
         this._overlay && this._overlay.option("width", this.getRealPanelWidth());
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
