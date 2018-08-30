@@ -1137,6 +1137,7 @@ var FileUploader = Editor.inherit({
         this._sendFileChunk(file, {
             name: realFile.name,
             loadedBytes: 0,
+            type: realFile.type,
             chunks: this._createChunkArray(realFile),
             count: Math.ceil(realFile.size / this.option("chunkSize")),
         });
@@ -1180,7 +1181,7 @@ var FileUploader = Editor.inherit({
                         chunksData.chunks = [];
                     }
                 },
-                data: this._createChunkFormData(this.option("name"), chunk.blob, chunk.index, chunksData.count, chunksData.name)
+                data: this._createChunkFormData(this.option("name"), chunk.blob, chunk.index, chunksData.type, chunksData.count, chunksData.name)
             }).done(function() {
                 file.onProgress.fire({
                     loaded: chunksData.loadedBytes,
@@ -1199,13 +1200,14 @@ var FileUploader = Editor.inherit({
             });
         }
     },
-    _createChunkFormData: function(blobName, blob, index, count, name) {
+    _createChunkFormData: function(blobName, blob, index, type, count, name) {
         var formData = new window.FormData();
         formData.append(blobName, blob);
         formData.append("metaData", JSON.stringify({
-            index: index,
-            count: count,
-            name: name
+            Index: index,
+            Count: count,
+            Type: type,
+            Name: name,
         }));
         return formData;
     },
