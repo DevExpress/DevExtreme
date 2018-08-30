@@ -159,6 +159,10 @@ module.exports = Class.inherit({
         return this.options.mode === "single" || this.options.mode === "multiple";
     },
 
+    isItemDataSelected: function(data) {
+        return this._selectionStrategy.isItemDataSelected(data);
+    },
+
     isItemSelected: function(arg) {
         return this._selectionStrategy.isItemKeySelected(arg);
     },
@@ -179,7 +183,7 @@ module.exports = Class.inherit({
             focusedItem = items[this._focusedItemIndex],
             focusedData = this.options.getItemData(focusedItem),
             focusedKey = keyOf(focusedData),
-            isFocusedItemSelected = focusedItem && this.isItemSelected(focusedKey);
+            isFocusedItemSelected = focusedItem && this.isItemDataSelected(focusedData);
 
         if(!isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
