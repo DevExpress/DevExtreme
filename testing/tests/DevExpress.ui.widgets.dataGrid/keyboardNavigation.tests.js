@@ -339,6 +339,37 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
     assert.ok(navigationController._keyDownProcessor, "keyDownProcessor");
 });
 
+// T667278
+QUnit.testInActiveWindow("Cell is focused when clicked on input in cell", function(assert) {
+    // arrange
+    var navigationController,
+        $input,
+        $cell,
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td><input/></td></tr>")).appendTo("#container");
+
+    this.getView("rowsView").element = function() {
+        return $rowsElement;
+    };
+
+    // act
+    navigationController = new KeyboardNavigationController(this.component);
+    navigationController.init();
+
+    callViewsRenderCompleted(this.component._views);
+
+    $input = $rowsElement.find("input");
+
+    $input.focus().trigger(CLICK_EVENT);
+
+    // assert
+    $cell = $input.parent();
+    assert.ok($input.is(":focus"), "input is focused");
+    assert.equal($cell.attr("tabIndex"), undefined, "cell does not have tabindex");
+    assert.ok($cell.hasClass("dx-cell-focus-disabled"), "cell has class dx-cell-focus-disabled");
+    assert.equal(navigationController._focusedViews.viewIndex, 0, "view index");
+    assert.equal(navigationController._focusedView.name, "rowsView", "focused view");
+});
+
 // T579521
 QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self", function(assert) {
     // arrange
