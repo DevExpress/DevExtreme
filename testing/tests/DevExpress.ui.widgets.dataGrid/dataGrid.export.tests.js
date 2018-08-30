@@ -1,14 +1,17 @@
+import "common.css!";
+
+import "ui/data_grid/ui.data_grid";
+
+import $ from "jquery";
+import {excel as excelCreator} from "client_exporter";
+
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
     $("#qunit-fixture").html(markup);
     // $("body").append(markup);
 });
 
-require("common.css!");
-require("ui/data_grid/ui.data_grid");
-var $ = require("jquery"),
-    excelCreator = require("client_exporter").excel,
-    internals = excelCreator.__internals,
+const internals = excelCreator.__internals,
     SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
     STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
     STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
