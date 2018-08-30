@@ -379,7 +379,7 @@ Series.prototype = {
         }, []);
 
         if(itemsWithoutArgument && itemsWithoutArgument === data.length) {
-            that._incidentOccurred("W2002", [that.getArgumentField()]);
+            that._incidentOccurred("W2002", [that.name, that.getArgumentField()]);
         }
         that._endUpdateData();
     },
@@ -433,7 +433,7 @@ Series.prototype = {
 
         for(let field in skippedFields) {
             if(skippedFields[field] === data.length) {
-                that._incidentOccurred("W2002", [field]);
+                that._incidentOccurred("W2002", [that.name, field]);
             }
         }
         Object.keys(oldPointsByArgument).forEach((key) => that._disposePoints(oldPointsByArgument[key]));
