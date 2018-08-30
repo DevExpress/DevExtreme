@@ -6,6 +6,7 @@ import resizeCallbacks from "core/utils/resize_callbacks";
 import config from "core/config";
 import typeUtils from "core/utils/type";
 import { animation } from "ui/drawer/ui.drawer.rendering.strategy";
+import Overlay from "ui/overlay";
 
 import "common.css!";
 import "ui/drawer";
@@ -756,6 +757,15 @@ QUnit.test("maxWidth should be rendered correctly in shrink mode, right menu pos
 });
 
 QUnit.module("overlap mode");
+
+QUnit.test("drawer panel should be overlay with right content in overlap mode", assert => {
+    const drawer = $("#drawer").dxDrawer({
+        openedStateMode: "overlap"
+    }).dxDrawer("instance");
+
+    assert.ok(drawer._overlay instanceof Overlay, "Drawer has inner overlay");
+    assert.deepEqual(drawer.content(), drawer._overlay.$element(), "Panel content is an overlay content");
+});
 
 QUnit.test("minWidth should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
