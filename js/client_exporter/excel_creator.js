@@ -591,7 +591,7 @@ exports.getData = function(data, options, callback) {
         if(excelCreator._zip.generateAsync) {
             excelCreator.getData(typeUtils.isFunction(window.Blob))
                 .then(blob => {
-                    let _zip = undefined;
+                    let _zip;
                     ///#DEBUG
                     _zip = excelCreator._zip;
                     ///#ENDDEBUG
