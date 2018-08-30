@@ -604,6 +604,27 @@ QUnit.test('no options and container has no sizes', function(assert) {
     }
 });
 
+// T665179
+QUnit.test('Do not get size from container if size option is set', function(assert) {
+    try {
+        var width = sinon.stub(renderer.fn, 'width').returns(0);
+        var height = sinon.stub(renderer.fn, 'height').returns(0);
+
+        this.createWidget({
+            size: {
+                width: 200,
+                height: 200
+            }
+        });
+
+        assert.ok(!width.called);
+        assert.ok(!height.called);
+    } finally {
+        renderer.fn.width.restore();
+        renderer.fn.height.restore();
+    }
+});
+
 QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
     try {
         sinon.stub(renderer.fn, 'width').returns(-2);
