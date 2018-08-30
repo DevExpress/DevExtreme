@@ -1,4 +1,25 @@
 /**
+ * @name PieChartSeries
+ * @type object
+ * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+ * @hidden
+ */
+var pieChartSeries = {
+    /**
+    * @name PieChartSeries.name
+    * @type string
+    * @default undefined
+    */
+    name: undefined,
+    /**
+    * @name PieChartSeries.tag
+    * @type any
+    * @default undefined
+    */
+    tag: undefined
+};
+
+/**
 * @name dxPieChartSeriesTypes
 * @type object
 */

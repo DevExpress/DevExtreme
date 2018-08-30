@@ -1,4 +1,30 @@
 /**
+ * @name PolarChartSeries
+ * @type object
+ * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+ */
+var polarChartSeries = {
+    /**
+    * @name PolarChartSeries.name
+    * @type string
+    * @default undefined
+    */
+    name: undefined,
+    /**
+    * @name PolarChartSeries.tag
+    * @type any
+    * @default undefined
+    */
+    tag: undefined,
+    /**
+    * @name PolarChartSeries.type
+    * @type Enums.PolarChartSeriesType
+    * @default 'scatter'
+    */
+    type: 'scatter'
+};
+
+/**
 * @name dxPolarChartSeriesTypes
 * @type object
 */

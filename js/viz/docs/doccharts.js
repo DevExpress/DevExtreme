@@ -22,7 +22,7 @@ var dxChart = {
         * @name dxChartOptions.seriesTemplate.customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return dxChartOptions.series
+        * @type_function_return ChartSeries
         */
         customizeSeries: function() { }
     },
@@ -1791,33 +1791,13 @@ var dxChart = {
     onZoomEnd: function() { },
     /**
     * @name dxChartOptions.series
-    * @type Object|Array<Object>
+    * @type ChartSeries|Array<ChartSeries>
     * @default undefined
-    * @inherits dxChartSeriesTypes.CommonSeries
     * @hideDefaults true
     * @notUsedInTheme
     * @inheritAll
     */
-    series: [{
-        /**
-        * @name dxChartOptions.series.name
-        * @type string
-        * @default undefined
-        */
-        name: undefined,
-        /**
-        * @name dxChartOptions.series.tag
-        * @type any
-        * @default undefined
-        */
-        tag: undefined,
-        /**
-        * @name dxChartOptions.series.type
-        * @type Enums.SeriesType
-        * @default 'line'
-        */
-        type: 'line'
-    }],
+    series: undefined,
     /**
     * @name dxChartOptions.minBubbleSize
     * @default 12
@@ -1885,7 +1865,7 @@ var dxPieChart = {
         * @name dxPieChartOptions.seriesTemplate.customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return dxPieChartOptions.series
+        * @type_function_return PieChartSeries
         */
         customizeSeries: function() { }
     },
@@ -1935,26 +1915,12 @@ var dxPieChart = {
     palette: [],
     /**
     * @name dxPieChartOptions.series
-    * @type Object|Array<Object>
+    * @type PieChartSeries|Array<PieChartSeries>
     * @default undefined
-    * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
     * @hideDefaults true
     * @inheritAll
     */
-    series: [{
-        /**
-        * @name dxPieChartOptions.series.name
-        * @type string
-        * @default undefined
-        */
-        name: undefined,
-        /**
-        * @name dxPieChartOptions.series.tag
-        * @type any
-        * @default undefined
-        */
-        tag: undefined
-    }],
+    series: undefined,
     /**
     * @name dxPieChartOptions.type
     * @type Enums.PieChartType
@@ -2045,7 +2011,7 @@ var dxPolarChart = {
         * @name dxPolarChartOptions.seriesTemplate.customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return dxPolarChartOptions.series
+        * @type_function_return PolarChartSeries
         */
         customizeSeries: function() { }
     },
@@ -2942,33 +2908,13 @@ var dxPolarChart = {
     onSeriesSelectionChanged: function() { },
     /**
     * @name dxPolarChartOptions.series
-    * @type Object|Array<Object>
+    * @type PolarChartSeries|Array<PolarChartSeries>
     * @default undefined
-    * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
     * @hideDefaults true
     * @notUsedInTheme
     * @inheritAll
     */
-    series: [{
-        /**
-        * @name dxPolarChartOptions.series.name
-        * @type string
-        * @default undefined
-        */
-        name: undefined,
-        /**
-        * @name dxPolarChartOptions.series.tag
-        * @type any
-        * @default undefined
-        */
-        tag: undefined,
-        /**
-        * @name dxPolarChartOptions.series.type
-        * @type Enums.PolarChartSeriesType
-        * @default 'scatter'
-        */
-        type: 'scatter'
-    }],
+    series: undefined,
 };
 /**
 * @name BaseChart
