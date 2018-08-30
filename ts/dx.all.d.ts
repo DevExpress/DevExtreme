@@ -2331,7 +2331,7 @@ declare module DevExpress.ui {
         exportToExcel(selectionOnly: boolean): void;
         /** Gets the currently selected rows' keys. */
         getSelectedRowKeys(): Array<any> & Promise<any> & JQueryPromise<any>;
-        /** Gets data objects of currently selected rows. */
+        /** Gets the selected rows' data objects. */
         getSelectedRowsData(): Array<any> & Promise<any> & JQueryPromise<any>;
         /** Gets the value of a total summary item. */
         getTotalSummaryValue(summaryItemName: string): any;
@@ -5633,6 +5633,15 @@ declare module DevExpress.viz {
         /** Redraws the widget. */
         render(renderOptions: any): void;
     }
+    /** Specifies options for Chart widget series. */
+    export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
+        /** Specifies the name that identifies the series. */
+        name?: string;
+        /** Specifies data about a series. */
+        tag?: any;
+        /** Sets the series type. */
+        type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+    }
     /** This section lists objects that define options used to configure series of specific types. */
     interface dxChartSeriesTypes {
         /** Describes settings supported by a series of the area type. */
@@ -6930,6 +6939,15 @@ declare module DevExpress.viz {
         /** @deprecated Use selected instead. */
         selected(state: boolean): void;
     }
+    /** Specifies options for the series of the PieChart widget. */
+    export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
+        /** Specifies the name that identifies the series. */
+        name?: string;
+        /** Specifies data about a series. */
+        tag?: any;
+        /** @deprecated Use the type option instead. */
+        type?: 'donut' | 'doughnut' | 'pie';
+    }
     /** This section lists the objects that define options to be used to configure series of particular types. */
     export interface dxPieChartSeriesTypes {
         /** An object that defines configuration options for chart series. */
@@ -6975,6 +6993,15 @@ declare module DevExpress.viz {
         tagField?: string;
         /** Specifies the data source field that provides values for series points. */
         valueField?: string;
+    }
+    /** Specifies options for PolarChart widget series. */
+    export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+        /** Specifies the name that identifies the series. */
+        name?: string;
+        /** Specifies data about a series. */
+        tag?: any;
+        /** Sets the series type. */
+        type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
     /** This section lists objects that define options used to configure series of specific types. */
     export interface dxPolarChartSeriesTypes {
@@ -7265,7 +7292,9 @@ declare module DevExpress.events {
     export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
     /** Detaches an event handler from the specified elements. */
     export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
+    /** Detaches all handlers of the specified event from the specified elements. */
     export function off(element: Element | Array<Element>, eventName: string): void;
+    /** Detaches all handlers from the specified elements. */
     export function off(element: Element | Array<Element>): void;
     /** Triggers an event for the specified elements. Allows you to pass custom parameters to event handlers. */
     export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
@@ -7365,11 +7394,11 @@ declare module DevExpress.viz.charts {
         /** Enables scrolling in your chart. */
         scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
         /** Specifies options for Chart widget series. */
-        series?: dxChartSeries | Array<dxChartSeries>;
+        series?: ChartSeries | Array<ChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: 'multiple' | 'single';
         /** Defines options for the series template. */
-        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxChartSeries) };
+        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => ChartSeries) };
         /** Indicates whether or not to synchronize value axes when they are displayed on a single pane. */
         synchronizeMultiAxes?: boolean;
         /** Configures tooltips. */
@@ -7683,15 +7712,6 @@ declare module DevExpress.viz.charts {
         /** Specifies the name of the pane. */
         name?: string;
     }
-    /** Specifies options for Chart widget series. */
-    export interface dxChartSeries extends dxChartSeriesTypesCommonSeries {
-        /** Specifies the name that identifies the series. */
-        name?: string;
-        /** Specifies data about a series. */
-        tag?: any;
-        /** Sets the series type. */
-        type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
-    }
     /** Configures tooltips. */
     export interface dxChartTooltip extends BaseChartTooltip {
         /** Specifies whether the tooltip must be located in the center of a series point or on its edge. Applies to bar-like and bubble series only. */
@@ -7834,9 +7854,9 @@ declare module DevExpress.viz.charts {
         /** Specifies the direction that the pie chart segments will occupy. */
         segmentsDirection?: 'anticlockwise' | 'clockwise';
         /** Specifies options for the series of the PieChart widget. */
-        series?: dxPieChartSeries | Array<dxPieChartSeries>;
+        series?: PieChartSeries | Array<PieChartSeries>;
         /** Defines options for the series template. */
-        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPieChartSeries) };
+        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => PieChartSeries) };
         /** Allows you to display several adjoining pies in the same size. */
         sizeGroup?: string;
         /** Specifies the angle in arc degrees from which the first segment of a pie chart should start. */
@@ -7862,15 +7882,6 @@ declare module DevExpress.viz.charts {
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /** Specifies what chart elements to highlight when a corresponding item in the legend is hovered over. */
         hoverMode?: 'none' | 'allArgumentPoints';
-    }
-    /** Specifies options for the series of the PieChart widget. */
-    export interface dxPieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
-        /** Specifies the name that identifies the series. */
-        name?: string;
-        /** Specifies data about a series. */
-        tag?: any;
-        /** @deprecated Use the type option instead. */
-        type?: 'donut' | 'doughnut' | 'pie';
     }
     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
         /** Specifies adaptive layout options. */
@@ -7910,11 +7921,11 @@ declare module DevExpress.viz.charts {
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: 'hide' | 'none';
         /** Specifies options for PolarChart widget series. */
-        series?: dxPolarChartSeries | Array<dxPolarChartSeries>;
+        series?: PolarChartSeries | Array<PolarChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: 'multiple' | 'single';
         /** Defines options for the series template. */
-        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPolarChartSeries) };
+        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => PolarChartSeries) };
         /** Configures tooltips. */
         tooltip?: dxPolarChartTooltip;
         /** Indicates whether or not to display a "spider web". */
@@ -8113,15 +8124,6 @@ declare module DevExpress.viz.charts {
         customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /** Specifies what series elements to highlight when a corresponding item in the legend is hovered over. */
         hoverMode?: 'excludePoints' | 'includePoints' | 'none';
-    }
-    /** Specifies options for PolarChart widget series. */
-    export interface dxPolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
-        /** Specifies the name that identifies the series. */
-        name?: string;
-        /** Specifies data about a series. */
-        tag?: any;
-        /** Sets the series type. */
-        type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
     /** Configures tooltips. */
     export interface dxPolarChartTooltip extends BaseChartTooltip {
@@ -8611,7 +8613,7 @@ declare module DevExpress.viz.rangeSelector {
         /** Specifies the RangeSelector's behavior options. */
         behavior?: { animationEnabled?: boolean, snapToTicks?: boolean, moveSelectedRangeByClick?: boolean, manualRangeSelectionEnabled?: boolean, allowSlidersSwap?: boolean, callSelectedRangeChanged?: 'onMoving' | 'onMovingComplete', callValueChanged?: 'onMoving' | 'onMovingComplete' };
         /** Specifies the options required to display a chart as the range selector's background. */
-        chart?: { commonSeriesSettings?: DevExpress.viz.charts.dxChartCommonSeriesSettings, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, useAggregation?: boolean, valueAxis?: { min?: number, max?: number, inverted?: boolean, valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'logarithmic', logarithmBase?: number }, series?: DevExpress.viz.charts.dxChartSeries | Array<DevExpress.viz.charts.dxChartSeries>, seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => DevExpress.viz.charts.dxChartSeries) }, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate' };
+        chart?: { commonSeriesSettings?: DevExpress.viz.charts.dxChartCommonSeriesSettings, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, useAggregation?: boolean, valueAxis?: { min?: number, max?: number, inverted?: boolean, valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'logarithmic', logarithmBase?: number }, series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => ChartSeries) }, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate' };
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
         /** Specifies a data source for the scale values and for the chart at the background. */

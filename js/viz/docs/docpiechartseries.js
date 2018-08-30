@@ -1,4 +1,32 @@
 /**
+ * @name PieChartSeries
+ * @type object
+ * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+ * @hidden
+ */
+var pieChartSeries = {
+    /**
+    * @name PieChartSeries.name
+    * @type string
+    * @default undefined
+    */
+    name: undefined,
+    /**
+    * @name PieChartSeries.tag
+    * @type any
+    * @default undefined
+    */
+    tag: undefined,
+    /**
+    * @name PieChartSeries.type
+    * @type Enums.PieChartType
+    * @default 'pie'
+    * @deprecated dxPieChartOptions.type
+    */
+    type: 'pie'
+};
+
+/**
 * @name dxPieChartSeriesTypes
 * @type object
 */

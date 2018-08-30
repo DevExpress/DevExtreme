@@ -1,4 +1,31 @@
 /**
+ * @name ChartSeries
+ * @type object
+ * @inherits dxChartSeriesTypes.CommonSeries
+ * @hidden
+ */
+var chartSeries = {
+    /**
+    * @name ChartSeries.name
+    * @type string
+    * @default undefined
+    */
+    name: undefined,
+    /**
+    * @name ChartSeries.tag
+    * @type any
+    * @default undefined
+    */
+    tag: undefined,
+    /**
+    * @name ChartSeries.type
+    * @type Enums.SeriesType
+    * @default 'line'
+    */
+    type: 'line'
+};
+
+/**
 * @name dxChartSeriesTypes
 * @type object
 */
