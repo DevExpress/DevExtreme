@@ -42,22 +42,22 @@ function testConfiguration(assert, options, { styles = "", worksheet = "", share
 
 QUnit.test("Empty pivot", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count=\"0\"></numFmts>' +
+        '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
-        '<cellXfs count=\"3\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
         STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"1\" ySplit=\"1\" topLeftCell=\"B2\" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width=\"13.57\" min=\"1\" max=\"1\" /><col width=\"13.57\" min=\"2\" max=\"2\" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:2\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\" /><c r=\"B1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
-        '<row r=\"2\" spans=\"1:2\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"1\" t=\"s\"><v>0</v></c><c r=\"B2\" s=\"2\" t=\"s\" /></row>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>0</v></c><c r="B2" s="2" t="s" /></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
@@ -67,29 +67,29 @@ QUnit.test("Empty pivot", function(assert) {
     testConfiguration(assert, {}, { styles, worksheet, sharedStrings });
 });
 
-QUnit.test("Rows: string, Columns: string, Data: sum as currency", function(assert) {
+QUnit.test("Rows: string, Columns: string, Data: sum(number format as currency)", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
         internals.BASE_STYLE_XML +
-        '<cellXfs count=\"3\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"1\" numFmtId=\"165\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
         STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"1\" ySplit=\"1\" topLeftCell=\"B2\" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width=\"13.57\" min=\"1\" max=\"1\" />' +
-        '<col width=\"13.57\" min=\"2\" max=\"2\" />' +
-        '<col width=\"13.57\" min=\"3\" max=\"3\" />' +
+        '<col width="13.57" min="1" max="1" />' +
+        '<col width="13.57" min="2" max="2" />' +
+        '<col width="13.57" min="3" max="3" />' +
         '</cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\" /><c r=\"B1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"C1\" s=\"0\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"2\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"1\" t=\"s\"><v>2</v></c><c r=\"B2\" s=\"2\" t=\"n\"><v>42</v></c><c r=\"C2\" s=\"2\" t=\"n\"><v>42</v></c></row>' +
-        '<row r=\"3\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"1\" t=\"s\"><v>1</v></c><c r=\"B3\" s=\"2\" t=\"n\"><v>42</v></c><c r=\"C3\" s=\"2\" t=\"n\"><v>42</v></c></row>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>2</v></c><c r="B2" s="2" t="n"><v>42</v></c><c r="C2" s="2" t="n"><v>42</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>1</v></c><c r="B3" s="2" t="n"><v>42</v></c><c r="C3" s="2" t="n"><v>42</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
@@ -116,33 +116,33 @@ QUnit.test("Rows: string, Columns: string, Data: sum as currency", function(asse
 
 QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count=\"0\"></numFmts>' +
+        '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
-        '<cellXfs count=\"3\">' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
         STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"2\" ySplit=\"2\" topLeftCell=\"C3\" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="2" topLeftCell="C3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
-        '<col width=\"13.57\" min=\"1\" max=\"1\" />' +
-        '<col width=\"13.57\" min=\"2\" max=\"2\" />' +
-        '<col width=\"13.57\" min=\"3\" max=\"3\" />' +
-        '<col width=\"13.57\" min=\"4\" max=\"4\" />' +
-        '<col width=\"13.57\" min=\"5\" max=\"5\" />' +
+        '<col width="13.57" min="1" max="1" />' +
+        '<col width="13.57" min="2" max="2" />' +
+        '<col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" />' +
+        '<col width="13.57" min="5" max="5" />' +
         '</cols>' +
         '<sheetData>' +
-        '<row r=\"1\" spans=\"1:5\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\" /><c r=\"B1\" s=\"2\" t=\"s\" /><c r=\"C1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"D1\" s=\"0\" t=\"s\"><v>1</v></c><c r=\"E1\" s=\"0\" t=\"s\"><v>2</v></c></row>' +
-        '<row r=\"2\" spans=\"1:5\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"2\" t=\"s\" /><c r=\"B2\" s=\"2\" t=\"s\" /><c r=\"C2\" s=\"0\" t=\"s\"><v>3</v></c><c r=\"D2\" s=\"0\" t=\"s\" /><c r=\"E2\" s=\"0\" t=\"s\" /></row>' +
-        '<row r=\"3\" spans=\"1:5\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"1\" t=\"s\"><v>4</v></c><c r=\"B3\" s=\"1\" t=\"s\"><v>5</v></c><c r=\"C3\" s=\"2\" t=\"s\"><v>6</v></c><c r=\"D3\" s=\"2\" t=\"s\"><v>6</v></c><c r=\"E3\" s=\"2\" t=\"s\"><v>6</v></c></row>' +
-        '<row r=\"4\" spans=\"1:5\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"1\" t=\"s\"><v>7</v></c><c r=\"B4\" s=\"1\" t=\"s\" /><c r=\"C4\" s=\"2\" t=\"s\"><v>6</v></c><c r=\"D4\" s=\"2\" t=\"s\"><v>6</v></c><c r=\"E4\" s=\"2\" t=\"s\"><v>6</v></c></row>' +
-        '<row r=\"5\" spans=\"1:5\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"1\" t=\"s\"><v>2</v></c><c r=\"B5\" s=\"1\" t=\"s\" /><c r=\"C5\" s=\"2\" t=\"s\"><v>6</v></c><c r=\"D5\" s=\"2\" t=\"s\"><v>6</v></c><c r=\"E5\" s=\"2\" t=\"s\"><v>6</v></c></row>' +
+        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="s" /><c r="C1" s="0" t="s"><v>0</v></c><c r="D1" s="0" t="s"><v>1</v></c><c r="E1" s="0" t="s"><v>2</v></c></row>' +
+        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="s" /><c r="B2" s="2" t="s" /><c r="C2" s="0" t="s"><v>3</v></c><c r="D2" s="0" t="s" /><c r="E2" s="0" t="s" /></row>' +
+        '<row r="3" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>4</v></c><c r="B3" s="1" t="s"><v>5</v></c><c r="C3" s="2" t="s"><v>6</v></c><c r="D3" s="2" t="s"><v>6</v></c><c r="E3" s="2" t="s"><v>6</v></c></row>' +
+        '<row r="4" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="1" t="s"><v>7</v></c><c r="B4" s="1" t="s" /><c r="C4" s="2" t="s"><v>6</v></c><c r="D4" s="2" t="s"><v>6</v></c><c r="E4" s="2" t="s"><v>6</v></c></row>' +
+        '<row r="5" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="1" t="s"><v>2</v></c><c r="B5" s="1" t="s" /><c r="C5" s="2" t="s"><v>6</v></c><c r="D5" s="2" t="s"><v>6</v></c><c r="E5" s="2" t="s"><v>6</v></c></row>' +
         '</sheetData>' +
-        '<mergeCells count=\"5\"><mergeCell ref=\"A1:B2\" /><mergeCell ref=\"D1:D2\" /><mergeCell ref=\"E1:E2\" /><mergeCell ref=\"A4:B4\" /><mergeCell ref=\"A5:B5\" /></mergeCells>' +
+        '<mergeCells count="5"><mergeCell ref="A1:B2" /><mergeCell ref="D1:D2" /><mergeCell ref="E1:E2" /><mergeCell ref="A4:B4" /><mergeCell ref="A5:B5" /></mergeCells>' +
         '<ignoredErrors><ignoredError sqref="A1:E5" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="8" uniqueCount="8">' +
         '<si><t>col1</t></si>' +
