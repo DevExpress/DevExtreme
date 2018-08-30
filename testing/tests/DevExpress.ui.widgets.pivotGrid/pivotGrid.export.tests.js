@@ -12,7 +12,7 @@ require("ui/pivot_grid/ui.pivot_grid");
 
 var $ = require("jquery"),
     internals = require("client_exporter").excel.__internals,
-    SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+    SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
     STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
 
 function testConfiguration(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {

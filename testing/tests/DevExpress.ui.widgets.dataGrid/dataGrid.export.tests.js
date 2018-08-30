@@ -9,7 +9,7 @@ require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
     excelCreator = require("client_exporter").excel,
     internals = excelCreator.__internals,
-    SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+    SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
     STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
 
 function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
