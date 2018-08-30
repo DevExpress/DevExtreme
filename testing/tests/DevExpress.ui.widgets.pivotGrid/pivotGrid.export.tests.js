@@ -11,7 +11,9 @@ require("generic_light.css!");
 require("ui/pivot_grid/ui.pivot_grid");
 
 var $ = require("jquery"),
-    internals = require("client_exporter").excel.__internals;
+    internals = require("client_exporter").excel.__internals,
+    SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+    STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
 
 function testConfiguration(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
     const done = assert.async(3);
@@ -38,12 +40,9 @@ function testConfiguration(assert, options, { styles = "", worksheet = "", share
 };
 
 QUnit.test("Empty pivot", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
+    const styles = STYLESHEET_HEADER_XML +
         '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
+        internals.BASE_STYLE_XML +
         '<cellXfs count=\"3\">' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
@@ -51,7 +50,7 @@ QUnit.test("Empty pivot", function(assert) {
         '</cellXfs>' +
         '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
         '</styleSheet>';
-    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+    const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"1\" ySplit=\"1\" topLeftCell=\"B2\" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
@@ -61,7 +60,7 @@ QUnit.test("Empty pivot", function(assert) {
         '<row r=\"2\" spans=\"1:2\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"1\" t=\"s\"><v>0</v></c><c r=\"B2\" s=\"2\" t=\"s\" /></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="1" uniqueCount="1">' +
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
         '<si><t>Grand Total</t></si>' +
         '</sst>';
 
@@ -69,12 +68,9 @@ QUnit.test("Empty pivot", function(assert) {
 });
 
 QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
+    const styles = STYLESHEET_HEADER_XML +
         '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
+        internals.BASE_STYLE_XML +
         '<cellXfs count=\"3\">' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
@@ -82,7 +78,7 @@ QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
         '</cellXfs>' +
         '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
         '</styleSheet>';
-    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+    const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"1\" ySplit=\"1\" topLeftCell=\"B2\" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
@@ -97,7 +93,7 @@ QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
         '<row r=\"3\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"1\" t=\"s\"><v>1</v></c><c r=\"B3\" s=\"2\" t=\"s\"><v>3</v></c><c r=\"C3\" s=\"2\" t=\"s\"><v>3</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="4" uniqueCount="4">' +
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
         '<si><t>str2</t></si>' +
         '<si><t>Grand Total</t></si>' +
         '<si><t>str1</t></si>' +
@@ -117,12 +113,9 @@ QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
 });
 
 QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)", function(assert) {
-    const styles = '<?xml version=\"1.0\" encoding=\"utf-8\"?><styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">' +
+    const styles = STYLESHEET_HEADER_XML +
         '<numFmts count=\"0\"></numFmts>' +
-        '<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/><scheme val=\"minor\"/></font></fonts>' +
-        '<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>' +
-        '<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\"><color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/></bottom></border></borders>' +
-        '<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>' +
+        internals.BASE_STYLE_XML +
         '<cellXfs count=\"3\">' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
@@ -130,7 +123,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
         '</cellXfs>' +
         '<cellStyles count=\"1\"><cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></cellStyles>' +
         '</styleSheet>';
-    const worksheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+    const worksheet = internals.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" xSplit=\"2\" ySplit=\"2\" topLeftCell=\"C3\" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
@@ -150,7 +143,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
         '</sheetData>' +
         '<mergeCells count=\"5\"><mergeCell ref=\"A1:B2\" /><mergeCell ref=\"D1:D2\" /><mergeCell ref=\"E1:E2\" /><mergeCell ref=\"A4:B4\" /><mergeCell ref=\"A5:B5\" /></mergeCells>' +
         '<ignoredErrors><ignoredError sqref="A1:E5" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="8" uniqueCount="8">' +
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="8" uniqueCount="8">' +
         '<si><t>col1</t></si>' +
         '<si><t>col1 Total</t></si>' +
         '<si><t>Grand Total</t></si>' +
