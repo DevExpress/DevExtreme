@@ -347,49 +347,6 @@ QUnit.test("set ArgumentType in options of chart invalid startValue", function(a
     assert.deepEqual(this.incidentOccurred.lastCall.args, ["E2202", ["start"]]);
 });
 
-QUnit.test("invalid type of dataSource arguments (rangeSelector show stubData)", function(assert) {
-    this.createWidget({
-        dataSource: this.invalidDataSource,
-        scale: {
-            valueType: "datetime",
-        },
-        chart: {
-            series: [
-                { argumentField: "x", valueField: "y1" },
-                { argumentField: "x", valueField: "y2" }
-            ]
-        }
-    });
-
-    var options = this.axis.updateOptions.lastCall.args[0];
-    assert.strictEqual(options.startValue, undefined);
-    assert.strictEqual(options.endValue, undefined);
-    assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2002", ["Series 2", "x"]]);
-});
-
-QUnit.test("invalid type of dataSource arguments and set valid values of start and end", function(assert) {
-    var year = new Date().getFullYear() - 1;
-    this.createWidget({
-        dataSource: this.invalidDataSource,
-        scale: {
-            startValue: new Date(year, 1).toString(),
-            endValue: new Date(year, 5).toString(),
-            valueType: "datetime"
-        },
-        chart: {
-            series: [
-                { argumentField: "x", valueField: "y1" },
-                { argumentField: "x", valueField: "y2" }
-            ]
-        }
-    });
-
-    var options = this.axis.updateOptions.lastCall.args[0];
-    assert.deepEqual(options.startValue, new Date(year, 1));
-    assert.deepEqual(options.endValue, new Date(year, 5));
-    assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2002", ["Series 2", "x"]]);
-});
-
 QUnit.test("check safety custom setting of scale after updating dataSource", function(assert) {
     var widget = this.createWidget({
         scale: {
