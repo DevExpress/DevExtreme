@@ -1,41 +1,8 @@
 QUnit.testStart(function() {
     var markup =
-'<style>\
-    .fixed-height {\
-        height: 400px;\
-    }\
-    .qunit-fixture-auto-height {\
-        position: static !important;\
-        height: auto !important;\
-    }\
-    .dx-scrollable-native-ios .dx-scrollable-content {\
-        padding: 0 !important;\
-    }\
-</style>\
-\
-<!--qunit-fixture-->\
-    <div id="container">\
-        <div id="dataGrid">\
-            <div data-options="dxTemplate: { name: \'test\' }">Template Content</div>\
-            <div data-options="dxTemplate: { name: \'test2\' }">Template Content2</div>\
-            <table data-options="dxTemplate: { name: \'testRow\' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>\
-            <table data-options="dxTemplate: { name: \'testRowWithExpand\' }"><tr class="dx-row"><td colspan="2">Row Content <em class=\"dx-command-expand dx-datagrid-expand\">More info</em></td></tr></table>\
-            <div data-options="dxTemplate: { name: \'testDetail\' }"><p>Test Details</p></div>\
-        </div>\
-\
-        <div id="dataGridWithStyle" style="width: 500px;"></div>\
-        <div id="form"></div>\
-    </div>\
-\
-<script id="jsrenderRow" type="text/x-jsrender">\
-    <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>\
-</script>\
-<script id="scriptTestTemplate1" type="text/html">\
-<span id="template1">Template1</span>\
-</script>\
-<script id="scriptTestTemplate2" type="text/html">\
-<span>Template2</span>\
-</script>';
+'<div id="container">\
+        <div id="dataGrid"></div>\
+</div>';
 
     $("#qunit-fixture").html(markup);
 });
