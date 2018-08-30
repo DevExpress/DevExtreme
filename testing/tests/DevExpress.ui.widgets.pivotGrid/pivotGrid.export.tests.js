@@ -67,14 +67,14 @@ QUnit.test("Empty pivot", function(assert) {
     testConfiguration(assert, {}, { styles, worksheet, sharedStrings });
 });
 
-QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
+QUnit.test("Rows: string, Columns: string, Data: sum as currency", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count=\"0\"></numFmts>' +
+        '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
         internals.BASE_STYLE_XML +
         '<cellXfs count=\"3\">' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"center\" /></xf>' +
         '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"left\" /></xf>' +
-        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"0\" numFmtId=\"0\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
+        '<xf xfId=\"0\" applyAlignment=\"1\" fontId=\"0\" applyNumberFormat=\"1\" numFmtId=\"165\"><alignment vertical=\"top\" wrapText=\"0\" horizontal=\"right\" /></xf>' +
         '</cellXfs>' +
         STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
@@ -88,23 +88,26 @@ QUnit.test("Rows: string, Columns: string, Data: count", function(assert) {
         '</cols>' +
         '<sheetData>' +
         '<row r=\"1\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\" /><c r=\"B1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"C1\" s=\"0\" t=\"s\"><v>1</v></c></row>' +
-        '<row r=\"2\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"1\" t=\"s\"><v>2</v></c><c r=\"B2\" s=\"2\" t=\"s\"><v>3</v></c><c r=\"C2\" s=\"2\" t=\"s\"><v>3</v></c></row>' +
-        '<row r=\"3\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"1\" t=\"s\"><v>1</v></c><c r=\"B3\" s=\"2\" t=\"s\"><v>3</v></c><c r=\"C3\" s=\"2\" t=\"s\"><v>3</v></c></row>' +
+        '<row r=\"2\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"1\" t=\"s\"><v>2</v></c><c r=\"B2\" s=\"2\" t=\"n\"><v>42</v></c><c r=\"C2\" s=\"2\" t=\"n\"><v>42</v></c></row>' +
+        '<row r=\"3\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"1\" t=\"s\"><v>1</v></c><c r=\"B3\" s=\"2\" t=\"n\"><v>42</v></c><c r=\"C3\" s=\"2\" t=\"n\"><v>42</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
         '<si><t>str2</t></si>' +
         '<si><t>Grand Total</t></si>' +
         '<si><t>str1</t></si>' +
-        '<si><t>1</t></si>' +
         '</sst>';
 
     testConfiguration(
         assert,
         {
             dataSource: {
-                fields: [{ dataField: 'field1', area: 'row' }, { dataField: 'field2', area: 'column' }, { summaryType: 'count', area: 'data' }],
-                store: [{ field1: 'str1', field2: 'str2' }]
+                fields: [
+                    { dataField: 'field1', area: 'row' },
+                    { dataField: 'field2', area: 'column' },
+                    { dataField: 'field3', area: 'data', summaryType: 'sum', format: 'currency' }
+                ],
+                store: [{ field1: 'str1', field2: 'str2', field3: 42 }]
             }
         },
         { styles, worksheet, sharedStrings }
