@@ -728,6 +728,8 @@ var Widget = DOMComponent.inherit({
         eventsEngine.off(that._eventBindingTarget(), inactiveEventName, feedbackSelector);
 
         if(that.option("activeStateEnabled")) {
+            that._toggleActiveState(that._eventBindingTarget(), false);
+
             var feedbackActionHandler = function(args) {
                 var $element = $(args.element),
                     value = args.value,
