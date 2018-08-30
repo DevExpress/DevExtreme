@@ -46,7 +46,8 @@ QUnit.test("it works", function(assert) {
         d: function() {
             return { a: "d().a" };
         },
-        e: null
+        e: null,
+        f: 0
     };
     assert.equal(GETTER()(obj), obj);
     assert.equal(GETTER("this")(obj), obj);
@@ -62,6 +63,8 @@ QUnit.test("it works", function(assert) {
     assert.equal(GETTER("a")(null, { defaultValue: 1 }), 1);
     assert.equal(GETTER("c.b")(obj, { defaultValue: 1 }), 1);
     assert.deepEqual(GETTER("a.b.c")({}, { defaultValue: { b: 1 } }), { b: 1 });
+    assert.strictEqual(GETTER("f")(obj, { defaultValue: 1 }), 0);
+    assert.strictEqual(GETTER("f.x")(obj, { defaultValue: 1 }), 1);
 });
 
 QUnit.test("inheritance", function(assert) {
