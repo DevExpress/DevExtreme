@@ -1123,7 +1123,7 @@ module.exports = {
                         that._updateLockCount--;
                     }
                     that._columnChanges = undefined;
-                    if(columnChanges.optionNames && (columnChanges.optionNames.dataField || columnChanges.optionNames.lookup)) {
+                    if(columnChanges.optionNames && (columnChanges.optionNames.dataField || columnChanges.optionNames.lookup || columnChanges.optionNames.dataType)) {
                         that.reinit();
                     } else {
                         that.columnsChanged.fire(columnChanges);
