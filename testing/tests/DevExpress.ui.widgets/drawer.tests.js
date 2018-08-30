@@ -764,7 +764,7 @@ QUnit.test("drawer panel should be overlay with right content in overlap mode", 
     }).dxDrawer("instance");
 
     assert.ok(drawer._overlay instanceof Overlay, "Drawer has inner overlay");
-    assert.deepEqual(drawer.content(), drawer._overlay.$element(), "Panel content is an overlay content");
+    assert.deepEqual($(drawer.content()), $(drawer._overlay.$element()), "Panel content is an overlay content");
 });
 
 QUnit.test("minWidth should be rendered correctly in overlap mode, expand", assert => {

@@ -8,19 +8,13 @@ import Overlay from "../overlay";
 class OverlapStrategy extends DrawerStrategy {
 
     renderPanel(template) {
+        let position = this.getOverlayPosition();
+
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
             shading: false,
             container: this._drawer._$wrapper,
             width: 200,
-            position: {
-                my: "top left",
-                at: "top left",
-                of: $(window),
-                offset: {
-                    x: 0,
-                    y: 0
-                }
-            },
+            position: position,
             animation: {
                 show: {
                     duration: 0
@@ -32,6 +26,28 @@ class OverlapStrategy extends DrawerStrategy {
         });
 
         this._drawer._overlay && this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
+    }
+
+    getOverlayPosition() {
+        let position = this._drawer.option("position"),
+            result = {};
+
+        if(position === "left" || position === "right") {
+            result = {
+                my: "top left",
+                at: "top left",
+            };
+        }
+        if(position === "top") {
+            result = {
+                my: "top",
+                at: "top",
+            };
+        }
+
+        result.of = $(window);
+
+        return result;
     }
 
     renderPosition(offset, animate) {
