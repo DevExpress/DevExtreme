@@ -1,20 +1,21 @@
+import "spa.css!";
+
+import "common.css!";
+import "generic_light.css!";
+
+import "ui/pivot_grid/ui.pivot_grid";
+
+import $ from "jquery";
+import { __internals as internals } from "client_exporter/excel_creator";
+
+const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
+const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+const STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+
 QUnit.testStart(function() {
     var markup = '<div id="pivotGrid" style="width: 700px"></div>';
     $("#qunit-fixture").html(markup);
 });
-
-require("spa.css!");
-
-require("common.css!");
-require("generic_light.css!");
-
-require("ui/pivot_grid/ui.pivot_grid");
-
-var $ = require("jquery"),
-    internals = require("client_exporter").excel.__internals,
-    SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
-    STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
-    STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
 
 function testConfiguration(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
     const done = assert.async(3);
