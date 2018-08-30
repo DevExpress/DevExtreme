@@ -75,6 +75,12 @@ class DrawerStrategy {
         this._drawer = drawer;
     }
 
+    renderPanel(template) {
+        template && template.render({
+            container: this._drawer.content()
+        });
+    }
+
     renderPosition(offset, animate) {
         this._stopAnimations();
 

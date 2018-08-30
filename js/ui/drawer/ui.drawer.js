@@ -13,7 +13,6 @@ import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import pointerEvents from "../../events/pointer";
-import Overlay from "../overlay";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -226,38 +225,8 @@ const Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshRevealModeClass();
 
-        if(this.option("openedStateMode") === "overlap") {
-            this._overlay = this._createComponent(this._$panel, Overlay, {
-                shading: false,
-                container: this._$wrapper,
-                width: 200,
-                position: {
-                    my: "top left",
-                    at: "top left",
-                    of: $(window),
-                    offset: {
-                        x: 0,
-                        y: 0
-                    }
-                },
-                animation: {
-                    show: {
-                        duration: 0
-                    }
-                },
-                contentTemplate: this._getTemplate(this.option("template")),
-                visible: true,
-                propagateOutsideClick: true
-            });
-        } else {
-            const panelTemplate = this._getTemplate(this.option("template"));
+        this._strategy.renderPanel(this._getTemplate(this.option("template")));
 
-            panelTemplate && panelTemplate.render({
-                container: this.content()
-            });
-        }
-
-        this._overlay && this._overlay.option("width", this.getRealPanelWidth());
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
             transclude = this._getAnonymousTemplateName() === contentTemplateOption;

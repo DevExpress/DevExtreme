@@ -2,9 +2,38 @@ import { animation } from "./ui.drawer.rendering.strategy";
 import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
+import Overlay from "../overlay";
 
 
 class OverlapStrategy extends DrawerStrategy {
+
+    renderPanel(template) {
+        this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
+            shading: false,
+            container: this._drawer._$wrapper,
+            width: 200,
+            position: {
+                my: "top left",
+                at: "top left",
+                of: $(window),
+                offset: {
+                    x: 0,
+                    y: 0
+                }
+            },
+            animation: {
+                show: {
+                    duration: 0
+                }
+            },
+            contentTemplate: template,
+            visible: true,
+            propagateOutsideClick: true
+        });
+
+        this._drawer._overlay && this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
+    }
+
     renderPosition(offset, animate) {
         super.renderPosition(offset, animate);
 
