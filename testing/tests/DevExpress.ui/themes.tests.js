@@ -492,22 +492,26 @@ require("style-compiler-test-server/known-css-files");
                 themeName: "win10.white"
             }];
 
+        that.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='" + materialThemeName + "' />");
+        that.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='" + genericThemeName + "' />");
+
+        themes.init({ context: that.frameDoc(), theme: materialThemeName });
+        assert.ok(themes.isMaterial(), "isMaterial is true after material theme init");
+        assert.notOk(themes.isGeneric(), "isGeneric is false after material theme init");
+
+        themes.current(genericThemeName);
+        assert.ok(themes.isGeneric(), "isGeneric after activate generic theme");
+        assert.notOk(themes.isMaterial(), "isMaterial is false after generic theme init");
+        assert.notOk(themes.isIos7(), "isIos7 is false after generic theme init");
+        themes.resetTheme();
+        assert.notOk(themes.isGeneric(), "isGeneric is false after reset");
+
         $.each(testThemes, function(_, themeData) {
             var anotherThemeName = themeData.anotherThemeName || genericThemeName;
-            that.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='" + anotherThemeName + "' />");
-            that.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='" + themeData.themeName + "' />");
-
-            themes.init({ context: that.frameDoc(), theme: anotherThemeName });
-            themes.resetTheme();
-            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after reset");
-
-            themes.current(anotherThemeName);
-            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after activate " + anotherThemeName);
-            themes.current(themeData.themeName);
-            assert.ok(themes[themeData.functionName](), themeData.functionName + " after activate " + themeData.themeName);
-            themes.resetTheme();
-            that.removeFrameStyleLinks();
+            assert.ok(themes[themeData.functionName](themeData.themeName), themeData.functionName + " with " + themeData.themeName + " argument");
+            assert.notOk(themes[themeData.functionName](anotherThemeName), themeData.functionName + " with " + anotherThemeName + " argument");
         });
+        that.removeFrameStyleLinks();
     });
 
     QUnit.test("Themes functions return right value if theme file loaded after ready event (T666366)", function(assert) {
