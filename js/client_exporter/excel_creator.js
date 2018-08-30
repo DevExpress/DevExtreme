@@ -591,11 +591,11 @@ exports.getData = function(data, options, callback) {
         if(excelCreator._zip.generateAsync) {
             excelCreator.getData(typeUtils.isFunction(window.Blob))
                 .then(blob => {
-                    const callbackArgs = { blob };
+                    let _zip = undefined;
                     ///#DEBUG
-                    callbackArgs._zip = excelCreator._zip;
+                    _zip = excelCreator._zip;
                     ///#ENDDEBUG
-                    callback(callbackArgs);
+                    callback(blob, _zip);
                 });
         } else {
             callback(excelCreator.getData(typeUtils.isFunction(window.Blob)));

@@ -22,19 +22,21 @@ exports.export = function(data, options, getData) {
     _isFunction(exportingAction) && exportingAction(eventArgs);
 
     if(!eventArgs.cancel) {
-        getData(data, options, function(args) {
+        getData(data, options, function(blob, _zip) {
             _isFunction(exportedAction) && exportedAction();
 
             if(_isFunction(fileSavingAction)) {
-                eventArgs.data = args.blob;
+                eventArgs.data = blob;
                 ///#DEBUG
-                eventArgs._zip = args._zip;
+                if(_zip) {
+                    eventArgs._zip = _zip;
+                }
                 ///#ENDDEBUG
                 fileSavingAction(eventArgs);
             }
 
             if(!eventArgs.cancel) {
-                fileSaver.saveAs(eventArgs.fileName, options.format, args.blob, options.proxyUrl, undefined, options.forceProxy);
+                fileSaver.saveAs(eventArgs.fileName, options.format, blob, options.proxyUrl, undefined, options.forceProxy);
             }
         });
     }
