@@ -1,8 +1,6 @@
 QUnit.testStart(function() {
     var markup =
-'<div id="container">\
-        <div id="dataGrid"></div>\
-</div>';
+'<div id="dataGrid"></div>';
 
     $("#qunit-fixture").html(markup);
 });
