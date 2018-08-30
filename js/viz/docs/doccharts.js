@@ -1158,13 +1158,7 @@ var dxChart = {
         * @type boolean
         * @default undefined
         */
-        endOnTick: undefined,
-        /**
-        * @name dxChartOptions.commonAxisSettings.wholeRange
-        * @type Array<number,string,Date>
-        * @default undefined
-        */
-        wholeRange: undefined
+        endOnTick: undefined
     },
     /**
     * @name dxChartOptions.argumentAxis
@@ -1395,15 +1389,16 @@ var dxChart = {
         max: undefined,
         /**
         * @name dxChartOptions.argumentAxis.visualRange
-        * @type Array<number,string,Date>
+        * @type VizRange | Array<number,string,Date>
         * @notUsedInTheme
         */
-        visualRange: [undefined, undefined],
-        /**
-        * @name dxChartOptions.argumentAxis.visualRangeLength
-        * @inherits VizTimeInterval
+        visualRange: undefined,
+         /**
+        * @name dxChartOptions.argumentAxis.wholeRange
+        * @type VizRange | Array<number,string,Date>
+        * @default undefined
         */
-        visualRangeLength: {},
+        wholeRange: undefined,
         /**
         * @name dxChartOptions.argumentAxis.visualRangeOnDataUpdate
         * @type Enums.VisualRangeUpdateMode
@@ -1683,10 +1678,16 @@ var dxChart = {
         max: undefined,
         /**
         * @name dxChartOptions.valueAxis.visualRange
-        * @type Array<number,string,Date>
+        * @type VizRange | Array<number,string,Date>
         * @notUsedInTheme
         */
-        visualRange: [undefined, undefined],
+        visualRange: undefined,
+        /**
+        * @name dxChartOptions.valueAxis.wholeRange
+        * @type VizRange | Array<number,string,Date>
+        * @default undefined
+        */
+        wholeRange: undefined,
         /**
         * @name dxChartOptions.valueAxis.axisDivisionFactor
         * @type number

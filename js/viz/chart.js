@@ -565,7 +565,7 @@ var dxChart = AdvancedChart.inherit({
         const series = that._getVisibleSeries();
         const argumentAxis = that.getArgumentAxis();
         const argumentViewport = argumentAxis.getViewport();
-        const minMaxDefined = argumentViewport && (_isDefined(argumentViewport.min) || _isDefined(argumentViewport.max)) || _isDefined(argumentAxis.getOptions().visualRangeLength);
+        const minMaxDefined = argumentViewport && (_isDefined(argumentViewport.startValue) || _isDefined(argumentViewport.endValue)) || _isDefined(argumentAxis.getOptions().visualRangeLength);
         const useAggregation = series.some(s => s.useAggregation());
         const adjustOnZoom = that._themeManager.getOptions("adjustOnZoom");
         const alignToBounds = !minMaxDefined || !argumentAxis.isZoomed();
@@ -1177,18 +1177,22 @@ var dxChart = AdvancedChart.inherit({
 
         that._eventTrigger("zoomStart"); // TODO !gesturesUsed condition
 
-        that._getVisualRangeSetter(true, false)([min, max]);
+        that.getArgumentAxis().visualRange([min, max]);
 
         const bounds = that.getVisibleArgumentBounds();
         that._eventTrigger("zoomEnd", { rangeStart: bounds.minVisible, rangeEnd: bounds.maxVisible });
     },
 
-    _getVisualRangeSetter(isArgumentAxis, useAnimation, index) {
+    _getVisualRangeSetter(isArgumentAxis, useAnimation) {
         const chart = this;
-        return function(visualRange) {
-            const axes = isArgumentAxis ? chart._argumentAxes : chart._valueAxes.filter(va => va.name === chart._valueAxes[index].name);
+        return function(axis, visualRange) {
 
-            axes.forEach(axis => axis.zoom(visualRange[0], visualRange[1]));
+            if(axis.isArgumentAxis) {
+                if(chart._argumentAxes.filter(a => a === axis)[0] !== chart._argumentAxes[chart._displayedArgumentAxisIndex]) {
+                    return;
+                }
+                chart._argumentAxes.filter(a => a !== axis).forEach(a => a.visualRange(visualRange));
+            }
 
             chart._recreateSizeDependentObjects(false);
             chart._doRender({
@@ -1199,7 +1203,7 @@ var dxChart = AdvancedChart.inherit({
                 animate: useAnimation
             });
 
-            chart._triggerVisualRangeOptionChange(isArgumentAxis ? chart.getArgumentAxis() : axes[0], isArgumentAxis, false);
+            chart._triggerVisualRangeOptionChange(axis, isArgumentAxis, false);
             if(isArgumentAxis && chart._themeManager.getOptions("adjustOnZoom")) {
                 chart._triggerVisualRangeOptionChange(null, false, true);
             }
@@ -1244,8 +1248,8 @@ var dxChart = AdvancedChart.inherit({
         const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + ".visualRange";
         const previousVisualRange = that.option(optionFullName);
 
-        if(!_isDefined(previousVisualRange) || JSON.stringify(visualRange[0]) !== JSON.stringify(previousVisualRange[0]) || JSON.stringify(visualRange[1]) !== JSON.stringify(previousVisualRange[1])) {
-            that._simulateOptionChange(optionFullName, visualRange, previousVisualRange);
+        if(!_isDefined(previousVisualRange) || JSON.stringify(visualRange) !== JSON.stringify(previousVisualRange)) {
+            that._simulateOptionChange(optionFullName, vizUtils.convertVisualRangeObject(visualRange, !_isArray(previousVisualRange)), previousVisualRange);
         }
     },
 

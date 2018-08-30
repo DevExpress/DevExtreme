@@ -25,7 +25,7 @@ var OldEventsName = {
 
 QUnit.module("Zooming", commons.environment);
 
-QUnit.test("Call zoom argument axis and adjust value axis", function(assert) {
+QUnit.test("Adjust value axis when argument visual range is changed", function(assert) {
     var series = new MockSeries({});
     chartMocks.seriesMockData.series.push(series);
 
@@ -34,15 +34,14 @@ QUnit.test("Call zoom argument axis and adjust value axis", function(assert) {
     });
 
     chart._argumentAxes[0].getViewport.returns({
-        min: 10,
-        max: 50
+        startValue: 10,
+        endValue: 50
     });
 
     chart._valueAxes[0].adjust.reset();
     // act
-    chart.zoomArgument(10, 50);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
     // assert
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
     assert.strictEqual(series.getValueAxis().adjust.callCount, 1);
     assert.strictEqual(series.getValueAxis().adjust.firstCall.args[0], false);
 });
@@ -60,7 +59,7 @@ QUnit.test("T576295. chart is not zoom value axis if series is not return their 
 
     chart._valueAxes[0].adjust.reset();
     // act
-    chart.zoomArgument(10, 50);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
     // assert
     assert.ok(series.getValueAxis().adjust.called);
     assert.strictEqual(series.getValueAxis().adjust.firstCall.args[0], true);
@@ -100,7 +99,7 @@ QUnit.test("chart with single value axis. Zooming with one null/undefined values
         chartRenderSpy = sinon.spy(chart, "_doRender");
 
     // act
-    chart.zoomArgument(10, null);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
 
     // assert
     assert.equal(chartRenderSpy.callCount, 1);
@@ -209,24 +208,23 @@ QUnit.test("MultiAxis chart", function(assert) {
         ]
     });
     chart._argumentAxes[0].getViewport.returns({
-        min: 10,
-        max: 50
+        startValue: 10,
+        endValue: 50
     });
 
     chart._valueAxes[0].adjust.reset();
     chart._valueAxes[1].adjust.reset();
     // act
-    chart.zoomArgument(10, 50);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
     // assert
 
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
     assert.deepEqual(series1.getValueAxis().adjust.callCount, 1, "axis 1 viewport adjusted");
     assert.deepEqual(series2.getValueAxis().adjust.callCount, 1, "axis 2 viewport adjusted");
     assert.strictEqual(series1.getValueAxis().adjust.firstCall.args[0], false);
     assert.strictEqual(series2.getValueAxis().adjust.firstCall.args[0], false);
 });
 
-QUnit.test("Zoom all argument axis", function(assert) {
+QUnit.test("Set visual range for all argument axis except original target one", function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
 
@@ -248,11 +246,12 @@ QUnit.test("Zoom all argument axis", function(assert) {
     });
 
     // act
-    chart.zoomArgument(10, 50);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), [10, 50]);
     // assert
 
-    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50]);
-    assert.deepEqual(chart._argumentAxes[1].zoom.lastCall.args, [10, 50]);
+    assert.deepEqual(chart._argumentAxes[0].visualRange.lastCall.args[0], [10, 50]);
+    assert.ok(!chart._argumentAxes[1].called);
+    assert.equal(chart._argumentAxes[1], chart.getArgumentAxis());
 });
 
 QUnit.test("chart with single value with aggregation. Adjust on zoom = true", function(assert) {
@@ -864,7 +863,7 @@ QUnit.test("T172802. Scroll bar after zooming. One categories", function(assert)
 
     scrollBar.setPosition.reset();
 
-    chart.zoomArgument("January", "January");
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: "January", endValue: "January" });
 
     assert.ok(scrollBar.setPosition.calledOnce);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [undefined, undefined]);

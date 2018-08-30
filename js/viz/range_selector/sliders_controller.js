@@ -4,7 +4,9 @@ var noop = require("../../core/utils/common").noop,
     emptySliderMarkerText = commonModule.consts.emptySliderMarkerText,
     Slider = require("./slider"),
     _normalizeEnum = require("../core/utils").normalizeEnum,
-    isNumeric = require("../../core/utils/type").isNumeric,
+    typeUtils = require("../../core/utils/type"),
+    isNumeric = typeUtils.isNumeric,
+    vizUtils = require("../core/utils"),
     adjust = require("../../core/utils/math").adjust;
 
 function buildRectPoints(left, top, right, bottom) {
@@ -212,17 +214,29 @@ SlidersController.prototype = {
         return { startValue: this._sliders[0].getValue(), endValue: this._sliders[1].getValue() };
     },
 
-    setSelectedRange: function(arg) {
-        arg = arg || {};
-        var that = this,
-            translator = that._params.translator,
-            startValue = translator.isValid(arg.startValue) ? translator.getCorrectValue(arg.startValue, +1) : translator.getRange()[0],
-            endValue = translator.isValid(arg.endValue) ? translator.getCorrectValue(arg.endValue, -1) : translator.getRange()[1],
-            values;
+    setSelectedRange: function(visualRange) {
+        visualRange = visualRange || {};
+        const that = this;
+        const translator = that._params.translator;
+        const businessRange = translator.getBusinessRange();
+
+        let { startValue, endValue } = vizUtils.adjustVisualRange({
+            dataType: businessRange.dataType,
+            axisType: businessRange.axisType,
+            base: businessRange.base
+        }, {
+            startValue: translator.isValid(visualRange.startValue) ? translator.getCorrectValue(visualRange.startValue, +1) : undefined,
+            endValue: translator.isValid(visualRange.endValue) ? translator.getCorrectValue(visualRange.endValue, -1) : undefined,
+            length: visualRange.length
+        }, {
+            min: businessRange.min,
+            max: businessRange.max,
+            categories: businessRange.categories
+        });
 
         startValue = isNumeric(startValue) ? adjust(startValue) : startValue;
         endValue = isNumeric(endValue) ? adjust(endValue) : endValue;
-        values = translator.to(startValue, -1) < translator.to(endValue, +1) ? [startValue, endValue] : [endValue, startValue];
+        const values = translator.to(startValue, -1) < translator.to(endValue, +1) ? [startValue, endValue] : [endValue, startValue];
         that._sliders[0].setDisplayValue(values[0]);
         that._sliders[1].setDisplayValue(values[1]);
         that._sliders[0]._position = translator.to(values[0], -1);

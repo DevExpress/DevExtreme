@@ -613,6 +613,32 @@ var tickInterval = {
 };
 
 /**
+* @name VizRange
+* @hidden
+* @type object
+*/
+var VizRange = {
+    /**
+    * @name VizRange.startValue
+    * @type number|date|string
+    * @default undefined
+    */
+    startValue: undefined,
+    /**
+    * @name VizRange.endValue
+    * @type number|date|string
+    * @default undefined
+    */
+    endValue: undefined,
+    /**
+    * @name VizRange.length
+    * @inherits VizTimeInterval
+    * @default undefined
+    */
+    length: undefined
+};
+
+/**
  * @name Font
  * @type object
  * @hidden

@@ -21,6 +21,8 @@ var registerComponent = require("../../core/component_registrator"),
     seriesDataSourceModule = require("./series_data_source"),
     themeManagerModule = require("./theme_manager"),
     tickGeneratorModule = require("../axes/tick_generator"),
+    parseValue = vizUtils.getVizRangeObject,
+    convertVisualRangeObject = vizUtils.convertVisualRangeObject,
 
     _isDefined = typeUtils.isDefined,
     _isNumber = typeUtils.isNumeric,
@@ -58,14 +60,6 @@ function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickInterva
         textBBox = getTextBBox(renderer, formattedText, scaleOptions.label.font);
 
     return _ceil(textBBox.width / 2);
-}
-
-function parseValue(value) {
-    return { startValue: value[0], endValue: value[1] };
-}
-
-function parseSelectedRange(selectedRange) {
-    return [selectedRange.startValue, selectedRange.endValue];
 }
 
 function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, tickIntervalsInfo) {
@@ -599,7 +593,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
-            updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); },
+            updateSelectedRange: function(range) { that.setValue(convertVisualRangeObject(range)); },
             incidentOccurred: that._incidentOccurred
         });
 
@@ -615,12 +609,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             trackersGroup: trackersGroup,
             updateSelectedRange: function(range, lastSelectedRange) {
                 if(!that._rangeOption) {
-                    that.option(VALUE, parseSelectedRange(range));
+                    that.option(VALUE, convertVisualRangeObject(range, typeUtils.isPlainObject(that._options[VALUE])));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
-                    value: parseSelectedRange(range),
-                    previousValue: parseSelectedRange(lastSelectedRange)
+                    value: convertVisualRangeObject(range),
+                    previousValue: convertVisualRangeObject(lastSelectedRange)
                 });
             },
             translator: that._axis.getTranslator()
@@ -688,7 +682,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
     _change_VALUE: function() {
         var that = this,
-            option = that._rangeOption && that._rangeOption[VALUE];
+            option = that._rangeOption;
         if(option) {
             that._options[VALUE] = option;
             that.setValue(option);
@@ -725,7 +719,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             value = that._options[VALUE];
 
         if(that._changes.has("VALUE") && value) {
-            that._rangeOption = { "value": [value[0], value[1]] };
+            that._rangeOption = value;
         }
         that.callBase.apply(that, arguments);
         that._rangeOption = null;
@@ -954,16 +948,17 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     },
 
     getValue: function() {
-        return parseSelectedRange(this._slidersController.getSelectedRange());
+        return convertVisualRangeObject(this._slidersController.getSelectedRange());
     },
 
     setValue: function(value) {
         var current;
+        const visualRange = parseValue(value);
         if(!this._isUpdating && value) {
-            this._validateRange(value[0], value[1]);
+            this._validateRange(visualRange.startValue, visualRange.endValue);
             // TODO: Move the check inside the SlidersController
             current = this._slidersController.getSelectedRange();
-            if(!current || current.startValue !== value[0] || current.endValue !== value[1]) {
+            if(!current || current.startValue !== visualRange.startValue || current.endValue !== visualRange.endValue) {
                 this._slidersController.setSelectedRange(parseValue(value));
             }
         }

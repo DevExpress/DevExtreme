@@ -2727,7 +2727,8 @@ QUnit.test("Get scale breaks in the viewport", function(assert) {
             { startValue: 500, endValue: 600 }
         ]
     });
-    this.axis.zoom(250, 540);
+
+    this.axis.visualRange(250, 540);
     this.axis.createTicks(this.canvas);
 
     var breaks = this.tickGeneratorSpy.lastCall.args[7];
@@ -2744,7 +2745,7 @@ QUnit.test("Do not get scale break if viewport inside it", function(assert) {
         breaks: [{ startValue: 200, endValue: 500 }]
     });
 
-    this.axis.zoom(250, 340);
+    this.axis.visualRange(250, 340);
     this.axis.createTicks(this.canvas);
 
     var breaks = this.tickGeneratorSpy.lastCall.args[7];
@@ -3319,7 +3320,7 @@ QUnit.test("Recalculate the breaks on zoom", function(assert) {
     this.axis.createTicks(this.canvas);
 
     // act
-    this.axis.zoom(new Date(2017, 8, 8, 8, 0, 0), new Date(2017, 8, 11));
+    this.axis.visualRange(new Date(2017, 8, 8, 8, 0, 0), new Date(2017, 8, 11));
     this.axis.createTicks(this.canvas);
 
     // assert
@@ -3747,7 +3748,7 @@ QUnit.test("Filter scalebreaks on zoom", function(assert) {
     this.axis.setGroupSeries(this.series);
     this.axis.createTicks(this.canvas);
 
-    this.axis.zoom(50, 100);
+    this.axis.visualRange(50, 100);
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 50, to: 80, cumulativeWidth: 0 }]);
@@ -3771,7 +3772,7 @@ QUnit.test("Recalculate scale breaks on zoom", function(assert) {
         this.stubSeries([[80, 120, 40], []])
     ]);
 
-    this.axis.zoom(50, 100);
+    this.axis.visualRange(50, 100);
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 80, to: 100, cumulativeWidth: 0 }]);
@@ -3789,10 +3790,10 @@ QUnit.test("Reset zoom", function(assert) {
         max: 120
     });
 
-    this.axis.zoom(50, 100);
+    this.axis.visualRange(50, 100);
     this.axis.createTicks(this.canvas);
 
-    this.axis.zoom(2, 120);
+    this.axis.visualRange(2, 120);
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 10, to: 40, cumulativeWidth: 0 }, { from: 40, to: 80, cumulativeWidth: 0 }]);
@@ -4170,7 +4171,7 @@ QUnit.test("Do not adjust axis if it was zoomed", function(assert) {
     this.axis.setBusinessRange({ min: -100, max: 100 });
     this.axis.setMarginOptions({});
 
-    this.axis.zoom(-20, 60);
+    this.axis.visualRange(-20, 60);
 
     this.axis.adjust();
     this.translator.stub("updateBusinessRange").reset();

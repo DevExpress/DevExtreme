@@ -105,7 +105,7 @@ circularAxes = polarAxes.circular = {
     _validateOptions(options) {
         const that = this;
         let originValue = options.originValue;
-        const wholeRange = options.wholeRange = [];
+        const wholeRange = options.wholeRange = {};
         const period = options.period;
 
         if(isDefined(originValue)) {
@@ -114,12 +114,12 @@ circularAxes = polarAxes.circular = {
 
         if(period > 0 && options.argumentType === constants.numeric) {
             originValue = originValue || 0;
-            wholeRange[1] = originValue + period;
-            that._viewport = [originValue, wholeRange[1]];
+            wholeRange.endValue = originValue + period;
+            that._viewport = vizUtils.getVizRangeObject([originValue, wholeRange.endValue]);
         }
 
         if(isDefined(originValue)) {
-            wholeRange[0] = originValue;
+            wholeRange.startValue = originValue;
         }
     },
 
