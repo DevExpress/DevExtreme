@@ -42,7 +42,7 @@ var Class = require("../core/class"),
     MAX_DIGIT_WIDTH_IN_PIXELS = 7, // Calibri font with 11pt size
     CUSTOM_FORMAT_START_INDEX = 165;
 
-exports.ExcelCreator = Class.inherit({
+var ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
         var result = "<" + tagName,
             i,
@@ -550,8 +550,8 @@ exports.ExcelCreator = Class.inherit({
         this._needSheetPr = false;
         this._dataProvider = dataProvider;
 
-        if(typeUtils.isDefined(JSZip)) {
-            this._zip = new JSZip();
+        if(typeUtils.isDefined(ExcelCreator.JSZip)) {
+            this._zip = new ExcelCreator.JSZip();
         } else {
             this._zip = null;
         }
@@ -582,6 +582,10 @@ exports.ExcelCreator = Class.inherit({
     }
 });
 
+ExcelCreator.JSZip = JSZip;
+
+exports.ExcelCreator = ExcelCreator;
+
 exports.getData = function(data, options, callback) {
     // TODO: Looks like there is no need to export ExcelCreator any more?
     var excelCreator = new exports.ExcelCreator(data, options);
@@ -590,14 +594,7 @@ exports.getData = function(data, options, callback) {
 
     excelCreator.ready().done(function() {
         if(excelCreator._zip.generateAsync) {
-            excelCreator.getData(typeUtils.isFunction(window.Blob))
-                .then(blob => {
-                    let _zip;
-                    ///#DEBUG
-                    _zip = excelCreator._zip;
-                    ///#ENDDEBUG
-                    callback(blob, _zip);
-                });
+            excelCreator.getData(typeUtils.isFunction(window.Blob)).then(callback);
         } else {
             callback(excelCreator.getData(typeUtils.isFunction(window.Blob)));
         }
