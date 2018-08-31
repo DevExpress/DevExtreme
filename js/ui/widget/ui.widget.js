@@ -471,6 +471,11 @@ var Widget = DOMComponent.inherit({
         this._contentReadyAction();
     }),
 
+    _refresh: function() {
+        this._toggleActiveState(this._eventBindingTarget(), false);
+        this.callBase.apply(this, arguments);
+    },
+
     _dispose: function() {
         this._cleanTemplates();
         this._contentReadyAction = null;
