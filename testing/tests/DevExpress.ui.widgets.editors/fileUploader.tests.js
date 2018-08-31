@@ -73,6 +73,25 @@ var fakeFile2 = {
     lastModifiedDate: $.now()
 };
 
+var createBlobFile = function(name, size) {
+    return {
+        name: name,
+        size: size,
+        type: "image/png",
+        blob: (function(size) {
+            var str = "";
+            while(str.length < size) {
+                str += "a";
+            }
+            return new Blob([str], { type: 'application/octet-binary' });
+        })(size),
+        slice: function(startPos, endPos) {
+            return this.blob.slice(startPos, endPos);
+        },
+        lastModifiedDate: $.now()
+    };
+};
+
 var getNewFile = function() {
     var randomSize = Math.round(Math.random() * 10000),
         randomId = Math.round(Math.random() * 10000);
@@ -116,7 +135,118 @@ var moduleConfig = {
     }
 };
 
-QUnit.module("validation rendrering", moduleConfig, function() {
+QUnit.module("uploading by chunks", moduleConfig, function() {
+    QUnit.test("file should correctly cut and sent it", function(assert) {
+        this.xhrMock.changeTimeouts(100, 100);
+        var fakeContentFile = createBlobFile("fake.png", 100023);
+        var index = 0;
+        var loadedBytes = 0;
+        var isUploaded = false;
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: false,
+            uploadMode: "instantly",
+            enabledChunks: true,
+            onProgress: function(e) {
+                var progressBar = $(".dx-progressbar").dxProgressBar("instance");
+                var request = this.xhrMock.getLastInstance();
+
+                loadedBytes += request.loadedSize;
+                assert.equal(e.bytesLoaded, loadedBytes, "total loaded bytes size is correct");
+                assert.equal(progressBar.option("value"), loadedBytes, "progressBar value is correct");
+                assert.equal(e.segmentSize, request.loadedSize, "loaded segment bytes size is correct");
+                assert.equal(e.component.option("progress"), Math.round(loadedBytes / fakeContentFile.size * 100), "component progress value is correct");
+
+                assert.ok(this.xhrMock.getInstanceAt(index), "request " + index + " is created");
+                index++;
+            }.bind(this),
+            onUploaded: function() {
+                isUploaded = true;
+            }
+        });
+        simulateFileChoose($fileUploader, [fakeContentFile]);
+
+        var expectedCallsCount = Math.ceil(fakeContentFile.size / $($fileUploader).dxFileUploader("instance").option("chunkSize"));
+        assert.equal(index, expectedCallsCount, "count of calls onProgress event is valid");
+        assert.ok(isUploaded, "file is uploaded");
+    });
+    QUnit.test("onFileAborted event should be raised if canceled uploading", function(assert) {
+        var isUploadAborted = false;
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: false,
+            uploadMode: "instantly",
+            enabledChunks: true,
+            onUploadAborted: function() {
+                isUploadAborted = true;
+            }
+        });
+        simulateFileChoose($fileUploader, [createBlobFile("fake.png", 100023)]);
+        $fileUploader.find("." + FILEUPLOADER_CANCEL_BUTTON_CLASS).eq(0).trigger("dxclick");
+        assert.ok(isUploadAborted, "upload file is aborted");
+        assert.ok(this.xhrMock.getInstanceAt().uploadAborted, "request is aborted");
+    });
+    QUnit.test("multiple files should correctly cut and sent it", function(assert) {
+        this.xhrMock.changeTimeouts(100, 100);
+        var fileUploadedCount = 0;
+        var totalBytes = 0;
+        var totalLoadedBytes = 0;
+        var fileStates = { };
+
+        var files = [createBlobFile("fake1.png", 100023), createBlobFile("fake2.png", 5000)];
+        files.forEach(function(item) {
+            totalBytes += item.size;
+            fileStates[item.name] = {
+                bytesLoaded: 0
+            };
+        });
+
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: false,
+            uploadMode: "instantly",
+            enabledChunks: true,
+            onProgress: function(e) {
+                var request = this.xhrMock.getLastInstance();
+                var state = fileStates[e.file.name];
+                state.bytesLoaded += request.loadedSize;
+                totalLoadedBytes += request.loadedSize;
+
+                assert.equal(e.bytesLoaded, state.bytesLoaded, "loaded bytes size is correct");
+                assert.equal(e.segmentSize, request.loadedSize, "current loaded segment bytes size is correct");
+                assert.equal(e.component.option("progress"), Math.round(totalLoadedBytes / totalBytes * 100), "component progress value is correct");
+            }.bind(this),
+            onUploaded: function() {
+                fileUploadedCount++;
+            }
+        });
+        simulateFileChoose($fileUploader, files);
+
+        assert.equal(fileUploadedCount, files.length, "Count uploaded files is correct");
+        for(var i = 0; i < files.length; i++) {
+            assert.equal(files[i].size, fileStates[files[i].name].bytesLoaded, "Uploded file bytes is correct");
+        }
+    });
+    QUnit.test("uploading multiple files should be succesed", function(assert) {
+        var uploadedFiles = [];
+        this.xhrMock.changeTimeouts(100, 100);
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: true,
+            uploadMode: "instantly",
+            enabledChunks: true,
+            onUploaded: function(e) {
+                uploadedFiles.push(e.file.name);
+            }
+        });
+
+        var files = [createBlobFile("fake1.png", 100023), createBlobFile("fake2.png", 5000)];
+        simulateFileChoose($fileUploader, files);
+
+        assert.equal(uploadedFiles.length, files.length, "count uploaded files is valid");
+        for(var i = 0; i < files.length; i++) {
+            assert.equal(uploadedFiles[i], files[i].name, "uploaded files is valid");
+        }
+    });
+});
+
+QUnit.module("validation rendering", moduleConfig, function() {
     QUnit.test("file with .pdf Extension should be rendered as invalid", function(assert) {
         var $fileUploader = $("#fileuploader").dxFileUploader({
             multiple: true,

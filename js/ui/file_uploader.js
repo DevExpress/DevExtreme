@@ -1302,16 +1302,18 @@ var FileUploader = Editor.inherit({
         if(file) {
             var loadedSize = Math.min(e.loaded, file.value.size);
             var segmentSize = loadedSize - file.loadedSize;
+            file.loadedSize = loadedSize;
+
+            this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
             this._updateProgressBar(file, {
                 loaded: loadedSize,
                 total: e.total,
                 currentSegmentSize: segmentSize,
                 event: this.option("enabledChunks") ? null : e
             });
-            file.loadedSize = loadedSize;
-            totalLoadedFilesSize += segmentSize;
+        } else {
+            this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize);
         }
-        this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize);
     },
     _updateProgressBar: function(file, loadedFileData) {
         file.progressBar && file.progressBar.option({
