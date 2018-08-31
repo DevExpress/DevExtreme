@@ -59,6 +59,16 @@ QUnit.test("it works", function(assert) {
     assert.equal(GETTER("a")(null), null);
     assert.equal(GETTER("z.z.z")(obj), undefined);
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
+});
+
+QUnit.test("default values", function(assert) {
+    var obj = {
+        a: "a",
+        c: {
+            a: 1
+        },
+        f: 0
+    };
 
     assert.equal(GETTER("a")(null, { defaultValue: 1 }), 1);
     assert.equal(GETTER("c.b")(obj, { defaultValue: 1 }), 1);
