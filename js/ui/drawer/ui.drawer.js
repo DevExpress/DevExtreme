@@ -314,6 +314,26 @@ const Drawer = Widget.inherit({
         return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
     },
 
+    getRealPanelHeight() {
+        if(windowUtils.hasWindow()) {
+            var $element;
+
+            if(this.option("openedStateMode") === "overlap") {
+                $element = $(this._overlay.content());
+            } else {
+                $element = this._$panel;
+            }
+
+            return this.getElementHeight($element);
+        } else {
+            return 0;
+        }
+    },
+
+    getElementHeight($element) {
+        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
+    },
+
     _isRightPosition() {
         const invertedPosition = this.option("position") === "right";
         const rtl = this.option("rtlEnabled");

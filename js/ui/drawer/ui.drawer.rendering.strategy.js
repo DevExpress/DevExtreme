@@ -13,8 +13,15 @@ const animation = {
             toConfig["right"] = position;
             toConfig["transform"] = " translate(0, 0)";
             animationType = "custom";
-        } else {
+        }
+
+        if(direction === "left") {
             toConfig["left"] = position;
+            animationType = "slide";
+        }
+
+        if(direction === "top") {
+            toConfig["top"] = position;
             animationType = "slide";
         }
         fx.animate($element, {
@@ -108,10 +115,20 @@ class DrawerStrategy {
     }
 
     _getPanelOffset(offset) {
-        if(offset) {
-            return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxWidth());
-        } else {
-            return -(this._drawer.getRealPanelWidth() - this._drawer.getMinWidth());
+        if(this._drawer.option("position") === "left" || this._drawer.option("position") === "right") {
+            if(offset) {
+                return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxWidth());
+            } else {
+                return -(this._drawer.getRealPanelWidth() - this._drawer.getMinWidth());
+            }
+        }
+
+        if(this._drawer.option("position") === "top") {
+            if(offset) {
+                return -(this._drawer.getRealPanelHeight() - this._drawer.getMaxWidth());
+            } else {
+                return -(this._drawer.getRealPanelHeight() - this._drawer.getMinWidth());
+            }
         }
     }
 
