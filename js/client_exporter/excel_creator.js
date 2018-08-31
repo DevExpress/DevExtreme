@@ -26,6 +26,9 @@ var Class = require("../core/class"),
     STYLE_FILE_NAME = "styles.xml",
     WORKSHEETS_FOLDER = "worksheets",
     WORKSHEET_FILE_NAME = "sheet1.xml",
+    WORKSHEET_HEADER_XML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
+        'mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">',
     VALID_TYPES = {
         "boolean": "b",
         "date": "d",
@@ -401,9 +404,7 @@ exports.ExcelCreator = Class.inherit({
             colsLength = this._colsArray.length,
             rSpans = "1:" + colsLength,
             headerRowCount = this._dataProvider.getHeaderRowCount ? this._dataProvider.getHeaderRowCount() : 1,
-            xmlResult = [["<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" " +
-                          "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" " +
-                          "mc:Ignorable=\"x14ac\" xmlns:x14ac=\"http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac\">",
+            xmlResult = [[WORKSHEET_HEADER_XML,
                 ((this._needSheetPr) ? GROUP_SHEET_PR_XML : SINGLE_SHEET_PR_XML), "<dimension ref=\"A1:", this._getCellIndex(this._maxIndex[0], this._maxIndex[1]) + "\"/><sheetViews><sheetView " +
             (this._rtlEnabled ? "rightToLeft=\"1\" " : "") + "tabSelected=\"1\" workbookViewId=\"0\">" + this._getPaneXML() + "</sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"",
                 ((this._dataProvider.getRowsCount() > 0) ? this._dataProvider.getGroupLevel(0) : 0), "\" x14ac:dyDescent=\"0.25\"/>"].join("")];
@@ -589,7 +590,14 @@ exports.getData = function(data, options, callback) {
 
     excelCreator.ready().done(function() {
         if(excelCreator._zip.generateAsync) {
-            excelCreator.getData(typeUtils.isFunction(window.Blob)).then(callback);
+            excelCreator.getData(typeUtils.isFunction(window.Blob))
+                .then(blob => {
+                    let _zip;
+                    ///#DEBUG
+                    _zip = excelCreator._zip;
+                    ///#ENDDEBUG
+                    callback(blob, _zip);
+                });
         } else {
             callback(excelCreator.getData(typeUtils.isFunction(window.Blob)));
         }
@@ -605,8 +613,11 @@ exports.__internals = {
     STYLE_FILE_NAME: STYLE_FILE_NAME,
     WORKSHEET_FILE_NAME: WORKSHEET_FILE_NAME,
     WORKSHEETS_FOLDER: WORKSHEETS_FOLDER,
+    WORKSHEET_HEADER_XML: WORKSHEET_HEADER_XML,
     SHAREDSTRING_FILE_NAME: SHAREDSTRING_FILE_NAME,
     GROUP_SHEET_PR_XML: GROUP_SHEET_PR_XML,
-    SINGLE_SHEET_PR_XML: SINGLE_SHEET_PR_XML
+    SINGLE_SHEET_PR_XML: SINGLE_SHEET_PR_XML,
+    BASE_STYLE_XML: BASE_STYLE_XML,
+    XML_TAG: XML_TAG
 };
 ///#ENDDEBUG
