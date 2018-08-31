@@ -30,7 +30,6 @@ var $ = require("../../core/renderer"),
     Popup = require("../popup"),
     ContextMenu = require("../context_menu"),
     deferredUtils = require("../../core/utils/deferred"),
-    getSwatchContainer = require("../widget/swatch_container"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
 
@@ -1098,7 +1097,6 @@ var PivotGrid = Widget.inherit({
                 minWidth: fieldChooserOptions.minWidth,
                 minHeight: fieldChooserOptions.minHeight,
                 toolbarItems: toolbarItems,
-                container: getSwatchContainer(that.$element()),
                 onResize: function(e) {
                     e.component.$content().dxPivotGridFieldChooser("updateDimensions");
                 },

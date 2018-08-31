@@ -10,7 +10,12 @@ require("common.css!");
 require("generic_light.css!");
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler-navigator"></div>');
+    $("#qunit-fixture").html('\
+        <div id="scheduler-navigator"></div>\
+        <div class="dx-additional-color-scheme-1">\
+            <div id="swatchNavigator"></div>\
+        </div>\
+        ');
 });
 
 QUnit.module("Navigator", {
@@ -291,6 +296,19 @@ QUnit.test("Calendar popover should be shown on caption click", function(assert)
 
     assert.equal($popover.length, 1, "Popover exists");
     assert.equal($popover.dxPopover("instance").option("visible"), true, "Popover is shown");
+});
+
+QUnit.test("Calendar popover renders on the right container if color swatch exists", function(assert) {
+    var instance = $("#swatchNavigator").dxSchedulerNavigator().dxSchedulerNavigator("instance");
+    instance.notifyObserver = noop;
+
+    var $element = instance.$element(),
+        $button = $element.find(".dx-scheduler-navigator-caption");
+
+    $($button).trigger("dxclick");
+
+
+    assert.equal($("body > .dx-additional-color-scheme-1 > .dx-overlay-wrapper.dx-scheduler-navigator-calendar-popover").length, 1, "Popover was rendered in div with swatch class");
 });
 
 QUnit.test("Popover should contain calendar", function(assert) {

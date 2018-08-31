@@ -491,12 +491,9 @@ var Overlay = Widget.inherit({
     },
 
     _initContainer: function(container) {
+        container = container === undefined ? viewPortUtils.value() : container;
+
         var $element = this.$element();
-
-        if(container === undefined) {
-            container = getSwatchContainer($element);
-        }
-
         var $container = $element.closest(container);
 
         if(!$container.length) {
@@ -1179,12 +1176,14 @@ var Overlay = Widget.inherit({
 
     _attachWrapperToContainer: function() {
         var $element = this.$element();
+        var containerDefined = this.option("container") !== undefined;
+        var renderContainer = containerDefined ? this._$container : getSwatchContainer($element);
 
-        if(this._$container && this._$container[0] !== $element.parent()[0]) {
-            this._$wrapper.appendTo(this._$container);
-        } else {
-            this._$wrapper.appendTo($element);
+        if(renderContainer[0] === $element.parent()[0]) {
+            renderContainer = $element;
         }
+
+        this._$wrapper.appendTo(renderContainer);
     },
 
     _renderGeometry: function() {

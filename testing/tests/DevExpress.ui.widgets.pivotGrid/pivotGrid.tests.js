@@ -660,11 +660,11 @@ QUnit.test("Render field chooser in the swatch correctly", function(assert) {
     pivotGrid._fieldChooserPopup.show();
     this.clock.tick(500);
 
-    var container = pivotGrid._fieldChooserPopup.option("container");
+    var container = pivotGrid._fieldChooserPopup._$wrapper.parent();
 
     assert.ok($(".dx-fieldchooser-popup").is(":visible"), "fieldChooser popup is visible");
     assert.ok($(container).hasClass("dx-additional-color-scheme-1"), "fieldChooser popup renders on the right container");
-    assert.equal($(container).parent().get(0).tagName.toLowerCase(), "body", "parent of container is viewport (body)");
+    assert.equal($(container).parent()[0].tagName.toLowerCase(), "body", "parent of container is viewport (body)");
 });
 
 QUnit.test("FieldPanel inherits visible option", function(assert) {
