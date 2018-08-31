@@ -46,7 +46,7 @@ QUnit.test("it works", function(assert) {
         d: function() {
             return { a: "d().a" };
         },
-        f: 0
+        e: null
     };
     assert.equal(GETTER()(obj), obj);
     assert.equal(GETTER("this")(obj), obj);
