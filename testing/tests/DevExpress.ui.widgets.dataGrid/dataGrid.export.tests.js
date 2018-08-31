@@ -8,7 +8,6 @@ import { excel as excelCreator } from "client_exporter";
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
     $("#qunit-fixture").html(markup);
-    // $("body").append(markup);
 });
 
 const internals = excelCreator.__internals,
@@ -16,7 +15,7 @@ const internals = excelCreator.__internals,
     STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
     STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
 
-function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
+function runTest(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
     const done = assert.async(3);
     gridOptions.loadingTimeout = undefined;
     gridOptions.onFileSaving = e => {
@@ -33,7 +32,6 @@ function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", s
             done();
         });
 
-        // TODO: $.when([deferred1, deferred2, deferred3, deferred4]).done(done); - avoid async, use another event
         e.cancel = true;
     };
 
@@ -41,14 +39,14 @@ function testConfiguration(assert, gridOptions, { styles = "", worksheet = "", s
 
     const getColumnWidthsHeadersOld = dataGrid.getView("columnHeadersView").getColumnWidths;
     dataGrid.getView("columnHeadersView").getColumnWidths = function() {
-        const results = getColumnWidthsHeadersOld.apply(this);
-        return results.map(() => 100);
+        const columnWidths = getColumnWidthsHeadersOld.apply(this);
+        return columnWidths.map(() => 100);
     };
 
     const getColumnWidthsRowsOld = dataGrid.getView("rowsView").getColumnWidths;
     dataGrid.getView("rowsView").getColumnWidths = function() {
-        const results = getColumnWidthsRowsOld.apply(this);
-        return results.map(() => 100);
+        const columnWidths = getColumnWidthsRowsOld.apply(this);
+        return columnWidths.map(() => 100);
     };
     dataGrid.exportToExcel();
 };
@@ -68,7 +66,7 @@ QUnit.test("Empty grid", function(assert) {
         '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
-    testConfiguration(assert, {}, { styles, worksheet, sharedStrings });
+    runTest(assert, {}, { styles, worksheet, sharedStrings });
 });
 
 QUnit.test("Columns - number", function(assert) {
@@ -102,7 +100,7 @@ QUnit.test("Columns - number", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "number" }],
@@ -143,7 +141,7 @@ QUnit.test("Columns - number as currency", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
@@ -186,7 +184,7 @@ QUnit.test("Columns - string", function(assert) {
         '<si><t>str2</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -226,7 +224,7 @@ QUnit.test("Columns - date", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "date" }],
@@ -266,7 +264,7 @@ QUnit.test("Columns - datetime", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "datetime" }],
@@ -308,7 +306,7 @@ QUnit.test("Columns - boolean", function(assert) {
         '<si><t>false</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "boolean" }],
@@ -350,7 +348,7 @@ QUnit.test("Columns - lookup", function(assert) {
         '<si><t>name2</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{
@@ -373,7 +371,7 @@ QUnit.test("Columns - lookup", function(assert) {
     );
 });
 
-QUnit.test("Columns - string, number, date, boolean, object, datetime", function(assert) {
+QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="2"><numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" /><numFmt numFmtId="166" formatCode="[$-9]M\\/d\\/yyyy, H:mm AM/PM" /></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -433,7 +431,7 @@ QUnit.test("Columns - string, number, date, boolean, object, datetime", function
         "<si><t>name1</t></si>" +
         "</sst>";
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [
@@ -470,7 +468,7 @@ QUnit.test("Columns - string, number, date, boolean, object, datetime", function
     );
 });
 
-QUnit.test("Columns - selection/editing commands", function(assert) {
+QUnit.test("Columns - remove the command columns from exporting document", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -497,13 +495,68 @@ QUnit.test("Columns - selection/editing commands", function(assert) {
         '<si><t>str1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
             dataSource: [{ field1: 'str1' }],
             selection: { mode: "multiple" },
             editing: { mode: "row", allowUpdating: true, allowDeleting: true, allowAdding: true },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Bands", function(assert) {
+    const styles = STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        internals.BASE_STYLE_XML +
+        '<cellXfs count="7">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        STYLESHEET_FOOTER_XML;
+    const worksheet = internals.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>4</v></c><c r="B3" s="4" t="s"><v>5</v></c><c r="C3" s="5" t="s"><v>6</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
+        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="7" uniqueCount="7">' +
+        '<si><t>Field 1</t></si>' +
+        '<si><t>Band1</t></si>' +
+        '<si><t>Field 2</t></si>' +
+        '<si><t>Field 3</t></si>' +
+        '<si><t>str1</t></si>' +
+        '<si><t>str2</t></si>' +
+        '<si><t>str3</t></si>' +
+        '</sst>';
+
+    runTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string" },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "field2", dataType: "string" },
+                        { dataField: "field3", dataType: "string" },
+                    ]
+                }
+            ],
+            dataSource: [{ field1: 'str1', field2: 'str2', field3: 'str3' } ],
         },
         { styles, worksheet, sharedStrings }
     );
@@ -540,7 +593,7 @@ QUnit.test("Groupping - 1 level", function(assert) {
         '<si><t>str_1_2</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [
@@ -588,7 +641,7 @@ QUnit.test("Groupping - 2 levels", function(assert) {
         '<si><t>str1_2_1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [
@@ -602,7 +655,51 @@ QUnit.test("Groupping - 2 levels", function(assert) {
     );
 });
 
-QUnit.test("Groupping - 'alignByColumn: true'", function(assert) {
+QUnit.test("Group summary", function(assert) {
+    const styles = STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        internals.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        STYLESHEET_FOOTER_XML;
+    const worksheet = internals.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n"><v>1</v></c></row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>Field 2</t></si>' +
+        '<si><t>Field 1: str1 (Sum of Field 2 is $1)</t></si>' +
+        '</sst>';
+
+    runTest(
+        assert,
+        {
+            columns: [
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "number" },
+            ],
+            dataSource: [{ field1: 'str1', field2: 1 }],
+            summary: {
+                groupItems: [{ column: 'field2', summaryType: 'sum', valueFormat: 'currency' }]
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Group summary - alignByColumn: true", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -638,7 +735,7 @@ QUnit.test("Groupping - 'alignByColumn: true'", function(assert) {
         '<si><t>str4</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [
@@ -656,7 +753,7 @@ QUnit.test("Groupping - 'alignByColumn: true'", function(assert) {
     );
 });
 
-QUnit.test("Bands", function(assert) {
+QUnit.test("Group summary - showInGroupFooter: true", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -671,47 +768,57 @@ QUnit.test("Bands", function(assert) {
         '</cellXfs>' +
         STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width=\"13.57\" min=\"3\" max=\"3\" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
-        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>4</v></c><c r="B3" s="4" t="s"><v>5</v></c><c r="C3" s="5" t="s"><v>6</v></c></row>' +
+        '<row r=\"1\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c><c r=\"B1\" s=\"0\" t=\"s\"><v>1</v></c><c r=\"C1\" s=\"0\" t=\"s\"><v>2</v></c></row>' +
+        '<row r=\"2\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"6\" t=\"s\"><v>3</v></c><c r=\"B2\" s=\"6\" t=\"s\" /><c r=\"C2\" s=\"6\" t=\"s\" /></row>' +
+        '<row r=\"3\" spans=\"1:3\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"3\" t=\"s\"><v>4</v></c><c r=\"B3\" s=\"4\" t=\"s\"><v>5</v></c><c r=\"C3\" s=\"5\" t=\"s\"><v>6</v></c></row>' +
+        '<row r=\"4\" spans=\"1:3\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A4\" s=\"1\" t=\"s\" /><c r=\"B4\" s=\"1\" t=\"s\"><v>7</v></c><c r=\"C4\" s=\"1\" t=\"s\"><v>7</v></c></row>' +
+        '<row r=\"5\" spans=\"1:3\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A5\" s=\"6\" t=\"s\"><v>8</v></c><c r=\"B5\" s=\"6\" t=\"s\" /><c r=\"C5\" s=\"6\" t=\"s\" /></row>' +
+        '<row r=\"6\" spans=\"1:3\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A6\" s=\"3\" t=\"s\"><v>9</v></c><c r=\"B6\" s=\"4\" t=\"s\"><v>10</v></c><c r=\"C6\" s=\"5\" t=\"s\"><v>11</v></c></row>' +
+        '<row r=\"7\" spans=\"1:3\" outlineLevel=\"1\" x14ac:dyDescent=\"0.25\"><c r=\"A7\" s=\"1\" t=\"s\" /><c r=\"B7\" s=\"1\" t=\"s\"><v>7</v></c><c r=\"C7\" s=\"1\" t=\"s\"><v>7</v></c></row>' +
         '</sheetData>' +
-        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
-        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="7" uniqueCount="7">' +
-        '<si><t>Field 1</t></si>' +
-        '<si><t>Band1</t></si>' +
+        '<ignoredErrors><ignoredError sqref="A1:C7" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="12" uniqueCount="12">' +
         '<si><t>Field 2</t></si>' +
         '<si><t>Field 3</t></si>' +
-        '<si><t>str1</t></si>' +
-        '<si><t>str2</t></si>' +
-        '<si><t>str3</t></si>' +
+        '<si><t>Field 4</t></si>' +
+        '<si><t>Field 1: str1_1</t></si>' +
+        '<si><t>str2_1</t></si>' +
+        '<si><t>str3_1</t></si>' +
+        '<si><t>str4_1</t></si>' +
+        '<si><t>Count: 1</t></si>' +
+        '<si><t>Field 1: str1_2</t></si>' +
+        '<si><t>str2_2</t></si>' +
+        '<si><t>str3_2</t></si>' +
+        '<si><t>str4_2</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [
-                { dataField: "field1", dataType: "string" },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "field2", dataType: "string" },
-                        { dataField: "field3", dataType: "string" },
-                    ]
-                }
+                { dataField: "field1", dataType: "string", groupIndex: 0 },
+                { dataField: "field2", dataType: "string" },
+                { dataField: "field3", dataType: "string" },
+                { dataField: "field4", dataType: "string" },
             ],
-            dataSource: [{ field1: 'str1', field2: 'str2', field3: 'str3' } ],
+            dataSource: [
+                { field1: 'str1_1', field2: 'str2_1', field3: 'str3_1', field4: 'str4_1' },
+                { field1: 'str1_2', field2: 'str2_2', field3: 'str3_2', field4: 'str4_2' }
+            ],
+            summary: {
+                groupItems: [{ column: 'field3', summaryType: 'count', showInGroupFooter: true }, { column: 'field4', summaryType: 'count', showInGroupFooter: true }]
+            },
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Summary - total", function(assert) {
+QUnit.test("Total summary", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -729,72 +836,24 @@ QUnit.test("Summary - total", function(assert) {
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1</v></c></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n"><v>2</v></c></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="2" t="s"><v>1</v></c></row>' +
+        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
+        '<row r=\"2\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A2\" s=\"3\" t=\"n\"><v>1</v></c></row>' +
+        '<row r=\"3\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A3\" s=\"2\" t=\"s\"><v>1</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>Field 1</t></si>' +
-        '<si><t>Count: 2</t></si>' +
+        '<si><t>Sum: $1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "number" }],
-            dataSource: [{ field1: 1 }, { field1: 2 }],
+            dataSource: [{ field1: 1 }],
             summary: {
-                totalItems: [{ column: 'field1', summaryType: 'count' }]
-            }
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Summary - groupping", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
-        internals.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
-        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
-        '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
-        '<row r="4" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>3</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
-        '<si><t>Field 2</t></si>' +
-        '<si><t>Field 1: str1 (Count: 2)</t></si>' +
-        '<si><t>str1_1</t></si>' +
-        '<si><t>str_1_2</t></si>' +
-        '</sst>';
-
-    testConfiguration(
-        assert,
-        {
-            columns: [
-                { dataField: "field1", dataType: "string", groupIndex: 0 },
-                { dataField: "field2", dataType: "string" },
-            ],
-            dataSource: [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }],
-            summary: {
-                groupItems: [{ column: 'field1', summaryType: 'count' }]
-            }
+                totalItems: [{ column: 'field1', summaryType: 'sum', valueFormat: 'currency' }]
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -825,7 +884,7 @@ QUnit.test("showColumnHeaders: false", function(assert) {
         '<si><t>str1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -836,7 +895,7 @@ QUnit.test("showColumnHeaders: false", function(assert) {
     );
 });
 
-QUnit.test("customizeExportData callback", function(assert) {
+QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -863,7 +922,7 @@ QUnit.test("customizeExportData callback", function(assert) {
         '<si><t>str1_customize</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],

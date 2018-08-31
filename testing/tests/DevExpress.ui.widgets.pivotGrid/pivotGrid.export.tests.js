@@ -17,7 +17,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-function testConfiguration(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
+function runTest(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
     const done = assert.async(3);
     options.loadingTimeout = undefined;
     options.onFileSaving = e => {
@@ -34,7 +34,6 @@ function testConfiguration(assert, options, { styles = "", worksheet = "", share
             done();
         });
 
-        // TODO: $.when([deferred1, deferred2, deferred3, deferred4]).done(done); - avoid async, use another event
         e.cancel = true;
     };
     const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');
@@ -65,7 +64,7 @@ QUnit.test("Empty pivot", function(assert) {
         '<si><t>Grand Total</t></si>' +
         '</sst>';
 
-    testConfiguration(assert, {}, { styles, worksheet, sharedStrings });
+    runTest(assert, {}, { styles, worksheet, sharedStrings });
 });
 
 QUnit.test("dataFieldArea: column", function(assert) {
@@ -108,7 +107,7 @@ QUnit.test("dataFieldArea: column", function(assert) {
         '<si><t>1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             dataSource: {
@@ -166,7 +165,7 @@ QUnit.test("dataFieldArea: row", function(assert) {
         '<si><t>1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             dataSource: {
@@ -215,7 +214,7 @@ QUnit.test("Rows: string, Columns: string, Data: sum(number format as currency)"
         '<si><t>str1</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             dataSource: {
@@ -272,7 +271,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
         '<si><t>row1 Total</t></si>' +
         '</sst>';
 
-    testConfiguration(
+    runTest(
         assert,
         {
             dataSource: {
