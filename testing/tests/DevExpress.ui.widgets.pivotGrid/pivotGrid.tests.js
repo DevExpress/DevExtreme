@@ -7,9 +7,6 @@ QUnit.testStart(function() {
     }\
 </style>\
 <div id="pivotGrid"></div>\
-<div class="dx-additional-color-scheme-1">\
-    <div id="swatchPivotGrid"></div>\
-</div>\
 <div class="dx-pivotgrid">\
     <div id="pivotArea" class="dx-pivotgrid-area-data dx-pivotgrid-vertical-headers" />\
 </div>';
@@ -646,25 +643,6 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     assert.strictEqual($(".dx-pivotgrid-toolbar").find(".dx-button").length, 1);
     assert.strictEqual($(".dx-pivotgrid-toolbar").parent()[0], pivotGrid.$element().find(".dx-area-description-cell")[0]);
     assert.ok(!pivotGrid.$element().find(".dx-area-description-cell").hasClass("dx-pivotgrid-background"));
-});
-
-QUnit.test("Render field chooser in the swatch correctly", function(assert) {
-    var pivotGrid = $("#swatchPivotGrid").dxPivotGrid({
-        dataSource: {
-            rows: [],
-            columns: [],
-            values: []
-        }
-    }).dxPivotGrid("instance");
-
-    pivotGrid._fieldChooserPopup.show();
-    this.clock.tick(500);
-
-    var container = pivotGrid._fieldChooserPopup._$wrapper.parent();
-
-    assert.ok($(".dx-fieldchooser-popup").is(":visible"), "fieldChooser popup is visible");
-    assert.ok($(container).hasClass("dx-additional-color-scheme-1"), "fieldChooser popup renders on the right container");
-    assert.equal($(container).parent()[0].tagName.toLowerCase(), "body", "parent of container is viewport (body)");
 });
 
 QUnit.test("FieldPanel inherits visible option", function(assert) {
