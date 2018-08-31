@@ -895,6 +895,80 @@ QUnit.test("showColumnHeaders: false", function(assert) {
     );
 });
 
+QUnit.test("excelFilterEnabled: true", function(assert) {
+    const styles = STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        internals.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        STYLESHEET_FOOTER_XML;
+    const worksheet = internals.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
+        '</sheetData>' +
+        '<autoFilter ref=\"A1:C2\" /><ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>Field 1</t></si>' +
+        '</sst>';
+
+    runTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: "string" }],
+            export: {
+                excelFilterEnabled: true
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("ignoreExcelErrors: false", function(assert) {
+    const styles = STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        internals.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        STYLESHEET_FOOTER_XML;
+    const worksheet = internals.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane=\"bottomLeft\" state=\"frozen\" ySplit=\"1\" topLeftCell=\"A2\" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r=\"1\" spans=\"1:1\" outlineLevel=\"0\" x14ac:dyDescent=\"0.25\"><c r=\"A1\" s=\"0\" t=\"s\"><v>0</v></c></row>' +
+        '</sheetData>' +
+        '</worksheet>';
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>Field 1</t></si>' +
+        '</sst>';
+
+    runTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: "string" }],
+            export: {
+                ignoreExcelErrors: false
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
 QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
