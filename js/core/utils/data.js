@@ -67,13 +67,15 @@ var compileGetter = function(expr) {
 
             for(var i = 0; i < path.length; i++) {
                 if(!current) {
-                    return hasDefaultValue ? options.defaultValue : current;
+                    if(current == null && hasDefaultValue) {
+                        return options.defaultValue;
+                    }
+                    break;
                 }
 
-                var pathPart = path[i],
-                    useDefaultValue = hasDefaultValue && typeUtils.isObject(current) && !(pathPart in current);
+                var pathPart = path[i];
 
-                if(useDefaultValue) {
+                if(hasDefaultValue && typeUtils.isObject(current) && !(pathPart in current)) {
                     return options.defaultValue;
                 }
 

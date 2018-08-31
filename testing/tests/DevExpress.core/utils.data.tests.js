@@ -56,25 +56,28 @@ QUnit.test("it works", function(assert) {
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
     assert.equal(GETTER("d.a")(obj), "d().a");
     assert.equal(GETTER("e.z")(obj), undefined);
-    assert.equal(GETTER("a")(null), null);
     assert.equal(GETTER("z.z.z")(obj), undefined);
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
 });
 
-QUnit.test("default values", function(assert) {
+QUnit.test("defaultValue", function(assert) {
     var obj = {
-        a: "a",
-        c: {
-            a: 1
-        },
-        f: 0
+        zero: 0,
+        emptyString: "",
+        innerObj: {}
     };
 
-    assert.equal(GETTER("a")(null, { defaultValue: 1 }), 1);
-    assert.equal(GETTER("c.b")(obj, { defaultValue: 1 }), 1);
-    assert.deepEqual(GETTER("a.b.c")({}, { defaultValue: { b: 1 } }), { b: 1 });
-    assert.strictEqual(GETTER("f")(obj, { defaultValue: 1 }), 0);
-    assert.strictEqual(GETTER("f.x")(obj, { defaultValue: 1 }), 1);
+    var DEFAULT_VALUE = "TEST_DEFAULT_VALUE";
+
+    assert.equal(GETTER("any")(null, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+
+    assert.equal(GETTER("missing")(obj, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+    assert.equal(GETTER("innerObj.missing")(obj, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+
+    assert.equal(GETTER("zero")(obj, { defaultValue: DEFAULT_VALUE }), 0);
+    assert.equal(GETTER("emptyString.length")(obj, { defaultValue: DEFAULT_VALUE }), 0);
+
+    assert.deepEqual(GETTER("phantom.missing")({}, { defaultValue: { phantom: {} } }), { phantom: {} });
 });
 
 QUnit.test("inheritance", function(assert) {
