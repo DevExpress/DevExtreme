@@ -6257,7 +6257,7 @@ function getEvent(options) {
         }
     });
 
-    QUnit.test('Color swatch', function(assert) {
+    QUnit.test('Header renders inside swatch', function(assert) {
         var testElement = $('#gridInSwatch'),
             draggingHeader,
             controller = this.createDraggingHeaderViewController();
