@@ -1414,6 +1414,7 @@ var environment = {
         assert.ok(chart._argumentAxes[0].wasDrawn, "Horizontal axis was drawn");
         assert.ok(chart._valueAxes[0].wasDrawn, "Vertical axis was drawn");
         assert.ok(chart.series[0].wasDrawn, "Series was drawn");
+        assert.strictEqual(chart.series[0].draw.lastCall.args[0], false);
         assert.ok(!chart._legendGroup.stub("linkRemove").called, "Legend group should not be detached");
         assert.ok(!chart._legendGroup.stub("clear").called, "Legend group should not be cleared");
         assert.ok(!chart._seriesGroup.stub("linkRemove").called, "Series group should be detached");

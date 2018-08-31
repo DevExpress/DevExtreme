@@ -472,7 +472,7 @@ var dxChart = AdvancedChart.inherit({
                 name: axisName,
                 crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
             }, rotated));
-            axis.applyVisualRangeSetter(that._getVisualRangeSetter(false, true, valueAxes.length));
+            axis.applyVisualRangeSetter(that._getVisualRangeSetter(false));
             valueAxes.push(axis);
         }
 
@@ -1183,7 +1183,7 @@ var dxChart = AdvancedChart.inherit({
         that._eventTrigger("zoomEnd", { rangeStart: bounds.minVisible, rangeEnd: bounds.maxVisible });
     },
 
-    _getVisualRangeSetter(isArgumentAxis, useAnimation) {
+    _getVisualRangeSetter(isArgumentAxis) {
         const chart = this;
         return function(axis, visualRange) {
 
@@ -1200,7 +1200,7 @@ var dxChart = AdvancedChart.inherit({
                 drawTitle: false,
                 drawLegend: false,
                 adjustAxes: !isArgumentAxis,
-                animate: useAnimation
+                animate: false
             });
 
             chart._triggerVisualRangeOptionChange(axis, isArgumentAxis, false);
