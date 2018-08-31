@@ -471,6 +471,11 @@ var Widget = DOMComponent.inherit({
         this._contentReadyAction();
     }),
 
+    _refresh: function() {
+        this._toggleActiveState(this._eventBindingTarget(), false);
+        this.callBase.apply(this, arguments);
+    },
+
     _dispose: function() {
         this._cleanTemplates();
         this._contentReadyAction = null;
@@ -728,8 +733,6 @@ var Widget = DOMComponent.inherit({
         eventsEngine.off(that._eventBindingTarget(), inactiveEventName, feedbackSelector);
 
         if(that.option("activeStateEnabled")) {
-            that._toggleActiveState(that._eventBindingTarget(), false);
-
             var feedbackActionHandler = function(args) {
                 var $element = $(args.element),
                     value = args.value,
