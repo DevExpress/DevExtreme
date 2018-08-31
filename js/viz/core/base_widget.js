@@ -134,6 +134,10 @@ var getEmptyComponent = function() {
 
 var isServerSide = !windowUtils.hasWindow();
 
+function sizeIsValid(value) {
+    return typeUtils.isDefined(value) && value > 0;
+}
+
 module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
         "onIncidentOccurred": { name: "incidentOccurred" },
@@ -341,8 +345,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             size = that.option("size") || {},
             margin = that.option("margin") || {},
             defaultCanvas = that._getDefaultSize() || {},
-            elementWidth = windowUtils.hasWindow() ? that._$element.width() : 0,
-            elementHeight = windowUtils.hasWindow() ? that._$element.height() : 0,
+            elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0,
+            elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0,
             canvas = {
                 width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
                 height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
