@@ -2352,7 +2352,7 @@ declare module DevExpress.ui {
         exportToExcel(selectionOnly: boolean): void;
         /** Gets the currently selected rows' keys. */
         getSelectedRowKeys(): Array<any> & Promise<any> & JQueryPromise<any>;
-        /** Gets data objects of currently selected rows. */
+        /** Gets the selected rows' data objects. */
         getSelectedRowsData(): Array<any> & Promise<any> & JQueryPromise<any>;
         /** Gets the value of a total summary item. */
         getTotalSummaryValue(summaryItemName: string): any;
@@ -5640,6 +5640,12 @@ declare module DevExpress.viz {
     }
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
     export type VizTimeInterval = number | { years?: number, quarters?: number, months?: number, weeks?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    export interface VizRange {
+        endValue?: number | Date | string;
+        /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
+        length?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        startValue?: number | Date | string;
+    }
     /** Font options. */
     export interface Font {
         /** Specifies font color. */
@@ -5713,11 +5719,11 @@ declare module DevExpress.viz {
         /** Enables scrolling in your chart. */
         scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
         /** Specifies options for Chart widget series. */
-        series?: dxChartSeries | Array<dxChartSeries>;
+        series?: ChartSeries | Array<ChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: 'multiple' | 'single';
         /** Defines options for the series template. */
-        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxChartSeries) };
+        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => ChartSeries) };
         /** Indicates whether or not to synchronize value axes when they are displayed on a single pane. */
         synchronizeMultiAxes?: boolean;
         /** Configures tooltips. */
@@ -5777,10 +5783,9 @@ declare module DevExpress.viz {
         title?: dxChartArgumentAxisTitle;
         /** Specifies the type of the argument axis. */
         type?: 'continuous' | 'discrete' | 'logarithmic';
-        visualRange?: Array<number | string | Date>;
-        /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
-        visualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        visualRange?: VizRange | Array<number | string | Date>;
         visualRangeOnDataUpdate?: 'auto' | 'keep' | 'reset' | 'shift';
+        wholeRange?: VizRange | Array<number | string | Date>;
         /** Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis' argumentType is "datetime". */
         workdaysOnly?: boolean;
         /** Specifies which days are workdays. The array can contain values from 0 (Sunday) to 6 (Saturday). Applies only if workdaysOnly is true. */
@@ -5886,8 +5891,6 @@ declare module DevExpress.viz {
         valueMarginsEnabled?: boolean;
         /** Makes the axis line visible. */
         visible?: boolean;
-        /** Defines the range where the axis can be scrolled or zoomed. Equals the data range when it is not set. */
-        wholeRange?: Array<number | string | Date>;
         /** Specifies the width of the axis line in pixels. */
         width?: number;
     }
@@ -6033,15 +6036,6 @@ declare module DevExpress.viz {
         /** Specifies the name of the pane. */
         name?: string;
     }
-    /** Specifies options for Chart widget series. */
-    export interface dxChartSeries extends dxChartSeriesTypesCommonSeries {
-        /** Specifies the name that identifies the series. */
-        name?: string;
-        /** Specifies data about a series. */
-        tag?: any;
-        /** Sets the series type. */
-        type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
-    }
     /** Configures tooltips. */
     export interface dxChartTooltip extends BaseChartTooltip {
         /** Specifies whether the tooltip must be located in the center of a series point or on its edge. Applies to bar-like and bubble series only. */
@@ -6101,7 +6095,8 @@ declare module DevExpress.viz {
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /** Casts values to a specified data type. */
         valueType?: 'datetime' | 'numeric' | 'string';
-        visualRange?: Array<number | string | Date>;
+        visualRange?: VizRange | Array<number | string | Date>;
+        wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** Declares a collection of constant lines belonging to the value axis. */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
@@ -6196,9 +6191,9 @@ declare module DevExpress.viz {
         /** Specifies the direction that the pie chart segments will occupy. */
         segmentsDirection?: 'anticlockwise' | 'clockwise';
         /** Specifies options for the series of the PieChart widget. */
-        series?: dxPieChartSeries | Array<dxPieChartSeries>;
+        series?: PieChartSeries | Array<PieChartSeries>;
         /** Defines options for the series template. */
-        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPieChartSeries) };
+        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => PieChartSeries) };
         /** Allows you to display several adjoining pies in the same size. */
         sizeGroup?: string;
         /** Specifies the angle in arc degrees from which the first segment of a pie chart should start. */
@@ -6219,13 +6214,6 @@ declare module DevExpress.viz {
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /** Specifies what chart elements to highlight when a corresponding item in the legend is hovered over. */
         hoverMode?: 'none' | 'allArgumentPoints';
-    }
-    /** Specifies options for the series of the PieChart widget. */
-    export interface dxPieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
-        /** Specifies the name that identifies the series. */
-        name?: string;
-        /** Specifies data about a series. */
-        tag?: any;
     }
     /** The PieChart is a widget that visualizes data as a circle divided into sectors that each represents a portion of the whole. */
     export class dxPieChart extends BaseChart {
@@ -6270,11 +6258,11 @@ declare module DevExpress.viz {
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: 'hide' | 'none';
         /** Specifies options for PolarChart widget series. */
-        series?: dxPolarChartSeries | Array<dxPolarChartSeries>;
+        series?: PolarChartSeries | Array<PolarChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: 'multiple' | 'single';
         /** Defines options for the series template. */
-        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPolarChartSeries) };
+        seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => PolarChartSeries) };
         /** Configures tooltips. */
         tooltip?: dxPolarChartTooltip;
         /** Indicates whether or not to display a "spider web". */
@@ -6469,15 +6457,6 @@ declare module DevExpress.viz {
         customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /** Specifies what series elements to highlight when a corresponding item in the legend is hovered over. */
         hoverMode?: 'excludePoints' | 'includePoints' | 'none';
-    }
-    /** Specifies options for PolarChart widget series. */
-    export interface dxPolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
-        /** Specifies the name that identifies the series. */
-        name?: string;
-        /** Specifies data about a series. */
-        tag?: any;
-        /** Sets the series type. */
-        type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
     /** Configures tooltips. */
     export interface dxPolarChartTooltip extends BaseChartTooltip {
@@ -6677,6 +6656,15 @@ declare module DevExpress.viz {
         render(): void;
         /** Redraws the widget. */
         render(renderOptions: any): void;
+    }
+    /** Specifies options for Chart widget series. */
+    export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
+        /** Specifies the name that identifies the series. */
+        name?: string;
+        /** Specifies data about a series. */
+        tag?: any;
+        /** Sets the series type. */
+        type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
     }
     /** This section lists objects that define options used to configure series of specific types. */
     interface dxChartSeriesTypes {
@@ -8035,7 +8023,7 @@ declare module DevExpress.viz {
     /** This section describes the Axis object. This object represents a chart axis. */
     export class chartAxisObject {
         /** Gets the axis's visual range. */
-        visualRange(): Array<number | string | Date>;
+        visualRange(): VizRange;
         /** Sets the axis's visual range. */
         visualRange(visualRange: Array<number | string | Date>): void;
     }
@@ -8201,6 +8189,13 @@ declare module DevExpress.viz {
         /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
     }
+    /** Specifies options for the series of the PieChart widget. */
+    export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
+        /** Specifies the name that identifies the series. */
+        name?: string;
+        /** Specifies data about a series. */
+        tag?: any;
+    }
     /** This section lists the objects that define options to be used to configure series of particular types. */
     export interface dxPieChartSeriesTypes {
         /** An object that defines configuration options for chart series. */
@@ -8240,6 +8235,15 @@ declare module DevExpress.viz {
         tagField?: string;
         /** Specifies the data source field that provides values for series points. */
         valueField?: string;
+    }
+    /** Specifies options for PolarChart widget series. */
+    export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+        /** Specifies the name that identifies the series. */
+        name?: string;
+        /** Specifies data about a series. */
+        tag?: any;
+        /** Sets the series type. */
+        type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
     /** This section lists objects that define options used to configure series of specific types. */
     export interface dxPolarChartSeriesTypes {
@@ -8403,7 +8407,7 @@ declare module DevExpress.viz {
         /** Specifies the RangeSelector's behavior options. */
         behavior?: { animationEnabled?: boolean, snapToTicks?: boolean, moveSelectedRangeByClick?: boolean, manualRangeSelectionEnabled?: boolean, allowSlidersSwap?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete' };
         /** Specifies the options required to display a chart as the range selector's background. */
-        chart?: { commonSeriesSettings?: dxChartCommonSeriesSettings, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, useAggregation?: boolean, valueAxis?: { min?: number, max?: number, inverted?: boolean, valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'logarithmic', logarithmBase?: number }, series?: dxChartSeries | Array<dxChartSeries>, seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxChartSeries) }, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate' };
+        chart?: { commonSeriesSettings?: dxChartCommonSeriesSettings, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, useAggregation?: boolean, valueAxis?: { min?: number, max?: number, inverted?: boolean, valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'logarithmic', logarithmBase?: number }, series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => ChartSeries) }, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate' };
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
         /** Specifies a data source for the scale values and for the chart at the background. */
@@ -8425,7 +8429,7 @@ declare module DevExpress.viz {
         /** Defines the options of the range selector slider markers. */
         sliderMarker?: { visible?: boolean, format?: DevExpress.ui.format, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), paddingTopBottom?: number, paddingLeftRight?: number, color?: string, invalidRangeColor?: string, placeholderHeight?: number, font?: Font };
         /** The selected range, initial or current. */
-        value?: Array<number | string | Date>;
+        value?: Array<number | string | Date> | VizRange;
     }
     /** The RangeSelector is a widget that allows a user to select a range of values on a scale. */
     export class dxRangeSelector extends BaseWidget {
@@ -8772,7 +8776,9 @@ declare module DevExpress.events {
     export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
     /** Detaches an event handler from the specified elements. */
     export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
+    /** Detaches all handlers of the specified event from the specified elements. */
     export function off(element: Element | Array<Element>, eventName: string): void;
+    /** Detaches all handlers from the specified elements. */
     export function off(element: Element | Array<Element>): void;
     /** Triggers an event for the specified elements. Allows you to pass custom parameters to event handlers. */
     export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;

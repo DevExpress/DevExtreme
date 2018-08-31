@@ -1,3 +1,11 @@
+declare module DevExpress.viz {
+    /** @deprecated Use DevExpress.viz.ChartSeries instead */
+    export type  dxChartSeries =  DevExpress.viz.ChartSeries;
+    /** @deprecated Use DevExpress.viz.PieChartSeries instead */
+    export type  dxPieChartSeries =  DevExpress.viz.PieChartSeries;
+    /** @deprecated Use DevExpress.viz.PolarChartSeries instead */
+    export type  dxPolarChartSeries =  DevExpress.viz.PolarChartSeries;
+}
 
 /** @deprecated Use DevExpress.viz instead */
 declare module DevExpress.viz.charts {
