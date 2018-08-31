@@ -62,12 +62,24 @@ var compileGetter = function(expr) {
         return function(obj, options) {
             options = prepareOptions(options);
             var functionAsIs = options.functionsAsIs,
+                hasDefaultValue = "defaultValue" in options,
                 current = unwrap(obj, options);
 
             for(var i = 0; i < path.length; i++) {
-                if(!current) break;
+                if(!current) {
+                    if(current == null && hasDefaultValue) {
+                        return options.defaultValue;
+                    }
+                    break;
+                }
 
-                var next = unwrap(current[path[i]], options);
+                var pathPart = path[i];
+
+                if(hasDefaultValue && typeUtils.isObject(current) && !(pathPart in current)) {
+                    return options.defaultValue;
+                }
+
+                var next = unwrap(current[pathPart], options);
 
                 if(!functionAsIs && typeUtils.isFunction(next)) {
                     next = next.call(current);

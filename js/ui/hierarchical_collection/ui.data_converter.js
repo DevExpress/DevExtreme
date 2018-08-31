@@ -65,9 +65,9 @@ var DataConverter = Class.inherit({
         var that = this,
             node = {
                 internalFields: {
-                    disabled: that._dataAccessors.getters.disabled(item) || false,
-                    expanded: that._dataAccessors.getters.expanded(item) || false,
-                    selected: that._dataAccessors.getters.selected(item) || false,
+                    disabled: that._dataAccessors.getters.disabled(item, { defaultValue: false }),
+                    expanded: that._dataAccessors.getters.expanded(item, { defaultValue: false }),
+                    selected: that._dataAccessors.getters.selected(item, { defaultValue: false }),
                     key: that._getUniqueKey(item),
                     parentKey: typeUtils.isDefined(parentKey) ? parentKey : that._rootValue,
                     item: that._makeObjectFromPrimitive(item),

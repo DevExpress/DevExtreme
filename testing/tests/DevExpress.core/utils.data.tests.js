@@ -59,6 +59,39 @@ QUnit.test("it works", function(assert) {
     assert.equal(GETTER("c.a.a")(obj), "c.a.a");
 });
 
+QUnit.test("defaultValue", function(assert) {
+    var obj = {
+        zero: 0,
+        emptyString: "",
+        innerObj: {}
+    };
+
+    var DEFAULT_VALUE = "TEST_DEFAULT_VALUE";
+
+    assert.equal(GETTER("any")(undefined, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+    assert.equal(GETTER("any")(null, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+
+    assert.equal(GETTER("missing")(obj, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+    assert.equal(GETTER("innerObj.missing")(obj, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+
+    assert.equal(GETTER("zero")(obj, { defaultValue: DEFAULT_VALUE }), 0);
+    assert.equal(GETTER("emptyString.length")(obj, { defaultValue: DEFAULT_VALUE }), 0);
+
+    assert.deepEqual(GETTER("phantom.missing")({}, { defaultValue: { phantom: {} } }), { phantom: {} });
+
+    class Parent {
+    }
+
+    class Child extends Parent {
+    }
+
+    Parent.prototype["parentProp"] = 123;
+
+    assert.equal(GETTER("missing")(new function() {
+    }, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+    assert.equal(GETTER("parentProp")(new Child, { defaultValue: DEFAULT_VALUE }), 123);
+    assert.equal(GETTER("missing")(new Child, { defaultValue: DEFAULT_VALUE }), DEFAULT_VALUE);
+});
 
 QUnit.test("complex getter", function(assert) {
     var original = {
