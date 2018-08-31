@@ -813,7 +813,7 @@ var dxRangeSelector = {
         },
         /**
         * @name dxRangeSelectorOptions.chart.series
-        * @type dxChartOptions.series|Array<dxChartOptions.series>
+        * @type ChartSeries|Array<ChartSeries>
         * @default undefined
         * @notUsedInTheme
         */
@@ -834,7 +834,7 @@ var dxRangeSelector = {
             * @name dxRangeSelectorOptions.chart.seriesTemplate.customizeSeries
             * @type function(seriesName)
             * @type_function_param1 seriesName:any
-            * @type_function_return dxChartOptions.series
+            * @type_function_return ChartSeries
             */
             customizeSeries: function() { }
         },
