@@ -88,6 +88,11 @@ var FileUploader = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxFileUploaderOptions.chunkSize
+            * @type number
+            * @default 0
+            */
             chunkSize: 0,
             /**
             * @name dxFileUploaderOptions.value
