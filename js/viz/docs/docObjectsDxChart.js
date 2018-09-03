@@ -121,7 +121,7 @@ var chartAxisObject = {
     /**
     * @name chartAxisObjectMethods.visualRange
     * @publicName visualRange(visualRange)
-    * @param1 visualRange:VizRange | Array<number,string,Date>
+    * @param1 visualRange:Array<number,string,Date> | VizRange
     */
     visualRange: function(visualRange) { }
 };
