@@ -1233,34 +1233,18 @@ var SchedulerWorkSpace = Widget.inherit({
     _makeGroupRows: function(groups, groupByDate) {
         var tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
-        if(!groupByDate) {
-            return tableCreator.makeGroupedTable(tableCreatorStrategy,
-                groups, {
-                    groupHeaderRowClass: this._getGroupRowClass(),
-                    groupRowClass: this._getGroupRowClass(),
-                    groupHeaderClass: this._getGroupHeaderClass(),
-                    groupHeaderContentClass: this._getGroupHeaderContentClass()
-                },
-                this._getCellCount() || 1,
-                this.option("resourceCellTemplate"),
-                this._getGroupCount()
-            );
-        } else {
-            return tableCreator.makeGroupedTable(tableCreatorStrategy,
-                groups, {
-                    groupHeaderRowClass: this._getGroupRowClass(),
-                    groupRowClass: this._getGroupRowClass(),
-                    groupHeaderClass: this._getGroupHeaderClass(),
-                    groupHeaderContentClass: this._getGroupHeaderContentClass()
-                },
-                this._getCellCount() || 1,
-                this.option("resourceCellTemplate"),
-                this._getGroupCount(),
-                groupByDate,
-                this._getTotalCellCount(this._getGroupCount())
-            );
-
-        }
+        return tableCreator.makeGroupedTable(tableCreatorStrategy,
+            groups, {
+                groupHeaderRowClass: this._getGroupRowClass(),
+                groupRowClass: this._getGroupRowClass(),
+                groupHeaderClass: this._getGroupHeaderClass(),
+                groupHeaderContentClass: this._getGroupHeaderContentClass()
+            },
+            this._getCellCount() || 1,
+            this.option("resourceCellTemplate"),
+            this._getGroupCount(),
+            groupByDate
+        );
     },
 
     _getDateHeaderTemplate: function() {

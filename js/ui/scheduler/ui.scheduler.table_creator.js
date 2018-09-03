@@ -119,13 +119,13 @@ var SchedulerTableCreator = {
         return templateCallbacks;
     },
 
-    makeGroupedTable: function(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate, totalCellCount) {
+    makeGroupedTable: function(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate) {
         var rows = [];
 
         if(type === this.VERTICAL) {
             rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
         } else {
-            rows = this._makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate, totalCellCount);
+            rows = this._makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
         }
 
         return rows;
@@ -291,7 +291,7 @@ var SchedulerTableCreator = {
         };
     },
 
-    _makeHorizontalGroupedRows: function(groups, cssClasses, cellCount, cellTemplate, groupByDate, totalCellCount) {
+    _makeHorizontalGroupedRows: function(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
         var repeatCount = 1,
             groupCount = groups.length,
             rows = [],
