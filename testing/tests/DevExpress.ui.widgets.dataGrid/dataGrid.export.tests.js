@@ -7,16 +7,19 @@ import { excel as excelCreator } from "client_exporter";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
 
-const oldJSZip = excel_creator.ExcelCreator.JSZip;
-
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
     $("#qunit-fixture").html(markup);
-    excel_creator.ExcelCreator.JSZip = JSZipMock;
 });
 
-QUnit.testDone(function() {
-    excel_creator.ExcelCreator.JSZip = oldJSZip;
+QUnit.module("DataGrid export tests", {
+    beforeEach: function() {
+        this.oldJSZip = excel_creator.ExcelCreator.JSZip;
+        excel_creator.ExcelCreator.JSZip = JSZipMock;
+    },
+    afterEach: function() {
+        excel_creator.ExcelCreator.JSZip = this.oldJSZip;
+    }
 });
 
 const internals = excelCreator.__internals,

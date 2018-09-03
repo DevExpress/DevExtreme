@@ -14,16 +14,19 @@ const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schema
 const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
 const STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
 
-const oldJSZip = excel_creator.ExcelCreator.JSZip;
-
 QUnit.testStart(function() {
     var markup = '<div id="pivotGrid" style="width: 700px"></div>';
     $("#qunit-fixture").html(markup);
-    excel_creator.ExcelCreator.JSZip = JSZipMock;
 });
 
-QUnit.testDone(function() {
-    excel_creator.ExcelCreator.JSZip = oldJSZip;
+QUnit.module("Pivot export tests", {
+    beforeEach: function() {
+        this.oldJSZip = excel_creator.ExcelCreator.JSZip;
+        excel_creator.ExcelCreator.JSZip = JSZipMock;
+    },
+    afterEach: function() {
+        excel_creator.ExcelCreator.JSZip = this.oldJSZip;
+    }
 });
 
 function runTest(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
