@@ -101,12 +101,6 @@ var Tabs = CollectionWidget.inherit({
             */
 
             /**
-            * @name dxTabsOptions.noDataText
-            * @hidden
-            * @inheritdoc
-            */
-
-            /**
             * @name dxTabsOptions.selectedItems
             * @type Array<string,number,Object>
             */
