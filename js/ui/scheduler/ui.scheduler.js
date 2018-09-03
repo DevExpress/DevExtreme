@@ -1413,8 +1413,7 @@ var Scheduler = Widget.inherit({
             this._dataSource.load().done((function() {
                 loading.hide();
 
-                this._fireContentReadyAction();
-                result.resolve();
+                this._fireContentReadyAction(result);
             }).bind(this)).fail(function() {
                 loading.hide();
                 result.reject();
@@ -1427,10 +1426,16 @@ var Scheduler = Widget.inherit({
                 }
             });
         } else {
-            result.resolve();
+            this._fireContentReadyAction(result);
         }
 
         return result.promise();
+    },
+
+    _fireContentReadyAction(result) {
+        this.callBase();
+
+        result && result.resolve();
     },
 
     _dimensionChanged: function() {
