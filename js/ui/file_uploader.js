@@ -1,4 +1,5 @@
 var $ = require("../core/renderer"),
+    Guid = require("../core/guid"),
     window = require("../core/utils/window").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
@@ -1139,6 +1140,8 @@ var FileUploader = Editor.inherit({
             loadedBytes: 0,
             type: realFile.type,
             chunks: this._createChunkArray(realFile),
+            guid: new Guid(),
+            fileSize: realFile.size,
             count: Math.ceil(realFile.size / this.option("chunkSize")),
         });
     },
@@ -1181,7 +1184,13 @@ var FileUploader = Editor.inherit({
                         chunksData.chunks = [];
                     }
                 },
-                data: this._createChunkFormData(this.option("name"), chunk.blob, chunk.index, chunksData.type, chunksData.count, chunksData.name)
+                data: this._createChunkFormData(chunksData.name, this.option("name"),
+                    chunk.blob,
+                    chunk.index,
+                    chunksData.count,
+                    chunksData.type,
+                    chunksData.guid,
+                    chunksData.fileSize)
             }).done(function() {
                 file.onProgress.fire({
                     loaded: chunksData.loadedBytes,
@@ -1200,14 +1209,16 @@ var FileUploader = Editor.inherit({
             });
         }
     },
-    _createChunkFormData: function(blobName, blob, index, type, count, name) {
+    _createChunkFormData: function(fileName, blobName, blob, index, count, type, guid, size) {
         var formData = new window.FormData();
         formData.append(blobName, blob);
         formData.append("metaData", JSON.stringify({
+            Name: fileName,
             Index: index,
             Count: count,
+            FileSize: size,
             Type: type,
-            Name: name,
+            Guid: guid
         }));
         return formData;
     },
