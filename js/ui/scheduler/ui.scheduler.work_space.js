@@ -1259,57 +1259,23 @@ var SchedulerWorkSpace = Widget.inherit({
             repeatCount = this._calculateHeaderCellRepeatCount(),
             templateCallbacks = [],
             colspan = this.option("groupByDate") ? this._getGroupCount() : 1,
-            groupByDate = this.option("groupByDate");
+            groupByDate = this.option("groupByDate"),
+            i, j;
 
         if(!groupByDate) {
-            for(var j = 0; j < repeatCount; j++) {
-                for(var i = 0; i < count; i++) {
-                    var text = this._getHeaderText(i),
-                        $cell = $("<th>")
-                            .addClass(this._getHeaderPanelCellClass(i))
-                            .attr("title", text);
+            for(j = 0; j < repeatCount; j++) {
+                for(i = 0; i < count; i++) {
 
-                    if(cellTemplate && cellTemplate.render) {
-                        templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
-                            model: {
-                                text: text,
-                                date: this._getDateByIndex(i)
-                            },
-                            index: j * repeatCount + i,
-                            container: getPublicElement($cell)
-                        }));
-                    } else {
-                        $cell.text(text);
-                    }
-
-                    $headerRow.append($cell);
+                    this._renderDateHeaderTemplate($headerRow, i, j * repeatCount + i, cellTemplate, templateCallbacks);
                 }
             }
 
             $container.append($headerRow);
         } else {
-            for(var i = 0; i < count; i++) {
-                var text = this._getHeaderText(i),
-                    $cell = $("<th>")
-                            .addClass(this._getHeaderPanelCellClass(i))
-                            .attr("title", text);
+            for(i = 0; i < count; i++) {
+                var $cell = this._renderDateHeaderTemplate($headerRow, i, i * repeatCount, cellTemplate, templateCallbacks);
 
                 $cell.attr("colSpan", colspan);
-
-                if(cellTemplate && cellTemplate.render) {
-                    templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
-                        model: {
-                            text: text,
-                            date: this._getDateByIndex(i)
-                        },
-                        index: i * repeatCount,
-                        container: getPublicElement($cell)
-                    }));
-                } else {
-                    $cell.text(text);
-                }
-                $headerRow.append($cell);
-
             }
 
             $container.prepend($headerRow);
@@ -1319,6 +1285,29 @@ var SchedulerWorkSpace = Widget.inherit({
         this._applyCellTemplates(templateCallbacks);
 
         return $headerRow;
+    },
+
+    _renderDateHeaderTemplate: function($container, i, calculatedIndex, cellTemplate, templateCallbacks) {
+        var text = this._getHeaderText(i),
+            $cell = $("<th>")
+                .addClass(this._getHeaderPanelCellClass(i))
+                .attr("title", text);
+
+        if(cellTemplate && cellTemplate.render) {
+            templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
+                model: {
+                    text: text,
+                    date: this._getDateByIndex(i)
+                },
+                index: calculatedIndex,
+                container: getPublicElement($cell)
+            }));
+        } else {
+            $cell.text(text);
+        }
+
+        $container.append($cell);
+        return $cell;
     },
 
     _getHeaderPanelCellClass: function(i) {
