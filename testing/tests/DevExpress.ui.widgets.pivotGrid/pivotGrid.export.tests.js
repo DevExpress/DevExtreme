@@ -7,6 +7,8 @@ import "ui/pivot_grid/ui.pivot_grid";
 
 import $ from "jquery";
 import { __internals as internals } from "client_exporter/excel_creator";
+import excel_creator from "client_exporter/excel_creator";
+import JSZipMock from "../../helpers/jszipMock.js";
 
 const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
 const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
@@ -17,23 +19,27 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
+QUnit.module("Pivot export tests", {
+    beforeEach: function() {
+        this.oldJSZip = excel_creator.ExcelCreator.JSZip;
+        excel_creator.ExcelCreator.JSZip = JSZipMock;
+    },
+    afterEach: function() {
+        excel_creator.ExcelCreator.JSZip = this.oldJSZip;
+    }
+});
+
 function runTest(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
-    const done = assert.async(3);
+    const done = assert.async();
     options.loadingTimeout = undefined;
     options.onFileSaving = e => {
-        e._zip.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).async("string").then(content => {
-            assert.strictEqual(content, styles, "styles");
-            done();
-        });
-        e._zip.folder(internals.XL_FOLDER_NAME).folder(internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async("string").then(content => {
-            assert.strictEqual(content, worksheet, "worksheet");
-            done();
-        });
-        e._zip.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).async("string").then(content => {
-            assert.strictEqual(content, sharedStrings, "sharedStrings");
-            done();
-        });
+        const zipMock = JSZipMock.lastCreatedInstance;
 
+        assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).content, styles, "styles");
+        assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).folder(internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
+        assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+
+        done();
         e.cancel = true;
     };
     const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');

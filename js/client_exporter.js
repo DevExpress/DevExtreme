@@ -22,16 +22,11 @@ exports.export = function(data, options, getData) {
     _isFunction(exportingAction) && exportingAction(eventArgs);
 
     if(!eventArgs.cancel) {
-        getData(data, options, function(blob, _zip) {
+        getData(data, options, function(blob) {
             _isFunction(exportedAction) && exportedAction();
 
             if(_isFunction(fileSavingAction)) {
                 eventArgs.data = blob;
-                ///#DEBUG
-                if(_zip) {
-                    eventArgs._zip = _zip;
-                }
-                ///#ENDDEBUG
                 fileSavingAction(eventArgs);
             }
 
