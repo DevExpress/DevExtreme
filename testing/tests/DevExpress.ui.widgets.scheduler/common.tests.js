@@ -2929,6 +2929,14 @@ QUnit.testStart(function() {
         });
     });
 
+    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
+        this.createInstance({
+            onContentReady: function(e) {
+                assert.ok(true, 1, "contentReady is fired");
+            }
+        });
+    });
+
     QUnit.test("contentReady action should rise at the right time", function(assert) {
         var done = assert.async();
         this.clock.restore();
