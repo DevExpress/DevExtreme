@@ -47,10 +47,7 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
 
     FILEUPLOADER_INVALID_CLASS = "dx-fileuploader-invalid",
 
-    FILEUPLOADER_AFTER_LOAD_DELAY = 400,
-
-    FILEUPLOADER_DEFAULT_CHUNK_SIZE = 20000;
-
+    FILEUPLOADER_AFTER_LOAD_DELAY = 400;
 
 var renderFileUploaderInput = function() {
     return $("<input>").attr("type", "file");
@@ -91,8 +88,7 @@ var FileUploader = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            enabledChunks: false,
-            chunkSize: FILEUPLOADER_DEFAULT_CHUNK_SIZE,
+            chunkSize: 0,
             /**
             * @name dxFileUploaderOptions.value
             * @type Array<File>
@@ -1125,7 +1121,7 @@ var FileUploader = Editor.inherit({
 
     _uploadFile: function(file) {
         if(file.isValid() && !file.uploadStarted) {
-            if(this.option("enabledChunks")) {
+            if(this.option("chunkSize") > 0) {
                 this._uploadFileByChunks(file);
             } else {
                 this._uploadFileFull(file);
@@ -1320,7 +1316,7 @@ var FileUploader = Editor.inherit({
                 loaded: loadedSize,
                 total: e.total,
                 currentSegmentSize: segmentSize,
-                event: this.option("enabledChunks") ? null : e
+                event: this.option("chunkSize") > 0 ? null : e
             });
         } else {
             this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize);

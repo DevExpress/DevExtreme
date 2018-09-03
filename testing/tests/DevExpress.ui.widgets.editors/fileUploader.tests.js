@@ -145,7 +145,7 @@ QUnit.module("uploading by chunks", moduleConfig, function() {
         var $fileUploader = $("#fileuploader").dxFileUploader({
             multiple: false,
             uploadMode: "instantly",
-            enabledChunks: true,
+            chunkSize: 20000,
             onProgress: function(e) {
                 var progressBar = $(".dx-progressbar").dxProgressBar("instance");
                 var request = this.xhrMock.getLastInstance();
@@ -174,7 +174,7 @@ QUnit.module("uploading by chunks", moduleConfig, function() {
         var $fileUploader = $("#fileuploader").dxFileUploader({
             multiple: false,
             uploadMode: "instantly",
-            enabledChunks: true,
+            chunkSize: 20000,
             onUploadAborted: function() {
                 isUploadAborted = true;
             }
@@ -202,7 +202,7 @@ QUnit.module("uploading by chunks", moduleConfig, function() {
         var $fileUploader = $("#fileuploader").dxFileUploader({
             multiple: false,
             uploadMode: "instantly",
-            enabledChunks: true,
+            chunkSize: 20000,
             onProgress: function(e) {
                 var request = this.xhrMock.getLastInstance();
                 var state = fileStates[e.file.name];
@@ -230,7 +230,7 @@ QUnit.module("uploading by chunks", moduleConfig, function() {
         var $fileUploader = $("#fileuploader").dxFileUploader({
             multiple: true,
             uploadMode: "instantly",
-            enabledChunks: true,
+            chunkSize: 20000,
             onUploaded: function(e) {
                 uploadedFiles.push(e.file.name);
             }
