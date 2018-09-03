@@ -341,12 +341,13 @@ var SchedulerTableCreator = {
 
     _makeGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
         repeatByDate = repeatByDate || 1;
+        repeatCount = repeatCount * repeatByDate;
 
         var cells = [],
             items = group.items,
             itemCount = items.length;
 
-        for(var i = 0; i < repeatCount * repeatByDate; i++) {
+        for(var i = 0; i < repeatCount; i++) {
             for(var j = 0; j < itemCount; j++) {
                 var $container = $("<div>"),
                     cell = {};
