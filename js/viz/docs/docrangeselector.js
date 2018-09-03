@@ -762,13 +762,7 @@ var dxRangeSelector = {
     /**
     * @name dxRangeSelectorMethods.setValue
     * @publicName setValue(value)
-    * @param1 value:Array<number,string,Date>
-    */
-    setValue: function() { },
-    /**
-    * @name dxRangeSelectorMethods.setValue
-    * @publicName setValue(value)
-    * @param1 value:VizRange
+    * @param1 value:Array<number,string,Date> | VizRange
     */
     setValue: function() { },
     /**
