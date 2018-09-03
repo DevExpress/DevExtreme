@@ -1538,6 +1538,7 @@ var FileUploader = Editor.inherit({
                     this._renderFiles();
                 }
                 break;
+            case "chunkSize":
             case "uploadUrl":
             case "progress":
             case "uploadMethod":
