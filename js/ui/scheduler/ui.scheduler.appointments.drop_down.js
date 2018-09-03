@@ -150,11 +150,12 @@ var dropDownAppointments = Class.inherit({
                 buttonTemplate: this._createButtonTemplate(items.data.length, isCompact),
                 buttonWidth: config.buttonWidth,
                 closeOnClick: false,
-                onItemClick: function(args) {
-                    var mappedData = that.instance.fire("mapAppointmentFields", args);
+                onItemClick: (function(args) {
+                    var mappedData = this.instance.fire("mapAppointmentFields", args),
+                        result = extendFromObject(mappedData, args, false);
 
-                    that._appointmentClickAction(extendFromObject(mappedData, args, false));
-                },
+                    that._appointmentClickAction(this._clearExcessFields(result));
+                }).bind(this),
                 activeStateEnabled: false,
                 focusStateEnabled: this.instance.option("focusStateEnabled"),
                 itemTemplate: new FunctionTemplate(function(options) {
@@ -188,6 +189,14 @@ var dropDownAppointments = Class.inherit({
                 }
             });
         }
+    },
+
+    _clearExcessFields: function(data) {
+        delete data.itemData;
+        delete data.itemIndex;
+        delete data.itemElement;
+
+        return data;
     },
 
     _dragStartHandler: function($item, itemData, settings, $menu, e) {
