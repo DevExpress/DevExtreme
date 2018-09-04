@@ -8,6 +8,36 @@ var noop = require("../../core/utils/common").noop,
     _isString = typeUtils.isString,
     _isNumber = typeUtils.isNumeric;
 
+function moveLabel(node, labelOptions, availableLabelWidth, rect) {
+    if(node.label.getBBox().width > availableLabelWidth) {
+        node.labelText.applyEllipsis(availableLabelWidth);
+    }
+
+    var bBox = node.label.getBBox(),
+        labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2) + labelOptions.verticalOffset,
+        labelOffsetX = node.rect.x + labelOptions.horizontalOffset + node.rect.width - bBox.x;
+
+    if(labelOffsetX + bBox.width >= rect[2] - rect[0]) {
+        labelOffsetX = node.rect.x - labelOptions.horizontalOffset - bBox.x - bBox.width;
+    }
+
+    node.labelText.attr({
+        translateX: labelOffsetX,
+        translateY: labelOffsetY
+    });
+}
+
+function getConnectedLinks(layout, nodeName, linkType) {
+    let result = [],
+        attrName = linkType === 'in' ? '_to' : '_from',
+        invertedAttrName = linkType === 'in' ? '_from' : '_to';
+
+    layout.links.map((link) => { return link[attrName]._name === nodeName; }).forEach((connected, idx) => {
+        connected && result.push({ index: idx, weight: layout.links[idx]._weight, node: layout.links[idx][invertedAttrName]._name });
+    });
+    return result;
+}
+
 var dxSankey = require("../core/base_widget").inherit({
     _rootClass: "dxs-sankey",
 
@@ -266,8 +296,8 @@ var dxSankey = require("../core/base_widget").inherit({
                             color: color,
                             rect: node,
                             options: nodeOptions,
-                            linksIn: that._getConnectedLinks(layout, node._name, 'in'),
-                            linksOut: that._getConnectedLinks(layout, node._name, 'out')
+                            linksIn: getConnectedLinks(layout, node._name, 'in'),
+                            linksOut: getConnectedLinks(layout, node._name, 'out')
                         });
                     that._nodes.push(nodeItem);
                     nodeIdx++;
@@ -328,8 +358,8 @@ var dxSankey = require("../core/base_widget").inherit({
             // emtpy space between cascades with 'labelOptions.horizontalOffset' subtracted
             var availableLabelWidth = (availableWidth - (nodeOptions.width + labelOptions.horizontalOffset) - (that._layoutMap.cascades.length * nodeOptions.width)) / (that._layoutMap.cascades.length - 1) - labelOptions.horizontalOffset;
             that._nodes.forEach(function(node) {
-                that._createLabel(node, labelOptions, that._shadowFilter.id, availableLabelWidth);
-                that._moveLabel(node, labelOptions, availableLabelWidth);
+                that._createLabel(node, labelOptions, that._shadowFilter.id);
+                moveLabel(node, labelOptions, availableLabelWidth, that._rect);
             });
 
             // test and handle labels overlapping here
@@ -351,25 +381,6 @@ var dxSankey = require("../core/base_widget").inherit({
         }
     },
 
-    _moveLabel: function(node, labelOptions, availableLabelWidth) {
-        if(node.label.getBBox().width > availableLabelWidth) {
-            node.labelText.applyEllipsis(availableLabelWidth);
-        }
-
-        var bBox = node.label.getBBox(),
-            labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2) + labelOptions.verticalOffset,
-            labelOffsetX = node.rect.x + labelOptions.horizontalOffset + node.rect.width - bBox.x;
-
-        if(labelOffsetX + bBox.width >= this._rect[2] - this._rect[0]) {
-            labelOffsetX = node.rect.x - labelOptions.horizontalOffset - bBox.x - bBox.width;
-        }
-
-        node.labelText.attr({
-            translateX: labelOffsetX,
-            translateY: labelOffsetY
-        });
-    },
-
     _createLabel: function(node, labelOptions, filter) {
         var textData = labelOptions.customizeText(node),
             settings = node.getLabelAttributes(labelOptions, filter);
@@ -381,16 +392,6 @@ var dxSankey = require("../core/base_widget").inherit({
             node.labelText.append(node.label);
         }
 
-    },
-
-    _getConnectedLinks: function(layout, nodeName, linkType) {
-        let result = [],
-            attrName = linkType === 'in' ? '_to' : '_from',
-            invertedAttrName = linkType === 'in' ? '_from' : '_to';
-        layout.links.map((link) => { return link[attrName]._name === nodeName; }).forEach((connected, idx) => {
-            connected && result.push({ index: idx, weight: layout.links[idx]._weight, node: layout.links[idx][invertedAttrName]._name });
-        });
-        return result;
     },
 
     _getMinSize: function() {
