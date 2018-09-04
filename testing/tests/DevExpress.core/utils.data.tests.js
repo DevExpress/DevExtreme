@@ -1,4 +1,7 @@
-import { compileGetter as GETTER, compileSetter as SETTER } from "core/utils/data";
+import {
+    compileGetter as GETTER,
+    compileSetter as SETTER
+} from "core/utils/data";
 import variableWrapper from "core/utils/variable_wrapper";
 
 var mockVariableWrapper = {
@@ -110,7 +113,6 @@ QUnit.module("getter", () => {
         assert.deepEqual(GETTER([])(original), undefined);
     });
 
-
     test("functionsAsIs option", (assert) => {
         const obj = {
             b: () => {
@@ -135,7 +137,6 @@ QUnit.module("getter", () => {
         assert.equal(GETTER("prop.items[1]")(obj), "second");
         assert.equal(GETTER("prop[items][1]")(obj), "second");
     });
-
 
     test("empty results are the same", (assert) => {
         const monoGetter = GETTER("field1");
@@ -547,5 +548,3 @@ QUnit.module("setter with wrapped variables", {
         SETTER("prop.subProp")(obj, "Nested value", { unwrapObservables: false });
     });
 });
-
-
