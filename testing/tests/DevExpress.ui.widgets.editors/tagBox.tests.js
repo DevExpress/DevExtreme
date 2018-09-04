@@ -2929,7 +2929,7 @@ QUnit.test("filter should not be cleared when no focusout and no item selection 
     assert.equal($.trim($(".dx-item").first().text()), "111", "value of first item");
 });
 
-QUnit.test("searchEnabled allows searching", function(assert) {
+QUnit.test("TagBox with selection controls shouldn't clear search after click on item", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: ["test1", "custom", "test2"],
             searchEnabled: true,
