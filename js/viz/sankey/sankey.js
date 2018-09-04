@@ -14,11 +14,21 @@ function moveLabel(node, labelOptions, availableLabelWidth, rect) {
     }
 
     var bBox = node.label.getBBox(),
-        labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2) + labelOptions.verticalOffset,
-        labelOffsetX = node.rect.x + labelOptions.horizontalOffset + node.rect.width - bBox.x;
+        verticalOffset = labelOptions.verticalOffset,
+        horizontalOffset = labelOptions.horizontalOffset,
+        labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2) + verticalOffset,
+        labelOffsetX = node.rect.x + horizontalOffset + node.rect.width - bBox.x;
 
     if(labelOffsetX + bBox.width >= rect[2] - rect[0]) {
-        labelOffsetX = node.rect.x - labelOptions.horizontalOffset - bBox.x - bBox.width;
+        labelOffsetX = node.rect.x - horizontalOffset - bBox.x - bBox.width;
+    }
+
+    if(labelOffsetY + bBox.height >= rect[3] - rect[1]) {
+        labelOffsetY = node.rect.y - bBox.y - bBox.height + verticalOffset;
+    }
+
+    if(labelOffsetY < rect[1] - bBox.y) {
+        labelOffsetY = node.rect.y - bBox.y + verticalOffset;
     }
 
     node.labelText.attr({
