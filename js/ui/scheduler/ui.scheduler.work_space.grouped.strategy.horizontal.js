@@ -14,7 +14,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
         } else {
             return {
                 rowIndex: cellCoordinates.rowIndex,
-                cellIndex: cellCoordinates.cellIndex + groupIndex + intervalIndex
+                cellIndex: cellCoordinates.cellIndex * this._workSpace._getGroupCount() + groupIndex
             };
         }
     },
