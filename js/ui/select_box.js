@@ -647,7 +647,7 @@ var SelectBox = DropDownList.inherit({
 
         this._saveValueChangeEvent(e.event);
 
-        if(this._wasSearch()) {
+        if(this._shouldClearFilter()) {
             this._clearFilter();
         }
 
@@ -660,6 +660,10 @@ var SelectBox = DropDownList.inherit({
         if(this.option("searchEnabled") && previousValue === this._valueGetter(e.itemData)) {
             this._updateField(e.itemData);
         }
+    },
+
+    _shouldClearFilter: function() {
+        return this._wasSearch();
     },
 
     _completeSelection: function(value) {
