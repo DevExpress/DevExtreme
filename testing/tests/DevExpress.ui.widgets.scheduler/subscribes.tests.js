@@ -444,7 +444,7 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true", func
             assert.equal(result.cellIndex, 0, "Coordinates are OK");
             assert.equal(result.rowIndex, 0, "Coordinates are OK");
             assert.equal(result.top, 0, "Coordinates are OK");
-            assert.equal(result.left, 324, "Coordinates are OK");
+            assert.roughEqual(result.left, 324, 1.1, "Coordinates are OK");
         }
     });
 
@@ -459,7 +459,7 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true", func
             assert.equal(result.cellIndex, 1, "Coordinates are OK");
             assert.equal(result.rowIndex, 0, "Coordinates are OK");
             assert.equal(result.top, 0, "Coordinates are OK");
-            assert.equal(result.left, 548, "Coordinates are OK");
+            assert.roughEqual(result.left, 548, 1.1, "Coordinates are OK");
         }
     });
 });
