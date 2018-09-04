@@ -1,24 +1,24 @@
-var domAdapter = require("../dom_adapter");
-var injector = require("./dependency_injector");
-var windowUtils = require("./window");
-var callOnce = require("./call_once");
-var callbacks = [];
+const domAdapter = require("../dom_adapter");
+const injector = require("./dependency_injector");
+const windowUtils = require("./window");
+const callOnce = require("./call_once");
+let callbacks = [];
 
-var isReady = function() {
+const isReady = () => {
     // NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
     return domAdapter.getReadyState() === "complete" || (domAdapter.getReadyState() !== "loading" && !domAdapter.getDocumentElement().doScroll);
 };
 
-var subscribeReady = callOnce(function() {
-    var removeListener = domAdapter.listen(domAdapter.getDocument(), "DOMContentLoaded", function() {
+const subscribeReady = callOnce(() => {
+    const removeListener = domAdapter.listen(domAdapter.getDocument(), "DOMContentLoaded", () => {
         readyCallbacks.fire();
         removeListener();
     });
 });
 
-var readyCallbacks = {
-    add: function(callback) {
-        var hasWindow = windowUtils.hasWindow();
+const readyCallbacks = {
+    add: callback => {
+        const hasWindow = windowUtils.hasWindow();
 
         if(hasWindow && isReady()) {
             callback();
@@ -27,10 +27,9 @@ var readyCallbacks = {
             hasWindow && subscribeReady();
         }
     },
-    fire: function() {
-        callbacks.forEach(function(callback) {
-            callback();
-        });
+    fire: () => {
+        callbacks.forEach(callback => callback());
+        callbacks = [];
     }
 };
 
