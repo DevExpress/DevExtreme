@@ -1,4 +1,5 @@
 var $ = require("../core/renderer"),
+    Class = require("../core/class"),
     Guid = require("../core/guid"),
     window = require("../core/utils/window").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
@@ -47,7 +48,8 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
 
     FILEUPLOADER_INVALID_CLASS = "dx-fileuploader-invalid",
 
-    FILEUPLOADER_AFTER_LOAD_DELAY = 400;
+    FILEUPLOADER_AFTER_LOAD_DELAY = 400,
+    FILEUPLOADER_CHUNK_META_DATA_NAME = "metaData";
 
 var renderFileUploaderInput = function() {
     return $("<input>").attr("type", "file");
@@ -64,6 +66,7 @@ var isFormDataSupported = function() {
 * @export default
 */
 var FileUploader = Editor.inherit({
+    _uploadStrategy: null,
 
     _supportedKeys: function() {
         var click = function(e) {
@@ -436,6 +439,11 @@ var FileUploader = Editor.inherit({
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
+        this._setUploadStrategy();
+    },
+
+    _setUploadStrategy: function() {
+        this._uploadStrategy = this.option("chunkSize") > 0 ? new ChunksFileUploadStrategy(this) : new WholeFileUploadStrategy(this);
     },
 
     _initFileInput: function() {
@@ -562,6 +570,22 @@ var FileUploader = Editor.inherit({
         this._renderFiles();
 
         this.callBase();
+    },
+
+    _createFileProgressBar: function(file) {
+        file.progressBar = this._createProgressBar(file.value.size);
+        file.progressBar.$element().appendTo(file.$file);
+        this._initStatusMessage(file);
+        this._initCancelButton(file);
+    },
+    _setStatusMessage: function(file, key) {
+        setTimeout(function() {
+            if(this.option("showFileList")) {
+                file.$statusMessage.text(this.option(key));
+                file.$statusMessage.css("display", "");
+                file.progressBar.$element().remove();
+            }
+        }.bind(this), FILEUPLOADER_AFTER_LOAD_DELAY);
     },
 
     _createFiles: function() {
@@ -1115,216 +1139,10 @@ var FileUploader = Editor.inherit({
     },
 
     _uploadFiles: function() {
-        if(!isFormDataSupported()) {
-            return;
-        }
-
-        each(this._files, (function(_, file) {
-            this._uploadFile(file);
-        }).bind(this));
-    },
-
-    _uploadFile: function(file) {
-        if(file.isValid() && !file.uploadStarted) {
-            if(this.option("chunkSize") > 0) {
-                this._uploadFileByChunks(file);
-            } else {
-                this._uploadFileFull(file);
-            }
-        }
-    },
-    _uploadFileByChunks: function(file) {
-        var realFile = file.value;
-        this._prepareFileBeforeUpload(file);
-        this._sendFileChunk(file, {
-            name: realFile.name,
-            loadedBytes: 0,
-            type: realFile.type,
-            chunks: this._createChunkArray(realFile),
-            guid: new Guid(),
-            fileSize: realFile.size,
-            count: Math.ceil(realFile.size / this.option("chunkSize")),
-        });
-    },
-    _createChunkArray: function(file) {
-        var blobPosition = 0;
-        var chunkIndex = 0;
-        var result = [];
-        while(blobPosition <= file.size) {
-            result.push({
-                blob: this._sliceFile(file, blobPosition, this.option("chunkSize")),
-                index: chunkIndex
-            });
-            blobPosition += this.option("chunkSize");
-            chunkIndex++;
-        }
-        return result;
-    },
-    _sendFileChunk: function(file, chunksData) {
-        var that = this;
-        var chunk = chunksData.chunks.shift();
-        if(chunk) {
-            chunksData.loadedBytes += chunk.blob.size;
-
-            ajax.sendRequest({
-                url: this.option("uploadUrl"),
-                method: this.option("uploadMethod"),
-                headers: this.option("uploadHeaders"),
-                beforeSend: function(xhr) {
-                    file.request = xhr;
-                },
-                upload: {
-                    "onloadstart": function() {
-                        if(!file.isStartLoad) {
-                            file.isStartLoad = true;
-                            file.onLoadStart.fire();
-                        }
-                    },
-                    "onabort": function() {
-                        file.onAbort.fire();
-                        chunksData.chunks = [];
-                    }
-                },
-                data: this._createChunkFormData(chunksData.name, this.option("name"),
-                    chunk.blob,
-                    chunk.index,
-                    chunksData.count,
-                    chunksData.type,
-                    chunksData.guid,
-                    chunksData.fileSize)
-            }).done(function() {
-                file.onProgress.fire({
-                    loaded: chunksData.loadedBytes,
-                    total: file.value.size
-                });
-                if(chunksData.chunks.length === 0) {
-                    file.onLoad.fire();
-                }
-                that._sendFileChunk(file, chunksData);
-            }).fail(function(e) {
-                if(that._isStatusError(e.status)) {
-                    file._isError = true;
-                    file.onError.fire();
-                }
-                chunksData.chunks = [];
-            });
-        }
-    },
-    _createChunkFormData: function(fileName, blobName, blob, index, count, type, guid, size) {
-        var formData = new window.FormData();
-        formData.append(blobName, blob);
-        formData.append("metaData", JSON.stringify({
-            Name: fileName,
-            Index: index,
-            Count: count,
-            FileSize: size,
-            Type: type,
-            Guid: guid
-        }));
-        return formData;
-    },
-
-    _sliceFile: function(file, startPos, length) {
-        if(file.slice) {
-            return file.slice(startPos, startPos + length);
-        }
-        if(file.webkitSlice) {
-            return file.webkitSlice(startPos, startPos + length);
-        }
-        if(file.mozSlice) {
-            return file.mozSlice(startPos, startPos + length);
-        }
-        return null;
-    },
-    _uploadFileFull: function(file) {
-        this._prepareFileBeforeUpload(file);
-        this._sendFileData(file, this._createFormData(this.option("name"), file.value));
-    },
-    _prepareFileBeforeUpload: function(file) {
-        if(file.$file) {
-            file.progressBar = this._createProgressBar(file.value.size);
-            file.progressBar.$element().appendTo(file.$file);
-            this._initStatusMessage(file);
-            this._initCancelButton(file);
-        }
-
-        file.onLoadStart.add(this._onUploadStarted.bind(this, file));
-        file.onLoad.add(this._onLoadedHandler.bind(this, file));
-        file.onError.add(this._onErrorHandler.bind(this, file));
-        file.onAbort.add(this._onAbortHandler.bind(this, file));
-        file.onProgress.add(this._onProgressHandler.bind(this, file));
-    },
-
-    _onUploadStarted: function(file, e) {
-        file.uploadStarted = true;
-
-        this._uploadStartedAction({
-            file: file.value,
-            event: e,
-            request: file.request
-        });
-    },
-
-    _onErrorHandler: function(file, e) {
-        var that = this;
-
-        setTimeout(function() {
-            if(that.option("showFileList")) {
-                file.$statusMessage.text(that.option("uploadFailedMessage"));
-                file.$statusMessage.css("display", "");
-                file.progressBar.$element().remove();
-            }
-        }, FILEUPLOADER_AFTER_LOAD_DELAY);
-
-        this._uploadErrorAction({
-            file: file.value,
-            event: e,
-            request: file.request
-        });
-    },
-
-    _onAbortHandler: function(file, e) {
-        this._uploadAbortedAction({
-            file: file.value,
-            event: e,
-            request: file.request
-        });
-    },
-
-    _onLoadedHandler: function(file, e) {
-        var that = this;
-
-        setTimeout(function() {
-            if(that.option("showFileList")) {
-                file.$statusMessage.text(that.option("uploadedMessage"));
-                file.$statusMessage.css("display", "");
-                file.progressBar.$element().remove();
-            }
-        }, FILEUPLOADER_AFTER_LOAD_DELAY);
-
-        this._uploadedAction({
-            file: file.value,
-            event: e,
-            request: file.request
-        });
-    },
-    _onProgressHandler: function(file, e) {
-        var totalFilesSize = this._getTotalSize();
-        var totalLoadedFilesSize = this._getTotalLoadedSize();
-        if(file) {
-            var loadedSize = Math.min(e.loaded, file.value.size);
-            var segmentSize = loadedSize - file.loadedSize;
-            file.loadedSize = loadedSize;
-
-            this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
-            this._updateProgressBar(file, {
-                loaded: loadedSize,
-                total: e.total,
-                currentSegmentSize: segmentSize,
-                event: this.option("chunkSize") > 0 ? null : e
-            });
-        } else {
-            this._updateTotalProgress(totalFilesSize, totalLoadedFilesSize);
+        if(isFormDataSupported()) {
+            each(this._files, (function(_, file) {
+                this._uploadStrategy.upload(file);
+            }).bind(this));
         }
     },
     _updateProgressBar: function(file, loadedFileData) {
@@ -1370,54 +1188,6 @@ var FileUploader = Editor.inherit({
 
         file.onLoad.add(hideCancelButton);
         file.onError.add(hideCancelButton);
-    },
-
-    _sendFileData: function(file, data) {
-        var that = this;
-        file.loadedSize = 0;
-        ajax.sendRequest({
-            url: this.option("uploadUrl"),
-            method: this.option("uploadMethod"),
-            headers: this.option("uploadHeaders"),
-            beforeSend: function(xhr) {
-                file.request = xhr;
-            },
-            upload: {
-                "onprogress": function(e) {
-                    if(file._isError) {
-                        return;
-                    }
-
-                    file._isProgressStarted = true;
-                    file.onProgress.fire(e);
-                },
-                "onloadstart": function() {
-                    file.onLoadStart.fire();
-                },
-                "onabort": function() {
-                    file.onAbort.fire();
-                }
-            },
-            data: data
-        }).done(function() {
-            file.onLoad.fire();
-        }).fail(function(e) {
-            if(that._isStatusError(e.status) || !file._isProgressStarted) {
-                file._isError = true;
-                file.onError.fire();
-            }
-        });
-    },
-
-    _isStatusError: function(status) {
-        return 400 <= status && status < 500
-            || 500 <= status && status < 600;
-    },
-
-    _createFormData: function(fieldName, fieldValue) {
-        var formData = new window.FormData();
-        formData.append(fieldName, fieldValue);
-        return formData;
     },
 
     _createProgressBar: function(fileSize) {
@@ -1469,7 +1239,7 @@ var FileUploader = Editor.inherit({
     _recalculateProgress: function() {
         delete this._totalSize;
         delete this._loadedSize;
-        this._onProgressHandler();
+        this._updateTotalProgress(this._getTotalSize(), this._getTotalLoadedSize());
     },
 
     _getValidationMessageTarget: function() {
@@ -1539,6 +1309,8 @@ var FileUploader = Editor.inherit({
                 }
                 break;
             case "chunkSize":
+                this._setUploadStrategy();
+                break;
             case "uploadUrl":
             case "progress":
             case "uploadMethod":
@@ -1596,6 +1368,236 @@ FileUploader.__internals = {
     }
 };
 ///#ENDDEBUG
+
+var FileUploadStrategyBase = Class.inherit({
+    ctor: function(fileUploader) {
+        this.fileUploader = fileUploader;
+    },
+    upload: function(file) {
+        if(file.isValid() && !file.uploadStarted) {
+            this._prepareFileBeforeUpload(file);
+            this._uploadCore(file);
+        }
+    },
+    _uploadCore: function(file) {
+    },
+    _prepareFileBeforeUpload: function(file) {
+        if(file.$file) {
+            this.fileUploader._createFileProgressBar(file);
+        }
+
+        file.onLoadStart.add(this._onUploadStarted.bind(this, file));
+        file.onLoad.add(this._onLoadedHandler.bind(this, file));
+        file.onError.add(this._onErrorHandler.bind(this, file));
+        file.onAbort.add(this._onAbortHandler.bind(this, file));
+        file.onProgress.add(this._onProgressHandler.bind(this, file));
+    },
+    _isStatusError: function(status) {
+        return 400 <= status && status < 500 || 500 <= status && status < 600;
+    },
+
+    _onUploadStarted: function(file, e) {
+        file.uploadStarted = true;
+
+        this.fileUploader._uploadStartedAction({
+            file: file.value,
+            event: e,
+            request: file.request
+        });
+    },
+    _onAbortHandler: function(file, e) {
+        this.fileUploader._uploadAbortedAction({
+            file: file.value,
+            event: e,
+            request: file.request
+        });
+    },
+    _onErrorHandler: function(file, e) {
+        this.fileUploader._setStatusMessage(file, "uploadFailedMessage");
+        this.fileUploader._uploadErrorAction({
+            file: file.value,
+            event: e,
+            request: file.request
+        });
+    },
+    _onLoadedHandler: function(file, e) {
+        this.fileUploader._setStatusMessage(file, "uploadedMessage");
+        this.fileUploader._uploadedAction({
+            file: file.value,
+            event: e,
+            request: file.request
+        });
+    },
+    _onProgressHandler: function(file, e) {
+        var totalFilesSize = this.fileUploader._getTotalSize();
+        var totalLoadedFilesSize = this.fileUploader._getTotalLoadedSize();
+        if(file) {
+            var loadedSize = Math.min(e.loaded, file.value.size);
+            var segmentSize = loadedSize - file.loadedSize;
+            file.loadedSize = loadedSize;
+
+            this.fileUploader._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
+            this.fileUploader._updateProgressBar(file, {
+                loaded: loadedSize,
+                total: e.total,
+                currentSegmentSize: segmentSize,
+                event: this._getEvent(e)
+            });
+        }
+    },
+    _getEvent: function(e) {
+        return e;
+    }
+});
+var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
+    ctor: function(fileUploader) {
+        this.callBase(fileUploader);
+        this.chunkSize = this.fileUploader.option("chunkSize");
+    },
+
+    _uploadCore: function(file) {
+        var realFile = file.value;
+        this._sendChunk(file, {
+            name: realFile.name,
+            loadedBytes: 0,
+            type: realFile.type,
+            chunks: this._createChunkArray(realFile),
+            guid: new Guid(),
+            fileSize: realFile.size,
+            count: Math.ceil(realFile.size / this.chunkSize)
+        });
+    },
+    _sendChunk: function(file, chunksData) {
+        var chunk = chunksData.chunks.shift();
+        if(chunk) {
+            chunksData.loadedBytes += chunk.blob.size;
+            ajax.sendRequest({
+                url: this.fileUploader.option("uploadUrl"),
+                method: this.fileUploader.option("uploadMethod"),
+                headers: this.fileUploader.option("uploadHeaders"),
+                beforeSend: function(xhr) {
+                    file.request = xhr;
+                },
+                upload: {
+                    "onloadstart": function() {
+                        if(!file.isStartLoad) {
+                            file.isStartLoad = true;
+                            file.onLoadStart.fire();
+                        }
+                    },
+                    "onabort": function() {
+                        file.onAbort.fire();
+                        chunksData.chunks = [];
+                    }
+                },
+                data: this._createFormData(chunksData.name, this.fileUploader.option("name"),
+                    chunk.blob,
+                    chunk.index,
+                    chunksData.count,
+                    chunksData.type,
+                    chunksData.guid,
+                    chunksData.fileSize)
+            }).done(function() {
+                file.onProgress.fire({
+                    loaded: chunksData.loadedBytes,
+                    total: file.value.size
+                });
+                if(chunksData.chunks.length === 0) {
+                    file.onLoad.fire();
+                }
+                this._sendChunk(file, chunksData);
+            }.bind(this)).fail(function(e) {
+                if(this._isStatusError(e.status)) {
+                    file._isError = true;
+                    file.onError.fire();
+                }
+                chunksData.chunks = [];
+            }.bind(this));
+        }
+    },
+    _createFormData: function(fileName, blobName, blob, index, count, type, guid, size) {
+        var formData = new window.FormData();
+        formData.append(blobName, blob);
+        formData.append(FILEUPLOADER_CHUNK_META_DATA_NAME, JSON.stringify({
+            Name: fileName,
+            Index: index,
+            Count: count,
+            FileSize: size,
+            Type: type,
+            Guid: guid
+        }));
+        return formData;
+    },
+    _createChunkArray: function(file) {
+        var blobPosition = 0;
+        var chunkIndex = 0;
+        var result = [];
+        while(blobPosition <= file.size) {
+            result.push({
+                blob: this._sliceFile(file, blobPosition, this.chunkSize),
+                index: chunkIndex
+            });
+            blobPosition += this.chunkSize;
+            chunkIndex++;
+        }
+        return result;
+    },
+    _sliceFile: function(file, startPos, length) {
+        if(file.slice) {
+            return file.slice(startPos, startPos + length);
+        }
+        if(file.webkitSlice) {
+            return file.webkitSlice(startPos, startPos + length);
+        }
+        return null;
+    },
+    _getEvent: function(e) {
+        return null;
+    }
+});
+
+var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
+    _uploadCore: function(file) {
+        file.loadedSize = 0;
+        ajax.sendRequest({
+            url: this.fileUploader.option("uploadUrl"),
+            method: this.fileUploader.option("uploadMethod"),
+            headers: this.fileUploader.option("uploadHeaders"),
+            beforeSend: function(xhr) {
+                file.request = xhr;
+            },
+            upload: {
+                "onprogress": function(e) {
+                    if(file._isError) {
+                        return;
+                    }
+
+                    file._isProgressStarted = true;
+                    file.onProgress.fire(e);
+                },
+                "onloadstart": function() {
+                    file.onLoadStart.fire();
+                },
+                "onabort": function() {
+                    file.onAbort.fire();
+                }
+            },
+            data: this._createFormData(this.fileUploader.option("name"), file.value)
+        }).done(function() {
+            file.onLoad.fire();
+        }.bind(this)).fail(function(e) {
+            if(this._isStatusError(e.status) || !file._isProgressStarted) {
+                file._isError = true;
+                file.onError.fire();
+            }
+        }.bind(this));
+    },
+    _createFormData: function(fieldName, fieldValue) {
+        var formData = new window.FormData();
+        formData.append(fieldName, fieldValue);
+        return formData;
+    }
+});
 
 registerComponent("dxFileUploader", FileUploader);
 
