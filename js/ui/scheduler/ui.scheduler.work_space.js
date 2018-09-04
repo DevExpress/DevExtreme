@@ -1866,9 +1866,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.$element().get(0).getBoundingClientRect().width - this.getTimePanelWidth();
     },
 
-    _getCellPositionByIndex: function(index, groupIndex, inAllDayRow, intervalIndex) {
+    _getCellPositionByIndex: function(index, groupIndex, inAllDayRow) {
         var cellCoordinates = this._getCellCoordinatesByIndex(index),
-            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow, intervalIndex),
+            $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow),
             result = this._getCellPosition($cell);
 
         this.setCellDataCache(cellCoordinates, groupIndex, $cell);
@@ -1891,8 +1891,8 @@ var SchedulerWorkSpace = Widget.inherit({
         return position;
     },
 
-    _getCellByCoordinates: function(cellCoordinates, groupIndex, inAllDayRow, intervalIndex) {
-        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow, intervalIndex);
+    _getCellByCoordinates: function(cellCoordinates, groupIndex, inAllDayRow) {
+        var indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
 
         return this._$dateTable
             .find("tr")
@@ -2037,7 +2037,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var intervalIndex = this.getDateIntervalIndex(date);
 
         var index = this.getCellIndexByDate(date, inAllDayRow),
-            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow, intervalIndex),
+            position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow),
             shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date)),
             horizontalHMax = this.option("groupByDate") ? this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex) : this._groupedStrategy.getHorizontalMax(groupIndex);
 
