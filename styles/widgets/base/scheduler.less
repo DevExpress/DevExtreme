@@ -330,7 +330,7 @@
     }
 }
 
-.dx-scheduler-vertical-group-table-mixin() {
+.dx-scheduler-vertical-group-table-mixin(@offset: 0px) {
     .set-size(@size) {
         .dx-scheduler-work-space-vertical-group-table {
             width: @size;
@@ -367,31 +367,38 @@
         }
 
         &.dx-scheduler-work-space-both-scrollbar {
+            .dx-scheduler-date-table {
+                margin-left: 0
+            }
+
              .dx-scheduler-date-table-scrollable {
-                margin-left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px;
+                margin-left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px + @offset;
             }
 
             .dx-scheduler-fixed-appointments {
-                left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px;
+                left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset;
             }
 
             .dx-scheduler-header-scrollable.dx-scrollable {
-                margin: 0 0 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px;
+                margin: 0 0 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset;
             }
 
             &.dx-rtl {
                 .dx-scheduler-date-table-scrollable {
                     margin-left: 0;
-                    margin-right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px;
+                    margin-right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px + @offset;
                 }
 
+                .dx-scheduler-date-table {
+                    margin-right: 0
+                }
                 .dx-scheduler-header-scrollable.dx-scrollable {
-                    margin: 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px 0 0;
+                    margin: 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset 0 0;
                 }
 
                 .dx-scheduler-fixed-appointments {
                     left: 0;
-                    right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px;
+                    right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset;
                 }
             }
         }
@@ -2551,10 +2558,6 @@
         }
         
         &.dx-scheduler-work-space-both-scrollbar {
-            .dx-scheduler-date-table {
-                margin-left: 0
-            }
-
             .dx-scheduler-all-day-table-row:before {
                 display: none;
             }
