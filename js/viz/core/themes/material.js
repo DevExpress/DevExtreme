@@ -369,6 +369,13 @@ registerTheme({
                 color: DARK_BACKGROUND_COLOR
             }
         }
+    },
+    sankey: {
+        label: {
+            font: {
+                color: WHITE
+            }
+        }
     }
 }, "material");
 
