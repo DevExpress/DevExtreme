@@ -1206,43 +1206,34 @@ var FileUploader = Editor.inherit({
         });
     },
 
-    _getTotalSize: function() {
-        if(!this._totalSize) {
-            var value = this.option("value"),
-                totalSize = 0;
-
-            each(value, function(_, file) {
-                totalSize += file.size;
-            });
-
-            this._totalSize = totalSize;
+    _getTotalFilesSize: function() {
+        if(!this._totalFilesSize) {
+            this._totalFilesSize = 0;
+            each(this._files, function(_, file) {
+                this._totalFilesSize += file.value.size;
+            }.bind(this));
         }
-
-        return this._totalSize;
+        return this._totalFilesSize;
     },
 
-    _getTotalLoadedSize: function() {
-        if(!this._loadedSize) {
-            var loadedSize = 0;
-
+    _getTotalLoadedFilesSize: function() {
+        if(!this._totalLoadedFilesSize) {
+            this._totalLoadedFilesSize = 0;
             each(this._files, function(_, file) {
-                loadedSize += file.loadedSize;
-            });
-
-            this._loadedSize = loadedSize;
+                this._totalLoadedFilesSize += file.loadedSize;
+            }.bind(this));
         }
-
-        return this._loadedSize;
+        return this._totalLoadedFilesSize;
     },
 
     _setLoadedSize: function(value) {
-        this._loadedSize = value;
+        this._totalLoadedFilesSize = value;
     },
 
     _recalculateProgress: function() {
-        delete this._totalSize;
-        delete this._loadedSize;
-        this._updateTotalProgress(this._getTotalSize(), this._getTotalLoadedSize());
+        this._totalFilesSize = 0;
+        this._totalLoadedFilesSize = 0;
+        this._updateTotalProgress(this._getTotalFilesSize(), this._getTotalLoadedFilesSize());
     },
 
     _getValidationMessageTarget: function() {
@@ -1432,9 +1423,10 @@ var FileUploadStrategyBase = Class.inherit({
         });
     },
     _onProgressHandler: function(file, e) {
-        var totalFilesSize = this.fileUploader._getTotalSize();
-        var totalLoadedFilesSize = this.fileUploader._getTotalLoadedSize();
         if(file) {
+            var totalFilesSize = this.fileUploader._getTotalFilesSize();
+            var totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
+
             var loadedSize = Math.min(e.loaded, file.value.size);
             var segmentSize = loadedSize - file.loadedSize;
             file.loadedSize = loadedSize;
