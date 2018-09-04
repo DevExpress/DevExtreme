@@ -1141,9 +1141,12 @@ var FileUploader = Editor.inherit({
     _uploadFiles: function() {
         if(isFormDataSupported()) {
             each(this._files, (function(_, file) {
-                this._uploadStrategy.upload(file);
+                this._uploadFile(file);
             }).bind(this));
         }
+    },
+    _uploadFile: function(file) {
+        this._uploadStrategy.upload(file);
     },
     _updateProgressBar: function(file, loadedFileData) {
         file.progressBar && file.progressBar.option({
@@ -1585,7 +1588,7 @@ var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
             data: this._createFormData(this.fileUploader.option("name"), file.value)
         }).done(function() {
             file.onLoad.fire();
-        }.bind(this)).fail(function(e) {
+        }).fail(function(e) {
             if(this._isStatusError(e.status) || !file._isProgressStarted) {
                 file._isError = true;
                 file.onError.fire();
