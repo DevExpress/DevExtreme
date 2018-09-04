@@ -168,7 +168,7 @@ var contains = function(container, element) {
     }
     element = domAdapter.isTextNode(element) ? element.parentNode : element;
 
-    return domAdapter.isDocument(container) ? container.body.contains(element) : container.contains(element);
+    return domAdapter.isDocument(container) ? container.documentElement.contains(element) : container.contains(element);
 };
 
 var getPublicElement = function($element) {
