@@ -199,6 +199,36 @@ QUnit.test("Labels offsets", function(assert) {
     assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
 });
 
+// T669620
+QUnit.test("Label drawing on bottom border of widget", function(assert) {
+    createSankey({
+        dataSource: [{ target: 't1', source: 's1', weight: 20 },
+            { target: 't2', source: 's1', weight: 30 }, { target: 't3', source: 's1', weight: 0.1 }
+        ],
+        size: {
+            width: 800,
+            height: 400
+        }
+    });
+
+    assert.equal(this.label(3).attr.lastCall.args[0].translateY, 386, 'Alignment of bottom label');
+});
+
+// T669620
+QUnit.test("Label drawing on top border of widget", function(assert) {
+    createSankey({
+        dataSource: [{ target: 't3', source: 's1', weight: 0.1 }, { target: 't1', source: 's1', weight: 20 },
+            { target: 't2', source: 's1', weight: 30 }
+        ],
+        size: {
+            width: 800,
+            height: 400
+        }
+    });
+
+    assert.equal(this.label(1).attr.lastCall.args[0].translateY, -2, 'Alignment of top label');
+});
+
 QUnit.module("Node labels. Adaptive layout", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
