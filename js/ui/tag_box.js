@@ -735,6 +735,13 @@ var TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
+    _shouldClearFilter: function() {
+        var shouldClearFilter = this.callBase(),
+            showSelectionControls = this.option("showSelectionControls");
+
+        return !showSelectionControls && shouldClearFilter;
+    },
+
     _renderInputSize: function() {
         var $input = this._input();
         $input.prop("size", $input.val() ? $input.val().length + 2 : 1);
