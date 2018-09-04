@@ -3197,12 +3197,10 @@ QUnit.test("searchEnabled allows searching", function(assert) {
 
     this.clock.tick(TIME_TO_WAIT);
 
-    var $input = $tagBox.find("input");
-    keyboardMock($input).type("te");
-
+    keyboardMock(instance._input()).type("te");
     this.clock.tick(TIME_TO_WAIT);
 
-    var $listItems = $(".dx-list-item");
+    var $listItems = $("." + LIST_ITEM_CLASS);
 
     $listItems.first().trigger("dxclick");
     this.clock.tick(TIME_TO_WAIT);
