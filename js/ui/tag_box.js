@@ -20,6 +20,7 @@ var $ = require("../core/renderer"),
     messageLocalization = require("../localization/message"),
     eventUtils = require("../events/utils"),
     clickEvent = require("../events/click"),
+    iteratorUtils = require("../core/utils/iterator"),
     SelectBox = require("./select_box"),
     caret = require("./text_box/utils.caret"),
     BindableTemplate = require("./widget/bindable_template");
@@ -834,12 +835,38 @@ var TagBox = SelectBox.inherit({
 
         this._getFilteredItems(values)
             .done(function(filteredItems) {
-                var items = this._createTagData(values, filteredItems);
-                tagData.resolve(items);
+                if(filteredItems.length) {
+                    var items = this._createTagData(values, filteredItems);
+                    tagData.resolve(items);
+                } else {
+                    this._loadTagDataDirectly(values, tagData);
+                }
             }.bind(this))
             .fail(tagData.reject.bind(this));
 
         return tagData.promise();
+    },
+
+    _loadTagDataDirectly: function(values, deferred) {
+        var cache = {},
+            items = [];
+
+        var itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
+            return this._loadItem(value, cache).always((function(item) {
+                var valueIndex = values.indexOf(value);
+
+                if(isDefined(item)) {
+                    this._selectedItems.push(item);
+                    items.splice(valueIndex, 0, item);
+                } else {
+                    items.splice(valueIndex, 0, value);
+                }
+            }).bind(this));
+        }).bind(this));
+
+        when.apply($, itemLoadDeferreds)
+            .done(function() { deferred.resolve(items); })
+            .fail(function() { deferred.reject(items); });
     },
 
     _renderTags: function() {
