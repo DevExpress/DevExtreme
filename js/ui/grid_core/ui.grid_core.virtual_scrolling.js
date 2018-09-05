@@ -5,7 +5,9 @@ var $ = require("../../core/renderer"),
     virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     each = require("../../core/utils/iterator").each,
-    Deferred = require("../../core/utils/deferred").Deferred,
+    deferredUtils = require("../../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred,
+    when = deferredUtils.when,
     translator = require("../../animation/translator"),
     LoadIndicator = require("../load_indicator");
 
@@ -695,8 +697,9 @@ module.exports = {
             data: (function() {
                 var members = {
                     _refreshDataSource: function() {
-                        this.callBase.apply(this, arguments);
-                        this.initVirtualRows();
+                        var baseResult = this.callBase.apply(this, arguments);
+                        when(baseResult).then(this.initVirtualRows.bind(this));
+                        return baseResult;
                     },
                     getRowPageSize: function() {
                         var rowPageSize = this.option("scrolling.rowPageSize"),
