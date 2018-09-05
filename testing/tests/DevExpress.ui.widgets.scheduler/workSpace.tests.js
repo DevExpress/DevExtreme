@@ -1174,33 +1174,6 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("getCoordinateByDates should return coordinates depend on appointment duration", function(assert) {
-        var ws = this.instance;
-
-        ws.option({
-            currentDate: new Date(2015, 2, 16),
-            firstDayOfWeek: 1
-        });
-        var $cells = ws.$element().find(".dx-scheduler-date-table-cell"),
-            coordinates = ws.getCoordinatesByDates(new Date(2015, 2, 7), new Date(2015, 2, 28));
-
-        var cells = [12, 14, 21, 28];
-
-        $.each(coordinates, function(index, coordinate) {
-            var $currentCell = $cells.eq(cells[index]),
-                rowIndex = $currentCell.parent().index(),
-                expectedCoordinate = $currentCell.position();
-
-            if(rowIndex) {
-                // ! fix coordinate calculation in webkit
-                expectedCoordinate.top = rowIndex * ws.getCellHeight();
-            }
-
-            assert.equal(coordinate.top, expectedCoordinate.top, "");
-            assert.equal(coordinate.left, expectedCoordinate.left, "");
-        });
-    });
-
     QUnit.test("WorkSpace should calculate max left position", function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 2, 16),
