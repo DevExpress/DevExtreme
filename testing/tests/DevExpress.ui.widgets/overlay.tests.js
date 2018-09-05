@@ -88,11 +88,15 @@ QUnit.testStart(function() {
         \
         <div>\
             <div class="dx-additional-color-scheme-my-color_scheme1 some-class some-class2">\
-                <div id="swatchOverlay1"></div>\
+                <div>\
+                    <div id="swatchOverlay1"></div>\
+                </div>\
             </div>\
             <div class="some-class some-class2 dx-additional-color-scheme-my-color_scheme2 some-class3">\
-                <div id="swatchOverlay2"></div>\
-                <div id="swatchOverlay3"></div>\
+                <div>\
+                    <div id="swatchOverlay2"></div>\
+                    <div id="swatchOverlay3"></div>\
+                </div>\
             </div>\
         <div>';
 
@@ -284,6 +288,18 @@ QUnit.test("Color swatches - overlay should be rendered on the child of viewport
     assert.ok(containers[3].parent().hasClass("dx-viewport"), "overlay's container is the viewport's child");
 
     assert.equal($(".dx-viewport > .dx-additional-color-scheme-my-color_scheme2").length, 1, "one container for different overlays from the same swatch");
+});
+
+QUnit.test("Color swatches - overlay should be rendered on the child of viewport with special class if its element attached after creation", function(assert) {
+    var detachedContainer = $("<div>");
+    var overlay = detachedContainer.dxOverlay().dxOverlay("instance");
+    detachedContainer.appendTo(".dx-additional-color-scheme-my-color_scheme1 > div");
+    overlay.show();
+
+    var overlayContainer = overlay.$content().parent().parent();
+
+    assert.ok(overlayContainer.hasClass("dx-additional-color-scheme-my-color_scheme1"), "overlay's container has right class");
+    assert.ok(overlayContainer.parent().hasClass("dx-viewport"), "overlay's container is the viewport's child");
 });
 
 QUnit.module("option", moduleConfig);

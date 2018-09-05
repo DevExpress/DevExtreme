@@ -223,6 +223,12 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
+                * @name dxSchedulerOptions.views.groupByDate
+                * @type boolean
+                * @default false
+                */
+
+            /**
                 * @name dxSchedulerOptions.views.startDate
                 * @type Date|number|string
                 * @default undefined
@@ -566,6 +572,13 @@ var Scheduler = Widget.inherit({
             selectedCellData: [],
 
             /**
+                * @name dxSchedulerOptions.groupByDate
+                * @type boolean
+                * @default false
+                */
+            groupByDate: false,
+
+            /**
                 * @name dxSchedulerOptions.onAppointmentRendered
                 * @extends Action
                 * @type function(e)
@@ -840,6 +853,8 @@ var Scheduler = Widget.inherit({
                 * @default "No data to display"
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
+
+            groupByDate: false,
 
             allowMultipleCellSelection: true,
             _appointmentTooltipOffset: { x: 0, y: 0 },
@@ -1252,6 +1267,7 @@ var Scheduler = Widget.inherit({
             case "indicatorTime":
             case "indicatorUpdateInterval":
             case "shadeUntilCurrentTime":
+            case "groupByDate":
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
@@ -1826,6 +1842,7 @@ var Scheduler = Widget.inherit({
             return 0;
         }
     },
+
     getAppointmentDurationInMinutes: function() {
         return this._getCurrentViewOption("cellDuration");
     },
@@ -1927,7 +1944,8 @@ var Scheduler = Widget.inherit({
             selectedCellData: this.option("selectedCellData"),
             onSelectionChanged: (args) => {
                 this.option("selectedCellData", args.selectedCellData);
-            }
+            },
+            groupByDate: this._getCurrentViewOption("groupByDate")
         }, currentViewOptions);
 
         result.observer = this;

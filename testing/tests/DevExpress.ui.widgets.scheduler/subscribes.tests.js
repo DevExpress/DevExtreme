@@ -400,6 +400,130 @@ QUnit.test("'needCoordinates' should work correct with custom data fields", func
     });
 });
 
+QUnit.test("'needCoordinates' should work correct when groupByDate = true, Day view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "day",
+        views: [{
+            type: "day",
+            name: "day",
+            intervalCount: 2
+        }],
+        currentDate: new Date(2018, 4, 21, 9, 0),
+        groupByDate: true,
+        startDayHour: 9,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 21, 9, 0),
+            priorityId: 2
+        },
+        startDate: new Date(2018, 4, 21, 9, 0),
+        callback: function(result) {
+            result = result[0];
+            assert.equal(result.cellIndex, 0, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.equal(result.top, 0, "Coordinates are OK");
+            assert.roughEqual(result.left, 324, 1.1, "Coordinates are OK");
+        }
+    });
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 22, 9, 0),
+            priorityId: 1
+        },
+        startDate: new Date(2018, 4, 22, 9, 0),
+        callback: function(result) {
+            result = result[0];
+            assert.equal(result.cellIndex, 1, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.equal(result.top, 0, "Coordinates are OK");
+            assert.roughEqual(result.left, 548, 1.1, "Coordinates are OK");
+        }
+    });
+});
+
+QUnit.test("'needCoordinates' should work correct when groupByDate = true, Week view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "week",
+        views: ["week"],
+        currentDate: new Date(2018, 4, 21, 9, 0),
+        groupByDate: true,
+        startDayHour: 9,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 22, 10, 0),
+            priorityId: 2
+        },
+        startDate: new Date(2018, 4, 22, 10, 0),
+        callback: function(result) {
+            result = result[0];
+            assert.equal(result.cellIndex, 2, "Coordinates are OK");
+            assert.equal(result.rowIndex, 2, "Coordinates are OK");
+            assert.equal(result.top, 100, "Coordinates are OK");
+            assert.roughEqual(result.left, 420, 1.1, "Coordinates are OK");
+        }
+    });
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 25, 1, 0),
+            priorityId: 1
+        },
+        startDate: new Date(2018, 4, 25, 11, 0),
+        callback: function(result) {
+            result = result[0];
+            assert.equal(result.cellIndex, 5, "Coordinates are OK");
+            assert.equal(result.rowIndex, 4, "Coordinates are OK");
+            assert.equal(result.top, 200, "Coordinates are OK");
+            assert.equal(result.left, 740, "Coordinates are OK");
+        }
+    });
+});
+
 QUnit.test("'updateAppointmentStartDate' should work correct with custom data fields", function(assert) {
     this.createInstance({
         startDateExpr: "Start"

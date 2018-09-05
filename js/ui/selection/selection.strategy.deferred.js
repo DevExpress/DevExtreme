@@ -157,19 +157,22 @@ module.exports = SelectionStrategy.inherit({
         var that = this,
             needAddFilter = true,
             currentFilter = isDeselect ? ["!", filter] : filter,
+            currentOperation = isDeselect ? "and" : "or",
             selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
-            that._removeSameFilter(selectionFilter, filter, isDeselect, true);
+            that._removeSameFilter(selectionFilter, filter, isDeselect);
+            var lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
-            if(that._removeSameFilter(selectionFilter, filter, !isDeselect, !isUnique)) {
-                needAddFilter = selectionFilter.length && !isUnique;
+            if(lastOperation && (lastOperation !== "or" && isDeselect || lastOperation !== "and" && !isDeselect)) {
+                needAddFilter = false;
+                selectionFilter = [];
             }
 
             if(needAddFilter) {
-                selectionFilter = that._addFilterOperator(selectionFilter, isDeselect ? "and" : "or");
+                selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
             }
         }
 
@@ -189,27 +192,33 @@ module.exports = SelectionStrategy.inherit({
         return filter;
     },
 
-    _removeSameFilter: function(selectionFilter, filter, inverted, forceRemove) {
+    _removeSameFilter: function(selectionFilter, filter, inverted) {
         filter = inverted ? ["!", filter] : filter;
 
         var filterIndex = this._findSubFilter(selectionFilter, filter);
 
         if(JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
             selectionFilter.splice(0, selectionFilter.length);
-            return true;
+            return "undefined";
         }
 
-        var isLastItem = filterIndex === selectionFilter.length - 1;
-
-        if(filterIndex >= 0 && (forceRemove || isLastItem)) {
+        if(filterIndex >= 0) {
             if(filterIndex > 0) {
-                selectionFilter.splice(filterIndex - 1, 2);
+                return selectionFilter.splice(filterIndex - 1, 2)[0];
             } else {
-                selectionFilter.splice(filterIndex, 2);
+                return selectionFilter.splice(filterIndex, 2)[1] || "undefined";
             }
-            return true;
+        } else {
+            for(var i = 0; i < selectionFilter.length; i++) {
+                var lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter);
+                if(lastRemoveOperation) {
+                    if(selectionFilter[i].length === 1) {
+                        selectionFilter[i] = selectionFilter[i][0];
+                    }
+                    return lastRemoveOperation;
+                }
+            }
         }
-        return false;
     },
 
     getSelectAllState: function() {

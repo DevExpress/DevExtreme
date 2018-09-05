@@ -1200,6 +1200,54 @@ QUnit.test("Hide loading when dataSource is empty", function(assert) {
     assert.equal($(".dx-loadpanel-content.dx-state-invisible").length, 1, "loading panel should be hidden");
 });
 
+// T668808
+QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
+    var generateDataSource = function(n) {
+        return Array.apply(null, Array(n)).map(function(_, index) {
+            return { id: index };
+        });
+    };
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageIndex: 3 };
+            },
+            customSave: function() {
+            }
+        },
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            timeout: 0,
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        height: 100,
+        loadingTimeout: null,
+        dataSource: {
+            store: generateDataSource(10)
+        }
+    });
+
+    this.gridView.render(this.$element().height(60));
+
+    this.gridView.update();
+    this.clock.tick(200);
+
+    var $dataRows = this.gridView.element().find("tr.dx-data-row");
+    assert.strictEqual(this.dataController.pageIndex(), 3);
+    assert.strictEqual($dataRows.eq(0).text(), "6");
+    assert.strictEqual($dataRows.length, 4);
+});
+
 QUnit.test("Show NoData message when dataSource is empty and state is loaded", function(assert) {
     // arrange, act
     this.$element = function() {

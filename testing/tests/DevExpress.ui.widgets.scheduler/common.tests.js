@@ -1221,6 +1221,21 @@ QUnit.testStart(function() {
         assert.equal(this.instance.option("showCurrentTimeIndicator"), true, "showCurrentTimeIndicator option value is right on init");
     });
 
+    QUnit.test("groupByDate option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            groupByDate: false
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("groupByDate"), false, "workspace has correct groupByDate");
+
+        this.instance.option("groupByDate", true);
+
+        assert.equal(workSpaceWeek.option("groupByDate"), true, "workspace has correct groupByDate");
+    });
+
     QUnit.test("showCurrentTimeIndicator option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
@@ -1435,6 +1450,29 @@ QUnit.testStart(function() {
         assert.deepEqual(workSpaceWeek.option("startDate"), date, "workspace has correct startDate");
         assert.deepEqual(header.option("startDate"), date, "header has correct startDate");
         assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date depending on startDate");
+    });
+
+    QUnit.test("view.groupByDate is passed to workspace", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+                groupByDate: true
+            },
+            {
+                type: "day",
+                name: "Day",
+                groupByDate: false
+            }]
+        });
+
+        var workSpace = this.instance.getWorkSpace();
+
+        assert.ok(workSpace.option("groupByDate"), "workspace has correct groupByDate");
+        this.instance.option("currentView", "day");
+        workSpace = this.instance.getWorkSpace();
+        assert.notOk(workSpace.option("groupByDate"), "workspace has correct groupByDate");
     });
 
     QUnit.test("currentView option should be passed to header correctly", function(assert) {

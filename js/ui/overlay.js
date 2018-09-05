@@ -31,7 +31,8 @@ var $ = require("../core/renderer"),
     pointerEvents = require("../events/pointer"),
     Resizable = require("./resizable"),
     EmptyTemplate = require("./widget/empty_template"),
-    Deferred = require("../core/utils/deferred").Deferred;
+    Deferred = require("../core/utils/deferred").Deferred,
+    getSwatchContainer = require("./widget/swatch_container");
 
 var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_WRAPPER_CLASS = "dx-overlay-wrapper",
@@ -39,7 +40,6 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
-    SWATCH_CONTAINER_CLASS_PREFIX = "dx-additional-color-scheme-",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
 
@@ -491,35 +491,16 @@ var Overlay = Widget.inherit({
     },
 
     _initContainer: function(container) {
-        if(container === undefined) {
-            container = this._getSwatchContainer();
-        }
+        container = container === undefined ? viewPortUtils.value() : container;
 
-        var $element = this.$element(),
-            $container = $element.closest(container);
+        var $element = this.$element();
+        var $container = $element.closest(container);
 
         if(!$container.length) {
             $container = $(container).first();
         }
 
         this._$container = $container.length ? $container : $element.parent();
-    },
-
-    _getSwatchContainer: function() {
-        var $element = this.$element();
-        var swatchContainer = $element.closest(`[class^="${SWATCH_CONTAINER_CLASS_PREFIX}"], [class*=" ${SWATCH_CONTAINER_CLASS_PREFIX}"]`);
-        var viewport = viewPortUtils.value();
-        if(!swatchContainer.length) return viewport;
-
-        var swatchClassRegex = new RegExp(`(\\s|^)(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);
-        var swatchClass = swatchContainer[0].className.match(swatchClassRegex)[2];
-        var swatchContainer = viewport.children("." + swatchClass);
-
-        if(!swatchContainer.length) {
-            swatchContainer = $("<div>").addClass(swatchClass).appendTo(viewport);
-        }
-
-        return swatchContainer;
     },
 
     _initHideTopOverlayHandler: function(handler) {
@@ -1195,12 +1176,14 @@ var Overlay = Widget.inherit({
 
     _attachWrapperToContainer: function() {
         var $element = this.$element();
+        var containerDefined = this.option("container") !== undefined;
+        var renderContainer = containerDefined ? this._$container : getSwatchContainer($element);
 
-        if(this._$container && this._$container[0] !== $element.parent()[0]) {
-            this._$wrapper.appendTo(this._$container);
-        } else {
-            this._$wrapper.appendTo($element);
+        if(renderContainer[0] === $element.parent()[0]) {
+            renderContainer = $element;
         }
+
+        this._$wrapper.appendTo(renderContainer);
     },
 
     _renderGeometry: function() {

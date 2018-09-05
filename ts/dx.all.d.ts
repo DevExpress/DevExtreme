@@ -2534,6 +2534,7 @@ declare module DevExpress.ui {
         invalidFileExtensionMessage?: string;
         invalidMaxFileSizeMessage?: string;
         invalidMinFileSizeMessage?: string;
+        chunkSize?: number;
         /** Specifies the text displayed on the area to which an end-user can drop a file. */
         labelText?: string;
         maxFileSize?: number;

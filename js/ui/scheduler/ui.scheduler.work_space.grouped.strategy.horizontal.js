@@ -3,11 +3,20 @@ var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
 
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
-    prepareCellIndexes: function(cellCoordinates, groupIndex) {
-        return {
-            rowIndex: cellCoordinates.rowIndex,
-            cellIndex: cellCoordinates.cellIndex + groupIndex * this._workSpace._getCellCount()
-        };
+    prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDay) {
+        var groupByDay = this._workSpace.option("groupByDate");
+
+        if(!groupByDay) {
+            return {
+                rowIndex: cellCoordinates.rowIndex,
+                cellIndex: cellCoordinates.cellIndex + groupIndex * this._workSpace._getCellCount()
+            };
+        } else {
+            return {
+                rowIndex: cellCoordinates.rowIndex,
+                cellIndex: cellCoordinates.cellIndex * this._workSpace._getGroupCount() + groupIndex
+            };
+        }
     },
 
     calculateCellIndex: function(rowIndex, cellIndex) {
@@ -17,7 +26,14 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupIndex: function(rowIndex, cellIndex) {
-        return Math.floor(cellIndex / this._workSpace._getCellCount());
+        var groupByDay = this._workSpace.option("groupByDate"),
+            groupCount = this._workSpace._getGroupCount();
+
+        if(groupByDay) {
+            return cellIndex % groupCount;
+        } else {
+            return Math.floor(cellIndex / this._workSpace._getCellCount());
+        }
     },
 
     calculateHeaderCellRepeatCount: function() {

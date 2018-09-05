@@ -525,7 +525,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth"])) {
             var visibleColumns = this._columnsController.getVisibleColumns();
-            var widths = iteratorUtils.map(visibleColumns, function(column) { return column.visibleWidth || column.width || "auto"; });
+            var widths = iteratorUtils.map(visibleColumns, function(column) {
+                var width = column.visibleWidth || column.width;
+                return typeUtils.isDefined(width) ? width : "auto";
+            });
 
             this.setColumnWidths(widths);
             return;
@@ -737,7 +740,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(typeof width === "number") {
                     width = width.toFixed(3) + "px";
                 }
-                styleUtils.setWidth($cols.eq(columnIndex), width || "auto");
+                styleUtils.setWidth($cols.eq(columnIndex), typeUtils.isDefined(width) ? width : "auto");
 
                 columnIndex++;
             }

@@ -2166,6 +2166,118 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     }
 });
 
+// T649906
+QUnit.test("Last column width should be reseted during column resizing to left when columnResizingMode is widget", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            columnResizingMode: "widget",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: ["id", "firstName", "lastName", { dataField: "age", allowResizing: false }]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition - 20,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    // assert
+    assert.strictEqual(instance.columnOption(0, "width"), 80);
+    assert.strictEqual(instance.columnOption(0, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(1, "width"), 100);
+    assert.strictEqual(instance.columnOption(1, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(2, "width"), 100);
+    assert.strictEqual(instance.columnOption(2, "visibleWidth"), "auto");
+    assert.strictEqual(instance.columnOption(3, "width"), 100);
+    assert.strictEqual(instance.columnOption(3, "visibleWidth"), undefined);
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
+        assert.strictEqual(headersCols[0].style.width, "80px");
+        assert.strictEqual(headersCols[1].style.width, "100px");
+        assert.strictEqual(headersCols[2].style.width, "auto");
+        assert.strictEqual(headersCols[3].style.width, "100px");
+    }
+});
+
+// T649906
+QUnit.test("Last column width should not be reseted during column resizing to right when columnResizingMode is widget", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            columnResizingMode: "widget",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: ["id", "firstName", "lastName", { dataField: "age", allowResizing: false }]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition + 20,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    // assert
+    assert.strictEqual(instance.columnOption(0, "width"), 120);
+    assert.strictEqual(instance.columnOption(0, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(1, "width"), 100);
+    assert.strictEqual(instance.columnOption(1, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(2, "width"), 100);
+    assert.strictEqual(instance.columnOption(2, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(3, "width"), 100);
+    assert.strictEqual(instance.columnOption(3, "visibleWidth"), undefined);
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
+        assert.strictEqual(headersCols[0].style.width, "120px");
+        assert.strictEqual(headersCols[1].style.width, "100px");
+        assert.strictEqual(headersCols[2].style.width, "100px");
+        assert.strictEqual(headersCols[3].style.width, "100px");
+    }
+});
+
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget and minWidth is assigned", function(assert) {
     $("#container").width(300);
     // arrange
@@ -10702,6 +10814,48 @@ QUnit.test("column with width auto should have minimum size by content", functio
 
 
     assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
+});
+
+QUnit.test("column with width 0 should be applied", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            dataField: "field3",
+            width: 0
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0).offsetWidth, 100, "first column width");
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).get(0).offsetWidth, 0, "last column width");
+});
+
+QUnit.test("column with width 0 should be ignored if all column widths are defined", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1",
+            width: 50
+        }, {
+            dataField: "field2",
+            width: 50
+        }, {
+            dataField: "field3",
+            width: 0
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0).offsetWidth, 50, "first column width");
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).get(0).offsetWidth, 100, "last column width");
 });
 
 QUnit.test("SelectAll when allowSelectAll is default", function(assert) {
