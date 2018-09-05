@@ -450,6 +450,16 @@ module.exports = (function() {
                     focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
                 } catch(e) {}
             }
+        },
+
+        getLastResizableColumnIndex: function(columns) {
+            var lastColumnIndex = columns.length - 1;
+            var hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
+            while(lastColumnIndex >= 0 && columns[lastColumnIndex] && (columns[lastColumnIndex].command || columns[lastColumnIndex] === "adaptiveHidden" || columns[lastColumnIndex].fixed || (hasResizableColumns && columns[lastColumnIndex].allowResizing === false))) {
+                lastColumnIndex--;
+            }
+
+            return lastColumnIndex;
         }
     };
 })();
