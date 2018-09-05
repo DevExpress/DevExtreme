@@ -1209,7 +1209,7 @@ QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
     };
 
     this.$element = function() {
-        return $("#container").height(60);
+        return $("#container");
     };
 
     this.setupDataGridModules({
@@ -1237,7 +1237,7 @@ QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
         }
     });
 
-    this.gridView.render(this.$element());
+    this.gridView.render(this.$element().height(60));
 
     this.gridView.update();
     this.clock.tick(200);
