@@ -2,19 +2,19 @@ const MetadataLoader = require("../modules/metadata-loader.js");
 const MetadataRepository = require("../modules/metadata-repository.js");
 const LessTemplateLoader = require("../modules/less-template-loader.js");
 const themes = require("../modules/themes.js");
+const normalize = require("../modules/config-normalizer");
 
-const processTheme = (config, metadata, data, version) => {
+const processTheme = (config, metadata, version) => {
     let lessTemplateLoader = new LessTemplateLoader(config, version);
     if(config.isBootstrap) {
         let bootstrapMetadata = config.bootstrapVersion === 3 ?
             require("../data/bootstrap-metadata/bootstrap-metadata.js") :
             require("../data/bootstrap-metadata/bootstrap4-metadata.js");
 
-        return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, data, config.bootstrapVersion);
+        return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, config.data, config.bootstrapVersion);
     } else {
-        let metadataJSON = JSON.parse(data);
-        if(metadataJSON.items) {
-            metadataJSON.items.forEach(item => {
+        if(config.items) {
+            config.items.forEach(item => {
                 for(let group in metadata) {
                     metadata[group].forEach(metadataItem => {
                         if(metadataItem.Key === item.key) {
@@ -31,12 +31,11 @@ const processTheme = (config, metadata, data, version) => {
 };
 
 const buildTheme = config => {
+    config = normalize(config);
     let metadataRepository = new MetadataRepository(new MetadataLoader());
     let repositoryPromise = metadataRepository.init(themes);
 
-    return Promise.all([config.metadataPromise, repositoryPromise]).then(resolves => {
-        let data = resolves[0];
-
+    return repositoryPromise.then(() => {
         let metadata = metadataRepository.getData({
             name: config.themeName,
             colorScheme: config.colorScheme
@@ -44,7 +43,7 @@ const buildTheme = config => {
 
         let version = metadataRepository.getVersion();
 
-        return processTheme(config, metadata, data, version);
+        return processTheme(config, metadata, version);
     });
 };
 

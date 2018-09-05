@@ -1,44 +1,31 @@
 const mock = require("mock-require");
 const assert = require("chai").assert;
+const normalizeConfig = require("../modules/config-normalizer");
+const commands = require("../modules/commands");
 
-let createdDirectory;
+const deleteUnchanged = (config) => {
+    delete config.data;
+    delete config.items;
+    delete config.reader;
+    delete config.lessCompiler;
+};
 
-mock("../cli/adapters/node-file-reader", (file) => {
-    if(file === "readable.json") {
-        return new Promise(resolve => resolve("{meta}"));
-    } else {
-        return new Promise(resolve => resolve("{}"));
-    }
-});
-mock("../cli/helpers/recursive-path-creator", (directory) => {
-    createdDirectory = directory;
-});
-mock("less/lib/less-node", {});
-
-const readCommandLineArguments = require("../cli/config");
-const commands = require("../cli/commands");
-
-describe("config", () => {
+describe("Cli arguments normalizer", () => {
     after(() => {
         mock.stopAll();
     });
 
-    it("Commands", () => {
-        let config = readCommandLineArguments(["node", "devextreme-themebuilder"]);
+    it("Commands stay unchanged", () => {
+        let config = normalizeConfig({ command: "build-theme" });
         assert.equal(config.command, commands.BUILD_THEME);
 
-        config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme"]);
-        assert.equal(config.command, commands.BUILD_THEME);
-
-        config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars"]);
+        config = normalizeConfig({ command: "build-theme-vars" });
         assert.equal(config.command, commands.BUILD_VARS);
     });
 
     it("build-theme default parameters", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -55,10 +42,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars default parameters", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme-vars" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -75,12 +60,8 @@ describe("config", () => {
     });
 
     it("build-theme bootstrap configuration", () => {
-        mock("../cli/adapters/node-file-reader", () => { return new Promise(resolve => resolve("{}")); });
-        mock("./adapters/node-file-reader", () => { return new Promise(resolve => resolve("{}")); });
-        let config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--input-file=vars.less"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        let config = normalizeConfig({ command: "build-theme", inputFile: "vars.less" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -96,10 +77,8 @@ describe("config", () => {
         });
 
 
-        config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--input-file=vars.scss"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        config = normalizeConfig({ command: "build-theme", inputFile: "vars.scss" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -116,12 +95,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars bootstrap configuration", () => {
-        mock("../cli/adapters/node-file-reader", () => { return new Promise(resolve => resolve("{}")); });
-        mock("./adapters/node-file-reader", () => { return new Promise(resolve => resolve("{}")); });
-        let config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--input-file=vars.less"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        let config = normalizeConfig({ command: "build-theme-vars", inputFile: "vars.less" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -137,10 +112,8 @@ describe("config", () => {
         });
 
 
-        config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--input-file=vars.scss"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        config = normalizeConfig({ command: "build-theme-vars", inputFile: "vars.scss" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -156,10 +129,8 @@ describe("config", () => {
         });
 
 
-        config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--input-file=vars.scss", "--output-file=./dir/file.scss"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        config = normalizeConfig({ command: "build-theme-vars", inputFile: "vars.scss", outputFile: "./dir/file.scss" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -176,10 +147,8 @@ describe("config", () => {
     });
 
     it("build-theme output parameters (file and color scheme)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--output-file=./dir/file.css", "--output-color-scheme=green"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme", outputFile: "./dir/file.css", outputColorScheme: "green" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -196,10 +165,8 @@ describe("config", () => {
     });
 
     it("build-theme output parameters (color scheme only)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--output-color-scheme=green"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme", outputColorScheme: "green" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -216,10 +183,8 @@ describe("config", () => {
     });
 
     it("build-theme output parameters (color scheme, swatch, base)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--output-color-scheme=green", "--make-swatch", "--base"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme", outputColorScheme: "green", makeSwatch: true, base: true });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": true,
@@ -236,10 +201,8 @@ describe("config", () => {
     });
 
     it("build-theme output parameters (color scheme not valid)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--output-color-scheme=$#@green"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme", outputColorScheme: "$#@green" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -256,10 +219,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars output parameters (color scheme)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--output-color-scheme=green"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme-vars", outputColorScheme: "green" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -276,10 +237,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars output parameters (color scheme, output file: less)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--output-color-scheme=green", "--output-file=vars.less"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme-vars", outputColorScheme: "green", outputFile: "vars.less" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -296,10 +255,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars output parameters (color scheme, output file: scss)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--output-color-scheme=green", "--output-file=vars.scss"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme-vars", outputColorScheme: "green", outputFile: "vars.scss" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -316,10 +273,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars output parameters (color scheme, output file: scss, file format: less) (wrong file format - file extension pair)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--output-color-scheme=green", "--output-file=vars.scss", "--output-format=less"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme-vars", outputColorScheme: "green", outputFile: "vars.scss", outputFormat: "less" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -336,10 +291,8 @@ describe("config", () => {
     });
 
     it("build-theme-vars output parameters (color scheme, output file: scss, file format: scss)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme-vars", "--output-color-scheme=green", "--output-format=scss"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme-vars", outputColorScheme: "green", outputFormat: "scss" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -356,10 +309,8 @@ describe("config", () => {
     });
 
     it("build-theme input parameters (base theme)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--base-theme=material.blue.light"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme", baseTheme: "material.blue.light" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -376,10 +327,8 @@ describe("config", () => {
     });
 
     it("build-theme input parameters (base theme, input file)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--base-theme=material.blue.light", "--input-file=file.json"]);
-        delete config.metadataPromise;
-        delete config.lessCompiler;
-        delete config.reader;
+        const config = normalizeConfig({ command: "build-theme", baseTheme: "material.blue.light", inputFile: "file.json" });
+        deleteUnchanged(config);
 
         assert.deepEqual(config, {
             "base": false,
@@ -395,28 +344,45 @@ describe("config", () => {
         });
     });
 
-    it("build-theme input parameters (input file reading)", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--input-file=readable.json"]);
-        delete config.lessCompiler;
-        delete config.reader;
+    it("build-theme 'data', 'items', 'reader', 'lessCompiler' stay unchanged", () => {
+        const config = normalizeConfig({ command: "build-theme", baseTheme: "material.blue.light", inputFile: "file.json", data: "somedata", items: "items", reader: "r", lessCompiler: "l" });
 
-        return config.metadataPromise.then(function(data) {
-            assert.equal(data, "{meta}", "right file was read");
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "blue-light",
+            "command": "build-theme",
+            "data": "somedata",
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "items": "items",
+            "lessCompiler": "l",
+            "makeSwatch": false,
+            "out": "dx.material.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "reader": "r",
+            "themeName": "material"
         });
     });
 
-    it("build-theme get empty object in meta by default", () => {
-        const config = readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme"]);
-        delete config.lessCompiler;
-        delete config.reader;
+    it("build-theme: if 'data' is empty string it will be unchanged", () => {
+        const config = normalizeConfig({ command: "build-theme", baseTheme: "material.blue.light", data: "", items: "items", reader: "r", lessCompiler: "l" });
 
-        return config.metadataPromise.then(function(data) {
-            assert.equal(data, "{}", "empty object by default");
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "blue-light",
+            "command": "build-theme",
+            "data": "",
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "items": "items",
+            "lessCompiler": "l",
+            "makeSwatch": false,
+            "out": "dx.material.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "reader": "r",
+            "themeName": "material"
         });
-    });
-
-    it("build-theme create output directory", () => {
-        readCommandLineArguments(["node", "devextreme-themebuilder", "build-theme", "--output-file=../dir1/dir2/dir3/dir4/file1.txt"]);
-        assert(createdDirectory, "../dir1/dir2/dir3/dir4/file1.txt", "path was passed to createDirectory helper");
     });
 });
