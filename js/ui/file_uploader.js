@@ -1495,13 +1495,16 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
                         chunksData.chunks = [];
                     }
                 },
-                data: this._createFormData(chunksData.name, this.fileUploader.option("name"),
-                    chunk.blob,
-                    chunk.index,
-                    chunksData.count,
-                    chunksData.type,
-                    chunksData.guid,
-                    chunksData.fileSize)
+                data: this._createFormData({
+                    fileName: chunksData.name,
+                    blobName: this.fileUploader.option("name"),
+                    blob: chunk.blob,
+                    index: chunk.index,
+                    count: chunksData.count,
+                    type: chunksData.type,
+                    guid: chunksData.guid,
+                    size: chunksData.fileSize
+                })
             }).done(function() {
                 file.onProgress.fire({
                     loaded: chunksData.loadedBytes,
@@ -1521,16 +1524,16 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
         }
     },
 
-    _createFormData: function(fileName, blobName, blob, index, count, type, guid, size) {
+    _createFormData: function(options) {
         var formData = new window.FormData();
-        formData.append(blobName, blob);
+        formData.append(options.blobName, options.blob);
         formData.append(FILEUPLOADER_CHUNK_META_DATA_NAME, JSON.stringify({
-            Name: fileName,
-            Index: index,
-            Count: count,
-            FileSize: size,
-            Type: type,
-            Guid: guid
+            Name: options.fileName,
+            Index: options.index,
+            Count: options.count,
+            FileSize: options.size,
+            Type: options.type,
+            Guid: options.guid
         }));
         return formData;
     },
