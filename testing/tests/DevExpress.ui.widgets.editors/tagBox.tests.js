@@ -2929,6 +2929,32 @@ QUnit.test("filter should not be cleared when no focusout and no item selection 
     assert.equal($.trim($(".dx-item").first().text()), "111", "value of first item");
 });
 
+QUnit.test("TagBox with selection controls shouldn't clear search after click on item", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["test1", "custom", "test2"],
+            searchEnabled: true,
+            searchTimeout: 0,
+            showSelectionControls: true,
+            selectAllMode: "allPages"
+        }),
+        instance = $tagBox.dxTagBox("instance");
+
+    this.clock.tick(TIME_TO_WAIT);
+
+    keyboardMock(instance._input()).type("te");
+    this.clock.tick(TIME_TO_WAIT);
+
+    var $listItems = $("." + LIST_ITEM_CLASS);
+
+    $listItems.first().trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    $listItems.last().trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.deepEqual(instance.option("value"), ["test1", "test2"], "Correct value");
+});
+
 QUnit.module("popup position and size", moduleSetup);
 
 QUnit.testInActiveWindow("popup height should be depended from its content height", function(assert) {
