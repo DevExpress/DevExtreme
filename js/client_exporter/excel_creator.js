@@ -39,7 +39,6 @@ var Class = require("../core/class"),
     EXCEL_START_TIME = Date.UTC(1899, 11, 30),
     DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
 
-    BOLD_STYLES_COUNT = 4,
     MAX_DIGIT_WIDTH_IN_PIXELS = 7, // Calibri font with 11pt size
     CUSTOM_FORMAT_START_INDEX = 165;
 
@@ -225,14 +224,6 @@ var ExcelCreator = Class.inherit({
         }
 
         return result;
-    },
-
-    _getBoldStyleID: function(alignment) {
-        for(var i = 0; i < BOLD_STYLES_COUNT - 1; i++) {
-            if(this._styleArray[i].alignment === alignment) {
-                return i;
-            }
-        }
     },
 
     _calculateWidth: function(pixelsWidth) {
