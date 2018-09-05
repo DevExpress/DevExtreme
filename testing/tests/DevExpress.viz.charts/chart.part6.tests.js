@@ -1551,8 +1551,7 @@ QUnit.test("Argument axis strips are not changed", function(assert) {
     // assert
     assert.deepEqual(chart.option("argumentAxis"), {
         name: "axis",
-        strips: [{ startValue: 250, endValue: 350, color: "red" }],
-        visualRange: undefined
+        strips: [{ startValue: 250, endValue: 350, color: "red" }]
     });
 });
 
@@ -1608,8 +1607,7 @@ QUnit.test("Value axis strips are not changed", function(assert) {
     // assert
     assert.deepEqual(chart.option("valueAxis"), {
         name: "axis",
-        strips: [{ startValue: 250, endValue: 350, color: "red" }],
-        visualRange: undefined
+        strips: [{ startValue: 250, endValue: 350, color: "red" }]
     });
 });
 
@@ -1824,8 +1822,7 @@ QUnit.test("Argument axis Categories are not changed", function(assert) {
     // assert
     assert.deepEqual(chart.option("argumentAxis"), {
         name: "axis",
-        categories: ["A", "B"],
-        visualRange: undefined
+        categories: ["A", "B"]
     });
 });
 
@@ -1877,8 +1874,7 @@ QUnit.test("Value axis Categories are not changed", function(assert) {
     // assert
     assert.deepEqual(chart.option("valueAxis"), {
         name: "axis",
-        categories: ["AA", "BB", "CC"],
-        visualRange: undefined
+        categories: ["AA", "BB", "CC"]
     });
 });
 

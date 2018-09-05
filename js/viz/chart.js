@@ -1160,6 +1160,10 @@ var dxChart = AdvancedChart.inherit({
         const axesName = isArgumentAxis ? "argumentAxis" : "valueAxis";
         const options = that._options[axesName];
 
+        if(!options) {
+            return;
+        }
+
         if(isArgumentAxis || !_isDefined(index)) {
             options._customVisualRange = value;
         } else {
@@ -1186,6 +1190,9 @@ var dxChart = AdvancedChart.inherit({
     _getVisualRangeSetter(isArgumentAxis) {
         const chart = this;
         return function(axis, visualRange) {
+            if(axis.getOptions().optionPath) {
+                chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", visualRange);
+            }
 
             if(axis.isArgumentAxis) {
                 if(chart._argumentAxes.filter(a => a === axis)[0] !== chart._argumentAxes[chart._displayedArgumentAxisIndex]) {
@@ -1269,15 +1276,17 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _optionChanged: function(arg) {
-        if(arg.fullName.indexOf("visualRange") && !this._optionChangedLocker) {
+        if(!this._optionChangedLocker) {
             this._parseVisualRangeOption(arg.fullName, arg.value);
-            let axisPath;
-            if(arg.fullName) {
-                axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
-            }
-            const axis = this._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
-            if(axis) {
-                axis.visualRange(arg.value);
+            if(arg.fullName.indexOf("visualRange") > 0) {
+                let axisPath;
+                if(arg.fullName) {
+                    axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
+                }
+                const axis = this._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
+                if(axis) {
+                    axis.visualRange(arg.value);
+                }
             }
         }
         this.callBase(arg);
