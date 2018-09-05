@@ -363,11 +363,8 @@ var ResizingController = modules.ViewController.inherit({
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth < contentWidth) {
-                lastColumnIndex = resultWidths.length - 1;
-                var hasResizableColumns = visibleColumns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
-                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed || (hasResizableColumns && visibleColumns[lastColumnIndex].allowResizing === false))) {
-                    lastColumnIndex--;
-                }
+                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
+
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = "auto";
                     isColumnWidthsCorrected = true;
