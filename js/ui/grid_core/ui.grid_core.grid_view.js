@@ -257,7 +257,7 @@ var ResizingController = modules.ViewController.inherit({
 
             each(visibleColumns, function(index) {
                 if(this.width !== "auto") {
-                    if(this.width) {
+                    if(typeUtils.isDefined(this.width)) {
                         resultWidths[index] = this.width;
                     } else if(!columnAutoWidth) {
                         resultWidths[index] = undefined;
@@ -344,7 +344,7 @@ var ResizingController = modules.ViewController.inherit({
                 isColumnWidthsCorrected = true;
                 i = -1;
             }
-            if(!column.width) {
+            if(!typeUtils.isDefined(column.width)) {
                 hasAutoWidth = true;
             }
             if(isPercentWidth(column.width)) {
