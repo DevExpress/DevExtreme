@@ -661,12 +661,18 @@ var Slider = TrackBar.inherit({
                 this.callBase(args);
         }
     },
+
     _refresh: function() {
         this._toggleRTLDirection(this.option("rtlEnabled"));
         this._renderDimensions();
         this._renderValue();
         this._renderHandle();
         this._repaintHandle();
+    },
+
+    _clean: function() {
+        delete this._inkRipple;
+        this.callBase();
     }
 });
 
