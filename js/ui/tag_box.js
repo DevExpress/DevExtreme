@@ -807,19 +807,29 @@ var TagBox = SelectBox.inherit({
     },
 
     _createTagData: function(values, filteredItems) {
-        var items = [];
+        var items = [],
+            cache = {};
 
         each(values, function(valueIndex, value) {
             var item = filteredItems[valueIndex];
 
-            if(isDefined(item)) {
+            if(!isDefined(item) && this._valueGetterExpr() === "this") {
+                this._loadItem(value, cache).always((function(item) {
+                    var valueIndex = values.indexOf(value);
+
+                    if(isDefined(item)) {
+                        this._selectedItems.push(item);
+                        items.splice(valueIndex, 0, item);
+                    } else {
+                        var selectedItem = this.option("selectedItem"),
+                            customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
+
+                        items.splice(valueIndex, 0, customItem);
+                    }
+                }).bind(this));
+            } else {
                 this._selectedItems.push(item);
                 items.splice(valueIndex, 0, item);
-            } else {
-                var selectedItem = this.option("selectedItem"),
-                    customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
-
-                items.splice(valueIndex, 0, customItem);
             }
         }.bind(this));
 
