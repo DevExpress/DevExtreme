@@ -1307,6 +1307,42 @@ QUnit.testStart(function() {
 
 (function() {
 
+    QUnit.module("Work Space Month with grouping by date", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                currentDate: new Date(2018, 2, 1),
+                groupByDate: true,
+                showCurrentTimeIndicator: false
+            }).dxSchedulerWorkSpaceMonth("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Work space should find cell coordinates by date, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4), 1, false);
+
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(7).position().top, 1.1, "Top cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(7).position().left, 1.1, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 21), 0, false);
+
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, 1.1, "Top cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, 1.1, "Left cell coordinates are right");
+    });
+})("Work Space Month with grouping by date");
+
+(function() {
+
     QUnit.module("Work Space Month with horizontal grouping", {
         beforeEach: function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
