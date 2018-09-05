@@ -35,6 +35,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
+    WORKSPACE_WITH_GROUP_BY_DATE_CLASS = "dx-scheduler-work-space-group-by-date",
     WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
@@ -468,6 +469,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._toggleWorkSpaceCountClass();
                 this._toggleFixedScrollableClass();
                 break;
+            case "groupByDate":
+                this._cleanWorkSpace();
+                this._toggleGroupByDateClass();
+                break;
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
@@ -496,8 +501,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this.callBase();
 
         this._initGrouping();
+
         this._toggleHorizontalScrollClass();
         this._toggleWorkSpaceCountClass();
+        this._toggleGroupByDateClass();
         this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
 
@@ -529,6 +536,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _toggleHorizontalScrollClass: function() {
         this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
+    },
+
+    _toggleGroupByDateClass: function() {
+        this.$element().toggleClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS, this.option("groupByDate"));
     },
 
     _toggleWorkSpaceCountClass: function() {
