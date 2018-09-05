@@ -202,8 +202,8 @@ var ExcelCreator = Class.inherit({
                     valueType: cellData.type,
                     style: that._styleArray[cellStyleId],
                 };
-                if(dataProvider.customizeCell) {
-                    dataProvider.customizeCell({
+                if(dataProvider.customizeXlsxCell) {
+                    dataProvider.customizeXlsxCell({
                         // TODO: this object should provide enough members to customize XLSX cell (include 'xlsxFile: this._xlsxFile' ?),
                         // we need a separate test for each target scenario
                         xlsxCell, rowIndex, cellIndex });

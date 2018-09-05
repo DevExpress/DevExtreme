@@ -95,7 +95,7 @@ exports.ExportMixin = extend({}, exportMixin, {
             items: items,
             rtlEnabled: this.option("rtlEnabled"),
             dataFields: this.getDataSource().getAreaFields("data"),
-            customizeCell: this.option("export.customizeCell")
+            customizeXlsxCell: this.option("export.customizeXlsxCell")
         });
     }
 });
@@ -228,9 +228,9 @@ exports.DataProvider = Class.inherit({
     },
 
     // XtraPrinting: public static bool RaiseCustomizeCellEvent
-    customizeCell: function({ xlsxCell, rowIndex, cellIndex }) { // TODO: rename to 'customizeXlsxCell' - the 'Cell' word is already used to represent a DataGrid element in API of this class (see getCellValue)
-        if(this._options.customizeCell) {
-            this._options.customizeCell(
+    customizeXlsxCell: function({ xlsxCell, rowIndex, cellIndex }) { // TODO: rename to 'customizeXlsxCell' - the 'Cell' word is already used to represent a DataGrid element in API of this class (see getCellValue)
+        if(this._options.customizeXlsxCell) {
+            this._options.customizeXlsxCell(
                 {  // XtraPrinting: public class CustomizeCellEventArgs : CustomizeCellEventArgsBase {
                     xlsxCell,
                     pivotGridElement: { // TODO: rename? This is 'some PivotGrid element that will be represented by the created Xlsx cell'

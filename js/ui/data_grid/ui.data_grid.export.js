@@ -63,14 +63,14 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            customizeCell: exportController.option("export.customizeCell"),
+            customizeXlsxCell: exportController.option("export.customizeXlsxCell"),
         };
     },
 
     // XtraPrinting: public static bool RaiseCustomizeCellEvent
-    customizeCell: function({ xlsxCell, rowIndex, cellIndex }) { // TODO: rename to 'customizeXlsxCell' - the 'Cell' word is already used to represent a PivotGrid element in API of this class (see getCellValue)
-        if(this._options.customizeCell) {
-            this._options.customizeCell(
+    customizeXlsxCell: function({ xlsxCell, rowIndex, cellIndex }) {
+        if(this._options.customizeXlsxCell) {
+            this._options.customizeXlsxCell(
                 {  // XtraPrinting: public class CustomizeCellEventArgs : CustomizeCellEventArgsBase {
                     xlsxCell,
                     dataGridElement: { // TODO: rename? This is 'some DataGrid element that will be represented by the created Xlsx cell'

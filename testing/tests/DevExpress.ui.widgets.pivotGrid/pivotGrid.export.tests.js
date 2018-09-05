@@ -295,7 +295,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
     );
 });
 
-QUnit.test("customizeCell - check args in the 'Rows: [string], Columns: [string], Data: sum(number)' configuration", function(assert) {
+QUnit.test("customizeXlsxCell - check args in the 'Rows: [string], Columns: [string], Data: sum(number)' configuration", function(assert) {
     const done = assert.async();
     const options = {
         columns: ["field1", "field2"],
@@ -311,7 +311,7 @@ QUnit.test("customizeCell - check args in the 'Rows: [string], Columns: [string]
         },
         loadingTimeout: undefined,
         export: {
-            customizeCell: args =>
+            customizeXlsxCell: args =>
                 assert.step(`pge_value: ${args.pivotGridElement.value}, ` +
                     `x_value: ${args.xlsxCell.value}, x_valueType: ${args.xlsxCell.valueType}, x_style: ${args.xlsxCell.style}`)
         },

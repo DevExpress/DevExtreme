@@ -1014,14 +1014,14 @@ QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
     );
 });
 
-QUnit.test("customizeCell - check args in the 'two string columns and two rows with header' configuration", function(assert) {
+QUnit.test("customizeXlsxCell - check args in the 'two string columns and two rows with header' configuration", function(assert) {
     const done = assert.async();
     const gridOptions = {
         columns: ["field1", "field2"],
         dataSource: [{ field1: '0_0', field2: '0_1' }, { field1: '1_0', field2: '1_1' }],
         loadingTimeout: undefined,
         export: {
-            customizeCell: args =>
+            customizeXlsxCell: args =>
                 assert.step(`dge_value: ${args.dataGridElement.value}, ` +
                     `x_value: ${args.xlsxCell.value}, x_valueType: ${args.xlsxCell.valueType}, x_style: ${args.xlsxCell.style}`)
         }
@@ -1046,7 +1046,7 @@ QUnit.test("customizeCell - check args in the 'two string columns and two rows w
     dataGrid.exportToExcel();
 });
 
-QUnit.test("customizeCell - set alignment: null for all xlsx cells", function(assert) {
+QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
@@ -1081,7 +1081,7 @@ QUnit.test("customizeCell - set alignment: null for all xlsx cells", function(as
             columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 'str1_1' }],
             export: {
-                customizeCell: (args) => {
+                customizeXlsxCell: (args) => {
                     Object.assign(args.xlsxCell.style, {
                         alignment: null
                     });
