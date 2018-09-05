@@ -1440,17 +1440,16 @@ var FileUploadStrategyBase = Class.inherit({
             file.loadedSize = loadedSize;
 
             this.fileUploader._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
-            this.fileUploader._updateProgressBar(file, {
-                loaded: loadedSize,
-                total: e.total,
-                currentSegmentSize: segmentSize,
-                event: this._getEvent(e)
-            });
+            this.fileUploader._updateProgressBar(file, this._getLoadedData(loadedSize, e.total, segmentSize, e));
         }
     },
 
-    _getEvent: function(e) {
-        return e;
+    _getLoadedData: function(loaded, total, currentSegmentSize, event) {
+        return {
+            loaded: loaded,
+            total: total,
+            currentSegmentSize: currentSegmentSize
+        };
     }
 });
 var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
@@ -1609,6 +1608,12 @@ var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
         var formData = new window.FormData();
         formData.append(fieldName, fieldValue);
         return formData;
+    },
+
+    _getLoadedData: function(loaded, total, segmentSize, event) {
+        var result = this.callBase(loaded, total, segmentSize, event);
+        result.event = event;
+        return result;
     }
 });
 
