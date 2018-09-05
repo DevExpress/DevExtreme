@@ -806,45 +806,35 @@ var TagBox = SelectBox.inherit({
 
     },
 
-    _createTagData: function(values, filteredItems) {
+    _createTagsData: function(values, filteredItems) {
         var items = [],
             cache = {};
 
         each(values, function(valueIndex, value) {
             var item = filteredItems[valueIndex];
 
-            if(!isDefined(item)) {
-                if(this._valueGetterExpr() === "this") {
-                    this._loadItem(value, cache).always((function(item) {
-                        var valueIndex = values.indexOf(value);
-
-                        if(isDefined(item)) {
-                            this._addItem(items, item, valueIndex);
-                        } else {
-                            this._addCustomItem(items, item, value, valueIndex);
-                        }
-                    }).bind(this));
-                } else {
-                    this._addCustomItem(items, item, value, valueIndex);
-                }
+            if(this._valueGetterExpr() === "this" && !isDefined(item)) {
+                this._loadItem(value, cache).always((function(item) {
+                    this._createTagData(items, item, value, valueIndex);
+                }).bind(this));
             } else {
-                this._addItem(items, item, valueIndex);
+                this._createTagData(items, item, value, valueIndex);
             }
         }.bind(this));
 
         return items;
     },
 
-    _addItem: function(items, item, valueIndex) {
-        this._selectedItems.push(item);
-        items.splice(valueIndex, 0, item);
-    },
+    _createTagData: function(items, item, value, valueIndex) {
+        if(isDefined(item)) {
+            this._selectedItems.push(item);
+            items.splice(valueIndex, 0, item);
+        } else {
+            var selectedItem = this.option("selectedItem"),
+                customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
-    _addCustomItem: function(items, item, value, valueIndex) {
-        var selectedItem = this.option("selectedItem"),
-            customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
-
-        items.splice(valueIndex, 0, customItem);
+            items.splice(valueIndex, 0, customItem);
+        }
     },
 
     _loadTagData: function() {
@@ -855,7 +845,7 @@ var TagBox = SelectBox.inherit({
 
         this._getFilteredItems(values)
             .done(function(filteredItems) {
-                var items = this._createTagData(values, filteredItems);
+                var items = this._createTagsData(values, filteredItems);
                 tagData.resolve(items);
             }.bind(this))
             .fail(tagData.reject.bind(this));
