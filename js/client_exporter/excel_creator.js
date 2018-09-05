@@ -8,6 +8,7 @@ var Class = require("../core/class"),
     JSZip = require("jszip"),
     fileSaver = require("./file_saver"),
     excelFormatConverter = require("./excel_format_converter"),
+    XlsxFile = require("./xlsx/xlsx_file"),
     XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
     GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
     SINGLE_SHEET_PR_XML = "<sheetPr/>",
@@ -198,9 +199,21 @@ var ExcelCreator = Class.inherit({
 
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
+                let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
+                const cellFormat = that._styleArray[cellStyleId];
+                if(dataProvider.customizeCell) {
+                    dataProvider.customizeCell({
+                        xlsxCell: { style: cellFormat },
+                        gridCell: {
+                            rowIndex,
+                            columnIndex: cellIndex
+                        }
+                    });
+                }
+                cellStyleId = this._xlsxFile.registerCellFormat(cellFormat);
 
                 cellsArray.push({
-                    style: dataProvider.getStyleId(rowIndex, cellIndex),
+                    style: cellStyleId,
                     value: cellData.value,
                     type: cellData.type
                 });
@@ -239,13 +252,18 @@ var ExcelCreator = Class.inherit({
         });
 
         styles.forEach(function(style) {
+            const formatID = that._appendFormat(style.format, style.dataType);
             that._styleArray.push({
-                bold: !!style.bold,
-                alignment: style.alignment || "left",
-                formatID: that._appendFormat(style.format, style.dataType),
-                wrapText: style.wrapText
+                fontId: Number(!!style.bold),
+                numberFormatId: typeUtils.isDefined(formatID) ? Number(formatID) + CUSTOM_FORMAT_START_INDEX - 1 : 0,
+                alignment: {
+                    vertical: "top",
+                    wrapText: Number(!!style.wrapText),
+                    horizontal: style.alignment || "left"
+                }
             });
         });
+        that._styleArray.forEach(item => this._xlsxFile.registerCellFormat(item));
     },
 
     _prepareCellData: function() {
@@ -294,7 +312,6 @@ var ExcelCreator = Class.inherit({
     _generateStylesXML: function() {
         var that = this,
             folder = that._zip.folder(XL_FOLDER_NAME),
-            xmlStyles = [],
             formatIndex,
             XML = "";
 
@@ -307,24 +324,8 @@ var ExcelCreator = Class.inherit({
 
         XML = XML + that._getXMLTag("numFmts", [{ name: "count", value: that._styleFormat.length }], that._styleFormat.join("")) + BASE_STYLE_XML;
 
-        this._styleArray.forEach(function(style) {
-            xmlStyles.push(that._getXMLTag("xf", [
-                { name: "xfId", value: 0 },
-                { name: "applyAlignment", value: 1 },
-                { name: "fontId", value: Number(!!style.bold) },
-                { name: "applyNumberFormat", value: (typeUtils.isDefined(style.formatID)) ? 1 : 0 },
-                {
-                    name: "numFmtId",
-                    value: typeUtils.isDefined(style.formatID) ? Number(style.formatID) + CUSTOM_FORMAT_START_INDEX - 1 : 0
-                }
-            ], that._getXMLTag("alignment", [
-                { name: "vertical", value: "top" },
-                { name: "wrapText", value: Number(!!style.wrapText) },
-                { name: "horizontal", value: style.alignment }
-            ])));
-        });
+        XML = XML + this._xlsxFile.generateCellFormatsXmlString();
 
-        XML = XML + that._getXMLTag("cellXfs", [{ name: "count", value: xmlStyles.length }], xmlStyles.join(""));
         XML = XML + that._getXMLTag("cellStyles", [{ name: "count", value: 1 }], that._getXMLTag("cellStyle", [
             { name: "name", value: "Normal" },
             { name: "xfId", value: 0 },
@@ -549,6 +550,7 @@ var ExcelCreator = Class.inherit({
         this._styleFormat = [];
         this._needSheetPr = false;
         this._dataProvider = dataProvider;
+        this._xlsxFile = new XlsxFile();
 
         if(typeUtils.isDefined(ExcelCreator.JSZip)) {
             this._zip = new ExcelCreator.JSZip();

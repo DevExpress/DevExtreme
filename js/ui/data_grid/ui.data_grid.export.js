@@ -63,7 +63,20 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
+            customizeCell: exportController.option("export.customizeCell"),
         };
+    },
+
+    // XtraPrinting: public static bool RaiseCustomizeCellEvent
+    customizeCell: function({ xlsxCell, gridCell }) {
+        if(this._options.customizeCell) {
+            this._options.customizeCell(
+                {  // XtraPrinting: public class CustomizeCellEventArgs : CustomizeCellEventArgsBase {
+                    xlsxCell,
+                    gridCell // TODO: gridCell object should provide enough info to process header, summary, group, group summary cells individually
+                }
+            );
+        }
     },
 
     ctor: function(exportController) {
