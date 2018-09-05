@@ -607,8 +607,8 @@ var FileUploader = Editor.inherit({
         file.isValidMaxSize = this._validateMaxFileSize(file);
     },
     _validateFileExtension: function(file) {
-        var allowedExtensions = this.option("allowedFileExtensions");
-        var fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
+        var allowedExtensions = this.option("allowedFileExtensions"),
+            fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
         if(allowedExtensions.length === 0) {
             return true;
         }
@@ -620,13 +620,13 @@ var FileUploader = Editor.inherit({
         return false;
     },
     _validateMaxFileSize: function(file) {
-        var fileSize = file.value.size;
-        var maxFileSize = this.option("maxFileSize");
+        var fileSize = file.value.size,
+            maxFileSize = this.option("maxFileSize");
         return maxFileSize > 0 ? fileSize <= maxFileSize : true;
     },
     _validateMinFileSize: function(file) {
-        var fileSize = file.value.size;
-        var minFileSize = this.option("minFileSize");
+        var fileSize = file.value.size,
+            minFileSize = this.option("minFileSize");
         return minFileSize > 0 ? fileSize >= minFileSize : true;
     },
 
@@ -1538,9 +1538,9 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
     },
 
     _createChunkArray: function(file) {
-        var blobPosition = 0;
-        var chunkIndex = 0;
-        var result = [];
+        var blobPosition = 0,
+            chunkIndex = 0,
+            result = [];
         while(blobPosition <= file.size) {
             result.push({
                 blob: this._sliceFile(file, blobPosition, this.chunkSize),
