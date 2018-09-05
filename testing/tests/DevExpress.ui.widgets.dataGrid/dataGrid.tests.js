@@ -10704,6 +10704,48 @@ QUnit.test("column with width auto should have minimum size by content", functio
     assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
 });
 
+QUnit.test("column with width 0 should be applied", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            dataField: "field3",
+            width: 0
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0).offsetWidth, 100, "first column width");
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).get(0).offsetWidth, 0, "last column width");
+});
+
+QUnit.test("column with width 0 should be ignored if all column widths are defined", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1",
+            width: 50
+        }, {
+            dataField: "field2",
+            width: 50
+        }, {
+            dataField: "field3",
+            width: 0
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0).offsetWidth, 50, "first column width");
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).get(0).offsetWidth, 100, "last column width");
+});
+
 QUnit.test("SelectAll when allowSelectAll is default", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
