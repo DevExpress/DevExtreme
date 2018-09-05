@@ -11,7 +11,6 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     dataQuery = require("data/query"),
     isRenderer = require("core/utils/type").isRenderer,
-    noop = require("core/utils/common").noop,
     errors = require("core/errors"),
     config = require("core/config");
 
@@ -4625,8 +4624,7 @@ QUnit.test("initial items value should be loaded and selected when valueExpr = t
         $tagBox = $("#tagBox").dxTagBox({
             dataSource: {
                 load: load,
-                key: "id",
-                byKey: noop
+                key: "id"
             },
             value: [{ id: 2, text: "item 2" }],
             valueExpr: "this",
