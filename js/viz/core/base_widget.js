@@ -160,6 +160,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
+        that._optionChangedLocker = 0;
         that._changes = helpers.changes();
         that._suspendChanges();
         that._themeManager = that._createThemeManager();
@@ -224,6 +225,9 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             if(that._optionsQueue) {
                 that._applyQueuedOptions();
             }
+            that._optionChangedLocker++;
+            that._notify();
+            that._optionChangedLocker--;
         }
     },
 
@@ -490,15 +494,27 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _render: noop,
 
     _optionChanged: function(arg) {
-        var that = this;
+        const that = this;
+        if(that._optionChangedLocker) {
+            return;
+        }
+        let partialChange;
+        if(arg.fullName) {
+            partialChange = arg.fullName.slice(arg.fullName.indexOf(".") + 1, arg.fullName.length);
+        }
+
+        const change = that._optionChangesMap[partialChange] || that._optionChangesMap[arg.name];
+
         if(that._eventTrigger.change(arg.name)) {
             that._change(["EVENTS"]);
-        } else if(that._optionChangesMap[arg.name]) {
-            that._change([that._optionChangesMap[arg.name]]);
+        } else if(change) {
+            that._change([change]);
         } else {
             that.callBase.apply(that, arguments);
         }
     },
+
+    _notify: noop,
 
     _optionChangesMap: {
         size: "CONTAINER_SIZE",

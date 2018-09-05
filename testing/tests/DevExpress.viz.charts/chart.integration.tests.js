@@ -313,7 +313,7 @@ QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)"
     visualRangeChanged.reset();
     chart.getValueAxis().visualRange([3, 6]);
 
-    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { startValue: 3, endValue: 6 });
+    assert.deepEqual(visualRangeChanged.lastCall.args[0].value, { startValue: 3, endValue: 6 });
     assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 6 });
 });
 

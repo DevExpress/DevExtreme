@@ -83,7 +83,8 @@ var AdvancedChart = BaseChart.inherit({
         const panes = that.panes;
         const rotated = that._isRotated();
         const argumentAxesOptions = prepareAxis(that.option("argumentAxis") || {})[0];
-        const valueAxesOptions = prepareAxis(that.option("valueAxis") || {});
+        const valueAxisOption = that.option("valueAxis");
+        const valueAxesOptions = prepareAxis(valueAxisOption || {});
         let argumentAxesPopulatedOptions = [];
         let valueAxesPopulatedOptions = [];
         const axisNames = [];
@@ -107,6 +108,7 @@ var AdvancedChart = BaseChart.inherit({
                 {
                     pane: pane.name,
                     name: null,
+                    optionPath: "argumentAxis",
                     crosshairMargin: rotated ? crosshairMargins.x : crosshairMargins.y
                 },
                 rotated, virtual);
@@ -133,11 +135,16 @@ var AdvancedChart = BaseChart.inherit({
                 axisPanes.push(undefined);
             }
 
-            _each(axisPanes, (_, pane) => {
+            _each(axisPanes, (paneIndex, pane) => {
+                let optionPath = _isArray(valueAxisOption) ? `valueAxis[${priority}]` : "valueAxis";
+                if(paneIndex) {
+                    optionPath = null;
+                }
                 valueAxesPopulatedOptions.push(that._populateAxesOptions("valueAxis", axisOptions, {
                     name: name || getNextAxisName(),
-                    pane: pane,
-                    priority: priority,
+                    pane,
+                    priority,
+                    optionPath,
                     crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
                 }, rotated));
             });

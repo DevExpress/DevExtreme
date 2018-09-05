@@ -1130,10 +1130,10 @@ var dxChart = AdvancedChart.inherit({
         return this._getOption("crosshair");
     },
 
-    _notifyOptionChanged(option, value, previousValue) {
-        this.callBase.apply(this, arguments);
-        this._parseVisualRangeOption(option, value);
-    },
+    // _notifyOptionChanged(option, value, previousValue) {
+    //     this.callBase.apply(this, arguments);
+    //     this._parseVisualRangeOption(option, value);
+    // },
 
     _parseVisualRangeOption(fullName, value) {
         const that = this;
@@ -1194,19 +1194,7 @@ var dxChart = AdvancedChart.inherit({
                 chart._argumentAxes.filter(a => a !== axis).forEach(a => a.visualRange(visualRange));
             }
 
-            chart._recreateSizeDependentObjects(false);
-            chart._doRender({
-                force: true,
-                drawTitle: false,
-                drawLegend: false,
-                adjustAxes: !isArgumentAxis,
-                animate: false
-            });
-
-            chart._triggerVisualRangeOptionChange(axis, isArgumentAxis, false);
-            if(isArgumentAxis && chart._themeManager.getOptions("adjustOnZoom")) {
-                chart._triggerVisualRangeOptionChange(null, false, true);
-            }
+            chart._requestChange(["VISUAL_RANGE"]);
         };
     },
 
@@ -1246,10 +1234,13 @@ var dxChart = AdvancedChart.inherit({
         const that = this;
         const axisType = isArgumentAxis ? "argumentAxis" : "valueAxis";
         const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + ".visualRange";
+        visualRange = vizUtils.getVizRangeObject(visualRange);
         const previousVisualRange = that.option(optionFullName);
+        const optionValue = vizUtils.convertVisualRangeObject(visualRange, !_isArray(previousVisualRange));
 
-        if(!_isDefined(previousVisualRange) || JSON.stringify(visualRange) !== JSON.stringify(previousVisualRange)) {
-            that._simulateOptionChange(optionFullName, vizUtils.convertVisualRangeObject(visualRange, !_isArray(previousVisualRange)), previousVisualRange);
+        if(!_isDefined(previousVisualRange) || JSON.stringify(optionValue) !== JSON.stringify(previousVisualRange)) {
+            this.option(optionFullName, optionValue);
+            // that._simulateOptionChange(optionFullName, vizUtils.convertVisualRangeObject(visualRange, !_isArray(previousVisualRange)), previousVisualRange);
         }
     },
 
@@ -1264,8 +1255,52 @@ var dxChart = AdvancedChart.inherit({
             minVisible: isDiscrete ? (range.minVisible || categories[0]) : range.minVisible,
             maxVisible: isDiscrete ? (range.maxVisible || categories[categories.length - 1]) : range.maxVisible
         };
+    },
+
+    _change_VISUAL_RANGE: function() {
+        this._recreateSizeDependentObjects(false);
+        this._doRender({
+            force: true,
+            drawTitle: false,
+            drawLegend: false,
+            adjustAxes: false,
+            animate: false
+        });
+    },
+
+    _optionChanged: function(arg) {
+        if(arg.fullName.indexOf("visualRange") && !this._optionChangedLocker) {
+            this._parseVisualRangeOption(arg.fullName, arg.value);
+            let axisPath;
+            if(arg.fullName) {
+                axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
+            }
+            const axis = this._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
+            if(axis) {
+                axis.visualRange(arg.value);
+            }
+        }
+        this.callBase(arg);
+    },
+
+    _notify() {
+        const that = this;
+        const argumentVisualRange =
+            vizUtils.convertVisualRangeObject(this._argumentAxes[0].visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
+
+        that.option("argumentAxis.visualRange", argumentVisualRange);
+        that._valueAxes.forEach(axis => {
+            if(axis.getOptions().optionPath) {
+                const path = `${axis.getOptions().optionPath}.visualRange`;
+                const visualRange = vizUtils.convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
+
+                that.option(path, visualRange);
+            }
+        });
     }
 });
+
+dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 
