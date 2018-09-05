@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),
     commonUtils = require("../../core/utils/common"),
+    isPromise = require("../../core/utils/type").isPromise,
     virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     each = require("../../core/utils/iterator").each,
@@ -695,8 +696,12 @@ module.exports = {
             data: (function() {
                 var members = {
                     _refreshDataSource: function() {
-                        this.callBase.apply(this, arguments);
-                        this.initVirtualRows();
+                        var baseResult = this.callBase.apply(this, arguments);
+                        if(isPromise(baseResult)) {
+                            baseResult.then(this.initVirtualRows.bind(this));
+                        } else {
+                            this.initVirtualRows();
+                        }
                     },
                     getRowPageSize: function() {
                         var rowPageSize = this.option("scrolling.rowPageSize"),
