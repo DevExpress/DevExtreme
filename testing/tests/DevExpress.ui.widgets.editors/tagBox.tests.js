@@ -4622,6 +4622,26 @@ QUnit.test("initial items value should be loaded when filter is not implemented 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2item 3");
 });
 
+QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key is used (T662546)", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }, { id: 3, text: "item 3" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load,
+                key: "id",
+                byKey: noop
+            },
+            value: [{ id: 2, text: "item 2" }],
+            valueExpr: "this",
+            displayExpr: "text",
+            opened: true
+        });
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2");
+
+    var list = $tagBox.dxTagBox("instance")._$list.dxList("instance");
+    assert.deepEqual(list.option("selectedItems"), [{ id: 2, text: "item 2" }]);
+});
+
 QUnit.test("useSubmitBehavior option", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2],
