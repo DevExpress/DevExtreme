@@ -256,7 +256,13 @@ QUnit.test("formatArray unique appending", function(assert) {
     assert.ok(exportMocks.checkUniqueValue(this.excelCreator._styleFormat));
 });
 
-QUnit.test("styleArray generating", function(assert) {
+QUnit.test("Cell formats generating by the 'getStyles' function result", function(assert) {
+    const expectedCellFormatsXml = '<cellXfs count="4">' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>';
     // act
     this.dataProvider.getStyles.returns([
         { alignment: "center", bold: true, wrapText: true },
@@ -266,14 +272,8 @@ QUnit.test("styleArray generating", function(assert) {
     ]);
     this.excelCreator._prepareStyleData();
 
-    var styles = this.excelCreator._styleArray;
-
-    // assert
-    assert.equal(styles.length, 4, "styles count");
-    assert.deepEqual(styles[0], { alignment: "center", bold: true, wrapText: true, formatID: undefined }, "style 1");
-    assert.deepEqual(styles[1], { alignment: "left", bold: false, wrapText: false, formatID: 1 }, "style 2");
-    assert.deepEqual(styles[2], { alignment: "right", bold: false, wrapText: false, formatID: 1 }, "style 3");
-    assert.deepEqual(styles[3], { alignment: "left", bold: false, wrapText: undefined, formatID: 2 }, "style 4");
+    const cellFormatsXml = this.excelCreator._xlsxFile.generateCellFormatsXmlString();
+    assert.equal(cellFormatsXml, expectedCellFormatsXml);
 });
 
 QUnit.test("stringArray generating", function(assert) {
