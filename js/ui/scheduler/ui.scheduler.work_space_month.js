@@ -233,20 +233,6 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         };
     },
 
-
-    getCoordinatesByDates: function(startDate, endDate) {
-        var result = [],
-            date = new Date(startDate);
-
-        while(date <= endDate) {
-            result.push(this.getCoordinatesByDate(date));
-            date.setDate(date.getDate() + 7);
-            date = dateUtils.getFirstWeekDate(date, this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex());
-        }
-
-        return result;
-    },
-
     getCellCountToLastViewDate: function(date) {
         var firstDateTime = date.getTime(),
             lastDateTime = this.getEndViewDate().getTime(),
