@@ -1367,14 +1367,17 @@ var FileUploadStrategyBase = Class.inherit({
     ctor: function(fileUploader) {
         this.fileUploader = fileUploader;
     },
+
     upload: function(file) {
         if(file.isValid() && !file.uploadStarted) {
             this._prepareFileBeforeUpload(file);
             this._uploadCore(file);
         }
     },
+
     _uploadCore: function(file) {
     },
+
     _prepareFileBeforeUpload: function(file) {
         if(file.$file) {
             this.fileUploader._createFileProgressBar(file);
@@ -1386,6 +1389,7 @@ var FileUploadStrategyBase = Class.inherit({
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
     },
+
     _isStatusError: function(status) {
         return 400 <= status && status < 500 || 500 <= status && status < 600;
     },
@@ -1399,6 +1403,7 @@ var FileUploadStrategyBase = Class.inherit({
             request: file.request
         });
     },
+
     _onAbortHandler: function(file, e) {
         this.fileUploader._uploadAbortedAction({
             file: file.value,
@@ -1406,6 +1411,7 @@ var FileUploadStrategyBase = Class.inherit({
             request: file.request
         });
     },
+
     _onErrorHandler: function(file, e) {
         this.fileUploader._setStatusMessage(file, "uploadFailedMessage");
         this.fileUploader._uploadErrorAction({
@@ -1414,6 +1420,7 @@ var FileUploadStrategyBase = Class.inherit({
             request: file.request
         });
     },
+
     _onLoadedHandler: function(file, e) {
         this.fileUploader._setStatusMessage(file, "uploadedMessage");
         this.fileUploader._uploadedAction({
@@ -1422,6 +1429,7 @@ var FileUploadStrategyBase = Class.inherit({
             request: file.request
         });
     },
+
     _onProgressHandler: function(file, e) {
         if(file) {
             var totalFilesSize = this.fileUploader._getTotalFilesSize();
@@ -1440,6 +1448,7 @@ var FileUploadStrategyBase = Class.inherit({
             });
         }
     },
+
     _getEvent: function(e) {
         return e;
     }
@@ -1462,6 +1471,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
             count: Math.ceil(realFile.size / this.chunkSize)
         });
     },
+
     _sendChunk: function(file, chunksData) {
         var chunk = chunksData.chunks.shift();
         if(chunk) {
@@ -1510,6 +1520,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
             }.bind(this));
         }
     },
+
     _createFormData: function(fileName, blobName, blob, index, count, type, guid, size) {
         var formData = new window.FormData();
         formData.append(blobName, blob);
@@ -1523,6 +1534,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
         }));
         return formData;
     },
+
     _createChunkArray: function(file) {
         var blobPosition = 0;
         var chunkIndex = 0;
@@ -1537,6 +1549,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
         }
         return result;
     },
+
     _sliceFile: function(file, startPos, length) {
         if(file.slice) {
             return file.slice(startPos, startPos + length);
@@ -1546,6 +1559,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
         }
         return null;
     },
+
     _getEvent: function(e) {
         return null;
     }
@@ -1587,6 +1601,7 @@ var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
             }
         }.bind(this));
     },
+
     _createFormData: function(fieldName, fieldValue) {
         var formData = new window.FormData();
         formData.append(fieldName, fieldValue);
