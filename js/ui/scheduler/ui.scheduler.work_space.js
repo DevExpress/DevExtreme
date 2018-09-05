@@ -2196,14 +2196,15 @@ var SchedulerWorkSpace = Widget.inherit({
     getMaxAllowedPosition: function() {
         if(!this._maxAllowedPosition) {
             var isRtl = this.option("rtlEnabled"),
-                that = this;
+                that = this,
+                groupCount = this.option("groupByDate") ? this._getGroupCount() : 1;
 
             this._maxAllowedPosition = [];
 
             this._$dateTable
                 .find("tr")
                 .first()
-                .find("td:nth-child(" + this._getCellCount() + "n)")
+                .find("td:nth-child(" + this._getCellCount() * groupCount + "n)")
                 .each(function(_, cell) {
 
                     var maxPosition = $(cell).position().left;
