@@ -7,7 +7,8 @@ var $ = require("../../core/renderer"),
     addNamespace = eventUtils.addNamespace,
     registerComponent = require("../../core/component_registrator"),
     DOMComponent = require("../../core/dom_component"),
-    dragEvents = require("../../events/drag");
+    dragEvents = require("../../events/drag"),
+    getSwatchContainer = require("../widget/swatch_container");
 
 var SORTABLE_NAMESPACE = "dxSortable",
     SORTABLE_CLASS = "dx-sortable",
@@ -205,7 +206,7 @@ var Sortable = DOMComponent.inherit({
         this._$draggable && this._$draggable.remove();
 
         this._$draggable = this._renderItem($sourceItem, 'drag')
-            .addClass(this.option("dragClass")).appendTo("body")
+            .addClass(this.option("dragClass")).appendTo(getSwatchContainer($sourceItem))
             .css({
                 zIndex: 1000000,
                 position: "absolute"
