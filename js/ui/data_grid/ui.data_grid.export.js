@@ -68,12 +68,16 @@ exports.DataProvider = Class.inherit({
     },
 
     // XtraPrinting: public static bool RaiseCustomizeCellEvent
-    customizeCell: function({ xlsxCell, gridCell }) {
+    customizeCell: function({ xlsxCell, rowIndex, cellIndex }) { // TODO: rename to 'customizeXlsxCell' - the 'Cell' word is already used to represent a PivotGrid element in API of this class (see getCellValue)
         if(this._options.customizeCell) {
             this._options.customizeCell(
                 {  // XtraPrinting: public class CustomizeCellEventArgs : CustomizeCellEventArgsBase {
                     xlsxCell,
-                    gridCell // TODO: gridCell object should provide enough info to process header, summary, group, group summary cells individually
+                    dataGridElement: { // TODO: rename? This is 'some DataGrid element that will be represented by the created Xlsx cell'
+                        // TODO: this object should provide enough info about a DataGrid element that will be represented by the created XLSX cell,
+                        // we need a separate test for each target scenario
+                        value: this.getCellValue(rowIndex, cellIndex)
+                    }
                 }
             );
         }

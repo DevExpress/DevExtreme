@@ -294,3 +294,46 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
         { styles, worksheet, sharedStrings }
     );
 });
+
+QUnit.test("customizeCell - check args in the 'Rows: [string], Columns: [string], Data: sum(number)' configuration", function(assert) {
+    const done = assert.async();
+    const options = {
+        columns: ["field1", "field2"],
+        dataSource: {
+            fields: [
+                { dataField: 'row1', area: 'row' },
+                { dataField: 'col1', area: 'column' },
+                { summaryType: 'count', area: 'data' }
+            ],
+            store: [
+                { row1: 'row1', col1: 'col1' }
+            ]
+        },
+        loadingTimeout: undefined,
+        export: {
+            customizeCell: args =>
+                assert.step(`pge_value: ${args.pivotGridElement.value}, ` +
+                    `x_value: ${args.xlsxCell.value}, x_valueType: ${args.xlsxCell.valueType}, x_style: ${args.xlsxCell.style}`)
+        },
+        onFileSaving: e => {
+            assert.verifySteps(
+                [
+                    'pge_value: , x_value: undefined, x_valueType: s, x_style: [object Object]',
+                    'pge_value: col1, x_value: 0, x_valueType: s, x_style: [object Object]',
+                    'pge_value: Grand Total, x_value: 1, x_valueType: s, x_style: [object Object]',
+                    'pge_value: row1, x_value: 2, x_valueType: s, x_style: [object Object]',
+                    'pge_value: 1, x_value: 3, x_valueType: s, x_style: [object Object]',
+                    'pge_value: 1, x_value: 3, x_valueType: s, x_style: [object Object]',
+                    'pge_value: Grand Total, x_value: 1, x_valueType: s, x_style: [object Object]',
+                    'pge_value: 1, x_value: 3, x_valueType: s, x_style: [object Object]',
+                    'pge_value: 1, x_value: 3, x_valueType: s, x_style: [object Object]'
+                ]
+            );
+            done();
+            e.cancel = true;
+        }
+    };
+
+    const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');
+    pivot.exportToExcel();
+});

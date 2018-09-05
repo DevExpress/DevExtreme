@@ -197,22 +197,23 @@ var ExcelCreator = Class.inherit({
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
-                const cellFormat = that._styleArray[cellStyleId];
+                const xlsxCell = {
+                    value: cellData.value,
+                    valueType: cellData.type,
+                    style: that._styleArray[cellStyleId],
+                };
                 if(dataProvider.customizeCell) {
                     dataProvider.customizeCell({
-                        xlsxCell: { style: cellFormat },
-                        gridCell: {
-                            rowIndex,
-                            columnIndex: cellIndex
-                        }
-                    });
+                        // TODO: this object should provide enough members to customize XLSX cell (include 'xlsxFile: this._xlsxFile' ?),
+                        // we need a separate test for each target scenario
+                        xlsxCell, rowIndex, cellIndex });
                 }
-                cellStyleId = this._xlsxFile.registerCellFormat(cellFormat);
+                cellStyleId = this._xlsxFile.registerCellFormat(xlsxCell.style);
 
                 cellsArray.push({
-                    style: cellStyleId,
-                    value: cellData.value,
-                    type: cellData.type
+                    style: cellStyleId, // TODO: test it
+                    value: xlsxCell.value, // TODO: test it
+                    type: xlsxCell.valueType // TODO: test it
                 });
             }
 

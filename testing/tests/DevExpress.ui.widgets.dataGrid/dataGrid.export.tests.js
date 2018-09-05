@@ -1014,7 +1014,39 @@ QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
     );
 });
 
-QUnit.test("customizeCell - applyAlignment: false", function(assert) {
+QUnit.test("customizeCell - check args in the 'two string columns and two rows with header' configuration", function(assert) {
+    const done = assert.async();
+    const gridOptions = {
+        columns: ["field1", "field2"],
+        dataSource: [{ field1: '0_0', field2: '0_1' }, { field1: '1_0', field2: '1_1' }],
+        loadingTimeout: undefined,
+        export: {
+            customizeCell: args =>
+                assert.step(`dge_value: ${args.dataGridElement.value}, ` +
+                    `x_value: ${args.xlsxCell.value}, x_valueType: ${args.xlsxCell.valueType}, x_style: ${args.xlsxCell.style}`)
+        }
+    };
+    gridOptions.loadingTimeout = undefined;
+    gridOptions.onFileSaving = e => {
+        assert.verifySteps(
+            [
+                'dge_value: Field 1, x_value: 0, x_valueType: s, x_style: [object Object]',
+                'dge_value: Field 2, x_value: 1, x_valueType: s, x_style: [object Object]',
+                'dge_value: 0_0, x_value: 2, x_valueType: s, x_style: [object Object]',
+                'dge_value: 0_1, x_value: 3, x_valueType: s, x_style: [object Object]',
+                'dge_value: 1_0, x_value: 4, x_valueType: s, x_style: [object Object]',
+                'dge_value: 1_1, x_value: 5, x_valueType: s, x_style: [object Object]'
+            ]
+        );
+        done();
+        e.cancel = true;
+    };
+
+    const dataGrid = $("#dataGrid").dxDataGrid(gridOptions).dxDataGrid("instance");
+    dataGrid.exportToExcel();
+});
+
+QUnit.test("customizeCell - set alignment: null for all xlsx cells", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         internals.BASE_STYLE_XML +
