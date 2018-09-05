@@ -4581,8 +4581,7 @@ QUnit.test("load filter should be undefined when tagBox has a lot of initial val
 
     $("#tagBox").dxTagBox({
         dataSource: {
-            load: load,
-            byKey: noop
+            load: load
         },
         value: Array.apply(null, { length: 2000 }).map(Number.call, Number),
         valueExpr: "id",
@@ -4597,8 +4596,7 @@ QUnit.test("load filter should be array when tagBox has not a lot of initial val
 
     $("#tagBox").dxTagBox({
         dataSource: {
-            load: load,
-            byKey: noop
+            load: load
         },
         value: Array.apply(null, { length: 2 }).map(Number.call, Number),
         valueExpr: "id",

@@ -813,7 +813,7 @@ var TagBox = SelectBox.inherit({
         each(values, function(valueIndex, value) {
             var item = filteredItems[valueIndex];
 
-            if(!isDefined(item)) {
+            if(!isDefined(item) && this._valueGetterExpr() === "this") {
                 this._loadItem(value, cache).always((function(item) {
                     var valueIndex = values.indexOf(value);
 
