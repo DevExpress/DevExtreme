@@ -953,6 +953,51 @@ QUnit.testStart(function() {
     });
 })("Work Space Week");
 
+
+(function() {
+
+    QUnit.module("Work Space Week with grouping by date", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+                currentDate: new Date(2018, 2, 1),
+                groupByDate: true,
+                showCurrentTimeIndicator: false
+            }).dxSchedulerWorkSpaceWeek("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Get date range", function(assert) {
+        this.instance.option("intervalCount", 2);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 1, 25, 0, 0), new Date(2018, 2, 10, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 3);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 1, 25, 0, 0), new Date(2018, 2, 17, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("Work space should find cell coordinates by date, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+
+        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(63).position().top, "Top cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(63).position().left, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 7, 1, 0), 0, false);
+
+        assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, "Top cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, "Left cell coordinates are right");
+    });
+})("Work Space Week with grouping by date");
+
 (function() {
 
     QUnit.module("Work Space Work Week", {
