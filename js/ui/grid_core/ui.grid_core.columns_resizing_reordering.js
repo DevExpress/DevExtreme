@@ -785,6 +785,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         var deltaX,
             needUpdate = false,
             nextCellWidth,
+            resizingInfo = this._resizingInfo,
             columnsController = this._columnsController,
             visibleColumns = columnsController.getVisibleColumns(),
             columnsSeparatorWidth = this._columnsSeparatorView.width(),
@@ -813,18 +814,18 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             }
         }
 
-        deltaX = posX - this._resizingInfo.startPosX;
+        deltaX = posX - resizingInfo.startPosX;
         if(isNextColumnMode && this.option("rtlEnabled")) {
             deltaX = -deltaX;
         }
-        cellWidth = this._resizingInfo.currentColumnWidth + deltaX;
-        column = visibleColumns[this._resizingInfo.currentColumnIndex];
+        cellWidth = resizingInfo.currentColumnWidth + deltaX;
+        column = visibleColumns[resizingInfo.currentColumnIndex];
         minWidth = column && column.minWidth || columnsSeparatorWidth;
         needUpdate = cellWidth >= minWidth;
 
         if(isNextColumnMode) {
-            nextCellWidth = this._resizingInfo.nextColumnWidth - deltaX;
-            nextColumn = visibleColumns[this._resizingInfo.nextColumnIndex];
+            nextCellWidth = resizingInfo.nextColumnWidth - deltaX;
+            nextColumn = visibleColumns[resizingInfo.nextColumnIndex];
             minWidth = nextColumn && nextColumn.minWidth || columnsSeparatorWidth;
             needUpdate = needUpdate && nextCellWidth >= minWidth;
         }
@@ -840,6 +841,14 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                 setColumnWidth(nextColumn, nextCellWidth, contentWidth, adaptColumnWidthByRatio);
             } else {
                 var columnWidths = this._columnHeadersView.getColumnWidths();
+                columnWidths[resizingInfo.currentColumnIndex] = cellWidth;
+                var hasScroll = columnWidths.reduce((totalWidth, width) => totalWidth + width, 0) > this._rowsView.contentWidth();
+                if(!hasScroll) {
+                    var lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
+                    if(lastColumnIndex >= 0) {
+                        columnsController.columnOption(visibleColumns[lastColumnIndex].index, "visibleWidth", "auto");
+                    }
+                }
                 for(var i = 0; i < columnWidths.length; i++) {
                     if(visibleColumns[i] && visibleColumns[i] !== column && visibleColumns[i].width === undefined) {
                         columnsController.columnOption(visibleColumns[i].index, "width", columnWidths[i]);
