@@ -223,6 +223,12 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
+                * @name dxSchedulerOptions.views.groupByDate
+                * @type boolean
+                * @default false
+                */
+
+            /**
                 * @name dxSchedulerOptions.views.startDate
                 * @type Date|number|string
                 * @default undefined
@@ -564,6 +570,13 @@ var Scheduler = Widget.inherit({
                 * @default []
                 */
             selectedCellData: [],
+
+            /**
+                * @name dxSchedulerOptions.groupByDate
+                * @type boolean
+                * @default false
+                */
+            groupByDate: false,
 
             /**
                 * @name dxSchedulerOptions.onAppointmentRendered
@@ -1829,6 +1842,7 @@ var Scheduler = Widget.inherit({
             return 0;
         }
     },
+
     getAppointmentDurationInMinutes: function() {
         return this._getCurrentViewOption("cellDuration");
     },
@@ -1931,7 +1945,7 @@ var Scheduler = Widget.inherit({
             onSelectionChanged: (args) => {
                 this.option("selectedCellData", args.selectedCellData);
             },
-            groupByDate: this.option("groupByDate")
+            groupByDate: this._getCurrentViewOption("groupByDate")
         }, currentViewOptions);
 
         result.observer = this;

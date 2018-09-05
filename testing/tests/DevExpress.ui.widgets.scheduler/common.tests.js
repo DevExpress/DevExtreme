@@ -1452,6 +1452,29 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date depending on startDate");
     });
 
+    QUnit.test("view.groupByDate is passed to workspace", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+                groupByDate: true
+            },
+            {
+                type: "day",
+                name: "Day",
+                groupByDate: false
+            }]
+        });
+
+        var workSpace = this.instance.getWorkSpace();
+
+        assert.ok(workSpace.option("groupByDate"), "workspace has correct groupByDate");
+        this.instance.option("currentView", "day");
+        workSpace = this.instance.getWorkSpace();
+        assert.notOk(workSpace.option("groupByDate"), "workspace has correct groupByDate");
+    });
+
     QUnit.test("currentView option should be passed to header correctly", function(assert) {
         this.createInstance({
             currentView: "Week1",
