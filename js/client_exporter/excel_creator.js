@@ -156,9 +156,7 @@ var ExcelCreator = Class.inherit({
     _prepareValue: function(rowIndex, cellIndex) {
         var dataProvider = this._dataProvider,
             value = dataProvider.getCellValue(rowIndex, cellIndex),
-            type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex)),
-            formatID = this._styleArray[this._dataProvider.getStyleId(rowIndex, cellIndex)].formatID,
-            format = typeUtils.isNumeric(formatID) ? this._styleFormat[formatID - 1] : null;
+            type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
         if(type === "d" && !typeUtils.isDate(value)) {
             type = "s";
@@ -170,7 +168,7 @@ var ExcelCreator = Class.inherit({
                 break;
 
             case "d":
-                value = this._getExcelDateValue(value, format);
+                value = this._getExcelDateValue(value);
                 type = "n";
                 break;
         }
