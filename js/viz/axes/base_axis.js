@@ -1754,6 +1754,14 @@ Axis.prototype = {
         }, that._series, that.isArgumentAxis);
     },
 
+    getZoomEventArg() {
+        return {
+            axis: this,
+            range: this.visualRange(),
+            cancel: false
+        };
+    },
+
      // API
     visualRange() {
         const that = this;
@@ -1761,14 +1769,13 @@ Axis.prototype = {
         const preventEvents = args[1] || {};
 
         let visualRange;
-        const adjustedRange = this._getAdjustedBusinessRange();
-        const currentRange = {
-            startValue: adjustedRange.minVisible,
-            endValue: adjustedRange.maxVisible
-        };
 
         if(args.length === 0) {
-            return currentRange;
+            const adjustedRange = this._getAdjustedBusinessRange();
+            return {
+                startValue: adjustedRange.minVisible,
+                endValue: adjustedRange.maxVisible
+            };
         } else if(_isArray(args[0]) || isPlainObject(args[0])) {
             visualRange = args[0];
         } else {
@@ -1776,11 +1783,9 @@ Axis.prototype = {
         }
         visualRange = that._validateVisualRange(visualRange);
 
-        const zoomStartEvent = {
-            axis: that,
-            range: currentRange,
-            cancel: false
-        };
+        const zoomStartEvent = this.getZoomEventArg();
+
+        const currentRange = zoomStartEvent.range;
 
         !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
 

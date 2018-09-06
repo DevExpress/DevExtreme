@@ -563,8 +563,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
                 zoom = translator.zoom(-translate, scale);
             that._pointerOut();
 
-            that._eventTrigger(ZOOM_START);
-            that._chart.zoomArgument(zoom.min, zoom.max);
+            that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max]);
 
             e.preventDefault();
             e.stopPropagation(); // T249548
@@ -642,7 +641,8 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
 
         if(gestureChanged) {
             if(that._startScroll) {
-                that._eventTrigger(ZOOM_START);
+                const eventArg = that._chart.getArgumentAxis().getZoomEventArg();
+                that._eventTrigger(ZOOM_START, eventArg);
                 that._startScroll = false;
             }
 
@@ -661,7 +661,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         that._startScroll = false;
 
         function complete() {
-            that._chart.zoomArgument(zoom.min, zoom.max);
+            that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max], { start: true });
         }
 
         if(startGesture && startGesture.changed) {
