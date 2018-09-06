@@ -18,7 +18,8 @@ var CELL_CONTENT_CLASS = "text-content",
     TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = "dx-text-content-alignment-",
     SORT_INDICATOR_CLASS = "dx-sort-indicator",
     HEADER_FILTER_INDICATOR_CLASS = "dx-header-filter-indicator",
-    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row";
+    MULTI_ROW_HEADER_CLASS = "dx-header-multi-row",
+    COLUMN_ID_PREFIX = "dx-col";
 
 module.exports = {
     defaultOptions: function() {
@@ -42,6 +43,8 @@ module.exports = {
             var createCellContent = function(that, $cell, options) {
                 var showColumnLines,
                     $cellContent = $("<div>").addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
+
+                that.setAria("role", "presentation", $cellContent);
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
                 showColumnLines = that.option("showColumnLines");
@@ -146,7 +149,19 @@ module.exports = {
                     this.callBase($cell, cellOptions);
                     if(cellOptions.rowType === "header") {
                         this.setAria("role", "columnheader", $cell);
+                        if(cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand && cellOptions.column.dataField) {
+                            $cell.attr("id", this._getColumnId(cellOptions.column));
+                            this.setAria("label", this._getColumnLabel(cellOptions.column), $cell);
+                        }
                     }
+                },
+
+                _getColumnId: function(column) {
+                    return `${COLUMN_ID_PREFIX}-${column.dataField}`;
+                },
+
+                _getColumnLabel: function(column) {
+                    return `column ${column.caption}`;
                 },
 
                 _createRow: function(row) {
@@ -172,7 +187,7 @@ module.exports = {
                         .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
                         .empty();
 
-                    that.setAria("role", "presentation", $container);
+                    that.setAria("role", "rowheader", $container);
 
                     that._updateContent(that._renderTable());
 
@@ -199,6 +214,10 @@ module.exports = {
                 _renderRow: function($table, options) {
                     options.columns = this._getRowVisibleColumns(options.row.rowIndex);
                     this.callBase($table, options);
+                },
+
+                _setRowAriaAttributes: function($row) {
+                    this.setAria("role", "presentation", $row);
                 },
 
                 _createCell: function(options) {
