@@ -509,6 +509,7 @@ var AdvancedChart = BaseChart.inherit({
         const renderingSettings = _extend({
             renderer: that._renderer,
             incidentOccurred: that._incidentOccurred,
+            eventTrigger: that._eventTrigger,
             axisClass: isArgumentAxes ? "arg" : "val",
             widgetClass: "dxc",
             stripsGroup: that._stripsGroup,

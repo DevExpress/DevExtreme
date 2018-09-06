@@ -51,6 +51,7 @@ var environment = {
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
             incidentOccurred: this.incidentOccurred,
+            eventTrigger: () => { },
             axisType: "xyAxes",
             drawingType: "linear"
         }, options));

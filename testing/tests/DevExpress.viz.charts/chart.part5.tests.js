@@ -326,64 +326,6 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
     assert.strictEqual(series1.getValueAxis().adjust.callCount, 1);
 });
 
-QUnit.test("Event, zoomEnd", function(assert) {
-    var zoomEnd = sinon.spy(),
-        series = new MockSeries({
-            range: {
-                val: { min: 0, max: 1 },
-                arg: {
-                    min: 100,
-                    max: 200
-                }
-            }
-        });
-    chartMocks.seriesMockData.series.push(series);
-
-    var chart = this.createChart({
-        series: { type: "line" },
-        onZoomEnd: zoomEnd
-    });
-
-    chart.zoomArgument(30, 80);
-
-    assert.equal(zoomEnd.callCount, 1);
-    assert.equal(zoomEnd.getCall(0).args[0].rangeStart, 100, 'rangeStart', "rangeStart from axis");
-    assert.equal(zoomEnd.getCall(0).args[0].rangeEnd, 200, 'rangeEnd', "rangeEnd from axis");
-});
-
-QUnit.test("Event, zoomStart", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries());
-    var zoomStart = sinon.spy();
-    var chart = this.createChart({
-        series: { type: "line" },
-        onZoomStart: zoomStart
-    });
-
-    chart.zoomArgument(30, 80);
-
-    assert.equal(zoomStart.callCount, 1);
-});
-
-// T520370
-QUnit.test("zoom end event, not rendered chart", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries({}));
-    var zoomEnd = sinon.spy();
-    var chart = this.createChart({
-        series: { type: "line" },
-        size: {
-            height: 10
-        },
-        margin: {
-            top: 100
-        },
-        onZoomEnd: zoomEnd
-    });
-
-    chart.zoomArgument(30, 80);
-
-    assert.equal(zoomEnd.callCount, 1);
-});
-
 QUnit.module("MultiAxis Synchronization", commons.environment);
 
 function getTickPositions(axis) {

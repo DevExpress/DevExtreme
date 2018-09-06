@@ -1174,12 +1174,7 @@ var dxChart = AdvancedChart.inherit({
             return;
         }
 
-        that._eventTrigger("zoomStart"); // TODO !gesturesUsed condition
-
         that.getArgumentAxis().visualRange([min, max]);
-
-        const bounds = that.getVisibleArgumentBounds();
-        that._eventTrigger("zoomEnd", { rangeStart: bounds.minVisible, rangeEnd: bounds.maxVisible });
     },
 
     _getVisualRangeSetter() {
