@@ -201,6 +201,10 @@ QUnit.test("Labels offsets", function(assert) {
 
 // T669620
 QUnit.test("Label drawing on bottom border of widget", function(assert) {
+    this.renderer.bBoxTemplate = sinon.stub();
+    this.renderer.bBoxTemplate.onCall(7).returns({ x: 1, y: -10, width: 20, height: 10 });
+    this.renderer.bBoxTemplate.returns({ x: 1, y: 2, width: 20, height: 10 });
+
     createSankey({
         dataSource: [{ target: 't1', source: 's1', weight: 20 },
             { target: 't2', source: 's1', weight: 30 }, { target: 't3', source: 's1', weight: 0.1 }
@@ -211,7 +215,7 @@ QUnit.test("Label drawing on bottom border of widget", function(assert) {
         }
     });
 
-    assert.equal(this.label(3).attr.lastCall.args[0].translateY, 386, 'Alignment of bottom label');
+    assert.equal(this.label(3).attr.lastCall.args[0].translateY, 400, 'Alignment of bottom label');
 });
 
 // T669620

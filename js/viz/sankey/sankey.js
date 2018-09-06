@@ -23,11 +23,11 @@ function moveLabel(node, labelOptions, availableLabelWidth, rect) {
         labelOffsetX = node.rect.x - horizontalOffset - bBox.x - bBox.width;
     }
 
-    if(labelOffsetY + bBox.height >= rect[3] - rect[1]) {
-        labelOffsetY = node.rect.y - bBox.y - bBox.height + verticalOffset;
+    if(labelOffsetY >= rect[3]) {
+        labelOffsetY = rect[3];
     }
 
-    if(labelOffsetY < rect[1] - bBox.y) {
+    if(labelOffsetY - bBox.height < rect[1]) {
         labelOffsetY = node.rect.y - bBox.y + verticalOffset;
     }
 
