@@ -228,7 +228,7 @@ exports.DataProvider = Class.inherit({
     },
 
     // XtraPrinting: public static bool RaiseCustomizeCellEvent
-    customizeXlsxCell: function({ xlsxCell, rowIndex, cellIndex }) { // TODO: rename to 'customizeXlsxCell' - the 'Cell' word is already used to represent a DataGrid element in API of this class (see getCellValue)
+    customizeXlsxCell: function({ xlsxCell, rowIndex, cellIndex }) {
         if(this._options.customizeXlsxCell) {
             this._options.customizeXlsxCell(
                 {  // XtraPrinting: public class CustomizeCellEventArgs : CustomizeCellEventArgsBase {
