@@ -662,7 +662,8 @@ var BaseChart = BaseWidget.inherit({
 
         if(that._scrollBar) {
             argBusinessRange = that._argumentAxes[0].getTranslator().getBusinessRange();
-            if(argBusinessRange.axisType === "discrete" && argBusinessRange.categories && argBusinessRange.categories.length <= 1) {
+            if(argBusinessRange.axisType === "discrete" && argBusinessRange.categories && argBusinessRange.categories.length <= 1 ||
+                argBusinessRange.axisType !== "discrete" && argBusinessRange.min === argBusinessRange.max) {
                 zoomMinArg = zoomMaxArg = undefined;
             } else {
                 zoomMinArg = argBusinessRange.minVisible;

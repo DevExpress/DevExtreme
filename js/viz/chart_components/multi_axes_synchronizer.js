@@ -135,7 +135,7 @@ var populateAxesInfo = function(axes) {
             result.push(axisInfo);
 
             ///#DEBUG
-            debug.assert(axisInfo.tickInterval !== undefined && axisInfo.tickInterval !== null, "tickInterval was not provided");
+            debug.assert((axisInfo.minValue === axisInfo.maxValue && (!_isDefined(axisInfo.tickInterval) || _isDefined(options.tickInterval))) || _isDefined(axisInfo.tickInterval), "tickInterval was not provided");
             ///#ENDDEBUG
         }
         return result;

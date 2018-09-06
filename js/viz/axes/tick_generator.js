@@ -657,9 +657,13 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             result = processCustomTicks(customTicks);
 
         if(!isNaN(businessDelta)) {
-            result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
-            if(!options.skipTickGeneration && businessDelta > 0) {
-                result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
+            if(businessDelta === 0 && !customTicks.majors) {
+                result.ticks = [data.min];
+            } else {
+                result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
+                if(!options.skipTickGeneration && businessDelta > 0) {
+                    result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
+                }
             }
         }
 
