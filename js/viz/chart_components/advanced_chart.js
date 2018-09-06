@@ -194,7 +194,7 @@ var AdvancedChart = BaseChart.inherit({
                     isArgumentAxes ? index : undefined);
                 axes.push(axis);
             }
-            axis.applyVisualRangeSetter(that._getVisualRangeSetter(isArgumentAxes));
+            axis.applyVisualRangeSetter(that._getVisualRangeSetter());
         });
     },
 

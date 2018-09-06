@@ -472,7 +472,7 @@ var dxChart = AdvancedChart.inherit({
                 name: axisName,
                 crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
             }, rotated));
-            axis.applyVisualRangeSetter(that._getVisualRangeSetter(false));
+            axis.applyVisualRangeSetter(that._getVisualRangeSetter());
             valueAxes.push(axis);
         }
 
@@ -1130,11 +1130,6 @@ var dxChart = AdvancedChart.inherit({
         return this._getOption("crosshair");
     },
 
-    // _notifyOptionChanged(option, value, previousValue) {
-    //     this.callBase.apply(this, arguments);
-    //     this._parseVisualRangeOption(option, value);
-    // },
-
     _parseVisualRangeOption(fullName, value) {
         const that = this;
         const name = fullName.split(/[.\[]/)[0];
@@ -1187,7 +1182,7 @@ var dxChart = AdvancedChart.inherit({
         that._eventTrigger("zoomEnd", { rangeStart: bounds.minVisible, rangeEnd: bounds.maxVisible });
     },
 
-    _getVisualRangeSetter(isArgumentAxis) {
+    _getVisualRangeSetter() {
         const chart = this;
         return function(axis, visualRange) {
             if(axis.getOptions().optionPath) {
@@ -1208,47 +1203,6 @@ var dxChart = AdvancedChart.inherit({
     _resetZoom() {
         this._argumentAxes.forEach(axis => axis.resetZoom());
         this._valueAxes.forEach(axis => axis.resetZoom()); // T602156
-    },
-
-    _triggerOptionChanged() {
-        this._triggerVisualRangeOptionChange(this.getArgumentAxis(), true, true);
-        this._triggerVisualRangeOptionChange(null, false, true);
-    },
-
-    _triggerVisualRangeOptionChange(sourceAxis, isArgumentAxis, skipOptionApplying) {
-        const that = this;
-
-        that._skipVisualRangeOptionApplying = skipOptionApplying;
-        if(!isArgumentAxis) {
-            const valueAxesOptions = that._options.valueAxis;
-            const valueAxes = _isArray(valueAxesOptions) ? (!_isDefined(sourceAxis) ? that._valueAxes : that._valueAxes.filter(va => va.pane === sourceAxis.pane)) : [that.getValueAxis()];
-
-            valueAxes.forEach(axis => {
-                let curIndex = that._valueAxes.indexOf(axis);
-                if(_isArray(valueAxesOptions)) {
-                    const axisOptions = valueAxesOptions.filter(opt => opt.name === axis.name && (!_isDefined(opt.pane) || opt.pane === axis.pane))[0];
-                    axisOptions && (curIndex = valueAxesOptions.indexOf(axisOptions));
-                }
-                that._riseVisualRangeOptionChange(axis.visualRange(), false, curIndex);
-            });
-        } else {
-            that._riseVisualRangeOptionChange(sourceAxis.visualRange(), true);
-        }
-        that._skipVisualRangeOptionApplying = false;
-    },
-
-    _riseVisualRangeOptionChange(visualRange, isArgumentAxis, index) {
-        const that = this;
-        const axisType = isArgumentAxis ? "argumentAxis" : "valueAxis";
-        const optionFullName = axisType + (_isArray(that._options[axisType]) ? "[" + index + "]" : "") + ".visualRange";
-        visualRange = vizUtils.getVizRangeObject(visualRange);
-        const previousVisualRange = that.option(optionFullName);
-        const optionValue = vizUtils.convertVisualRangeObject(visualRange, !_isArray(previousVisualRange));
-
-        if(!_isDefined(previousVisualRange) || JSON.stringify(optionValue) !== JSON.stringify(previousVisualRange)) {
-            this.option(optionFullName, optionValue);
-            // that._simulateOptionChange(optionFullName, vizUtils.convertVisualRangeObject(visualRange, !_isArray(previousVisualRange)), previousVisualRange);
-        }
     },
 
     // T218011 for dashboards
