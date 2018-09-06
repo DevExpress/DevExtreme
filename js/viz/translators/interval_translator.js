@@ -30,7 +30,7 @@ module.exports = {
             specialValue = that.translateSpecialCase(bp);
 
         if(isDefined(specialValue)) {
-            return specialValue;
+            return Math.round(specialValue);
         }
         interval = interval || that._options.interval;
 
