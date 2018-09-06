@@ -646,6 +646,7 @@ var SelectBox = DropDownList.inherit({
 
     _listItemClickHandler: function(e) {
         var previousValue = this._getCurrentValue();
+        this._focusListElement($(e.itemElement));
 
         this._saveValueChangeEvent(e.event);
 
