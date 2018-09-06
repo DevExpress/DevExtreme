@@ -15,7 +15,7 @@ module.exports = {
             stickInterval = that._options.stick ? 0 : 0.5;
 
         if(isDefined(specialValue)) {
-            return specialValue;
+            return round(specialValue);
         }
 
         // Q522516

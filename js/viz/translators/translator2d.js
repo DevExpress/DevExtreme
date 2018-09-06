@@ -377,11 +377,11 @@ _Translator2d.prototype = {
         const range = this._businessRange;
         const specialValue = this.translateSpecialCase(bp);
 
-        if(isDefined(specialValue) && !isNaN(parseFloat(specialValue))) {
-            return Math.floor(specialValue);
+        if(isDefined(specialValue)) {
+            return Math.round(specialValue);
         }
 
-        if((range.axisType !== "discrete" && range.maxVisible.valueOf() === range.minVisible.valueOf()) || isNaN(bp)) {
+        if((isDefined(range.minVisible) && isDefined(range.maxVisible) && range.maxVisible.valueOf() === range.minVisible.valueOf()) || isNaN(bp)) {
             return null;
         }
         return this.to(bp, direction);
