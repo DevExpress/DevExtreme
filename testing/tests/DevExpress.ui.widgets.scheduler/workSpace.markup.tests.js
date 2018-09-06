@@ -1221,6 +1221,30 @@ QUnit.module("Workspace Month markup", monthModuleConfig, () => {
         });
     });
 
+    QUnit.test("Scheduler workspace month view should have a right date in each cell, groupByDate = true", (assert) => {
+        const $element = this.instance.$element();
+
+        this.instance.option("groupByDate", true);
+        this.instance.option("groups", [
+            {
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }, { id: 3, text: "c" }]
+            }
+        ]);
+        this.instance.option("currentDate", new Date(2015, 2, 1));
+        this.instance.option("firstDayOfWeek", 1);
+
+        const firstDate = new Date(2015, 1, 23);
+
+        $element.find(".dx-scheduler-date-table tr>td").each(function(index, cell) {
+            var index = Math.floor(index / 3);
+
+            const date = new Date(firstDate);
+            date.setDate(firstDate.getDate() + index);
+            assert.equal($(cell).text(), dateLocalization.format(date, "dd"), "Cell has a right date");
+        });
+    });
+
     QUnit.test("Scheduler workspace month view should have a date with current-date class", (assert) => {
         const $element = this.instance.$element();
 

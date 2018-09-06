@@ -1174,33 +1174,6 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("getCoordinateByDates should return coordinates depend on appointment duration", function(assert) {
-        var ws = this.instance;
-
-        ws.option({
-            currentDate: new Date(2015, 2, 16),
-            firstDayOfWeek: 1
-        });
-        var $cells = ws.$element().find(".dx-scheduler-date-table-cell"),
-            coordinates = ws.getCoordinatesByDates(new Date(2015, 2, 7), new Date(2015, 2, 28));
-
-        var cells = [12, 14, 21, 28];
-
-        $.each(coordinates, function(index, coordinate) {
-            var $currentCell = $cells.eq(cells[index]),
-                rowIndex = $currentCell.parent().index(),
-                expectedCoordinate = $currentCell.position();
-
-            if(rowIndex) {
-                // ! fix coordinate calculation in webkit
-                expectedCoordinate.top = rowIndex * ws.getCellHeight();
-            }
-
-            assert.equal(coordinate.top, expectedCoordinate.top, "");
-            assert.equal(coordinate.left, expectedCoordinate.left, "");
-        });
-    });
-
     QUnit.test("WorkSpace should calculate max left position", function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 2, 16),
@@ -1304,6 +1277,42 @@ QUnit.testStart(function() {
     });
 
 })("Work Space Month");
+
+(function() {
+
+    QUnit.module("Work Space Month with grouping by date", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                currentDate: new Date(2018, 2, 1),
+                groupByDate: true,
+                showCurrentTimeIndicator: false
+            }).dxSchedulerWorkSpaceMonth("instance");
+
+            stubInvokeMethod(this.instance);
+
+            this.instance.option("groups", [{
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            }]);
+        }
+    });
+
+    QUnit.test("Work space should find cell coordinates by date, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4), 1, false);
+
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(7).position().top, 1.1, "Top cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(7).position().left, 1.1, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 21), 0, false);
+
+        assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, 1.1, "Top cell coordinates are right");
+        assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, 1.1, "Left cell coordinates are right");
+    });
+})("Work Space Month with grouping by date");
 
 (function() {
 
