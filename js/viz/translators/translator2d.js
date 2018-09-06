@@ -9,10 +9,9 @@ var extend = require("../../core/utils/extend").extend,
     getLog = vizUtils.getLog,
     getPower = vizUtils.getPower,
     isDefined = typeUtils.isDefined,
+    adjust = require("../../core/utils/math").adjust,
     _abs = Math.abs,
     CANVAS_PROP = ["width", "height", "left", "top", "bottom", "right"],
-    NUMBER_EQUALITY_CORRECTION = 1,
-    DATETIME_EQUALITY_CORRECTION = 60000,
     _Translator2d,
 
     addInterval = require("../../core/utils/date").addInterval;
@@ -41,10 +40,6 @@ var validateBusinessRange = function(businessRange) {
     validate("maxVisible", "max");
     return businessRange;
 };
-
-function valuesAreDefinedAndEqual(val1, val2) {
-    return isDefined(val1) && isDefined(val2) && val1.valueOf() === val2.valueOf();
-}
 
 function prepareBreaks(breaks, range) {
     var transform = range.axisType === 'logarithmic' ? function(value) {
@@ -79,53 +74,20 @@ function prepareBreaks(breaks, range) {
 }
 
 function getCanvasBounds(range) {
-    var min = range.min,
-        max = range.max,
-        minVisible = range.minVisible,
-        maxVisible = range.maxVisible,
-        newMin,
-        newMax,
-        base = range.base,
-        isDateTime = typeUtils.isDate(max) || typeUtils.isDate(min),
-        correction = isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION,
-        isLogarithmic = range.axisType === 'logarithmic';
+    let min = range.min;
+    let max = range.max;
+    let minVisible = range.minVisible;
+    let maxVisible = range.maxVisible;
+    let isLogarithmic = range.axisType === 'logarithmic';
 
     if(isLogarithmic) {
-        maxVisible = getLog(maxVisible, base);
-        minVisible = getLog(minVisible, base);
-        min = getLog(min, base);
-        max = getLog(max, base);
+        maxVisible = getLog(maxVisible, range.base);
+        minVisible = getLog(minVisible, range.base);
+        min = getLog(min, range.base);
+        max = getLog(max, range.base);
     }
 
-    if(valuesAreDefinedAndEqual(min, max)) {
-        newMin = min.valueOf() - correction;
-        newMax = max.valueOf() + correction;
-
-        if(isDateTime) {
-            min = new Date(newMin);
-            max = new Date(newMax);
-        } else {
-            min = (min !== 0 || isLogarithmic) ? newMin : 0;
-            max = newMax;
-        }
-    }
-
-    if(valuesAreDefinedAndEqual(minVisible, maxVisible)) {
-        newMin = minVisible.valueOf() - correction;
-        newMax = maxVisible.valueOf() + correction;
-
-        if(isDateTime) {
-            minVisible = (newMin < min.valueOf()) ? min : new Date(newMin);
-            maxVisible = (newMax > max.valueOf()) ? max : new Date(newMax);
-        } else {
-            if(minVisible !== 0 || isLogarithmic) {
-                minVisible = newMin < min ? min : newMin;
-            }
-            maxVisible = newMax > max ? max : newMax;
-        }
-    }
-
-    return { base: base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
+    return { base: range.base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
 }
 
 function getCheckingMethodsAboutBreaks(inverted) {
@@ -275,13 +237,13 @@ _Translator2d.prototype = {
         return correctedCategoriesCount > 0 ? canvasOptions.canvasLength / correctedCategoriesCount : canvasOptions.canvasLength;
     },
 
-    _prepareCanvasOptions: function() {
-        var that = this,
-            businessRange = that._businessRange,
-            canvasOptions = that._canvasOptions = getCanvasBounds(businessRange),
-            length,
-            canvas = that._canvas,
-            breaks = that._breaks;
+    _prepareCanvasOptions() {
+        const that = this;
+        const businessRange = that._businessRange;
+        const canvasOptions = that._canvasOptions = getCanvasBounds(businessRange);
+        const canvas = that._canvas;
+        const breaks = that._breaks;
+        let length;
 
         if(that._options.isHorizontal) {
             canvasOptions.startPoint = canvas.left;
@@ -381,7 +343,13 @@ _Translator2d.prototype = {
         };
     },
 
-    translateSpecialCase: function(value) {
+    translateSpecialCase(value) {
+        const range = this._businessRange;
+        if(isDefined(range.maxVisible) && isDefined(range.minVisible) &&
+            range.maxVisible.valueOf() === range.minVisible.valueOf() &&
+            range.maxVisible.valueOf() === value.valueOf()) {
+            value = "canvas_position_center";
+        }
         return this.sc[value];
     },
 
@@ -405,14 +373,15 @@ _Translator2d.prototype = {
         return _abs(value) < minShownValue ? value >= 0 ? minShownValue : -minShownValue : value;
     },
 
-    translate: function(bp, direction) {
-        var specialValue = this.translateSpecialCase(bp);
+    translate(bp, direction) {
+        const range = this._businessRange;
+        const specialValue = this.translateSpecialCase(bp);
 
-        if(isDefined(specialValue)) {
-            return specialValue;
+        if(isDefined(specialValue) && !isNaN(parseFloat(specialValue))) {
+            return Math.floor(specialValue);
         }
 
-        if(isNaN(bp)) {
+        if((range.axisType !== "discrete" && range.maxVisible.valueOf() === range.minVisible.valueOf()) || isNaN(bp)) {
             return null;
         }
         return this.to(bp, direction);
@@ -422,21 +391,47 @@ _Translator2d.prototype = {
         return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
     },
 
-    zoom: function(translate, scale) {
-        var canvasOptions = this._canvasOptions,
+    zoom(translate, scale) {
+        const canvasOptions = this._canvasOptions;
 
-            startPoint = canvasOptions.startPoint,
-            endPoint = canvasOptions.endPoint,
+        if(canvasOptions.rangeMinVisible.valueOf() === canvasOptions.rangeMaxVisible.valueOf() && translate !== 0) {
+            return this.zoomZeroLengthRange(translate, scale);
+        }
 
-            newStart = (startPoint + translate) / scale,
-            newEnd = (endPoint + translate) / scale;
+        const startPoint = canvasOptions.startPoint;
+        const endPoint = canvasOptions.endPoint;
+
+        const newStart = (startPoint + translate) / scale;
+        const newEnd = (endPoint + translate) / scale;
 
         translate = (endPoint - startPoint) * newStart / (newEnd - newStart) - startPoint;
         scale = ((startPoint + translate) / newStart) || 1;
 
         return {
-            min: this.from(newStart, 1),
-            max: this.from(newEnd, -1),
+            min: adjust(this.from(newStart, 1)),
+            max: adjust(this.from(newEnd, -1)),
+            translate: adjust(translate),
+            scale: adjust(scale)
+        };
+    },
+
+    zoomZeroLengthRange(translate, scale) {
+        const canvasOptions = this._canvasOptions;
+        const min = canvasOptions.rangeMin;
+        const max = canvasOptions.rangeMax;
+        const correction = (max.valueOf() !== min.valueOf() ? max.valueOf() - min.valueOf() : _abs(canvasOptions.rangeMinVisible.valueOf() - min.valueOf())) / canvasOptions.canvasLength;
+        const isDateTime = typeUtils.isDate(max) || typeUtils.isDate(min);
+        const isLogarithmic = this._businessRange.axisType === 'logarithmic';
+
+        let newMin = canvasOptions.rangeMinVisible.valueOf() - correction;
+        let newMax = canvasOptions.rangeMaxVisible.valueOf() + correction;
+
+        newMin = isLogarithmic ? adjust(Math.pow(canvasOptions.base, newMin)) : isDateTime ? new Date(newMin) : newMin;
+        newMax = isLogarithmic ? adjust(Math.pow(canvasOptions.base, newMax)) : isDateTime ? new Date(newMax) : newMax;
+
+        return {
+            min: newMin,
+            max: newMax,
             translate: translate,
             scale: scale
         };
@@ -448,6 +443,10 @@ _Translator2d.prototype = {
 
     getScale: function(val1, val2) {
         var canvasOptions = this._canvasOptions;
+        if(canvasOptions.rangeMax === canvasOptions.rangeMin) {
+            return 1;
+        }
+
         val1 = isDefined(val1) ? this._fromValue(val1) : canvasOptions.rangeMin;
         val2 = isDefined(val2) ? this._fromValue(val2) : canvasOptions.rangeMax;
         return (canvasOptions.rangeMax - canvasOptions.rangeMin) / Math.abs(val1 - val2);

@@ -516,17 +516,33 @@ QUnit.test("BusinessDelta is 0", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
-        type: "continuous",
-        allowDecimals: true
+        type: "continuous"
     });
 
-    this.axis.setBusinessRange({ min: 200, max: 200 });
+    this.axis.setBusinessRange({ min: 231, max: 231 });
 
     // act
     this.axis.createTicks(canvas(1000));
 
-    assert.deepEqual(this.axis._majorTicks.map(value), [200]);
-    assert.deepEqual(this.axis._tickInterval, 1);
+    assert.deepEqual(this.axis._majorTicks.map(value), [231]);
+    assert.deepEqual(this.axis._tickInterval, undefined);
+});
+
+QUnit.test("BusinessDelta is 0 (logarithmic)", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10
+    });
+
+    this.axis.setBusinessRange({ min: 1452, max: 1452 });
+
+    // act
+    this.axis.createTicks(canvas(1000));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [1452]);
+    assert.deepEqual(this.axis._tickInterval, undefined);
 });
 
 QUnit.test("Custom tickInterval is very small - ignore tickInterval and raise W2003 warning", function(assert) {
@@ -2611,6 +2627,23 @@ QUnit.test("Do not generate minor ticks nor calculate minorTickInterval when dat
 
     assert.deepEqual(this.axis._minorTicks.map(value), []);
     assert.deepEqual(this.axis._minorTickInterval, undefined);
+});
+
+QUnit.test("BusinessDelta is 0", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "datetime",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ min: new Date(2018, 4, 5), max: new Date(2018, 4, 5) });
+
+    // act
+    this.axis.createTicks(canvas(1000));
+
+    assert.equal(this.axis._majorTicks.length, 1);
+    assert.deepEqual(this.axis._majorTicks[0].value, new Date(2018, 4, 5));
+    assert.deepEqual(this.axis._tickInterval, undefined);
 });
 
 QUnit.module("Polar axes", environment);

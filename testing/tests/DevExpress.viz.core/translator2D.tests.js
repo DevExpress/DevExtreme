@@ -154,7 +154,7 @@ QUnit.test('Create numeric translator', function(assert) {
     assert.ok($.isFunction(translator.getInterval));
 });
 
-QUnit.test('Create numeric translator when business range delta = 0, Min = max = minVisible = maxVisible != 0', function(assert) {
+QUnit.test('Create numeric translator when business range delta = 0, Min = max = minVisible = maxVisible', function(assert) {
     var range = {
             min: 100,
             max: 100,
@@ -168,32 +168,10 @@ QUnit.test('Create numeric translator when business range delta = 0, Min = max =
     translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
-    assert.equal(translator._canvasOptions.rangeMin, 99, 'range min is correct');
-    assert.equal(translator._canvasOptions.rangeMax, 101, 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible, 99, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible, 101, 'range max visible is correct');
-});
-
-QUnit.test('Create numeric translator when business range delta = 0, Min = max = minVisible = maxVisible = 0', function(assert) {
-    var range = {
-            min: 0,
-            max: 0,
-            minVisible: 0,
-            maxVisible: 0,
-            interval: 0,
-            axisType: 'continuous',
-            dataType: 'numeric'
-        },
-        canvas = $.extend({}, canvasTemplate),
-        translator;
-
-    translator = this.createTranslator(range, canvas);
-
-    assert.ok(translator);
-    assert.equal(translator._canvasOptions.rangeMin, 0, 'range min is correct');
-    assert.equal(translator._canvasOptions.rangeMax, 1, 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible, 0, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible, 1, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMin, 100, 'range min is correct');
+    assert.equal(translator._canvasOptions.rangeMax, 100, 'range max is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible, 100, 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible, 100, 'range max visible is correct');
 });
 
 QUnit.test('Create numeric translator when business range delta = 0, min < minVisible = maxVisible != 0 < max', function(assert) {
@@ -214,8 +192,8 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax, 100, 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible, 49, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible, 51, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible, 50, 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible, 50, 'range max visible is correct');
 });
 
 QUnit.test('Create numeric translator when business range delta = 0, min < minVisible = maxVisible = 0 < max', function(assert) {
@@ -237,7 +215,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
     assert.equal(translator._canvasOptions.rangeMin, -10, 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax, 10, 'range max is correct');
     assert.equal(translator._canvasOptions.rangeMinVisible, 0, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible, 1, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible, 0, 'range max visible is correct');
 });
 
 QUnit.test('Create numeric translator when business range delta = 0, min = minVisible = maxVisible < max', function(assert) {
@@ -259,7 +237,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min = minVi
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax, 100, 'range max is correct');
     assert.equal(translator._canvasOptions.rangeMinVisible, 10, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible, 11, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible, 10, 'range max visible is correct');
 });
 
 QUnit.test('Create numeric translator when business range delta = 0, min < minVisible = maxVisible = max', function(assert) {
@@ -280,7 +258,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax, 100, 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible, 99, 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible, 100, 'range min visible is correct');
     assert.equal(translator._canvasOptions.rangeMaxVisible, 100, 'range max visible is correct');
 });
 
@@ -301,8 +279,7 @@ QUnit.test('Create datetime translator', function(assert) {
 });
 
 QUnit.test('Create datetime translator when business range delta = 0. min = minVisible = maxVisible = max', function(assert) {
-    var correction = 60000,
-        range = {
+    var range = {
             min: new Date(2000, 1, 1),
             max: new Date(2000, 1, 1),
             minVisible: new Date(2000, 1, 1),
@@ -317,15 +294,14 @@ QUnit.test('Create datetime translator when business range delta = 0. min = minV
     translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
-    assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf() - correction, 'range min is correct');
-    assert.equal(translator._canvasOptions.rangeMax.valueOf(), new Date(2000, 1, 1).valueOf() + correction, 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf() - correction, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf() + correction, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min is correct');
+    assert.equal(translator._canvasOptions.rangeMax.valueOf(), new Date(2000, 1, 1).valueOf(), 'range max is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range max visible is correct');
 });
 
 QUnit.test('Create datetime translator when business range delta = 0. min < minVisible = maxVisible < max', function(assert) {
-    var correction = 60000,
-        range = {
+    var range = {
             min: new Date(1990, 1, 1),
             max: new Date(2010, 1, 1),
             minVisible: new Date(2000, 1, 1),
@@ -342,13 +318,12 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(1990, 1, 1).valueOf(), 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax.valueOf(), new Date(2010, 1, 1).valueOf(), 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf() - correction, 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf() + correction, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range max visible is correct');
 });
 
 QUnit.test('Create datetime translator when business range delta = 0. min = minVisible = maxVisible < max', function(assert) {
-    var correction = 60000,
-        range = {
+    var range = {
             min: new Date(2000, 1, 1),
             max: new Date(2010, 1, 1),
             minVisible: new Date(2000, 1, 1),
@@ -366,12 +341,11 @@ QUnit.test('Create datetime translator when business range delta = 0. min = minV
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax.valueOf(), new Date(2010, 1, 1).valueOf(), 'range max is correct');
     assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min visible is correct');
-    assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf() + correction, 'range max visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range max visible is correct');
 });
 
 QUnit.test('Create datetime translator when business range delta = 0. min < minVisible = maxVisible = max', function(assert) {
-    var correction = 60000,
-        range = {
+    var range = {
             min: new Date(1990, 1, 1),
             max: new Date(2000, 1, 1),
             minVisible: new Date(2000, 1, 1),
@@ -388,7 +362,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(1990, 1, 1).valueOf(), 'range min is correct');
     assert.equal(translator._canvasOptions.rangeMax.valueOf(), new Date(2000, 1, 1).valueOf(), 'range max is correct');
-    assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf() - correction, 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min visible is correct');
     assert.equal(translator._canvasOptions.rangeMaxVisible.valueOf(), new Date(2000, 1, 1).valueOf(), 'range max visible is correct');
 });
 
@@ -491,7 +465,7 @@ QUnit.test('Create logarithmic translator', function(assert) {
 });
 
 QUnit.test('Create logarithmic translator. Min = max = minVisible = maxVisible = 1', function(assert) {
-    var range = $.extend({}, logarithmicRange, { min: 1, max: 1, minVisible: 1, maxVisible: 1 }),
+    var range = $.extend({}, logarithmicRange, { min: 10, max: 10, minVisible: 10, maxVisible: 10 }),
         canvas = $.extend({}, canvasTemplate),
         translator;
 
@@ -499,20 +473,20 @@ QUnit.test('Create logarithmic translator. Min = max = minVisible = maxVisible =
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
-    assert.deepEqual(translator._businessRange, { min: 1, minVisible: 1, max: 1, maxVisible: 1, interval: 1, base: 10, axisType: 'logarithmic', dataType: 'numeric' });
+    assert.deepEqual(translator._businessRange, { min: 10, minVisible: 10, max: 10, maxVisible: 10, interval: 1, base: 10, axisType: 'logarithmic', dataType: 'numeric' });
 
     assert.ok($.isFunction(translator.translate));
     assert.ok($.isFunction(translator.from));
     assert.ok($.isFunction(translator.getInterval));
 
     assert.equal(translator._canvasOptions.rangeMaxVisible, 1);
-    assert.equal(translator._canvasOptions.rangeMinVisible, -1);
-    assert.equal(translator._canvasOptions.rangeMin, -1);
+    assert.equal(translator._canvasOptions.rangeMinVisible, 1);
+    assert.equal(translator._canvasOptions.rangeMin, 1);
     assert.equal(translator._canvasOptions.rangeMax, 1);
     assert.equal(translator._canvasOptions.base, 10);
 
     assert.roughEqual(translator._canvasOptions.rangeDoubleError, 0.0001, 0.000001);
-    assert.roughEqual(translator._canvasOptions.ratioOfCanvasRange, 165, 0.00001);
+    assert.equal(translator._canvasOptions.ratioOfCanvasRange, Infinity);
 });
 
 QUnit.test('Create logarithmic translator. Base = 2', function(assert) {
@@ -2176,7 +2150,7 @@ QUnit.test('All translators process special cases', function(assert) {
     var that = this;
     function checkTranslator(value, expected, message, range) {
         var original = translator2DModule.Translator2D.prototype.translateSpecialCase;
-        translator2DModule.Translator2D.prototype.translateSpecialCase = function(value) { return value + '_processed'; };
+        translator2DModule.Translator2D.prototype.translateSpecialCase = function(value) { return parseInt(value + '500'); };
 
         try {
             var translator = that.createTranslator(range);
@@ -2186,10 +2160,10 @@ QUnit.test('All translators process special cases', function(assert) {
         }
     }
 
-    checkTranslator('special_case', 'special_case_processed', 'Numeric translator can process special case', { min: 100, max: 1000, axisType: 'continuous', dataType: 'numeric' });
-    checkTranslator('special_case', 'special_case_processed', 'Datetime translator can process special case', { min: new Date(1000), max: new Date(10000), axisType: 'continuous', dataType: 'datetime' });
-    checkTranslator('special_case', 'special_case_processed', 'Logarithmic translator can process special case', { min: 1, max: 1000, axisType: 'logarithmic', dataType: 'numeric' });
-    checkTranslator('special_case', 'special_case_processed', 'Discrete translator can process special case', { categories: ['a1', 'a2'], axisType: 'discrete', dataType: 'string' });
+    checkTranslator('100', 100500, 'Numeric translator can process special case', { min: 100, max: 1000, axisType: 'continuous', dataType: 'numeric' });
+    checkTranslator('100', 100500, 'Datetime translator can process special case', { min: new Date(1000), max: new Date(10000), axisType: 'continuous', dataType: 'datetime' });
+    checkTranslator('100', 100500, 'Logarithmic translator can process special case', { min: 1, max: 1000, axisType: 'logarithmic', dataType: 'numeric' });
+    checkTranslator('100', 100500, 'Discrete translator can process special case', { categories: ['a1', 'a2'], axisType: 'discrete', dataType: 'string' });
 });
 
 QUnit.module("Zooming and scrolling", environment);
@@ -2383,6 +2357,38 @@ QUnit.test('scroll inverted range', function(assert) {
     assert.equal(zoom.translate.toFixed(2), -100, "negative big scroll translate");
     assert.roughEqual(zoom.scale.toFixed(2), 1.00, 0.1, "negative big scroll scale");
 
+});
+
+QUnit.test('zoom single point range', function(assert) {
+    var range = $.extend({}, numericRange, { min: 100, max: 100 }),
+        canvas = $.extend({}, canvasTemplate),
+        translator,
+        zoom;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true });
+
+    zoom = translator.zoom(48, 1.1);
+
+    assert.deepEqual(zoom, {
+        min: 100,
+        max: 100,
+        translate: 48,
+        scale: 1.1
+    }, "zoom point scroll");
+});
+
+QUnit.test('scroll null size visual range', function(assert) {
+    var range = $.extend({}, numericRange, { minVisible: 50, maxVisible: 50 }),
+        canvas = $.extend({}, canvasTemplate),
+        translator,
+        zoom;
+
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true });
+
+    zoom = translator.zoom(100, 1);
+
+    assert.roughEqual(zoom.max, 50.196, 0.001, "scroll null size visual range");
+    assert.roughEqual(zoom.min, 49.804, 0.001, "scroll null size visual range");
 });
 
 QUnit.test('scale without scroll', function(assert) {
