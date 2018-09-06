@@ -75,7 +75,7 @@ class OverlapStrategy extends DrawerStrategy {
             if(animate) {
                 let animationConfig = {
                     $element: $(this._drawer._$panel),
-                    position: panelPosition,
+                    position: direction === "bottom" ? panelPosition * this._drawer._getPositionCorrection() : panelPosition,
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
