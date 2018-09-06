@@ -2,60 +2,48 @@ import typeUtils from "../../core/utils/type";
 import XlsxTagUtils from './xlsx_tag_utils';
 
 //
-// This class represents a denormalized '§18.8.1 alignment (Alignment)' structure
+// This class represents '§18.8.1 alignment (Alignment)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
 //
-class XlsxCellAlignment {
-    constructor({ vertical, wrapText, horizontal } = {}) {
-        this.vertical = vertical;
-        this.wrapText = wrapText;
-        this.horizontal = horizontal;
-    }
-    static tryCreateTag(alignment) {
+export default class XlsxCellAlignment {
+
+    static tryCreateTag(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(alignment)) {
-            result = new XlsxCellAlignmentTag(alignment);
-            if(XlsxCellAlignmentTag.isEmpty(result)) {
-                result = null;
-            }
+        if(typeUtils.isDefined(sourceObj) && !XlsxCellAlignment.isEmpty(sourceObj)) {
+            result = Object.assign(
+                {},
+                sourceObj
+            );
         }
         return result;
     }
-}
 
-//
-// For internal use.
-// This class represents a '§18.8.1 alignment (Alignment)' structure
-//
-class XlsxCellAlignmentTag {
-    constructor({ vertical, wrapText, horizontal } = {}) {
-        this._vertical = vertical;
-        this._wrapText = wrapText;
-        this._horizontal = horizontal;
-    }
-    static areEqual(left, right) {
-        return XlsxCellAlignmentTag.isEmpty(left) && XlsxCellAlignmentTag.isEmpty(right) ||
+    static areEqual(leftTag, rightTag) {
+        return XlsxCellAlignment.isEmpty(leftTag) && XlsxCellAlignment.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(left) && typeUtils.isDefined(right) &&
-                left._vertical === right._vertical &&
-                left._wrapText === right._wrapText &&
-                left._horizontal === right._horizontal
+                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                leftTag.vertical === rightTag.vertical &&
+                leftTag.wrapText === rightTag.wrapText &&
+                leftTag.horizontal === rightTag.horizontal
             );
     }
-    static isEmpty(obj) {
-        return !typeUtils.isDefined(obj) ||
-            !typeUtils.isDefined(obj._vertical) && !typeUtils.isDefined(obj._wrapText) && !typeUtils.isDefined(obj._horizontal);
+
+    static isEmpty(tag) {
+        return !typeUtils.isDefined(tag) ||
+            !typeUtils.isDefined(tag.vertical) && !typeUtils.isDefined(tag.wrapText) && !typeUtils.isDefined(tag.horizontal);
     }
-    toXmlString() {
-        return XlsxTagUtils.toXmlString(
-            "alignment",  // §18.8.1 alignment (Alignment)
-            [
-                { name: "vertical", value: this._vertical },
-                { name: "wrapText", value: this._wrapText },
-                { name: "horizontal", value: this._horizontal }
-            ]
-        );
+
+    static toXmlString(tag) {
+        if(XlsxCellAlignment.isEmpty(tag)) {
+            return '';
+        } else {
+            return XlsxTagUtils.toXmlString(
+                "alignment",  // §18.8.1 alignment (Alignment)
+                [
+                    { name: "vertical", value: tag.vertical },
+                    { name: "wrapText", value: tag.wrapText },
+                    { name: "horizontal", value: tag.horizontal }
+                ]
+            );
+        }
     }
 }
-
-module.exports.XlsxCellAlignment = XlsxCellAlignment;
-module.exports.XlsxCellAlignmentTag = XlsxCellAlignmentTag;
