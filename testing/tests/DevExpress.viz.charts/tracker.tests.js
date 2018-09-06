@@ -2624,6 +2624,23 @@ QUnit.test("zoomStart. ScrollBar. Range is not changed", function(assert) {
     assert.ok(!this.axis.visualRange.called);
 });
 
+QUnit.test("Can cancel zoomin on zoomStart", function(assert) {
+    this.options.eventTrigger = sinon.spy(function(_, e) {
+        e.cancel = true;
+    });
+
+    this.tracker = this.createTracker(this.options);
+
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+
+    assert.ok(!this.options.chart._transformArgument.calledOnce);
+
+    assert.equal(this.options.eventTrigger.withArgs("zoomStart").callCount, 1);
+    assert.ok(!this.axis.visualRange.calledOnce);
+});
+
 QUnit.test("zoomStart. ScrollBar. Scrolling is disabled", function(assert) {
     this.options.scrollingMode = "none";
     this.tracker.update(this.options);

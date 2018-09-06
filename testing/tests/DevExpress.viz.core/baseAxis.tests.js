@@ -762,6 +762,8 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
         max: 50
     });
 
+    sinon.spy(this.axis, "_visualRange");
+
     this.axis.visualRange(10, 20);
 
     assert.equal(this.eventTrigger.callCount, 2);
@@ -770,6 +772,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
         startValue: 0,
         endValue: 50
     });
+    assert.ok(this.axis._visualRange.called);
 });
 
 QUnit.test("Can prevent zoomStart", function(assert) {

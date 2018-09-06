@@ -639,11 +639,15 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             startGesture.scroll = (gestureParams.center - startGesture.center);
         }
 
-        if(gestureChanged) {
+        if(gestureChanged && !startGesture.cancel) {
             if(that._startScroll) {
                 const eventArg = that._chart.getArgumentAxis().getZoomEventArg();
                 that._eventTrigger(ZOOM_START, eventArg);
                 that._startScroll = false;
+                if(eventArg.cancel) {
+                    startGesture.cancel = true;
+                    return false;
+                }
             }
 
             startGesture.changed = gestureChanged;

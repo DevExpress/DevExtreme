@@ -1806,9 +1806,8 @@ Axis.prototype = {
 
             if(zoomEndEvent.cancel) {
                 that._applyZooming(currentRange);
-            } else {
-                that._visualRange(that, visualRange);
             }
+            that._visualRange(that, visualRange);
         }
     },
 
