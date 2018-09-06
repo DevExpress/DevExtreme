@@ -2517,7 +2517,7 @@ QUnit.testInActiveWindow("widget with fieldTemplate and remote data source shoul
     var listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
     listItem.trigger("dxclick");
 
-    assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), "Name 2", "selectBox should be opened");
+    assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), "Name 2", "selectBox displays right value");
 });
 
 QUnit.testInActiveWindow("Value should be null after input is cleared and enter key is tapped", function(assert) {
