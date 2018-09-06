@@ -1049,11 +1049,7 @@ QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", functio
             columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 'str1_1' }],
             export: {
-                customizeXlsxCell: (args) => {
-                    Object.assign(args.xlsxCell.style, {
-                        alignment: null
-                    });
-                }
+                customizeXlsxCell: e => Object.assign(e.xlsxCell.style, { alignment: null })
             }
         },
         { styles, worksheet, sharedStrings }

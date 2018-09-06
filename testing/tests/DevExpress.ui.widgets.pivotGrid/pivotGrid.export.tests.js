@@ -294,3 +294,39 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
         { styles, worksheet, sharedStrings }
     );
 });
+
+QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", function(assert) {
+    const styles = STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        internals.BASE_STYLE_XML +
+        '<cellXfs count="4">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" fontId="0" applyNumberFormat="0" numFmtId="0" />' +
+        '</cellXfs>' +
+        STYLESHEET_FOOTER_XML;
+    const worksheet = internals.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s" /><c r="B1" s="3" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>0</v></c><c r="B2" s="3" t="s" /></row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>Grand Total</t></si>' +
+        '</sst>';
+
+    runTest(
+        assert,
+        {
+            export: {
+                customizeXlsxCell: e => Object.assign(e.xlsxCell.style, { alignment: null })
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});

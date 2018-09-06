@@ -9,12 +9,12 @@ const XlsxTagUtils = {
 
         for(i = 0; i < length; i++) {
             attr = attributes[i];
-            if(typeUtils.isDefined(attr.value)) { // pass 'empty string' as value to get 'v=""', pass 'undefined/null' to exclude
+            if(typeUtils.isDefined(attr.value)) {
                 result = result + " " + attr.name + "=\"" + attr.value + "\"";
             }
         }
 
-        return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />"; // pass 'empty string' as content to get '<v></v>', pass 'undefined/null' to to get '<v />'
+        return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
     }
 };
 
