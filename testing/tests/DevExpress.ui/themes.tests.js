@@ -169,6 +169,10 @@ require("style-compiler-test-server/known-css-files");
             return $("link[rel=stylesheet]", frameDoc());
         }
 
+        function removeFrameStyleLinks() {
+            getFrameStyleLinks().remove();
+        }
+
         return {
             beforeEach: setup,
             afterEach: teardown,
@@ -176,6 +180,7 @@ require("style-compiler-test-server/known-css-files");
             frameDoc: frameDoc,
             writeToFrame: writeToFrame,
             getFrameStyleLinks: getFrameStyleLinks,
+            removeFrameStyleLinks: removeFrameStyleLinks,
             initViewPort: false
         };
     };
@@ -501,9 +506,18 @@ require("style-compiler-test-server/known-css-files");
             themes.current(themeData.themeName);
             assert.ok(themes[themeData.functionName](), themeData.functionName + " after activate " + themeData.themeName);
             themes.resetTheme();
+            that.removeFrameStyleLinks();
         });
     });
 
+    QUnit.test("Themes functions return right value if theme file loaded after ready event (T666366)", function(assert) {
+        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='material.blue.light' />");
+        themes.init({ context: this.frameDoc(), theme: "material.blue.light" });
+        themes.resetTheme();
+
+        this.writeToFrame("<style>.dx-theme-marker { font-family: 'dx.generic.light' }</style>");
+        assert.equal(themes.isGeneric(), true, "isGeneric returns 'true' if css has been added after themes initialization");
+    });
 })();
 
 

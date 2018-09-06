@@ -24,6 +24,8 @@ var DateViewStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(config) {
+        var themeName = themes.current();
+
         return {
             showTitle: true,
             toolbarItems: this.dateBox._popupToolbarItemsConfig(),
@@ -48,7 +50,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function() {
-                        return themes.isWin8();
+                        return themes.isWin8(themeName);
                     },
                     options: {
                         fullScreen: true
@@ -91,7 +93,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function(device) {
-                        return device.phone && themes.isWin10();
+                        return device.phone && themes.isWin10(themeName);
                     },
                     options: {
                         width: 333,

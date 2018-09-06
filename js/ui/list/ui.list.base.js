@@ -389,6 +389,8 @@ var ListBase = CollectionWidget.inherit({
         * @default false @for desktop
         * @default true @for Mac
         */
+        var themeName = themes.current();
+
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
@@ -437,7 +439,7 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return themes.isAndroid5();
+                    return themes.isAndroid5(themeName);
                 },
                 options: {
                     useInkRipple: true
@@ -454,7 +456,7 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     /**
