@@ -4,10 +4,10 @@ const XlsxTagUtils = {
     toXml: function(tagName, attributes, content) {
         var result = ['<', tagName];
 
-        for(let i = 0; i < attributes.length; i++) {
-            const attr = attributes[i];
-            if(typeUtils.isDefined(attr.value)) {
-                result.push(' ', attr.name, '="', attr.value, '"');
+        for(const attributeName in attributes) {
+            const attributeValue = attributes[attributeName];
+            if(typeUtils.isDefined(attributeValue)) {
+                result.push(' ', attributeName, '="', attributeValue, '"');
             }
         }
 

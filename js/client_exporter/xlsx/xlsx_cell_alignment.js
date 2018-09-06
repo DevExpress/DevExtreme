@@ -39,11 +39,11 @@ const XlsxCellAlignmentUtils = {
             // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
             return XlsxTagUtils.toXml(
                 "alignment",
-                [
-                    { name: "vertical", value: tag.vertical },
-                    { name: "wrapText", value: tag.wrapText },
-                    { name: "horizontal", value: tag.horizontal }
-                ]
+                {
+                    vertical: tag.vertical,
+                    wrapText: tag.wrapText,
+                    horizontal: tag.horizontal
+                }
             );
         }
     }

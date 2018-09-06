@@ -23,7 +23,7 @@ export default class XlsxFile {
     generateCellFormatsXml() {
         const cellFormatTagsAsXmlStringsArray = this._cellFormatTags.map(tag => XlsxCellFormatUtils.toXml(tag));
         // §18.8.10 cellXfs (Cell Formats), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return XlsxTagUtils.toXml("cellXfs", [{ name: "count", value: cellFormatTagsAsXmlStringsArray.length }], cellFormatTagsAsXmlStringsArray.join(""));
+        return XlsxTagUtils.toXml("cellXfs", { count: cellFormatTagsAsXmlStringsArray.length }, cellFormatTagsAsXmlStringsArray.join(""));
     }
 }
 

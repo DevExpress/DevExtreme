@@ -50,13 +50,13 @@ const XlsxCellFormatUtils = {
             // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
             return XlsxTagUtils.toXml(
                 "xf",
-                [
-                    { name: "xfId", value: 0 },
-                    { name: "applyAlignment", value: isAlignmentEmpty ? null : 1 },
-                    { name: "fontId", value: tag.fontId },
-                    { name: "applyNumberFormat", value: applyNumberFormat },
-                    { name: "numFmtId", value: tag.numberFormatId },
-                ],
+                {
+                    'xfId': 0,
+                    applyAlignment: isAlignmentEmpty ? null : 1,
+                    fontId: tag.fontId,
+                    applyNumberFormat: applyNumberFormat,
+                    'numFmtId': tag.numberFormatId,
+                },
                 isAlignmentEmpty ? null : XlsxCellAlignmentUtils.toXml(tag.alignment)
             );
         }
