@@ -145,7 +145,72 @@ require("style-compiler-test-server/known-css-files");
 
 
 (function() {
+    QUnit.module('dx-theme changing');
 
+    QUnit.test("Themes functions return right value after themes switching", function(assert) {
+        var genericThemeName = "generic.light",
+            materialThemeName = "material.blue.light",
+            linksContainer = $("<div>").addClass("links-container").appendTo("body"),
+            testThemes = [{
+                functionName: "isGeneric",
+                themeName: genericThemeName,
+                anotherThemeName: materialThemeName
+            }, {
+                functionName: "isMaterial",
+                themeName: materialThemeName
+            }, {
+                functionName: "isAndroid5",
+                themeName: "android5.light"
+            }, {
+                functionName: "isIos7",
+                themeName: "ios7.default"
+            }, {
+                functionName: "isWin8",
+                themeName: "win8.white"
+            }, {
+                functionName: "isWin10",
+                themeName: "win10.white"
+            }];
+
+        linksContainer.append("<link rel='dx-theme' href='style2.css' data-theme='" + materialThemeName + "' />");
+        linksContainer.append("<link rel='dx-theme' href='style1.css' data-theme='" + genericThemeName + "' />");
+
+        themes.init({ context: window.document, theme: materialThemeName });
+        assert.ok(themes.isMaterial(), "isMaterial is true after material theme init");
+        assert.notOk(themes.isGeneric(), "isGeneric is false after material theme init");
+
+        themes.current(genericThemeName);
+        assert.ok(themes.isGeneric(), "isGeneric after activate generic theme");
+        assert.notOk(themes.isMaterial(), "isMaterial is false after generic theme init");
+        assert.notOk(themes.isIos7(), "isIos7 is false after generic theme init");
+        themes.resetTheme();
+        assert.notOk(themes.isGeneric(), "isGeneric is false after reset");
+
+        $.each(testThemes, function(_, themeData) {
+            var anotherThemeName = themeData.anotherThemeName || genericThemeName;
+            assert.ok(themes[themeData.functionName](themeData.themeName), themeData.functionName + " with " + themeData.themeName + " argument");
+            assert.notOk(themes[themeData.functionName](anotherThemeName), themeData.functionName + " with " + anotherThemeName + " argument");
+        });
+        linksContainer.remove();
+    });
+
+    QUnit.test("Themes functions return right value if theme file loaded after ready event (T666366)", function(assert) {
+        var linksContainer = $("<div>").addClass("links-container").appendTo("body");
+        linksContainer.append("<link rel='dx-theme' href='style2.css' data-theme='material.blue.light' />");
+
+        themes.init({ context: window.document, theme: "material.blue.light" });
+        themes.resetTheme();
+
+        linksContainer.append("<style>.dx-theme-marker { font-family: 'dx.generic.light' }</style>");
+
+        assert.equal(themes.isGeneric(), true, "isGeneric returns 'true' if css has been added after themes initialization");
+
+        linksContainer.remove();
+    });
+})();
+
+
+(function() {
     var createModuleObject = function() {
         var $frame;
 
@@ -465,58 +530,6 @@ require("style-compiler-test-server/known-css-files");
 
         themes.current("material.blue.light");
         assert.ok($(".dx-theme-material", this.frameDoc()).hasClass("dx-color-scheme-blue-light"), "right dx-color-scheme class for material");
-    });
-
-    QUnit.test("Themes functions return right value after themes switching", function(assert) {
-        var that = this,
-            genericThemeName = "generic.light",
-            materialThemeName = "material.blue.light",
-            testThemes = [{
-                functionName: "isGeneric",
-                themeName: genericThemeName,
-                anotherThemeName: materialThemeName
-            }, {
-                functionName: "isMaterial",
-                themeName: materialThemeName
-            }, {
-                functionName: "isAndroid5",
-                themeName: "android5.light"
-            }, {
-                functionName: "isIos7",
-                themeName: "ios7.default"
-            }, {
-                functionName: "isWin8",
-                themeName: "win8.white"
-            }, {
-                functionName: "isWin10",
-                themeName: "win10.white"
-            }];
-
-        $.each(testThemes, function(_, themeData) {
-            var anotherThemeName = themeData.anotherThemeName || genericThemeName;
-            that.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='" + anotherThemeName + "' />");
-            that.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='" + themeData.themeName + "' />");
-
-            themes.init({ context: that.frameDoc(), theme: anotherThemeName });
-            themes.resetTheme();
-            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after reset");
-
-            themes.current(anotherThemeName);
-            assert.notOk(themes[themeData.functionName](), themeData.functionName + " after activate " + anotherThemeName);
-            themes.current(themeData.themeName);
-            assert.ok(themes[themeData.functionName](), themeData.functionName + " after activate " + themeData.themeName);
-            themes.resetTheme();
-            that.removeFrameStyleLinks();
-        });
-    });
-
-    QUnit.test("Themes functions return right value if theme file loaded after ready event (T666366)", function(assert) {
-        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='material.blue.light' />");
-        themes.init({ context: this.frameDoc(), theme: "material.blue.light" });
-        themes.resetTheme();
-
-        this.writeToFrame("<style>.dx-theme-marker { font-family: 'dx.generic.light' }</style>");
-        assert.equal(themes.isGeneric(), true, "isGeneric returns 'true' if css has been added after themes initialization");
     });
 })();
 
