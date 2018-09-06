@@ -334,8 +334,8 @@ const Drawer = Widget.inherit({
         return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
-    _isRightPosition() {
-        const invertedPosition = this.option("position") === "right";
+    _isInvertedPosition() {
+        const invertedPosition = this.option("position") === "right" || this.option("position") === "bottom";
         const rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
@@ -347,6 +347,7 @@ const Drawer = Widget.inherit({
         this._$panel.removeClass(DRAWER_CLASS + "-left");
         this._$panel.removeClass(DRAWER_CLASS + "-right");
         this._$panel.removeClass(DRAWER_CLASS + "-top");
+        this._$panel.removeClass(DRAWER_CLASS + "-bottom");
 
         this._$panel.addClass(DRAWER_CLASS + "-" + position);
 
@@ -393,7 +394,7 @@ const Drawer = Widget.inherit({
     },
 
     _getPositionCorrection() {
-        return this._isRightPosition() ? -1 : 1;
+        return this._isInvertedPosition() ? -1 : 1;
     },
 
     _dispose() {

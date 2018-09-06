@@ -20,10 +20,11 @@ const animation = {
             animationType = "slide";
         }
 
-        if(direction === "top") {
+        if(direction === "top" || direction === "bottom") {
             toConfig["top"] = position;
             animationType = "slide";
         }
+
         fx.animate($element, {
             type: animationType,
             to: toConfig,
@@ -123,7 +124,7 @@ class DrawerStrategy {
             }
         }
 
-        if(this._drawer.option("position") === "top") {
+        if(this._drawer.option("position") === "top" || this._drawer.option("position") === "bottom") {
             if(offset) {
                 return -(this._drawer.getRealPanelHeight() - this._drawer.getMaxWidth());
             } else {
