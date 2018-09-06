@@ -2195,17 +2195,15 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getMaxAllowedPosition: function() {
         if(!this._maxAllowedPosition) {
-            var isRtl = this.option("rtlEnabled"),
-                that = this,
-                groupCount = this.option("groupByDate") ? this._getGroupCount() : 1;
+            var isRtl = this.option("rtlEnabled");
 
             this._maxAllowedPosition = [];
 
             this._$dateTable
                 .find("tr")
                 .first()
-                .find("td:nth-child(" + this._getCellCount() * groupCount + "n)")
-                .each(function(_, cell) {
+                .find("td:nth-child(" + this._getCellCount() + "n)")
+                .each((function(_, cell) {
 
                     var maxPosition = $(cell).position().left;
 
@@ -2213,8 +2211,8 @@ var SchedulerWorkSpace = Widget.inherit({
                         maxPosition += $(cell).get(0).getBoundingClientRect().width;
                     }
 
-                    that._maxAllowedPosition.push(Math.round(maxPosition));
-                });
+                    this._maxAllowedPosition.push(Math.round(maxPosition));
+                }).bind(this));
         }
 
         return this._maxAllowedPosition;
