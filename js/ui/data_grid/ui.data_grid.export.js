@@ -67,19 +67,9 @@ exports.DataProvider = Class.inherit({
         };
     },
 
-    // XtraPrinting: public static bool RaiseCustomizeCellEvent
-    customizeXlsxCell: function({ xlsxCell, rowIndex, cellIndex }) {
+    customizeXlsxCell: function({ xlsxCell }) {
         if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell(
-                {  // XtraPrinting: public class CustomizeCellEventArgs : CustomizeCellEventArgsBase {
-                    xlsxCell,
-                    dataGridElement: { // TODO: rename? This is 'some DataGrid element that will be represented by the created Xlsx cell'
-                        // TODO: this object should provide enough info about a DataGrid element that will be represented by the created XLSX cell,
-                        // we need a separate test for each target scenario
-                        value: this.getCellValue(rowIndex, cellIndex)
-                    }
-                }
-            );
+            this._options.customizeXlsxCell({ xlsxCell });
         }
     },
 

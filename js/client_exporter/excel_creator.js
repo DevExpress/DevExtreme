@@ -204,16 +204,15 @@ var ExcelCreator = Class.inherit({
                 };
                 if(dataProvider.customizeXlsxCell) {
                     dataProvider.customizeXlsxCell({
-                        // TODO: this object should provide enough members to customize XLSX cell (include 'xlsxFile: this._xlsxFile' ?),
-                        // we need a separate test for each target scenario
-                        xlsxCell, rowIndex, cellIndex });
+                        xlsxCell
+                    });
                 }
                 cellStyleId = this._xlsxFile.registerCellFormat(xlsxCell.style);
 
                 cellsArray.push({
-                    style: cellStyleId, // TODO: test it
-                    value: xlsxCell.value, // TODO: test it
-                    type: xlsxCell.valueType // TODO: test it
+                    style: cellStyleId,
+                    value: cellData.value,
+                    type: cellData.type
                 });
             }
 

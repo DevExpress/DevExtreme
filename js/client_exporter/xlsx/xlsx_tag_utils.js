@@ -1,8 +1,7 @@
 import typeUtils from "../../core/utils/type";
 
-export default class XlsxTagUtils {
-
-    static toXmlString(tagName, attributes, content) {
+const XlsxTagUtils = {
+    toXmlString: function(tagName, attributes, content) {
         var result = "<" + tagName,
             i,
             length = attributes.length,
@@ -17,4 +16,6 @@ export default class XlsxTagUtils {
 
         return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />"; // pass 'empty string' as content to get '<v></v>', pass 'undefined/null' to to get '<v />'
     }
-}
+};
+
+export default XlsxTagUtils;
