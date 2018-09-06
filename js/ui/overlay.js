@@ -1427,6 +1427,7 @@ var Overlay = Widget.inherit({
             case "deferRendering":
             case "contentTemplate":
                 this._contentAlreadyRendered = false;
+                this._clean();
                 this._invalidate();
                 break;
             case "closeOnBackButton":
