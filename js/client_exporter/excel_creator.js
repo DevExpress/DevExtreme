@@ -311,7 +311,7 @@ var ExcelCreator = Class.inherit({
 
         XML = XML + that._getXMLTag("numFmts", [{ name: "count", value: that._styleFormat.length }], that._styleFormat.join("")) + BASE_STYLE_XML;
 
-        XML = XML + this._xlsxFile.generateCellFormatsXmlString();
+        XML = XML + this._xlsxFile.generateCellFormatsXml();
 
         XML = XML + that._getXMLTag("cellStyles", [{ name: "count", value: 1 }], that._getXMLTag("cellStyle", [
             { name: "name", value: "Normal" },

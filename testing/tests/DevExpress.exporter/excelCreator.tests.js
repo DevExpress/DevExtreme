@@ -272,7 +272,7 @@ QUnit.test("Cell formats generating by the 'getStyles' function result", functio
     ]);
     this.excelCreator._prepareStyleData();
 
-    const cellFormatsXml = this.excelCreator._xlsxFile.generateCellFormatsXmlString();
+    const cellFormatsXml = this.excelCreator._xlsxFile.generateCellFormatsXml();
     assert.equal(cellFormatsXml, expectedCellFormatsXml);
 });
 

@@ -4,11 +4,15 @@ import XlsxTagUtils from './xlsx_tag_utils';
 const XlsxCellAlignmentUtils = {
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj) && !XlsxCellAlignmentUtils.isEmpty(sourceObj)) {
-            result = Object.assign(
-                {},
-                sourceObj
-            );
+        if(typeUtils.isDefined(sourceObj)) {
+            result = {
+                vertical: sourceObj.vertical,
+                wrapText: sourceObj.wrapText,
+                horizontal: sourceObj.horizontal,
+            };
+            if(XlsxCellAlignmentUtils.isEmpty(result)) {
+                result = null;
+            }
         }
         return result;
     },
@@ -28,12 +32,12 @@ const XlsxCellAlignmentUtils = {
             !typeUtils.isDefined(tag.vertical) && !typeUtils.isDefined(tag.wrapText) && !typeUtils.isDefined(tag.horizontal);
     },
 
-    toXmlString: function(tag) {
+    toXml: function(tag) {
         if(XlsxCellAlignmentUtils.isEmpty(tag)) {
             return '';
         } else {
             // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            return XlsxTagUtils.toXmlString(
+            return XlsxTagUtils.toXml(
                 "alignment",
                 [
                     { name: "vertical", value: tag.vertical },

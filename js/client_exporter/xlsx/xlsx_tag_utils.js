@@ -1,20 +1,23 @@
-import typeUtils from "../../core/utils/type";
+import typeUtils from '../../core/utils/type';
 
 const XlsxTagUtils = {
-    toXmlString: function(tagName, attributes, content) {
-        var result = "<" + tagName,
-            i,
-            length = attributes.length,
-            attr;
+    toXml: function(tagName, attributes, content) {
+        var result = ['<', tagName];
 
-        for(i = 0; i < length; i++) {
-            attr = attributes[i];
+        for(let i = 0; i < attributes.length; i++) {
+            const attr = attributes[i];
             if(typeUtils.isDefined(attr.value)) {
-                result = result + " " + attr.name + "=\"" + attr.value + "\"";
+                result.push(' ', attr.name, '="', attr.value, '"');
             }
         }
 
-        return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
+        if(typeUtils.isDefined(content)) {
+            result.push('>', content, '</', tagName, '>');
+        } else {
+            result.push(' />');
+        }
+
+        return result.join('');
     }
 };
 

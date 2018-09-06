@@ -5,12 +5,15 @@ import XlsxCellAlignmentUtils from './xlsx_cell_alignment';
 const XlsxCellFormatUtils = {
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj) && !XlsxCellFormatUtils.isEmpty(sourceObj)) {
-            result = Object.assign(
-                {},
-                sourceObj,
-                { alignment: XlsxCellAlignmentUtils.tryCreateTag(sourceObj.alignment) }
-            );
+        if(typeUtils.isDefined(sourceObj)) {
+            result = {
+                fontId: sourceObj.fontId,
+                numberFormatId: sourceObj.numberFormatId,
+                alignment: XlsxCellAlignmentUtils.tryCreateTag(sourceObj.alignment)
+            };
+            if(XlsxCellFormatUtils.isEmpty(result)) {
+                result = null;
+            }
         }
         return result;
     },
@@ -32,7 +35,7 @@ const XlsxCellFormatUtils = {
             XlsxCellAlignmentUtils.isEmpty(tag.alignment);
     },
 
-    toXmlString: function(tag) {
+    toXml: function(tag) {
         if(XlsxCellFormatUtils.isEmpty(tag)) {
             return '';
         } else {
@@ -45,7 +48,7 @@ const XlsxCellFormatUtils = {
             }
 
             // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            return XlsxTagUtils.toXmlString(
+            return XlsxTagUtils.toXml(
                 "xf",
                 [
                     { name: "xfId", value: 0 },
@@ -54,7 +57,7 @@ const XlsxCellFormatUtils = {
                     { name: "applyNumberFormat", value: applyNumberFormat },
                     { name: "numFmtId", value: tag.numberFormatId },
                 ],
-                isAlignmentEmpty ? null : XlsxCellAlignmentUtils.toXmlString(tag.alignment)
+                isAlignmentEmpty ? null : XlsxCellAlignmentUtils.toXml(tag.alignment)
             );
         }
     }
