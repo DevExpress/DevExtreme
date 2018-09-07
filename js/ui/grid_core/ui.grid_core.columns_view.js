@@ -163,6 +163,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createRow: function(rowObject) {
         var $element = $("<tr>").addClass(ROW_CLASS);
+        this.setAria("role", "row", $element);
         return $element;
     },
 
@@ -443,11 +444,6 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         that._renderCells($row, options);
         that._appendRow($table, $row);
         that._rowPrepared($row, extend({ columns: options.columns }, options.row));
-        that._setRowAriaAttributes($row);
-    },
-
-    _setRowAriaAttributes: function($row) {
-        this.setAria("role", "row", $row);
     },
 
     _renderCells: function($row, options) {

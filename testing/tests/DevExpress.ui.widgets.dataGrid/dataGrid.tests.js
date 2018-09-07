@@ -203,7 +203,7 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
 
     assert.equal($(".dx-datagrid").attr("role"), "grid");
 
-    assert.equal($headers.attr("role"), "row");
+    assert.equal($headers.attr("role"), "presentation");
     assert.equal($headers.find(".dx-column-indicators").attr("role"), "presentation");
     assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
     assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
@@ -283,6 +283,7 @@ QUnit.test("Command column accessibility structure", function(assert) {
     });
 
     // assert
+    assert.equal($(".dx-row.dx-header-row").eq(0).attr("role"), "row");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
 });

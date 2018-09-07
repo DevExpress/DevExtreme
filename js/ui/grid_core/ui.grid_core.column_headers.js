@@ -181,7 +181,7 @@ module.exports = {
                         .toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option("wordWrapEnabled"))
                         .empty();
 
-                    that.setAria("role", "row", $container);
+                    that.setAria("role", "presentation", $container);
 
                     that._updateContent(that._renderTable());
 
@@ -208,10 +208,6 @@ module.exports = {
                 _renderRow: function($table, options) {
                     options.columns = this._getRowVisibleColumns(options.row.rowIndex);
                     this.callBase($table, options);
-                },
-
-                _setRowAriaAttributes: function($row) {
-                    this.setAria("role", "presentation", $row);
                 },
 
                 _createCell: function(options) {
