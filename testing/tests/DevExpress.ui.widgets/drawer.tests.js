@@ -767,6 +767,30 @@ QUnit.test("drawer panel should be overlay with right content in overlap mode", 
     assert.deepEqual($(drawer.content()), $(drawer._overlay.$element()), "Panel content is an overlay content");
 });
 
+QUnit.test("drawer panel overlay should have right config depending on position option", assert => {
+    let drawer = $("#drawer").dxDrawer({
+            openedStateMode: "overlap"
+        }).dxDrawer("instance"),
+        $wrapper = drawer._$wrapper,
+        overlay = drawer._overlay;
+
+    assert.equal(overlay.option("shading"), false);
+    assert.deepEqual(overlay.option("container"), $wrapper);
+
+    assert.equal(overlay.option("position").my, "top left");
+    assert.equal(overlay.option("position").at, "top left");
+
+    drawer.option("position", "top");
+    overlay = drawer._overlay;
+    assert.equal(overlay.option("position").my, "top");
+    assert.equal(overlay.option("position").at, "top");
+
+    drawer.option("position", "bottom");
+    overlay = drawer._overlay;
+    assert.equal(overlay.option("position").my, "bottom");
+    assert.equal(overlay.option("position").at, "bottom");
+});
+
 QUnit.test("minWidth should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
 

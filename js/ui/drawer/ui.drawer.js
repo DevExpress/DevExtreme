@@ -439,10 +439,7 @@ const Drawer = Widget.inherit({
                 break;
             case "position":
                 // NOTE: temporary fix
-                this.repaint();
-
-                this._togglePositionClass();
-                this._renderPosition(this.option("opened"));
+                this._invalidate();
                 break;
             case "contentTemplate":
             case "template":

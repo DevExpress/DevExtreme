@@ -10,8 +10,7 @@ const animation = {
             animationType;
 
         if(direction === "right") {
-            toConfig["right"] = position;
-            toConfig["transform"] = " translate(0, 0)";
+            toConfig["transform"] = "translate(" + position + "px, 0px)";
             animationType = "custom";
         }
 
