@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
 
     <script type="text/javascript" src="../artifacts/js/angular.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -27,99 +25,22 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
 
-<style>
-    html,
-    body {
-        height: 100%;
-    }
-
-    .slider {
-        height: 400px;
-        float: left;
-    }
-
-    #chart {
-        width: 1000px;
-        float: left;
-    }
-</style>
-
 <body ng-app="DemoApp">
     <div ng-controller="DemoController">
-        <div>
-            <div id="v-rs" class="slider"></div>
-            <div id="chart" dx-chart="chartOptions" style="height: 400px;"></div>
-        </div>
-        <div style="clear:both;"></div>
-        value range: {{valueRange}} <br/>
-        argument range: {{argumentRange}}
+        <div dx-button="buttonOptions"></div>
     </div>
 
     <script>
         var DemoApp = angular.module('DemoApp', ['dx']);
 
-
         DemoApp.controller('DemoController', function DemoController($scope) {
-            $scope.valueRange=[];
-            $scope.argumentRange = [];
-            $scope.chartOptions = {
-                dataSource: [{ "arg": 0, "val": 0 }, { "arg": 1, "val": 0.1608366860390975 }, { "arg": 2, "val": 0.8079357239735887 }, { "arg": 3, "val": 1.4638355023734364 }, { "arg": 4, "val": 0.19843397308416044 }, { "arg": 5, "val": 3.155584294466718 }, { "arg": 6, "val": 1.755404101988021 }, { "arg": 7, "val": 6.042668075321254 }, { "arg": 8, "val": 7.442458485386096 }, { "arg": 9, "val": 3.8058468752201318 }, { "arg": 10, "val": 4.71125724651664 }, { "arg": 11, "val": 8.473409480308831 }, { "arg": 12, "val": 2.105453762108212 }, { "arg": 13, "val": 4.174839196625828 }, { "arg": 14, "val": 9.67658089224441 }, { "arg": 15, "val": 9.300259784813829 }, { "arg": 16, "val": 14.623567612908204 }, { "arg": 17, "val": 6.416269010289966 }, { "arg": 18, "val": 4.938085628771709 }, { "arg": 19, "val": 14.499323185546261 }, { "arg": 20, "val": 3.6328239639521476 }, { "arg": 21, "val": 17.96762672780017 }, { "arg": 22, "val": 7.281063798540758 }, { "arg": 23, "val": 18.88307157296399 }, { "arg": 24, "val": 2.229799933552737 }, { "arg": 25, "val": 12.030585761629553 }, { "arg": 26, "val": 4.552757792137351 }, { "arg": 27, "val": 4.086506684538086 }, { "arg": 28, "val": 7.2831178183083205 }, { "arg": 29, "val": 6.3318071766722905 }, { "arg": 30, "val": 27.069930081982108 }, { "arg": 31, "val": 2.344039339272393 }, { "arg": 32, "val": 12.947390416794775 }, { "arg": 33, "val": 5.766897822037063 }, { "arg": 34, "val": 33.38577339694255 }, { "arg": 35, "val": 18.015650598087884 }, { "arg": 36, "val": 13.502519832685653 }, { "arg": 37, "val": 25.947482964019777 }, { "arg": 38, "val": 25.968916889822914 }, { "arg": 39, "val": 3.8407897500220596 }, { "arg": 40, "val": 37.23153833105167 }, { "arg": 41, "val": 16.56674639319138 }, { "arg": 42, "val": 41.75185613776649 }, { "arg": 43, "val": 0.48025271312985973 }, { "arg": 44, "val": 30.302170262614233 }, { "arg": 45, "val": 40.05161217538234 }, { "arg": 46, "val": 22.582236357017504 }, { "arg": 47, "val": 15.33232636042325 }, { "arg": 48, "val": 31.35761501239819 }, { "arg": 49, "val": 20.090847354266412 }, { "arg": 50, "val": 10.145237802702955 }, { "arg": 51, "val": 40.251459084055604 }, { "arg": 52, "val": 37.75267551540121 }, { "arg": 53, "val": 0.05973163185227448 }, { "arg": 54, "val": 52.38831400428615 }, { "arg": 55, "val": 15.812813885269895 }, { "arg": 56, "val": 6.356090447342453 }, { "arg": 57, "val": 42.37328129790001 }, { "arg": 58, "val": 10.14325213092092 }, { "arg": 59, "val": 17.404307391436394 }, { "arg": 60, "val": 42.379574209461744 }, { "arg": 61, "val": 27.491146156128078 }, { "arg": 62, "val": 49.35551060746676 }, { "arg": 63, "val": 54.880692609319226 }, { "arg": 64, "val": 8.862327102565644 }, { "arg": 65, "val": 8.043342441161606 }, { "arg": 66, "val": 41.37575244369687 }, { "arg": 67, "val": 20.446683266355315 }, { "arg": 68, "val": 32.313236762066786 }, { "arg": 69, "val": 27.402635006714824 }, { "arg": 70, "val": 52.269808067918646 }, { "arg": 71, "val": 49.018473523756825 }, { "arg": 72, "val": 1.0895778142799948 }, { "arg": 73, "val": 32.472897891979144 }, { "arg": 74, "val": 49.72977049001051 }, { "arg": 75, "val": 23.910677730456353 }, { "arg": 76, "val": 43.73631289370321 }, { "arg": 77, "val": 5.284529868465057 }, { "arg": 78, "val": 11.075042664852905 }, { "arg": 79, "val": 78.12287776343955 }, { "arg": 80, "val": 49.38532169255302 }, { "arg": 81, "val": 4.489801674407646 }, { "arg": 82, "val": 54.57517553420018 }, { "arg": 83, "val": 23.386500468568006 }, { "arg": 84, "val": 11.591154819442448 }, { "arg": 85, "val": 13.034977396615101 }, { "arg": 86, "val": 69.26323549238161 }, { "arg": 87, "val": 10.302173042388773 }, { "arg": 88, "val": 9.852151836043612 }, { "arg": 89, "val": 41.81683297180512 }, { "arg": 90, "val": 82.16856709472691 }, { "arg": 91, "val": 78.58916813983393 }, { "arg": 92, "val": 86.33967930911687 }, { "arg": 93, "val": 33.01849080546587 }, { "arg": 94, "val": 47.110568069493034 }, { "arg": 95, "val": 47.36924973587943 }, { "arg": 96, "val": 6.994890965901654 }, { "arg": 97, "val": 13.604539033814874 }, { "arg": 98, "val": 44.73600498650034 }, { "arg": 99, "val": 54.40919400327597 }],
-
-                series: {
-                    point: {
-                        visible: true
-                    }
-                },
-                scrollingMode: "all",
-                zoomingMode: "all",
-                scrollBar: {
-                    visible: true
-                },
-                bindingOptions: {
-                    "valueAxis[0].visualRange": "valueRange",
-                    "argumentAxis.visualRange": "argumentRange"
-                },
-                valueAxis: [{
-
-                }],
-                argumentAxis: {
-
+            $scope.buttonOptions = {
+                text: 'Click me!',
+                onClick: function() {
+                    alert("clicked");
                 }
             };
-
-            $scope.$watch("valueRange", (v)=>{
-                $( "#v-rs" ).slider( "values", v );
-            });
-
-            $("#v-rs").slider({
-                orientation: "vertical",
-                range: true,
-                values: [0, 90],
-                min: 0,
-                max: 90,
-                slide: function(_, e) {
-                    $scope.$apply(() => {
-                        if (e.values[0] === 0 && e.values[1] === 90) {
-                            $scope.valueRange = [null, null];
-                        } else {
-                            $scope.valueRange = e.values;
-                        }
-                    });
-                    // var zoomedChart = $("#button").dxChart("instance");
-
-                    // if(e.values[0]===0&&e.values[1]===90){
-                    //     zoomedChart._valueAxes[0].resetZoom();
-                    // } else{
-                    //     zoomedChart._valueAxes[0].zoom(e.values[0], e.values[1]);
-
-                    // }
-                    // zoomedChart.render({force: true});
-
-                }
-            });
-
         });
     </script>
 </body>
-
 </html>
