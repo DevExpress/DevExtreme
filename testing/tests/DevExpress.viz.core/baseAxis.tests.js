@@ -3434,7 +3434,7 @@ QUnit.test("Correct zero level if showZero is true", function(assert) {
 
 QUnit.test("Value axis ignores visual range on update option", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "reset"
+        visualRangeUpdateMode: "reset"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3493,7 +3493,7 @@ QUnit.module("Visual range on update", {
 });
 
 QUnit.test("Reset", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "reset" });
+    this.updateOptions({ visualRangeUpdateMode: "reset" });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3514,7 +3514,7 @@ QUnit.test("Reset", function(assert) {
 });
 
 QUnit.test("Keep", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "keep", visualRange: [10, 40] });
+    this.updateOptions({ visualRangeUpdateMode: "keep", visualRange: [10, 40] });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3535,7 +3535,7 @@ QUnit.test("Keep", function(assert) {
 });
 
 QUnit.test("Shift", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "shift", visualRange: { length: 10 } });
+    this.updateOptions({ visualRangeUpdateMode: "shift", visualRange: { length: 10 } });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3557,7 +3557,7 @@ QUnit.test("Shift", function(assert) {
 
 QUnit.test("Shift. Datetime axis", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "shift",
+        visualRangeUpdateMode: "shift",
         visualRange: {
             length: {
                 minutes: 15
@@ -3586,7 +3586,7 @@ QUnit.test("Shift. Datetime axis", function(assert) {
 
 QUnit.test("Shift. logarithmic axis", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "shift",
+        visualRangeUpdateMode: "shift",
         visualRange: { length: 2 },
         logarithmBase: 10,
         type: "logarithmic"
@@ -3613,7 +3613,7 @@ QUnit.test("Shift. logarithmic axis", function(assert) {
 QUnit.test("Shift. Discrete", function(assert) {
     this.updateOptions({
         type: "discrete",
-        visualRangeOnDataUpdate: "shift"
+        visualRangeUpdateMode: "shift"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3637,7 +3637,7 @@ QUnit.test("Shift. Discrete", function(assert) {
 QUnit.test("Shift. Discrete datetime", function(assert) {
     this.updateOptions({
         type: "discrete",
-        visualRangeOnDataUpdate: "shift"
+        visualRangeUpdateMode: "shift"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3681,7 +3681,7 @@ QUnit.test("Auto mode. visualRange is equal wholeRange - reset", function(assert
 
 QUnit.test("Auto mode. visualRange is not equal wholeRange - keep", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "auto"
+        visualRangeUpdateMode: "auto"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3775,7 +3775,7 @@ QUnit.test("Auto. Discrete axis - keep if categories aren't changed", function(a
 });
 
 QUnit.test("Do not reset initial viewport if current bussiness range has isEstimatedRange flag", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "reset", visualRange: [10, 20] });
+    this.updateOptions({ visualRangeUpdateMode: "reset", visualRange: [10, 20] });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
