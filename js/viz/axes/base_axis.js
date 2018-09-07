@@ -1215,7 +1215,7 @@ Axis.prototype = {
             },
             that._getScreenDelta(),
             that._translator.getBusinessRange().stubData ? null : options.tickInterval,
-            options.label.overlappingBehavior === "ignore" ? true : options.forceUserTickInterval,
+            options.label.overlappingBehavior === "ignore" || options.forceUserTickInterval,
             {
                 majors: customTicks,
                 minors: customMinorTicks
