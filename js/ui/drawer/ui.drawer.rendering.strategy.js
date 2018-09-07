@@ -115,15 +115,13 @@ class DrawerStrategy {
     }
 
     _getPanelOffset(offset) {
-        if(this._drawer.option("position") === "left" || this._drawer.option("position") === "right") {
+        if(this._drawer._isHorizontalDirection()) {
             if(offset) {
                 return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxWidth());
             } else {
                 return -(this._drawer.getRealPanelWidth() - this._drawer.getMinWidth());
             }
-        }
-
-        if(this._drawer.option("position") === "top" || this._drawer.option("position") === "bottom") {
+        } else {
             if(offset) {
                 return -(this._drawer.getRealPanelHeight() - this._drawer.getMaxWidth());
             } else {

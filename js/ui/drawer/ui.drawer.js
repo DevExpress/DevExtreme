@@ -341,6 +341,10 @@ const Drawer = Widget.inherit({
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
     },
 
+    _isHorizontalDirection() {
+        return this.option("position") === "left" || this.option("position") === "right";
+    },
+
     _togglePositionClass() {
         const position = this.option("position");
 

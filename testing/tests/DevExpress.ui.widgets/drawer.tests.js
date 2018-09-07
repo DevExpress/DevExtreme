@@ -952,13 +952,13 @@ QUnit.test("maxWidth should be rendered correctly in overlap mode, right menu po
     const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 1000, "menu has correct left when maxWidth is set");
+    assert.equal($menu.position().left, 700, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 900, "menu has correct left when maxWidth is set");
+    assert.equal($menu.position().left, 600, "menu has correct left when maxWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when maxWidth is set");
 
     fx.off = false;
