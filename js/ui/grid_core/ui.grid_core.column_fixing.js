@@ -1,6 +1,5 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    browser = require("../../core/utils/browser"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -18,6 +17,7 @@ var CONTENT_CLASS = "content",
     FIXED_COLUMNS_CLASS = "dx-fixed-columns",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
+    GROUP_ROW_CLASS = "dx-group-row",
 
     getTransparentColumnIndex = function(fixedColumns) {
         var transparentColumnIndex = -1;
@@ -172,24 +172,36 @@ var baseFixedColumns = {
 
     _getCellElementsCore: function(rowIndex) {
         var that = this,
+            fixedColumn,
             fixedColumns,
             fixedColumnIndex,
             fixedCellElements,
             cellElements = that.callBase(rowIndex),
+            isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS),
             index = that.name === "columnHeadersView" ? rowIndex : undefined; // TODO
 
         if(that._fixedTableElement && cellElements) {
             fixedColumns = that.getFixedColumns(index);
-
             fixedCellElements = that._getRowElements(that._fixedTableElement).eq(rowIndex).children("td");
-            each(fixedColumns, function(columnIndex, column) {
-                if(column.command === "transparent") {
-                    if(fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
-                        cellElements[columnIndex] = fixedCellElements.get(columnIndex) || cellElements[columnIndex];
+
+            each(fixedCellElements, function(columnIndex, cell) {
+                if(isGroupRow) {
+                    if(cellElements[columnIndex] && $(cell).css("visibility") !== "hidden") {
+                        cellElements[columnIndex] = cell;
                     }
                 } else {
-                    fixedColumnIndex = that._columnsController.getVisibleIndex(column.index, index);
-                    cellElements[fixedColumnIndex] = fixedCellElements.get(columnIndex) || cellElements[fixedColumnIndex];
+                    fixedColumn = fixedColumns[columnIndex];
+
+                    if(fixedColumn) {
+                        if(fixedColumn.command === "transparent") {
+                            if(fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
+                                cellElements[columnIndex] = cell || cellElements[columnIndex];
+                            }
+                        } else {
+                            fixedColumnIndex = that._columnsController.getVisibleIndex(fixedColumn.index, index);
+                            cellElements[fixedColumnIndex] = cell || cellElements[fixedColumnIndex];
+                        }
+                    }
                 }
             });
         }
@@ -607,11 +619,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 alignByFixedColumnCellCount -= (options.columns[transparentColumnIndex].colspan - 1) || 0;
                 groupCellColSpan -= (options.columns[transparentColumnIndex].colspan - 1) || 0;
             } else if(alignByColumnCellCount > 0) {
-                if(browser.mozilla) {
-                    $groupCell.css("display", "none");
-                } else {
-                    $groupCell.css("visibility", "hidden");
-                }
+                $groupCell.css("visibility", "hidden");
             }
             alignByColumnCellCount = alignByFixedColumnCellCount;
         }
