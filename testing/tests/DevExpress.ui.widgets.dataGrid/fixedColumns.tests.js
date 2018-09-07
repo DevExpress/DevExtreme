@@ -25,7 +25,6 @@ window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
 var $ = require("jquery"),
     devices = require("core/devices"),
     device = devices.real(),
-    browser = require("core/utils/browser"),
     setTemplateEngine = require("ui/set_template_engine"),
     nativePointerMock = require("../../helpers/nativePointerMock.js"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
