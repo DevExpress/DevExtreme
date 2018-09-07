@@ -2486,27 +2486,16 @@ QUnit.testInActiveWindow("widget with fieldTemplate and remote data source shoul
             valueExpr: "Id",
             displayValue: "Name",
             fieldTemplate: function(data) {
-                if(data !== null) {
-                    var textBox = $("<div>").dxTextBox({
-                        value: data.Name
-                    });
-                } else {
-                    var textBox = $("<div>").dxTextBox({
-                        value: ""
-                    });
-                }
-
-                return textBox;
+                return $("<div>").dxTextBox({
+                    value: (data !== null) ? data.Name : ""
+                });
             },
             minSearchLength: 1,
             showDataBeforeSearch: false,
             searchEnabled: true,
             searchTimeout: 0,
             itemTemplate: function(data) {
-                var markup = "<div>";
-                markup += "<span>" + data.Name + "</span>";
-                markup += "</div>";
-                return markup;
+                return "<div><span>" + data.Name + "</span></div>";
             }
         }),
         selectBox = $selectBox.dxSelectBox("instance"),
