@@ -109,8 +109,6 @@ var ModuleItem = Class.inherit({
         } else {
             $target.attr(prefix + name, value);
         }
-
-        // this.component.setAria.apply(this.component, arguments);
     },
 
     _createComponent: function() {
