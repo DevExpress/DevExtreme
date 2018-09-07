@@ -1,5 +1,6 @@
 var windowUtils = require("../../core/utils/window");
 var virtualColumnsCore = require("./ui.grid_core.virtual_columns_core");
+var gridCoreUtils = require("./ui.grid_core.utils");
 
 var DEFAULT_COLUMN_WIDTH = 50;
 
@@ -16,7 +17,18 @@ var VirtualScrollingRowsViewExtender = {
         }
 
         that._columnsController.setScrollPosition(left);
-    }
+    },
+
+    _columnOptionChanged: function(e) {
+        var optionNames = e.optionNames;
+
+        if(gridCoreUtils.checkChanges(optionNames, ["visible"]) && this._columnsController.isVirtualMode()) {
+            let resizingController = this.getController("resizing");
+            resizingController && resizingController.updateDimensions();
+        }
+
+        this.callBase.apply(this, arguments);
+    },
 };
 
 var HeaderFooterViewExtender = {
@@ -51,6 +63,8 @@ var ColumnsControllerExtender = (function() {
         resetColumnsCache: function() {
             this.callBase();
             this._virtualVisibleColumns = {};
+            this._beginPageIndex = 0;
+            this._endPageIndex = 0;
         },
         getBeginPageIndex: function(position) {
             var visibleColumns = this.getVisibleColumns(undefined, true),

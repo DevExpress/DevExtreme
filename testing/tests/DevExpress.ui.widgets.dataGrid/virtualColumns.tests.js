@@ -496,6 +496,34 @@ QUnit.test("columnHeaders scroll position during virtual scrolling", function(as
     assert.strictEqual(this.footerView.element().children().scrollLeft(), 200, "scrollLeft in footerView");
 });
 
+// T669142
+QUnit.test("Column visibility update properly when columnAutoWidth=true", function(assert) {
+    for(var i = 4; i < this.columns.length; i++) {
+        this.columns[i].visible = false;
+    }
+
+    this.setupVirtualColumns({
+        width: 700,
+        columnWidth: "auto",
+        "columnAutoWidth": true,
+        scrolling: {
+            mode: "virtual"
+        }
+    });
+
+    this.gridView.render($("#container"));
+    this.gridView.update();
+
+    this.clock.tick(30);
+
+    this.columnsController.columnOption("field5", "visible", true);
+    this.columnsController.columnOption("field6", "visible", true);
+    this.columnsController.columnOption("field7", "visible", true);
+
+    // assert
+    assert.strictEqual(this.columnHeadersView.element().find("tr td").length, 7);
+});
+
 QUnit.test("columns should be update on scrolling", function(assert) {
     this.setupVirtualColumns({
         width: 200
