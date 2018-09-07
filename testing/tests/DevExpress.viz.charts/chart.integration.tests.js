@@ -862,6 +862,81 @@ QUnit.test("Ticks calculation after resize", function(assert) {
     assert.deepEqual(chart._argumentAxes[0].getTicksValues().majorTicksValues, [1, 1.5, 2]);
 });
 
+QUnit.test("Set user's small ticksInterval (user's axisDivisionFactor undefined)", function(assert) {
+    var data = [{
+        arg: 1950,
+        val: 2525778669
+    }, {
+        arg: 1980,
+        val: 4449048798
+    }, {
+        arg: 2010,
+        val: 6916183482
+    }];
+
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: data,
+        legend: {
+            visible: false
+        },
+        series: { },
+        argumentAxis: {
+            tickInterval: 2,
+            label: {
+                format: {
+                    type: "decimal"
+                }
+            }
+        }
+    });
+
+    assert.deepEqual(chart._argumentAxes[0]._tickInterval, 2, "user's tickinterval");
+});
+
+QUnit.test("Calculate tickInterval, when user's ticksInterval and axisDivisionFactor are defined", function(assert) {
+    var data = [{
+        arg: 1950,
+        val: 2525778669
+    }, {
+        arg: 1980,
+        val: 4449048798
+    }, {
+        arg: 2010,
+        val: 6916183482
+    }];
+
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: data,
+        legend: {
+            visible: false
+        },
+        series: { },
+        argumentAxis: {
+            tickInterval: 2,
+            axisDivisionFactor: 200,
+            label: {
+                format: {
+                    type: "decimal"
+                }
+            }
+        }
+    });
+
+    assert.deepEqual(chart._argumentAxes[0]._tickInterval, 20, "calculated tickinterval");
+});
+
 QUnit.module("B237847. Groups and classes", moduleSetup);
 
 QUnit.test("dxChart groups and classes", function(assert) {

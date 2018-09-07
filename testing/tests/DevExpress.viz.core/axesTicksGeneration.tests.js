@@ -336,6 +336,63 @@ QUnit.test("forceTickInterval true. No user's tickIntervsal, calculated tickInte
     assert.deepEqual(this.axis._tickInterval, 2);
 });
 
+QUnit.test("forceTickInterval false. User's tickIntervsal 2, no user's axisDivisionFactor, calculated tickInterval 2 - return user tickInterval", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        forceUserTickInterval: false,
+        tickInterval: 2,
+        axisDivisionFactor: undefined
+    });
+
+    this.axis.setBusinessRange({ min: 0, max: 10 });
+
+    // act
+    this.axis.createTicks(canvas(300));
+
+    assert.deepEqual(this.axis._tickInterval, 2);
+});
+
+QUnit.test("forceTickInterval false. User's tickIntervsal 2, user's axisDivisionFactor 100, calculated tickInterval 5 - return calculated", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        forceUserTickInterval: false,
+        tickInterval: 2,
+        axisDivisionFactor: 100
+    });
+
+    this.axis.setBusinessRange({ min: 0, max: 10 });
+
+    // act
+    this.axis.createTicks(canvas(300));
+
+    assert.deepEqual(this.axis._tickInterval, 5);
+});
+
+QUnit.test("forceTickInterval true. User's tickIntervsal 2, user's axisDivisionFactor 100, calculated tickInterval 2 - return user tickInterval", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        forceUserTickInterval: true,
+        tickInterval: 2,
+        axisDivisionFactor: 100
+    });
+
+    this.axis.setBusinessRange({ min: 0, max: 10 });
+
+    // act
+    this.axis.createTicks(canvas(300));
+
+    assert.deepEqual(this.axis._tickInterval, 2);
+});
+
 QUnit.module("Numeric. Misc", environment);
 
 QUnit.test("Adjust numeric ticks", function(assert) {
