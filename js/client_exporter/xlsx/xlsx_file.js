@@ -1,6 +1,6 @@
 import typeUtils from "../../core/utils/type";
-import XlsxTagHelper from './xlsx_tag_utils';
-import XlsxCellFormatHelper from './xlsx_cell_format';
+import XlsxTagHelper from './xlsx_tag_helper';
+import XlsxCellFormatHelper from './xlsx_cell_format_helper';
 
 export default class XlsxFile {
 
