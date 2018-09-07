@@ -579,11 +579,42 @@ module.exports = {
 
                 _showValidationMessage: function($cell, message, alignment, revertTooltip) {
                     var that = this,
+                        rowData,
+                        cellIndex,
+                        groupLevel,
+                        colspan,
+                        groupCellIndex,
+                        $fixedRowElement,
+                        $groupCellElement,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
-                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
+                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment,
+                        isFixedColumns = that._rowsView.isFixedColumns(),
+                        isFormEditMode = that._editingController.isFormEditMode();
+
+                    if(isFixedColumns && !isFormEditMode) {
+                        rowData = $cell.closest(".dx-row").next().data("options");
+
+                        if(rowData.rowType === "group") {
+                            $fixedRowElement = $(that._rowsView.getRowElement(rowData.rowIndex)).last();
+                            groupCellIndex = rowData.groupIndex + 1;
+                            $groupCellElement = $fixedRowElement.children().eq(groupCellIndex);
+
+                            if($groupCellElement && $groupCellElement.css("visibility") !== "hidden") {
+                                cellIndex = $cell.index();
+
+                                if(cellIndex > groupCellIndex) {
+                                    colspan = $groupCellElement.attr("colspan");
+                                    groupLevel = $fixedRowElement.prev().children().filter(".dx-datagrid-group-space").length;
+                                    $groupCellElement.attr("colspan", groupLevel - rowData.groupIndex);
+                                } else {
+                                    $groupCellElement.css("visibility", "hidden");
+                                }
+                            }
+                        }
+                    }
 
                     new Overlay($("<div>")
                         .addClass(INVALID_MESSAGE_CLASS)
@@ -618,6 +649,15 @@ module.exports = {
                                 }
 
                                 that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
+                            },
+                            onDisposing: function() {
+                                if($groupCellElement) {
+                                    if(colspan) {
+                                        $groupCellElement.attr("colspan", colspan);
+                                    } else if(cellIndex !== undefined) {
+                                        $groupCellElement.css("visibility", "");
+                                    }
+                                }
                             }
                         });
                 },

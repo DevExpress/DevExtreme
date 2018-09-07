@@ -6760,7 +6760,7 @@ QUnit.module('Editing with validation', {
             return renderer(".dx-datagrid");
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
             initViews: true
         });
 
@@ -7442,6 +7442,10 @@ QUnit.test("Cell's height is increasing on resize if validation applied and batc
     var that = this,
         rowsView = this.rowsView,
         testElement = $('#container');
+
+    that.columnHeadersView.element = function() {
+        return testElement;
+    };
 
     rowsView.render(testElement);
 
@@ -9871,6 +9875,100 @@ QUnit.test("Prevent cell validation if template with editor is used", function(a
 
     // assert
     assert.ok(!validator, "only internal editor validator");
+});
+
+// T653933
+QUnit.test("Validation error message should not hide behind a grouped row when there are fixed columns on the left", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    that.applyOptions({
+        grouping: {
+            autoExpandAll: true
+        },
+        dataSource: [
+            { name: 'Alex', age: "", lastName: "John" },
+            { name: 'Dan', age: 16, lastName: "Skip" }
+        ],
+        scrolling: {
+            mode: "standard"
+        },
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", fixed: true }, {
+            dataField: "age",
+            validationRules: [{ type: "required" }]
+        }, { dataField: "lastName", groupIndex: 0 }]
+    });
+
+    // act
+    that.editCell(1, 2);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(1, 2)).find(".dx-overlay.dx-datagrid-invalid-message").length, 1, "has invalid message");
+    assert.strictEqual($(rowsView.getCellElement(2, 1)).attr("colspan"), "1", "group cell colspan");
+
+    // act
+    that.closeEditCell();
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(1, 2)).find(".dx-overlay.dx-datagrid-invalid-message").length, 0, "hasn't invalid message");
+    assert.strictEqual($(rowsView.getCellElement(2, 1)).attr("colspan"), "2", "group cell colspan");
+});
+
+// T653933
+QUnit.test("Validation error message should not hide behind a grouped row when there are fixed columns on the right", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    that.applyOptions({
+        grouping: {
+            autoExpandAll: true
+        },
+        dataSource: [
+            { name: 'Alex', age: "", lastName: "John" },
+            { name: 'Dan', age: 16, lastName: "Skip" }
+        ],
+        scrolling: {
+            mode: "standard"
+        },
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", fixed: true, fixedPosition: "right" }, {
+            dataField: "age",
+            validationRules: [{ type: "required" }]
+        }, { dataField: "lastName", groupIndex: 0 }]
+    });
+
+    // act
+    that.editCell(1, 1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(1, 1)).find(".dx-overlay.dx-datagrid-invalid-message").length, 1, "has invalid message");
+    assert.strictEqual($(rowsView.getRowElement(2)).last().children().eq(1).css("visibility"), "hidden", "group cell isn't visible");
+
+    // act
+    that.closeEditCell();
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(1, 2)).find(".dx-overlay.dx-datagrid-invalid-message").length, 0, "hasn't invalid message");
+    assert.notStrictEqual($(rowsView.getRowElement(2)).last().children().eq(1).css("visibility"), "hidden", "group cell is visible");
 });
 
 
