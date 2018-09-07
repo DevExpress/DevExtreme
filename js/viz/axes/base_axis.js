@@ -989,8 +989,8 @@ Axis.prototype = {
         return range;
     },
 
-    _getVisualRangeOnUpdateValue(range, newRange) {
-        let value = this._options.visualRangeOnDataUpdate;
+    _getVisualRangeUpdateMode(range, newRange) {
+        let value = this._options.visualRangeUpdateMode;
         if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
             if(range.axisType === constants.discrete) {
                 if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
@@ -1026,15 +1026,15 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
 
-        const visualRangeOnDataUpdateValue = this._getVisualRangeOnUpdateValue(currentBusinessRange, seriesData);
+        const visualRangeUpdateMode = this._getVisualRangeUpdateMode(currentBusinessRange, seriesData);
 
-        if(visualRangeOnDataUpdateValue === KEEP) {
+        if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([currentBusinessRange.minVisible, currentBusinessRange.maxVisible]);
         }
-        if(visualRangeOnDataUpdateValue === RESET) {
+        if(visualRangeUpdateMode === RESET) {
             that.resetZoom();
         }
-        if(visualRangeOnDataUpdateValue === SHIFT) {
+        if(visualRangeUpdateMode === SHIFT) {
             const currentBusinessRange = this._translator.getBusinessRange();
             if(options.type !== constants.discrete) {
                 const add = vizUtils.getAddFunction({

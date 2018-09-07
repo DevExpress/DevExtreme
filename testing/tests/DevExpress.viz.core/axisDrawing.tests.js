@@ -1129,7 +1129,7 @@ QUnit.test("Check calls to translator. Boundary ticks", function(assert) {
     this.updateOptions({
         isHorizontal: true,
         position: "bottom",
-        visualRangeOnDataUpdate: "reset",
+        visualRangeUpdateMode: "reset",
         showCustomBoundaryTicks: true,
         tick: {
             visible: true

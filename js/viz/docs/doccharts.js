@@ -1400,10 +1400,10 @@ var dxChart = {
         */
         wholeRange: undefined,
         /**
-        * @name dxChartOptions.argumentAxis.visualRangeOnDataUpdate
+        * @name dxChartOptions.argumentAxis.visualRangeUpdateMode
         * @type Enums.VisualRangeUpdateMode
         */
-        visualRangeOnDataUpdate: "auto",
+        visualRangeUpdateMode: "auto",
         /**
         * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
