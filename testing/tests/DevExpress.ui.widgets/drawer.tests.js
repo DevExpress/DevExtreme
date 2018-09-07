@@ -798,22 +798,30 @@ QUnit.test("minWidth should be rendered correctly in overlap mode, expand", asse
         minWidth: 50,
         opened: false,
         revealMode: "expand",
-        openedStateMode: "overlap"
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
     });
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $overlayContent = $element.find(".dx-drawer-panel-content .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
-    assert.equal($menu.width(), 50, "menu has correct width when minWidth is set");
+    assert.equal($menu.position().left, 0, "panel has correct left when minWidth is set");
+    assert.equal($overlayContent.width(), 50, "panel content has correct width when minWidth is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minWidth is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
+    assert.equal($menu.position().left, 0, "panel has correct left when minWidth is set");
+    assert.equal($overlayContent.width(), 200, "panel content has correct width when minWidth is set");
 
     fx.off = false;
 });
@@ -831,16 +839,17 @@ QUnit.test("maxWidth should be rendered correctly in overlap mode, expand", asse
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $overlayContent = $element.find(".dx-drawer-panel-content .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 0, "menu has correct width when maxWidth is set");
+    assert.equal($menu.position().left, 0, "panel has correct left when maxWidth is set");
+    assert.equal($overlayContent.width(), 0, "panel content has correct width when maxWidth is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxWidth is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when maxWidth is set");
-    assert.equal($menu.width(), 100, "menu has correct width when maxWidth is set");
+    assert.equal($menu.position().left, 0, "panel has correct left when maxWidth is set");
+    assert.equal($overlayContent.width(), 100, "panel content has correct width when maxWidth is set");
 
     fx.off = false;
 });
@@ -915,13 +924,13 @@ QUnit.test("minWidth should be rendered correctly in overlap mode, right menu po
     const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
-    assert.equal($menu.position().left, 950, "menu has correct left when minWidth is set");
+    assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minWidth is set");
-    assert.equal($menu.position().left, 800, "menu has correct left when minWidth is set");
+    assert.equal($menu.position().left, 650, "menu has correct left when minWidth is set");
     assert.equal($menu.width(), 200, "menu has correct width when minWidth is set");
 
     fx.off = false;
