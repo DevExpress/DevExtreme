@@ -531,7 +531,7 @@ QUnit.test("Using the single section of axis options for some panes (check custo
     panes.push({ name: "p2" });
     chart.option("panes", panes);
 
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 5.6, endValue: 7.2 });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), chart.getValueAxis().visualRange());
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 4, endValue: 6 }, "argument visual range");
     assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 5.6, endValue: 7.2 });
     assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 16, endValue: 26 });

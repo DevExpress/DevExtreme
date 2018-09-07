@@ -135,11 +135,9 @@ var AdvancedChart = BaseChart.inherit({
                 axisPanes.push(undefined);
             }
 
-            _each(axisPanes, (paneIndex, pane) => {
+            _each(axisPanes, (_, pane) => {
                 let optionPath = _isArray(valueAxisOption) ? `valueAxis[${priority}]` : "valueAxis";
-                if(paneIndex) {
-                    optionPath = null;
-                }
+
                 valueAxesPopulatedOptions.push(that._populateAxesOptions("valueAxis", axisOptions, {
                     name: name || getNextAxisName(),
                     pane,

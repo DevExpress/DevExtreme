@@ -2624,7 +2624,7 @@ QUnit.test("zoomStart. ScrollBar. Range is not changed", function(assert) {
     assert.ok(!this.axis.visualRange.called);
 });
 
-QUnit.test("Can cancel zoomin on zoomStart", function(assert) {
+QUnit.test("Can cancel zooming on zoomStart", function(assert) {
     this.options.eventTrigger = sinon.spy(function(_, e) {
         e.cancel = true;
     });

@@ -470,6 +470,7 @@ var dxChart = AdvancedChart.inherit({
             axis = that._createAxis(false, that._populateAxesOptions("valueAxis", axisOptions, {
                 pane: paneName,
                 name: axisName,
+                optionPath: _isArray(valueAxisOptions) ? `valueAxis[${axisOptions.priority}]` : "valueAxis",
                 crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
             }, rotated));
             axis.applyVisualRangeSetter(that._getVisualRangeSetter());
@@ -510,6 +511,30 @@ var dxChart = AdvancedChart.inherit({
             }
             return doesPaneExist(that.panes, axis.pane);
         }).sort(compareAxes);
+
+        const defaultAxis = this.getValueAxis();
+
+        that._valueAxes.forEach(axis => {
+            const optionPath = axis.getOptions().optionPath;
+            if(optionPath) {
+                const axesWithSamePath = that._valueAxes.filter(a => a.getOptions().optionPath === optionPath);
+                if(axesWithSamePath.length > 1) {
+                    if(axesWithSamePath.some(a => a === defaultAxis)) {
+                        axesWithSamePath.forEach(a => {
+                            if(a !== defaultAxis) {
+                                a.getOptions().optionPath = null;
+                            }
+                        });
+                    } else {
+                        axesWithSamePath.forEach((a, i) => {
+                            if(i !== 0) {
+                                a.getOptions().optionPath = null;
+                            }
+                        });
+                    }
+                }
+            }
+        });
     },
 
     _getSeriesForPane: function(paneName) {
