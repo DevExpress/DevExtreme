@@ -31,7 +31,7 @@ const processTheme = (config, metadata, version) => {
 };
 
 const buildTheme = config => {
-    config = normalize(config);
+    normalize(config);
     let metadataRepository = new MetadataRepository(new MetadataLoader());
     let repositoryPromise = metadataRepository.init(themes);
 

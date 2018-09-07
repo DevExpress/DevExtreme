@@ -66,9 +66,13 @@ const parseConfig = config => {
     const bootstrapConfig = getBootstrapConfig(metadataFilePath);
     const output = getOutParameters(command, themeName, config);
 
-    return {
-        command: command,
-        items: config.items,
+    delete config.baseTheme;
+    delete config.outputColorScheme;
+    delete config.outputFormat;
+    delete config.outputFile;
+    delete config.inputFile;
+
+    Object.assign(config, {
         data: config.data !== undefined ? config.data : {},
         fileFormat: output.fileFormat,
         themeName: themeName,
@@ -79,10 +83,7 @@ const parseConfig = config => {
         out: output.outputFile,
         makeSwatch: output.makeSwatch,
         base: output.base,
-
-        reader: config.reader,
-        lessCompiler: config.lessCompiler
-    };
+    });
 };
 
 module.exports = parseConfig;
