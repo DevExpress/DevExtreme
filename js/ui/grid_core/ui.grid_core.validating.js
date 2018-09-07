@@ -577,52 +577,56 @@ module.exports = {
                     }
                 },
 
-                _showValidationMessage: function($cell, message, alignment, revertTooltip) {
-                    var that = this,
-                        rowData,
-                        cellIndex,
+                _hideFixedGroupCell: function($cell, overlayOptions) {
+                    var cellIndex,
+                        rowOptions,
                         groupLevel,
-                        colspan,
                         groupCellIndex,
                         $fixedRowElement,
+                        prevGroupColspan,
                         $groupCellElement,
-                        needRepaint,
-                        $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
-                        myPosition = isOverlayVisible ? "top right" : "top " + alignment,
-                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment,
-                        isFixedColumns = that._rowsView.isFixedColumns(),
-                        isFormEditMode = that._editingController.isFormEditMode();
+                        isFixedColumns = this._rowsView.isFixedColumns(),
+                        isFormEditMode = this._editingController.isFormEditMode();
 
                     if(isFixedColumns && !isFormEditMode) {
-                        rowData = $cell.closest(".dx-row").next().data("options");
+                        rowOptions = $cell.closest(".dx-row").next().data("options");
 
-                        if(rowData.rowType === "group") {
-                            $fixedRowElement = $(that._rowsView.getRowElement(rowData.rowIndex)).last();
-                            groupCellIndex = rowData.groupIndex + 1;
+                        if(rowOptions && rowOptions.rowType === "group") {
+                            $fixedRowElement = $(this._rowsView.getRowElement(rowOptions.rowIndex)).last();
+                            groupCellIndex = rowOptions.groupIndex + 1;
                             $groupCellElement = $fixedRowElement.children().eq(groupCellIndex);
 
                             if($groupCellElement && $groupCellElement.css("visibility") !== "hidden") {
                                 cellIndex = $cell.index();
 
                                 if(cellIndex > groupCellIndex) {
-                                    colspan = $groupCellElement.attr("colspan");
+                                    prevGroupColspan = $groupCellElement.attr("colspan");
                                     groupLevel = $fixedRowElement.prev().children().filter(".dx-datagrid-group-space").length;
-                                    $groupCellElement.attr("colspan", groupLevel - rowData.groupIndex);
+                                    $groupCellElement.attr("colspan", groupLevel - rowOptions.groupIndex);
                                 } else {
                                     $groupCellElement.css("visibility", "hidden");
                                 }
+
+                                overlayOptions.onDisposing = function() {
+                                    if(prevGroupColspan) {
+                                        $groupCellElement.attr("colspan", prevGroupColspan);
+                                    } else {
+                                        $groupCellElement.css("visibility", "");
+                                    }
+                                };
                             }
                         }
                     }
+                },
 
-                    new Overlay($("<div>")
-                        .addClass(INVALID_MESSAGE_CLASS)
-                        .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                        .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
-                        .text(message)
-                        .appendTo($cell),
-                        {
+                _showValidationMessage: function($cell, message, alignment, revertTooltip) {
+                    var that = this,
+                        needRepaint,
+                        $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
+                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
+                        myPosition = isOverlayVisible ? "top right" : "top " + alignment,
+                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment,
+                        overlayOptions = {
                             target: $highlightContainer.length ? $highlightContainer : $cell,
                             container: $cell,
                             shading: false,
@@ -649,17 +653,19 @@ module.exports = {
                                 }
 
                                 that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
-                            },
-                            onDisposing: function() {
-                                if($groupCellElement) {
-                                    if(colspan) {
-                                        $groupCellElement.attr("colspan", colspan);
-                                    } else if(cellIndex !== undefined) {
-                                        $groupCellElement.css("visibility", "");
-                                    }
-                                }
                             }
-                        });
+                        };
+
+                    that._hideFixedGroupCell($cell, overlayOptions);
+
+                    new Overlay($("<div>")
+                        .addClass(INVALID_MESSAGE_CLASS)
+                        .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
+                        .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                        .text(message)
+                        .appendTo($cell),
+                        overlayOptions
+                    );
                 },
 
                 _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
