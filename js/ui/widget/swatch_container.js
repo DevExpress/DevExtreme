@@ -1,7 +1,7 @@
 const $ = require("../../core/renderer");
 const viewPortUtils = require("../../core/utils/view_port");
 
-const SWATCH_CONTAINER_CLASS_PREFIX = "dx-additional-color-scheme-";
+const SWATCH_CONTAINER_CLASS_PREFIX = "dx-swatch-";
 
 const getSwatchContainer = element => {
     const $element = $(element);
