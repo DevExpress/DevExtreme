@@ -1684,16 +1684,7 @@ Axis.prototype = {
             visualRange = visualRangeOptionValue;
         }
 
-        if(!that._skipVisualRangeApplying) {
-            that._setVisualRange(visualRange);
-        } else {
-            that._setVisualRange({
-                startValue: null,
-                endValue: null
-            });
-        }
-
-        that._skipVisualRangeApplying = false;
+        that._setVisualRange(visualRange);
     },
 
     _validateVisualRange(visualRange) {
