@@ -2466,6 +2466,49 @@ QUnit.test("search should stay opened after the search when focus state is disab
     assert.ok(selectBox.option("opened"), "selectBox should be opened");
 });
 
+QUnit.testInActiveWindow("widget with fieldTemplate and remote data source should display right value after search and selection (T668290)", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            dataSource: {
+                store: new CustomStore({
+                    byKey: noop,
+                    load: function(options) {
+                        return [{
+                            Id: "1",
+                            Name: "Name 1"
+                        }, {
+                            Id: "2",
+                            Name: "Name 2"
+                        }];
+                    },
+                    key: "Id"
+                })
+            },
+            valueExpr: "Id",
+            displayValue: "Name",
+            fieldTemplate: function(data) {
+                return $("<div>").dxTextBox({
+                    value: (data !== null) ? data.Name : ""
+                });
+            },
+            minSearchLength: 1,
+            showDataBeforeSearch: false,
+            searchEnabled: true,
+            searchTimeout: 0,
+            itemTemplate: function(data) {
+                return "<div><span>" + data.Name + "</span></div>";
+            }
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        keyboard = keyboardMock($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)));
+
+    keyboard.type("a");
+
+    var listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+    listItem.trigger("dxclick");
+
+    assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), "Name 2", "selectBox displays right value");
+});
+
 QUnit.testInActiveWindow("Value should be null after input is cleared and enter key is tapped", function(assert) {
     var items = [1, 2],
         $selectBox = $("#selectBox").dxSelectBox({

@@ -221,10 +221,12 @@ var SelectBox = DropDownList.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isWin8();
+                    return themes.isWin8(themeName);
                 },
                 options: {
                     _isAdaptablePopupPosition: true,
@@ -236,7 +238,7 @@ var SelectBox = DropDownList.inherit({
             },
             {
                 device: function() {
-                    return themes.isAndroid5();
+                    return themes.isAndroid5(themeName);
                 },
                 options: {
                     _isAdaptablePopupPosition: true,
@@ -644,6 +646,7 @@ var SelectBox = DropDownList.inherit({
 
     _listItemClickHandler: function(e) {
         var previousValue = this._getCurrentValue();
+        this._focusListElement($(e.itemElement));
 
         this._saveValueChangeEvent(e.event);
 

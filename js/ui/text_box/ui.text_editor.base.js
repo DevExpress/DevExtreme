@@ -282,10 +282,12 @@ var TextEditorBase = Editor.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isAndroid5();
+                    return themes.isAndroid5(themeName);
                 },
                 options: {
                     validationMessageOffset: { v: -8 }
@@ -293,7 +295,7 @@ var TextEditorBase = Editor.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     stylingMode: "standard"
