@@ -1324,7 +1324,7 @@ QUnit.test("contentTemplate option support dynamic change in a set of options", 
         visible: true
     });
 
-    assert.equal(overlay.content().textContent, "template2", "template rerendered correctly");
+    assert.equal(overlay.$content().text(), "template2", "template rerendered correctly");
 });
 
 QUnit.module("defer rendering", moduleConfig);
