@@ -939,7 +939,14 @@ QUnit.test("minWidth should be rendered correctly in overlap mode, top menu posi
         opened: false,
         position: "top",
         revealMode: "slide",
-        openedStateMode: "overlap"
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
     });
 
     const instance = $element.dxDrawer("instance");
@@ -947,13 +954,13 @@ QUnit.test("minWidth should be rendered correctly in overlap mode, top menu posi
     const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minWidth is set");
-    assert.equal($menu.position().top, -690, "menu has correct top when minWidth is set");
+    assert.equal($menu.position().top, -150, "menu has correct top when minWidth is set");
     assert.equal($menu.height(), 1000, "menu has correct height when minWidth is set");
 
     instance.toggle();
 
     assert.equal($content.position().top, 0, "content has correct top when minWidth is set");
-    assert.equal($menu.position().top, -540, "menu has correct top when minWidth is set");
+    assert.equal($menu.position().top, 400, "menu has correct top when minWidth is set");
     assert.equal($menu.height(), 1000, "menu has correct height when minWidth is set");
 
     fx.off = false;
@@ -967,7 +974,14 @@ QUnit.test("maxWidth should be rendered correctly in overlap mode, top menu posi
         opened: false,
         position: "top",
         revealMode: "slide",
-        openedStateMode: "overlap"
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
     });
 
     const instance = $element.dxDrawer("instance");
@@ -975,13 +989,13 @@ QUnit.test("maxWidth should be rendered correctly in overlap mode, top menu posi
     const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minWidth is set");
-    assert.equal($menu.position().top, -740, "menu has correct top when minWidth is set");
+    assert.equal($menu.position().top, -200, "menu has correct top when minWidth is set");
     assert.equal($menu.height(), 1000, "menu has correct height when minWidth is set");
 
     instance.toggle();
 
     assert.equal($content.position().top, 0, "content has correct top when minWidth is set");
-    assert.equal($menu.position().top, -640, "menu has correct top when minWidth is set");
+    assert.equal($menu.position().top, -100, "menu has correct top when minWidth is set");
     assert.equal($menu.height(), 1000, "menu has correct height when minWidth is set");
 
     fx.off = false;
