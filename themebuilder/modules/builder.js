@@ -1,8 +1,8 @@
-const MetadataLoader = require("../modules/metadata-loader.js");
-const MetadataRepository = require("../modules/metadata-repository.js");
-const LessTemplateLoader = require("../modules/less-template-loader.js");
-const themes = require("../modules/themes.js");
-const normalize = require("../modules/config-normalizer");
+const MetadataLoader = require("./metadata-loader.js");
+const MetadataRepository = require("./metadata-repository.js");
+const LessTemplateLoader = require("./less-template-loader.js");
+const themes = require("./themes.js");
+const normalize = require("./config-normalizer");
 
 const processTheme = (config, metadata, version) => {
     let lessTemplateLoader = new LessTemplateLoader(config, version);
