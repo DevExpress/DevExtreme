@@ -103,14 +103,15 @@ class OverlapStrategy extends DrawerStrategy {
         }
 
         if(this._drawer.option("revealMode") === "expand") {
+            const $element = this._drawer._overlay.$content();
             const width = this._getPanelWidth(offset);
             if(animate) {
-                animation.width($(this._drawer._$panel), width, this._drawer.option("animationDuration"), () => {
+                animation.width($element, width, this._drawer.option("animationDuration"), () => {
                     this._contentAnimationResolve();
                     this._panelAnimationResolve();
                 });
             } else {
-                $(this._drawer._$panel).css("width", width);
+                $($element).css("width", width);
             }
         }
     }
