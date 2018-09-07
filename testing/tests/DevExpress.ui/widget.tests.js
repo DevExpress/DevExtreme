@@ -474,6 +474,17 @@ require("common.css!");
         assert.ok(!element.hasClass(ACTIVE_STATE_CLASS));
     });
 
+    QUnit.test("active state should be cleared after repaint", function(assert) {
+        var element = this.element.dxWidget({ activeStateEnabled: true }),
+            instance = element.dxWidget("instance");
+
+        this.mouse.active();
+
+        instance.repaint();
+
+        assert.notOk(element.hasClass(ACTIVE_STATE_CLASS));
+    });
+
     QUnit.test("widget with ui feedback support, disabled state", function(assert) {
         var el = this.element.dxWidget({
             activeStateEnabled: true,
@@ -720,7 +731,6 @@ require("common.css!");
             .trigger("dxpointerup")
             .trigger("dxclick");
     });
-
 
     QUnit.module("widget sizing render");
 

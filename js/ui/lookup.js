@@ -1212,6 +1212,7 @@ var Lookup = DropDownList.inherit({
     _clean: function() {
         this._$fieldWrapper.remove();
         this._$searchBox = null;
+        delete this._inkRipple;
         this.callBase();
     },
 

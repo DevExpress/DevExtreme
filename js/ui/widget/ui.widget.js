@@ -478,9 +478,13 @@ var Widget = DOMComponent.inherit({
         this.callBase();
     },
 
+    _resetActiveState: function() {
+        this._toggleActiveState(this._eventBindingTarget(), false);
+    },
+
     _clean: function() {
         this._cleanFocusState();
-
+        this._resetActiveState();
         this.callBase();
         this.$element().empty();
     },

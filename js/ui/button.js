@@ -406,9 +406,9 @@ var Button = Widget.inherit({
     },
 
     _clean: function() {
+        delete this._inkRipple;
         this.callBase();
         delete this._$content;
-        delete this._inkRipple;
     }
 
 }).include(ValidationMixin);
