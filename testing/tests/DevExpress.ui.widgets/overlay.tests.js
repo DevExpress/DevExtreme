@@ -1312,6 +1312,20 @@ QUnit.test("contentTemplate option support dynamic change", function(assert) {
     assert.equal($.trim($overlay.dxOverlay("$content").text()), "template2", "template rerendered");
 });
 
+QUnit.test("contentTemplate option support dynamic change in a set of options", function(assert) {
+    var overlay = $("#overlay").dxOverlay({
+        contentTemplate: "template1",
+        visible: true
+    }).dxOverlay("instance");
+
+    overlay.hide();
+    overlay.option({
+        contentTemplate: "template2",
+        visible: true
+    });
+
+    assert.equal(overlay.$content().text(), "template2", "template rerendered correctly");
+});
 
 QUnit.module("defer rendering", moduleConfig);
 
