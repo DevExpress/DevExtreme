@@ -1,12 +1,13 @@
 /* eslint no-console: 0 */
 
-const path = require("path");
 const commands = require("./commands");
 
 const DEFAULT_OUT_COLOR_SCHEME = "custom-scheme";
 
+const extname = filename => filename.substring(filename.lastIndexOf("."));
+
 const getBootstrapConfig = fileName => {
-    const extension = path.extname(fileName);
+    const extension = extname(fileName);
     let bootstrap = false;
     let version = 0;
 
@@ -24,7 +25,7 @@ const getBootstrapConfig = fileName => {
 const getOutParameters = (command, themeName, config) => {
     let outputFile = config.outputFile || "";
     let outColorScheme = config.outputColorScheme || "";
-    let fileFormat = config.outputFormat || path.extname(outputFile).substr(1);
+    let fileFormat = config.outputFormat || extname(outputFile).substr(1);
 
     const makeSwatch = !!config.makeSwatch;
     const base = !!config.base;
