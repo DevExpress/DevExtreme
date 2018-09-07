@@ -1,6 +1,6 @@
 import typeUtils from '../../core/utils/type';
 
-const XlsxTagUtils = {
+const XlsxTagHelper = {
     toXml: function(tagName, attributes, content) {
         var result = ['<', tagName];
 
@@ -21,4 +21,4 @@ const XlsxTagUtils = {
     }
 };
 
-export default XlsxTagUtils;
+export default XlsxTagHelper;

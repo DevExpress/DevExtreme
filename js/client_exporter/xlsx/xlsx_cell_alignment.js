@@ -1,7 +1,7 @@
 import typeUtils from "../../core/utils/type";
-import XlsxTagUtils from './xlsx_tag_utils';
+import XlsxTagHelper from './xlsx_tag_utils';
 
-const XlsxCellAlignmentUtils = {
+const XlsxCellAlignmentHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
@@ -10,7 +10,7 @@ const XlsxCellAlignmentUtils = {
                 wrapText: sourceObj.wrapText,
                 horizontal: sourceObj.horizontal,
             };
-            if(XlsxCellAlignmentUtils.isEmpty(result)) {
+            if(XlsxCellAlignmentHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -18,7 +18,7 @@ const XlsxCellAlignmentUtils = {
     },
 
     areEqual: function(leftTag, rightTag) {
-        return XlsxCellAlignmentUtils.isEmpty(leftTag) && XlsxCellAlignmentUtils.isEmpty(rightTag) ||
+        return XlsxCellAlignmentHelper.isEmpty(leftTag) && XlsxCellAlignmentHelper.isEmpty(rightTag) ||
             (
                 typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
                 leftTag.vertical === rightTag.vertical &&
@@ -33,11 +33,11 @@ const XlsxCellAlignmentUtils = {
     },
 
     toXml: function(tag) {
-        if(XlsxCellAlignmentUtils.isEmpty(tag)) {
+        if(XlsxCellAlignmentHelper.isEmpty(tag)) {
             return '';
         } else {
             // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            return XlsxTagUtils.toXml(
+            return XlsxTagHelper.toXml(
                 "alignment",
                 {
                     vertical: tag.vertical,
@@ -49,4 +49,4 @@ const XlsxCellAlignmentUtils = {
     }
 };
 
-export default XlsxCellAlignmentUtils;
+export default XlsxCellAlignmentHelper;
