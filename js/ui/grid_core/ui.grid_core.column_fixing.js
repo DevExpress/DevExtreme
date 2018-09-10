@@ -186,7 +186,7 @@ var baseFixedColumns = {
 
             each(fixedCellElements, function(columnIndex, cell) {
                 if(isGroupRow) {
-                    if(cellElements[columnIndex] && $(cell).css("visibility") !== "hidden") {
+                    if(cellElements[columnIndex] && cell.style.visibility !== "hidden") {
                         cellElements[columnIndex] = cell;
                     }
                 } else {
