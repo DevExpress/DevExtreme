@@ -940,7 +940,7 @@ var BaseChart = BaseWidget.inherit({
         that._themeManager.update(that._options);
         that.callBase.apply(that, arguments);
         that._doRefresh();
-        that._triggerOptionChanged();
+        // that._triggerOptionChanged();
     },
 
     _triggerOptionChanged: noop,
@@ -973,7 +973,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
-        "FORCE_RENDER", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
+        "FORCE_RENDER", "VISUAL_RANGE", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
 
     _change_ANIMATION: function() {
         this._renderer.updateAnimationOptions(this._getAnimationOptions());

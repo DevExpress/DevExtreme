@@ -83,7 +83,8 @@ var AdvancedChart = BaseChart.inherit({
         const panes = that.panes;
         const rotated = that._isRotated();
         const argumentAxesOptions = prepareAxis(that.option("argumentAxis") || {})[0];
-        const valueAxesOptions = prepareAxis(that.option("valueAxis") || {});
+        const valueAxisOption = that.option("valueAxis");
+        const valueAxesOptions = prepareAxis(valueAxisOption || {});
         let argumentAxesPopulatedOptions = [];
         let valueAxesPopulatedOptions = [];
         const axisNames = [];
@@ -107,6 +108,7 @@ var AdvancedChart = BaseChart.inherit({
                 {
                     pane: pane.name,
                     name: null,
+                    optionPath: "argumentAxis",
                     crosshairMargin: rotated ? crosshairMargins.x : crosshairMargins.y
                 },
                 rotated, virtual);
@@ -134,10 +136,13 @@ var AdvancedChart = BaseChart.inherit({
             }
 
             _each(axisPanes, (_, pane) => {
+                let optionPath = _isArray(valueAxisOption) ? `valueAxis[${priority}]` : "valueAxis";
+
                 valueAxesPopulatedOptions.push(that._populateAxesOptions("valueAxis", axisOptions, {
                     name: name || getNextAxisName(),
-                    pane: pane,
-                    priority: priority,
+                    pane,
+                    priority,
+                    optionPath,
                     crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
                 }, rotated));
             });
@@ -187,7 +192,7 @@ var AdvancedChart = BaseChart.inherit({
                     isArgumentAxes ? index : undefined);
                 axes.push(axis);
             }
-            axis.applyVisualRangeSetter(that._getVisualRangeSetter(isArgumentAxes));
+            axis.applyVisualRangeSetter(that._getVisualRangeSetter());
         });
     },
 
@@ -502,6 +507,7 @@ var AdvancedChart = BaseChart.inherit({
         const renderingSettings = _extend({
             renderer: that._renderer,
             incidentOccurred: that._incidentOccurred,
+            eventTrigger: that._eventTrigger,
             axisClass: isArgumentAxes ? "arg" : "val",
             widgetClass: "dxc",
             stripsGroup: that._stripsGroup,

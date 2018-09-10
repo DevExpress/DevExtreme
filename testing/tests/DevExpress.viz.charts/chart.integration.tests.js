@@ -313,7 +313,7 @@ QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)"
     visualRangeChanged.reset();
     chart.getValueAxis().visualRange([3, 6]);
 
-    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { startValue: 3, endValue: 6 });
+    assert.deepEqual(visualRangeChanged.lastCall.args[0].value, { startValue: 3, endValue: 6 });
     assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 6 });
 });
 
@@ -527,13 +527,12 @@ QUnit.test("Using the single section of axis options for some panes (check custo
         valueAxis: { name: "ax1" }
     });
 
-    assert.ok(chart);
-
     chart.getArgumentAxis().visualRange([4, 6]);
     panes.push({ name: "p2" });
     chart.option("panes", panes);
 
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 16, endValue: 26 });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), chart.getValueAxis().visualRange());
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 4, endValue: 6 }, "argument visual range");
     assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 5.6, endValue: 7.2 });
     assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 16, endValue: 26 });
 });
@@ -567,8 +566,6 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
         series: { type: "line" },
         onOptionChanged: visualRangeChanged
     });
-
-    assert.ok(chart);
 
     visualRangeChanged.reset();
     chart.option("valueAxis.visualRange", [3, 6]);
