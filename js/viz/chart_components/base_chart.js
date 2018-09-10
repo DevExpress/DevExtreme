@@ -940,10 +940,7 @@ var BaseChart = BaseWidget.inherit({
         that._themeManager.update(that._options);
         that.callBase.apply(that, arguments);
         that._doRefresh();
-        // that._triggerOptionChanged();
     },
-
-    _triggerOptionChanged: noop,
 
     _optionChangesMap: {
         animation: "ANIMATION",

@@ -598,6 +598,43 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
     assert.deepEqual(chart._options.valueAxis._customVisualRange, [2, 7]);
 });
 
+QUnit.test("Set zoom in the onDone callback", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 5,
+        val: 7
+    }, {
+        arg: 8,
+        val: 3
+    }, {
+        arg: 11,
+        val: 8
+    }];
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        series: { type: "line" },
+        onDone: function(e) {
+            e.component.zoomArgument(2, 5);
+        }
+    });
+
+    var businessRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 2, endValue: 5 });
+    assert.equal(businessRange.minVisible, 2);
+    assert.equal(businessRange.maxVisible, 5);
+});
+
 QUnit.test("Set null visualRange", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
 
