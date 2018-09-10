@@ -66,9 +66,13 @@ const getThemeAndColorScheme = config => {
         themeName = themeParts[0];
         colorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
     } else if(config.themeId) {
-        const theme = themes.filter(t => t.themeId === config.themeId)[0];
-        themeName = theme.name;
-        colorScheme = theme.colorScheme;
+        const theme = themes.find(t => t.themeId === config.themeId);
+        if(!theme) {
+            console.log("Wrong theme id: " + config.themeId);
+        } else {
+            themeName = theme.name;
+            colorScheme = theme.colorScheme;
+        }
     }
 
     return {

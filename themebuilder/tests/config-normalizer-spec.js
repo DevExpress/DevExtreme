@@ -437,4 +437,23 @@ describe("Cli arguments normalizer", () => {
             "themeName": "material"
         });
     });
+
+    it("build-theme: if themeId is wrong, generic.light will be used", () => {
+        const config = { command: "build-theme", themeId: 270 };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "light",
+            "command": "build-theme",
+            "data": {},
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.generic.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "themeName": "generic"
+        });
+    });
 });
