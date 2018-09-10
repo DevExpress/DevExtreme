@@ -39,7 +39,8 @@ QUnit.testStart(function() {
 });
 
 var BOX_CLASS = "dx-box",
-    BOX_ITEM_CLASS = "dx-box-item";
+    BOX_ITEM_CLASS = "dx-box-item",
+    BOX_ITEM_CONTENT_CLASS = "dx-box-item-content";
 
 var relativeOffset = function($element, $relativeElement) {
     $relativeElement = $relativeElement || $element.parent();
@@ -189,6 +190,11 @@ QUnit.test("direction row", function(assert) {
     };
 
     assert.deepEqual(secondItemLayout, secondItemExpectedLayout, "second item positioned correctly");
+
+    var $firstItemContent = $firstItem.find("." + BOX_ITEM_CONTENT_CLASS);
+    $firstItemContent.append($("<div>").width(0.75 * size));
+
+    assert.equal($firstItemContent.width(), size / 2, "item content width is less or equal to item width");
 });
 
 QUnit.test("align for column direction", function(assert) {
