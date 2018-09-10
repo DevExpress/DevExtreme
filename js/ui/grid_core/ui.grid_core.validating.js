@@ -35,6 +35,7 @@ var INVALIDATE_CLASS = "invalid",
     EDIT_MODE_BATCH = "batch",
     EDIT_MODE_CELL = "cell",
     EDIT_MODE_POPUP = "popup",
+    GROUP_CELL_CLASS = "dx-group-cell",
 
     FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
@@ -577,21 +578,39 @@ module.exports = {
                     }
                 },
 
+                _hideFixedGroupCell: function($cell, overlayOptions) {
+                    var nextRowOptions,
+                        $nextFixedRowElement,
+                        $groupCellElement,
+                        isFixedColumns = this._rowsView.isFixedColumns(),
+                        isFormEditMode = this._editingController.isFormEditMode();
+
+                    if(isFixedColumns && !isFormEditMode) {
+                        nextRowOptions = $cell.closest(".dx-row").next().data("options");
+
+                        if(nextRowOptions && nextRowOptions.rowType === "group") {
+                            $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
+                            $groupCellElement = $nextFixedRowElement.find("." + GROUP_CELL_CLASS);
+
+                            if($groupCellElement.length && $groupCellElement.get(0).style.visibility !== "hidden") {
+                                $groupCellElement.css("visibility", "hidden");
+
+                                overlayOptions.onDisposing = function() {
+                                    $groupCellElement.css("visibility", "");
+                                };
+                            }
+                        }
+                    }
+                },
+
                 _showValidationMessage: function($cell, message, alignment, revertTooltip) {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
-                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
-
-                    new Overlay($("<div>")
-                        .addClass(INVALID_MESSAGE_CLASS)
-                        .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                        .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
-                        .text(message)
-                        .appendTo($cell),
-                        {
+                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment,
+                        overlayOptions = {
                             target: $highlightContainer.length ? $highlightContainer : $cell,
                             container: $cell,
                             shading: false,
@@ -619,7 +638,18 @@ module.exports = {
 
                                 that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                             }
-                        });
+                        };
+
+                    that._hideFixedGroupCell($cell, overlayOptions);
+
+                    new Overlay($("<div>")
+                        .addClass(INVALID_MESSAGE_CLASS)
+                        .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
+                        .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                        .text(message)
+                        .appendTo($cell),
+                        overlayOptions
+                    );
                 },
 
                 _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
