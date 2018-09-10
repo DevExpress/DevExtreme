@@ -5953,6 +5953,7 @@ QUnit.test("parseValue for column with number dataField", function(assert) {
     assert.strictEqual(column.parseValue(undefined), undefined);
     assert.strictEqual(column.parseValue(''), undefined);
     assert.strictEqual(column.parseValue('a'), undefined);
+    assert.strictEqual(column.parseValue('a1'), undefined, "Number should parse for numeric data (T669808)");
     assert.strictEqual(column.parseValue('201'), 201);
     assert.strictEqual(column.parseValue('1.2'), 1.2);
     assert.strictEqual(column.parseValue('12'), 12);
