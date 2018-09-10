@@ -858,6 +858,13 @@ QUnit.test("isValid", function(assert) {
     assert.strictEqual(translator.isValid({}), false, "object");
 });
 
+
+QUnit.test("Default positioin when 0 is in break", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, { min: -200, max: 700, breaks: [{ from: -100, to: 100 }] });
+
+    assert.equal(translator.translate("canvas_position_default"), 640, 'BP inside range');
+});
+
 QUnit.module('Datetime translator', {
     beforeEach: function() {
         this.createTranslator = function(range, _, options) {
