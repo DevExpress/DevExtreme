@@ -2093,6 +2093,9 @@ QUnit.test('Default value', function(assert) {
     checkTranslator(500, { min: 100, max: 200, invert: true, axisType: 'continuous', dataType: 'numeric' }, { isHorizontal: false }, 'Invert = true. Position = vertical. Range is positive');
     checkTranslator(1500, { min: -200, max: -100, invert: true, axisType: 'continuous', dataType: 'numeric' }, { isHorizontal: false }, 'Invert = true. Position = vertical. Range is negative');
     checkTranslator(1000, { min: -200, max: 200, invert: true, axisType: 'continuous', dataType: 'numeric' }, { isHorizontal: false }, 'Invert = true. Position = vertical. Range includes zero');
+
+    checkTranslator(1000, { min: 180, max: 180, axisType: 'continuous', dataType: 'numeric' }, { }, 'Invert = false. Position = horizontal. Middle of the canvas is default');
+    checkTranslator(1000, { min: new Date(10000), max: new Date(10000), invert: true, axisType: 'continuous', dataType: 'datetime' }, 'Datetime. Invert = true. Position = horizontal. Middle of the canvas is default');
 });
 
 QUnit.test('Other values', function(assert) {

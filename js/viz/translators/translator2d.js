@@ -305,30 +305,30 @@ _Translator2d.prototype = {
     },
 
     _calculateSpecialValues: function() {
-        var that = this,
-            canvasOptions = that._canvasOptions,
-            startPoint = canvasOptions.startPoint,
-            endPoint = canvasOptions.endPoint,
-            range = that._businessRange,
-            minVisible = range.minVisible,
-            maxVisible = range.maxVisible,
-            invert,
-            canvas_position_default,
-            canvas_position_center_middle;
+        const that = this;
+        const canvasOptions = that._canvasOptions;
+        const startPoint = canvasOptions.startPoint;
+        const endPoint = canvasOptions.endPoint;
+        const range = that._businessRange;
+        const minVisible = range.minVisible;
+        const maxVisible = range.maxVisible;
+        const canvas_position_center_middle = startPoint + canvasOptions.canvasLength / 2;
+        let canvas_position_default;
 
-        if(minVisible <= 0 && maxVisible >= 0) {
+        if(isDefined(minVisible) && isDefined(maxVisible) && minVisible.valueOf() === maxVisible.valueOf()) {
+            canvas_position_default = canvas_position_center_middle;
+        } else if(minVisible <= 0 && maxVisible >= 0) {
             that.sc = {};// we can not call translate method without sc object
             canvas_position_default = that.translate(0);
-        } else {
-            invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);
+        }
+        if(!isDefined(canvas_position_default)) {
+            const invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);
             if(that._options.isHorizontal) {
                 canvas_position_default = invert ? endPoint : startPoint;
             } else {
                 canvas_position_default = invert ? startPoint : endPoint;
             }
         }
-
-        canvas_position_center_middle = startPoint + canvasOptions.canvasLength / 2;
 
         that.sc = {
             "canvas_position_default": canvas_position_default,
