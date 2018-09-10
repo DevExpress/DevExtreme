@@ -25,7 +25,6 @@ window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
 var $ = require("jquery"),
     devices = require("core/devices"),
     device = devices.real(),
-    browser = require("core/utils/browser"),
     setTemplateEngine = require("ui/set_template_engine"),
     nativePointerMock = require("../../helpers/nativePointerMock.js"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -548,11 +547,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(0).html(), "&nbsp;", "text a first cell in data row");
     assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(1).html(), "&nbsp;", "text a second cell in data row");
     assert.equal($fixTable.find("tbody > .dx-data-row").first().find("td").eq(1).attr("colspan"), 3, "colspan a second cell in data row");
-    if(browser.mozilla) {
-        assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("display"), "none", "group cell is visible");
-    } else {
-        assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("visibility"), "hidden", "group cell is visible");
-    }
+    assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("visibility"), "hidden", "group cell is visible");
     assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(2).text(), "test2", "text a third cell in data row");
 });
 
@@ -689,11 +684,7 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed column in group 
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").length, 3, "count cell in group row");
     assert.ok($fixTable.find("tbody > .dx-group-row").find("td").first().hasClass("dx-datagrid-expand"), "has expand column in group row");
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).text(), "Column 4: test4", "text second cell in group row");
-    if(browser.mozilla) {
-        assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("display"), "none", "group cell is visible");
-    } else {
-        assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("visibility"), "hidden", "group cell is visible");
-    }
+    assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("visibility"), "hidden", "group cell is visible");
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").eq(1).attr("colspan"), 3, "colspan a second cell in group row");
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(2).text(), "Column2 Count: 2", "summary value");
 });
@@ -753,11 +744,7 @@ QUnit.test("Draw fixed table for rowsView with summary by unfixed column in grou
     assert.equal($cellElements.length, 3, "count cell in group row");
     assert.ok($cellElements.first().hasClass("dx-datagrid-expand"), "has expand column in group row");
     assert.strictEqual($cellElements.eq(1).text(), "Column 4: test4", "text second cell in group row");
-    if(browser.mozilla) {
-        assert.equal($cellElements.eq(1).css("display"), "none", "group cell is visible");
-    } else {
-        assert.equal($cellElements.eq(1).css("visibility"), "hidden", "group cell is visible");
-    }
+    assert.equal($cellElements.eq(1).css("visibility"), "hidden", "group cell is visible");
     assert.equal($cellElements.eq(1).attr("colspan"), 3, "colspan a second cell in group row");
 });
 
@@ -827,11 +814,7 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on left side) a
     assert.equal($cellElements.length, 4, "count cell in group row");
     assert.ok($cellElements.first().hasClass("dx-datagrid-expand"), "has expand column in group row");
     assert.strictEqual($cellElements.eq(1).text(), "Column 4: test4", "text second cell in group row");
-    if(browser.mozilla) {
-        assert.notEqual($cellElements.eq(1).css("display"), "none", "group cell is visible");
-    } else {
-        assert.notEqual($cellElements.eq(1).css("visibility"), "hidden", "group cell is visible");
-    }
+    assert.notEqual($cellElements.eq(1).css("visibility"), "hidden", "group cell is visible");
     assert.equal($cellElements.eq(1).attr("colspan"), 1, "colspan a second cell in group row");
     assert.strictEqual($cellElements.eq(2).text(), "Column3 Count: 2", "summary value");
     assert.ok($cellElements.eq(3).hasClass("dx-pointer-events-none"), "transparent column");
@@ -900,11 +883,7 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on right side) 
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").length, 3, "count cell in group row");
     assert.ok($fixTable.find("tbody > .dx-group-row").find("td").first().hasClass("dx-datagrid-expand"), "has expand column in group row");
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(1).text(), "Column 4: test4", "text second cell in group row");
-    if(browser.mozilla) {
-        assert.equal($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("display"), "none", "group cell is not visible");
-    } else {
-        assert.equal($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("visibility"), "hidden", "group cell is not visible");
-    }
+    assert.equal($fixTable.find("tbody > .dx-group-row").find("td").eq(1).css("visibility"), "hidden", "group cell is not visible");
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").eq(1).attr("colspan"), 3, "colspan a second cell in group row");
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").eq(2).text(), "Column2 Count: 2", "summary value");
 });
@@ -2995,4 +2974,23 @@ QUnit.test("Scroll top should be correct after expanding master detail", functio
 
     // assert
     assert.ok(scrollable.scrollTop() > 0, "scroll top");
+});
+
+QUnit.test("'getCellElement' function return group cell from correct table", function(assert) {
+    // arrange
+    var isCellFromFixedTable = function($cell) {
+        return $cell && !!$cell.closest(".dx-datagrid-content-fixed").length;
+    };
+
+    var $testElement = $("#container");
+
+    this.options.columns[0].fixedPosition = "right";
+    this.options.columns[1] = { dataField: "field2", groupIndex: 0 };
+
+    this.setupDataGrid();
+    this.rowsView.render($testElement);
+
+    // act, assert
+    assert.ok(isCellFromFixedTable($(this.getCellElement(0, 0))), "fixed cell");
+    assert.ok(isCellFromFixedTable($(this.getCellElement(0, 1))), "fixed cell");
 });
