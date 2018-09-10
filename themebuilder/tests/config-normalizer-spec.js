@@ -42,7 +42,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme-vars" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 0,
@@ -62,7 +61,6 @@ describe("Cli arguments normalizer", () => {
         let config = { command: "build-theme", inputFile: "vars.less" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 3,
@@ -80,7 +78,6 @@ describe("Cli arguments normalizer", () => {
 
         config = { command: "build-theme", inputFile: "vars.scss" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -101,7 +98,6 @@ describe("Cli arguments normalizer", () => {
         let config = { command: "build-theme-vars", inputFile: "vars.less" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 3,
@@ -116,10 +112,8 @@ describe("Cli arguments normalizer", () => {
             "themeName": "generic"
         });
 
-
         config = { command: "build-theme-vars", inputFile: "vars.scss" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -135,10 +129,8 @@ describe("Cli arguments normalizer", () => {
             "themeName": "generic"
         });
 
-
         config = { command: "build-theme-vars", inputFile: "vars.scss", outputFile: "./dir/file.scss" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -159,7 +151,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme", outputFile: "./dir/file.css", outputColorScheme: "green" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 0,
@@ -178,7 +169,6 @@ describe("Cli arguments normalizer", () => {
     it("build-theme output parameters (color scheme only)", () => {
         const config = { command: "build-theme", outputColorScheme: "green" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -199,7 +189,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme", outputColorScheme: "green", makeSwatch: true, base: true };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": true,
             "bootstrapVersion": 0,
@@ -218,7 +207,6 @@ describe("Cli arguments normalizer", () => {
     it("build-theme output parameters (color scheme not valid)", () => {
         const config = { command: "build-theme", outputColorScheme: "$#@green" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -239,7 +227,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme-vars", outputColorScheme: "green" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 0,
@@ -258,7 +245,6 @@ describe("Cli arguments normalizer", () => {
     it("build-theme-vars output parameters (color scheme, output file: less)", () => {
         const config = { command: "build-theme-vars", outputColorScheme: "green", outputFile: "vars.less" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -279,7 +265,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme-vars", outputColorScheme: "green", outputFile: "vars.scss" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 0,
@@ -298,7 +283,6 @@ describe("Cli arguments normalizer", () => {
     it("build-theme-vars output parameters (color scheme, output file: scss, file format: less) (wrong file format - file extension pair)", () => {
         const config = { command: "build-theme-vars", outputColorScheme: "green", outputFile: "vars.scss", outputFormat: "less" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -319,7 +303,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme-vars", outputColorScheme: "green", outputFormat: "scss" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 0,
@@ -339,7 +322,6 @@ describe("Cli arguments normalizer", () => {
         const config = { command: "build-theme", baseTheme: "material.blue.light" };
         normalizeConfig(config);
 
-
         assert.deepEqual(config, {
             "base": false,
             "bootstrapVersion": 0,
@@ -358,7 +340,6 @@ describe("Cli arguments normalizer", () => {
     it("build-theme input parameters (base theme, input file)", () => {
         const config = { command: "build-theme", baseTheme: "material.blue.light", inputFile: "file.json" };
         normalizeConfig(config);
-
 
         assert.deepEqual(config, {
             "base": false,
@@ -415,6 +396,44 @@ describe("Cli arguments normalizer", () => {
             "out": "dx.material.custom-scheme.css",
             "outColorScheme": "custom-scheme",
             "reader": "r",
+            "themeName": "material"
+        });
+    });
+
+    it("build-theme: if themeId is set, but baseTheme not - right theme will be set", () => {
+        const config = { command: "build-theme", themeId: 27 };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "teal-light",
+            "command": "build-theme",
+            "data": {},
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.material.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "themeName": "material"
+        });
+    });
+
+    it("build-theme: if themeId and baseTheme both are set - themeId will be ignored", () => {
+        const config = { command: "build-theme", themeId: 27, baseTheme: "material.blue.light" };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "blue-light",
+            "command": "build-theme",
+            "data": {},
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.material.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
             "themeName": "material"
         });
     });

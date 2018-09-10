@@ -1,6 +1,7 @@
 /* eslint no-console: 0 */
 
 const commands = require("./commands");
+const themes = require("./themes");
 
 const DEFAULT_OUT_COLOR_SCHEME = "custom-scheme";
 
@@ -56,28 +57,45 @@ const getOutParameters = (command, themeName, config) => {
     };
 };
 
+const getThemeAndColorScheme = config => {
+    let themeName = "generic";
+    let colorScheme = "light";
+
+    if(config.baseTheme) {
+        const themeParts = config.baseTheme.split(".");
+        themeName = themeParts[0];
+        colorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
+    } else if(config.themeId) {
+        const theme = themes.filter(t => t.themeId === config.themeId)[0];
+        themeName = theme.name;
+        colorScheme = theme.colorScheme;
+    }
+
+    return {
+        themeName: themeName,
+        colorScheme: colorScheme
+    };
+};
+
 const parseConfig = config => {
     const command = config.command;
-    const theme = config.baseTheme || "generic.light";
     const metadataFilePath = config.inputFile || "";
-
-    const themeParts = theme.split(".");
-    const themeName = themeParts[0];
-    const colorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
+    const themeInfo = getThemeAndColorScheme(config);
     const bootstrapConfig = getBootstrapConfig(metadataFilePath);
-    const output = getOutParameters(command, themeName, config);
+    const output = getOutParameters(command, themeInfo.themeName, config);
 
     delete config.baseTheme;
     delete config.outputColorScheme;
     delete config.outputFormat;
     delete config.outputFile;
     delete config.inputFile;
+    delete config.themeId;
 
     Object.assign(config, {
         data: config.data !== undefined ? config.data : {},
         fileFormat: output.fileFormat,
-        themeName: themeName,
-        colorScheme: colorScheme,
+        themeName: themeInfo.themeName,
+        colorScheme: themeInfo.colorScheme,
         outColorScheme: output.outColorScheme,
         isBootstrap: bootstrapConfig.isBootstrap,
         bootstrapVersion: bootstrapConfig.bootstrapVersion,
