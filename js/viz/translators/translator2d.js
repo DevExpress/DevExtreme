@@ -437,8 +437,7 @@ _Translator2d.prototype = {
             canvas_position_center_middle;
 
         if(minVisible <= 0 && maxVisible >= 0) {
-            that.sc = {};// we can not call translate method without sc object
-            canvas_position_default = that.translate(0);
+            canvas_position_default = that.translate(0, 1);
         } else {
             invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);
             if(that._options.isHorizontal) {
