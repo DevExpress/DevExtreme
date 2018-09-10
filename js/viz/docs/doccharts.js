@@ -1788,8 +1788,8 @@ var dxChart = {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rangeStart:Date|Number
-     * @type_function_param1_field5 rangeEnd:Date|Number
+     * @type_function_param1_field4 rangeStart:Date|Number:deprecated(range)
+     * @type_function_param1_field5 rangeEnd:Date|Number:deprecated(range)
      * @type_function_param1_field6 axis:chartAxisObject
      * @type_function_param1_field7 range:VizRange
      * @type_function_param1_field8 previousRange:VizRange
