@@ -1,4 +1,10 @@
+import $ from "jquery";
 import helper from '../../helpers/dataGridExportTestsHelper.js';
+
+QUnit.testStart(function() {
+    var markup = '<div id="dataGrid"></div>';
+    $("#qunit-fixture").html(markup);
+});
 
 QUnit.module("DataGrid export.customizeXlsxCell tests", {
     beforeEach: helper.beforeEachTest,
