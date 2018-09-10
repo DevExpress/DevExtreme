@@ -117,21 +117,21 @@ class DrawerStrategy {
     _getPanelOffset(offset) {
         if(this._drawer._isHorizontalDirection()) {
             if(offset) {
-                return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxWidth());
+                return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxSize());
             } else {
-                return -(this._drawer.getRealPanelWidth() - this._drawer.getMinWidth());
+                return -(this._drawer.getRealPanelWidth() - this._drawer.getMinSize());
             }
         } else {
             if(offset) {
-                return -(this._drawer.getRealPanelHeight() - this._drawer.getMaxWidth());
+                return -(this._drawer.getRealPanelHeight() - this._drawer.getMaxSize());
             } else {
-                return -(this._drawer.getRealPanelHeight() - this._drawer.getMinWidth());
+                return -(this._drawer.getRealPanelHeight() - this._drawer.getMinSize());
             }
         }
     }
 
     _getPanelWidth(offset) {
-        return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
+        return offset ? this._drawer.getMaxSize() : this._drawer.getMinSize();
     }
 
     renderShaderVisibility(offset, animate, duration) {
@@ -146,13 +146,6 @@ class DrawerStrategy {
         }
     }
 
-    getPanelContent() {
-        return this._drawer._$panel;
-    }
-
-    getWidth() {
-        return this._drawer.$element().get(0).getBoundingClientRect().width;
-    }
     _getFadeConfig(offset) {
         if(offset) {
             return {
@@ -165,6 +158,14 @@ class DrawerStrategy {
                 from: 0.5
             };
         }
+    }
+
+    getPanelContent() {
+        return this._drawer._$panel;
+    }
+
+    getWidth() {
+        return this._drawer.$element().get(0).getBoundingClientRect().width;
     }
 };
 

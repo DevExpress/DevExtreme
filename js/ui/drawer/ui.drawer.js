@@ -44,18 +44,18 @@ const Drawer = Widget.inherit({
             opened: false,
 
             /**
-             * @name dxDrawerOptions.minWidth
+             * @name dxDrawerOptions.minSize
              * @type number
              * @default null
              */
-            minWidth: null,
+            minSize: null,
 
             /**
-             * @name dxDrawerOptions.maxWidth
+             * @name dxDrawerOptions.maxSize
              * @type number
              * @default null
              */
-            maxWidth: null,
+            maxSize: null,
 
             /**
             * @name dxDrawerOptions.shading
@@ -243,7 +243,7 @@ const Drawer = Widget.inherit({
     },
 
     _render() {
-        this._initWidth();
+        this._initSize();
 
         this.callBase();
 
@@ -281,17 +281,17 @@ const Drawer = Widget.inherit({
         this._toggleShaderVisibility(this.option("opened"));
     },
 
-    _initWidth() {
-        this._minWidth = this.option("minWidth") || 0;
-        this._maxWidth = this.option("maxWidth") || this.getRealPanelWidth();
+    _initSize() {
+        this._minSize = this.option("minSize") || 0;
+        this._maxSize = this.option("maxSize") || this.getRealPanelWidth();
     },
 
-    getMaxWidth() {
-        return this._maxWidth;
+    getMaxSize() {
+        return this._maxSize;
     },
 
-    getMinWidth() {
-        return this._minWidth;
+    getMinSize() {
+        return this._minSize;
     },
 
     getRealPanelWidth() {
@@ -442,9 +442,9 @@ const Drawer = Widget.inherit({
                 // NOTE: temporary fix
                 this.repaint();
                 break;
-            case "minWidth":
-            case "maxWidth":
-                this._initWidth();
+            case "minSize":
+            case "maxSize":
+                this._initSize();
                 this._$panel.css("left", 0);
                 this._renderPosition(this.option("opened"));
 
