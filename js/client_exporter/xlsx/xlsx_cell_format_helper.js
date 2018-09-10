@@ -3,13 +3,14 @@ import XlsxTagHelper from './xlsx_tag_helper';
 import XlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
 
 const XlsxCellFormatHelper = {
-    tryCreateTag: function(sourceObj) {
+    tryCreateTag: function(sourceObj, xlsxFile) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             result = {
                 fontId: sourceObj.fontId,
                 numberFormatId: sourceObj.numberFormatId,
-                alignment: XlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment)
+                alignment: XlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
+                fillId: xlsxFile.registerFill(sourceObj.fill),
             };
             if(XlsxCellFormatHelper.isEmpty(result)) {
                 result = null;
@@ -24,6 +25,7 @@ const XlsxCellFormatHelper = {
                 typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
                 leftTag.fontId === rightTag.fontId &&
                 leftTag.numberFormatId === rightTag.numberFormatId &&
+                leftTag.fillId === rightTag.fillId &&
                 XlsxCellAlignmentHelper.areEqual(leftTag.alignment, rightTag.alignment)
             );
     },
@@ -32,6 +34,7 @@ const XlsxCellFormatHelper = {
         return !typeUtils.isDefined(tag) ||
             !typeUtils.isDefined(tag.fontId) &&
             !typeUtils.isDefined(tag.numberFormatId) &&
+            !typeUtils.isDefined(tag.fillId) &&
             XlsxCellAlignmentHelper.isEmpty(tag.alignment);
     },
 
@@ -55,6 +58,7 @@ const XlsxCellFormatHelper = {
                     applyAlignment: isAlignmentEmpty ? null : 1,
                     fontId: tag.fontId,
                     applyNumberFormat: applyNumberFormat,
+                    fillId: tag.fillId,
                     'numFmtId': tag.numberFormatId,
                 },
                 isAlignmentEmpty ? null : XlsxCellAlignmentHelper.toXml(tag.alignment)

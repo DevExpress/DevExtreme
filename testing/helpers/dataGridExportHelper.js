@@ -27,7 +27,9 @@ const DataGridExportHelper = {
         });
     },
 
-    BASE_STYLE_XML: excelCreator.__internals.BASE_STYLE_XML,
+    BASE_STYLE_XML: excelCreator.__internals.BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2,
+    BASE_STYLE_XML1: excelCreator.__internals.BASE_STYLE_XML1,
+    BASE_STYLE_XML2: excelCreator.__internals.BASE_STYLE_XML2,
     WORKSHEET_HEADER_XML: excelCreator.__internals.WORKSHEET_HEADER_XML,
     SHARED_STRINGS_HEADER_XML: excelCreator.__internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
     STYLESHEET_HEADER_XML: excelCreator.__internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',

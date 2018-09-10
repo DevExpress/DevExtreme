@@ -6,10 +6,12 @@ import "generic_light.css!";
 import "ui/pivot_grid/ui.pivot_grid";
 
 import $ from "jquery";
+import { excel as excelCreator } from "client_exporter";
 import { __internals as internals } from "client_exporter/excel_creator";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
 
+const BASE_STYLE_XML = excelCreator.__internals.BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2;
 const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
 const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
 const STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
@@ -49,7 +51,7 @@ function runTest(assert, options, { styles = "", worksheet = "", sharedStrings =
 QUnit.test("Empty pivot", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
-        internals.BASE_STYLE_XML +
+        BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
@@ -76,7 +78,7 @@ QUnit.test("Empty pivot", function(assert) {
 QUnit.test("dataFieldArea: column", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
-        internals.BASE_STYLE_XML +
+        BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
@@ -133,7 +135,7 @@ QUnit.test("dataFieldArea: column", function(assert) {
 QUnit.test("dataFieldArea: row", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
-        internals.BASE_STYLE_XML +
+        BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
@@ -190,7 +192,7 @@ QUnit.test("dataFieldArea: row", function(assert) {
 QUnit.test("Rows: string, Columns: string, Data: sum(number format as currency)", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
-        internals.BASE_STYLE_XML +
+        BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
@@ -237,7 +239,7 @@ QUnit.test("Rows: string, Columns: string, Data: sum(number format as currency)"
 QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
-        internals.BASE_STYLE_XML +
+        BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
@@ -298,7 +300,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
 QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
-        internals.BASE_STYLE_XML +
+        BASE_STYLE_XML +
         '<cellXfs count="4">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
