@@ -10893,6 +10893,10 @@ QUnit.test("column with width auto should have minimum size by content", functio
 });
 
 QUnit.test("column with width 0 should be applied", function(assert) {
+    if(browser.safari || (browser.msie && parseInt(browser.version) <= 11)) {
+        assert.ok(true, "IE 11 and Safari works wrong with width 0");
+        return;
+    }
     var dataGrid = $("#dataGrid").dxDataGrid({
         width: 200,
         loadingTimeout: undefined,
