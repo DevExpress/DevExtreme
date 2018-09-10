@@ -2536,10 +2536,17 @@ module.exports = {
                  */
                 deleteColumn: function(id) {
                     var that = this,
-                        columnIndex = that.columnOption(id, "index");
+                        childIndexes,
+                        column = that.columnOption(id);
 
-                    if(columnIndex >= 0) {
-                        that._columns.splice(columnIndex, 1);
+                    if(column && column.index >= 0) {
+                        that._columns.splice(column.index, 1);
+
+                        if(column.isBand) {
+                            childIndexes = that.getChildrenByBandColumn(column.index).map((column) => column.index);
+                            that._columns = that._columns.filter((column) => childIndexes.indexOf(column.index) < 0);
+                        }
+
                         updateIndexes(that);
                         that.updateColumns(that._dataSource);
                     }
