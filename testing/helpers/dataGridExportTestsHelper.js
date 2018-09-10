@@ -7,7 +7,7 @@ import { excel as excelCreator } from "client_exporter";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
 
-const DataGridExportHelper = {
+const dataGridExportTestsHelper = {
 
     BASE_STYLE_XML: excelCreator.__internals.BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2,
     BASE_STYLE_XML1: excelCreator.__internals.BASE_STYLE_XML1,
@@ -63,4 +63,4 @@ const DataGridExportHelper = {
     }
 };
 
-export default DataGridExportHelper;
+export default dataGridExportTestsHelper;
