@@ -4,6 +4,11 @@ var virtualColumnsCore = require("./ui.grid_core.virtual_columns_core");
 var DEFAULT_COLUMN_WIDTH = 50;
 
 var VirtualScrollingRowsViewExtender = {
+    _resizeCore: function() {
+        this.callBase.apply(this, arguments);
+        this._columnsController.resize();
+    },
+
     _handleScroll: function(e) {
         var that = this,
             scrollable = this.getScrollable(),
@@ -117,19 +122,23 @@ var ColumnsControllerExtender = (function() {
         isVirtualMode: function() {
             return windowUtils.hasWindow() && this.option("scrolling.columnRenderingMode") === "virtual";
         },
+        resize: function() {
+            this._setScrollPositionCore(this._position);
+        },
         _setScrollPositionCore: function(position) {
             var that = this;
 
             if(that.isVirtualMode()) {
-                var beginPageIndex = that.getBeginPageIndex(position);
-                var endPageIndex = that.getEndPageIndex(position);
+                var beginPageIndex = that.getBeginPageIndex(position),
+                    endPageIndex = that.getEndPageIndex(position),
+                    needColumnsChanged = position < that._position ? that._beginPageIndex > beginPageIndex : that._endPageIndex < endPageIndex;
 
-                if(position < that._position ? that._beginPageIndex !== beginPageIndex : that._endPageIndex !== endPageIndex) {
+                that._position = position;
+                if(needColumnsChanged) {
                     that._beginPageIndex = beginPageIndex;
                     that._endPageIndex = endPageIndex;
                     that._fireColumnsChanged();
                 }
-                that._position = position;
             }
         },
         getFixedColumns: function(rowIndex, isBase) {
