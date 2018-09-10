@@ -9832,54 +9832,7 @@ QUnit.test("Prevent cell validation if template with editor is used", function(a
 });
 
 // T653933
-QUnit.test("Validation error message should not hide behind a grouped row when there are fixed columns on the left", function(assert) {
-    // arrange
-    var that = this,
-        rowsView = that.rowsView,
-        $testElement = $('#container');
-
-    rowsView.render($testElement);
-
-    that.applyOptions({
-        grouping: {
-            autoExpandAll: true
-        },
-        dataSource: [
-            { name: 'Alex', age: "", lastName: "John" },
-            { name: 'Dan', age: 16, lastName: "Skip" }
-        ],
-        scrolling: {
-            mode: "standard"
-        },
-        editing: {
-            mode: "batch",
-            allowUpdating: true
-        },
-        columns: [{ dataField: "name", fixed: true }, {
-            dataField: "age",
-            validationRules: [{ type: "required" }]
-        }, { dataField: "lastName", groupIndex: 0 }]
-    });
-
-    // act
-    that.editCell(1, 2);
-    that.clock.tick();
-
-    // assert
-    assert.strictEqual($(rowsView.getCellElement(1, 2)).find(".dx-overlay.dx-datagrid-invalid-message").length, 1, "has invalid message");
-    assert.strictEqual($(rowsView.getCellElement(2, 1)).attr("colspan"), "1", "group cell colspan");
-
-    // act
-    that.closeEditCell();
-    that.clock.tick();
-
-    // assert
-    assert.strictEqual($(rowsView.getCellElement(1, 2)).find(".dx-overlay.dx-datagrid-invalid-message").length, 0, "hasn't invalid message");
-    assert.strictEqual($(rowsView.getCellElement(2, 1)).attr("colspan"), "2", "group cell colspan");
-});
-
-// T653933
-QUnit.test("Validation error message should not hide behind a grouped row when there are fixed columns on the right", function(assert) {
+QUnit.test("Validation error message should not hide behind a grouped row when there are fixed columns", function(assert) {
     // arrange
     var that = this,
         rowsView = that.rowsView,
