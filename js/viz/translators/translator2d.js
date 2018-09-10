@@ -291,12 +291,13 @@ _Translator2d.prototype = {
         extend(that, script);
         that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
 
-        that._calculateSpecialValues();
+        that.sc = {};
         that._checkingMethodsAboutBreaks = [
             getCheckingMethodsAboutBreaks(false),
             getCheckingMethodsAboutBreaks(that.isInverted())
         ];
         that._translateBreaks();
+        that._calculateSpecialValues();
     },
 
     _translateBreaks: function() {
