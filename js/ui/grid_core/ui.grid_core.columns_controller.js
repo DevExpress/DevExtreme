@@ -2618,7 +2618,7 @@ module.exports = {
                                         parsedValue;
 
                                     if(column.dataType === "number") {
-                                        if(typeUtils.isString(text)) {
+                                        if(typeUtils.isString(text) && column.format) {
                                             parsedValue = numberLocalization.parse(text);
 
                                             if(typeUtils.isNumeric(parsedValue)) {

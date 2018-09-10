@@ -4760,6 +4760,26 @@ QUnit.test("Loading columns state when all columns have width and one column is 
     clock.restore();
 });
 
+QUnit.test("Search text should convert to number if it is a number (T670671)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            columns: [{ dataField: "field1" }],
+            searchPanel: {
+                visible: true,
+                text: "a1"
+            },
+            dataSource: [{ field1: 1 }],
+        });
+
+    // act
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 0, "has no rows");
+
+    clock.restore();
+});
+
 // T235091
 QUnit.test("pageSize state is not applied when scrolling mode is virtual", function(assert) {
     var clock = sinon.useFakeTimers(),
