@@ -21,7 +21,7 @@ var VirtualScrollingRowsViewExtender = {
         }
 
         that._columnsController.setScrollPosition(left);
-    },
+    }
 };
 
 var HeaderFooterViewExtender = {
