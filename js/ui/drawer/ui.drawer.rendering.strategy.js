@@ -10,13 +10,20 @@ const animation = {
             animationType;
 
         if(direction === "right") {
-            toConfig["right"] = position;
-            toConfig["transform"] = " translate(0, 0)";
+            toConfig["transform"] = "translate(" + position + "px, 0px)";
             animationType = "custom";
-        } else {
+        }
+
+        if(direction === "left") {
             toConfig["left"] = position;
             animationType = "slide";
         }
+
+        if(direction === "top" || direction === "bottom") {
+            toConfig["top"] = position;
+            animationType = "slide";
+        }
+
         fx.animate($element, {
             type: animationType,
             to: toConfig,
@@ -75,6 +82,12 @@ class DrawerStrategy {
         this._drawer = drawer;
     }
 
+    renderPanel(template) {
+        template && template.render({
+            container: this._drawer.content()
+        });
+    }
+
     renderPosition(offset, animate) {
         this._stopAnimations();
 
@@ -102,15 +115,17 @@ class DrawerStrategy {
     }
 
     _getPanelOffset(offset) {
+        var size = this._drawer._isHorizontalDirection() ? this._drawer.getRealPanelWidth() : this._drawer.getRealPanelHeight();
+
         if(offset) {
-            return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxWidth());
+            return -(size - this._drawer.getMaxSize());
         } else {
-            return -(this._drawer.getRealPanelWidth() - this._drawer.getMinWidth());
+            return -(size - this._drawer.getMinSize());
         }
     }
 
     _getPanelWidth(offset) {
-        return offset ? this._drawer.getMaxWidth() : this._drawer.getMinWidth();
+        return offset ? this._drawer.getMaxSize() : this._drawer.getMinSize();
     }
 
     renderShaderVisibility(offset, animate, duration) {
@@ -125,9 +140,6 @@ class DrawerStrategy {
         }
     }
 
-    getWidth() {
-        return this._drawer.$element().get(0).getBoundingClientRect().width;
-    }
     _getFadeConfig(offset) {
         if(offset) {
             return {
@@ -140,6 +152,14 @@ class DrawerStrategy {
                 from: 0.5
             };
         }
+    }
+
+    getPanelContent() {
+        return this._drawer._$panel;
+    }
+
+    getWidth() {
+        return this._drawer.$element().get(0).getBoundingClientRect().width;
     }
 };
 

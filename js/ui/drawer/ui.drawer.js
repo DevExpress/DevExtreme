@@ -44,18 +44,18 @@ const Drawer = Widget.inherit({
             opened: false,
 
             /**
-             * @name dxDrawerOptions.minWidth
+             * @name dxDrawerOptions.minSize
              * @type number
              * @default null
              */
-            minWidth: null,
+            minSize: null,
 
             /**
-             * @name dxDrawerOptions.maxWidth
+             * @name dxDrawerOptions.maxSize
              * @type number
              * @default null
              */
-            maxWidth: null,
+            maxSize: null,
 
             /**
             * @name dxDrawerOptions.shading
@@ -225,12 +225,7 @@ const Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshRevealModeClass();
 
-        const panelTemplate = this._getTemplate(this.option("template"));
-
-        panelTemplate && panelTemplate.render({
-            container: this.content()
-        });
-
+        this._strategy.renderPanel(this._getTemplate(this.option("template")));
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
@@ -248,7 +243,7 @@ const Drawer = Widget.inherit({
     },
 
     _render() {
-        this._initWidth();
+        this._initSize();
 
         this.callBase();
 
@@ -286,33 +281,52 @@ const Drawer = Widget.inherit({
         this._toggleShaderVisibility(this.option("opened"));
     },
 
-    _initWidth() {
-        this._minWidth = this.option("minWidth") || 0;
-        this._maxWidth = this.option("maxWidth") || this.getRealPanelWidth();
+    _initSize() {
+        this._minSize = this.option("minSize") || 0;
+        this._maxSize = this.option("maxSize") || this.getRealPanelWidth();
     },
 
-    getMaxWidth() {
-        return this._maxWidth;
+    getMaxSize() {
+        return this._maxSize;
     },
 
-    getMinWidth() {
-        return this._minWidth;
+    getMinSize() {
+        return this._minSize;
     },
 
     getRealPanelWidth() {
         if(windowUtils.hasWindow()) {
-            const $panel = this._$panel;
-            return $panel.get(0).hasChildNodes() ? $panel.get(0).childNodes[0].getBoundingClientRect().width : $panel.get(0).getBoundingClientRect().width;
+            return this.getElementWidth(this._strategy.getPanelContent());
         } else {
             return 0;
         }
     },
 
-    _isRightPosition() {
-        const invertedPosition = this.option("position") === "right";
+    getElementWidth($element) {
+        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
+    },
+
+    getRealPanelHeight() {
+        if(windowUtils.hasWindow()) {
+            return this.getElementHeight(this._strategy.getPanelContent());
+        } else {
+            return 0;
+        }
+    },
+
+    getElementHeight($element) {
+        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
+    },
+
+    _isInvertedPosition() {
+        const invertedPosition = this.option("position") === "right" || this.option("position") === "bottom";
         const rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
+    },
+
+    _isHorizontalDirection() {
+        return this.option("position") === "left" || this.option("position") === "right";
     },
 
     _togglePositionClass() {
@@ -321,6 +335,7 @@ const Drawer = Widget.inherit({
         this._$panel.removeClass(DRAWER_CLASS + "-left");
         this._$panel.removeClass(DRAWER_CLASS + "-right");
         this._$panel.removeClass(DRAWER_CLASS + "-top");
+        this._$panel.removeClass(DRAWER_CLASS + "-bottom");
 
         this._$panel.addClass(DRAWER_CLASS + "-" + position);
 
@@ -367,7 +382,7 @@ const Drawer = Widget.inherit({
     },
 
     _getPositionCorrection() {
-        return this._isRightPosition() ? -1 : 1;
+        return this._isInvertedPosition() ? -1 : 1;
     },
 
     _dispose() {
@@ -411,8 +426,8 @@ const Drawer = Widget.inherit({
                 this._toggleVisibleClass(args.value);
                 break;
             case "position":
-                this._togglePositionClass();
-                this._renderPosition(this.option("opened"));
+                // NOTE: temporary fix
+                this._invalidate();
                 break;
             case "contentTemplate":
             case "template":
@@ -427,9 +442,9 @@ const Drawer = Widget.inherit({
                 // NOTE: temporary fix
                 this.repaint();
                 break;
-            case "minWidth":
-            case "maxWidth":
-                this._initWidth();
+            case "minSize":
+            case "maxSize":
+                this._initSize();
                 this._$panel.css("left", 0);
                 this._renderPosition(this.option("opened"));
 
