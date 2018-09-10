@@ -41,7 +41,7 @@ QUnit.testStart(function() {
             </div>\
         </div>\
         \
-        <div class="dx-additional-color-scheme-1">\
+        <div class="dx-swatch-1">\
             <div id="swatchSortable" style="height: 300px; width: 300px" class="test-items">\
                 <div class="test-container">\
                     <div class="test-item">1</div>\
@@ -564,7 +564,7 @@ QUnit.test("dragging with color swatch", function(assert) {
         .move(offset.left + 5, offset.top + 5);
 
     // assert
-    assert.equal($("body > .dx-additional-color-scheme-1 > .test-item.dx-drag").length, 1, "Dragging item rendered in container with swatch class");
+    assert.equal($("body > .dx-swatch-1 > .test-item.dx-drag").length, 1, "Dragging item rendered in container with swatch class");
 });
 
 

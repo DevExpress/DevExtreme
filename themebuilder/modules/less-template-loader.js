@@ -1,7 +1,7 @@
 const sassCompiler = require("sass");
 
 const LESS_DIR_PATH = "data/less/";
-const SWATCH_SELECTOR_PREFIX = ".dx-additional-color-scheme-";
+const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 
 const createModifyVars = modifyVars => {
     let result = "";

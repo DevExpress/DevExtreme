@@ -24,7 +24,7 @@ describe("Builder - testing exported function", () => {
 
         return buildTheme(config).then((result) => {
             assert.notEqual(result.css, "", "Has css in result");
-            assert.equal(result.swatchSelector, ".dx-additional-color-scheme-custom-scheme");
+            assert.equal(result.swatchSelector, ".dx-swatch-custom-scheme");
         });
     });
 
