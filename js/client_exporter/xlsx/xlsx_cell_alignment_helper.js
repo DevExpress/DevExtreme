@@ -33,19 +33,15 @@ const XlsxCellAlignmentHelper = {
     },
 
     toXml: function(tag) {
-        if(XlsxCellAlignmentHelper.isEmpty(tag)) {
-            return '';
-        } else {
-            // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            return XlsxTagHelper.toXml(
-                "alignment",
-                {
-                    vertical: tag.vertical,
-                    wrapText: tag.wrapText,
-                    horizontal: tag.horizontal
-                }
-            );
-        }
+        // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        return XlsxTagHelper.toXml(
+            "alignment",
+            {
+                vertical: tag.vertical,
+                wrapText: tag.wrapText,
+                horizontal: tag.horizontal
+            }
+        );
     }
 };
 

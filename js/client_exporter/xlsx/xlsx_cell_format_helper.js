@@ -39,31 +39,27 @@ const XlsxCellFormatHelper = {
     },
 
     toXml: function(tag) {
-        if(XlsxCellFormatHelper.isEmpty(tag)) {
-            return '';
-        } else {
-            const isAlignmentEmpty = XlsxCellAlignmentHelper.isEmpty(tag.alignment);
-            let applyNumberFormat;
-            if(tag.numberFormatId === 0) {
-                applyNumberFormat = 0;
-            } else if(typeUtils.isDefined(tag.numberFormatId)) {
-                applyNumberFormat = 1;
-            }
-
-            // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            return XlsxTagHelper.toXml(
-                "xf",
-                {
-                    'xfId': 0,
-                    applyAlignment: isAlignmentEmpty ? null : 1,
-                    fontId: tag.fontId,
-                    applyNumberFormat: applyNumberFormat,
-                    fillId: tag.fillId,
-                    'numFmtId': tag.numberFormatId,
-                },
-                isAlignmentEmpty ? null : XlsxCellAlignmentHelper.toXml(tag.alignment)
-            );
+        const isAlignmentEmpty = XlsxCellAlignmentHelper.isEmpty(tag.alignment);
+        let applyNumberFormat;
+        if(tag.numberFormatId === 0) {
+            applyNumberFormat = 0;
+        } else if(typeUtils.isDefined(tag.numberFormatId)) {
+            applyNumberFormat = 1;
         }
+
+        // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        return XlsxTagHelper.toXml(
+            "xf",
+            {
+                'xfId': 0,
+                applyAlignment: isAlignmentEmpty ? null : 1,
+                fontId: tag.fontId,
+                applyNumberFormat: applyNumberFormat,
+                fillId: tag.fillId,
+                'numFmtId': tag.numberFormatId,
+            },
+            isAlignmentEmpty ? null : XlsxCellAlignmentHelper.toXml(tag.alignment)
+        );
     }
 };
 

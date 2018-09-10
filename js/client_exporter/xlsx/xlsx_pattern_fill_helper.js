@@ -30,23 +30,19 @@ const XlsxPatternFillHelper = {
     },
 
     toXml: function(tag) {
-        if(XlsxPatternFillHelper.isEmpty(tag)) {
-            return '';
-        } else {
-            // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            // §18.8.3 bgColor (Background Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            // §18.8.19 fgColor (Foreground Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            const content =
-                [
-                    (tag.backgroundColor_RGB) ? XlsxTagHelper.toXml("bgColor", { rgb: tag.backgroundColor_RGB }) : "",
-                    (tag.foregroundColor_RGB) ? XlsxTagHelper.toXml("fgColor", { rgb: tag.foregroundColor_RGB }) : "",
-                ].join("");
-            return XlsxTagHelper.toXml(
-                "patternFill",
-                { patternType: tag.patternType },
-                content === "" ? null : content
-            );
-        }
+        // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        // §18.8.3 bgColor (Background Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        // §18.8.19 fgColor (Foreground Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        const content =
+            [
+                (tag.backgroundColor_RGB) ? XlsxTagHelper.toXml("bgColor", { rgb: tag.backgroundColor_RGB }) : "",
+                (tag.foregroundColor_RGB) ? XlsxTagHelper.toXml("fgColor", { rgb: tag.foregroundColor_RGB }) : "",
+            ].join("");
+        return XlsxTagHelper.toXml(
+            "patternFill",
+            { patternType: tag.patternType },
+            content === "" ? null : content
+        );
     }
 };
 

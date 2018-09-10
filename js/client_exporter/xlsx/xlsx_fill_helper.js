@@ -27,16 +27,12 @@ const XlsxFillHelper = {
     },
 
     toXml: function(tag) {
-        if(XlsxFillHelper.isEmpty(tag)) {
-            return '';
-        } else {
-            // §18.8.20 fill (Fill), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            return XlsxTagHelper.toXml(
-                "fill",
-                {},
-                XlsxPatternFillHelper.toXml(tag.patternFill)
-            );
-        }
+        // §18.8.20 fill (Fill), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        return XlsxTagHelper.toXml(
+            "fill",
+            {},
+            XlsxPatternFillHelper.toXml(tag.patternFill)
+        );
     }
 };
 
