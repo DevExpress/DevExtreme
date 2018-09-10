@@ -504,10 +504,11 @@ QUnit.test("Column visibility update properly when columnAutoWidth=true", functi
 
     this.setupVirtualColumns({
         width: 700,
-        columnWidth: "auto",
+        columnWidth: null,
         "columnAutoWidth": true,
         scrolling: {
-            mode: "virtual"
+            mode: "virtual",
+            updateTimeout: 0
         }
     });
 
@@ -522,6 +523,37 @@ QUnit.test("Column visibility update properly when columnAutoWidth=true", functi
 
     // assert
     assert.strictEqual(this.columnHeadersView.element().find("tr td").length, 7);
+});
+
+QUnit.test("Update is not fired twice if columnAutoWidth=true", function(assert) {
+    var headerCellTemplate = function(container, options) {
+        $(container).width(200).text(options.text);
+    };
+    for(var i = 0; i < this.columns.length; i++) {
+        this.columns[i].headerCellTemplate = headerCellTemplate;
+    }
+
+    this.setupVirtualColumns({
+        width: 500,
+        columnWidth: null,
+        columnAutoWidth: true,
+        scrolling: {
+            mode: "virtual",
+            updateTimeout: 0
+        }
+    });
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    var columnsChangedSpy = sinon.spy();
+    this.columnsController.columnsChanged.add(columnsChangedSpy);
+    this.gridView.update();
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(this.columnHeadersView.element().find("tr td").length, 11);
+    assert.ok(columnsChangedSpy.calledOnce, "columns changed is called once");
 });
 
 QUnit.test("columns should be update on scrolling", function(assert) {
