@@ -43,19 +43,10 @@ class OverlapStrategy extends DrawerStrategy {
                 my: "top left",
                 at: "top left",
             };
-        }
-
-        if(position === "top") {
+        } else {
             result = {
-                my: "top",
-                at: "top",
-            };
-        }
-
-        if(position === "bottom") {
-            result = {
-                my: "bottom",
-                at: "bottom",
+                my: position,
+                at: position,
             };
         }
 
