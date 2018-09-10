@@ -1,14 +1,8 @@
-import $ from "jquery";
 import Helper from '../../helpers/dataGridExportHelper.js';
 
-QUnit.testStart(function() {
-    var markup = '<div id="dataGrid"></div>';
-    $("#qunit-fixture").html(markup);
-});
-
 QUnit.module("DataGrid export tests", {
-    beforeEach: function() { Helper.beforeEachTest.apply(this); },
-    afterEach: function() { Helper.afterEachTest.apply(this); }
+    beforeEach: Helper.beforeEachTest.bind(this),
+    afterEach: Helper.afterEachTest.bind(this),
 });
 
 QUnit.test("Empty grid", function(assert) {

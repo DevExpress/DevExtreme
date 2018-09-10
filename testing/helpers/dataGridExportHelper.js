@@ -22,6 +22,8 @@ const DataGridExportHelper = {
     STYLESHEET_FOOTER_XML: '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>',
 
     beforeEachTest: function() {
+        var markup = '<div id="dataGrid"></div>';
+        $("#qunit-fixture").html(markup);
         this.oldJSZip = excel_creator.ExcelCreator.JSZip;
         excel_creator.ExcelCreator.JSZip = JSZipMock;
     },
