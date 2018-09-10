@@ -42,8 +42,13 @@ export default class XlsxFile {
         let result;
         const fillTag = XlsxFillHelper.tryCreateTag(fill);
         if(typeUtils.isDefined(fillTag)) {
-            result = this._fillTags.findIndex(item => XlsxFillHelper.areEqual(item, fillTag));
-            if(result < 0) {
+            for(let i = 0; i < this._fillTags.length; i++) {
+                if(XlsxFillHelper.areEqual(this._fillTags[i], fillTag)) {
+                    result = i;
+                    break;
+                }
+            }
+            if(result === undefined) {
                 if(this._fillTags.length < 2) {
                     // the [0, 1] indexes are reserved:
                     // - https://stackoverflow.com/questions/11116176/cell-styles-in-openxml-spreadsheet-spreadsheetml
