@@ -233,7 +233,7 @@ var Store = Class.inherit({
     * @return Promise<any>
     */
     byKey: function(key, extraOptions) {
-        return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
+        return this._withLock(this._byKeyImpl(key, extraOptions));
     },
 
     _byKeyImpl: abstract,
