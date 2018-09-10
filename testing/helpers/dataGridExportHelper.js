@@ -8,24 +8,6 @@ import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
 
 const DataGridExportHelper = {
-    QUnit_testStart: function() {
-        QUnit.testStart(function() {
-            var markup = '<div id="dataGrid"></div>';
-            $("#qunit-fixture").html(markup);
-        });
-    },
-
-    QUnit_module: function(moduleName) {
-        QUnit.module(moduleName, {
-            beforeEach: function() {
-                this.oldJSZip = excel_creator.ExcelCreator.JSZip;
-                excel_creator.ExcelCreator.JSZip = JSZipMock;
-            },
-            afterEach: function() {
-                excel_creator.ExcelCreator.JSZip = this.oldJSZip;
-            }
-        });
-    },
 
     BASE_STYLE_XML: excelCreator.__internals.BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2,
     BASE_STYLE_XML1: excelCreator.__internals.BASE_STYLE_XML1,
@@ -38,6 +20,15 @@ const DataGridExportHelper = {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="right" /></xf>',
 
     STYLESHEET_FOOTER_XML: '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>',
+
+    beforeEachTest: function() {
+        this.oldJSZip = excel_creator.ExcelCreator.JSZip;
+        excel_creator.ExcelCreator.JSZip = JSZipMock;
+    },
+
+    afterEachTest: function() {
+        excel_creator.ExcelCreator.JSZip = this.oldJSZip;
+    },
 
     runTest: function(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
         const done = assert.async();
