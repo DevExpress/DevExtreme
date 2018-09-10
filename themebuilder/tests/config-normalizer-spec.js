@@ -456,4 +456,23 @@ describe("Cli arguments normalizer", () => {
             "themeName": "generic"
         });
     });
+
+    it("build-theme-meta: default file format - json", () => {
+        const config = { command: "build-theme-meta" };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "light",
+            "command": "build-theme-meta",
+            "data": {},
+            "fileFormat": "json",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.generic.custom-scheme.json",
+            "outColorScheme": "custom-scheme",
+            "themeName": "generic"
+        });
+    });
 });
