@@ -115,18 +115,12 @@ class DrawerStrategy {
     }
 
     _getPanelOffset(offset) {
-        if(this._drawer._isHorizontalDirection()) {
-            if(offset) {
-                return -(this._drawer.getRealPanelWidth() - this._drawer.getMaxSize());
-            } else {
-                return -(this._drawer.getRealPanelWidth() - this._drawer.getMinSize());
-            }
+        var size = this._drawer._isHorizontalDirection() ? this._drawer.getRealPanelWidth() : this._drawer.getRealPanelHeight();
+
+        if(offset) {
+            return -(size - this._drawer.getMaxSize());
         } else {
-            if(offset) {
-                return -(this._drawer.getRealPanelHeight() - this._drawer.getMaxSize());
-            } else {
-                return -(this._drawer.getRealPanelHeight() - this._drawer.getMinSize());
-            }
+            return -(size - this._drawer.getMinSize());
         }
     }
 
