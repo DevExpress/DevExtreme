@@ -13,7 +13,6 @@ class OverlapStrategy extends DrawerStrategy {
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
             shading: false,
             container: this._drawer._$wrapper,
-            width: 200,
             position: position,
             animation: {
                 show: {
@@ -25,13 +24,8 @@ class OverlapStrategy extends DrawerStrategy {
             propagateOutsideClick: true
         });
 
-        if(this._drawer.option("position") === "left") {
-            this._drawer._overlay && this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
-        }
-        if(this._drawer.option("position") === "top" || this._drawer.option("position") === "bottom") {
-            this._drawer._overlay && this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
-            this._drawer._overlay && this._drawer._overlay.option("height", this._drawer.getRealPanelHeight());
-        }
+        this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
+        this._drawer._overlay.option("height", this._drawer.getRealPanelHeight());
     }
 
     getOverlayPosition() {
