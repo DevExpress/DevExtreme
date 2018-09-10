@@ -1,4 +1,4 @@
-import Helper from '../../helpers/DataGridExportHelper.js';
+import Helper from '../../helpers/dataGridExportHelper.js';
 
 Helper.QUnit_testStart();
 Helper.QUnit_module("DataGrid export tests");
