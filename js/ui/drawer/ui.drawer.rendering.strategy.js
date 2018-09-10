@@ -146,6 +146,10 @@ class DrawerStrategy {
         }
     }
 
+    getPanelContent() {
+        return this._drawer._$panel;
+    }
+
     getWidth() {
         return this._drawer.$element().get(0).getBoundingClientRect().width;
     }

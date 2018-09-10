@@ -115,6 +115,10 @@ class OverlapStrategy extends DrawerStrategy {
             }
         }
     }
+
+    getPanelContent() {
+        return $(this._drawer._overlay.content());
+    }
 };
 
 module.exports = OverlapStrategy;

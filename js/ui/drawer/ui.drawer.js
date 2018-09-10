@@ -296,15 +296,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelWidth() {
         if(windowUtils.hasWindow()) {
-            var $element;
-
-            if(this.option("openedStateMode") === "overlap") {
-                $element = $(this._overlay.content());
-            } else {
-                $element = this._$panel;
-            }
-
-            return this.getElementWidth($element);
+            return this.getElementWidth(this._strategy.getPanelContent());
         } else {
             return 0;
         }
@@ -316,15 +308,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelHeight() {
         if(windowUtils.hasWindow()) {
-            var $element;
-
-            if(this.option("openedStateMode") === "overlap") {
-                $element = $(this._overlay.content());
-            } else {
-                $element = this._$panel;
-            }
-
-            return this.getElementHeight($element);
+            return this.getElementHeight(this._strategy.getPanelContent());
         } else {
             return 0;
         }
