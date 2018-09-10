@@ -14,6 +14,7 @@ class OverlapStrategy extends DrawerStrategy {
             shading: false,
             container: this._drawer._$wrapper,
             position: position,
+            width: 200,
             animation: {
                 show: {
                     duration: 0
