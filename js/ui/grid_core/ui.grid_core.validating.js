@@ -35,6 +35,7 @@ var INVALIDATE_CLASS = "invalid",
     EDIT_MODE_BATCH = "batch",
     EDIT_MODE_CELL = "cell",
     EDIT_MODE_POPUP = "popup",
+    GROUP_CELL_CLASS = "dx-group-cell",
 
     FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
@@ -578,41 +579,24 @@ module.exports = {
                 },
 
                 _hideFixedGroupCell: function($cell, overlayOptions) {
-                    var cellIndex,
-                        rowOptions,
-                        groupLevel,
-                        groupCellIndex,
-                        $fixedRowElement,
-                        prevGroupColspan,
+                    var nextRowOptions,
+                        $nextFixedRowElement,
                         $groupCellElement,
                         isFixedColumns = this._rowsView.isFixedColumns(),
                         isFormEditMode = this._editingController.isFormEditMode();
 
                     if(isFixedColumns && !isFormEditMode) {
-                        rowOptions = $cell.closest(".dx-row").next().data("options");
+                        nextRowOptions = $cell.closest(".dx-row").next().data("options");
 
-                        if(rowOptions && rowOptions.rowType === "group") {
-                            $fixedRowElement = $(this._rowsView.getRowElement(rowOptions.rowIndex)).last();
-                            groupCellIndex = rowOptions.groupIndex + 1;
-                            $groupCellElement = $fixedRowElement.children().eq(groupCellIndex);
+                        if(nextRowOptions && nextRowOptions.rowType === "group") {
+                            $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
+                            $groupCellElement = $nextFixedRowElement.find("." + GROUP_CELL_CLASS);
 
-                            if($groupCellElement && $groupCellElement.css("visibility") !== "hidden") {
-                                cellIndex = $cell.index();
-
-                                if(cellIndex > groupCellIndex) {
-                                    prevGroupColspan = $groupCellElement.attr("colspan");
-                                    groupLevel = $fixedRowElement.prev().children().filter(".dx-datagrid-group-space").length;
-                                    $groupCellElement.attr("colspan", groupLevel - rowOptions.groupIndex);
-                                } else {
-                                    $groupCellElement.css("visibility", "hidden");
-                                }
+                            if($groupCellElement.length && $groupCellElement.get(0).style.visibility !== "hidden") {
+                                $groupCellElement.css("visibility", "hidden");
 
                                 overlayOptions.onDisposing = function() {
-                                    if(prevGroupColspan) {
-                                        $groupCellElement.attr("colspan", prevGroupColspan);
-                                    } else {
-                                        $groupCellElement.css("visibility", "");
-                                    }
+                                    $groupCellElement.css("visibility", "");
                                 };
                             }
                         }
