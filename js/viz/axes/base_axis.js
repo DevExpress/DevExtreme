@@ -267,6 +267,7 @@ const Axis = exports.Axis = function(renderSettings) {
 
     that._renderer = renderSettings.renderer;
     that._incidentOccurred = renderSettings.incidentOccurred;
+    that._eventTrigger = renderSettings.eventTrigger;
 
     that._stripsGroup = renderSettings.stripsGroup;
     that._labelAxesGroup = renderSettings.labelAxesGroup;
@@ -989,8 +990,8 @@ Axis.prototype = {
         return range;
     },
 
-    _getVisualRangeOnUpdateValue(range, newRange) {
-        let value = this._options.visualRangeOnDataUpdate;
+    _getVisualRangeUpdateMode(range, newRange) {
+        let value = this._options.visualRangeUpdateMode;
         if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
             if(range.axisType === constants.discrete) {
                 if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
@@ -1026,15 +1027,15 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
 
-        const visualRangeOnDataUpdateValue = this._getVisualRangeOnUpdateValue(currentBusinessRange, seriesData);
+        const visualRangeUpdateMode = this._getVisualRangeUpdateMode(currentBusinessRange, seriesData);
 
-        if(visualRangeOnDataUpdateValue === KEEP) {
+        if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([currentBusinessRange.minVisible, currentBusinessRange.maxVisible]);
         }
-        if(visualRangeOnDataUpdateValue === RESET) {
+        if(visualRangeUpdateMode === RESET) {
             that.resetZoom();
         }
-        if(visualRangeOnDataUpdateValue === SHIFT) {
+        if(visualRangeUpdateMode === SHIFT) {
             const currentBusinessRange = this._translator.getBusinessRange();
             if(options.type !== constants.discrete) {
                 const add = vizUtils.getAddFunction({
@@ -1215,7 +1216,7 @@ Axis.prototype = {
             },
             that._getScreenDelta(),
             that._translator.getBusinessRange().stubData ? null : options.tickInterval,
-            options.label.overlappingBehavior === "ignore" ? true : options.forceUserTickInterval,
+            options.label.overlappingBehavior === "ignore" || options.forceUserTickInterval,
             {
                 majors: customTicks,
                 minors: customMinorTicks
@@ -1683,16 +1684,7 @@ Axis.prototype = {
             visualRange = visualRangeOptionValue;
         }
 
-        if(!that._skipVisualRangeApplying) {
-            that._setVisualRange(visualRange);
-        } else {
-            that._setVisualRange({
-                startValue: null,
-                endValue: null
-            });
-        }
-
-        that._skipVisualRangeApplying = false;
+        that._setVisualRange(visualRange);
     },
 
     _validateVisualRange(visualRange) {
@@ -1741,23 +1733,8 @@ Axis.prototype = {
         this._setVisualRange([null, null]);
     },
 
-     // API
-    visualRange() {
+    _applyZooming(visualRange) {
         const that = this;
-        const args = arguments;
-
-        let visualRange;
-
-        if(args.length === 0) {
-            const adjustedRange = this._getAdjustedBusinessRange();
-            return { startValue: adjustedRange.minVisible, endValue: adjustedRange.maxVisible };
-        } else if(_isArray(args[0]) || isPlainObject(args[0])) {
-            visualRange = args[0];
-        } else {
-            visualRange = [args[0], args[1]];
-        }
-        visualRange = that._validateVisualRange(visualRange);
-
         that._setVisualRange(visualRange);
 
         const viewPort = that.getViewport();
@@ -1766,8 +1743,63 @@ Axis.prototype = {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);
+    },
 
-        that._visualRange(that, visualRange);
+    getZoomEventArg() {
+        return {
+            axis: this,
+            range: this.visualRange(),
+            cancel: false
+        };
+    },
+
+     // API
+    visualRange() {
+        const that = this;
+        const args = arguments;
+        const preventEvents = args[1] || {};
+
+        let visualRange;
+
+        if(args.length === 0) {
+            const adjustedRange = this._getAdjustedBusinessRange();
+            return {
+                startValue: adjustedRange.minVisible,
+                endValue: adjustedRange.maxVisible
+            };
+        } else if(_isArray(args[0]) || isPlainObject(args[0])) {
+            visualRange = args[0];
+        } else {
+            visualRange = [args[0], args[1]];
+        }
+        visualRange = that._validateVisualRange(visualRange);
+
+        const zoomStartEvent = this.getZoomEventArg();
+
+        const currentRange = zoomStartEvent.range;
+
+        !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
+
+        if(!zoomStartEvent.cancel) {
+            that._applyZooming(visualRange);
+            const newRange = that.visualRange();
+            const zoomEndEvent = {
+                axis: that,
+                previousRange: currentRange,
+                range: newRange,
+                cancel: false,
+                // backwards
+                rangeStart: newRange.startValue,
+                rangeEnd: newRange.endValue
+            };
+
+            !preventEvents.end && that._eventTrigger("zoomEnd", zoomEndEvent);
+
+            if(zoomEndEvent.cancel) {
+                that._applyZooming(currentRange);
+            }
+            that._visualRange(that, visualRange);
+        }
     },
 
     isZoomed() {

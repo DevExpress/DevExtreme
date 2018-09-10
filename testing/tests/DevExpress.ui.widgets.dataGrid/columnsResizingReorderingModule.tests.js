@@ -17,7 +17,7 @@ QUnit.testStart(function() {
 <div id="itemsContainer" style="font-size: 0"><div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div></div>\
 <div id="itemsContainerVertical"><div style="width:125px; height: 50px;" ></div><div style="width:125px; height: 50px;" ></div></div>\
 \
-<div class="dx-additional-color-scheme-1">\
+<div class="dx-swatch-1">\
     <div id="gridInSwatch">\
     <div id="swatchitemsContainer" style="font-size: 0"><div style="width:125px; display: inline-block;"></div><div style="width:125px; display: inline-block;"></div></div>\
     </div>\
@@ -6304,7 +6304,7 @@ function getEvent(options) {
         var viewport = draggingHeaderParent.parent();
 
         // assert
-        assert.ok(draggingHeaderParent.hasClass("dx-additional-color-scheme-1"), "Dragging header rendered in element with swatch class");
+        assert.ok(draggingHeaderParent.hasClass("dx-swatch-1"), "Dragging header rendered in element with swatch class");
         assert.equal(viewport.get(0).tagName.toLowerCase(), "body", "Div with swatch class rendered on body");
     });
 })();

@@ -19,8 +19,13 @@ export default class XlsxFile {
         let result;
         const cellFormatTag = XlsxCellFormatHelper.tryCreateTag(cellFormat, { registerFill: this.registerFill.bind(this) });
         if(typeUtils.isDefined(cellFormatTag)) {
-            result = this._cellFormatTags.findIndex(item => XlsxCellFormatHelper.areEqual(item, cellFormatTag));
-            if(result < 0) {
+            for(let i = 0; i < this._cellFormatTags.length; i++) {
+                if(XlsxCellFormatHelper.areEqual(this._cellFormatTags[i], cellFormatTag)) {
+                    result = i;
+                    break;
+                }
+            }
+            if(result === undefined) {
                 result = this._cellFormatTags.push(cellFormatTag) - 1;
             }
         }

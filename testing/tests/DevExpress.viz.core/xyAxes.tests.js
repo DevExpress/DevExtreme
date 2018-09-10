@@ -117,7 +117,8 @@ var environment = {
                 renderer: this.renderer,
                 axisType: "xyAxes",
                 drawingType: "linear",
-                incidentOccurred: this.incidentOccurred
+                incidentOccurred: this.incidentOccurred,
+                eventTrigger: () => { }
             };
             this.range = new RangeStubCtor();
             this.range.min = 0;
@@ -3920,7 +3921,8 @@ QUnit.module("Adjust value axis", {
             renderer: this.renderer,
             axisType: "xyAxes",
             drawingType: "linear",
-            isArgumentAxis: false
+            isArgumentAxis: false,
+            eventTrigger() {}
         });
 
         this.series = [new MockSeries({}), new MockSeries({})];

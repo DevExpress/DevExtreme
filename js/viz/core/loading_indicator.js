@@ -140,7 +140,9 @@ exports.plugin = {
             this._loadingIndicator.hide();
         },
         _onBeginUpdate: function() {
-            this._scheduleLoadingIndicatorHiding();
+            if(!this._optionChangedLocker) {
+                this._scheduleLoadingIndicatorHiding();
+            }
         }
     },
     customize: function(constructor) {

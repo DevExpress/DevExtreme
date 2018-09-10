@@ -626,20 +626,30 @@ QUnit.module("Zoom", {
             axesContainerGroup = renderer.g(),
             gridGroup = renderer.g();
 
-        renderer.g.reset();
-        this.axis = new Axis({
+        this.eventTrigger = sinon.spy();
+
+        this.axisOptions = {
             renderer: renderer,
             stripsGroup: stripsGroup,
             labelAxesGroup: labelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
+            eventTrigger: this.eventTrigger,
             gridGroup: gridGroup
-        });
-        this.axis.parser = function(value) {
-            return value;
         };
 
+        renderer.g.reset();
+
+        this.axis = this.createAxis({});
+
         this.generatedTicks = [0, 1, 2];
+    },
+    createAxis(options) {
+        const axis = new Axis($.extend({}, this.axisOptions, options));
+        axis.parser = function(value) {
+            return value;
+        };
+        return axis;
     },
     afterEach: function() {
         translator2DModule.Translator2D.restore();
@@ -671,6 +681,126 @@ QUnit.test("range min and max are not defined", function(assert) {
 
     assert.equal(this.axis.visualRange().startValue, 10, "visualRange[0] should be correct");
     assert.equal(this.axis.visualRange().endValue, 20, "visualRange[1] should be correct");
+});
+
+QUnit.test("Trigger zoom events", function(assert) {
+    this.updateOptions();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 50
+    });
+
+    this.axis.visualRange(10, 20);
+
+    assert.equal(this.eventTrigger.callCount, 2);
+    assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
+    assert.equal(this.eventTrigger.firstCall.args[1].axis, this.axis);
+    assert.deepEqual(this.eventTrigger.firstCall.args[1].range, {
+        startValue: 0,
+        endValue: 50
+    });
+    assert.strictEqual(this.eventTrigger.firstCall.args[1].cancel, false);
+
+    assert.equal(this.eventTrigger.secondCall.args[0], "zoomEnd");
+    assert.equal(this.eventTrigger.secondCall.args[1].axis, this.axis);
+    assert.deepEqual(this.eventTrigger.secondCall.args[1].previousRange, {
+        startValue: 0,
+        endValue: 50
+    });
+    assert.deepEqual(this.eventTrigger.secondCall.args[1].range, {
+        startValue: 10,
+        endValue: 20
+    });
+    assert.strictEqual(this.eventTrigger.secondCall.args[1].cancel, false);
+
+    assert.strictEqual(this.eventTrigger.secondCall.args[1].rangeStart, 10);
+    assert.strictEqual(this.eventTrigger.secondCall.args[1].rangeEnd, 20);
+});
+
+QUnit.test("Can cancel zooming on zoom start", function(assert) {
+    this.eventTrigger = sinon.spy(function(_, e) {
+        e.cancel = true;
+    });
+
+    this.axis = this.createAxis({
+        eventTrigger: this.eventTrigger
+    });
+
+    this.updateOptions();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 50
+    });
+
+    this.axis.visualRange(10, 20);
+
+    assert.equal(this.eventTrigger.callCount, 1);
+    assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
+    assert.deepEqual(this.axis.visualRange(), {
+        startValue: 0,
+        endValue: 50
+    });
+});
+
+QUnit.test("Can cancel zooming on zoom end", function(assert) {
+    this.eventTrigger = sinon.spy(function(event, e) {
+        if(event === "zoomEnd") {
+            e.cancel = true;
+        }
+    });
+
+    this.axis = this.createAxis({
+        eventTrigger: this.eventTrigger
+    });
+
+    this.updateOptions();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 50
+    });
+
+    sinon.spy(this.axis, "_visualRange");
+
+    this.axis.visualRange(10, 20);
+
+    assert.equal(this.eventTrigger.callCount, 2);
+    assert.equal(this.eventTrigger.secondCall.args[0], "zoomEnd");
+    assert.deepEqual(this.axis.visualRange(), {
+        startValue: 0,
+        endValue: 50
+    });
+    assert.ok(this.axis._visualRange.called);
+});
+
+QUnit.test("Can prevent zoomStart", function(assert) {
+    this.updateOptions();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 50
+    });
+
+    this.axis.visualRange([10, 20], { start: true });
+
+    assert.equal(this.eventTrigger.callCount, 1);
+    assert.equal(this.eventTrigger.firstCall.args[0], "zoomEnd");
+});
+
+QUnit.test("Can prevent zoomEnd", function(assert) {
+    this.updateOptions();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 50
+    });
+
+    this.axis.visualRange([10, 20], { end: true });
+
+    assert.equal(this.eventTrigger.callCount, 1);
+    assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
 });
 
 QUnit.test("Set visual range using array", function(assert) {
@@ -876,7 +1006,8 @@ QUnit.module("VisualRange", {
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
-            incidentOccurred: this.incidentOccurred
+            incidentOccurred: this.incidentOccurred,
+            eventTrigger: () => { }
         });
 
         this.axis.parser = function(value) {
@@ -1031,7 +1162,8 @@ QUnit.module("Data margins calculations", {
                 constantLinesGroup: renderer.g(),
                 axesContainerGroup: renderer.g(),
                 gridGroup: renderer.g(),
-                isArgumentAxis: isArgumentAxis
+                isArgumentAxis: isArgumentAxis,
+                eventTrigger: () => { }
             });
 
         axis.updateOptions($.extend(true, {
@@ -2395,7 +2527,8 @@ QUnit.module("Data margins calculations after zooming", {
                 constantLinesGroup: renderer.g(),
                 axesContainerGroup: renderer.g(),
                 gridGroup: renderer.g(),
-                isArgumentAxis: isArgumentAxis
+                isArgumentAxis: isArgumentAxis,
+                eventTrigger: () => { }
             });
 
         axis.parser = function(value) { return value; };
@@ -2563,7 +2696,8 @@ QUnit.module("Set business range", {
             renderer: this.renderer,
             axisType: "xyAxes",
             drawingType: "linear",
-            isArgumentAxis: true
+            isArgumentAxis: true,
+            eventTrigger: () => { }
         });
 
         this.updateOptions({});
@@ -3314,7 +3448,8 @@ QUnit.module("Set business range. Value axis", {
             renderer: this.renderer,
             axisType: "xyAxes",
             drawingType: "linear",
-            isArgumentAxis: false
+            isArgumentAxis: false,
+            eventTrigger: () => { }
         });
 
         this.updateOptions({});
@@ -3434,7 +3569,7 @@ QUnit.test("Correct zero level if showZero is true", function(assert) {
 
 QUnit.test("Value axis ignores visual range on update option", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "reset"
+        visualRangeUpdateMode: "reset"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3467,7 +3602,8 @@ QUnit.module("Visual range on update", {
             renderer: this.renderer,
             axisType: "xyAxes",
             drawingType: "linear",
-            isArgumentAxis: true
+            isArgumentAxis: true,
+            eventTrigger: () => { }
         });
 
         this.canvas = {
@@ -3493,7 +3629,7 @@ QUnit.module("Visual range on update", {
 });
 
 QUnit.test("Reset", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "reset" });
+    this.updateOptions({ visualRangeUpdateMode: "reset" });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3514,7 +3650,7 @@ QUnit.test("Reset", function(assert) {
 });
 
 QUnit.test("Keep", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "keep", visualRange: [10, 40] });
+    this.updateOptions({ visualRangeUpdateMode: "keep", visualRange: [10, 40] });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3535,7 +3671,7 @@ QUnit.test("Keep", function(assert) {
 });
 
 QUnit.test("Shift", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "shift", visualRange: { length: 10 } });
+    this.updateOptions({ visualRangeUpdateMode: "shift", visualRange: { length: 10 } });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,
@@ -3557,7 +3693,7 @@ QUnit.test("Shift", function(assert) {
 
 QUnit.test("Shift. Datetime axis", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "shift",
+        visualRangeUpdateMode: "shift",
         visualRange: {
             length: {
                 minutes: 15
@@ -3586,7 +3722,7 @@ QUnit.test("Shift. Datetime axis", function(assert) {
 
 QUnit.test("Shift. logarithmic axis", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "shift",
+        visualRangeUpdateMode: "shift",
         visualRange: { length: 2 },
         logarithmBase: 10,
         type: "logarithmic"
@@ -3613,7 +3749,7 @@ QUnit.test("Shift. logarithmic axis", function(assert) {
 QUnit.test("Shift. Discrete", function(assert) {
     this.updateOptions({
         type: "discrete",
-        visualRangeOnDataUpdate: "shift"
+        visualRangeUpdateMode: "shift"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3637,7 +3773,7 @@ QUnit.test("Shift. Discrete", function(assert) {
 QUnit.test("Shift. Discrete datetime", function(assert) {
     this.updateOptions({
         type: "discrete",
-        visualRangeOnDataUpdate: "shift"
+        visualRangeUpdateMode: "shift"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3681,7 +3817,7 @@ QUnit.test("Auto mode. visualRange is equal wholeRange - reset", function(assert
 
 QUnit.test("Auto mode. visualRange is not equal wholeRange - keep", function(assert) {
     this.updateOptions({
-        visualRangeOnDataUpdate: "auto"
+        visualRangeUpdateMode: "auto"
     });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3775,7 +3911,7 @@ QUnit.test("Auto. Discrete axis - keep if categories aren't changed", function(a
 });
 
 QUnit.test("Do not reset initial viewport if current bussiness range has isEstimatedRange flag", function(assert) {
-    this.updateOptions({ visualRangeOnDataUpdate: "reset", visualRange: [10, 20] });
+    this.updateOptions({ visualRangeUpdateMode: "reset", visualRange: [10, 20] });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 100,

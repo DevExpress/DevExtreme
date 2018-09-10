@@ -1400,10 +1400,10 @@ var dxChart = {
         */
         wholeRange: undefined,
         /**
-        * @name dxChartOptions.argumentAxis.visualRangeOnDataUpdate
+        * @name dxChartOptions.argumentAxis.visualRangeUpdateMode
         * @type Enums.VisualRangeUpdateMode
         */
-        visualRangeOnDataUpdate: "auto",
+        visualRangeUpdateMode: "auto",
         /**
         * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
@@ -1774,6 +1774,11 @@ var dxChart = {
     /**
      * @name dxChartOptions.onZoomStart
      * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 axis:chartAxisObject
+     * @type_function_param1_field5 range:VizRange
+     * @type_function_param1_field6 cancel:boolean
      * @notUsedInTheme
      * @action
      */
@@ -1785,6 +1790,10 @@ var dxChart = {
      * @type_function_param1 e:object
      * @type_function_param1_field4 rangeStart:Date|Number
      * @type_function_param1_field5 rangeEnd:Date|Number
+     * @type_function_param1_field6 axis:chartAxisObject
+     * @type_function_param1_field7 range:VizRange
+     * @type_function_param1_field8 previousRange:VizRange
+     * @type_function_param1_field9 cancel:boolean
      * @notUsedInTheme
      * @action
      */

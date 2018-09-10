@@ -151,7 +151,7 @@ describe("LessTemplateLoader", () => {
             colorScheme,
             metadata).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.css, ".dx-additional-color-scheme-my-custom div {\n  color: green;\n}\n\n");
+                assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
                 delete metadata["base.common"][0].Value;
                 delete metadata["base.common"][0].isModified;
             });
@@ -184,13 +184,13 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-additional-color-scheme-my-custom div {
+                assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;
 }
-.dx-additional-color-scheme-my-custom {
+.dx-swatch-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .dx-additional-color-scheme-my-custom .dx-theme-accent-as-text-color {
+.dx-viewport.dx-theme-generic .dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 
@@ -229,13 +229,13 @@ describe("LessTemplateLoader", () => {
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
-            assert.equal(data.css, `.dx-additional-color-scheme-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;
 }
-.dx-additional-color-scheme-my-custom {
+.dx-swatch-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .dx-additional-color-scheme-my-custom .dx-theme-accent-as-text-color {
+.dx-viewport.dx-theme-generic .dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 

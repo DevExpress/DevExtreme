@@ -135,6 +135,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var $cell = $(cell);
 
+        if(options.rowType === "data") {
+            column.id && this.setAria("describedby", column.id, $cell);
+        }
+
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
         }
@@ -180,7 +184,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             that.setAria("hidden", true, $table);
         }
 
-        $table.append($("<tbody>"));
+        this.setAria("role", "presentation", $("<tbody>").appendTo($table));
 
         if(isAppend) {
             return $table;
