@@ -178,8 +178,13 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     clock.restore();
 });
 
-QUnit.test("Base accessibility structure", function(assert) {
-    var clock = sinon.useFakeTimers();
+QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        firstColumnIndex,
+        $headers,
+        getGlobalColumnIdSelector = function(index) {
+            return "[id=dx-col-" + index + "]";
+        };
 
     createDataGrid({
         columns: ["field1", "field2"],
@@ -190,12 +195,82 @@ QUnit.test("Base accessibility structure", function(assert) {
 
     clock.tick();
 
+    $headers = $(".dx-datagrid-headers");
+
+    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+
     assert.equal($(".dx-widget").attr("role"), "presentation");
+
     assert.equal($(".dx-datagrid").attr("role"), "grid");
-    assert.equal($(".dx-datagrid-headers").attr("role"), "presentation");
+
+    assert.equal($headers.attr("role"), "presentation");
+    assert.equal($headers.find(".dx-column-indicators").attr("role"), "presentation");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
+
     assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
+
     assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
     assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+
+    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(1)").attr("aria-describedby"), "dx-col-" + firstColumnIndex);
+    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(2)").attr("aria-describedby"), "dx-col-" + (firstColumnIndex + 1));
+
+    assert.equal($(".dx-datagrid-rowsview .dx-freespace-row").attr("role"), "presentation");
+
+    assert.equal($(".dx-context-menu").attr("role"), "presentation");
+
+    clock.restore();
+});
+
+QUnit.testInActiveWindow("Global column index should be unique for the different grids", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $headers,
+        $detailGridHeaders,
+        firstColumnIndex,
+        getGlobalColumnIdSelector = function(index) {
+            return "[id=dx-col-" + index + "]";
+        },
+        dataGrid = createDataGrid({
+            columns: ["field1", "field2"],
+            dataSource: [{ field1: "1", field2: "2" }],
+            keyExpr: "field1",
+            masterDetail: {
+                enabled: true,
+                template: function(container, e) {
+                    $("<div>").addClass("detail-grid").appendTo(container).dxDataGrid({
+                        loadingTimeout: undefined,
+                        columns: ["field3", "field4"],
+                        dataSource: [{ field1: "3", field2: "4" }]
+                    });
+                }
+            },
+        });
+
+    clock.tick();
+
+    $headers = $(".dx-datagrid-headers");
+
+    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+
+    dataGrid.expandRow("1");
+
+    clock.tick();
+
+    $headers = dataGrid.$element().find(".dx-datagrid-headers").eq(0);
+    $detailGridHeaders = dataGrid.$element().find(".dx-datagrid-headers").eq(1);
+
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
+
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).attr("aria-label"), "Column Field 3");
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).text(), "Field 3");
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).attr("aria-label"), "Column Field 4");
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).text(), "Field 4");
 
     clock.restore();
 });
@@ -208,6 +283,7 @@ QUnit.test("Command column accessibility structure", function(assert) {
     });
 
     // assert
+    assert.equal($(".dx-row.dx-header-row").eq(0).attr("role"), "row");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
 });

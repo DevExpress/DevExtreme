@@ -38,6 +38,8 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
+var globalColumnId = 1;
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -586,7 +588,7 @@ module.exports = {
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
 
-                        return extend(true, {}, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
+                        return extend(true, { id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
                     }
                 }
             };
