@@ -8168,6 +8168,39 @@ QUnit.test("Expand column must have the right rowspan", function(assert) {
     assert.ok(!visibleColumns[0].rowspan, "rowspan of the expand column");
 });
 
+// T670211
+QUnit.test("Delete band column via API", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField2", caption: "Column 2" },
+                    { dataField: "TestField3", caption: "Column 3" },
+                    {
+                        caption: "Band Column 2", columns: [
+                            { dataField: "TestField4", caption: "Column 4" },
+                            { dataField: "TestField5", caption: "Column 5" }
+                        ]
+                    }
+                ]
+            }
+        ]
+    });
+
+    // act
+    this.columnsController.deleteColumn(1);
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns(0);
+    assert.strictEqual(visibleColumns.length, 1, "column count");
+    assert.strictEqual(visibleColumns[0].dataField, "TestField1", "dataField of the column");
+    assert.strictEqual(this.columnsController.getRowCount(), 1, "header row count");
+});
+
 
 QUnit.module("onOptionChanged", {
     beforeEach: function() {
