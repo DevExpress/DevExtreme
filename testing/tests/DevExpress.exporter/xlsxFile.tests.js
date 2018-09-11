@@ -19,7 +19,7 @@ QUnit.test("XlsxFile.ctor", function(assert) {
 
 QUnit.test("registerCellFormat(empty format)", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.generateCellFormatsXml(), '<cellXfs count="0"></cellXfs>');
+    assert.equal(file.generateCellFormatsXml(), '<cellXfs count="0" />');
 
     assert.equal(file.registerCellFormat(null), undefined);
     assert.equal(file.registerCellFormat(undefined), undefined);
@@ -31,7 +31,7 @@ QUnit.test("registerCellFormat(empty format)", function(assert) {
     assert.equal(file.registerCellFormat({ alignment: null }), undefined);
     assert.equal(file.registerCellFormat({ alignment: { vertical: undefined } }), undefined);
     assert.equal(file.registerCellFormat({ alignment: { vertical: null } }), undefined);
-    assert.equal(file.generateCellFormatsXml(), '<cellXfs count="0"></cellXfs>');
+    assert.equal(file.generateCellFormatsXml(), '<cellXfs count="0" />');
 });
 
 QUnit.test("registerCellFormat( various numFmtId )", function(assert) {

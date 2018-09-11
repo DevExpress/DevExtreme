@@ -11,7 +11,7 @@ const xlsxTagHelper = {
             }
         }
 
-        if(typeUtils.isDefined(content)) {
+        if(typeUtils.isDefined(content) && content !== "") {
             result.push('>', content, '</', tagName, '>');
         } else {
             result.push(' />');

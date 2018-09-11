@@ -41,7 +41,7 @@ const xlsxPatternFillHelper = {
         return xlsxTagHelper.toXml(
             "patternFill",
             { patternType: tag.patternType },
-            content === "" ? null : content
+            content
         );
     }
 };
