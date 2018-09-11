@@ -1,5 +1,6 @@
 import $ from "jquery";
 import helper from '../../helpers/dataGridExportTestsHelper.js';
+import { extend } from "core/utils/extend";
 
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
@@ -44,7 +45,7 @@ QUnit.test("customizeXlsxCell - set alignment: null", function(assert) {
             columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 'str1_1' }],
             export: {
-                customizeXlsxCell: e => Object.assign(e.xlsxCell.style, { alignment: null })
+                customizeXlsxCell: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
             }
         },
         { styles, worksheet, sharedStrings }
@@ -88,14 +89,17 @@ QUnit.test("customizeXlsxCell - set fill", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             showColumnHeaders: false,
             export: {
-                customizeXlsxCell: e => Object.assign(e.xlsxCell.style, {
-                    fill: {
-                        patternFill: {
-                            patternType: 'darkVertical',
-                            foregroundColor_RGB: 'FF20FF60'
+                customizeXlsxCell: e =>
+                    extend(true, e.xlsxCell, {
+                        style: {
+                            fill: {
+                                patternFill: {
+                                    patternType: 'darkVertical',
+                                    foregroundColor_RGB: 'FF20FF60'
+                                }
+                            }
                         }
-                    }
-                })
+                    }),
             }
         },
         { styles, worksheet, sharedStrings }
