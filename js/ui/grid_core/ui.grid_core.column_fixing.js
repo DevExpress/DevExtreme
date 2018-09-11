@@ -109,8 +109,11 @@ var baseFixedColumns = {
                 $cell
                     .addClass(POINTER_EVENTS_NONE_CLASS)
                     .toggleClass(FIRST_CELL_CLASS, transparentColumnIndex === 0 || prevFixedColumn && prevFixedColumn.command === "expand")
-                    .toggleClass(LAST_CELL_CLASS, fixedColumns.length && transparentColumnIndex === (fixedColumns.length - 1))
-                    .html(rowType !== "freeSpace" ? "&nbsp;" : "");
+                    .toggleClass(LAST_CELL_CLASS, fixedColumns.length && transparentColumnIndex === (fixedColumns.length - 1));
+
+                if(rowType !== "freeSpace") {
+                    gridCoreUtils.setEmptyText($cell);
+                }
             }
         } else if(rowType === "filter") {
             $cell.toggleClass(FIRST_CELL_CLASS, options.columnIndex === transparentColumnIndex);

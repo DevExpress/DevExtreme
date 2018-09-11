@@ -1,6 +1,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     gridCore = require("../data_grid/ui.data_grid.core"),
+    gridCoreUtils = require("./ui.grid_core.utils"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
@@ -752,7 +753,7 @@ module.exports = {
                         this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
                         this._renderSelectCheckBox($container, options);
                     } else {
-                        $container.get(0).innerHTML = "&nbsp;";
+                        gridCoreUtils.setEmptyText($container);
                     }
                 },
 

@@ -433,6 +433,11 @@ module.exports = {
              * @default true
              */
             /**
+             * @name GridBaseColumn.renderAsync
+             * @type boolean
+             * @default false
+             */
+            /**
              * @name dxDataGridColumn.resized
              * @type function
              * @hidden
