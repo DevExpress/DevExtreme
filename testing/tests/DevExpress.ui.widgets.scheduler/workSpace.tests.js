@@ -2027,6 +2027,32 @@ QUnit.testStart(function() {
         assert.equal(cells.filter(".dx-state-focused").length, 1, "right quantity of focused cells");
     });
 
+    QUnit.test("It should not be possible to select cells via mouse if scrollable 'scrollByContent' is true", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                currentDate: new Date(2015, 3, 1),
+                height: 400,
+                allowMultipleCellSelection: true,
+                onContentReady: function(e) {
+                    var scrollable = e.component._dateTableScrollable;
+                    scrollable.option("scrollByContent", true);
+                },
+            }),
+            workspace = $element.dxSchedulerWorkSpaceMonth("instance");
+
+        var stub = sinon.stub(workspace, "notifyObserver");
+
+        var cells = $element.find("." + CELL_CLASS),
+            cell = cells.eq(23).get(0),
+            $table = $element.find(".dx-scheduler-date-table");
+
+        pointerMock(cells.eq(2)).start().click();
+        $($table).trigger($.Event("dxpointermove", { target: cell, toElement: cell, which: 1 }));
+
+        assert.notOk(stub.calledOnce, "Cells weren't selected");
+    });
+
 })("Workspace Keyboard Navigation");
 
 
