@@ -11217,6 +11217,30 @@ QUnit.test("Group item should not be merged with band item", function(assert) {
     assert.equal(formItems[0].caption, "group", "caption for group item is correct");
 });
 
+QUnit.test("The first editor should be focused after row added if band column presents and edit mode is form (T670648)", function(assert) {
+    var that = this,
+        testElement = $('#container');
+
+    that.options.columns = [{
+        caption: "band",
+        columns: [{ dataField: "column1", allowEditing: true }, "column2"],
+    }];
+    that.options.editing = {
+        mode: "form",
+        allowAdding: true
+    };
+
+    that.setupModules(that);
+
+    that.rowsView.render(testElement);
+
+    // act
+    that.addRow();
+
+    // assert
+    assert.equal(that.editingController.getFirstEditableColumnIndex(), 0, "first editable column index is 0");
+});
+
 QUnit.test("Save and cancel buttons", function(assert) {
     this.setupModules(this);
 

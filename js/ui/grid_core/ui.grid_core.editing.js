@@ -266,10 +266,11 @@ var EditingController = modules.ViewController.inherit((function() {
 
         getFirstEditableColumnIndex: function() {
             var columnsController = this.getController("columns"),
+                firstFormItem = this._firstFormItem,
                 columnIndex;
 
-            if(getEditMode(this) === EDIT_MODE_FORM && this._firstFormItem) {
-                columnIndex = this._firstFormItem.column.index;
+            if(getEditMode(this) === EDIT_MODE_FORM && firstFormItem) {
+                columnIndex = this._columnsController.getVisibleIndex(firstFormItem.column.index);
             } else {
                 var visibleColumns = columnsController.getVisibleColumns();
                 each(visibleColumns, function(index, column) {
