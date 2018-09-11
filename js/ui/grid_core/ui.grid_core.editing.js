@@ -73,6 +73,7 @@ var EDIT_FORM_CLASS = "edit-form",
     EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
+    FORM_BASED_MODES = [EDIT_MODE_FORM, EDIT_MODE_POPUP],
     MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
 
 var EDIT_LINK_CLASS = {
@@ -252,6 +253,11 @@ var EditingController = modules.ViewController.inherit((function() {
 
         isRowEditMode: function() {
             return isRowEditMode(this);
+        },
+
+        isFormEditMode: function() {
+            var editMode = getEditMode(this);
+            return FORM_BASED_MODES.indexOf(editMode) !== -1;
         },
 
         getEditMode: function() {

@@ -1216,7 +1216,11 @@ var dxChart = AdvancedChart.inherit({
                 chart._argumentAxes.filter(a => a !== axis).forEach(a => a.visualRange(visualRange));
             }
 
-            chart._requestChange(["VISUAL_RANGE"]);
+            if(chart._applyingChanges) {
+                chart._change_VISUAL_RANGE();
+            } else {
+                chart._requestChange(["VISUAL_RANGE"]);
+            }
         };
     },
 

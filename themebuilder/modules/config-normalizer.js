@@ -37,10 +37,16 @@ const getOutParameters = (command, themeName, config) => {
     }
 
     if(!fileFormat) {
-        if(command === commands.BUILD_THEME) {
-            fileFormat = "css";
-        } else if(command === commands.BUILD_VARS) {
-            fileFormat = "less";
+        switch(command) {
+            case commands.BUILD_THEME:
+                fileFormat = "css";
+                break;
+            case commands.BUILD_VARS:
+                fileFormat = "less";
+                break;
+            case commands.BUILD_META:
+                fileFormat = "json";
+                break;
         }
     }
 

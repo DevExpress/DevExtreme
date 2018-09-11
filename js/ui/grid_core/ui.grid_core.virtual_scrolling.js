@@ -7,7 +7,6 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     deferredUtils = require("../../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
     translator = require("../../animation/translator"),
     LoadIndicator = require("../load_indicator");
 
@@ -709,8 +708,8 @@ module.exports = {
             data: (function() {
                 var members = {
                     _refreshDataSource: function() {
-                        var baseResult = this.callBase.apply(this, arguments);
-                        when(baseResult).then(this.initVirtualRows.bind(this));
+                        var baseResult = this.callBase.apply(this, arguments) || new Deferred().resolve().promise();
+                        baseResult.done(this.initVirtualRows.bind(this));
                         return baseResult;
                     },
                     getRowPageSize: function() {

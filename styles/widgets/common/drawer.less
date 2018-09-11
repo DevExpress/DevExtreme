@@ -3,6 +3,8 @@
 .dx-drawer {
     height: 100%;
     width: 100%;
+    overflow: hidden;
+    
     .touch-action(pinch-zoom);
 }
 
@@ -38,8 +40,6 @@
 }
 
 .dx-drawer-shader {
-    pointer-events: none;
-    
     position: absolute;
     top: 0;
     height: 100%;
@@ -68,5 +68,15 @@
     .dx-drawer-content {
         position: relative;
         flex: 1 1 auto;
+    }
+}
+
+.dx-drawer-overlap {
+    .dx-drawer-panel-content {
+        overflow: visible;
+    }
+
+    .dx-drawer-wrapper {
+        overflow: visible;
     }
 }
