@@ -560,7 +560,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
                 translator = that._argumentAxis.getTranslator(),
                 scale = translator.getMinScale(e.delta > 0),
                 translate = x - x * scale,
-                zoom = translator.zoom(-translate, scale);
+                zoom = translator.zoom(-translate, scale, that._chart.getArgumentAxis().getZoomBounds());
             that._pointerOut();
 
             that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max]);
@@ -664,12 +664,14 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         that._startGesture = null;
         that._startScroll = false;
 
+        const argumentAxis = that._argumentAxis;
+
         function complete() {
-            that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max], { start: true });
+            argumentAxis.visualRange([zoom.min, zoom.max], { start: true });
         }
 
         if(startGesture && startGesture.changed) {
-            zoom = that._argumentAxis._translator.zoom(-startGesture.scroll, startGesture.scale);
+            zoom = argumentAxis.getTranslator().zoom(-startGesture.scroll, startGesture.scale, argumentAxis.getZoomBounds());
 
             if(renderer.animationEnabled() && (-startGesture.scroll !== zoom.translate || startGesture.scale !== zoom.scale)) {
                 var translateDelta = -(startGesture.scroll + zoom.translate),

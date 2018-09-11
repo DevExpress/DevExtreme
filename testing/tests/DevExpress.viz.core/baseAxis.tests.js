@@ -3931,3 +3931,65 @@ QUnit.test("Do not reset initial viewport if current bussiness range has isEstim
     assert.equal(businessRange.minVisible, 10);
     assert.equal(businessRange.maxVisible, 20);
 });
+
+QUnit.module("Get scroll bounds", {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        sinon.spy(translator2DModule, "Translator2D");
+
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "xyAxes",
+            drawingType: "linear",
+            isArgumentAxis: true,
+            eventTrigger: () => { }
+        });
+
+        this.updateOptions({});
+        this.translator = translator2DModule.Translator2D.lastCall.returnValue;
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+        translator2DModule.Translator2D.restore();
+    },
+    updateOptions: environment.updateOptions
+});
+
+QUnit.test("whole range is not set - get from data", function(assert) {
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: 100, endValue: 120 });
+});
+
+QUnit.test("whole range is set - get from option", function(assert) {
+    this.updateOptions({
+        wholeRange: [10, 50]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: 10, endValue: 50 });
+});
+
+
+QUnit.test("whole range values are set to null - get from option", function(assert) {
+    this.updateOptions({
+        wholeRange: [null, null]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: undefined, endValue: undefined });
+});

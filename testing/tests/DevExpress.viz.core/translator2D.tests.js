@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    translator2DModule = require("viz/translators/translator2d"),
-    adjust = require("core/utils/math").adjust;
+import $ from "jquery";
+import translator2DModule from "viz/translators/translator2d";
+import { adjust } from "core/utils/math";
 
 function prepareScaleBreaks(array, breakSize) {
     var breaks = [],
@@ -2436,6 +2436,90 @@ QUnit.test('scale without scroll', function(assert) {
     assert.roughEqual(zoom.max.toFixed(2), 90 + 80 / 510 * 580, 0.1, "big zoom ot max");
     assert.equal(zoom.translate.toFixed(2), 0, "big zoom in translate");
     assert.equal(zoom.scale.toFixed(2), 0.5, " big zoom in scale");
+});
+
+QUnit.test("Scroll with whole range", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: false }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-10, 1, { startValue: 5, endValue: 300 }), {
+        min: 5,
+        max: 105,
+        scale: 1,
+        translate: -5
+    });
+
+    assert.deepEqual(translator.zoom(10, 1, { startValue: 5, endValue: 115 }), {
+        min: 15,
+        max: 115,
+        scale: 1,
+        translate: 5
+    });
+});
+
+QUnit.test("Scroll with whole range. inverted", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: true }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(10, 1, { startValue: 5, endValue: 300 }), {
+        max: 5,
+        min: 105,
+        scale: 1,
+        translate: 5
+    });
+
+    assert.deepEqual(translator.zoom(-10, 1, { startValue: 5, endValue: 115 }), {
+        max: 15,
+        min: 115,
+        scale: 1,
+        translate: -5
+    });
+});
+
+QUnit.test("Scroll with whole range endless whole range with one side", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: false }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-10, 1, { startValue: undefined, endValue: 300 }), {
+        min: 0,
+        max: 100,
+        scale: 1,
+        translate: -10
+    });
+
+    assert.deepEqual(translator.zoom(10, 1, { startValue: 5, endValue: undefined }), {
+        min: 20,
+        max: 120,
+        scale: 1,
+        translate: 10
+    });
+});
+
+QUnit.test("Scroll with whole range endless whole range with one side. Inverted", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: true }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(10, 1, { startValue: undefined, endValue: 300 }), {
+        max: 0,
+        min: 100,
+        scale: 1,
+        translate: 10
+    });
+
+    assert.deepEqual(translator.zoom(-10, 1, { startValue: 5, endValue: undefined }), {
+        max: 20,
+        min: 120,
+        scale: 1,
+        translate: -10
+    });
 });
 
 QUnit.test('get scale. Numeric', function(assert) {

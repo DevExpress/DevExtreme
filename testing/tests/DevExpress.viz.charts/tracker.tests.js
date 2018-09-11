@@ -93,6 +93,7 @@ var createAxis = function(translator) {
     axis.getOptions = function() { return { hoverMode: "allargumentpoints" }; };
 
     axis.stub("getZoomEventArg").returns({ mockArg: true });
+    axis.stub("getZoomBounds").returns({ mockWholeRange: true });
 
     return axis;
 };
@@ -2152,7 +2153,7 @@ QUnit.test("scroll right", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2199,7 +2200,7 @@ QUnit.test("scroll top. Rotated", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2212,7 +2213,7 @@ QUnit.test("scroll left", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2228,7 +2229,7 @@ QUnit.test("scroll bottom. Rotated", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2261,7 +2262,7 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Mouse Event", fun
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
@@ -2313,7 +2314,7 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Touch Event", fun
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 
@@ -2333,7 +2334,7 @@ QUnit.test("scroll from scrollBar", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [20, 1]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
     assert.ok(preventDefault.calledOnce);
@@ -2347,7 +2348,7 @@ QUnit.test("zoom in without scroll", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-70, 3]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [70, 3]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [70, 3, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2360,7 +2361,7 @@ QUnit.test("zoom out scale 0", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [35, 0]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-35, 0]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-35, 0, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2373,7 +2374,7 @@ QUnit.test("zoom out without scroll", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [14, 0.6]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2386,7 +2387,7 @@ QUnit.test("zoom when pointers has reverse order", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-70, 3]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [70, 3]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [70, 3, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
 });
@@ -2442,7 +2443,7 @@ QUnit.test("Pinch-zoom. only touch", function(assert) {
     assert.ok(this.options.chart._transformArgument.calledOnce);
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [14, 0.6]);
-    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6]);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
@@ -2459,7 +2460,7 @@ QUnit.test("mousewheel with positive delta", function(assert) {
 
     assert.equal(this.translator.stub("zoom").callCount, 1);
 
-    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [4, 1.1]);
+    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [4, 1.1, { mockWholeRange: true }]);
 
     assert.equal(this.axis.visualRange.callCount, 1);
     assert.ok(this.translator.getMinScale.calledOnce);
@@ -2476,7 +2477,7 @@ QUnit.test("mousewheel with negative delta", function(assert) {
 
     assert.equal(this.translator.stub("zoom").callCount, 1);
 
-    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [4, 1.1]);
+    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [4, 1.1, { mockWholeRange: true }]);
 
     assert.equal(this.axis.visualRange.callCount, 1);
     assert.ok(this.translator.getMinScale.calledOnce);
@@ -2495,8 +2496,8 @@ QUnit.test("mousewheel. Rotated", function(assert) {
 
     assert.equal(this.translator.stub("zoom").callCount, 2);
 
-    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [6.5, 1.1]);
-    assert.deepEqual(this.translator.stub("zoom").getCall(1).args, [6.5, 1.1]);
+    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [6.5, 1.1, { mockWholeRange: true }]);
+    assert.deepEqual(this.translator.stub("zoom").getCall(1).args, [6.5, 1.1, { mockWholeRange: true }]);
 
     assert.equal(this.axis.visualRange.callCount, 2);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"]]);
@@ -2541,7 +2542,7 @@ QUnit.test("mousewheel with only mouse interaction", function(assert) {
 
     assert.equal(this.translator.stub("zoom").callCount, 1);
 
-    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [4, 1.1]);
+    assert.deepEqual(this.translator.stub("zoom").getCall(0).args, [4, 1.1, { mockWholeRange: true }]);
 
     assert.equal(this.axis.visualRange.callCount, 1);
     assert.ok(this.translator.getMinScale.calledOnce);

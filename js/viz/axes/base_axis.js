@@ -206,6 +206,16 @@ function valueOf(value) {
     return value.valueOf();
 }
 
+function getZoomBoundValue(optionValue, dataValue) {
+    if(optionValue === undefined) {
+        return dataValue;
+    } else if(optionValue === null) {
+        return undefined;
+    } else {
+        return optionValue;
+    }
+}
+
 function correctMarginExtremum(value, margins, maxMinDistance, roundingMethod) {
     var dividerPower,
         distancePower,
@@ -1750,6 +1760,16 @@ Axis.prototype = {
             axis: this,
             range: this.visualRange(),
             cancel: false
+        };
+    },
+
+    getZoomBounds() {
+        const wholeRange = vizUtils.getVizRangeObject(this._options.wholeRange);
+        const range = this.getTranslator().getBusinessRange();
+
+        return {
+            startValue: getZoomBoundValue(wholeRange.startValue, range.min),
+            endValue: getZoomBoundValue(wholeRange.endValue, range.max)
         };
     },
 
