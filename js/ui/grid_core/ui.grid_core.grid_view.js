@@ -575,6 +575,7 @@ var ResizingController = modules.ViewController.inherit({
                 this.resize();
                 /* falls through */
             case "legacyRendering":
+            case "renderAsync":
                 args.handled = true;
                 return;
             default:
@@ -718,7 +719,13 @@ module.exports = {
              * @default false
              */
             showBorders: false,
-            legacyRendering: false
+            /**
+             * @name GridBaseOptions.renderAsync
+             * @type boolean
+             * @default false
+             */
+            renderAsync: false,
+            legacyRendering: false,
         };
     },
     controllers: {
