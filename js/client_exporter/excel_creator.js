@@ -12,10 +12,10 @@ var Class = require("../core/class"),
     XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
     GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
     SINGLE_SHEET_PR_XML = "<sheetPr/>",
-    BASE_STYLE_XML = "<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/>" +
+    BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/>" +
                      "<scheme val=\"minor\"/></font><font><b/><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/>" +
-                     "<family val=\"2\"/><scheme val=\"minor\"/></font></fonts><fills count=\"1\"><fill><patternFill patternType=\"none\"/>" +
-                     "</fill></fills><borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\">" +
+                     "<family val=\"2\"/><scheme val=\"minor\"/></font></fonts>",
+    BASE_STYLE_XML2 = "<borders count=\"1\"><border><left style=\"thin\"><color rgb=\"FFD3D3D3\"/></left><right style=\"thin\">" +
                      "<color rgb=\"FFD3D3D3\"/></right><top style=\"thin\"><color rgb=\"FFD3D3D3\"/></top><bottom style=\"thin\"><color rgb=\"FFD3D3D3\"/>" +
                      "</bottom></border></borders><cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>",
     OPEN_XML_FORMAT_URL = "http://schemas.openxmlformats.org",
@@ -309,7 +309,10 @@ var ExcelCreator = Class.inherit({
             ]);
         }
 
-        XML = XML + that._getXMLTag("numFmts", [{ name: "count", value: that._styleFormat.length }], that._styleFormat.join("")) + BASE_STYLE_XML;
+        XML = XML + that._getXMLTag("numFmts", [{ name: "count", value: that._styleFormat.length }], that._styleFormat.join(""));
+        XML = XML + BASE_STYLE_XML1;
+        XML = XML + this._xlsxFile.generateFillsXml();
+        XML = XML + BASE_STYLE_XML2;
 
         XML = XML + this._xlsxFile.generateCellFormatsXml();
 
@@ -603,7 +606,8 @@ exports.__internals = {
     SHAREDSTRING_FILE_NAME: SHAREDSTRING_FILE_NAME,
     GROUP_SHEET_PR_XML: GROUP_SHEET_PR_XML,
     SINGLE_SHEET_PR_XML: SINGLE_SHEET_PR_XML,
-    BASE_STYLE_XML: BASE_STYLE_XML,
+    BASE_STYLE_XML1: BASE_STYLE_XML1,
+    BASE_STYLE_XML2: BASE_STYLE_XML2,
     XML_TAG: XML_TAG
 };
 ///#ENDDEBUG
