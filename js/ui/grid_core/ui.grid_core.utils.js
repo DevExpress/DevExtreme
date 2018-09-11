@@ -74,6 +74,10 @@ module.exports = (function() {
         return dataType === "date" || dataType === "datetime";
     };
 
+    var setEmptyText = function($container) {
+        $container.get(0).textContent = "\u00A0";
+    };
+
     return {
         renderNoDataText: function($element) {
             var that = this;
@@ -429,11 +433,13 @@ module.exports = (function() {
 
                         rowsView.setAria("label", options.value ? rowsView.localize("dxDataGrid-ariaCollapse") : rowsView.localize("dxDataGrid-ariaExpand"), $container);
                     } else {
-                        $container.get(0).innerHTML = "&nbsp;";
+                        setEmptyText($container);
                     }
                 }
             };
         },
+
+        setEmptyText: setEmptyText,
 
         isDateType: isDateType,
 
