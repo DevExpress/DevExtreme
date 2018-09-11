@@ -666,7 +666,7 @@ module.exports = {
                 timeout: 300,
                 updateTimeout: 300,
                 minTimeout: 0,
-                renderingThreshold: 150,
+                renderingThreshold: 100,
                 removeInvisiblePages: true,
                 rowPageSize: 5,
                 /**

@@ -146,7 +146,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 editingController._createEditingLinks($container, options, editingOptions, isRowMode);
             }
         } else {
-            $container.get(0).innerHTML = "&nbsp;";
+            gridCoreUtils.setEmptyText($container);
         }
     };
 

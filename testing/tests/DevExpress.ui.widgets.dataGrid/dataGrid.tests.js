@@ -6097,6 +6097,122 @@ QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
 });
 
 
+QUnit.module("Async render", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        if(window.requestIdleCallback) {
+            this.originalRequestIdleCallback = window.requestIdleCallback;
+            window.requestIdleCallback = window.setTimeout;
+        }
+    },
+    afterEach: function() {
+        this.clock.restore();
+        if(this.originalRequestIdleCallback) {
+            window.requestIdleCallback = this.originalRequestIdleCallback;
+        }
+    }
+});
+
+QUnit.test("filterRow, command column and showEditorAlways column should render asynchronously if renderAsync is true", function(assert) {
+    var cellPreparedCells = [];
+
+    // act
+    createDataGrid({
+        dataSource: [{ id: 1, boolean: true }],
+        loadingTimeout: undefined,
+        renderAsync: true,
+        filterRow: {
+            visible: true
+        },
+        selection: {
+            mode: "multiple"
+        },
+        onCellPrepared: function(e) {
+            cellPreparedCells.push(e.rowType + "-" + (e.column.command || e.column.dataField));
+        }
+    });
+
+
+    // assert
+    assert.deepEqual(cellPreparedCells, [
+        "header-id", "header-boolean",
+        "filter-select", "header-select",
+        "data-id"
+    ], "synchronous cellPrepared calls");
+
+    // act
+    cellPreparedCells = [];
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(cellPreparedCells, [
+        "filter-id", "filter-boolean", // filter row is async
+        "data-select", // command column is async
+        "data-boolean" // showEditorAlways column is async
+    ], "asynchronous cellPrepared calls");
+});
+
+QUnit.test("showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false", function(assert) {
+    var cellPreparedCells = [];
+
+    // act
+    createDataGrid({
+        dataSource: [{ boolean: true }],
+        loadingTimeout: undefined,
+        renderAsync: true,
+        columns: [{
+            dataField: "boolean",
+            renderAsync: false
+        }],
+        onCellPrepared: function(e) {
+            cellPreparedCells.push(e.rowType + "-" + (e.column.command || e.column.dataField));
+        }
+    });
+
+    // assert
+    assert.deepEqual(cellPreparedCells, [
+        "header-boolean",
+        "data-boolean"
+    ], "header and data is synchronous");
+});
+
+QUnit.test("cellTemplate should be rendered, asynchronously if column renderAsync is true", function(assert) {
+    var cellPreparedCells = [];
+    var cellTemplateArgs = [];
+
+    // act
+    createDataGrid({
+        dataSource: [{ id: 1, template: "Test" }],
+        loadingTimeout: undefined,
+        filterRow: {
+            visible: true
+        },
+        columns: ["id", {
+            dataField: "template",
+            renderAsync: true,
+            cellTemplate: function(container, options) {
+                cellTemplateArgs.push(options);
+            }
+        }],
+        onCellPrepared: function(e) {
+            cellPreparedCells.push(e.rowType + "-" + (e.column.command || e.column.dataField));
+        }
+    });
+
+    // assert
+    assert.deepEqual(cellTemplateArgs, [], "cell template are not called");
+
+    // act
+    cellPreparedCells = [];
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(cellPreparedCells, ["data-template"], "asynchronous cellPrepared calls");
+    assert.equal(cellTemplateArgs.length, 1, "cell template is called");
+    assert.equal(cellTemplateArgs[0].rowType, "data", "cell template rowType");
+    assert.equal(cellTemplateArgs[0].column.dataField, "template", "cell template column");
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

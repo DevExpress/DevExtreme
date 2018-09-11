@@ -62,7 +62,7 @@ function adaptiveCellTemplate(container, options) {
         }));
         $adaptiveColumnButton.appendTo($container);
     } else {
-        $container.get(0).innerHTML = "&nbsp;";
+        gridCoreUtils.setEmptyText($container);
     }
 }
 

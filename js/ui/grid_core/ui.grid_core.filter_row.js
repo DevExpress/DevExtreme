@@ -361,36 +361,45 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             return result;
         },
 
-        _renderCellContent: function($cell, options) {
+        _renderFilterCell: function(cell, options) {
             var that = this,
                 column = options.column,
+                $cell = $(cell),
                 $container,
                 $editorContainer;
+
+            that.setAria("label",
+                messageLocalization.format("dxDataGrid-ariaColumn") + " " + column.caption + ", " + messageLocalization.format("dxDataGrid-ariaFilterCell"),
+                $cell);
+            $cell.addClass(EDITOR_CELL_CLASS);
+            $container = $("<div>").appendTo($cell);
+            $editorContainer = $("<div>").addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
+
+            if(getColumnSelectedFilterOperation(that, column) === "between") {
+                that._renderFilterRangeContent($cell, column);
+            } else {
+                that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
+            }
+
+            if(column.alignment) {
+                $cell.find(EDITORS_INPUT_SELECTOR).first().css("textAlign", column.alignment);
+            }
+
+            if(column.filterOperations && column.filterOperations.length) {
+                that._renderFilterOperationChooser($container, column, $editorContainer);
+            }
+        },
+
+        _renderCellContent: function($cell, options) { // TODO _getCellTemplate
+            var that = this,
+                column = options.column;
 
             if(options.rowType === "filter") {
                 if(column.command) {
                     $cell.html("&nbsp;");
                 } else if(column.allowFiltering) {
-                    that.setAria("label",
-                        messageLocalization.format("dxDataGrid-ariaColumn") + " " + column.caption + ", " + messageLocalization.format("dxDataGrid-ariaFilterCell"),
-                        $cell);
-                    $cell.addClass(EDITOR_CELL_CLASS);
-                    $container = $("<div>").appendTo($cell);
-                    $editorContainer = $("<div>").addClass(EDITOR_CONTAINER_CLASS).appendTo($container);
-
-                    if(getColumnSelectedFilterOperation(that, column) === "between") {
-                        that._renderFilterRangeContent($cell, column);
-                    } else {
-                        that._renderEditor($editorContainer, that._getEditorOptions($editorContainer, column));
-                    }
-
-                    if(column.alignment) {
-                        $cell.find(EDITORS_INPUT_SELECTOR).first().css("textAlign", column.alignment);
-                    }
-
-                    if(column.filterOperations && column.filterOperations.length) {
-                        that._renderFilterOperationChooser($container, column, $editorContainer);
-                    }
+                    that.renderTemplate($cell, that._renderFilterCell.bind(that), options);
+                    return;
                 }
             }
 
