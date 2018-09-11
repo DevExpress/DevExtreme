@@ -391,7 +391,7 @@ _Translator2d.prototype = {
         return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
     },
 
-    zoom(translate, scale) {
+    zoom(translate, scale, wholeRange) {
         const canvasOptions = this._canvasOptions;
 
         if(canvasOptions.rangeMinVisible.valueOf() === canvasOptions.rangeMaxVisible.valueOf() && translate !== 0) {
@@ -401,8 +401,26 @@ _Translator2d.prototype = {
         const startPoint = canvasOptions.startPoint;
         const endPoint = canvasOptions.endPoint;
 
-        const newStart = (startPoint + translate) / scale;
-        const newEnd = (endPoint + translate) / scale;
+        let newStart = (startPoint + translate) / scale;
+        let newEnd = (endPoint + translate) / scale;
+
+        wholeRange = wholeRange || {};
+        const minPoint = this.to(this._businessRange.invert ? wholeRange.endValue : wholeRange.startValue);
+        const maxPoint = this.to(this._businessRange.invert ? wholeRange.startValue : wholeRange.endValue);
+
+        if(minPoint > newStart) {
+            newEnd -= newStart - minPoint;
+            newStart = minPoint;
+        }
+
+        if(maxPoint < newEnd) {
+            newStart -= newEnd - maxPoint;
+            newEnd = maxPoint;
+        }
+        if((maxPoint - minPoint) < (newEnd - newStart)) {
+            newStart = minPoint;
+            newEnd = maxPoint;
+        }
 
         translate = (endPoint - startPoint) * newStart / (newEnd - newStart) - startPoint;
         scale = ((startPoint + translate) / newStart) || 1;
