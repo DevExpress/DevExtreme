@@ -2488,7 +2488,7 @@ QUnit.test("Filter row does not have rowspan attribute when band column is enabl
             width: 200
         }
     ];
-    this.options.columnAutoWidth = true;
+
     this.options.filterRow = { visible: true };
     this.setupDataGrid();
 
