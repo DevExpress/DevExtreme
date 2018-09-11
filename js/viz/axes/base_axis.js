@@ -954,17 +954,15 @@ Axis.prototype = {
             axisType: options.type,
             dataType: options.dataType,
             base: options.logarithmBase
-        },
-            visualRange,
-            {
-                categories,
-                min: wholeRange.startValue,
-                max: wholeRange.endValue
-            }, {
-                categories,
-                min: minVisible,
-                max: maxVisible
-            });
+        }, visualRange, {
+            categories,
+            min: wholeRange.startValue,
+            max: wholeRange.endValue
+        }, {
+            categories,
+            min: minVisible,
+            max: maxVisible
+        });
 
         result.minVisible = adjustedVisualRange.startValue;
         result.maxVisible = adjustedVisualRange.endValue;
@@ -1396,10 +1394,10 @@ Axis.prototype = {
         }
         if(that._options.type !== constants.discrete) {
             if(length && !that._options.skipViewportExtending) {
-                if(!that.isArgumentAxis && ticks[0].value < range.minVisible) {
+                if(that.allowToExtendVisualRange() && ticks[0].value < range.minVisible) {
                     minVisible = ticks[0].value;
                 }
-                if(!that.isArgumentAxis && length > 1 && ticks[length - 1].value > range.maxVisible) {
+                if(that.allowToExtendVisualRange() && length > 1 && ticks[length - 1].value > range.maxVisible) {
                     maxVisible = ticks[length - 1].value;
                 }
             }
@@ -1427,6 +1425,10 @@ Axis.prototype = {
 
     setMarginOptions: function(options) {
         this._marginOptions = options;
+    },
+
+    allowToExtendVisualRange() {
+        return !this.isArgumentAxis;
     },
 
     _calculateRangeInterval: function(dataLength, interval) {
