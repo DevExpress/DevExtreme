@@ -1660,7 +1660,7 @@ var SchedulerWorkSpace = Widget.inherit({
             }
         });
         eventsEngine.on($table, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, "td", function(e) {
-            if(isPointerDown) {
+            if(isPointerDown && that._dateTableScrollable && !that._dateTableScrollable.option("scrollByContent")) {
                 e.preventDefault();
                 e.stopPropagation();
                 that._moveToCell($(e.target), true);
