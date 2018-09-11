@@ -1253,9 +1253,15 @@ var dxChart = AdvancedChart.inherit({
         });
     },
 
+    _notifyOptionChanged(option, value, previousValue) {
+        this.callBase.apply(this, arguments);
+        if(!this._optionChangedLocker) {
+            this._parseVisualRangeOption(option, value);
+        }
+    },
+
     _optionChanged: function(arg) {
         if(!this._optionChangedLocker) {
-            this._parseVisualRangeOption(arg.fullName, arg.value);
             if(arg.fullName.indexOf("visualRange") > 0) {
                 let axisPath;
                 if(arg.fullName) {

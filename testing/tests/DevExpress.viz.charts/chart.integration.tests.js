@@ -6,6 +6,7 @@ var $ = require("jquery"),
     titleModule = require("viz/core/title"),
     dxChart = require("viz/chart"),
     dxPieChart = require("viz/pie_chart"),
+    dxPolarChart = require("viz/polar_chart"),
     baseChartModule = require("viz/chart_components/base_chart"),
     setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily;
 
@@ -38,6 +39,9 @@ var chartContainerCounter = 1,
                 $("#" + containerName).remove();
                 executeAsyncMock.teardown();
             }
+        },
+        createPolarChart: function(options) {
+            return this.createChartCore(options, dxPolarChart);
         },
         createPieChart: function(options) {
             return this.createChartCore(options, dxPieChart);
@@ -564,8 +568,15 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
         },
         dataSource: dataSource,
         series: { type: "line" },
-        onOptionChanged: visualRangeChanged
+        onOptionChanged: visualRangeChanged,
+        argumentAxis: { visualRange: [3, 10] },
+        valueAxis: { visualRange: { startValue: 4, endValue: 7 } }
     });
+
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), [3, 10]);
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 4, endValue: 7 });
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 3, endValue: 10 });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 4, endValue: 7 });
 
     visualRangeChanged.reset();
     chart.option("valueAxis.visualRange", [3, 6]);
@@ -1733,6 +1744,38 @@ QUnit.test("getAllPoints with enabled aggregation", function(assert) {
     });
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 1);
+});
+
+QUnit.module("dxPolarChart", moduleSetup);
+
+QUnit.test("Add extra ticks (endOnTick) for extend visualRange and hide overlapping labels", function(assert) {
+    var data = [
+        { "temperature": 11.9, "sales": 185 },
+        { "temperature": 14.2, "sales": 215 },
+        { "temperature": 15.2, "sales": 332 },
+        { "temperature": 16.4, "sales": 325 },
+        { "temperature": 17.2, "sales": 408 },
+        { "temperature": 18.5, "sales": 406 },
+        { "temperature": 19.4, "sales": 412 },
+        { "temperature": 20.8, "sales": 469 },
+        { "temperature": 22.1, "sales": 522 },
+        { "temperature": 22.6, "sales": 493 },
+        { "temperature": 23.4, "sales": 544 },
+        { "temperature": 24.8, "sales": 614 }
+    ];
+
+    this.$container.css({ width: "1000px", height: "400px" });
+
+    var chart = this.createPolarChart({
+        dataSource: data,
+        series: [{ closed: false, valueField: 'sales', argumentField: 'temperature', label: { visible: true }, type: 'line' }],
+        legend: { visible: false },
+        title: { text: 'Ice Cream Sales vs Temperature' },
+        palette: 'Office'
+    });
+
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), { startValue: 11, endValue: 25 }, "extend visualRange");
+    assert.equal(chart._argumentAxes[0]._majorTicks[14].label.element.clientWidth, 0, "hidden label");
 });
 
 QUnit.module("T576725", $.extend({}, moduleSetup, {

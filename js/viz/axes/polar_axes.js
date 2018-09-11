@@ -125,6 +125,10 @@ circularAxes = polarAxes.circular = {
 
     _setVisualRange: _noop,
 
+    allowToExtendVisualRange() {
+        return true;
+    },
+
     _getStick: function() {
         return this._options.firstPointOnStartAngle || (this._options.type !== constants.discrete);
     },
