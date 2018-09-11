@@ -2625,13 +2625,13 @@ module.exports = {
                                         parsedValue;
 
                                     if(column.dataType === "number") {
-                                        if(typeUtils.isString(text)) {
+                                        if(typeUtils.isString(text) && column.format) {
                                             parsedValue = numberLocalization.parse(text);
 
                                             if(typeUtils.isNumeric(parsedValue)) {
                                                 result = parsedValue;
                                             }
-                                        } else if(isDefined(text)) {
+                                        } else if(isDefined(text) && typeUtils.isNumeric(text)) {
                                             result = Number(text);
                                         }
                                     } else if(column.dataType === "boolean") {
