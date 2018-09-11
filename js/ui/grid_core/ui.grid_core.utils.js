@@ -440,18 +440,24 @@ module.exports = (function() {
         isDateType: isDateType,
 
         getSelectionRange: function(focusedElement) {
-            return focusedElement ? {
-                selectionStart: focusedElement.selectionStart,
-                selectionEnd: focusedElement.selectionEnd
-            } : {};
+            try {
+                if(focusedElement) {
+                    return {
+                        selectionStart: focusedElement.selectionStart,
+                        selectionEnd: focusedElement.selectionEnd
+                    };
+                }
+            } catch(e) {}
+
+            return {};
         },
 
         setSelectionRange: function(focusedElement, selectionRange) {
-            if(focusedElement && focusedElement.setSelectionRange) {
-                try {
+            try {
+                if(focusedElement && focusedElement.setSelectionRange) {
                     focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
-                } catch(e) {}
-            }
+                }
+            } catch(e) {}
         },
 
         getLastResizableColumnIndex: function(columns) {
