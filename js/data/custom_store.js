@@ -417,6 +417,7 @@ var CustomStore = Store.inherit({
             invokeUserByKeyFunc(this, key, extraOptions)
                 .done(function(obj) { d.resolve(obj); })
                 .fail(createUserFuncFailureHandler(d));
+            d = this._addFailHandlers(d);
         }
 
         return d.promise();
