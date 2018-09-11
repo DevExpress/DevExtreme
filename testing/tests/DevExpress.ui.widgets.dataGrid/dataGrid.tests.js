@@ -11463,6 +11463,19 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
     assert.notOk(preventDefaultCalled, "preventDefault is not called");
 });
 
+// T671532
+QUnit.testInActiveWindow("Change options do not throw an exception when an element outside the grid is focused", function(assert) {
+    // arange
+    var $inputElement = $("<input type='button' />").prependTo($("#container"));
+
+    // act
+    $inputElement.focus();
+    this.dataGrid.option("columnAutoWidth", true);
+
+    // assert
+    assert.ok(true, "no exceptions");
+});
+
 
 QUnit.module("Formatting");
 
