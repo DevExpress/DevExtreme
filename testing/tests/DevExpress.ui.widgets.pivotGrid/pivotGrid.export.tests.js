@@ -9,6 +9,7 @@ import $ from "jquery";
 import { __internals as internals } from "client_exporter/excel_creator";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
+import { extend } from "core/utils/extend";
 
 const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
 const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
@@ -324,7 +325,7 @@ QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", functio
         assert,
         {
             export: {
-                customizeXlsxCell: e => Object.assign(e.xlsxCell.style, { alignment: null })
+                customizeXlsxCell: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
             }
         },
         { styles, worksheet, sharedStrings }

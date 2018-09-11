@@ -6,6 +6,7 @@ import $ from "jquery";
 import { excel as excelCreator } from "client_exporter";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
+import { extend } from "core/utils/extend";
 
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
@@ -1049,7 +1050,7 @@ QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", functio
             columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 'str1_1' }],
             export: {
-                customizeXlsxCell: e => Object.assign(e.xlsxCell.style, { alignment: null })
+                customizeXlsxCell: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
             }
         },
         { styles, worksheet, sharedStrings }
