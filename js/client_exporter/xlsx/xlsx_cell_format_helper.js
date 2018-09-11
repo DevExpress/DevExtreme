@@ -1,18 +1,18 @@
 import typeUtils from "../../core/utils/type";
-import XlsxTagHelper from './xlsx_tag_helper';
-import XlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
+import xlsxTagHelper from './xlsx_tag_helper';
+import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
 
-const XlsxCellFormatHelper = {
+const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, xlsxFile) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             result = {
                 fontId: sourceObj.fontId,
                 numberFormatId: sourceObj.numberFormatId,
-                alignment: XlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
+                alignment: xlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
                 fillId: xlsxFile.registerFill(sourceObj.fill),
             };
-            if(XlsxCellFormatHelper.isEmpty(result)) {
+            if(xlsxCellFormatHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -20,13 +20,13 @@ const XlsxCellFormatHelper = {
     },
 
     areEqual: function(leftTag, rightTag) {
-        return XlsxCellFormatHelper.isEmpty(leftTag) && XlsxCellFormatHelper.isEmpty(rightTag) ||
+        return xlsxCellFormatHelper.isEmpty(leftTag) && xlsxCellFormatHelper.isEmpty(rightTag) ||
             (
                 typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
                 leftTag.fontId === rightTag.fontId &&
                 leftTag.numberFormatId === rightTag.numberFormatId &&
                 leftTag.fillId === rightTag.fillId &&
-                XlsxCellAlignmentHelper.areEqual(leftTag.alignment, rightTag.alignment)
+                xlsxCellAlignmentHelper.areEqual(leftTag.alignment, rightTag.alignment)
             );
     },
 
@@ -35,18 +35,18 @@ const XlsxCellFormatHelper = {
             !typeUtils.isDefined(tag.fontId) &&
             !typeUtils.isDefined(tag.numberFormatId) &&
             !typeUtils.isDefined(tag.fillId) &&
-            XlsxCellAlignmentHelper.isEmpty(tag.alignment);
+            xlsxCellAlignmentHelper.isEmpty(tag.alignment);
     },
 
     toXml: function(tag) {
-        const isAlignmentEmpty = XlsxCellAlignmentHelper.isEmpty(tag.alignment);
+        const isAlignmentEmpty = xlsxCellAlignmentHelper.isEmpty(tag.alignment);
         let applyNumberFormat;
         if(typeUtils.isDefined(tag.numberFormatId)) {
             applyNumberFormat = tag.numberFormatId > 0 ? 1 : 0;
         }
 
         // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return XlsxTagHelper.toXml(
+        return xlsxTagHelper.toXml(
             "xf",
             {
                 'xfId': 0,
@@ -56,9 +56,9 @@ const XlsxCellFormatHelper = {
                 fillId: tag.fillId,
                 'numFmtId': tag.numberFormatId,
             },
-            isAlignmentEmpty ? null : XlsxCellAlignmentHelper.toXml(tag.alignment)
+            isAlignmentEmpty ? null : xlsxCellAlignmentHelper.toXml(tag.alignment)
         );
     }
 };
 
-export default XlsxCellFormatHelper;
+export default xlsxCellFormatHelper;

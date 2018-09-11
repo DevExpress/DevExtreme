@@ -1,13 +1,13 @@
 import typeUtils from "../../core/utils/type";
-import XlsxTagHelper from './xlsx_tag_helper';
-import XlsxPatternFillHelper from './xlsx_pattern_fill_helper';
+import xlsxTagHelper from './xlsx_tag_helper';
+import xlsxPatternFillHelper from './xlsx_pattern_fill_helper';
 
-const XlsxFillHelper = {
+const xlsxFillHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             result = { patternFill: sourceObj.patternFill };
-            if(XlsxFillHelper.isEmpty(result)) {
+            if(xlsxFillHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -15,25 +15,25 @@ const XlsxFillHelper = {
     },
 
     areEqual: function(leftTag, rightTag) {
-        return XlsxFillHelper.isEmpty(leftTag) && XlsxFillHelper.isEmpty(rightTag) ||
+        return xlsxFillHelper.isEmpty(leftTag) && xlsxFillHelper.isEmpty(rightTag) ||
             (
                 typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
-                XlsxPatternFillHelper.areEqual(leftTag.patternFill, rightTag.patternFill)
+                xlsxPatternFillHelper.areEqual(leftTag.patternFill, rightTag.patternFill)
             );
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) || XlsxPatternFillHelper.isEmpty(tag.patternFill);
+        return !typeUtils.isDefined(tag) || xlsxPatternFillHelper.isEmpty(tag.patternFill);
     },
 
     toXml: function(tag) {
         // §18.8.20 fill (Fill), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return XlsxTagHelper.toXml(
+        return xlsxTagHelper.toXml(
             "fill",
             {},
-            XlsxPatternFillHelper.toXml(tag.patternFill)
+            xlsxPatternFillHelper.toXml(tag.patternFill)
         );
     }
 };
 
-export default XlsxFillHelper;
+export default xlsxFillHelper;
