@@ -41,10 +41,8 @@ const XlsxCellFormatHelper = {
     toXml: function(tag) {
         const isAlignmentEmpty = XlsxCellAlignmentHelper.isEmpty(tag.alignment);
         let applyNumberFormat;
-        if(tag.numberFormatId === 0) {
-            applyNumberFormat = 0;
-        } else if(typeUtils.isDefined(tag.numberFormatId)) {
-            applyNumberFormat = 1;
+        if(typeUtils.isDefined(tag.numberFormatId)) {
+            applyNumberFormat = tag.numberFormatId > 0 ? 1 : 0;
         }
 
         // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
@@ -54,7 +52,7 @@ const XlsxCellFormatHelper = {
                 'xfId': 0,
                 applyAlignment: isAlignmentEmpty ? null : 1,
                 fontId: tag.fontId,
-                applyNumberFormat: applyNumberFormat,
+                applyNumberFormat,
                 fillId: tag.fillId,
                 'numFmtId': tag.numberFormatId,
             },
