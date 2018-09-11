@@ -515,12 +515,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
             },
-            defaultFormOptions = themes.isMaterial()
-                ? {
-                    colCount: 2,
-                    screenByWidth: function() { return "lg"; }
-                }
-                : {};
+            defaultFormOptions = themes.isMaterial() ? { colCount: 2 } : {};
 
         this.executeAction("onAdaptiveDetailRowPreparing", { formOptions: userFormOptions });
 
