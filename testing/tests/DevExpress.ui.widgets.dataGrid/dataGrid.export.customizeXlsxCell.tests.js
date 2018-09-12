@@ -122,7 +122,7 @@ QUnit.test("Check e.XXX for DataGrid with data row with number cell value", func
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with data row with number cell value", function(assert) {
+QUnit.test("Check e.XXX for DataGrid with data row with number cell value with formatting", function(assert) {
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
