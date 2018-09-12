@@ -151,6 +151,7 @@ var DropDownList = DropDownEditor.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:object
             * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 event:event
             * @action
             */
             onItemClick: commonUtils.noop,

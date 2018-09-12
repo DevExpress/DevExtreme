@@ -73,6 +73,7 @@ var TabPanel = MultiView.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 event:event
             * @action
             */
             onTitleClick: null,
@@ -84,6 +85,7 @@ var TabPanel = MultiView.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 event:event
             * @action
             */
             onTitleHold: null,
