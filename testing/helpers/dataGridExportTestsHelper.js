@@ -4,6 +4,7 @@ import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
 import typeUtils from "core/utils/type";
+import { toComparable } from "core/utils/data";
 import { excel as excelCreator } from "client_exporter";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
@@ -81,13 +82,13 @@ const dataGridExportTestsHelper = {
 
                 for(const propertyName in expectedGridCell) {
                     if(skipProperties.indexOf(propertyName) === -1) {
-                        assert.strictEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `actualGridCell[${propertyName}], ${i}`);
+                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `actualGridCell[${propertyName}], ${i}`);
                         skipProperties.push(propertyName);
                     }
                 }
                 for(const propertyName in actualGridCell) {
                     if(!skipProperties.indexOf(propertyName) === -1) {
-                        assert.strictEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `actualGridCell[${propertyName}], ${i}`);
+                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `actualGridCell[${propertyName}], ${i}`);
                     }
                 }
 

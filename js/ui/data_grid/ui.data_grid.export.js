@@ -69,7 +69,60 @@ exports.DataProvider = Class.inherit({
 
     customizeXlsxCell: function(e) {
         if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell(e);
+            let rowIndex = e.rowIndex,
+                cellIndex = e.cellIndex;
+            const columns = this.getColumns(),
+                correctedCellIndex = this._correctCellIndex(e.cellIndex),
+                gridCell = {};
+
+            if(rowIndex < this.getHeaderRowCount()) {
+                // TODO: return this._getHeaderCellValue(rowIndex, cellIndex);
+            } else {
+                rowIndex -= this.getHeaderRowCount();
+                const item = this._options.items.length && this._options.items[rowIndex];
+
+                if(item) {
+                    const itemValues = item.values;
+                    switch(item.rowType) {
+                        case "groupFooter":
+                        case "totalFooter":
+                            // TODO
+                            // if(correctedCellIndex < itemValues.length) {
+                            //     value = itemValues[correctedCellIndex];
+                            //     if(isDefined(value)) {
+                            //         return dataGridCore.getSummaryText(value, this._options.summaryTexts);
+                            //     }
+                            // }
+                            break;
+                        case "group":
+                            // TODO
+                            // if(cellIndex < 1) {
+                            //     return this._getGroupValue(item);
+                            // } else {
+                            //     summaryItems = item.values[correctedCellIndex];
+                            //     if(Array.isArray(summaryItems)) {
+                            //         value = "";
+                            //         for(i = 0; i < summaryItems.length; i++) {
+                            //             value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
+                            //         }
+                            //         return value;
+                            //     }
+                            // }
+                            break;
+                        default:
+                            gridCell.column = columns[cellIndex];
+                            gridCell.value = itemValues[correctedCellIndex];
+                            // if(column) {
+                            //     value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType);
+                            //     return !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value;
+                            // }
+                    }
+                }
+            }
+            this._options.customizeXlsxCell({
+                xlsxCell: e.xlsxCell,
+                gridCell
+            });
         }
     },
 
