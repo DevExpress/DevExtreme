@@ -1870,7 +1870,11 @@ QUnit.testStart(function() {
             startDayHour: 3,
             endDayHour: 7,
             hoursInterval: 0.5,
-            currentDate: new Date(2015, 3, 1)
+            currentDate: new Date(2015, 3, 1),
+            onContentReady: function(e) {
+                var scrollable = e.component.getScrollable();
+                scrollable.option("scrollByContent", false);
+            }
         });
 
         var cells = $element.find("." + CELL_CLASS),
@@ -1919,7 +1923,11 @@ QUnit.testStart(function() {
             startDayHour: 3,
             endDayHour: 7,
             hoursInterval: 0.5,
-            currentDate: new Date(2015, 3, 1)
+            currentDate: new Date(2015, 3, 1),
+            onContentReady: function(e) {
+                var scrollable = e.component.getScrollable();
+                scrollable.option("scrollByContent", false);
+            }
         });
 
         var cells = $element.find("." + CELL_CLASS),
@@ -1960,7 +1968,11 @@ QUnit.testStart(function() {
                 focusStateEnabled: true,
                 currentDate: new Date(2018, 4, 21),
                 groupOrientation: "vertical",
-                endDayHour: 2
+                endDayHour: 2,
+                onContentReady: function(e) {
+                    var scrollable = e.component.getScrollable();
+                    scrollable.option("scrollByContent", false);
+                }
             }),
             instance = $element.dxSchedulerWorkSpaceWeek("instance");
 
@@ -2004,7 +2016,11 @@ QUnit.testStart(function() {
                 endDayHour: 7,
                 hoursInterval: 0.5,
                 currentDate: new Date(2015, 3, 1),
-                height: 400
+                height: 400,
+                onContentReady: function(e) {
+                    var scrollable = e.component.getScrollable();
+                    scrollable.option("scrollByContent", false);
+                }
             }),
             instance = $element.dxSchedulerWorkSpaceMonth("instance");
 
