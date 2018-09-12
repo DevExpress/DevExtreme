@@ -427,7 +427,7 @@ var position = function(what, options) {
         return $what.offset();
     }
 
-    translator.resetPosition($what);
+    translator.resetPosition($what, true);
 
     var offset = $what.offset(),
         targetPosition = (options.h && options.v) ? options : calculatePosition($what, options);
