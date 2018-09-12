@@ -1785,9 +1785,15 @@ Axis.prototype = {
 
         if(args.length === 0) {
             const adjustedRange = this._getAdjustedBusinessRange();
+            let startValue = adjustedRange.minVisible;
+            let endValue = adjustedRange.maxVisible;
+            if(this._options.type === constants.discrete) {
+                startValue = isDefined(startValue) ? startValue : adjustedRange.categories[0];
+                endValue = isDefined(endValue) ? endValue : adjustedRange.categories[adjustedRange.categories.length - 1];
+            }
             return {
-                startValue: adjustedRange.minVisible,
-                endValue: adjustedRange.maxVisible
+                startValue,
+                endValue
             };
         } else if(_isArray(args[0]) || isPlainObject(args[0])) {
             visualRange = args[0];
@@ -1825,8 +1831,28 @@ Axis.prototype = {
     },
 
     isZoomed() {
-        // TODO Check if visualRange equals wholeRange?
-        return true;
+        let minDataValue;
+        let maxDataValue;
+
+        const seriesData = this._seriesData;
+        if(this._options.type === "discrete") {
+            minDataValue = seriesData.categories[0];
+            maxDataValue = seriesData.categories[seriesData.categories.length - 1];
+        } else {
+            minDataValue = seriesData.min;
+            maxDataValue = seriesData.max;
+        }
+
+        const translator = this.getTranslator();
+        const startPoint = translator.to(minDataValue);
+        const endPoint = translator.to(maxDataValue);
+        const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];
+        const visualRange = this.visualRange();
+        const visualRangeStartPoint = translator.to(visualRange.startValue);
+        const visualRangeEndPoint = translator.to(visualRange.endValue);
+
+        return (visualRangeStartPoint > edges[0] && visualRangeStartPoint < edges[1]) ||
+            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]);
     },
 
     getViewport() {

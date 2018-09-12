@@ -683,6 +683,17 @@ QUnit.test("range min and max are not defined", function(assert) {
     assert.equal(this.axis.visualRange().endValue, 20, "visualRange[1] should be correct");
 });
 
+QUnit.test("Get visual range after setBusinessRange. Discrete", function(assert) {
+    this.updateOptions({ type: "discrete" });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: ["A", "B", "C", "D", "E", "F"]
+    });
+
+    assert.deepEqual(this.axis.visualRange(), { startValue: "A", endValue: "F" });
+});
+
 QUnit.test("Trigger zoom events", function(assert) {
     this.updateOptions();
 
@@ -3992,4 +4003,114 @@ QUnit.test("whole range values are set to null - get from option", function(asse
     });
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: undefined, endValue: undefined });
+});
+
+QUnit.module("isZoomed method", {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        sinon.spy(translator2DModule, "Translator2D");
+
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "xyAxes",
+            drawingType: "linear",
+            isArgumentAxis: true,
+            eventTrigger: () => { }
+        });
+
+        this.updateOptions({});
+        this.axis.updateCanvas({
+            left: 0,
+            right: 0,
+            width: 100
+        });
+        this.translator = translator2DModule.Translator2D.lastCall.returnValue;
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+        translator2DModule.Translator2D.restore();
+    },
+    updateOptions: environment.updateOptions
+});
+
+QUnit.test("No visualRange, wholeRange - false", function(assert) {
+    this.updateOptions({
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), false);
+});
+
+QUnit.test("visualRange is equal to dataRange - false", function(assert) {
+    this.updateOptions({
+        visualRange: [100, 120]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), false);
+});
+
+QUnit.test("visualRange is less then dataRange - true", function(assert) {
+    this.updateOptions({
+        visualRange: [101, 119]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), true);
+});
+
+QUnit.test("startValue in data range - true", function(assert) {
+    this.updateOptions({
+        visualRange: [101, 120]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), true);
+});
+
+QUnit.test("wholeRange less then data range - true", function(assert) {
+    this.updateOptions({
+        wholeRange: [100, 119]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), true);
+});
+
+QUnit.test("discrete data, visualRange and whole range are not set - false", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: ["a", "b", "c"]
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), false);
 });

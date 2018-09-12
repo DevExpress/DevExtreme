@@ -589,11 +589,9 @@ var dxChart = AdvancedChart.inherit({
         const that = this;
         const series = that._getVisibleSeries();
         const argumentAxis = that.getArgumentAxis();
-        const argumentViewport = argumentAxis.getViewport();
-        const minMaxDefined = argumentViewport && (_isDefined(argumentViewport.startValue) || _isDefined(argumentViewport.endValue)) || _isDefined(argumentAxis.getOptions().visualRangeLength);
         const useAggregation = series.some(s => s.useAggregation());
         const adjustOnZoom = that._themeManager.getOptions("adjustOnZoom");
-        const alignToBounds = !minMaxDefined || !argumentAxis.isZoomed();
+        const alignToBounds = !argumentAxis.isZoomed();
 
         if(!useAggregation && !adjustOnZoom) {
             return;
