@@ -504,7 +504,7 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true, Week 
             assert.equal(result.cellIndex, 2, "Coordinates are OK");
             assert.equal(result.rowIndex, 2, "Coordinates are OK");
             assert.equal(result.top, 100, "Coordinates are OK");
-            assert.roughEqual(result.left, 420, 1.1, "Coordinates are OK");
+            assert.roughEqual(result.left, 420, 1.5, "Coordinates are OK");
         }
     });
 
@@ -519,7 +519,7 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true, Week 
             assert.equal(result.cellIndex, 5, "Coordinates are OK");
             assert.equal(result.rowIndex, 4, "Coordinates are OK");
             assert.equal(result.top, 200, "Coordinates are OK");
-            assert.roughEqual(result.left, 740, 1.1, "Coordinates are OK");
+            assert.roughEqual(result.left, 740, 1.5, "Coordinates are OK");
         }
     });
 });
