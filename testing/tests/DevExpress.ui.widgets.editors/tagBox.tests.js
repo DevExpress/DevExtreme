@@ -45,7 +45,8 @@ var LIST_CLASS = "dx-list",
 var KEY_TAB = 9,
     KEY_ENTER = 13,
     KEY_ESC = 27,
-    KEY_DOWN = 40;
+    KEY_DOWN = 40,
+    KEY_SPACE = 32;
 
 var TIME_TO_WAIT = 500;
 
@@ -1688,6 +1689,71 @@ QUnit.test("tagBox selects item on enter key", function(assert) {
 
     var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
     assert.equal($tags.text(), "1", "rendered first item");
+});
+
+QUnit.test("tagBox selects item on space key", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    this.reinit({
+        items: [1, 2, 3],
+        focusStateEnabled: true,
+        opened: true
+    });
+
+    this.keyboard
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal($tags.text(), "1", "rendered first item");
+});
+
+QUnit.test("tagBox didn't selects item on space key if it acceptCustomValue", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    this.reinit({
+        items: [1, 2, 3],
+        focusStateEnabled: true,
+        acceptCustomValue: true,
+        opened: true
+    });
+
+    this.keyboard
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal($tags.length, 0, "there are no tags");
+});
+
+QUnit.test("tagBox didn't selects item on space key if search is enabled", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    this.reinit({
+        items: [1, 2, 3],
+        focusStateEnabled: true,
+        searchEnabled: true,
+        opened: true
+    });
+
+    this.keyboard
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal($tags.length, 0, "there are no tags");
 });
 
 QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (T378292)", function(assert) {

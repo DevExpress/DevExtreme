@@ -56,6 +56,7 @@ var TagBox = SelectBox.inherit({
 
     _supportedKeys: function() {
         var parent = this.callBase();
+
         return extend(parent, {
             backspace: function(e) {
                 if(!this._isCaretAtTheStart()) {
@@ -108,6 +109,17 @@ var TagBox = SelectBox.inherit({
                 }
 
                 if(!this.option("opened")) {
+                    return;
+                }
+
+                e.preventDefault();
+                this._keyboardProcessor._childProcessors[0].process(e);
+            },
+            space: function(e) {
+                var isOpened = this.option("opened"),
+                    isInputActive = this._shouldRenderSearchEvent();
+
+                if(!isOpened || isInputActive) {
                     return;
                 }
 
