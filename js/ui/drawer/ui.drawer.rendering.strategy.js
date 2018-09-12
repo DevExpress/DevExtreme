@@ -109,9 +109,9 @@ class DrawerStrategy {
     }
 
     _stopAnimations() {
-        fx.stop(this._drawer._$shader, true);
-        fx.stop($(this._drawer.content()), true);
-        fx.stop($(this._drawer.viewContent()), true);
+        fx.stop(this._drawer._$shader);
+        fx.stop($(this._drawer.content()));
+        fx.stop($(this._drawer.viewContent()));
     }
 
     _getPanelOffset(offset) {

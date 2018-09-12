@@ -161,14 +161,18 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
 QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
     let origFxStop = fx.stop,
         menuStopCalls = 0,
-        contentStopCalls = 0;
+        contentStopCalls = 0,
+        isJumpedToEnd = false;
 
     const $element = $("#drawer").dxDrawer({
         opened: false
     });
 
     const instance = $element.dxDrawer("instance");
-    fx.stop = function($element) {
+    fx.stop = function($element, jumpToEnd) {
+        if(jumpToEnd) {
+            isJumpedToEnd = true;
+        }
         if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
             menuStopCalls++;
         }
@@ -185,6 +189,7 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
 
         assert.equal(menuStopCalls, 2, "animation should stops before toggling visibility");
         assert.equal(contentStopCalls, 2, "animation should stops before toggling visibility");
+        assert.notOk(isJumpedToEnd, "elements aren't returned to the end position after animation stopping");
     } finally {
         fx.off = true;
         fx.stop = origFxStop;
