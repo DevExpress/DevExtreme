@@ -110,7 +110,7 @@ exports.DataProvider = Class.inherit({
                             // }
                             break;
                         default:
-                            gridCell.column = columns[cellIndex];
+                            gridCell.column = columns[cellIndex].gridColumn;
                             gridCell.value = itemValues[correctedCellIndex];
                             // if(column) {
                             //     value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType);
