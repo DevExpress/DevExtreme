@@ -67,9 +67,9 @@ exports.DataProvider = Class.inherit({
         };
     },
 
-    customizeXlsxCell: function({ xlsxCell }) {
+    customizeXlsxCell: function(e) {
         if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell({ xlsxCell });
+            this._options.customizeXlsxCell(e);
         }
     },
 
@@ -310,7 +310,8 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             columns = columnsController.getVisibleColumns(i, true);
             for(j = 0; j < columns.length; j++) {
                 column = extend({}, columns[j], {
-                    dataType: columns[j].dataType === "datetime" ? "date" : columns[j].dataType
+                    dataType: columns[j].dataType === "datetime" ? "date" : columns[j].dataType,
+                    gridColumn: columns[j],
                 });
 
                 if(column.allowExporting && !column.command) {

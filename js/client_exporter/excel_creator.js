@@ -201,8 +201,13 @@ var ExcelCreator = Class.inherit({
                     style: that._styleArray[cellStyleId],
                 };
                 if(dataProvider.customizeXlsxCell) {
+                    const cellValue = this._dataProvider.getCellValue(rowIndex, cellIndex);
                     dataProvider.customizeXlsxCell({
-                        xlsxCell
+                        xlsxCell,
+                        gridCell: {
+                            value: cellValue,
+                            column: columns[cellIndex].gridColumn,
+                        }
                     });
                 }
                 cellStyleId = this._xlsxFile.registerCellFormat(xlsxCell.style);

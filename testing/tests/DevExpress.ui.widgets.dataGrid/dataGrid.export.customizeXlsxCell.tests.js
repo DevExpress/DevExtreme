@@ -12,7 +12,7 @@ QUnit.module("DataGrid export.customizeXlsxCell tests", {
     afterEach: helper.afterEachTest,
 });
 
-QUnit.test("customizeXlsxCell - set alignment: null", function(assert) {
+QUnit.test("Clear alignment in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
@@ -52,7 +52,7 @@ QUnit.test("customizeXlsxCell - set alignment: null", function(assert) {
     );
 });
 
-QUnit.test("customizeXlsxCell - set fill", function(assert) {
+QUnit.test("Set fill in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML1 +
@@ -103,5 +103,325 @@ QUnit.test("customizeXlsxCell - set fill", function(assert) {
             }
         },
         { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with number cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "number" }],
+            dataSource: [{ field1: undefined }, { field1: null }, { field1: 0 }, { field1: 1 }],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: undefined, column: grid.columnOption(0) },
+            { value: null, column: grid.columnOption(0) },
+            { value: 0, column: grid.columnOption(0) },
+            { value: 1, column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with number cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
+            dataSource: [{ field1: 1 }],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: 1, column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with string cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "string" }],
+            dataSource: [{ field1: undefined }, { field1: null }, { field1: '' }, { field1: 'f1' } ],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: undefined, column: grid.columnOption(0) },
+            { value: null, column: grid.columnOption(0) },
+            { value: '', column: grid.columnOption(0) },
+            { value: 'f1', column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with date cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "date" }],
+            dataSource: [{ field1: undefined }, { field1: null }, { field1: new Date(2018, 11, 1) }],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: undefined, column: grid.columnOption(0) },
+            { value: null, column: grid.columnOption(0) },
+            { value: new Date(2018, 11, 1), column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with datetime cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "datetime" }],
+            dataSource: [{ field1: undefined }, { field1: null }, { field1: new Date(2018, 11, 1, 16, 10) }],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: undefined, column: grid.columnOption(0) },
+            { value: null, column: grid.columnOption(0) },
+            { value: new Date(2018, 11, 1, 16, 10), column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with boolean cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "boolean" }],
+            dataSource: [{ field1: undefined }, { field1: null }, { field1: true }],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: undefined, column: grid.columnOption(0) },
+            { value: null, column: grid.columnOption(0) },
+            { value: true, column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with data row with lookup cell value", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{
+                dataField: "field1",
+                lookup: {
+                    dataSource: {
+                        store: {
+                            type: 'array',
+                            data: [{ id: 1, name: 'name1' }]
+                        },
+                        key: 'id'
+                    },
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }],
+            dataSource: [{ field1: undefined }, { field1: null }, { field1: 1 }],
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: undefined, column: grid.columnOption(0) },
+            { value: null, column: grid.columnOption(0) },
+            { value: 1, column: grid.columnOption(0) },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with header row", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", caption: "Field1" }],
+            dataSource: [],
+        },
+        (grid) => [{ value: 'Field1', column: grid.columnOption(0) }]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with bands", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [
+                { dataField: "field1", caption: "Field1" },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "field2", caption: "Field2" },
+                        { dataField: "field3", caption: "Field3" },
+                    ]
+                }
+            ],
+            dataSource: [{ field1: 'f1', field2: 'f2', field3: 'f3' }],
+        },
+        (grid) => [
+            { value: 'Field1', column: 'check cellPrepared' },
+            { value: 'Band1', column: 'check cellPrepared' },
+            { value: '', column: 'check cellPrepared' },
+            { value: '', column: 'check cellPrepared' },
+            { value: 'Field2', column: 'check cellPrepared' },
+            { value: 'Field3', column: 'check cellPrepared' },
+            { value: 'f1', column: 'check cellPrepared' },
+            { value: 'f2', column: 'check cellPrepared' },
+            { value: 'f3', column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with groupping 1 level", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [
+                { dataField: "field1", caption: "Field1", groupIndex: 0 },
+                { dataField: "field2", caption: "Field2" },
+            ],
+            dataSource: [{ field1: 'f1', field2: 'f2' }],
+        },
+        (grid) => [
+            { value: 'Field2', column: 'check cellPrepared' },
+            { value: 'Field1: f1', column: 'check cellPrepared' },
+            { value: 'f2', column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with groupping 2 levels", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [
+                { dataField: "field1", caption: "Field1", groupIndex: 0 },
+                { dataField: "field2", caption: "Field2", groupIndex: 1 },
+                { dataField: "field3", caption: "Field3" },
+            ],
+            dataSource: [{ field1: 'f1', field2: 'f2', field3: 'f3' }],
+        },
+        (grid) => [
+            { value: 'Field3', column: 'check cellPrepared' },
+            { value: 'Field1: f1', column: 'check cellPrepared' },
+            { value: 'Field2: f2', column: 'check cellPrepared' },
+            { value: 'f3', column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with group summary", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [
+                { dataField: "field1", caption: "Field1", groupIndex: 0 },
+                { dataField: "field2", caption: "Field2" },
+            ],
+            dataSource: [{ field1: 'str1', field2: 1 }],
+            summary: {
+                groupItems: [{ column: 'field2', summaryType: 'sum' }]
+            },
+        },
+        (grid) => [
+            { value: 'Field2', column: 'check cellPrepared' },
+            { value: 'Field1: str1 (Sum of Field2 is 1)', column: 'check cellPrepared' },
+            { value: 1, column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with group summary with alignByColumn", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [
+                { dataField: "field1", caption: "Field1", groupIndex: 0 },
+                { dataField: "field2", caption: "Field2", groupIndex: 1 },
+                { dataField: "field3", caption: "Field3" },
+                { dataField: "field4", caption: "Field4" },
+            ],
+            dataSource: [{ field1: 'f1', field2: 'f2', field3: 'f3', field4: 'f4' }],
+            summary: {
+                groupItems: [{ column: 'field3', summaryType: 'count' }, { column: 'field4', summaryType: 'count', alignByColumn: true }]
+            },
+        },
+        (grid) => [
+            { value: 'Field3', column: 'check cellPrepared' },
+            { value: 'Field4', column: 'check cellPrepared' },
+            { value: 'Field1: f1 (Count: 1)', column: 'check cellPrepared' },
+            { value: 'Count: 1', column: 'check cellPrepared' },
+            { value: 'Field2: f2 (Count: 1)', column: 'check cellPrepared' },
+            { value: 'Count: 1', column: 'check cellPrepared' },
+            { value: 'f3', column: 'check cellPrepared' },
+            { value: 'f4', column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with group summary with showInGroupFooter", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [
+                { dataField: "field1", caption: "Field1", groupIndex: 0 },
+                { dataField: "field2", caption: "Field2" },
+                { dataField: "field3", caption: "Field3" },
+                { dataField: "field4", caption: "Field4" },
+            ],
+            dataSource: [
+                { field1: '1_f1', field2: '1_f2', field3: '1_f3', field4: '1_f4' },
+                { field1: '2_f1', field2: '2_f2', field3: '2_f3', field4: '2_f4' }
+            ],
+            summary: {
+                groupItems: [{ column: 'field3', summaryType: 'count', showInGroupFooter: true }, { column: 'field4', summaryType: 'count', showInGroupFooter: true }]
+            },
+        },
+        (grid) => [
+            { value: 'Field2', column: grid.columnOption(1) },
+            { value: 'Field3', column: grid.columnOption(2) },
+            { value: 'Field4', column: grid.columnOption(3) },
+            { value: 'Field1: 1_f1', column: 'check cellPrepared' },
+            { value: undefined, column: 'check cellPrepared' },
+            { value: undefined, column: 'check cellPrepared' },
+            { value: '1_f2', column: grid.columnOption(1) },
+            { value: '1_f3', column: grid.columnOption(2) },
+            { value: '1_f4', column: grid.columnOption(3) },
+            { value: undefined, column: 'check cellPrepared' },
+            { value: 'Count: 1', column: 'check cellPrepared' },
+            { value: 'Count: 1', column: 'check cellPrepared' },
+            { value: 'Field1: 2_f1', column: grid.columnOption(0) },
+            { value: undefined, column: 'check cellPrepared' },
+            { value: undefined, column: 'check cellPrepared' },
+            { value: '2_f2', column: grid.columnOption(1) },
+            { value: '2_f3', column: grid.columnOption(2) },
+            { value: '2_f4', column: grid.columnOption(3) },
+            { value: undefined, column: 'check cellPrepared' },
+            { value: 'Count: 1', column: 'check cellPrepared' },
+            { value: 'Count: 1', column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX for DataGrid with total summary", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "number" }],
+            dataSource: [{ field1: 1 }],
+            summary: {
+                totalItems: [{ column: 'field1', summaryType: 'sum' }]
+            },
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: 1, column: grid.columnOption(0) },
+            { value: 'Sum: 1', column: 'check cellPrepared' },
+        ]
+    );
+});
+
+QUnit.test("Check e.XXX with customizeExportData changes", function(assert) {
+    helper.runCustomizeXlsxCellTest(assert,
+        {
+            columns: [{ dataField: "field1", dataType: "string" }],
+            dataSource: [{ field1: 'f1' }],
+            customizeExportData: (columns, rows) => {
+                rows.forEach(row => {
+                    for(let i = 0; i < row.values.length; i++) {
+                        row.values[i] += '_customize';
+                    }
+                });
+            },
+            showColumnHeaders: false,
+        },
+        (grid) => [
+            { value: 'f1_customize', column: grid.columnOption(0) },
+        ]
     );
 });
