@@ -25,46 +25,6 @@ var OldEventsName = {
 
 QUnit.module("Zooming", commons.environment);
 
-QUnit.test("Adjust value axis when argument visual range is changed", function(assert) {
-    var series = new MockSeries({});
-    chartMocks.seriesMockData.series.push(series);
-
-    var chart = this.createChart({
-        series: [{ type: "line" }]
-    });
-
-    chart._argumentAxes[0].getViewport.returns({
-        startValue: 10,
-        endValue: 50
-    });
-
-    chart._valueAxes[0].adjust.reset();
-    // act
-    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
-    // assert
-    assert.strictEqual(series.getValueAxis().adjust.callCount, 1);
-    assert.strictEqual(series.getValueAxis().adjust.firstCall.args[0], false);
-});
-
-QUnit.test("T576295. chart is not zoom value axis if series is not return their viewport", function(assert) {
-    var series = new MockSeries({});
-
-    series.getViewport.returns({});
-
-    chartMocks.seriesMockData.series.push(series);
-
-    var chart = this.createChart({
-        series: [{ type: "line" }]
-    });
-
-    chart._valueAxes[0].adjust.reset();
-    // act
-    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
-    // assert
-    assert.ok(series.getValueAxis().adjust.called);
-    assert.strictEqual(series.getValueAxis().adjust.firstCall.args[0], true);
-});
-
 QUnit.test("chart with single value axis. Zooming with all null/undefined values", function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
@@ -105,33 +65,6 @@ QUnit.test("chart with single value axis. Zooming with one null/undefined values
     assert.equal(chartRenderSpy.callCount, 1);
 });
 
-QUnit.test("Adjust value axis on dataSource changed", function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries());
-    chartMocks.seriesMockData.series.push(new MockSeries());
-    var chart = this.createChart({
-        argumentAxis: {
-            argumentType: "numeric"
-        },
-        series: [{
-            type: "line"
-        }, {
-            type: "line"
-        }]
-    });
-
-    chart.zoomArgument(10, 50);
-    chart.getAllSeries()[0].getValueAxis().adjust.reset();
-    // act
-    chart.isReady = function() { return true; };
-    chart.option("dataSource", []);
-    // assert
-    assert.strictEqual(chart.getAllSeries()[0].getValueAxis().adjust.called, true);
-    assert.strictEqual(chart.getAllSeries()[1].getValueAxis().adjust.called, true);
-
-    assert.strictEqual(chart.getAllSeries()[0].getValueAxis().adjust.firstCall.args[0], true);
-    assert.strictEqual(chart.getAllSeries()[1].getValueAxis().adjust.firstCall.args[0], true);
-});
-
 QUnit.test("No reset zooming on series changed", function(assert) {
     var series1 = new MockSeries(),
         series2 = new MockSeries();
@@ -147,10 +80,8 @@ QUnit.test("No reset zooming on series changed", function(assert) {
             type: "line"
         }]
     });
-    chart._argumentAxes[0].getViewport.returns({
-        min: 10,
-        max: 50
-    });
+
+    chart.getArgumentAxis().isZoomed = sinon.stub().returns(true);
 
     chart.zoomArgument(10, 50);
 
@@ -168,6 +99,44 @@ QUnit.test("No reset zooming on series changed", function(assert) {
 
     // assert
     assert.deepEqual(series2.getValueAxis().adjust.callCount, 1);
+    assert.strictEqual(series2.getValueAxis().adjust.lastCall.args[0], false);
+});
+
+QUnit.test("No reset zooming on series changed with not zoomed axis", function(assert) {
+    var series1 = new MockSeries(),
+        series2 = new MockSeries();
+
+    chartMocks.seriesMockData.series.push(series1);
+    chartMocks.seriesMockData.series.push(series2);
+
+    var chart = this.createChart({
+        argumentAxis: {
+            argumentType: "numeric"
+        },
+        series: [{
+            type: "line"
+        }]
+    });
+
+    chart.getArgumentAxis().isZoomed = sinon.stub().returns(false);
+
+    chart.zoomArgument(10, 50);
+
+    series2.getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    chart._valueAxes[0].adjust.reset();
+    // act
+    chart.option({
+        series: { type: "area" },
+        palette: ["black", "red"]
+    });
+
+    // assert
+    assert.deepEqual(series2.getValueAxis().adjust.callCount, 1);
+    assert.strictEqual(series2.getValueAxis().adjust.lastCall.args[0], true);
 });
 
 QUnit.test("chart with single value axis. Adjust on zoom = false", function(assert) {
@@ -206,10 +175,6 @@ QUnit.test("MultiAxis chart", function(assert) {
             { name: "axis1" },
             { name: "axis1" }
         ]
-    });
-    chart._argumentAxes[0].getViewport.returns({
-        startValue: 10,
-        endValue: 50
     });
 
     chart._valueAxes[0].adjust.reset();
