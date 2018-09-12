@@ -1438,15 +1438,15 @@ QUnit.test("scrollbar position calculated correctly with scaled content", functi
     var instance = $scrollable.dxScrollable("instance"),
         $scrollbar = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
 
-    instance.scrollTo({ top: 500 });
+    instance.scrollTo({ top: 100 });
 
     var scrollBarPosition = translator.locate($scrollbar),
         $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS),
         scrollbarRect = $scrollbar.get(0).getBoundingClientRect();
 
-    assert.equal(scrollBarPosition.top, 250, "Correct scrollbar position");
+    assert.equal(scrollBarPosition.top, 50, "Correct scrollbar position");
     assert.equal(scrollbarRect.height, 125, "Correct scrollbar size");
-    assert.equal($container.scrollTop(), 500, "Content position isn't zoomed");
+    assert.equal($container.scrollTop(), 100, "Content position isn't zoomed");
 });
 
 QUnit.test("scrollbar in scaled container has correct position after update", function(assert) {
