@@ -127,6 +127,18 @@ var SelectBox = DropDownList.inherit({
                     }
                 }
             },
+            space: function(e) {
+                var isOpened = this.option("opened"),
+                    isSearchEnabled = this.option("searchEnabled"),
+                    acceptCustomValue = this.option("acceptCustomValue");
+                if(!isOpened || isSearchEnabled || acceptCustomValue) {
+                    return;
+                }
+
+                e.preventDefault();
+                this._valueChangeEventHandler(e);
+                return true;
+            },
             backspace: clearSelectBox,
             del: clearSelectBox
         });
