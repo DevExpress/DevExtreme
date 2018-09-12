@@ -1009,4 +1009,23 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
             window.outerWidth = initialOuterWidth;
         }
     });
+
+    // T664522
+    QUnit.test("setup should call resetPosition with finishTransition argument", function(assert) {
+        var origResetPosition = translator.resetPosition;
+
+        translator.resetPosition = function($element, finishTransition) {
+            assert.equal(finishTransition, true, "finishTransition is true");
+        };
+
+        try {
+            var $what = $("#what").width(100);
+
+            setupPosition($what, {
+                of: $(window)
+            });
+        } finally {
+            translator.resetPosition = origResetPosition;
+        }
+    });
 })();
