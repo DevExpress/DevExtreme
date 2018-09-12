@@ -1819,6 +1819,34 @@ QUnit.test("'itemOption' should get item by composite path use the name option",
     assert.deepEqual(item.dataField, "LastName", "data field of item");
 });
 
+QUnit.test("'itemOption' should get a group item by the name option", function(assert) {
+    // arrange
+    var $testContainer = $("#form").dxForm({
+        formData: {
+            LastName: "Last Name"
+        },
+        items: [{
+            itemType: "group",
+            name: "testGroup",
+            items: [{
+                name: "simpleItem",
+                dataField: "LastName"
+            }]
+        }]
+    });
+
+    // act
+    var item = $testContainer.dxForm("instance").itemOption("testGroup");
+
+    // assert
+    assert.ok(!!item, "get a group item");
+    assert.equal(item.itemType, "group", "It's a group item");
+    assert.deepEqual(item.items, [{
+        name: "simpleItem",
+        dataField: "LastName"
+    }], "has correct items");
+});
+
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }
