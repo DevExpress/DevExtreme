@@ -1402,6 +1402,7 @@ var dxChart = {
         /**
         * @name dxChartOptions.argumentAxis.visualRangeUpdateMode
         * @type Enums.VisualRangeUpdateMode
+        * @default 'auto'
         */
         visualRangeUpdateMode: "auto",
         /**
