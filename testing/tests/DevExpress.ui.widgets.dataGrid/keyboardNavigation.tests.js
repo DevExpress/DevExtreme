@@ -1193,6 +1193,31 @@ QUnit.testInActiveWindow("Up arrow", function(assert) {
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
+// T670539
+QUnit.testInActiveWindow("Up arrow if scrolling mode is virtual", function(assert) {
+    // arrange
+    setupModules(this);
+
+    // act
+    this.gridView.render($("#container"));
+
+    var oldGetRowIndexOffset = this.dataController.getRowIndexOffset;
+
+    this.dataController.getRowIndexOffset = function() {
+        return 100000;
+    };
+
+    this.focusCell(1, 0);
+
+    this.triggerKeyDown("upArrow");
+
+    // assert
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 100000, "rowIndex");
+
+    this.dataController.getRowIndexOffset = oldGetRowIndexOffset;
+});
+
 QUnit.testInActiveWindow("StopPropagation is called", function(assert) {
     // arrange
     setupModules(this);
