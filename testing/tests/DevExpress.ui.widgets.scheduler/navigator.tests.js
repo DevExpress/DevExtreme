@@ -417,6 +417,42 @@ QUnit.test("Caption should be OK for 'agenda' view if agendaDuration = 0", funct
     assert.equal(button.option("text"), caption, "Step is agenda: Caption is OK");
 });
 
+QUnit.test("Caption should be OK for 'agenda' view if years is different", function(assert) {
+    this.instance.invoke = function(subject) {
+        if(subject === "getAgendaDuration") {
+            return 360;
+        }
+    };
+
+    this.instance.option({
+        step: "agenda",
+        date: new Date(2018, 5, 20)
+    });
+
+    var $element = this.instance.$element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance");
+
+    assert.equal(button.option("text"), "20 Jun 2018-14 Jun 2019", "Step is agenda: Caption is OK");
+});
+
+QUnit.test("Caption should be OK for 'agenda' view if year is same, but months is different", function(assert) {
+    this.instance.invoke = function(subject) {
+        if(subject === "getAgendaDuration") {
+            return 60;
+        }
+    };
+
+    this.instance.option({
+        step: "agenda",
+        date: new Date(2018, 5, 20)
+    });
+
+    var $element = this.instance.$element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance");
+
+    assert.equal(button.option("text"), "20 Jun-18 Aug 2018", "Step is agenda: Caption is OK");
+});
+
 QUnit.module("Navigator Min & Max Options", {
     beforeEach: function() {
         devices.current({ platform: "generic" });
