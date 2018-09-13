@@ -92,12 +92,22 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
 
 var formatCaptionByMonths = function(lastDate, firstDate) {
     var isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth(),
+        isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear(),
         useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
-        firstDateText = dateLocalization.format(firstDate, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
+        lastDateText,
+        firstDateText;
+
+    if(isDifferentYears) {
+        firstDateText = dateLocalization.format(firstDate, getCaptionFormat(true));
+        lastDateText = dateLocalization.format(lastDate, getCaptionFormat(true));
+    } else {
+        firstDateText = dateLocalization.format(firstDate, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d");
         lastDateText = dateLocalization.format(lastDate, getCaptionFormat(useShortFormat));
+    }
 
     return firstDateText + "-" + lastDateText;
 };
+
 var getMonthCaption = function(date) {
     if(this.option("intervalCount") > 1) {
         var firstDate = new Date(date);
