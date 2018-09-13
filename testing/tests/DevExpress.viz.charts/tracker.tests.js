@@ -3020,7 +3020,7 @@ QUnit.test("point click", function(assert) {
 
 QUnit.test("legend item click. One series", function(assert) {
     this.legend.coordsIn.withArgs(97, 45).returns(true);
-    this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: "argument1" });
+    this.legend.getItemByCoord.withArgs(97, 45).returns({ argumentIndex: 0, argument: "argument1" });
     this.series.stub("getPointsByKeys").withArgs("argument1", 0).returns([this.point]);
 
     var event = getEvent("dxclick", { pageX: 100, pageY: 50 });
@@ -3044,7 +3044,7 @@ QUnit.test("legend item click, several series", function(assert) {
         points = ["firstPoint", "secondPoint"];
 
     this.legend.coordsIn.withArgs(97, 45).returns(true);
-    this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: argument });
+    this.legend.getItemByCoord.withArgs(97, 45).returns({ argumentIndex: 0, argument: argument });
     this.series.stub("getPointsByKeys").withArgs(argument, 0).returns(["firstPoint"]);
     extraSeries.stub("getPointsByKeys").withArgs(argument, 0).returns(["secondPoint"]);
 
