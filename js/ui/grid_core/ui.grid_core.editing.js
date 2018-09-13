@@ -23,7 +23,8 @@ var $ = require("../../core/renderer"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
-    commonUtils = require("../../core/utils/common");
+    commonUtils = require("../../core/utils/common"),
+    Scrollable = require("../scroll_view/ui.scrollable");
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -39,6 +40,7 @@ var EDIT_FORM_CLASS = "edit-form",
     EDIT_BUTTON_CLASS = "dx-edit-button",
     COMMAND_EDIT_CLASS = "dx-command-edit",
     COMMAND_EDIT_WITH_ICONS_CLASS = COMMAND_EDIT_CLASS + "-with-icons",
+    SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
 
     BUTTON_CLASS = "dx-button",
 
@@ -381,7 +383,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 popupVisible = this._editPopup && this._editPopup.option("visible");
 
             if(editMode === EDIT_MODE_POPUP && popupVisible) {
-                return this._editPopup.$content();
+                return this._$popupContent;
             }
         },
 
@@ -713,7 +715,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hiding", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
-                    eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
+                    eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not("." + SCROLLABLE_CONTAINER_CLASS).first(), "focus");
                 });
             }
 
@@ -740,10 +742,13 @@ var EditingController = modules.ViewController.inherit((function() {
                     key: row.key
                 };
 
-            return function($container) {
-                var formTemplate = that.getEditFormTemplate();
+            return function(container) {
+                var formTemplate = that.getEditFormTemplate(),
+                    scrollable = that._createComponent($("<div>").appendTo(container), Scrollable);
 
-                formTemplate($container, templateOptions, true);
+                that._$popupContent = scrollable.$content();
+
+                formTemplate(that._$popupContent, templateOptions, true);
             };
         },
 
@@ -1552,8 +1557,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     items = that.option("editing.form.items"),
                     userCustomizeItem = that.option("editing.form.customizeItem"),
                     editData = that._editData[getIndexByKey(detailOptions.key, that._editData)],
-                    editFormItemClass = that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS),
-                    isScrollingEnabled = getEditMode(that) === EDIT_MODE_POPUP;
+                    editFormItemClass = that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS);
 
                 if(!items) {
                     var columns = that.getController("columns").getColumns();
@@ -1571,7 +1575,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 that._firstFormItem = undefined;
 
-                that._editForm = that._createComponent($("<div>").appendTo($container), Form, extend({ scrollingEnabled: isScrollingEnabled }, editFormOptions, {
+                that._editForm = that._createComponent($("<div>").appendTo($container), Form, extend({}, editFormOptions, {
                     items: items,
                     formID: "dx-" + new Guid(),
                     validationGroup: editData,

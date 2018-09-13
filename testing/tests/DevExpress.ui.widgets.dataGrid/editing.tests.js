@@ -9484,7 +9484,7 @@ QUnit.test("Show error message on save inserted rows when edit mode is 'popup'",
 
     this.editRow(0);
 
-    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").$content();
+    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").$content().find(".dx-scrollable-content");
     $inputElement = $popupContent.find("input").first();
     $inputElement.val("");
     $($inputElement).trigger("change");
@@ -11868,7 +11868,7 @@ QUnit.module('Editing - "popup" mode', {
         this.preparePopupHelpers = function() {
             this.$editPopup = this.$testElement.find(".dx-datagrid-edit-popup");
             this.editPopupInstance = this.$editPopup.dxPopup("instance");
-            this.getEditPopupContent = function() { return this.editPopupInstance.$content(); };
+            this.getEditPopupContent = function() { return this.editingController.getPopupContent(); };
             this.isEditingPopupVisible = function() { return this.editPopupInstance.option("visible"); };
         };
     },
@@ -12189,7 +12189,7 @@ QUnit.test("Show error row inside popup when update error", function(assert) {
         that.editRow(0);
         that.preparePopupHelpers();
 
-        $popupContent = $(that.editPopupInstance.content());
+        $popupContent = that.getEditPopupContent();
         $inputElement = $popupContent.find("input").first();
         $inputElement.val("Test");
         $($inputElement).trigger("change");
@@ -12394,4 +12394,44 @@ QUnit.test("The data passed to the editCellTemplate callback should be updated a
     // assert
     assert.deepEqual(template.getCall(1).args[1].data, { name: 'Alex', age: 666, lastName: "John", phone: "555555", room: 1 }, "row data");
     assert.strictEqual(template.callCount, 2, "editCellTemplate call count");
+});
+
+QUnit.test("Popup should have scrollbar", function(assert) {
+    // arrange
+    var that = this,
+        scrollable,
+        $scrollableContent,
+        $popupContent;
+
+    that.options.editing.allowAdding = true;
+    that.options.editing.popup = {
+        width: 700,
+        height: 200
+    };
+    that.options.onRowValidating = function(e) {
+        e.isValid = false;
+        e.errorText = "Test";
+    };
+    that.options.onInitNewRow = function(e) {
+        e.data = { name: 'Tom', age: 66, lastName: "Steve", phone: "555555", room: 1 };
+    };
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.addRow();
+    that.clock.tick();
+
+    // act
+    that.saveEditData();
+    that.clock.tick();
+
+    that.preparePopupHelpers();
+    $popupContent = that.editPopupInstance.$content();
+    scrollable = $popupContent.children().data("dxScrollable");
+
+    // assert
+    assert.ok(scrollable, "popup has scrollable");
+    $scrollableContent = scrollable.$content();
+    assert.ok($scrollableContent.children().first().hasClass("dx-error-message"), "error message inside the scrollable component");
+    assert.ok($scrollableContent.children().last().hasClass("dx-form"), "form inside the scrollable component");
 });
