@@ -727,9 +727,10 @@
 
     .dx-gridbase-container > .dx-@{widgetName}-rowsview {
         flex: auto;
+        height: auto; // T671939
 
         &.dx-scrollable {
-            display: flex;  
+            display: flex;
 
             .dx-scrollable-wrapper {
                 flex: 1;
