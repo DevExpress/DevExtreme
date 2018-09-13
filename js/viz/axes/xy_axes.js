@@ -950,6 +950,7 @@ module.exports = {
         },
 
         adjust(alignToBounds) {
+            const that = this;
             let viewport = { min: this._seriesData.min, max: this._seriesData.max };
 
             if(!alignToBounds) {
@@ -969,6 +970,11 @@ module.exports = {
                 this._seriesData.minVisible = viewport.min;
                 this._seriesData.maxVisible = viewport.max;
             }
+
+            that._breaks = that._getScaleBreaks(that._options, {
+                minVisible: this._seriesData.minVisible,
+                maxVisible: this._seriesData.maxVisible
+            }, that._series, that.isArgumentAxis);
         },
 
         _getStick: function() {

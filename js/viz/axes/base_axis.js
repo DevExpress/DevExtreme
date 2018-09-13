@@ -1790,6 +1790,11 @@ Axis.prototype = {
             if(this._options.type === constants.discrete) {
                 startValue = isDefined(startValue) ? startValue : adjustedRange.categories[0];
                 endValue = isDefined(endValue) ? endValue : adjustedRange.categories[adjustedRange.categories.length - 1];
+                return {
+                    startValue,
+                    endValue,
+                    categories: vizUtils.getCategoriesInfo(adjustedRange.categories, startValue, endValue).categories
+                };
             }
             return {
                 startValue,
@@ -1844,15 +1849,16 @@ Axis.prototype = {
         }
 
         const translator = this.getTranslator();
-        const startPoint = translator.to(minDataValue);
-        const endPoint = translator.to(maxDataValue);
+        const startPoint = translator.translate(minDataValue);
+        const endPoint = translator.translate(maxDataValue);
         const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];
         const visualRange = this.visualRange();
-        const visualRangeStartPoint = translator.to(visualRange.startValue);
-        const visualRangeEndPoint = translator.to(visualRange.endValue);
+        const visualRangeStartPoint = translator.translate(visualRange.startValue);
+        const visualRangeEndPoint = translator.translate(visualRange.endValue);
 
         return (visualRangeStartPoint > edges[0] && visualRangeStartPoint < edges[1]) ||
-            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]);
+            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]) ||
+            visualRangeStartPoint === visualRangeEndPoint && edges[0] !== edges[1];
     },
 
     getViewport() {

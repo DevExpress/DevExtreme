@@ -4011,6 +4011,49 @@ QUnit.test("Calculate common range from series on adjust. series with show zero"
     assert.strictEqual(maxVisible, 15);
 });
 
+QUnit.test("Recalculate scale breaks", function(assert) {
+    this.updateOptions({
+        breakStyle: { width: 10 },
+        breaks: [
+            { startValue: 10, endValue: 100 },
+            { startValue: 200, endValue: 300 },
+            { startValue: 310, endValue: 360 },
+            { startValue: 500, endValue: 600 }
+        ]
+    });
+
+    this.axis.parser = function(value) {
+        return value;
+    };
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 1000
+    });
+
+    this.series[0].getViewport.returns({
+        min: 250,
+        max: 540
+    });
+
+    this.series[1].getViewport.returns({
+        min: 250,
+        max: 540
+    });
+
+    this.axis.adjust(false);
+
+    this.axis.createTicks(this.canvas);
+
+    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+
+    assert.deepEqual(breaks, [
+        { from: 250, to: 300, cumulativeWidth: 10 },
+        { from: 310, to: 360, cumulativeWidth: 20 },
+        { from: 500, to: 540, cumulativeWidth: 30 }
+    ]);
+});
+
 QUnit.test("Calculate common range from series on adjust when one series is not visible", function(assert) {
     this.updateOptions({
         endOnTick: false,

@@ -691,7 +691,11 @@ QUnit.test("Get visual range after setBusinessRange. Discrete", function(assert)
         categories: ["A", "B", "C", "D", "E", "F"]
     });
 
-    assert.deepEqual(this.axis.visualRange(), { startValue: "A", endValue: "F" });
+    assert.deepEqual(this.axis.visualRange(), {
+        startValue: "A",
+        endValue: "F",
+        categories: ["A", "B", "C", "D", "E", "F"]
+    });
 });
 
 QUnit.test("Trigger zoom events", function(assert) {
@@ -4110,6 +4114,47 @@ QUnit.test("discrete data, visualRange and whole range are not set - false", fun
     this.axis.validate();
     this.axis.setBusinessRange({
         categories: ["a", "b", "c"]
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), false);
+});
+
+QUnit.test("discrete data, visualRange is set - true", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRange: ["a", "b"]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: ["a", "b", "c"]
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), true);
+});
+
+QUnit.test("discrete data, visualRange includes only last point - true", function(assert) {
+    this.updateOptions({
+        type: "discrete",
+        visualRange: ["c", "c"]
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: ["a", "b", "c"]
+    });
+
+    assert.deepEqual(this.axis.isZoomed(), true);
+});
+
+QUnit.test("discrete data, one point - false", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: ["a"]
     });
 
     assert.deepEqual(this.axis.isZoomed(), false);
