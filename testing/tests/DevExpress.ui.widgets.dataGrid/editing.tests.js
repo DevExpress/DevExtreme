@@ -5410,7 +5410,7 @@ QUnit.test("Get first editable column index when form edit mode and custom form 
     var editableIndex = this.editingController.getFirstEditableColumnIndex();
 
     // assert
-    assert.equal(editableIndex, 3, "editable index");
+    assert.equal(editableIndex, 1, "editable index");
 });
 
 QUnit.test("Get correct first editable column index when form edit mode and form items are changed dynamically", function(assert) {
@@ -5441,7 +5441,7 @@ QUnit.test("Get correct first editable column index when form edit mode and form
     var editableIndex = this.editingController.getFirstEditableColumnIndex();
 
     // assert
-    assert.equal(editableIndex, 3, "editable index");
+    assert.equal(editableIndex, 0, "editable index");
 });
 
 QUnit.test("Get correct first editable column index when visible option for item set via formItem option", function(assert) {
@@ -5472,7 +5472,7 @@ QUnit.test("Get correct first editable column index when visible option for item
     var editableIndex = this.editingController.getFirstEditableColumnIndex();
 
     // assert
-    assert.equal(editableIndex, 1, "editable index");
+    assert.equal(editableIndex, 0, "editable index");
 });
 
 // T664284
@@ -11215,6 +11215,30 @@ QUnit.test("Group item should not be merged with band item", function(assert) {
     assert.notOk(formItems[0].column, "column is not defined for group item");
     assert.notOk(formItems[0].label, "label is not defined for group item");
     assert.equal(formItems[0].caption, "group", "caption for group item is correct");
+});
+
+QUnit.test("The first editor should be focused after row added if band column presents and edit mode is form (T670648)", function(assert) {
+    var that = this,
+        testElement = $('#container');
+
+    that.options.columns = [{
+        caption: "band",
+        columns: [{ dataField: "column1", allowEditing: true }, "column2"],
+    }];
+    that.options.editing = {
+        mode: "form",
+        allowAdding: true
+    };
+
+    that.setupModules(that);
+
+    that.rowsView.render(testElement);
+
+    // act
+    that.addRow();
+
+    // assert
+    assert.equal(that.editingController.getFirstEditableColumnIndex(), 0, "first editable column index is 0");
 });
 
 QUnit.test("Save and cancel buttons", function(assert) {
