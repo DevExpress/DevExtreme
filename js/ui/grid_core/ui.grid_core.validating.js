@@ -755,7 +755,9 @@ module.exports = {
                     this.getController("validating").createValidator(cellOptions, $container.find(".dx-widget").first());
                 },
                 _cellPrepared: function($cell, parameters) {
-                    this.getController("validating").createValidator(parameters, $cell);
+                    if(!this.getController("editing").isFormEditMode()) {
+                        this.getController("validating").createValidator(parameters, $cell);
+                    }
 
                     this.callBase.apply(this, arguments);
                 }

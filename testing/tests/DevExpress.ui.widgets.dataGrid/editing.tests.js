@@ -12191,7 +12191,12 @@ QUnit.test("Editing popup hide on cancelEditData", function(assert) {
 });
 
 QUnit.test("Try to add row with invalid data", function(assert) {
-    var that = this;
+    var that = this,
+        rowValidatingArgs;
+
+    that.options.onRowValidating = function(e) {
+        rowValidatingArgs = e;
+    };
 
     that.setupModules(that);
     that.renderRowsView();
@@ -12208,6 +12213,8 @@ QUnit.test("Try to add row with invalid data", function(assert) {
     // assert
     assert.ok(that.isEditingPopupVisible(), "Editing popup is visible");
     assert.equal($invalidValidators.length, 2, "There are 2 invalid fields");
+    // T671944
+    assert.equal(rowValidatingArgs.brokenRules.length, 2, "There are 2 broken rules");
 });
 
 QUnit.test("Save the row with an invalid data after update it's values", function(assert) {
