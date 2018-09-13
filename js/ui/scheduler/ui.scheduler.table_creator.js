@@ -370,7 +370,16 @@ var SchedulerTableCreator = {
                 }
 
                 $container.addClass(cssClasses.groupHeaderContentClass);
-                cell.element = $("<th>").addClass(cssClasses.groupHeaderClass(j)).append($container);
+
+                var cssClass;
+
+                if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
+                    cssClass = cssClasses.groupHeaderClass(i, j);
+                } else {
+                    cssClass = cssClasses.groupHeaderClass;
+                }
+
+                cell.element = $("<th>").addClass(cssClass).append($container);
 
                 cells.push(cell);
             }
