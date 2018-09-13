@@ -414,7 +414,7 @@
         }
 
         .dx-data-row.dx-state-hover {
-            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
                     background-color: ~"@{@{widgetName}-hover-bg}";
                     color: ~"@{@{widgetName}-row-hovered-color}";
@@ -719,6 +719,12 @@
                 padding-top: @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
                 padding-bottom: @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
                 padding-left: @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
+            }
+        }
+
+        .dx-row-focused.dx-row.dx-data-row {
+            & > td, & > tr > td {
+                background-color: green;
             }
         }
 
