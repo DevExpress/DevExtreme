@@ -268,10 +268,12 @@ var EditingController = modules.ViewController.inherit((function() {
 
         getFirstEditableColumnIndex: function() {
             var columnsController = this.getController("columns"),
+                firstFormItem = this._firstFormItem,
                 columnIndex;
 
-            if(getEditMode(this) === EDIT_MODE_FORM && this._firstFormItem) {
-                columnIndex = this._firstFormItem.column.index;
+            if(getEditMode(this) === EDIT_MODE_FORM && firstFormItem) {
+                var $editFormElements = this._rowsView.getCellElements(this._editRowIndex);
+                columnIndex = this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
             } else {
                 var visibleColumns = columnsController.getVisibleColumns();
                 each(visibleColumns, function(index, column) {
@@ -2117,28 +2119,31 @@ module.exports = {
                     return this.callBase.apply(this, arguments);
                 },
                 _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
-                    var item,
-                        column,
-                        visibleIndex,
-                        editFormRowIndex = this._editingController.getEditFormRowIndex();
+                    var editFormRowIndex = this._editingController.getEditFormRowIndex(),
+                        column;
 
                     if(editFormRowIndex === rowIndex && typeUtils.isString(columnIdentifier)) {
                         column = this._columnsController.columnOption(columnIdentifier);
-
-                        each($cells, function(index, cellElement) {
-                            item = $(cellElement).find(".dx-field-item-content").data("dx-form-item");
-
-                            if(item && item.column && column && item.column.index === column.index) {
-                                visibleIndex = index;
-                                return false;
-                            }
-                        });
-
-                        return visibleIndex;
+                        return this._getEditFormEditorVisibleIndex($cells, column);
                     }
 
                     return this.callBase.apply(this, arguments);
                 },
+
+                _getEditFormEditorVisibleIndex: function($cells, column) {
+                    var item,
+                        visibleIndex = -1;
+
+                    each($cells, function(index, cellElement) {
+                        item = $(cellElement).find(".dx-field-item-content").data("dx-form-item");
+                        if(item && item.column && column && item.column.index === column.index) {
+                            visibleIndex = index;
+                            return false;
+                        }
+                    });
+                    return visibleIndex;
+                },
+
                 publicMethods: function() {
                     return this.callBase().concat(["cellValue"]);
                 },
