@@ -61,8 +61,16 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     _addLastGroupCellClass: function(cellClass, index) {
-        if(index % this._workSpace._getCellCount() === 0) {
-            return cellClass + " " + this.getLastGroupCellClass();
+        var groupByDay = this._workSpace.option("groupByDate");
+
+        if(groupByDay) {
+            if(index % this._workSpace._getGroupCount() === 0) {
+                return cellClass + " " + this.getLastGroupCellClass();
+            }
+        } else {
+            if(index % this._workSpace._getCellCount() === 0) {
+                return cellClass + " " + this.getLastGroupCellClass();
+            }
         }
 
         return cellClass;

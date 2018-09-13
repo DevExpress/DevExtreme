@@ -595,12 +595,15 @@ var SchedulerWorkSpace = Widget.inherit({
     _needApplyLastGroupCellClass: function() {
         return true;
     },
+
     _getGroupRowClass: function() {
         return GROUP_ROW_CLASS;
     },
 
-    _getGroupHeaderClass: function() {
-        return GROUP_HEADER_CLASS;
+    _getGroupHeaderClass: function(i) {
+        var cellClass = GROUP_HEADER_CLASS;
+
+        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
     },
 
     _getGroupHeaderContentClass: function() {
@@ -1248,7 +1251,7 @@ var SchedulerWorkSpace = Widget.inherit({
             groups, {
                 groupHeaderRowClass: this._getGroupRowClass(),
                 groupRowClass: this._getGroupRowClass(),
-                groupHeaderClass: this._getGroupHeaderClass(),
+                groupHeaderClass: this._getGroupHeaderClass.bind(this),
                 groupHeaderContentClass: this._getGroupHeaderContentClass()
             },
             this._getCellCount() || 1,
