@@ -173,6 +173,16 @@
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    'quill': '@Url.Content("~/node_modules/quill")',
+
+                    // Quill deps
+                    'quill-delta': '@Url.Content("~/node_modules/quill-delta")',
+                    'parchment': '@Url.Content("~/node_modules/parchment")',
+                    'extend': '@Url.Content("~/node_modules/extend")',
+                    'clone': '@Url.Content("~/node_modules/clone")',
+                    'deep-equal': '@Url.Content("~/node_modules/deep-equal")',
+                    'eventemitter3': '@Url.Content("~/node_modules/eventemitter3")',
+                    'fast-diff': '@Url.Content("~/node_modules/fast-diff")',
 
                     // Global CSS
                     'style-compiler-test-server': '@Model.StyleCompilerTestServerUrl',
@@ -205,6 +215,37 @@
                     },
                     'cldr': {
                         main: '../cldr.js',
+                        defaultExtension: 'js'
+                    },
+                    'quill': {
+                        defaultExtension: 'js'
+                    },
+                    'quill-delta': {
+                        main: 'lib/delta.js',
+                        defaultExtension: 'js'
+                    },
+                    'parchment': {
+                        main: 'dist/parchment.js',
+                        defaultExtension: 'js'
+                    },
+                    'extend': {
+                        main: 'index.js',
+                        defaultExtension: 'js'
+                    },
+                    'clone': {
+                        main: 'clone.js',
+                        defaultExtension: 'js'
+                    },
+                    'deep-equal': {
+                        main: 'index.js',
+                        defaultExtension: 'js'
+                    },
+                    'eventemitter3': {
+                        main: 'index.js',
+                        defaultExtension: 'js'
+                    },
+                    'fast-diff': {
+                        main: 'diff.js',
                         defaultExtension: 'js'
                     }
                 },

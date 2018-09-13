@@ -209,7 +209,8 @@ namespace StyleCompiler
                 "filterBuilder",
                 "recurrenceEditor",
                 "drawer",
-                "card"
+                "card",
+                "htmlEditor"
             });
 
             // Non-themeable components that have only common styles

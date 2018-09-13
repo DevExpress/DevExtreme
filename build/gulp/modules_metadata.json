@@ -332,6 +332,12 @@
     }
   },
   {
+    "name": "ui/html_editor",
+    "exports": {
+      "default": "ui.dxHtmlEditor"
+    }
+  },
+  {
     "name": "ui/list",
     "exports": {
       "default": "ui.dxList"
