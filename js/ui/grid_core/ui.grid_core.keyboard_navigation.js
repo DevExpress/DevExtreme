@@ -720,7 +720,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             newFocusedCellPosition = this._getNewPositionByCode(focusedCellPosition, elementType, keyCode);
             $cell = this._getCell(newFocusedCellPosition);
 
-            if(!this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
+            if($cell && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
                 $cell = this._getNextCell(keyCode, "cell", newFocusedCellPosition);
             }
 
