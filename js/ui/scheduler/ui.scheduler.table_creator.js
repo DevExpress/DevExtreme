@@ -374,7 +374,7 @@ var SchedulerTableCreator = {
                 var cssClass;
 
                 if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
-                    cssClass = cssClasses.groupHeaderClass(i, j);
+                    cssClass = cssClasses.groupHeaderClass(j);
                 } else {
                     cssClass = cssClasses.groupHeaderClass;
                 }
