@@ -60,9 +60,9 @@ const Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.shading
             * @type boolean
-            * @default true
+            * @default false
             */
-            shading: true,
+            shading: false,
 
             /**
             * @name dxDrawerOptions.template
@@ -75,9 +75,9 @@ const Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.openedStateMode
             * @type Enums.DrawerOpenedStateMode
-            * @default "push"
+            * @default "shrink"
             */
-            openedStateMode: "push",
+            openedStateMode: "shrink",
 
             /**
             * @name dxDrawerOptions.revealMode

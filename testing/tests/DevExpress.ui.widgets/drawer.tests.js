@@ -89,17 +89,21 @@ QUnit.test("defaults", assert => {
     const instance = $element.dxDrawer("instance");
 
     assert.equal(instance.option("revealMode"), "slide", "revealMode is OK");
-    assert.equal(instance.option("openedStateMode"), "push", "mode is OK");
+    assert.equal(instance.option("openedStateMode"), "shrink", "mode is OK");
     assert.equal(instance.option("position"), "left", "position is OK");
-    assert.equal(instance.option("shading"), true, "shading is OK");
+    assert.equal(instance.option("shading"), false, "shading is OK");
+    assert.strictEqual(instance.option("minSize"), null, "minSize is OK");
+    assert.strictEqual(instance.option("maxSize"), null, "maxSize is OK");
+    assert.equal(instance.option("animationEnabled"), true, "animationEnabled is OK");
+    assert.equal(instance.option("animationDuration"), 400, "animationDuration is OK");
 });
 
 QUnit.test("content() function", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
     assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
-    assert.equal($menu.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
+    assert.equal($panel.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
 });
 
 QUnit.test("viewContent() function", assert => {
@@ -161,14 +165,18 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
 QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
     let origFxStop = fx.stop,
         menuStopCalls = 0,
-        contentStopCalls = 0;
+        contentStopCalls = 0,
+        isJumpedToEnd = false;
 
     const $element = $("#drawer").dxDrawer({
         opened: false
     });
 
     const instance = $element.dxDrawer("instance");
-    fx.stop = function($element) {
+    fx.stop = function($element, jumpToEnd) {
+        if(jumpToEnd) {
+            isJumpedToEnd = true;
+        }
         if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
             menuStopCalls++;
         }
@@ -185,6 +193,7 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
 
         assert.equal(menuStopCalls, 2, "animation should stops before toggling visibility");
         assert.equal(contentStopCalls, 2, "animation should stops before toggling visibility");
+        assert.notOk(isJumpedToEnd, "elements aren't returned to the end position after animation stopping");
     } finally {
         fx.off = true;
         fx.stop = origFxStop;
@@ -210,9 +219,9 @@ QUnit.test("content container should have correct position if menu is visible", 
 
     const instance = $element.dxDrawer("instance");
     const $content = $(instance.viewContent());
-    const $menu = $(instance.content());
+    const $panel = $(instance.content());
 
-    assert.equal(position($content), $menu.width(), "container rendered at correct position");
+    assert.equal(position($content), $panel.width(), "container rendered at correct position");
 });
 
 QUnit.test("content container should have correct position after resize", assert => {
@@ -341,7 +350,8 @@ QUnit.module("shader");
 
 QUnit.test("shader should be visible if drawer is opened", assert => {
     const $element = $("#drawer").dxDrawer({
-        opened: true
+        opened: true,
+        shading: true
     });
 
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
@@ -351,7 +361,8 @@ QUnit.test("shader should be visible if drawer is opened", assert => {
 
 QUnit.test("shader should not be visible if drawer is closed", assert => {
     const $element = $("#drawer").dxDrawer({
-        opened: false
+        opened: false,
+        shading: true
     });
 
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
@@ -361,7 +372,8 @@ QUnit.test("shader should not be visible if drawer is closed", assert => {
 
 QUnit.test("click on shader should not close drawer", assert => {
     const $element = $("#drawer").dxDrawer({
-        opened: true
+        opened: true,
+        shading: true
     });
 
     const instance = $element.dxDrawer("instance");
@@ -373,7 +385,8 @@ QUnit.test("click on shader should not close drawer", assert => {
 
 QUnit.test("shader should be visible during animation", assert => {
     const $element = $("#drawer").dxDrawer({
-        opened: false
+        opened: false,
+        shading: true
     });
 
     const instance = $element.dxDrawer("instance");
@@ -385,7 +398,8 @@ QUnit.test("shader should be visible during animation", assert => {
 
 QUnit.test("shader should have correct position", assert => {
     const $element = $("#drawer").dxDrawer({
-        opened: true
+        opened: true,
+        shading: true
     });
 
     const instance = $element.dxDrawer("instance");
@@ -398,7 +412,8 @@ QUnit.test("shader should have correct position", assert => {
 QUnit.test("shader should have correct position after widget resize", assert => {
     const $element = $("#drawer2").dxDrawer({
         width: "100%",
-        opened: true
+        opened: true,
+        shading: true
     });
 
     const instance = $element.dxDrawer("instance");
@@ -536,18 +551,18 @@ QUnit.test("minSize should be rendered correctly in shrink mode, expand", assert
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
 
     assert.equal($content.position().left, 50, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 50, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 50, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 200, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -566,17 +581,17 @@ QUnit.test("minSize should be rendered correctly in shrink mode, right menu posi
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 950, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 50, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 950, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 50, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 800, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 800, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -594,17 +609,17 @@ QUnit.test("maxSize should be rendered correctly in shrink mode, expand", assert
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 0, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 0, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 100, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 100, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 100, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -623,17 +638,17 @@ QUnit.test("maxSize should be rendered correctly in shrink mode, right menu posi
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 1000, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 0, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 1000, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 0, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 900, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 100, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 900, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 100, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -650,19 +665,19 @@ QUnit.test("minSize should be rendered correctly in shrink mode, slide", assert 
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
-    assert.equal($menu.css("margin-left"), "-150px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-left"), "-150px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 50, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
-    assert.equal($menu.css("margin-left"), "0px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-left"), "0px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 200, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -679,19 +694,19 @@ QUnit.test("maxSize should be rendered correctly in shrink mode, slide", assert 
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
-    assert.equal($menu.css("margin-left"), "-200px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-left"), "-200px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
-    assert.equal($menu.css("margin-left"), "-100px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-left"), "-100px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 100, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -709,19 +724,19 @@ QUnit.test("minSize should be rendered correctly in shrink mode, right menu posi
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
-    assert.equal($menu.css("margin-right"), "-150px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-right"), "-150px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 950, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 950, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
-    assert.equal($menu.css("margin-right"), "0px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-right"), "0px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 800, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 800, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -739,19 +754,19 @@ QUnit.test("maxSize should be rendered correctly in shrink mode, right menu posi
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
-    assert.equal($menu.css("margin-right"), "-200px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-right"), "-200px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 1000, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 1000, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
-    assert.equal($menu.css("margin-right"), "-100px", "menu has correct margin when minSize is set");
+    assert.equal($panel.css("margin-right"), "-100px", "menu has correct margin when minSize is set");
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 900, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 900, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -810,17 +825,17 @@ QUnit.test("minSize should be rendered correctly in overlap mode, expand", asser
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
     const $overlayContent = $element.find(".dx-drawer-panel-content .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "panel has correct left when minSize is set");
+    assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 50, "panel content has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "panel has correct left when minSize is set");
+    assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 200, "panel content has correct width when minSize is set");
 
     fx.off = false;
@@ -838,17 +853,17 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, expand", asser
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
     const $overlayContent = $element.find(".dx-drawer-panel-content .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($menu.position().left, 0, "panel has correct left when maxSize is set");
+    assert.equal($panel.position().left, 0, "panel has correct left when maxSize is set");
     assert.equal($overlayContent.width(), 0, "panel content has correct width when maxSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($menu.position().left, 0, "panel has correct left when maxSize is set");
+    assert.equal($panel.position().left, 0, "panel has correct left when maxSize is set");
     assert.equal($overlayContent.width(), 100, "panel content has correct width when maxSize is set");
 
     fx.off = false;
@@ -866,17 +881,17 @@ QUnit.test("minSize should be rendered correctly in overlap mode, slide", assert
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, -150, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, -150, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 0, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -893,17 +908,17 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, slide", assert
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($menu.position().left, -200, "menu has correct left when maxSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxSize is set");
+    assert.equal($panel.position().left, -200, "menu has correct left when maxSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when maxSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($menu.position().left, -100, "menu has correct left when maxSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxSize is set");
+    assert.equal($panel.position().left, -100, "menu has correct left when maxSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when maxSize is set");
 
     fx.off = false;
 });
@@ -921,17 +936,17 @@ QUnit.test("minSize should be rendered correctly in overlap mode, right menu pos
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 800, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 800, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($menu.position().left, 650, "menu has correct left when minSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when minSize is set");
+    assert.equal($panel.position().left, 650, "menu has correct left when minSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
 });
@@ -949,17 +964,17 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, right menu pos
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($menu.position().left, 700, "menu has correct left when maxSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxSize is set");
+    assert.equal($panel.position().left, 700, "menu has correct left when maxSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when maxSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($menu.position().left, 600, "menu has correct left when maxSize is set");
-    assert.equal($menu.width(), 200, "menu has correct width when maxSize is set");
+    assert.equal($panel.position().left, 600, "menu has correct left when maxSize is set");
+    assert.equal($panel.width(), 200, "menu has correct width when maxSize is set");
 
     fx.off = false;
 });
@@ -984,17 +999,17 @@ QUnit.test("minSize should be rendered correctly in overlap mode, top menu posit
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, -150, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, -150, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, 400, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, 400, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     fx.off = false;
 });
@@ -1019,17 +1034,17 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, top menu posit
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, -200, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, -200, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, -100, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, -100, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     fx.off = false;
 });
@@ -1054,17 +1069,17 @@ QUnit.test("minSize should be rendered correctly in overlap mode, bottom menu po
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, 150, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, 150, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, -400, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, -400, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     fx.off = false;
 });
@@ -1089,17 +1104,17 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu po
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $menu = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, 200, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, 200, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
-    assert.equal($menu.position().top, 100, "menu has correct top when minSize is set");
-    assert.equal($menu.height(), 1000, "menu has correct height when minSize is set");
+    assert.equal($panel.position().top, 100, "menu has correct top when minSize is set");
+    assert.equal($panel.height(), 1000, "menu has correct height when minSize is set");
 
     fx.off = false;
 });
@@ -1109,14 +1124,15 @@ QUnit.module("rtl");
 QUnit.test("content should have correct position if menu is visible in rtl mode", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true,
+        openedStateMode: "push",
         rtlEnabled: true
     });
 
     const instance = $element.dxDrawer("instance");
     const $content = $(instance.viewContent());
-    const $menu = $(instance.content());
+    const $panel = $(instance.content());
 
-    assert.equal(position($content), -$menu.width(), "container rendered at correct position");
+    assert.equal(position($content), -$panel.width(), "container rendered at correct position");
 });
 
 QUnit.module("closeOnOutsideClick");
