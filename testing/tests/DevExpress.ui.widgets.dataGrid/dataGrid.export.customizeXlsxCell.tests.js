@@ -180,31 +180,32 @@ QUnit.test("Check event arguments for header", function(assert) {
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with bands", function(assert) {
+QUnit.test("Check event arguments for bands", function(assert) {
+    const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
-                { dataField: "field1", caption: "Field1" },
+                { dataField: "f1" },
                 {
                     caption: 'Band1',
                     columns: [
-                        { dataField: "field2", caption: "Field2" },
-                        { dataField: "field3", caption: "Field3" },
+                        { dataField: "f2" },
+                        { dataField: "f3" },
                     ]
                 }
             ],
-            dataSource: [{ field1: 'f1', field2: 'f2', field3: 'f3' }],
+            dataSource: ds,
         },
         (grid) => [
-            { value: 'Field1', column: 'check cellPrepared' },
-            { value: 'Band1', column: 'check cellPrepared' },
-            { value: '', column: 'check cellPrepared' },
-            { value: '', column: 'check cellPrepared' },
-            { value: 'Field2', column: 'check cellPrepared' },
-            { value: 'Field3', column: 'check cellPrepared' },
-            { value: 'f1', column: 'check cellPrepared' },
-            { value: 'f2', column: 'check cellPrepared' },
-            { value: 'f3', column: 'check cellPrepared' },
+            { rowType: 'header', column: grid.columnOption(0) },
+            { rowType: 'header', column: grid.columnOption(1) },
+            { rowType: 'header', column: grid.columnOption(1) },
+            { rowType: 'header', column: grid.columnOption(0) },
+            { rowType: 'header', column: grid.columnOption(2) },
+            { rowType: 'header', column: grid.columnOption(3) },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: 'f1' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
         ]
     );
 });
