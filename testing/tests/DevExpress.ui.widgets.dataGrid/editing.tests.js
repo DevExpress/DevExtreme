@@ -11004,6 +11004,42 @@ QUnit.test("Position of the inserted row if grouping is used", function(assert) 
     assert.deepEqual(item3.data, {}, "Item3 is empty");
 });
 
+// T672237
+QUnit.test("cancelEditData after scrolling if scrolling mode is editing", function(assert) {
+    // arrange
+    var testElement = $('#container');
+
+    this.options.scrolling = {
+        mode: "virtual",
+        useNative: false
+    };
+
+    this.options.editing.mode = "row";
+
+    this.options.dataSource = generateDataSource(50, 2);
+
+    this.setupDataGrid();
+
+    this.rowsView.render(testElement);
+    this.rowsView.height(130);
+    this.rowsView.resize();
+
+    // act
+    this.pageIndex(5);
+    this.editRow(1, 1);
+
+    // assert
+    assert.equal(testElement.find("input").length, 1, "editor exists");
+    assert.equal(testElement.find(".dx-edit-row").length, 1, "edit row exists");
+
+    // act
+    this.cancelEditData();
+
+    // assert
+    assert.equal(testElement.find("input").length, 0, "no inputs");
+    assert.equal(testElement.find(".dx-edit-row").length, 0, "edit row is closed");
+});
+
 QUnit.module('Edit Form', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
