@@ -414,6 +414,28 @@ const Drawer = Widget.inherit({
         this.$element().toggleClass(OPENED_STATE_CLASS, opened);
     },
 
+    _refreshPanel() {
+        if(this._overlay) {
+            this._overlay && this._overlay._dispose();
+
+            delete this._overlay;
+            delete this._$panel;
+            this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
+            this._$wrapper.prepend(this._$panel);
+        }
+
+        this._$panel.empty();
+
+        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+    },
+
+    _setInitialPosition() {
+        $(this.content()).css("left", 0);
+        $(this.content()).css("marginLeft", 0);
+        $(this.viewContent()).css("paddingLeft", 0);
+        $(this.viewContent()).css("left", 0);
+        $(this.viewContent()).css("transform", "translate(0px, 0px)");
+    },
 
     _optionChanged(args) {
         switch(args.name) {
@@ -426,36 +448,28 @@ const Drawer = Widget.inherit({
                 this._toggleVisibleClass(args.value);
                 break;
             case "position":
-                // NOTE: temporary fix
-                this._invalidate();
-                break;
             case "contentTemplate":
             case "template":
                 this._invalidate();
                 break;
             case "openedStateMode":
                 this._initStrategy();
-                this._$panel.css("left", 0);
-                this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("opened"));
 
-                // NOTE: temporary fix
-                this.repaint();
+                this._setInitialPosition();
+                this._refreshPanel();
+
+                this._refreshModeClass(args.previousValue);
+                this._renderPosition(this.option("opened"), false);
                 break;
             case "minSize":
             case "maxSize":
                 this._initSize();
-                this._$panel.css("left", 0);
-                this._renderPosition(this.option("opened"));
-
-                // NOTE: temporary fix
-                this.repaint();
+                this._renderPosition(this.option("opened"), false);
                 break;
             case "revealMode":
+                this._setInitialPosition();
                 this._refreshRevealModeClass(args.previousValue);
-
-                // NOTE: temporary fix
-                this.repaint();
+                this._renderPosition(this.option("opened"), false);
                 break;
             case "shading":
                 this._refreshModeClass(args.previousValue);
