@@ -819,7 +819,7 @@ module.exports = {
                         scrollingMode = that.option("scrolling.mode");
 
                     for(i = 0; i < columns.length; i++) {
-                        if(columns[i].command === "expand") {
+                        if(columns[i].type === "group") {
                             columnsCountBeforeGroups = i;
                             break;
                         }

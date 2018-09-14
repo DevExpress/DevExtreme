@@ -1252,6 +1252,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 cssClass = COMMAND_EDIT_CLASS + (useIcons ? " " + COMMAND_EDIT_WITH_ICONS_CLASS : "");
 
             that._columnsController.addCommandColumn({
+                type: "buttons",
                 command: "edit",
                 visible: isEditColumnVisible,
                 cssClass: cssClass,

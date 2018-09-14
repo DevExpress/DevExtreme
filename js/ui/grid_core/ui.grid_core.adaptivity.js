@@ -608,6 +608,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         that._rowsView = that.getView("rowsView");
 
         that._columnsController.addCommandColumn({
+            type: ADAPTIVE_COLUMN_NAME,
             command: ADAPTIVE_COLUMN_NAME,
             visible: true,
             adaptiveHidden: true,

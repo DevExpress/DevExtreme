@@ -50,6 +50,7 @@ module.exports = {
 
                     if(this.option("masterDetail.enabled")) {
                         expandColumns.push({
+                            type: "expand",
                             cellTemplate: gridCoreUtils.getExpandCellTemplate()
                         });
                     }

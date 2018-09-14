@@ -3658,6 +3658,7 @@ QUnit.test("insert select column on update when showCheckBoxesMode is onClick", 
     assert.deepEqual(this.getVisibleColumns()[0], {
         visible: true,
         command: 'select',
+        type: 'selection',
         dataType: 'boolean',
         alignment: 'center',
         width: 'auto',
@@ -3681,6 +3682,7 @@ QUnit.test("insert select column on update when showCheckBoxesMode is always", f
     assert.deepEqual(this.getVisibleColumns()[0], {
         visible: true,
         command: 'select',
+        type: 'selection',
         dataType: 'boolean',
         alignment: 'center',
         width: 'auto',
@@ -8342,20 +8344,18 @@ QUnit.module("Customization of the command columns", {
                     editRow: "Edit"
                 }
             },
-            columns: ["field1", "field2", {
-                command: "edit",
+            columns: [{
+                type: "command",
                 cellTemplate: editCellTemplate,
-                width: 200,
-                visibleIndex: -1
-            }]
+                width: 200
+            }, "field1", "field2"]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
-            command: "edit",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[0], {
+            type: "command",
             cellTemplate: editCellTemplate,
-            width: 200,
-            visibleIndex: -1
+            width: 200
         }, "edit column");
     });
 
@@ -8369,19 +8369,17 @@ QUnit.module("Customization of the command columns", {
                 showCheckBoxesMode: "always"
             },
             columns: ["field1", "field2", {
-                command: "select",
+                type: "selection",
                 cellTemplate: selectCellTemplate,
-                width: 200,
-                visibleIndex: 0
+                width: 200
             }]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[2], {
-            command: "select",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[2], {
+            type: "selection",
             cellTemplate: selectCellTemplate,
-            width: 200,
-            visibleIndex: 0
+            width: 200
         }, "select column");
     });
 
@@ -8391,22 +8389,42 @@ QUnit.module("Customization of the command columns", {
 
         this.applyOptions({
             columnHidingEnabled: true,
-            columns: ["field1", "field2", {
-                command: "adaptive",
+            columns: [{
+                type: "adaptive",
                 cellTemplate: adaptiveCellTemplate,
                 width: 100,
-                visibleIndex: -1,
                 adaptiveHidden: false
-            }]
+            }, "field1", "field2"]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
-            command: "adaptive",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[0], {
+            type: "adaptive",
             cellTemplate: adaptiveCellTemplate,
-            width: 100,
-            visibleIndex: -1
+            width: 100
         }, "adaptive column");
+    });
+
+    QUnit.test("The group column", function(assert) {
+        // arrange
+        var groupCellTemplate = function() {};
+
+        this.applyOptions({
+            columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
+                type: "group",
+                cellTemplate: groupCellTemplate,
+                width: 100
+            }, "field3"]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["type", "groupIndex", "dataField", "cellTemplate", "width"])[1], {
+            type: "group",
+            groupIndex: 0,
+            dataField: "field1",
+            cellTemplate: groupCellTemplate,
+            width: 100
+        }, "group column");
     });
 
     QUnit.test("The expand column", function(assert) {
@@ -8414,19 +8432,19 @@ QUnit.module("Customization of the command columns", {
         var expandCellTemplate = function() {};
 
         this.applyOptions({
-            columnHidingEnabled: true,
-            columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
-                command: "expand",
+            masterDetail: {
+                enabled: true
+            },
+            columns: ["field1", {
+                type: "expand",
                 cellTemplate: expandCellTemplate,
                 width: 100
-            }]
+            }, "field2", "field3"]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "groupIndex", "dataField", "cellTemplate", "width"])[0], {
-            command: "expand",
-            groupIndex: 0,
-            dataField: "field1",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[1], {
+            type: "expand",
             cellTemplate: expandCellTemplate,
             width: 100
         }, "group column");
@@ -8443,56 +8461,27 @@ QUnit.module("Customization of the command columns", {
                 }
             },
             columns: ["field1", "field2", {
-                command: "edit",
-                width: 200,
-                visibleIndex: -1
+                type: "buttons",
+                width: 200
             }]
         });
 
         // act, assert
-        assert.deepEqual(processColumnsForCompare([this.columnOption("command:edit")], ["command", "cellTemplate", "width", "visibleIndex"]), [{
-            command: "edit",
-            width: 200,
-            visibleIndex: -1
+        assert.deepEqual(processColumnsForCompare([this.columnOption("type:buttons")], ["type", "width"]), [{
+            type: "buttons",
+            width: 200
         }], "edit column");
-    });
-
-    QUnit.test("Custom command column", function(assert) {
-        // arrange
-        this.applyOptions({
-            columnHidingEnabled: true,
-            columns: ["field1", "field2", {
-                command: "custom",
-                width: 100
-            }]
-        });
-
-        // act, assert
-        assert.deepEqual(this.getVisibleColumns()[2], {
-            command: "custom",
-            index: 2,
-            width: 100,
-            visible: true
-        }, "custom command column");
-    });
-
-    QUnit.test("Get custom command options via columnOption method", function(assert) {
-        // arrange
-        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
-
-        // act, assert
-        assert.deepEqual(processColumnsForCompare([this.columnOption("command:custom")], ["command", "width", "visible"]), [{ command: "custom", width: 100, visible: true }], "options of the custom command column");
     });
 
     QUnit.test("Update custom command options via columnOption method", function(assert) {
         // arrange
-        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
+        this.applyOptions({ columns: ["field1", "field2", { type: "buttons", width: 100 }] });
 
         // act
-        this.columnOption("command:custom", "width", 50);
+        this.columnOption("type:buttons", "width", 50);
 
         // assert
-        assert.strictEqual(this.columnOption("command:custom", "width"), 50, "width of the custom command column");
+        assert.strictEqual(this.columnOption("type:buttons", "width"), 50, "width of the custom command column");
     });
 });
 

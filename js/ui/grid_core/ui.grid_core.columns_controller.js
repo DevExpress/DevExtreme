@@ -568,8 +568,7 @@ module.exports = {
 
             var createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 var commonColumnOptions = {},
-                    calculatedColumnOptions,
-                    isDefaultCommandColumn;
+                    calculatedColumnOptions;
 
                 if(columnOptions) {
                     if(typeUtils.isString(columnOptions)) {
@@ -579,13 +578,7 @@ module.exports = {
                     }
 
                     if(columnOptions.command) {
-                        isDefaultCommandColumn = that._commandColumns.some((column) => column.command === columnOptions.command);
-
-                        if(!isDefaultCommandColumn) {
-                            commonColumnOptions.visible = true;
-                        }
-
-                        return extend(true, commonColumnOptions, columnOptions);
+                        return extend(true, {}, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings();
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -1239,15 +1232,24 @@ module.exports = {
                 return !column.fixedPosition ? "left" : column.fixedPosition;
             };
 
-            var processExpandColumns = function(columns, expandColumns, columnIndex) {
-                var rowspan = columns[columnIndex] && columns[columnIndex].rowspan,
-                    expandColumnsByRow = expandColumns.slice(0);
+            var processExpandColumns = function(columns, expandColumns, type, columnIndex) {
+                var customColumnIndex,
+                    rowCount = this.getRowCount(),
+                    rowspan = columns[columnIndex] && columns[columnIndex].rowspan,
+                    expandColumnsByType = expandColumns.filter((column) => column.type === type);
+
+                columns.forEach((column, index) => {
+                    if(column.type === type) {
+                        customColumnIndex = index;
+                        rowspan = columns[index + 1] ? columns[index + 1].rowspan : rowCount;
+                    }
+                });
 
                 if(rowspan > 1) {
-                    expandColumnsByRow = iteratorUtils.map(expandColumnsByRow, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
+                    expandColumnsByType = iteratorUtils.map(expandColumnsByType, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
                 }
-                expandColumnsByRow.unshift(columnIndex, 0);
-                columns.splice.apply(columns, expandColumnsByRow);
+                expandColumnsByType.unshift.apply(expandColumnsByType, isDefined(customColumnIndex) ? [customColumnIndex, 1] : [columnIndex, 0]);
+                columns.splice.apply(columns, expandColumnsByType);
 
                 return rowspan || 1;
             };
@@ -1276,26 +1278,29 @@ module.exports = {
                 var i,
                     column,
                     commandColumnIndex,
-                    result = columns.length ? (needToExtend && commandColumns || columns).slice().map(column => extend({}, column)) : [],
+                    result = columns.slice().map(column => extend({}, column)),
+                    defaultCommandColumns = commandColumns.slice().map(column => extend({}, column)),
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
-                        return commandColumn.command === column.command ? index : result;
-                    }, -1);
+                        return commandColumn.type === column.type || commandColumn.command === column.command ? index : result;
+                    }, -1),
+                    callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
 
-                if(result.length) {
-                    for(i = 0; i < columns.length; i++) {
-                        column = columns[i];
+                for(i = 0; i < columns.length; i++) {
+                    column = columns[i];
 
-                        commandColumnIndex = column && column.command ? getCommandColumnIndex(column) : -1;
-                        if(commandColumnIndex >= 0) {
-                            if(needToExtend) {
-                                result[commandColumnIndex] = extend({}, result[commandColumnIndex], column);
-                            } else {
-                                result[i] = extend({}, result[i], commandColumns[commandColumnIndex]);
-                            }
-                        } else if(column && needToExtend) {
-                            result.push(extend({}, column));
+                    commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
+                    if(commandColumnIndex >= 0) {
+                        if(needToExtend) {
+                            result[i] = extend({}, commandColumns[commandColumnIndex], column);
+                            defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
+                        } else {
+                            result[i] = extend({}, column, commandColumns[commandColumnIndex]);
                         }
                     }
+                }
+
+                if(columns.length && needToExtend && defaultCommandColumns.length) {
+                    result = result.concat(defaultCommandColumns);
                 }
 
                 return result;
@@ -1304,6 +1309,7 @@ module.exports = {
             return {
                 _getExpandColumnOptions: function() {
                     return {
+                        type: "expand",
                         command: "expand",
                         width: "auto",
                         cssClass: COMMAND_EXPAND_CLASS,
@@ -1721,7 +1727,10 @@ module.exports = {
                             minWidth: null,
                             cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
                             headerCellTemplate: null
-                        }, expandColumn, { index: column.index });
+                        }, expandColumn, {
+                            index: column.index,
+                            type: column.type || "group"
+                        });
                     });
 
                     return expandColumns;
@@ -1769,17 +1778,18 @@ module.exports = {
                     var that = this,
                         i,
                         result = [],
+                        rowspanGroupColumns = 0,
                         rowspanExpandColumns = 0,
                         firstPositiveIndexColumn,
-                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
                         rowCount = that.getRowCount(),
                         positiveIndexedColumns = [],
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
-                        columns = mergeColumns(that._columns, that._commandColumns, true),
                         bandColumnsCache = that.getBandColumnsCache(),
+                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
+                        columns = mergeColumns(that._columns, that._commandColumns, true),
                         columnDigitsCount = digitsCount(columns.length);
 
                     processBandColumns(that, columns, bandColumnsCache);
@@ -1795,6 +1805,7 @@ module.exports = {
                             rowIndex,
                             visibleIndex = column.visibleIndex,
                             indexedColumns,
+                            isNotCustomCommandColumn,
                             parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex),
                             visible = that._isColumnVisible(column);
 
@@ -1807,15 +1818,16 @@ module.exports = {
                             } else {
                                 column.fixed = parentBandColumns.length ? parentBandColumns[0].fixed : column.fixed;
                                 column.fixedPosition = parentBandColumns.length ? parentBandColumns[0].fixedPosition : column.fixedPosition;
+                                isNotCustomCommandColumn = column.command && !isDefined(column.visibleIndex);
 
-                                if(column.fixed || column.command) {
+                                if(column.fixed || isNotCustomCommandColumn) {
                                     isFixedToEnd = column.fixedPosition === "right";
 
                                     if(rtlEnabled) {
                                         isFixedToEnd = !isFixedToEnd;
                                     }
 
-                                    if(isFixedToEnd || column.command) {
+                                    if(isFixedToEnd || isNotCustomCommandColumn) {
                                         indexedColumns = positiveIndexedColumns[rowIndex][2];
                                     } else {
                                         indexedColumns = positiveIndexedColumns[rowIndex][0];
@@ -1850,8 +1862,13 @@ module.exports = {
                             });
                         });
 
+                        // The order of processing is important
                         if(rowspanExpandColumns < (rowIndex + 1)) {
-                            rowspanExpandColumns += processExpandColumns(result[rowIndex], expandColumns, firstPositiveIndexColumn);
+                            rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "expand", firstPositiveIndexColumn);
+                        }
+
+                        if(rowspanGroupColumns < (rowIndex + 1)) {
+                            rowspanGroupColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "group", firstPositiveIndexColumn);
                         }
                     });
 
@@ -2411,7 +2428,7 @@ module.exports = {
                     var that = this,
                         i,
                         identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
-                        columns = (identifier < 0 || identifierOptionName === "command") ? that._columns.concat(that._commandColumns) : that._columns,
+                        columns = that._columns.concat(that._commandColumns),
                         needUpdateIndexes,
                         column;
 
