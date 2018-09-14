@@ -13,25 +13,58 @@ exports.FocusController = gridCore.Controller.inherit((function() {
                 focusedRowKey,
                 focusedRowEnabled;
 
-            that.dataController = that.getController("data");
-
             focusedRowIndex = that.option("focusedRowIndex");
             focusedRowKey = that.option("focusedRowKey");
             focusedRowEnabled = that.option("focusedRowEnabled");
-            if(focusedRowIndex && focusedRowKey) {
+            if(focusedRowIndex >= 0 && focusedRowKey) {
                 that.option("focusedRowIndex", -1);
             }
+
+            that.dataController = that.getController("data");
+
+            that.updateFocusedRowState();
+
             if(!isDefined(focusedRowEnabled) && (isDefined(focusedRowIndex) && focusedRowIndex >= 0 || isDefined(focusedRowKey))) {
                 that.option("focusedRowEnabled", true);
             }
         },
 
+        updateFocusedRowState: function() {
+            var that = this;
+
+            that.dataController.changed.add(function(e) {
+                var rowIndex,
+                    rowKey;
+
+                if(e.changeType !== "refresh" && e.changeType !== "update") {
+                    return;
+                }
+
+                rowIndex = that.option("focusedRowIndex");
+                if(rowIndex >= 0) {
+                    rowKey = that.dataController.getKeyByRowIndex(rowIndex);
+                    if(isDefined(rowKey)) {
+                        that.option("focusedRowKey", rowKey);
+                    }
+                } else {
+                    rowKey = that.option("focusedRowKey");
+                    if(isDefined(rowKey)) {
+                        rowIndex = that.dataController.getRowIndexByKey(rowKey);
+                        if(rowIndex >= 0) {
+                            that.option("focusedRowIndex", rowIndex);
+                        }
+                    }
+                }
+            });
+        },
+
         optionChanged: function(args) {
             var that = this,
-                rowKey;
+                rowKey,
+                rowIndex;
 
             if(args.value !== args.previousValue) {
-                if(args.name === "focusedRowIndex") {
+                if(args.name === "focusedRowIndex" && args.value >= 0) {
                     rowKey = that.dataController.getKeyByRowIndex(args.value);
                     if(isDefined(rowKey)) {
                         that.option("focusedRowKey", rowKey);
@@ -39,6 +72,8 @@ exports.FocusController = gridCore.Controller.inherit((function() {
                 } else if(args.name === "focusedRowKey") {
                     rowKey = args.value;
                     if(isDefined(rowKey)) {
+                        rowIndex = that.dataController.getRowIndexByKey(rowKey);
+                        that.option("focusedRowIndex", rowIndex);
                         that.dataController.updateItems({
                             changeType: "updateFocusedRow",
                             focusedRowKey: args.value
@@ -91,8 +126,17 @@ module.exports = {
 
     extenders: {
         controllers: {
-            keyboard: {
-                // TODO
+            keyboardNavigation: {
+                _focus: function($cell, disableFocus, isInteractiveElement) {
+                    var nextRowIndex;
+
+                    this.callBase($cell, disableFocus, isInteractiveElement);
+
+                    if(this.option("focusedRowEnabled")) {
+                        nextRowIndex = this._focusedCellPosition && this._focusedCellPosition.rowIndex;
+                        this.option("focusedRowIndex", nextRowIndex);
+                    }
+                }
             },
 
             data: {
@@ -152,10 +196,14 @@ module.exports = {
 
                 _rowClick: function(e) {
                     var that = this,
+                        rowKey,
                         dxEvent = e.event;
 
                     if(that.option("focusedRowEnabled")) {
-                        that.option("focusedRowIndex", e.rowIndex);
+                        rowKey = this._dataController.getKeyByRowIndex(e.rowIndex);
+                        if(rowKey) {
+                            that.option("focusedRowKey", rowKey);
+                        }
                         dxEvent.preventDefault();
                         e.handled = true;
                     }

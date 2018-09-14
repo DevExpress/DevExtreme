@@ -1017,8 +1017,9 @@ module.exports = {
             rowsView: {
                 renderFocusState: function() {
                     var that = this,
-                        cellElements = that.getCellElements(0),
                         keyboardNavigation = that.getController("keyboardNavigation"),
+                        rowIndex = that.option("focusedRowIndex") || 0,
+                        cellElements = that.getCellElements(rowIndex),
                         tabIndex = that.option("tabIndex"),
                         oldFocusedView = keyboardNavigation._focusedView,
                         $row,
