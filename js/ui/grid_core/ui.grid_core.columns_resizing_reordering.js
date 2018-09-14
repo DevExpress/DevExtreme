@@ -831,7 +831,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                     return sum;
                 }, 0);
 
-                if(totalPercent > 0) {
+                if(totalPercent > 0 && totalPercent > 100) {
                     contentWidth = contentWidth / totalPercent * 100;
                 }
             }
