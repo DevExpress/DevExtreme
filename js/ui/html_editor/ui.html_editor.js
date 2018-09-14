@@ -69,7 +69,8 @@ let HtmlEditor = Editor.inherit({
 
         this._htmlEditor = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
-            modules: modulesConfig
+            modules: modulesConfig,
+            theme: "basic"
         });
 
         this._htmlEditor.on("text-change", function(newDelta, oldDelta, source) {

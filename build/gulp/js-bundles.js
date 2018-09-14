@@ -46,7 +46,7 @@ function processDevBundles(bundles) {
 function muteWebPack() {
 }
 
-gulp.task('js-bundles-prod', ['transpile'], function() {
+gulp.task('js-bundles-prod', ['transpile', 'transpile-quill'], function() {
     return gulp.src(processBundles(BUNDLES))
         .pipe(named())
         .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
@@ -86,7 +86,7 @@ var createDebugBundlesStream = function(watch) {
 };
 
 
-gulp.task('js-bundles-debug', ['transpile'], function() {
+gulp.task('js-bundles-debug', ['transpile', 'transpile-quill'], function() {
     return createDebugBundlesStream(false);
 });
 

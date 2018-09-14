@@ -1,6 +1,6 @@
 import Quill from "quill/core";
 
-
+import BaseTheme from "./themes/base";
 import { AlignStyle } from "quill/formats/align";
 import {
   DirectionAttribute,
@@ -50,16 +50,18 @@ class QuillRegistrator {
             "formats/font": FontStyle,
             "formats/size": SizeStyle,
 
-            "formats/header": Header.default,
-            "formats/list": List.default,
+            "formats/header": Header,
+            "formats/list": List,
 
-            "formats/bold": Bold.default,
-            "formats/italic": Italic.default,
-            "formats/link": Link.default,
-            "formats/strike": Strike.default,
-            "formats/underline": Underline.default,
+            "formats/bold": Bold,
+            "formats/italic": Italic,
+            "formats/link": Link,
+            "formats/strike": Strike,
+            "formats/underline": Underline,
 
-            "modules/syntax": Syntax.default,
+            "modules/syntax": Syntax,
+
+            "themes/basic": BaseTheme
         },
             true
         );
@@ -80,6 +82,6 @@ class QuillRegistrator {
     }
 };
 
-QuillRegistrator.Quill = Quill.default;
+QuillRegistrator.Quill = Quill;
 
 export { QuillRegistrator as default };

@@ -17,5 +17,13 @@ module.exports = {
         'globalize/currency': 'window.Globalize',
         'globalize/date': 'window.Globalize',
         'globalize/message': 'window.Globalize'
+    },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            use: {
+                loader: 'babel-loader'
+            }
+        }]
     }
 };
