@@ -1,9 +1,11 @@
 var $ = require("../core/renderer"),
     Color = require("../color"),
     isFunction = require("../core/utils/type").isFunction,
+    svgUtils = require("../core/utils/svg"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     domAdapter = require("../core/dom_adapter"),
+    domUtils = require("../core/utils/dom"),
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
     camelize = require("../core/utils/inflector").camelize,
@@ -79,7 +81,6 @@ function arcTo(x1, y1, x2, y2, radius, largeArcFlag, clockwise, context) {
 
 function getElementOptions(element) {
     var attr = parseAttributes(element.attributes || {}),
-        style = element.style || {},
         options = extend({}, attr, {
             text: element.textContent.replace(/\s+/g, " "),
             textAlign: attr["text-anchor"] === "middle" ? "center" : attr["text-anchor"]
@@ -104,7 +105,7 @@ function getElementOptions(element) {
         }
     }
 
-    parseStyles(style, options);
+    parseStyles(element, options);
 
     return options;
 }
@@ -194,12 +195,29 @@ function drawPath(context, dAttr) {
     } while(i < dArray.length);
 }
 
-function parseStyles(style, options) {
-    _each(style, function(_, field) {
+function parseStyles(element, options) {
+    var style = element.style || {},
+        field;
+
+    for(field in style) {
         if(style[field] !== "") {
             options[camelize(field)] = style[field];
         }
-    });
+    }
+    if(domAdapter.isElementNode(element) && domUtils.contains(domAdapter.getBody(), element)) {
+        style = window.getComputedStyle(element);
+        ["fill", "stroke", "stroke-width", "font-family", "font-size", "font-style", "font-weight" ].forEach(function(prop) {
+            if(prop in style && style[prop] !== "") {
+                options[camelize(prop)] = style[prop];
+            }
+        });
+
+        ["opacity", "fill-opacity", "stroke-opacity"].forEach(function(prop) {
+            if(prop in style && style[prop] !== "" && style[prop] !== "1") {
+                options[prop] = _number(style[prop]);
+            }
+        });
+    }
 
     options.textDecoration = options.textDecoration || options.textDecorationLine;
     options.globalAlpha = options.opacity || options.globalAlpha;
@@ -601,9 +619,7 @@ function drawBackground(context, width, height, backgroundColor, margin) {
 function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
     var canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
-        parser = new window.DOMParser(),
-        elem = parser.parseFromString(markup, "image/svg+xml"),
-        svgElem = elem.childNodes[0];
+        svgElem = svgUtils.getSvgElement(markup);
 
     context.translate(margin, margin);
 
