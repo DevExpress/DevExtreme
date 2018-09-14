@@ -215,7 +215,11 @@ exports.DataProvider = Class.inherit({
         sourceCellRef = sourceCellRef || {};
 
         if(rowIndex < this.getHeaderRowCount()) {
-            return this._getHeaderCellValue(rowIndex, cellIndex);
+            const columnsRow = this.getColumns(true)[rowIndex];
+            column = columnsRow[cellIndex];
+            sourceCellRef.rowType = 'header';
+            sourceCellRef.column = column && column.gridColumn;
+            return column && column.caption;
         } else {
             rowIndex -= this.getHeaderRowCount();
         }
@@ -224,6 +228,8 @@ exports.DataProvider = Class.inherit({
 
         if(item) {
             itemValues = item.values;
+            sourceCellRef.rowType = item.rowType;
+            sourceCellRef.column = columns[cellIndex] && columns[cellIndex].gridColumn;
             switch(item.rowType) {
                 case "groupFooter":
                 case "totalFooter":
@@ -249,24 +255,22 @@ exports.DataProvider = Class.inherit({
                     }
                     break;
                 default:
+                    let result;
                     column = columns[cellIndex];
                     if(column) {
                         value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
-                        const result = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // like 'ui.grid_core.rows.js: _getCellOptions'
-
-                        sourceCellRef.row = {  // contains values of the 'cellPrepared.e.{ data, rowType, rowIndex, key }' properties
-                            data: item.data,
-                            key: item.data,
-                            rowIndex: rowIndex,
-                            rowType: item.rowType,
-                        };
-                        sourceCellRef.column = column.gridColumn; // contains value of the  'cellPrepared.e.columnIndex' property
-                        sourceCellRef.value = itemValues[correctedCellIndex];
-                        sourceCellRef.displayValue = value;
-                        sourceCellRef.text = gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
-
-                        return result;
+                        result = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // similar to 'ui.grid_core.rows.js: _getCellOptions'
                     }
+                    sourceCellRef.row = {
+                        data: item.data,
+                        key: item.data,
+                        // rowIndex: rowIndex,
+                        rowType: item.rowType,
+                    };
+                    sourceCellRef.value = itemValues[correctedCellIndex];
+                    sourceCellRef.displayValue = value;
+                    sourceCellRef.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
+                    return result;
             }
         }
     },

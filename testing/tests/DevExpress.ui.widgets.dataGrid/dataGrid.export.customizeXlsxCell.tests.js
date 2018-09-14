@@ -106,7 +106,7 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for DataGrid with data row with various data types", function(assert) {
+QUnit.test("Check event arguments for data row cell with various data types", function(assert) {
     const testConfigArray = [
         { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
         { dataType: "string", values: [undefined, null, '', 's'], expectedTexts: ['', '', '', 's' ] },
@@ -139,7 +139,7 @@ QUnit.test("Check event arguments for DataGrid with data row with various data t
                 const result = [];
                 for(let i = 0; i < config.values.length; i++) {
                     result.push({
-                        row: { data: ds[i], key: ds[i], rowIndex: i, rowType: 'data' },
+                        row: { data: ds[i], key: ds[i], rowType: 'data' },
                         column: grid.columnOption(0),
                         value: config.values[i],
                         displayValue: config.expectedDisplayValues ? config.expectedDisplayValues[i] : config.values[i],
@@ -152,7 +152,7 @@ QUnit.test("Check event arguments for DataGrid with data row with various data t
     });
 });
 
-QUnit.test("Check event arguments for DataGrid with data row with number cell value with formatting", function(assert) {
+QUnit.test("Check event arguments for data row cell with formatting", function(assert) {
     const ds = [
         { field1: 1 }
     ];
@@ -163,18 +163,20 @@ QUnit.test("Check event arguments for DataGrid with data row with number cell va
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], key: ds[0], rowIndex: 0, rowType: 'data' }, column: grid.columnOption(0), value: ds[0].field1, displayValue: ds[0].field1, text: '$1' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].field1, displayValue: ds[0].field1, text: '$1' },
         ]
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with header row", function(assert) {
+QUnit.test("Check event arguments for header", function(assert) {
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "field1", caption: "Field1" }],
             dataSource: [],
         },
-        (grid) => [{ value: 'Field1', column: grid.columnOption(0) }]
+        (grid) => [
+            { rowType: 'header', column: grid.columnOption(0) },
+        ]
     );
 });
 
@@ -243,27 +245,29 @@ QUnit.test("Check e.XXX for DataGrid with groupping 2 levels", function(assert) 
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with group summary", function(assert) {
+QUnit.test("Check event arguments for group summary", function(assert) {
+    const ds = [{ field1: 'str1', field2: 1 }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "field1", caption: "Field1", groupIndex: 0 },
                 { dataField: "field2", caption: "Field2" },
             ],
-            dataSource: [{ field1: 'str1', field2: 1 }],
+            dataSource: ds,
             summary: {
                 groupItems: [{ column: 'field2', summaryType: 'sum' }]
             },
         },
         (grid) => [
-            { value: 'Field2', column: 'check cellPrepared' },
-            { value: 'Field1: str1 (Sum of Field2 is 1)', column: 'check cellPrepared' },
-            { value: 1, column: 'check cellPrepared' },
+            { column: grid.columnOption(1), rowType: 'header' },
+            { column: grid.columnOption(1), rowType: 'group' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].field2, displayValue: ds[0].field2, text: '1' },
         ]
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with group summary with alignByColumn", function(assert) {
+QUnit.test("Check event arguments for group summary with alignByColumn", function(assert) {
+    const ds = [{ field1: 'f1', field2: 'f2', field3: 'f3', field4: 'f4' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
@@ -272,100 +276,100 @@ QUnit.test("Check e.XXX for DataGrid with group summary with alignByColumn", fun
                 { dataField: "field3", caption: "Field3" },
                 { dataField: "field4", caption: "Field4" },
             ],
-            dataSource: [{ field1: 'f1', field2: 'f2', field3: 'f3', field4: 'f4' }],
+            dataSource: ds,
             summary: {
                 groupItems: [{ column: 'field3', summaryType: 'count' }, { column: 'field4', summaryType: 'count', alignByColumn: true }]
             },
         },
         (grid) => [
-            { value: 'Field3', column: 'check cellPrepared' },
-            { value: 'Field4', column: 'check cellPrepared' },
-            { value: 'Field1: f1 (Count: 1)', column: 'check cellPrepared' },
-            { value: 'Count: 1', column: 'check cellPrepared' },
-            { value: 'Field2: f2 (Count: 1)', column: 'check cellPrepared' },
-            { value: 'Count: 1', column: 'check cellPrepared' },
-            { value: 'f3', column: 'check cellPrepared' },
-            { value: 'f4', column: 'check cellPrepared' },
+            { column: grid.columnOption(2), rowType: 'header' },
+            { column: grid.columnOption(3), rowType: 'header' },
+            { column: grid.columnOption(2), rowType: 'group' },
+            { column: grid.columnOption(3), rowType: 'group' },
+            { column: grid.columnOption(2), rowType: 'group' },
+            { column: grid.columnOption(3), rowType: 'group' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].field3, displayValue: ds[0].field3, text: 'f3' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].field4, displayValue: ds[0].field4, text: 'f4' },
+
         ]
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with group summary with showInGroupFooter", function(assert) {
+QUnit.test("Check event arguments for group summary with showInGroupFooter", function(assert) {
+    const ds = [
+        { f1: '1_f1', f2: '1_f2', f3: '1_f3', f4: '1_f4' },
+        { f1: '2_f1', f2: '2_f2', f3: '2_f3', f4: '2_f4' }
+    ];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
-                { dataField: "field1", caption: "Field1", groupIndex: 0 },
-                { dataField: "field2", caption: "Field2" },
-                { dataField: "field3", caption: "Field3" },
-                { dataField: "field4", caption: "Field4" },
+                { dataField: "f1", groupIndex: 0 },
+                { dataField: "f2" },
+                { dataField: "f3" },
+                { dataField: "f4" },
             ],
-            dataSource: [
-                { field1: '1_f1', field2: '1_f2', field3: '1_f3', field4: '1_f4' },
-                { field1: '2_f1', field2: '2_f2', field3: '2_f3', field4: '2_f4' }
-            ],
+            dataSource: ds,
             summary: {
-                groupItems: [{ column: 'field3', summaryType: 'count', showInGroupFooter: true }, { column: 'field4', summaryType: 'count', showInGroupFooter: true }]
+                groupItems: [{ column: 'f3', summaryType: 'count', showInGroupFooter: true }, { column: 'f4', summaryType: 'count', showInGroupFooter: true }]
             },
         },
         (grid) => [
-            { value: 'Field2', column: grid.columnOption(1) },
-            { value: 'Field3', column: grid.columnOption(2) },
-            { value: 'Field4', column: grid.columnOption(3) },
-            { value: 'Field1: 1_f1', column: 'check cellPrepared' },
-            { value: undefined, column: 'check cellPrepared' },
-            { value: undefined, column: 'check cellPrepared' },
-            { value: '1_f2', column: grid.columnOption(1) },
-            { value: '1_f3', column: grid.columnOption(2) },
-            { value: '1_f4', column: grid.columnOption(3) },
-            { value: undefined, column: 'check cellPrepared' },
-            { value: 'Count: 1', column: 'check cellPrepared' },
-            { value: 'Count: 1', column: 'check cellPrepared' },
-            { value: 'Field1: 2_f1', column: grid.columnOption(0) },
-            { value: undefined, column: 'check cellPrepared' },
-            { value: undefined, column: 'check cellPrepared' },
-            { value: '2_f2', column: grid.columnOption(1) },
-            { value: '2_f3', column: grid.columnOption(2) },
-            { value: '2_f4', column: grid.columnOption(3) },
-            { value: undefined, column: 'check cellPrepared' },
-            { value: 'Count: 1', column: 'check cellPrepared' },
-            { value: 'Count: 1', column: 'check cellPrepared' },
+            { column: grid.columnOption(1), rowType: 'header' },
+            { column: grid.columnOption(2), rowType: 'header' },
+            { column: grid.columnOption(3), rowType: 'header' },
+            { column: grid.columnOption(1), rowType: 'group' },
+            { column: grid.columnOption(2), rowType: 'group' },
+            { column: grid.columnOption(3), rowType: 'group' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1_f2' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: '1_f3' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: '1_f4' },
+            { column: grid.columnOption(1), rowType: 'groupfooter' },
+            { column: grid.columnOption(2), rowType: 'groupfooter' },
+            { column: grid.columnOption(3), rowType: 'groupfooter' },
+            { column: grid.columnOption(1), rowType: 'group' },
+            { column: grid.columnOption(2), rowType: 'group' },
+            { column: grid.columnOption(3), rowType: 'group' },
+            { row: { data: ds[1], key: ds[1], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[1].f2, displayValue: ds[1].f2, text: '2_f2' },
+            { row: { data: ds[1], key: ds[1], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[1].f3, displayValue: ds[1].f3, text: '2_f3' },
+            { row: { data: ds[1], key: ds[1], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[1].f4, displayValue: ds[1].f4, text: '2_f4' },
+            { column: grid.columnOption(1), rowType: 'groupfooter' },
+            { column: grid.columnOption(2), rowType: 'groupfooter' },
+            { column: grid.columnOption(3), rowType: 'groupfooter' },
         ]
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with total summary", function(assert) {
+QUnit.test("Check event arguments for total summary", function(assert) {
+    const ds = [{ field1: 1 }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "field1", dataType: "number" }],
-            dataSource: [{ field1: 1 }],
+            dataSource: ds,
             summary: {
                 totalItems: [{ column: 'field1', summaryType: 'sum' }]
             },
             showColumnHeaders: false,
         },
         (grid) => [
-            { value: 1, column: grid.columnOption(0) },
-            { value: 'Sum: 1', column: 'check cellPrepared' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].field1, displayValue: ds[0].field1, text: '1' },
+            { column: grid.columnOption(0), rowType: 'totalFooter' },
         ]
     );
 });
 
-QUnit.test("Check e.XXX with customizeExportData changes", function(assert) {
+QUnit.test("Check event arguments for changes from customizeExportData", function(assert) {
+    const ds = [{ field1: 'f1' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
-            dataSource: [{ field1: 'f1' }],
+            dataSource: ds,
             customizeExportData: (columns, rows) => {
-                rows.forEach(row => {
-                    for(let i = 0; i < row.values.length; i++) {
-                        row.values[i] += '_customize';
-                    }
-                });
+                rows.forEach(row => row.values.forEach((value, valueIndex) => row.values[valueIndex] += '+'));
             },
             showColumnHeaders: false,
         },
         (grid) => [
-            { value: 'f1_customize', column: grid.columnOption(0) },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: 'f1+', displayValue: 'f1+', text: 'f1+' },
         ]
     );
 });

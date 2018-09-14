@@ -92,7 +92,9 @@ const dataGridExportTestsHelper = {
                     }
                 }
 
-                assert.ok(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column), `isDefined(actualColumn && expectedColumn), ${i}`);
+                assert.ok(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column) ||
+                    !typeUtils.isDefined(actualGridCell.column) && !typeUtils.isDefined(expectedGridCell.column),
+                    `actualColumn === expectedColumn, ${i}`);
                 if(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column)) {
                     assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `column.dataField, ${i}`);
                     assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `column.dataType, ${i}`);
@@ -100,7 +102,9 @@ const dataGridExportTestsHelper = {
                     assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `column.index, ${i}`);
                 }
 
-                assert.ok(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row), `isDefined(actualRow && expectedRow), ${i}`);
+                assert.ok(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row) ||
+                    !typeUtils.isDefined(actualGridCell.row) && !typeUtils.isDefined(expectedGridCell.row),
+                    `actualRow === expectedRow, ${i}`);
                 if(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row)) {
                     assert.strictEqual(actualGridCell.row.data, expectedGridCell.row.data, `row.data, ${i}`);
                     assert.strictEqual(actualGridCell.row.key, expectedGridCell.row.key, `row.key, ${i}`);
