@@ -2475,6 +2475,62 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     }
 });
 
+// T670844
+QUnit.test("Resize column if all columns have percent widths and columnResizingMode is nextColumn", function(assert) {
+    $("#container").width(200);
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columnResizingMode: "nextColumn",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: "50%" },
+                { dataField: "field2", width: "50%" },
+                { dataField: "field3", width: "50%" },
+                { dataField: "field4", width: "50%" }
+            ]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition + 25,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    instance.updateDimensions();
+
+    // assert
+    assert.strictEqual(instance.$element().children().width(), 200);
+    assert.strictEqual(instance.columnOption(0, "width"), "75.000%");
+    assert.strictEqual(instance.columnOption(1, "width"), "25.000%");
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
+        assert.strictEqual(headersCols[0].style.width, "75%");
+        assert.strictEqual(headersCols[1].style.width, "25%");
+    }
+});
+
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget and grid's width is 100%", function(assert) {
     $("#container").width(300);
     // arrange

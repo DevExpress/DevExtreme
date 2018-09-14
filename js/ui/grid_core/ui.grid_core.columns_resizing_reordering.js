@@ -797,11 +797,15 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             nextColumn,
             cellWidth;
 
+        function isPercentWidth(width) {
+            return typeUtils.isString(width) && width.slice(-1) === "%";
+        }
+
         function setColumnWidth(column, columnWidth, contentWidth, adaptColumnWidthByRatio) {
             if(column) {
                 var oldColumnWidth = column.width;
                 if(oldColumnWidth) {
-                    adaptColumnWidthByRatio = typeUtils.isString(oldColumnWidth) && oldColumnWidth.slice(-1) === "%";
+                    adaptColumnWidthByRatio = isPercentWidth(oldColumnWidth);
                 }
 
                 if(adaptColumnWidthByRatio) {
@@ -812,6 +816,26 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                     column && columnsController.columnOption(column.index, "width", columnWidth);
                 }
             }
+        }
+
+        function correctContentWidth(contentWidth, visibleColumns) {
+            var allColumnsHaveWidth = visibleColumns.every(column => column.width),
+                totalPercent;
+
+            if(allColumnsHaveWidth) {
+                totalPercent = visibleColumns.reduce((sum, column) => {
+                    if(isPercentWidth(column.width)) {
+                        sum += parseFloat(column.width);
+                    }
+                    return sum;
+                }, 0);
+
+                if(totalPercent > 0) {
+                    contentWidth = contentWidth / totalPercent * 100;
+                }
+            }
+
+            return contentWidth;
         }
 
         deltaX = posX - resizingInfo.startPosX;
@@ -834,6 +858,9 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             columnsController.beginUpdate();
 
             cellWidth = Math.floor(cellWidth);
+
+            contentWidth = correctContentWidth(contentWidth, visibleColumns);
+
             setColumnWidth(column, cellWidth, contentWidth, adaptColumnWidthByRatio);
 
             if(isNextColumnMode) {
