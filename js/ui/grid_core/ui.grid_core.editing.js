@@ -1311,7 +1311,7 @@ var EditingController = modules.ViewController.inherit((function() {
         cancelEditData: function() {
             var that = this,
                 editMode = getEditMode(that),
-                rowIndex = this._editRowIndex,
+                rowIndex = this._getVisibleEditRowIndex(),
                 dataController = that._dataController;
 
             that._beforeCancelEditData();
