@@ -1,7 +1,7 @@
 var $ = require("../../core/renderer"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type");
+    isDefined = require("../../core/utils/type").isDefined;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused";
 
@@ -10,16 +10,18 @@ exports.FocusController = gridCore.Controller.inherit((function() {
         init: function() {
             var that = this,
                 focusedRowIndex,
-                focusedRowKey;
+                focusedRowKey,
+                focusedRowEnabled;
 
             that.dataController = that.getController("data");
 
             focusedRowIndex = that.option("focusedRowIndex");
             focusedRowKey = that.option("focusedRowKey");
+            focusedRowEnabled = that.option("focusedRowEnabled");
             if(focusedRowIndex && focusedRowKey) {
                 that.option("focusedRowIndex", -1);
             }
-            if(!that.option("focusedRowEnabled") || focusedRowIndex >= 0 || typeUtils.isDefined(focusedRowKey)) {
+            if(!isDefined(focusedRowEnabled) && (isDefined(focusedRowIndex) && focusedRowIndex >= 0 || isDefined(focusedRowKey))) {
                 that.option("focusedRowEnabled", true);
             }
         },
@@ -31,12 +33,12 @@ exports.FocusController = gridCore.Controller.inherit((function() {
             if(args.value !== args.previousValue) {
                 if(args.name === "focusedRowIndex") {
                     rowKey = that.dataController.getKeyByRowIndex(args.value);
-                    if(typeUtils.isDefined(rowKey)) {
+                    if(isDefined(rowKey)) {
                         that.option("focusedRowKey", rowKey);
                     }
                 } else if(args.name === "focusedRowKey") {
                     rowKey = args.value;
-                    if(typeUtils.isDefined(rowKey)) {
+                    if(isDefined(rowKey)) {
                         that.dataController.updateItems({
                             changeType: "updateFocusedRow",
                             focusedRowKey: args.value
@@ -130,7 +132,9 @@ module.exports = {
                         changedItem;
 
                     if(change.changeType === "updateFocusedRow") {
+
                         tableElements.find(".dx-row").removeClass(ROW_FOCUSED_CLASS);
+
                         if(tableElements.length > 0) {
                             each(tableElements, function(_, tableElement) {
                                 changedItem = change.items[rowIndex];
