@@ -1265,6 +1265,10 @@ var dxChart = AdvancedChart.inherit({
                 if(arg.fullName) {
                     axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
                 }
+                if(axisPath === "argumentAxis") {
+                    this.getArgumentAxis().visualRange(arg.value);
+                    return;
+                }
                 const axis = this._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
                 if(axis) {
                     axis.visualRange(arg.value);
