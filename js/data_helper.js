@@ -79,8 +79,8 @@ var DataHelperMixin = {
 
     _addDataSourceChangeHandler: function() {
         var dataSource = this._dataSource;
-        this._proxiedDataSourceChangedHandler = (function() {
-            this[DATA_SOURCE_CHANGED_METHOD](dataSource.items());
+        this._proxiedDataSourceChangedHandler = (function(e) {
+            this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
         }).bind(this);
         dataSource.on("changed", this._proxiedDataSourceChangedHandler);
     },

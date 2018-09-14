@@ -631,3 +631,15 @@ QUnit.test("function context is current Store's instance", function(assert) {
     store.remove();
     store.totalCount();
 });
+
+QUnit.test("push", function(assert) {
+    var onPushSpy = sinon.spy(),
+        changes = [{ type: "remove", key: 0 }],
+        store = new CustomStore({
+            onPush: onPushSpy
+        });
+
+    store.push(changes);
+    assert.equal(onPushSpy.callCount, 1);
+    assert.equal(onPushSpy.firstCall.args[0].changes, changes);
+});

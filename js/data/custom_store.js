@@ -392,6 +392,12 @@ var CustomStore = Store.inherit({
         return d.promise();
     },
 
+    _pushImpl: function(changes) {
+        if(this.__rawData) {
+            dataUtils.arrayHelper.push(this.__rawData, changes, this);
+        }
+    },
+
     _loadImpl: function(options) {
         var d = new Deferred();
 

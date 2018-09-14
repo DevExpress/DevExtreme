@@ -1,11 +1,17 @@
-var isFunction = require("../core/utils/type").isFunction,
-    domAdapter = require("../core/dom_adapter"),
-    ready = require("../core/utils/ready_callbacks").add,
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    map = require("../core/utils/iterator").map,
-    toComparable = require("../core/utils/data").toComparable,
-    Deferred = require("../core/utils/deferred").Deferred;
+import { isFunction, isPlainObject, isEmptyObject } from "../core/utils/type";
+import Guid from "../core/guid";
+import domAdapter from "../core/dom_adapter";
+import { add as ready } from "../core/utils/ready_callbacks";
+import { extend } from "../core/utils/extend";
+import windowUtils from "../core/utils/window";
+import { map } from "../core/utils/iterator";
+import { errors } from "./errors";
+import objectUtils from "../core/utils/object";
+import { toComparable } from "../core/utils/data";
+import { Deferred } from "../core/utils/deferred";
+import { noop } from "../core/utils/common";
+
+var window = windowUtils.getWindow();
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -226,6 +232,154 @@ var isUnaryOperation = function(crit) {
     return crit[0] === "!" && Array.isArray(crit[1]);
 };
 
+var trivialPromise = function() {
+    var d = new Deferred();
+    return d.resolve.apply(d, arguments).promise();
+};
+
+var rejectedPromise = function() {
+    var d = new Deferred();
+    return d.reject.apply(d, arguments).promise();
+};
+
+function ArrayHelper() {
+    var hasKey = function(target, keyOrKeys) {
+        var key,
+            keys = typeof keyOrKeys === "string" ? keyOrKeys.split() : keyOrKeys.slice();
+
+        while(keys.length) {
+            key = keys.shift();
+            if(key in target) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    this.push = function(array, batchData, keyInfo) {
+        batchData.forEach(item => {
+            switch(item.type) {
+                case "update": this.updateArrayItem(array, item.key, item.data, keyInfo); break;
+                case "insert": this.insertItemToArray(array, item.data, keyInfo); break;
+                case "remove": this.removeItemFromArray(array, item.key, keyInfo); break;
+            }
+        });
+    };
+
+    this.updateArrayItem = function(array, key, data, keyInfo) {
+        var target,
+            extendComplexObject = true,
+            keyExpr = keyInfo.key();
+
+        if(keyExpr) {
+            if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
+                return rejectedPromise(errors.Error("E4017"));
+            }
+
+            let index = this.indexByKey(array, key, keyInfo);
+            if(index < 0) {
+                return rejectedPromise(errors.Error("E4009"));
+            }
+
+            target = array[index];
+        } else {
+            target = key;
+        }
+
+        objectUtils.deepExtendArraySafe(target, data, extendComplexObject);
+        return trivialPromise(key, data);
+    };
+
+    this.insertItemToArray = function(array, data, keyInfo) {
+        var keyValue,
+            obj,
+            keyExpr = keyInfo.key();
+
+        obj = isPlainObject(data) ? extend({}, data) : data;
+
+        if(keyExpr) {
+            keyValue = keyInfo.keyOf(obj);
+            if(keyValue === undefined || typeof keyValue === "object" && isEmptyObject(keyValue)) {
+                if(Array.isArray(keyExpr)) {
+                    throw errors.Error("E4007");
+                }
+                keyValue = obj[keyExpr] = String(new Guid());
+            } else {
+                if(array[this.indexByKey(array, keyValue, keyInfo)] !== undefined) {
+                    return rejectedPromise(errors.Error("E4008"));
+                }
+            }
+        } else {
+            keyValue = obj;
+        }
+
+        array.push(obj);
+        return trivialPromise(data, keyValue);
+    };
+
+    this.removeItemFromArray = function(array, key, keyInfo) {
+        var index = this.indexByKey(array, key, keyInfo);
+        if(index > -1) {
+            array.splice(index, 1);
+        }
+        return trivialPromise(key);
+    };
+
+    this.indexByKey = function(array, key, keyInfo) {
+        var keyExpr = keyInfo.key();
+        for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
+            if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
+                return i;
+            }
+        }
+        return -1;
+    };
+}
+
+function Throttle(func, timeout) {
+    let timeoutId,
+        lastArgs;
+    this.execute = function() {
+        lastArgs = arguments;
+        if(!timeoutId) {
+            timeoutId = setTimeout(() => {
+                timeoutId = undefined;
+                if(lastArgs) {
+                    func.call(this, lastArgs);
+                }
+            }, timeout);
+        }
+    };
+    this.dispose = function() {
+        clearTimeout(timeoutId);
+    };
+};
+
+function ThrottleWithAggregation(func, timeout) {
+    if(!timeout) {
+        this.execute = func;
+        this.dispose = noop;
+    } else {
+        let cache = [],
+            throttle = new Throttle(function() {
+                func.call(this, cache);
+                cache = [];
+            }, timeout);
+
+        this.execute = function(changes) {
+            if(Array.isArray(changes)) {
+                cache.push(...changes);
+            }
+            throttle.execute.call(this, cache);
+        };
+
+        this.dispose = function() {
+            throttle.dispose();
+        };
+    }
+}
+
 /**
 * @name Utils
 */
@@ -238,6 +392,11 @@ var utils = {
     aggregators: aggregators,
 
     keysEqual: keysEqual,
+    arrayHelper: new ArrayHelper(),
+    ThrottleWithAggregation: ThrottleWithAggregation,
+    Throttle: Throttle,
+    trivialPromise: trivialPromise,
+    rejectedPromise: rejectedPromise,
 
     isDisjunctiveOperator: isDisjunctiveOperator,
     isConjunctiveOperator: isConjunctiveOperator,

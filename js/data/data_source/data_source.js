@@ -206,10 +206,20 @@ var DataSource = Class.inherit({
         */
 
         /**
+        * @name DataSourceOptions.pushAggregationTimeout
+        * @type number
+        * @default undefined
+        */
+        this._pushThrottle = new dataUtils.ThrottleWithAggregation(this._onPush, options.pushAggregationTimeout);
+
+        this._onPushHandler = (e) => { this._pushThrottle.execute.call(this, e.changes); };
+
+        /**
         * @name DataSourceOptions.store
         * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
+        this._store.on("push", this._onPushHandler);
 
         /**
         * @name DataSourceOptions.sort
@@ -302,6 +312,13 @@ var DataSource = Class.inherit({
         */
         this._paginate = options.paginate;
 
+        /**
+        * @name DataSourceOptions.reshapeOnPush
+        * @type Boolean
+        * @default false
+        */
+        this.reshapeOnPush = __isDefined(options.reshapeOnPush) ? options.reshapeOnPush : false;
+
         iteratorUtils.each(
             [
                 /**
@@ -359,7 +376,9 @@ var DataSource = Class.inherit({
     * @publicName dispose()
     */
     dispose: function() {
+        this._store.off("push", this._onPushHandler);
         this._disposeEvents();
+        this._pushThrottle.dispose();
 
         delete this._store;
 
@@ -804,6 +823,19 @@ var DataSource = Class.inherit({
         return d.promise({
             operationId: loadOperation.operationId
         });
+    },
+
+    _onPush: function(changes) {
+        if(this.reshapeOnPush) {
+            this.load();
+        } else {
+            if(this.paginate()) {
+                changes = changes.filter(item => item.type === "update");
+            }
+
+            dataUtils.arrayHelper.push(this.items(), changes, this.store());
+            this.fireEvent("changed", [{ changes: changes }]);
+        }
     },
 
     _createLoadOperation: function(deferred) {
