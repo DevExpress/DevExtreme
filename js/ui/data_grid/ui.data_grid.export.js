@@ -263,7 +263,7 @@ exports.DataProvider = Class.inherit({
                         sourceCellRef.column = column.gridColumn; // contains value of the  'cellPrepared.e.columnIndex' property
                         sourceCellRef.value = itemValues[correctedCellIndex];
                         sourceCellRef.displayValue = value;
-                        sourceCellRef.text = gridCoreUtils.formatValue(value, column);
+                        sourceCellRef.text = gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
 
                         return result;
                     }

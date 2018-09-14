@@ -106,7 +106,7 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for various data types", function(assert) {
+QUnit.test("Check event arguments for DataGrid with data row with various data types", function(assert) {
     const testConfigArray = [
         { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
         { dataType: "string", values: [undefined, null, '', 's'], expectedTexts: ['', '', '', 's' ] },
