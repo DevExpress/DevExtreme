@@ -18,12 +18,7 @@ module.exports = {
         'globalize/date': 'window.Globalize',
         'globalize/message': 'window.Globalize'
     },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            use: {
-                loader: 'babel-loader'
-            }
-        }]
+    resolve: {
+        modules: ['artifacts/transpiled/quill_modules', 'node_modules']
     }
 };
