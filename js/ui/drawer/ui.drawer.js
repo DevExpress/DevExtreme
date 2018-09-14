@@ -13,7 +13,6 @@ import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import pointerEvents from "../../events/pointer";
-import translator from "../../animation/translator";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -435,7 +434,7 @@ const Drawer = Widget.inherit({
         $(this.content()).css("marginLeft", 0);
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
-        translator.move($(this.viewContent()), { left: 0 });
+        $(this.viewContent()).css("transform", "translate(0px, 0px)");
     },
 
     _optionChanged(args) {
