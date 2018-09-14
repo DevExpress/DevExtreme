@@ -448,9 +448,6 @@ const Drawer = Widget.inherit({
                 this._toggleVisibleClass(args.value);
                 break;
             case "position":
-                // NOTE: temporary fix
-                this._invalidate();
-                break;
             case "contentTemplate":
             case "template":
                 this._invalidate();
@@ -470,10 +467,9 @@ const Drawer = Widget.inherit({
                 this._renderPosition(this.option("opened"), false);
                 break;
             case "revealMode":
+                this._setInitialPosition();
                 this._refreshRevealModeClass(args.previousValue);
-
-                // NOTE: temporary fix
-                this.repaint();
+                this._renderPosition(this.option("opened"), false);
                 break;
             case "shading":
                 this._refreshModeClass(args.previousValue);
