@@ -210,38 +210,40 @@ QUnit.test("Check event arguments for bands", function(assert) {
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with groupping 1 level", function(assert) {
+QUnit.test("Check event arguments for groupping 1 level", function(assert) {
+    const ds = [{ f1: 'f1', f2: 'f2' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
-                { dataField: "field1", caption: "Field1", groupIndex: 0 },
-                { dataField: "field2", caption: "Field2" },
+                { dataField: "f1", groupIndex: 0 },
+                { dataField: "f2" },
             ],
-            dataSource: [{ field1: 'f1', field2: 'f2' }],
+            dataSource: ds,
         },
         (grid) => [
-            { value: 'Field2', column: 'check cellPrepared' },
-            { value: 'Field1: f1', column: 'check cellPrepared' },
-            { value: 'f2', column: 'check cellPrepared' },
+            { rowType: 'header', column: grid.columnOption(1) },
+            { rowType: 'group', column: grid.columnOption(0) },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
         ]
     );
 });
 
 QUnit.test("Check e.XXX for DataGrid with groupping 2 levels", function(assert) {
+    const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
-                { dataField: "field1", caption: "Field1", groupIndex: 0 },
-                { dataField: "field2", caption: "Field2", groupIndex: 1 },
-                { dataField: "field3", caption: "Field3" },
+                { dataField: "f1", groupIndex: 0 },
+                { dataField: "f2", groupIndex: 1 },
+                { dataField: "f3" },
             ],
-            dataSource: [{ field1: 'f1', field2: 'f2', field3: 'f3' }],
+            dataSource: ds,
         },
         (grid) => [
-            { value: 'Field3', column: 'check cellPrepared' },
-            { value: 'Field1: f1', column: 'check cellPrepared' },
-            { value: 'Field2: f2', column: 'check cellPrepared' },
-            { value: 'f3', column: 'check cellPrepared' },
+            { rowType: 'header', column: grid.columnOption(2) },
+            { rowType: 'group', column: grid.columnOption(0) },
+            { rowType: 'group', column: grid.columnOption(1) },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
         ]
     );
 });
