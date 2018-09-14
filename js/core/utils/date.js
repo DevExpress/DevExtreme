@@ -321,7 +321,8 @@ var getViewMinBoundaryDate = function(viewType, date) {
 };
 
 var getViewMaxBoundaryDate = function(viewType, date) {
-    var resultDate = new Date(date.getFullYear(), date.getMonth(), getLastMonthDay(date));
+    var resultDate = new Date(date);
+    resultDate.setDate(getLastMonthDay(date));
 
     if(viewType === "month") {
         return resultDate;
