@@ -121,7 +121,7 @@ QUnit.test("drawer preserve content", assert => {
     assert.equal($content[0], $element.find("#content")[0]);
 });
 
-QUnit.test("show and hide functions", assert => {
+QUnit.test("show and hide", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
 
@@ -132,7 +132,7 @@ QUnit.test("show and hide functions", assert => {
     assert.equal(instance.option("opened"), false, "menu was hidden");
 });
 
-QUnit.test("toggle function", assert => {
+QUnit.test("toggle", assert => {
     const $element = $("#drawer").dxDrawer({});
     const instance = $element.dxDrawer("instance");
     const opened = instance.option("opened");
@@ -199,6 +199,19 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
         fx.stop = origFxStop;
     }
 });
+
+QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "push"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "shrink");
+    instance.option("openedStateMode", "overlap");
+
+    assert.ok(true, "Drawer works correctly");
+});
+
 QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if menu isn't visible", assert => {

@@ -13,6 +13,7 @@ import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import pointerEvents from "../../events/pointer";
+import translator from "../../animation/translator";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -414,6 +415,28 @@ const Drawer = Widget.inherit({
         this.$element().toggleClass(OPENED_STATE_CLASS, opened);
     },
 
+    _refreshPanel() {
+        if(this._overlay) {
+            this._overlay && this._overlay._dispose();
+
+            delete this._overlay;
+            delete this._$panel;
+            this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
+            this._$wrapper.prepend(this._$panel);
+        }
+
+        this._$panel.empty();
+
+        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+    },
+
+    _setInitialPosition() {
+        $(this.content()).css("left", 0);
+        $(this.content()).css("marginLeft", 0);
+        $(this.viewContent()).css("paddingLeft", 0);
+        $(this.viewContent()).css("left", 0);
+        translator.move($(this.viewContent()), { left: 0 });
+    },
 
     _optionChanged(args) {
         switch(args.name) {
@@ -435,21 +458,17 @@ const Drawer = Widget.inherit({
                 break;
             case "openedStateMode":
                 this._initStrategy();
-                this._$panel.css("left", 0);
-                this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("opened"));
 
-                // NOTE: temporary fix
-                this.repaint();
+                this._setInitialPosition();
+                this._refreshPanel();
+
+                this._refreshModeClass(args.previousValue);
+                this._renderPosition(this.option("opened"), false);
                 break;
             case "minSize":
             case "maxSize":
                 this._initSize();
-                this._$panel.css("left", 0);
-                this._renderPosition(this.option("opened"));
-
-                // NOTE: temporary fix
-                this.repaint();
+                this._renderPosition(this.option("opened"), false);
                 break;
             case "revealMode":
                 this._refreshRevealModeClass(args.previousValue);
