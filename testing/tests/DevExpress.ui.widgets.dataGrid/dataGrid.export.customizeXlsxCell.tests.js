@@ -153,17 +153,15 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
 });
 
 QUnit.test("Check event arguments for data row cell with formatting", function(assert) {
-    const ds = [
-        { field1: 1 }
-    ];
+    const ds = [{ f1: 1 }];
     helper.runCustomizeXlsxCellTest(assert,
         {
-            columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
+            columns: [{ dataField: "f1", dataType: "number", format: "currency" }],
             dataSource: ds,
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].field1, displayValue: ds[0].field1, text: '$1' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '$1' },
         ]
     );
 });
@@ -171,7 +169,7 @@ QUnit.test("Check event arguments for data row cell with formatting", function(a
 QUnit.test("Check event arguments for header", function(assert) {
     helper.runCustomizeXlsxCellTest(assert,
         {
-            columns: [{ dataField: "field1", caption: "Field1" }],
+            columns: [{ dataField: "f1" }],
             dataSource: [],
         },
         (grid) => [
@@ -249,39 +247,39 @@ QUnit.test("Check e.XXX for DataGrid with groupping 2 levels", function(assert) 
 });
 
 QUnit.test("Check event arguments for group summary", function(assert) {
-    const ds = [{ field1: 'str1', field2: 1 }];
+    const ds = [{ f1: 'str1', f2: 1 }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
-                { dataField: "field1", caption: "Field1", groupIndex: 0 },
-                { dataField: "field2", caption: "Field2" },
+                { dataField: "f1", groupIndex: 0 },
+                { dataField: "f2", },
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ column: 'field2', summaryType: 'sum' }]
+                groupItems: [{ column: 'f2', summaryType: 'sum' }]
             },
         },
         (grid) => [
             { column: grid.columnOption(1), rowType: 'header' },
             { column: grid.columnOption(1), rowType: 'group' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].field2, displayValue: ds[0].field2, text: '1' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1' },
         ]
     );
 });
 
 QUnit.test("Check event arguments for group summary with alignByColumn", function(assert) {
-    const ds = [{ field1: 'f1', field2: 'f2', field3: 'f3', field4: 'f4' }];
+    const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
-                { dataField: "field1", caption: "Field1", groupIndex: 0 },
-                { dataField: "field2", caption: "Field2", groupIndex: 1 },
-                { dataField: "field3", caption: "Field3" },
-                { dataField: "field4", caption: "Field4" },
+                { dataField: "f1", groupIndex: 0 },
+                { dataField: "f2", groupIndex: 1 },
+                { dataField: "f3" },
+                { dataField: "f4" },
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ column: 'field3', summaryType: 'count' }, { column: 'field4', summaryType: 'count', alignByColumn: true }]
+                groupItems: [{ column: 'f3', summaryType: 'count' }, { column: 'f4', summaryType: 'count', alignByColumn: true }]
             },
         },
         (grid) => [
@@ -291,8 +289,8 @@ QUnit.test("Check event arguments for group summary with alignByColumn", functio
             { column: grid.columnOption(3), rowType: 'group' },
             { column: grid.columnOption(2), rowType: 'group' },
             { column: grid.columnOption(3), rowType: 'group' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].field3, displayValue: ds[0].field3, text: 'f3' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].field4, displayValue: ds[0].field4, text: 'f4' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: 'f4' },
 
         ]
     );
@@ -343,28 +341,28 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
 });
 
 QUnit.test("Check event arguments for total summary", function(assert) {
-    const ds = [{ field1: 1 }];
+    const ds = [{ f1: 1 }];
     helper.runCustomizeXlsxCellTest(assert,
         {
-            columns: [{ dataField: "field1", dataType: "number" }],
+            columns: [{ dataField: "f1", dataType: "number" }],
             dataSource: ds,
             summary: {
-                totalItems: [{ column: 'field1', summaryType: 'sum' }]
+                totalItems: [{ column: 'f1', summaryType: 'sum' }]
             },
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].field1, displayValue: ds[0].field1, text: '1' },
+            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '1' },
             { column: grid.columnOption(0), rowType: 'totalFooter' },
         ]
     );
 });
 
 QUnit.test("Check event arguments for changes from customizeExportData", function(assert) {
-    const ds = [{ field1: 'f1' }];
+    const ds = [{ f1: 'f1' }];
     helper.runCustomizeXlsxCellTest(assert,
         {
-            columns: [{ dataField: "field1", dataType: "string" }],
+            columns: [{ dataField: "f1", dataType: "string" }],
             dataSource: ds,
             customizeExportData: (columns, rows) => {
                 rows.forEach(row => row.values.forEach((value, valueIndex) => row.values[valueIndex] += '+'));
