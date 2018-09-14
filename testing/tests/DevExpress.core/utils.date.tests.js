@@ -570,3 +570,9 @@ QUnit.test("getViewMaxBoundaryDate", function(assert) {
     resultDate = dateUtils.getViewMaxBoundaryDate("century", initialDate);
     assert.deepEqual(resultDate, new Date(2099, 11, 31), "last decade, last year, last month and last day are set for century");
 });
+
+QUnit.test("the getViewMaxBoundaryDate method is should be return value with corrected time", function(assert) {
+    var initialDate = new Date(2018, 7, 31, 12, 13, 23);
+    var resultDate = dateUtils.getViewMaxBoundaryDate("month", initialDate);
+    assert.deepEqual(resultDate, new Date(initialDate), "last day of a month should be equal to an initial date and a time");
+});
