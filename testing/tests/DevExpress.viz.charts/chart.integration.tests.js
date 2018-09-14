@@ -494,6 +494,23 @@ QUnit.test("Set visualRange for multi axis/pane (check option method and adjustO
     assert.deepEqual(chart.option("valueAxis[1].visualRange"), { startValue: 16, endValue: 26 });
 });
 
+QUnit.test("Set argument visual range using option", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{
+            arg: 0,
+            val: 0,
+        }, {
+            arg: 2,
+            val: 10,
+        }],
+        series: {}
+    });
+
+    chart.option("argumentAxis.visualRange", { startValue: 2, endValue: 10 });
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 10 });
+});
+
 QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
     var visualRangeChanged = sinon.spy();
