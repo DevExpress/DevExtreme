@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     arrayUtils = require("../../core/utils/array"),
     dataGridCore = require("./ui.data_grid.core"),
+    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
     clientExporter = require("../../client_exporter"),
     messageLocalization = require("../../localization/message"),
@@ -69,59 +70,9 @@ exports.DataProvider = Class.inherit({
 
     customizeXlsxCell: function(e) {
         if(this._options.customizeXlsxCell) {
-            let rowIndex = e.rowIndex,
-                cellIndex = e.cellIndex;
-            const columns = this.getColumns(),
-                correctedCellIndex = this._correctCellIndex(e.cellIndex),
-                gridCell = {};
-
-            if(rowIndex < this.getHeaderRowCount()) {
-                // TODO: return this._getHeaderCellValue(rowIndex, cellIndex);
-            } else {
-                rowIndex -= this.getHeaderRowCount();
-                const item = this._options.items.length && this._options.items[rowIndex];
-
-                if(item) {
-                    const itemValues = item.values;
-                    switch(item.rowType) {
-                        case "groupFooter":
-                        case "totalFooter":
-                            // TODO
-                            // if(correctedCellIndex < itemValues.length) {
-                            //     value = itemValues[correctedCellIndex];
-                            //     if(isDefined(value)) {
-                            //         return dataGridCore.getSummaryText(value, this._options.summaryTexts);
-                            //     }
-                            // }
-                            break;
-                        case "group":
-                            // TODO
-                            // if(cellIndex < 1) {
-                            //     return this._getGroupValue(item);
-                            // } else {
-                            //     summaryItems = item.values[correctedCellIndex];
-                            //     if(Array.isArray(summaryItems)) {
-                            //         value = "";
-                            //         for(i = 0; i < summaryItems.length; i++) {
-                            //             value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
-                            //         }
-                            //         return value;
-                            //     }
-                            // }
-                            break;
-                        default:
-                            gridCell.column = columns[cellIndex].gridColumn;
-                            gridCell.value = itemValues[correctedCellIndex];
-                            // if(column) {
-                            //     value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType);
-                            //     return !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value;
-                            // }
-                    }
-                }
-            }
             this._options.customizeXlsxCell({
                 xlsxCell: e.xlsxCell,
-                gridCell
+                gridCell: e.sourceCell
             });
         }
     },
@@ -251,7 +202,7 @@ exports.DataProvider = Class.inherit({
         return row[cellIndex] && row[cellIndex].caption;
     },
 
-    getCellValue: function(rowIndex, cellIndex) {
+    getCellValue: function(rowIndex, cellIndex, sourceCellRef) {
         var column,
             value,
             i,
@@ -260,6 +211,8 @@ exports.DataProvider = Class.inherit({
             correctedCellIndex = this._correctCellIndex(cellIndex),
             itemValues,
             item;
+
+        sourceCellRef = sourceCellRef || {};
 
         if(rowIndex < this.getHeaderRowCount()) {
             return this._getHeaderCellValue(rowIndex, cellIndex);
@@ -298,8 +251,21 @@ exports.DataProvider = Class.inherit({
                 default:
                     column = columns[cellIndex];
                     if(column) {
-                        value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType);
-                        return !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value;
+                        value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
+                        const result = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // like 'ui.grid_core.rows.js: _getCellOptions'
+
+                        sourceCellRef.row = {  // contains values of the 'cellPrepared.e.{ data, rowType, rowIndex, key }' properties
+                            data: item.data,
+                            key: item.data,
+                            rowIndex: rowIndex,
+                            rowType: item.rowType,
+                        };
+                        sourceCellRef.column = column.gridColumn; // contains value of the  'cellPrepared.e.columnIndex' property
+                        sourceCellRef.value = itemValues[correctedCellIndex];
+                        sourceCellRef.displayValue = value;
+                        sourceCellRef.text = gridCoreUtils.formatValue(value, column);
+
+                        return result;
                     }
             }
         }

@@ -106,120 +106,64 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with data row with number cell value", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
+QUnit.test("Check event arguments for various data types", function(assert) {
+    const testConfigArray = [
+        { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
+        { dataType: "string", values: [undefined, null, '', 's'], expectedTexts: ['', '', '', 's' ] },
+        { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)], expectedTexts: ['', '', '12/1/2018' ] },
+        { dataType: "datetime", values: [undefined, null, new Date(2018, 11, 1, 16, 10)], expectedTexts: ['', '', '12/1/2018, 4:10 PM' ] },
+        { dataType: "boolean", values: [undefined, null, false, true], expectedTexts: ['', '', 'false', 'true' ] },
         {
-            columns: [{ dataField: "field1", dataType: "number" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: 0 }, { field1: 1 }],
-            showColumnHeaders: false,
+            dataType: "lookup", values: [undefined, null, 1], expectedDisplayValues: [undefined, undefined, 'name1' ], expectedTexts: ['', '', 'name1' ],
+            lookup: {
+                dataSource: {
+                    store: { type: 'array', data: [{ id: 1, name: 'name1' }] },
+                    key: 'id'
+                },
+                valueExpr: 'id',
+                displayExpr: 'name'
+            }
         },
-        (grid) => [
-            { value: undefined, column: grid.columnOption(0) },
-            { value: null, column: grid.columnOption(0) },
-            { value: 0, column: grid.columnOption(0) },
-            { value: 1, column: grid.columnOption(0) },
-        ]
-    );
+    ];
+    testConfigArray.forEach(config => {
+        const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
+            ds = config.values.map(item => { return { f1: item }; });
+
+        helper.runCustomizeXlsxCellTest(assert,
+            {
+                columns: [column],
+                dataSource: ds,
+                showColumnHeaders: false,
+            },
+            (grid) => {
+                const result = [];
+                for(let i = 0; i < config.values.length; i++) {
+                    result.push({
+                        row: { data: ds[i], key: ds[i], rowIndex: i, rowType: 'data' },
+                        column: grid.columnOption(0),
+                        value: config.values[i],
+                        displayValue: config.expectedDisplayValues ? config.expectedDisplayValues[i] : config.values[i],
+                        text: config.expectedTexts ? config.expectedTexts[i] : config.values[i] }
+                    );
+                }
+                return result;
+            }
+        );
+    });
 });
 
-QUnit.test("Check e.XXX for DataGrid with data row with number cell value with formatting", function(assert) {
+QUnit.test("Check event arguments for DataGrid with data row with number cell value with formatting", function(assert) {
+    const ds = [
+        { field1: 1 }
+    ];
     helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
-            dataSource: [{ field1: 1 }],
+            dataSource: ds,
             showColumnHeaders: false,
         },
         (grid) => [
-            { value: 1, column: grid.columnOption(0) },
-        ]
-    );
-});
-
-QUnit.test("Check e.XXX for DataGrid with data row with string cell value", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
-        {
-            columns: [{ dataField: "field1", dataType: "string" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: '' }, { field1: 'f1' } ],
-            showColumnHeaders: false,
-        },
-        (grid) => [
-            { value: undefined, column: grid.columnOption(0) },
-            { value: null, column: grid.columnOption(0) },
-            { value: '', column: grid.columnOption(0) },
-            { value: 'f1', column: grid.columnOption(0) },
-        ]
-    );
-});
-
-QUnit.test("Check e.XXX for DataGrid with data row with date cell value", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
-        {
-            columns: [{ dataField: "field1", dataType: "date" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: new Date(2018, 11, 1) }],
-            showColumnHeaders: false,
-        },
-        (grid) => [
-            { value: undefined, column: grid.columnOption(0) },
-            { value: null, column: grid.columnOption(0) },
-            { value: new Date(2018, 11, 1), column: grid.columnOption(0) },
-        ]
-    );
-});
-
-QUnit.test("Check e.XXX for DataGrid with data row with datetime cell value", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
-        {
-            columns: [{ dataField: "field1", dataType: "datetime" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: new Date(2018, 11, 1, 16, 10) }],
-            showColumnHeaders: false,
-        },
-        (grid) => [
-            { value: undefined, column: grid.columnOption(0) },
-            { value: null, column: grid.columnOption(0) },
-            { value: new Date(2018, 11, 1, 16, 10), column: grid.columnOption(0) },
-        ]
-    );
-});
-
-QUnit.test("Check e.XXX for DataGrid with data row with boolean cell value", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
-        {
-            columns: [{ dataField: "field1", dataType: "boolean" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: true }],
-            showColumnHeaders: false,
-        },
-        (grid) => [
-            { value: undefined, column: grid.columnOption(0) },
-            { value: null, column: grid.columnOption(0) },
-            { value: true, column: grid.columnOption(0) },
-        ]
-    );
-});
-
-QUnit.test("Check e.XXX for DataGrid with data row with lookup cell value", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
-        {
-            columns: [{
-                dataField: "field1",
-                lookup: {
-                    dataSource: {
-                        store: {
-                            type: 'array',
-                            data: [{ id: 1, name: 'name1' }]
-                        },
-                        key: 'id'
-                    },
-                    valueExpr: 'id',
-                    displayExpr: 'name'
-                }
-            }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: 1 }],
-            showColumnHeaders: false,
-        },
-        (grid) => [
-            { value: undefined, column: grid.columnOption(0) },
-            { value: null, column: grid.columnOption(0) },
-            { value: 1, column: grid.columnOption(0) },
+            { row: { data: ds[0], key: ds[0], rowIndex: 0, rowType: 'data' }, column: grid.columnOption(0), value: ds[0].field1, displayValue: ds[0].field1, text: '$1' },
         ]
     );
 });

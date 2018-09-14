@@ -78,26 +78,34 @@ const dataGridExportTestsHelper = {
             for(let i = 0; i < actualGridCells.length; i++) {
                 const actualGridCell = actualGridCells[i];
                 const expectedGridCell = expectedGridCells[i];
-                const skipProperties = ['column'];
+                const skipProperties = ['column', 'row'];
 
                 for(const propertyName in expectedGridCell) {
                     if(skipProperties.indexOf(propertyName) === -1) {
-                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `actualGridCell[${propertyName}], ${i}`);
+                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `gridCell[${propertyName}], ${i}`);
                         skipProperties.push(propertyName);
                     }
                 }
                 for(const propertyName in actualGridCell) {
                     if(!skipProperties.indexOf(propertyName) === -1) {
-                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `actualGridCell[${propertyName}], ${i}`);
+                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `gridCell[${propertyName}], ${i}`);
                     }
                 }
 
-                assert.ok(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column), `isDefined(actualGridCell.column && expectedGridCell.column), ${i}`);
+                assert.ok(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column), `isDefined(actualColumn && expectedColumn), ${i}`);
                 if(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column)) {
-                    assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `actualGridCell.column.dataField, ${i}`);
-                    assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `actualGridCell.column.dataType, ${i}`);
-                    assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `actualGridCell.column.caption, ${i}`);
-                    assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `actualGridCell.column.index, ${i}`);
+                    assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `column.dataField, ${i}`);
+                    assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `column.dataType, ${i}`);
+                    assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `column.caption, ${i}`);
+                    assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `column.index, ${i}`);
+                }
+
+                assert.ok(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row), `isDefined(actualRow && expectedRow), ${i}`);
+                if(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row)) {
+                    assert.strictEqual(actualGridCell.row.data, expectedGridCell.row.data, `row.data, ${i}`);
+                    assert.strictEqual(actualGridCell.row.key, expectedGridCell.row.key, `row.key, ${i}`);
+                    assert.strictEqual(actualGridCell.row.rowIndex, expectedGridCell.row.rowIndex, `row.rowIndex, ${i}`);
+                    assert.strictEqual(actualGridCell.row.rowType, expectedGridCell.row.rowType, `row.rowType, ${i}`);
                 }
             }
 
