@@ -169,8 +169,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     }, clickAction);
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
-                    var isPartialUpdate = e && e.changeType === "update";
-                    if(that._focusedView && that._focusedView.name === view.name && (that._isNeedFocus || (that._isHiddenFocus && !isPartialUpdate))) {
+
+                    var isFullUpdate = !e || e.changeType === "refresh";
+
+                    if(that._focusedView && that._focusedView.name === view.name && (that._isNeedFocus || (that._isHiddenFocus && isFullUpdate))) {
                         that._updateFocus();
                     }
                 });
