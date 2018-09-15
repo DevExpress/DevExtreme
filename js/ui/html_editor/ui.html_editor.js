@@ -6,6 +6,7 @@ import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import QuillRegistrator from "./quill_registrator";
+import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 
 let RICH_EDIT_CLASS = "dx-htmleditor",
     ANONYMOUS_TEMPLATE_NAME = "content";
@@ -25,6 +26,7 @@ let HtmlEditor = Editor.inherit({
     _init: function() {
         this.callBase();
         this._quillRegistrator = new QuillRegistrator();
+        this._quillDeltaConverter = new QuillDeltaToHtmlConverter();
     },
 
     _getAnonymousTemplateName: function() {
@@ -74,17 +76,18 @@ let HtmlEditor = Editor.inherit({
         });
 
         this._htmlEditor.on("text-change", function(newDelta, oldDelta, source) {
-            // let resultMarkup,
-            //     HtmlMarkup = that._htmlEditor.getSemanticHTML();
+            let resultMarkup,
+                delta = that._htmlEditor.getContents(),
+                htmlMarkup = that._convertToHtml(delta.ops);
 
-            // that._isEditorUpdating = true;
+            that._isEditorUpdating = true;
 
-            // if(that._isMarkdownValue()) {
-            //     resultMarkup = that._updateValueByType("Markdown", HtmlMarkup);
-            // } else {
-            //     resultMarkup = HtmlMarkup;
-            // }
-            // that.option("value", resultMarkup);
+            if(that._isMarkdownValue()) {
+                resultMarkup = that._updateValueByType("Markdown", htmlMarkup);
+            } else {
+                resultMarkup = htmlMarkup;
+            }
+            that.option("value", resultMarkup);
         });
     },
 
@@ -113,6 +116,11 @@ let HtmlEditor = Editor.inherit({
         return extend({
             editorInstance: this
         }, userConfig);
+    },
+
+    _convertToHtml: function(deltaOps) {
+        this._quillDeltaConverter.rawDeltaOps = deltaOps;
+        return this._quillDeltaConverter.convert();
     },
 
     _updateValueByType: function(valueType, value) {

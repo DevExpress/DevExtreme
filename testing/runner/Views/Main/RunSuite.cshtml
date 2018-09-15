@@ -177,6 +177,7 @@
 
                     // Quill deps
                     'quill-delta': '@Url.Content("~/artifacts/transpiled/quill_modules/quill-delta")',
+                    'quill-delta-to-html': '@Url.Content("~/artifacts/transpiled/quill_modules/quill-delta-to-html")',
                     'parchment': '@Url.Content("~/artifacts/transpiled/quill_modules/parchment")',
                     'extend': '@Url.Content("~/artifacts/transpiled/quill_modules/extend")',
                     'clone': '@Url.Content("~/artifacts/transpiled/quill_modules/clone")',
@@ -222,6 +223,10 @@
                     },
                     'quill-delta': {
                         main: 'lib/delta.js',
+                        defaultExtension: 'js'
+                    },
+                    'quill-delta-to-html': {
+                        main: 'dist/commonjs/QuillDeltaToHtmlConverter.js',
                         defaultExtension: 'js'
                     },
                     'parchment': {

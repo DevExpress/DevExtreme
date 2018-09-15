@@ -7,6 +7,7 @@ var context = require('./context.js');
 var DESTINATION_FOLDER = context.TRANSPILED_PATH + "/quill_modules";
 var QUILL_SRC = 'node_modules/quill/**/*.js';
 var QUILL_DELTA_SRC = 'node_modules/quill-delta/**/*.*';
+var QUILL_DELTA_TO_HTML_SRC = 'node_modules/quill-delta-to-html/**/*.*';
 var PARCHMENT_SRC = 'node_modules/parchment/**/*.*';
 var EXTEND_SRC = 'node_modules/extend/**/*.*';
 var CLONE_SRC = 'node_modules/clone/**/*.*';
@@ -23,6 +24,9 @@ gulp.task('transpile-quill', ['bundler-config'], function() {
 
         gulp.src(QUILL_DELTA_SRC)
             .pipe(gulp.dest(DESTINATION_FOLDER + "/quill-delta")),
+
+        gulp.src(QUILL_DELTA_TO_HTML_SRC)
+            .pipe(gulp.dest(DESTINATION_FOLDER + "/quill-delta-to-html")),
 
         gulp.src(PARCHMENT_SRC)
             .pipe(gulp.dest(DESTINATION_FOLDER + "/parchment")),
