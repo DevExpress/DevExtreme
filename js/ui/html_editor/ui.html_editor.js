@@ -26,6 +26,7 @@ let HtmlEditor = Editor.inherit({
 
     _init: function() {
         this.callBase();
+
         this._quillRegistrator = new QuillRegistrator();
         this._prepareConverters();
     },

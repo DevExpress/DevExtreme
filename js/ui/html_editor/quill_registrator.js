@@ -8,7 +8,7 @@ import {
 } from "quill/formats/direction";
 
 import Header from "quill/formats/header";
-import List from "quill/formats/list";
+import List, { ListItem } from "quill/formats/list";
 
 import { BackgroundStyle } from "quill/formats/background";
 import { ColorStyle } from "quill/formats/color";
@@ -52,6 +52,7 @@ class QuillRegistrator {
 
             "formats/header": Header,
             "formats/list": List,
+            'formats/list/item': ListItem,
 
             "formats/bold": Bold,
             "formats/italic": Italic,

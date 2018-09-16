@@ -10,7 +10,7 @@ QUnit.module("Value as HTML markup", () => {
                 value: "<h1>Hi!</h1><p>Test</p>"
             }).dxHtmlEditor("instance"),
             $element = instance.$element(),
-            markup = $element.find(".dx-htmlEditor-content").html();
+            markup = $element.find(".dx-htmleditor-content").html();
 
         assert.equal(instance.option("value"), "<h1>Hi!</h1><p>Test</p>");
         assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
@@ -20,7 +20,7 @@ QUnit.module("Value as HTML markup", () => {
         const instance = $("#htmlEditor")
         .dxHtmlEditor()
         .dxHtmlEditor("instance");
-        $(instance.element()).find(".dx-htmlEditor-content").text("Hi!\nTest.").trigger("change");
+        $(instance.element()).find(".dx-htmleditor-content").text("Hi!\nTest.").trigger("change");
         assert.equal(instance.option("value"), "<p>Hi!<br/>Test.</p>");
     });
 });
@@ -32,7 +32,7 @@ QUnit.module("Value as Markdown markup", () => {
                 valueType: "Markdown"
             }).dxHtmlEditor("instance"),
             $element = instance.$element(),
-            markup = $element.find(".dx-htmlEditor-content").html();
+            markup = $element.find(".dx-htmleditor-content").html();
 
         assert.equal(instance.option("value"), "Hi!\nIt's a **test**!");
         assert.equal(markup, "<p>Hi!</p><p>It's a <strong>test</strong>!</p>");
