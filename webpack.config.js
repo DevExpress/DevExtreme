@@ -16,7 +16,9 @@ module.exports = {
         'globalize/number': 'window.Globalize',
         'globalize/currency': 'window.Globalize',
         'globalize/date': 'window.Globalize',
-        'globalize/message': 'window.Globalize'
+        'globalize/message': 'window.Globalize',
+        'turndown': 'window.TurndownService',
+        'showdown': 'window.showdown'
     },
     resolve: {
         modules: ['artifacts/transpiled/quill_modules', 'node_modules']

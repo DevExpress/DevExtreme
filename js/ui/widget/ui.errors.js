@@ -204,6 +204,16 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1049: `Column '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
 
     /**
+     * @name ErrorsUIWidgets.E1050
+     */
+    E1050: "The TurnDown script is referenced after the DevExtreme scripts or not referenced at all",
+
+    /**
+     * @name ErrorsUIWidgets.E1051
+     */
+    E1051: "The ShowDown script is referenced after the DevExtreme scripts or not referenced at all",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",

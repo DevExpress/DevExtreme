@@ -7,6 +7,7 @@ import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import QuillRegistrator from "./quill_registrator";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+import MarkdownConverter from "./markdownConverter";
 
 let RICH_EDIT_CLASS = "dx-htmleditor",
     ANONYMOUS_TEMPLATE_NAME = "content";
@@ -26,7 +27,17 @@ let HtmlEditor = Editor.inherit({
     _init: function() {
         this.callBase();
         this._quillRegistrator = new QuillRegistrator();
-        this._quillDeltaConverter = new QuillDeltaToHtmlConverter();
+        this._prepareConverters();
+    },
+
+    _prepareConverters: function() {
+        if(!this._quillDeltaConverter) {
+            this._quillDeltaConverter = new QuillDeltaToHtmlConverter();
+        }
+
+        if(this.option("valueType") === "Markdown" && !this._markdownConverter) {
+            this._markdownConverter = new MarkdownConverter();
+        }
     },
 
     _getAnonymousTemplateName: function() {
@@ -55,10 +66,14 @@ let HtmlEditor = Editor.inherit({
     },
 
     _render: function() {
-        let value = this.option("value");
+        let markup = this.option("value");
 
-        if(value) {
-            this._$htmlContainer.html(value);
+        if(this._isMarkdownValue()) {
+            markup = this._markdownConverter.toHtml(markup);
+        }
+
+        if(markup) {
+            this._$htmlContainer.html(markup);
         }
 
         this._renderHtmlEditor();
@@ -124,7 +139,16 @@ let HtmlEditor = Editor.inherit({
     },
 
     _updateValueByType: function(valueType, value) {
-        return value;
+        var currentValue = value || this.option("value"),
+            updatedValue;
+
+        if(valueType === "Markdown") {
+            updatedValue = this._markdownConverter.toMarkdown(currentValue);
+        } else {
+            updatedValue = this._markdownConverter.toHtml(currentValue);
+        }
+
+        return updatedValue;
     },
 
     _isMarkdownValue: function() {
@@ -143,7 +167,6 @@ let HtmlEditor = Editor.inherit({
                     delete this._isEditorUpdating;
                 } else {
                     let updatedValue;
-                    this._htmlEditor.setContents([], "silent");
 
                     if(this._isMarkdownValue()) {
                         updatedValue = this._updateValueByType("HTML", args.value);
@@ -151,7 +174,8 @@ let HtmlEditor = Editor.inherit({
                         updatedValue = args.value;
                     }
 
-                    this._htmlEditor.clipboard.dangerouslyPasteHTML(0, updatedValue);
+                    let newDelta = this._htmlEditor.clipboard.convert(updatedValue);
+                    this._htmlEditor.setContents(newDelta);
                 }
                 this.callBase(args);
                 break;
@@ -163,6 +187,7 @@ let HtmlEditor = Editor.inherit({
                 this._invalidate();
                 break;
             case "valueType":
+                this._prepareConverters();
                 this.option("value", this._updateValueByType(args.value));
                 break;
             default:

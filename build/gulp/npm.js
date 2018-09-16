@@ -43,6 +43,8 @@ var DIST_GLOBS = [
     '!artifacts/js/jquery*',
     '!artifacts/js/jszip*',
     '!artifacts/js/dx.custom*',
+    '!artifacts/js/showdown*',
+    '!artifacts/js/turndown*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',

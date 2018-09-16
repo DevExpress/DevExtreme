@@ -37,6 +37,12 @@ const VENDORS = [
         path: '/globalize/dist/globalize/@(number|currency|date|message).js',
         noUglyFile: true,
         base: '/globalize/dist/'
+    },
+    {
+        path: '/showdown/dist/showdown.js'
+    },
+    {
+        path: '/turndown/lib/turndown.browser.umd.js'
     }
 ];
 
