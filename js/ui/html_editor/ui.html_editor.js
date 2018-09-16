@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import windowUtils from "../../core/utils/window";
+import { isDefined } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
@@ -140,8 +141,12 @@ let HtmlEditor = Editor.inherit({
     },
 
     _updateValueByType: function(valueType, value) {
-        var currentValue = value || this.option("value"),
-            updatedValue;
+        if(!isDefined(this._markdownConverter)) {
+            return;
+        }
+
+        const currentValue = value || this.option("value");
+        let updatedValue;
 
         if(valueType === "Markdown") {
             updatedValue = this._markdownConverter.toMarkdown(currentValue);
