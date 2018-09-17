@@ -723,8 +723,15 @@
         }
 
         .dx-row-focused.dx-row.dx-data-row {
-            & > td, & > tr > td {
-                background-color: #e2e2a6;
+            & > td:not(.dx-focused),
+            & > tr > td:not(.dx-focused) {
+                background-color: ~"@{@{widgetName}-row-focused-bg}";
+                color: ~"@{@{widgetName}-row-focused-color}";
+            }
+            & > td,
+            & > tr > td {
+                border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
             }
         }
 
@@ -748,7 +755,7 @@
                     color: ~"@{@{widgetName}-base-color}";
                 }
             }
-            &:not(.dx-row-lines) {
+            &:not(.dx-row-lines, .dx-row-focused) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
@@ -852,7 +859,7 @@
 
 
         .dx-data-row.dx-state-hover {
-            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
                     &.dx-@{widgetName}-group-space {
                         border-left-color: ~"@{@{widgetName}-hover-bg}";
