@@ -226,7 +226,7 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
     );
 });
 
-QUnit.test("Check e.XXX for DataGrid with groupping 2 levels", function(assert) {
+QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
     helper.runCustomizeXlsxCellTest(assert,
         {

@@ -197,11 +197,6 @@ exports.DataProvider = Class.inherit({
         });
     },
 
-    _getHeaderCellValue: function(rowIndex, cellIndex) {
-        var row = this.getColumns(true)[rowIndex];
-        return row[cellIndex] && row[cellIndex].caption;
-    },
-
     getCellValue: function(rowIndex, cellIndex, sourceCellRef) {
         var column,
             value,
