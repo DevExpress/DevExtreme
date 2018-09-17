@@ -18,16 +18,26 @@
     <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>-->
+    <script type="text/javascript" src="../artifacts/js/turndown.browser.umd.js"></script>
+    <script type="text/javascript" src="../artifacts/js/showdown.js"></script>
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="editor"></div>
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            var value = '<h2>Fragaria</h2><p><em>Wild strawberry</em></p><p></p><p><img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Fragaria_daltoniana.jpg" ' +
+       '></img</p><p></p><p></p><p>Strawberries are not true berries. The fleshy and edible part of the fruit is a receptacle, and the parts ' +
+       'that are sometimes mistakenly called "seeds" are achenes. Although it is commonly thought that strawberries get their name from straw being used as a mulch ' +
+       'in cultivating the plants, the etymology of the word is possibly derived from "strewn berry" in reference to the fruit being "strewn" about the base of the ' +
+       'plants.</p><p></p><p><u>Diploid species</u></p><ul><li><span style="color: tomato;">Fragaria bucharica</span> Losinsk. (China)</li><li><span style="color: tomato;' +
+       '">Fragaria daltoniana</span> J.Gay (Himalayas)</li><li><span style="color: tomato;">Fragaria gracilis</span> Losinsk (China)</li><li><span style="color: tomato;' +
+       '">Fragaria iinumae</span> Makino (East Russia, Japan)</li></ul><p style="text-align: right;"><em>From Wikipedia, the free encyclopedia</em></p>';
+
+            $("#editor").dxHtmlEditor({
+                value: value,
+                toolbar: { items: ["bold", "italic", "strike", "underline", "clear"] }
             });
         });
     </script>
