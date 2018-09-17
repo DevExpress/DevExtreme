@@ -374,3 +374,27 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
         ]
     );
 });
+
+QUnit.test("Assign a copy to 'e.xlsxCell.style'", function(assert) {
+    const done = assert.async();
+    let counter = 1;
+    const gridOptions = {
+        columns: [{ dataField: "f1" }],
+        dataSource: [{ f1: 1 }, { f1: 2 }, { f1: 3 }],
+        showColumnHeaders: false,
+        loadingTimeout: undefined,
+        export: {
+            customizeXlsxCell: e => {
+                assert.step(e.xlsxCell.style.alignment.horizontal);
+                e.xlsxCell.style.alignment.horizontal = counter++;
+            },
+        },
+        onFileSaving: e => {
+            assert.verifySteps(['right', 'right', 'right']);
+            done();
+            e.cancel = true;
+        },
+    };
+    const dataGrid = $("#dataGrid").dxDataGrid(gridOptions).dxDataGrid("instance");
+    dataGrid.exportToExcel();
+});
