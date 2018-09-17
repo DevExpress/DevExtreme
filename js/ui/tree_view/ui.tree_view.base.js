@@ -1434,7 +1434,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._itemDXEventHandler(e, "onItemClick", { node: this._dataAdapter.getPublicNode(node) });
 
-        if(this.option("selectByClick")) {
+        if(this.option("selectByClick") && !e.isDefaultPrevented()) {
             this._updateItemSelection(!node.internalFields.selected, itemData, e);
         }
     },
