@@ -641,5 +641,5 @@ QUnit.test("push", function(assert) {
 
     store.push(changes);
     assert.equal(onPushSpy.callCount, 1);
-    assert.equal(onPushSpy.firstCall.args[0].changes, changes);
+    assert.equal(onPushSpy.firstCall.args[0], changes);
 });

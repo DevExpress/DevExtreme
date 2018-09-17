@@ -212,7 +212,7 @@ var DataSource = Class.inherit({
         */
         this._pushThrottle = new dataUtils.ThrottleWithAggregation(this._onPush, options.pushAggregationTimeout);
 
-        this._onPushHandler = (e) => { this._pushThrottle.execute.call(this, e.changes); };
+        this._onPushHandler = this._pushThrottle.execute.bind(this);
 
         /**
         * @name DataSourceOptions.store

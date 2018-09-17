@@ -82,6 +82,7 @@ var Store = Class.inherit({
                 /**
                  * @name StoreOptions.onPush
                  * @type function
+                 * @type_function_param1 changes:Array<any>
                  * @action
                  */
                 "onPush",
@@ -290,10 +291,11 @@ var Store = Class.inherit({
     /**
     * @name StoreMethods.push
     * @publicName push(changes)
+    * @param1 changes:Array<any>
     */
     push: function(changes) {
         this._pushImpl(changes);
-        this.fireEvent("push", [{ changes }]);
+        this.fireEvent("push", [changes]);
     },
 
     _pushImpl: noop,
