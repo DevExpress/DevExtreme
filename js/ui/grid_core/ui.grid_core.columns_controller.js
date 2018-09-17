@@ -1294,7 +1294,7 @@ module.exports = {
                             result[i] = extend({}, commandColumns[commandColumnIndex], column);
                             defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
                         } else {
-                            result[i] = extend({}, column, commandColumns[commandColumnIndex]);
+                            result[i] = extend({}, column, commandColumns[commandColumnIndex], { index: column.index, id: column.id });
                         }
                     }
                 }
@@ -1305,6 +1305,8 @@ module.exports = {
 
                 return result;
             };
+
+            var isCustomCommandColumn = (that, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
 
             return {
                 _getExpandColumnOptions: function() {
@@ -1656,7 +1658,7 @@ module.exports = {
                                 prevColumn = visibleColumns[j - 1];
                                 column = visibleColumns[j];
 
-                                if(!column.command) {
+                                if(!column.command || isCustomCommandColumn(that, column)) {
                                     if(!column.fixed) {
                                         if(i === 0) {
                                             if(column.isBand && column.colspan) {
@@ -1674,6 +1676,10 @@ module.exports = {
                                         if(!isDefined(transparentColumnIndex)) {
                                             transparentColumnIndex = j;
                                         }
+                                    } else if(isDefined(column.groupIndex) && column.command) {
+                                        notFixedColumnCount = 0;
+                                        transparentColspan = 0;
+                                        transparentColumnIndex = j + 1;
                                     } else {
                                         lastFixedPosition = column.fixedPosition;
                                     }
@@ -1818,7 +1824,7 @@ module.exports = {
                             } else {
                                 column.fixed = parentBandColumns.length ? parentBandColumns[0].fixed : column.fixed;
                                 column.fixedPosition = parentBandColumns.length ? parentBandColumns[0].fixedPosition : column.fixedPosition;
-                                isNotCustomCommandColumn = column.command && !isDefined(column.visibleIndex);
+                                isNotCustomCommandColumn = column.command && !isCustomCommandColumn(that, column);
 
                                 if(column.fixed || isNotCustomCommandColumn) {
                                     isFixedToEnd = column.fixedPosition === "right";

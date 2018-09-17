@@ -2989,3 +2989,30 @@ QUnit.test("'getCellElement' function return group cell from correct table", fun
     assert.ok(isCellFromFixedTable($(this.getCellElement(0, 0))), "fixed cell");
     assert.ok(isCellFromFixedTable($(this.getCellElement(0, 1))), "fixed cell");
 });
+
+QUnit.test("Fixed column widths should be correct when the group cell position is specified", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $colElements;
+
+    this.options.grouping = { allowCollapsing: true };
+    this.options.columns[2] = { dataField: "field3", groupIndex: 0 };
+    this.options.columns.splice(1, 0, {
+        type: "group"
+    });
+
+    this.setupDataGrid();
+    this.rowsView.render($testElement);
+
+    // act
+    this.rowsView.setColumnWidths([100, 30, 150, 100]);
+    this.rowsView.resize();
+
+    // assert
+    $colElements = $testElement.find(".dx-datagrid-rowsview .dx-datagrid-content-fixed col");
+    assert.strictEqual($colElements.length, 4, "col count");
+    assert.strictEqual($colElements[0].style.width, "100px", "width of the first col");
+    assert.strictEqual($colElements[1].style.width, "30px", "width of the second col");
+    assert.strictEqual($colElements[2].style.width, "auto", "width of the third col");
+    assert.strictEqual($colElements[3].style.width, "auto", "width of the fourth col");
+});

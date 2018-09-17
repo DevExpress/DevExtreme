@@ -741,6 +741,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             width,
             minWidth,
             columnIndex,
+            expandCellIndex,
             columnAutoWidth = this.option("columnAutoWidth"),
             legacyRendering = this.option("legacyRendering");
 
@@ -751,6 +752,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cols = $tableElement.children("colgroup").children("col");
             styleUtils.setWidth($cols, "auto");
             columns = columns || this.getColumns(null, $tableElement);
+
+            if(fixed) {
+                columns.forEach((column, index) => {
+                    if(column.command === "expand") {
+                        expandCellIndex = index;
+                    }
+                });
+            }
+
             for(i = 0; i < columns.length; i++) {
                 if(!legacyRendering && columnAutoWidth && !fixed) {
                     width = columns[i].width;
@@ -771,8 +781,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         }
                     }
                 }
-                if(columns[i].colspan) {
-                    columnIndex += columns[i].colspan;
+                if(columns[i].colspan || i > expandCellIndex && !columns[i].fixed) {
+                    columnIndex += columns[i].colspan ? columns[i].colspan : 1;
                     continue;
                 }
                 width = widths[columnIndex];

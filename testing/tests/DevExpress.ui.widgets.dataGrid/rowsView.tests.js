@@ -5234,6 +5234,30 @@ QUnit.test('Show grouped column when cellTemplate is defined', function(assert) 
     assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(2).html(), '15');
 });
 
+QUnit.test("Group row with the custom position of the group cell", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $groupCellElements;
+
+    this.options.grouping = { allowCollapsing: true };
+    this.options.columns[0] = { dataField: "name", groupIndex: 0 };
+    this.options.columns.push({
+        type: "group"
+    }, "age");
+
+    this.setupDataGridModules();
+
+    // act
+    this.rowsView.render($testElement);
+
+    // assert
+    $groupCellElements = $(this.getRowElement(0)).children();
+    assert.strictEqual($groupCellElements.length, 3, "group cell count");
+    assert.ok($groupCellElements.eq(0).hasClass("dx-datagrid-group-space"), "first cell is empty");
+    assert.ok($groupCellElements.eq(1).hasClass("dx-datagrid-expand"), "second cell is expandable");
+    assert.ok($groupCellElements.eq(2).hasClass("dx-group-cell"), "third cell is group");
+});
+
 
 QUnit.module('Virtual scrolling', {
     beforeEach: function() {

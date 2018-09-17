@@ -8483,6 +8483,29 @@ QUnit.module("Customization of the command columns", {
         // assert
         assert.strictEqual(this.columnOption("type:buttons", "width"), 50, "width of the custom command column");
     });
+
+    QUnit.test("getFixedColumns when the group cell position is specified", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', fixed: true, groupIndex: 0 },
+                { type: "group" },
+                { dataField: 'TestField3', caption: 'Custom Title 3' },
+                { dataField: 'TestField4', caption: 'Custom Title 4' },
+                { dataField: 'TestField5', caption: 'Custom Title 5' }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField1", "first fixed column");
+        assert.strictEqual(fixedColumns[1].type, "group", "second fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "fourth fixed column");
+    });
 });
 
 // T622771

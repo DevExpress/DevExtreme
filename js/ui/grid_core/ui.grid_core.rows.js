@@ -735,8 +735,19 @@ module.exports = {
                         } }, e, item));
                 },
 
+                _getColumnsCountBeforeGroups: function(columns) {
+                    for(var i = 0; i < columns.length; i++) {
+                        if(columns[i].type === "group") {
+                            return i;
+                        }
+                    }
+
+                    return 0;
+                },
+
                 _getGroupCellOptions: function(options) {
-                    var columnIndex = (options.row.groupIndex || 0) + options.columnsCountBeforeGroups;
+                    var columnsCountBeforeGroups = this._getColumnsCountBeforeGroups(options.columns),
+                        columnIndex = (options.row.groupIndex || 0) + columnsCountBeforeGroups;
 
                     return {
                         columnIndex: columnIndex,
@@ -813,21 +824,10 @@ module.exports = {
 
                 _renderRows: function($table, options) {
                     var that = this,
-                        i,
-                        columns = options.columns,
-                        columnsCountBeforeGroups = 0,
                         scrollingMode = that.option("scrolling.mode");
 
-                    for(i = 0; i < columns.length; i++) {
-                        if(columns[i].type === "group") {
-                            columnsCountBeforeGroups = i;
-                            break;
-                        }
-                    }
-
                     that.callBase($table, extend({
-                        scrollingMode: scrollingMode,
-                        columnsCountBeforeGroups: columnsCountBeforeGroups
+                        scrollingMode: scrollingMode
                     }, options));
 
                     that._checkRowKeys(options.change);

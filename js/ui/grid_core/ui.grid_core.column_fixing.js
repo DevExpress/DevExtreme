@@ -310,17 +310,20 @@ var baseFixedColumns = {
 
     setColumnWidths: function(widths) {
         var columns,
+            haveGroupColumns,
             useVisibleColumns = false;
 
         this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
+            haveGroupColumns = this._columnsController.getGroupColumns().length;
+
             if(this.option("legacyRendering")) {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
             } else {
                 useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
             }
-            if(useVisibleColumns) {
+            if(useVisibleColumns || haveGroupColumns) {
                 columns = this._columnsController.getVisibleColumns();
             }
             this.callBase(widths, this._fixedTableElement, columns, true);
@@ -583,6 +586,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
 
         return this.callBase(options);
+    },
+
+    _renderGroupedCells: function($row, options) {
+        return this.callBase($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
     },
 
     _renderGroupSummaryCells: function($row, options) {

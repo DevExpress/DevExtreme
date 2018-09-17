@@ -288,12 +288,18 @@ module.exports = {
                     },
 
                     _getGroupCellOptions: function(options) {
-                        var row = options.row,
-                            groupColumns = this._columnsController.getGroupColumns(),
-                            columnIndex = groupColumns.length + options.columnsCountBeforeGroups,
-                            emptyCellsCount = columnIndex + Number(this.option("masterDetail.enabled"));
+                        var columnIndex,
+                            groupColumns,
+                            emptyCellsCount,
+                            columnsCountBeforeGroups,
+                            row = options.row;
 
                         if(row && this._isDetailRow(row)) {
+                            groupColumns = this._columnsController.getGroupColumns();
+                            columnsCountBeforeGroups = this._getColumnsCountBeforeGroups(options.columns),
+                            columnIndex = groupColumns.length + columnsCountBeforeGroups;
+                            emptyCellsCount = columnIndex + Number(this.option("masterDetail.enabled"));
+
                             return {
                                 columnIndex: columnIndex,
                                 emptyCellsCount: emptyCellsCount,
