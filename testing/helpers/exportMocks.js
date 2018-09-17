@@ -41,8 +41,8 @@ exports.MockDataProvider = function(data, columns) {
             return (index === 2) ? true : false;
         },
 
-        getCellValue: function(rowIndex, cellIndex) {
-            return data[rowIndex][cellIndex];
+        getCellData: function(rowIndex, cellIndex) {
+            return { value: data[rowIndex][cellIndex] };
         },
 
         getCellType: function(rowIndex, cellIndex) {

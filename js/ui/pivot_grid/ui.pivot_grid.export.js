@@ -196,13 +196,18 @@ exports.DataProvider = Class.inherit({
     },
 
     getCellValue: function(rowIndex, cellIndex) {
+        const cellData = this.getCellData(rowIndex, cellIndex);
+        return cellData ? cellData.value : null;
+    },
+
+    getCellData: function(rowIndex, cellIndex) {
         var items = this._options.items,
             item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
         if(this.getCellType(rowIndex, cellIndex) === "string") {
-            return item.text;
+            return { value: item.text };
         } else {
-            return item.value;
+            return { value: item.value };
         }
     },
 
