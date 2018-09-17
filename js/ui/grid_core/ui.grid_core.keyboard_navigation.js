@@ -130,7 +130,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
-            if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
+
+            if($target.parent().hasClass(FREESPACE_ROW_CLASS)) {
+                this._focusedView.element().attr("tabindex", 0);
+                this._focusedView.focus();
+            } else if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
                 columnIndex = this.getView("rowsView").getCellIndex($target);
                 column = this._columnsController.getVisibleColumns()[columnIndex];
                 if(isCellEditMode && column && column.allowEditing) {
