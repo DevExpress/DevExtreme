@@ -262,6 +262,23 @@ QUnit.test("selectByClick option should unselect item  by second click", functio
     assert.notOk(items[0].selected, "item was unselected");
 });
 
+QUnit.test("selection can be prevented on itemClick", function(assert) {
+    var items = [{ text: "item 1" }, { text: "item 2" }],
+        $treeview = initTree({
+            items: items,
+            selectByClick: true,
+            selectionMode: "single",
+            onItemClick: function(e) {
+                e.event.preventDefault();
+            }
+        }),
+        $item = $treeview.find(".dx-treeview-item").eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.notOk(items[0].selected, "item selection has been prevented");
+});
+
 QUnit.test("selectNodesRecursive should be ignored when single selection is enabled", function(assert) {
     var $treeview = initTree({
             items: [{ text: "Item 1", expanded: true, items: [{ text: "Item 11" }] }],
