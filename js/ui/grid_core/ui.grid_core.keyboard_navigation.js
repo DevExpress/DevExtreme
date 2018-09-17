@@ -1017,8 +1017,10 @@ module.exports = {
             rowsView: {
                 renderFocusState: function() {
                     var that = this,
-                        cellElements = that.getCellElements(0),
                         keyboardNavigation = that.getController("keyboardNavigation"),
+                        rowIndex = that.option("focusedRowIndex") || 0,
+                        columnIndex = that.option("focusedColumnIndex"),
+                        cellElements = that.getCellElements(rowIndex),
                         tabIndex = that.option("tabIndex"),
                         oldFocusedView = keyboardNavigation._focusedView,
                         $row,
@@ -1029,6 +1031,10 @@ module.exports = {
                         $element.attr("tabIndex", null);
                     }
 
+                    if(!columnIndex || columnIndex < 0) {
+                        columnIndex = 0;
+                    }
+
                     if(that.option("useKeyboard") && cellElements) {
                         $row = cellElements.eq(0).parent();
 
@@ -1036,13 +1042,18 @@ module.exports = {
                             $row.attr("tabIndex", tabIndex);
                         } else {
                             keyboardNavigation._focusedView = that;
-                            for(var i = 0; i < cellElements.length; i++) {
-                                $cell = cellElements.eq(i);
-                                if(keyboardNavigation._isCellValid($cell)) {
-                                    if(isCellElement($cell)) {
-                                        $cell.attr("tabIndex", tabIndex);
-                                    }
-                                    break;
+
+                            var validCellElements = cellElements.filter(function(_, element) {
+                                var $element = $(element);
+                                return keyboardNavigation._isCellValid($element) && isCellElement($element);
+                            });
+                            if(validCellElements) {
+                                if(validCellElements.length <= columnIndex) {
+                                    columnIndex = validCellElements.length - 1;
+                                }
+                                $cell = $(validCellElements[columnIndex]);
+                                if($cell) {
+                                    $cell.attr("tabIndex", tabIndex);
                                 }
                             }
 

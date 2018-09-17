@@ -174,6 +174,7 @@ module.exports = {
             * @type_function_param1_field10 rowIndex:number
             * @type_function_param1_field11 rowType:string
             * @type_function_param1_field12 isSelected:boolean
+            * @type_function_param1_field12 isFocused:boolean
             * @type_function_param1_field13 isExpanded:boolean
             * @type_function_param1_field14 groupIndex:number
             * @type_function_param1_field15 rowElement:dxElement
@@ -194,6 +195,7 @@ module.exports = {
             * @type_function_param1_field10 rowIndex:number
             * @type_function_param1_field11 rowType:string
             * @type_function_param1_field12 isSelected:boolean
+            * @type_function_param1_field12 isFocused:boolean
             * @type_function_param1_field13 isExpanded:boolean
             * @type_function_param1_field14 rowElement:dxElement
             * @type_function_param1_field15 handled:boolean
@@ -298,8 +300,9 @@ module.exports = {
              * @type_function_param1_field12 rowType:string
              * @type_function_param1_field13 row:dxDataGridRowObject
              * @type_function_param1_field14 isSelected:boolean
-             * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:dxElement
+             * @type_function_param1_field15 isFocused:boolean
+             * @type_function_param1_field16 isExpanded:boolean
+             * @type_function_param1_field17 cellElement:dxElement
              * @extends Action
              * @action
              */
@@ -318,8 +321,9 @@ module.exports = {
              * @type_function_param1_field12 rowType:string
              * @type_function_param1_field13 row:dxTreeListRowObject
              * @type_function_param1_field14 isSelected:boolean
-             * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:dxElement
+             * @type_function_param1_field15 isFocused:boolean
+             * @type_function_param1_field16 isExpanded:boolean
+             * @type_function_param1_field17 cellElement:dxElement
              * @extends Action
              * @action
              */
@@ -335,8 +339,9 @@ module.exports = {
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 groupIndex:number
              * @type_function_param1_field11 isSelected:boolean
-             * @type_function_param1_field12 isExpanded:boolean
-             * @type_function_param1_field13 rowElement:dxElement
+             * @type_function_param1_field12 isFocused:boolean
+             * @type_function_param1_field13 isExpanded:boolean
+             * @type_function_param1_field14 rowElement:dxElement
              * @extends Action
              * @action
              */
@@ -351,8 +356,9 @@ module.exports = {
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean
-             * @type_function_param1_field11 isExpanded:boolean
-             * @type_function_param1_field12 rowElement:dxElement
+             * @type_function_param1_field11 isFocused:boolean
+             * @type_function_param1_field12 isExpanded:boolean
+             * @type_function_param1_field13 rowElement:dxElement
              * @extends Action
              * @action
              */
@@ -1440,6 +1446,11 @@ module.exports = {
  */
 /**
  * @name dxTreeListRowObject.isSelected
+ * @type boolean
+ */
+
+/**
+ * @name dxDataGridRowObject.isFocused
  * @type boolean
  */
 
