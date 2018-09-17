@@ -22,6 +22,8 @@ import Link from "quill/formats/link";
 import Strike from "quill/formats/strike";
 import Underline from "quill/formats/underline";
 
+import Image from "./formats/image";
+
 import Syntax from "quill/modules/syntax";
 
 class QuillRegistrator {
@@ -61,6 +63,8 @@ class QuillRegistrator {
             "formats/link": Link,
             "formats/strike": Strike,
             "formats/underline": Underline,
+
+            "formats/image": Image,
 
             "modules/syntax": Syntax,
 
