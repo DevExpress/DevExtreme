@@ -10,83 +10,34 @@ exports.FocusController = gridCore.Controller.inherit((function() {
         init: function() {
             var that = this,
                 focusedRowIndex,
-                focusedRowKey,
                 focusedRowEnabled;
-
-            focusedRowIndex = that.option("focusedRowIndex");
-            focusedRowKey = that.option("focusedRowKey");
-            focusedRowEnabled = that.option("focusedRowEnabled");
-            if(focusedRowIndex >= 0 && focusedRowKey) {
-                that.option("focusedRowIndex", -1);
-            }
 
             that.dataController = that.getController("data");
 
-            that.updateFocusedRowState();
+            focusedRowIndex = that.option("focusedRowIndex");
+            focusedRowEnabled = that.option("focusedRowEnabled");
 
-            if(!isDefined(focusedRowEnabled) && (isDefined(focusedRowIndex) && focusedRowIndex >= 0 || isDefined(focusedRowKey))) {
+            if(!isDefined(focusedRowEnabled) && (isDefined(focusedRowIndex) && focusedRowIndex >= 0)) {
                 that.option("focusedRowEnabled", true);
             }
         },
 
-        updateFocusedRowState: function() {
-            var that = this;
-
-            that.dataController.changed.add(function(e) {
-                var rowIndex,
-                    rowKey;
-
-                if(e.changeType !== "refresh" && e.changeType !== "update") {
-                    return;
-                }
-
-                rowIndex = that.option("focusedRowIndex");
-                if(rowIndex >= 0) {
-                    rowKey = that.dataController.getKeyByRowIndex(rowIndex);
-                    if(isDefined(rowKey)) {
-                        that.option("focusedRowKey", rowKey);
-                    }
-                } else {
-                    rowKey = that.option("focusedRowKey");
-                    if(isDefined(rowKey)) {
-                        rowIndex = that.dataController.getRowIndexByKey(rowKey);
-                        if(rowIndex >= 0) {
-                            that.option("focusedRowIndex", rowIndex);
-                        }
-                    }
-                }
-            });
-        },
-
         optionChanged: function(args) {
-            var that = this,
-                rowKey,
-                rowIndex;
+            var that = this;
 
             if(args.value !== args.previousValue) {
                 if(args.name === "focusedRowIndex" && args.value >= 0) {
-                    rowKey = that.dataController.getKeyByRowIndex(args.value);
-                    if(isDefined(rowKey)) {
-                        that.option("focusedRowKey", rowKey);
-                    }
-                } else if(args.name === "focusedRowKey") {
-                    rowKey = args.value;
-                    if(isDefined(rowKey)) {
-                        rowIndex = that.dataController.getRowIndexByKey(rowKey);
-                        that.option("focusedRowIndex", rowIndex);
-                        that.dataController.updateItems({
-                            changeType: "updateFocusedRow",
-                            focusedRowKey: args.value
-                        });
-                    }
+                    that.dataController.updateItems({
+                        changeType: "updateFocusedRow"
+                    });
                 }
             }
 
             that.callBase(args);
         },
 
-        isRowFocused: function(arg) {
-            return this.option("focusedRowIndex") === arg.rowIndex || this.option("focusedRowKey") === arg.key;
+        isRowFocused: function(rowIndex) {
+            return this.option("focusedRowIndex") === rowIndex;
         }
     };
 })());
@@ -104,12 +55,6 @@ module.exports = {
              * @name GridBaseOptions.focusedColumnIndex
              * @type number
              * @default -1
-             */
-
-            /**
-             * @name GridBaseOptions.focusedRowKey
-             * @type object
-             * @default null
              */
 
              /**
@@ -137,21 +82,6 @@ module.exports = {
                         this.option("focusedRowIndex", nextRowIndex);
                     }
                 }
-            },
-
-            data: {
-                _processDataItem: function(item, options) {
-                    var that = this,
-                        focusController = that.getController("focus"),
-                        dataItem = that.callBase.apply(that, arguments);
-
-                    dataItem.isFocused = focusController.isRowFocused({
-                        key: dataItem.key,
-                        rowIndex: options.rowIndex
-                    });
-
-                    return dataItem;
-                }
             }
         },
 
@@ -160,8 +90,10 @@ module.exports = {
                 _createRow: function(row) {
                     var $row = this.callBase(row);
 
-                    if(row && row.isFocused) {
-                        $row.addClass(ROW_FOCUSED_CLASS);
+                    if(row) {
+                        if(this.getController("focus").isRowFocused(row.rowIndex)) {
+                            $row.addClass(ROW_FOCUSED_CLASS);
+                        }
                     }
 
                     return $row;
@@ -170,8 +102,7 @@ module.exports = {
                 _update: function(change) {
                     var that = this,
                         tableElements = that.getTableElements(),
-                        focusedRowKey = that.option("focusedRowKey"),
-                        rowIndex = that._dataController.getRowIndexByKey(focusedRowKey),
+                        focusedRowIndex = that.option("focusedRowIndex"),
                         $row,
                         changedItem;
 
@@ -181,13 +112,12 @@ module.exports = {
 
                         if(tableElements.length > 0) {
                             each(tableElements, function(_, tableElement) {
-                                changedItem = change.items[rowIndex];
+                                changedItem = change.items[focusedRowIndex];
                                 if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
-                                    $row = that._getRowElements($(tableElement)).eq(rowIndex);
+                                    $row = that._getRowElements($(tableElement)).eq(focusedRowIndex);
                                     $row.addClass(ROW_FOCUSED_CLASS);
                                 }
                             });
-                            that._updateCheckboxesClass();
                         }
                     } else {
                         that.callBase(change);
@@ -196,14 +126,10 @@ module.exports = {
 
                 _rowClick: function(e) {
                     var that = this,
-                        rowKey,
                         dxEvent = e.event;
 
                     if(that.option("focusedRowEnabled")) {
-                        rowKey = this._dataController.getKeyByRowIndex(e.rowIndex);
-                        if(rowKey) {
-                            that.option("focusedRowKey", rowKey);
-                        }
+                        that.option("focusedRowIndex", e.rowIndex);
                         dxEvent.preventDefault();
                         e.handled = true;
                     }

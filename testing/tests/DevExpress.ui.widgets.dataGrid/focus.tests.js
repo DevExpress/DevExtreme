@@ -25,8 +25,9 @@ QUnit.module("Focus", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             options = options || { };
+            options.initViews = true,
             options.dataSource = options.dataSource || this.data;
-            setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'focus'], { initDefaultOptions: true, options: options });
+            setupDataGridModules(this, ['data', 'gridView', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'focus'], { initDefaultOptions: true, options: options });
         };
 
         this.data = [
@@ -58,17 +59,15 @@ QUnit.test("Focused row initial state", function(assert) {
     // assert
     assert.equal(this.option("focusedRowEnabled"), undefined, "Focused row is enabled");
     assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
-    assert.equal(this.option("focusedRowKey"), undefined, "FocusedRowKey is undefined");
-    this.dataController.items().forEach(function(item, _) {
-        assert.equal(item.isFocused, false, "No focused row");
-    });
+    assert.equal(this.option("focusedColumnIndex"), undefined, "FocusedColumnIndex is undefined");
 });
 
-QUnit.test("Set focusedRowIndex", function(assert) {
+QUnit.test("Set focusedRow options", function(assert) {
     // act
     this.setupDataGrid({
         keyExpr: "name",
-        focusedRowIndex: 2
+        focusedRowIndex: 2,
+        focusedColumnIndex: 3
     });
 
     this.clock.tick();
@@ -76,44 +75,5 @@ QUnit.test("Set focusedRowIndex", function(assert) {
     // assert
     assert.equal(this.option("focusedRowEnabled"), true, "Focused row is enabled");
     assert.equal(this.option("focusedRowIndex"), 2, "FocusedRowIndex is 2");
-    assert.equal(this.option("focusedRowKey"), "Vadim", "FocusedRowKey is 'Vadim'");
-    this.dataController.items().forEach(function(item, _) {
-        assert.equal(item.isFocused, item.rowIndex === 2, "Row with index 1 is focused");
-    });
-});
-
-QUnit.test("Set focusedRowKey", function(assert) {
-    // act
-    this.setupDataGrid({
-        keyExpr: "name",
-        focusedRowKey: "Vadim"
-    });
-
-    this.clock.tick();
-
-    // assert
-    assert.equal(this.option("focusedRowEnabled"), true, "Focused row is enabled");
-    assert.equal(this.option("focusedRowIndex"), 2, "FocusedRowIndex is 2");
-    assert.equal(this.option("focusedRowKey"), "Vadim", "FocusedRowKey is 'Vadim'");
-    this.dataController.items().forEach(function(item, _) {
-        assert.equal(item.isFocused, item.key === "Vadim", "Row with key 'Vadim' is focused");
-    });
-});
-
-QUnit.test("Set focusedRowKey and focusedRowIndex", function(assert) {
-    // act
-    this.setupDataGrid({
-        focusedRowKey: "Vadim",
-        focusedRowIndex: 1
-    });
-
-    this.clock.tick();
-
-    // assert
-    assert.equal(this.option("focusedRowEnabled"), true, "Focused row is enabled");
-    assert.equal(this.option("focusedRowIndex"), -1, "FocusedRowIndex is -1");
-    assert.equal(this.option("focusedRowKey"), "Vadim", "FocusedRowKey is 'Vadim'");
-    this.dataController.items().forEach(function(item, _) {
-        assert.equal(item.isFocused, item.key === "Vadim", "Row with key 'Vadim' is focused");
-    });
+    assert.equal(this.option("focusedColumnIndex"), 3, "focusedColumnIndex is 2");
 });
