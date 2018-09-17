@@ -12,7 +12,7 @@ QUnit.module("DataGrid export.onXlsxCellPrepared tests", {
     afterEach: helper.afterEachTest,
 });
 
-QUnit.test("Clear Xlsx cell horizontal alignment in all xlsx cells", function(assert) {
+QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
@@ -45,6 +45,7 @@ QUnit.test("Clear Xlsx cell horizontal alignment in all xlsx cells", function(as
             columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 'str1_1' }],
             export: {
+                enabled: true,
                 onXlsxCellPrepared: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
             }
         },
@@ -52,7 +53,7 @@ QUnit.test("Clear Xlsx cell horizontal alignment in all xlsx cells", function(as
     );
 });
 
-QUnit.test("Change Xlsx cell horizontal alignment by grid cell value", function(assert) {
+QUnit.test("Change horizontal alignment by value of source grid cell", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
@@ -60,39 +61,37 @@ QUnit.test("Change Xlsx cell horizontal alignment by grid cell value", function(
         helper.STYLESHEET_STANDARDSTYLES +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment horizontal="right" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="5" t="s"><v>2</v></c></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="6" t="s"><v>3</v></c></row>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="s"><v>0</v></c><c r="B1" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="6" t="s"><v>2</v></c><c r="B2" s="3" t="s"><v>1</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
-        '<si><t>F1</t></si>' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
         '<si><t>left</t></si>' +
+        '<si><t>f2</t></si>' +
         '<si><t>right</t></si>' +
-        '<si><t>center</t></si>' +
         '</sst>';
 
-    const ds = [{ f1: 'left' }, { f1: 'right' }, { f1: 'center' }];
     helper.runTest(
         assert,
         {
-            columns: [{ dataField: 'f1' }],
-            dataSource: ds,
+            columns: ['f1', 'f2'],
+            dataSource: [{ f1: 'left', f2: 'f2' }, { f1: 'right', f2: 'f2' } ],
+            showColumnHeaders: false,
             export: {
+                enabled: true,
                 onXlsxCellPrepared: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'f1' && e.gridCell.rowType === 'data') {
-                        e.xlsxCell.style.alignment.horizontal = e.gridCell.value;
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'f1') {
+                        extend(e.xlsxCell.style, { alignment: { horizontal: e.gridCell.value } });
                     }
                 },
             }
@@ -101,7 +100,7 @@ QUnit.test("Change Xlsx cell horizontal alignment by grid cell value", function(
     );
 });
 
-QUnit.test("Set fill in all xlsx cells", function(assert) {
+QUnit.test("Change fill in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML1 +
@@ -138,6 +137,7 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             showColumnHeaders: false,
             export: {
+                enabled: true,
                 onXlsxCellPrepared: e =>
                     extend(true, e.xlsxCell, {
                         style: {
@@ -149,6 +149,66 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
                             }
                         }
                     }),
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change fill by value of source grid cell", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        helper.BASE_STYLE_XML1 +
+        '<fills count="4">' +
+        '<fill><patternFill patternType="none" /></fill>' +
+        '<fill><patternFill patternType="Gray125" /></fill>' +
+        '<fill><patternFill patternType="darkVertical"><fgColor rgb="FF20FF60" /></patternFill></fill>' +
+        '<fill><patternFill patternType="darkHorizontal"><fgColor rgb="FF20FF60" /></patternFill></fill>' +
+        '</fills>' +
+        helper.BASE_STYLE_XML2 +
+        '<cellXfs count="7">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="3" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="6" t="s"><v>1</v></c></row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>darkVertical</t></si>' +
+        '<si><t>darkHorizontal</t></si>' +
+        '</sst>';
+
+    helper.runTest(
+        assert,
+        {
+            columns: [{ dataField: "f1" }],
+            dataSource: [{ f1: 'darkVertical' }, { f1: 'darkHorizontal' }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'f1') {
+                        extend(e.xlsxCell.style, {
+                            fill: {
+                                patternFill: {
+                                    patternType: e.gridCell.value,
+                                    foregroundColor_RGB: 'FF20FF60'
+                                }
+                            }
+                        });
+                    }
+                }
             }
         },
         { styles, worksheet, sharedStrings }
