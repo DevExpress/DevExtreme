@@ -25,6 +25,7 @@ import Underline from "quill/formats/underline";
 import Image from "./formats/image";
 
 import Syntax from "quill/modules/syntax";
+import Toolbar from "./modules/toolbar";
 
 class QuillRegistrator {
     constructor() {
@@ -67,6 +68,7 @@ class QuillRegistrator {
             "formats/image": Image,
 
             "modules/syntax": Syntax,
+            "modules/toolbar": Toolbar,
 
             "themes/basic": BaseTheme
         },

@@ -10,17 +10,18 @@ import QuillRegistrator from "./quill_registrator";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import MarkdownConverter from "./markdownConverter";
 
-let RICH_EDIT_CLASS = "dx-htmleditor",
-    ANONYMOUS_TEMPLATE_NAME = "content";
+const RICH_EDIT_CLASS = "dx-htmleditor";
+const ANONYMOUS_TEMPLATE_NAME = "content";
 
-let HtmlEditor = Editor.inherit({
+const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             valueType: "HTML",
             placeholder: "Type something",
+            toolbar: null, // container, items
             mention: null,
-            allowImageResizing: true,
+            allowImageResizing: false,
             resizing: null
         });
     },
@@ -109,26 +110,41 @@ let HtmlEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        let modulesConfig = {};
+        let modulesConfig = extend({}, {
+            mention: this._getModuleConfigByOption("mention"),
+            toolbar: this._getToolbarConfig(),
+            dataPlaceholders: this._getModuleConfigByOption("dataPlaceholders")
+        });
 
         if(this.option("allowImageResizing")) {
-        }
-
-        if(this.option("mention")) {
-        }
-
-        if(this.option("dataPlaceholders")) {
+            modulesConfig.resizing = { editorInstance: this };
         }
 
         return modulesConfig;
     },
 
     _getToolbarConfig: function() {
-        return [];
+        const toolbarConfig = this.option("toolbar");
+        let resultConfig;
+
+        if(Array.isArray(toolbarConfig)) {
+            resultConfig = {
+                editorInstance: this,
+                items: toolbarConfig
+            };
+        } else {
+            resultConfig = this._getModuleConfigByOption("toolbar");
+        }
+
+        return resultConfig;
     },
 
-    _getBaseModuleConfig: function(userOptionName) {
+    _getModuleConfigByOption: function(userOptionName) {
         let userConfig = this.option(userOptionName);
+
+        if(!isDefined(userConfig)) {
+            return undefined;
+        }
 
         return extend({
             editorInstance: this
