@@ -9,6 +9,7 @@ import {
 
 import Header from "quill/formats/header";
 import List, { ListItem } from "quill/formats/list";
+import { IndentClass as Indent } from "quill/formats/indent";
 
 import { BackgroundStyle } from "quill/formats/background";
 import { ColorStyle } from "quill/formats/color";
@@ -44,6 +45,7 @@ class QuillRegistrator {
         QuillRegistrator.Quill.register({
             "formats/align": AlignStyle,
             "formats/direction": DirectionStyle,
+            "formats/indent": Indent,
 
             "formats/background": BackgroundStyle,
             "formats/color": ColorStyle,
@@ -52,7 +54,7 @@ class QuillRegistrator {
 
             "formats/header": Header,
             "formats/list": List,
-            'formats/list/item': ListItem,
+            "formats/list/item": ListItem,
 
             "formats/bold": Bold,
             "formats/italic": Italic,
