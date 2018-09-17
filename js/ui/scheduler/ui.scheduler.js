@@ -2384,7 +2384,9 @@ var Scheduler = Widget.inherit({
         }
 
         var recurrenceException = this._makeDateAsRecurrenceException(exceptionDate, targetAppointment),
-            updatedAppointment = extend({}, targetAppointment, { recurrenceException: recurrenceException });
+            updatedAppointment = extend({}, targetAppointment);
+
+        this.fire("setField", "recurrenceException", updatedAppointment, recurrenceException);
 
         if(isPopupEditing) {
             this._updatedRecAppointment = updatedAppointment;
