@@ -241,6 +241,7 @@ exports.DataProvider = Class.inherit({
                     }
                     break;
                 case "group":
+                    sourceCellRef.column = this._options.groupColumns[item.groupIndex];
                     if(cellIndex < 1) {
                         return this._getGroupValue(item);
                     } else {
