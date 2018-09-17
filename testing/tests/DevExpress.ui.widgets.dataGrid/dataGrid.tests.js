@@ -11095,6 +11095,30 @@ QUnit.test("column with width auto should have minimum size by content", functio
     assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
 });
 
+// T672282
+QUnit.test("column with width auto should have minimum size by content if columnAutoWidth is disabled", function(assert) {
+    var CONTENT_WIDTH = 50;
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1000,
+        loadingTimeout: undefined,
+        dataSource: [{ field1: 1, field2: 2 }],
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            width: "auto",
+            cellTemplate: function(container) {
+                $(container).css("padding", 0);
+                $("<div>").css("width", CONTENT_WIDTH).appendTo(container);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
+});
+
 QUnit.test("column with width 0 should be applied", function(assert) {
     if(browser.safari || (browser.msie && parseInt(browser.version) <= 11)) {
         assert.ok(true, "IE 11 and Safari works wrong with width 0");

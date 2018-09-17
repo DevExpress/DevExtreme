@@ -984,10 +984,6 @@ module.exports = {
                 _toggleBestFitMode: function(isBestFit) {
                     isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
                     this.callBase(isBestFit);
-                    if(!this.option("legacyRendering") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
-                        var $rowsTable = this._rowsView._getTableElement();
-                        $rowsTable.get(0).style.width = isBestFit ? "auto" : "";
-                    }
                 },
 
                 _needStretch: function() {
