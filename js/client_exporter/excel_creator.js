@@ -198,14 +198,14 @@ var ExcelCreator = Class.inherit({
                 const cellSourceData = {};
                 cellData = that._prepareValue(rowIndex, cellIndex, cellSourceData);
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
-                if(dataProvider.customizeXlsxCell) {
+                if(dataProvider.onXlsxCellPrepared) {
                     const xlsxCell = {
                         style: extend(true, {}, that._styleArray[cellStyleId]),
                         // value: cellData.value,
                         // type: cellData.type,
                         // xlsxFile
                     };
-                    dataProvider.customizeXlsxCell({
+                    dataProvider.onXlsxCellPrepared({
                         xlsxCell,
                         cellSourceData,
                     });

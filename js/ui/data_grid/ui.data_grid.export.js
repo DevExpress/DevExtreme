@@ -64,13 +64,13 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            customizeXlsxCell: exportController.option("export.customizeXlsxCell"),
+            onXlsxCellPrepared: exportController.option("export.onXlsxCellPrepared"),
         };
     },
 
-    customizeXlsxCell: function(e) {
-        if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell({
+    onXlsxCellPrepared: function(e) {
+        if(this._options.onXlsxCellPrepared) {
+            this._options.onXlsxCellPrepared({
                 xlsxCell: e.xlsxCell,
                 gridCell: e.cellSourceData
             });

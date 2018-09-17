@@ -7,7 +7,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("DataGrid export.customizeXlsxCell tests", {
+QUnit.module("DataGrid export.onXlsxCellPrepared tests", {
     beforeEach: helper.beforeEachTest,
     afterEach: helper.afterEachTest,
 });
@@ -45,7 +45,7 @@ QUnit.test("Clear alignment in all xlsx cells", function(assert) {
             columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 'str1_1' }],
             export: {
-                customizeXlsxCell: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
+                onXlsxCellPrepared: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
             }
         },
         { styles, worksheet, sharedStrings }
@@ -89,7 +89,7 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             showColumnHeaders: false,
             export: {
-                customizeXlsxCell: e =>
+                onXlsxCellPrepared: e =>
                     extend(true, e.xlsxCell, {
                         style: {
                             fill: {
@@ -129,7 +129,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
         const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
             ds = config.values.map(item => { return { f1: item }; });
 
-        helper.runCustomizeXlsxCellTest(assert,
+        helper.runXlsxCellPreparedTest(assert,
             {
                 columns: [column],
                 dataSource: ds,
@@ -154,7 +154,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
 
 QUnit.test("Check event arguments for data row cell with formatting", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number", format: "currency" }],
             dataSource: ds,
@@ -167,7 +167,7 @@ QUnit.test("Check event arguments for data row cell with formatting", function(a
 });
 
 QUnit.test("Check event arguments for header", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [{ dataField: "f1" }],
             dataSource: [],
@@ -180,7 +180,7 @@ QUnit.test("Check event arguments for header", function(assert) {
 
 QUnit.test("Check event arguments for bands", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [
                 { dataField: "f1" },
@@ -210,7 +210,7 @@ QUnit.test("Check event arguments for bands", function(assert) {
 
 QUnit.test("Check event arguments for groupping 1 level", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -228,7 +228,7 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
 
 QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -248,7 +248,7 @@ QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
 
 QUnit.test("Check event arguments for group summary", function(assert) {
     const ds = [{ f1: 'str1', f2: 1 }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -269,7 +269,7 @@ QUnit.test("Check event arguments for group summary", function(assert) {
 
 QUnit.test("Check event arguments for group summary with alignByColumn", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -301,7 +301,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
         { f1: '1_f1', f2: '1_f2', f3: '1_f3', f4: '1_f4' },
         { f1: '2_f1', f2: '2_f2', f3: '2_f3', f4: '2_f4' }
     ];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -342,7 +342,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
 
 QUnit.test("Check event arguments for total summary", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number" }],
             dataSource: ds,
@@ -360,7 +360,7 @@ QUnit.test("Check event arguments for total summary", function(assert) {
 
 QUnit.test("Check event arguments for changes from customizeExportData", function(assert) {
     const ds = [{ f1: 'f1' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runXlsxCellPreparedTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "string" }],
             dataSource: ds,
@@ -375,7 +375,7 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
     );
 });
 
-QUnit.test("Assign a copy to 'e.xlsxCell.style'", function(assert) {
+QUnit.test("Assign a copy of a shared style object to 'e.xlsxCell.style'", function(assert) {
     const done = assert.async();
     let counter = 1;
     const gridOptions = {
@@ -384,7 +384,7 @@ QUnit.test("Assign a copy to 'e.xlsxCell.style'", function(assert) {
         showColumnHeaders: false,
         loadingTimeout: undefined,
         export: {
-            customizeXlsxCell: e => {
+            onXlsxCellPrepared: e => {
                 assert.step(e.xlsxCell.style.alignment.horizontal);
                 e.xlsxCell.style.alignment.horizontal = counter++;
             },

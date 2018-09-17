@@ -95,7 +95,7 @@ exports.ExportMixin = extend({}, exportMixin, {
             items: items,
             rtlEnabled: this.option("rtlEnabled"),
             dataFields: this.getDataSource().getAreaFields("data"),
-            customizeXlsxCell: this.option("export.customizeXlsxCell")
+            onXlsxCellPrepared: this.option("export.onXlsxCellPrepared")
         });
     }
 });
@@ -227,9 +227,9 @@ exports.DataProvider = Class.inherit({
         return DATA_STYLE_OFFSET + (item.dataIndex || 0);
     },
 
-    customizeXlsxCell: function({ xlsxCell }) {
-        if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell({ xlsxCell });
+    onXlsxCellPrepared: function({ xlsxCell }) {
+        if(this._options.onXlsxCellPrepared) {
+            this._options.onXlsxCellPrepared({ xlsxCell });
         }
     },
 });

@@ -298,7 +298,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
     );
 });
 
-QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", function(assert) {
+QUnit.test("onXlsxCellPrepared - set alignment: null for all xlsx cells", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         BASE_STYLE_XML +
@@ -327,7 +327,7 @@ QUnit.test("customizeXlsxCell - set alignment: null for all xlsx cells", functio
         assert,
         {
             export: {
-                customizeXlsxCell: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
+                onXlsxCellPrepared: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
             }
         },
         { styles, worksheet, sharedStrings }
