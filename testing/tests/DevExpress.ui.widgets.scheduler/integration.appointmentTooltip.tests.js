@@ -450,6 +450,45 @@ QUnit.test("Click on tooltip-remove button should call scheduler.deleteAppointme
 
 });
 
+QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointment and hide tooltip, if recurrenceRuleExpr and recurrenceExceptionExpr is set", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2018, 6, 30),
+        currentView: "month",
+        views: ["month"],
+        recurrenceRuleExpr: "SC_RecurrenceRule",
+        recurrenceExceptionExpr: "SC_RecurrenceException",
+        recurrenceEditMode: "occurrence",
+        dataSource: [{
+            text: "Meeting of Instructors",
+            startDate: new Date(2018, 6, 30, 10, 0),
+            endDate: new Date(2018, 6, 30, 11, 0),
+            SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
+            SC_RecurrenceException: "20170626T100000"
+        }
+        ]
+    });
+    var stub = sinon.stub(this.instance, "_updateAppointment");
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    this.clock.tick(300);
+
+    var $tooltip = $(".dx-scheduler-appointment-tooltip");
+    $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(0).trigger("dxclick");
+
+    assert.deepEqual(stub.getCall(0).args[1],
+        {
+            startDate: new Date(2018, 6, 30, 10, 0),
+            endDate: new Date(2018, 6, 30, 11, 0),
+            text: "Meeting of Instructors",
+            SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
+            SC_RecurrenceException: "20170626T100000,20180731T100000"
+        },
+        "updateAppointment has a right arguments");
+
+    assert.equal($(".dx-scheduler-appointment-tooltip").length, 0, "tooltip was hidden");
+
+});
+
 QUnit.test("Tooltip should appear if mouse is over arrow icon", function(assert) {
     var endDate = new Date(2015, 9, 12);
 
