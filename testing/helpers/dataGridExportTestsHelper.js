@@ -86,9 +86,9 @@ const dataGridExportTestsHelper = {
                         skipProperties.push(propertyName);
                     }
                 }
-                for(const propertyName in actualGridCell) {
-                    if(!skipProperties.indexOf(propertyName) === -1) {
-                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `gridCell[${propertyName}], ${i}`);
+                for(const actualPropertyName in actualGridCell) {
+                    if(skipProperties.indexOf(actualPropertyName) === -1) {
+                        assert.strictEqual(toComparable(actualGridCell[actualPropertyName]), toComparable(expectedGridCell[actualPropertyName]), `gridCell[${actualPropertyName}], ${i}`);
                     }
                 }
 

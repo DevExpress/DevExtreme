@@ -12,7 +12,7 @@ QUnit.module("DataGrid export.onXlsxCellPrepared tests", {
     afterEach: helper.afterEachTest,
 });
 
-QUnit.test("Clear alignment in all xlsx cells", function(assert) {
+QUnit.test("Clear Xlsx cell horizontal alignment in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
@@ -46,6 +46,55 @@ QUnit.test("Clear alignment in all xlsx cells", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             export: {
                 onXlsxCellPrepared: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change Xlsx cell horizontal alignment by grid cell value", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="7">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="5" t="s"><v>2</v></c></row>' +
+        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="6" t="s"><v>3</v></c></row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+        '<si><t>F1</t></si>' +
+        '<si><t>left</t></si>' +
+        '<si><t>right</t></si>' +
+        '<si><t>center</t></si>' +
+        '</sst>';
+
+    const ds = [{ f1: 'left' }, { f1: 'right' }, { f1: 'center' }];
+    helper.runTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1' }],
+            dataSource: ds,
+            export: {
+                onXlsxCellPrepared: e => {
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'f1' && e.gridCell.rowType === 'data') {
+                        e.xlsxCell.style.alignment.horizontal = e.gridCell.value;
+                    }
+                },
             }
         },
         { styles, worksheet, sharedStrings }
@@ -139,6 +188,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
                 const result = [];
                 for(let i = 0; i < config.values.length; i++) {
                     result.push({
+                        rowType: 'data',
                         row: { data: ds[i], key: ds[i], rowType: 'data' },
                         column: grid.columnOption(0),
                         value: config.values[i],
