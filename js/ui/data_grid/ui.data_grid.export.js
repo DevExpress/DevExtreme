@@ -72,7 +72,7 @@ exports.DataProvider = Class.inherit({
         if(this._options.customizeXlsxCell) {
             this._options.customizeXlsxCell({
                 xlsxCell: e.xlsxCell,
-                gridCell: e.sourceCell
+                gridCell: e.cellSourceData
             });
         }
     },
@@ -197,7 +197,7 @@ exports.DataProvider = Class.inherit({
         });
     },
 
-    getCellValue: function(rowIndex, cellIndex, sourceCellRef) {
+    getCellValue: function(rowIndex, cellIndex, cellSourceData) {
         var column,
             value,
             i,
@@ -207,13 +207,13 @@ exports.DataProvider = Class.inherit({
             itemValues,
             item;
 
-        sourceCellRef = sourceCellRef || {};
+        cellSourceData = cellSourceData || {};
 
         if(rowIndex < this.getHeaderRowCount()) {
             const columnsRow = this.getColumns(true)[rowIndex];
             column = columnsRow[cellIndex];
-            sourceCellRef.rowType = 'header';
-            sourceCellRef.column = column && column.gridColumn;
+            cellSourceData.rowType = 'header';
+            cellSourceData.column = column && column.gridColumn;
             return column && column.caption;
         } else {
             rowIndex -= this.getHeaderRowCount();
@@ -223,8 +223,8 @@ exports.DataProvider = Class.inherit({
 
         if(item) {
             itemValues = item.values;
-            sourceCellRef.rowType = item.rowType;
-            sourceCellRef.column = columns[cellIndex] && columns[cellIndex].gridColumn;
+            cellSourceData.rowType = item.rowType;
+            cellSourceData.column = columns[cellIndex] && columns[cellIndex].gridColumn;
             switch(item.rowType) {
                 case "groupFooter":
                 case "totalFooter":
@@ -236,7 +236,7 @@ exports.DataProvider = Class.inherit({
                     }
                     break;
                 case "group":
-                    sourceCellRef.column = this._options.groupColumns[item.groupIndex];
+                    cellSourceData.column = this._options.groupColumns[item.groupIndex];
                     if(cellIndex < 1) {
                         return this._getGroupValue(item);
                     } else {
@@ -257,15 +257,15 @@ exports.DataProvider = Class.inherit({
                         value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
                         result = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // similar to 'ui.grid_core.rows.js: _getCellOptions'
                     }
-                    sourceCellRef.row = {
+                    cellSourceData.row = {
                         data: item.data,
                         key: item.data,
                         // rowIndex: rowIndex,
                         rowType: item.rowType,
                     };
-                    sourceCellRef.value = itemValues[correctedCellIndex];
-                    sourceCellRef.displayValue = value;
-                    sourceCellRef.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
+                    cellSourceData.value = itemValues[correctedCellIndex];
+                    cellSourceData.displayValue = value;
+                    cellSourceData.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
                     return result;
             }
         }

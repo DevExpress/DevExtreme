@@ -107,7 +107,7 @@ QUnit.test("Set fill in all xlsx cells", function(assert) {
 });
 
 QUnit.test("Check event arguments for data row cell with various data types", function(assert) {
-    const testConfigArray = [
+    const configurations = [
         { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
         { dataType: "string", values: [undefined, null, '', 's'], expectedTexts: ['', '', '', 's' ] },
         { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)], expectedTexts: ['', '', '12/1/2018' ] },
@@ -125,7 +125,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
             }
         },
     ];
-    testConfigArray.forEach(config => {
+    configurations.forEach(config => {
         const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
             ds = config.values.map(item => { return { f1: item }; });
 

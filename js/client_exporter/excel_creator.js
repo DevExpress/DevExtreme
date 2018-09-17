@@ -152,9 +152,9 @@ var ExcelCreator = Class.inherit({
         }
     },
 
-    _prepareValue: function(rowIndex, cellIndex, sourceCellRef) {
+    _prepareValue: function(rowIndex, cellIndex, cellSourceData) {
         var dataProvider = this._dataProvider,
-            value = dataProvider.getCellValue(rowIndex, cellIndex, sourceCellRef),
+            value = dataProvider.getCellValue(rowIndex, cellIndex, cellSourceData),
             type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
         if(type === "d" && !typeUtils.isDate(value)) {
@@ -195,16 +195,19 @@ var ExcelCreator = Class.inherit({
             cellsLength = columns.length;
 
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
-                const sourceCellRef = {};
-                cellData = that._prepareValue(rowIndex, cellIndex, sourceCellRef);
+                const cellSourceData = {};
+                cellData = that._prepareValue(rowIndex, cellIndex, cellSourceData);
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
                 if(dataProvider.customizeXlsxCell) {
                     const xlsxCell = {
                         style: extend(true, {}, that._styleArray[cellStyleId]),
+                        // value: cellData.value,
+                        // type: cellData.type,
+                        // xlsxFile
                     };
                     dataProvider.customizeXlsxCell({
                         xlsxCell,
-                        sourceCell: sourceCellRef,
+                        cellSourceData,
                     });
                     cellStyleId = this._xlsxFile.registerCellFormat(xlsxCell.style);
                 }
