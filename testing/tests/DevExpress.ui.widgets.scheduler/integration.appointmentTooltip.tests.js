@@ -460,7 +460,6 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
         recurrenceEditMode: "occurrence",
         dataSource: [{
             text: "Meeting of Instructors",
-            roomId: [4],
             startDate: new Date(2018, 6, 30, 10, 0),
             endDate: new Date(2018, 6, 30, 11, 0),
             SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
