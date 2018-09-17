@@ -1650,10 +1650,11 @@ QUnit.module("live update", {
         this.loadSpy = loadSpy;
         var itemRemove = { field: 1 },
             itemUpdate = { field: 2 };
-        this.insertChange = { type: "insert", data: { field: 3 } };
-        this.removeChange = { type: "remove", key: itemRemove };
-        this.updateChange = { type: "update", key: itemUpdate, data: { field: 4 } };
-        this.changes = [this.insertChange, this.removeChange, this.updateChange];
+        this.changes = [
+            { type: "insert", data: { field: 3 } },
+            { type: "remove", key: itemRemove },
+            { type: "update", key: itemUpdate, data: { field: 4 } }
+        ];
 
         this.initDataSource = function(options) {
             return new DataSource($.extend({
@@ -1663,6 +1664,22 @@ QUnit.module("live update", {
                 }
             }, options));
         };
+        this.initGroupingDataSource = function(options) {
+            return new DataSource({
+                load: function() {
+                    return [{
+                        key: "a",
+                        items: [{ key: 1, field: 1, type: "a" }, { key: 2, field: 2, type: "a" }]
+                    }, {
+                        key: "b",
+                        items: [{ key: 3, field: 3, type: "b" }]
+                    }];
+                },
+                key: "key",
+                group: "type"
+            });
+        };
+
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
@@ -1738,5 +1755,41 @@ QUnit.module("live update", {
         this.clock.tick(100);
         assert.equal(changedSpy.callCount, 1);
         assert.equal(changedSpy.lastCall.args[0].changes.length, 6);
+    });
+
+    QUnit.test("push for grouping", function(assert) {
+        var dataSource = this.initGroupingDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "update", data: { key: 1, field: 12, type: "a" }, key: 1 }
+        ]);
+        assert.deepEqual(dataSource.items()[0].key, "a");
+        assert.deepEqual(dataSource.items()[0].items[0].field, 12);
+    });
+
+    QUnit.test("push type='insert' is ignored for grouping", function(assert) {
+        var dataSource = this.initGroupingDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "insert", data: { key: 3, field: 3, type: "a" } }
+        ]);
+        assert.deepEqual(dataSource.items()[0].items.length, 2);
+
+        dataSource.store().push([
+            { type: "insert", key: 4 }
+        ]);
+        assert.deepEqual(dataSource.items()[0].items.length, 2);
+    });
+
+    QUnit.test("push type='delete' is ignored for grouping", function(assert) {
+        var dataSource = this.initGroupingDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "delete", key: 2 }
+        ]);
+        assert.deepEqual(dataSource.items()[0].items.length, 2);
     });
 });
