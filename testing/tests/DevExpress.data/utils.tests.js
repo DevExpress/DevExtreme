@@ -3,7 +3,7 @@ var Guid = require("core/guid"),
     keysEqual = dataUtils.keysEqual,
     processRequestResultLock = dataUtils.processRequestResultLock,
     b64 = dataUtils.base64_encode,
-    ThrottleWithAggregation = dataUtils.ThrottleWithAggregation,
+    createThrottleWithAggregation = dataUtils.createThrottleWithAggregation,
     odataUtils = require("data/odata/utils");
 
 QUnit.module("keysEqual");
@@ -115,9 +115,9 @@ QUnit.module("Throttling", {
 }, function() {
     QUnit.test("push with timeout", function(assert) {
         var spy = sinon.spy(),
-            throttle = new ThrottleWithAggregation(spy, 100);
+            throttle = createThrottleWithAggregation(spy, 100);
         for(var i = 0; i < 10; i++) {
-            throttle.execute([i]);
+            throttle([i]);
         }
         assert.equal(spy.callCount, 0);
         this.clock.tick(100);
@@ -127,12 +127,13 @@ QUnit.module("Throttling", {
 
     QUnit.test("dispose", function(assert) {
         var spy = sinon.spy(),
-            throttle = new ThrottleWithAggregation(spy, 100);
+            throttle = createThrottleWithAggregation(spy, 100),
+            timeoutId;
         for(var i = 0; i < 10; i++) {
-            throttle.execute([i]);
+            timeoutId = throttle([i]);
         }
         assert.equal(spy.callCount, 0);
-        throttle.dispose();
+        clearTimeout(timeoutId);
         this.clock.tick(100);
         assert.equal(spy.callCount, 0);
     });

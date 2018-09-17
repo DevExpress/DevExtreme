@@ -9,7 +9,6 @@ import { errors } from "./errors";
 import objectUtils from "../core/utils/object";
 import { toComparable } from "../core/utils/data";
 import { Deferred } from "../core/utils/deferred";
-import { noop } from "../core/utils/common";
 
 var window = windowUtils.getWindow();
 
@@ -337,10 +336,10 @@ function ArrayHelper() {
     };
 }
 
-function Throttle(func, timeout) {
-    let timeoutId,
+function createThrottle(func, timeout) {
+    var timeoutId,
         lastArgs;
-    this.execute = function() {
+    return function() {
         lastArgs = arguments;
         if(!timeoutId) {
             timeoutId = setTimeout(() => {
@@ -350,34 +349,23 @@ function Throttle(func, timeout) {
                 }
             }, timeout);
         }
-    };
-    this.dispose = function() {
-        clearTimeout(timeoutId);
+        return timeoutId;
     };
 };
 
-function ThrottleWithAggregation(func, timeout) {
-    if(!timeout) {
-        this.execute = func;
-        this.dispose = noop;
-    } else {
-        let cache = [],
-            throttle = new Throttle(function() {
-                func.call(this, cache);
-                cache = [];
-            }, timeout);
+function createThrottleWithAggregation(func, timeout) {
+    var cache = [],
+        throttle = createThrottle(function() {
+            func.call(this, cache);
+            cache = [];
+        }, timeout);
 
-        this.execute = function(changes) {
-            if(Array.isArray(changes)) {
-                cache.push(...changes);
-            }
-            throttle.execute.call(this, cache);
-        };
-
-        this.dispose = function() {
-            throttle.dispose();
-        };
-    }
+    return function(changes) {
+        if(Array.isArray(changes)) {
+            cache.push(...changes);
+        }
+        return throttle.call(this, cache);
+    };
 }
 
 /**
@@ -393,8 +381,7 @@ var utils = {
 
     keysEqual: keysEqual,
     arrayHelper: new ArrayHelper(),
-    ThrottleWithAggregation: ThrottleWithAggregation,
-    Throttle: Throttle,
+    createThrottleWithAggregation: createThrottleWithAggregation,
     trivialPromise: trivialPromise,
     rejectedPromise: rejectedPromise,
 

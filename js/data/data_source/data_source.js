@@ -215,9 +215,13 @@ var DataSource = Class.inherit({
         * @type number
         * @default undefined
         */
-        this._pushThrottle = new dataUtils.ThrottleWithAggregation(this._onPush, options.pushAggregationTimeout);
+        var onPushHandler = options.pushAggregationTimeout
+            ? dataUtils.createThrottleWithAggregation(this._onPush, options.pushAggregationTimeout).bind(this)
+            : this._onPush.bind(this);
 
-        this._onPushHandler = this._pushThrottle.execute.bind(this);
+        this._onPushHandler = (changes) => {
+            this.aggregationTimeoutId = onPushHandler.call(this, changes);
+        };
 
         /**
         * @name DataSourceOptions.store
@@ -383,7 +387,7 @@ var DataSource = Class.inherit({
     dispose: function() {
         this._store.off("push", this._onPushHandler);
         this._disposeEvents();
-        this._pushThrottle.dispose();
+        clearTimeout(this.aggregationTimeoutId);
 
         delete this._store;
 
