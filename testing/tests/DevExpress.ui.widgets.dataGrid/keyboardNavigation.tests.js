@@ -5102,6 +5102,8 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.is(":focus"), "focus", "freespace cell has no focus");
         assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "freespace cell has no .dx-cell-focus-disabled");
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
+        // T672133
+        assert.ok(that.rowsView.element().is(":focus"), "rowsView has focus to work pageUp/pageDown");
     });
 
     QUnit.testInActiveWindow("virtual row cells should not have focus", function(assert) {
