@@ -485,7 +485,7 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
     );
 });
 
-QUnit.test("Assign a copy of a shared style object to 'e.xlsxCell.style'", function(assert) {
+QUnit.test("Changes in 'e.xlsxCell.style' shouldn't modify a shared style object", function(assert) {
     const done = assert.async();
     let counter = 1;
     const gridOptions = {
