@@ -1570,7 +1570,7 @@ registerTheme({
             useNodeColors: false,
             font: {
                 color: BLACK,
-                weight: 400
+                weight: 500
             },
             border: {
                 visible: false,
@@ -1581,7 +1581,7 @@ registerTheme({
                 return info.title;
             },
             shadow: {
-                opacity: 0,
+                opacity: 0.2,
                 offsetX: 0,
                 offsetY: 1,
                 blur: 1,

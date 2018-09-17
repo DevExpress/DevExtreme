@@ -32,11 +32,14 @@ function compileLabelAttrs(labelOptions, filter, node) {
         borderColor = isDefined(labelOptions.border.color) ? labelOptions.border.color : labelOptions.font.color,
         borderOpacity = isDefined(labelOptions.border.opacity) ? labelOptions.border.opacity : 1,
         attr = {
-            filter: filter,
-            stroke: borderColor,
-            "stroke-width": borderVisible ? borderWidth : 0,
-            "stroke-opacity": borderOpacity
+            filter: filter
         };
+
+    if(borderVisible && borderWidth) {
+        attr.stroke = borderColor;
+        attr["stroke-width"] = borderVisible ? borderWidth : 0;
+        attr["stroke-opacity"] = borderOpacity;
+    }
 
     return {
         attr: attr,

@@ -293,6 +293,9 @@ registerTheme({
         label: {
             font: {
                 color: WHITE
+            },
+            shadow: {
+                opacity: 0
             }
         },
         node: {
