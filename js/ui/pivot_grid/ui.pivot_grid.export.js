@@ -195,20 +195,17 @@ exports.DataProvider = Class.inherit({
         return style && style.dataType || "string";
     },
 
-    getCellValue: function(rowIndex, cellIndex) {
-        const cellData = this.getCellData(rowIndex, cellIndex);
-        return cellData ? cellData.value : null;
-    },
-
     getCellData: function(rowIndex, cellIndex) {
         var items = this._options.items,
-            item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+            item = items[rowIndex] && items[rowIndex][cellIndex] || {},
+            result = {};
 
         if(this.getCellType(rowIndex, cellIndex) === "string") {
-            return { value: item.text };
+            result.value = item.text;
         } else {
-            return { value: item.value };
+            result.value = item.value;
         }
+        return result;
     },
 
     getStyles: function() {

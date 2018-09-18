@@ -197,13 +197,8 @@ exports.DataProvider = Class.inherit({
         });
     },
 
-    getCellValue: function(rowIndex, cellIndex) {
-        const cellData = this.getCellData(rowIndex, cellIndex);
-        return cellData ? cellData.value : null;
-    },
-
     getCellData: function(rowIndex, cellIndex) {
-        var cellData = { cellSourceData: {} },
+        var result = { cellSourceData: {}, value },
             column,
             value,
             i,
@@ -216,9 +211,9 @@ exports.DataProvider = Class.inherit({
         if(rowIndex < this.getHeaderRowCount()) {
             const columnsRow = this.getColumns(true)[rowIndex];
             column = columnsRow[cellIndex];
-            cellData.cellSourceData.rowType = 'header';
-            cellData.cellSourceData.column = column && column.gridColumn;
-            cellData.value = column && column.caption;
+            result.cellSourceData.rowType = 'header';
+            result.cellSourceData.column = column && column.gridColumn;
+            result.value = column && column.caption;
         } else {
             rowIndex -= this.getHeaderRowCount();
 
@@ -226,22 +221,22 @@ exports.DataProvider = Class.inherit({
 
             if(item) {
                 itemValues = item.values;
-                cellData.cellSourceData.rowType = item.rowType;
-                cellData.cellSourceData.column = columns[cellIndex] && columns[cellIndex].gridColumn;
+                result.cellSourceData.rowType = item.rowType;
+                result.cellSourceData.column = columns[cellIndex] && columns[cellIndex].gridColumn;
                 switch(item.rowType) {
                     case "groupFooter":
                     case "totalFooter":
                         if(correctedCellIndex < itemValues.length) {
                             value = itemValues[correctedCellIndex];
                             if(isDefined(value)) {
-                                cellData.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
+                                result.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
                             }
                         }
                         break;
                     case "group":
-                        cellData.cellSourceData.column = this._options.groupColumns[item.groupIndex];
+                        result.cellSourceData.column = this._options.groupColumns[item.groupIndex];
                         if(cellIndex < 1) {
-                            cellData.value = this._getGroupValue(item);
+                            result.value = this._getGroupValue(item);
                         } else {
                             summaryItems = item.values[correctedCellIndex];
                             if(Array.isArray(summaryItems)) {
@@ -249,7 +244,7 @@ exports.DataProvider = Class.inherit({
                                 for(i = 0; i < summaryItems.length; i++) {
                                     value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
                                 }
-                                cellData.value = value;
+                                result.value = value;
                             }
                         }
                         break;
@@ -257,21 +252,21 @@ exports.DataProvider = Class.inherit({
                         column = columns[cellIndex];
                         if(column) {
                             value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
-                            cellData.value = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // similar to 'ui.grid_core.rows.js: _getCellOptions'
+                            result.value = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // similar to 'ui.grid_core.rows.js: _getCellOptions'
                         }
-                        cellData.cellSourceData.row = {
+                        result.cellSourceData.row = {
                             data: item.data,
                             key: item.data,
                             // rowIndex: rowIndex,
                             rowType: item.rowType,
                         };
-                        cellData.cellSourceData.value = itemValues[correctedCellIndex];
-                        cellData.cellSourceData.displayValue = value;
-                        cellData.cellSourceData.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
+                        result.cellSourceData.value = itemValues[correctedCellIndex];
+                        result.cellSourceData.displayValue = value;
+                        result.cellSourceData.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
                 }
             }
         }
-        return cellData;
+        return result;
     },
 
     isHeadersVisible: function() {
