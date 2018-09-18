@@ -742,6 +742,201 @@ QUnit.test("Move visual frame by visualRangeLength", function(assert) {
     });
 });
 
+QUnit.test("Reset axis viewport", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var zoomStart = sinon.spy();
+    var zoomEnd = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }, {
+            arg: 8,
+            val: 3
+        }, {
+            arg: 11,
+            val: 8
+        }],
+        argumentAxis: {
+            visualRange: [2, 5],
+            valueMarginsEnabled: false
+        },
+        valueAxis: { valueMarginsEnabled: false },
+        series: { type: "line" },
+        onZoomStart: zoomStart,
+        onZoomEnd: zoomEnd
+    });
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 5 });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 5, endValue: 7 });
+
+    chart.getArgumentAxis().visualRange(null, null);
+
+    assert.equal(zoomStart.callCount, 1);
+    assert.equal(zoomEnd.callCount, 1);
+    assert.deepEqual(zoomStart.firstCall.args[0].range, { startValue: 2, endValue: 5 });
+    assert.deepEqual(zoomEnd.firstCall.args[0].range, { startValue: 1, endValue: 11 });
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 11 });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 8 });
+
+    chart.getArgumentAxis().visualRange([3, 6]);
+    chart.getArgumentAxis().visualRange({ startValue: null, endValue: null });
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 11 });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 8 });
+});
+
+QUnit.test("Reset chart viewport", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var zoomStart = sinon.spy();
+    var zoomEnd = sinon.spy();
+    var dataSource = [{
+        year: new Date(1997, 0, 1),
+        first: 263,
+        second: 226,
+        third: 10,
+        fourth: 1
+    }, {
+        year: new Date(1999, 0, 1),
+        first: 69,
+        second: 56,
+        third: 16,
+        fourth: 7
+    }, {
+        year: new Date(2001, 0, 1),
+        first: 57,
+        second: 77,
+        third: 43,
+        fourth: 23
+    }, {
+        year: new Date(2003, 0, 1),
+        first: 0,
+        second: 163,
+        third: 127,
+        fourth: 210
+    }, {
+        year: new Date(2005, 0, 1),
+        first: 0,
+        second: 103,
+        third: 36,
+        fourth: 361
+    }, {
+        year: new Date(2007, 0, 1),
+        first: 0,
+        second: 91,
+        third: 3,
+        fourth: 406
+    }, {
+        year: new Date(2008, 0, 1),
+        first: 263,
+        second: 226,
+        third: 10,
+        fourth: 1
+    }, {
+        year: new Date(2009, 0, 1),
+        first: 169,
+        second: 256,
+        third: 66,
+        fourth: 7
+    }, {
+        year: new Date(2010, 0, 1),
+        first: 57,
+        second: 257,
+        third: 143,
+        fourth: 43
+    }, {
+        year: new Date(2011, 0, 1),
+        first: 0,
+        second: 163,
+        third: 127,
+        fourth: 210
+    }, {
+        year: new Date(2013, 0, 1),
+        first: 0,
+        second: 103,
+        third: 36,
+        fourth: 361
+    }, {
+        year: new Date(2015, 3, 1),
+        first: 0,
+        second: 91,
+        third: 3,
+        fourth: 706
+    }];
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        commonSeriesSettings: {
+            argumentField: "year"
+        },
+        series: [
+            { valueField: "first", name: "SMP", pane: "p1" },
+            { valueField: "second", name: "MMP", pane: "p1" },
+            { valueField: "third", name: "Cnstl", pane: "p2" },
+            { valueField: "fourth", name: "Cluster", pane: "p2" }
+        ],
+        onZoomStart: zoomStart,
+        onZoomEnd: zoomEnd,
+        panes: [{ name: "p1" }, { name: "p2" }],
+        argumentAxis: {
+            axisDivisionFactor: 60,
+            dataType: "datetime",
+            wholeRange: [new Date(2000, 6, 1), undefined],
+            visualRange: { startValue: new Date(2008, 2, 1), endValue: null, length: { months: 6 } },
+            endOnTick: true
+        },
+        valueAxis: [{
+            name: "ax1",
+            pane: "p1",
+        }, {
+            name: "ax2",
+            pane: "p2"
+        }]
+    });
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange().startValue, new Date(2008, 2, 1));
+    assert.equal(chart.getArgumentAxis().visualRange().endValue - chart.getArgumentAxis().visualRange().startValue, 1000 * 60 * 60 * 24 * 30 * 6); // months: 6
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 50 });
+    assert.roughEqual(chart.getValueAxis("ax1").visualRange().startValue, 199.5, 0.5);
+    assert.equal(chart.getValueAxis("ax1").visualRange().endValue, 250);
+
+    chart.getValueAxis().visualRange([-20, 40]);
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -20, endValue: 40 });
+
+    zoomStart.reset();
+    zoomEnd.reset();
+    chart.resetVisualRange();
+
+    assert.equal(zoomStart.callCount, 3);
+    assert.equal(zoomEnd.callCount, 3);
+    assert.roughEqual(zoomStart.secondCall.args[0].range.startValue, 199.5, 0.5);
+    assert.equal(zoomStart.secondCall.args[0].range.endValue, 250);
+    assert.equal(zoomEnd.secondCall.args[0].range.startValue, 0);
+    assert.roughEqual(zoomEnd.secondCall.args[0].range.endValue, 273.1, 0.5);
+    assert.deepEqual(zoomStart.thirdCall.args[0].range, { startValue: -20, endValue: 40 });
+    assert.equal(zoomEnd.thirdCall.args[0].range.startValue, 0);
+    assert.roughEqual(zoomEnd.thirdCall.args[0].range.endValue, 735.3, 0.5);
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: new Date(2000, 6, 1), endValue: new Date(2016, 0, 1) });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 800 });
+    assert.deepEqual(chart.getValueAxis("ax1").visualRange(), { startValue: 0, endValue: 300 });
+});
+
 QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
     // arrange
     var chart = this.$container.dxChart({

@@ -789,10 +789,10 @@ QUnit.test("Check calls to translator. Major ticks. Non categories", function(as
     // act
     this.axis.draw(this.canvas);
 
-    assert.deepEqual(this.translator.translate.callCount, 6); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, [1, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, [2, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, [3, 1, false]);
+    assert.deepEqual(this.translator.translate.callCount, 10); // 3 for labels
+    assert.deepEqual(this.translator.translate.getCall(4).args, [1, 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, [2, 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(8).args, [3, 1, false]);
 });
 
 QUnit.test("Check calls to translator. Minor ticks", function(assert) {
@@ -815,10 +815,10 @@ QUnit.test("Check calls to translator. Minor ticks", function(assert) {
     // act
     this.axis.draw(this.canvas);
 
-    assert.deepEqual(this.translator.translate.callCount, 6); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, [1, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, [2, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, [3, 1, false]);
+    assert.deepEqual(this.translator.translate.callCount, 10); // 3 for labels
+    assert.deepEqual(this.translator.translate.getCall(4).args, [1, 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, [2, 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(8).args, [3, 1, false]);
 });
 
 QUnit.test("Check calls to translator. Major ticks. Categories, discreteAxisDivisionMode betweenLabels", function(assert) {
@@ -2179,10 +2179,10 @@ QUnit.test("Check calls to translator", function(assert) {
     // act
     this.axis.draw(this.canvas);
 
-    assert.deepEqual(this.translator.translate.callCount, 6);
-    assert.deepEqual(this.translator.translate.getCall(1).args, [1, undefined, false]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, [2, undefined, false]);
-    assert.deepEqual(this.translator.translate.getCall(5).args, [3, undefined, false]);
+    assert.deepEqual(this.translator.translate.callCount, 10);
+    assert.deepEqual(this.translator.translate.getCall(5).args, [1, undefined, false]);
+    assert.deepEqual(this.translator.translate.getCall(7).args, [2, undefined, false]);
+    assert.deepEqual(this.translator.translate.getCall(9).args, [3, undefined, false]);
 });
 
 QUnit.test("Labels are outside canvas (on zoom) - do not draw outside labels", function(assert) {

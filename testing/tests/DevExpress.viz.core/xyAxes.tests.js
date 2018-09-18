@@ -4249,7 +4249,7 @@ QUnit.test("Adjust axis after reset zoom", function(assert) {
     this.axis.setBusinessRange({ min: -100, max: 100 });
     this.axis.setMarginOptions({});
 
-    this.axis.resetZoom();
+    this.axis.resetVisualRange();
 
     this.axis.adjust();
     this.translator.stub("updateBusinessRange").reset();
