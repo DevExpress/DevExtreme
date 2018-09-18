@@ -32,7 +32,7 @@ const dataGridExportTestsHelper = {
         excel_creator.ExcelCreator.JSZip = this.oldJSZip;
     },
 
-    runTest: function(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
+    runGeneralTest: function(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
         const done = assert.async();
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {
@@ -62,7 +62,7 @@ const dataGridExportTestsHelper = {
         dataGrid.exportToExcel();
     },
 
-    runXlsxCellPreparedTest: function(assert, gridOptions, getExpectedGridCells) {
+    runXlsxCellPreparedTest: function(assert, gridOptions, getExpectedGridCellsCallback) {
         const done = assert.async();
         const actualGridCells = [];
 
@@ -73,7 +73,7 @@ const dataGridExportTestsHelper = {
         };
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {
-            const expectedGridCells = getExpectedGridCells(e.component);
+            const expectedGridCells = getExpectedGridCellsCallback(e.component);
             assert.strictEqual(actualGridCells.length, expectedGridCells.length, 'actualGridCells.length');
             for(let i = 0; i < actualGridCells.length; i++) {
                 const actualGridCell = actualGridCells[i];
@@ -107,8 +107,6 @@ const dataGridExportTestsHelper = {
                     `actualRow === expectedRow, ${i}`);
                 if(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row)) {
                     assert.strictEqual(actualGridCell.row.data, expectedGridCell.row.data, `row.data, ${i}`);
-                    assert.strictEqual(actualGridCell.row.key, expectedGridCell.row.key, `row.key, ${i}`);
-                    assert.strictEqual(actualGridCell.row.rowIndex, expectedGridCell.row.rowIndex, `row.rowIndex, ${i}`);
                     assert.strictEqual(actualGridCell.row.rowType, expectedGridCell.row.rowType, `row.rowType, ${i}`);
                 }
             }

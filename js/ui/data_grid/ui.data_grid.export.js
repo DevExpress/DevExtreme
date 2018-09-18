@@ -198,8 +198,8 @@ exports.DataProvider = Class.inherit({
     },
 
     getCellData: function(rowIndex, cellIndex) {
-        var result = { cellSourceData: {}, value },
-            column,
+        const result = { cellSourceData: {}, value };
+        var column,
             value,
             i,
             summaryItems,

@@ -39,7 +39,7 @@ QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
         '<si><t>str1_1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1" }],
@@ -53,16 +53,15 @@ QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
     );
 });
 
-QUnit.test("Change horizontal alignment by value of source grid cell", function(assert) {
+QUnit.test("Change horizontal alignment by a property value of source object", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
-        '<cellXfs count="7">' +
+        '<cellXfs count="6">' +
         helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment horizontal="center" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
@@ -71,27 +70,26 @@ QUnit.test("Change horizontal alignment by value of source grid cell", function(
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="s"><v>0</v></c><c r="B1" s="3" t="s"><v>1</v></c></row>' +
-        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="6" t="s"><v>2</v></c><c r="B2" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>left</t></si>' +
-        '<si><t>f2</t></si>' +
-        '<si><t>right</t></si>' +
-        '</sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
-            columns: ['f1', 'f2'],
-            dataSource: [{ f1: 'left', f2: 'f2' }, { f1: 'right', f2: 'f2' } ],
+            columns: ['data1', 'data2'],
+            dataSource: [
+                { data1: 1, data2: 1, alignment: 'center' },
+                { data1: 2, data2: 2, alignment: 'right' },
+            ],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 onXlsxCellPrepared: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'f1') {
-                        extend(e.xlsxCell.style, { alignment: { horizontal: e.gridCell.value } });
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
+                        extend(e.xlsxCell.style, { alignment: { horizontal: e.gridCell.row.data.alignment } });
                     }
                 },
             }
@@ -130,7 +128,7 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
         '<si><t>str1_1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1" }],
@@ -155,55 +153,53 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
     );
 });
 
-QUnit.test("Change fill by value of source grid cell", function(assert) {
+QUnit.test("Change fill by a property value of source object", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML1 +
-        '<fills count="4">' +
+        '<fills count="3">' +
         '<fill><patternFill patternType="none" /></fill>' +
         '<fill><patternFill patternType="Gray125" /></fill>' +
-        '<fill><patternFill patternType="darkVertical"><fgColor rgb="FF20FF60" /></patternFill></fill>' +
-        '<fill><patternFill patternType="darkHorizontal"><fgColor rgb="FF20FF60" /></patternFill></fill>' +
+        '<fill><patternFill patternType="darkVertical"><fgColor rgb="FF00FF00" /></patternFill></fill>' +
         '</fills>' +
         helper.BASE_STYLE_XML2 +
-        '<cellXfs count="7">' +
+        '<cellXfs count="6">' +
         helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="3" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="6" t="s"><v>1</v></c></row>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
-        '<si><t>darkVertical</t></si>' +
-        '<si><t>darkHorizontal</t></si>' +
-        '</sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "f1" }],
-            dataSource: [{ f1: 'darkVertical' }, { f1: 'darkHorizontal' }],
+            columns: ['data1', 'data2'],
+            dataSource: [
+                { data1: 1, data2: 1, fillPattern: 'darkVertical', fillColor: 'FF00FF00' },
+                { data1: 2, data2: 2, fillPattern: 'darkHorizontal', fillColor: 'FF0000FF' },
+            ],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 onXlsxCellPrepared: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'f1') {
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
                         extend(e.xlsxCell.style, {
                             fill: {
                                 patternFill: {
-                                    patternType: e.gridCell.value,
-                                    foregroundColor_RGB: 'FF20FF60'
+                                    patternType: e.gridCell.row.data.fillPattern,
+                                    foregroundColor_RGB: e.gridCell.row.data.fillColor
                                 }
                             }
                         });
@@ -249,7 +245,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
                 for(let i = 0; i < config.values.length; i++) {
                     result.push({
                         rowType: 'data',
-                        row: { data: ds[i], key: ds[i], rowType: 'data' },
+                        row: { data: ds[i], rowType: 'data' },
                         column: grid.columnOption(0),
                         value: config.values[i],
                         displayValue: config.expectedDisplayValues ? config.expectedDisplayValues[i] : config.values[i],
@@ -271,7 +267,7 @@ QUnit.test("Check event arguments for data row cell with formatting", function(a
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '$1' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '$1' },
         ]
     );
 });
@@ -311,9 +307,9 @@ QUnit.test("Check event arguments for bands", function(assert) {
             { rowType: 'header', column: grid.columnOption(0) },
             { rowType: 'header', column: grid.columnOption(2) },
             { rowType: 'header', column: grid.columnOption(3) },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: 'f1' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: 'f1' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
         ]
     );
 });
@@ -331,7 +327,7 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
         (grid) => [
             { rowType: 'header', column: grid.columnOption(1) },
             { rowType: 'group', column: grid.columnOption(0) },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
         ]
     );
 });
@@ -351,7 +347,7 @@ QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
             { rowType: 'header', column: grid.columnOption(2) },
             { rowType: 'group', column: grid.columnOption(0) },
             { rowType: 'group', column: grid.columnOption(1) },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
         ]
     );
 });
@@ -372,7 +368,7 @@ QUnit.test("Check event arguments for group summary", function(assert) {
         (grid) => [
             { column: grid.columnOption(1), rowType: 'header' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1' },
         ]
     );
 });
@@ -399,8 +395,8 @@ QUnit.test("Check event arguments for group summary with alignByColumn", functio
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(1), rowType: 'group' },
             { column: grid.columnOption(1), rowType: 'group' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: 'f4' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: 'f4' },
 
         ]
     );
@@ -431,18 +427,18 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1_f2' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: '1_f3' },
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: '1_f4' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1_f2' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: '1_f3' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: '1_f4' },
             { column: grid.columnOption(1), rowType: 'groupfooter' },
             { column: grid.columnOption(2), rowType: 'groupfooter' },
             { column: grid.columnOption(3), rowType: 'groupfooter' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[1], key: ds[1], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[1].f2, displayValue: ds[1].f2, text: '2_f2' },
-            { row: { data: ds[1], key: ds[1], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[1].f3, displayValue: ds[1].f3, text: '2_f3' },
-            { row: { data: ds[1], key: ds[1], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[1].f4, displayValue: ds[1].f4, text: '2_f4' },
+            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[1].f2, displayValue: ds[1].f2, text: '2_f2' },
+            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[1].f3, displayValue: ds[1].f3, text: '2_f3' },
+            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[1].f4, displayValue: ds[1].f4, text: '2_f4' },
             { column: grid.columnOption(1), rowType: 'groupfooter' },
             { column: grid.columnOption(2), rowType: 'groupfooter' },
             { column: grid.columnOption(3), rowType: 'groupfooter' },
@@ -462,7 +458,7 @@ QUnit.test("Check event arguments for total summary", function(assert) {
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '1' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '1' },
             { column: grid.columnOption(0), rowType: 'totalFooter' },
         ]
     );
@@ -480,7 +476,7 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], key: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: 'f1+', displayValue: 'f1+', text: 'f1+' },
+            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: 'f1+', displayValue: 'f1+', text: 'f1+' },
         ]
     );
 });

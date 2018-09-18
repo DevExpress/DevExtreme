@@ -28,7 +28,7 @@ QUnit.test("Empty grid", function(assert) {
         '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
-    helper.runTest(assert, {}, { styles, worksheet, sharedStrings });
+    helper.runGeneralTest(assert, {}, { styles, worksheet, sharedStrings });
 });
 
 QUnit.test("Columns - number", function(assert) {
@@ -60,7 +60,7 @@ QUnit.test("Columns - number", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "number" }],
@@ -99,7 +99,7 @@ QUnit.test("Columns - number as currency", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
@@ -140,7 +140,7 @@ QUnit.test("Columns - string", function(assert) {
         '<si><t>str2</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -178,7 +178,7 @@ QUnit.test("Columns - date", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "date" }],
@@ -216,7 +216,7 @@ QUnit.test("Columns - datetime", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "datetime" }],
@@ -256,7 +256,7 @@ QUnit.test("Columns - boolean", function(assert) {
         '<si><t>false</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "boolean" }],
@@ -296,7 +296,7 @@ QUnit.test("Columns - lookup", function(assert) {
         '<si><t>name2</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{
@@ -376,7 +376,7 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
         "<si><t>name1</t></si>" +
         "</sst>";
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -438,7 +438,7 @@ QUnit.test("Columns - remove the command columns from exporting document", funct
         '<si><t>str1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -482,7 +482,7 @@ QUnit.test("Bands", function(assert) {
         '<si><t>str3</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -530,7 +530,7 @@ QUnit.test("Groupping - 1 level", function(assert) {
         '<si><t>str_1_2</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -576,7 +576,7 @@ QUnit.test("Groupping - 2 levels", function(assert) {
         '<si><t>str1_2_1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -616,7 +616,7 @@ QUnit.test("Group summary", function(assert) {
         '<si><t>Field 1: str1 (Sum of Field 2 is $1)</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -665,7 +665,7 @@ QUnit.test("Group summary - alignByColumn: true", function(assert) {
         '<si><t>str4</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -723,7 +723,7 @@ QUnit.test("Group summary - showInGroupFooter: true", function(assert) {
         '<si><t>str4_2</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [
@@ -770,7 +770,7 @@ QUnit.test("Total summary", function(assert) {
         '<si><t>Sum: $1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "number" }],
@@ -806,7 +806,7 @@ QUnit.test("showColumnHeaders: false", function(assert) {
         '<si><t>str1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -840,7 +840,7 @@ QUnit.test("excelFilterEnabled: true", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -875,7 +875,7 @@ QUnit.test("ignoreExcelErrors: false", function(assert) {
         '<si><t>Field 1</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],
@@ -912,7 +912,7 @@ QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
         '<si><t>str1_customize</t></si>' +
         '</sst>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1", dataType: "string" }],

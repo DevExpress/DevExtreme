@@ -196,9 +196,9 @@ exports.DataProvider = Class.inherit({
     },
 
     getCellData: function(rowIndex, cellIndex) {
+        const result = {};
         var items = this._options.items,
-            item = items[rowIndex] && items[rowIndex][cellIndex] || {},
-            result = {};
+            item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
         if(this.getCellType(rowIndex, cellIndex) === "string") {
             result.value = item.text;
