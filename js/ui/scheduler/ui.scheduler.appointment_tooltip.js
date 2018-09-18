@@ -24,7 +24,6 @@ var appointmentTooltip = {
         }
 
         this.instance = instance;
-        var isAllDay = instance.appointmentTakesAllDay(appointmentData);
 
         this._initDynamicTemplate(appointmentData, singleAppointmentData, $appointment);
 
@@ -48,7 +47,7 @@ var appointmentTooltip = {
                 my: "bottom",
                 at: "top",
                 of: $appointment,
-                boundary: isAllDay ? instance.$element() : instance.getWorkSpaceScrollableContainer(),
+                boundary: this._isAppointmentInAllDayPanel(appointmentData) ? instance.$element() : instance.getWorkSpaceScrollableContainer(),
                 collision: "fit flipfit",
                 offset: this.instance.option("_appointmentTooltipOffset")
             }
@@ -64,6 +63,12 @@ var appointmentTooltip = {
         delete this._$tooltip;
         delete this._tooltip;
         tooltip.hide();
+    },
+
+    _isAppointmentInAllDayPanel: function(appointmentData) {
+        var workSpace = this.instance._workSpace;
+
+        return this.instance.appointmentTakesAllDay(appointmentData) && workSpace.supportAllDayRow() && workSpace.option("showAllDayPanel");
     },
 
     _initDynamicTemplate: function(appointmentData, singleAppointmentData, $appointment) {
