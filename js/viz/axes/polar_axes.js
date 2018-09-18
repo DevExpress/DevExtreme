@@ -125,7 +125,7 @@ circularAxes = polarAxes.circular = {
 
     _setVisualRange: _noop,
 
-    allowToExtendVisualRange() {
+    allowToExtendVisualRange(isEnd) {
         return true;
     },
 

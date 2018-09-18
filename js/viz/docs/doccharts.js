@@ -1831,6 +1831,11 @@ var dxChart = {
     */
     zoomArgument: function() { },
     /**
+    * @name dxchartmethods.resetVisualRange
+    * @publicName resetVisualRange()
+    */
+    resetVisualRange: function() { },
+    /**
     * @name dxchartmethods.getValueAxis
     * @publicName getValueAxis()
     * @return chartAxisObject

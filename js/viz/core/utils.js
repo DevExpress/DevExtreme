@@ -454,17 +454,16 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
 
     if(isDefined(visualRange.length)) {
         if(!isDiscrete) {
-
             if(options.dataType === "datetime" && !isNumber(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
             }
 
             if(maxDefined && !minDefined || !maxDefined && !minDefined) {
+                isDefined(wholeRange.max) && (max = max > wholeRange.max ? wholeRange.max : max);
                 min = add(max, rangeLength, -1);
-
             } else if(minDefined && !maxDefined) {
+                isDefined(wholeRange.min) && (min = min < wholeRange.min ? wholeRange.min : min);
                 max = add(min, rangeLength);
-
             }
         } else {
             rangeLength = parseInt(rangeLength);

@@ -1183,8 +1183,6 @@ var BaseChart = BaseWidget.inherit({
         return drawElements;
     },
 
-    _resetZoom: noop,
-
     _dataIsReady: function() {
         // In order to support scenario when chart is created without "dataSource" and it is considered
         // as data is being loaded the check for state of "dataSource" option is added

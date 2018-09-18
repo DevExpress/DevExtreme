@@ -1202,7 +1202,7 @@ QUnit.module("Data margins calculations", {
 
         axis.createTicks(this.canvas);
 
-        assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, 1, "update range call count");
+        assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, data.zoom ? 2 : 1, "update range call count");
 
         var range = this.translator.stub("updateBusinessRange").lastCall.args[0],
             value = data.options.dataType === "datetime" ?
@@ -2572,7 +2572,7 @@ QUnit.module("Data margins calculations after zooming", {
         axis.visualRange(data.zoom[0], data.zoom[1]);
         axis.createTicks(this.canvas);
 
-        assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, 1);
+        assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, data.zoom ? 2 : 1);
 
         var range = this.translator.stub("updateBusinessRange").lastCall.args[0];
 
@@ -2962,6 +2962,20 @@ QUnit.test("Set visualRangeLength (numeric)", function(assert) {
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.minVisible, 90);
     assert.equal(businessRange.maxVisible, 100);
+});
+
+QUnit.test("Set visualRangeLength (numeric) out of bounds", function(assert) {
+    this.updateOptions({ wholeRange: [50, undefined], visualRange: { startValue: 0, length: 10 } });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 20,
+        max: 100
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.minVisible, 50);
+    assert.equal(businessRange.maxVisible, 60);
 });
 
 QUnit.test("Set visualRange and visualRangeLength (datetime, visualRange.endValue === null)", function(assert) {
@@ -4009,7 +4023,7 @@ QUnit.test("whole range values are set to null - get from option", function(asse
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: undefined, endValue: undefined });
 });
 
-QUnit.module("isZoomed method", {
+QUnit.module("dataVisualRangeIsReduced method", {
     beforeEach: function() {
         environment.beforeEach.call(this);
         sinon.spy(translator2DModule, "Translator2D");
@@ -4047,7 +4061,7 @@ QUnit.test("No visualRange, wholeRange - false", function(assert) {
         max: 120
     });
 
-    assert.deepEqual(this.axis.isZoomed(), false);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
 });
 
 QUnit.test("visualRange is equal to dataRange - false", function(assert) {
@@ -4061,7 +4075,7 @@ QUnit.test("visualRange is equal to dataRange - false", function(assert) {
         max: 120
     });
 
-    assert.deepEqual(this.axis.isZoomed(), false);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
 });
 
 QUnit.test("visualRange is less then dataRange - true", function(assert) {
@@ -4075,7 +4089,7 @@ QUnit.test("visualRange is less then dataRange - true", function(assert) {
         max: 120
     });
 
-    assert.deepEqual(this.axis.isZoomed(), true);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
 });
 
 QUnit.test("startValue in data range - true", function(assert) {
@@ -4089,7 +4103,7 @@ QUnit.test("startValue in data range - true", function(assert) {
         max: 120
     });
 
-    assert.deepEqual(this.axis.isZoomed(), true);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
 });
 
 QUnit.test("wholeRange less then data range - true", function(assert) {
@@ -4103,7 +4117,7 @@ QUnit.test("wholeRange less then data range - true", function(assert) {
         max: 120
     });
 
-    assert.deepEqual(this.axis.isZoomed(), true);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
 });
 
 QUnit.test("discrete data, visualRange and whole range are not set - false", function(assert) {
@@ -4116,7 +4130,7 @@ QUnit.test("discrete data, visualRange and whole range are not set - false", fun
         categories: ["a", "b", "c"]
     });
 
-    assert.deepEqual(this.axis.isZoomed(), false);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
 });
 
 QUnit.test("discrete data, visualRange is set - true", function(assert) {
@@ -4130,7 +4144,7 @@ QUnit.test("discrete data, visualRange is set - true", function(assert) {
         categories: ["a", "b", "c"]
     });
 
-    assert.deepEqual(this.axis.isZoomed(), true);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
 });
 
 QUnit.test("discrete data, visualRange includes only last point - true", function(assert) {
@@ -4144,7 +4158,7 @@ QUnit.test("discrete data, visualRange includes only last point - true", functio
         categories: ["a", "b", "c"]
     });
 
-    assert.deepEqual(this.axis.isZoomed(), true);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), true);
 });
 
 QUnit.test("discrete data, one point - false", function(assert) {
@@ -4157,5 +4171,5 @@ QUnit.test("discrete data, one point - false", function(assert) {
         categories: ["a"]
     });
 
-    assert.deepEqual(this.axis.isZoomed(), false);
+    assert.deepEqual(this.axis.dataVisualRangeIsReduced(), false);
 });
