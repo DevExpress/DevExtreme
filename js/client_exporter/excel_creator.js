@@ -154,7 +154,7 @@ var ExcelCreator = Class.inherit({
 
     _prepareValue: function(rowIndex, cellIndex) {
         var dataProvider = this._dataProvider,
-            { value, cellSourceData } = dataProvider.getCellData(rowIndex, cellIndex),
+            { value, cellSourceData } = dataProvider.getCellData(rowIndex, cellIndex) || {},
             type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
         if(type === "d" && !typeUtils.isDate(value)) {
