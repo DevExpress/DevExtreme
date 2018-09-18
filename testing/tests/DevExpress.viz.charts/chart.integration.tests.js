@@ -910,9 +910,11 @@ QUnit.test("Reset chart viewport", function(assert) {
         }]
     });
 
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: new Date(2008, 2, 1), endValue: new Date(2008, 7, 28, 1, 0, 0) });
+    assert.deepEqual(chart.getArgumentAxis().visualRange().startValue, new Date(2008, 2, 1));
+    assert.equal(chart.getArgumentAxis().visualRange().endValue - chart.getArgumentAxis().visualRange().startValue, 1000 * 60 * 60 * 24 * 30 * 6); // months: 6
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 50 });
-    assert.deepEqual(chart.getValueAxis("ax1").visualRange(), { startValue: 199.5, endValue: 250 });
+    assert.roughEqual(chart.getValueAxis("ax1").visualRange().startValue, 199.5, 0.5);
+    assert.equal(chart.getValueAxis("ax1").visualRange().endValue, 250);
 
     chart.getValueAxis().visualRange([-20, 40]);
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -20, endValue: 40 });
@@ -923,10 +925,13 @@ QUnit.test("Reset chart viewport", function(assert) {
 
     assert.equal(zoomStart.callCount, 3);
     assert.equal(zoomEnd.callCount, 3);
-    assert.deepEqual(zoomStart.secondCall.args[0].range, { startValue: 199.5, endValue: 250 });
-    assert.deepEqual(zoomEnd.secondCall.args[0].range, { startValue: 0, endValue: 273.1 });
+    assert.roughEqual(zoomStart.secondCall.args[0].range.startValue, 199.5, 0.5);
+    assert.equal(zoomStart.secondCall.args[0].range.endValue, 250);
+    assert.equal(zoomEnd.secondCall.args[0].range.startValue, 0);
+    assert.roughEqual(zoomEnd.secondCall.args[0].range.endValue, 273.1, 0.5);
     assert.deepEqual(zoomStart.thirdCall.args[0].range, { startValue: -20, endValue: 40 });
-    assert.deepEqual(zoomEnd.thirdCall.args[0].range, { startValue: 0, endValue: 735.3 });
+    assert.equal(zoomEnd.thirdCall.args[0].range.startValue, 0);
+    assert.roughEqual(zoomEnd.thirdCall.args[0].range.endValue, 735.3, 0.5);
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: new Date(2000, 6, 1), endValue: new Date(2016, 0, 1) });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 800 });
     assert.deepEqual(chart.getValueAxis("ax1").visualRange(), { startValue: 0, endValue: 300 });
