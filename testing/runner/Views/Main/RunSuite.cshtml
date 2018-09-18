@@ -173,20 +173,11 @@
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
-                    'quill': '@Url.Content("~/artifacts/transpiled/quill_modules/quill")',
+                    'quill': '@Url.Content("~/artifacts/js/quill.js")',
+                    'quill-delta-to-html': '@Url.Content("~/artifacts/js/QuillDeltaToHtmlConverter.bundle.js")',
                     'turndown': '@Url.Content("~/artifacts/js/turndown.browser.umd.js")',
                     'showdown': '@Url.Content("~/artifacts/js/showdown.js")',
-
-                    // Quill deps
-                    'quill-delta': '@Url.Content("~/artifacts/transpiled/quill_modules/quill-delta")',
-                    'quill-delta-to-html': '@Url.Content("~/artifacts/transpiled/quill_modules/quill-delta-to-html")',
-                    'parchment': '@Url.Content("~/artifacts/transpiled/quill_modules/parchment")',
-                    'extend': '@Url.Content("~/artifacts/transpiled/quill_modules/extend")',
-                    'clone': '@Url.Content("~/artifacts/transpiled/quill_modules/clone")',
-                    'deep-equal': '@Url.Content("~/artifacts/transpiled/quill_modules/deep-equal")',
-                    'eventemitter3': '@Url.Content("~/artifacts/transpiled/quill_modules/eventemitter3")',
-                    'fast-diff': '@Url.Content("~/artifacts/transpiled/quill_modules/fast-diff")',
-
+                   
                     // Global CSS
                     'style-compiler-test-server': '@Model.StyleCompilerTestServerUrl',
 
@@ -218,41 +209,6 @@
                     },
                     'cldr': {
                         main: '../cldr.js',
-                        defaultExtension: 'js'
-                    },
-                    'quill': {
-                        defaultExtension: 'js'
-                    },
-                    'quill-delta': {
-                        main: 'lib/delta.js',
-                        defaultExtension: 'js'
-                    },
-                    'quill-delta-to-html': {
-                        main: 'dist/commonjs/QuillDeltaToHtmlConverter.js',
-                        defaultExtension: 'js'
-                    },
-                    'parchment': {
-                        main: 'dist/parchment.js',
-                        defaultExtension: 'js'
-                    },
-                    'extend': {
-                        main: 'index.js',
-                        defaultExtension: 'js'
-                    },
-                    'clone': {
-                        main: 'clone.js',
-                        defaultExtension: 'js'
-                    },
-                    'deep-equal': {
-                        main: 'index.js',
-                        defaultExtension: 'js'
-                    },
-                    'eventemitter3': {
-                        main: 'index.js',
-                        defaultExtension: 'js'
-                    },
-                    'fast-diff': {
-                        main: 'diff.js',
                         defaultExtension: 'js'
                     }
                 },

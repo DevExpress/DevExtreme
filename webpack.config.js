@@ -17,6 +17,8 @@ module.exports = {
         'globalize/currency': 'window.Globalize',
         'globalize/date': 'window.Globalize',
         'globalize/message': 'window.Globalize',
+        'quill': 'window.Quill',
+        'quill-delta-to-html': 'window.QuillDeltaToHtmlConverter',
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown'
     },

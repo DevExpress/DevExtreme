@@ -26,8 +26,6 @@ require('./build/gulp/layouts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/transpile');
-require('./build/gulp/transpile-quill');
-
 
 function gulpDefault(callback) {
     runSequence(

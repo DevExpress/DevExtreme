@@ -1,9 +1,12 @@
+import getQuill from "../quill_importer";
+
 import $ from "../../../core/renderer";
-import BaseModule from "quill/core/module";
 import Toolbar from "../../toolbar";
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
+
+const BaseModule = getQuill().import("core/module");
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
@@ -12,6 +15,7 @@ const ACTIVE_FORMAT_CLASS = "dx-format-active";
 class ToolbarModule extends BaseModule {
     constructor(quill, options) {
         super(quill, options);
+
         this.editorInstance = options.editorInstance;
         this._formats = {};
 

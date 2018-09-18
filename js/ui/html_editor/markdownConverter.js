@@ -5,11 +5,11 @@ import Errors from "../widget/ui.errors";
 class MarkdownConverter {
     constructor() {
         if(!MarkdownConverter._TurnDown) {
-            throw Errors.Error("E1050");
+            throw Errors.Error("E1052");
         }
 
         if(!MarkdownConverter._ShowDown) {
-            throw Errors.Error("E1051");
+            throw Errors.Error("E1053");
         }
 
         this._html2Markdown = new MarkdownConverter._TurnDown();

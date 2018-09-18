@@ -1,7 +1,8 @@
-import Image from "quill/formats/image";
+import getQuill from "../quill_importer";
+
+const Image = getQuill().import("formats/image");
 
 class extImage extends Image {
-
     static formats(domNode) {
         let formats = super.formats(domNode);
 

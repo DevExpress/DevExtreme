@@ -206,12 +206,22 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.E1050
      */
-    E1050: "The TurnDown script is referenced after the DevExtreme scripts or not referenced at all",
+    E1050: "The Quill script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
      * @name ErrorsUIWidgets.E1051
      */
-    E1051: "The ShowDown script is referenced after the DevExtreme scripts or not referenced at all",
+    E1051: "The Quill-Delta-to-Html script is referenced after the DevExtreme scripts or not referenced at all",
+
+    /**
+     * @name ErrorsUIWidgets.E1052
+     */
+    E1052: "The TurnDown script is referenced after the DevExtreme scripts or not referenced at all",
+
+    /**
+     * @name ErrorsUIWidgets.E1053
+     */
+    E1053: "The ShowDown script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
     * @name ErrorsUIWidgets.W1001

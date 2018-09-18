@@ -6,9 +6,11 @@ import { getPublicElement } from "../../core/utils/dom";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
+
 import QuillRegistrator from "./quill_registrator";
-import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+import DeltaConverter from "./deltaConverter";
 import MarkdownConverter from "./markdownConverter";
+
 
 const RICH_EDIT_CLASS = "dx-htmleditor";
 const ANONYMOUS_TEMPLATE_NAME = "content";
@@ -35,7 +37,7 @@ const HtmlEditor = Editor.inherit({
 
     _prepareConverters: function() {
         if(!this._quillDeltaConverter) {
-            this._quillDeltaConverter = new QuillDeltaToHtmlConverter();
+            this._deltaConverter = new DeltaConverter();
         }
 
         if(this.option("valueType") === "Markdown" && !this._markdownConverter) {
@@ -96,7 +98,7 @@ const HtmlEditor = Editor.inherit({
         this._htmlEditor.on("text-change", function(newDelta, oldDelta, source) {
             let resultMarkup,
                 delta = that._htmlEditor.getContents(),
-                htmlMarkup = that._convertToHtml(delta.ops);
+                htmlMarkup = that._deltaConverter.toHtml(delta.ops);
 
             that._isEditorUpdating = true;
 
@@ -149,11 +151,6 @@ const HtmlEditor = Editor.inherit({
         return extend({
             editorInstance: this
         }, userConfig);
-    },
-
-    _convertToHtml: function(deltaOps) {
-        this._quillDeltaConverter.rawDeltaOps = deltaOps;
-        return this._quillDeltaConverter.convert();
     },
 
     _updateValueByType: function(valueType, value) {
