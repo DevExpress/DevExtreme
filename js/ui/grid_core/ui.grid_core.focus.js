@@ -3,7 +3,12 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined;
 
-var ROW_FOCUSED_CLASS = "dx-row-focused";
+var ROW_FOCUSED_CLASS = "dx-row-focused",
+    MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row";
+
+function isDetailRow($row) {
+    return $row && $row.hasClass(MASTER_DETAIL_ROW_CLASS);
+}
 
 exports.FocusController = gridCore.Controller.inherit((function() {
     return {
@@ -81,6 +86,33 @@ module.exports = {
                         nextRowIndex = this._focusedCellPosition && this._focusedCellPosition.rowIndex;
                         this.option("focusedRowIndex", nextRowIndex);
                     }
+                },
+
+                _upDownKeysHandler: function(eventArgs, isEditing) {
+                    var that = this,
+                        rowIndex = this.option("focusedRowIndex"),
+                        currentFocusedRowIndex,
+                        focusedRowIndex,
+                        lastRowIndex,
+                        $row = that._focusedView && that._focusedView.getRow(rowIndex);
+
+                    if(!isEditing && $row && !isDetailRow($row)) {
+                        currentFocusedRowIndex = focusedRowIndex = that.option("focusedRowIndex");
+                        if(eventArgs.key === "downArrow") {
+                            lastRowIndex = that._dataController.getVisibleRows().length - 1;
+                            if(focusedRowIndex < lastRowIndex) {
+                                ++focusedRowIndex;
+                            }
+                        } else {
+                            if(focusedRowIndex > 0) {
+                                --focusedRowIndex;
+                            }
+                        }
+                        if(currentFocusedRowIndex !== focusedRowIndex) {
+                            that.option("focusedRowIndex", focusedRowIndex);
+                        }
+                    }
+                    that.callBase(eventArgs, isEditing);
                 }
             }
         },

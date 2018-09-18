@@ -229,10 +229,17 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var that = this,
             rowIndex,
             columnIndex,
+            focusedRowIndex,
             $rowElement = $cell.closest("tr");
 
         if($rowElement.length > 0 && that._focusedView) {
-            rowIndex = $rowElement.length > 0 && that._getRowIndex($rowElement);
+            focusedRowIndex = that.option("focusedRowIndex");
+            if(focusedRowIndex >= 0) {
+                rowIndex = focusedRowIndex;
+            } else {
+                rowIndex = $rowElement.length > 0 && that._getRowIndex($rowElement);
+            }
+
             columnIndex = that._focusedView.getCellIndex($cell, rowIndex);
 
             if(direction) {
