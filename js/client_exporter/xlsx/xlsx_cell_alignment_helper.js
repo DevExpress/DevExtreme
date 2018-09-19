@@ -38,7 +38,7 @@ const xlsxCellAlignmentHelper = {
             "alignment",
             {
                 vertical: tag.vertical,
-                wrapText: tag.wrapText,
+                wrapText: typeUtils.isDefined(tag.wrapText) ? Number(tag.wrapText) : undefined,
                 horizontal: tag.horizontal
             }
         );
