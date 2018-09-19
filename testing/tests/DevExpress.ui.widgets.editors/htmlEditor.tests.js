@@ -1,6 +1,6 @@
-var $ = require("jquery");
+import $ from "jquery";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup = '<div id="htmlEditor"></div>';
@@ -8,6 +8,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("./htmlEditorParts/markup.tests.js");
-require("./htmlEditorParts/valueRendering.tests.js");
-require("./htmlEditorParts/formats.tests.js");
+import "./htmlEditorParts/quillImporter.tests.js";
+import "./htmlEditorParts/quillRegistrator.tests.js";
+import "./htmlEditorParts/converters.tests.js";
+import "./htmlEditorParts/markup.tests.js";
+import "./htmlEditorParts/valueRendering.tests.js";

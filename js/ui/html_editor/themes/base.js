@@ -1,6 +1,6 @@
-import getQuill from "../quill_importer";
+import QuillImporter from "../quill_importer";
 
-const Theme = getQuill().import("core/theme");
+const Theme = QuillImporter.getQuill().import("core/theme");
 
 class BaseTheme extends Theme {
     constructor(quill, options) {

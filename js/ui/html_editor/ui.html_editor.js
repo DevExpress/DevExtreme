@@ -1,6 +1,5 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import windowUtils from "../../core/utils/window";
 import { isDefined } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
 import registerComponent from "../../core/component_registrator";
@@ -8,11 +7,11 @@ import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 
 import QuillRegistrator from "./quill_registrator";
-import DeltaConverter from "./deltaConverter";
-import MarkdownConverter from "./markdownConverter";
+import DeltaConverter from "./converters/deltaConverter";
+import MarkdownConverter from "./converters/markdownConverter";
 
+const HTML_EDITOR_CLASS = "dx-htmleditor";
 
-const RICH_EDIT_CLASS = "dx-htmleditor";
 const ANONYMOUS_TEMPLATE_NAME = "content";
 
 const HtmlEditor = Editor.inherit({
@@ -57,15 +56,16 @@ const HtmlEditor = Editor.inherit({
 
     _initMarkup: function() {
         let template = this._getTemplate("content");
+        this._$htmlContainer = $("<div>");
 
-        this._$htmlContainer = windowUtils.hasWindow() ? $("<div>") : $("<textarea>");
+        this.$element()
+            .addClass(HTML_EDITOR_CLASS)
+            .wrapInner(this._$htmlContainer);
 
         template && template.render({
             container: getPublicElement(this._$htmlContainer),
             noModel: true
         });
-
-        this.$element().addClass(RICH_EDIT_CLASS).wrapInner(this._$htmlContainer);
 
         this.callBase();
     },
@@ -203,6 +203,7 @@ const HtmlEditor = Editor.inherit({
             case "dataPlaceholders":
             case "allowImageResizing":
             case "resizing":
+            case "toolbar":
                 this._invalidate();
                 break;
             case "valueType":

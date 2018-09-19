@@ -1,5 +1,5 @@
 const DefaultQuillDeltaToHtmlConverter = require("quill-delta-to-html");
-import Errors from "../widget/ui.errors";
+import Errors from "../../widget/ui.errors";
 
 class DeltaConverter {
     constructor() {

@@ -1,12 +1,18 @@
 import Quill from "quill";
 import Errors from "../widget/ui.errors";
 
-function getQuill() {
-    if(!Quill) {
-        throw Errors.Error("E1050");
-    }
+class QuillImporter {
+    constructor() {}
 
-    return Quill;
+    static getQuill() {
+        if(!QuillImporter._quill) {
+            throw Errors.Error("E1050");
+        }
+
+        return QuillImporter._quill;
+    }
 }
 
-export { getQuill as default };
+QuillImporter._quill = Quill;
+
+export { QuillImporter as default };

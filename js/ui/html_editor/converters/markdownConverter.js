@@ -1,6 +1,6 @@
 import TurnDown from "turndown";
 import ShowDown from "showdown";
-import Errors from "../widget/ui.errors";
+import Errors from "../../widget/ui.errors";
 
 class MarkdownConverter {
     constructor() {
@@ -26,7 +26,11 @@ class MarkdownConverter {
     toHtml(markdownMarkup) {
         let markup = this._markdown2Html.makeHtml(markdownMarkup);
 
-        return markup.replace(new RegExp("\\r?\\n", "g"), "");
+        if(markup) {
+            markup = markup.replace(new RegExp("\\r?\\n", "g"), "");
+        }
+
+        return markup;
     }
 }
 
