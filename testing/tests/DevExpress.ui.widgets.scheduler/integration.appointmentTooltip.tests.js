@@ -853,3 +853,23 @@ QUnit.test("Scheduler appointment tooltip should has buttons at the bottom in ge
 
     tooltip.hide();
 });
+
+QUnit.test("Tooltip should has right boundary in timeline view if appointment is allDay", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            startDate: new Date(2018, 8, 24),
+            endDate: new Date(2018, 8, 25)
+        }],
+        currentView: "timelineDay",
+        currentDate: new Date(2018, 8, 24)
+    });
+
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    this.clock.tick(300);
+
+    var tooltip = Tooltip.getInstance($(".dx-tooltip")),
+        tooltipBoundary = tooltip.option("position").boundary.get(0),
+        containerBoundary = this.instance.getWorkSpaceScrollableContainer().get(0);
+
+    assert.deepEqual(tooltipBoundary, containerBoundary, "tooltip has right boundary");
+});
