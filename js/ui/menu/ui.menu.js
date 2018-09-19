@@ -336,11 +336,6 @@ var Menu = MenuBase.inherit({
         this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
     },
 
-    _renderItems: function(items) {
-        this.callBase(items);
-        this._updateItemsWidthCache();
-    },
-
     _init: function() {
         this.callBase();
         this._submenus = [];
@@ -508,6 +503,7 @@ var Menu = MenuBase.inherit({
 
         this.$element().append(this._$adaptiveContainer);
 
+        this._updateItemsWidthCache();
         this._dimensionChanged();
     },
 
