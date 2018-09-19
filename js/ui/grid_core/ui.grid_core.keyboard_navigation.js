@@ -345,7 +345,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         this._isHiddenFocus = disableFocus;
 
-        if(isGroupRow($row)) {
+        if(isGroupRow($row) || this.isRowFocusType()) {
             $focusElement = $row;
             if(focusedView) {
                 this.setFocusedRowIndex(this._getRowIndex($row));
@@ -919,7 +919,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
     init: function() {
         var that = this;
         if(that.option("useKeyboard")) {
-            that.setCellFocusType();
             that._dataController = that.getController("data");
             that._selectionController = that.getController("selection");
             that._editingController = that.getController("editing");

@@ -25,7 +25,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 that.option("focusedRowEnabled", true);
             }
             if(that.option("focusedRowEnabled")) {
-                that.keyboardController.setRowFocusType();
+                if(!isDefined(focusedRowIndex)) {
+                    that.option("focusedRowIndex", 0);
+                }
             }
         },
 
@@ -85,6 +87,8 @@ module.exports = {
 
                     this.callBase();
 
+                    this.setRowFocusType();
+
                     this._focusedCellPosition = { };
                     if(isDefined(rowIndex)) {
                         this._focusedCellPosition.rowIndex = this.option("focusedRowIndex");
@@ -137,6 +141,13 @@ module.exports = {
                 setFocusedColumnIndex: function(columnIndex) {
                     this.callBase(columnIndex);
                     this.option("focusedColumnIndex", columnIndex);
+                },
+
+                _clickHandler: function(e) {
+                    if(this.option("focusedRowEnabled")) {
+                        this.setRowFocusType();
+                    }
+                    this.callBase(e);
                 }
             }
         },
@@ -185,19 +196,6 @@ module.exports = {
                     } else {
                         that.callBase(change);
                     }
-                },
-
-                _rowClick: function(e) {
-                    var that = this,
-                        keyboardController = that.getController("keyboardNavigation"),
-                        dxEvent = e.event;
-
-                    if(that.option("focusedRowEnabled")) {
-                        keyboardController.setFocusedRowIndex(e.rowIndex);
-                        dxEvent.preventDefault();
-                        e.handled = true;
-                    }
-                    that.callBase(e);
                 }
             }
         }
