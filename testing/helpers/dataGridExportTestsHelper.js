@@ -3,6 +3,8 @@ import "common.css!";
 import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
+import typeUtils from "core/utils/type";
+import { toComparable } from "core/utils/data";
 import { excel as excelCreator } from "client_exporter";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
@@ -30,7 +32,7 @@ const dataGridExportTestsHelper = {
         excel_creator.ExcelCreator.JSZip = this.oldJSZip;
     },
 
-    runTest: function(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
+    runGeneralTest: function(assert, gridOptions, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
         const done = assert.async();
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {
@@ -58,7 +60,64 @@ const dataGridExportTestsHelper = {
             return columnWidths.map(() => 100);
         };
         dataGrid.exportToExcel();
-    }
+    },
+
+    runXlsxCellPreparedTest: function(assert, gridOptions, getExpectedGridCellsCallback) {
+        const done = assert.async();
+        const actualGridCells = [];
+
+        gridOptions.export = {
+            onXlsxCellPrepared: e => {
+                actualGridCells.push(e.gridCell);
+            },
+        };
+        gridOptions.loadingTimeout = undefined;
+        gridOptions.onFileSaving = e => {
+            const expectedGridCells = getExpectedGridCellsCallback(e.component);
+            assert.strictEqual(actualGridCells.length, expectedGridCells.length, 'actualGridCells.length');
+            for(let i = 0; i < actualGridCells.length; i++) {
+                const actualGridCell = actualGridCells[i];
+                const expectedGridCell = expectedGridCells[i];
+                const skipProperties = ['column', 'row'];
+
+                for(const propertyName in expectedGridCell) {
+                    if(skipProperties.indexOf(propertyName) === -1) {
+                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `gridCell[${propertyName}], ${i}`);
+                        skipProperties.push(propertyName);
+                    }
+                }
+                for(const actualPropertyName in actualGridCell) {
+                    if(skipProperties.indexOf(actualPropertyName) === -1) {
+                        assert.strictEqual(toComparable(actualGridCell[actualPropertyName]), toComparable(expectedGridCell[actualPropertyName]), `gridCell[${actualPropertyName}], ${i}`);
+                    }
+                }
+
+                assert.ok(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column) ||
+                    !typeUtils.isDefined(actualGridCell.column) && !typeUtils.isDefined(expectedGridCell.column),
+                    `actualColumn === expectedColumn, ${i}`);
+                if(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column)) {
+                    assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `column.dataField, ${i}`);
+                    assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `column.dataType, ${i}`);
+                    assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `column.caption, ${i}`);
+                    assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `column.index, ${i}`);
+                }
+
+                assert.ok(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row) ||
+                    !typeUtils.isDefined(actualGridCell.row) && !typeUtils.isDefined(expectedGridCell.row),
+                    `actualRow === expectedRow, ${i}`);
+                if(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row)) {
+                    assert.strictEqual(actualGridCell.row.data, expectedGridCell.row.data, `row.data, ${i}`);
+                    assert.strictEqual(actualGridCell.row.rowType, expectedGridCell.row.rowType, `row.rowType, ${i}`);
+                }
+            }
+
+            done();
+            e.cancel = true;
+        };
+
+        const dataGrid = $("#dataGrid").dxDataGrid(gridOptions).dxDataGrid("instance");
+        dataGrid.exportToExcel();
+    },
 };
 
 export default dataGridExportTestsHelper;

@@ -1,9 +1,10 @@
 import typeUtils from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
+import XlsxFile from "./xlsx_file";
 
 const xlsxCellFormatHelper = {
-    tryCreateTag: function(sourceObj, xlsxFile) {
+    tryCreateTag: function(sourceObj, xlsxFile = new XlsxFile()) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             result = {

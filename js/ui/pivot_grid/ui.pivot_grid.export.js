@@ -95,7 +95,7 @@ exports.ExportMixin = extend({}, exportMixin, {
             items: items,
             rtlEnabled: this.option("rtlEnabled"),
             dataFields: this.getDataSource().getAreaFields("data"),
-            customizeXlsxCell: this.option("export.customizeXlsxCell")
+            onXlsxCellPrepared: this.option("export.onXlsxCellPrepared")
         });
     }
 });
@@ -195,15 +195,17 @@ exports.DataProvider = Class.inherit({
         return style && style.dataType || "string";
     },
 
-    getCellValue: function(rowIndex, cellIndex) {
+    getCellData: function(rowIndex, cellIndex) {
+        const result = {};
         var items = this._options.items,
             item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
         if(this.getCellType(rowIndex, cellIndex) === "string") {
-            return item.text;
+            result.value = item.text;
         } else {
-            return item.value;
+            result.value = item.value;
         }
+        return result;
     },
 
     getStyles: function() {
@@ -227,9 +229,9 @@ exports.DataProvider = Class.inherit({
         return DATA_STYLE_OFFSET + (item.dataIndex || 0);
     },
 
-    customizeXlsxCell: function({ xlsxCell }) {
-        if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell({ xlsxCell });
+    onXlsxCellPrepared: function({ xlsxCell }) {
+        if(this._options.onXlsxCellPrepared) {
+            this._options.onXlsxCellPrepared({ xlsxCell });
         }
     },
 });
