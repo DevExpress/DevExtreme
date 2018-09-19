@@ -31,7 +31,9 @@ const getOutParameters = (command, themeName, config) => {
     const makeSwatch = !!config.makeSwatch;
     const base = !!config.base;
 
-    if(!/^[\w\-.]+$/.test(outColorScheme)) {
+    if(!outColorScheme) {
+        outColorScheme = DEFAULT_OUT_COLOR_SCHEME;
+    } else if(!/^[\w\-.]+$/.test(outColorScheme)) {
         console.log(`'--output-color-scheme' is not valid. '${DEFAULT_OUT_COLOR_SCHEME}' will be used.`);
         outColorScheme = DEFAULT_OUT_COLOR_SCHEME;
     }
