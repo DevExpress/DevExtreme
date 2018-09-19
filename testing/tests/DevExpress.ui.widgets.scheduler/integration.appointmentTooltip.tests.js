@@ -828,7 +828,9 @@ QUnit.test("Tooltip should has right boundary in timeline view if appointment is
     $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
-    var tooltip = Tooltip.getInstance($(".dx-tooltip"));
+    var tooltip = Tooltip.getInstance($(".dx-tooltip")),
+        tooltipBoundary = tooltip.option("position").boundary.get(0),
+        containerBoundary = this.instance.getWorkSpaceScrollableContainer().get(0);
 
-    assert.deepEqual(tooltip.option("position").boundary.get(0), this.instance.getWorkSpaceScrollableContainer().get(0), "tooltip has right boundary");
+    assert.deepEqual(tooltipBoundary, containerBoundary, "tooltip has right boundary");
 });

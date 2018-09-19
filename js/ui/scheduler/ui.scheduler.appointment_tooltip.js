@@ -66,9 +66,10 @@ var appointmentTooltip = {
     },
 
     _isAppointmentInAllDayPanel: function(appointmentData) {
-        var workSpace = this.instance._workSpace;
+        var workSpace = this.instance._workSpace,
+            itTakesAllDay = this.instance.appointmentTakesAllDay(appointmentData);
 
-        return this.instance.appointmentTakesAllDay(appointmentData) && workSpace.supportAllDayRow() && workSpace.option("showAllDayPanel");
+        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option("showAllDayPanel");
     },
 
     _initDynamicTemplate: function(appointmentData, singleAppointmentData, $appointment) {
