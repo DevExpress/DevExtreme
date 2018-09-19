@@ -11,6 +11,16 @@ function getSelector(className) {
 const { test } = QUnit;
 
 QUnit.module("Value as HTML markup", () => {
+    test("show placeholder is value undefined", (assert) => {
+        const instance = $("#htmlEditor").dxHtmlEditor({
+                placeholder: "test placeholder"
+            }).dxHtmlEditor("instance"),
+            $element = instance.$element(),
+            $content = $element.find(getSelector(CONTENT_CLASS));
+
+        assert.equal($content.get(0).dataset.placeholder, "test placeholder");
+    });
+
     test("render default value", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "<h1>Hi!</h1><p>Test</p>"
