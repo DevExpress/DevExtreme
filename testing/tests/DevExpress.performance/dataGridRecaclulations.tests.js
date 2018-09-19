@@ -52,7 +52,7 @@ QUnit.performanceTest("render with columnFixing", function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 16);
+    assert.measureStyleRecalculation(measureFunction, 15);
 });
 
 QUnit.performanceTest("render with virtual scrolling", function(assert) {
@@ -144,7 +144,7 @@ QUnit.performanceTest("refresh with columnFixing", function(assert) {
 
     var measureFunction = createDataGridMeasureFunction("refresh");
 
-    assert.measureStyleRecalculation(measureFunction, 5);
+    assert.measureStyleRecalculation(measureFunction, 4);
 });
 
 QUnit.performanceTest("refresh with virtual scrolling", function(assert) {

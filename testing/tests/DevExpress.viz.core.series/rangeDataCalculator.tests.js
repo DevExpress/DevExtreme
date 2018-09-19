@@ -2518,20 +2518,27 @@ QUnit.test("Datetime argument. String value.", function(assert) {
 });
 
 QUnit.test("Discrete argument axis.", function(assert) {
-    var data = [{ arg: "1", val: 10 }, { arg: "2", val: 20 }, { arg: "3", val: 30 }, { arg: "4", val: 40 }, { arg: "5", val: 50 }, { arg: "6", val: 60 }],
+    var data = [{ arg: "a", val: 10 }, { arg: "b", val: 20 }, { arg: "c", val: 30 }, { arg: "d", val: 40 }, { arg: "e", val: 50 }, { arg: "f", val: 60 }],
         rangeData,
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete" }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
     series.createPoints();
 
-    this.zoom("3", "4");
+    this.zoom("c", "d");
+
+    const visualRange = this.argumentAxis.visualRange();
+    visualRange.categories = ["c", "d"];
+
+    this.argumentAxis.visualRange = function() {
+        return visualRange;
+    };
 
     rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.min, undefined, "min y");
-    assert.equal(rangeData.max, undefined, "max y");
+    assert.equal(rangeData.min, 30, "min y");
+    assert.equal(rangeData.max, 40, "max y");
     assert.strictEqual(rangeData.interval, undefined);
     // should include values inside of range AND neighbour points
     assert.strictEqual(rangeData.minVisible, undefined, "no min Visible Y");
@@ -2638,10 +2645,17 @@ QUnit.test("Discrete data", function(assert) {
 
     this.zoom("2", "4");
 
+    const visualRange = this.argumentAxis.visualRange();
+    visualRange.categories = ["2", "3", "4"];
+
+    this.argumentAxis.visualRange = function() {
+        return visualRange;
+    };
+
     rangeData = series.getViewport();
 
-    assert.equal(rangeData.min, undefined, "min Y");
-    assert.equal(rangeData.max, undefined, "max Y");
+    assert.equal(rangeData.min, 0, "min Y");
+    assert.equal(rangeData.max, 40, "max Y");
 });
 
 QUnit.module("Get points in viewport", {

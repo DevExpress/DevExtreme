@@ -81,7 +81,7 @@ QUnit.test("No reset zooming on series changed", function(assert) {
         }]
     });
 
-    chart.getArgumentAxis().isZoomed = sinon.stub().returns(true);
+    chart.getArgumentAxis().dataVisualRangeIsReduced = sinon.stub().returns(true);
 
     chart.zoomArgument(10, 50);
 
@@ -118,7 +118,7 @@ QUnit.test("No reset zooming on series changed with not zoomed axis", function(a
         }]
     });
 
-    chart.getArgumentAxis().isZoomed = sinon.stub().returns(false);
+    chart.getArgumentAxis().dataVisualRangeIsReduced = sinon.stub().returns(false);
 
     chart.zoomArgument(10, 50);
 

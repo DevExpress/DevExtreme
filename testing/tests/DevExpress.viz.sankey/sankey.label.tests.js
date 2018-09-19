@@ -101,7 +101,30 @@ QUnit.test("Create labels with styles and invisible borders", function(assert) {
         }
     });
     var attrs = this.label(0).attr.firstCall.args[0];
-    assert.equal(attrs["stroke-width"], 0);
+
+    assert.equal(attrs.hasOwnProperty("stroke-width"), false);
+    assert.equal(attrs.hasOwnProperty("stroke-opacity"), false);
+    assert.equal(attrs.hasOwnProperty("stroke"), false);
+});
+
+QUnit.test("Create labels with styles and invisible borders if border width is 0", function(assert) {
+    createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        label: {
+            visible: true,
+            border: {
+                visible: true,
+                color: "white",
+                width: 0,
+                opacity: 0.2
+            }
+        }
+    });
+    var attrs = this.label(0).attr.firstCall.args[0];
+
+    assert.equal(attrs.hasOwnProperty("stroke-width"), false);
+    assert.equal(attrs.hasOwnProperty("stroke-opacity"), false);
+    assert.equal(attrs.hasOwnProperty("stroke"), false);
 });
 
 QUnit.test("Label color if useNodeColors set to true", function(assert) {

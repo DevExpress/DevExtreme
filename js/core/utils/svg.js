@@ -1,4 +1,5 @@
-var domAdapter = require("../dom_adapter");
+var domAdapter = require("../../core/dom_adapter"),
+    window = require("./window").getWindow();
 
 function getMarkup(element) {
     var temp = domAdapter.createElement('div');
@@ -33,4 +34,12 @@ function decodeHtmlEntities(markup) {
 
 exports.getSvgMarkup = function(element) {
     return fixIENamespaces(decodeHtmlEntities(getMarkup(element)));
+};
+
+exports.getSvgElement = function(markup) {
+    return domAdapter.isNode(markup)
+        ? markup
+        : (new window.DOMParser()
+            .parseFromString(markup, "image/svg+xml")
+            .childNodes[0]);
 };

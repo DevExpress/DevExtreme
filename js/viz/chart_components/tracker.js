@@ -851,11 +851,8 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
         var that = this,
             points = [];
 
-        that._storedSeries.forEach(function(s) {
-            points.push.apply(points, s.getPointsByKeys(item.argument, item.id));
-        });
-
-        that._eventTrigger(LEGEND_CLICK, { target: item.argument, points: points, event: e });
+        that._storedSeries.forEach(s => points.push.apply(points, s.getPointsByKeys(item.argument, item.argumentIndex)));
+        that._eventTrigger(LEGEND_CLICK, { target: item.argument, points, event: e });
     },
 
     _pointClick: function(point, e) {

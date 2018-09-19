@@ -2475,6 +2475,62 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     }
 });
 
+// T670844
+QUnit.test("Resize column if all columns have percent widths and columnResizingMode is nextColumn", function(assert) {
+    $("#container").width(200);
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columnResizingMode: "nextColumn",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: "50%" },
+                { dataField: "field2", width: "50%" },
+                { dataField: "field3", width: "50%" },
+                { dataField: "field4", width: "50%" }
+            ]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition + 25,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    instance.updateDimensions();
+
+    // assert
+    assert.strictEqual(instance.$element().children().width(), 200);
+    assert.strictEqual(instance.columnOption(0, "width"), "75.000%");
+    assert.strictEqual(instance.columnOption(1, "width"), "25.000%");
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
+        assert.strictEqual(headersCols[0].style.width, "75%");
+        assert.strictEqual(headersCols[1].style.width, "25%");
+    }
+});
+
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget and grid's width is 100%", function(assert) {
     $("#container").width(300);
     // arrange
@@ -3503,6 +3559,37 @@ QUnit.test("scroll position should not be changed after partial update via repai
 
     // assert
     assert.equal(dataGrid.getScrollable().scrollTop(), 200, "scrollTop is not reseted");
+});
+
+// T671942
+QUnit.test("scroll position should not be changed after scrolling to end if scrolling mode is infinite", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 100; i++) {
+        array.push({ id: i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        scrolling: {
+            mode: "infinite"
+        },
+        loadingTimeout: undefined
+    }).dxDataGrid("instance");
+
+
+    var clock = sinon.useFakeTimers();
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+    clock.tick();
+    clock.restore();
+
+    // assert
+    assert.ok(dataGrid.getScrollable().scrollTop() > 0, "scrollTop is not reseted");
 });
 
 QUnit.test("height from extern styles", function(assert) {
@@ -10991,6 +11078,30 @@ QUnit.test("column with width auto should have minimum size by content", functio
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2 }],
         columnAutoWidth: true,
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            width: "auto",
+            cellTemplate: function(container) {
+                $(container).css("padding", 0);
+                $("<div>").css("width", CONTENT_WIDTH).appendTo(container);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
+});
+
+// T672282
+QUnit.test("column with width auto should have minimum size by content if columnAutoWidth is disabled", function(assert) {
+    var CONTENT_WIDTH = 50;
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1000,
+        loadingTimeout: undefined,
+        dataSource: [{ field1: 1, field2: 2 }],
         columns: [{
             dataField: "field1"
         }, {

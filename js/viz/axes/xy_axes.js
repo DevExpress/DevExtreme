@@ -950,10 +950,12 @@ module.exports = {
         },
 
         adjust(alignToBounds) {
-            let viewport = { min: this._seriesData.min, max: this._seriesData.max };
+            const that = this;
+            const seriesData = that._seriesData;
+            let viewport = { min: seriesData.min, max: seriesData.max };
 
             if(!alignToBounds) {
-                viewport = this._series.filter(s => s.isVisible()).reduce((range, s) => {
+                viewport = that._series.filter(s => s.isVisible()).reduce((range, s) => {
                     var seriesRange = s.getViewport();
                     range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
                     range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
@@ -966,9 +968,16 @@ module.exports = {
             }
 
             if(isDefined(viewport.min) && isDefined(viewport.max)) {
-                this._seriesData.minVisible = viewport.min;
-                this._seriesData.maxVisible = viewport.max;
+                seriesData.minVisible = viewport.min;
+                seriesData.maxVisible = viewport.max;
             }
+
+            that._translator.updateBusinessRange(that.adjustViewport(seriesData));
+
+            that._breaks = that._getScaleBreaks(that._options, {
+                minVisible: seriesData.minVisible,
+                maxVisible: seriesData.maxVisible
+            }, that._series, that.isArgumentAxis);
         },
 
         _getStick: function() {

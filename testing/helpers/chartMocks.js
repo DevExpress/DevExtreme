@@ -983,7 +983,7 @@ export const MockAxis = function(renderOptions) {
         }),
         adjust: sinon.spy(),
         getViewport: sinon.stub().returns({}),
-        resetZoom: sinon.spy(),
+        resetVisualRange: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
         resetTypes: sinon.spy(),
         setMarginOptions: sinon.spy(),
@@ -993,7 +993,7 @@ export const MockAxis = function(renderOptions) {
                 ticks: []
             };
         },
-        isZoomed: function() {
+        dataVisualRangeIsReduced: function() {
             return true;
         },
         getCategoriesSorter: function() {

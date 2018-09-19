@@ -3,7 +3,7 @@ var $ = require("../core/renderer"),
     window = require("../core/utils/window").getWindow(),
     isFunction = require("../core/utils/type").isFunction,
     each = require("../core/utils/iterator").each,
-    getSvgMarkup = require("../core/utils/svg").getSvgMarkup,
+    svgUtils = require("../core/utils/svg"),
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
@@ -80,13 +80,11 @@ exports.svgCreator = {
             that = this,
             xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
             blob = new Deferred(),
-            parser = new window.DOMParser(),
-            elem = parser.parseFromString(data, "image/svg+xml"),
-            svgElem = elem.childNodes[0],
+            svgElem = svgUtils.getSvgElement(data),
             $svgObject = $(svgElem);
 
         $svgObject.css("backgroundColor", options.backgroundColor);
-        markup = xmlVersion + getSvgMarkup($svgObject.get(0));
+        markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0));
 
         that._prepareImages(svgElem).done(function() {
             each(that._imageArray, function(href, dataURI) {

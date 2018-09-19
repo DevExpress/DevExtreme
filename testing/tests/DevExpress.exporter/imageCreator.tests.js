@@ -389,6 +389,17 @@ QUnit.module("Svg to canvas", {
     },
     afterEach: function() {
         teardownCanvasStub();
+        this.getComputedStyle && this.getComputedStyle.restore();
+    },
+    stubGetComputedStyle: function(testElement, testStyle) {
+        var getComputedStyle = window.getComputedStyle;
+
+        this.getComputedStyle = sinon.stub(window, "getComputedStyle", function(element) {
+            if(element === testElement) {
+                return testStyle;
+            }
+            return getComputedStyle.apply(window, arguments);
+        });
     }
 });
 
@@ -1699,13 +1710,81 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
     });
 });
 
+QUnit.test("Read computed style of elements if export target is attached element", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd,
+        element = new window.DOMParser().parseFromString(markup, "image/svg+xml").childNodes[0];
+
+    $("#qunit-fixture").append(element);
+    this.stubGetComputedStyle(element.childNodes[0], { fill: "#ff0000", "font-size": "25px", "font-style": "" });
+
+    // act
+    var imageBlob = getData(element);
+
+    assert.expect(7);
+    $.when(imageBlob).done(function() {
+        try {
+            var textElem = that.drawnElements[1];
+
+            assert.equal(textElem.style.weight, "bold", "Style weight");
+
+            assert.equal(textElem.type, "text", "The second element on canvas is text");
+            assert.equal(textElem.style.font, "\"Segoe UI Light\",\"Helvetica Neue Light\",\"Segoe UI\",\"Helvetica Neue\",\"Trebuchet MS\",Verdana", "Style font");
+            assert.equal(textElem.style.size, "25px", "Size from computed");
+            assert.equal(textElem.style.style, "italic", "Style");
+            assert.equal(textElem.style.fillStyle, "#ff0000", "Style fill");
+            assert.roughEqual(textElem.style.globalAlpha, 0.3, 0.1, "Style opacity");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Read computed style of elements. Ignore default opacity", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<rect x="20" y="30" width="100" height="200" fill="#232323" stroke="#454545" stroke-width="1" stroke-opacity="0.5" fill-opacity="0.5" opacity="0.3" ></rect>' + testingMarkupEnd,
+        element = new window.DOMParser().parseFromString(markup, "image/svg+xml").childNodes[0];
+
+    $("#qunit-fixture").append(element);
+    this.stubGetComputedStyle(element.childNodes[0], { fill: "#ff0000", "opacity": "1", "stroke-opacity": "0.1", "fill-opacity": "" });
+
+    // act
+    var imageBlob = getData(element);
+
+    assert.expect(4);
+    $.when(imageBlob).done(function() {
+        try {
+            assert.equal(that.drawnElements[2].style.fillStyle, "#ff0000", "fill");
+            assert.roughEqual(that.drawnElements[2].style.globalAlpha, 0.15, 0.001, "fill opacity");
+
+            assert.equal(that.drawnElements[3].style.strokeStyle, "#454545", "stroke");
+            assert.roughEqual(that.drawnElements[3].style.globalAlpha, 0.03, 0.001, "stroke opacity");
+        } finally {
+            done();
+        }
+    });
+});
+
 // T403049
 QUnit.test("getElementOptions should work correctly with empty attributs element", function(assert) {
+    var done = assert.async();
     var markup = "<svg>Brazil</svg>";
-    imageCreator.getData(markup, {
+    var parsedAttributes;
+    var imageBlob = imageCreator.getData(markup, {
         __parseAttributesFn: function(attributes) {
-            assert.ok(typeUtils.isDefined(attributes), "Attributes are always defined");
+            parsedAttributes = attributes;
             return {};
+        }
+    });
+
+    assert.expect(1);
+    $.when(imageBlob).done(function() {
+        try {
+            assert.ok(typeUtils.isDefined(parsedAttributes), "Attributes are always defined");
+        } finally {
+            done();
         }
     });
 });

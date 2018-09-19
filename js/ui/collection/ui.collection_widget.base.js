@@ -164,6 +164,7 @@ var CollectionWidget = Widget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
+            * @type_function_param1_field7 event:event
             * @action
             */
             onItemHold: null,

@@ -1402,6 +1402,7 @@ var dxChart = {
         /**
         * @name dxChartOptions.argumentAxis.visualRangeUpdateMode
         * @type Enums.VisualRangeUpdateMode
+        * @default 'auto'
         */
         visualRangeUpdateMode: "auto",
         /**
@@ -1829,6 +1830,11 @@ var dxChart = {
     * @param2 endValue:Number|Date|string
     */
     zoomArgument: function() { },
+    /**
+    * @name dxchartmethods.resetVisualRange
+    * @publicName resetVisualRange()
+    */
+    resetVisualRange: function() { },
     /**
     * @name dxchartmethods.getValueAxis
     * @publicName getValueAxis()

@@ -173,13 +173,13 @@ QUnit.test("getCellType", function(assert) {
     assert.strictEqual(this.dataProvider.getCellType(5, 0), "string", "ColsPart dataType is correct");
 });
 
-QUnit.test("getCellValue", function(assert) {
+QUnit.test("getCellData", function(assert) {
     // act, assert
-    assert.strictEqual(this.dataProvider.getCellValue(5, 5), 0.1, "CellsInfo cellValue is correct");
-    assert.strictEqual(this.dataProvider.getCellValue(1, 2), "Q1", "Header part cellText is correct");
+    assert.strictEqual(this.dataProvider.getCellData(5, 5).value, 0.1, "CellsInfo cellValue is correct");
+    assert.strictEqual(this.dataProvider.getCellData(1, 2).value, "Q1", "Header part cellText is correct");
 
-    assert.strictEqual(this.dataProvider.getCellValue(5, 0), "C1 Total", "RowInfo part cellText is correct");
-    assert.strictEqual(this.dataProvider.getCellValue(555, 555), undefined, "CellValue out of index is undefined");
+    assert.strictEqual(this.dataProvider.getCellData(5, 0).value, "C1 Total", "RowInfo part cellText is correct");
+    assert.strictEqual(this.dataProvider.getCellData(555, 555).value, undefined, "CellValue out of index is undefined");
 });
 
 QUnit.test("exportToExcel", function(assert) {
@@ -429,7 +429,7 @@ QUnit.test("getCellType. Data fields have customizeText", function(assert) {
     assert.strictEqual(dataProvider.getCellType(1, 1), "string", "Val1 format");
     assert.strictEqual(dataProvider.getCellType(1, 2), "string", "Val2 format");
     assert.strictEqual(dataProvider.getCellType(1, 3), "string", "Val3 format");
-    assert.strictEqual(dataProvider.getCellValue(1, 3), "text", "Val3 value");
+    assert.strictEqual(dataProvider.getCellData(1, 3).value, "text", "Val3 value");
     assert.strictEqual(dataProvider.getCellType(1, 4), "string", "Val4 format");
     assert.strictEqual(dataProvider.getCellType(1, 5), "string", "Val5 format");
 });

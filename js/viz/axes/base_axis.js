@@ -43,6 +43,8 @@ const RESET = "reset";
 const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 
+const SCROLL_THRESHOLD = 5;
+
 const dateIntervals = {
     day: 86400000,
     week: 604800000
@@ -1041,7 +1043,7 @@ Axis.prototype = {
             that._setVisualRange([currentBusinessRange.minVisible, currentBusinessRange.maxVisible]);
         }
         if(visualRangeUpdateMode === RESET) {
-            that.resetZoom();
+            that._setVisualRange([null, null]);
         }
         if(visualRangeUpdateMode === SHIFT) {
             const currentBusinessRange = this._translator.getBusinessRange();
@@ -1404,10 +1406,10 @@ Axis.prototype = {
         }
         if(that._options.type !== constants.discrete) {
             if(length && !that._options.skipViewportExtending) {
-                if(that.allowToExtendVisualRange() && ticks[0].value < range.minVisible) {
+                if(that.allowToExtendVisualRange(false) && ticks[0].value < range.minVisible) {
                     minVisible = ticks[0].value;
                 }
-                if(that.allowToExtendVisualRange() && length > 1 && ticks[length - 1].value > range.maxVisible) {
+                if(that.allowToExtendVisualRange(true) && length > 1 && ticks[length - 1].value > range.maxVisible) {
                     maxVisible = ticks[length - 1].value;
                 }
             }
@@ -1437,8 +1439,10 @@ Axis.prototype = {
         this._marginOptions = options;
     },
 
-    allowToExtendVisualRange() {
-        return !this.isArgumentAxis;
+    allowToExtendVisualRange(isEnd) {
+        const wholeRange = this.adjustRange(getVizRangeObject(this._options.wholeRange));
+        const bound = isEnd ? wholeRange.endValue : wholeRange.startValue;
+        return !this.isArgumentAxis || !isDefined(bound) && this.isExtremePosition(isEnd);
     },
 
     _calculateRangeInterval: function(dataLength, interval) {
@@ -1741,8 +1745,10 @@ Axis.prototype = {
         that._validateOptions(options);
     },
 
-    resetZoom() {
-        this._setVisualRange([null, null]);
+    resetVisualRange(isSilent) {
+        this._seriesData.minVisible = this._seriesData.min;
+        this._seriesData.maxVisible = this._seriesData.max;
+        this.handleZooming([null, null], { start: !!isSilent, end: !!isSilent });
     },
 
     _applyZooming(visualRange) {
@@ -1755,6 +1761,8 @@ Axis.prototype = {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);
+
+        that._translator.updateBusinessRange(that._getViewportRange());
     },
 
     getZoomEventArg() {
@@ -1779,17 +1787,20 @@ Axis.prototype = {
     visualRange() {
         const that = this;
         const args = arguments;
-        const preventEvents = args[1] || {};
-
         let visualRange;
 
         if(args.length === 0) {
-            const adjustedRange = this._getAdjustedBusinessRange();
+            const adjustedRange = that._getAdjustedBusinessRange();
             let startValue = adjustedRange.minVisible;
             let endValue = adjustedRange.maxVisible;
-            if(this._options.type === constants.discrete) {
+            if(that._options.type === constants.discrete) {
                 startValue = isDefined(startValue) ? startValue : adjustedRange.categories[0];
                 endValue = isDefined(endValue) ? endValue : adjustedRange.categories[adjustedRange.categories.length - 1];
+                return {
+                    startValue,
+                    endValue,
+                    categories: vizUtils.getCategoriesInfo(adjustedRange.categories, startValue, endValue).categories
+                };
             }
             return {
                 startValue,
@@ -1800,10 +1811,19 @@ Axis.prototype = {
         } else {
             visualRange = [args[0], args[1]];
         }
+
+        if(that.handleZooming(visualRange, args[1])) {
+            that._visualRange(that, visualRange);
+        }
+    },
+
+    handleZooming(visualRange, preventEvents) {
+        const that = this;
+        preventEvents = preventEvents || {};
+
         visualRange = that._validateVisualRange(visualRange);
 
-        const zoomStartEvent = this.getZoomEventArg();
-
+        const zoomStartEvent = that.getZoomEventArg();
         const currentRange = zoomStartEvent.range;
 
         !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
@@ -1826,11 +1846,12 @@ Axis.prototype = {
             if(zoomEndEvent.cancel) {
                 that._applyZooming(currentRange);
             }
-            that._visualRange(that, visualRange);
         }
+
+        return !zoomStartEvent.cancel;
     },
 
-    isZoomed() {
+    dataVisualRangeIsReduced() {
         let minDataValue;
         let maxDataValue;
 
@@ -1844,15 +1865,34 @@ Axis.prototype = {
         }
 
         const translator = this.getTranslator();
-        const startPoint = translator.to(minDataValue);
-        const endPoint = translator.to(maxDataValue);
+        const startPoint = translator.translate(minDataValue);
+        const endPoint = translator.translate(maxDataValue);
         const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];
         const visualRange = this.visualRange();
-        const visualRangeStartPoint = translator.to(visualRange.startValue);
-        const visualRangeEndPoint = translator.to(visualRange.endValue);
+        const visualRangeStartPoint = translator.translate(visualRange.startValue);
+        const visualRangeEndPoint = translator.translate(visualRange.endValue);
 
         return (visualRangeStartPoint > edges[0] && visualRangeStartPoint < edges[1]) ||
-            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]);
+            (visualRangeEndPoint > edges[0] && visualRangeEndPoint < edges[1]) ||
+            visualRangeStartPoint === visualRangeEndPoint && edges[0] !== edges[1];
+    },
+
+    isExtremePosition(isMax) {
+        let extremeDataValue;
+
+        const seriesData = this._translator.getBusinessRange();
+        if(this._options.type === "discrete") {
+            extremeDataValue = isMax ? seriesData.categories[seriesData.categories.length - 1] : seriesData.categories[0];
+        } else {
+            extremeDataValue = isMax ? seriesData.max : seriesData.min;
+        }
+
+        const translator = this.getTranslator();
+        const extremePoint = translator.translate(extremeDataValue);
+        const visualRange = this.visualRange();
+        const visualRangePoint = isMax ? translator.translate(visualRange.endValue) : translator.translate(visualRange.startValue);
+
+        return Math.abs(visualRangePoint - extremePoint) < SCROLL_THRESHOLD;
     },
 
     getViewport() {

@@ -60,7 +60,8 @@ var POPUP_CLASS = "dx-selectbox-popup",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 var KEY_DOWN = 40,
-    KEY_ENTER = 13;
+    KEY_ENTER = 13,
+    KEY_SPACE = 32;
 
 var TIME_TO_WAIT = 500;
 
@@ -3390,6 +3391,98 @@ QUnit.test("press 'enter' key sets option value (T100679)", function(assert) {
         .keyDown(KEY_ENTER);
 
     assert.deepEqual(selectBox.option("value"), value, "value selected");
+});
+
+QUnit.test("press 'space' key sets option value", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    var value = {
+        value: "test"
+    };
+
+    var $element = $("#selectBox").dxSelectBox({
+        dataSource: [value],
+        displayExpr: "value",
+        focusStateEnabled: true
+    });
+
+    this.clock.tick();
+
+    var selectBox = $element.dxSelectBox("instance"),
+        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+    selectBox.open();
+    keyboardMock($input)
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    assert.deepEqual(selectBox.option("value"), value, "value selected");
+});
+
+QUnit.test("press 'space' key shouldn't sets option value if SelectBox accept custom value", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    var value = {
+        value: "test"
+    };
+
+    var $element = $("#selectBox").dxSelectBox({
+        dataSource: [value],
+        displayExpr: "value",
+        acceptCustomValue: true,
+        focusStateEnabled: true
+    });
+
+    this.clock.tick();
+
+    var selectBox = $element.dxSelectBox("instance"),
+        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+    selectBox.open();
+    keyboardMock($input)
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    assert.deepEqual(selectBox.option("value"), null, "There is no value");
+});
+
+QUnit.test("press 'space' key shouldn't sets option value if search is enabled", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    var value = {
+        value: "test"
+    };
+
+    var $element = $("#selectBox").dxSelectBox({
+        dataSource: [value],
+        displayExpr: "value",
+        searchEnabled: true,
+        focusStateEnabled: true
+    });
+
+    this.clock.tick();
+
+    var selectBox = $element.dxSelectBox("instance"),
+        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+    selectBox.open();
+    keyboardMock($input)
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    assert.deepEqual(selectBox.option("value"), null, "There is no value");
 });
 
 QUnit.test("error occurred while using the remote dataSource (T119856)", function(assert) {
