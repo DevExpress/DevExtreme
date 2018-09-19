@@ -147,7 +147,9 @@ QUnit.test("registerCellFormat( empty font )", function(assert) {
     assert.equal(file.registerCellFormat({ font: undefined }), undefined);
     assert.equal(file.registerCellFormat({ font: null }), undefined);
     assert.equal(file.registerCellFormat({ font: { notSupported: 'a' } }), undefined);
+    assert.equal(file.registerCellFormat({ font: { bold: null } }), undefined);
     assert.equal(file.registerCellFormat({ font: { bold: false } }), undefined);
+    assert.equal(file.registerCellFormat({ font: { italic: null } }), undefined);
     assert.equal(file.registerCellFormat({ font: { italic: false } }), undefined);
     assert.equal(file.registerCellFormat({ font: { color: undefined } }), undefined);
     assert.equal(file.registerCellFormat({ font: { color: null } }), undefined);
@@ -163,6 +165,9 @@ QUnit.test("registerCellFormat( various fonts )", function(assert) {
     assert.equal(file.registerCellFormat({ font: { bold: true } }), 0);
     assert.equal(file.registerCellFormat({ font: { size: 10 } }), 1);
     assert.equal(file.registerCellFormat({ font: { size: 10 } }), 1);
+    assert.equal(file.registerCellFormat({ font: { size: 10, bold: false } }), 1);
+    assert.equal(file.registerCellFormat({ font: { size: 10, italic: false } }), 1);
+    assert.equal(file.registerCellFormat({ font: { size: 10, color: { notSupported: 'a' } } }), 1);
     assert.equal(file.registerCellFormat({ font: { size: 11 } }), 2);
     assert.equal(file.registerCellFormat({ font: { name: 'n1' } }), 3);
     assert.equal(file.registerCellFormat({ font: { name: 'n1' } }), 3);

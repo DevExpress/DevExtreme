@@ -32,8 +32,8 @@ const xlsxFontHelper = {
                 leftTag.name === rightTag.name &&
                 leftTag.family === rightTag.family &&
                 leftTag.scheme === rightTag.scheme &&
-                leftTag.bold === rightTag.bold &&
-                leftTag.italic === rightTag.italic &&
+                (leftTag.bold === rightTag.bold || !leftTag.bold === !rightTag.bold) &&
+                (leftTag.italic === rightTag.italic || !leftTag.italic === !rightTag.italic) &&
                 leftTag.underline === rightTag.underline &&
                 xlsxColorHelper.areEqual(leftTag.color, rightTag.color)
             );
@@ -53,14 +53,14 @@ const xlsxFontHelper = {
 
     toXml: function(tag) {
         const content = [
-            typeUtils.isDefined(tag.bold) && tag.bold ? xlsxTagHelper.toXml('b', {}) : '', // 'CT_BooleanProperty', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            typeUtils.isDefined(tag.size) ? xlsxTagHelper.toXml('sz', { 'val': tag.size }) : '', // 'CT_FontSize', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+            typeUtils.isDefined(tag.bold) && tag.bold ? xlsxTagHelper.toXml('b', {}) : '',
+            typeUtils.isDefined(tag.size) ? xlsxTagHelper.toXml('sz', { 'val': tag.size }) : '',
             typeUtils.isDefined(tag.color) ? xlsxColorHelper.toXml(tag.color) : '',
-            typeUtils.isDefined(tag.name) ? xlsxTagHelper.toXml('name', { 'val': tag.name }) : '', // 'CT_FontName', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            typeUtils.isDefined(tag.family) ? xlsxTagHelper.toXml('family', { 'val': tag.family }) : '', // 'CT_FontFamily', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            typeUtils.isDefined(tag.scheme) ? xlsxTagHelper.toXml('scheme', { 'val': tag.scheme }) : '', // 'CT_FontScheme', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            typeUtils.isDefined(tag.italic) && tag.italic ? xlsxTagHelper.toXml('i', {}) : '', // 'CT_BooleanProperty', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            typeUtils.isDefined(tag.underline) ? xlsxTagHelper.toXml('u', { 'val': tag.underline }) : '', // 'CT_UnderlineProperty', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+            typeUtils.isDefined(tag.name) ? xlsxTagHelper.toXml('name', { 'val': tag.name }) : '',
+            typeUtils.isDefined(tag.family) ? xlsxTagHelper.toXml('family', { 'val': tag.family }) : '',
+            typeUtils.isDefined(tag.scheme) ? xlsxTagHelper.toXml('scheme', { 'val': tag.scheme }) : '',
+            typeUtils.isDefined(tag.italic) && tag.italic ? xlsxTagHelper.toXml('i', {}) : '',
+            typeUtils.isDefined(tag.underline) ? xlsxTagHelper.toXml('u', { 'val': tag.underline }) : '',
         ].join('');
 
         // §18.8.22, 'font (Font)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
