@@ -45,9 +45,10 @@ class LessMetadataPreCompilerPlugin {
 }
 
 class LessMetadataPostCompilerPlugin {
-    constructor(compiledMetadata, swatchSelector) {
+    constructor(compiledMetadata, swatchSelector, colorScheme) {
         this._metadata = compiledMetadata;
         this.swatchSelector = swatchSelector;
+        this.colorScheme = colorScheme;
     }
 
     process(css) {
@@ -62,11 +63,13 @@ class LessMetadataPostCompilerPlugin {
         });
 
         if(this.swatchSelector) {
-            let escapedSelector = this.swatchSelector.replace(".", "\\.");
-            let customStylesRegex = new RegExp("(" + escapedSelector + "\\s+)(\\.dx-viewport\\.dx-theme-(?:.*?)\\s)", "g");
+            const escapedSelector = this.swatchSelector.replace(".", "\\.");
+            const customStylesRegex = new RegExp("(" + escapedSelector + "\\s+)(\\.dx-viewport\\.dx-theme-(?:.*?)\\s)", "g");
+            const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
             css = css
                 .replace(/\s\.dx-theme-(?:.*?)-typography/g, "")
-                .replace(customStylesRegex, "$2$1");
+                .replace(customStylesRegex, "$2$1")
+                .replace(themeMarkerRegex, "$1" + this.colorScheme + "$3");
 
         }
 
@@ -92,6 +95,7 @@ class LessTemplateLoader {
         this.readFile = config.reader;
         this.lessCompiler = config.lessCompiler;
         this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : "";
+        this.outColorScheme = config.outColorScheme;
         this.version = version;
     }
 
@@ -129,7 +133,7 @@ class LessTemplateLoader {
                     }
                 }, {
                     install: (less, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector));
+                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
                     }
                 }]
             }).then(output => {
