@@ -38,6 +38,24 @@ QUnit.module("Value as HTML markup", () => {
             .find(getSelector(CONTENT_CLASS))
             .html("<p>Hi! <strong>Test.</strong></p>");
     });
+
+    test("value after change valueType", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                valueType: "Markdown",
+                value: "Hi! **Test.**",
+                onValueChanged: (e) => {
+                    if(e.component.option("valueType") === "HTML") {
+                        assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
+                        done();
+                    }
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        instance.option("valueType", "HTML");
+    });
 });
 
 
@@ -70,5 +88,22 @@ QUnit.module("Value as Markdown markup", () => {
             .$element()
             .find(getSelector(CONTENT_CLASS))
             .html("<p>Hi! <strong>Test.</strong></p>");
+    });
+
+    test("value after change valueType", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "<p>Hi! <strong>Test.</strong></p>",
+                onValueChanged: (e) => {
+                    if(e.component.option("valueType") === "Markdown") {
+                        assert.equal(e.value, "Hi! **Test.**");
+                        done();
+                    }
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        instance.option("valueType", "Markdown");
     });
 });
