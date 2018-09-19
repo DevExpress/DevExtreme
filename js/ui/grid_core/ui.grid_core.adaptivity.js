@@ -614,7 +614,8 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
             width: "auto",
-            cellTemplate: adaptiveCellTemplate
+            cellTemplate: adaptiveCellTemplate,
+            fixedPosition: "right"
         });
 
         that._columnsController.columnsChanged.add(function() {

@@ -310,20 +310,17 @@ var baseFixedColumns = {
 
     setColumnWidths: function(widths) {
         var columns,
-            haveGroupColumns,
             useVisibleColumns = false;
 
         this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
-            haveGroupColumns = this._columnsController.getGroupColumns().length;
-
             if(this.option("legacyRendering")) {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
             } else {
                 useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
             }
-            if(useVisibleColumns || haveGroupColumns) {
+            if(useVisibleColumns) {
                 columns = this._columnsController.getVisibleColumns();
             }
             this.callBase(widths, this._fixedTableElement, columns, true);

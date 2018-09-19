@@ -1257,7 +1257,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 visible: isEditColumnVisible,
                 cssClass: cssClass,
                 width: "auto",
-                cellTemplate: editCellTemplate
+                cellTemplate: editCellTemplate,
+                fixedPosition: "right"
             });
 
             that._columnsController.columnOption("command:edit", {

@@ -8488,7 +8488,7 @@ QUnit.module("Customization of the command columns", {
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField1', caption: 'Custom Title 1', fixed: true },
                 { dataField: 'TestField2', caption: 'Custom Title 2', fixed: true, groupIndex: 0 },
                 { type: "group" },
                 { dataField: 'TestField3', caption: 'Custom Title 3' },
