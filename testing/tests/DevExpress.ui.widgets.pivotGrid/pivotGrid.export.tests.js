@@ -12,7 +12,10 @@ import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
 import { extend } from "core/utils/extend";
 
-const BASE_STYLE_XML = excelCreator.__internals.BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2;
+const BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +
+    "<scheme val=\"minor\" /></font><font><b /><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" />" +
+    "<family val=\"2\" /><scheme val=\"minor\" /></font></fonts>";
+const BASE_STYLE_XML = BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2;
 const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
 const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
 const STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';

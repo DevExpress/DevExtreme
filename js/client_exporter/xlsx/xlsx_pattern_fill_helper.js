@@ -30,14 +30,13 @@ const xlsxPatternFillHelper = {
     },
 
     toXml: function(tag) {
-        // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        // §18.8.3 bgColor (Background Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        // §18.8.19 fgColor (Foreground Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         const content =
             [
-                (tag.backgroundColor_RGB) ? xlsxTagHelper.toXml("bgColor", { rgb: tag.backgroundColor_RGB }) : "",
-                (tag.foregroundColor_RGB) ? xlsxTagHelper.toXml("fgColor", { rgb: tag.foregroundColor_RGB }) : "",
+                (tag.backgroundColor_RGB) ? xlsxTagHelper.toXml("bgColor", { rgb: tag.backgroundColor_RGB }) : "", // §18.8.3 bgColor (Background Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+                (tag.foregroundColor_RGB) ? xlsxTagHelper.toXml("fgColor", { rgb: tag.foregroundColor_RGB }) : "", // §18.8.19 fgColor (Foreground Color), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
             ].join("");
+
+        // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return xlsxTagHelper.toXml(
             "patternFill",
             { patternType: tag.patternType },

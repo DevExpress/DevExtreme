@@ -1,14 +1,13 @@
 import typeUtils from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
-import XlsxFile from "./xlsx_file";
 
 const xlsxCellFormatHelper = {
-    tryCreateTag: function(sourceObj, xlsxFile = new XlsxFile()) {
+    tryCreateTag: function(sourceObj, xlsxFile) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             result = {
-                fontId: sourceObj.fontId,
+                fontId: xlsxFile.registerFont(sourceObj.font),
                 numberFormatId: sourceObj.numberFormatId,
                 alignment: xlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
                 fillId: xlsxFile.registerFill(sourceObj.fill),

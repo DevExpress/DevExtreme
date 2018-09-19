@@ -2,12 +2,14 @@ import typeUtils from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellFormatHelper from './xlsx_cell_format_helper';
 import xlsxFillHelper from "./xlsx_fill_helper";
+import xlsxFontHelper from "./xlsx_font_helper";
 
 export default class XlsxFile {
 
     constructor() {
         this._cellFormatTags = [];
         this._fillTags = [];
+        this._fontTags = [];
 
         // the [0, 1] indexes are reserved:
         // - https://stackoverflow.com/questions/11116176/cell-styles-in-openxml-spreadsheet-spreadsheetml
@@ -17,7 +19,12 @@ export default class XlsxFile {
 
     registerCellFormat(cellFormat) {
         let result;
-        const cellFormatTag = xlsxCellFormatHelper.tryCreateTag(cellFormat, { registerFill: this.registerFill.bind(this) });
+        const cellFormatTag = xlsxCellFormatHelper.tryCreateTag(
+            cellFormat,
+            {
+                registerFill: this.registerFill.bind(this),
+                registerFont: this.registerFont.bind(this),
+            });
         if(typeUtils.isDefined(cellFormatTag)) {
             for(let i = 0; i < this._cellFormatTags.length; i++) {
                 if(xlsxCellFormatHelper.areEqual(this._cellFormatTags[i], cellFormatTag)) {
@@ -65,6 +72,29 @@ export default class XlsxFile {
         const tagsAsXmlStringsArray = this._fillTags.map(tag => xlsxFillHelper.toXml(tag));
         // §18.8.21, 'fills (Fills)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return xlsxTagHelper.toXml("fills", { count: tagsAsXmlStringsArray.length }, tagsAsXmlStringsArray.join(""));
+    }
+
+    registerFont(font) {
+        let result;
+        const fontTag = xlsxFontHelper.tryCreateTag(font);
+        if(typeUtils.isDefined(fontTag)) {
+            for(let i = 0; i < this._fontTags.length; i++) {
+                if(xlsxFontHelper.areEqual(this._fontTags[i], fontTag)) {
+                    result = i;
+                    break;
+                }
+            }
+            if(result === undefined) {
+                result = this._fontTags.push(fontTag) - 1;
+            }
+        }
+        return result;
+    }
+
+    generateFontsXml() {
+        const xmlStringsArray = this._fontTags.map(tag => xlsxFontHelper.toXml(tag));
+        // §18.8.23, 'fonts (Fonts)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        return xlsxTagHelper.toXml("fonts", { count: xmlStringsArray.length }, xmlStringsArray.join(""));
     }
 }
 
