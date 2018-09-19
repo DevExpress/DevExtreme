@@ -12,96 +12,125 @@ function getExpectedFillsXml(expectedFillXmlArray) {
     }
 }
 
-QUnit.test("XlsxFile.ctor", function(assert) {
-    new XlsxFile();
-    assert.ok(true);
+function getFullXml(xlsxFile) {
+    return xlsxFile.generateCellFormatsXml() + xlsxFile.generateFillsXml();
+}
+
+QUnit.test("Empty file", function(assert) {
+    const file = new XlsxFile();
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml());
 });
 
-QUnit.test("registerCellFormat(empty format)", function(assert) {
+QUnit.test("registerCellFormat( empty format )", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.generateCellFormatsXml(), '<cellXfs count="0" />');
-
+    assert.equal(file.registerCellFormat(), undefined);
     assert.equal(file.registerCellFormat(null), undefined);
     assert.equal(file.registerCellFormat(undefined), undefined);
     assert.equal(file.registerCellFormat({}), undefined);
-    assert.equal(file.registerCellFormat({ notSupported: 0 }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormatId: undefined }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormatId: null }), undefined);
-    assert.equal(file.registerCellFormat({ alignment: undefined }), undefined);
-    assert.equal(file.registerCellFormat({ alignment: null }), undefined);
-    assert.equal(file.registerCellFormat({ alignment: { vertical: undefined } }), undefined);
-    assert.equal(file.registerCellFormat({ alignment: { vertical: null } }), undefined);
-    assert.equal(file.generateCellFormatsXml(), '<cellXfs count="0" />');
+    assert.equal(file.registerCellFormat({ notSupported: 'a' }), undefined);
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml());
 });
 
-QUnit.test("registerCellFormat( various numFmtId )", function(assert) {
+QUnit.test("registerCellFormat( empty numberFormatId )", function(assert) {
+    const file = new XlsxFile();
+    assert.equal(file.registerCellFormat({ numberFormatId: undefined }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormatId: null }), undefined);
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml());
+});
+
+QUnit.test("registerCellFormat( various numberFormatId )", function(assert) {
     const file = new XlsxFile();
     assert.equal(file.registerCellFormat({ numberFormatId: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormatId: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormatId: 1 }), 1);
     assert.equal(file.registerCellFormat({ numberFormatId: 1 }), 1);
-
-    assert.equal(file.generateCellFormatsXml(),
+    assert.equal(getFullXml(file),
         '<cellXfs count="2">' +
         '<xf xfId="0" applyNumberFormat="0" numFmtId="0" />' +
         '<xf xfId="0" applyNumberFormat="1" numFmtId="1" />' +
-        '</cellXfs>');
+        '</cellXfs>' +
+        getExpectedFillsXml());
 });
 
-QUnit.test("registerCellFormat( various fontId )", function(assert) {
+QUnit.test("registerCellFormat( empty alignment )", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.registerCellFormat({ fontId: 0 }), 0);
-    assert.equal(file.registerCellFormat({ fontId: 0 }), 0);
-    assert.equal(file.registerCellFormat({ fontId: 1 }), 1);
-    assert.equal(file.registerCellFormat({ fontId: 1 }), 1);
-
-    assert.equal(file.generateCellFormatsXml(),
-        '<cellXfs count="2">' +
-        '<xf xfId="0" fontId="0" />' +
-        '<xf xfId="0" fontId="1" />' +
-        '</cellXfs>');
+    assert.equal(file.registerCellFormat({ alignment: undefined }), undefined);
+    assert.equal(file.registerCellFormat({ alignment: null }), undefined);
+    assert.equal(file.registerCellFormat({ alignment: { vertical: undefined, wrapText: undefined, horizontal: undefined } }), undefined);
+    assert.equal(file.registerCellFormat({ alignment: { vertical: null, wrapText: null, horizontal: null } }), undefined);
+    assert.equal(file.registerCellFormat({ alignment: { notSupported: 'a' } }), undefined);
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml());
 });
 
-QUnit.test("registerFill( empty fill )", function(assert) {
+QUnit.test("registerCellFormat( various alignment )", function(assert) {
+    const file = new XlsxFile();
+    assert.equal(file.registerCellFormat({ alignment: { vertical: 'top' } }), 0);
+    assert.equal(file.registerCellFormat({ alignment: { vertical: 'top' } }), 0);
+    assert.equal(file.registerCellFormat({ alignment: { vertical: 'bottom' } }), 1);
+    assert.equal(file.registerCellFormat({ alignment: { wrapText: true } }), 2);
+    assert.equal(file.registerCellFormat({ alignment: { wrapText: true } }), 2);
+    assert.equal(file.registerCellFormat({ alignment: { wrapText: false } }), 3);
+    assert.equal(file.registerCellFormat({ alignment: { horizontal: 'center' } }), 4);
+    assert.equal(file.registerCellFormat({ alignment: { horizontal: 'center' } }), 4);
+    assert.equal(file.registerCellFormat({ alignment: { horizontal: 'left' } }), 5);
+
+    assert.equal(getFullXml(file),
+        '<cellXfs count="6">' +
+        '<xf xfId="0" applyAlignment="1"><alignment vertical="top" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment vertical="bottom" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment wrapText="1" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment wrapText="0" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        getExpectedFillsXml());
+});
+
+QUnit.test("registerCellFormat( empty fill )", function(assert) {
     const file = new XlsxFile();
     assert.equal(file.generateFillsXml(), getExpectedFillsXml());
 
-    assert.equal(file.registerFill(), undefined);
-    assert.equal(file.registerFill(undefined), undefined);
-    assert.equal(file.registerFill(null), undefined);
-    assert.equal(file.registerFill({ notSupported: 0 }), undefined);
-    assert.equal(file.registerFill({ patternFill: undefined }), undefined);
-    assert.equal(file.registerFill({ patternFill: null }), undefined);
-    assert.equal(file.registerFill({ patternFill: {} }), undefined);
-    assert.equal(file.registerFill({ patternFill: { notSupported: 0 } }), undefined);
-    assert.equal(file.registerFill({ patternFill: { patternType: undefined } }), undefined);
-    assert.equal(file.registerFill({ patternFill: { patternType: null } }), undefined);
-    assert.equal(file.registerFill({ patternFill: { backgroundColor_RGB: null } }), undefined);
-    assert.equal(file.registerFill({ patternFill: { foregroundColor_RGB: null } }), undefined);
-    assert.equal(file.registerFill({ patternFill: { foregroundColor_RGB: '1', backgroundColor_RGB: '1' } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: undefined }), undefined);
+    assert.equal(file.registerCellFormat({ fill: null }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { notSupported: 0 } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: undefined } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: null } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: {} } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { notSupported: 0 } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: undefined } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor_RGB: null } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor_RGB: null } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor_RGB: '1', backgroundColor_RGB: '1' } } }), undefined);
 
-    assert.equal(file.generateFillsXml(), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml());
 });
 
-QUnit.test("registerFill( various patternFill )", function(assert) {
+QUnit.test("registerCellFormat( various fill )", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.registerFill({ patternFill: { patternType: '1' } }), 2);
-    assert.equal(file.registerFill({ patternFill: { patternType: '1' } }), 2);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
 
-    assert.equal(file.registerFill({ patternFill: { patternType: '2' } }), 3);
-    assert.equal(file.registerFill({ patternFill: { patternType: '2' } }), 3);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '2' } } }), 1);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '2' } } }), 1);
 
-    assert.equal(file.registerFill({ patternFill: { patternType: '1', backgroundColor_RGB: '1' } }), 4);
-    assert.equal(file.registerFill({ patternFill: { patternType: '1', backgroundColor_RGB: '1' } }), 4);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1' } } }), 2);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1' } } }), 2);
 
-    assert.equal(file.registerFill({ patternFill: { patternType: '1', foregroundColor_RGB: '1' } }), 5);
-    assert.equal(file.registerFill({ patternFill: { patternType: '1', foregroundColor_RGB: '1' } }), 5);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor_RGB: '1' } } }), 3);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor_RGB: '1' } } }), 3);
 
-    assert.equal(file.registerFill({ patternFill: { patternType: '1', backgroundColor_RGB: '1', foregroundColor_RGB: '1' } }), 6);
-    assert.equal(file.registerFill({ patternFill: { patternType: '1', backgroundColor_RGB: '1', foregroundColor_RGB: '1' } }), 6);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1', foregroundColor_RGB: '1' } } }), 4);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1', foregroundColor_RGB: '1' } } }), 4);
 
-    assert.equal(
-        file.generateFillsXml(),
+    assert.equal(getFullXml(file),
+        '<cellXfs count="5">' +
+        '<xf xfId="0" fillId="2" />' +
+        '<xf xfId="0" fillId="3" />' +
+        '<xf xfId="0" fillId="4" />' +
+        '<xf xfId="0" fillId="5" />' +
+        '<xf xfId="0" fillId="6" />' +
+        '</cellXfs>' +
         getExpectedFillsXml([
             '<fill><patternFill patternType="1" /></fill>',
             '<fill><patternFill patternType="2" /></fill>',
@@ -110,4 +139,26 @@ QUnit.test("registerFill( various patternFill )", function(assert) {
             '<fill><patternFill patternType="1"><bgColor rgb="1" /><fgColor rgb="1" /></patternFill></fill>',
         ])
     );
+});
+
+QUnit.test("registerCellFormat( empty font )", function(assert) {
+    const file = new XlsxFile();
+    assert.equal(file.registerCellFormat({ fontId: undefined }), undefined);
+    assert.equal(file.registerCellFormat({ fontId: null }), undefined);
+
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml());
+});
+
+QUnit.test("registerCellFormat( various font )", function(assert) {
+    const file = new XlsxFile();
+    assert.equal(file.registerCellFormat({ fontId: 0 }), 0);
+    assert.equal(file.registerCellFormat({ fontId: 0 }), 0);
+    assert.equal(file.registerCellFormat({ fontId: 1 }), 1);
+    assert.equal(file.registerCellFormat({ fontId: 1 }), 1);
+
+    assert.equal(getFullXml(file),
+        '<cellXfs count="2">' +
+        '<xf xfId="0" fontId="0" /><xf xfId="0" fontId="1" />' +
+        '</cellXfs>' +
+        getExpectedFillsXml());
 });
