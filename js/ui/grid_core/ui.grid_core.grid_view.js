@@ -303,7 +303,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _needStretch: function() {
-        return this.option("legacyRendering") || this._columnsController.getVisibleColumns().some(c => c.width === "auto");
+        return this.option("legacyRendering") || this._columnsController.getVisibleColumns().some(c => c.width === "auto" && !c.command);
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
