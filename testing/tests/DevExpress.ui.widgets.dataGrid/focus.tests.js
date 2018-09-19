@@ -96,34 +96,6 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
     return result;
 };
 
-QUnit.test("Focused row initial state", function(assert) {
-    // act
-    this.setupDataGrid();
-
-    this.clock.tick();
-
-    // assert
-    assert.equal(this.option("focusedRowEnabled"), undefined, "Focused row is enabled");
-    assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
-    assert.equal(this.option("focusedColumnIndex"), undefined, "FocusedColumnIndex is undefined");
-});
-
-QUnit.test("Set focusedRow options", function(assert) {
-    // act
-    this.setupDataGrid({
-        keyExpr: "name",
-        focusedRowIndex: 2,
-        focusedColumnIndex: 3
-    });
-
-    this.clock.tick();
-
-    // assert
-    assert.equal(this.option("focusedRowEnabled"), true, "Focused row is enabled");
-    assert.equal(this.option("focusedRowIndex"), 2, "FocusedRowIndex is 2");
-    assert.equal(this.option("focusedColumnIndex"), 3, "focusedColumnIndex is 2");
-});
-
 QUnit.module("FocusedRow with real dataController and columnsController", {
     setupModule: function() {
         this.triggerKeyDown = triggerKeyDown;
