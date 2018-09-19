@@ -86,7 +86,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _updateFocus: function() {
         var that = this,
-            $cell = that._getFocusedCell();
+            $cell = that._getFocusedCell(),
+            $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
 
         if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
             if(that._hasSkipRow($cell.parent())) {
@@ -95,7 +96,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if($cell && $cell.length > 0) {
                 setTimeout(function() {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
-                        if(that.getController("editorFactory").focus()) {
+                        if(that.getController("editorFactory").focus() || $cellEditingCell) {
                             that._focus($cell);
                         } else if(that._isHiddenFocus) {
                             that._focus($cell, true);
