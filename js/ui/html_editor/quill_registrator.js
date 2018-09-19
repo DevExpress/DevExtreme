@@ -1,9 +1,5 @@
 import getQuill from "./quill_importer";
 
-import BaseTheme from "./themes/base";
-import Image from "./formats/image";
-import Toolbar from "./modules/toolbar";
-
 class QuillRegistrator {
     constructor() {
         if(QuillRegistrator.initialized) {
@@ -11,6 +7,10 @@ class QuillRegistrator {
         }
 
         const quill = this.getQuill();
+
+        const BaseTheme = require("./themes/base");
+        const Image = require("./formats/image");
+        const Toolbar = require("./modules/toolbar");
 
         const DirectionStyle = quill.import("attributors/style/direction");
         const AlignStyle = quill.import("attributors/style/align");

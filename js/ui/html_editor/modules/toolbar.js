@@ -144,4 +144,4 @@ ToolbarModule.DEFAULTS = {
     }
 };
 
-export { ToolbarModule as default };
+module.exports = ToolbarModule;

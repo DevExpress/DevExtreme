@@ -2,7 +2,7 @@ import getQuill from "../quill_importer";
 
 const Image = getQuill().import("formats/image");
 
-class extImage extends Image {
+class ExtImage extends Image {
     static formats(domNode) {
         let formats = super.formats(domNode);
 
@@ -22,4 +22,5 @@ class extImage extends Image {
     }
 }
 
-export { extImage as default };
+
+module.exports = ExtImage;
