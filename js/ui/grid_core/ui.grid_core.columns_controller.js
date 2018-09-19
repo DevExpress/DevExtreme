@@ -580,7 +580,7 @@ module.exports = {
                     if(columnOptions.command) {
                         return extend(true, {}, columnOptions);
                     } else {
-                        commonColumnOptions = that.getCommonSettings();
+                        commonColumnOptions = that.getCommonSettings(columnOptions);
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
@@ -1527,8 +1527,8 @@ module.exports = {
                 isDataSourceApplied: function() {
                     return this._dataSourceApplied;
                 },
-                getCommonSettings: function() {
-                    var commonColumnSettings = this.option("commonColumnSettings") || {},
+                getCommonSettings: function(column) {
+                    var commonColumnSettings = (!column || !column.type) && this.option("commonColumnSettings") || {},
                         groupingOptions = this.option("grouping") || {},
                         groupPanelOptions = this.option("groupPanel") || {};
 

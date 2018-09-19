@@ -8345,7 +8345,7 @@ QUnit.module("Customization of the command columns", {
                 }
             },
             columns: [{
-                type: "command",
+                type: "buttons",
                 cellTemplate: editCellTemplate,
                 width: 200
             }, "field1", "field2"]
@@ -8353,7 +8353,7 @@ QUnit.module("Customization of the command columns", {
 
         // act, assert
         assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[0], {
-            type: "command",
+            type: "buttons",
             cellTemplate: editCellTemplate,
             width: 200
         }, "edit column");

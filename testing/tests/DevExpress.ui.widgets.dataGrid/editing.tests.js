@@ -6683,6 +6683,36 @@ QUnit.test("hasChanges with rowIndex", function(assert) {
     assert.ok(that.editingController.hasChanges(1), "the second row has changed");
 });
 
+QUnit.test("Get first editable column index when there is custom select column", function(assert) {
+    // arrange
+    var that = this,
+        editableIndex,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true
+    };
+    that.options.selection = {
+        mode: "multiple",
+        showCheckBoxesMode: "always"
+    };
+    that.options.columns.unshift({ type: "selection" });
+    that.selectionController.init();
+    that.columnsController.reset();
+
+    rowsView.render($testElement);
+    debugger;
+    that.editRow(0);
+
+    // act
+    editableIndex = that.editingController.getFirstEditableColumnIndex();
+    debugger;
+    // assert
+    assert.equal(editableIndex, 1, "editable index");
+});
+
 QUnit.module('Editing with validation', {
     beforeEach: function() {
         this.array = [
