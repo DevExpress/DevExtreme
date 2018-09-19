@@ -448,13 +448,11 @@ QUnit.test("Draw fixed table for rowsView with master detail", function(assert) 
     $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
     assert.equal($table.find("tbody > tr").first().find("td").length, 6, "count column");
-    assert.equal($table.find("tbody > tr").eq(1).find("td").length, 2, "count column in master detail row");
-    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").first().html(), "", "text column");
-    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").last().html(), "&nbsp;", "text column");
+    assert.equal($table.find("tbody > tr").eq(1).find("td").length, 1, "count column in master detail row");
+    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").first().html(), "&nbsp;", "text column");
     assert.equal($fixTable.find("tbody > tr").first().find("td").length, 4, "count column");
-    assert.equal($fixTable.find("tbody > tr").eq(1).find("td").length, 2, "count column in master detail row");
-    assert.strictEqual($fixTable.find("tbody > tr").eq(1).find("td").first().text(), "", "text column");
-    assert.strictEqual($fixTable.find("tbody > tr").eq(1).find("td").last().text(), "Test", "text column");
+    assert.equal($fixTable.find("tbody > tr").eq(1).find("td").length, 1, "count column in master detail row");
+    assert.strictEqual($fixTable.find("tbody > tr").eq(1).find("td").first().text(), "Test", "text column");
 });
 
 // T363211

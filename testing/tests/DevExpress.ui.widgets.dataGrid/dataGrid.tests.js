@@ -10686,7 +10686,7 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
     $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
     assert.strictEqual($rowElements.length, 5, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content More info", "row 0 content");
-    assert.strictEqual($rowElements.eq(1).children().eq(1).text(), "Test Details", "row 1 content");
+    assert.strictEqual($rowElements.eq(1).children().first().text(), "Test Details", "row 1 content");
     assert.strictEqual($rowElements.eq(2).text(), "Row Content More info", "row 2 content");
     assert.strictEqual($rowElements.eq(3).text(), "Row Content More info", "row 3 content");
 });
@@ -10889,9 +10889,9 @@ QUnit.test("Detail cell should not have width and max-width styles", function(as
 
     // assert
     assert.equal($(dataGrid.getCellElement(0, 1)).get(0).style.width, "100px", "width style is defined for data cell");
-    assert.equal($(dataGrid.getCellElement(1, 1)).get(0).style.width, "", "width style is not defined for detail cell");
+    assert.equal($(dataGrid.getCellElement(1, 0)).get(0).style.width, "", "width style is not defined for detail cell");
     // T650963
-    assert.equal($(dataGrid.getCellElement(1, 1)).css("maxWidth"), "none", "max width style for detail cell");
+    assert.equal($(dataGrid.getCellElement(1, 0)).css("maxWidth"), "none", "max width style for detail cell");
 });
 
 // T661361

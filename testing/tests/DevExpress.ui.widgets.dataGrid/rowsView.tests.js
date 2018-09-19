@@ -2723,9 +2723,8 @@ QUnit.test('Show master detail', function(assert) {
 
     assert.ok(!$(testElement.find('tbody > tr')[1]).hasClass("dx-group-row"));
     assert.ok($(testElement.find('tbody > tr')[1]).hasClass("dx-master-detail-row"));
-    assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 2);
-    assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(0).html(), '&nbsp;');
-    assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(1).text(), 'Test Detail Information');
+    assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 1);
+    assert.equal($(testElement.find('tbody > tr')[1]).find('td').first().text(), 'Test Detail Information');
 });
 
 QUnit.test('Detail grid render as delayed template', function(assert) {
@@ -2849,10 +2848,8 @@ QUnit.test('Show grouped columns and master detail', function(assert) {
     assert.equal($(testElement.find('tbody > tr')[2]).find('td').last().text(), '3');
 
     assert.ok(!$(testElement.find('tbody > tr')[3]).hasClass("dx-group-row"));
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').length, 4);
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').first().html(), '&nbsp;');
-    assert.equal($($(testElement.find('tbody > tr')[3]).find('td')[1]).html(), '&nbsp;');
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').last().text(), 'Test Detail Information');
+    assert.equal($(testElement.find('tbody > tr')[3]).find('td').length, 1);
+    assert.equal($(testElement.find('tbody > tr')[3]).find('td').first().text(), 'Test Detail Information');
 });
 
 QUnit.test('Change Row Expand for master detail on expand button click ', function(assert) {
@@ -4852,7 +4849,7 @@ QUnit.test("Render one time the master detail when expanded/collapsed item", fun
     // assert
     assert.ok(getRowElement(1).hasClass("dx-master-detail-row"), "have master detail row");
     assert.ok(getRowElement(1).is(":visible"), "visible master detail row");
-    assert.strictEqual(getRowElement(1).children().eq(1).text(), "Test", "text master detail row");
+    assert.strictEqual(getRowElement(1).children().first().text(), "Test", "text master detail row");
     assert.equal(countCallTemplate, 1, "call template");
 
     // act
@@ -4867,7 +4864,7 @@ QUnit.test("Render one time the master detail when expanded/collapsed item", fun
     // assert
     assert.ok(getRowElement(1).hasClass("dx-master-detail-row"), "have master detail row");
     assert.ok(getRowElement(1).is(":visible"), "visible master detail row");
-    assert.strictEqual(getRowElement(1).children().eq(1).text(), "Test", "text master detail row");
+    assert.strictEqual(getRowElement(1).children().first().text(), "Test", "text master detail row");
     assert.equal(countCallTemplate, 1, "not call template");
 });
 
