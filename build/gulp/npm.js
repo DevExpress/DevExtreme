@@ -44,7 +44,7 @@ var DIST_GLOBS = [
     '!artifacts/js/jszip*',
     '!artifacts/js/dx.custom*',
     '!artifacts/js/quill*',
-    '!artifacts/js/quill-delta-to-html*',
+    '!artifacts/js/Quill*',
     '!artifacts/js/turndown*',
     '!artifacts/js/showdown*',
     '!artifacts/ts/jquery*',
