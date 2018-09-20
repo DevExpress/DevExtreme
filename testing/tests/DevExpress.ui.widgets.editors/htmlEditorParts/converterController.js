@@ -1,4 +1,6 @@
+import $ from "jquery";
 import "ui/html_editor";
+
 import ConverterController from "ui/html_editor/converterController";
 
 const { test } = QUnit;
@@ -17,5 +19,17 @@ QUnit.module("Converter controller", () => {
         const customConverter = ConverterController.getConverter("custom");
 
         assert.ok(customConverter, "Custom converter exists");
+    });
+});
+
+QUnit.module("Unknown converter", () => {
+    test("Editor throw an error if cannot find a converter", (assert) => {
+        assert.throws(
+            function() { $("#htmlEditor").dxHtmlEditor({ valueType: "Markdown" }); },
+            function(e) {
+                return /E1054/.test(e.message);
+            },
+            "Converter isn't defined"
+        );
     });
 });
