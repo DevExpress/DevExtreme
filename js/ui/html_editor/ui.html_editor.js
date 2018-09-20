@@ -45,7 +45,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _prepareConverters: function() {
-        if(!this._quillDeltaConverter) {
+        if(!this._deltaConverter) {
             this._deltaConverter = new DeltaConverter();
         }
 
