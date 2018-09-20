@@ -78,9 +78,11 @@ const HtmlEditor = Editor.inherit({
         });
 
         this.callBase();
+
+        this._updateContainerMarkup();
     },
 
-    _render: function() {
+    _updateContainerMarkup: function() {
         let markup = this.option("value");
 
         if(this._isMarkdownValue()) {
@@ -90,36 +92,26 @@ const HtmlEditor = Editor.inherit({
         if(markup) {
             this._$htmlContainer.html(markup);
         }
+    },
 
+    _render: function() {
         this._renderHtmlEditor();
         this.callBase();
     },
 
     _renderHtmlEditor: function() {
-        let that = this,
-            modulesConfig = that._getModulesConfig();
+        const modulesConfig = this._getModulesConfig();
 
-        this._htmlEditor = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
+        this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
             readOnly: this.option("readOnly") || this.option("disabled"),
             modules: modulesConfig,
             theme: "basic"
         });
 
-        this._htmlEditor.on("text-change", function(newDelta, oldDelta, source) {
-            let resultMarkup,
-                delta = that._htmlEditor.getContents(),
-                htmlMarkup = that._deltaConverter.toHtml(delta.ops);
+        this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
 
-            that._isEditorUpdating = true;
-
-            if(that._isMarkdownValue()) {
-                resultMarkup = that._updateValueByType("Markdown", htmlMarkup);
-            } else {
-                resultMarkup = htmlMarkup;
-            }
-            that.option("value", resultMarkup);
-        });
+        this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
     },
 
     _getModulesConfig: function() {
@@ -164,21 +156,27 @@ const HtmlEditor = Editor.inherit({
         }, userConfig);
     },
 
+    _textChangeHandler: function(newDelta, oldDelta, source) {
+        let delta = this._quillInstance.getContents(),
+            htmlMarkup = this._deltaConverter.toHtml(delta.ops);
+
+        this._isEditorUpdating = true;
+
+        const value = this._isMarkdownValue() ? this._updateValueByType("Markdown", htmlMarkup) : htmlMarkup;
+
+        this.option("value", value);
+    },
+
     _updateValueByType: function(valueType, value) {
-        if(!isDefined(this._markdownConverter)) {
+        const converter = this._markdownConverter;
+
+        if(!isDefined(converter)) {
             return;
         }
 
         const currentValue = value || this.option("value");
-        let updatedValue;
 
-        if(valueType === "Markdown") {
-            updatedValue = this._markdownConverter.toMarkdown(currentValue);
-        } else {
-            updatedValue = this._markdownConverter.toHtml(currentValue);
-        }
-
-        return updatedValue;
+        return valueType === "Markdown" ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
     },
 
     _isMarkdownValue: function() {
@@ -186,17 +184,17 @@ const HtmlEditor = Editor.inherit({
     },
 
     _resetEnabledState: function() {
-        if(this._htmlEditor) {
+        if(this._quillInstance) {
             const isEnabled = !(this.option("readOnly") || this.option("disabled"));
 
-            this._htmlEditor.enable(isEnabled);
+            this._quillInstance.enable(isEnabled);
         }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
-                if(!this._htmlEditor) {
+                if(!this._quillInstance) {
                     this._$htmlContainer.html(args.value);
                     return;
                 }
@@ -204,16 +202,10 @@ const HtmlEditor = Editor.inherit({
                 if(this._isEditorUpdating) {
                     delete this._isEditorUpdating;
                 } else {
-                    let updatedValue;
+                    const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
 
-                    if(this._isMarkdownValue()) {
-                        updatedValue = this._updateValueByType("HTML", args.value);
-                    } else {
-                        updatedValue = args.value;
-                    }
-
-                    let newDelta = this._htmlEditor.clipboard.convert(updatedValue);
-                    this._htmlEditor.setContents(newDelta);
+                    let newDelta = this._quillInstance.clipboard.convert(updatedValue);
+                    this._quillInstance.setContents(newDelta);
                 }
                 this.callBase(args);
                 break;
@@ -237,6 +229,14 @@ const HtmlEditor = Editor.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _clean: function() {
+        if(this._quillInstance) {
+            this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
+        }
+
+        this.callBase();
     },
 
     /**

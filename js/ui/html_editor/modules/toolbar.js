@@ -134,14 +134,4 @@ class ToolbarModule extends BaseModule {
     }
 }
 
-ToolbarModule.DEFAULTS = {
-    formats: {
-        clear: {
-            options: {
-
-            }
-        }
-    }
-};
-
 module.exports = ToolbarModule;
