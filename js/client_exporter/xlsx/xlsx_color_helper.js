@@ -31,9 +31,9 @@ const xlsxColorHelper = {
             );
     },
 
-    toXml: function(tag) {
-         // 'CT_Color', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml("color",
+    toXml: function(tagName, tag) {
+        // 'CT_Color', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        return xlsxTagHelper.toXml(tagName,
             {
                 rgb: tag.rgb,
                 theme: tag.theme

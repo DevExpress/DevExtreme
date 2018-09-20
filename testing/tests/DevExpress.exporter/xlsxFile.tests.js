@@ -99,9 +99,14 @@ QUnit.test("registerCellFormat( empty fill )", function(assert) {
     assert.equal(file.registerCellFormat({ fill: { patternFill: { notSupported: 0 } } }), undefined);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: undefined } } }), undefined);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null } } }), undefined);
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor_RGB: null } } }), undefined);
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor_RGB: null } } }), undefined);
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor_RGB: '1', backgroundColor_RGB: '1' } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, notSupported: null } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor: null } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor: { notSupported: null } } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor: { rgb: null } } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor: null } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor: { notSupported: null } } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor: { rgb: null } } } }), undefined);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor: { rgb: '1' }, foregroundColor: { rgb: '1' } } } }), undefined);
 
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
@@ -110,32 +115,36 @@ QUnit.test("registerCellFormat( various fill )", function(assert) {
     const file = new XlsxFile();
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
-
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '2' } } }), 1);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '2' } } }), 1);
-
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1' } } }), 2);
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1' } } }), 2);
-
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor_RGB: '1' } } }), 3);
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor_RGB: '1' } } }), 3);
-
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1', foregroundColor_RGB: '1' } } }), 4);
-    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor_RGB: '1', foregroundColor_RGB: '1' } } }), 4);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' } } } }), 2);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' } } } }), 2);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { theme: '1' } } } }), 3);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { theme: '1' } } } }), 3);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1' } } } }), 4);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1' } } } }), 4);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor: { theme: '1' } } } }), 5);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor: { theme: '1' } } } }), 5);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' }, foregroundColor: { rgb: '1' } } } }), 6);
+    assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' }, foregroundColor: { rgb: '1' } } } }), 6);
 
     assert.equal(getFullXml(file),
-        '<cellXfs count="5">' +
+        '<cellXfs count="7">' +
         '<xf xfId="0" fillId="2" />' +
         '<xf xfId="0" fillId="3" />' +
         '<xf xfId="0" fillId="4" />' +
         '<xf xfId="0" fillId="5" />' +
         '<xf xfId="0" fillId="6" />' +
+        '<xf xfId="0" fillId="7" />' +
+        '<xf xfId="0" fillId="8" />' +
         '</cellXfs>' +
         getExpectedFillsXml([
             '<fill><patternFill patternType="1" /></fill>',
             '<fill><patternFill patternType="2" /></fill>',
             '<fill><patternFill patternType="1"><bgColor rgb="1" /></patternFill></fill>',
+            '<fill><patternFill patternType="1"><bgColor theme="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><fgColor rgb="1" /></patternFill></fill>',
+            '<fill><patternFill patternType="1"><fgColor theme="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><bgColor rgb="1" /><fgColor rgb="1" /></patternFill></fill>',
         ]) +
         '<fonts count="0" />'

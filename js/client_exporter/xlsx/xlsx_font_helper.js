@@ -55,7 +55,7 @@ const xlsxFontHelper = {
         const content = [
             typeUtils.isDefined(tag.bold) && tag.bold ? xlsxTagHelper.toXml('b', {}) : '',
             typeUtils.isDefined(tag.size) ? xlsxTagHelper.toXml('sz', { 'val': tag.size }) : '',
-            typeUtils.isDefined(tag.color) ? xlsxColorHelper.toXml(tag.color) : '',
+            typeUtils.isDefined(tag.color) ? xlsxColorHelper.toXml('color', tag.color) : '',
             typeUtils.isDefined(tag.name) ? xlsxTagHelper.toXml('name', { 'val': tag.name }) : '',
             typeUtils.isDefined(tag.family) ? xlsxTagHelper.toXml('family', { 'val': tag.family }) : '',
             typeUtils.isDefined(tag.scheme) ? xlsxTagHelper.toXml('scheme', { 'val': tag.scheme }) : '',
