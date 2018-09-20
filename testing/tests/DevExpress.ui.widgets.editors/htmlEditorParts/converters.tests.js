@@ -1,5 +1,5 @@
-import DeltaConverter from "ui/html_editor/converters/deltaConverter";
-import MarkdownConverter from "ui/html_editor/converters/markdownConverter";
+import DeltaConverter from "ui/html_editor/converters/delta";
+import MarkdownConverter from "ui/html_editor/converters/markdown";
 
 const { test } = QUnit;
 

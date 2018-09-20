@@ -224,6 +224,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1053: "The ShowDown script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
+     * @name ErrorsUIWidgets.E1054
+     */
+    E1054: "The \"{0}\" converter is not found in the ConverterController",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",

@@ -1,5 +1,6 @@
 const DefaultQuillDeltaToHtmlConverter = require("quill-delta-to-html");
 import Errors from "../../widget/ui.errors";
+import ConverterController from "../converterController";
 
 class DeltaConverter {
     constructor() {
@@ -19,5 +20,7 @@ class DeltaConverter {
 if(DefaultQuillDeltaToHtmlConverter) {
     DeltaConverter._deltaToHtmlConverter = DefaultQuillDeltaToHtmlConverter.QuillDeltaToHtmlConverter || DefaultQuillDeltaToHtmlConverter;
 }
+
+ConverterController.addConverter("delta", DeltaConverter);
 
 export { DeltaConverter as default };

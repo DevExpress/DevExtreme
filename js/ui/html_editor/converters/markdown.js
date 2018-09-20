@@ -1,6 +1,7 @@
 import TurnDown from "turndown";
 import ShowDown from "showdown";
 import Errors from "../../widget/ui.errors";
+import converterController from "../converterController";
 
 class MarkdownConverter {
     constructor() {
@@ -36,5 +37,7 @@ class MarkdownConverter {
 
 MarkdownConverter._TurnDown = TurnDown;
 MarkdownConverter._ShowDown = ShowDown;
+
+converterController.addConverter("markdown", MarkdownConverter);
 
 export { MarkdownConverter as default };

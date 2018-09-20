@@ -103,7 +103,7 @@ class ToolbarModule extends BaseModule {
     }
 
     getFormatItemConfig(format) {
-        return ToolbarModule.DEFAULTS.formats[format] || {};
+        return {}; // ToolbarModule.DEFAULTS.formats[format]
     }
 
     updateFormatWidgets() {

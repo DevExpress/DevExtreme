@@ -5,10 +5,11 @@ import { getPublicElement } from "../../core/utils/dom";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
+import Errors from "../widget/ui.errors";
 
 import QuillRegistrator from "./quill_registrator";
-import DeltaConverter from "./converters/deltaConverter";
-import MarkdownConverter from "./converters/markdownConverter";
+import "./converters/delta";
+import ConverterController from "./converterController";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 
@@ -46,11 +47,23 @@ const HtmlEditor = Editor.inherit({
 
     _prepareConverters: function() {
         if(!this._deltaConverter) {
-            this._deltaConverter = new DeltaConverter();
+            const DeltaConverter = ConverterController.getConverter("delta");
+
+            if(DeltaConverter) {
+                this._deltaConverter = new DeltaConverter();
+            } else {
+                throw Errors.Error("E1054", "delta");
+            }
         }
 
         if(this.option("valueType") === "Markdown" && !this._markdownConverter) {
-            this._markdownConverter = new MarkdownConverter();
+            const MarkdownConverter = ConverterController.getConverter("markdown");
+
+            if(MarkdownConverter) {
+                this._markdownConverter = new MarkdownConverter();
+            } else {
+                throw Errors.Error("E1054", "markdown");
+            }
         }
     },
 

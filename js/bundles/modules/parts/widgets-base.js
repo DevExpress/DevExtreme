@@ -68,6 +68,9 @@ DevExpress.validationEngine = require("../../../ui/validation_engine");
 ui.dxValidationSummary = require("../../../ui/validation_summary");
 ui.dxValidationGroup = require("../../../ui/validation_group");
 ui.dxValidator = require("../../../ui/validator");
+
+/* Widget parts */
+require("../../../ui/html_editor/converters/markdown");
 /// BUNDLER_PARTS_END
 
 // Dashboards

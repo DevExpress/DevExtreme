@@ -1,6 +1,7 @@
 import $ from "jquery";
 
 import "ui/html_editor";
+import "ui/html_editor/converters/markdown";
 
 const CONTENT_CLASS = "dx-htmleditor-content";
 
