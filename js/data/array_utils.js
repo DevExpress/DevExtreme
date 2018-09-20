@@ -22,9 +22,9 @@ function hasKey(target, keyOrKeys) {
 function push(array, batchData, keyInfo) {
     batchData.forEach(item => {
         switch(item.type) {
-            case "update": this.update(array, item.key, item.data, keyInfo); break;
-            case "insert": this.insert(array, item.data, keyInfo); break;
-            case "remove": this.remove(array, item.key, keyInfo); break;
+            case "update": update(array, item.key, item.data, keyInfo); break;
+            case "insert": insert(array, item.data, keyInfo); break;
+            case "remove": remove(array, item.key, keyInfo); break;
         }
     });
 }
