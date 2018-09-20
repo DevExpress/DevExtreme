@@ -1,14 +1,18 @@
 
 class ConverterController {
-    constructor() {}
-
-    static addConverter(name, converter) {
-        ConverterController[name] = converter;
+    constructor() {
+        this._converters = {};
     }
 
-    static getConverter(name) {
-        return ConverterController[name];
+    addConverter(name, converter) {
+        this._converters[name] = converter;
+    }
+
+    getConverter(name) {
+        return this._converters[name];
     }
 }
 
-export { ConverterController as default };
+const controller = new ConverterController();
+
+export { controller as default };
