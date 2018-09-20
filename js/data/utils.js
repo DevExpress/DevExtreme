@@ -1,12 +1,8 @@
-import { isFunction, isPlainObject, isEmptyObject } from "../core/utils/type";
-import Guid from "../core/guid";
+import { isFunction } from "../core/utils/type";
 import domAdapter from "../core/dom_adapter";
 import { add as ready } from "../core/utils/ready_callbacks";
-import { extend } from "../core/utils/extend";
 import windowUtils from "../core/utils/window";
 import { map } from "../core/utils/iterator";
-import { errors } from "./errors";
-import objectUtils from "../core/utils/object";
 import { toComparable } from "../core/utils/data";
 import { Deferred } from "../core/utils/deferred";
 
@@ -241,102 +237,7 @@ var rejectedPromise = function() {
     return d.reject.apply(d, arguments).promise();
 };
 
-function ArrayHelper() {
-    var hasKey = function(target, keyOrKeys) {
-        var key,
-            keys = typeof keyOrKeys === "string" ? keyOrKeys.split() : keyOrKeys.slice();
-
-        while(keys.length) {
-            key = keys.shift();
-            if(key in target) {
-                return true;
-            }
-        }
-
-        return false;
-    };
-
-    this.push = function(array, batchData, keyInfo) {
-        batchData.forEach(item => {
-            switch(item.type) {
-                case "update": this.updateArrayItem(array, item.key, item.data, keyInfo); break;
-                case "insert": this.insertItemToArray(array, item.data, keyInfo); break;
-                case "remove": this.removeItemFromArray(array, item.key, keyInfo); break;
-            }
-        });
-    };
-
-    this.updateArrayItem = function(array, key, data, keyInfo) {
-        var target,
-            extendComplexObject = true,
-            keyExpr = keyInfo.key();
-
-        if(keyExpr) {
-            if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
-                return rejectedPromise(errors.Error("E4017"));
-            }
-
-            let index = this.indexByKey(array, key, keyInfo);
-            if(index < 0) {
-                return rejectedPromise(errors.Error("E4009"));
-            }
-
-            target = array[index];
-        } else {
-            target = key;
-        }
-
-        objectUtils.deepExtendArraySafe(target, data, extendComplexObject);
-        return trivialPromise(key, data);
-    };
-
-    this.insertItemToArray = function(array, data, keyInfo) {
-        var keyValue,
-            obj,
-            keyExpr = keyInfo.key();
-
-        obj = isPlainObject(data) ? extend({}, data) : data;
-
-        if(keyExpr) {
-            keyValue = keyInfo.keyOf(obj);
-            if(keyValue === undefined || typeof keyValue === "object" && isEmptyObject(keyValue)) {
-                if(Array.isArray(keyExpr)) {
-                    throw errors.Error("E4007");
-                }
-                keyValue = obj[keyExpr] = String(new Guid());
-            } else {
-                if(array[this.indexByKey(array, keyValue, keyInfo)] !== undefined) {
-                    return rejectedPromise(errors.Error("E4008"));
-                }
-            }
-        } else {
-            keyValue = obj;
-        }
-
-        array.push(obj);
-        return trivialPromise(data, keyValue);
-    };
-
-    this.removeItemFromArray = function(array, key, keyInfo) {
-        var index = this.indexByKey(array, key, keyInfo);
-        if(index > -1) {
-            array.splice(index, 1);
-        }
-        return trivialPromise(key);
-    };
-
-    this.indexByKey = function(array, key, keyInfo) {
-        var keyExpr = keyInfo.key();
-        for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
-            if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
-                return i;
-            }
-        }
-        return -1;
-    };
-}
-
-function createThrottle(func, timeout) {
+function throttle(func, timeout) {
     var timeoutId,
         lastArgs;
     return function() {
@@ -353,9 +254,9 @@ function createThrottle(func, timeout) {
     };
 };
 
-function createThrottleWithAggregation(func, timeout) {
+function throttleChanges(func, timeout) {
     var cache = [],
-        throttle = createThrottle(function() {
+        throttled = throttle(function() {
             func.call(this, cache);
             cache = [];
         }, timeout);
@@ -364,7 +265,7 @@ function createThrottleWithAggregation(func, timeout) {
         if(Array.isArray(changes)) {
             cache.push(...changes);
         }
-        return throttle.call(this, cache);
+        return throttled.call(this, cache);
     };
 }
 
@@ -380,8 +281,7 @@ var utils = {
     aggregators: aggregators,
 
     keysEqual: keysEqual,
-    arrayHelper: new ArrayHelper(),
-    createThrottleWithAggregation: createThrottleWithAggregation,
+    throttleChanges: throttleChanges,
     trivialPromise: trivialPromise,
     rejectedPromise: rejectedPromise,
 

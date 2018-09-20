@@ -5,6 +5,7 @@ var Class = require("../../core/class"),
     ajax = require("../../core/utils/ajax"),
     typeUtils = require("../../core/utils/type"),
     dataUtils = require("../utils"),
+    arrayUtils = require("../array_utils"),
     Store = require("../abstract_store"),
     ArrayStore = require("../array_store"),
     CustomStore = require("../custom_store"),
@@ -216,11 +217,11 @@ var DataSource = Class.inherit({
         * @default undefined
         */
         var onPushHandler = options.pushAggregationTimeout
-            ? dataUtils.createThrottleWithAggregation(this._onPush, options.pushAggregationTimeout).bind(this)
+            ? dataUtils.throttleChanges(this._onPush, options.pushAggregationTimeout).bind(this)
             : this._onPush.bind(this);
 
         this._onPushHandler = (changes) => {
-            this.aggregationTimeoutId = onPushHandler.call(this, changes);
+            this._aggregationTimeoutId = onPushHandler.call(this, changes);
         };
 
         /**
@@ -326,7 +327,7 @@ var DataSource = Class.inherit({
         * @type Boolean
         * @default false
         */
-        this.reshapeOnPush = __isDefined(options.reshapeOnPush) ? options.reshapeOnPush : false;
+        this._reshapeOnPush = __isDefined(options.reshapeOnPush) ? options.reshapeOnPush : false;
 
         iteratorUtils.each(
             [
@@ -387,7 +388,7 @@ var DataSource = Class.inherit({
     dispose: function() {
         this._store.off("push", this._onPushHandler);
         this._disposeEvents();
-        clearTimeout(this.aggregationTimeoutId);
+        clearTimeout(this._aggregationTimeoutId);
 
         delete this._store;
 
@@ -835,7 +836,7 @@ var DataSource = Class.inherit({
     },
 
     _onPush: function(changes) {
-        if(this.reshapeOnPush) {
+        if(this._reshapeOnPush) {
             this.load();
         } else {
             let group = this.group(),
@@ -849,7 +850,7 @@ var DataSource = Class.inherit({
                 items = getPlainItems(items, groupLevel);
             }
 
-            dataUtils.arrayHelper.push(items, changes, this.store());
+            arrayUtils.push(items, changes, this.store());
             this.fireEvent("changed", [{ changes: changes }]);
         }
     },

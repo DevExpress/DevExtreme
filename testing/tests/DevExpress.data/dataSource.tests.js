@@ -1656,7 +1656,7 @@ QUnit.module("live update", {
             { type: "update", key: itemUpdate, data: { field: 4 } }
         ];
 
-        this.initDataSource = function(options) {
+        this.createDataSource = function(options) {
             return new DataSource($.extend({
                 load: function() {
                     loadSpy();
@@ -1687,7 +1687,7 @@ QUnit.module("live update", {
     }
 }, function() {
     QUnit.test("load is called when reshapeOnPush is enabled", function(assert) {
-        var dataSource = this.initDataSource({
+        var dataSource = this.createDataSource({
             reshapeOnPush: true
         });
         assert.equal(this.loadSpy.callCount, 0);
@@ -1697,7 +1697,7 @@ QUnit.module("live update", {
     });
 
     QUnit.test("load is called with throttle when reshapeOnPush and pushAggregationTimeout are enabled", function(assert) {
-        var dataSource = this.initDataSource({
+        var dataSource = this.createDataSource({
             reshapeOnPush: true,
             pushAggregationTimeout: 100
         });
@@ -1712,13 +1712,13 @@ QUnit.module("live update", {
     });
 
     QUnit.test("load isn't called when reshapeOnPush is disabled", function(assert) {
-        var dataSource = this.initDataSource();
+        var dataSource = this.createDataSource();
         dataSource.store().push(this.changes);
         assert.equal(this.loadSpy.callCount, 0);
     });
 
     QUnit.test("pass changes in changed event when reshapeOnPush and paginate are disabled", function(assert) {
-        var dataSource = this.initDataSource({
+        var dataSource = this.createDataSource({
             paginate: false
         });
         var changedSpy = sinon.spy();
@@ -1728,7 +1728,7 @@ QUnit.module("live update", {
     });
 
     QUnit.test("skip changes with types 'insert' and 'remove' when reshapeOnPush is disabled and paginate is enabled", function(assert) {
-        var dataSource = this.initDataSource({
+        var dataSource = this.createDataSource({
             paginate: true
         });
         var changedSpy = sinon.spy();
@@ -1738,7 +1738,7 @@ QUnit.module("live update", {
     });
 
     QUnit.test("changed is fired with throttle when pushAggregationTimeout is enabled", function(assert) {
-        var dataSource = this.initDataSource({
+        var dataSource = this.createDataSource({
             paginate: false,
             pushAggregationTimeout: 100
         });

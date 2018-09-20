@@ -2,7 +2,7 @@ import { rejectedPromise, trivialPromise } from "./utils";
 import Query from "./query";
 import { errors } from "./errors";
 import Store from "./abstract_store";
-import { arrayHelper } from "./utils";
+import arrayUtils from "./array_utils";
 
 /**
 * @name ArrayStore
@@ -45,7 +45,7 @@ var ArrayStore = Store.inherit({
     },
 
     _byKeyImpl: function(key) {
-        var index = arrayHelper.indexByKey(this._array, key, this);
+        var index = arrayUtils.indexByKey(this._array, key, this);
 
         if(index === -1) {
             return rejectedPromise(errors.Error("E4009"));
@@ -55,19 +55,19 @@ var ArrayStore = Store.inherit({
     },
 
     _insertImpl: function(values) {
-        return arrayHelper.insertItemToArray(this._array, values, this);
+        return arrayUtils.insert(this._array, values, this);
     },
 
     _pushImpl: function(changes) {
-        arrayHelper.push(this._array, changes, this);
+        arrayUtils.push(this._array, changes, this);
     },
 
     _updateImpl: function(key, values) {
-        return arrayHelper.updateArrayItem(this._array, key, values, this);
+        return arrayUtils.update(this._array, key, values, this);
     },
 
     _removeImpl: function(key) {
-        return arrayHelper.removeItemFromArray(this._array, key, this);
+        return arrayUtils.remove(this._array, key, this);
     },
 
     /**
