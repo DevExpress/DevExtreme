@@ -35,8 +35,8 @@ const xlsxPatternFillHelper = {
     toXml: function(tag) {
         const content =
             [
-                typeUtils.isDefined(tag.backgroundColor) ? xlsxColorHelper.toXml("bgColor", tag.backgroundColor) : '',
                 typeUtils.isDefined(tag.foregroundColor) ? xlsxColorHelper.toXml("fgColor", tag.foregroundColor) : '',
+                typeUtils.isDefined(tag.backgroundColor) ? xlsxColorHelper.toXml("bgColor", tag.backgroundColor) : '',
             ].join("");
 
         // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)

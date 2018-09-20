@@ -165,7 +165,7 @@ QUnit.test("Various fills", function(assert) {
             '<fill><patternFill patternType="1"><bgColor theme="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><fgColor rgb="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><fgColor theme="1" /></patternFill></fill>',
-            '<fill><patternFill patternType="1"><bgColor rgb="1" /><fgColor rgb="1" /></patternFill></fill>',
+            '<fill><patternFill patternType="1"><fgColor rgb="1" /><bgColor rgb="1" /></patternFill></fill>',
         ]) +
         '<fonts count="0" />'
     );
@@ -210,7 +210,7 @@ QUnit.test("Passed fills should be copied", function(assert) {
         '<xf xfId="0" fillId="2" />' +
         '</cellXfs>' +
         getExpectedFillsXml([
-            '<fill><patternFill patternType="1"><bgColor rgb="1" theme="1" /><fgColor rgb="1" theme="1" /></patternFill></fill>',
+            '<fill><patternFill patternType="1"><fgColor rgb="1" theme="1" /><bgColor rgb="1" theme="1" /></patternFill></fill>',
         ]) +
         '<fonts count="0" />'
     );
