@@ -6,15 +6,9 @@ var typeUtils = require("../../core/utils/type"),
     serializePropName = odataUtils.serializePropName,
     errors = require("../errors").errors,
     dataUtils = require("../utils"),
-    isFunction = typeUtils.isFunction,
-    isPlainObject = typeUtils.isPlainObject,
-    grep = require("../../core/utils/common").grep;
+    isFunction = typeUtils.isFunction;
 
 var DEFAULT_PROTOCOL_VERSION = 2;
-
-var makeArray = function(value) {
-    return typeUtils.type(value) === "string" ? value.split() : value;
-};
 
 var compileCriteria = (function() {
     var protocolVersion,
@@ -179,155 +173,6 @@ var createODataQueryAdapter = function(queryOptions) {
         return false;
     };
 
-    var generateSelectExpand = function() {
-        var hasDot = function(x) {
-            return /\./.test(x);
-        };
-
-        var generateSelect = function() {
-            if(!_select) {
-                return;
-            }
-
-            if(_oDataVersion < 4) {
-                return serializePropName(_select.join());
-            }
-
-            return grep(_select, hasDot, true).join();
-        };
-
-        var generateExpand = function() {
-            var generatorV2 = function() {
-                var hash = {};
-
-                if(_expand) {
-                    iteratorUtils.each(makeArray(_expand), function() {
-                        hash[serializePropName(this)] = 1;
-                    });
-                }
-
-                if(_select) {
-                    iteratorUtils.each(makeArray(_select), function() {
-                        var path = this.split(".");
-                        if(path.length < 2) {
-                            return;
-                        }
-
-                        path.pop();
-                        hash[serializePropName(path.join("."))] = 1;
-                    });
-                }
-
-                return iteratorUtils.map(hash, function(k, v) { return v; }).join();
-            };
-
-            var generatorV4 = function() {
-                var format = function(hash) {
-                    var formatCore = function(hash) {
-                        var result = "",
-                            select = [],
-                            expand = [];
-
-                        iteratorUtils.each(hash, function(key, value) {
-                            if(Array.isArray(value)) {
-                                [].push.apply(select, value);
-                            }
-
-                            if(isPlainObject(value)) {
-                                expand.push(key + formatCore(value));
-                            }
-                        });
-
-                        if(select.length || expand.length) {
-                            result += "(";
-
-                            if(select.length) {
-                                result += "$select=" + iteratorUtils.map(select, serializePropName).join();
-                            }
-
-                            if(expand.length) {
-                                if(select.length) {
-                                    result += ";";
-                                }
-
-                                result += "$expand=" + iteratorUtils.map(expand, serializePropName).join();
-                            }
-                            result += ")";
-                        }
-
-                        return result;
-                    };
-
-                    var result = [];
-
-                    iteratorUtils.each(hash, function(key, value) {
-                        result.push(key + formatCore(value));
-                    });
-
-                    return result.join();
-                };
-
-                var parseTree = function(exprs, root, stepper) {
-                    var parseCore = function(exprParts, root, stepper) {
-                        var result = stepper(root, exprParts.shift(), exprParts);
-                        if(result === false) {
-                            return;
-                        }
-
-                        parseCore(exprParts, result, stepper);
-                    };
-
-                    iteratorUtils.each(exprs, function(_, x) {
-                        parseCore(x.split("."), root, stepper);
-                    });
-                };
-
-                var hash = {};
-
-                if(_expand || _select) {
-                    if(_expand) {
-                        parseTree(makeArray(_expand), hash, function(node, key, path) {
-                            node[key] = node[key] || {};
-
-                            if(!path.length) {
-                                return false;
-                            }
-
-                            return node[key];
-                        });
-                    }
-
-                    if(_select) {
-                        parseTree(grep(makeArray(_select), hasDot), hash, function(node, key, path) {
-                            if(!path.length) {
-                                node[key] = node[key] || [];
-                                node[key].push(key);
-                                return false;
-                            }
-
-                            return (node[key] = node[key] || {});
-                        });
-                    }
-
-                    return format(hash);
-                }
-            };
-
-            if(_oDataVersion < 4) {
-                return generatorV2();
-            }
-
-            return generatorV4();
-        };
-
-        var tuple = {
-            "$select": generateSelect() || undefined,
-            "$expand": generateExpand() || undefined
-        };
-
-        return tuple;
-    };
-
     var requestData = function() {
         var result = {};
 
@@ -342,9 +187,8 @@ var createODataQueryAdapter = function(queryOptions) {
                 result["$top"] = _take;
             }
 
-            var tuple = generateSelectExpand();
-            result["$select"] = tuple["$select"];
-            result["$expand"] = tuple["$expand"];
+            result["$select"] = odataUtils.generateSelect(_oDataVersion, _select) || undefined;
+            result["$expand"] = odataUtils.generateExpand(_oDataVersion, _expand, _select) || undefined;
         }
 
         if(_criteria.length) {
