@@ -3,12 +3,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined;
 
-var ROW_FOCUSED_CLASS = "dx-row-focused",
-    MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row";
-
-function isDetailRow($row) {
-    return $row && $row.hasClass(MASTER_DETAIL_ROW_CLASS);
-}
+var ROW_FOCUSED_CLASS = "dx-row-focused";
 
 exports.FocusController = core.ViewController.inherit((function() {
     return {
@@ -95,41 +90,6 @@ module.exports = {
                     }
                     if(isDefined(columnIndex)) {
                         this._focusedCellPosition.columnIndex = this.option("focusedColumnIndex");
-                    }
-                },
-
-                _upDownKeysHandler: function(eventArgs, isEditing) {
-                    var that = this,
-                        rowIndex = this.option("focusedRowIndex"),
-                        focusedRowEnabled = this.option("focusedRowEnabled"),
-                        keyboardController = this.getController("keyboardNavigation"),
-                        currentFocusedRowIndex,
-                        focusedRowIndex,
-                        lastRowIndex,
-                        $row = that._focusedView && that._focusedView.getRow(rowIndex);
-
-                    if(!focusedRowEnabled || keyboardController.isCellFocusType()) {
-                        that.callBase(eventArgs, isEditing);
-                        return;
-                    }
-                    if($row && !isEditing && !isDetailRow($row)) {
-                        currentFocusedRowIndex = focusedRowIndex = that.option("focusedRowIndex");
-                        if(eventArgs.key === "downArrow") {
-                            lastRowIndex = that._dataController.getVisibleRows().length - 1;
-                            if(focusedRowIndex < lastRowIndex) {
-                                ++focusedRowIndex;
-                            }
-                        } else {
-                            if(focusedRowIndex > 0) {
-                                --focusedRowIndex;
-                            }
-                        }
-                        if(currentFocusedRowIndex !== focusedRowIndex) {
-                            that.setFocusedRowIndex(focusedRowIndex);
-                            if(eventArgs.originalEvent) {
-                                eventArgs.originalEvent.preventDefault();
-                            }
-                        }
                     }
                 },
 
