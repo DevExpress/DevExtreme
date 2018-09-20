@@ -1,6 +1,7 @@
 var $ = require("jquery"),
     devices = require("core/devices"),
     fx = require("animation/fx"),
+    renderer = require("core/renderer"),
     viewPort = require("core/utils/view_port").value,
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config"),
@@ -2361,6 +2362,24 @@ QUnit.test("Menu should toggle it's view between adaptive and non adaptive on vi
     menu.option("visible", true);
 
     assert.notOk($itemsContainer.is(":visible"), "non adaptive container should be hidden");
+});
+
+QUnit.test("Adaptive menu should not flick when the window has been resized with jQuery 3.3.1", function(assert) {
+    var outerWidth = sinon.spy(renderer.fn, "outerWidth");
+
+    try {
+        new Menu(this.$element, {
+            items: [{ text: "item 1" }, { text: "item 2" }],
+            adaptivityEnabled: true
+        });
+
+        assert.equal(outerWidth.callCount, 3, "itemWidth has been called for each item and container on render");
+
+        resizeCallbacks.fire();
+        assert.equal(outerWidth.callCount, 4, "itemWidth has been called just for container on dimension change");
+    } finally {
+        outerWidth.restore();
+    }
 });
 
 QUnit.test("Adaptive mode should depend on summary item width but not on item container width", function(assert) {
