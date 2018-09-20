@@ -189,7 +189,7 @@ const HtmlEditor = Editor.inherit({
         if(this._htmlEditor) {
             const isEnabled = !(this.option("readOnly") || this.option("disabled"));
 
-            this._htmlEditor.enabled(isEnabled);
+            this._htmlEditor.enable(isEnabled);
         }
     },
 
