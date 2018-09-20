@@ -493,7 +493,51 @@ QUnit.test("with expand", function(assert) {
 
         new ODataStore({ version: 4, url: "odata4.org" })
             .byKey(42, { expand: ["prop1.subprop", "prop2"] })
-            .done(assertFunc)
+            .done((r) => {
+                assert.deepEqual(r, { expandClause: "prop1($expand=subprop),prop2" });
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
+QUnit.test("with explicit expand", function(assert) {
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata.org(42)",
+        callback: function(bag) {
+            this.responseText = { d: { results: [bag.data["$expand"]] } };
+        }
+    });
+
+    ajaxMock.setup({
+        url: "odata4.org(42)",
+        callback: function(bag) {
+            this.responseText = { value: [bag.data["$expand"]] };
+        }
+    });
+
+    var options = { expand: ["a", "b.c"] };
+
+    var promises = [
+        new ODataStore({ url: "odata.org" })
+            .byKey(42, options)
+            .done(function(r, extra) {
+                assert.ok(!extra);
+                assert.deepEqual(r, ["a,b/c"]);
+            }),
+
+        new ODataStore({ version: 4, url: "odata4.org" })
+            .byKey(42, options)
+            .done(function(r, extra) {
+                assert.ok(!extra);
+                assert.deepEqual(r, ["a,b($expand=c)"]);
+            })
     ];
 
     $.when.apply($, promises)

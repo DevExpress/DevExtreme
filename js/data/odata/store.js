@@ -1,7 +1,7 @@
 var isDefined = require("../../core/utils/type").isDefined,
-    map = require("../../core/utils/iterator").map,
     odataUtils = require("./utils"),
     proxyUrlFormatter = require("../proxy_url_formatter"),
+    queryByOptions = require("../store_helper").queryByOptions,
     errors = require("../errors").errors,
     query = require("../query"),
     Store = require("../abstract_store"),
@@ -168,11 +168,12 @@ var ODataStore = Store.inherit({
 
         if(extraOptions) {
             if(extraOptions.expand) {
-                params["$expand"] = map([].slice.call(extraOptions.expand), odataUtils.serializePropName).join();
+                params["expand"] = extraOptions.expand;
             }
         }
 
-        return this._sendRequest(this._byKeyUrl(key), "GET", params);
+        params["urlOverride"] = this._byKeyUrl(key);
+        return queryByOptions(this.createQuery(params), params).enumerate();
     },
 
     /**
