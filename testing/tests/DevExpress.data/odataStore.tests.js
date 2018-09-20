@@ -493,7 +493,9 @@ QUnit.test("with expand", function(assert) {
 
         new ODataStore({ version: 4, url: "odata4.org" })
             .byKey(42, { expand: ["prop1.subprop", "prop2"] })
-            .done(assertFunc)
+            .done((value) => {
+                assert.deepEqual(value, { expandClause: "prop1($expand=subprop),prop2" });
+            })
     ];
 
     $.when.apply($, promises)
