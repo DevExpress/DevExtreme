@@ -77,6 +77,18 @@ QUnit.test("array value should be supported", function(assert) {
     assert.equal($input.val(), "Item 2", "array value works");
 });
 
+QUnit.test("it should be possible to restore value after reset", function(assert) {
+    var instance = new DropDownBox(this.$element, {
+            value: 2
+        }),
+        $input = this.$element.find(".dx-texteditor-input");
+
+    instance.reset();
+    instance.option("value", "Test");
+
+    assert.equal($input.val(), "Test", "value has been applied");
+});
+
 QUnit.test("array value changing", function(assert) {
     var instance = new DropDownBox(this.$element, {
         items: this.simpleItems,
