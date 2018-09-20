@@ -49,7 +49,7 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_INVALID_CLASS = "dx-fileuploader-invalid",
 
     FILEUPLOADER_AFTER_LOAD_DELAY = 400,
-    FILEUPLOADER_CHUNK_META_DATA_NAME = "metaData";
+    FILEUPLOADER_CHUNK_META_DATA_NAME = "chunkMetadata";
 
 var renderFileUploaderInput = function() {
     return $("<input>").attr("type", "file");
@@ -1527,12 +1527,12 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
         var formData = new window.FormData();
         formData.append(options.blobName, options.blob);
         formData.append(FILEUPLOADER_CHUNK_META_DATA_NAME, JSON.stringify({
-            Name: options.fileName,
+            FileName: options.fileName,
             Index: options.index,
-            Count: options.count,
+            TotalCount: options.count,
             FileSize: options.size,
-            Type: options.type,
-            Guid: options.guid
+            FileType: options.type,
+            FileGuid: options.guid
         }));
         return formData;
     },
