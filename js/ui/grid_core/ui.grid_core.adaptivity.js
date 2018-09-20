@@ -558,7 +558,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     updateHidingQueue: function(columns) {
         var that = this,
             hideableColumns = columns.filter(function(column) {
-                return column.visible && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
+                return column.visible && !column.type && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
             }),
             columnsHasHidingPriority,
             i;
