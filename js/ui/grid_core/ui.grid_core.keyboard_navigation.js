@@ -509,14 +509,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _spaceKeyHandler: function(eventArgs, isEditing) {
         var rowIndex = this.getFocusedRowIndex(),
-            $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target);
+            $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target),
+            isFocusedRowElement;
 
-        if(this.option("selection") && this.option("selection").mode !== "none" && !isEditing && ($target.parent().hasClass(DATA_ROW_CLASS) || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS)))) {
-            this._selectionController.changeItemSelection(rowIndex, {
-                shift: eventArgs.shift,
-                control: eventArgs.ctrl
-            });
-            eventArgs.originalEvent.preventDefault();
+        if(this.option("selection") && this.option("selection").mode !== "none" && !isEditing) {
+            isFocusedRowElement = this._getElementType($target) === "row" && this.isRowFocusType() && isDataRow($target);
+            if(isFocusedRowElement) {
+                this._selectionController.startSelectionWithCheckboxes();
+            }
+            if(isFocusedRowElement || $target.parent().hasClass(DATA_ROW_CLASS) || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
+                this._selectionController.changeItemSelection(rowIndex, {
+                    shift: eventArgs.shift,
+                    control: eventArgs.ctrl
+                });
+                eventArgs.originalEvent.preventDefault();
+            }
         }
     },
 
