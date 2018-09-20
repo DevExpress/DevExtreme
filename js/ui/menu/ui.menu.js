@@ -311,6 +311,9 @@ var Menu = MenuBase.inherit({
 
     _visibilityChanged: function(visible) {
         if(visible) {
+            if(!this._menuItemsWidth) {
+                this._updateItemsWidthCache();
+            }
             this._dimensionChanged();
         }
     },
@@ -319,16 +322,18 @@ var Menu = MenuBase.inherit({
         return this.option("adaptivityEnabled") && this.option("orientation") === "horizontal";
     },
 
+    _updateItemsWidthCache: function() {
+        var $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS);
+        this._menuItemsWidth = this._getSummaryItemsWidth($menuItems, true);
+    },
+
     _dimensionChanged: function() {
         if(!this._isAdaptivityEnabled()) {
             return;
         }
 
-        var $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS),
-            menuItemsWidth = this._getSummaryItemsWidth($menuItems, true),
-            containerWidth = this.$element().outerWidth();
-
-        this._toggleAdaptiveMode(menuItemsWidth > containerWidth);
+        var containerWidth = this.$element().outerWidth();
+        this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
     },
 
     _init: function() {
@@ -498,6 +503,7 @@ var Menu = MenuBase.inherit({
 
         this.$element().append(this._$adaptiveContainer);
 
+        this._updateItemsWidthCache();
         this._dimensionChanged();
     },
 
