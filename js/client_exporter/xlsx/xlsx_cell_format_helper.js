@@ -3,14 +3,14 @@ import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
 
 const xlsxCellFormatHelper = {
-    tryCreateTag: function(sourceObj, xlsxFile) {
+    tryCreateTag: function(sourceObj, sharedItemsContainer) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             result = {
-                fontId: xlsxFile.registerFont(sourceObj.font),
                 numberFormatId: sourceObj.numberFormatId,
                 alignment: xlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
-                fillId: xlsxFile.registerFill(sourceObj.fill),
+                fontId: sharedItemsContainer.registerFont(sourceObj.font),
+                fillId: sharedItemsContainer.registerFill(sourceObj.fill),
             };
             if(xlsxCellFormatHelper.isEmpty(result)) {
                 result = null;
