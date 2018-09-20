@@ -18,8 +18,18 @@ const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxHtmlEditorOptions.valueType
+            * @type Enums.HtmlEditorValueType
+            * @default "HTML"
+            */
             valueType: "HTML",
-            placeholder: "Type something",
+            /**
+            * @name dxHtmlEditorOptions.placeholder
+            * @type string
+            * @default ""
+            */
+            placeholder: "",
             toolbar: null, // container, items
             mention: null,
             allowImageResizing: false,
@@ -91,6 +101,7 @@ const HtmlEditor = Editor.inherit({
 
         this._htmlEditor = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
+            readOnly: this.option("readOnly") || this.option("disabled"),
             modules: modulesConfig,
             theme: "basic"
         });
@@ -174,6 +185,14 @@ const HtmlEditor = Editor.inherit({
         return this.option("valueType") === "Markdown";
     },
 
+    _resetEnabledState: function() {
+        if(this._htmlEditor) {
+            const isEnabled = !(this.option("readOnly") || this.option("disabled"));
+
+            this._htmlEditor.enabled(isEnabled);
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
@@ -210,9 +229,23 @@ const HtmlEditor = Editor.inherit({
                 this._prepareConverters();
                 this.option("value", this._updateValueByType(args.value));
                 break;
+            case "readOnly":
+            case "disabled":
+                this.callBase(args);
+                this._resetEnabledState();
+                break;
             default:
                 this.callBase(args);
         }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.registerModules
+    * @publicName registerModules(modules)
+    * @param1 modules:Object
+    */
+    registerModules: function(modules) {
+        QuillRegistrator.registerModules(modules);
     }
 });
 
