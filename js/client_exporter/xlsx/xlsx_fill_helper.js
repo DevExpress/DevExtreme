@@ -6,7 +6,7 @@ const xlsxFillHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
-            result = { patternFill: sourceObj.patternFill };
+            result = { patternFill: xlsxPatternFillHelper.tryCreateTag(sourceObj.patternFill) };
             if(xlsxFillHelper.isEmpty(result)) {
                 result = null;
             }
