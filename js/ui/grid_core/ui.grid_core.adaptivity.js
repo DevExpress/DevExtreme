@@ -55,7 +55,7 @@ function adaptiveCellTemplate(container, options) {
         $container = $(container),
         adaptiveColumnsController = options.component.getController("adaptiveColumns");
 
-    if(options.rowType !== "groupFooter") {
+    if(options.rowType === "data") {
         $adaptiveColumnButton = $("<span>").addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
         eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
             adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
