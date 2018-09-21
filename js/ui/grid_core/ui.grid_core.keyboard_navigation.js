@@ -1206,7 +1206,10 @@ module.exports = {
 
             editorFactory: {
                 renderFocusOverlay: function($element, hideBorder) {
-                    if(this.getController("keyboardNavigation").isCellFocusType()) {
+                    var keyboardController = this.getController("keyboardNavigation"),
+                        focusedRowEnabled = this.option("focusedRowEnabled");
+
+                    if(!focusedRowEnabled || keyboardController.isCellFocusType()) {
                         this.callBase($element, hideBorder);
                     }
                 }

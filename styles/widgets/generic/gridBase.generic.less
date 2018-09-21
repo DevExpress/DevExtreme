@@ -722,16 +722,34 @@
             }
         }
 
-        .dx-row-focused.dx-row.dx-data-row {
-            & > td:not(.dx-focused),
-            & > tr > td:not(.dx-focused) {
+        .dx-row-focused.dx-row {
+            &.dx-data-row {
+                & > td:not(.dx-focused),
+                & > tr > td:not(.dx-focused),
+                & .dx-command-edit .dx-link {
+                    background-color: ~"@{@{widgetName}-row-focused-bg}";
+                    color: ~"@{@{widgetName}-row-focused-color}";
+
+                    & .dx-@{widgetName}-group-opened,
+                    & .dx-@{widgetName}-group-closed {
+                        color: ~"@{@{widgetName}-row-focused-color}";
+                    }
+                }
+                & > td,
+                & > tr > td {
+                    border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                    border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                }
+            }
+
+            &.dx-group-row {
                 background-color: ~"@{@{widgetName}-row-focused-bg}";
                 color: ~"@{@{widgetName}-row-focused-color}";
-            }
-            & > td,
-            & > tr > td {
-                border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
-                border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+
+                & .dx-@{widgetName}-group-opened,
+                & .dx-@{widgetName}-group-closed {
+                    color: ~"@{@{widgetName}-row-focused-color}";
+                }
             }
         }
 
