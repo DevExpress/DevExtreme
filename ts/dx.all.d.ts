@@ -768,7 +768,7 @@ declare module DevExpress {
         constructor(element: Element | JQuery, options?: DOMComponentOptions);
         /** Specifies the device-dependent default configuration options for this component. */
         static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
-        /** Removes the widget from the DOM. */
+        /** Disposes of all the resources allocated to the widget instance. */
         dispose(): void;
         /** Gets the root widget element. */
         element(): DevExpress.core.dxElement;
@@ -872,6 +872,7 @@ declare module DevExpress.data {
         onModified?: Function;
         /** A function that is executed before a data item is added, updated, or removed from the store. */
         onModifying?: Function;
+        onPush?: ((changes: Array<any>) => any);
         /** A function that is executed after a data item is removed from the store. */
         onRemoved?: ((key: any | string | number) => any);
         /** A function that is executed before a data item is removed from the store. */
@@ -904,6 +905,7 @@ declare module DevExpress.data {
         on(eventName: string, eventHandler: Function): this;
         /** Subscribes to events. */
         on(events: any): this;
+        push(changes: Array<any>): void;
         /** Removes a data item with a specific key from the store. */
         remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
         /** Gets the total count of items the load() function returns. */
@@ -1007,8 +1009,10 @@ declare module DevExpress.data {
         paginate?: boolean;
         /** Specifies a post processing function. */
         postProcess?: ((data: Array<any>) => Array<any>);
+        pushAggregationTimeout?: number;
         /** Specifies whether the DataSource requests the total count of data items in the storage. */
         requireTotalCount?: boolean;
+        reshapeOnPush?: boolean;
         /** Specifies the fields to search. */
         searchExpr?: string | Function | Array<string | Function>;
         /** Specifies the comparison operation used in searching. The following values are accepted: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains". */
@@ -1199,7 +1203,7 @@ declare module DevExpress.data {
         beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
         /** Specifies whether the store serializes/parses date-time values. */
         deserializeDates?: boolean;
-        /** Specifies the function that is executed when the store throws an error. */
+        /** Specifies a function that is executed when the ODataStore throws an error. */
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
         /** Specifies the data field types. Accepts the following types: "String", "Int32", "Int64", "Boolean", "Single", "Decimal" and "Guid". */
         fieldTypes?: any;
@@ -1684,7 +1688,7 @@ declare module DevExpress.ui {
         /** Specifies whether the widget can expand several items or only a single item at once. */
         multiple?: boolean;
         /** A function that is executed when an accordion item's title is clicked or tapped. */
-        onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
+        onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
         /** The index number of the currently selected item. */
         selectedIndex?: number;
     }
@@ -2020,6 +2024,8 @@ declare module DevExpress.ui {
         pager?: { visible?: boolean | 'auto', showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | 'auto', showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
         /** Configures paging. */
         paging?: GridBasePaging;
+        /** Specifies whether to render the filter row, command columns, and columns with showEditorAlways set to true after other elements. */
+        renderAsync?: boolean;
         /** Specifies whether rows should be shaded differently. */
         rowAlternationEnabled?: boolean;
         /** Overridden. A configuration object specifying scrolling options. */
@@ -2102,7 +2108,7 @@ declare module DevExpress.ui {
     }
     /** Overridden. A configuration object specifying scrolling options. */
     export interface GridBaseScrolling {
-        /** Specifies the rendering mode for columns. Applies when columns are left outside the viewport. */
+        /** Specifies the rendering mode for columns. Applies when columns are left outside the viewport. Requires the columnWidth, columnAutoWidth, or width (for all columns) option specified. */
         columnRenderingMode?: 'standard' | 'virtual';
         /** Specifies whether the widget should load pages adjacent to the current page. Applies only if scrolling.mode is "virtual". */
         preloadEnabled?: boolean;
@@ -2446,25 +2452,40 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxDeferRenderingOptions)
     }
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
+        /** Specifies the duration of the drawer's opening and closing animation (in milliseconds). Applies only if animationEnabled is true. */
         animationDuration?: number;
+        /** Specifies whether to use an opening and closing animation. */
         animationEnabled?: boolean;
+        /** Specifies whether to close the drawer if a user clicks or taps the view area. */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
-        maxWidth?: number;
-        minWidth?: number;
+        /** Specifies the drawer's width or height (depending on the drawer's position) in the opened state. */
+        maxSize?: number;
+        /** Specifies the drawer's width or height (depending on the drawer's position) in the closed state. */
+        minSize?: number;
+        /** Specifies whether the drawer is opened. */
         opened?: boolean;
+        /** Specifies how the drawer interacts with the view in the opened state. */
         openedStateMode?: 'overlap' | 'shrink' | 'push';
+        /** Specifies the drawer's position in relation to the view. */
         position?: 'left' | 'right';
+        /** Specifies the drawer's reveal mode. */
         revealMode?: 'slide' | 'expand';
+        /** Specifies whether to shade the view when the drawer is opened. */
         shading?: boolean;
+        /** Specifies the drawer's content. */
         template?: template | ((Element: DevExpress.core.dxElement) => any);
     }
     /** The base class for widgets. */
     export class dxDrawer extends Widget {
         constructor(element: Element, options?: dxDrawerOptions)
         constructor(element: JQuery, options?: dxDrawerOptions)
+        /** Gets the drawer's content. */
         content(): DevExpress.core.dxElement;
+        /** Closes the drawer. */
         hide(): Promise<void> & JQueryPromise<void>;
+        /** Opens the drawer. */
         show(): Promise<void> & JQueryPromise<void>;
+        /** Opens or closes the drawer, reversing the current state. */
         toggle(): Promise<void> & JQueryPromise<void>;
     }
     export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
@@ -2504,7 +2525,7 @@ declare module DevExpress.ui {
         /** A function that is executed when the button that opens the drop-down menu is clicked or tapped. */
         onButtonClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** A function that is executed when a menu item is clicked or tapped. */
-        onItemClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
+        onItemClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
         /** Specifies whether or not the drop-down menu is displayed. */
         opened?: boolean;
         /** Specifies the popup element's height in pixels. */
@@ -2528,16 +2549,23 @@ declare module DevExpress.ui {
         accept?: string;
         /** Specifies if an end user can remove a file from the selection and interrupt uploading. */
         allowCanceling?: boolean;
+        /** Restricts file extensions that can be uploaded to the server. */
         allowedFileExtensions?: Array<string>;
+        /** Specifies the chunk size in bytes. Applies only if uploadMode is "instantly" or "useButtons". Requires a server that can process file chunks. */
+        chunkSize?: number;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
+        /** The text displayed when the extension of the file being uploaded is not an allowed file extension. */
         invalidFileExtensionMessage?: string;
+        /** The text displayed when the size of the file being uploaded is greater than the maxFileSize. */
         invalidMaxFileSizeMessage?: string;
+        /** The text displayed when the size of the file being uploaded is less than the minFileSize. */
         invalidMinFileSizeMessage?: string;
-        chunkSize?: number;
         /** Specifies the text displayed on the area to which an end-user can drop a file. */
         labelText?: string;
+        /** Specifies the maximum file size (in bytes) allowed for uploading. Applies only if uploadMode is "instantly" or "useButtons". */
         maxFileSize?: number;
+        /** Specifies the minimum file size (in bytes) allowed for uploading. Applies only if uploadMode is "instantly" or "useButtons". */
         minFileSize?: number;
         /** Specifies whether the widget enables an end-user to select a single file or multiple files. */
         multiple?: boolean;
@@ -2762,8 +2790,8 @@ declare module DevExpress.ui {
         nextButtonText?: string;
         /** A function that is executed when a group element is rendered. */
         onGroupRendered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, groupData?: any, groupElement?: DevExpress.core.dxElement, groupIndex?: number }) => any);
-        /** A function that is executed when a list item is clicked or tapped. Applies only if the selectionMode is "none". */
-        onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any }) => any) | string;
+        /** A function that is executed when a collection item is clicked or tapped. */
+        onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any) | string;
         /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any);
         /** A function that is executed after a list item is deleted from the data source. */
@@ -3121,7 +3149,7 @@ declare module DevExpress.ui {
         badge?: string;
     }
     export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
-        /** Specifies the value's display format and controls the user input according to it. */
+        /** Specifies the value's display format and controls user input accordingly. */
         format?: format;
         /** Specifies the text of the message displayed if the specified value is not a number. */
         invalidValueMessage?: string;
@@ -3628,6 +3656,8 @@ declare module DevExpress.ui {
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
+        /** Specifies whether to group appointments by date first. */
+        groupByDate?: boolean;
         /** Specifies the resource kinds by which the scheduler's appointments are grouped in a timetable. */
         groups?: Array<string>;
         /** Specifies the time interval between when the date-time indicator changes its position, in milliseconds. */
@@ -3701,7 +3731,7 @@ declare module DevExpress.ui {
         /** Specifies whether a user can switch views using tabs or a drop-down menu. */
         useDropDownViewSwitcher?: boolean;
         /** Configures individual views. */
-        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek', name?: string, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', intervalCount?: number, startDate?: Date | number | string, startDayHour?: number, endDayHour?: number, groups?: Array<string>, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, cellDuration?: number, appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), agendaDuration?: number, groupOrientation?: 'horizontal' | 'vertical', forceMaxAppointmentPerCell?: boolean }>;
+        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek', name?: string, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', intervalCount?: number, groupByDate?: boolean, startDate?: Date | number | string, startDayHour?: number, endDayHour?: number, groups?: Array<string>, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, cellDuration?: number, appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), agendaDuration?: number, groupOrientation?: 'horizontal' | 'vertical', forceMaxAppointmentPerCell?: boolean }>;
     }
     /** The Scheduler is a widget that represents scheduled data and allows a user to manage and edit it. */
     export class dxScheduler extends Widget {
@@ -3911,9 +3941,9 @@ declare module DevExpress.ui {
         /** Specifies a custom template for item titles. */
         itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** A function that is executed when a tab is clicked or tapped. */
-        onTitleClick?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
+        onTitleClick?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: event }) => any) | string;
         /** A function that is executed when a tab has been held for a specified period. */
-        onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
+        onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: event }) => any);
         /** A function that is executed after a tab is rendered. */
         onTitleRendered?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
         /** A Boolean value specifying if tabs in the title are scrolled by content. */
@@ -4517,7 +4547,7 @@ declare module DevExpress.ui {
         /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** A function that is executed when a collection item has been held for a specified period. */
-        onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
+        onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
         /** A function that is executed after a collection item is rendered. */
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
         /** A function that is executed when a collection item is selected or the selection is canceled. */
@@ -4669,7 +4699,7 @@ declare module DevExpress.ui {
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
         /** A function that is executed when a list item is clicked or tapped. */
-        onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any }) => any);
+        onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: event }) => any);
         /** A function that is executed when a list item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
         /** A function that is executed after the widget's value is changed. */
@@ -4945,7 +4975,7 @@ declare module DevExpress.ui {
         allowSorting?: boolean;
         /** Calculates custom values for column cells. */
         calculateCellValue?: ((rowData: any) => any);
-        /** Calculates custom display values for column cells. Used when display values should differ from values for editing. */
+        /** Calculates custom display values for column cells. Requires specifying the dataField or calculateCellValue option. Used in lookup optimization. */
         calculateDisplayValue?: string | ((rowData: any) => any);
         /** Specifies the column's custom filtering rules. */
         calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
@@ -4975,9 +5005,9 @@ declare module DevExpress.ui {
         filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'notcontains' | 'contains' | 'startswith' | 'endswith' | 'between'>;
         /** Specifies whether a user changes the current filter by including (selecting) or excluding (clearing the selection of) values. Applies only if headerFilter.visible and allowHeaderFiltering are true. */
         filterType?: 'exclude' | 'include';
-        /** Specifies a filter value for the column. */
+        /** Specifies the column's filter value displayed in the filter row. */
         filterValue?: any;
-        /** Specifies filter values for the column's header filter. */
+        /** Specifies values selected in the column's header filter. */
         filterValues?: Array<any>;
         /** Fixes the column. */
         fixed?: boolean;
@@ -4985,7 +5015,7 @@ declare module DevExpress.ui {
         fixedPosition?: 'left' | 'right';
         /** Formats a value before it is displayed in a column cell. */
         format?: format;
-        /** Configures the form item produced by this column in the editing state. Used only if editing.mode is "form" or "popup". */
+        /** Configures the form item that the column produces in the editing state. Applies only if editing.mode is "form" or "popup". */
         formItem?: dxFormSimpleItem;
         /** Specifies a custom template for column headers. */
         headerCellTemplate?: template | ((columnHeader: DevExpress.core.dxElement, headerInfo: any) => any);
@@ -5003,7 +5033,9 @@ declare module DevExpress.ui {
         name?: string;
         /** Specifies the band column that owns the current column. Accepts the index of the band column in the columns array. */
         ownerBand?: number;
-        /** Specifies the selected filter operation for the column. */
+        /** Specifies whether to render the column after other columns and elements. Use with complex templates. */
+        renderAsync?: boolean;
+        /** Specifies the column's filter operation displayed in the filter row. */
         selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
         /** Specifies a function to be invoked after the user has edited a cell value, but before it will be saved in the data source. */
         setCellValue?: ((newData: any, value: any, currentRowData: any) => any);
@@ -5048,7 +5080,7 @@ declare module DevExpress.ui {
         key?: any;
         /** The visible index of the row. */
         rowIndex?: number;
-        /** The type of the row. */
+        /** The row's type. */
         rowType?: string;
         /** Values of the row as they exist in the data source. */
         values?: Array<any>;
@@ -5642,9 +5674,11 @@ declare module DevExpress.viz {
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
     export type VizTimeInterval = number | { years?: number, quarters?: number, months?: number, weeks?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
     export interface VizRange {
+        /** The range's end value. */
         endValue?: number | Date | string;
-        /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
+        /** The range's length. */
         length?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        /** The range's start value. */
         startValue?: number | Date | string;
     }
     /** Font options. */
@@ -5661,7 +5695,7 @@ declare module DevExpress.viz {
         weight?: number;
     }
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
-        /** Specifies whether or not to adjust the value axis when zooming the widget. */
+        /** Specifies whether to adjust the value axis's visualRange when the argument axis is being zoomed or scrolled. */
         adjustOnZoom?: boolean;
         /** Configures the argument axis. */
         argumentAxis?: dxChartArgumentAxis;
@@ -5706,9 +5740,9 @@ declare module DevExpress.viz {
         /** A function that is executed when a series is selected or the selection is canceled. */
         onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
         /** A function that is executed when zooming or scrolling ends. */
-        onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, rangeStart?: Date | number, rangeEnd?: Date | number }) => any);
+        onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean }) => any);
         /** A function that is executed when zooming or scrolling begins. */
-        onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, axis?: chartAxisObject, range?: VizRange, cancel?: boolean }) => any);
         /** Declares a collection of panes. */
         panes?: dxChartPanes | Array<dxChartPanes>;
         /** Specifies how the chart must behave when series point labels overlap. */
@@ -5784,8 +5818,11 @@ declare module DevExpress.viz {
         title?: dxChartArgumentAxisTitle;
         /** Specifies the type of the argument axis. */
         type?: 'continuous' | 'discrete' | 'logarithmic';
+        /** Defines the axis's displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
-        visualRangeOnDataUpdate?: 'auto' | 'keep' | 'reset' | 'shift';
+        /** Specifies how the axis's visual range should behave when chart data is updated. */
+        visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+        /** Defines the range where the axis can be zoomed and scrolled. Equals the data range when unspecified. */
         wholeRange?: VizRange | Array<number | string | Date>;
         /** Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis' argumentType is "datetime". */
         workdaysOnly?: boolean;
@@ -6096,7 +6133,9 @@ declare module DevExpress.viz {
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /** Casts values to a specified data type. */
         valueType?: 'datetime' | 'numeric' | 'string';
+        /** Defines the axis's displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
+        /** Defines the range where the axis can be zoomed and scrolled. Equals the data range when not set. */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** Declares a collection of constant lines belonging to the value axis. */
@@ -6167,6 +6206,7 @@ declare module DevExpress.viz {
         getValueAxis(): chartAxisObject;
         /** Gets a value axis with the specified name. */
         getValueAxis(name: string): chartAxisObject;
+        resetVisualRange(): void;
         /** Sets the argument axis' start and end values. */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
     }
@@ -8023,10 +8063,10 @@ declare module DevExpress.viz {
     }
     /** This section describes the Axis object. This object represents a chart axis. */
     export class chartAxisObject {
-        /** Gets the axis's visual range. */
+        /** Gets the axis's displayed range. */
         visualRange(): VizRange;
-        /** Sets the axis's visual range. */
-        visualRange(visualRange: Array<number | string | Date>): void;
+        /** Sets the axis's displayed range. */
+        visualRange(visualRange: Array<number | string | Date> | VizRange): void;
     }
     /** This section describes the Item object, which represents a funnel item. */
     export class dxFunnelItem {
@@ -8429,7 +8469,7 @@ declare module DevExpress.viz {
         sliderHandle?: { color?: string, width?: number, opacity?: number };
         /** Defines the options of the range selector slider markers. */
         sliderMarker?: { visible?: boolean, format?: DevExpress.ui.format, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), paddingTopBottom?: number, paddingLeftRight?: number, color?: string, invalidRangeColor?: string, placeholderHeight?: number, font?: Font };
-        /** The selected range, initial or current. */
+        /** The selected range (initial or current). Equals the entire scale when not set. */
         value?: Array<number | string | Date> | VizRange;
     }
     /** The RangeSelector is a widget that allows a user to select a range of values on a scale. */
@@ -8445,12 +8485,12 @@ declare module DevExpress.viz {
         /** Redraws the widget. */
         render(skipChartAnimation: boolean): void;
         /** Sets the selected range. */
-        setValue(value: Array<number | string | Date>): void;
+        setValue(value: Array<number | string | Date> | VizRange): void;
     }
     export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
         /** Specifies adaptive layout options. */
         adaptiveLayout?: { width?: number, height?: number, keepLabels?: boolean };
-        /** Specifies nodes' vertical alignment. */
+        /** Aligns node columns vertically. */
         alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
         /** Specifies the widget's data source. */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
@@ -8474,7 +8514,7 @@ declare module DevExpress.viz {
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /** Specifies how to extend the palette when it contains less colors than the number of sankey nodes. */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
-        /** Specifies nodes' sorting order. */
+        /** Specifies nodes' sorting order in their columns. */
         sortData?: any;
         /** Specifies which data source field provides links' source nodes. */
         sourceField?: string;
