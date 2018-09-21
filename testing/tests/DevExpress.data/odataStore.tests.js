@@ -6,7 +6,6 @@ import Guid from "core/guid";
 import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 
-
 var MUST_NOT_REACH_MESSAGE = "Shouldn't reach this point";
 
 var moduleConfig = {
