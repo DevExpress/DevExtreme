@@ -10406,6 +10406,95 @@ QUnit.test("Repaint rows", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
+QUnit.test("Repaint with changesOnly", function(assert) {
+    // arrange
+    var $cellElements,
+        $updatedCellElements,
+        dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", "field1"]
+        });
+
+    dataSource.store().update(1, { field1: "test5" });
+
+    // assert
+    $cellElements = $(dataGrid.$element()).find(".dx-data-row").first().children();
+    assert.equal($cellElements.length, 2, "count cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test1", "first row - value of the second cell");
+
+    // act
+    dataGrid.refresh(true);
+
+    // assert
+    $updatedCellElements = $(dataGrid.$element()).find(".dx-data-row").first().children();
+    assert.equal($updatedCellElements.length, 2, "count cell");
+    assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't updated");
+    assert.ok($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell isn't updated");
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
+});
+
+QUnit.test("Repaint with changesOnly and cellTemplate", function(assert) {
+    // arrange
+    var $cellElements,
+        $updatedCellElements,
+        dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", {
+                dataField: "field1",
+                cellTemplate: function(container, options) {
+                    setTimeout(function() {
+                        $(container).text(options.text);
+                    });
+                }
+            }]
+        });
+
+    this.clock.tick();
+
+    dataSource.store().update(1, { field1: "test5" });
+
+    // assert
+    $cellElements = $(dataGrid.$element()).find(".dx-data-row").first().children();
+    assert.equal($cellElements.length, 2, "count cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test1", "first row - value of the second cell");
+    // act
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    $updatedCellElements = $(dataGrid.$element()).find(".dx-data-row").first().children();
+    assert.equal($updatedCellElements.length, 2, "count cell");
+    assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't updated");
+    assert.ok(!$updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is updated");
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
+});
+
 // T443177
 QUnit.test("Show searchPanel via option method", function(assert) {
     // arrange

@@ -639,12 +639,16 @@ module.exports = {
                     return dataItem;
                 },
 
-                refresh: function() {
+                refresh: function(options) {
                     var that = this,
                         d = new Deferred();
 
                     this.callBase.apply(this, arguments).done(function() {
-                        that.getController("selection").refresh().done(d.resolve).fail(d.reject);
+                        if(!options || options.selection) {
+                            that.getController("selection").refresh().done(d.resolve).fail(d.reject);
+                        } else {
+                            d.resolve();
+                        }
                     }).fail(d.reject);
 
                     return d.promise();

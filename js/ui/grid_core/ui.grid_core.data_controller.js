@@ -31,6 +31,12 @@ module.exports = {
              */
             cacheEnabled: true,
             /**
+             * @name GridBaseOptions.repaintChangesOnly
+             * @type boolean
+             * @default false
+             */
+            repaintChangesOnly: false,
+            /**
              * @name GridBaseOptions.onDataErrorOccurred
              * @extends Action
              * @type function(e)
@@ -199,6 +205,7 @@ module.exports = {
 
                     that._isLoading = false;
                     that._isCustomLoading = false;
+                    that._repaintChangesOnly = false;
                     that._changes = [];
 
                     that.createAction("onDataErrorOccurred");
@@ -253,14 +260,19 @@ module.exports = {
                         that._refreshDataSource();
                     }
 
-                    if(args.name === "dataSource" && args.name === args.fullName && args.value === args.previousValue) {
+                    if(args.name === "dataSource" && args.name === args.fullName && (args.value === args.previousValue || (that.option("columns") && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
+                        if(args.value !== args.previousValue) {
+                            var store = that.store();
+                            store._array = args.value;
+                        }
                         handled();
-                        that.refresh();
+                        that.refresh(that.option("repaintChangesOnly"));
                         return;
                     }
 
                     switch(args.name) {
                         case "cacheEnabled":
+                        case "repaintChangesOnly":
                         case "loadingTimeout":
                         case "remoteOperations":
                             handled();
@@ -587,11 +599,26 @@ module.exports = {
                     }
                     return values;
                 },
-                _applyChangeUpdate: function(change) {
+                _applyChange: function(change) {
+                    var that = this;
+
+                    if(change.changeType === "update") {
+                        that._applyChangeUpdate(change);
+                    } else if(change.repaintChangesOnly && change.changeType === "refresh") {
+                        that._applyChangesOnly(change);
+                    } else {
+                        that._applyChangeFull(change);
+                    }
+                },
+                _applyChangeFull: function(change) {
+                    this._items = change.items.slice(0);
+                },
+                _applyChangeUpdate: function(change, isLiveUpdate) {
                     var that = this,
                         items = change.items,
                         rowIndices = change.rowIndices.slice(0),
                         rowIndexDelta = that.getRowIndexDelta(),
+                        repaintChangesOnly = isLiveUpdate,
                         prevIndex = -1,
                         rowIndexCorrection = 0,
                         changeType;
@@ -607,6 +634,7 @@ module.exports = {
 
                     change.items = [];
                     change.rowIndices = [];
+                    change.columnIndices = [];
                     change.changeTypes = [];
 
                     var equalItems = function(item1, item2, strict) {
@@ -622,7 +650,8 @@ module.exports = {
                             newItem,
                             oldNextItem,
                             newNextItem,
-                            strict;
+                            strict,
+                            columnIndices;
 
                         rowIndex += rowIndexCorrection + rowIndexDelta;
 
@@ -645,6 +674,9 @@ module.exports = {
                             that._items[rowIndex] = newItem;
                             if(oldItem.visible !== newItem.visible) {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
+                            } else if(repaintChangesOnly) {
+                                newItem.cells = oldItem.cells;
+                                columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate);
                             }
                         } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
                             changeType = "insert";
@@ -664,17 +696,106 @@ module.exports = {
 
                         change.rowIndices.push(rowIndex - rowIndexDelta);
                         change.changeTypes.push(changeType);
+                        change.columnIndices.push(columnIndices);
                     });
                 },
-                _applyChange: function(change) {
-                    var that = this;
+                _isCellChanged: function(oldRow, newRow, rowIndex, columnIndex, isLiveUpdate) {
+                    return JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex]);
+                },
+                _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
+                    if(oldItem.rowType === newItem.rowType) {
+                        var columnIndices = [];
 
-                    if(change.changeType === "update") {
-                        that._applyChangeUpdate(change);
-                    } else {
-                        that._items = change.items.slice(0);
+                        for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                            if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
+                                columnIndices.push(columnIndex);
+                            }
+                        }
+                        return columnIndices;
                     }
                 },
+                _applyChangesOnly: function(change) {
+                    var that = this,
+                        oldItems = that._items,
+                        newItems = change.items,
+                        newIndexByKey = {},
+                        oldIndexByKey = {},
+                        rowIndices = [],
+                        addedCount = 0,
+                        removeCount = 0;
+
+                    function getRowKey(row) {
+                        if(row) {
+                            return row.rowType + "," + JSON.stringify(row.key);
+                        }
+                    }
+
+                    function isItemEquals(item1, item2) {
+                        return JSON.stringify(item1.values) === JSON.stringify(item2.values);
+                    }
+
+                    oldItems.forEach(function(item, index) {
+                        var key = getRowKey(item);
+                        oldIndexByKey[key] = index;
+                    });
+
+                    newItems.forEach(function(item, index) {
+                        var key = getRowKey(item);
+                        newIndexByKey[key] = index;
+                    });
+
+
+                    for(var index = 0; index < newItems.length + addedCount; index++) {
+                        var newItem = newItems[index],
+                            key = getRowKey(newItem),
+                            oldIndex = oldIndexByKey[key],
+                            oldItem = oldItems[oldIndex],
+                            newIndex = index - addedCount + removeCount;
+
+                        if(!newItem) {
+                            if(oldItems[newIndex]) {
+                                removeCount++;
+                                index--;
+                                rowIndices.push(newIndex);
+                            }
+                        } else if(!oldItem) {
+                            addedCount++;
+                            rowIndices.push(newIndex);
+                        } else if(oldIndex === newIndex) {
+                            if(!isItemEquals(oldItem, newItem)) {
+                                rowIndices.push(newIndex);
+                            }
+                        } else {
+                            oldItem = oldItems[newIndex];
+                            key = getRowKey(oldItem);
+                            newItem = newItems[newIndexByKey[key]];
+
+                            if(oldItem && !newItem) {
+                                removeCount++;
+                                index--;
+                                rowIndices.push(newIndex);
+                            } else {
+                                that._applyChangeFull(change);
+                                return;
+                            }
+                        }
+                    }
+
+                    change.repaintChangesOnly = true;
+                    change.changeType = "update";
+                    change.rowIndices = rowIndices;
+
+                    that._correctRowIndices(function getRowIndexCorrection(rowIndex) {
+                        var oldItem = oldItems[rowIndex],
+                            key = getRowKey(oldItem),
+                            newRowIndex = newIndexByKey[key];
+
+                        return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
+                    });
+
+                    that._applyChangeUpdate(change, true);
+                },
+                _correctRowIndices: commonUtils.noop,
                 _updateItemsCore: function(change) {
                     var that = this,
                         items,
@@ -702,6 +823,10 @@ module.exports = {
                 updateItems: function(change) {
                     change = change || {};
                     var that = this;
+
+                    if(that._repaintChangesOnly) {
+                        change.repaintChangesOnly = true;
+                    }
 
                     if(that._updateLockCount) {
                         that._changes.push(change);
@@ -1078,13 +1203,42 @@ module.exports = {
                  * @publicName refresh()
                  * @return Promise<void>
                  */
-                refresh: function() {
+                /**
+                 * @name GridBaseMethods.refresh
+                 * @publicName refresh(changesOnly)
+                 * @param1 changesOnly:boolean
+                 * @return Promise<void>
+                 */
+                refresh: function(options) {
+                    if(options === true) {
+                        options = { reload: true, changesOnly: true };
+                    } else if(!options) {
+                        options = { lookup: true, selection: true, reload: true };
+                    }
+
                     var that = this,
+                        dataSource = that.getDataSource(),
+                        changesOnly = options.changesOnly,
                         d = new Deferred();
 
-                    when(this._columnsController.refresh()).always(function() {
-                        when(that.reload(true)).done(d.resolve).fail(d.reject);
+
+                    var customizeLoadResult = function() {
+                        that._repaintChangesOnly = !!changesOnly;
+                    };
+
+                    when(!options.lookup || that._columnsController.refresh()).always(function() {
+                        if(options.load || options.reload) {
+                            dataSource && dataSource.on("customizeLoadResult", customizeLoadResult);
+
+                            when(that.reload(options.reload, changesOnly)).always(function() {
+                                dataSource && dataSource.off("customizeLoadResult", customizeLoadResult);
+                                that._repaintChangesOnly = false;
+                            }).done(d.resolve).fail(d.reject);
+                        } else {
+                            that.updateItems({ repaintChangesOnly: options.changesOnly });
+                        }
                     });
+
                     return d;
                 },
                 /**

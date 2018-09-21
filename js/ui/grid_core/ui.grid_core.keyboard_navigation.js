@@ -1051,13 +1051,17 @@ module.exports = {
                         }
                     }
                 },
-                renderDelayedTemplates: function() {
+                renderDelayedTemplates: function(change) {
                     this.callBase.apply(this, arguments);
-                    this.renderFocusState();
+                    if(!change || !change.repaintChangesOnly) {
+                        this.renderFocusState();
+                    }
                 },
                 _renderCore: function(change) {
                     this.callBase(change);
-                    this.renderFocusState();
+                    if(!change || !change.repaintChangesOnly) {
+                        this.renderFocusState();
+                    }
                 }
             }
         },
@@ -1097,6 +1101,24 @@ module.exports = {
                 init: function() {
                     this.callBase();
                     this._keyboardNavigationController = this.getController("keyboardNavigation");
+                }
+            },
+            data: {
+                _correctRowIndices: function(getRowIndexCorrection) {
+                    var that = this,
+                        keyboardNavigationController = that.getController("keyboardNavigation"),
+                        editorFactory = that.getController("editorFactory"),
+                        focusedCellPosition = keyboardNavigationController._focusedCellPosition;
+
+                    that.callBase.apply(that, arguments);
+
+                    if(focusedCellPosition && focusedCellPosition.rowIndex >= 0) {
+                        var focusedRowIndexCorrection = getRowIndexCorrection(focusedCellPosition.rowIndex);
+                        if(focusedRowIndexCorrection) {
+                            focusedCellPosition.rowIndex += focusedRowIndexCorrection;
+                            editorFactory.focus(editorFactory.focus());
+                        }
+                    }
                 }
             }
         }
