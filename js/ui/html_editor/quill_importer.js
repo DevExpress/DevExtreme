@@ -1,18 +1,16 @@
-import Quill from "quill";
 import Errors from "../widget/ui.errors";
 
-class QuillImporter {
-    constructor() {}
+let Quill;
+try {
+    Quill = require("quill");
+} catch(e) {}
 
-    static getQuill() {
-        if(!QuillImporter._quill) {
-            throw Errors.Error("E1050");
-        }
-
-        return QuillImporter._quill;
+function getQuill() {
+    if(!Quill) {
+        throw Errors.Error("E1050");
     }
+
+    return Quill;
 }
 
-QuillImporter._quill = Quill;
-
-export { QuillImporter as default };
+export { getQuill };

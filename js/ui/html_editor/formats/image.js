@@ -1,6 +1,6 @@
-import QuillImporter from "../quill_importer";
+import { getQuill } from "../quill_importer";
 
-const quill = QuillImporter.getQuill();
+const quill = getQuill();
 const Image = quill.import("formats/image");
 
 class ExtImage extends Image {

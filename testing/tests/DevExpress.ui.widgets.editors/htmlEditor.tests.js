@@ -8,7 +8,6 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-import "./htmlEditorParts/quillImporter.tests.js";
 import "./htmlEditorParts/quillRegistrator.tests.js";
 import "./htmlEditorParts/converters.tests.js";
 import "./htmlEditorParts/markup.tests.js";

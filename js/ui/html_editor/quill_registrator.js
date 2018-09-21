@@ -1,4 +1,4 @@
-import QuillImporter from "./quill_importer";
+import { getQuill } from "./quill_importer";
 
 class QuillRegistrator {
     constructor() {
@@ -48,7 +48,7 @@ class QuillRegistrator {
     }
 
     getQuill() {
-        return QuillImporter.getQuill();
+        return getQuill();
     }
 };
 

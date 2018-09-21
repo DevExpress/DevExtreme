@@ -1,20 +1,30 @@
-import TurnDown from "turndown";
-import ShowDown from "showdown";
+
 import Errors from "../../widget/ui.errors";
 import converterController from "../converterController";
+import { isEmptyObject, isObject } from "../../../core/utils/type";
+
+let TurnDown;
+let ShowDown;
+
+try {
+    TurnDown = require("turndown");
+} catch(e) {}
+try {
+    ShowDown = require("showdown");
+} catch(e) {}
 
 class MarkdownConverter {
     constructor() {
-        if(!MarkdownConverter._TurnDown) {
+        if(!TurnDown || (isObject(TurnDown) && isEmptyObject(TurnDown))) {
             throw Errors.Error("E1052");
         }
 
-        if(!MarkdownConverter._ShowDown) {
+        if(!ShowDown || (isObject(ShowDown) && isEmptyObject(ShowDown))) {
             throw Errors.Error("E1053");
         }
 
-        this._html2Markdown = new MarkdownConverter._TurnDown();
-        this._markdown2Html = new MarkdownConverter._ShowDown.Converter({
+        this._html2Markdown = new TurnDown();
+        this._markdown2Html = new ShowDown.Converter({
             simpleLineBreaks: true,
             strikethrough: true
         });
@@ -34,9 +44,6 @@ class MarkdownConverter {
         return markup;
     }
 }
-
-MarkdownConverter._TurnDown = TurnDown;
-MarkdownConverter._ShowDown = ShowDown;
 
 converterController.addConverter("markdown", MarkdownConverter);
 

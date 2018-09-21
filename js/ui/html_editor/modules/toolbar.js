@@ -1,4 +1,4 @@
-import QuillImporter from "../quill_importer";
+import { getQuill } from "../quill_importer";
 
 import $ from "../../../core/renderer";
 import Toolbar from "../../toolbar";
@@ -6,7 +6,7 @@ import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 
-const BaseModule = QuillImporter.getQuill().import("core/module");
+const BaseModule = getQuill().import("core/module");
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
