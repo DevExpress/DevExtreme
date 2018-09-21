@@ -1,7 +1,7 @@
 
 SystemJS.config({
     map: {
-        'showdown': ''
+        'showdown': '/testing/helpers/quillDependencies/noShowdown.js'
     }
 });
 
@@ -10,7 +10,6 @@ define(function(require) {
 
     QUnit.module("Import 3rd party", function() {
         QUnit.test("it throw an error if the markdown -> html converter script isn't referenced", function(assert) {
-            debugger;
             assert.throws(
                 function() { new MarkdownConverter(); },
                 function(e) {

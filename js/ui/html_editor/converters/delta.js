@@ -1,16 +1,12 @@
+let QuillDeltaToHtmlConverter = require("quill-delta-to-html");
+
 import Errors from "../../widget/ui.errors";
 import ConverterController from "../converterController";
-import { isEmptyObject, isObject } from "../../../core/utils/type";
 
-let QuillDeltaToHtmlConverter;
-
-try {
-    QuillDeltaToHtmlConverter = require("quill-delta-to-html");
-} catch(e) {}
 
 class DeltaConverter {
     constructor() {
-        if(!QuillDeltaToHtmlConverter || (isObject(QuillDeltaToHtmlConverter) && isEmptyObject(QuillDeltaToHtmlConverter))) {
+        if(!QuillDeltaToHtmlConverter) {
             throw Errors.Error("E1051");
         }
 

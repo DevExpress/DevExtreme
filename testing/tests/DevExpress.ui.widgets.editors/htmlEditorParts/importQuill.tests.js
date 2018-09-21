@@ -1,8 +1,8 @@
 
 SystemJS.config({
     map: {
-        'quill': '',
-        'quill-delta-to-html': ''
+        'quill': '/testing/helpers/quillDependencies/noQuill.js',
+        'quill-delta-to-html': '/testing/helpers/quillDependencies/noQuillDeltaToHtml.js',
     }
 });
 

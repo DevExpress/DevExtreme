@@ -1,25 +1,17 @@
 
+import TurnDown from "turndown";
+import ShowDown from "showdown";
+
 import Errors from "../../widget/ui.errors";
 import converterController from "../converterController";
-import { isEmptyObject, isObject } from "../../../core/utils/type";
-
-let TurnDown;
-let ShowDown;
-
-try {
-    TurnDown = require("turndown");
-} catch(e) {}
-try {
-    ShowDown = require("showdown");
-} catch(e) {}
 
 class MarkdownConverter {
     constructor() {
-        if(!TurnDown || (isObject(TurnDown) && isEmptyObject(TurnDown))) {
+        if(!TurnDown) {
             throw Errors.Error("E1052");
         }
 
-        if(!ShowDown || (isObject(ShowDown) && isEmptyObject(ShowDown))) {
+        if(!ShowDown) {
             throw Errors.Error("E1053");
         }
 

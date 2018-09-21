@@ -1,9 +1,5 @@
+import Quill from "quill";
 import Errors from "../widget/ui.errors";
-
-let Quill;
-try {
-    Quill = require("quill");
-} catch(e) {}
 
 function getQuill() {
     if(!Quill) {

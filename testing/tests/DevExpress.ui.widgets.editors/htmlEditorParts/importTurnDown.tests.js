@@ -1,7 +1,7 @@
 
 SystemJS.config({
     map: {
-        'turndown': ''
+        'turndown': '/testing/helpers/quillDependencies/noTurndown.js'
     }
 });
 
