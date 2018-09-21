@@ -7,10 +7,6 @@ class BaseTheme extends Theme {
 
         super(quill, options);
         this.quill.root.classList.add("dx-htmleditor-content");
-
-        // add keyboard bindings
-        // this.options.modules.keyboard.bindings = {
-        // };
     }
 }
 

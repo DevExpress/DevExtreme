@@ -1,11 +1,10 @@
-import $ from "jquery";
-
 import "common.css!";
 
-QUnit.testStart(function() {
-    var markup = '<div id="htmlEditor"></div>';
+QUnit.testStart(() => {
+    let element = document.createElement("div");
+    element.setAttribute("id", "htmlEditor");
 
-    $("#qunit-fixture").html(markup);
+    document.getElementById("qunit-fixture").appendChild(element);
 });
 
 import "../DevExpress.ui.widgets.editors/htmlEditorParts/markup.tests.js";
