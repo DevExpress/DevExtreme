@@ -1,5 +1,6 @@
 var $ = require("../core/renderer"),
     dataUtils = require("./utils"),
+    arrayUtils = require("./array_utils"),
     isFunction = require("../core/utils/type").isFunction,
     errors = require("./errors").errors,
     Store = require("./abstract_store"),
@@ -390,6 +391,12 @@ var CustomStore = Store.inherit({
         }
 
         return d.promise();
+    },
+
+    _pushImpl: function(changes) {
+        if(this.__rawData) {
+            arrayUtils.applyBatch(this, this.__rawData, changes);
+        }
     },
 
     _loadImpl: function(options) {

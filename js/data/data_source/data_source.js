@@ -5,6 +5,7 @@ var Class = require("../../core/class"),
     ajax = require("../../core/utils/ajax"),
     typeUtils = require("../../core/utils/type"),
     dataUtils = require("../utils"),
+    arrayUtils = require("../array_utils"),
     Store = require("../abstract_store"),
     ArrayStore = require("../array_store"),
     CustomStore = require("../custom_store"),
@@ -171,6 +172,11 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
     return mapRecursive(items, groupInfo ? dataUtils.normalizeSortingInfo(groupInfo).length : 0);
 }
 
+function getPlainItems(groupedItems, level) {
+    var plainItems = groupedItems.map(item => level > 0 ? getPlainItems(item.items, level - 1) : item);
+    return [].concat.apply([], plainItems);
+}
+
 var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods.ctor
@@ -206,10 +212,24 @@ var DataSource = Class.inherit({
         */
 
         /**
+        * @name DataSourceOptions.pushAggregationTimeout
+        * @type number
+        * @default undefined
+        */
+        var onPushHandler = options.pushAggregationTimeout
+            ? dataUtils.throttleChanges(this._onPush, options.pushAggregationTimeout)
+            : this._onPush;
+
+        this._onPushHandler = (changes) => {
+            this._aggregationTimeoutId = onPushHandler.call(this, changes);
+        };
+
+        /**
         * @name DataSourceOptions.store
         * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
+        this._store.on("push", this._onPushHandler);
 
         /**
         * @name DataSourceOptions.sort
@@ -302,6 +322,13 @@ var DataSource = Class.inherit({
         */
         this._paginate = options.paginate;
 
+        /**
+        * @name DataSourceOptions.reshapeOnPush
+        * @type Boolean
+        * @default false
+        */
+        this._reshapeOnPush = __isDefined(options.reshapeOnPush) ? options.reshapeOnPush : false;
+
         iteratorUtils.each(
             [
                 /**
@@ -359,7 +386,9 @@ var DataSource = Class.inherit({
     * @publicName dispose()
     */
     dispose: function() {
+        this._store.off("push", this._onPushHandler);
         this._disposeEvents();
+        clearTimeout(this._aggregationTimeoutId);
 
         delete this._store;
 
@@ -804,6 +833,26 @@ var DataSource = Class.inherit({
         return d.promise({
             operationId: loadOperation.operationId
         });
+    },
+
+    _onPush: function(changes) {
+        if(this._reshapeOnPush) {
+            this.load();
+        } else {
+            let group = this.group(),
+                items = this.items();
+            if(this.paginate() || group) {
+                changes = changes.filter(item => item.type === "update");
+            }
+
+            if(group) {
+                let groupLevel = Array.isArray(group) ? group.length : 1;
+                items = getPlainItems(items, groupLevel);
+            }
+
+            arrayUtils.applyBatch(this.store(), items, changes);
+            this.fireEvent("changed", [{ changes: changes }]);
+        }
     },
 
     _createLoadOperation: function(deferred) {

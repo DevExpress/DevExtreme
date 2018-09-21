@@ -1,11 +1,12 @@
-var isFunction = require("../core/utils/type").isFunction,
-    domAdapter = require("../core/dom_adapter"),
-    ready = require("../core/utils/ready_callbacks").add,
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    map = require("../core/utils/iterator").map,
-    toComparable = require("../core/utils/data").toComparable,
-    Deferred = require("../core/utils/deferred").Deferred;
+import { isFunction } from "../core/utils/type";
+import domAdapter from "../core/dom_adapter";
+import { add as ready } from "../core/utils/ready_callbacks";
+import windowUtils from "../core/utils/window";
+import { map } from "../core/utils/iterator";
+import { toComparable } from "../core/utils/data";
+import { Deferred } from "../core/utils/deferred";
+
+var window = windowUtils.getWindow();
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -226,6 +227,48 @@ var isUnaryOperation = function(crit) {
     return crit[0] === "!" && Array.isArray(crit[1]);
 };
 
+var trivialPromise = function() {
+    var d = new Deferred();
+    return d.resolve.apply(d, arguments).promise();
+};
+
+var rejectedPromise = function() {
+    var d = new Deferred();
+    return d.reject.apply(d, arguments).promise();
+};
+
+function throttle(func, timeout) {
+    var timeoutId,
+        lastArgs;
+    return function() {
+        lastArgs = arguments;
+        if(!timeoutId) {
+            timeoutId = setTimeout(() => {
+                timeoutId = undefined;
+                if(lastArgs) {
+                    func.call(this, lastArgs);
+                }
+            }, timeout);
+        }
+        return timeoutId;
+    };
+};
+
+function throttleChanges(func, timeout) {
+    var cache = [],
+        throttled = throttle(function() {
+            func.call(this, cache);
+            cache = [];
+        }, timeout);
+
+    return function(changes) {
+        if(Array.isArray(changes)) {
+            cache.push(...changes);
+        }
+        return throttled.call(this, cache);
+    };
+}
+
 /**
 * @name Utils
 */
@@ -238,6 +281,9 @@ var utils = {
     aggregators: aggregators,
 
     keysEqual: keysEqual,
+    throttleChanges: throttleChanges,
+    trivialPromise: trivialPromise,
+    rejectedPromise: rejectedPromise,
 
     isDisjunctiveOperator: isDisjunctiveOperator,
     isConjunctiveOperator: isConjunctiveOperator,

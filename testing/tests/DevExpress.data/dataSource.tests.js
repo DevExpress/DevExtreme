@@ -1643,3 +1643,153 @@ QUnit.test("StoreLoadOptionAccessors: null and undefined (based on T304670)", fu
     assert.equal(ds.requireTotalCount(null), false);
     assert.equal(ds.requireTotalCount(), false);
 });
+
+QUnit.module("live update", {
+    beforeEach: function() {
+        var loadSpy = sinon.spy();
+        this.loadSpy = loadSpy;
+        var itemRemove = { field: 1 },
+            itemUpdate = { field: 2 };
+        this.changes = [
+            { type: "insert", data: { field: 3 } },
+            { type: "remove", key: itemRemove },
+            { type: "update", key: itemUpdate, data: { field: 4 } }
+        ];
+
+        this.createDataSource = function(options) {
+            return new DataSource($.extend({
+                load: function() {
+                    loadSpy();
+                    return [itemRemove, itemUpdate];
+                }
+            }, options));
+        };
+        this.initGroupingDataSource = function(options) {
+            return new DataSource({
+                load: function() {
+                    return [{
+                        key: "a",
+                        items: [{ key: 1, field: 1, type: "a" }, { key: 2, field: 2, type: "a" }]
+                    }, {
+                        key: "b",
+                        items: [{ key: 3, field: 3, type: "b" }]
+                    }];
+                },
+                key: "key",
+                group: "type"
+            });
+        };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.test("load is called when reshapeOnPush is enabled", function(assert) {
+        var dataSource = this.createDataSource({
+            reshapeOnPush: true
+        });
+        assert.equal(this.loadSpy.callCount, 0);
+
+        dataSource.store().push(this.changes);
+        assert.equal(this.loadSpy.callCount, 1);
+    });
+
+    QUnit.test("load is called with throttle when reshapeOnPush and pushAggregationTimeout are enabled", function(assert) {
+        var dataSource = this.createDataSource({
+            reshapeOnPush: true,
+            pushAggregationTimeout: 100
+        });
+        assert.equal(this.loadSpy.callCount, 0);
+
+        dataSource.store().push(this.changes);
+        dataSource.store().push(this.changes);
+
+        assert.equal(this.loadSpy.callCount, 0);
+        this.clock.tick(100);
+        assert.equal(this.loadSpy.callCount, 1);
+    });
+
+    QUnit.test("load isn't called when reshapeOnPush is disabled", function(assert) {
+        var dataSource = this.createDataSource();
+        dataSource.store().push(this.changes);
+        assert.equal(this.loadSpy.callCount, 0);
+    });
+
+    QUnit.test("pass changes in changed event when reshapeOnPush and paginate are disabled", function(assert) {
+        var dataSource = this.createDataSource({
+            paginate: false
+        });
+        var changedSpy = sinon.spy();
+        dataSource.on("changed", changedSpy);
+        dataSource.store().push(this.changes);
+        assert.equal(changedSpy.firstCall.args[0].changes.length, 3);
+    });
+
+    QUnit.test("skip changes with types 'insert' and 'remove' when reshapeOnPush is disabled and paginate is enabled", function(assert) {
+        var dataSource = this.createDataSource({
+            paginate: true
+        });
+        var changedSpy = sinon.spy();
+        dataSource.on("changed", changedSpy);
+        dataSource.store().push(this.changes);
+        assert.equal(changedSpy.firstCall.args[0].changes.length, 1);
+    });
+
+    QUnit.test("changed is fired with throttle when pushAggregationTimeout is enabled", function(assert) {
+        var dataSource = this.createDataSource({
+            paginate: false,
+            pushAggregationTimeout: 100
+        });
+        var changedSpy = sinon.spy();
+        dataSource.on("changed", changedSpy);
+
+        assert.equal(changedSpy.callCount, 0);
+
+        dataSource.store().push(this.changes);
+        dataSource.store().push(this.changes);
+
+        assert.equal(changedSpy.callCount, 0);
+
+        this.clock.tick(100);
+        assert.equal(changedSpy.callCount, 1);
+        assert.equal(changedSpy.lastCall.args[0].changes.length, 6);
+    });
+
+    QUnit.test("push for grouping", function(assert) {
+        var dataSource = this.initGroupingDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "update", data: { key: 1, field: 12, type: "a" }, key: 1 }
+        ]);
+        assert.deepEqual(dataSource.items()[0].key, "a");
+        assert.deepEqual(dataSource.items()[0].items[0].field, 12);
+    });
+
+    QUnit.test("push type='insert' is ignored for grouping", function(assert) {
+        var dataSource = this.initGroupingDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "insert", data: { key: 3, field: 3, type: "a" } }
+        ]);
+        assert.deepEqual(dataSource.items()[0].items.length, 2);
+
+        dataSource.store().push([
+            { type: "insert", key: 4 }
+        ]);
+        assert.deepEqual(dataSource.items()[0].items.length, 2);
+    });
+
+    QUnit.test("push type='delete' is ignored for grouping", function(assert) {
+        var dataSource = this.initGroupingDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "delete", key: 2 }
+        ]);
+        assert.deepEqual(dataSource.items()[0].items.length, 2);
+    });
+});

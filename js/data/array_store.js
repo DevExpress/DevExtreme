@@ -1,36 +1,8 @@
-var extend = require("../core/utils/extend").extend,
-    typeUtils = require("../core/utils/type"),
-    Guid = require("../core/guid"),
-    objectUtils = require("../core/utils/object"),
-    keysEqual = require("./utils").keysEqual,
-    Query = require("./query"),
-    errors = require("./errors").errors,
-    Store = require("./abstract_store"),
-    Deferred = require("../core/utils/deferred").Deferred;
-
-var hasKey = function(target, keyOrKeys) {
-    var key,
-        keys = typeof keyOrKeys === "string" ? keyOrKeys.split() : keyOrKeys.slice();
-
-    while(keys.length) {
-        key = keys.shift();
-        if(key in target) {
-            return true;
-        }
-    }
-
-    return false;
-};
-
-var trivialPromise = function() {
-    var d = new Deferred();
-    return d.resolve.apply(d, arguments).promise();
-};
-
-var rejectedPromise = function() {
-    var d = new Deferred();
-    return d.reject.apply(d, arguments).promise();
-};
+import { rejectedPromise, trivialPromise } from "./utils";
+import Query from "./query";
+import { errors } from "./errors";
+import Store from "./abstract_store";
+import arrayUtils from "./array_utils";
 
 /**
 * @name ArrayStore
@@ -73,7 +45,7 @@ var ArrayStore = Store.inherit({
     },
 
     _byKeyImpl: function(key) {
-        var index = this._indexByKey(key);
+        var index = arrayUtils.indexByKey(this, this._array, key);
 
         if(index === -1) {
             return rejectedPromise(errors.Error("E4009"));
@@ -83,77 +55,19 @@ var ArrayStore = Store.inherit({
     },
 
     _insertImpl: function(values) {
-        var keyExpr = this.key(),
-            keyValue,
-            obj;
+        return arrayUtils.insert(this, this._array, values);
+    },
 
-        if(typeUtils.isPlainObject(values)) {
-            obj = extend({}, values);
-        } else {
-            obj = values;
-        }
-
-        if(keyExpr) {
-            keyValue = this.keyOf(obj);
-            if(keyValue === undefined || typeof keyValue === "object" && typeUtils.isEmptyObject(keyValue)) {
-                if(Array.isArray(keyExpr)) {
-                    throw errors.Error("E4007");
-                }
-                keyValue = obj[keyExpr] = String(new Guid());
-            } else {
-                if(this._array[this._indexByKey(keyValue)] !== undefined) {
-                    return rejectedPromise(errors.Error("E4008"));
-                }
-            }
-        } else {
-            keyValue = obj;
-        }
-
-        this._array.push(obj);
-        return trivialPromise(values, keyValue);
+    _pushImpl: function(changes) {
+        arrayUtils.applyBatch(this, this._array, changes);
     },
 
     _updateImpl: function(key, values) {
-        var index,
-            target,
-            keyExpr = this.key(),
-            extendComplexObject = true;
-
-        if(keyExpr) {
-
-            if(hasKey(values, keyExpr) && !keysEqual(keyExpr, key, this.keyOf(values))) {
-                return rejectedPromise(errors.Error("E4017"));
-            }
-
-            index = this._indexByKey(key);
-            if(index < 0) {
-                return rejectedPromise(errors.Error("E4009"));
-            }
-
-            target = this._array[index];
-        } else {
-            target = key;
-        }
-
-        objectUtils.deepExtendArraySafe(target, values, extendComplexObject);
-        return trivialPromise(key, values);
+        return arrayUtils.update(this, this._array, key, values);
     },
 
     _removeImpl: function(key) {
-        var index = this._indexByKey(key);
-        if(index > -1) {
-            this._array.splice(index, 1);
-        }
-        return trivialPromise(key);
-    },
-
-    _indexByKey: function(key) {
-        for(var i = 0, arrayLength = this._array.length; i < arrayLength; i++) {
-            if(keysEqual(this.key(), this.keyOf(this._array[i]), key)) {
-                return i;
-            }
-        }
-        return -1;
+        return arrayUtils.remove(this, this._array, key);
     },
 
     /**

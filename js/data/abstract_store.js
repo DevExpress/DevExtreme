@@ -8,6 +8,7 @@ var Class = require("../core/class"),
     storeHelper = require("./store_helper"),
     queryByOptions = storeHelper.queryByOptions,
     Deferred = require("../core/utils/deferred").Deferred,
+    noop = require("../core/utils/common").noop,
 
     storeImpl = {};
 
@@ -77,6 +78,14 @@ var Store = Class.inherit({
                  * @action
                  */
                 "onUpdating",
+
+                /**
+                 * @name StoreOptions.onPush
+                 * @type function
+                 * @type_function_param1 changes:Array<any>
+                 * @action
+                 */
+                "onPush",
 
                 /**
                  * @name StoreOptions.onRemoved
@@ -278,6 +287,18 @@ var Store = Class.inherit({
     },
 
     _updateImpl: abstract,
+
+    /**
+    * @name StoreMethods.push
+    * @publicName push(changes)
+    * @param1 changes:Array<any>
+    */
+    push: function(changes) {
+        this._pushImpl(changes);
+        this.fireEvent("push", [changes]);
+    },
+
+    _pushImpl: noop,
 
     /**
     * @name StoreMethods.remove
