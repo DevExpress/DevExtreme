@@ -278,7 +278,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(this._focusedCellPosition) {
             return this._focusedCellPosition.rowIndex - this._dataController.getRowIndexOffset();
         }
-
         return null;
     },
 
@@ -472,20 +471,26 @@ var KeyboardNavigationController = core.ViewController.inherit({
             var scrollHandler = function() {
                 scrollable.off(scrollHandler);
                 setTimeout(function() {
-                    var columnIndex = that._focusedCellPosition.columnIndex;
-                    var rowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
-                    that.getController("editorFactory").loseFocus();
-
-                    var $rowsView = that.getView("rowsView").element();
-                    that._applyTabIndexToElement($rowsView);
-                    eventsEngine.trigger($rowsView, "focus");
-
-                    that.setFocusedCellPosition(rowIndex, columnIndex);
+                    that.restoreFocusableElement();
                 });
             };
             scrollable.on("scroll", scrollHandler);
         }
         scrollable.scrollBy({ left: 0, top: top });
+    },
+
+    restoreFocusableElement: function() {
+        var that = this,
+            rowsView = that.getView("rowsView"),
+            $rowsViewElement = rowsView.element(),
+            columnIndex = that._focusedCellPosition.columnIndex,
+            firstRowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
+
+        that.getController("editorFactory").loseFocus();
+        that._applyTabIndexToElement($rowsViewElement);
+        eventsEngine.trigger($rowsViewElement, "focus");
+
+        that.setFocusedCellPosition(firstRowIndex, columnIndex);
     },
 
     _pageUpDownKeyHandler: function(eventArgs) {

@@ -138,21 +138,23 @@ module.exports = {
 
                 _update: function(change) {
                     var that = this,
+                        keyboardController = that.getController("keyboardNavigation"),
                         tableElements = that.getTableElements(),
                         focusedRowEnabled = that.option("focusedRowEnabled"),
-                        focusedRowIndex = that.option("focusedRowIndex"),
+                        focusedRowIndex,
                         tabIndex = that.option("tabindex") || 0,
                         $row,
                         changedItem;
 
-                    if(focusedRowEnabled && change.changeType === "updateFocusedRow") {
+                    if(focusedRowEnabled && change.changeType === "updateFocusedRow" && tableElements.length > 0) {
 
                         tableElements.find(".dx-row")
                             .removeClass(ROW_FOCUSED_CLASS)
                             .removeAttr("tabindex");
 
-                        if(tableElements.length > 0) {
-                            each(tableElements, function(_, tableElement) {
+                        focusedRowIndex = keyboardController.getFocusedRowIndex();
+                        if(focusedRowIndex >= 0) {
+                            each(that.getTableElements(), function(_, tableElement) {
                                 changedItem = change.items[focusedRowIndex];
                                 if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
                                     $row = that._getRowElements($(tableElement)).eq(focusedRowIndex);

@@ -121,7 +121,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail"], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail", "virtualScrolling"], {
             initViews: true
         });
     },
@@ -378,4 +378,54 @@ QUnit.testInActiveWindow("RightArrow key should focus the cell", function(assert
     assert.equal(rowsView.getRow(1).attr("tabindex"), 0, "Row 1 has tabindex");
     assert.equal(rowsView.getRow(1).find("td").eq(0).attr("tabindex"), undefined, "Cell[1,0] has no tabindex");
     assert.equal(rowsView.getRow(1).find("td").eq(1).attr("tabindex"), 0, "Cell[1,1] has tabindex");
+});
+
+QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2,
+            pageIndex: 2
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 },
+        { name: "Ben", phone: "6666666", room: 3 },
+        { name: "Mark1", phone: "777777", room: 4 },
+        { name: "Mark2", phone: "888888", room: 5 },
+        { name: "Mark3", phone: "99999999", room: 6 }
+    ];
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex = 0");
+
+    // act
+    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 3, "FocusedRowIndex = 3");
 });
