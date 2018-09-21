@@ -8,12 +8,12 @@
     @MATERIAL_COLORVIEW_COLOR_PREVIEW_HEIGHT: 40px;
     @MATERIAL_COLORVIEW_PREVIEW_CONTAINER_MARGIN: 34px;
 
-    @MATERIAL_COLORVIEW_CONTAINER_LINE_HEIGHT: 60px;
-    @MATERIAL_COLORVIEW_CONTAINER_HEX_MARGIN: 10px 0 0 0;
+    @MATERIAL_COLORVIEW_CONTAINER_LINE_HEIGHT: normal;
+    @MATERIAL_COLORVIEW_CONTAINER_HEX_MARGIN: 20px 0 0 0;
     @MATERIAL_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH: 115px;
     @MATERIAL_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN: 43px;
     @MATERIAL_COLORVIEW_CONTAINER_TEXTBOX_WIDTH: 69px;
-    @MATERIAL_COLORVIEW_CONTAINER_TEXTBOX_MARGIN: 1px 1px 10px 0;
+    @MATERIAL_COLORVIEW_CONTAINER_TEXTBOX_MARGIN: 0 0 0 10px;
 
     @MATERIAL_COLORVIEW_CONTROLS_CONTAINER_WIDTH: 90px;
     @MATERIAL_COLORVIEW_CONTROLS_CONTAINER_MARGIN: 27px;
@@ -48,13 +48,16 @@
 
     label {
         line-height: @MATERIAL_COLORVIEW_CONTAINER_LINE_HEIGHT;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
 
         &.dx-colorview-label-hex {
             margin: @MATERIAL_COLORVIEW_CONTAINER_HEX_MARGIN;
         }
 
         &.dx-colorview-alpha-channel-label {
-            margin-left: @MATERIAL_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN;
+            margin: 0 0 0 @MATERIAL_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN;
             width: @MATERIAL_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH;
         }
 
@@ -80,6 +83,8 @@
 
 .dx-colorview-container-row.dx-colorview-alpha-channel-row {
     margin-top: @MATERIAL_COLORVIEW_ALPHA_MARGIN;
+    display: flex;
+    align-items: center;
 }
 
 .dx-colorview-hue-scale {
