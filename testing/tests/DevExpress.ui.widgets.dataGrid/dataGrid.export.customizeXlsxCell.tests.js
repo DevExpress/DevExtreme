@@ -142,7 +142,9 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
                             fill: {
                                 patternFill: {
                                     patternType: 'darkVertical',
-                                    foregroundColor_RGB: 'FF20FF60'
+                                    foregroundColor: {
+                                        rgb: 'FF20FF60'
+                                    }
                                 }
                             }
                         }
@@ -199,12 +201,61 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
                             fill: {
                                 patternFill: {
                                     patternType: e.gridCell.row.data.fillPattern,
-                                    foregroundColor_RGB: e.gridCell.row.data.fillColor
+                                    foregroundColor: {
+                                        rgb: e.gridCell.row.data.fillColor
+                                    }
                                 }
                             }
                         });
                     }
                 }
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change font in all xlsx cells", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="0"></numFmts>' +
+        '<fonts count="3">' +
+        '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
+        '<font><b /><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
+        '<font><sz val="22" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
+        '</fonts>' +
+        '<fills count="1">' +
+        '<fill><patternFill patternType="none" /></fill>' +
+        '</fills>' +
+        helper.BASE_STYLE_XML2 +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="2" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="s"><v>0</v></c></row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>str1_1</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1" }],
+            dataSource: [{ field1: 'str1_1' }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => e.xlsxCell.style.font.size = 22
             }
         },
         { styles, worksheet, sharedStrings }

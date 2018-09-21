@@ -9,10 +9,13 @@ import { excel as excelCreator } from "client_exporter";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
 
+const INTERNAL_BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +
+    "<scheme val=\"minor\" /></font><font><b /><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" />" +
+    "<family val=\"2\" /><scheme val=\"minor\" /></font></fonts>";
 const dataGridExportTestsHelper = {
 
-    BASE_STYLE_XML: excelCreator.__internals.BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2,
-    BASE_STYLE_XML1: excelCreator.__internals.BASE_STYLE_XML1,
+    BASE_STYLE_XML1: INTERNAL_BASE_STYLE_XML1,
+    BASE_STYLE_XML: INTERNAL_BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2,
     BASE_STYLE_XML2: excelCreator.__internals.BASE_STYLE_XML2,
     WORKSHEET_HEADER_XML: excelCreator.__internals.WORKSHEET_HEADER_XML,
     SHARED_STRINGS_HEADER_XML: excelCreator.__internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
