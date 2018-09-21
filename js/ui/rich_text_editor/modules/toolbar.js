@@ -8,8 +8,8 @@ import { extend } from "../../../core/utils/extend";
 
 const BaseModule = getQuill().import("core/module");
 
-const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
-const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
+const TOOLBAR_CLASS = "dx-richtexteditor-toolbar";
+const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-richtexteditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 
 class ToolbarModule extends BaseModule {

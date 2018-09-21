@@ -1,9 +1,9 @@
 import $ from "jquery";
 
-import "ui/html_editor";
-import "ui/html_editor/converters/markdown";
+import "ui/rich_text_editor";
+import "ui/rich_text_editor/converters/markdown";
 
-const CONTENT_CLASS = "dx-htmleditor-content";
+const CONTENT_CLASS = "dx-richtexteditor-content";
 
 function getSelector(className) {
     return "." + className;
@@ -13,9 +13,9 @@ const { test } = QUnit;
 
 QUnit.module("Value as HTML markup", () => {
     test("show placeholder is value undefined", (assert) => {
-        const instance = $("#htmlEditor").dxHtmlEditor({
+        const instance = $("#richTextEditor").dxRichTextEditor({
                 placeholder: "test placeholder"
-            }).dxHtmlEditor("instance"),
+            }).dxRichTextEditor("instance"),
             $element = instance.$element(),
             $content = $element.find(getSelector(CONTENT_CLASS));
 
@@ -23,9 +23,9 @@ QUnit.module("Value as HTML markup", () => {
     });
 
     test("render default value", (assert) => {
-        const instance = $("#htmlEditor").dxHtmlEditor({
+        const instance = $("#richTextEditor").dxRichTextEditor({
                 value: "<h1>Hi!</h1><p>Test</p>"
-            }).dxHtmlEditor("instance"),
+            }).dxRichTextEditor("instance"),
             $element = instance.$element(),
             markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
@@ -35,14 +35,14 @@ QUnit.module("Value as HTML markup", () => {
 
     test("change value by user", (assert) => {
         const done = assert.async();
-        const instance = $("#htmlEditor")
-            .dxHtmlEditor({
+        const instance = $("#richTextEditor")
+            .dxRichTextEditor({
                 onValueChanged: (e) => {
                     assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
                     done();
                 }
             })
-            .dxHtmlEditor("instance");
+            .dxRichTextEditor("instance");
 
         instance
             .$element()
@@ -52,8 +52,8 @@ QUnit.module("Value as HTML markup", () => {
 
     test("value after change valueType", (assert) => {
         const done = assert.async();
-        const instance = $("#htmlEditor")
-            .dxHtmlEditor({
+        const instance = $("#richTextEditor")
+            .dxRichTextEditor({
                 valueType: "Markdown",
                 value: "Hi! **Test.**",
                 onValueChanged: (e) => {
@@ -63,7 +63,7 @@ QUnit.module("Value as HTML markup", () => {
                     }
                 }
             })
-            .dxHtmlEditor("instance");
+            .dxRichTextEditor("instance");
 
         instance.option("valueType", "HTML");
     });
@@ -72,10 +72,10 @@ QUnit.module("Value as HTML markup", () => {
 
 QUnit.module("Value as Markdown markup", () => {
     test("render default value", (assert) => {
-        const instance = $("#htmlEditor").dxHtmlEditor({
+        const instance = $("#richTextEditor").dxRichTextEditor({
                 value: "Hi!\nIt's a **test**!",
                 valueType: "Markdown"
-            }).dxHtmlEditor("instance"),
+            }).dxRichTextEditor("instance"),
             $element = instance.$element(),
             markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
@@ -85,15 +85,15 @@ QUnit.module("Value as Markdown markup", () => {
 
     test("change value by user", (assert) => {
         const done = assert.async();
-        const instance = $("#htmlEditor")
-            .dxHtmlEditor({
+        const instance = $("#richTextEditor")
+            .dxRichTextEditor({
                 valueType: "Markdown",
                 onValueChanged: (e) => {
                     assert.equal(e.value, "Hi! **Test.**");
                     done();
                 }
             })
-            .dxHtmlEditor("instance");
+            .dxRichTextEditor("instance");
 
         instance
             .$element()
@@ -103,8 +103,8 @@ QUnit.module("Value as Markdown markup", () => {
 
     test("value after change valueType", (assert) => {
         const done = assert.async();
-        const instance = $("#htmlEditor")
-            .dxHtmlEditor({
+        const instance = $("#richTextEditor")
+            .dxRichTextEditor({
                 value: "<p>Hi! <strong>Test.</strong></p>",
                 onValueChanged: (e) => {
                     if(e.component.option("valueType") === "Markdown") {
@@ -113,7 +113,7 @@ QUnit.module("Value as Markdown markup", () => {
                     }
                 }
             })
-            .dxHtmlEditor("instance");
+            .dxRichTextEditor("instance");
 
         instance.option("valueType", "Markdown");
     });

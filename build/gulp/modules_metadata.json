@@ -332,9 +332,9 @@
     }
   },
   {
-    "name": "ui/html_editor",
+    "name": "ui/rich_text_editor",
     "exports": {
-      "default": "ui.dxHtmlEditor"
+      "default": "ui.dxRichTextEditor"
     }
   },
   {

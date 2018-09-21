@@ -11,22 +11,22 @@ import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
 
-const HTML_EDITOR_CLASS = "dx-htmleditor";
+const RICH_TEXT_EDITOR_CLASS = "dx-richtexteditor";
 
 const ANONYMOUS_TEMPLATE_NAME = "content";
 
-const HtmlEditor = Editor.inherit({
+const RichTextEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxHtmlEditorOptions.valueType
-            * @type Enums.HtmlEditorValueType
+            * @name dxRichTextEditorOptions.valueType
+            * @type Enums.RichTextEditorValueType
             * @default "HTML"
             */
             valueType: "HTML",
             /**
-            * @name dxHtmlEditorOptions.placeholder
+            * @name dxRichTextEditorOptions.placeholder
             * @type string
             * @default ""
             */
@@ -82,7 +82,7 @@ const HtmlEditor = Editor.inherit({
         this._$htmlContainer = $("<div>");
 
         this.$element()
-            .addClass(HTML_EDITOR_CLASS)
+            .addClass(RICH_TEXT_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
 
         template && template.render({
@@ -108,11 +108,11 @@ const HtmlEditor = Editor.inherit({
     },
 
     _render: function() {
-        this._renderHtmlEditor();
+        this._renderRichTextEditor();
         this.callBase();
     },
 
-    _renderHtmlEditor: function() {
+    _renderRichTextEditor: function() {
         const modulesConfig = this._getModulesConfig();
 
         this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
@@ -253,7 +253,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     /**
-    * @name dxHtmlEditorMethods.registerModules
+    * @name dxRichTextEditorMethods.registerModules
     * @publicName registerModules(modules)
     * @param1 modules:Object
     */
@@ -262,6 +262,6 @@ const HtmlEditor = Editor.inherit({
     }
 });
 
-registerComponent("dxHtmlEditor", HtmlEditor);
+registerComponent("dxRichTextEditor", RichTextEditor);
 
-module.exports = HtmlEditor;
+module.exports = RichTextEditor;

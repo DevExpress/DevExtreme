@@ -144,11 +144,11 @@ interface JQuery {
     dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
 }
 interface JQuery {
-    dxHtmlEditor(): JQuery;
-    dxHtmlEditor(options: "instance"): DevExpress.ui.dxHtmlEditor;
-    dxHtmlEditor(options: string): any;
-    dxHtmlEditor(options: string, ...params: any[]): any;
-    dxHtmlEditor(options: DevExpress.ui.dxHtmlEditorOptions): JQuery;
+    dxRichTextEditor(): JQuery;
+    dxRichTextEditor(options: "instance"): DevExpress.ui.dxRichTextEditor;
+    dxRichTextEditor(options: string): any;
+    dxRichTextEditor(options: string, ...params: any[]): any;
+    dxRichTextEditor(options: DevExpress.ui.dxRichTextEditorOptions): JQuery;
 }
 interface JQuery {
     dxList(): JQuery;
@@ -2738,12 +2738,12 @@ declare module DevExpress.ui {
         /** Specifies the URL of the image displayed by the item. */
         imageSrc?: string;
     }
-    export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
-        // TODO: add richEditor options
+    export interface dxRichTextEditorOptions extends EditorOptions<dxRichTextEditor> {
+        // TODO: add richTextEditor options
     }
-    export class dxHtmlEditor extends Editor {
-        constructor(element: Element, options?: dxHtmlEditorOptions)
-        constructor(element: JQuery, options?: dxHtmlEditorOptions)
+    export class dxRichTextEditor extends Editor {
+        constructor(element: Element, options?: dxRichTextEditorOptions)
+        constructor(element: JQuery, options?: dxRichTextEditorOptions)
     }
     export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
         /** Specifies whether or not the widget changes its state when interacting with a user. */

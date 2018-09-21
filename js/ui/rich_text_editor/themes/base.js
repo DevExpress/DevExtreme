@@ -6,7 +6,7 @@ class BaseTheme extends Theme {
     constructor(quill, options) {
 
         super(quill, options);
-        this.quill.root.classList.add("dx-htmleditor-content");
+        this.quill.root.classList.add("dx-richtexteditor-content");
     }
 }
 
