@@ -15,7 +15,7 @@ define(function(require) {
             assert.throws(
                 function() { getQuill(); },
                 function(e) {
-                    return /E1050/.test(e.message);
+                    return /(E1041)[\s\S]*(Quill)/.test(e.message);
                 },
                 "The Quill script isn't referenced"
             );
@@ -25,9 +25,9 @@ define(function(require) {
             assert.throws(
                 function() { new DeltaConverter(); },
                 function(e) {
-                    return /E1051/.test(e.message);
+                    return /(E1041)[\s\S]*(QuillDeltaToHtmlConverter)/.test(e.message);
                 },
-                "The Quill script isn't referenced"
+                "The Quill delta converter script isn't referenced"
             );
         });
     });

@@ -9,7 +9,7 @@ class DeltaConverter {
         const converter = QuillDeltaConverter && (QuillDeltaConverter.QuillDeltaToHtmlConverter || QuillDeltaConverter.default);
 
         if(!converter) {
-            throw Errors.Error("E1051");
+            throw Errors.Error("E1041", "QuillDeltaToHtmlConverter");
         }
 
         this._delta2Html = new converter();

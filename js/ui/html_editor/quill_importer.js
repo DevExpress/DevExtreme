@@ -3,7 +3,7 @@ import Errors from "../widget/ui.errors";
 
 function getQuill() {
     if(!Quill) {
-        throw Errors.Error("E1050");
+        throw Errors.Error("E1041", "Quill");
     }
 
     return Quill;

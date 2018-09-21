@@ -8,11 +8,11 @@ import converterController from "../converterController";
 class MarkdownConverter {
     constructor() {
         if(!TurnDown) {
-            throw Errors.Error("E1052");
+            throw Errors.Error("E1041", "Turndown");
         }
 
         if(!ShowDown) {
-            throw Errors.Error("E1053");
+            throw Errors.Error("E1041", "Showdown");
         }
 
         this._html2Markdown = new TurnDown();

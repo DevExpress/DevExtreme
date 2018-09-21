@@ -1070,7 +1070,7 @@ QUnit.test("Exception should be thrown if JSzip not included has no start date",
     assert.throws(
         function() { this.excelCreator.getData(); }.bind(this),
         function(e) {
-            return /E1041/.test(e.message);
+            return /(E1041)[\s\S]*(JSZip)/.test(e.message);
         },
         "The JSZip script is referenced after DevExtreme scripts"
     );

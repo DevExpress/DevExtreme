@@ -161,7 +161,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.E1041
      */
-    E1041: "The JSZip script is referenced after the DevExtreme scripts or not referenced at all",
+    E1041: "The '{0}' script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
     * @name ErrorsUIWidgets.E1042
@@ -202,26 +202,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsUIWidgets.E1049
     */
     E1049: `Column '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
-
-    /**
-     * @name ErrorsUIWidgets.E1050
-     */
-    E1050: "The Quill script is referenced after the DevExtreme scripts or not referenced at all",
-
-    /**
-     * @name ErrorsUIWidgets.E1051
-     */
-    E1051: "The Quill-Delta-to-Html script is referenced after the DevExtreme scripts or not referenced at all",
-
-    /**
-     * @name ErrorsUIWidgets.E1052
-     */
-    E1052: "The TurnDown script is referenced after the DevExtreme scripts or not referenced at all",
-
-    /**
-     * @name ErrorsUIWidgets.E1053
-     */
-    E1053: "The ShowDown script is referenced after the DevExtreme scripts or not referenced at all",
 
     /**
      * @name ErrorsUIWidgets.E1054

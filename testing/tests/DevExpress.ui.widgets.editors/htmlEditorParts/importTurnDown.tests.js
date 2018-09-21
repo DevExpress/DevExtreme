@@ -13,7 +13,7 @@ define(function(require) {
             assert.throws(
                 function() { new MarkdownConverter(); },
                 function(e) {
-                    return /E1052/.test(e.message);
+                    return /(E1041)[\s\S]*(Turndown)/.test(e.message);
                 },
                 "The Turndown script isn't referenced"
             );
