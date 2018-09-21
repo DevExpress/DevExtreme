@@ -19,17 +19,17 @@ function hasKey(target, keyOrKeys) {
     return false;
 }
 
-function push(array, batchData, keyInfo) {
+function applyBatch(keyInfo, array, batchData) {
     batchData.forEach(item => {
         switch(item.type) {
-            case "update": update(array, item.key, item.data, keyInfo); break;
-            case "insert": insert(array, item.data, keyInfo); break;
-            case "remove": remove(array, item.key, keyInfo); break;
+            case "update": update(keyInfo, array, item.key, item.data); break;
+            case "insert": insert(keyInfo, array, item.data); break;
+            case "remove": remove(keyInfo, array, item.key); break;
         }
     });
 }
 
-function update(array, key, data, keyInfo) {
+function update(keyInfo, array, key, data) {
     var target,
         extendComplexObject = true,
         keyExpr = keyInfo.key();
@@ -39,7 +39,7 @@ function update(array, key, data, keyInfo) {
             return rejectedPromise(errors.Error("E4017"));
         }
 
-        let index = indexByKey(array, key, keyInfo);
+        let index = indexByKey(keyInfo, array, key);
         if(index < 0) {
             return rejectedPromise(errors.Error("E4009"));
         }
@@ -53,7 +53,7 @@ function update(array, key, data, keyInfo) {
     return trivialPromise(key, data);
 }
 
-function insert(array, data, keyInfo) {
+function insert(keyInfo, array, data) {
     var keyValue,
         obj,
         keyExpr = keyInfo.key();
@@ -68,7 +68,7 @@ function insert(array, data, keyInfo) {
             }
             keyValue = obj[keyExpr] = String(new Guid());
         } else {
-            if(array[indexByKey(array, keyValue, keyInfo)] !== undefined) {
+            if(array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
                 return rejectedPromise(errors.Error("E4008"));
             }
         }
@@ -80,15 +80,15 @@ function insert(array, data, keyInfo) {
     return trivialPromise(data, keyValue);
 }
 
-function remove(array, key, keyInfo) {
-    var index = indexByKey(array, key, keyInfo);
+function remove(keyInfo, array, key) {
+    var index = indexByKey(keyInfo, array, key);
     if(index > -1) {
         array.splice(index, 1);
     }
     return trivialPromise(key);
 }
 
-function indexByKey(array, key, keyInfo) {
+function indexByKey(keyInfo, array, key) {
     var keyExpr = keyInfo.key();
     for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
         if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
@@ -98,7 +98,7 @@ function indexByKey(array, key, keyInfo) {
     return -1;
 }
 
-module.exports.push = push;
+module.exports.applyBatch = applyBatch;
 module.exports.update = update;
 module.exports.insert = insert;
 module.exports.remove = remove;

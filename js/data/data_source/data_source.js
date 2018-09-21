@@ -850,7 +850,7 @@ var DataSource = Class.inherit({
                 items = getPlainItems(items, groupLevel);
             }
 
-            arrayUtils.push(items, changes, this.store());
+            arrayUtils.applyBatch(this.store(), items, changes);
             this.fireEvent("changed", [{ changes: changes }]);
         }
     },

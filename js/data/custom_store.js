@@ -395,7 +395,7 @@ var CustomStore = Store.inherit({
 
     _pushImpl: function(changes) {
         if(this.__rawData) {
-            arrayUtils.push(this.__rawData, changes, this);
+            arrayUtils.applyBatch(this, this.__rawData, changes);
         }
     },
 

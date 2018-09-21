@@ -45,7 +45,7 @@ var ArrayStore = Store.inherit({
     },
 
     _byKeyImpl: function(key) {
-        var index = arrayUtils.indexByKey(this._array, key, this);
+        var index = arrayUtils.indexByKey(this, this._array, key);
 
         if(index === -1) {
             return rejectedPromise(errors.Error("E4009"));
@@ -55,19 +55,19 @@ var ArrayStore = Store.inherit({
     },
 
     _insertImpl: function(values) {
-        return arrayUtils.insert(this._array, values, this);
+        return arrayUtils.insert(this, this._array, values);
     },
 
     _pushImpl: function(changes) {
-        arrayUtils.push(this._array, changes, this);
+        arrayUtils.applyBatch(this, this._array, changes);
     },
 
     _updateImpl: function(key, values) {
-        return arrayUtils.update(this._array, key, values, this);
+        return arrayUtils.update(this, this._array, key, values);
     },
 
     _removeImpl: function(key) {
-        return arrayUtils.remove(this._array, key, this);
+        return arrayUtils.remove(this, this._array, key);
     },
 
     /**
