@@ -35,8 +35,8 @@ var ROWS_VIEW_CLASS = "rowsview",
     EDIT_MODE_CELL = "cell",
 
     FOCUS_TYPES = {
-        row: 0,
-        cell: 1
+        row: "row",
+        cell: "cell"
     };
 ;
 

@@ -41,7 +41,9 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         isRowFocused: function(rowIndex) {
-            return this.option("focusedRowIndex") === rowIndex;
+            var rowIndexOffset = this.dataController.getRowIndexOffset(),
+                pageRowIndex = this.option("focusedRowIndex") - rowIndexOffset;
+            return pageRowIndex === rowIndex;
         }
     };
 })());

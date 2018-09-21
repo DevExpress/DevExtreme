@@ -380,7 +380,7 @@ QUnit.testInActiveWindow("RightArrow key should focus the cell", function(assert
     assert.equal(rowsView.getRow(1).find("td").eq(1).attr("tabindex"), 0, "Cell[1,1] has tabindex");
 });
 
-QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert) {
+QUnit.testInActiveWindow("Focus row by click if virtual scrolling mode", function(assert) {
     var rowsView;
 
     // arrange
@@ -428,4 +428,48 @@ QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert)
 
     // assert
     assert.equal(this.option("focusedRowIndex"), 3, "FocusedRowIndex = 3");
+});
+
+QUnit.testInActiveWindow("Focus row by if virtual scrolling mode", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowIndex: 4,
+        editing: {
+            allowEditing: false
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2,
+            pageIndex: 2
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 },
+        { name: "Ben", phone: "6666666", room: 3 },
+        { name: "Mark1", phone: "777777", room: 4 },
+        { name: "Test", phone: "888888", room: 5 },
+        { name: "Mark3", phone: "99999999", room: 6 }
+    ];
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 4, "FocusedRowIndex = 4");
+    assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
 });
