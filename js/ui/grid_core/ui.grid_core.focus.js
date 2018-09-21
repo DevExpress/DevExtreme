@@ -140,34 +140,44 @@ module.exports = {
 
                 _update: function(change) {
                     var that = this,
+                        $tableElement,
                         keyboardController = that.getController("keyboardNavigation"),
                         tableElements = that.getTableElements(),
                         focusedRowEnabled = that.option("focusedRowEnabled"),
-                        focusedRowIndex,
-                        tabIndex = that.option("tabindex") || 0,
-                        $row,
-                        changedItem;
+                        focusedRowIndex;
 
-                    if(focusedRowEnabled && change.changeType === "updateFocusedRow" && tableElements.length > 0) {
+                    if(change.changeType !== "updateFocusedRow") {
+                        that.callBase(change);
+                    }
 
-                        tableElements.find(".dx-row")
-                            .removeClass(ROW_FOCUSED_CLASS)
-                            .removeAttr("tabindex");
-
+                    if(focusedRowEnabled && tableElements.length > 0) {
                         focusedRowIndex = keyboardController.getFocusedRowIndex();
                         if(focusedRowIndex >= 0) {
                             each(that.getTableElements(), function(_, tableElement) {
-                                changedItem = change.items[focusedRowIndex];
-                                if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
-                                    $row = that._getRowElements($(tableElement)).eq(focusedRowIndex);
-                                    $row.addClass(ROW_FOCUSED_CLASS)
-                                        .attr("tabindex", tabIndex)
-                                        .focus();
-                                }
+                                $tableElement = $(tableElement);
+                                that.clearPreviousFocusedRow($tableElement);
+                                that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
                             });
                         }
-                    } else {
-                        that.callBase(change);
+                    }
+                },
+
+                clearPreviousFocusedRow: function($tableElement) {
+                    var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS);
+                    $prevRowFocusedElement.removeClass(ROW_FOCUSED_CLASS).removeAttr("tabindex");
+                    $prevRowFocusedElement.children("td").removeAttr("tabindex");
+                },
+
+                prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
+                    var that = this,
+                        $row,
+                        tabIndex = that.option("tabindex") || 0;
+
+                    if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
+                        $row = that._getRowElements($tableElement).eq(focusedRowIndex);
+                        $row.addClass(ROW_FOCUSED_CLASS)
+                            .attr("tabindex", tabIndex)
+                            .focus();
                     }
                 }
             }

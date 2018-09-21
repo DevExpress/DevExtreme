@@ -358,6 +358,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._applyTabIndexToElement($focusElement);
             eventsEngine.trigger($focusElement, "focus");
         }
+
         if(disableFocus) {
             $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
             $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
@@ -1122,7 +1123,7 @@ module.exports = {
 
                     if(that.option("useKeyboard") && cellElements) {
                         $row = cellElements.eq(0).parent();
-                        if(isGroupRow($row)) {
+                        if(isGroupRow($row) || that.option("focusedRowEnabled")) {
                             $row.attr("tabIndex", tabIndex);
                         } else {
                             that.renderCellFocusState(cellElements, columnIndex);

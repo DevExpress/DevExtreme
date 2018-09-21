@@ -473,3 +473,41 @@ QUnit.testInActiveWindow("Focus row by if virtual scrolling mode", function(asse
     assert.equal(this.option("focusedRowIndex"), 4, "FocusedRowIndex = 4");
     assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
 });
+
+QUnit.testInActiveWindow("Tab index should not exist for the previous focused row", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowIndex: 0,
+        editing: {
+            allowEditing: false
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // act
+    $(rowsView.getRow(0).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.clock.tick();
+    this.triggerKeyDown("rightArrow", false, false, rowsView.element().find(":focus").get(0));
+    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    // assert
+    assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 1, "Row 0 has tabindex");
+    // act
+    rowsView.clearPreviousFocusedRow($(rowsView.getRow(0).parent()));
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
+    assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 0, "Row 0 has no tabindex");
+    assert.equal($(rowsView.getRow(1)).find('[tabindex="0"]').length, 0, "Row 1 has no tabindex");
+});
