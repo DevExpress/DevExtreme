@@ -220,10 +220,10 @@ class LessTemplateLoader {
             if(version === 3) {
                 this.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
             } else if(version === 4) {
-                let defaultBootstrapVariablesUrl = "node_modules/bootstrap/scss/_variables.scss",
-                    defaultBootstrapFunctionsUrl = "node_modules/bootstrap/scss/_functions.scss";
+                let defaultBootstrapVariablesUrl = "bootstrap/scss/_variables.scss",
+                    defaultBootstrapFunctionsUrl = "bootstrap/scss/_functions.scss";
 
-                Promise.all([this.readFile(defaultBootstrapFunctionsUrl, true), this.readFile(defaultBootstrapVariablesUrl, true)])
+                Promise.all([this.readFile(defaultBootstrapFunctionsUrl), this.readFile(defaultBootstrapVariablesUrl)])
                     .then(files => {
                         this.compileScss(files[0] + customLessContent + files[1] + metadataVariables, bootstrapMetadata).then(processDxTheme);
                     }, () => {
@@ -239,7 +239,7 @@ class LessTemplateLoader {
     };
 
     _loadLessByFileName(fileName) {
-        return this.readFile(fileName, true);
+        return this.readFile("devextreme-themebuilder/" + fileName);
     };
 
     _makeInfoHeader() {
