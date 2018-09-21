@@ -1123,7 +1123,7 @@ module.exports = {
 
                     if(that.option("useKeyboard") && cellElements) {
                         $row = cellElements.eq(0).parent();
-                        if(isGroupRow($row) || that.option("focusedRowEnabled")) {
+                        if(isGroupRow($row)) {
                             $row.attr("tabIndex", tabIndex);
                         } else {
                             that.renderCellFocusState(cellElements, columnIndex);
