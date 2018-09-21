@@ -1765,11 +1765,24 @@ Axis.prototype = {
         that._translator.updateBusinessRange(that._getViewportRange());
     },
 
-    getZoomEventArg() {
+    getZoomStartEventArg() {
         return {
             axis: this,
             range: this.visualRange(),
             cancel: false
+        };
+    },
+
+    getZoomEndEventArg(currentRange) {
+        const newRange = this.visualRange();
+        return {
+            axis: this,
+            previousRange: currentRange,
+            range: newRange,
+            cancel: false,
+            // backwards
+            rangeStart: newRange.startValue,
+            rangeEnd: newRange.endValue
         };
     },
 
@@ -1812,8 +1825,9 @@ Axis.prototype = {
             visualRange = [args[0], args[1]];
         }
 
-        if(that.handleZooming(visualRange, args[1])) {
-            that._visualRange(that, visualRange);
+        const zoomResults = that.handleZooming(visualRange, args[1]);
+        if(!zoomResults.isPrevented) {
+            that._visualRange(that, zoomResults.range);
         }
     },
 
@@ -1823,32 +1837,25 @@ Axis.prototype = {
 
         visualRange = that._validateVisualRange(visualRange);
 
-        const zoomStartEvent = that.getZoomEventArg();
-        const currentRange = zoomStartEvent.range;
+        const zoomStartEvent = that.getZoomStartEventArg();
+        const currentRange = preventEvents.startRange && that._validateVisualRange(preventEvents.startRange) || zoomStartEvent.range;
 
         !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
+        const zoomResults = { isPrevented: zoomStartEvent.cancel, range: visualRange };
 
         if(!zoomStartEvent.cancel) {
             that._applyZooming(visualRange);
-            const newRange = that.visualRange();
-            const zoomEndEvent = {
-                axis: that,
-                previousRange: currentRange,
-                range: newRange,
-                cancel: false,
-                // backwards
-                rangeStart: newRange.startValue,
-                rangeEnd: newRange.endValue
-            };
+            const zoomEndEvent = that.getZoomEndEventArg(currentRange);
 
             !preventEvents.end && that._eventTrigger("zoomEnd", zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
                 that._applyZooming(currentRange);
+                zoomResults.range = currentRange;
             }
         }
 
-        return !zoomStartEvent.cancel;
+        return zoomResults;
     },
 
     dataVisualRangeIsReduced() {

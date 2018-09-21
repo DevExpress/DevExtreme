@@ -92,7 +92,8 @@ var createAxis = function(translator) {
     };
     axis.getOptions = function() { return { hoverMode: "allargumentpoints" }; };
 
-    axis.stub("getZoomEventArg").returns({ mockArg: true });
+    axis.stub("getZoomStartEventArg").returns({ mockArg: true });
+    axis.stub("getZoomEndEventArg").returns({ mockArg: true });
     axis.stub("getZoomBounds").returns({ mockWholeRange: true });
 
     return axis;
@@ -2121,7 +2122,7 @@ QUnit.test("pointerdown, pointerup with gesture action when animation enabled", 
     assert.ok(!this.axis.visualRange.called);
     this.renderer.root.animate.firstCall.args[1].complete();
     assert.ok(this.axis.visualRange.called);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("scroll without end", function(assert) {
@@ -2155,7 +2156,40 @@ QUnit.test("scroll right", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
+});
+
+QUnit.test("render axes and series each time on zooming/scrollig (via rendering timeout)", function(assert) {
+    this.options.chart._lastRenderingTime = 200;
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 60, pointers: [{ pageX: 60, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+
+    assert.equal(this.options.chart._transformArgument.callCount, 0);
+    assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-10, 1, { mockWholeRange: true }]);
+    assert.ok(this.axis.visualRange.calledTwice);
+    assert.deepEqual(this.axis.visualRange.firstCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.ok(this.options.eventTrigger.withArgs("zoomStart").calledOnce);
+    assert.ok(this.options.eventTrigger.withArgs("zoomEnd").calledOnce);
+});
+
+QUnit.test("run transformArgument if rendering timeout is exceeded", function(assert) {
+    this.options.chart._lastRenderingTime = 200;
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
+    this.options.chart._lastRenderingTime = 500;
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 60, pointers: [{ pageX: 60, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+
+    assert.equal(this.options.chart._transformArgument.callCount, 1);
+    assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [10, 1]);
+    assert.ok(this.axis.visualRange.calledTwice);
+    assert.deepEqual(this.axis.visualRange.firstCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
+    assert.ok(this.options.eventTrigger.withArgs("zoomStart").calledOnce);
+    assert.equal(this.options.eventTrigger.withArgs("zoomEnd").callCount, 0);
 });
 
 QUnit.test("dispose tracker doesn't affect other trackers", function(assert) {
@@ -2186,7 +2220,7 @@ QUnit.test("dispose tracker doesn't affect other trackers", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
     $(document).trigger(getEvent("dxpointerup", {}));
     // assert
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("scroll top. Rotated", function(assert) {
@@ -2202,7 +2236,7 @@ QUnit.test("scroll top. Rotated", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("scroll left", function(assert) {
@@ -2215,7 +2249,7 @@ QUnit.test("scroll left", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("scroll bottom. Rotated", function(assert) {
@@ -2231,7 +2265,7 @@ QUnit.test("scroll bottom. Rotated", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("scroll with disabled scroll interaction", function(assert) {
@@ -2264,7 +2298,7 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Mouse Event", fun
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
         "-ms-touch-action": "pan-x pan-y ",
         "touch-action": "pan-x pan-y "
@@ -2316,7 +2350,7 @@ QUnit.test("scroll with enabled only mouse scroll interaction. Touch Event", fun
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
         "-ms-touch-action": "none",
@@ -2336,7 +2370,7 @@ QUnit.test("scroll from scrollBar", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [20, 1]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-20, 1, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
     assert.ok(preventDefault.calledOnce);
 });
 
@@ -2350,7 +2384,7 @@ QUnit.test("zoom in without scroll", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-70, 3]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [70, 3, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("zoom out scale 0", function(assert) {
@@ -2363,7 +2397,7 @@ QUnit.test("zoom out scale 0", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [35, 0]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-35, 0, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("zoom out without scroll", function(assert) {
@@ -2376,7 +2410,7 @@ QUnit.test("zoom out without scroll", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [14, 0.6]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("zoom when pointers has reverse order", function(assert) {
@@ -2389,7 +2423,7 @@ QUnit.test("zoom when pointers has reverse order", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-70, 3]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [70, 3, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("zoom in with right scroll", function(assert) {
@@ -2401,7 +2435,7 @@ QUnit.test("zoom in with right scroll", function(assert) {
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-140 - (-40), 5]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("zoom in with left scroll", function(assert) {
@@ -2413,7 +2447,7 @@ QUnit.test("zoom in with left scroll", function(assert) {
 
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [-35 - 15, 2]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
 });
 
 QUnit.test("pinch-zoom. Zooming interaction disabled", function(assert) {
@@ -2445,7 +2479,7 @@ QUnit.test("Pinch-zoom. only touch", function(assert) {
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [14, 0.6]);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-14, 0.6, { mockWholeRange: true }]);
     assert.ok(this.axis.visualRange.calledOnce);
-    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true }]);
+    assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
         "-ms-touch-action": "none",
         "touch-action": "none"
@@ -2640,6 +2674,29 @@ QUnit.test("Can cancel zooming on zoomStart", function(assert) {
 
     assert.equal(this.options.eventTrigger.withArgs("zoomStart").callCount, 1);
     assert.ok(!this.axis.visualRange.calledOnce);
+});
+
+QUnit.test("Can cancel zooming on zoomEnd", function(assert) {
+    this.options.eventTrigger = sinon.spy(function(event, e) {
+        if(event === "zoomEnd") {
+            e.cancel = true;
+        }
+    });
+    this.options.chart._lastRenderingTime = 200;
+    this.axis._visualRange = sinon.spy();
+
+    this.tracker = this.createTracker(this.options);
+
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+
+    assert.equal(this.options.chart._transformArgument.callCount, 0);
+
+    assert.equal(this.options.eventTrigger.withArgs("zoomEnd").callCount, 1);
+    assert.equal(this.axis.visualRange.callCount, 1);
+    assert.deepEqual(this.axis.visualRange.firstCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.ok(this.axis._visualRange.calledOnce);
 });
 
 QUnit.test("zoomStart. ScrollBar. Scrolling is disabled", function(assert) {

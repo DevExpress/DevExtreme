@@ -30,11 +30,13 @@ var $ = require("../../core/renderer"),
     SERIES_CLICK = "seriesClick",
     POINT_CLICK = "pointClick",
     ZOOM_START = "zoomStart",
+    ZOOM_END = "zoomEnd",
     POINT_DATA = "chart-data-point",
     SERIES_DATA = "chart-data-series",
     ARG_DATA = "chart-data-argument",
     DELAY = 100,
     TOUCHSTART_TIMEOUT = 500,
+    GESTURE_TIMEOUT = 300,
     SCROLL_THRESHOLD = 10,
 
     NONE_MODE = "none",
@@ -641,17 +643,27 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
 
         if(gestureChanged && !startGesture.cancel) {
             if(that._startScroll) {
-                const eventArg = that._chart.getArgumentAxis().getZoomEventArg();
+                const eventArg = that._chart.getArgumentAxis().getZoomStartEventArg();
                 that._eventTrigger(ZOOM_START, eventArg);
                 that._startScroll = false;
                 if(eventArg.cancel) {
                     startGesture.cancel = true;
                     return false;
+                } else {
+                    startGesture.range = eventArg.range;
                 }
             }
 
             startGesture.changed = gestureChanged;
-            that._chart._transformArgument(startGesture.scroll, startGesture.scale);
+            if(that._chart._lastRenderingTime < GESTURE_TIMEOUT) {
+                var zoom = that._argumentAxis._translator.zoom(-startGesture.scroll, startGesture.scale, that._argumentAxis.getZoomBounds());
+                that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max], { start: true, end: true });
+
+                startGesture.distance = gestureParams.distance;
+                startGesture.center = gestureParams.center;
+            } else {
+                that._chart._transformArgument(startGesture.scroll, startGesture.scale);
+            }
         }
         return gestureChanged;
     },
@@ -667,27 +679,38 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         const argumentAxis = that._argumentAxis;
 
         function complete() {
-            argumentAxis.visualRange([zoom.min, zoom.max], { start: true });
+            argumentAxis.visualRange([zoom.min, zoom.max], { start: true, startRange: startGesture.range });
         }
 
         if(startGesture && startGesture.changed) {
-            zoom = argumentAxis.getTranslator().zoom(-startGesture.scroll, startGesture.scale, argumentAxis.getZoomBounds());
+            if(!isDefined(that._chart._lastRenderingTime) || that._chart._lastRenderingTime >= GESTURE_TIMEOUT) {
+                zoom = argumentAxis.getTranslator().zoom(-startGesture.scroll, startGesture.scale, argumentAxis.getZoomBounds());
+                if(renderer.animationEnabled() && (-startGesture.scroll !== zoom.translate || startGesture.scale !== zoom.scale)) {
+                    var translateDelta = -(startGesture.scroll + zoom.translate),
+                        scaleDelta = startGesture.scale - zoom.scale;
 
-            if(renderer.animationEnabled() && (-startGesture.scroll !== zoom.translate || startGesture.scale !== zoom.scale)) {
-                var translateDelta = -(startGesture.scroll + zoom.translate),
-                    scaleDelta = startGesture.scale - zoom.scale;
+                    renderer.root.animate({ _: 0 }, {
+                        step: function(pos) {
+                            var translateValue = -(startGesture.scroll) - translateDelta * pos,
+                                scaleValue = startGesture.scale - scaleDelta * pos;
 
-                renderer.root.animate({ _: 0 }, {
-                    step: function(pos) {
-                        var translateValue = -(startGesture.scroll) - translateDelta * pos,
-                            scaleValue = startGesture.scale - scaleDelta * pos;
-
-                        that._chart._transformArgument(-translateValue, scaleValue);
-                    }, complete: complete,
-                    duration: 250
-                });
+                            that._chart._transformArgument(-translateValue, scaleValue);
+                        }, complete: complete,
+                        duration: 250
+                    });
+                } else {
+                    complete();
+                }
             } else {
-                complete();
+                const currentRange = startGesture.range;
+                const zoomEndEvent = argumentAxis.getZoomEndEventArg(currentRange);
+
+                that._eventTrigger(ZOOM_END, zoomEndEvent);
+
+                if(zoomEndEvent.cancel) {
+                    argumentAxis._applyZooming(currentRange);
+                    argumentAxis._visualRange(argumentAxis, currentRange);
+                }
             }
         }
     },
