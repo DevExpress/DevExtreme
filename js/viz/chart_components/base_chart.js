@@ -607,7 +607,9 @@ var BaseChart = BaseWidget.inherit({
         that._renderer.stopAllAnimations(true);
         _setCanvasValues(that._canvas);
         that._cleanGroups();
+        const startTime = new Date();
         that._renderElements(drawOptions);
+        that._lastRenderingTime = new Date() - startTime;
     },
 
     _renderElements: function(drawOptions) {
