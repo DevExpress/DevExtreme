@@ -2510,6 +2510,7 @@ QUnit.test("item click changes radio button state only to true in single selecti
 
 QUnit.test("keyboard navigation should work with without selectAll checkbox", function(assert) {
     var $list = $($("#templated-list").dxList({
+            focusStateEnabled: true,
             items: ["0", "1"],
             showSelectionControls: true,
             selectionMode: 'single'
