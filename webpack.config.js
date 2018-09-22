@@ -21,8 +21,5 @@ module.exports = {
         'quill-delta-to-html': 'window.QuillDeltaToHtmlConverter',
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown'
-    },
-    resolve: {
-        modules: ['artifacts/transpiled/quill_modules', 'node_modules']
     }
 };

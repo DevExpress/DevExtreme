@@ -204,9 +204,9 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1049: `Column '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
 
     /**
-     * @name ErrorsUIWidgets.E1054
+     * @name ErrorsUIWidgets.E1050
      */
-    E1054: "The \"{0}\" converter is not found in the ConverterController",
+    E1050: "The \"{0}\" converter is not found in the ConverterController",
 
     /**
     * @name ErrorsUIWidgets.W1001

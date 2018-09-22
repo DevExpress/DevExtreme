@@ -27,7 +27,7 @@ QUnit.module("Unknown converter", () => {
         assert.throws(
             function() { $("#richTextEditor").dxRichTextEditor({ valueType: "Markdown" }); },
             function(e) {
-                return /E1054/.test(e.message);
+                return /E1050/.test(e.message);
             },
             "Converter isn't defined"
         );

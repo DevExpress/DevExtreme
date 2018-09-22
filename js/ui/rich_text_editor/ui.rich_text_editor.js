@@ -52,7 +52,7 @@ const RichTextEditor = Editor.inherit({
             if(DeltaConverter) {
                 this._deltaConverter = new DeltaConverter();
             } else {
-                throw Errors.Error("E1054", "delta");
+                throw Errors.Error("E1050", "delta");
             }
         }
 
@@ -62,7 +62,7 @@ const RichTextEditor = Editor.inherit({
             if(MarkdownConverter) {
                 this._markdownConverter = new MarkdownConverter();
             } else {
-                throw Errors.Error("E1054", "markdown");
+                throw Errors.Error("E1050", "markdown");
             }
         }
     },
