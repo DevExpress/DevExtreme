@@ -50,6 +50,38 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(focusedRowIndex >= 0 && focusedColumnIndex >= 0) return;
 
             that.keyboardController.focus($element);
+        },
+
+        updateFocusedRow: function(change) {
+            var that = this,
+                focusedRowIndex = that.keyboardController.getFocusedRowIndex(),
+                rowsView = that.getView("rowsView"),
+                $tableElement;
+
+            if(focusedRowIndex >= 0) {
+                each(rowsView.getTableElements(), function(_, element) {
+                    $tableElement = $(element);
+                    that.clearPreviousFocusedRow($tableElement);
+                    that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                });
+            }
+        },
+        clearPreviousFocusedRow: function($tableElement) {
+            var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS);
+            $prevRowFocusedElement.removeClass(ROW_FOCUSED_CLASS).removeAttr("tabindex");
+            $prevRowFocusedElement.children("td").removeAttr("tabindex");
+        },
+        prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
+            var that = this,
+                $row,
+                tabIndex = that.option("tabindex") || 0;
+
+            if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
+                $row = that.getView("rowsView")._getRowElements($tableElement).eq(focusedRowIndex);
+                $row.addClass(ROW_FOCUSED_CLASS)
+                    .attr("tabindex", tabIndex)
+                    .focus();
+            }
         }
     };
 })());
@@ -163,45 +195,10 @@ module.exports = {
                 },
 
                 _update: function(change) {
-                    var that = this,
-                        $tableElement,
-                        keyboardController = that.getController("keyboardNavigation"),
-                        tableElements = that.getTableElements(),
-                        focusedRowEnabled = that.option("focusedRowEnabled"),
-                        focusedRowIndex;
-
                     if(change.changeType !== "updateFocusedRow") {
-                        that.callBase(change);
-                    }
-
-                    if(focusedRowEnabled && tableElements.length > 0) {
-                        focusedRowIndex = keyboardController.getFocusedRowIndex();
-                        if(focusedRowIndex >= 0) {
-                            each(that.getTableElements(), function(_, tableElement) {
-                                $tableElement = $(tableElement);
-                                that.clearPreviousFocusedRow($tableElement);
-                                that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
-                            });
-                        }
-                    }
-                },
-
-                clearPreviousFocusedRow: function($tableElement) {
-                    var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS);
-                    $prevRowFocusedElement.removeClass(ROW_FOCUSED_CLASS).removeAttr("tabindex");
-                    $prevRowFocusedElement.children("td").removeAttr("tabindex");
-                },
-
-                prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
-                    var that = this,
-                        $row,
-                        tabIndex = that.option("tabindex") || 0;
-
-                    if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
-                        $row = that._getRowElements($tableElement).eq(focusedRowIndex);
-                        $row.addClass(ROW_FOCUSED_CLASS)
-                            .attr("tabindex", tabIndex)
-                            .focus();
+                        this.callBase(change);
+                    } else if(this.option("focusedRowEnabled")) {
+                        this.getController("focus").updateFocusedRow(change);
                     }
                 }
             }
