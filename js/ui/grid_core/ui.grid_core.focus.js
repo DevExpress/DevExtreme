@@ -19,11 +19,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(!isDefined(that.option("focusedRowEnabled")) && (isDefined(focusedRowIndex) && focusedRowIndex >= 0)) {
                 that.option("focusedRowEnabled", true);
             }
-            if(that.option("focusedRowEnabled")) {
-                if(!isDefined(focusedRowIndex)) {
-                    that.option("focusedRowIndex", 0);
-                }
-            }
         },
 
         optionChanged: function(args) {
@@ -44,6 +39,17 @@ exports.FocusController = core.ViewController.inherit((function() {
             var rowIndexOffset = this.dataController.getRowIndexOffset(),
                 pageRowIndex = this.option("focusedRowIndex") - rowIndexOffset;
             return pageRowIndex === rowIndex;
+        },
+
+        verifyFocusedRow: function($element) {
+            var that = this;
+
+            var focusedRowIndex = that.keyboardController.getFocusedRowIndex(),
+                focusedColumnIndex = that.keyboardController.getFocusedColumnIndex();
+
+            if(focusedRowIndex >= 0 && focusedColumnIndex >= 0) return;
+
+            that.keyboardController.focus($element);
         }
     };
 })());
@@ -120,6 +126,24 @@ module.exports = {
                     }
                     return null;
                 },
+            },
+
+            editorFactory: {
+                focus: function($element, hideBorder) {
+                    if(this.option("focusedRowEnabled")) {
+                        this.getController("focus").verifyFocusedRow($element);
+                    }
+                    this.callBase($element, hideBorder);
+                },
+
+                renderFocusOverlay: function($element, hideBorder) {
+                    var keyboardController = this.getController("keyboardNavigation"),
+                        focusedRowEnabled = this.option("focusedRowEnabled");
+
+                    if(!focusedRowEnabled || keyboardController.isCellFocusType()) {
+                        this.callBase($element, hideBorder);
+                    }
+                }
             }
         },
 

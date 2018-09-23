@@ -281,6 +281,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return null;
     },
 
+    getFocusedColumnIndex: function() {
+        return this._focusedCellPosition ? this._focusedCellPosition.columnIndex : null;
+    },
+
     _applyColumnIndexBoundaries: function(columnIndex) {
         var visibleColumnsCount = this._getVisibleColumnCount();
 
@@ -1207,17 +1211,6 @@ module.exports = {
                 init: function() {
                     this.callBase();
                     this._keyboardNavigationController = this.getController("keyboardNavigation");
-                }
-            },
-
-            editorFactory: {
-                renderFocusOverlay: function($element, hideBorder) {
-                    var keyboardController = this.getController("keyboardNavigation"),
-                        focusedRowEnabled = this.option("focusedRowEnabled");
-
-                    if(!focusedRowEnabled || keyboardController.isCellFocusType()) {
-                        this.callBase($element, hideBorder);
-                    }
                 }
             }
         }
