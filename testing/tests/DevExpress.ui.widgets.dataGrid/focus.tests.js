@@ -505,7 +505,7 @@ QUnit.testInActiveWindow("Tab index should not exist for the previous focused ro
     // assert
     assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 1, "Row 0 has tabindex");
     // act
-    rowsView.clearPreviousFocusedRow($(rowsView.getRow(0).parent()));
+    this.getController("focus").clearPreviousFocusedRow($(rowsView.getRow(0).parent()));
     // assert
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
     assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 0, "Row 0 has no tabindex");
@@ -544,4 +544,35 @@ QUnit.testInActiveWindow("Focus grid with element [tabindex=0] should update foc
     assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex = 0");
     assert.equal(this.option("focusedColumnIndex"), 0, "focusedColumnIndex = 0");
     assert.ok(this.keyboardNavigationController.isCellFocusType(), "cell focus type");
+});
+
+QUnit.testInActiveWindow("Set of the focusedRowIndex, focusedColumnIndex should focus the cell", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowIndex: 1,
+        focusedColumnIndex: 2,
+        editing: {
+            allowEditing: false
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
+    assert.equal(this.option("focusedColumnIndex"), 2, "focusedColumnIndex = 2");
+    assert.equal(rowsView.getRow(1).children("td:nth-child(3)").attr("tabindex"), 0, "Cell[2;1] has tabindex=0");
+    assert.equal(rowsView.getRow(1).children("td:nth-child(3):focus").length, 1, "Cell[2;1] has focus");
 });

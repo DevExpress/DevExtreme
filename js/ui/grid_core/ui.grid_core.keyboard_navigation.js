@@ -1108,13 +1108,14 @@ module.exports = {
     extenders: {
         views: {
             rowsView: {
-                renderFocusState: function() {
+                renderFocusState: function(focusCell) {
                     var that = this,
                         rowIndex = that.option("focusedRowIndex") || 0,
                         columnIndex = that.option("focusedColumnIndex"),
                         cellElements = that.getCellElements(rowIndex),
                         tabIndex = that.option("tabIndex"),
                         $row,
+                        needFocusCell = focusCell && columnIndex >= 0,
                         $element = that.element();
 
                     if($element && !focused($element)) {
@@ -1130,34 +1131,34 @@ module.exports = {
                         if(isGroupRow($row)) {
                             $row.attr("tabIndex", tabIndex);
                         } else {
-                            that.renderCellFocusState(cellElements, columnIndex);
+                            that.renderCellFocusState(cellElements, columnIndex, needFocusCell);
                         }
                     }
                 },
 
-                renderCellFocusState: function(cellElements, columnIndex) {
+                renderCellFocusState: function(cellElements, columnIndex, needFocusCell) {
                     var that = this,
-                        $element,
                         $cell,
                         tabIndex = that.option("tabIndex"),
                         keyboardNavigation = that.getController("keyboardNavigation"),
-                        oldFocusedView = keyboardNavigation._focusedView,
-                        validCellElements = cellElements.filter(function(_, element) {
-                            $element = $(element);
-                            return keyboardNavigation._isCellValid($element) && isCellElement($element);
-                        });
+                        oldFocusedView = keyboardNavigation._focusedView;
 
                     keyboardNavigation._focusedView = that;
 
-                    if(validCellElements) {
-                        if(validCellElements.length <= columnIndex) {
-                            columnIndex = validCellElements.length - 1;
+                    if(cellElements) {
+                        if(cellElements.length <= columnIndex) {
+                            columnIndex = cellElements.length - 1;
                         }
-                        $cell = $(validCellElements[columnIndex]);
-                        if($cell) {
-                            $cell.attr("tabIndex", tabIndex);
-
-                            keyboardNavigation.setCellFocusType();
+                        for(var i = columnIndex; i < cellElements.length; ++i) {
+                            $cell = $(cellElements[i]);
+                            if(keyboardNavigation._isCellValid($cell)) {
+                                $cell.attr("tabIndex", tabIndex);
+                                keyboardNavigation.setCellFocusType();
+                                if(needFocusCell) {
+                                    keyboardNavigation.focus($cell);
+                                }
+                                break;
+                            }
                         }
                     }
 
@@ -1171,7 +1172,7 @@ module.exports = {
 
                 _renderCore: function(change) {
                     this.callBase(change);
-                    this.renderFocusState();
+                    this.renderFocusState(true);
                 }
             }
         },

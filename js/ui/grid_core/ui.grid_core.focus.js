@@ -3,7 +3,8 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined;
 
-var ROW_FOCUSED_CLASS = "dx-row-focused";
+var ROW_FOCUSED_CLASS = "dx-row-focused",
+    UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
 
 exports.FocusController = core.ViewController.inherit((function() {
     return {
@@ -195,10 +196,12 @@ module.exports = {
                 },
 
                 _update: function(change) {
-                    if(change.changeType !== "updateFocusedRow") {
+                    if(change.changeType === UPDATE_FOCUSED_ROW_CHANGE_TYPE) {
+                        if(this.option("focusedRowEnabled")) {
+                            this.getController("focus").updateFocusedRow(change);
+                        }
+                    } else {
                         this.callBase(change);
-                    } else if(this.option("focusedRowEnabled")) {
-                        this.getController("focus").updateFocusedRow(change);
                     }
                 }
             }
