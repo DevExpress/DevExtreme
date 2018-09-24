@@ -8,4 +8,4 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-import "./richTextEditorParts/converterController.js";
+import "./richTextEditorParts/converterController.tests.js";
