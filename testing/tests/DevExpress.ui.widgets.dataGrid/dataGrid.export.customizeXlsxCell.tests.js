@@ -555,3 +555,191 @@ QUnit.test("Changes in 'e.xlsxCell.style' shouldn't modify a shared style object
     const dataGrid = $("#dataGrid").dxDataGrid(gridOptions).dxDataGrid("instance");
     dataGrid.exportToExcel();
 });
+
+QUnit.module("DataGrid export.onXlsxCellPrepared: change value/datatype tests", {
+    // 18.18.11 ST_CellType (Cell Type)
+    beforeEach: helper.beforeEachTest,
+    afterEach: helper.afterEachTest,
+});
+
+QUnit.test("Change string value", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>b</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    assert.strictEqual(e.xlsxCell.value, 'a');
+                    e.xlsxCell.value = 'b';
+                }
+            }
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    assert.strictEqual(e.xlsxCell.value, 42);
+                    e.xlsxCell.value = 43;
+                }
+            }
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date value", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c>' +
+        '</row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="3" t="n"><v>43487.70486111111</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: new Date(2018, 0, 21, 16, 55) }, { f1: new Date(2019, 0, 21, 16, 55) }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
+                        e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
+                    } else {
+                        e.xlsxCell.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
+                    }
+                }
+            }
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change boolean value", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>true</t></si>' +
+        '<si><t>false</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'boolean' }],
+            dataSource: [{ f1: true }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    assert.strictEqual(e.xlsxCell.value, 'true');
+                    e.xlsxCell.value = 'false';
+                }
+            }
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change cell data type", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" t="n"><v>1</v></c><c r="B1" t="s"><v>1</v></c><c r="C1" t="s"><v>2</v></c><c r="D1" t="n"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:D1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+        '<si><t>a</t></si>' +
+        '<si><t>one</t></si>' +
+        '<si><t>my date</t></si>' +
+        '<si><t>true</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'string', dataType: 'string' },
+                { dataField: 'number', dataType: 'number' },
+                { dataField: 'date', dataType: 'date' },
+                { dataField: 'boolean', dataType: 'boolean' }
+            ],
+            dataSource: [{ string: 'a', number: 1, date: new Date(2018, 0, 20), boolean: true }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    if(e.gridCell.column.dataField === 'string') {
+                        e.xlsxCell.value = 1;
+                        e.xlsxCell.dataType = 'n';
+                        e.xlsxCell.style = null;
+                    } else if(e.gridCell.column.dataField === 'number') {
+                        e.xlsxCell.value = 'one';
+                        e.xlsxCell.dataType = 's';
+                        e.xlsxCell.style = null;
+                    } else if(e.gridCell.column.dataField === 'date') {
+                        e.xlsxCell.value = 'my date';
+                        e.xlsxCell.dataType = 's';
+                        e.xlsxCell.style = null;
+                    } else if(e.gridCell.column.dataField === 'boolean') {
+                        e.xlsxCell.value = 1;
+                        e.xlsxCell.dataType = 'n';
+                        e.xlsxCell.style = null;
+                    }
+                }
+            }
+        },
+        { worksheet, sharedStrings }
+    );
+});
