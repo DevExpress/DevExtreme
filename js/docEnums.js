@@ -869,3 +869,8 @@
  * @typedef {string} Enums.ExportFormat
  * @enum {'GIF'|'JPEG'|'PDF'|'PNG'|'SVG'}
  */
+
+ /**
+ * @typedef {string} Enums.RichTextEditorValueType
+ * @enum {'HTML'|'Markdown'}
+ */

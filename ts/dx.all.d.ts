@@ -144,6 +144,13 @@ interface JQuery {
     dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
 }
 interface JQuery {
+    dxRichTextEditor(): JQuery;
+    dxRichTextEditor(options: "instance"): DevExpress.ui.dxRichTextEditor;
+    dxRichTextEditor(options: string): any;
+    dxRichTextEditor(options: string, ...params: any[]): any;
+    dxRichTextEditor(options: DevExpress.ui.dxRichTextEditorOptions): JQuery;
+}
+interface JQuery {
     dxList(): JQuery;
     dxList(options: "instance"): DevExpress.ui.dxList;
     dxList(options: string): any;
@@ -2758,6 +2765,13 @@ declare module DevExpress.ui {
         imageAlt?: string;
         /** Specifies the URL of the image displayed by the item. */
         imageSrc?: string;
+    }
+    export interface dxRichTextEditorOptions extends EditorOptions<dxRichTextEditor> {
+        // TODO: add richTextEditor options
+    }
+    export class dxRichTextEditor extends Editor {
+        constructor(element: Element, options?: dxRichTextEditorOptions)
+        constructor(element: JQuery, options?: dxRichTextEditorOptions)
     }
     export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
         /** Specifies whether or not the widget changes its state when interacting with a user. */

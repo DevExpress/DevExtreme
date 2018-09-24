@@ -559,7 +559,7 @@ var ExcelCreator = Class.inherit({
 
     _checkZipState: function() {
         if(!this._zip) {
-            throw errors.Error("E1041");
+            throw errors.Error("E1041", "JSZip");
         }
     },
 

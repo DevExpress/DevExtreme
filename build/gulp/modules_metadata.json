@@ -332,6 +332,12 @@
     }
   },
   {
+    "name": "ui/rich_text_editor",
+    "exports": {
+      "default": "ui.dxRichTextEditor"
+    }
+  },
+  {
     "name": "ui/list",
     "exports": {
       "default": "ui.dxList"

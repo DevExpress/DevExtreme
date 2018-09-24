@@ -65,7 +65,7 @@ require("style-compiler-test-server/known-css-files");
                     return false;
                 }
             } else {
-                if(!/^[#.]dx-/.test(part)) {
+                if(!/^[#.](dx|ql)-/.test(part)) {
                     return false;
                 }
             }
