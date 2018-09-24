@@ -72,16 +72,15 @@ class OverlapStrategy extends DrawerStrategy {
         super.renderPosition(offset, animate);
 
         const direction = this._drawer.option("position");
-
-        const panelPosition = this._getPanelOffset(offset);
+        const panelPosition = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
 
         $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
 
         if(this._drawer.option("revealMode") === "slide") {
             if(animate) {
                 let animationConfig = {
-                    $element: $(this._drawer._$panel),
-                    position: panelPosition * this._drawer._getPositionCorrection(),
+                    $element: $(this._drawer.content()),
+                    position: panelPosition,
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
@@ -94,9 +93,9 @@ class OverlapStrategy extends DrawerStrategy {
             } else {
 
                 if(this._drawer._isHorizontalDirection()) {
-                    translator.move($(this._drawer._$panel), { left: panelPosition * this._drawer._getPositionCorrection() });
+                    translator.move($(this._drawer.content()), { left: panelPosition });
                 } else {
-                    translator.move($(this._drawer._$panel), { top: panelPosition * this._drawer._getPositionCorrection() });
+                    translator.move($(this._drawer.content()), { top: panelPosition });
                 }
             }
         }
