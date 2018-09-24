@@ -623,7 +623,10 @@ QUnit.test("Change date value", function(assert) {
         assert,
         {
             columns: [{ dataField: 'f1', dataType: 'number' }],
-            dataSource: [{ f1: new Date(2018, 0, 21, 16, 55) }, { f1: new Date(2019, 0, 21, 16, 55) }],
+            dataSource: [
+                { f1: new Date(2018, 0, 21, 16, 55) },
+                { f1: new Date(2019, 0, 21, 16, 55) }
+            ],
             showColumnHeaders: false,
             export: {
                 enabled: true,
@@ -659,7 +662,10 @@ QUnit.test("Change boolean value", function(assert) {
         assert,
         {
             columns: [{ dataField: 'f1', dataType: 'boolean' }],
-            dataSource: [{ f1: true }, { f1: false }],
+            dataSource: [
+                { f1: true },
+                { f1: false }
+            ],
             showColumnHeaders: false,
             export: {
                 enabled: true,
