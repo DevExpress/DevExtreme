@@ -671,7 +671,7 @@ QUnit.test("Change boolean value", function(assert) {
                         // e.xlsxCell.value = false; - DataProvider doesn't provide a way to convert true/false to 'true'/'false'
                     } else {
                         assert.strictEqual(e.xlsxCell.value, 'false');
-                        e.xlsxCell.value = 'true';
+                        e.xlsxCell.value = true;
                     }
                 }
             }
