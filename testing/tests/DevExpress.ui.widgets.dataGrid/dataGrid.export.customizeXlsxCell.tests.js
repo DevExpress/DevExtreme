@@ -544,12 +544,6 @@ QUnit.test("Changes in 'e.xlsxCell.style' shouldn't modify a shared style object
     dataGrid.exportToExcel();
 });
 
-QUnit.module("DataGrid export.onXlsxCellPrepared: change value/datatype tests", {
-    // 18.18.11 ST_CellType (Cell Type)
-    beforeEach: helper.beforeEachTest,
-    afterEach: helper.afterEachTest,
-});
-
 QUnit.test("Change string value", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
@@ -678,7 +672,7 @@ QUnit.test("Change boolean value", function(assert) {
     );
 });
 
-QUnit.test("Change cell data type", function(assert) {
+QUnit.test("Change cell value data type", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
         '<sheetData>' +
