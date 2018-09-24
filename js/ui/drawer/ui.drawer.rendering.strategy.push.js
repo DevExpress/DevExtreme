@@ -8,6 +8,7 @@ class PushStrategy extends DrawerStrategy {
         super.renderPosition(offset, animate);
 
         $(this._drawer.viewContent()).css("paddingLeft", 0);
+        $(this._drawer.content()).css("width", this._getPanelWidth(true));
 
         const contentPosition = this._getPanelWidth(offset) * this._drawer._getPositionCorrection();
 

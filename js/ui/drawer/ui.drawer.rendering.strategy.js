@@ -161,6 +161,15 @@ class DrawerStrategy {
     getWidth() {
         return this._drawer.$element().get(0).getBoundingClientRect().width;
     }
+
+    setPanelSize() {
+        if(this._drawer._isHorizontalDirection()) {
+            $(this._drawer.content()).css("width", this._drawer.getRealPanelWidth());
+        } else {
+            $(this._drawer.content()).css("height", this._drawer.getRealPanelHeight());
+        }
+    }
+
 };
 
 module.exports = DrawerStrategy;

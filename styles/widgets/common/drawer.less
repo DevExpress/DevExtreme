@@ -15,7 +15,6 @@
 
 .dx-drawer-panel-content {
     z-index: @DRAWER_ZINDEX;
-    overflow: hidden;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -70,11 +69,13 @@
 }
 
 .dx-drawer-overlap {
-    .dx-drawer-panel-content {
-        overflow: visible;
-    }
-
     .dx-drawer-wrapper {
         overflow: visible;
     }
+}
+
+.dx-overlay-wrapper.dx-drawer-panel-content {
+    overflow: visible;
+    right: auto;
+    left: auto;
 }
