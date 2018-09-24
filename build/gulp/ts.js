@@ -20,7 +20,7 @@ exports.getAugmentationOptionsPath = (widgetPath) => widgetNameByPath(widgetPath
 
 var getWidgetOptionsPath = (widgetPath) => `${widgetPath}Options`;
 
-exports.generateJQueryAugmentation = function(exportName, globalWidgetPath) {
+exports.generateJQueryAugmentation = function(globalWidgetPath) {
     var widgetName = widgetNameByPath(globalWidgetPath);
     if(!widgetName) return '';
 
@@ -48,16 +48,23 @@ gulp.task('ts-sources', function() {
 gulp.task('ts-check', ['ts-sources'], function() {
     var content = '/// <reference path="./ts/dx.all.d.ts" />\n';
 
-    content += MODULES.map(function(moduleMeta) {
-        return Object.keys(moduleMeta.exports || []).map(function(name) {
-            var globalPath = moduleMeta.exports[name];
-            var widgetName = widgetNameByPath(globalPath);
-            if(!widgetName) return '';
+    content += MODULES
+        .map(function(moduleMeta) {
+            return Object.keys(moduleMeta.exports || []).map(function(name) {
 
-            return `$().${widgetName}();\n` +
-                   `<DevExpress.${globalPath}>$().${widgetName}("instance");\n`;
-        }).join('');
-    }).join('\n');
+                if(moduleMeta.isInternal) { return ''; }
+
+                const exportEntry = moduleMeta.exports[name];
+                if(!exportEntry.isWidget) { return ''; }
+
+                var globalPath = exportEntry.path;
+                var widgetName = widgetNameByPath(globalPath);
+                if(!widgetName) { return ''; }
+
+                return `$().${widgetName}();\n` +
+                    `<DevExpress.${globalPath}>$().${widgetName}("instance");\n`;
+            }).join('');
+        }).join('\n');
 
     return file('artifacts/globals.ts', content, { src: true })
         .pipe(ts({
