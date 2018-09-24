@@ -175,5 +175,5 @@ QUnit.test("drawer panel should be overlay in overlap mode", assert => {
     }).dxDrawer("instance");
 
     const $panel = drawer.content();
-    assert.ok($($panel).hasClass("dx-overlay"), "drawer panel is overlay");
+    assert.ok($($panel).hasClass("dx-overlay-wrapper"), "drawer panel is overlay");
 });
