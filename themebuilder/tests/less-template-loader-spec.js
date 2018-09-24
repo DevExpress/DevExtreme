@@ -246,8 +246,7 @@ describe("LessTemplateLoader", () => {
 
     it("compileScss", () => {
         let config = {
-            sassCompiler: require("sass"),
-            isBootstrap: false
+            sassCompiler: require("sass")
         };
 
         let scss = `$body-bg: #fff; $body-color:#0f0;
