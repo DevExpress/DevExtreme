@@ -12,9 +12,10 @@ class OverlapStrategy extends DrawerStrategy {
 
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
             shading: false,
-            container: this._drawer._$wrapper,
+            target: $(window),
+            height: $(window).height(),
             position: position,
-            width: 200,
+            width: $(window).width(),
             animation: {
                 show: {
                     duration: 0
@@ -25,25 +26,39 @@ class OverlapStrategy extends DrawerStrategy {
             propagateOutsideClick: true
         });
 
-        this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
-        this._drawer._overlay.option("height", this._drawer.getRealPanelHeight());
+        if(this._drawer._isHorizontalDirection()) {
+            this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
+        } else {
+            this._drawer._overlay.option("height", this._drawer.getRealPanelHeight());
+        }
+
+        this._drawer._$panel = this._drawer._overlay._$wrapper;
     }
 
     getOverlayPosition() {
         let position = this._drawer.option("position"),
             result = {};
 
-        if(position === "left" || position === "right") {
+        if(position === "left") {
             result = {
                 my: "top left",
                 at: "top left",
             };
-        } else {
+        }
+        if(position === "right") {
+            result = {
+                my: "top right",
+                at: "top right",
+            };
+        }
+
+        if(position === "top" || position === "bottom") {
             result = {
                 my: position,
                 at: position,
             };
         }
+
 
         result.of = $(window);
 
@@ -55,9 +70,9 @@ class OverlapStrategy extends DrawerStrategy {
 
         const direction = this._drawer.option("position");
 
-        if(direction === "right") {
-            offset = !offset;
-        }
+        // if(direction === "right") {
+        //     offset = !offset;
+        // }
         const panelPosition = this._getPanelOffset(offset);
 
         $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
@@ -66,7 +81,7 @@ class OverlapStrategy extends DrawerStrategy {
             if(animate) {
                 let animationConfig = {
                     $element: $(this._drawer._$panel),
-                    position: direction === "bottom" ? panelPosition * this._drawer._getPositionCorrection() : panelPosition,
+                    position: panelPosition * this._drawer._getPositionCorrection(),
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
@@ -79,7 +94,7 @@ class OverlapStrategy extends DrawerStrategy {
             } else {
 
                 if(this._drawer._isHorizontalDirection()) {
-                    translator.move($(this._drawer._$panel), { left: panelPosition });
+                    translator.move($(this._drawer._$panel), { left: panelPosition * this._drawer._getPositionCorrection() });
                 } else {
                     translator.move($(this._drawer._$panel), { top: panelPosition * this._drawer._getPositionCorrection() });
                 }
