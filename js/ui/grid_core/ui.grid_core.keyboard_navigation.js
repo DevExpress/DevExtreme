@@ -1142,15 +1142,16 @@ module.exports = {
                         $cell,
                         tabIndex = that.option("tabIndex"),
                         keyboardNavigation = that.getController("keyboardNavigation"),
-                        oldFocusedView = keyboardNavigation._focusedView;
+                        oldFocusedView = keyboardNavigation._focusedView,
+                        cellElementsLength = cellElements ? cellElements.length : -1;
 
                     keyboardNavigation._focusedView = that;
 
-                    if(cellElements) {
-                        if(cellElements.length <= columnIndex) {
-                            columnIndex = cellElements.length - 1;
+                    if(cellElementsLength > 0) {
+                        if(cellElementsLength <= columnIndex) {
+                            columnIndex = cellElementsLength - 1;
                         }
-                        for(var i = columnIndex; i < cellElements.length; ++i) {
+                        for(var i = columnIndex; i < cellElementsLength; ++i) {
                             $cell = $(cellElements[i]);
                             if(keyboardNavigation._isCellValid($cell)) {
                                 $cell.attr("tabIndex", tabIndex);
