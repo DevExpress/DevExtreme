@@ -1,5 +1,6 @@
 import $ from "jquery";
 
+import "ui/select_box";
 import Toolbar from "ui/rich_text_editor/modules/toolbar";
 import { noop } from "core/utils/common";
 
