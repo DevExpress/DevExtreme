@@ -543,6 +543,29 @@ QUnit.test("maxSize should be rendered correctly in push mode, right menu positi
     fx.off = false;
 });
 
+QUnit.test("Panel should be rendered correctly after openedStateMode changing", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 300,
+        opened: false,
+        revealMode: "expand",
+        openedStateMode: "shrink"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("openedStateMode", "push");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.width(), 300, "content has correct left when maxSize is set");
+
+    instance.toggle();
+
+    assert.equal($panel.width(), 300, "content has correct left when maxSize is set");
+
+    fx.off = false;
+});
+
 QUnit.module("shrink mode");
 
 QUnit.test("minSize should be rendered correctly in shrink mode, expand", assert => {
