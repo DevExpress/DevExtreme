@@ -66,13 +66,13 @@ describe("LessTemplateLoader", () => {
             reader: (filename) => {
                 let content = "";
                 switch(filename) {
-                    case "data/less/theme-builder-generic-light.less":
+                    case "devextreme-themebuilder/data/less/theme-builder-generic-light.less":
                         content = "@base-bg: #fff;@base-font-family:'default';@base-text-color: #fff;div { color: @base-bg; background: @base-text-color; }";
                         break;
-                    case "node_modules/bootstrap/scss/_variables.scss":
+                    case "bootstrap/scss/_variables.scss":
                         content = "$gray-900: #212529 !default;$body-color: $gray-900 !default;";
                         break;
-                    case "node_modules/bootstrap/scss/_functions.scss":
+                    case "bootstrap/scss/_functions.scss":
                         break;
                 }
 

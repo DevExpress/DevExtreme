@@ -5,6 +5,7 @@ const buildTheme = require("../modules/builder").buildTheme;
 const commands = require("../modules/commands");
 
 const fileReader = (filename) => {
+    filename = filename.replace("devextreme-themebuilder/", "");
     return new Promise((resolve) => {
         fs.readFile(filename, "utf8", (error, data) => {
             resolve(data);
