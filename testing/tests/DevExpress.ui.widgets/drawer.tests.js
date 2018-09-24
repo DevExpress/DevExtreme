@@ -276,15 +276,6 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
-QUnit.test("menu should be hidden after hideTopOverlayCallback calling", assert => {
-    const instance = $("#drawer").dxDrawer({
-        opened: true
-    }).dxDrawer("instance");
-
-    hideCallback.fire();
-    assert.equal(instance.option("opened"), false, "hidden after back button event");
-});
-
 QUnit.test("hideTopOverlayCallback be removed on dispose", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true

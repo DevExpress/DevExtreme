@@ -2,7 +2,6 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import typeUtils from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
-import { hideCallback } from "../../mobile/hide_top_overlay";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
@@ -361,8 +360,6 @@ const Drawer = Widget.inherit({
 
         const duration = this.option("animationDuration");
 
-        this._toggleHideMenuCallback(offset);
-
         offset && this._toggleShaderVisibility(offset);
 
         this._strategy.renderPosition(offset, animate);
@@ -377,21 +374,12 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _toggleHideMenuCallback(subscribe) {
-        if(subscribe) {
-            hideCallback.add(this._hideMenuHandler);
-        } else {
-            hideCallback.remove(this._hideMenuHandler);
-        }
-    },
-
     _getPositionCorrection() {
         return this._isInvertedPosition() ? -1 : 1;
     },
 
     _dispose() {
         animation.complete($(this.viewContent()));
-        this._toggleHideMenuCallback(false);
         this.callBase();
     },
 
@@ -402,7 +390,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
-        delete this._panelWidth;
+        this._strategy.setPanelSize();
         this._renderPosition(this.option("opened"), false);
     },
 

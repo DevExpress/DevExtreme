@@ -161,6 +161,9 @@ class DrawerStrategy {
     getWidth() {
         return this._drawer.$element().get(0).getBoundingClientRect().width;
     }
+
+    setPanelSize() {}
+
 };
 
 module.exports = DrawerStrategy;
