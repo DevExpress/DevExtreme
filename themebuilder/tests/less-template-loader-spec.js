@@ -63,6 +63,7 @@ describe("LessTemplateLoader", () => {
             isBootstrap: true,
             bootstrapVersion: 4,
             lessCompiler: require("less/lib/less-node"),
+            sassCompiler: require("sass"),
             reader: (filename) => {
                 let content = "";
                 switch(filename) {
@@ -245,6 +246,7 @@ describe("LessTemplateLoader", () => {
 
     it("compileScss", () => {
         let config = {
+            sassCompiler: require("sass"),
             isBootstrap: false
         };
 

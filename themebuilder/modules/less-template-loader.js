@@ -1,5 +1,3 @@
-const sassCompiler = require("sass");
-
 const LESS_DIR_PATH = "data/less/";
 const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 
@@ -94,6 +92,7 @@ class LessTemplateLoader {
     constructor(config, version) {
         this.readFile = config.reader;
         this.lessCompiler = config.lessCompiler;
+        this.sassCompiler = config.sassCompiler;
         this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : "";
         this.outColorScheme = config.outColorScheme;
         this.version = version;
@@ -155,7 +154,7 @@ class LessTemplateLoader {
             let preCompiler = new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector);
             let sassContent = preCompiler.process(less);
 
-            sassCompiler.render({
+            this.sassCompiler.render({
                 data: sassContent
             }, (error, result) => {
                 if(error) {
