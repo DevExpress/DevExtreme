@@ -32,6 +32,7 @@ var Class = require("../core/class"),
         "date": "d",
         "number": "n",
         "string": "s"
+        // // 18.18.11 ST_CellType (Cell Type): 'inlineStr', 'str', 'b'
     },
     EXCEL_START_TIME = Date.UTC(1899, 11, 30),
     DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
@@ -233,12 +234,6 @@ var ExcelCreator = Class.inherit({
                                     }
                                 }
                                 cellData.value = newValue;
-                                break;
-                            case 'inlineStr':
-                            case 'str':
-                            case 'b':
-                                cellData.type = 's';
-                                cellData.value = this._appendString('not supported'); // these structures requires additional serialization code
                                 break;
                             default:
                                 cellData.value = xlsxCell.value;
