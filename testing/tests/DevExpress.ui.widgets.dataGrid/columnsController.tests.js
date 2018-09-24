@@ -8506,6 +8506,45 @@ QUnit.module("Customization of the command columns", {
         assert.strictEqual(fixedColumns[1].type, "group", "second fixed column");
         assert.strictEqual(fixedColumns[2].command, "transparent", "fourth fixed column");
     });
+
+    QUnit.test("Initialization grouped columns", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: 'TestField1', caption: 'Custom Title 1', fixed: true, groupIndex: 0 },
+                { dataField: 'TestField2', caption: 'Custom Title 2', groupIndex: 1 },
+                { type: "group" },
+                { dataField: 'TestField3', caption: 'Custom Title 3' },
+                { dataField: 'TestField4', caption: 'Custom Title 4' },
+                { dataField: 'TestField5', caption: 'Custom Title 5' }
+            ]
+        });
+
+        // assert
+        var visibleColumns = this.columnsController.getVisibleColumns();
+        assert.strictEqual(visibleColumns[0].groupIndex, 0, "first grouped column");
+        assert.ok(visibleColumns[0].fixed, "first grouped column is fixed");
+        assert.ok(visibleColumns[0].allowReordering, "allowReordering of the first grouped column");
+        assert.ok(visibleColumns[0].allowFixing, "allowFixing of the first grouped column");
+        assert.strictEqual(visibleColumns[1].groupIndex, 1, "second grouped column");
+        assert.ok(visibleColumns[1].fixed, "second grouped column is fixed");
+        assert.notOk(visibleColumns[1].allowReordering, "allowReordering of the second grouped column");
+        assert.notOk(visibleColumns[1].allowFixing, "allowFixing of the second grouped column");
+
+        // act
+        this.columnsController.columnOption("TestField1", "fixed", false);
+
+        // assert
+        visibleColumns = this.columnsController.getVisibleColumns();
+        assert.strictEqual(visibleColumns[0].groupIndex, 0, "first grouped column");
+        assert.notOk(visibleColumns[0].fixed, "first grouped column isn't fixed");
+        assert.ok(visibleColumns[0].allowReordering, "allowReordering of the first grouped column");
+        assert.ok(visibleColumns[0].allowFixing, "allowFixing of the first grouped column");
+        assert.strictEqual(visibleColumns[1].groupIndex, 1, "second grouped column");
+        assert.notOk(visibleColumns[1].fixed, "second grouped column isn't fixed");
+        assert.notOk(visibleColumns[1].allowReordering, "allowReordering of the second grouped column");
+        assert.notOk(visibleColumns[1].allowFixing, "allowFixing of the second grouped column");
+    });
 });
 
 // T622771

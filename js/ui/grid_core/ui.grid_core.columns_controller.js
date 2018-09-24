@@ -898,6 +898,10 @@ module.exports = {
                 visibleIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
 
+                if(column && column.type === "group") {
+                    column = that._columns.filter((col) => column.type === col.type)[0] || column;
+                }
+
                 return column && isDefined(column.index) ? column.index : -1;
             };
 
@@ -1274,12 +1278,14 @@ module.exports = {
                 return str;
             };
 
-            var mergeColumns = (columns, commandColumns, needToExtend) => {
+            var mergeColumns = (that, columns, commandColumns, needToExtend) => {
                 var i,
                     column,
+                    columnOptions,
                     commandColumnIndex,
                     result = columns.slice().map(column => extend({}, column)),
-                    defaultCommandColumns = commandColumns.slice().map(column => extend({}, column)),
+                    isColumnFixing = that._isColumnFixing(),
+                    defaultCommandColumns = commandColumns.slice().map(column => extend({ fixed: isColumnFixing }, column)),
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
                         var columnType = needToExtend && column.type === "group" ? "expand" : column.type;
                         return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
@@ -1292,12 +1298,20 @@ module.exports = {
                     commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
                     if(commandColumnIndex >= 0) {
                         if(needToExtend) {
-                            result[i] = extend({}, commandColumns[commandColumnIndex], column);
+                            result[i] = extend({ fixed: isColumnFixing }, commandColumns[commandColumnIndex], column);
                             if(column.type !== "group") {
                                 defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
                             }
                         } else {
-                            result[i] = extend({}, column, commandColumns[commandColumnIndex], { index: column.index, id: column.id });
+                            columnOptions = {
+                                visibleIndex: column.visibleIndex,
+                                index: column.index,
+                                id: column.id,
+                                allowFixing: column.groupIndex === 0,
+                                allowReordering: column.groupIndex === 0,
+                                groupIndex: column.groupIndex
+                            };
+                            result[i] = extend({}, column, commandColumns[commandColumnIndex], column.type === "group" && columnOptions);
                         }
                     }
                 }
@@ -1310,6 +1324,8 @@ module.exports = {
             };
 
             var isCustomCommandColumn = (that, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
+
+            var isColumnFixed = (that, column) => isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing();
 
             return {
                 _getExpandColumnOptions: function() {
@@ -1718,18 +1734,22 @@ module.exports = {
                 },
                 getExpandColumns: function() {
                     var expandColumns = this._getExpandColumnsCore(),
-                        expandColumn;
+                        expandColumn,
+                        firstGroupColumn = expandColumns.filter((column) => column.groupIndex === 0)[0],
+                        isFixedFirstGroupColumn = firstGroupColumn && firstGroupColumn.fixed,
+                        isColumnFixing = this._isColumnFixing();
 
                     if(expandColumns.length) {
                         expandColumn = this.columnOption("command:expand");
                     }
 
-                    expandColumns = iteratorUtils.map(expandColumns, function(column) {
+                    expandColumns = iteratorUtils.map(expandColumns, (column) => {
                         return extend({}, column, {
                             visibleWidth: null,
                             minWidth: null,
                             cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
-                            headerCellTemplate: null
+                            headerCellTemplate: null,
+                            fixed: !isDefined(column.groupIndex) || !isDefined(isFixedFirstGroupColumn) ? isColumnFixing : isFixedFirstGroupColumn
                         }, expandColumn, {
                             index: column.index,
                             type: column.type || "group"
@@ -1791,8 +1811,8 @@ module.exports = {
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
                         bandColumnsCache = that.getBandColumnsCache(),
-                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
-                        columns = mergeColumns(that._columns, that._commandColumns, true),
+                        expandColumns = mergeColumns(that, that.getExpandColumns(), that._columns),
+                        columns = mergeColumns(that, that._columns, that._commandColumns, true),
                         columnDigitsCount = digitsCount(columns.length);
 
                     processBandColumns(that, columns, bandColumnsCache);
@@ -1977,7 +1997,7 @@ module.exports = {
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
                                 options.visibleIndex = MAX_SAFE_INTEGER;
                             } else {
-                                if(column.fixed ^ targetColumn.fixed) {
+                                if(isColumnFixed(that, column) ^ isColumnFixed(that, targetColumn)) {
                                     options.visibleIndex = MAX_SAFE_INTEGER;
                                 } else {
                                     options.visibleIndex = targetColumn.visibleIndex;
@@ -2576,8 +2596,6 @@ module.exports = {
                         commandColumn = options;
                         this._commandColumns.push(commandColumn);
                     }
-
-                    commandColumn.fixed = this._isColumnFixing();
                 },
                 getUserState: function() {
                     var columns = this._columns,

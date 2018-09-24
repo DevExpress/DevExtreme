@@ -4326,6 +4326,37 @@ function getEvent(options) {
         assert.ok(rowsView.setRowsOpacity.calledOnce, "setRowsOpacity of RowsView method should is called once");
         assert.ok(columnHeadersView.setRowsOpacity.calledOnce, "setRowsOpacity of ColumnHeadersView method should is called once");
     });
+
+    QUnit.test("Drag command column", function(assert) {
+        // arrange
+        var testElement = $("#container"),
+            draggingHeader,
+            $dragHeader;
+
+        // act
+        this.createDraggingHeaderViewController();
+        draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
+        draggingHeader.render(testElement);
+        draggingHeader.dragHeader({
+            columnElement: $("<td />", {
+                css: {
+                    width: "100px"
+                }
+            }),
+            sourceColumn: {
+                command: "edit",
+                type: "buttons"
+            }
+        });
+        $dragHeader = $(".dx-datagrid-drag-header");
+
+        // assert
+        assert.ok(draggingHeader._isDragging, "is dragging");
+        assert.ok($dragHeader.hasClass("dx-command-cell"), "draggable header element has class dx-command-cell");
+        assert.strictEqual($dragHeader.outerWidth(), 100, "width");
+        assert.strictEqual($dragHeader.text(), "", "text");
+    });
 }());
 
 // Group panel reordering///
