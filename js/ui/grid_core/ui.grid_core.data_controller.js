@@ -613,12 +613,12 @@ module.exports = {
                 _applyChangeFull: function(change) {
                     this._items = change.items.slice(0);
                 },
-                _applyChangeUpdate: function(change, isLiveUpdate) {
+                _applyChangeUpdate: function(change) {
                     var that = this,
                         items = change.items,
                         rowIndices = change.rowIndices.slice(0),
                         rowIndexDelta = that.getRowIndexDelta(),
-                        repaintChangesOnly = that.option("repaintChangesOnly") || isLiveUpdate,
+                        repaintChangesOnly = that.option("repaintChangesOnly"),
                         prevIndex = -1,
                         rowIndexCorrection = 0,
                         changeType;
@@ -676,7 +676,7 @@ module.exports = {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
                             } else if(repaintChangesOnly) {
                                 newItem.cells = oldItem.cells;
-                                columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate);
+                                columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex);
                             }
                         } else if(newItem && !oldItem || (newNextItem && equalItems(oldItem, newNextItem, strict))) {
                             changeType = "insert";
