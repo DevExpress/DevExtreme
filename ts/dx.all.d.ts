@@ -17,6 +17,7 @@ interface Promise<T> {
     ): Promise<TResult1 | TResult2>;
 }
 /* #EndGlobalDeclaration */
+/* #StartJQueryAugmentation */
 interface JQuery {
     dxAccordion(): JQuery;
     dxAccordion(options: "instance"): DevExpress.ui.dxAccordion;
@@ -535,6 +536,7 @@ interface JQuery {
     dxVectorMap(options: string, ...params: any[]): any;
     dxVectorMap(options: DevExpress.viz.dxVectorMapOptions): JQuery;
 }
+/* #EndJQueryAugmentation */
 declare module DevExpress {
     export class DataHelperMixin {
         /** Gets the DataSource instance. */

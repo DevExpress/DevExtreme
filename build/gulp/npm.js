@@ -113,20 +113,31 @@ gulp.task('npm-dts-generator', function() {
         if(moduleMeta.exports) {
             var exportNames = Object.keys(moduleMeta.exports);
             var exportProperties = exportNames.map(function(name) {
-                var globalPath = moduleMeta.exports[name];
+                const exportEntry = moduleMeta.exports[name];
+
                 if(name !== 'default') {
-                    return `export declare let ${name}: typeof DevExpress.${globalPath};`;
+                    switch(moduleMeta.exports[name].exportAs) {
+                        case "type":
+                            return `export type ${name} = DevExpress.${exportEntry.path};`;
+                    }
+                    return `export declare let ${name}: typeof DevExpress.${exportEntry.path};`;
                 }
 
-                var jQueryAugmentation = generateJQueryAugmentation(name, globalPath);
-                if(jQueryAugmentation) {
-                    jQueryAugmentation = `declare global {\n${jQueryAugmentation}}\n`;
+                let result = '';
+
+                if(exportEntry.isWidget) {
+                    var jQueryAugmentation = generateJQueryAugmentation(exportEntry.path);
+                    if(jQueryAugmentation) {
+                        result += `declare global {\n${jQueryAugmentation}}\n`;
+                    }
                 }
 
-                var result = jQueryAugmentation + `export default DevExpress.${globalPath};`;
+                result += `export default DevExpress.${exportEntry.path};`;
 
-                var widgetOptionsPath = getAugmentationOptionsPath(globalPath);
+                var widgetOptionsPath = getAugmentationOptionsPath(exportEntry.path);
                 if(widgetOptionsPath) {
+                    result += `\nexport type Options = DevExpress.${widgetOptionsPath};`;
+                    result += `\n\n/** @deprecated use Options instead */`;
                     result += `\nexport type IOptions = DevExpress.${widgetOptionsPath};`;
                 }
 
@@ -152,6 +163,7 @@ gulp.task('npm-dts-generator', function() {
             .pipe(replace('/*!', '/**'))
             .pipe(replace(/\/\*\s*#StartGlobalDeclaration\s*\*\//g, 'declare global {'))
             .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
+            .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
             .pipe(footer('\nexport default DevExpress;'))
             .pipe(gulp.dest(path.join(context.RESULT_NPM_PATH, 'bundles'))),
 
@@ -171,13 +183,23 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
         }
 
         return Object.keys(moduleMeta.exports).map(function(name) {
-            var uniqueIdentifier = moduleMeta.name.split('\/').concat([name]).join('__');
+            const exportEntry = moduleMeta.exports[name];
+
+            var uniqueIdentifier = moduleMeta.name
+                .replace(/\./g, '_')
+                .split('\/')
+                .concat([name])
+                .join('__');
+
             var importIdentifier = name === 'default' ? uniqueIdentifier : `{ ${name} as ${uniqueIdentifier} }`;
 
-            var widgetName = widgetNameByPath(moduleMeta.exports[name]);
-            var checkJQueryAugmentation = widgetName ? `$('<div>').${widgetName}();\n` : '';
+            const importStatement = `import ${importIdentifier} from ${modulePath};`;
+            var widgetName = widgetNameByPath(exportEntry.path);
+            if(exportEntry.isWidget && widgetName) {
+                return `$('<div>').${widgetName}();\n${importStatement}`;
+            };
 
-            return checkJQueryAugmentation + `import ${importIdentifier} from ${modulePath};`;
+            return importStatement;
         }).join('\n');
     }).join('\n');
 
