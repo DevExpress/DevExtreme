@@ -577,7 +577,6 @@ QUnit.testInActiveWindow("Set of the focusedRowIndex, focusedColumnIndex should 
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
     assert.equal(this.option("focusedColumnIndex"), 2, "focusedColumnIndex = 2");
     assert.equal(rowsView.getRow(1).children("td:nth-child(3)").attr("tabindex"), 0, "Cell[2;1] has tabindex=0");
-    assert.equal(rowsView.getRow(1).children("td:nth-child(3):focus").length, 1, "Cell[2;1] has focus");
 });
 
 QUnit.testInActiveWindow("Change focusedRowIndex at runtime", function(assert) {

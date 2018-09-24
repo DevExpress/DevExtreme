@@ -1108,15 +1108,13 @@ module.exports = {
     extenders: {
         views: {
             rowsView: {
-                renderFocusState: function(focusElement) {
+                renderFocusState: function() {
                     var that = this,
                         rowIndex = that.option("focusedRowIndex") || 0,
                         columnIndex = that.option("focusedColumnIndex"),
-                        focusedRowEnabled = that.option("focusedRowEnabled"),
                         cellElements = that.getCellElements(rowIndex),
                         tabIndex = that.option("tabIndex"),
                         $row,
-                        needFocusCell = focusedRowEnabled && focusElement && columnIndex >= 0,
                         $element = that.element();
 
                     if($element && !focused($element)) {
@@ -1132,12 +1130,12 @@ module.exports = {
                         if(isGroupRow($row)) {
                             $row.attr("tabIndex", tabIndex);
                         } else {
-                            that.renderCellFocusState(cellElements, columnIndex, needFocusCell);
+                            that.renderCellFocusState(cellElements, columnIndex);
                         }
                     }
                 },
 
-                renderCellFocusState: function(cellElements, columnIndex, needFocusCell) {
+                renderCellFocusState: function(cellElements, columnIndex) {
                     var that = this,
                         $cell,
                         tabIndex = that.option("tabIndex"),
@@ -1153,12 +1151,9 @@ module.exports = {
                         }
                         for(var i = columnIndex; i < cellElementsLength; ++i) {
                             $cell = $(cellElements[i]);
-                            if(keyboardNavigation._isCellValid($cell)) {
+                            if(keyboardNavigation._isCellValid($cell) && isCellElement($cell)) {
                                 $cell.attr("tabIndex", tabIndex);
                                 keyboardNavigation.setCellFocusType();
-                                if(needFocusCell) {
-                                    keyboardNavigation.focus($cell);
-                                }
                                 break;
                             }
                         }
