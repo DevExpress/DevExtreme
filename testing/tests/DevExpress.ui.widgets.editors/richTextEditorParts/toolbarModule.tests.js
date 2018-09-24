@@ -20,7 +20,7 @@ const moduleConfig = {
             getFormat: noop
         };
 
-        this.defaultOptions = {
+        this.options = {
             editorInstance: {
                 $element: () => {
                     return this.$element;
@@ -37,7 +37,7 @@ const { test } = QUnit;
 
 QUnit.module("Toolbar module", moduleConfig, () => {
     test("Render toolbar without any options", (assert) => {
-        new Toolbar(this.quillMock, this.defaultOptions);
+        new Toolbar(this.quillMock, this.options);
 
         assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
         assert.notOk(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar isn't render inside the root element (no items)");
@@ -45,8 +45,8 @@ QUnit.module("Toolbar module", moduleConfig, () => {
     });
 
     test("Render toolbar with items", (assert) => {
-        this.defaultOptions.items = ["bold"];
-        new Toolbar(this.quillMock, this.defaultOptions);
+        this.options.items = ["bold"];
+        new Toolbar(this.quillMock, this.options);
 
         assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
         assert.ok(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar render inside the root element");
@@ -54,19 +54,21 @@ QUnit.module("Toolbar module", moduleConfig, () => {
     });
 
     test("Render toolbar on custom container", (assert) => {
-        this.defaultOptions.items = ["bold"];
-        this.defaultOptions.container = this.$element;
-        new Toolbar(this.quillMock, this.defaultOptions);
+        this.options.items = ["bold"];
+        this.options.container = this.$element;
+        new Toolbar(this.quillMock, this.options);
 
         assert.ok(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered on the custom element");
     });
 
     test("Render toolbar with simple formats", (assert) => {
-        this.defaultOptions.items = ["bold", "strike"];
+        this.options.items = ["bold", "strike"];
 
-        new Toolbar(this.quillMock, this.defaultOptions);
+        new Toolbar(this.quillMock, this.options);
+        const $formatWidgets = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
 
-        assert.equal(this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS).length, 2, "There are 2 format widgets");
+        assert.equal($formatWidgets.length, 2, "There are 2 format widgets");
+        assert.ok($formatWidgets.first().hasClass("dx-button"), "Change simple format via Button");
     });
 
     test("Simple format handling", (assert) => {
@@ -74,7 +76,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
         this.quillMock.getFormat = () => {
             return { bold: false };
         };
-        this.defaultOptions.items = ["bold", {
+        this.options.items = ["bold", {
             format: "strike",
             widget: "dxButton",
             options: {
@@ -84,7 +86,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
             }
         }];
 
-        new Toolbar(this.quillMock, this.defaultOptions);
+        new Toolbar(this.quillMock, this.options);
 
         const $formatWidgets = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
 
@@ -93,5 +95,14 @@ QUnit.module("Toolbar module", moduleConfig, () => {
 
         assert.deepEqual(this.log[0], { format: "bold", value: true });
         assert.ok(isHandlerTriggered, "Custom handler triggered");
+    });
+
+    test("Render toolbar with enum format", (assert) => {
+        this.options.items = [{ format: "header", items: [1, 2, 3, false] }];
+
+        new Toolbar(this.quillMock, this.options);
+        const $formatWidget = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
+
+        assert.ok($formatWidget.first().hasClass("dx-selectbox"), "Change enum format via SelectBox");
     });
 });
