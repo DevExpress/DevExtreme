@@ -692,29 +692,29 @@ QUnit.test("Change cell value data type", function(assert) {
         assert,
         {
             columns: [
-                { dataField: 'string', dataType: 'string' },
-                { dataField: 'number', dataType: 'number' },
-                { dataField: 'date', dataType: 'date' },
-                { dataField: 'boolean', dataType: 'boolean' }
+                { dataField: 'stringToNumber', dataType: 'string' },
+                { dataField: 'numberToString', dataType: 'number' },
+                { dataField: 'dateToString', dataType: 'date' },
+                { dataField: 'boolToNumber', dataType: 'boolean' }
             ],
-            dataSource: [{ string: 'a', number: 1, date: new Date(2018, 0, 20), boolean: true }],
+            dataSource: [{ stringToNumber: 'a', numberToString: 1, dateToString: new Date(2018, 0, 20), boolToNumber: true }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 onXlsxCellPrepared: e => {
-                    if(e.gridCell.column.dataField === 'string') {
+                    if(e.gridCell.column.dataField === 'stringToNumber') {
                         e.xlsxCell.value = 1;
                         e.xlsxCell.dataType = 'n';
                         e.xlsxCell.style = null;
-                    } else if(e.gridCell.column.dataField === 'number') {
+                    } else if(e.gridCell.column.dataField === 'numberToString') {
                         e.xlsxCell.value = 'one';
                         e.xlsxCell.dataType = 's';
                         e.xlsxCell.style = null;
-                    } else if(e.gridCell.column.dataField === 'date') {
+                    } else if(e.gridCell.column.dataField === 'dateToString') {
                         e.xlsxCell.value = 'my date';
                         e.xlsxCell.dataType = 's';
                         e.xlsxCell.style = null;
-                    } else if(e.gridCell.column.dataField === 'boolean') {
+                    } else if(e.gridCell.column.dataField === 'boolToNumber') {
                         e.xlsxCell.value = 1;
                         e.xlsxCell.dataType = 'n';
                         e.xlsxCell.style = null;
