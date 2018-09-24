@@ -294,7 +294,12 @@ var dropDownAppointments = Class.inherit({
         }).bind(this));
 
         var startDate = this.instance.fire("getField", "startDate", appointmentData),
-            endDate = this.instance.fire("getField", "endDate", appointmentData);
+            endDate = this.instance.fire("getField", "endDate", appointmentData),
+            startDateTimeZone = this.instance.fire("getField", "startDateTimeZone", appointmentData),
+            endDateTimeZone = this.instance.fire("getField", "endDateTimeZone", appointmentData);
+
+        startDate = this.instance.fire("convertDateByTimezone", startDate, startDateTimeZone);
+        endDate = this.instance.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
         this.instance.fire("formatDates", {
             startDate: startDate,

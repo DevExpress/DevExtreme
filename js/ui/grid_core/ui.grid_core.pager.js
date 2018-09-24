@@ -15,7 +15,14 @@ var PagerView = modules.View.inherit({
         that._isVisible = false;
 
         dataController.changed.add(function(e) {
-            if(!e || e.changeType !== "update") {
+            if(e && e.repaintChangesOnly) {
+                var pager = that._getPager();
+                if(pager) {
+                    pager.option("pageCount", dataController.pageCount());
+                } else {
+                    that.render();
+                }
+            } else if(!e || e.changeType !== "update") {
                 that.render();
             }
         });

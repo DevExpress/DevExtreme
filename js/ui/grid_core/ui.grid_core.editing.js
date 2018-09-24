@@ -253,6 +253,10 @@ var EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        correctEditRowIndex: function(getRowIndexCorrection) {
+            this._editRowIndex += getRowIndexCorrection(this._getVisibleEditRowIndex());
+        },
+
         isRowEditMode: function() {
             return isRowEditMode(this);
         },
@@ -1206,7 +1210,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                         dataSource && dataSource.endLoading();
 
-                        when(dataController.refresh()).always(function() {
+                        when(dataController.refresh(that.option("repaintChangesOnly"))).always(function() {
                             that._fireSaveEditDataEvents(editData);
                             that._afterSaveEditData();
                             result.resolve();
@@ -2034,12 +2038,12 @@ module.exports = {
                     this._editingController = this.getController("editing");
                     this.callBase();
                 },
-                reload: function(full) {
+                reload: function(full, repaintChangesOnly) {
                     var d,
                         editingController = this.getController("editing");
 
-                    this._editingController.refresh();
-                    d = this.callBase(full);
+                    !repaintChangesOnly && this._editingController.refresh();
+                    d = this.callBase.apply(this, arguments);
 
                     return d && d.done(function() {
                         editingController.resetRowAndPageIndices(true);
@@ -2080,6 +2084,34 @@ module.exports = {
                     }
 
                     return item;
+                },
+                _correctRowIndices: function(getRowIndexCorrection) {
+                    this.callBase.apply(this, arguments);
+                    this._editingController.correctEditRowIndex(getRowIndexCorrection);
+                },
+                _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
+                    var editingController = this.getController("editing");
+
+                    if(oldItem.rowType === newItem.rowType && editingController.isRowEditMode() && editingController.isEditRow(rowIndex)) {
+                        return isLiveUpdate ? [] : undefined;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+                _isCellChanged: function(oldRow, newRow, rowIndex, columnIndex, isLiveUpdate) {
+                    var editingController = this.getController("editing"),
+                        cell = oldRow.cells && oldRow.cells[columnIndex],
+                        isEditing = editingController && editingController.isEditCell(rowIndex, columnIndex);
+
+                    if(isLiveUpdate && isEditing) {
+                        return false;
+                    }
+
+                    if(cell && cell.isEditing !== isEditing) {
+                        return true;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 }
             }
         },
