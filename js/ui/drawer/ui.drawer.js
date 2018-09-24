@@ -449,6 +449,7 @@ const Drawer = Widget.inherit({
 
                 this._setInitialPosition();
                 this._refreshPanel();
+                this._strategy.setPanelSize();
 
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("opened"), false);
