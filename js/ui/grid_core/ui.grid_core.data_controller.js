@@ -205,7 +205,7 @@ module.exports = {
 
                     that._isLoading = false;
                     that._isCustomLoading = false;
-                    that._repaintChangesOnly = false;
+                    that._repaintChangesOnly = undefined;
                     that._changes = [];
 
                     that.createAction("onDataErrorOccurred");
@@ -451,7 +451,7 @@ module.exports = {
                                 errors.log("W1005", that.component.NAME);
                                 that._applyFilter();
                             } else {
-                                that.updateItems(e);
+                                that.updateItems(e, true);
                             }
                         }).fail(function() {
                             that._isDataSourceApplying = false;
@@ -618,7 +618,7 @@ module.exports = {
                         items = change.items,
                         rowIndices = change.rowIndices.slice(0),
                         rowIndexDelta = that.getRowIndexDelta(),
-                        repaintChangesOnly = isLiveUpdate,
+                        repaintChangesOnly = that.option("repaintChangesOnly") || isLiveUpdate,
                         prevIndex = -1,
                         rowIndexCorrection = 0,
                         changeType;
@@ -703,7 +703,7 @@ module.exports = {
                     return JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex]);
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType) {
+                    if(oldItem.rowType === newItem.rowType && oldItem.isExpanded === newItem.isExpanded) {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -716,11 +716,14 @@ module.exports = {
                 },
                 _applyChangesOnly: function(change) {
                     var that = this,
-                        oldItems = that._items,
+                        oldItems = that._items.slice(),
                         newItems = change.items,
                         newIndexByKey = {},
                         oldIndexByKey = {},
                         rowIndices = [],
+                        columnIndices = [],
+                        changeTypes = [],
+                        items = [],
                         addedCount = 0,
                         removeCount = 0;
 
@@ -731,7 +734,7 @@ module.exports = {
                     }
 
                     function isItemEquals(item1, item2) {
-                        return JSON.stringify(item1.values) === JSON.stringify(item2.values);
+                        return JSON.stringify(item1.values) === JSON.stringify(item2.values) && item1.isExpanded === item2.isExpanded;
                     }
 
                     oldItems.forEach(function(item, index) {
@@ -744,8 +747,8 @@ module.exports = {
                         newIndexByKey[key] = index;
                     });
 
-
-                    for(var index = 0; index < newItems.length + addedCount; index++) {
+                    var itemCount = Math.max(oldItems.length, newItems.length);
+                    for(var index = 0; index < itemCount + addedCount; index++) {
                         var newItem = newItems[index],
                             key = getRowKey(newItem),
                             oldIndex = oldIndexByKey[key],
@@ -754,16 +757,29 @@ module.exports = {
 
                         if(!newItem) {
                             if(oldItems[newIndex]) {
+                                rowIndices.push(index);
+                                changeTypes.push("remove");
+                                that._items.splice(index, 1);
+                                items.push(oldItems[newIndex]);
+                                columnIndices.push(undefined);
                                 removeCount++;
                                 index--;
-                                rowIndices.push(newIndex);
                             }
                         } else if(!oldItem) {
                             addedCount++;
-                            rowIndices.push(newIndex);
+                            rowIndices.push(index);
+                            changeTypes.push("insert");
+                            items.push(newItem);
+                            columnIndices.push(undefined);
+                            that._items.splice(index, 0, newItem);
                         } else if(oldIndex === newIndex) {
                             if(!isItemEquals(oldItem, newItem)) {
-                                rowIndices.push(newIndex);
+                                rowIndices.push(index);
+                                changeTypes.push("update");
+                                items.push(newItem);
+                                that._items[index] = newItem;
+                                newItem.cells = oldItem.cells;
+                                columnIndices.push(that._getChangedColumnIndices(oldItem, newItem, index, true));
                             }
                         } else {
                             oldItem = oldItems[newIndex];
@@ -771,9 +787,13 @@ module.exports = {
                             newItem = newItems[newIndexByKey[key]];
 
                             if(oldItem && !newItem) {
+                                rowIndices.push(index);
+                                changeTypes.push("remove");
+                                items.push(oldItem);
+                                columnIndices.push(undefined);
+                                that._items.splice(index, 1);
                                 removeCount++;
                                 index--;
-                                rowIndices.push(newIndex);
                             } else {
                                 that._applyChangeFull(change);
                                 return;
@@ -784,6 +804,9 @@ module.exports = {
                     change.repaintChangesOnly = true;
                     change.changeType = "update";
                     change.rowIndices = rowIndices;
+                    change.columnIndices = columnIndices;
+                    change.changeTypes = changeTypes;
+                    change.items = items;
 
                     that._correctRowIndices(function getRowIndexCorrection(rowIndex) {
                         var oldItem = oldItems[rowIndex],
@@ -792,8 +815,6 @@ module.exports = {
 
                         return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
                     });
-
-                    that._applyChangeUpdate(change, true);
                 },
                 _correctRowIndices: commonUtils.noop,
                 _updateItemsCore: function(change) {
@@ -820,12 +841,18 @@ module.exports = {
                         that._items = [];
                     }
                 },
-                updateItems: function(change) {
+                updateItems: function(change, isDataChanged) {
                     change = change || {};
                     var that = this;
 
-                    if(that._repaintChangesOnly) {
-                        change.repaintChangesOnly = true;
+                    if(that._repaintChangesOnly !== undefined) {
+                        change.repaintChangesOnly = that._repaintChangesOnly;
+                    } else if(change.changes) {
+                        change.repaintChangesOnly = that.option("repaintChangesOnly");
+                    } else if(isDataChanged) {
+                        var operationTypes = that.dataSource().operationTypes();
+                        change.repaintChangesOnly = operationTypes && that.option("repaintChangesOnly");
+                        change.isDataChanged = true;
                     }
 
                     if(that._updateLockCount) {
@@ -1232,7 +1259,7 @@ module.exports = {
 
                             when(that.reload(options.reload, changesOnly)).always(function() {
                                 dataSource && dataSource.off("customizeLoadResult", customizeLoadResult);
-                                that._repaintChangesOnly = false;
+                                that._repaintChangesOnly = undefined;
                             }).done(d.resolve).fail(d.reject);
                         } else {
                             that.updateItems({ repaintChangesOnly: options.changesOnly });

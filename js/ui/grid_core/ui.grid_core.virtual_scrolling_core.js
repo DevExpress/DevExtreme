@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
+    typeUtils = require("../../core/utils/type"),
     positionUtils = require("../../animation/position"),
     each = require("../../core/utils/iterator").each,
     Class = require("../../core/class"),
@@ -239,8 +240,8 @@ exports.VirtualScrollController = Class.inherit((function() {
     var processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
         var dataSource = that._dataSource,
             items = dataSource.items().slice(),
-            change;
-        if(changeType && !that._isDelayChanged) {
+            change = typeUtils.isObject(changeType) ? changeType : undefined;
+        if(changeType && typeUtils.isString(changeType) && !that._isDelayChanged) {
             change = {
                 changeType: changeType,
                 items: items
@@ -555,7 +556,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 }
             }
         },
-        handleDataChanged: function(callBase) {
+        handleDataChanged: function(callBase, e) {
             var that = this,
                 beginPageIndex,
                 dataSource = that._dataSource,
@@ -610,7 +611,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     }
                 });
             } else {
-                processChanged(that, callBase);
+                processChanged(that, callBase, e);
             }
         },
         itemsCount: function(isBase) {

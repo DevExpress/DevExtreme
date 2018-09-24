@@ -2441,6 +2441,8 @@ QUnit.test("disabled row render virtualization", function(assert) {
     assert.strictEqual(this.dataController.getContentOffset("end"), 600);
     assert.deepEqual(this.changedArgs, [{
         changeType: "refresh",
+        isDataChanged: true,
+        repaintChangesOnly: false,
         items: this.dataController.items()
     }]);
 });
@@ -10028,7 +10030,7 @@ QUnit.test("insert and remove", function(assert) {
 QUnit.module("Refresh changesOnly", {
     beforeEach: function() {
         var that = this;
-        that.setupModules = function() {
+        that.setupModules = function(options) {
             setupModule.call(that);
 
             that.array = [
@@ -10036,7 +10038,7 @@ QUnit.module("Refresh changesOnly", {
                 { id: 2, name: 'Dan', age: 25 },
                 { id: 3, name: 'Bob', age: 20 }
             ];
-            that.dataSource = createDataSource(that.array, { key: 'id' });
+            that.dataSource = createDataSource(that.array, { key: 'id' }, options);
             that.dataController.setDataSource(that.dataSource);
             that.dataSource.load();
         };
@@ -10145,6 +10147,30 @@ QUnit.test("remove one item", function(assert) {
     assert.deepEqual(changedArgs.columnIndices, [undefined]);
 });
 
+QUnit.test("remove two items", function(assert) {
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.array.splice(1, 2);
+
+    this.dataController.refresh(true);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 1);
+    assert.strictEqual(changedArgs.repaintChangesOnly, true);
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["remove", "remove"]);
+    assert.deepEqual(changedArgs.rowIndices, [1, 1]);
+    assert.deepEqual(changedArgs.columnIndices, [undefined, undefined]);
+});
+
 QUnit.test("add and remove item", function(assert) {
     this.setupModules();
 
@@ -10167,7 +10193,7 @@ QUnit.test("add and remove item", function(assert) {
     assert.deepEqual(changedArgs.changeTypes, ["insert", "remove"]);
     assert.deepEqual(changedArgs.rowIndices, [0, 3]);
     assert.deepEqual(changedArgs.columnIndices, [undefined, undefined]);
-    assert.deepEqual(changedArgs.items, [items[0]]);
+    assert.deepEqual(changedArgs.items[0], items[0]);
 });
 
 QUnit.test("remove and add item", function(assert) {
@@ -10446,6 +10472,79 @@ QUnit.test("immutable change dataSource item field", function(assert) {
     assert.equal(oldItems[0], items[0], "first item is not changed");
     assert.notEqual(oldItems[1], items[1], "second item is changed");
     assert.equal(items[1].data, changedArray[1], "second item data is changed");
+});
+
+QUnit.test("update one cell using push", function(assert) {
+    this.setupModules();
+
+    var oldItems = this.dataController.items().slice(0);
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "update", key: 1, data: { age: 31 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items[0].values, [1, 'Alex', 31]);
+    assert.notStrictEqual(oldItems[0], items[0]);
+    assert.strictEqual(oldItems[1], items[1]);
+    assert.strictEqual(changedArgs.repaintChangesOnly, true);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, ['update']);
+    assert.deepEqual(changedArgs.rowIndices, [0]);
+    assert.deepEqual(changedArgs.columnIndices, [[2]]);
+    assert.deepEqual(changedArgs.items, [items[0]]);
+});
+
+QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
+    this.setupModules({ reshapeOnPush: true, filter: ["age", ">=", 18] });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "update", key: 1, data: { age: 15 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.strictEqual(items.length, 2);
+    assert.strictEqual(changedArgs.repaintChangesOnly, true);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, ['remove']);
+    assert.deepEqual(changedArgs.rowIndices, [0]);
+    assert.deepEqual(changedArgs.columnIndices, [undefined]);
+});
+
+QUnit.test("column hiding", function(assert) {
+    this.setupModules({ reshapeOnPush: true, filter: ["age", ">=", 18] });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.columnOption("age", "visible", false);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items[0].values, [1, "Alex"]);
+    assert.strictEqual(changedArgs.changeType, 'refresh');
+    assert.strictEqual(changedArgs.repaintChangesOnly, undefined, "full repaint");
 });
 
 QUnit.module("Using DataSource instance", {
