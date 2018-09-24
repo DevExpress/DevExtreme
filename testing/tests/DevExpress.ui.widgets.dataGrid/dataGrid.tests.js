@@ -2276,7 +2276,7 @@ QUnit.test("Last column width should be reseted during column resizing to left w
 
     // assert
     assert.strictEqual(instance.columnOption(0, "width"), 80);
-    assert.strictEqual(instance.columnOption(0, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(0, "visibleWidth"), null);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
     assert.strictEqual(instance.columnOption(1, "visibleWidth"), undefined);
     assert.strictEqual(instance.columnOption(2, "width"), 100);
@@ -2332,7 +2332,7 @@ QUnit.test("Last column width should not be reseted during column resizing to ri
 
     // assert
     assert.strictEqual(instance.columnOption(0, "width"), 120);
-    assert.strictEqual(instance.columnOption(0, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(0, "visibleWidth"), null);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
     assert.strictEqual(instance.columnOption(1, "visibleWidth"), undefined);
     assert.strictEqual(instance.columnOption(2, "width"), 100);
@@ -5545,6 +5545,42 @@ QUnit.test("Scroll to third page if expanded grouping is enabled and scrolling m
     assert.strictEqual(dataGrid.getVisibleRows()[0].data.key, 1);
     assert.strictEqual(dataGrid.getVisibleRows()[40].data.key, 21);
     assert.strictEqual(dataGrid.getVisibleRows()[80].data.key, 41);
+});
+
+QUnit.test("Resize command column", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            width: 470,
+            selection: { mode: "multiple", showCheckBoxesMode: "always" },
+            commonColumnSettings: {
+                allowResizing: true
+            },
+            loadingTimeout: undefined,
+            dataSource: [{}, {}, {}, {}],
+            columns: [{ type: "selection" }, { dataField: "firstName", width: 100 }, { dataField: "lastName", width: 100 }, { dataField: "room", width: 100 }, { dataField: "birthDay", width: 100 }]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+    resizeController._setupResizingInfo(-9930);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: -9850,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    // assert
+    headersCols = $(".dx-datagrid-headers" + " col");
+    assert.equal($(headersCols[0]).css("width"), "150px", "width of the first column - headers view");
+    assert.equal($(headersCols[1]).css("width"), "20px", "width of the second column - headers view");
 });
 
 QUnit.module("Virtual row rendering");

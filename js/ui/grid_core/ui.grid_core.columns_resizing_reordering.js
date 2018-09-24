@@ -812,7 +812,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                     column && columnsController.columnOption(column.index, "visibleWidth", columnWidth);
                     column && columnsController.columnOption(column.index, "width", (columnWidth / contentWidth * 100).toFixed(3) + "%");
                 } else {
-                    column && columnsController.columnOption(column.index, "visibleWidth", undefined);
+                    column && columnsController.columnOption(column.index, "visibleWidth", null);
                     column && columnsController.columnOption(column.index, "width", columnWidth);
                 }
             }

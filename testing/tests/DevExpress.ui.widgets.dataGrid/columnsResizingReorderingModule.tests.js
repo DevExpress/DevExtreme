@@ -1169,9 +1169,9 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 160 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 140 }
         ], 'update column options after resizing');
     });
@@ -1234,9 +1234,9 @@ function getEvent(options) {
         assert.equal($("#container").width(), 200);
 
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 110 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 90 }
         ], 'update column options after resizing');
     });
@@ -1293,9 +1293,9 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 140 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 160 },
         ], 'update column options after resizing');
     });
@@ -1321,7 +1321,7 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 160 }
         ], 'update column options after resizing');
     });
@@ -1343,9 +1343,9 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 159 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 140 }
         ], 'update column options after resizing');
     });
