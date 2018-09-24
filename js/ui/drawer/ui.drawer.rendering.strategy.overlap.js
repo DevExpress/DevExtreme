@@ -13,7 +13,6 @@ class OverlapStrategy extends DrawerStrategy {
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
             shading: false,
             target: $(window),
-            height: "100%",
             position: position,
             animation: {
                 show: {
