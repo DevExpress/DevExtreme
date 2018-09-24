@@ -28,11 +28,11 @@ var Class = require("../core/class"),
         'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
         'mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">',
     VALID_TYPES = {
+        // §18.18.11, ST_CellType (Cell Type)
         "boolean": "b",
         "date": "d",
         "number": "n",
         "string": "s"
-        // // 18.18.11 ST_CellType (Cell Type): 'inlineStr', 'str', 'b'
     },
     EXCEL_START_TIME = Date.UTC(1899, 11, 30),
     DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
@@ -223,7 +223,7 @@ var ExcelCreator = Class.inherit({
                                 cellData.value = this._appendString(xlsxCell.value);
                                 break;
                             case 'd':
-                                cellData.value = xlsxCell.value; // expected value in ISO 8601 format, 18.18.11 ST_CellType (Cell Type)
+                                cellData.value = xlsxCell.value;
                                 break;
                             case 'n':
                                 let newValue = xlsxCell.value;
