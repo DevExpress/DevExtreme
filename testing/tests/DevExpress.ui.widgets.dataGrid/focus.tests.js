@@ -121,7 +121,10 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail", "virtualScrolling"], {
+        setupDataGridModules(this, [
+            "data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus",
+            "keyboardNavigation", "validating", "masterDetail", "virtualScrolling"
+        ], {
             initViews: true
         });
     },
@@ -575,4 +578,28 @@ QUnit.testInActiveWindow("Set of the focusedRowIndex, focusedColumnIndex should 
     assert.equal(this.option("focusedColumnIndex"), 2, "focusedColumnIndex = 2");
     assert.equal(rowsView.getRow(1).children("td:nth-child(3)").attr("tabindex"), 0, "Cell[2;1] has tabindex=0");
     assert.equal(rowsView.getRow(1).children("td:nth-child(3):focus").length, 1, "Cell[2;1] has focus");
+});
+
+QUnit.testInActiveWindow("Change focusedRowIndex at runtime", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowIndex: 0,
+        editing: {
+            allowEditing: false
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+    // act
+    this.getController("focus").optionChanged({ name: "focusedRowIndex", value: 1 });
+    this.clock.tick();
+    // assert
+    assert.ok(this.gridView.getView("rowsView").getRow(1).hasClass("dx-row-focused"), "Row 1 has focus");
 });

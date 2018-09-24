@@ -1108,14 +1108,15 @@ module.exports = {
     extenders: {
         views: {
             rowsView: {
-                renderFocusState: function(focusCell) {
+                renderFocusState: function(focusElement) {
                     var that = this,
                         rowIndex = that.option("focusedRowIndex") || 0,
                         columnIndex = that.option("focusedColumnIndex"),
+                        focusedRowEnabled = that.option("focusedRowEnabled"),
                         cellElements = that.getCellElements(rowIndex),
                         tabIndex = that.option("tabIndex"),
                         $row,
-                        needFocusCell = focusCell && columnIndex >= 0,
+                        needFocusCell = focusedRowEnabled && focusElement && columnIndex >= 0,
                         $element = that.element();
 
                     if($element && !focused($element)) {

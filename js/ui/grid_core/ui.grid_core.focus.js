@@ -26,7 +26,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this;
 
             if(args.value !== args.previousValue) {
-                if(args.name === "focusedRowIndex" && args.value >= 0) {
+                if(args.name === "focusedRowIndex") {
+                    that.keyboardController.setFocusedRowIndex(args.value);
                     that.dataController.updateItems({
                         changeType: "updateFocusedRow"
                     });
@@ -78,10 +79,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                 tabIndex = that.option("tabindex") || 0;
 
             if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
-                $row = that.getView("rowsView")._getRowElements($tableElement).eq(focusedRowIndex);
-                $row.addClass(ROW_FOCUSED_CLASS)
-                    .attr("tabindex", tabIndex)
-                    .focus();
+                $row = $(that.getView("rowsView")._getRowElements($tableElement).eq(focusedRowIndex));
+                $row.addClass(ROW_FOCUSED_CLASS).attr("tabindex", tabIndex);
             }
         }
     };
