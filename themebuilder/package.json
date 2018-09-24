@@ -13,8 +13,7 @@
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "bootstrap": "^4.1.2",
-    "sass": "^1.10.3"
+    "bootstrap": "^4.1.2"
   },
   "scripts": {
     "test": "mocha -R spec tests/*-spec.js"
@@ -23,6 +22,7 @@
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "mock-require": "^3.0.2",
-    "less": "^2.6.1"
+    "less": "^2.6.1",
+    "sass": "^1.10.3"
   }
 }
