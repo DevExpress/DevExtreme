@@ -629,8 +629,10 @@ QUnit.test("Change date value", function(assert) {
                 enabled: true,
                 onXlsxCellPrepared: e => {
                     if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
+                        assert.deepEqual(e.xlsxCell.value, new Date(2018, 0, 21, 16, 55));
                         e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
                     } else {
+                        assert.deepEqual(e.xlsxCell.value, new Date(2019, 0, 21, 16, 55));
                         e.xlsxCell.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
                     }
                 }
@@ -644,11 +646,10 @@ QUnit.test("Change boolean value", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="s"><v>1</v></c>' +
-        '</row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>0</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>true</t></si>' +
         '<si><t>false</t></si>' +
@@ -658,13 +659,20 @@ QUnit.test("Change boolean value", function(assert) {
         assert,
         {
             columns: [{ dataField: 'f1', dataType: 'boolean' }],
-            dataSource: [{ f1: true }],
+            dataSource: [{ f1: true }, { f1: false }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 onXlsxCellPrepared: e => {
-                    assert.strictEqual(e.xlsxCell.value, 'true');
-                    e.xlsxCell.value = 'false';
+                    if(e.gridCell.value) {
+                        assert.strictEqual(e.xlsxCell.value, 'true');
+                        e.xlsxCell.value = 'false';
+                        // assert.strictEqual(e.xlsxCell.value, true); - DataProvider.getCellData(rowIndex, cellIndex) returns string
+                        // e.xlsxCell.value = false; - DataProvider doesn't allow to convert true/false to 'true'/'false'
+                    } else {
+                        assert.strictEqual(e.xlsxCell.value, 'false');
+                        e.xlsxCell.value = 'true';
+                    }
                 }
             }
         },
