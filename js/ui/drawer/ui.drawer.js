@@ -281,12 +281,10 @@ const Drawer = Widget.inherit({
     },
 
     _initSize() {
+        const realPanelSize = this._isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
+
+        this._maxSize = this.option("maxSize") || realPanelSize;
         this._minSize = this.option("minSize") || 0;
-        if(this._isHorizontalDirection()) {
-            this._maxSize = this.option("maxSize") || this.getRealPanelWidth();
-        } else {
-            this._maxSize = this.option("maxSize") || this.getRealPanelHeight();
-        }
     },
 
     getMaxSize() {
