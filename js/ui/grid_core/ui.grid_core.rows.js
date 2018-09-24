@@ -602,8 +602,11 @@ module.exports = {
                                     switch(changeType) {
                                         case "update":
                                             if(item) {
+                                                var columnIndices = change.columnIndices && change.columnIndices[index];
                                                 if(isDefined(item.visible) && item.visible !== $rowElement.is(":visible")) {
                                                     $rowElement.toggle(item.visible);
+                                                } else if(columnIndices) {
+                                                    that._updateCells($rowElement, $newRowElement, columnIndices);
                                                 } else {
                                                     $rowElement.replaceWith($newRowElement);
                                                 }
@@ -636,6 +639,27 @@ module.exports = {
                             that._renderContent(contentElement, newTableElement);
                             break;
                     }
+                },
+
+                _updateCells: function($rowElement, $newRowElement, columnIndices) {
+                    var $cells = $rowElement.children(),
+                        $newCells = $newRowElement.children();
+
+                    columnIndices.forEach(function(columnIndex, index) {
+                        var $cell = $cells.eq(columnIndex),
+                            $newCell = $newCells.eq(index),
+                            $newContent = $newCell.contents();
+
+                        if($newContent.length) {
+                            $cell.contents().remove();
+                            $cell.append($newContent);
+
+                            $cell.get(0).className = $newCell.get(0).className;
+                            $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
+                        } else {
+                            $cell.replaceWith($newCell);
+                        }
+                    });
                 },
 
                 _createEmptyRow: function(isFixed) {

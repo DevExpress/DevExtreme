@@ -454,7 +454,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         options.columns = that._columnsController.getVisibleColumns();
         var changeType = options.change && options.change.changeType;
-        $table = that._createTable(options.columns, changeType === "append" || changeType === "prepend");
+        $table = that._createTable(options.columns, changeType === "append" || changeType === "prepend" || changeType === "update");
 
         that._renderRows($table, options);
 
@@ -464,10 +464,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderRows: function($table, options) {
         var that = this,
             i,
-            rows = that._getRows(options.change);
+            rows = that._getRows(options.change),
+            columnIndices = options.change && options.change.columnIndices || [];
 
         for(i = 0; i < rows.length; i++) {
-            that._renderRow($table, extend({ row: rows[i] }, options));
+            that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i] }, options));
         }
     },
 
@@ -475,7 +476,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             $row;
 
-        options.row.cells = [];
+        if(!options.columnIndices) {
+            options.row.cells = [];
+        }
 
         $row = that._createRow(options.row);
 
@@ -492,7 +495,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             columns = options.columns;
 
         for(i = 0; i < columns.length; i++) {
-            that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex] }, options));
+            if(!options.columnIndices || options.columnIndices.indexOf(i) >= 0) {
+                that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex] }, options));
+            }
 
             if(columns[i].colspan > 1) {
                 columnIndex += columns[i].colspan;
@@ -515,7 +520,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             cellOptions = that._getCellOptions(options),
             $cell;
 
-        options.row.cells.push(cellOptions);
+        if(options.columnIndices) {
+            options.row.cells[cellOptions.columnIndex] = cellOptions;
+        } else {
+            options.row.cells.push(cellOptions);
+        }
 
         $cell = that._createCell(cellOptions);
 

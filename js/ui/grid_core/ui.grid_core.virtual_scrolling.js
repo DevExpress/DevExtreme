@@ -136,10 +136,10 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
             that.callBase.apply(that, arguments);
         },
-        _handleDataChanged: function() {
+        _handleDataChanged: function(e) {
             var callBase = this.callBase.bind(this);
 
-            this._virtualScrollController.handleDataChanged(callBase);
+            this._virtualScrollController.handleDataChanged(callBase, e);
         },
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this;

@@ -206,6 +206,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
                 options.pageIndex = dataSource.pageIndex();
                 options.lastLoadOptions = loadOptions;
+                options.operationTypes = operationTypes;
                 that._isRefreshing = true;
 
                 when(isRefreshing || that.refresh(options, isReload, operationTypes)).done(function() {
@@ -272,6 +273,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
             if(options.lastLoadOptions) {
                 this._lastLoadOptions = options.lastLoadOptions;
+                this._operationTypes = options.operationTypes;
             }
 
             if(localPaging) {
@@ -387,6 +389,9 @@ module.exports = gridCore.Controller.inherit((function() {
             deferred.always(function() {
                 that._isCustomLoading = false;
             });
+        },
+        operationTypes: function() {
+            return this._operationTypes;
         },
         isLastPage: function() {
             return this._isLastPage;

@@ -1103,6 +1103,50 @@ QUnit.test("Rise selectionChanged event on change dataSource", function(assert) 
     assert.strictEqual(selectionChangedCount, 2, 'selection changed raised');
 });
 
+QUnit.test("Rise selectionChanged event on refresh", function(assert) {
+    var selectionChangedCount = 0;
+
+    this.applyOptions({
+        selection: { mode: 'multiple' },
+        onSelectionChanged: function() {
+            selectionChangedCount++;
+        }
+    });
+
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
+    assert.strictEqual(selectionChangedCount, 1);
+
+    // act
+    this.array.splice(2, 10);
+    this.dataController.refresh();
+
+    // assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
+    assert.strictEqual(selectionChangedCount, 2, 'selection changed raised');
+});
+
+QUnit.test("Not rise selectionChanged event on refresh with changesOnly", function(assert) {
+    var selectionChangedCount = 0;
+
+    this.applyOptions({
+        selection: { mode: 'multiple' },
+        onSelectionChanged: function() {
+            selectionChangedCount++;
+        }
+    });
+
+    this.selectionController.selectRows([{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]); // 1, 3
+    assert.strictEqual(selectionChangedCount, 1);
+
+    // act
+    this.array.splice(2, 10);
+    this.dataController.refresh(true);
+
+    // assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
+    assert.strictEqual(selectionChangedCount, 1, 'selection changed is not raised');
+});
+
 QUnit.test("Not rise selectionChanged event on apply filter when selectedRows count not changed", function(assert) {
     var selectionChangedCount = 0;
 
