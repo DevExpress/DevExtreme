@@ -9,17 +9,10 @@ var ROW_FOCUSED_CLASS = "dx-row-focused",
 exports.FocusController = core.ViewController.inherit((function() {
     return {
         init: function() {
-            var that = this,
-                focusedRowIndex;
+            var that = this;
 
-            that.dataController = that.getController("data");
-            that.keyboardController = that.getController("keyboardNavigation");
-
-            focusedRowIndex = that.option("focusedRowIndex");
-
-            if(!isDefined(that.option("focusedRowEnabled")) && (isDefined(focusedRowIndex) && focusedRowIndex >= 0)) {
-                that.option("focusedRowEnabled", true);
-            }
+            that._dataController = that.getController("data");
+            that._keyboardController = that.getController("keyboardNavigation");
         },
 
         optionChanged: function(args) {
@@ -27,8 +20,8 @@ exports.FocusController = core.ViewController.inherit((function() {
 
             if(args.value !== args.previousValue) {
                 if(args.name === "focusedRowIndex") {
-                    that.keyboardController.setFocusedRowIndex(args.value);
-                    that.dataController.updateItems({
+                    that._keyboardController.setFocusedRowIndex(args.value);
+                    that._dataController.updateItems({
                         changeType: "updateFocusedRow"
                     });
                 }
@@ -38,7 +31,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         isRowFocused: function(rowIndex) {
-            var rowIndexOffset = this.dataController.getRowIndexOffset(),
+            var rowIndexOffset = this._dataController.getRowIndexOffset(),
                 pageRowIndex = this.option("focusedRowIndex") - rowIndexOffset;
             return pageRowIndex === rowIndex;
         },
@@ -46,17 +39,17 @@ exports.FocusController = core.ViewController.inherit((function() {
         verifyFocusedRow: function($element) {
             var that = this;
 
-            var focusedRowIndex = that.keyboardController.getFocusedRowIndex(),
-                focusedColumnIndex = that.keyboardController.getFocusedColumnIndex();
+            var focusedRowIndex = that._keyboardController.getFocusedRowIndex(),
+                focusedColumnIndex = that._keyboardController.getFocusedColumnIndex();
 
             if(focusedRowIndex >= 0 && focusedColumnIndex >= 0) return;
 
-            that.keyboardController.focus($element);
+            that._keyboardController.focus($element);
         },
 
         updateFocusedRow: function(change) {
             var that = this,
-                focusedRowIndex = that.keyboardController.getFocusedRowIndex(),
+                focusedRowIndex = that._keyboardController.getFocusedRowIndex(),
                 rowsView = that.getView("rowsView"),
                 $tableElement;
 
@@ -201,6 +194,23 @@ module.exports = {
                         }
                     } else {
                         this.callBase(change);
+                    }
+                },
+
+                dispatchFocus: function(cellElements) {
+                    var that = this,
+                        $row = cellElements.eq(0).parent(),
+                        columnIndex = that.option("focusedColumnIndex") || 0,
+                        rowIndex = that.option("focusedRowIndex"),
+                        tabIndex = that.option("tabIndex");
+
+                    if(that.option("focusedRowEnabled") && rowIndex >= 0) {
+                        if($row.length) {
+                            $row.attr("tabIndex", tabIndex);
+                            this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
+                        }
+                    } else {
+                        that.callBase(cellElements);
                     }
                 }
             }

@@ -34,11 +34,8 @@ var ROWS_VIEW_CLASS = "rowsview",
     EDIT_MODE_BATCH = "batch",
     EDIT_MODE_CELL = "cell",
 
-    FOCUS_TYPES = {
-        row: "row",
-        cell: "cell"
-    };
-;
+    FOCUS_TYPE_ROW = "row",
+    FOCUS_TYPE_CELL = "cell";
 
 function isGroupRow($row) {
     return $row && $row.hasClass(GROUP_ROW_CLASS);
@@ -1022,19 +1019,19 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     isRowFocusType: function() {
-        return this.focusType === FOCUS_TYPES.row;
+        return this.focusType === FOCUS_TYPE_ROW;
     },
 
     isCellFocusType: function() {
-        return this.focusType === FOCUS_TYPES.cell;
+        return this.focusType === FOCUS_TYPE_CELL;
     },
 
     setRowFocusType: function() {
-        this.focusType = FOCUS_TYPES.row;
+        this.focusType = FOCUS_TYPE_ROW;
     },
 
     setCellFocusType: function() {
-        this.focusType = FOCUS_TYPES.cell;
+        this.focusType = FOCUS_TYPE_CELL;
     },
 
     focusViewByName: function(viewName) {
@@ -1113,8 +1110,6 @@ module.exports = {
                         rowIndex = that.option("focusedRowIndex") || 0,
                         columnIndex = that.option("focusedColumnIndex"),
                         cellElements = that.getCellElements(rowIndex),
-                        tabIndex = that.option("tabIndex"),
-                        $row,
                         $element = that.element();
 
                     if($element && !focused($element)) {
@@ -1126,15 +1121,25 @@ module.exports = {
                     }
 
                     if(that.option("useKeyboard") && cellElements) {
-                        $row = cellElements.eq(0).parent();
-                        if(isGroupRow($row)) {
-                            $row.attr("tabIndex", tabIndex);
-                        } else {
-                            that.renderCellFocusState(cellElements, columnIndex);
-                        }
+                        this.dispatchFocus(cellElements);
                     }
                 },
+                dispatchFocus: function(cellElements) {
+                    var that = this,
+                        $row = cellElements.eq(0).parent(),
+                        columnIndex = that.option("focusedColumnIndex"),
+                        tabIndex = that.option("tabIndex");
 
+                    if(!columnIndex || columnIndex < 0) {
+                        columnIndex = 0;
+                    }
+
+                    if(isGroupRow($row)) {
+                        $row.attr("tabIndex", tabIndex);
+                    } else {
+                        that.renderCellFocusState(cellElements, columnIndex);
+                    }
+                },
                 renderCellFocusState: function(cellElements, columnIndex) {
                     var that = this,
                         $cell,
@@ -1161,6 +1166,7 @@ module.exports = {
 
                     keyboardNavigation._focusedView = oldFocusedView;
                 },
+
                 renderDelayedTemplates: function(change) {
                     this.callBase.apply(this, arguments);
                     if(!change || !change.repaintChangesOnly) {
