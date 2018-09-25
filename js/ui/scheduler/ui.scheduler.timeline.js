@@ -401,6 +401,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return 0;
     },
 
+    _renderTableBody: function(options) {
+        options.recalculateHeight = true;
+        this.callBase(options);
+    },
+
     getAllDayContainer: function() {
         return null;
     },

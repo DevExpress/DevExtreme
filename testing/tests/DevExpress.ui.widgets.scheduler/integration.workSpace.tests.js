@@ -891,7 +891,7 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry i
             if(!cellIndex) {
                 var $cell = $(cellElement).parent();
                 assert.equal($cell.outerWidth(), 99, "Resource cell width is OK");
-                assert.roughEqual($cell.outerHeight(), 275, 1.001, "Resource cell height is OK");
+                assert.roughEqual($cell.outerHeight(), 276, 1.001, "Resource cell height is OK");
             }
         }
     });
