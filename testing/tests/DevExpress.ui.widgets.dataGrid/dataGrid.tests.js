@@ -10442,7 +10442,7 @@ QUnit.test("Repaint rows", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
-QUnit.test("Repaint with changesOnly", function(assert) {
+QUnit.test("Refresh with changesOnly", function(assert) {
     // arrange
     var $cellElements,
         $updatedCellElements,
@@ -10482,7 +10482,7 @@ QUnit.test("Repaint with changesOnly", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
 });
 
-QUnit.test("Repaint with changesOnly and cellTemplate", function(assert) {
+QUnit.test("Refresh with changesOnly and cellTemplate", function(assert) {
     // arrange
     var $cellElements,
         $updatedCellElements,
@@ -10529,6 +10529,50 @@ QUnit.test("Repaint with changesOnly and cellTemplate", function(assert) {
     assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't updated");
     assert.ok(!$updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is updated");
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
+});
+
+QUnit.test("Refresh with changesOnly and summary", function(assert) {
+    // arrange
+    var $cellElements,
+        $updatedCellElements,
+        dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, value: 100 },
+                    { id: 2, value: 100 },
+                    { id: 3, value: 100 },
+                    { id: 4, value: 100 }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            summary: {
+                totalItems: [{
+                    column: "value",
+                    summaryType: "sum"
+                }]
+            },
+            columns: ["id", "value"]
+        });
+
+    dataSource.store().update(1, { value: 200 });
+
+    // assert
+    $cellElements = $(dataGrid.$element()).find(".dx-datagrid-total-footer .dx-row").first().children();
+
+    // act
+    dataGrid.refresh(true);
+
+    // assert
+    $updatedCellElements = $(dataGrid.$element()).find(".dx-datagrid-total-footer .dx-row").first().children();
+    assert.equal($updatedCellElements.length, 2, "count cell");
+    assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't changed");
+    assert.ok($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell isn't changed");
+    assert.strictEqual($updatedCellElements.eq(1).text(), "Sum: 500", "cell value is updated");
 });
 
 // T443177

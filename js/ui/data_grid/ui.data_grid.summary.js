@@ -75,16 +75,29 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
             this.callBase($cell, options);
         },
 
-        _renderCore: function() {
+        _renderCore: function(change) {
             var totalItem = this._dataController.footerItems()[0];
 
-            this.element()
-                .empty()
-                .addClass(DATAGRID_TOTAL_FOOTER_CLASS)
-                .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option("wordWrapEnabled"));
+            if(!change || !change.columnIndices) {
+                this.element()
+                    .empty()
+                    .addClass(DATAGRID_TOTAL_FOOTER_CLASS)
+                    .toggleClass(DATAGRID_NOWRAP_CLASS, !this.option("wordWrapEnabled"));
+            }
 
             if(totalItem && totalItem.summaryCells && totalItem.summaryCells.length) {
-                this._updateContent(this._renderTable());
+                this._updateContent(this._renderTable({ change: change }), change);
+            }
+        },
+
+        _updateContent: function($newTable, change) {
+            if(change && change.changeType === "update" && change.columnIndices) {
+                var $row = this.element().find(".dx-row"),
+                    $newRow = $newTable.find(".dx-row");
+
+                this._updateCells($row, $newRow, change.columnIndices[0]);
+            } else {
+                return this.callBase.apply(this, arguments);
             }
         },
 
@@ -105,7 +118,14 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
 
         _handleDataChanged: function(e) {
             var changeType = e.changeType;
-            if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
+
+            if(e.changeType === "update" && e.repaintChangesOnly) {
+                if(!e.totalColumnIndices) {
+                    this.render();
+                } else if(e.totalColumnIndices.length) {
+                    this.render(null, { changeType: "update", columnIndices: [e.totalColumnIndices] });
+                }
+            } else if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
                 this.render();
             }
         },
@@ -679,12 +699,23 @@ gridCore.registerModule("summary", {
                             summaryCells,
                             totalAggregates,
                             dataSource = that._dataSource,
+                            footerItems = that._footerItems,
+                            oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells,
                             summaryTotalItems = that.option("summary.totalItems");
 
                         that._footerItems = [];
                         if(dataSource && summaryTotalItems && summaryTotalItems.length) {
                             totalAggregates = dataSource.totalAggregates();
                             summaryCells = that._getSummaryCells(summaryTotalItems, totalAggregates);
+
+                            if(change && change.repaintChangesOnly && oldSummaryCells) {
+                                change.totalColumnIndices = summaryCells.map(function(summaryCell, index) {
+                                    if(JSON.stringify(summaryCell) !== JSON.stringify(oldSummaryCells[index])) {
+                                        return index;
+                                    }
+                                    return -1;
+                                }).filter(index => index >= 0);
+                            }
 
                             if(summaryCells.length) {
                                 that._footerItems.push({

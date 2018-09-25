@@ -507,6 +507,27 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
+    _updateCells: function($rowElement, $newRowElement, columnIndices) {
+        var $cells = $rowElement.children(),
+            $newCells = $newRowElement.children();
+
+        columnIndices.forEach(function(columnIndex, index) {
+            var $cell = $cells.eq(columnIndex),
+                $newCell = $newCells.eq(index),
+                $newContent = $newCell.contents();
+
+            if($newContent.length) {
+                $cell.contents().remove();
+                $cell.append($newContent);
+
+                $cell.get(0).className = $newCell.get(0).className;
+                $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
+            } else {
+                $cell.replaceWith($newCell);
+            }
+        });
+    },
+
     _setCellAriaAttributes: function($cell, cellOptions) {
         if(cellOptions.rowType !== "freeSpace") {
             this.setAria("selected", false, $cell);
@@ -521,7 +542,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell;
 
         if(options.columnIndices) {
-            options.row.cells[cellOptions.columnIndex] = cellOptions;
+            if(options.row.cells) {
+                options.row.cells[cellOptions.columnIndex] = cellOptions;
+            }
         } else {
             options.row.cells.push(cellOptions);
         }

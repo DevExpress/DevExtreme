@@ -641,27 +641,6 @@ module.exports = {
                     }
                 },
 
-                _updateCells: function($rowElement, $newRowElement, columnIndices) {
-                    var $cells = $rowElement.children(),
-                        $newCells = $newRowElement.children();
-
-                    columnIndices.forEach(function(columnIndex, index) {
-                        var $cell = $cells.eq(columnIndex),
-                            $newCell = $newCells.eq(index),
-                            $newContent = $newCell.contents();
-
-                        if($newContent.length) {
-                            $cell.contents().remove();
-                            $cell.append($newContent);
-
-                            $cell.get(0).className = $newCell.get(0).className;
-                            $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
-                        } else {
-                            $cell.replaceWith($newCell);
-                        }
-                    });
-                },
-
                 _createEmptyRow: function(isFixed) {
                     var that = this,
                         i,
