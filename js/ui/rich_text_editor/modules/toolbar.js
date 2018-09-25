@@ -147,11 +147,8 @@ class ToolbarModule extends BaseModule {
             header: {
                 options: {
                     displayExpr: (item) => {
-                        if(isDefined(item) && item !== false) {
-                            return "H" + item;
-                        } else {
-                            return "Normal";
-                        }
+                        const isHeaderValue = isDefined(item) && item !== false;
+                        return isHeaderValue ? "H" + item : "Normal";
                     }
                 }
             },
