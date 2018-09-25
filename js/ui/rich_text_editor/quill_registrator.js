@@ -18,7 +18,6 @@ class QuillRegistrator {
         const FontStyle = quill.import("attributors/style/font");
 
         let SizeStyle = quill.import("attributors/style/size");
-        this._updateAllowedSizes(SizeStyle);
 
         quill.register({
             "formats/align": AlignStyle,
@@ -37,13 +36,6 @@ class QuillRegistrator {
         );
 
         QuillRegistrator._initialized = true;
-    }
-
-    _updateAllowedSizes(SizeStyle) {
-        SizeStyle.whitelist = [];
-        for(let i = 8; i < 19; i++) {
-            SizeStyle.whitelist.push(i + "px");
-        }
     }
 
     createEditor(container, config) {
