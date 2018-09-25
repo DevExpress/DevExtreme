@@ -22,3 +22,4 @@ const xlsxTagHelper = {
 };
 
 export default xlsxTagHelper;
+module.exports = xlsxTagHelper;

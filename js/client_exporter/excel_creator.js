@@ -9,6 +9,7 @@ var Class = require("../core/class"),
     fileSaver = require("./file_saver"),
     excelFormatConverter = require("./excel_format_converter"),
     XlsxFile = require("./xlsx/xlsx_file"),
+    xlsxTagHelper = require("./xlsx/xlsx_tag_helper"),
     XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
     GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
     SINGLE_SHEET_PR_XML = "<sheetPr/>",
@@ -42,19 +43,12 @@ var Class = require("../core/class"),
 
 var ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
-        var result = "<" + tagName,
-            i,
-            length = attributes.length,
-            attr;
-
-        for(i = 0; i < length; i++) {
-            attr = attributes[i];
-            if(attr.value !== undefined) {
-                result = result + " " + attr.name + "=\"" + attr.value + "\"";
-            }
+        const attributes_ = {};
+        for(let i = 0; i < attributes.length; i++) {
+            const attr = attributes[i];
+            attributes_[attr.name] = attr.value;
         }
-
-        return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
+        return xlsxTagHelper.toXml(tagName, attributes_, content);
     },
 
     _getCellIndex: function(rowIndex, cellIndex) {
