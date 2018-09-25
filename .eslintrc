@@ -480,6 +480,7 @@
                     "waypoint",
                     "waypoints",
                     "winloss",
+                    "whitelist",
                     "workspace",
                     "writeable",
                     "xhr",
