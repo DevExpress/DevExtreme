@@ -121,21 +121,27 @@ class LessTemplateLoader {
     compileLess(less, modifyVars, metadata) {
         return new Promise((resolve, reject) => {
             let compiledMetadata = {};
-            this.lessCompiler.render(less, {
+            let options = {
                 modifyVars: modifyVars, plugins: [{
-                    install: (less, pluginManager) => {
+                    install: (_, pluginManager) => {
                         pluginManager.addPostProcessor(new LessFontPlugin(this.options));
                     }
                 }, {
-                    install: (less, pluginManager) => {
+                    install: (_, pluginManager) => {
                         pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
                     }
                 }, {
-                    install: (less, pluginManager) => {
+                    install: (_, pluginManager) => {
                         pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
                     }
                 }]
-            }).then(output => {
+            };
+
+            if(this.lessCompiler.options && typeof (this.lessCompiler.options) === "object") {
+                Object.assign(options, this.lessCompiler.options);
+            }
+
+            this.lessCompiler.render(less, options).then(output => {
                 resolve({
                     compiledMetadata: compiledMetadata,
                     css: this._makeInfoHeader() + output.css,
