@@ -6703,12 +6703,11 @@ QUnit.test("Get first editable column index when there is custom select column",
     that.columnsController.reset();
 
     rowsView.render($testElement);
-    debugger;
     that.editRow(0);
 
     // act
     editableIndex = that.editingController.getFirstEditableColumnIndex();
-    debugger;
+
     // assert
     assert.equal(editableIndex, 1, "editable index");
 });

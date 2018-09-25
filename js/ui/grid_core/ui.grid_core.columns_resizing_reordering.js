@@ -24,7 +24,7 @@ var COLUMNS_SEPARATOR_CLASS = "columns-separator",
     BLOCK_SEPARATOR_CLASS = "dx-block-separator",
     HEADER_ROW_CLASS = "dx-header-row",
     WIDGET_CLASS = "dx-widget",
-    COMMAND_CELL_CLASS = "dx-command-cell",
+    DRAGGING_COMMAND_CELL_CLASS = "dx-drag-command-cell",
 
     MODULE_NAMESPACE = "dxDataGridResizingReordering",
 
@@ -444,12 +444,12 @@ var DraggingHeaderView = modules.View.inherit({
 
         that.element().css({
             textAlign: columnElement && columnElement.css("textAlign"),
-            height: columnElement && (isCommandColumn && columnElement.outerHeight() || columnElement.height()),
-            width: columnElement && (isCommandColumn && columnElement.outerWidth() || columnElement.width()),
+            height: columnElement && (isCommandColumn && columnElement.get(0).clientHeight || columnElement.height()),
+            width: columnElement && (isCommandColumn && columnElement.get(0).clientWidth || columnElement.width()),
             whiteSpace: columnElement && columnElement.css("whiteSpace")
         })
             .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
-            .toggleClass(COMMAND_CELL_CLASS, isCommandColumn)
+            .toggleClass(DRAGGING_COMMAND_CELL_CLASS, isCommandColumn)
             .text(isCommandColumn ? "" : options.sourceColumn.caption);
 
         that.element().appendTo(getSwatchContainer(columnElement));

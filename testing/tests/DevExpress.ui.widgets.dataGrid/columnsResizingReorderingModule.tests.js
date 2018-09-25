@@ -4353,7 +4353,7 @@ function getEvent(options) {
 
         // assert
         assert.ok(draggingHeader._isDragging, "is dragging");
-        assert.ok($dragHeader.hasClass("dx-command-cell"), "draggable header element has class dx-command-cell");
+        assert.ok($dragHeader.hasClass("dx-drag-command-cell"), "draggable header element has class dx-command-cell");
         assert.strictEqual($dragHeader.outerWidth(), 100, "width");
         assert.strictEqual($dragHeader.text(), "", "text");
     });

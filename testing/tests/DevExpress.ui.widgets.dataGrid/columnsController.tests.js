@@ -4419,7 +4419,6 @@ QUnit.test("sortOrder should not be reset after column is ungrouped", function(a
     assert.strictEqual(this.columnsController.getVisibleColumns()[0].groupIndex, undefined);
 });
 
-
 QUnit.test("lastSortOrder should not be updated after changing the group index", function(assert) {
     // arrange
     this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "desc" }, { dataField: "field2", groupIndex: 1 }, "field3"] });
@@ -4445,6 +4444,29 @@ QUnit.test("lastSortOrder should not be updated after changing the group index",
     assert.strictEqual(this.columnsController.getVisibleColumns()[1].dataField, "field1");
     assert.strictEqual(this.columnsController.getVisibleColumns()[1].sortOrder, "desc");
     assert.strictEqual(this.columnsController.getVisibleColumns()[1].groupIndex, undefined);
+});
+
+QUnit.test("move the group command column to begin", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        selection: {
+            mode: "multiple"
+        },
+        columns: [{ type: "selection" }, { type: "group" }, { dataField: "field1", groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }, "field3", "field4"]
+    });
+
+    // act
+    this.columnsController.moveColumn(1, 0);
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns();
+    assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column");
+    assert.strictEqual(visibleColumns[1].dataField, "field2", "dataField of the second column");
+    assert.strictEqual(visibleColumns[2].type, "selection", "selection column");
+    assert.strictEqual(visibleColumns[3].dataField, "field3", "dataField of the fourth column");
+    assert.strictEqual(visibleColumns[4].dataField, "field4", "dataField of the fifth column");
 });
 
 QUnit.module("Column Option", { beforeEach: setupModule, afterEach: teardownModule });

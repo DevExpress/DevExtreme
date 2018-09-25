@@ -774,7 +774,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
 
                 if(columns[i].colspan) {
-                    columnIndex += columns[i].colspan || 1;
+                    columnIndex += columns[i].colspan;
                     continue;
                 }
                 width = widths[columnIndex];
