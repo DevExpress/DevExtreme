@@ -19,10 +19,7 @@ QUnit.test("Empty grid", function(assert) {
         helper.STYLESHEET_STANDARDSTYLES +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf></cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols></cols>' +
         '<sheetData></sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
@@ -793,10 +790,7 @@ QUnit.test("showColumnHeaders: false", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +

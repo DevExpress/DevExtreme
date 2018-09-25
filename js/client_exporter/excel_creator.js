@@ -28,6 +28,7 @@ var Class = require("../core/class"),
         'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
         'mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">',
     VALID_TYPES = {
+        // §18.18.11, ST_CellType (Cell Type)
         "boolean": "b",
         "date": "d",
         "number": "n",
@@ -48,7 +49,9 @@ var ExcelCreator = Class.inherit({
 
         for(i = 0; i < length; i++) {
             attr = attributes[i];
-            result = result + " " + attr.name + "=\"" + attr.value + "\"";
+            if(attr.value !== undefined) {
+                result = result + " " + attr.name + "=\"" + attr.value + "\"";
+            }
         }
 
         return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
@@ -152,6 +155,7 @@ var ExcelCreator = Class.inherit({
     _prepareValue: function(rowIndex, cellIndex) {
         var dataProvider = this._dataProvider,
             { value, cellSourceData } = dataProvider.getCellData(rowIndex, cellIndex) || {},
+            sourceValue,
             type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
         if(type === "d" && !typeUtils.isDate(value)) {
@@ -160,10 +164,12 @@ var ExcelCreator = Class.inherit({
 
         switch(type) {
             case "s":
+                sourceValue = value;
                 value = this._appendString(value);
                 break;
 
             case "d":
+                sourceValue = value;
                 value = this._getExcelDateValue(value);
                 type = "n";
                 break;
@@ -172,6 +178,7 @@ var ExcelCreator = Class.inherit({
         return {
             value: value,
             type: type,
+            sourceValue,
             cellSourceData: cellSourceData
         };
     },
@@ -196,16 +203,42 @@ var ExcelCreator = Class.inherit({
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
                 if(dataProvider.onXlsxCellPrepared) {
+                    const xlsxCellValue = cellData.sourceValue || cellData.value;
                     const xlsxCell = {
                         style: extend(true, {}, that._styleArray[cellStyleId]),
-                        // value: cellData.value,
-                        // type: cellData.type,
+                        value: xlsxCellValue,
+                        dataType: cellData.type,
                         // xlsxFile
                     };
                     dataProvider.onXlsxCellPrepared({
                         xlsxCell,
                         cellSourceData: cellData.cellSourceData
                     });
+
+                    cellData.type = xlsxCell.dataType;
+                    if(xlsxCell.value !== xlsxCellValue) {
+                        // 18.18.11 ST_CellType (Cell Type)
+                        switch(cellData.type) {
+                            case 's':
+                                cellData.value = this._appendString(xlsxCell.value);
+                                break;
+                            case 'd':
+                                cellData.value = xlsxCell.value;
+                                break;
+                            case 'n':
+                                let newValue = xlsxCell.value;
+                                if(typeUtils.isDate(newValue)) {
+                                    newValue = this._getExcelDateValue(newValue);
+                                    if(!typeUtils.isDefined(newValue)) {
+                                        newValue = xlsxCell.value;
+                                    }
+                                }
+                                cellData.value = newValue;
+                                break;
+                            default:
+                                cellData.value = xlsxCell.value;
+                        }
+                    }
                     cellStyleId = this._xlsxFile.registerCellFormat(xlsxCell.style);
                 }
                 cellsArray.push({
