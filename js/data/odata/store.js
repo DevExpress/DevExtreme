@@ -138,15 +138,6 @@ var ODataStore = Store.inherit({
     },
 
     /**
-    * @name ODataStoreMethods.load
-    * @publicName load(options)
-    * @type function
-    * @param1 options:LoadOptions
-    * @return Promise<any>
-    * @inheritdoc
-    */
-
-    /**
     * @name ODataStoreMethods.byKey
     * @publicName byKey(key, extraOptions)
     * @param1 key:object|string|number
