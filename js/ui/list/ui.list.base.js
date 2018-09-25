@@ -373,11 +373,11 @@ var ListBase = CollectionWidget.inherit({
             */
             /**
             * @name dxListItemTemplate.showChevron
-             * @type String
+             * @type boolean
             */
             /**
              * @name dxListItemTemplate.icon
-             * @type boolean
+             * @type String
              */
             /**
              * @name dxListItemTemplate.key
