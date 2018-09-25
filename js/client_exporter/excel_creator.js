@@ -43,12 +43,9 @@ var Class = require("../core/class"),
 
 var ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
-        const attributes_ = {};
-        for(let i = 0; i < attributes.length; i++) {
-            const attr = attributes[i];
-            attributes_[attr.name] = attr.value;
-        }
-        return xlsxTagHelper.toXml(tagName, attributes_, content);
+        const attributesObject = {};
+        attributes.forEach(attr => attributesObject[attr.name] = attr.value);
+        return xlsxTagHelper.toXml(tagName, attributesObject, content);
     },
 
     _getCellIndex: function(rowIndex, cellIndex) {
