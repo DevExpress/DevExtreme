@@ -180,9 +180,7 @@ class ToolbarModule extends BaseModule {
             if(formatWidget.option("value") === undefined) {
                 formatWidget.$element().addClass(ACTIVE_FORMAT_CLASS);
             } else {
-                this._isReset = true;
-                formatWidget.option("value", formats[format]);
-                this._isReset = false;
+                this._setValueSilent(formatWidget, formats[format]);
             }
         }
 
@@ -191,13 +189,18 @@ class ToolbarModule extends BaseModule {
         }
     }
 
+    _setValueSilent(widget, value) {
+        this._isReset = true;
+        widget.option("value", value);
+        this._isReset = false;
+    }
+
     _resetFormatWidgets() {
         each(this._formats, (name, widget) => {
             widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
             if(widget.NAME === "dxSelectBox" || widget.NAME === "dxColorBox") {
-                this._isReset = true;
-                widget.option("value", null);
-                this._isReset = false;
+                this._setValueSilent(widget, null);
+
             }
         });
     }
