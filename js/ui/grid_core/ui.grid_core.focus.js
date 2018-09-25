@@ -158,7 +158,7 @@ module.exports = {
                     if(this.option("focusedRowEnabled")) {
                         this.getController("focus").verifyFocusedRow($element);
                     }
-                    this.callBase($element, hideBorder);
+                    return this.callBase($element, hideBorder);
                 },
 
                 renderFocusOverlay: function($element, hideBorder) {

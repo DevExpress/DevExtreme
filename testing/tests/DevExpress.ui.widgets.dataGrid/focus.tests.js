@@ -145,6 +145,7 @@ QUnit.testInActiveWindow("FocusedRow should present if set focusedRowIndex", fun
     };
 
     this.options = {
+        focusedRowEnabled: true,
         focusedRowIndex: 1
     };
 
@@ -486,6 +487,7 @@ QUnit.testInActiveWindow("Tab index should not exist for the previous focused ro
     };
 
     this.options = {
+        focusedRowEnabled: true,
         focusedRowIndex: 0,
         editing: {
             allowEditing: false
@@ -586,6 +588,7 @@ QUnit.testInActiveWindow("Change focusedRowIndex at runtime", function(assert) {
     };
 
     this.options = {
+        focusedRowEnabled: true,
         focusedRowIndex: 0,
         editing: {
             allowEditing: false
