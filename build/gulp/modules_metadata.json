@@ -368,7 +368,7 @@
   {
     "name": "ui/rich_text_editor",
     "exports": {
-      "default": "ui.dxRichTextEditor"
+      "default": { "path": "ui.dxRichTextEditor", "isWidget": true }
     }
   },
   {
