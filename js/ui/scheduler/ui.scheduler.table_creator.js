@@ -31,7 +31,8 @@ var SchedulerTableCreator = {
             rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
             allDayElementIndex = 0,
             allDayElements = options.allDayElements,
-            groupIndex = options.groupIndex;
+            groupIndex = options.groupIndex,
+            rowCount = options.rowCount;
 
         $(options.container).append(tableBody);
 
@@ -40,7 +41,7 @@ var SchedulerTableCreator = {
             allDayElementIndex++;
         }
 
-        for(var i = 0; i < options.rowCount; i++) {
+        for(var i = 0; i < rowCount; i++) {
             row = domAdapter.createElement(ROW_SELECTOR);
             tableBody.appendChild(row);
 
@@ -113,6 +114,11 @@ var SchedulerTableCreator = {
             if(allDayElements && isLastRowInGroup) {
                 this.insertAllDayRow(allDayElements, tableBody, allDayElementIndex);
                 allDayElementIndex++;
+            }
+
+            if(options.recalculateHeight) {
+                var ratio = 100 / rowCount;
+                $(row).css("height", ratio + "%");
             }
         }
 
