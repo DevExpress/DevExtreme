@@ -4899,6 +4899,36 @@ QUnit.test("column filter for column with calculateFilterExpression using functi
     assert.equal(this.dataController.items()[0].data.name, 'Alex');
 });
 
+QUnit.test("column filter for column with calculateFilterExpression using function selector as filter function", function(assert) {
+    this.setupFilterableData();
+
+    var loadingCount = 0;
+    this.dataSource.store().on("loading", function() {
+        loadingCount++;
+    });
+
+    // act
+    this.columnsController.columnOption(3, 'calculateFilterExpression', function(text, operation) {
+        return [function(data) {
+            return !!(data.name + " " + data.age).match(text);
+        }, '=', true];
+    });
+    this.columnsController.columnOption(3, 'filterValue', '9');
+
+    // assert
+    assert.equal(loadingCount, 0, "no loading because cache enabled");
+    assert.equal(this.dataController.items().length, 1);
+    assert.equal(this.dataController.items()[0].data.age, 19);
+
+    // act
+    this.columnsController.columnOption(3, 'filterValue', 'Ale');
+
+    // assert
+    assert.equal(loadingCount, 0, "no loading because cache enabled");
+    assert.equal(this.dataController.items().length, 1);
+    assert.equal(this.dataController.items()[0].data.name, 'Alex');
+});
+
 QUnit.test("column filter for column with calculateFilterExpression returns filter function when cache enabled", function(assert) {
     this.setupFilterableData();
 
