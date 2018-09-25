@@ -12,6 +12,7 @@ import "./converters/delta";
 import ConverterController from "./converterController";
 
 const RICH_TEXT_EDITOR_CLASS = "dx-richtexteditor";
+const QUILL_CONTAINER_CLASS = "dx-quill-container";
 
 const ANONYMOUS_TEMPLATE_NAME = "content";
 
@@ -79,7 +80,7 @@ const RichTextEditor = Editor.inherit({
 
     _initMarkup: function() {
         let template = this._getTemplate("content");
-        this._$htmlContainer = $("<div>");
+        this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
             .addClass(RICH_TEXT_EDITOR_CLASS)
@@ -259,6 +260,52 @@ const RichTextEditor = Editor.inherit({
     */
     registerModules: function(modules) {
         QuillRegistrator.registerModules(modules);
+    },
+
+    /**
+    * @name dxRichTextEditorMethods.getSelection
+    * @publicName getSelection()
+    */
+    getSelection: function() {
+        if(this._quillInstance) {
+            return this._quillInstance.getSelection();
+        }
+    },
+
+    /**
+    * @name dxRichTextEditorMethods.setSelection
+    * @publicName setSelection(index, length)
+    * @param1 index:number
+    * @param2 length:number
+    */
+    setSelection: function(index, length) {
+        if(this._quillInstance) {
+            return this._quillInstance.setSelection(index, length);
+        }
+    },
+
+    /**
+    * @name dxRichTextEditorMethods.format
+    * @publicName format(name, value)
+    * @param1 name:string
+    * @param2 value:any
+    */
+    format: function(name, value) {
+        if(this._quillInstance) {
+            return this._quillInstance.format(name, value);
+        }
+    },
+
+    /**
+    * @name dxRichTextEditorMethods.setSelection
+    * @publicName setSelection(index, length)
+    * @param1 index:number
+    * @param2 length:number
+    */
+    removeFormat: function(index, length) {
+        if(this._quillInstance) {
+            return this._quillInstance.removeFormat(index, length);
+        }
     }
 });
 
