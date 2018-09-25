@@ -740,7 +740,7 @@ module.exports = {
 
                 _getColumnsCountBeforeGroups: function(columns) {
                     for(var i = 0; i < columns.length; i++) {
-                        if(columns[i].type === "group") {
+                        if(columns[i].type === "groupExpand") {
                             return i;
                         }
                     }

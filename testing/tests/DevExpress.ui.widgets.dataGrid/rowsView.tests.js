@@ -2587,7 +2587,7 @@ QUnit.test('Show grouped columns with select column', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1] }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2] }, { values: ['', '', 3] }],
         dataController = new MockDataController({ items: rows }),
-        rowsView = this.createRowsView(rows, dataController, [{ command: 'select' }, { command: 'expand', type: 'group', groupIndex: 0, caption: 'column 1', allowCollapsing: true, cellTemplate: expandCellTemplate }, { command: 'expand', groupIndex: 1, caption: 'column 2', cellTemplate: expandCellTemplate }, {}]),
+        rowsView = this.createRowsView(rows, dataController, [{ command: 'select' }, { command: 'expand', type: 'groupExpand', groupIndex: 0, caption: 'column 1', allowCollapsing: true, cellTemplate: expandCellTemplate }, { command: 'expand', type: 'groupExpand', groupIndex: 1, caption: 'column 2', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     // act
@@ -5239,7 +5239,7 @@ QUnit.test("Group row with the custom position of the group cell", function(asse
     this.options.grouping = { allowCollapsing: true };
     this.options.columns[0] = { dataField: "name", groupIndex: 0 };
     this.options.columns.push({
-        type: "group"
+        type: "groupExpand"
     }, "age");
 
     this.setupDataGridModules();
