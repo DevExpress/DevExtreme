@@ -51,8 +51,7 @@ class OverlapStrategy extends DrawerStrategy {
             };
         }
 
-
-        result.of = $(window);
+        result.of = this._drawer.getOverlayTarget();
 
         return result;
     }

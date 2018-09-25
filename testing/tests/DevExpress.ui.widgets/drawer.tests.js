@@ -101,50 +101,11 @@ QUnit.test("defaults", assert => {
     assert.equal(instance.option("animationDuration"), 400, "animationDuration is OK");
 });
 
-QUnit.test("content() function", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
-    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
-    assert.equal($panel.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
-});
-
-QUnit.test("viewContent() function", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-
-    assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
-});
-
-QUnit.test("drawer preserve content", assert => {
+QUnit.test("drawer should preserve content", assert => {
     const $content = $("#drawer #content"),
         $element = $("#drawer").dxDrawer({});
 
     assert.equal($content[0], $element.find("#content")[0]);
-});
-
-QUnit.test("show and hide", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-
-    instance.show();
-    assert.equal(instance.option("opened"), true, "menu was shown");
-
-    instance.hide();
-    assert.equal(instance.option("opened"), false, "menu was hidden");
-});
-
-QUnit.test("toggle", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const opened = instance.option("opened");
-
-    instance.toggle();
-    assert.equal(instance.option("opened"), !opened, "menu was shown");
-
-    instance.toggle();
-    assert.equal(instance.option("opened"), opened, "menu was hidden");
 });
 
 QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
@@ -215,6 +176,57 @@ QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
     assert.ok(true, "Drawer works correctly");
 });
 
+QUnit.test("target option", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "overlap"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    assert.ok($(instance._overlay.option("position").of).hasClass("dx-drawer-wrapper"), "default target is ok");
+
+    instance.option("target", $element.find(".dx-drawer-content"));
+    assert.ok($(instance._overlay.option("position").of).hasClass("dx-drawer-content"), "target is ok");
+});
+
+QUnit.test("content() function", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
+    assert.equal($panel.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
+});
+
+QUnit.test("viewContent() function", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
+});
+
+QUnit.test("show() and hide() methods", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+
+    instance.show();
+    assert.equal(instance.option("opened"), true, "menu was shown");
+
+    instance.hide();
+    assert.equal(instance.option("opened"), false, "menu was hidden");
+});
+
+QUnit.test("toggle() method", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const opened = instance.option("opened");
+
+    instance.toggle();
+    assert.equal(instance.option("opened"), !opened, "menu was shown");
+
+    instance.toggle();
+    assert.equal(instance.option("opened"), opened, "menu was hidden");
+});
+
 QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if menu isn't visible", assert => {
@@ -274,15 +286,6 @@ QUnit.test("content container should have correct position if it is rendered in 
     $element.trigger("dxshown");
 
     assert.equal(position($content), 50, "container rendered at correct position");
-});
-
-QUnit.test("hideTopOverlayCallback be removed on dispose", assert => {
-    const $element = $("#drawer").dxDrawer({
-        opened: true
-    });
-
-    $element.remove();
-    assert.ok(!hideCallback.hasCallback());
 });
 
 QUnit.test("drawer should not handle hideTopOverlayCallback if it isn't visible", assert => {
