@@ -55,7 +55,7 @@ gridCore.registerModulesOrder([
     "gridView"]);
 
 var DataGrid = Widget.inherit({
-    _activeStateUnit: DATAGRID_ROW_SELECTOR + "[tabindex]",
+    _activeStateUnit: DATAGRID_ROW_SELECTOR,
 
     _getDefaultOptions: function() {
         var that = this,

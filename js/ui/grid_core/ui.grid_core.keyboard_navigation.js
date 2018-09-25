@@ -1107,24 +1107,24 @@ module.exports = {
             rowsView: {
                 renderFocusState: function() {
                     var that = this,
-                        rowIndex = that.option("focusedRowIndex") || 0,
-                        columnIndex = that.option("focusedColumnIndex"),
-                        cellElements = that.getCellElements(rowIndex),
-                        $element = that.element();
+                        rowIndex = that.option("focusedRowIndex"),
+                        $element = that.element(),
+                        cellElements;
 
                     if($element && !focused($element)) {
                         $element.attr("tabIndex", null);
                     }
 
-                    if(!columnIndex || columnIndex < 0) {
-                        columnIndex = 0;
+                    if(!rowIndex || rowIndex < 0) {
+                        rowIndex = 0;
                     }
+                    cellElements = that.getCellElements(rowIndex);
 
                     if(that.option("useKeyboard") && cellElements) {
-                        this.dispatchFocus(cellElements);
+                        this._dispatchFocus(cellElements);
                     }
                 },
-                dispatchFocus: function(cellElements) {
+                _dispatchFocus: function(cellElements) {
                     var that = this,
                         $row = cellElements.eq(0).parent(),
                         columnIndex = that.option("focusedColumnIndex"),
@@ -1137,10 +1137,10 @@ module.exports = {
                     if(isGroupRow($row)) {
                         $row.attr("tabIndex", tabIndex);
                     } else {
-                        that.renderCellFocusState(cellElements, columnIndex);
+                        that._renderCellFocusState(cellElements, columnIndex);
                     }
                 },
-                renderCellFocusState: function(cellElements, columnIndex) {
+                _renderCellFocusState: function(cellElements, columnIndex) {
                     var that = this,
                         $cell,
                         tabIndex = that.option("tabIndex"),

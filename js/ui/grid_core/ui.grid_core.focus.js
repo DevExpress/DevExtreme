@@ -18,16 +18,19 @@ exports.FocusController = core.ViewController.inherit((function() {
         optionChanged: function(args) {
             var that = this;
 
-            if(args.value !== args.previousValue) {
-                if(args.name === "focusedRowIndex") {
-                    that._keyboardController.setFocusedRowIndex(args.value);
-                    that._dataController.updateItems({
-                        changeType: "updateFocusedRow"
-                    });
-                }
+            if(args.name === "focusedRowIndex") {
+                that._keyboardController.setFocusedRowIndex(args.value);
+                that._dataController.updateItems({
+                    changeType: "updateFocusedRow"
+                });
+                args.handled = true;
+            } else if(args.name === "focusedColumnIndex") {
+                args.handled = true;
+            } else if(args.name === "focusedRowEnabled") {
+                args.handled = true;
+            } else {
+                that.callBase(args);
             }
-
-            that.callBase(args);
         },
 
         isRowFocused: function(rowIndex) {
@@ -87,18 +90,21 @@ module.exports = {
              * @type number
              * @default -1
              */
+            focusedRowIndex: -1,
 
             /**
              * @name GridBaseOptions.focusedColumnIndex
              * @type number
              * @default -1
              */
+            focusedColumnIndex: -1,
 
              /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
              * @default false
              */
+            focusedRowEnabled: false
         };
     },
 
@@ -197,7 +203,7 @@ module.exports = {
                     }
                 },
 
-                dispatchFocus: function(cellElements) {
+                _dispatchFocus: function(cellElements) {
                     var that = this,
                         $row = cellElements.eq(0).parent(),
                         columnIndex = that.option("focusedColumnIndex") || 0,
@@ -207,6 +213,9 @@ module.exports = {
                     if(that.option("focusedRowEnabled") && rowIndex >= 0) {
                         if($row.length) {
                             $row.attr("tabIndex", tabIndex);
+                            if(columnIndex < 0) {
+                                columnIndex = 0;
+                            }
                             this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
                         }
                     } else {
