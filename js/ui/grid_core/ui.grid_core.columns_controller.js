@@ -2343,7 +2343,7 @@ module.exports = {
                     }
                 },
 
-                updateFilter: function(filter, remoteFiltering, columnIndex) {
+                updateFilter: function(filter, remoteFiltering, columnIndex, filterValue) {
                     var that = this;
 
                     if(!Array.isArray(filter)) return filter;
@@ -2354,6 +2354,7 @@ module.exports = {
                     filter = extend([], filter);
 
                     columnIndex = filter.columnIndex || columnIndex;
+                    filterValue = filter.filterValue || filterValue;
 
                     if(typeUtils.isString(filter[0])) {
                         column = that.columnOption(filter[0]);
@@ -2370,10 +2371,11 @@ module.exports = {
                         }
                     } else if(typeUtils.isFunction(filter[0])) {
                         filter[0].columnIndex = columnIndex;
+                        filter[0].filterValue = filterValue;
                     }
 
                     for(i = 0; i < filter.length; i++) {
-                        filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex);
+                        filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex, filterValue);
                     }
 
                     return filter;
@@ -2671,7 +2673,7 @@ module.exports = {
                         return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
-                    calculatedColumnOptions.createFilterExpression = function() {
+                    calculatedColumnOptions.createFilterExpression = function(filterValue) {
                         var result;
                         if(this.calculateFilterExpression) {
                             result = this.calculateFilterExpression.apply(this, arguments);
@@ -2680,6 +2682,7 @@ module.exports = {
                             result = [result, "=", true];
                         } else if(result) {
                             result.columnIndex = this.index;
+                            result.filterValue = filterValue;
                         }
                         return result;
                     };
