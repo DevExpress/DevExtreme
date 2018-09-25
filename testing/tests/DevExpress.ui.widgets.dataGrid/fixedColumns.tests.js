@@ -2996,7 +2996,7 @@ QUnit.test("Fixed column widths should be correct when the group cell position i
     this.options.grouping = { allowCollapsing: true };
     this.options.columns[2] = { dataField: "field3", groupIndex: 0 };
     this.options.columns.splice(1, 0, {
-        type: "group"
+        type: "groupExpand"
     });
 
     this.setupDataGrid();

@@ -34,7 +34,8 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: true, bufferedFilterValue: true },
     COMMAND_EXPAND_CLASS = "dx-command-expand",
-    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */,
+    GROUP_COMMAND_COLUMN_NAME = "groupExpand";
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
@@ -898,7 +899,7 @@ module.exports = {
                 visibleIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
 
-                if(column && column.type === "group") {
+                if(column && column.type === GROUP_COMMAND_COLUMN_NAME) {
                     column = that._columns.filter((col) => column.type === col.type)[0] || column;
                 }
 
@@ -1287,7 +1288,7 @@ module.exports = {
                     isColumnFixing = that._isColumnFixing(),
                     defaultCommandColumns = commandColumns.slice().map(column => extend({ fixed: isColumnFixing }, column)),
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
-                        var columnType = needToExtend && column.type === "group" ? "expand" : column.type;
+                        var columnType = needToExtend && column.type === GROUP_COMMAND_COLUMN_NAME ? "expand" : column.type;
                         return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
                     }, -1),
                     callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
@@ -1299,7 +1300,7 @@ module.exports = {
                     if(commandColumnIndex >= 0) {
                         if(needToExtend) {
                             result[i] = extend({ fixed: isColumnFixing }, commandColumns[commandColumnIndex], column);
-                            if(column.type !== "group") {
+                            if(column.type !== GROUP_COMMAND_COLUMN_NAME) {
                                 defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
                             }
                         } else {
@@ -1311,7 +1312,7 @@ module.exports = {
                                 allowReordering: column.groupIndex === 0,
                                 groupIndex: column.groupIndex
                             };
-                            result[i] = extend({}, column, commandColumns[commandColumnIndex], column.type === "group" && columnOptions);
+                            result[i] = extend({}, column, commandColumns[commandColumnIndex], column.type === GROUP_COMMAND_COLUMN_NAME && columnOptions);
                         }
                     }
                 }
@@ -1752,7 +1753,7 @@ module.exports = {
                             fixed: !isDefined(column.groupIndex) || !isDefined(isFixedFirstGroupColumn) ? isColumnFixing : isFixedFirstGroupColumn
                         }, expandColumn, {
                             index: column.index,
-                            type: column.type || "group"
+                            type: column.type || GROUP_COMMAND_COLUMN_NAME
                         });
                     });
 
@@ -1885,11 +1886,11 @@ module.exports = {
 
                         // The order of processing is important
                         if(rowspanExpandColumns < (rowIndex + 1)) {
-                            rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "expand", firstPositiveIndexColumn);
+                            rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "detailExpand", firstPositiveIndexColumn);
                         }
 
                         if(rowspanGroupColumns < (rowIndex + 1)) {
-                            rowspanGroupColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "group", firstPositiveIndexColumn);
+                            rowspanGroupColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, GROUP_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
                         }
                     });
 
