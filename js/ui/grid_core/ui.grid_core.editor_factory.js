@@ -108,41 +108,49 @@ var EditorFactory = modules.ViewController.inherit({
             clearTimeout(that._focusTimeoutID);
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
-                var $focusOverlay = that._$focusOverlay = that._$focusOverlay || $("<div>")
-                        .addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS),
-                    focusOverlayPosition;
 
-                if(hideBorder) {
-                    that._$focusOverlay && that._$focusOverlay.addClass(DX_HIDDEN);
-                } else if($element.length) {
-                    // align "left bottom" for IE, align "right bottom" for Mozilla
-                    var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
-                        $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS)),
-                        elemCoord = $element[0].getBoundingClientRect();
-
-                    $focusOverlay
-                        .removeClass(DX_HIDDEN)
-                        .appendTo($content)
-                        .outerWidth(elemCoord.right - elemCoord.left + 1)
-                        .outerHeight(elemCoord.bottom - elemCoord.top + 1);
-
-                    focusOverlayPosition = {
-                        precise: true,
-                        my: align,
-                        at: align,
-                        of: $element,
-                        boundary: $content.length && $content
-                    };
-
-                    that._updateFocusOverlaySize($focusOverlay, focusOverlayPosition);
-                    positionUtils.setup($focusOverlay, focusOverlayPosition);
-
-                    $focusOverlay.css("visibility", "visible"); // for ios
-                }
+                that.renderFocusOverlay($element, hideBorder);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
                 that.focused.fire($element);
             });
+        }
+    },
+
+    renderFocusOverlay: function($element, hideBorder) {
+        var that = this,
+            focusOverlayPosition;
+
+        if(!that._$focusOverlay) {
+            that._$focusOverlay = $("<div>").addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS);
+        }
+
+        if(hideBorder) {
+            that._$focusOverlay.addClass(DX_HIDDEN);
+        } else if($element.length) {
+            // align "left bottom" for IE, align "right bottom" for Mozilla
+            var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
+                $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS)),
+                elemCoord = $element[0].getBoundingClientRect();
+
+            that._$focusOverlay
+                .removeClass(DX_HIDDEN)
+                .appendTo($content)
+                .outerWidth(elemCoord.right - elemCoord.left + 1)
+                .outerHeight(elemCoord.bottom - elemCoord.top + 1);
+
+            focusOverlayPosition = {
+                precise: true,
+                my: align,
+                at: align,
+                of: $element,
+                boundary: $content.length && $content
+            };
+
+            that._updateFocusOverlaySize(that._$focusOverlay, focusOverlayPosition);
+            positionUtils.setup(that._$focusOverlay, focusOverlayPosition);
+
+            that._$focusOverlay.css("visibility", "visible"); // for ios
         }
     },
 

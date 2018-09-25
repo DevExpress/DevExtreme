@@ -414,7 +414,7 @@
         }
 
         .dx-data-row.dx-state-hover {
-            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
                     background-color: ~"@{@{widgetName}-hover-bg}";
                     color: ~"@{@{widgetName}-row-hovered-color}";
@@ -722,6 +722,37 @@
             }
         }
 
+        .dx-row-focused.dx-row {
+            &.dx-data-row {
+                & > td:not(.dx-focused),
+                & > tr > td:not(.dx-focused),
+                & .dx-command-edit .dx-link {
+                    background-color: ~"@{@{widgetName}-row-focused-bg}";
+                    color: ~"@{@{widgetName}-row-focused-color}";
+
+                    & .dx-@{widgetName}-group-opened,
+                    & .dx-@{widgetName}-group-closed {
+                        color: ~"@{@{widgetName}-row-focused-color}";
+                    }
+                }
+                & > td,
+                & > tr > td {
+                    border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                    border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                }
+            }
+
+            &.dx-group-row {
+                background-color: ~"@{@{widgetName}-row-focused-bg}";
+                color: ~"@{@{widgetName}-row-focused-color}";
+
+                & .dx-@{widgetName}-group-opened,
+                & .dx-@{widgetName}-group-closed {
+                    color: ~"@{@{widgetName}-row-focused-color}";
+                }
+            }
+        }
+
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
             & > td, & > tr > td {
@@ -742,7 +773,7 @@
                     color: ~"@{@{widgetName}-base-color}";
                 }
             }
-            &:not(.dx-row-lines) {
+            &:not(.dx-row-lines, .dx-row-focused) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
@@ -846,7 +877,7 @@
 
 
         .dx-data-row.dx-state-hover {
-            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
                     &.dx-@{widgetName}-group-space {
                         border-left-color: ~"@{@{widgetName}-hover-bg}";

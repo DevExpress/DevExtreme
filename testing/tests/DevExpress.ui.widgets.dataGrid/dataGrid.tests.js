@@ -3955,6 +3955,38 @@ QUnit.testInActiveWindow("Focus search textbox after change search text", functi
     clock.restore();
 });
 
+QUnit.testInActiveWindow("Focus component with focusedRowEnabled and focusedRowIndex should focus the focused row", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        focusedRowElement,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: [
+                    { field1: "1", field2: "2" },
+                    { field1: "2", field2: "3" },
+                    { field1: "4", field2: "5" }
+                ]
+            },
+            focusedRowEnabled: true,
+            focusedRowIndex: 1
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.focus();
+    clock.tick();
+
+    // assert
+    focusedRowElement = dataGrid.getView("rowsView").getRow(1);
+    assert.ok(focusedRowElement.hasClass("dx-row-focused"), "Focused row is row 1");
+    assert.equal(focusedRowElement.attr("tabindex"), 0, "Focused row has tabindex");
+    assert.ok(focusedRowElement.is(":focus"), "Focused row has focus");
+
+    clock.restore();
+});
+
 // T117114
 QUnit.test("columns width when all columns have width and scrolling mode is virtual", function(assert) {
     // arrange, act
