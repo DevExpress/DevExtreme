@@ -151,6 +151,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 isSelectColumnVisible = this.isSelectColumnVisible();
 
             columnsController.addCommandColumn({
+                type: "selection",
                 command: "select",
                 visible: isSelectColumnVisible,
                 visibleIndex: -1,

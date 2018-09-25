@@ -585,6 +585,10 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         return this.callBase(options);
     },
 
+    _renderGroupedCells: function($row, options) {
+        return this.callBase($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
+    },
+
     _renderGroupSummaryCells: function($row, options) {
         if(this._isFixedTableRendering) {
             this.callBase($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));

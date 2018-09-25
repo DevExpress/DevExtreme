@@ -1555,7 +1555,7 @@ QUnit.testInActiveWindow("Down arrow key do not work in masterDetail row", funct
 
     // assert
     assert.strictEqual(isDefaultPrevented, false, "default is not prevented");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 });
 
@@ -1593,7 +1593,7 @@ QUnit.testInActiveWindow("Left arrow key do not work in masterDetail row", funct
 
     // assert
     assert.strictEqual(isDefaultPrevented, false, "default is not prevented");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
 });
 

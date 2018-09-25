@@ -448,13 +448,11 @@ QUnit.test("Draw fixed table for rowsView with master detail", function(assert) 
     $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
     assert.equal($table.find("tbody > tr").first().find("td").length, 6, "count column");
-    assert.equal($table.find("tbody > tr").eq(1).find("td").length, 2, "count column in master detail row");
-    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").first().html(), "", "text column");
-    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").last().html(), "&nbsp;", "text column");
+    assert.equal($table.find("tbody > tr").eq(1).find("td").length, 1, "count column in master detail row");
+    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").first().html(), "&nbsp;", "text column");
     assert.equal($fixTable.find("tbody > tr").first().find("td").length, 4, "count column");
-    assert.equal($fixTable.find("tbody > tr").eq(1).find("td").length, 2, "count column in master detail row");
-    assert.strictEqual($fixTable.find("tbody > tr").eq(1).find("td").first().text(), "", "text column");
-    assert.strictEqual($fixTable.find("tbody > tr").eq(1).find("td").last().text(), "Test", "text column");
+    assert.equal($fixTable.find("tbody > tr").eq(1).find("td").length, 1, "count column in master detail row");
+    assert.strictEqual($fixTable.find("tbody > tr").eq(1).find("td").first().text(), "Test", "text column");
 });
 
 // T363211
@@ -2988,4 +2986,31 @@ QUnit.test("'getCellElement' function return group cell from correct table", fun
     // act, assert
     assert.ok(isCellFromFixedTable($(this.getCellElement(0, 0))), "fixed cell");
     assert.ok(isCellFromFixedTable($(this.getCellElement(0, 1))), "fixed cell");
+});
+
+QUnit.test("Fixed column widths should be correct when the group cell position is specified", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $colElements;
+
+    this.options.grouping = { allowCollapsing: true };
+    this.options.columns[2] = { dataField: "field3", groupIndex: 0 };
+    this.options.columns.splice(1, 0, {
+        type: "group"
+    });
+
+    this.setupDataGrid();
+    this.rowsView.render($testElement);
+
+    // act
+    this.rowsView.setColumnWidths([100, 30, 150, 100]);
+    this.rowsView.resize();
+
+    // assert
+    $colElements = $testElement.find(".dx-datagrid-rowsview .dx-datagrid-content-fixed col");
+    assert.strictEqual($colElements.length, 4, "col count");
+    assert.strictEqual($colElements[0].style.width, "100px", "width of the first col");
+    assert.strictEqual($colElements[1].style.width, "30px", "width of the second col");
+    assert.strictEqual($colElements[2].style.width, "auto", "width of the third col");
+    assert.strictEqual($colElements[3].style.width, "auto", "width of the fourth col");
 });

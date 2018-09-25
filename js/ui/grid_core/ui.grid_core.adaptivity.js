@@ -55,7 +55,7 @@ function adaptiveCellTemplate(container, options) {
         $container = $(container),
         adaptiveColumnsController = options.component.getController("adaptiveColumns");
 
-    if(options.rowType !== "groupFooter") {
+    if(options.rowType === "data") {
         $adaptiveColumnButton = $("<span>").addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
         eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
             adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
@@ -558,7 +558,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     updateHidingQueue: function(columns) {
         var that = this,
             hideableColumns = columns.filter(function(column) {
-                return column.visible && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
+                return column.visible && !column.type && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
             }),
             columnsHasHidingPriority,
             i;
@@ -608,12 +608,14 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         that._rowsView = that.getView("rowsView");
 
         that._columnsController.addCommandColumn({
+            type: ADAPTIVE_COLUMN_NAME,
             command: ADAPTIVE_COLUMN_NAME,
             visible: true,
             adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
             width: "auto",
-            cellTemplate: adaptiveCellTemplate
+            cellTemplate: adaptiveCellTemplate,
+            fixedPosition: "right"
         });
 
         that._columnsController.columnsChanged.add(function() {

@@ -568,8 +568,7 @@ module.exports = {
 
             var createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 var commonColumnOptions = {},
-                    calculatedColumnOptions,
-                    isDefaultCommandColumn;
+                    calculatedColumnOptions;
 
                 if(columnOptions) {
                     if(typeUtils.isString(columnOptions)) {
@@ -579,15 +578,9 @@ module.exports = {
                     }
 
                     if(columnOptions.command) {
-                        isDefaultCommandColumn = that._commandColumns.some((column) => column.command === columnOptions.command);
-
-                        if(!isDefaultCommandColumn) {
-                            commonColumnOptions.visible = true;
-                        }
-
-                        return extend(true, commonColumnOptions, columnOptions);
+                        return extend(true, {}, columnOptions);
                     } else {
-                        commonColumnOptions = that.getCommonSettings();
+                        commonColumnOptions = that.getCommonSettings(columnOptions);
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
                             columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
                         }
@@ -904,6 +897,10 @@ module.exports = {
 
                 visibleIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
+
+                if(column && column.type === "group") {
+                    column = that._columns.filter((col) => column.type === col.type)[0] || column;
+                }
 
                 return column && isDefined(column.index) ? column.index : -1;
             };
@@ -1239,15 +1236,24 @@ module.exports = {
                 return !column.fixedPosition ? "left" : column.fixedPosition;
             };
 
-            var processExpandColumns = function(columns, expandColumns, columnIndex) {
-                var rowspan = columns[columnIndex] && columns[columnIndex].rowspan,
-                    expandColumnsByRow = expandColumns.slice(0);
+            var processExpandColumns = function(columns, expandColumns, type, columnIndex) {
+                var customColumnIndex,
+                    rowCount = this.getRowCount(),
+                    rowspan = columns[columnIndex] && columns[columnIndex].rowspan,
+                    expandColumnsByType = expandColumns.filter((column) => column.type === type);
+
+                columns.forEach((column, index) => {
+                    if(column.type === type) {
+                        customColumnIndex = index;
+                        rowspan = columns[index + 1] ? columns[index + 1].rowspan : rowCount;
+                    }
+                });
 
                 if(rowspan > 1) {
-                    expandColumnsByRow = iteratorUtils.map(expandColumnsByRow, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
+                    expandColumnsByType = iteratorUtils.map(expandColumnsByType, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
                 }
-                expandColumnsByRow.unshift(columnIndex, 0);
-                columns.splice.apply(columns, expandColumnsByRow);
+                expandColumnsByType.unshift.apply(expandColumnsByType, isDefined(customColumnIndex) ? [customColumnIndex, 1] : [columnIndex, 0]);
+                columns.splice.apply(columns, expandColumnsByType);
 
                 return rowspan || 1;
             };
@@ -1272,38 +1278,59 @@ module.exports = {
                 return str;
             };
 
-            var mergeColumns = (columns, commandColumns, needToExtend) => {
+            var mergeColumns = (that, columns, commandColumns, needToExtend) => {
                 var i,
                     column,
+                    columnOptions,
                     commandColumnIndex,
-                    result = columns.length ? (needToExtend && commandColumns || columns).slice().map(column => extend({}, column)) : [],
+                    result = columns.slice().map(column => extend({}, column)),
+                    isColumnFixing = that._isColumnFixing(),
+                    defaultCommandColumns = commandColumns.slice().map(column => extend({ fixed: isColumnFixing }, column)),
                     getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
-                        return commandColumn.command === column.command ? index : result;
-                    }, -1);
+                        var columnType = needToExtend && column.type === "group" ? "expand" : column.type;
+                        return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
+                    }, -1),
+                    callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
 
-                if(result.length) {
-                    for(i = 0; i < columns.length; i++) {
-                        column = columns[i];
+                for(i = 0; i < columns.length; i++) {
+                    column = columns[i];
 
-                        commandColumnIndex = column && column.command ? getCommandColumnIndex(column) : -1;
-                        if(commandColumnIndex >= 0) {
-                            if(needToExtend) {
-                                result[commandColumnIndex] = extend({}, result[commandColumnIndex], column);
-                            } else {
-                                result[i] = extend({}, result[i], commandColumns[commandColumnIndex]);
+                    commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
+                    if(commandColumnIndex >= 0) {
+                        if(needToExtend) {
+                            result[i] = extend({ fixed: isColumnFixing }, commandColumns[commandColumnIndex], column);
+                            if(column.type !== "group") {
+                                defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
                             }
-                        } else if(column && needToExtend) {
-                            result.push(extend({}, column));
+                        } else {
+                            columnOptions = {
+                                visibleIndex: column.visibleIndex,
+                                index: column.index,
+                                id: column.id,
+                                allowFixing: column.groupIndex === 0,
+                                allowReordering: column.groupIndex === 0,
+                                groupIndex: column.groupIndex
+                            };
+                            result[i] = extend({}, column, commandColumns[commandColumnIndex], column.type === "group" && columnOptions);
                         }
                     }
+                }
+
+                if(columns.length && needToExtend && defaultCommandColumns.length) {
+                    result = result.concat(defaultCommandColumns);
                 }
 
                 return result;
             };
 
+            var isCustomCommandColumn = (that, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
+
+            var isColumnFixed = (that, column) => isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing();
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
+                        type: "expand",
                         command: "expand",
                         width: "auto",
                         cssClass: COMMAND_EXPAND_CLASS,
@@ -1352,8 +1379,6 @@ module.exports = {
 
                     that._columns = that._columns || [];
 
-                    addExpandColumn(that);
-
                     that._isColumnsFromOptions = !!columns;
 
                     if(that._isColumnsFromOptions) {
@@ -1362,6 +1387,8 @@ module.exports = {
                     } else {
                         assignColumns(that, that._columnsUserState ? createColumnsFromOptions(that, that._columnsUserState) : that._columns);
                     }
+
+                    addExpandColumn(that);
 
                     if(that._dataSourceApplied) {
                         that.applyDataSource(that._dataSource, true);
@@ -1516,8 +1543,8 @@ module.exports = {
                 isDataSourceApplied: function() {
                     return this._dataSourceApplied;
                 },
-                getCommonSettings: function() {
-                    var commonColumnSettings = this.option("commonColumnSettings") || {},
+                getCommonSettings: function(column) {
+                    var commonColumnSettings = (!column || !column.type) && this.option("commonColumnSettings") || {},
                         groupingOptions = this.option("grouping") || {},
                         groupPanelOptions = this.option("groupPanel") || {};
 
@@ -1650,27 +1677,25 @@ module.exports = {
                                 prevColumn = visibleColumns[j - 1];
                                 column = visibleColumns[j];
 
-                                if(!column.command) {
-                                    if(!column.fixed) {
-                                        if(i === 0) {
-                                            if(column.isBand && column.colspan) {
-                                                transparentColspan += column.colspan;
-                                            } else {
-                                                transparentColspan++;
-                                            }
+                                if(!column.fixed) {
+                                    if(i === 0) {
+                                        if(column.isBand && column.colspan) {
+                                            transparentColspan += column.colspan;
+                                        } else {
+                                            transparentColspan++;
                                         }
-
-                                        notFixedColumnCount++;
-                                        if(!isDefined(transparentColumnIndex)) {
-                                            transparentColumnIndex = j;
-                                        }
-                                    } else if(prevColumn && prevColumn.fixed && getFixedPosition(prevColumn) !== getFixedPosition(column)) {
-                                        if(!isDefined(transparentColumnIndex)) {
-                                            transparentColumnIndex = j;
-                                        }
-                                    } else {
-                                        lastFixedPosition = column.fixedPosition;
                                     }
+
+                                    notFixedColumnCount++;
+                                    if(!isDefined(transparentColumnIndex)) {
+                                        transparentColumnIndex = j;
+                                    }
+                                } else if(prevColumn && prevColumn.fixed && getFixedPosition(prevColumn) !== getFixedPosition(column)) {
+                                    if(!isDefined(transparentColumnIndex)) {
+                                        transparentColumnIndex = j;
+                                    }
+                                } else {
+                                    lastFixedPosition = column.fixedPosition;
                                 }
                             }
 
@@ -1709,19 +1734,26 @@ module.exports = {
                 },
                 getExpandColumns: function() {
                     var expandColumns = this._getExpandColumnsCore(),
-                        expandColumn;
+                        expandColumn,
+                        firstGroupColumn = expandColumns.filter((column) => column.groupIndex === 0)[0],
+                        isFixedFirstGroupColumn = firstGroupColumn && firstGroupColumn.fixed,
+                        isColumnFixing = this._isColumnFixing();
 
                     if(expandColumns.length) {
                         expandColumn = this.columnOption("command:expand");
                     }
 
-                    expandColumns = iteratorUtils.map(expandColumns, function(column) {
+                    expandColumns = iteratorUtils.map(expandColumns, (column) => {
                         return extend({}, column, {
                             visibleWidth: null,
                             minWidth: null,
                             cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
-                            headerCellTemplate: null
-                        }, expandColumn, { index: column.index });
+                            headerCellTemplate: null,
+                            fixed: !isDefined(column.groupIndex) || !isDefined(isFixedFirstGroupColumn) ? isColumnFixing : isFixedFirstGroupColumn
+                        }, expandColumn, {
+                            index: column.index,
+                            type: column.type || "group"
+                        });
                     });
 
                     return expandColumns;
@@ -1769,17 +1801,18 @@ module.exports = {
                     var that = this,
                         i,
                         result = [],
+                        rowspanGroupColumns = 0,
                         rowspanExpandColumns = 0,
                         firstPositiveIndexColumn,
-                        expandColumns = mergeColumns(that.getExpandColumns(), that._columns),
                         rowCount = that.getRowCount(),
                         positiveIndexedColumns = [],
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
-                        columns = mergeColumns(that._columns, that._commandColumns, true),
                         bandColumnsCache = that.getBandColumnsCache(),
+                        expandColumns = mergeColumns(that, that.getExpandColumns(), that._columns),
+                        columns = mergeColumns(that, that._columns, that._commandColumns, true),
                         columnDigitsCount = digitsCount(columns.length);
 
                     processBandColumns(that, columns, bandColumnsCache);
@@ -1808,14 +1841,14 @@ module.exports = {
                                 column.fixed = parentBandColumns.length ? parentBandColumns[0].fixed : column.fixed;
                                 column.fixedPosition = parentBandColumns.length ? parentBandColumns[0].fixedPosition : column.fixedPosition;
 
-                                if(column.fixed || column.command) {
+                                if(column.fixed) {
                                     isFixedToEnd = column.fixedPosition === "right";
 
-                                    if(rtlEnabled) {
+                                    if(rtlEnabled && (!column.command || isCustomCommandColumn(that, column))) {
                                         isFixedToEnd = !isFixedToEnd;
                                     }
 
-                                    if(isFixedToEnd || column.command) {
+                                    if(isFixedToEnd) {
                                         indexedColumns = positiveIndexedColumns[rowIndex][2];
                                     } else {
                                         indexedColumns = positiveIndexedColumns[rowIndex][0];
@@ -1850,8 +1883,13 @@ module.exports = {
                             });
                         });
 
+                        // The order of processing is important
                         if(rowspanExpandColumns < (rowIndex + 1)) {
-                            rowspanExpandColumns += processExpandColumns(result[rowIndex], expandColumns, firstPositiveIndexColumn);
+                            rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "expand", firstPositiveIndexColumn);
+                        }
+
+                        if(rowspanGroupColumns < (rowIndex + 1)) {
+                            rowspanGroupColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, "group", firstPositiveIndexColumn);
                         }
                     });
 
@@ -1959,7 +1997,7 @@ module.exports = {
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
                                 options.visibleIndex = MAX_SAFE_INTEGER;
                             } else {
-                                if(column.fixed ^ targetColumn.fixed) {
+                                if(isColumnFixed(that, column) ^ isColumnFixed(that, targetColumn)) {
                                     options.visibleIndex = MAX_SAFE_INTEGER;
                                 } else {
                                     options.visibleIndex = targetColumn.visibleIndex;
@@ -2411,7 +2449,7 @@ module.exports = {
                     var that = this,
                         i,
                         identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
-                        columns = (identifier < 0 || identifierOptionName === "command") ? that._columns.concat(that._commandColumns) : that._columns,
+                        columns = that._columns.concat(that._commandColumns),
                         needUpdateIndexes,
                         column;
 
@@ -2552,16 +2590,12 @@ module.exports = {
                     }
                 },
                 addCommandColumn: function(options) {
-                    var commandColumns = this._commandColumns,
-                        i;
+                    var commandColumn = this._commandColumns.filter((column) => column.command === options.command)[0];
 
-                    for(i = 0; i < commandColumns.length; i++) {
-                        if(commandColumns[i].command === options.command) {
-                            return;
-                        }
+                    if(!commandColumn) {
+                        commandColumn = options;
+                        this._commandColumns.push(commandColumn);
                     }
-
-                    commandColumns.push(options);
                 },
                 getUserState: function() {
                     var columns = this._columns,

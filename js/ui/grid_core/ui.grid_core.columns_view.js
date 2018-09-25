@@ -760,6 +760,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cols = $tableElement.children("colgroup").children("col");
             styleUtils.setWidth($cols, "auto");
             columns = columns || this.getColumns(null, $tableElement);
+
             for(i = 0; i < columns.length; i++) {
                 if(!legacyRendering && columnAutoWidth && !fixed) {
                     width = columns[i].width;
@@ -780,6 +781,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         }
                     }
                 }
+
                 if(columns[i].colspan) {
                     columnIndex += columns[i].colspan;
                     continue;

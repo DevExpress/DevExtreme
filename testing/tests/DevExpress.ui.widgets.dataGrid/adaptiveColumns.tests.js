@@ -1658,6 +1658,81 @@ QUnit.test("Form has 2 columns in material theme", function(assert) {
     themes.isMaterial = origIsMaterial;
 });
 
+QUnit.test("Custom command column should not be hidden", function(assert) {
+    // arrange
+    var hiddenColumns;
+
+    $(".dx-datagrid").width(200);
+
+    this.columns = [
+        { dataField: 'firstName', index: 0, width: 150 },
+        { dataField: 'lastName', index: 1, width: 100 },
+        { type: "buttons" }
+    ];
+
+    this.options = {
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        columnAutoWidth: true
+    };
+
+    setupDataGrid(this);
+
+    // act
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
+    assert.strictEqual(hiddenColumns.length, 1, "hidden column count");
+    assert.strictEqual(hiddenColumns[0].dataField, "lastName", "dataField of the hidden column");
+});
+
+QUnit.test("The adaptive cell should be empty in a grouped row with a summary", function(assert) {
+    // arrange
+    var $testElement = $("#container");
+
+    $(".dx-datagrid").width(200);
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", field1: "fiedl1", field2: "field2" },
+        { firstName: 'Super', lastName: "Star", field1: "fiedl3", field2: "field4" }
+    ];
+
+    this.columns = [
+        { dataField: 'firstName', groupIndex: 0 },
+        { dataField: 'lastName', width: 100 },
+        { dataField: 'fiedl1', width: 100 },
+        { dataField: 'field2', width: 100 },
+        { type: "adaptive" }
+    ];
+    this.options = {
+        summary: {
+            groupItems: [{
+                column: "fiedl1",
+                summaryType: "count",
+                alignByColumn: true
+            }],
+            texts: {
+                count: "count"
+            }
+        }
+    };
+
+    setupDataGrid(this);
+
+    // act
+    this.rowsView.render($testElement);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(this.rowsView.getRowElement(0)).children(".dx-command-adaptive").html(), "&nbsp;", "adaptive cell");
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

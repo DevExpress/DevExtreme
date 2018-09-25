@@ -2587,7 +2587,7 @@ QUnit.test('Show grouped columns with select column', function(assert) {
     // arrange
     var rows = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1] }, { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2] }, { values: ['', '', 3] }],
         dataController = new MockDataController({ items: rows }),
-        rowsView = this.createRowsView(rows, dataController, [{ command: 'select' }, { command: 'expand', groupIndex: 0, caption: 'column 1', allowCollapsing: true, cellTemplate: expandCellTemplate }, { command: 'expand', groupIndex: 1, caption: 'column 2', cellTemplate: expandCellTemplate }, {}]),
+        rowsView = this.createRowsView(rows, dataController, [{ command: 'select' }, { command: 'expand', type: 'group', groupIndex: 0, caption: 'column 1', allowCollapsing: true, cellTemplate: expandCellTemplate }, { command: 'expand', groupIndex: 1, caption: 'column 2', cellTemplate: expandCellTemplate }, {}]),
         testElement = $('#container');
 
     // act
@@ -2723,9 +2723,8 @@ QUnit.test('Show master detail', function(assert) {
 
     assert.ok(!$(testElement.find('tbody > tr')[1]).hasClass("dx-group-row"));
     assert.ok($(testElement.find('tbody > tr')[1]).hasClass("dx-master-detail-row"));
-    assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 2);
-    assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(0).html(), '&nbsp;');
-    assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(1).text(), 'Test Detail Information');
+    assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 1);
+    assert.equal($(testElement.find('tbody > tr')[1]).find('td').first().text(), 'Test Detail Information');
 });
 
 QUnit.test('Detail grid render as delayed template', function(assert) {
@@ -2849,10 +2848,8 @@ QUnit.test('Show grouped columns and master detail', function(assert) {
     assert.equal($(testElement.find('tbody > tr')[2]).find('td').last().text(), '3');
 
     assert.ok(!$(testElement.find('tbody > tr')[3]).hasClass("dx-group-row"));
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').length, 4);
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').first().html(), '&nbsp;');
-    assert.equal($($(testElement.find('tbody > tr')[3]).find('td')[1]).html(), '&nbsp;');
-    assert.equal($(testElement.find('tbody > tr')[3]).find('td').last().text(), 'Test Detail Information');
+    assert.equal($(testElement.find('tbody > tr')[3]).find('td').length, 1);
+    assert.equal($(testElement.find('tbody > tr')[3]).find('td').first().text(), 'Test Detail Information');
 });
 
 QUnit.test('Change Row Expand for master detail on expand button click ', function(assert) {
@@ -4852,7 +4849,7 @@ QUnit.test("Render one time the master detail when expanded/collapsed item", fun
     // assert
     assert.ok(getRowElement(1).hasClass("dx-master-detail-row"), "have master detail row");
     assert.ok(getRowElement(1).is(":visible"), "visible master detail row");
-    assert.strictEqual(getRowElement(1).children().eq(1).text(), "Test", "text master detail row");
+    assert.strictEqual(getRowElement(1).children().first().text(), "Test", "text master detail row");
     assert.equal(countCallTemplate, 1, "call template");
 
     // act
@@ -4867,7 +4864,7 @@ QUnit.test("Render one time the master detail when expanded/collapsed item", fun
     // assert
     assert.ok(getRowElement(1).hasClass("dx-master-detail-row"), "have master detail row");
     assert.ok(getRowElement(1).is(":visible"), "visible master detail row");
-    assert.strictEqual(getRowElement(1).children().eq(1).text(), "Test", "text master detail row");
+    assert.strictEqual(getRowElement(1).children().first().text(), "Test", "text master detail row");
     assert.equal(countCallTemplate, 1, "not call template");
 });
 
@@ -5232,6 +5229,30 @@ QUnit.test('Show grouped column when cellTemplate is defined', function(assert) 
     assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(0).html(), '&nbsp;', "expand column cell in data row must be empty");
     assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(1).text(), 'Alex');
     assert.equal($(testElement.find('tbody > tr')[1]).find('td').eq(2).html(), '15');
+});
+
+QUnit.test("Group row with the custom position of the group cell", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $groupCellElements;
+
+    this.options.grouping = { allowCollapsing: true };
+    this.options.columns[0] = { dataField: "name", groupIndex: 0 };
+    this.options.columns.push({
+        type: "group"
+    }, "age");
+
+    this.setupDataGridModules();
+
+    // act
+    this.rowsView.render($testElement);
+
+    // assert
+    $groupCellElements = $(this.getRowElement(0)).children();
+    assert.strictEqual($groupCellElements.length, 3, "group cell count");
+    assert.ok($groupCellElements.eq(0).hasClass("dx-datagrid-group-space"), "first cell is empty");
+    assert.ok($groupCellElements.eq(1).hasClass("dx-datagrid-expand"), "second cell is expandable");
+    assert.ok($groupCellElements.eq(2).hasClass("dx-group-cell"), "third cell is group");
 });
 
 

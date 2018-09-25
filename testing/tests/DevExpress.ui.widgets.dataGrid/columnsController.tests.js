@@ -3658,6 +3658,7 @@ QUnit.test("insert select column on update when showCheckBoxesMode is onClick", 
     assert.deepEqual(this.getVisibleColumns()[0], {
         visible: true,
         command: 'select',
+        type: 'selection',
         dataType: 'boolean',
         alignment: 'center',
         width: 'auto',
@@ -3681,6 +3682,7 @@ QUnit.test("insert select column on update when showCheckBoxesMode is always", f
     assert.deepEqual(this.getVisibleColumns()[0], {
         visible: true,
         command: 'select',
+        type: 'selection',
         dataType: 'boolean',
         alignment: 'center',
         width: 'auto',
@@ -4417,7 +4419,6 @@ QUnit.test("sortOrder should not be reset after column is ungrouped", function(a
     assert.strictEqual(this.columnsController.getVisibleColumns()[0].groupIndex, undefined);
 });
 
-
 QUnit.test("lastSortOrder should not be updated after changing the group index", function(assert) {
     // arrange
     this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "desc" }, { dataField: "field2", groupIndex: 1 }, "field3"] });
@@ -4443,6 +4444,29 @@ QUnit.test("lastSortOrder should not be updated after changing the group index",
     assert.strictEqual(this.columnsController.getVisibleColumns()[1].dataField, "field1");
     assert.strictEqual(this.columnsController.getVisibleColumns()[1].sortOrder, "desc");
     assert.strictEqual(this.columnsController.getVisibleColumns()[1].groupIndex, undefined);
+});
+
+QUnit.test("move the group command column to begin", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        selection: {
+            mode: "multiple"
+        },
+        columns: [{ type: "selection" }, { type: "group" }, { dataField: "field1", groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }, "field3", "field4"]
+    });
+
+    // act
+    this.columnsController.moveColumn(1, 0);
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns();
+    assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column");
+    assert.strictEqual(visibleColumns[1].dataField, "field2", "dataField of the second column");
+    assert.strictEqual(visibleColumns[2].type, "selection", "selection column");
+    assert.strictEqual(visibleColumns[3].dataField, "field3", "dataField of the fourth column");
+    assert.strictEqual(visibleColumns[4].dataField, "field4", "dataField of the fifth column");
 });
 
 QUnit.module("Column Option", { beforeEach: setupModule, afterEach: teardownModule });
@@ -8342,20 +8366,18 @@ QUnit.module("Customization of the command columns", {
                     editRow: "Edit"
                 }
             },
-            columns: ["field1", "field2", {
-                command: "edit",
+            columns: [{
+                type: "buttons",
                 cellTemplate: editCellTemplate,
-                width: 200,
-                visibleIndex: -1
-            }]
+                width: 200
+            }, "field1", "field2"]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
-            command: "edit",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[0], {
+            type: "buttons",
             cellTemplate: editCellTemplate,
-            width: 200,
-            visibleIndex: -1
+            width: 200
         }, "edit column");
     });
 
@@ -8369,19 +8391,17 @@ QUnit.module("Customization of the command columns", {
                 showCheckBoxesMode: "always"
             },
             columns: ["field1", "field2", {
-                command: "select",
+                type: "selection",
                 cellTemplate: selectCellTemplate,
-                width: 200,
-                visibleIndex: 0
+                width: 200
             }]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[2], {
-            command: "select",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[2], {
+            type: "selection",
             cellTemplate: selectCellTemplate,
-            width: 200,
-            visibleIndex: 0
+            width: 200
         }, "select column");
     });
 
@@ -8391,22 +8411,42 @@ QUnit.module("Customization of the command columns", {
 
         this.applyOptions({
             columnHidingEnabled: true,
-            columns: ["field1", "field2", {
-                command: "adaptive",
+            columns: [{
+                type: "adaptive",
                 cellTemplate: adaptiveCellTemplate,
                 width: 100,
-                visibleIndex: -1,
                 adaptiveHidden: false
-            }]
+            }, "field1", "field2"]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "cellTemplate", "width", "visibleIndex"])[0], {
-            command: "adaptive",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[0], {
+            type: "adaptive",
             cellTemplate: adaptiveCellTemplate,
-            width: 100,
-            visibleIndex: -1
+            width: 100
         }, "adaptive column");
+    });
+
+    QUnit.test("The group column", function(assert) {
+        // arrange
+        var groupCellTemplate = function() {};
+
+        this.applyOptions({
+            columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
+                type: "group",
+                cellTemplate: groupCellTemplate,
+                width: 100
+            }, "field3"]
+        });
+
+        // act, assert
+        assert.deepEqual(this.getVisibleColumns(["type", "groupIndex", "dataField", "cellTemplate", "width"])[1], {
+            type: "group",
+            groupIndex: 0,
+            dataField: "field1",
+            cellTemplate: groupCellTemplate,
+            width: 100
+        }, "group column");
     });
 
     QUnit.test("The expand column", function(assert) {
@@ -8414,19 +8454,19 @@ QUnit.module("Customization of the command columns", {
         var expandCellTemplate = function() {};
 
         this.applyOptions({
-            columnHidingEnabled: true,
-            columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
-                command: "expand",
+            masterDetail: {
+                enabled: true
+            },
+            columns: ["field1", {
+                type: "expand",
                 cellTemplate: expandCellTemplate,
                 width: 100
-            }]
+            }, "field2", "field3"]
         });
 
         // act, assert
-        assert.deepEqual(this.getVisibleColumns(["command", "groupIndex", "dataField", "cellTemplate", "width"])[0], {
-            command: "expand",
-            groupIndex: 0,
-            dataField: "field1",
+        assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[1], {
+            type: "expand",
             cellTemplate: expandCellTemplate,
             width: 100
         }, "group column");
@@ -8443,56 +8483,89 @@ QUnit.module("Customization of the command columns", {
                 }
             },
             columns: ["field1", "field2", {
-                command: "edit",
-                width: 200,
-                visibleIndex: -1
+                type: "buttons",
+                width: 200
             }]
         });
 
         // act, assert
-        assert.deepEqual(processColumnsForCompare([this.columnOption("command:edit")], ["command", "cellTemplate", "width", "visibleIndex"]), [{
-            command: "edit",
-            width: 200,
-            visibleIndex: -1
+        assert.deepEqual(processColumnsForCompare([this.columnOption("type:buttons")], ["type", "width"]), [{
+            type: "buttons",
+            width: 200
         }], "edit column");
-    });
-
-    QUnit.test("Custom command column", function(assert) {
-        // arrange
-        this.applyOptions({
-            columnHidingEnabled: true,
-            columns: ["field1", "field2", {
-                command: "custom",
-                width: 100
-            }]
-        });
-
-        // act, assert
-        assert.deepEqual(this.getVisibleColumns()[2], {
-            command: "custom",
-            index: 2,
-            width: 100,
-            visible: true
-        }, "custom command column");
-    });
-
-    QUnit.test("Get custom command options via columnOption method", function(assert) {
-        // arrange
-        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
-
-        // act, assert
-        assert.deepEqual(processColumnsForCompare([this.columnOption("command:custom")], ["command", "width", "visible"]), [{ command: "custom", width: 100, visible: true }], "options of the custom command column");
     });
 
     QUnit.test("Update custom command options via columnOption method", function(assert) {
         // arrange
-        this.applyOptions({ columns: ["field1", "field2", { command: "custom", width: 100 }] });
+        this.applyOptions({ columns: ["field1", "field2", { type: "buttons", width: 100 }] });
 
         // act
-        this.columnOption("command:custom", "width", 50);
+        this.columnOption("type:buttons", "width", 50);
 
         // assert
-        assert.strictEqual(this.columnOption("command:custom", "width"), 50, "width of the custom command column");
+        assert.strictEqual(this.columnOption("type:buttons", "width"), 50, "width of the custom command column");
+    });
+
+    QUnit.test("getFixedColumns when the group cell position is specified", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: 'TestField1', caption: 'Custom Title 1', fixed: true },
+                { dataField: 'TestField2', caption: 'Custom Title 2', fixed: true, groupIndex: 0 },
+                { type: "group" },
+                { dataField: 'TestField3', caption: 'Custom Title 3' },
+                { dataField: 'TestField4', caption: 'Custom Title 4' },
+                { dataField: 'TestField5', caption: 'Custom Title 5' }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField1", "first fixed column");
+        assert.strictEqual(fixedColumns[1].type, "group", "second fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "fourth fixed column");
+    });
+
+    QUnit.test("Initialization grouped columns", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: 'TestField1', caption: 'Custom Title 1', fixed: true, groupIndex: 0 },
+                { dataField: 'TestField2', caption: 'Custom Title 2', groupIndex: 1 },
+                { type: "group" },
+                { dataField: 'TestField3', caption: 'Custom Title 3' },
+                { dataField: 'TestField4', caption: 'Custom Title 4' },
+                { dataField: 'TestField5', caption: 'Custom Title 5' }
+            ]
+        });
+
+        // assert
+        var visibleColumns = this.columnsController.getVisibleColumns();
+        assert.strictEqual(visibleColumns[0].groupIndex, 0, "first grouped column");
+        assert.ok(visibleColumns[0].fixed, "first grouped column is fixed");
+        assert.ok(visibleColumns[0].allowReordering, "allowReordering of the first grouped column");
+        assert.ok(visibleColumns[0].allowFixing, "allowFixing of the first grouped column");
+        assert.strictEqual(visibleColumns[1].groupIndex, 1, "second grouped column");
+        assert.ok(visibleColumns[1].fixed, "second grouped column is fixed");
+        assert.notOk(visibleColumns[1].allowReordering, "allowReordering of the second grouped column");
+        assert.notOk(visibleColumns[1].allowFixing, "allowFixing of the second grouped column");
+
+        // act
+        this.columnsController.columnOption("TestField1", "fixed", false);
+
+        // assert
+        visibleColumns = this.columnsController.getVisibleColumns();
+        assert.strictEqual(visibleColumns[0].groupIndex, 0, "first grouped column");
+        assert.notOk(visibleColumns[0].fixed, "first grouped column isn't fixed");
+        assert.ok(visibleColumns[0].allowReordering, "allowReordering of the first grouped column");
+        assert.ok(visibleColumns[0].allowFixing, "allowFixing of the first grouped column");
+        assert.strictEqual(visibleColumns[1].groupIndex, 1, "second grouped column");
+        assert.notOk(visibleColumns[1].fixed, "second grouped column isn't fixed");
+        assert.notOk(visibleColumns[1].allowReordering, "allowReordering of the second grouped column");
+        assert.notOk(visibleColumns[1].allowFixing, "allowFixing of the second grouped column");
     });
 });
 

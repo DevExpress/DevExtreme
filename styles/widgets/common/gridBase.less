@@ -230,6 +230,10 @@
         z-index: 10000;
         // T105728
         .box-sizing(content-box);
+
+        &.dx-drag-command-cell {
+            padding: 0px;
+        }
     }
 
     .dx-@{widgetName}-columns-separator {
@@ -821,10 +825,7 @@
 
         .dx-row > .dx-master-detail-cell {
             padding: @GRID_MASTERDETAIL_PADDING;
-            padding-left: 0;
-            &:first-child {
-                padding-left: @GRID_MASTERDETAIL_PADDING;
-            }
+
             &:focus{
                 outline: 0;
             }

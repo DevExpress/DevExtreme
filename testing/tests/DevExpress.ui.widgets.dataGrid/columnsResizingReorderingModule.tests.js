@@ -1169,9 +1169,9 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 160 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 140 }
         ], 'update column options after resizing');
     });
@@ -1234,9 +1234,9 @@ function getEvent(options) {
         assert.equal($("#container").width(), 200);
 
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 110 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 90 }
         ], 'update column options after resizing');
     });
@@ -1293,9 +1293,9 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 140 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 160 },
         ], 'update column options after resizing');
     });
@@ -1321,7 +1321,7 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 160 }
         ], 'update column options after resizing');
     });
@@ -1343,9 +1343,9 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(resizeController._columnsController.updateOptions, [
-            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 0, optionName: "width", optionValue: 159 },
-            { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 1, optionName: "visibleWidth", optionValue: null },
             { columnIndex: 1, optionName: "width", optionValue: 140 }
         ], 'update column options after resizing');
     });
@@ -4325,6 +4325,37 @@ function getEvent(options) {
         // assert
         assert.ok(rowsView.setRowsOpacity.calledOnce, "setRowsOpacity of RowsView method should is called once");
         assert.ok(columnHeadersView.setRowsOpacity.calledOnce, "setRowsOpacity of ColumnHeadersView method should is called once");
+    });
+
+    QUnit.test("Drag command column", function(assert) {
+        // arrange
+        var testElement = $("#container"),
+            draggingHeader,
+            $dragHeader;
+
+        // act
+        this.createDraggingHeaderViewController();
+        draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
+        draggingHeader.render(testElement);
+        draggingHeader.dragHeader({
+            columnElement: $("<td />", {
+                css: {
+                    width: "100px"
+                }
+            }),
+            sourceColumn: {
+                command: "edit",
+                type: "buttons"
+            }
+        });
+        $dragHeader = $(".dx-datagrid-drag-header");
+
+        // assert
+        assert.ok(draggingHeader._isDragging, "is dragging");
+        assert.ok($dragHeader.hasClass("dx-drag-command-cell"), "draggable header element has class dx-command-cell");
+        assert.strictEqual($dragHeader.outerWidth(), 100, "width");
+        assert.strictEqual($dragHeader.text(), "", "text");
     });
 }());
 
