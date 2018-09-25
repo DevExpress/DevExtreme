@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     mathUtils = require("../core/utils/math"),
     extend = require("../core/utils/extend").extend,
     noop = require("../core/utils/common").noop,
+    domUtils = require("../core/utils/dom"),
     isDefined = require("../core/utils/type").isDefined,
     devices = require("../core/devices"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
@@ -284,10 +285,12 @@ var MultiView = CollectionWidget.inherit({
     },
 
     _renderSpecificItem: function(index) {
-        var hasItemContent = this._itemElements().eq(index).find(this._itemContentClass()).length > 0;
+        var $item = this._itemElements().eq(index),
+            hasItemContent = $item.find(this._itemContentClass()).length > 0;
 
         if(isDefined(index) && !hasItemContent) {
             this._deferredItems[index].resolve();
+            domUtils.triggerResizeEvent($item);
         }
     },
 
