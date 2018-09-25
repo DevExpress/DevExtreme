@@ -116,8 +116,10 @@ var SchedulerTableCreator = {
                 allDayElementIndex++;
             }
 
-            var ratio = 100 / rowCount;
-            $(row).css("height", ratio + "%");
+            if(options.recalculateHeight) {
+                var ratio = 100 / rowCount;
+                $(row).css("height", ratio + "%");
+            }
         }
 
         return templateCallbacks;
