@@ -341,7 +341,8 @@ module.exports = {
 
                     if(changes.length) {
                         this._changes = [];
-                        this.updateItems(changes.length === 1 ? changes[0] : {});
+                        var repaintChangesOnly = changes.every(change => change.repaintChangesOnly);
+                        this.updateItems(changes.length === 1 ? changes[0] : { repaintChangesOnly: repaintChangesOnly });
                     }
                 },
                 // Handlers
@@ -703,7 +704,7 @@ module.exports = {
                     return JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex]);
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && oldItem.isExpanded === newItem.isExpanded) {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group") {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -734,7 +735,17 @@ module.exports = {
                     }
 
                     function isItemEquals(item1, item2) {
-                        return JSON.stringify(item1.values) === JSON.stringify(item2.values) && item1.isExpanded === item2.isExpanded;
+                        if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
+                            return false;
+                        }
+
+                        if(item1.rowType === "group") {
+                            if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
+                                return false;
+                            }
+                        }
+
+                        return true;
                     }
 
                     oldItems.forEach(function(item, index) {
