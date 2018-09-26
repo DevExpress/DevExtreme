@@ -292,6 +292,10 @@ const Drawer = Widget.inherit({
         return this.option("target") || this._$wrapper;
     },
 
+    getOverlay() {
+        return this._overlay;
+    },
+
     getMaxSize() {
         return this._maxSize;
     },

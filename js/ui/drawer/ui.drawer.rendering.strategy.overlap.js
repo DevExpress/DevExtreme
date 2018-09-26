@@ -12,8 +12,9 @@ class OverlapStrategy extends DrawerStrategy {
 
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
             shading: false,
-            target: $(window),
+            container: this._drawer.getOverlayTarget(),
             position: position,
+            height: "100%",
             animation: {
                 show: {
                     duration: 0
@@ -23,8 +24,6 @@ class OverlapStrategy extends DrawerStrategy {
             visible: true,
             propagateOutsideClick: true
         });
-
-        this._drawer._$panel = this._drawer._overlay._$wrapper;
     }
 
     getOverlayPosition() {
@@ -57,12 +56,14 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     setPanelSize() {
+        const overlay = this._drawer.getOverlay();
+
         if(this._drawer._isHorizontalDirection()) {
-            this._drawer._overlay.option("height", $(window).height());
-            this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
+            overlay.option("height", "100%");
+            overlay.option("width", this._drawer.getRealPanelWidth());
         } else {
-            this._drawer._overlay.option("width", $(window).width());
-            this._drawer._overlay.option("height", this._drawer.getRealPanelHeight());
+            overlay.option("width", "100%");
+            overlay.option("height", this._drawer.getRealPanelHeight());
         }
     }
 
