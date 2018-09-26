@@ -634,9 +634,11 @@ QUnit.module("Scroll moving", {
 
         this.startEventsHandler = sinon.stub();
         this.moveEventsHandler = sinon.stub();
+        this.endEventsHandler = sinon.stub();
 
         $(this.group.children[0].element).on("dxc-scroll-start", this.startEventsHandler);
         $(this.group.children[0].element).on("dxc-scroll-move", this.moveEventsHandler);
+        $(this.group.children[0].element).on("dxc-scroll-end", this.endEventsHandler);
 
 
     },
@@ -650,6 +652,7 @@ QUnit.module("Scroll moving", {
 
         this.startEventsHandler = null;
         this.moveEventsHandler = null;
+        this.endEventsHandler = null;
     }
 });
 
@@ -659,17 +662,13 @@ QUnit.test("pointer move without down", function(assert) {
 
     assert.ok(!this.startEventsHandler.called);
     assert.ok(!this.moveEventsHandler.called);
+    assert.ok(!this.endEventsHandler.called);
 });
 
 QUnit.test("pointer down on scroll", function(assert) {
     $(this.group.children[0].element).trigger(new $.Event("dxpointerdown", { pageX: 100, pageY: 200 }));
 
     assert.ok(this.startEventsHandler.calledOnce);
-    assert.deepEqual(this.startEventsHandler.lastCall.args[0].pointers, [{
-        pageX: 100,
-        pageY: 200
-    }]);
-
 });
 
 QUnit.test("move scroll when scale = 1", function(assert) {
@@ -685,25 +684,19 @@ QUnit.test("move scroll when scale = 1", function(assert) {
     $(document).trigger(new $.Event("dxpointermove", { pageX: 80, pageY: 120, preventDefault: preventDefault }));
     // assert
     assert.ok(this.startEventsHandler.calledOnce);
-    assert.deepEqual(this.startEventsHandler.lastCall.args[0].pointers, [{
-        pageX: 100,
-        pageY: 200
-    }]);
 
-    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].pointers, [{
-        pageX: 100 - 30,
-        pageY: 200 - 70
-    }]);
-    assert.deepEqual(this.moveEventsHandler.lastCall.args[0].pointers, [{
-        pageX: 100 + 20,
-        pageY: 200 + 80
-    }]);
+    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].offset, {
+        x: -30,
+        y: -70
+    });
+    assert.deepEqual(this.moveEventsHandler.lastCall.args[0].offset, {
+        x: 20,
+        y: 80
+    });
     assert.ok(!preventDefault.called);
     this.moveEventsHandler.lastCall.args[0].preventDefault();
     assert.ok(preventDefault.calledOnce);
     assert.equal(this.moveEventsHandler.callCount, 2);
-
-
 });
 
 QUnit.test("move scroll when scale != 1", function(assert) {
@@ -718,19 +711,15 @@ QUnit.test("move scroll when scale != 1", function(assert) {
     $(document).trigger(new $.Event("dxpointermove", { pageX: 80, pageY: 120 }));
     // assert
     assert.ok(this.startEventsHandler.calledOnce);
-    assert.deepEqual(this.startEventsHandler.lastCall.args[0].pointers, [{
-        pageX: 100,
-        pageY: 200
-    }]);
 
-    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].pointers, [{
-        pageX: 100 - 60,
-        pageY: 200 - 140
-    }]);
-    assert.deepEqual(this.moveEventsHandler.lastCall.args[0].pointers, [{
-        pageX: 100 + 40,
-        pageY: 200 + 160
-    }]);
+    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].offset, {
+        x: -60,
+        y: -140
+    });
+    assert.deepEqual(this.moveEventsHandler.lastCall.args[0].offset, {
+        x: 40,
+        y: 160
+    });
 
     assert.equal(this.moveEventsHandler.callCount, 2);
 });
@@ -748,11 +737,12 @@ QUnit.test("scroll moving after pointerup", function(assert) {
     $(document).trigger(new $.Event("dxpointermove", { pageX: 80, pageY: 120 }));
     // assert
     assert.ok(this.moveEventsHandler.calledOnce);
+    assert.ok(this.endEventsHandler.calledOnce);
 
-    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].pointers, [{
-        pageX: 100 - 30,
-        pageY: 200 - 70
-    }]);
+    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].offset, {
+        x: -30,
+        y: -70
+    });
 });
 
 QUnit.module("scrollBar layouting", {

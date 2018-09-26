@@ -57,10 +57,17 @@ ScrollBar.prototype = {
                     type: "dxc-scroll-move",
                     originalEvent: e,
                     target: $scroll.get(0),
-                    pointers: [{
-                        pageX: startPosX + dX,
-                        pageY: startPosY + dY
-                    }]
+                    offset: {
+                        x: dX,
+                        y: dY
+                    }
+                });
+            },
+            scrollEndHandler = function(e) {
+                eventUtils.fireEvent({
+                    type: "dxc-scroll-end",
+                    originalEvent: e,
+                    target: $scroll.get(0)
                 });
             };
         eventsEngine.on($scroll, pointerEvents.down, function(e) {
@@ -70,17 +77,15 @@ ScrollBar.prototype = {
             eventUtils.fireEvent({
                 type: "dxc-scroll-start",
                 originalEvent: e,
-                target: $scroll.get(0),
-                pointers: [{
-                    pageX: startPosX,
-                    pageY: startPosY
-                }]
+                target: $scroll.get(0)
             });
 
             eventsEngine.on(document, pointerEvents.move, scrollChangeHandler);
+            eventsEngine.on(document, pointerEvents.up, scrollEndHandler);
         });
 
         eventsEngine.on(document, pointerEvents.up, function() {
+            eventsEngine.off(document, pointerEvents.up, scrollEndHandler);
             eventsEngine.off(document, pointerEvents.move, scrollChangeHandler);
         });
 

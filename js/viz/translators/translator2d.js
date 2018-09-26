@@ -405,8 +405,9 @@ _Translator2d.prototype = {
         let newEnd = (endPoint + translate) / scale;
 
         wholeRange = wholeRange || {};
-        const minPoint = this.to(this._businessRange.invert ? wholeRange.endValue : wholeRange.startValue);
-        const maxPoint = this.to(this._businessRange.invert ? wholeRange.startValue : wholeRange.endValue);
+        const minPoint = this.to(this.isInverted() ? wholeRange.endValue : wholeRange.startValue);
+        const maxPoint = this.to(this.isInverted() ? wholeRange.startValue : wholeRange.endValue);
+
 
         if(minPoint > newStart) {
             newEnd -= newStart - minPoint;

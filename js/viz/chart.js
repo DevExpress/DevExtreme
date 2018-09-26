@@ -1039,6 +1039,7 @@ var dxChart = AdvancedChart.inherit({
         }
     },
 
+    // TODO delete
     _transformArgument: function(translate, scale) {
         var that = this,
             rotated = that._isRotated(),
@@ -1079,6 +1080,42 @@ var dxChart = AdvancedChart.inherit({
 
         that._seriesGroup.attr(settings);
         that._scrollBar && that._scrollBar.transform(-translate, scale);
+    },
+
+    // TODO rewrite tests
+    // TODO transform not all panes by value axis direction
+    _transform: function(translate, scale) {
+        var that = this,
+            settings,
+            clipSettings,
+            panesClipRects = that._panesClipRects;
+        if(!that._transformed) {
+            that._transformed = true;
+            that._labelsGroup.remove();
+            that._resetIsReady();
+            _each(that.series || [], function(i, s) {
+                s.applyClip();
+            });
+        }
+
+        settings = {
+            translateX: translate.x,
+            scaleX: scale,
+            translateY: translate.y,
+            scaleY: scale
+        };
+        clipSettings = {
+            translateX: -translate.x / scale,
+            scaleX: 1 / scale,
+            translateY: -translate.y / scale,
+            scaleY: 1 / scale
+        };
+
+        applyClipSettings(panesClipRects.base, clipSettings);
+        applyClipSettings(panesClipRects.wide, clipSettings);
+
+        that._seriesGroup.attr(settings);
+        that._scrollBar && that._scrollBar.transform(-translate.x, scale);
     },
 
     _resetTransform: function() {
@@ -1321,6 +1358,7 @@ var dxChart = AdvancedChart.inherit({
 dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
+dxChart.addPlugin(require("./chart_components/zoom_and_pan"));
 
 registerComponent("dxChart", dxChart);
 module.exports = dxChart;
