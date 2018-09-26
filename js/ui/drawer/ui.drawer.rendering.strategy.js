@@ -75,7 +75,7 @@ const animation = {
         }
 
         if(direction === "bottom") {
-            toConfig["margin-top"] = marginTop;
+            toConfig["marginTop"] = marginTop;
         }
         fx.animate($element, {
             to: toConfig,

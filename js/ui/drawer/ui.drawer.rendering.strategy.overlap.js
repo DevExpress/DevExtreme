@@ -126,7 +126,7 @@ class OverlapStrategy extends DrawerStrategy {
                     $($element).css("height", size);
 
                     if(direction === "bottom") {
-                        $($element).css("margin-top", marginTop);
+                        $($element).css("marginTop", marginTop);
                     }
                 }
             }
