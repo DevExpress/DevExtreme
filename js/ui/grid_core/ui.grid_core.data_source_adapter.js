@@ -5,6 +5,7 @@ var Callbacks = require("../../core/utils/callbacks"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     ArrayStore = require("../../data/array_store"),
+    arrayUtils = require("../../data/array_utils"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred;
@@ -132,6 +133,27 @@ module.exports = gridCore.Controller.inherit((function() {
         resetCache: function() {
             this._cachedStoreData = undefined;
             this._cachedPagingData = undefined;
+        },
+        push: function(changes) {
+            var remoteOperations = this.remoteOperations(),
+                store = this.store(),
+                isLocalOperations = Object.keys(remoteOperations).every(operationName => !remoteOperations[operationName]);
+
+            if(!isLocalOperations) {
+                this._cachedStoreData = undefined;
+            }
+
+            this._cachedPagingData = undefined;
+
+            this.resetPagesCache();
+
+            if(this._cachedStoreData) {
+                arrayUtils.applyBatch(store, this._cachedStoreData, changes);
+            }
+
+            var groupCount = gridCore.normalizeSortingInfo(this.group()).length;
+
+            arrayUtils.applyBatch(store, this._items, changes, groupCount, true);
         },
         resetPagesCache: function() {
             this._cachedPagesData = createEmptyPagesData();

@@ -1018,7 +1018,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             }
         },
-        _saveEditDataCore: function(deferreds, results) {
+        _saveEditDataCore: function(deferreds, results, changes) {
             var that = this,
                 store = that._dataController.store(),
                 isDataSaved = true;
@@ -1064,7 +1064,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         params = { data: oldData, key: editData.key, cancel: false };
                         deferred = executeEditingAction("onRowRemoving", params, function() {
-                            return store.remove(editData.key);
+                            return store.remove(editData.key).done(function() {
+                                changes.push({ type: "remove", key: editData.key });
+                            });
                         });
                         break;
                     case DATA_EDIT_DATA_INSERT_TYPE:
@@ -1072,13 +1074,16 @@ var EditingController = modules.ViewController.inherit((function() {
                         deferred = executeEditingAction("onRowInserting", params, function() {
                             return store.insert(params.data).done(function(data, key) {
                                 editData.key = key;
+                                changes.push({ type: "insert", data: data, index: 0 });
                             });
                         });
                         break;
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         params = { newData: data, oldData: oldData, key: editData.key, cancel: false };
                         deferred = executeEditingAction("onRowUpdating", params, function() {
-                            return store.update(editData.key, params.newData);
+                            return store.update(editData.key, params.newData).done(function() {
+                                changes.push({ type: "update", key: editData.key, data: params.newData });
+                            });
                         });
                         break;
                 }
@@ -1172,6 +1177,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 editData,
                 results = [],
                 deferreds = [],
+                changes = [],
                 dataController = that._dataController,
                 dataSource = dataController.dataSource(),
                 editMode = getEditMode(that),
@@ -1191,7 +1197,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             editData = that._editData.slice(0);
 
-            if(!that._saveEditDataCore(deferreds, results) && editMode === EDIT_MODE_CELL) {
+            if(!that._saveEditDataCore(deferreds, results, changes) && editMode === EDIT_MODE_CELL) {
                 that._focusEditingCell();
             }
 
@@ -1210,7 +1216,19 @@ var EditingController = modules.ViewController.inherit((function() {
 
                         dataSource && dataSource.endLoading();
 
-                        when(dataController.refresh(that.option("repaintChangesOnly"))).always(function() {
+                        var refreshMode = that.option("editing.refreshMode"),
+                            isFullRefresh = refreshMode !== "reshape" && refreshMode !== "repaint";
+
+                        if(!isFullRefresh) {
+                            dataController.push(changes);
+                        }
+
+                        when(dataController.refresh({
+                            selection: isFullRefresh,
+                            reload: isFullRefresh,
+                            load: refreshMode === "reshape",
+                            changesOnly: that.option("repaintChangesOnly")
+                        })).always(function() {
                             that._fireSaveEditDataEvents(editData);
                             that._afterSaveEditData();
                             result.resolve();
@@ -1920,6 +1938,12 @@ module.exports = {
                  * @default "row"
                  */
                 mode: "row", // "batch"
+                /**
+                 * @name GridBaseOptions.editing.refreshMode
+                 * @type Enums.GridEditRefreshMode
+                 * @default "full"
+                 */
+                refreshMode: "full",
                 /**
                  * @name GridBaseOptions.editing.allowAdding
                  * @type boolean

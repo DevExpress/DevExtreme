@@ -19,12 +19,39 @@ function hasKey(target, keyOrKeys) {
     return false;
 }
 
-function applyBatch(keyInfo, array, batchData) {
+function findItems(keyInfo, items, key, groupCount) {
+    var childItems,
+        result;
+
+    if(groupCount) {
+        for(var i = 0; i < items.length; i++) {
+            childItems = items[i].items || items[i].collapsedItems || [];
+            result = findItems(keyInfo, childItems || [], key, groupCount - 1);
+            if(result) {
+                return result;
+            }
+        }
+    } else if(indexByKey(keyInfo, items, key) >= 0) {
+        return items;
+    }
+}
+
+function getItems(keyInfo, items, key, groupCount) {
+    if(groupCount) {
+        return findItems(keyInfo, items, key, groupCount) || [];
+    }
+
+    return items;
+}
+
+
+function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
     batchData.forEach(item => {
+        var items = item.type === "insert" ? array : getItems(keyInfo, array, item.key, groupCount);
         switch(item.type) {
-            case "update": update(keyInfo, array, item.key, item.data); break;
-            case "insert": insert(keyInfo, array, item.data); break;
-            case "remove": remove(keyInfo, array, item.key); break;
+            case "update": update(keyInfo, items, item.key, item.data); break;
+            case "insert": insert(keyInfo, items, item.data, useInsertIndex ? item.index : -1); break;
+            case "remove": remove(keyInfo, items, item.key); break;
         }
     });
 }
@@ -53,7 +80,7 @@ function update(keyInfo, array, key, data) {
     return trivialPromise(key, data);
 }
 
-function insert(keyInfo, array, data) {
+function insert(keyInfo, array, data, index) {
     var keyValue,
         obj,
         keyExpr = keyInfo.key();
@@ -75,8 +102,11 @@ function insert(keyInfo, array, data) {
     } else {
         keyValue = obj;
     }
-
-    array.push(obj);
+    if(index >= 0) {
+        array.splice(index, 0, obj);
+    } else {
+        array.push(obj);
+    }
     return trivialPromise(data, keyValue);
 }
 
