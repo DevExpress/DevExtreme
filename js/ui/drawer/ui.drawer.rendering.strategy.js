@@ -59,15 +59,28 @@ const animation = {
         });
     },
 
-    width($element, width, duration, completeAction) {
-        const toConfig = {};
+    size(config) {
+        let $element = config.$element,
+            size = config.size,
+            direction = config.direction || "left",
+            marginTop = config.marginTop || 0,
+            duration = config.duration,
+            toConfig = {};
 
-        toConfig["width"] = width;
 
+        if(direction === "right" || direction === "left") {
+            toConfig["width"] = size;
+        } else {
+            toConfig["height"] = size;
+        }
+
+        if(direction === "bottom") {
+            toConfig["marginTop"] = marginTop;
+        }
         fx.animate($element, {
             to: toConfig,
             duration,
-            complete: completeAction
+            complete: config.complete
         });
     },
 
@@ -124,7 +137,7 @@ class DrawerStrategy {
         }
     }
 
-    _getPanelWidth(offset) {
+    _getPanelSize(offset) {
         return offset ? this._drawer.getMaxSize() : this._drawer.getMinSize();
     }
 

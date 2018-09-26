@@ -12,8 +12,9 @@ class OverlapStrategy extends DrawerStrategy {
 
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
             shading: false,
-            target: $(window),
+            container: this._drawer.getOverlayTarget(),
             position: position,
+            height: "100%",
             animation: {
                 show: {
                     duration: 0
@@ -23,8 +24,6 @@ class OverlapStrategy extends DrawerStrategy {
             visible: true,
             propagateOutsideClick: true
         });
-
-        this._drawer._$panel = this._drawer._overlay._$wrapper;
     }
 
     getOverlayPosition() {
@@ -51,19 +50,20 @@ class OverlapStrategy extends DrawerStrategy {
             };
         }
 
-
-        result.of = $(window);
+        result.of = this._drawer.getOverlayTarget();
 
         return result;
     }
 
     setPanelSize() {
+        const overlay = this._drawer.getOverlay();
+
         if(this._drawer._isHorizontalDirection()) {
-            this._drawer._overlay.option("height", $(window).height());
-            this._drawer._overlay.option("width", this._drawer.getRealPanelWidth());
+            overlay.option("height", "100%");
+            overlay.option("width", this._drawer.getRealPanelWidth());
         } else {
-            this._drawer._overlay.option("width", $(window).width());
-            this._drawer._overlay.option("height", this._drawer.getRealPanelHeight());
+            overlay.option("width", overlay.option("container").width());
+            overlay.option("height", this._drawer.getRealPanelHeight());
         }
     }
 
@@ -73,7 +73,7 @@ class OverlapStrategy extends DrawerStrategy {
         const direction = this._drawer.option("position");
         const panelPosition = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
 
-        $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
+        this._drawer._isHorizontalDirection() && $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
 
         if(this._drawer.option("revealMode") === "slide") {
             if(animate) {
@@ -101,14 +101,34 @@ class OverlapStrategy extends DrawerStrategy {
 
         if(this._drawer.option("revealMode") === "expand") {
             const $element = this._drawer._overlay.$content();
-            const width = this._getPanelWidth(offset);
-            if(animate) {
-                animation.width($element, width, this._drawer.option("animationDuration"), () => {
+            const size = this._getPanelSize(offset);
+            const direction = this._drawer.option("position");
+            const marginTop = this._drawer.getRealPanelHeight() - size;
+
+            let animationConfig = {
+                $element: $element,
+                size: size,
+                duration: this._drawer.option("animationDuration"),
+                direction: direction,
+                marginTop: marginTop,
+                complete: () => {
                     this._contentAnimationResolve();
                     this._panelAnimationResolve();
-                });
+                }
+            };
+
+            if(animate) {
+                animation.size(animationConfig);
             } else {
-                $($element).css("width", width);
+                if(this._drawer._isHorizontalDirection()) {
+                    $($element).css("width", size);
+                } else {
+                    $($element).css("height", size);
+
+                    if(direction === "bottom") {
+                        $($element).css("marginTop", marginTop);
+                    }
+                }
             }
         }
     }

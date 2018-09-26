@@ -117,6 +117,7 @@ const Drawer = Widget.inherit({
             */
             contentTemplate: "content",
 
+            target: undefined,
             /**
             * @name dxDrawerOptions.onContentReady
             * @hidden true
@@ -287,6 +288,14 @@ const Drawer = Widget.inherit({
         this._minSize = this.option("minSize") || 0;
     },
 
+    getOverlayTarget() {
+        return this.option("target") || this._$wrapper;
+    },
+
+    getOverlay() {
+        return this._overlay;
+    },
+
     getMaxSize() {
         return this._maxSize;
     },
@@ -443,6 +452,7 @@ const Drawer = Widget.inherit({
                 this._invalidate();
                 break;
             case "openedStateMode":
+            case "target":
                 this._initStrategy();
 
                 this._setInitialPosition();

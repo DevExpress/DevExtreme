@@ -101,50 +101,11 @@ QUnit.test("defaults", assert => {
     assert.equal(instance.option("animationDuration"), 400, "animationDuration is OK");
 });
 
-QUnit.test("content() function", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
-    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
-    assert.equal($panel.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
-});
-
-QUnit.test("viewContent() function", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-
-    assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
-});
-
-QUnit.test("drawer preserve content", assert => {
+QUnit.test("drawer should preserve content", assert => {
     const $content = $("#drawer #content"),
         $element = $("#drawer").dxDrawer({});
 
     assert.equal($content[0], $element.find("#content")[0]);
-});
-
-QUnit.test("show and hide", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-
-    instance.show();
-    assert.equal(instance.option("opened"), true, "menu was shown");
-
-    instance.hide();
-    assert.equal(instance.option("opened"), false, "menu was hidden");
-});
-
-QUnit.test("toggle", assert => {
-    const $element = $("#drawer").dxDrawer({});
-    const instance = $element.dxDrawer("instance");
-    const opened = instance.option("opened");
-
-    instance.toggle();
-    assert.equal(instance.option("opened"), !opened, "menu was shown");
-
-    instance.toggle();
-    assert.equal(instance.option("opened"), opened, "menu was hidden");
 });
 
 QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
@@ -215,6 +176,57 @@ QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
     assert.ok(true, "Drawer works correctly");
 });
 
+QUnit.test("target option", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "overlap"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    assert.ok($(instance._overlay.option("position").of).hasClass("dx-drawer-wrapper"), "default target is ok");
+
+    instance.option("target", $element.find(".dx-drawer-content"));
+    assert.ok($(instance._overlay.option("position").of).hasClass("dx-drawer-content"), "target is ok");
+});
+
+QUnit.test("content() function", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, "menu element");
+    assert.equal($panel.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
+});
+
+QUnit.test("viewContent() function", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.get(0), $(instance.viewContent()).get(0), "content function return correct DOMNode");
+});
+
+QUnit.test("show() and hide() methods", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+
+    instance.show();
+    assert.equal(instance.option("opened"), true, "menu was shown");
+
+    instance.hide();
+    assert.equal(instance.option("opened"), false, "menu was hidden");
+});
+
+QUnit.test("toggle() method", assert => {
+    const $element = $("#drawer").dxDrawer({});
+    const instance = $element.dxDrawer("instance");
+    const opened = instance.option("opened");
+
+    instance.toggle();
+    assert.equal(instance.option("opened"), !opened, "menu was shown");
+
+    instance.toggle();
+    assert.equal(instance.option("opened"), opened, "menu was hidden");
+});
+
 QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if menu isn't visible", assert => {
@@ -274,15 +286,6 @@ QUnit.test("content container should have correct position if it is rendered in 
     $element.trigger("dxshown");
 
     assert.equal(position($content), 50, "container rendered at correct position");
-});
-
-QUnit.test("hideTopOverlayCallback be removed on dispose", assert => {
-    const $element = $("#drawer").dxDrawer({
-        opened: true
-    });
-
-    $element.remove();
-    assert.ok(!hideCallback.hasCallback());
 });
 
 QUnit.test("drawer should not handle hideTopOverlayCallback if it isn't visible", assert => {
@@ -803,34 +806,34 @@ QUnit.test("maxSize should be rendered correctly in shrink mode, right menu posi
 
 QUnit.module("overlap mode");
 
-QUnit.test("drawer panel should be overlay with right content in overlap mode", assert => {
+QUnit.test("drawer panel should be overlay in overlap mode", assert => {
     const drawer = $("#drawer").dxDrawer({
         openedStateMode: "overlap"
     }).dxDrawer("instance");
 
-    assert.ok(drawer._overlay instanceof Overlay, "Drawer has inner overlay");
-    assert.deepEqual($(drawer.content()), $(drawer._overlay._wrapper()), "Panel content is an overlay content");
+    assert.ok(drawer._overlay instanceof Overlay, "Drawer has overlay");
+    assert.ok($(drawer.content()).hasClass("dx-overlay"), "Panel content is an overlay");
 });
 
 QUnit.test("drawer panel overlay should have right config depending on position option", assert => {
     let drawer = $("#drawer").dxDrawer({
             openedStateMode: "overlap"
         }).dxDrawer("instance"),
-        overlay = drawer._overlay;
+        overlay = drawer.getOverlay();
 
     assert.equal(overlay.option("shading"), false, "Overlay has no shading");
-    assert.deepEqual($(overlay.option("target")), $(window));
+    assert.deepEqual(overlay.option("container").get(0), drawer.$element().find(".dx-drawer-wrapper").get(0));
 
     assert.equal(overlay.option("position").my, "top left");
     assert.equal(overlay.option("position").at, "top left");
 
     drawer.option("position", "top");
-    overlay = drawer._overlay;
+    overlay = drawer.getOverlay();
     assert.equal(overlay.option("position").my, "top");
     assert.equal(overlay.option("position").at, "top");
 
     drawer.option("position", "bottom");
-    overlay = drawer._overlay;
+    overlay = drawer.getOverlay();
     assert.equal(overlay.option("position").my, "bottom");
     assert.equal(overlay.option("position").at, "bottom");
 });
@@ -884,7 +887,7 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, expand", asser
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
     const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
-    const $overlayContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
+    const $overlayContent = $(".dx-drawer-panel-content.dx-overlay .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when maxSize is set");
@@ -918,7 +921,7 @@ QUnit.test("minSize should be rendered correctly in overlap mode, slide", assert
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
     assert.equal($panel.position().left, -150, "panel has correct left when minSize is set");
@@ -952,7 +955,7 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, slide", assert
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
     assert.equal($panel.position().left, -200, "menu has correct left when maxSize is set");
@@ -987,16 +990,16 @@ QUnit.test("minSize should be rendered correctly in overlap mode, right menu pos
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($panel.position().left, 150, "menu has correct left when minSize is set");
+    assert.equal($panel.position().left, 950, "menu has correct left when minSize is set");
     assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
-    assert.equal($panel.position().left, 0, "menu has correct left when minSize is set");
+    assert.equal($panel.position().left, 800, "menu has correct left when minSize is set");
     assert.equal($panel.width(), 200, "menu has correct width when minSize is set");
 
     fx.off = false;
@@ -1022,16 +1025,16 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, right menu pos
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($panel.position().left, 200, "menu has correct left when maxSize is set");
+    assert.equal($panel.position().left, 1000, "menu has correct left when maxSize is set");
     assert.equal($panel.width(), 200, "menu has correct width when maxSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when maxSize is set");
-    assert.equal($panel.position().left, 100, "menu has correct left when maxSize is set");
+    assert.equal($panel.position().left, 900, "menu has correct left when maxSize is set");
     assert.equal($panel.width(), 200, "menu has correct width when maxSize is set");
 
     fx.off = false;
@@ -1057,7 +1060,7 @@ QUnit.test("minSize should be rendered correctly in overlap mode, top menu posit
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, -150, "menu has correct top when minSize is set");
@@ -1090,7 +1093,7 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, top menu posit
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, -200, "menu has correct top when minSize is set");
@@ -1099,6 +1102,68 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, top menu posit
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, -100, "menu has correct top when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("minSize should be rendered correctly in overlap mode, top menu position, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 50, "panel content has correct height when minSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 200, "panel content has correct height when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxSize should be rendered correctly in overlap mode, top menu position, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 100,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 0, "panel content has correct height when maxSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 100, "panel content has correct height when maxSize is set");
 
     fx.off = false;
 });
@@ -1123,7 +1188,7 @@ QUnit.test("minSize should be rendered correctly in overlap mode, bottom menu po
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, 150, "menu has correct top when minSize is set");
@@ -1156,7 +1221,7 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu po
 
     const instance = $element.dxDrawer("instance");
     const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
-    const $panel = $(".dx-drawer-panel-content.dx-overlay-wrapper").eq(0);
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, 200, "menu has correct top when minSize is set");
@@ -1165,6 +1230,72 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu po
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, 100, "menu has correct top when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("minSize should be rendered correctly in overlap mode, bottom menu position, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: false,
+        position: "bottom",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 50, "panel content has correct height when minSize is set");
+    assert.equal($panelContent.css("marginTop"), "150px", "panel content has correct height when minSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 200, "panel content has correct height when minSize is set");
+    assert.equal($panelContent.css("marginTop"), "0px", "panel content has correct height when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu position, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 100,
+        opened: false,
+        position: "bottom",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 0, "panel content has correct height when maxSize is set");
+    assert.equal($panelContent.css("marginTop"), "200px", "panel content has correct height when minSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 100, "panel content has correct height when maxSize is set");
+    assert.equal($panelContent.css("marginTop"), "100px", "panel content has correct height when minSize is set");
 
     fx.off = false;
 });
