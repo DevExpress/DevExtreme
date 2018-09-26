@@ -693,6 +693,74 @@ QUnit.test("Get page index by composite key with sorting", function(assert) {
     });
 });
 
+QUnit.test("Get page index by simple key with sorting by unbound column", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 25 },
+        { team: 'internal', name: 'Den', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        {
+            pageSize: 1,
+            asyncLoadEnabled: false
+        });
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource,
+        columns: ['team', 'name', 'age',
+            {
+                dataField: 'calc',
+                sortOrder: 'desc',
+                calculateCellValue: function(data) {
+                    return data.name + ' ' + data.age;
+                }
+            }
+        ]
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    this.dataController._getPageIndexByKey("Den").done(function(pageIndex) {
+        assert.equal(pageIndex, 0);
+    });
+});
+
+QUnit.test("Get page index by composite key with sorting by unbound column", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 25 },
+        { team: 'internal', name: 'Den', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: [ 'name', 'age' ] },
+        {
+            pageSize: 1,
+            asyncLoadEnabled: false
+        });
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource,
+        columns: ['team', 'name', 'age',
+            {
+                dataField: 'calc',
+                sortOrder: 'asc',
+                calculateCellValue: function(data) {
+                    return data.name + ' ' + data.age;
+                }
+            }
+        ]
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    this.dataController._getPageIndexByKey({ name: "Alice", age: 19 }).done(function(pageIndex) {
+        assert.equal(pageIndex, 1);
+    });
+});
+
 // B254274
 QUnit.test("sortOrder in column options and group parameters in dataSource", function(assert) {
     // arrange

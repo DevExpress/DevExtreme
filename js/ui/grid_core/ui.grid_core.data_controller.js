@@ -1229,7 +1229,7 @@ module.exports = {
                     }).done(function(data) {
                         if(data.length > 0) {
                             dataSource.load({
-                                filter: that._generateFilterPageByKey(key, data[0]),
+                                filter: that._generateOperationFilterByKey(key, data[0]),
                                 skip: 0,
                                 take: 1,
                                 requireTotalCount: true
@@ -1242,18 +1242,51 @@ module.exports = {
 
                     return d.promise();
                 },
-                _generateFilterPageByKey: function(key, rowData) {
-                    var dataSource = this._dataSource,
-                        filter = this._generateFilterByKey(key, "<"),
+                _generateOperationFilterByKey: function(key, rowData) {
+                    var that = this,
+                        dataSource = that._dataSource,
+                        filter = that._generateFilterByKey(key, "<"),
                         sort = dataSource.sort();
+
                     if(sort) {
                         sort.slice().reverse().forEach(function(sortInfo) {
-                            filter = [[sortInfo.selector, "=", rowData[sortInfo.selector]], "and", filter];
-                            filter = [[sortInfo.selector, sortInfo.desc ? ">" : "<", rowData[sortInfo.selector]], "or", filter];
+                            var fieldName = sortInfo.selector,
+                                value = rowData[fieldName];
+
+                            if(!typeUtils.isDefined(value)) {
+                                filter = that._generateFilterForUnboundColumn(fieldName, rowData, sortInfo.desc);
+                            } else {
+                                filter = [[fieldName, "=", value], "and", filter];
+                                filter = [[fieldName, sortInfo.desc ? ">" : "<", value], "or", filter];
+                            }
                         });
                     }
+
                     return filter;
                 },
+
+                _generateFilterForUnboundColumn: function(fieldName, rowData, desc) {
+                    var cellValue,
+                        filter = [],
+                        column = this.getController("columns").columnOption(fieldName),
+                        getCurrent = function(data) {
+                            return cellValue === column.calculateCellValue(data);
+                        },
+                        getEnvirons = function(data) {
+                            var val = column.calculateCellValue(data);
+                            return desc ? val > cellValue : val < cellValue;
+                        };
+
+                    if(column && column.calculateCellValue) {
+                        cellValue = column.calculateCellValue(rowData);
+
+                        filter = [[getCurrent, "=", true], "and", filter];
+                        filter = [[getEnvirons, "=", true], "or", filter];
+                    }
+
+                    return filter;
+                },
+
                 _generateFilterByKey: function(key, operation) {
                     var dataSourceKey = this._dataSource.key(),
                         filter = [],
