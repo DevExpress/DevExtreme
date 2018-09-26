@@ -1219,12 +1219,11 @@ module.exports = {
 
                 _getPageIndexByKey: function(key) {
                     var that = this,
-                        dataSource = that._dataSource;
-
-                    var result = new Deferred();
+                        dataSource = that._dataSource,
+                        d = new Deferred();
 
                     dataSource.load({
-                        filter: [dataSource.key(), "=", key],
+                        filter: that._generateFilterByKey(key),
                         skip: 0,
                         take: 1
                     }).done(function(data) {
@@ -1236,16 +1235,16 @@ module.exports = {
                                 requireTotalCount: true
                             }).done(function(_, extra) {
                                 var pageIndex = Math.floor(extra.totalCount / that.pageSize());
-                                result.resolve(pageIndex);
+                                d.resolve(pageIndex);
                             });
                         }
                     });
 
-                    return result.promise();
+                    return d.promise();
                 },
                 _generateFilterPageByKey: function(key, rowData) {
                     var dataSource = this._dataSource,
-                        filter = [dataSource.key(), "<", key],
+                        filter = this._generateFilterByKey(key, "<"),
                         sort = dataSource.sort();
                     if(sort) {
                         sort.slice().reverse().forEach(function(sortInfo) {
@@ -1253,6 +1252,31 @@ module.exports = {
                             filter = [[sortInfo.selector, sortInfo.desc ? ">" : "<", rowData[sortInfo.selector]], "or", filter];
                         });
                     }
+                    return filter;
+                },
+                _generateFilterByKey: function(key, operation) {
+                    var dataSourceKey = this._dataSource.key(),
+                        filter = [],
+                        keyPart;
+
+                    if(!operation) {
+                        operation = "=";
+                    }
+
+                    if(Array.isArray(dataSourceKey)) {
+                        for(var i = 0; i < dataSourceKey.length; ++i) {
+                            keyPart = key[dataSourceKey[i]];
+                            if(keyPart) {
+                                if(filter.length > 0) {
+                                    filter.push("and");
+                                }
+                                filter.push([dataSourceKey[i], operation, keyPart]);
+                            }
+                        }
+                    } else {
+                        filter = [dataSourceKey, operation, key];
+                    }
+
                     return filter;
                 },
 
