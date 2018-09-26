@@ -34,14 +34,23 @@ class ShrinkStrategy extends DrawerStrategy {
         }
 
         if(this._drawer.option("revealMode") === "expand") {
-            const width = this._getPanelSize(offset);
+            const $element = $(this._drawer._$panel);
+            const size = this._getPanelSize(offset);
+
+            let animationConfig = {
+                $element: $element,
+                size: size,
+                duration: this._drawer.option("animationDuration"),
+                direction: this._drawer.option("position"),
+                complete: () => {
+                    this._panelAnimationResolve();
+                }
+            };
 
             if(animate) {
-                animation.width($(this._drawer._$panel), width, this._drawer.option("animationDuration"), () => {
-                    this._panelAnimationResolve();
-                });
+                animation.size(animationConfig);
             } else {
-                $(this._drawer._$panel).css("width", width);
+                $element.css("width", size);
             }
         }
     }

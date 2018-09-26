@@ -102,17 +102,23 @@ class OverlapStrategy extends DrawerStrategy {
         if(this._drawer.option("revealMode") === "expand") {
             const $element = this._drawer._overlay.$content();
             const size = this._getPanelSize(offset);
-            const isHorizontal = this._drawer._isHorizontalDirection();
-            const direction = this._drawer.option("position");
-            const marginTop = this._drawer.getMaxSize() - size;
 
-            if(animate) {
-                animation.size($element, size, marginTop, direction, this._drawer.option("animationDuration"), () => {
+            let animationConfig = {
+                $element: $element,
+                size: size,
+                duration: this._drawer.option("animationDuration"),
+                direction: this._drawer.option("position"),
+                marginTop: this._drawer.getMaxSize() - size,
+                complete: () => {
                     this._contentAnimationResolve();
                     this._panelAnimationResolve();
-                });
+                }
+            };
+
+            if(animate) {
+                animation.size(animationConfig);
             } else {
-                if(isHorizontal) {
+                if(this._drawer._isHorizontalDirection()) {
                     $($element).css("width", size);
                 } else {
                     $($element).css("height", size);

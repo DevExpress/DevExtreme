@@ -59,8 +59,14 @@ const animation = {
         });
     },
 
-    size($element, size, marginTop, direction, duration, completeAction) {
-        const toConfig = {};
+    size(config) {
+        let $element = config.$element,
+            size = config.size,
+            direction = config.direction || "left",
+            marginTop = config.marginTop || 0,
+            duration = config.duration,
+            toConfig = {};
+
 
         if(direction === "right" || direction === "left") {
             toConfig["width"] = size;
@@ -74,7 +80,7 @@ const animation = {
         fx.animate($element, {
             to: toConfig,
             duration,
-            complete: completeAction
+            complete: config.complete
         });
     },
 
