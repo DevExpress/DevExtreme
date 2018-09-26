@@ -114,6 +114,7 @@ var environment = {
         this.translator.getBusinessRange.returns(this.range);
 
         axis.updateCanvas(this.canvas);
+        axis.validate();
         axis.setBusinessRange(this.range);
 
         return axis;
@@ -126,7 +127,6 @@ var environment = {
     },
     createDrawnAxis: function(opt) {
         var axis = this.createSimpleAxis(opt);
-        axis.validate();
         axis.draw(this.canvas);
         return axis;
     }
@@ -1216,7 +1216,6 @@ QUnit.test("create spider strips", function(assert) {
     this.renderSettings.drawingType = "linearSpider";
     var axis = this.createSimpleAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
     axis.setSpiderTicks([{ coords: { angle: -90 } }, { coords: { angle: 90 } }, { coords: { angle: 0 } }]);
-    axis.validate();
     axis.draw(this.canvas);
 
     assert.ok(this.renderer.path.called);
@@ -1229,7 +1228,6 @@ QUnit.test("create spider constant line", function(assert) {
     this.renderSettings.drawingType = "linearSpider";
     var axis = this.createSimpleAxis({ constantLines: [{ value: 10, color: "green", label: {} }] });
     axis.setSpiderTicks([{ coords: { angle: -90 } }, { coords: { angle: 90 } }, { coords: { angle: 0 } }]);
-    axis.validate();
     axis.draw(this.canvas);
 
     assert.ok(this.renderer.path.called);

@@ -370,15 +370,14 @@ Axis.prototype = {
         };
     },
 
-    _getConstantLinePos: function(lineValue, canvasStart, canvasEnd) {
-        var parsedValue = this._validateUnit(lineValue, "E2105", "constantLine"),
-            value = this._getTranslatedCoord(parsedValue);
+    _getConstantLinePos: function(parsedValue, canvasStart, canvasEnd) {
+        var value = this._getTranslatedCoord(parsedValue);
 
         if(!isDefined(value) || value < _min(canvasStart, canvasEnd) || value > _max(canvasStart, canvasEnd)) {
-            return {};
+            return undefined;
         }
 
-        return { value: value, parsedValue: parsedValue };
+        return value;
     },
 
     _getConstantLineGraphicAttributes: function(value) {
@@ -947,6 +946,8 @@ Axis.prototype = {
         const visualRange = that.getViewport() || {};
 
         const result = new rangeModule.Range(businessRange);
+        that._addConstantLinesToRange(result, "minVisible", "maxVisible");
+
         const minDefined = isDefined(visualRange.startValue);
         const maxDefined = isDefined(visualRange.endValue);
         let minVisible = minDefined ? visualRange.startValue : result.minVisible;
@@ -1121,6 +1122,18 @@ Axis.prototype = {
         that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that.adjustViewport(that._seriesData));
+    },
+
+    _addConstantLinesToRange(dataRange, minValueField, maxValueField) {
+        this._outsideConstantLines.concat(this._insideConstantLines || []).forEach(cl => {
+            if(cl.options.extendAxis) {
+                const value = cl.getParsedValue();
+                dataRange.addRange({
+                    [minValueField]: value,
+                    [maxValueField]: value
+                });
+            }
+        });
     },
 
     setGroupSeries: function(series) {
