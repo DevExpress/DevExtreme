@@ -737,7 +737,7 @@ QUnit.module("Live Update", {
 
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
-        assert.ok(this.itemRenderedSpy.firstCall.args[0].itemElement.parent().hasClass("dx-tabs-wrapper"), "check item container");
+        assert.ok($(this.itemRenderedSpy.firstCall.args[0].itemElement).parent().hasClass("dx-tabs-wrapper"), "check item container");
     });
 
     QUnit.test("remove item", function(assert) {
@@ -777,6 +777,6 @@ QUnit.module("Live Update", {
 
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
-        assert.ok(this.itemRenderedSpy.firstCall.args[0].itemElement.parent().hasClass("dx-tabs-wrapper"), "check item container");
+        assert.ok($(this.itemRenderedSpy.firstCall.args[0].itemElement).parent().hasClass("dx-tabs-wrapper"), "check item container");
     });
 });
