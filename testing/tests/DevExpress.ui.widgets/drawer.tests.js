@@ -822,7 +822,7 @@ QUnit.test("drawer panel overlay should have right config depending on position 
         overlay = drawer.getOverlay();
 
     assert.equal(overlay.option("shading"), false, "Overlay has no shading");
-    assert.deepEqual(overlay.option("container").get(0), drawer.$element().find(".dx-drawer-wrapper").get(0));
+    assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
 
     assert.equal(overlay.option("position").my, "top left");
     assert.equal(overlay.option("position").at, "top left");
