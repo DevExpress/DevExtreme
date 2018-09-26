@@ -1120,10 +1120,10 @@ module.exports = {
                     cellElements = that.getCellElements(rowIndex);
 
                     if(that.option("useKeyboard") && cellElements) {
-                        this._dispatchFocus(cellElements);
+                        this._updateFocusElementTabIndex(cellElements);
                     }
                 },
-                _dispatchFocus: function(cellElements) {
+                _updateFocusElementTabIndex: function(cellElements) {
                     var that = this,
                         $row = cellElements.eq(0).parent(),
                         columnIndex = that.option("focusedColumnIndex"),
@@ -1136,10 +1136,10 @@ module.exports = {
                     if(isGroupRow($row)) {
                         $row.attr("tabIndex", tabIndex);
                     } else {
-                        that._renderCellFocusState(cellElements, columnIndex);
+                        that._updateFocusedCellTabIndex(cellElements, columnIndex);
                     }
                 },
-                _renderCellFocusState: function(cellElements, columnIndex) {
+                _updateFocusedCellTabIndex: function(cellElements, columnIndex) {
                     var that = this,
                         $cell,
                         tabIndex = that.option("tabIndex"),

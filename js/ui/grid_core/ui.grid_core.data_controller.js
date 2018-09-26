@@ -1216,6 +1216,46 @@ module.exports = {
                 pageIndex: function(value) {
                     return changePaging(this, "pageIndex", value);
                 },
+
+                _getPageIndexByKey: function(key) {
+                    var that = this,
+                        dataSource = that._dataSource;
+
+                    var result = new Deferred();
+
+                    dataSource.load({
+                        filter: [dataSource.key(), "=", key],
+                        skip: 0,
+                        take: 1
+                    }).done(function(data) {
+                        if(data.length > 0) {
+                            dataSource.load({
+                                filter: that._generateFilterPageByKey(key, data[0]),
+                                skip: 0,
+                                take: 1,
+                                requireTotalCount: true
+                            }).done(function(_, extra) {
+                                var pageIndex = Math.floor(extra.totalCount / that.pageSize());
+                                result.resolve(pageIndex);
+                            });
+                        }
+                    });
+
+                    return result.promise();
+                },
+                _generateFilterPageByKey: function(key, rowData) {
+                    var dataSource = this._dataSource,
+                        filter = [dataSource.key(), "<", key],
+                        sort = dataSource.sort();
+                    if(sort) {
+                        sort.slice().reverse().forEach(function(sortInfo) {
+                            filter = [[sortInfo.selector, "=", rowData[sortInfo.selector]], "and", filter];
+                            filter = [[sortInfo.selector, sortInfo.desc ? ">" : "<", rowData[sortInfo.selector]], "or", filter];
+                        });
+                    }
+                    return filter;
+                },
+
                 /**
                 * @name GridBaseMethods.pageSize
                 * @publicName pageSize()
