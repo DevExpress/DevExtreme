@@ -45,6 +45,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
         const event = $.Event($.Event("drop", { dataTransfer: { files: [this.file] } }));
         this.$element.trigger(event);
 
+        assert.ok(event.isDefaultPrevented(), "Prevent default behavior");
         assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
         assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "image", IMAGE, "user"], "insert base64 image by user");
     });
@@ -68,8 +69,13 @@ QUnit.module("DropImage module", moduleConfig, () => {
         this.$element.trigger(event);
         clock.tick();
 
-        assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
-        assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "image", IMAGE, "user"], "insert base64 image by user");
+        if(browser.mozilla) {
+            assert.ok(true, "FF handle this out-the-box");
+        } else {
+            assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
+            assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "image", IMAGE, "user"], "insert base64 image by user");
+        }
+
         clock.restore();
     });
 
