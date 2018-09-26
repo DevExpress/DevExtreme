@@ -26,6 +26,23 @@ let metadata = {
 
 const emptyHeader = () => { return ""; };
 
+
+const scssCompiler = {
+    render: (scss) => {
+        return new Promise((resolve, reject) => {
+            require("node-sass").render({
+                data: scss
+            }, (error, result) => {
+                if(error) {
+                    reject(error);
+                } else {
+                    resolve(result.css.toString());
+                }
+            });
+        });
+    }
+};
+
 describe("LessTemplateLoader", () => {
     it("analyzeBootstrapTheme - bootstrap 3", () => {
         let lessFileContent = "@body-bg: #000;";
@@ -63,7 +80,7 @@ describe("LessTemplateLoader", () => {
             isBootstrap: true,
             bootstrapVersion: 4,
             lessCompiler: require("less/lib/less-node"),
-            sassCompiler: require("sass"),
+            sassCompiler: scssCompiler,
             reader: (filename) => {
                 let content = "";
                 switch(filename) {
@@ -246,7 +263,7 @@ describe("LessTemplateLoader", () => {
 
     it("compileScss", () => {
         let config = {
-            sassCompiler: require("sass")
+            sassCompiler: scssCompiler
         };
 
         let scss = `$body-bg: #fff; $body-color:#0f0;
@@ -266,21 +283,18 @@ describe("LessTemplateLoader", () => {
         }).then(data => {
 
             assert.equal(data.css, `div {
-  color: #fff;
-}
+  color: #fff; }
 
 .dx-theme-generic-typography {
-  color: #0f0;
-}
+  color: #0f0; }
 
 .dx-viewport.dx-theme-generic .dx-theme-accent-as-text-color {
-  color: #fff;
-}
+  color: #fff; }
 
 #devexpress-metadata-compiler {
   base-bg: #fff;
-  base-text-color: #0f0;
-}`);
+  base-text-color: #0f0; }
+`);
         });
     });
 

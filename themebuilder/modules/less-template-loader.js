@@ -149,26 +149,20 @@ class LessTemplateLoader {
 
     compileScss(less, metadata) {
         return new Promise((resolve, reject) => {
-            let compiledMetadata = {};
+            const compiledMetadata = {};
 
-            let preCompiler = new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector);
-            let sassContent = preCompiler.process(less);
+            const preCompiler = new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector);
+            const sassContent = preCompiler.process(less);
 
-            this.sassCompiler.render({
-                data: sassContent
-            }, (error, result) => {
-                if(error) {
-                    reject(error);
-                } else {
-                    let postCompiler = new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector);
-                    let resultCss = result.css.toString();
-
-                    postCompiler.process(resultCss);
-                    resolve({
-                        compiledMetadata: compiledMetadata,
-                        css: resultCss
-                    });
-                }
+            this.sassCompiler.render(sassContent).then(css => {
+                const postCompiler = new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector);
+                postCompiler.process(css);
+                resolve({
+                    compiledMetadata: compiledMetadata,
+                    css: css
+                });
+            }, error => {
+                reject(error);
             });
         });
     };
