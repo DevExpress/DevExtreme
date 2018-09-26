@@ -14,7 +14,6 @@ QUnit.module("DataGrid export.onXlsxCellPrepared tests", {
 
 QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="7">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -55,7 +54,6 @@ QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
 
 QUnit.test("Change horizontal alignment by a property value of source object", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -97,7 +95,6 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
 
 QUnit.test("Change fill in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
         '<fill><patternFill patternType="none" /></fill>' +
@@ -151,7 +148,6 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
 
 QUnit.test("Change fill by a property value of source object", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
         '<fill><patternFill patternType="none" /></fill>' +
@@ -208,7 +204,6 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
 
 QUnit.test("Change font in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
         '<font><b /><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -244,6 +239,74 @@ QUnit.test("Change font in all xlsx cells", function(assert) {
             export: {
                 enabled: true,
                 onXlsxCellPrepared: e => e.xlsxCell.style.font.size = 22
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number format in all xlsx cells", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="3">' +
+        '<numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" />' +
+        '<numFmt numFmtId="166" formatCode="dd/mmm/yyyy hh:mm" />' +
+        '<numFmt numFmtId="167" formatCode="#,##0.0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="11">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="4"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="22"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>43483.6875</v></c>' +
+        '<c r="B1" s="6" t="n"><v>43484.6875</v></c>' +
+        '<c r="C1" s="7" t="n"><v>43485.6875</v></c>' +
+        '<c r="D1" s="8" t="n"><v>43486.6875</v></c>' +
+        '<c r="E1" s="9" t="n"><v>43487.6875</v></c>' +
+        '<c r="F1" s="10" t="n"><v>43488.6875</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:F1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const formats = [
+        null, // General
+        0, // General
+        4, // #,##0.00
+        22, // m/d/yy h:mm
+        { formatCode: 'dd/mmm/yyyy hh:mm' },
+        { formatCode: '#,##0.0000' }
+    ];
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
+            dataSource: [{
+                f1: new Date(2019, 0, 18, 16, 30), // serialized as '43483.6875'
+                f2: new Date(2019, 0, 19, 16, 30),
+                f3: new Date(2019, 0, 20, 16, 30),
+                f4: new Date(2019, 0, 21, 16, 30),
+                f5: new Date(2019, 0, 22, 16, 30),
+                f6: new Date(2019, 0, 23, 16, 30),
+            }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    e.xlsxCell.style.numberFormat = formats[0];
+                    formats.shift();
+                }
             }
         },
         { styles, worksheet, sharedStrings }

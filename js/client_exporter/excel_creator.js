@@ -37,8 +37,7 @@ var Class = require("../core/class"),
     EXCEL_START_TIME = Date.UTC(1899, 11, 30),
     DAYS_COUNT_BEFORE_29_FEB_1900 = 60,
 
-    MAX_DIGIT_WIDTH_IN_PIXELS = 7, // Calibri font with 11pt size
-    CUSTOM_FORMAT_START_INDEX = 165;
+    MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 
 var ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
@@ -105,7 +104,18 @@ var ExcelCreator = Class.inherit({
         return result;
     },
 
+    ///#DEBUG
     _appendFormat: function(format, dataType) {
+        const styleFormat = this._convertToXlsxFormat(format, dataType);
+        if(styleFormat) {
+            if(inArray(styleFormat, this._styleFormat) === -1) {
+                this._styleFormat.push(styleFormat);
+            }
+        }
+    },
+    ///#ENDDEBUG
+
+    _convertToXlsxFormat: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
 
@@ -113,14 +123,7 @@ var ExcelCreator = Class.inherit({
         currency = newFormat.currency;
         dataType = newFormat.dataType;
 
-        format = excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
-        if(format) {
-            if(inArray(format, this._styleFormat) === -1) {
-                this._styleFormat.push(format);
-            }
-
-            return inArray(format, this._styleFormat) + 1;
-        }
+        return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
     },
 
     _appendString: function(value) {
@@ -280,10 +283,14 @@ var ExcelCreator = Class.inherit({
         this._xlsxFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            const formatID = that._appendFormat(style.format, style.dataType);
+            const format = that._convertToXlsxFormat(style.format, style.dataType);
+            let numberFormat = 0;
+            if(typeUtils.isDefined(format)) {
+                numberFormat = { formatCode: format };
+            }
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
-                numberFormatId: typeUtils.isDefined(formatID) ? Number(formatID) + CUSTOM_FORMAT_START_INDEX - 1 : 0,
+                numberFormat,
                 alignment: {
                     vertical: "top",
                     wrapText: Number(!!style.wrapText),
@@ -340,17 +347,9 @@ var ExcelCreator = Class.inherit({
     _generateStylesXML: function() {
         var that = this,
             folder = that._zip.folder(XL_FOLDER_NAME),
-            formatIndex,
             XML = "";
 
-        for(formatIndex = 0; formatIndex < that._styleFormat.length; formatIndex++) {
-            that._styleFormat[formatIndex] = that._getXMLTag("numFmt", [
-                { name: "numFmtId", value: Number(formatIndex) + CUSTOM_FORMAT_START_INDEX },
-                { name: "formatCode", value: that._styleFormat[formatIndex] }
-            ]);
-        }
-
-        XML = XML + that._getXMLTag("numFmts", [{ name: "count", value: that._styleFormat.length }], that._styleFormat.join(""));
+        XML = XML + this._xlsxFile.generateNumberFormatsXml();
         XML = XML + this._xlsxFile.generateFontsXml();
         XML = XML + this._xlsxFile.generateFillsXml();
         XML = XML + BASE_STYLE_XML2;
@@ -578,7 +577,6 @@ var ExcelCreator = Class.inherit({
         this._styleArray = [];
         this._colsArray = [];
         this._cellsArray = [];
-        this._styleFormat = [];
         this._needSheetPr = false;
         this._dataProvider = dataProvider;
         this._xlsxFile = new XlsxFile();
@@ -588,6 +586,10 @@ var ExcelCreator = Class.inherit({
         } else {
             this._zip = null;
         }
+
+        ///#DEBUG
+        this._styleFormat = [];
+        ///#ENDDEBUG
     },
 
     _checkZipState: function() {
