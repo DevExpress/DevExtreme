@@ -103,7 +103,7 @@ class OverlapStrategy extends DrawerStrategy {
             const $element = this._drawer._overlay.$content();
             const size = this._getPanelSize(offset);
             const direction = this._drawer.option("position");
-            const marginTop = this._drawer.getMaxSize() - size;
+            const marginTop = this._drawer.getRealPanelHeight() - size;
 
             let animationConfig = {
                 $element: $element,

@@ -1106,6 +1106,68 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, top menu posit
     fx.off = false;
 });
 
+QUnit.test("minSize should be rendered correctly in overlap mode, top menu position, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 50, "panel content has correct height when minSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 200, "panel content has correct height when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxSize should be rendered correctly in overlap mode, top menu position, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 100,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 0, "panel content has correct height when maxSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 100, "panel content has correct height when maxSize is set");
+
+    fx.off = false;
+});
+
 QUnit.test("minSize should be rendered correctly in overlap mode, bottom menu position, slide", assert => {
     fx.off = true;
 
@@ -1168,6 +1230,72 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu po
 
     assert.equal($content.position().top, 0, "content has correct top when minSize is set");
     assert.equal($panel.position().top, 100, "menu has correct top when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("minSize should be rendered correctly in overlap mode, bottom menu position, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: false,
+        position: "bottom",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 50, "panel content has correct height when minSize is set");
+    assert.equal($panelContent.css("marginTop"), "150px", "panel content has correct height when minSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 200, "panel content has correct height when minSize is set");
+    assert.equal($panelContent.css("marginTop"), "0px", "panel content has correct height when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu position, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 100,
+        opened: false,
+        position: "bottom",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 600);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $panel.find(".dx-overlay-content");
+
+    assert.equal($panelContent.height(), 0, "panel content has correct height when maxSize is set");
+    assert.equal($panelContent.css("marginTop"), "200px", "panel content has correct height when minSize is set");
+
+    instance.toggle();
+
+    assert.equal($panelContent.height(), 100, "panel content has correct height when maxSize is set");
+    assert.equal($panelContent.css("marginTop"), "100px", "panel content has correct height when minSize is set");
 
     fx.off = false;
 });
