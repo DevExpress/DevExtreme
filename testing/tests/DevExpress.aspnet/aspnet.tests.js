@@ -280,9 +280,14 @@
             "'\"\\\n"
         );
 
-        testTemplate("Html encode",
-            "<%= '\"<&>' %> <%- '\"<&>' %>",
-            "\"<&> \"<&>"
+        testTemplate("Html encode: inline",
+            "<%- '<img />' %>",
+            "<img />"
+        );
+
+        testTemplate("Html encode: stored in variable",
+            "<% var a = '<script>alert(1)</script>'; %><%- a %>",
+            "<script>alert(1)</script>"
         );
     });
 }));
