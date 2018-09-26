@@ -212,3 +212,4 @@ require("./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js");
 require("./treeViewParts/selectNodesRecursiveTrue.js");
 require("./treeViewParts/usageWithoutKeys.js");
 require("./treeViewParts/virtualMode.js");
+require("./treeViewParts/liveUpdateTests.js");

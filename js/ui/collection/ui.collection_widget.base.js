@@ -3,7 +3,8 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     domAdapter = require("../../core/dom_adapter"),
-    isPlainObject = require("../../core/utils/type").isPlainObject,
+    typeUtils = require("../../core/utils/type"),
+    isPlainObject = typeUtils.isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -11,7 +12,10 @@ var $ = require("../../core/renderer"),
     Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
-    dataUtils = require("../../core/utils/data"),
+    coreDataUtils = require("../../core/utils/data"),
+    arrayUtils = require("../../data/array_utils"),
+    dataUtils = require("../../data/utils"),
+    keysEqual = dataUtils.keysEqual,
     Widget = require("../widget/ui.widget"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -22,7 +26,8 @@ var $ = require("../../core/renderer"),
     holdEvent = require("../../events/hold"),
     clickEvent = require("../../events/click"),
     contextMenuEvent = require("../../events/contextmenu"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../widget/bindable_template"),
+    findChanges = require("../../core/utils/array_compare").findChanges;
 
 var COLLECTION_CLASS = "dx-collection",
     ITEM_CLASS = "dx-item",
@@ -47,6 +52,16 @@ var FOCUS_UP = "up",
     FOCUS_PAGE_DOWN = "pagedown",
     FOCUS_LAST = "last",
     FOCUS_FIRST = "first";
+
+
+function getPlainItems(groupedItems, group) {
+    let groupLevel = Array.isArray(group) ? group.length : 1,
+        getPlainItemsWithLevel = function(groupedItems, level) {
+            var plainItems = groupedItems.map(item => level > 0 ? getPlainItemsWithLevel(item.items, level - 1) : item);
+            return [].concat.apply([], plainItems);
+        };
+    return getPlainItemsWithLevel(groupedItems, groupLevel);
+}
 
 /**
 * @name CollectionWidget
@@ -104,6 +119,13 @@ var CollectionWidget = Widget.inherit({
             * @hidden
             */
             selectOnFocus: false,
+
+            /**
+            * @name CollectionWidgetOptions.repaintChangesOnly
+            * @type boolean
+            * @hidden
+            */
+            repaintChangesOnly: false,
 
             /**
             * @name CollectionWidgetOptions.loopItemFocus
@@ -498,6 +520,22 @@ var CollectionWidget = Widget.inherit({
         return result;
     },
 
+    _findItemElementByKey: function(key) {
+        var result = $(),
+            that = this,
+            store = this.getDataSource().store();
+
+        this.itemElements().each(function() {
+            var $item = $(this);
+            if(keysEqual(store.key(), store.keyOf($item.data(that._itemDataKey())), key)) {
+                result = $item;
+                return false;
+            }
+        });
+
+        return result;
+    },
+
     _getIndexByItem: function(item) {
         return this.option("items").indexOf(item);
     },
@@ -518,6 +556,10 @@ var CollectionWidget = Widget.inherit({
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
 
+    _setItemsCache: function(items) {
+        this._itemsCache = extend(true, [], items);
+    },
+
     _optionChanged: function(args) {
         if(args.name === "items") {
             var matches = args.fullName.match(ITEM_PATH_REGEX);
@@ -530,6 +572,30 @@ var CollectionWidget = Widget.inherit({
                 this._itemOptionChanged(item, property, args.value, args.previousValue);
                 return;
             }
+
+            if(this.option("repaintChangesOnly")) {
+                var dataSource = this.getDataSource();
+                if(dataSource) {
+                    var store = dataSource.store(),
+                        group = dataSource.group(),
+                        getKey = function(item) {
+                            return store.keyOf(item);
+                        },
+                        isItemEquals = function(item1, item2) {
+                            return JSON.stringify(item1) === JSON.stringify(item2);
+                        };
+                    var oldItems = this._itemsCache,
+                        newItems = args.value.slice();
+                    if(!group) {
+                        var result = findChanges(oldItems, newItems, getKey, isItemEquals);
+                        this._setItemsCache(args.value);
+                        if(result) {
+                            this._modifyByChanges(this.option("items"), result);
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         switch(args.name) {
@@ -540,7 +606,6 @@ var CollectionWidget = Widget.inherit({
                 this._invalidate();
                 break;
             case "dataSource":
-                this.option("items", []);
                 this._refreshDataSource();
                 this._renderEmptyMessage();
                 break;
@@ -568,6 +633,7 @@ var CollectionWidget = Widget.inherit({
             case "selectOnFocus":
             case "loopItemFocus":
             case "focusOnSelectedItem":
+            case "repaintChangesOnly":
                 break;
             case "focusedElement":
                 this._removeFocusedItem(args.previousValue);
@@ -603,19 +669,86 @@ var CollectionWidget = Widget.inherit({
         this._startIndexForAppendedItems = null;
     },
 
-    _dataSourceChangedHandler: function(newItems) {
-        var items = this.option("items");
-        if(this._initialized && items && this._shouldAppendItems()) {
-            this._renderedItemsCount = items.length;
-            if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
-                this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
-            }
+    _deleteItemElement: function($item, deletedActionArgs) {
+        $item.remove();
+        this._fireDeleted($item, deletedActionArgs);
+    },
 
-            this._forgetNextPageLoading();
-            this._refreshContent();
-            this._renderFocusTarget();
+    _getWrapperElement: commonUtils.noop,
+
+    _modifyByChanges: function(items, changes) {
+        var dataSource = this.getDataSource(),
+            store = dataSource.store(),
+            group = dataSource.group();
+
+        if(group) {
+            items = getPlainItems(items, group);
+        }
+        changes.forEach(change => {
+            switch(change.type) {
+                case "update":
+                    if(change.oldItem) {
+                        this._renderItem(change.index, change.data, this._getWrapperElement(), this._findItemElementByKey(change.key));
+                    } else {
+                        let changedItem = items[arrayUtils.indexByKey(store, items, change.key)];
+                        if(changedItem) {
+                            arrayUtils.update(store, items, change.key, change.data).done(() => {
+                                this._renderItem(items.indexOf(changedItem), changedItem, this._getWrapperElement(), this._findItemElementByItem(changedItem));
+                            });
+                        }
+                    }
+                    break;
+                case "insert":
+                    when(change.index || arrayUtils.insert(store, items, change.data)).done(()=>{
+                        this._renderedItemsCount++;
+                        this._renderItem(this._renderedItemsCount, change.data, this._getWrapperElement());
+                    });
+                    break;
+                case "remove":
+                    let index = change.index || arrayUtils.indexByKey(store, items, change.key),
+                        removedItem = change.oldItem || items[index];
+                    if(removedItem) {
+                        let $removedItemElement = this._findItemElementByKey(change.key),
+                            deletedActionArgs = this._extendActionArgs($removedItemElement);
+                        arrayUtils.remove(store, items, change.key).done(() => {
+                            this._renderedItemsCount--;
+                            this._deleteItemElement($removedItemElement, deletedActionArgs, index);
+                        });
+                    }
+                    break;
+            }
+        });
+        this._renderedItemsCount = items.length;
+    },
+
+    _appendNewItems: function(items, newItems) {
+        this._renderedItemsCount = items.length;
+        if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
+            this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
+        }
+
+        this._forgetNextPageLoading();
+        this._refreshContent();
+        this._renderFocusTarget();
+    },
+
+    _dataSourceChangedHandler: function(newItems, e) {
+        var items = this.option("items");
+
+        if(this._initialized && items) {
+            let changes = e && e.changes;
+            if(changes) {
+                this._modifyByChanges(items, changes);
+            } else if(this._shouldAppendItems()) {
+                this._appendNewItems(items, newItems);
+            } else {
+                this.option("items", newItems.slice());
+            }
         } else {
-            this.option("items", newItems);
+            this.option("items", newItems.slice());
+            if(this.option("repaintChangesOnly")) {
+                this._setItemsCache(newItems);
+            }
         }
     },
 
@@ -959,7 +1092,7 @@ var CollectionWidget = Widget.inherit({
             },
             fieldGetter: function(field) {
                 var expr = that.option(field + "Expr"),
-                    getter = dataUtils.compileGetter(expr);
+                    getter = coreDataUtils.compileGetter(expr);
 
                 return getter;
             }

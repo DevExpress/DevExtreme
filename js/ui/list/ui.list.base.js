@@ -159,6 +159,12 @@ var ListBase = CollectionWidget.inherit({
             bounceEnabled: true,
 
             /**
+            * @name dxListOptions.repaintChangesOnly
+            * @type boolean
+            * @hidden false
+            */
+
+            /**
             * @name dxListOptions.scrollByContent
             * @type boolean
             * @default true
@@ -678,7 +684,7 @@ var ListBase = CollectionWidget.inherit({
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
-        this.callBase(newItems);
+        this.callBase.apply(this, arguments);
     },
 
     _refreshContent: function() {

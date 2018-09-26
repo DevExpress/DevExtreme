@@ -1,11 +1,12 @@
-var $ = require("jquery"),
-    domUtils = require("core/utils/dom"),
-    holdEvent = require("events/hold"),
-    config = require("core/config"),
-    pointerMock = require("../../helpers/pointerMock.js");
+import $ from "jquery";
+import domUtils from "core/utils/dom";
+import holdEvent from "events/hold";
+import config from "core/config";
+import pointerMock from "../../helpers/pointerMock.js";
+import { DataSource } from "data/data_source/data_source";
 
-require("ui/tabs");
-require("common.css!");
+import "ui/tabs";
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -676,4 +677,106 @@ QUnit.test("tabs should be scrolled to the right position on init in RTL mode", 
     var scrollable = $element.find(".dx-scrollable").dxScrollable("instance");
 
     assert.equal(scrollable.scrollLeft(), Math.round(scrollable.scrollWidth() - scrollable.clientWidth()), "items are scrolled");
+});
+
+QUnit.module("Live Update", {
+    beforeEach: function() {
+        this.itemRenderedSpy = sinon.spy();
+        this.itemDeletedSpy = sinon.spy();
+        this.data = [{
+            id: 0,
+            text: "0",
+            content: "0 tab content"
+        },
+        {
+            id: 1,
+            text: "1",
+            content: "1 tab content"
+        }];
+        this.createTabs = (dataSourceOptions, repaintChangesOnly) => {
+            var dataSource = new DataSource($.extend({
+                paginate: false,
+                load: () => this.data,
+                key: "id"
+            }, dataSourceOptions));
+
+            return $("#tabs").dxTabs({
+                dataSource: dataSource,
+                repaintChangesOnly: repaintChangesOnly,
+                onContentReady: (e) => {
+                    e.component.option("onItemRendered", this.itemRenderedSpy);
+                    e.component.option("onItemDeleted", this.itemDeletedSpy);
+                }
+            }).dxTabs("instance");
+        };
+    }
+}, function() {
+    QUnit.test("update item", function(assert) {
+        var store = this.createTabs().getDataSource().store();
+
+        var pushData = [{ type: "update", data: {
+            id: 1,
+            text: "1 Updated",
+            content: "1 tab content"
+        }, key: 1 }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check updated item");
+    });
+
+    QUnit.test("add item", function(assert) {
+        var store = this.createTabs().getDataSource().store();
+
+        var pushData = [{ type: "insert", data: {
+            id: 2,
+            text: "2 Inserted",
+            content: "2 tab content"
+        } }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
+        assert.ok(this.itemRenderedSpy.firstCall.args[0].itemElement.parent().hasClass("dx-tabs-wrapper"), "check item container");
+    });
+
+    QUnit.test("remove item", function(assert) {
+        var store = this.createTabs().getDataSource().store();
+
+        var pushData = [{ type: "remove", key: 1 }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, "items are not refreshed after remove");
+        assert.equal(this.itemDeletedSpy.callCount, 1, "removed items count");
+        assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, "1", "check removed item");
+    });
+
+    QUnit.test("repaintChangesOnly, update item instance", function(assert) {
+        var dataSource = this.createTabs({}, true).getDataSource();
+
+        this.data[0] = {
+            id: 0,
+            text: "0 Updated",
+            content: "0 tab content"
+        };
+        dataSource.load();
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after reload");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "0 Updated", "check updated item");
+    });
+
+    QUnit.test("repaintChangesOnly, add item", function(assert) {
+        var dataSource = this.createTabs({}, true).getDataSource();
+
+        this.data.push({
+            id: 2,
+            text: "2 Inserted",
+            content: "2 tab content"
+        });
+        dataSource.load();
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
+        assert.ok(this.itemRenderedSpy.firstCall.args[0].itemElement.parent().hasClass("dx-tabs-wrapper"), "check item container");
+    });
 });

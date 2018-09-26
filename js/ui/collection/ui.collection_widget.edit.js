@@ -804,6 +804,25 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._selection.deselect([key]);
     },
 
+    _fireDeleted: function($item, deletedActionArgs) {
+        this._itemEventHandler($item, "onItemDeleted", deletedActionArgs, {
+            beforeExecute: function() {
+                $item.detach();
+            },
+            excludeValidators: ["disabled", "readOnly"]
+        });
+    },
+
+    _deleteItemElement: function($item, deletedActionArgs, index) {
+        var changingOption = this._dataSource ? "dataSource" : "items";
+        this._updateSelectionAfterDelete(index);
+        this._updateIndicesAfterIndex(index);
+        this._editStrategy.deleteItemAtIndex(index);
+        this._simulateOptionChange(changingOption);
+        this._fireDeleted($item, deletedActionArgs);
+        this._renderEmptyMessage();
+    },
+
     /**
     * @name CollectionWidgetMethods.deleteItem
     * @publicName deleteItem(itemElement)
@@ -817,7 +836,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             deferred = new Deferred(),
             $item = this._editStrategy.getItemElement(itemElement),
             index = this._editStrategy.getNormalizedIndex(itemElement),
-            changingOption = this._dataSource ? "dataSource" : "items",
             itemResponseWaitClass = this._itemResponseWaitClass();
 
         if(indexExists(index)) {
@@ -825,18 +843,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 $item.addClass(itemResponseWaitClass);
                 var deletedActionArgs = that._extendActionArgs($item);
                 that._deleteItemFromDS($item).done(function() {
-                    that._updateSelectionAfterDelete(index);
-                    that._updateIndicesAfterIndex(index);
-                    that._editStrategy.deleteItemAtIndex(index);
-                    that._simulateOptionChange(changingOption);
-                    that._itemEventHandler($item, "onItemDeleted", deletedActionArgs, {
-                        beforeExecute: function() {
-                            $item.detach();
-                        },
-                        excludeValidators: ["disabled", "readOnly"]
-                    });
-
-                    that._renderEmptyMessage();
+                    that._deleteItemElement($item, deletedActionArgs, index);
                     that._tryRefreshLastPage().done(function() {
                         deferred.resolveWith(that);
                     });

@@ -591,12 +591,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initStoreChangeHandlers();
     },
 
-    _dataSourceChangedHandler: function(newItems) {
+    _dataSourceChangedHandler: function(newItems, e) {
         if(this._initialized && this._isVirtualMode() && this.option("items").length) {
             return;
         }
 
-        this.option("items", newItems);
+        this.callBase.apply(this, arguments);
     },
 
     _removeTreeViewLoadIndicator: function() {
@@ -838,13 +838,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var length = nodes.length - 1;
 
         for(var i = length; i >= 0; i--) {
-            this._renderItem(nodes[i], $nodeContainer);
+            this._renderNode(nodes[i], $nodeContainer);
         }
 
         this._renderFocusTarget();
     },
 
-    _renderItem: function(node, $nodeContainer) {
+    _renderNode: function(node, $nodeContainer) {
         var $node = this._createDOMElement($nodeContainer, node),
             nodeData = node.internalFields,
             showCheckBox = this._showCheckboxes();
@@ -855,7 +855,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
 
-        this.callBase(nodeData.key, nodeData.item, $node);
+        this._renderItem(nodeData.key, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);

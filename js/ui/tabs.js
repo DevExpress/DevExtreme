@@ -101,6 +101,12 @@ var Tabs = CollectionWidget.inherit({
             */
 
             /**
+            * @name dxTabsOptions.repaintChangesOnly
+            * @type boolean
+            * @hidden false
+            */
+
+            /**
             * @name dxTabsOptions.selectedItems
             * @type Array<string,number,Object>
             */
@@ -326,6 +332,10 @@ var Tabs = CollectionWidget.inherit({
         if(this.option("selectionMode") === "multiple") {
             this.option("selectOnFocus", false);
         }
+    },
+
+    _getWrapperElement: function() {
+        return this.$element().children("." + TABS_WRAPPER_CLASS);
     },
 
     _renderWrapper: function() {
