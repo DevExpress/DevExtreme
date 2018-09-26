@@ -275,7 +275,7 @@ QUnit.test("keyboard navigation does not work in disabled widget", function(asse
     assert.ok($element.attr('tabindex') === undefined, "collection of radio group has not tabindex");
 });
 
-QUnit.test("radio group items should have tabIndex = -1 (T674238)", function(assert) {
+QUnit.test("radio group items should not have tabIndex(T674238)", function(assert) {
     var items = [{ text: "0" }, { text: "1" }],
         $element = $("#widget").dxRadioGroup({
             focusStateEnabled: true,
@@ -283,8 +283,8 @@ QUnit.test("radio group items should have tabIndex = -1 (T674238)", function(ass
         });
 
     var $items = $element.find("." + RADIO_BUTTON_CLASS);
-    assert.equal($items.eq(0).attr('tabindex'), -1, "items of radio group has tabindex = -1");
-    assert.equal($items.eq(1).attr('tabindex'), -1, "items of radio group has tabindex = -1");
+    assert.ok($items.eq(0).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
+    assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
 });
 
 QUnit.module("focus policy", moduleConfig);
