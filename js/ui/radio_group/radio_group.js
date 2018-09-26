@@ -271,7 +271,6 @@ var RadioGroup = Editor.inherit({
         $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
         $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
-        $(e.itemElement).attr("tabindex", -1);
         $(e.itemElement).prepend($radioContainer);
     },
 
