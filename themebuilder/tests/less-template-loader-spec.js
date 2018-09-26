@@ -2,6 +2,7 @@ const assert = require("chai").assert;
 const LessTemplateLoader = require("../modules/less-template-loader");
 const themeName = "generic";
 const colorScheme = "light";
+const lessCompiler = require("less/lib/less-node");
 let metadata = {
     "base.common": [
         {
@@ -32,7 +33,7 @@ describe("LessTemplateLoader", () => {
         let config = {
             isBootstrap: true,
             bootstrapVersion: 3,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             reader: () => {
                 // data/less/theme-builder-generic-light.less
                 return new Promise(resolve => {
@@ -62,7 +63,7 @@ describe("LessTemplateLoader", () => {
         let config = {
             isBootstrap: true,
             bootstrapVersion: 4,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             sassCompiler: require("sass"),
             reader: (filename) => {
                 let content = "";
@@ -102,7 +103,7 @@ describe("LessTemplateLoader", () => {
     it("load - variable change", () => {
         let config = {
             isBootstrap: false,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             reader: () => {
                 // data/less/theme-builder-generic-light.less
                 return new Promise(resolve => {
@@ -132,7 +133,7 @@ describe("LessTemplateLoader", () => {
     it("load - variable change, color swatch", () => {
         let config = {
             isBootstrap: false,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             outColorScheme: "my-custom",
             makeSwatch: true,
             reader: () => {
@@ -161,7 +162,7 @@ describe("LessTemplateLoader", () => {
     it("load - variable change, color swatch, typography and special classes", () => {
         let config = {
             isBootstrap: false,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             outColorScheme: "my-custom",
             makeSwatch: true,
             reader: () => {
@@ -202,7 +203,7 @@ describe("LessTemplateLoader", () => {
     it("compileLess", () => {
         let config = {
             isBootstrap: false,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             outColorScheme: "my-custom",
             makeSwatch: true,
         };
@@ -293,7 +294,7 @@ describe("LessTemplateLoader", () => {
     it("load - change color scheme in theme marker", () => {
         let config = {
             isBootstrap: false,
-            lessCompiler: require("less/lib/less-node"),
+            lessCompiler: lessCompiler,
             outColorScheme: "my-custom",
             makeSwatch: true,
             reader: () => {
@@ -333,5 +334,50 @@ describe("LessTemplateLoader", () => {
 
 `);
             });
+    });
+
+    it("compile less with options", () => {
+        const compilerWithOptions = require("less/lib/less-node");
+        compilerWithOptions.options = {
+            "rootpath": "modified_path/"
+        };
+
+        let config = {
+            isBootstrap: false,
+            lessCompiler: compilerWithOptions
+        };
+
+        let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+        @font-face {
+            font-family: 'DXIcons';
+            src: url(~"icons/generic.woff2") format('woff2'),
+                 url(~"icons/generic.woff") format('woff'),
+                 url(~"icons/generic.ttf") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }`;
+
+        let metadataVariables = {};
+
+        for(let key in metadata) {
+            if(metadata.hasOwnProperty(key)) {
+                let group = metadata[key];
+                group.forEach(groupItem => {
+                    metadataVariables[groupItem.Key.replace("@", "")] = groupItem.Key;
+                });
+            }
+        }
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
+            assert.equal(data.css, `@font-face {
+  font-family: 'DXIcons';
+  src: url(modified_path/icons/generic.woff2) format('woff2'), url(modified_path/icons/generic.woff) format('woff'), url(modified_path/icons/generic.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+`);
+        });
     });
 });

@@ -137,6 +137,7 @@ class LessTemplateLoader {
                 }]
             };
 
+            // while using `less/lib/less-browser`, the global options are not passed to the `render` method, lets do it by ourselves
             if(this.lessCompiler.options && typeof (this.lessCompiler.options) === "object") {
                 Object.assign(options, this.lessCompiler.options);
             }
