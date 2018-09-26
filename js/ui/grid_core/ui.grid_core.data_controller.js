@@ -701,10 +701,18 @@ module.exports = {
                     });
                 },
                 _isCellChanged: function(oldRow, newRow, rowIndex, columnIndex, isLiveUpdate) {
-                    return JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex]);
+                    if(JSON.stringify(oldRow.values[columnIndex]) !== JSON.stringify(newRow.values[columnIndex])) {
+                        return true;
+                    }
+
+                    if(JSON.stringify(oldRow.modifiedValues && oldRow.modifiedValues[columnIndex]) !== JSON.stringify(newRow.modifiedValues && newRow.modifiedValues[columnIndex])) {
+                        return true;
+                    }
+
+                    return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group") {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && oldItem.inserted === newItem.inserted && oldItem.removed === newItem.removed) {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -736,6 +744,10 @@ module.exports = {
 
                     function isItemEquals(item1, item2) {
                         if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
+                            return false;
+                        }
+
+                        if(item1.modified !== item2.modified || item1.inserted !== item2.inserted || item1.removed !== item2.removed) {
                             return false;
                         }
 
@@ -1274,10 +1286,11 @@ module.exports = {
                             }).done(d.resolve).fail(d.reject);
                         } else {
                             that.updateItems({ repaintChangesOnly: options.changesOnly });
+                            d.resolve();
                         }
                     });
 
-                    return d;
+                    return d.promise();
                 },
                 /**
                  * @name dxDataGridMethods.getVisibleRows
@@ -1324,6 +1337,7 @@ module.exports = {
 
             gridCoreUtils.proxyMethod(members, "load");
             gridCoreUtils.proxyMethod(members, "reload");
+            gridCoreUtils.proxyMethod(members, "push");
             gridCoreUtils.proxyMethod(members, "itemsCount", 0);
             gridCoreUtils.proxyMethod(members, "totalItemsCount", 0);
             gridCoreUtils.proxyMethod(members, "hasKnownLastPage", true);

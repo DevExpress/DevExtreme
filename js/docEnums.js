@@ -341,6 +341,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GridEditRefreshMode
+ * @enum {'full'|'reshape'|'repaint'}
+ */
+
+/**
  * @typedef {string} Enums.GridApplyFilterMode
  * @enum {'auto'|'onClick'}
  */
