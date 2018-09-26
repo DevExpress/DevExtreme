@@ -17,14 +17,10 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         optionChanged: function(args) {
-            var that = this,
-                rowKey;
+            var that = this;
 
             if(args.name === "focusedRowIndex") {
-                rowKey = that._dataController.getKeyByRowIndex(args.value);
-                if(isDefined(rowKey)) {
-                    that.option("focusedRowKey", rowKey);
-                }
+                that._focusRowByIndex(args.value);
                 args.handled = true;
             } else if(args.name === "focusedRowKey") {
                 that._focusRowByKey(args.value);
@@ -38,10 +34,21 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
+        _focusRowByIndex: function(index) {
+            var rowKey = this._dataController.getKeyByRowIndex(index);
+            if(isDefined(rowKey)) {
+                this.option("focusedRowKey", rowKey);
+            }
+        },
+
         _focusRowByKey: function(key) {
             var that = this,
                 dataController = this._dataController,
                 rowsView = this.getView("rowsView");
+
+            if(!this.option("focusedRowEnabled")) {
+                return;
+            }
 
             dataController._getPageIndexByKey(key).done(function(pageIndex) {
                 that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
@@ -224,7 +231,9 @@ module.exports = {
 
             data: {
                 _fireChanged: function(e) {
-                    this.getController("focus").handleDataChanged(e);
+                    if(this.option("focusedRowEnabled")) {
+                        this.getController("focus").handleDataChanged(e);
+                    }
 
                     this.callBase(e);
                 }
