@@ -304,10 +304,12 @@ module.exports = gridCore.Controller.inherit((function() {
 
                     new ArrayStore(options.data).load(loadOptions).done(function(data) {
                         options.data = data;
+                        if(needStoreCache) {
+                            this._cachedPagingData = cloneItems(options.data, groupCount);
+                        }
+                    }).fail(function(error) {
+                        options.data = new Deferred().reject(error);
                     });
-                    if(needStoreCache) {
-                        this._cachedPagingData = cloneItems(options.data, groupCount);
-                    }
                 }
 
                 if(loadOptions.requireTotalCount && localPaging) {
