@@ -166,6 +166,10 @@ var RadioGroup = Editor.inherit({
         this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
     },
 
+    _focusTarget: function() {
+        return this.$element();
+    },
+
     _initMarkup: function() {
         this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
@@ -267,6 +271,7 @@ var RadioGroup = Editor.inherit({
         $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
         $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
+        $(e.itemElement).attr("tabindex", -1);
         $(e.itemElement).prepend($radioContainer);
     },
 
