@@ -14,7 +14,7 @@ QUnit.module("DataGrid export.onXlsxCellPrepared tests", {
 
 QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
+        '<numFmts count="0" />' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="7">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -55,7 +55,7 @@ QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
 
 QUnit.test("Change horizontal alignment by a property value of source object", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
+        '<numFmts count="0" />' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -71,7 +71,7 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0" />';
 
     helper.runGeneralTest(
         assert,
@@ -97,7 +97,7 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
 
 QUnit.test("Change fill in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
+        '<numFmts count="0" />' +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
         '<fill><patternFill patternType="none" /></fill>' +
@@ -151,7 +151,7 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
 
 QUnit.test("Change fill by a property value of source object", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
+        '<numFmts count="0" />' +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
         '<fill><patternFill patternType="none" /></fill>' +
@@ -173,7 +173,7 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0" />';
 
     helper.runGeneralTest(
         assert,
@@ -208,7 +208,7 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
 
 QUnit.test("Change font in all xlsx cells", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
+        '<numFmts count="0" />' +
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
         '<font><b /><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -585,7 +585,7 @@ QUnit.test("Change number value", function(assert) {
         '</row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0" />';
 
     helper.runGeneralTest(
         assert,
@@ -617,7 +617,7 @@ QUnit.test("Change date value", function(assert) {
         '</row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0" />';
 
     helper.runGeneralTest(
         assert,
