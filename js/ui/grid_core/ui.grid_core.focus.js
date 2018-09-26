@@ -147,6 +147,17 @@ module.exports = {
                         this.setRowFocusType();
                     }
                     this.callBase(e);
+                },
+
+                _escapeKeyHandler: function(eventArgs, isEditing) {
+                    if(isEditing || !this.option("focusedRowEnabled")) {
+                        this.callBase(eventArgs, isEditing);
+                        return;
+                    }
+                    if(this.isCellFocusType()) {
+                        this.setRowFocusType();
+                        this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
+                    }
                 }
             },
 
@@ -181,10 +192,9 @@ module.exports = {
         views: {
             rowsView: {
                 _createRow: function(row) {
-                    var focusedRowEnabled = this.option("focusedRowEnabled"),
-                        $row = this.callBase(row);
+                    var $row = this.callBase(row);
 
-                    if(focusedRowEnabled && row) {
+                    if(this.option("focusedRowEnabled") && row) {
                         if(this.getController("focus").isRowFocused(row.rowIndex)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
                         }
