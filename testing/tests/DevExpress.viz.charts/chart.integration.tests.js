@@ -937,6 +937,53 @@ QUnit.test("Reset chart viewport", function(assert) {
     assert.deepEqual(chart.getValueAxis("ax1").visualRange(), { startValue: 0, endValue: 300 });
 });
 
+QUnit.test("Set visualRange with constant lines and endOnTick", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: new Date(2010, 0, 1),
+            val: 4
+        }, {
+            arg: new Date(2011, 0, 1),
+            val: 8
+        }, {
+            arg: new Date(2012, 0, 1),
+            val: 7
+        }, {
+            arg: new Date(2013, 0, 1),
+            val: 3
+        }, {
+            arg: new Date(2014, 0, 1),
+            val: 15
+        }],
+        series: { type: "line" },
+        argumentAxis: {
+            valueMarginsEnabled: false,
+            constantLines: [{ value: new Date(2014, 5, 1), extendAxis: true }]
+        },
+        valueAxis: {
+            valueMarginsEnabled: true,
+            endOnTick: true,
+            constantLines: [{ value: 17.2, extendAxis: true }]
+        }
+    });
+
+    // act
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), {
+        startValue: new Date(2010, 0, 1),
+        endValue: new Date(2014, 5, 1)
+    });
+    assert.deepEqual(chart._valueAxes[0].visualRange(), {
+        startValue: 2,
+        endValue: 18
+    });
+});
+
 QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
     // arrange
     var chart = this.$container.dxChart({

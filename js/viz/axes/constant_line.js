@@ -4,6 +4,9 @@ export default function createConstantLine(axis, options) {
     const labelOptions = options.label || {};
     const labelPosition = labelOptions.position || "inside";
 
+    let parsedValue;
+    let valueIsParsed = false;
+
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
     let storedCoord;
@@ -19,14 +22,23 @@ export default function createConstantLine(axis, options) {
 
         line: null,
 
+        getParsedValue() {
+            if(!valueIsParsed) {
+                parsedValue = axis._validateUnit(options.value, "E2105", "constantLine");
+                valueIsParsed = true;
+                return parsedValue;
+            }
+            return parsedValue;
+        },
+
         draw() {
             if(!isDefined(options.value) || axis._translator.getBusinessRange().stubData) {
                 return this;
             }
             const canvas = axis._getCanvasStartEnd();
-            const pos = axis._getConstantLinePos(options.value, canvas.start, canvas.end);
+            const parsedValue = this.getParsedValue();
 
-            this.coord = pos.value;
+            this.coord = axis._getConstantLinePos(parsedValue, canvas.start, canvas.end);
 
             let group = axis._axisConstantLineGroups[labelPosition];
 
@@ -45,7 +57,7 @@ export default function createConstantLine(axis, options) {
                 dashStyle: options.dashStyle
             }).append(axis._axisConstantLineGroups.inside);
 
-            this.label = labelOptions.visible ? axis._drawConstantLineLabels(pos.parsedValue, labelOptions, this.coord, group) : null;
+            this.label = labelOptions.visible ? axis._drawConstantLineLabels(parsedValue, labelOptions, this.coord, group) : null;
 
             this.updatePosition();
 
@@ -59,7 +71,7 @@ export default function createConstantLine(axis, options) {
         updatePosition(animate) {
             const canvas = axis._getCanvasStartEnd();
 
-            const coord = axis._getConstantLinePos(this.options.value, canvas.start, canvas.end).value;
+            const coord = axis._getConstantLinePos(this.getParsedValue(), canvas.start, canvas.end);
 
             if(!isDefined(coord)) {
                 return;
