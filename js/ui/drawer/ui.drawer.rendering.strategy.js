@@ -59,15 +59,18 @@ const animation = {
         });
     },
 
-    size($element, size, isHorizontal, duration, completeAction) {
+    size($element, size, marginTop, direction, duration, completeAction) {
         const toConfig = {};
 
-        if(isHorizontal) {
+        if(direction === "right" || direction === "left") {
             toConfig["width"] = size;
         } else {
             toConfig["height"] = size;
         }
 
+        if(direction === "bottom") {
+            toConfig["margin-top"] = marginTop;
+        }
         fx.animate($element, {
             to: toConfig,
             duration,

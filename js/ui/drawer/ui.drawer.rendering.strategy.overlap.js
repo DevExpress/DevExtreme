@@ -103,9 +103,11 @@ class OverlapStrategy extends DrawerStrategy {
             const $element = this._drawer._overlay.$content();
             const size = this._getPanelSize(offset);
             const isHorizontal = this._drawer._isHorizontalDirection();
+            const direction = this._drawer.option("position");
+            const marginTop = this._drawer.getMaxSize() - size;
 
             if(animate) {
-                animation.size($element, size, isHorizontal, this._drawer.option("animationDuration"), () => {
+                animation.size($element, size, marginTop, direction, this._drawer.option("animationDuration"), () => {
                     this._contentAnimationResolve();
                     this._panelAnimationResolve();
                 });
@@ -114,6 +116,7 @@ class OverlapStrategy extends DrawerStrategy {
                     $($element).css("width", size);
                 } else {
                     $($element).css("height", size);
+                    $($element).css("margin-top", "150px");
                 }
             }
         }
