@@ -59,10 +59,14 @@ const animation = {
         });
     },
 
-    width($element, width, duration, completeAction) {
+    size($element, size, isHorizontal, duration, completeAction) {
         const toConfig = {};
 
-        toConfig["width"] = width;
+        if(isHorizontal) {
+            toConfig["width"] = size;
+        } else {
+            toConfig["height"] = size;
+        }
 
         fx.animate($element, {
             to: toConfig,
@@ -124,7 +128,7 @@ class DrawerStrategy {
         }
     }
 
-    _getPanelWidth(offset) {
+    _getPanelSize(offset) {
         return offset ? this._drawer.getMaxSize() : this._drawer.getMinSize();
     }
 

@@ -34,7 +34,7 @@ class ShrinkStrategy extends DrawerStrategy {
         }
 
         if(this._drawer.option("revealMode") === "expand") {
-            const width = this._getPanelWidth(offset);
+            const width = this._getPanelSize(offset);
 
             if(animate) {
                 animation.width($(this._drawer._$panel), width, this._drawer.option("animationDuration"), () => {

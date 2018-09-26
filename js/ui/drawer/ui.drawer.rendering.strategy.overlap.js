@@ -62,7 +62,7 @@ class OverlapStrategy extends DrawerStrategy {
             overlay.option("height", "100%");
             overlay.option("width", this._drawer.getRealPanelWidth());
         } else {
-            overlay.option("width", "100%");
+            overlay.option("width", overlay.option("container").width());
             overlay.option("height", this._drawer.getRealPanelHeight());
         }
     }
@@ -73,7 +73,7 @@ class OverlapStrategy extends DrawerStrategy {
         const direction = this._drawer.option("position");
         const panelPosition = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
 
-        $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
+        this._drawer._isHorizontalDirection() && $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
 
         if(this._drawer.option("revealMode") === "slide") {
             if(animate) {
@@ -101,14 +101,20 @@ class OverlapStrategy extends DrawerStrategy {
 
         if(this._drawer.option("revealMode") === "expand") {
             const $element = this._drawer._overlay.$content();
-            const width = this._getPanelWidth(offset);
+            const size = this._getPanelSize(offset);
+            const isHorizontal = this._drawer._isHorizontalDirection();
+
             if(animate) {
-                animation.width($element, width, this._drawer.option("animationDuration"), () => {
+                animation.size($element, size, isHorizontal, this._drawer.option("animationDuration"), () => {
                     this._contentAnimationResolve();
                     this._panelAnimationResolve();
                 });
             } else {
-                $($element).css("width", width);
+                if(isHorizontal) {
+                    $($element).css("width", size);
+                } else {
+                    $($element).css("height", size);
+                }
             }
         }
     }
