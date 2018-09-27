@@ -145,14 +145,13 @@ var environment = {
 
             axis = this.createAxis(this.renderSettings, options);
 
-            this.translator.getBusinessRange.returns(this.range);// TODO - move
+            axis.validate();
             axis.setBusinessRange(this.range);
 
             return axis;
         },
         createDrawnAxis: function(opt) {
             var axis = this.createSimpleAxis(opt);
-            axis.validate();
             axis.draw(this.canvas);
             return axis;
         }
@@ -356,6 +355,36 @@ QUnit.test("set business range and canvas", function(assert) {
 
     assert.strictEqual(axis.getTranslator().translate(0), 10);
     assert.strictEqual(axis.getTranslator().translate(100), 920);
+});
+
+QUnit.test("set business range with constant lines", function(assert) {
+    var axis = new Axis({
+        renderer: this.renderer,
+        axisType: "xyAxes",
+        drawingType: "linear"
+    });
+
+    axis.updateOptions({
+        isHorizontal: true,
+        label: {},
+        constantLines: [{ value: -5, extendAxis: true }, { value: 110, extendAxis: true }]
+    });
+
+    axis.updateCanvas({
+        left: 10,
+        right: 50,
+        width: 1000
+    });
+
+    axis.validate();
+
+    axis.setBusinessRange(new rangeModule.Range({
+        min: 0,
+        max: 100
+    }));
+
+    assert.strictEqual(axis.getTranslator().translate(-5), 10);
+    assert.strictEqual(axis.getTranslator().translate(110), 950);
 });
 
 QUnit.module("Ticks skipping. Normal axis", $.extend({}, environment, {
@@ -652,7 +681,6 @@ QUnit.test("Datetime, no custom format - use auto format based on estimated tick
             visible: true
         }
     });
-    axis.validate();
 
     axis.measureLabels(this.canvas);
 
@@ -676,7 +704,6 @@ QUnit.test("Datetime, custom format - use provided format", function(assert) {
             }
         }
     });
-    axis.validate();
 
     axis.measureLabels(this.canvas);
 
@@ -2518,7 +2545,6 @@ QUnit.test("no custom format - use auto format based on estimated tickInterval",
         min: new Date(2009, 11, 1),
         max: new Date(2010, 1, 1)
     });
-    axis.validate();
 
     axis.estimateMargins(this.canvas);
 
@@ -2930,7 +2956,6 @@ QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, enviro
         that.axis = that.createSimpleAxis({
             dataType: "datetime"
         });
-        that.axis.validate();
     },
     updateOptions: function(opt) {
 
@@ -4262,6 +4287,31 @@ QUnit.test("Adjust axis after reset zoom", function(assert) {
     assert.strictEqual(max, 100);
     assert.strictEqual(minVisible, 10);
     assert.strictEqual(maxVisible, 15);
+});
+
+QUnit.test("Adjusting with constant lines", function(assert) {
+    this.updateOptions({
+        constantLines: [{ value: 90, extendAxis: true }, { value: 210 }]
+    });
+
+    this.series[0].getViewport.returns({
+        min: 120,
+        max: 180
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({ min: 100, max: 200 });
+    this.axis.setMarginOptions({});
+
+    this.axis.adjust();
+    this.translator.stub("updateBusinessRange").reset();
+
+    this.axis.createTicks(this.canvas);
+
+    const { minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(minVisible, 90);
+    assert.strictEqual(maxVisible, 180);
 });
 
 QUnit.test("Update translator business range after adjust axis", function(assert) {

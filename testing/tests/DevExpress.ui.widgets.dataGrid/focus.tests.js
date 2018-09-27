@@ -605,3 +605,102 @@ QUnit.testInActiveWindow("Change focusedRowIndex at runtime", function(assert) {
     // assert
     assert.ok(this.gridView.getView("rowsView").getRow(1).hasClass("dx-row-focused"), "Row 1 has focus");
 });
+
+QUnit.test("Focus types test", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        editing: {
+            allowEditing: false,
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    assert.ok(this.getController("keyboardNavigation").isCellFocusType(), "Cell focus type");
+    // act
+    this.getController("keyboardNavigation").setRowFocusType();
+    // assert
+    assert.ok(this.getController("keyboardNavigation").isCellFocusType(), "Cell focus type");
+    assert.notOk(this.getController("keyboardNavigation").isRowFocusType(), "Row focus type");
+    // act
+    this.option("focusedRowEnabled", true);
+    this.getController("keyboardNavigation").setRowFocusType();
+    // assert
+    assert.notOk(this.getController("keyboardNavigation").isCellFocusType(), "Not cell focus type");
+    assert.ok(this.getController("keyboardNavigation").isRowFocusType(), "Row focus type");
+});
+
+QUnit.testInActiveWindow("Escape should change focus type from cell to row if focusedRowEnabled", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+    this.options = {
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        }
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
+    this.clock.tick();
+    // act
+    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.triggerKeyDown("rightArrow", false, false, rowsView.element().find(":focus").get(0));
+    // assert
+    assert.ok(this.getController("keyboardNavigation").isCellFocusType(), "Cell focus type");
+    // act
+    this.triggerKeyDown("escape", false, false, rowsView.element().find(":focus").get(0));
+    // assert
+    assert.ok(this.getController("keyboardNavigation").isRowFocusType(), "Row focus type");
+});
+
+QUnit.testInActiveWindow("Escape should not change focus type from cell to row if not focusedRowEnabled", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+    this.options = {
+        editing: {
+            allowEditing: false
+        }
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
+    this.clock.tick();
+    // act
+    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.triggerKeyDown("rightArrow", false, false, rowsView.element().find(":focus").get(0));
+    // assert
+    assert.ok(this.getController("keyboardNavigation").isCellFocusType(), "Cell focus type");
+    // act
+    this.triggerKeyDown("escape", false, false, rowsView.element().find(":focus").get(0));
+    // assert
+    assert.ok(this.getController("keyboardNavigation").isCellFocusType(), "Row focus type");
+});

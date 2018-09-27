@@ -24,8 +24,8 @@ QUnit.testStart(() => {
         Test Content\
     </div>\
     <div id="contentTemplate">\
-        <div data-options="dxTemplate: { name: \'customMenu\' }">\
-            Test Menu Template\
+        <div data-options="dxTemplate: { name: \'customPanel\' }">\
+            Test panel Template\
         </div>\
             <div data-options="dxTemplate: { name: \'customContent\' }">\
             Test Content Template\
@@ -42,7 +42,7 @@ QUnit.test("render drawer", assert => {
 
     assert.ok($element.hasClass(DRAWER_CLASS), "drawer rendered");
     assert.equal($element.find("." + DRAWER_WRAPPER_CLASS).length, 1, "drawer has wrapper");
-    assert.equal($element.find("." + DRAWER_PANEL_CONTENT_CLASS).length, 1, "drawer has menu container");
+    assert.equal($element.find("." + DRAWER_PANEL_CONTENT_CLASS).length, 1, "drawer has panel container");
     assert.equal($element.find("." + DRAWER_CONTENT_CLASS).length, 1, "drawer has content");
 });
 
@@ -80,14 +80,14 @@ QUnit.test("opened class should be applied correctly", assert => {
     assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, "drawer hasn't opened class");
 });
 
-QUnit.test("custom template for menu should be rendered correctly", assert => {
+QUnit.test("custom template for panel should be rendered correctly", assert => {
     const $element = $("#contentTemplate").dxDrawer({
-        template: "customMenu"
+        template: "customPanel"
     });
 
-    const $menu = $($element.dxDrawer("instance").content());
+    const $panel = $($element.dxDrawer("instance").content());
 
-    assert.equal($menu.text().trim(), "Test Menu Template", "menu content text is correct");
+    assert.equal($panel.text().trim(), "Test panel Template", "panel content text is correct");
 });
 
 QUnit.test("templates should be dom nodes without jQuery", assert => {
@@ -112,27 +112,25 @@ QUnit.test("custom content template for content should be rendered correctly", a
     assert.equal($content.text().trim(), "Test Content Template", "content text is correct");
 });
 
-QUnit.test("render menu positions", assert => {
+QUnit.test("render panel positions", assert => {
     const $element = $("#contentTemplate").dxDrawer({
         position: "right",
         openedStateMode: "shrink",
         opened: true
     });
-
     const instance = $element.dxDrawer("instance");
-    let $menuContent = $(instance.content());
 
-    assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "there is no left menu position class");
-    assert.ok($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class added");
+    assert.notOk($element.hasClass(DRAWER_CLASS + "-left"), "there is no left panel position class");
+    assert.ok($element.hasClass(DRAWER_CLASS + "-right"), "right panel position class added");
 
     instance.option("position", "top");
-    $menuContent = $(instance.content());
-    assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-right"), "right menu position class has been removed");
-    assert.notOk($menuContent.hasClass(DRAWER_CLASS + "-left"), "right menu position class has been removed");
-    assert.ok($menuContent.hasClass(DRAWER_CLASS + "-top"), "top menu position class added");
+
+    assert.notOk($element.hasClass(DRAWER_CLASS + "-right"), "right panel position class has been removed");
+    assert.notOk($element.hasClass(DRAWER_CLASS + "-left"), "right panel position class has been removed");
+    assert.ok($element.hasClass(DRAWER_CLASS + "-top"), "top panel position class added");
 });
 
-QUnit.test("shader should be rendered by default if menu is visible", assert => {
+QUnit.test("shader should be rendered by default if panel is visible", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true
     });
@@ -175,5 +173,5 @@ QUnit.test("drawer panel should be overlay in overlap mode", assert => {
     }).dxDrawer("instance");
 
     const $panel = drawer.content();
-    assert.ok($($panel).hasClass("dx-overlay-wrapper"), "drawer panel is overlay");
+    assert.ok($($panel).hasClass("dx-overlay"), "drawer panel is overlay");
 });

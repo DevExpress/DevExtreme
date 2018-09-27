@@ -457,6 +457,25 @@ describe("Cli arguments normalizer", () => {
         });
     });
 
+    it("build-theme: if baseTheme is wrong, generic.light will be used", () => {
+        const config = { command: "build-theme", baseTheme: "wrong.theme" };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "light",
+            "command": "build-theme",
+            "data": {},
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.generic.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "themeName": "generic"
+        });
+    });
+
     it("export-theme-meta: default file format - json", () => {
         const config = { command: "export-theme-meta" };
         normalizeConfig(config);

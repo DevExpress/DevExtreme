@@ -4454,7 +4454,7 @@ QUnit.test("move the group command column to begin", function(assert) {
         selection: {
             mode: "multiple"
         },
-        columns: [{ type: "selection" }, { type: "group" }, { dataField: "field1", groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }, "field3", "field4"]
+        columns: [{ type: "selection" }, { type: "groupExpand" }, { dataField: "field1", groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }, "field3", "field4"]
     });
 
     // act
@@ -8433,7 +8433,7 @@ QUnit.module("Customization of the command columns", {
 
         this.applyOptions({
             columns: [{ dataField: "field1", groupIndex: 0 }, "field2", {
-                type: "group",
+                type: "groupExpand",
                 cellTemplate: groupCellTemplate,
                 width: 100
             }, "field3"]
@@ -8441,7 +8441,7 @@ QUnit.module("Customization of the command columns", {
 
         // act, assert
         assert.deepEqual(this.getVisibleColumns(["type", "groupIndex", "dataField", "cellTemplate", "width"])[1], {
-            type: "group",
+            type: "groupExpand",
             groupIndex: 0,
             dataField: "field1",
             cellTemplate: groupCellTemplate,
@@ -8458,7 +8458,7 @@ QUnit.module("Customization of the command columns", {
                 enabled: true
             },
             columns: ["field1", {
-                type: "expand",
+                type: "detailExpand",
                 cellTemplate: expandCellTemplate,
                 width: 100
             }, "field2", "field3"]
@@ -8466,7 +8466,7 @@ QUnit.module("Customization of the command columns", {
 
         // act, assert
         assert.deepEqual(this.getVisibleColumns(["type", "cellTemplate", "width"])[1], {
-            type: "expand",
+            type: "detailExpand",
             cellTemplate: expandCellTemplate,
             width: 100
         }, "group column");
@@ -8512,7 +8512,7 @@ QUnit.module("Customization of the command columns", {
             columns: [
                 { dataField: 'TestField1', caption: 'Custom Title 1', fixed: true },
                 { dataField: 'TestField2', caption: 'Custom Title 2', fixed: true, groupIndex: 0 },
-                { type: "group" },
+                { type: "groupExpand" },
                 { dataField: 'TestField3', caption: 'Custom Title 3' },
                 { dataField: 'TestField4', caption: 'Custom Title 4' },
                 { dataField: 'TestField5', caption: 'Custom Title 5' }
@@ -8525,7 +8525,7 @@ QUnit.module("Customization of the command columns", {
         // assert
         assert.strictEqual(fixedColumns.length, 3, "fixed column count");
         assert.strictEqual(fixedColumns[0].dataField, "TestField1", "first fixed column");
-        assert.strictEqual(fixedColumns[1].type, "group", "second fixed column");
+        assert.strictEqual(fixedColumns[1].type, "groupExpand", "second fixed column");
         assert.strictEqual(fixedColumns[2].command, "transparent", "fourth fixed column");
     });
 
@@ -8535,7 +8535,7 @@ QUnit.module("Customization of the command columns", {
             columns: [
                 { dataField: 'TestField1', caption: 'Custom Title 1', fixed: true, groupIndex: 0 },
                 { dataField: 'TestField2', caption: 'Custom Title 2', groupIndex: 1 },
-                { type: "group" },
+                { type: "groupExpand" },
                 { dataField: 'TestField3', caption: 'Custom Title 3' },
                 { dataField: 'TestField4', caption: 'Custom Title 4' },
                 { dataField: 'TestField5', caption: 'Custom Title 5' }

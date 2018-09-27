@@ -1,7 +1,8 @@
 var $ = require("jquery"),
     FileUploader = require("ui/file_uploader"),
     devices = require("core/devices"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    createBlobFile = require("../../helpers/fileHelper.js").createBlobFile;
 
 require("../../helpers/xmlHttpRequestMock.js");
 
@@ -71,25 +72,6 @@ var fakeFile2 = {
     size: 4000,
     type: "application/pdf",
     lastModifiedDate: $.now()
-};
-
-var createBlobFile = function(name, size) {
-    return {
-        name: name,
-        size: size,
-        type: "image/png",
-        blob: (function(size) {
-            var str = "";
-            while(str.length < size) {
-                str += "a";
-            }
-            return new Blob([str], { type: 'application/octet-binary' });
-        })(size),
-        slice: function(startPos, endPos) {
-            return this.blob.slice(startPos, endPos);
-        },
-        lastModifiedDate: $.now()
-    };
 };
 
 var getNewFile = function() {

@@ -68,19 +68,26 @@ const getOutParameters = (command, themeName, config) => {
 const getThemeAndColorScheme = config => {
     let themeName = "generic";
     let colorScheme = "light";
+    let foundTheme = null;
 
     if(config.baseTheme) {
         const themeParts = config.baseTheme.split(".");
-        themeName = themeParts[0];
-        colorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
-    } else if(config.themeId) {
-        const theme = themes.find(t => t.themeId === config.themeId);
-        if(!theme) {
-            console.log("Wrong theme id: " + config.themeId);
-        } else {
-            themeName = theme.name;
-            colorScheme = theme.colorScheme;
+        const passedThemeName = themeParts[0];
+        const passedColorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
+        foundTheme = themes.find(t => t.name === passedThemeName && t.colorScheme === passedColorScheme);
+        if(!foundTheme) {
+            console.log(`The base theme with name ${config.baseTheme} does not exist.`);
         }
+    } else if(config.themeId) {
+        foundTheme = themes.find(t => t.themeId === config.themeId);
+        if(!foundTheme) {
+            console.log(`The theme with ID ${config.themeId} does not exist.`);
+        }
+    }
+
+    if(foundTheme) {
+        themeName = foundTheme.name;
+        colorScheme = foundTheme.colorScheme;
     }
 
     return {

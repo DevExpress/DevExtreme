@@ -129,14 +129,15 @@ const RichTextEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        let modulesConfig = extend({}, {
+        let modulesConfig = {
             mention: this._getModuleConfigByOption("mention"),
             toolbar: this._getToolbarConfig(),
-            dataPlaceholders: this._getModuleConfigByOption("dataPlaceholders")
-        });
+            dataPlaceholders: this._getModuleConfigByOption("dataPlaceholders"),
+            dropImage: this._getBaseModuleConfig()
+        };
 
         if(this.option("allowImageResizing")) {
-            modulesConfig.resizing = { editorInstance: this };
+            modulesConfig.resizing = this._getBaseModuleConfig();
         }
 
         return modulesConfig;
@@ -165,9 +166,11 @@ const RichTextEditor = Editor.inherit({
             return undefined;
         }
 
-        return extend({
-            editorInstance: this
-        }, userConfig);
+        return extend(this._getBaseModuleConfig(), userConfig);
+    },
+
+    _getBaseModuleConfig: function() {
+        return { editorInstance: this };
     },
 
     _textChangeHandler: function(newDelta, oldDelta, source) {

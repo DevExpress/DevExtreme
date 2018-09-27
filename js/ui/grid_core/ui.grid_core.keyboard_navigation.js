@@ -700,9 +700,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 this._editingController.cancelEditData();
             }
             eventArgs.originalEvent.preventDefault();
-        } else if(this.isCellFocusType()) {
-            this.setRowFocusType();
-            this._focus($cell, true);
         }
     },
 
@@ -1027,7 +1024,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     setRowFocusType: function() {
-        this.focusType = FOCUS_TYPE_ROW;
+        if(this.option("focusedRowEnabled")) {
+            this.focusType = FOCUS_TYPE_ROW;
+        }
     },
 
     setCellFocusType: function() {

@@ -6712,6 +6712,218 @@ QUnit.test("Get first editable column index when there is custom select column",
     assert.equal(editableIndex, 1, "editable index");
 });
 
+QUnit.module('Refresh modes', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.array = [
+                { id: 1, name: 'Alex', age: 15 },
+                { id: 2, name: 'Dan', age: 16 },
+                { id: 3, name: 'Vadim', age: 17 },
+                { id: 4, name: 'Alex', age: 18 },
+                { id: 5, name: 'Sergey', age: 18 }
+        ];
+        this.columns = ['name', 'age'];
+        this.options = {
+            editing: {
+                mode: 'batch'
+            },
+            cacheEnabled: true,
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: {
+                store: this.array,
+                paginate: true
+            }
+        };
+
+        this.setupModules = function() {
+            var that = this;
+
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping'], {
+                initViews: true
+            });
+
+            that.loadingArgs = [];
+
+            that.getDataSource().store().on("loading", function(options) {
+                that.loadingArgs.push(options);
+            });
+
+            that.changedArgs = [];
+            that.getDataSource().on("changed", function(options) {
+                that.changedArgs.push(options);
+            });
+
+            that.dataControllerChangedArgs = [];
+            that.dataController.changed.add(function(options) {
+                that.dataControllerChangedArgs.push(options);
+            });
+
+            that.rowsView.render($('#container'));
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Editing with refresh mode full", function(assert) {
+    // arrange
+    this.setupModules();
+
+    // act
+    this.cellValue(1, "age", 30);
+    this.saveEditData();
+
+    // assert
+    assert.equal(this.loadingArgs.length, 1, "loading is occured after editing");
+    assert.equal(this.changedArgs.length, 1, "changed is occured after editing");
+    assert.equal(this.array[1].age, 30, "data is updated");
+    assert.equal(this.getVisibleRows()[1].data.age, 30, "row data is updated");
+    assert.equal(this.getVisibleRows()[1].values[1], 30, "row values are updated");
+});
+
+QUnit.test("Editing with refresh mode reshape", function(assert) {
+    // arrange
+    this.options.editing.refreshMode = "reshape";
+    this.setupModules();
+
+    // act
+    this.addRow();
+    this.cellValue(0, "name", "Mike");
+    this.cellValue(2, "age", 30);
+    this.saveEditData();
+
+    // assert
+    assert.equal(this.loadingArgs.length, 0, "loading is not occured after editing");
+    assert.equal(this.changedArgs.length, 1, "changed is occured after editing");
+    assert.equal(this.array[1].age, 30, "data is updated");
+    assert.equal(this.getVisibleRows()[1].data.age, 30, "row data is updated");
+    assert.equal(this.getVisibleRows()[1].values[1], 30, "row values are updated");
+
+    assert.equal(this.array[this.array.length - 1].name, "Mike", "data is inserted to end");
+    assert.equal(this.getVisibleRows()[this.array.length - 1].data.name, "Mike", "row is inserted and reshaped");
+});
+
+QUnit.test("Editing with refresh mode repaint", function(assert) {
+    // arrange
+    this.options.editing.refreshMode = "repaint";
+    this.setupModules();
+
+    // act
+    this.addRow();
+    this.cellValue(0, "name", "Mike");
+    this.cellValue(2, "age", 30);
+    this.deleteRow(3);
+    this.saveEditData();
+
+    // assert
+    assert.equal(this.loadingArgs.length, 0, "loading is not occured after editing");
+    assert.equal(this.changedArgs.length, 0, "changed is not occured after editing");
+
+
+    assert.equal(this.array[1].age, 30, "data is updated");
+    assert.equal(this.getVisibleRows()[2].data.age, 30, "row data is updated");
+    assert.equal(this.getVisibleRows()[2].values[1], 30, "row values are updated");
+
+    assert.equal(this.array[2].id, 4, "data is removed");
+    assert.equal(this.getVisibleRows()[3].data.id, 4, "row data is removed");
+
+    assert.equal(this.array[this.array.length - 1].name, "Mike", "data is inserted to end");
+    assert.equal(this.getVisibleRows()[0].data.name, "Mike", "row is inserted to begin and not reshaped");
+});
+
+QUnit.test("Load after editing with refresh mode repaint and remoteOperations", function(assert) {
+    // arrange
+    this.options.editing.refreshMode = "repaint";
+    this.options.remoteOperations = { sorting: true, filtering: true };
+    this.setupModules();
+
+    this.addRow();
+    this.cellValue(0, "name", "Mike");
+    this.cellValue(2, "age", 30);
+    this.deleteRow(3);
+    this.saveEditData();
+
+    // act
+    this.getDataSource().load();
+
+    // assert
+    assert.equal(this.loadingArgs.length, 1, "loading is occured after editing and load");
+    assert.equal(this.changedArgs.length, 1, "changed is occured after editing and load");
+});
+
+QUnit.test("Editing with refresh mode repaint with repaintChangesOnly", function(assert) {
+    // arrange
+    this.options.editing.refreshMode = "repaint";
+    this.options.repaintChangesOnly = true;
+    this.setupModules();
+
+    this.addRow();
+    this.cellValue(0, "name", "Mike");
+    this.cellValue(2, "age", 30);
+    this.deleteRow(3);
+
+    this.dataControllerChangedArgs = [];
+    // act
+    this.saveEditData();
+
+    // assert
+    assert.equal(this.loadingArgs.length, 0, "loading is not occured after editing");
+    assert.equal(this.changedArgs.length, 0, "changed is not occured after editing");
+    assert.equal(this.dataControllerChangedArgs.length, 1, "dataController changed is occured after editing");
+    assert.deepEqual(this.dataControllerChangedArgs[0].changeType, "update", "dataController changed changeType");
+    assert.deepEqual(this.dataControllerChangedArgs[0].changeTypes, ["insert", "remove", "update", "remove"], "dataController changed changeTypes");
+    assert.deepEqual(this.dataControllerChangedArgs[0].columnIndices, [undefined, undefined, [1], undefined], "dataController changed columnIndices");
+    assert.deepEqual(this.dataControllerChangedArgs[0].rowIndices, [0, 1, 2, 3], "dataController changed rowIndices");
+});
+
+QUnit.test("Editing with refresh mode repaint and with grouping", function(assert) {
+    // arrange
+    this.options.editing.refreshMode = "repaint";
+    this.options.dataSource.group = "name";
+
+    this.setupModules();
+
+    this.expandRow(["Alex"]);
+
+    assert.deepEqual(this.getVisibleRows().map(function(row) {
+        return row.rowType;
+    }), ["group", "data", "data", "group", "group", "group"], "row types");
+
+    this.addRow();
+    this.cellValue(0, "name", "Mike");
+    this.cellValue(2, "age", 30);
+    this.deleteRow(3);
+    this.loadingArgs = [];
+    this.changedArgs = [];
+
+    // act
+    this.saveEditData();
+
+    // assert
+    assert.deepEqual(this.getVisibleRows().map(function(row) {
+        return row.rowType;
+    }), ["data", "group", "data", "group", "group", "group"], "row types");
+
+    assert.equal(this.loadingArgs.length, 0, "loading is not occured after editing");
+    assert.equal(this.changedArgs.length, 0, "changed is not occured after editing");
+
+    assert.equal(this.array[0].age, 30, "data is updated");
+    assert.equal(this.getVisibleRows()[2].data.age, 30, "row data is updated");
+    assert.equal(this.getVisibleRows()[2].values[1], 30, "row values are updated");
+
+    assert.equal(this.array.length, 5, "data is removed");
+    assert.equal(this.getVisibleRows()[3].data.key, "Dan", "row data is removed");
+
+    assert.equal(this.array[this.array.length - 1].name, "Mike", "data is inserted to end");
+    assert.equal(this.getVisibleRows()[0].data.name, "Mike", "row is inserted to begin and not reshaped");
+});
+
 QUnit.module('Editing with validation', {
     beforeEach: function() {
         this.array = [
