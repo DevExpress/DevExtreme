@@ -13,7 +13,7 @@ function getExpectedFillsXml(expectedFillXmlArray) {
 }
 
 function getFullXml(xlsxFile) {
-    return xlsxFile.generateCellFormatsXml() + xlsxFile.generateFillsXml() + xlsxFile.generateFontsXml();
+    return xlsxFile.generateCellFormatsXml() + xlsxFile.generateFillsXml() + xlsxFile.generateFontsXml() + xlsxFile.generateNumberFormatsXml();
 }
 
 QUnit.test("Empty 1", function(assert) {
@@ -31,25 +31,47 @@ QUnit.test("Empty 2", function(assert) {
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Empty numberFormatId", function(assert) {
+QUnit.test("Empty numberFormat", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.registerCellFormat({ numberFormatId: undefined }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormatId: null }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: undefined }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: null }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: { notSupported: 'a' } }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: undefined } }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: null } }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: '' } }), undefined);
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Various numberFormatId", function(assert) {
+QUnit.test("Various numberFormat as identifiers of predefined formats", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.registerCellFormat({ numberFormatId: 0 }), 0);
-    assert.equal(file.registerCellFormat({ numberFormatId: 0 }), 0);
-    assert.equal(file.registerCellFormat({ numberFormatId: 1 }), 1);
-    assert.equal(file.registerCellFormat({ numberFormatId: 1 }), 1);
+    assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
+    assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
+    assert.equal(file.registerCellFormat({ numberFormat: 1 }), 1);
+    assert.equal(file.registerCellFormat({ numberFormat: 1 }), 1);
+    assert.equal(file.registerCellFormat({ numberFormat: 2 }), 2);
+    assert.equal(file.registerCellFormat({ numberFormat: 2 }), 2);
     assert.equal(getFullXml(file),
-        '<cellXfs count="2">' +
+        '<cellXfs count="3">' +
         '<xf xfId="0" applyNumberFormat="0" numFmtId="0" />' +
         '<xf xfId="0" applyNumberFormat="1" numFmtId="1" />' +
+        '<xf xfId="0" applyNumberFormat="1" numFmtId="2" />' +
         '</cellXfs>' +
         getExpectedFillsXml() + '<fonts count="0" />');
+});
+
+QUnit.test("Various numberFormat as custom format", function(assert) {
+    const file = new XlsxFile();
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'a' } }), 0);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'a' } }), 0);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'b' } }), 1);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'b' } }), 1);
+    assert.equal(getFullXml(file),
+        '<cellXfs count="2">' +
+        '<xf xfId="0" applyNumberFormat="1" numFmtId="165" />' +
+        '<xf xfId="0" applyNumberFormat="1" numFmtId="166" />' +
+        '</cellXfs>' +
+        getExpectedFillsXml() + '<fonts count="0" />' +
+        '<numFmts count="2"><numFmt numFmtId="165" formatCode="a" /><numFmt numFmtId="166" formatCode="b" /></numFmts>');
 });
 
 QUnit.test("Empty alignments", function(assert) {
@@ -88,8 +110,6 @@ QUnit.test("Various alignments", function(assert) {
 
 QUnit.test("Empty fills", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.generateFillsXml(), getExpectedFillsXml());
-
     assert.equal(file.registerCellFormat({ fill: undefined }), undefined);
     assert.equal(file.registerCellFormat({ fill: null }), undefined);
     assert.equal(file.registerCellFormat({ fill: { notSupported: 0 } }), undefined);
