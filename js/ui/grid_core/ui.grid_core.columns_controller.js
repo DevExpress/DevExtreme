@@ -128,7 +128,7 @@ module.exports = {
              * @name GridBaseColumn.visible
              * @type boolean
              * @default true
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.hidingPriority
@@ -169,7 +169,7 @@ module.exports = {
              * @name GridBaseColumn.visibleIndex
              * @type number
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.showInColumnChooser
@@ -272,13 +272,13 @@ module.exports = {
              * @type Enums.SortOrder
              * @default undefined
              * @acceptValues undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.sortIndex
              * @type number
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.showEditorAlways
@@ -322,19 +322,19 @@ module.exports = {
              * @name GridBaseColumn.selectedFilterOperation
              * @type Enums.FilterOperations
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.filterValue
              * @type any
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.filterValues
              * @type Array<any>
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
             */
             /**
              * @name GridBaseColumn.filterType
@@ -369,7 +369,7 @@ module.exports = {
              * @name dxDataGridColumn.groupIndex
              * @type number
              * @default undefined
-             * @fires dxDataGrid.onOptionChanged
+             * @fires dxDataGridOptions.onOptionChanged
              */
             /**
              * @name dxDataGridColumn.grouped
