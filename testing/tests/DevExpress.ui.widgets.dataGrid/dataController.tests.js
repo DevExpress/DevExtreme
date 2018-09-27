@@ -10540,7 +10540,7 @@ QUnit.test("immutable change dataSource item field", function(assert) {
 });
 
 QUnit.test("update one cell using push", function(assert) {
-    this.setupModules();
+    this.setupModules({ pushAggregationTimeout: 0 });
 
     var oldItems = this.dataController.items().slice(0);
     var changedArgs;
@@ -10568,7 +10568,7 @@ QUnit.test("update one cell using push", function(assert) {
 });
 
 QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
-    this.setupModules({ reshapeOnPush: true, filter: ["age", ">=", 18] });
+    this.setupModules({ reshapeOnPush: true, pushAggregationTimeout: 0, filter: ["age", ">=", 18] });
 
     var changedArgs;
 

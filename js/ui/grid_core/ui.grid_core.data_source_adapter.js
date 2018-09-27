@@ -89,12 +89,14 @@ module.exports = gridCore.Controller.inherit((function() {
             that._dataLoadedHandler = that._handleDataLoaded.bind(that);
             that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
             that._loadErrorHandler = that._handleLoadError.bind(that);
+            that._pushHandler = that._handlePush.bind(that);
 
             dataSource.on("changed", that._dataChangedHandler);
             dataSource.on("customizeStoreLoadOptions", that._dataLoadingHandler);
             dataSource.on("customizeLoadResult", that._dataLoadedHandler);
             dataSource.on("loadingChanged", that._loadingChangedHandler);
             dataSource.on("loadError", that._loadErrorHandler);
+            dataSource.store().on("push", that._pushHandler);
 
             each(dataSource, function(memberName, member) {
                 if(!that[memberName] && typeUtils.isFunction(member)) {
@@ -116,6 +118,7 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.off("customizeLoadResult", that._dataLoadedHandler);
             dataSource.off("loadingChanged", that._loadingChangedHandler);
             dataSource.off("loadError", that._loadErrorHandler);
+            dataSource.store().off("push", that._pushHandler);
             if(!isSharedDataSource) {
                 dataSource.dispose();
             }
@@ -134,7 +137,10 @@ module.exports = gridCore.Controller.inherit((function() {
             this._cachedStoreData = undefined;
             this._cachedPagingData = undefined;
         },
-        push: function(changes) {
+        resetPagesCache: function() {
+            this._cachedPagesData = createEmptyPagesData();
+        },
+        push: function(changes, fromStore) {
             var remoteOperations = this.remoteOperations(),
                 store = this.store(),
                 isLocalOperations = Object.keys(remoteOperations).every(operationName => !remoteOperations[operationName]);
@@ -151,12 +157,13 @@ module.exports = gridCore.Controller.inherit((function() {
                 arrayUtils.applyBatch(store, this._cachedStoreData, changes);
             }
 
-            var groupCount = gridCore.normalizeSortingInfo(this.group()).length;
-
-            arrayUtils.applyBatch(store, this._items, changes, groupCount, true);
+            if(!fromStore) {
+                var groupCount = gridCore.normalizeSortingInfo(this.group()).length;
+                arrayUtils.applyBatch(store, this._items, changes, groupCount, true);
+            }
         },
-        resetPagesCache: function() {
-            this._cachedPagesData = createEmptyPagesData();
+        _handlePush: function(changes) {
+            this.push(changes, true);
         },
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this,

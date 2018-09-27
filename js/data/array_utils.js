@@ -49,14 +49,14 @@ function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
     batchData.forEach(item => {
         var items = item.type === "insert" ? array : getItems(keyInfo, array, item.key, groupCount);
         switch(item.type) {
-            case "update": update(keyInfo, items, item.key, item.data); break;
-            case "insert": insert(keyInfo, items, item.data, useInsertIndex ? item.index : -1); break;
-            case "remove": remove(keyInfo, items, item.key); break;
+            case "update": update(keyInfo, items, item.key, item.data, true); break;
+            case "insert": insert(keyInfo, items, item.data, useInsertIndex ? item.index : -1, true); break;
+            case "remove": remove(keyInfo, items, item.key, true); break;
         }
     });
 }
 
-function update(keyInfo, array, key, data) {
+function update(keyInfo, array, key, data, isBatch) {
     var target,
         extendComplexObject = true,
         keyExpr = keyInfo.key();
@@ -77,10 +77,12 @@ function update(keyInfo, array, key, data) {
     }
 
     objectUtils.deepExtendArraySafe(target, data, extendComplexObject);
-    return trivialPromise(key, data);
+    if(!isBatch) {
+        return trivialPromise(key, data);
+    }
 }
 
-function insert(keyInfo, array, data, index) {
+function insert(keyInfo, array, data, index, isBatch) {
     var keyValue,
         obj,
         keyExpr = keyInfo.key();
@@ -95,7 +97,7 @@ function insert(keyInfo, array, data, index) {
             }
             keyValue = obj[keyExpr] = String(new Guid());
         } else {
-            if(array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
+            if(!isBatch && array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
                 return rejectedPromise(errors.Error("E4008"));
             }
         }
@@ -107,15 +109,19 @@ function insert(keyInfo, array, data, index) {
     } else {
         array.push(obj);
     }
-    return trivialPromise(data, keyValue);
+    if(!isBatch) {
+        return trivialPromise(data, keyValue);
+    }
 }
 
-function remove(keyInfo, array, key) {
+function remove(keyInfo, array, key, isBatch) {
     var index = indexByKey(keyInfo, array, key);
     if(index > -1) {
         array.splice(index, 1);
     }
-    return trivialPromise(key);
+    if(!isBatch) {
+        return trivialPromise(key);
+    }
 }
 
 function indexByKey(keyInfo, array, key) {

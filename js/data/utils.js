@@ -248,11 +248,11 @@ function throttle(func, timeout) {
                 if(lastArgs) {
                     func.call(this, lastArgs);
                 }
-            }, timeout);
+            }, isFunction(timeout) ? timeout() : timeout);
         }
         return timeoutId;
     };
-};
+}
 
 function throttleChanges(func, timeout) {
     var cache = [],
