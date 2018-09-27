@@ -284,10 +284,7 @@ var ExcelCreator = Class.inherit({
 
         styles.forEach(function(style) {
             const format = that._convertToXlsxFormat(style.format, style.dataType);
-            let numberFormat = 0;
-            if(typeUtils.isDefined(format)) {
-                numberFormat = { formatCode: format };
-            }
+            let numberFormat = typeUtils.isDefined(format) ? { formatCode: format } : 0;
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
                 numberFormat,
