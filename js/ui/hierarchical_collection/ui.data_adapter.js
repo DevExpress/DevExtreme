@@ -13,7 +13,8 @@ var Class = require("../../core/class"),
 
 var EXPANDED = "expanded",
     SELECTED = "selected",
-    DISABLED = "disabled";
+    DISABLED = "disabled",
+    HASSELECTEDCHILD = "hasSelectedChild";
 
 var DataAdapter = Class.inherit({
 
@@ -51,6 +52,7 @@ var DataAdapter = Class.inherit({
             searchMode: "contains",
             dataConverter: new HierarchicalDataConverter(),
             onNodeChanged: commonUtils.noop,
+            hasSelectedChild: false,
             sort: null
         };
     },
@@ -131,6 +133,10 @@ var DataAdapter = Class.inherit({
     },
 
     _setParentSelection: function() {
+        this._setParentProperties(true);
+    },
+
+    _setParentProperties: function(setSelected) {
         var that = this;
 
         each(this._dataStructure, function(_, node) {
@@ -139,7 +145,11 @@ var DataAdapter = Class.inherit({
             if(parent && node.internalFields.parentKey !== that.options.rootValue) {
                 that._iterateParents(node, function(parent) {
                     var newParentState = that._calculateSelectedState(parent);
-                    that._setFieldState(parent, SELECTED, newParentState);
+                    if(setSelected) {
+                        that._setFieldState(parent, SELECTED, newParentState);
+                    }
+
+                    that._setFieldState(parent, HASSELECTEDCHILD, newParentState !== false);
                 });
             }
         });
@@ -380,6 +390,8 @@ var DataAdapter = Class.inherit({
         if(this.options.recursiveSelection && !selectRecursive) {
             state ? this._setChildrenSelection() : this._toggleChildrenSelection(node, state);
             this._setParentSelection();
+        } else {
+            this._setParentProperties();
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);

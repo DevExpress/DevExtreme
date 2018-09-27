@@ -726,7 +726,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems"];
+        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems", "hasSelectedChild"];
     },
 
     _getDataAdapterOptions: function() {
@@ -1348,6 +1348,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             that._toggleSelectedClass($node, nodeSelection);
+
+            $node.toggleClass("dx-treeview-item-has-selected-items", node.internalFields.hasSelectedChild);  // TO DO
+
             that.setAria("selected", nodeSelection, $node);
 
             if(that._showCheckboxes()) {
