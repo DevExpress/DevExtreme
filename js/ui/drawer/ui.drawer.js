@@ -248,6 +248,7 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._dimensionChanged();
+        this._renderPosition(this.option("opened"), false);
     },
 
     _renderMarkup() {
@@ -395,8 +396,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
-        this._strategy.setPanelSize();
-        this._renderPosition(this.option("opened"), false);
+        this._strategy.setPanelSize(this.option("revealMode") === "slide");
     },
 
     _toggleShaderVisibility(visible) {
