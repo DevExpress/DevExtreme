@@ -54,7 +54,6 @@ function runTest(assert, options, { styles = "", worksheet = "", sharedStrings =
 
 QUnit.test("Empty pivot", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
@@ -81,7 +80,6 @@ QUnit.test("Empty pivot", function(assert) {
 
 QUnit.test("dataFieldArea: column", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
@@ -138,7 +136,6 @@ QUnit.test("dataFieldArea: column", function(assert) {
 
 QUnit.test("dataFieldArea: row", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
@@ -242,7 +239,6 @@ QUnit.test("Rows: string, Columns: string, Data: sum(number format as currency)"
 
 QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
@@ -303,7 +299,6 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
 
 QUnit.test("onXlsxCellPrepared - set alignment: null for all xlsx cells", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         BASE_STYLE_XML +
         '<cellXfs count="4">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +

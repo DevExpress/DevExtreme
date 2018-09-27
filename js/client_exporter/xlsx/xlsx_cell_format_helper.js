@@ -6,8 +6,15 @@ const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
+            let numberFormatId;
+            if(typeUtils.isDefined(sourceObj.numberFormat) && typeUtils.isNumeric(sourceObj.numberFormat)) {
+                numberFormatId = sourceObj.numberFormat;
+            } else {
+                numberFormatId = sharedItemsContainer.registerNumberFormat(sourceObj.numberFormat);
+            }
+
             result = {
-                numberFormatId: sourceObj.numberFormatId,
+                numberFormatId,
                 alignment: xlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
                 fontId: sharedItemsContainer.registerFont(sourceObj.font),
                 fillId: sharedItemsContainer.registerFill(sourceObj.fill),

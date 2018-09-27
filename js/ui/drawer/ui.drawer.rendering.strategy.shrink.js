@@ -24,12 +24,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 };
                 animation.margin(animationConfig);
             } else {
-                if(direction === "left") {
-                    $(this._drawer._$panel).css("marginLeft", panelPos);
-                }
-                if(direction === "right") {
-                    $(this._drawer._$panel).css("marginRight", panelPos);
-                }
+                $(this._drawer._$panel).css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelPos);
             }
         }
 
@@ -50,7 +45,11 @@ class ShrinkStrategy extends DrawerStrategy {
             if(animate) {
                 animation.size(animationConfig);
             } else {
-                $element.css("width", size);
+                if(this._drawer._isHorizontalDirection()) {
+                    $($element).css("width", size);
+                } else {
+                    $($element).css("height", size);
+                }
             }
         }
     }

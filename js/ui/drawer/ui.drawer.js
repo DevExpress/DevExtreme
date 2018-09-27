@@ -248,6 +248,7 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._dimensionChanged();
+        this._renderPosition(this.option("opened"), false);
     },
 
     _renderMarkup() {
@@ -352,21 +353,6 @@ const Drawer = Widget.inherit({
         return this.option("position") === "left" || this.option("position") === "right";
     },
 
-    _togglePositionClass() {
-        const position = this.option("position");
-
-        this._$panel.removeClass(DRAWER_CLASS + "-left");
-        this._$panel.removeClass(DRAWER_CLASS + "-right");
-        this._$panel.removeClass(DRAWER_CLASS + "-top");
-        this._$panel.removeClass(DRAWER_CLASS + "-bottom");
-
-        this._$panel.addClass(DRAWER_CLASS + "-" + position);
-
-        if(position === "right") {
-            this._reverseElements();
-        }
-    },
-
     _reverseElements() {
         this._$wrapper.prepend(this._$contentWrapper);
     },
@@ -410,8 +396,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
-        this._strategy.setPanelSize();
-        this._renderPosition(this.option("opened"), false);
+        this._strategy.setPanelSize(this.option("revealMode") === "slide");
     },
 
     _toggleShaderVisibility(visible) {
