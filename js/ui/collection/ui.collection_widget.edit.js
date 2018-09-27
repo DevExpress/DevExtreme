@@ -609,16 +609,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         if(args.name === "items") {
             if(this.option("repaintChangesOnly")) {
-                var that = this,
-                    getKey = function(item) {
-                        return that.keyOf(item);
-                    },
-                    isItemEquals = function(item1, item2) {
-                        return JSON.stringify(item1) === JSON.stringify(item2);
-                    };
+                var isItemEquals = function(item1, item2) {
+                    return JSON.stringify(item1) === JSON.stringify(item2);
+                };
                 var oldItems = this._itemsCache,
                     newItems = args.value.slice();
-                var result = findChanges(oldItems, newItems, getKey, isItemEquals);
+                var result = findChanges(oldItems, newItems, this.keyOf.bind(this), isItemEquals);
                 this._refreshItemsCache();
                 if(result) {
                     this._modifyByChanges(result);
@@ -796,33 +792,33 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
     },
 
-    _updateByChange: function(items, change) {
+    _updateByChange: function(keyInfo, items, change) {
         if(change.oldItem) {
             this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
         } else {
-            let changedItem = items[arrayUtils.indexByKey(this, items, change.key)];
+            let changedItem = items[arrayUtils.indexByKey(keyInfo, items, change.key)];
             if(changedItem) {
-                arrayUtils.update(this, items, change.key, change.data).done(() => {
+                arrayUtils.update(keyInfo, items, change.key, change.data).done(() => {
                     this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByItem(changedItem));
                 });
             }
         }
     },
 
-    _insertByChange: function(items, change) {
-        when(change.index || arrayUtils.insert(this, items, change.data)).done(()=>{
+    _insertByChange: function(keyInfo, items, change) {
+        when(change.index || arrayUtils.insert(keyInfo, items, change.data)).done(()=>{
             this._renderedItemsCount++;
             this._renderItem(this._renderedItemsCount, change.data);
         });
     },
 
-    _removeByChange: function(items, change) {
-        let index = change.index || arrayUtils.indexByKey(this, items, change.key),
+    _removeByChange: function(keyInfo, items, change) {
+        let index = change.index || arrayUtils.indexByKey(keyInfo, items, change.key),
             removedItem = change.oldItem || items[index];
         if(removedItem) {
             let $removedItemElement = this._findItemElementByKey(change.key),
                 deletedActionArgs = this._extendActionArgs($removedItemElement);
-            arrayUtils.remove(this, items, change.key).done(() => {
+            arrayUtils.remove(keyInfo, items, change.key).done(() => {
                 this._renderedItemsCount--;
                 this._deleteItemElement($removedItemElement, deletedActionArgs, index);
             });
@@ -830,8 +826,9 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _modifyByChanges: function(changes) {
-        const items = this._editStrategy.itemsGetter();
-        changes.forEach(change => this[`_${change.type}ByChange`](items, change));
+        const items = this._editStrategy.itemsGetter(),
+            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+        changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change));
         this._renderedItemsCount = items.length;
     },
 

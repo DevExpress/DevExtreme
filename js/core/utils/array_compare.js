@@ -8,7 +8,7 @@ var getKeyWrapper = function(item, getKey) {
     return key;
 };
 
-var findChanges = function(oldItems, newItems, getKey, isItemEquals) {
+export const findChanges = function(oldItems, newItems, getKey, isItemEquals) {
     var oldIndexByKey = {},
         newIndexByKey = {},
         addedCount = 0,
@@ -85,4 +85,3 @@ var findChanges = function(oldItems, newItems, getKey, isItemEquals) {
     return result;
 };
 
-module.exports.findChanges = findChanges;
