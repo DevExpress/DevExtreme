@@ -60,7 +60,7 @@ class OverlapStrategy extends DrawerStrategy {
 
         if(this._drawer._isHorizontalDirection()) {
             overlay.option("height", "100%");
-            overlay.option("width", this._drawer.getRealPanelWidth());
+            overlay.option("width", this._getPanelSize(this._drawer.option("opened")));
         } else {
             overlay.option("width", overlay.option("container").width());
             overlay.option("height", this._drawer.getRealPanelHeight());
