@@ -494,6 +494,44 @@ QUnit.test("Set visualRange for multi axis/pane (check option method and adjustO
     assert.deepEqual(chart.option("valueAxis[1].visualRange"), { startValue: 16, endValue: 26 });
 });
 
+QUnit.test("Set visualRange for discrete axis (check adjustOnZoom)", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: "1",
+            val: -10
+        }, {
+            arg: "2",
+            val: 5
+        }, {
+            arg: "5",
+            val: 7
+        }, {
+            arg: "8",
+            val: 3
+        }, {
+            arg: "9",
+            val: 9
+        }, {
+            arg: "11",
+            val: 20
+        }],
+        argumentAxis: { type: "discrete" },
+        valueAxis: { valueMarginsEnabled: false },
+        series: [{ }]
+    });
+
+    chart.getArgumentAxis().visualRange(["2", "9"]);
+
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 3, endValue: 9 });
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 9 });
+});
+
 QUnit.test("Set argument visual range using option", function(assert) {
     var chart = this.createChart({
         dataSource: [{

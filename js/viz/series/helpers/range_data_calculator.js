@@ -208,14 +208,13 @@ module.exports = {
             range = {},
             reducer;
 
-        if(series.valueAxisType !== DISCRETE) {
-            reducer = getViewportReducer(series);
-            range = getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined);
-            points.some(function(point, index) {
-                reducer(range, point, index, points);
-                return range.endCalc;
-            });
-        }
+        reducer = getViewportReducer(series);
+        range = getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined);
+        points.some(function(point, index) {
+            reducer(range, point, index, points);
+            return range.endCalc;
+        });
+
         return range;
     },
 
