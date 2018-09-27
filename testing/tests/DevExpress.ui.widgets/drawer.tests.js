@@ -629,6 +629,43 @@ QUnit.test("minSize should be rendered correctly in shrink mode, right panel pos
     fx.off = false;
 });
 
+QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, top panel position, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 1000);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().top, 50, "content has correct top");
+    assert.equal($panel.position().top, 0, "panel has correct top");
+    assert.equal($panel.height(), 50, "panel has correct height");
+
+    instance.toggle();
+
+    assert.equal($content.position().top, 100, "content has correct top");
+    assert.equal($panel.position().top, 0, "panel has correct top");
+    assert.equal($panel.height(), 100, "panel has correct height");
+
+    fx.off = false;
+});
+
 QUnit.test("maxSize should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
@@ -800,6 +837,45 @@ QUnit.test("maxSize should be rendered correctly in shrink mode, right panel pos
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
     assert.equal($panel.position().left, 900, "panel has correct left when minSize is set");
     assert.equal($panel.width(), 200, "panel has correct width when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("maxSize and minSize should be rendered correctly in shrink mode, top panel position, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 100,
+        minSize: 50,
+        opened: false,
+        position: "top",
+        revealMode: "slide",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 1000);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($content.position().top, 50, "content has correct top");
+    assert.equal($panel.position().top, 0, "panel has correct top");
+    assert.equal($panel.height(), 200, "panel has correct height");
+    assert.equal($panel.css("marginTop"), "-150px", "panel content has correct height");
+
+    instance.toggle();
+
+    assert.equal($content.position().top, 100, "content has correct top");
+    assert.equal($panel.position().top, 0, "panel has correct top when");
+    assert.equal($panel.height(), 200, "panel has correct height when");
+    assert.equal($panel.css("marginTop"), "-100px", "panel content has correct height");
 
     fx.off = false;
 });

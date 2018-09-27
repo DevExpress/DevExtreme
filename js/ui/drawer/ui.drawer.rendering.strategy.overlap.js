@@ -55,12 +55,12 @@ class OverlapStrategy extends DrawerStrategy {
         return result;
     }
 
-    setPanelSize() {
+    setPanelSize(keepMaxSize) {
         const overlay = this._drawer.getOverlay();
 
         if(this._drawer._isHorizontalDirection()) {
             overlay.option("height", "100%");
-            overlay.option("width", this._drawer.getRealPanelWidth());
+            overlay.option("width", keepMaxSize ? this._drawer.getRealPanelWidth() : this._getPanelSize(this._drawer.option("opened")));
         } else {
             overlay.option("width", overlay.option("container").width());
             overlay.option("height", this._drawer.getRealPanelHeight());
