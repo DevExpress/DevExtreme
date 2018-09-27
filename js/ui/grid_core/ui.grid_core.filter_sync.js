@@ -336,6 +336,7 @@ module.exports = {
              * @name GridBaseOptions.filterValue
              * @type Filter expression
              * @default null
+             * @fires GridBase.onOptionChanged
              */
             filterValue: null,
 
