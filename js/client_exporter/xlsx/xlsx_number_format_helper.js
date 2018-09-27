@@ -31,9 +31,6 @@ const xlsxNumberFormatHelper = {
 
     toXml: function(tag, addCustomAttributesCallback) {
         // §18.8.30 numFmt (Number Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        // Formatting.NumberFormat Property, https://documentation.devexpress.com/CoreLibraries/DevExpress.Spreadsheet.Formatting.NumberFormat.property
-        // NumberingFormat class, https://msdn.microsoft.com/en-us/library/documentformat.openxml.spreadsheet.numberingformat.aspx
-        // Styles NumberFormat, https://github.com/ClosedXML/ClosedXML/wiki/Styles-NumberFormat
         const attributes = {};
         addCustomAttributesCallback(attributes);
         attributes.formatCode = tag.formatCode; // §21.2.2.71 formatCode (Format Code), §18.8.31 numFmts (Number Formats)
