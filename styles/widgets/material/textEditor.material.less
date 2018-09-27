@@ -28,7 +28,7 @@
                 padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
-        &.dx-editor-filled {
+        &.dx-editor-filled, &.dx-editor-outlined {
             .dx-texteditor-input {
                 padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
@@ -90,20 +90,10 @@
 
     .validation-icon-position();
 
-    &.dx-editor-filled {
-        background-color: @texteditor-bg;
+    &.dx-editor-filled, &.dx-editor-outlined {
         .dx-texteditor-buttons-container {
             right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
-
-        &.dx-state-hover {
-            background-color: @texteditor-hover-bg;
-
-            &:after {
-                border-bottom: 1px solid @texteditor-hover-border-color;
-            }
-        }
-
         &.dx-show-clear-button {
             .dx-texteditor-input {
                 padding-right: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
@@ -128,6 +118,17 @@
         .dx-rtl &, &.dx-rtl {
             .dx-texteditor-buttons-container {
                 left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
+        }
+    }
+
+    &.dx-editor-filled {
+        background-color: @texteditor-bg;
+        &.dx-state-hover {
+            background-color: @texteditor-hover-bg;
+
+            &:after {
+                border-bottom: 1px solid @texteditor-hover-border-color;
             }
         }
 
@@ -198,6 +199,40 @@
             &:after {
                 border-bottom-color: @texteditor-invalid-faded-border-color;
             }
+        }
+    }
+
+    &.dx-editor-outlined {
+        background-color: transparent;
+        border-radius: @texteditor-input-border-radius;
+        box-shadow: inset 0 0 0 1px @texteditor-border-color;
+
+        &:before {
+            display: none;
+        }
+
+        &.dx-state-hover {
+            box-shadow: inset 0 0 0 1px @texteditor-hover-border-color;
+        }
+
+        &.dx-state-disabled,
+        &.dx-state-readonly,
+        &.dx-state-readonly.dx-state-hover {
+            box-shadow: inset 0 0 0 1px fade(@texteditor-color, 50%);
+            .dx-texteditor-input {
+                color: fade(@texteditor-color, 50%);
+            }
+        }
+
+        &.dx-state-focused {
+            box-shadow: inset 0 0 0 2px @texteditor-focused-border-color;
+            &.dx-invalid {
+                box-shadow: inset 0 0 0 2px @texteditor-invalid-focused-border-color;
+            }
+        }
+
+        &.dx-invalid {
+            box-shadow: inset 0 0 0 1px @texteditor-invalid-faded-border-color;
         }
     }
 }

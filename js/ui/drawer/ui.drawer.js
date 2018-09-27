@@ -239,7 +239,7 @@ const Drawer = Widget.inherit({
 
         this._renderShader();
         this._initCloseOnOutsideClickHandler();
-        this._togglePositionClass();
+        this._refreshPositionClass();
     },
 
     _render() {
@@ -265,6 +265,19 @@ const Drawer = Widget.inherit({
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
         this.$element().addClass(DRAWER_CLASS + "-" + this.option("openedStateMode"));
+    },
+
+    _refreshPositionClass(prevClass) {
+        prevClass && this.$element()
+            .removeClass(DRAWER_CLASS + "-" + prevClass);
+
+        const position = this.option("position");
+
+        this.$element().addClass(DRAWER_CLASS + "-" + position);
+
+        if(position === "right") {
+            this._reverseElements();
+        }
     },
 
     _refreshRevealModeClass(prevClass) {
@@ -415,7 +428,8 @@ const Drawer = Widget.inherit({
 
     _refreshPanel() {
         if(this._overlay) {
-            this._overlay && this._overlay._dispose();
+            this._overlay._dispose();
+            this._$panel.remove();
 
             delete this._overlay;
             delete this._$panel;
@@ -430,6 +444,7 @@ const Drawer = Widget.inherit({
 
     _setInitialPosition() {
         $(this.content()).css("left", 0);
+        $(this.content()).css("width", 0);
         $(this.content()).css("marginLeft", 0);
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
@@ -447,6 +462,8 @@ const Drawer = Widget.inherit({
                 this._toggleVisibleClass(args.value);
                 break;
             case "position":
+                this._refreshPositionClass(args.previousValue);
+                this._invalidate();
             case "contentTemplate":
             case "template":
                 this._invalidate();

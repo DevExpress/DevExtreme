@@ -132,7 +132,7 @@ QUnit.test("multiView should trigger resize event for item content after item vi
 
     $("#customMultiView").dxMultiView({
         items: [{
-            template: () => {
+            template: function() {
                 return $("<div>", { class: "dx-visibility-change-handler" }).on("dxresize", resizeHandler);
             }
         }, { template: 'template2' }],
