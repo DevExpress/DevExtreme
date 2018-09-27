@@ -114,6 +114,13 @@ module.exports = {
 
     extenders: {
         controllers: {
+            data: {
+                _applyChange: function(change) {
+                    if(change && change.changeType === "updateFocusedRow") return;
+
+                    return this.callBase.apply(this, arguments);
+                }
+            },
             keyboardNavigation: {
                 init: function() {
                     var rowIndex = this.option("focusedRowIndex"),
