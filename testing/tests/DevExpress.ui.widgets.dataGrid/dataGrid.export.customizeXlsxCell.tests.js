@@ -313,6 +313,90 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
     );
 });
 
+QUnit.test("Change number format for Number column when column.format is function", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="1">' +
+        '<numFmt numFmtId="165" formatCode="0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number', format: () => 'my_function' }],
+            dataSource: [{
+                f1: 42,
+            }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+                }
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number format for Date column cell when column.format is function", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="1">' +
+        '<numFmt numFmtId="165" formatCode="dd/mmm/yyyy hh:mm" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>43483</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date', format: () => 'my_function' }],
+            dataSource: [{
+                f1: new Date(2019, 0, 18),
+            }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                onXlsxCellPrepared: e => {
+                    e.xlsxCell.style.numberFormat = { formatCode: 'dd/mmm/yyyy hh:mm' };
+                }
+            }
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
 QUnit.test("Check event arguments for data row cell with various data types", function(assert) {
     const configurations = [
         { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
