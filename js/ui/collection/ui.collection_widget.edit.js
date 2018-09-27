@@ -640,6 +640,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     this.option("selectedItemKeys", []);
                 }
 
+                if(!this.option("repaintChangesOnly") || !args.value) {
+                    this.option("items", []);
+                }
+
                 this.callBase(args);
                 break;
             case "selectedIndex":
@@ -792,43 +796,42 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
     },
 
+    _updateByChange: function(items, change) {
+        if(change.oldItem) {
+            this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
+        } else {
+            let changedItem = items[arrayUtils.indexByKey(this, items, change.key)];
+            if(changedItem) {
+                arrayUtils.update(this, items, change.key, change.data).done(() => {
+                    this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByItem(changedItem));
+                });
+            }
+        }
+    },
+
+    _insertByChange: function(items, change) {
+        when(change.index || arrayUtils.insert(this, items, change.data)).done(()=>{
+            this._renderedItemsCount++;
+            this._renderItem(this._renderedItemsCount, change.data);
+        });
+    },
+
+    _removeByChange: function(items, change) {
+        let index = change.index || arrayUtils.indexByKey(this, items, change.key),
+            removedItem = change.oldItem || items[index];
+        if(removedItem) {
+            let $removedItemElement = this._findItemElementByKey(change.key),
+                deletedActionArgs = this._extendActionArgs($removedItemElement);
+            arrayUtils.remove(this, items, change.key).done(() => {
+                this._renderedItemsCount--;
+                this._deleteItemElement($removedItemElement, deletedActionArgs, index);
+            });
+        }
+    },
+
     _modifyByChanges: function(changes) {
         const items = this._editStrategy.itemsGetter();
-
-        changes.forEach(change => {
-            switch(change.type) {
-                case "update":
-                    if(change.oldItem) {
-                        this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
-                    } else {
-                        let changedItem = items[arrayUtils.indexByKey(this, items, change.key)];
-                        if(changedItem) {
-                            arrayUtils.update(this, items, change.key, change.data).done(() => {
-                                this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByItem(changedItem));
-                            });
-                        }
-                    }
-                    break;
-                case "insert":
-                    when(change.index || arrayUtils.insert(this, items, change.data)).done(()=>{
-                        this._renderedItemsCount++;
-                        this._renderItem(this._renderedItemsCount, change.data);
-                    });
-                    break;
-                case "remove":
-                    let index = change.index || arrayUtils.indexByKey(this, items, change.key),
-                        removedItem = change.oldItem || items[index];
-                    if(removedItem) {
-                        let $removedItemElement = this._findItemElementByKey(change.key),
-                            deletedActionArgs = this._extendActionArgs($removedItemElement);
-                        arrayUtils.remove(this, items, change.key).done(() => {
-                            this._renderedItemsCount--;
-                            this._deleteItemElement($removedItemElement, deletedActionArgs, index);
-                        });
-                    }
-                    break;
-            }
-        });
+        changes.forEach(change => this[`_${change.type}ByChange`](items, change));
         this._renderedItemsCount = items.length;
     },
 

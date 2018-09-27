@@ -1,5 +1,13 @@
 import { isObject } from "./type";
 
+var getKeyWrapper = function(item, getKey) {
+    var key = getKey(item);
+    if(isObject(key)) {
+        key = JSON.stringify(key);
+    }
+    return key;
+};
+
 var findChanges = function(oldItems, newItems, getKey, isItemEquals) {
     var oldIndexByKey = {},
         newIndexByKey = {},
@@ -7,28 +15,20 @@ var findChanges = function(oldItems, newItems, getKey, isItemEquals) {
         removeCount = 0,
         result = [];
 
-    var getKeyWrapper = function(item) {
-        var key = getKey(item);
-        if(isObject(key)) {
-            key = JSON.stringify(key);
-        }
-        return key;
-    };
-
     oldItems.forEach(function(item, index) {
-        var key = getKeyWrapper(item);
+        var key = getKeyWrapper(item, getKey);
         oldIndexByKey[key] = index;
     });
 
     newItems.forEach(function(item, index) {
-        var key = getKeyWrapper(item);
+        var key = getKeyWrapper(item, getKey);
         newIndexByKey[key] = index;
     });
 
     var itemCount = Math.max(oldItems.length, newItems.length);
     for(var index = 0; index < itemCount + addedCount; index++) {
         var newItem = newItems[index],
-            key = getKeyWrapper(newItem),
+            key = getKeyWrapper(newItem, getKey),
             oldIndex = oldIndexByKey[key],
             oldItem = oldItems[oldIndex],
             newIndex = index - addedCount + removeCount;
@@ -63,7 +63,7 @@ var findChanges = function(oldItems, newItems, getKey, isItemEquals) {
             }
         } else {
             oldItem = oldItems[newIndex];
-            key = getKeyWrapper(oldItem);
+            key = getKeyWrapper(oldItem, getKey);
             newItem = newItems[newIndexByKey[key]];
 
             if(oldItem && !newItem) {
