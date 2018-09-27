@@ -2,8 +2,6 @@ import typeUtils from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 
 const xlsxNumberFormatHelper = {
-    ID_PROPERTY_NAME: 'id',
-
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
