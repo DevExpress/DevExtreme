@@ -7,21 +7,18 @@ QUnit.module("live update", {
     beforeEach: function() {
         this.itemRenderedSpy = sinon.spy();
         this.itemDeletedSpy = sinon.spy();
-        this.createList = (dataSourceOptions, repaintChangesOnly) => {
-            var dataSource = new DataSource($.extend({
-                paginate: false,
-                load: () => [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }],
-                key: "id"
-            }, dataSourceOptions));
-
-            return $("#templated-list").dxList({
-                dataSource: dataSource,
-                repaintChangesOnly: repaintChangesOnly,
+        this.createList = (options) => {
+            return $("#templated-list").dxList($.extend({
+                dataSource: {
+                    paginate: false,
+                    load: () => [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }],
+                    key: "id"
+                },
                 onContentReady: (e) => {
                     e.component.option("onItemRendered", this.itemRenderedSpy);
                     e.component.option("onItemDeleted", this.itemDeletedSpy);
                 }
-            }).dxList("instance");
+            }, options)).dxList("instance");
         };
     }
 }, function() {
@@ -58,14 +55,18 @@ QUnit.module("live update", {
 
     QUnit.test("update item when grouping is enabled", function(assert) {
         var store = this.createList({
-            load: () => [{
-                key: "a",
-                items: [{ a: "Item 0", id: 0, type: "a" }, { a: "Item 2", id: 0, type: "a" }]
-            }, {
-                key: "b",
-                items: [{ a: "Item 1", id: 1, type: "b" }]
-            }],
-            group: "type"
+            dataSource: {
+                load: () => [{
+                    key: "a",
+                    items: [{ a: "Item 0", id: 0, type: "a" }, { a: "Item 2", id: 0, type: "a" }]
+                }, {
+                    key: "b",
+                    items: [{ a: "Item 1", id: 1, type: "b" }]
+                }],
+                key: "id",
+                group: "type"
+            },
+            grouped: true
         }).getDataSource().store();
 
         var pushData = [{ type: "update", data: { a: "Item 0 Updated", id: 0, type: "a" }, key: 0 }];
@@ -77,13 +78,16 @@ QUnit.module("live update", {
 
     QUnit.test("update item when paging is enabled", function(assert) {
         var store = this.createList({
-            paginate: true,
-            pageSize: 2,
-            load: (loadOptions) => {
-                if(loadOptions.skip > 0) {
-                    return [{ a: "Item 2", id: 2 }, { a: "Item 3", id: 3 }];
+            dataSource: {
+                paginate: true,
+                pageSize: 2,
+                key: "id",
+                load: (loadOptions) => {
+                    if(loadOptions.skip > 0) {
+                        return [{ a: "Item 2", id: 2 }, { a: "Item 3", id: 3 }];
+                    }
+                    return [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
                 }
-                return [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
             }
         }).getDataSource().store();
 
@@ -105,9 +109,12 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, update item instance", function(assert) {
         var data = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
         var dataSource = this.createList({
-            load: () => data,
-            key: "id"
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: "id"
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         data[0] = { a: "Item Updated", id: 0 };
         dataSource.load();
@@ -119,9 +126,12 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, update item field", function(assert) {
         var data = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
         var dataSource = this.createList({
-            load: () => data,
-            key: "id"
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: "id"
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         data[0].a = "Item Updated";
         dataSource.load();
@@ -139,10 +149,13 @@ QUnit.module("live update", {
             items: [{ a: "Item 1", id: 2, type: "b" }]
         }];
         var dataSource = this.createList({
-            load: () => data,
-            key: "id",
-            group: "type"
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: "id",
+                group: "type"
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         data[0].items[0].a = "Item Updated";
         dataSource.load();
@@ -153,9 +166,12 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, update dataSource", function(assert) {
         var data = [{ a: "Item 0", id: 0 }, { a: "Item Updated", id: 1 }];
         var list = this.createList({
-            load: () => [data[0]],
-            key: "id"
-        }, true);
+            dataSource: {
+                load: () => [data[0]],
+                key: "id"
+            },
+            repaintChangesOnly: true
+        });
 
         var dataSource = new DataSource({
             paginate: false,
@@ -171,10 +187,13 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, update store item", function(assert) {
         var data = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
         var dataSource = this.createList({
-            load: () => data,
-            key: "id",
-            update: (key, value) => data[0].a = value.a
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: "id",
+                update: (key, value) => data[0].a = value.a
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         dataSource.store().update(0, { a: "Item Updated", id: 0 });
         dataSource.load();
@@ -186,9 +205,12 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, delete item", function(assert) {
         var data = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
         var dataSource = this.createList({
-            load: () => data,
-            key: "id"
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: "id"
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         data.splice(0, 1);
         dataSource.load();
@@ -201,9 +223,12 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, add item", function(assert) {
         var data = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
         var dataSource = this.createList({
-            load: () => data,
-            key: "id"
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: "id"
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         data.push({ a: "Item 2", id: 2 });
         dataSource.load();
@@ -215,9 +240,12 @@ QUnit.module("live update", {
     QUnit.test("repaintChangesOnly, update item instance with composite key", function(assert) {
         var data = [{ a: "Item 0", id: 0, key: 1 }, { a: "Item 1", id: 0, key: 0 }];
         var dataSource = this.createList({
-            load: () => data,
-            key: ["id", "key"]
-        }, true).getDataSource();
+            dataSource: {
+                load: () => data,
+                key: ["id", "key"]
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
 
         data[0] = { a: "Item Updated", id: 0, key: 1 };
         dataSource.load();
