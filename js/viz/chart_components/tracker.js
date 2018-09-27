@@ -656,11 +656,13 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
 
             startGesture.changed = gestureChanged;
             if(that._chart._lastRenderingTime < GESTURE_TIMEOUT) {
+                const viewport = that._argumentAxis.visualRange();
                 var zoom = that._argumentAxis._translator.zoom(-startGesture.scroll, startGesture.scale, that._argumentAxis.getZoomBounds());
-                that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max], { start: true, end: true });
-
-                startGesture.distance = gestureParams.distance;
-                startGesture.center = gestureParams.center;
+                if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
+                    that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max], { start: true, end: true });
+                    startGesture.distance = gestureParams.distance;
+                    startGesture.center = gestureParams.center;
+                }
             } else {
                 that._chart._transformArgument(startGesture.scroll, startGesture.scale);
             }
