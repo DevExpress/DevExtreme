@@ -240,7 +240,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         var result = $();
         this.itemElements().each(function(_, item) {
             var $item = $(item);
-            if(keysEqual(this.key(), this.keyOf($item.data(this._itemDataKey())), key)) {
+            if(keysEqual(this.key(), this.keyOf(this._getItemData($item)), key)) {
                 result = $item;
                 return false;
             }
