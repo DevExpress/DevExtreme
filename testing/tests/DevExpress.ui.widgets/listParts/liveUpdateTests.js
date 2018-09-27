@@ -11,6 +11,7 @@ QUnit.module("live update", {
             return $("#templated-list").dxList($.extend({
                 dataSource: {
                     paginate: false,
+                    pushAggregationTimeout: 0,
                     load: () => [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }],
                     key: "id"
                 },
@@ -63,6 +64,7 @@ QUnit.module("live update", {
                     key: "b",
                     items: [{ a: "Item 1", id: 1, type: "b" }]
                 }],
+                pushAggregationTimeout: 0,
                 key: "id",
                 group: "type"
             },
@@ -81,6 +83,7 @@ QUnit.module("live update", {
             dataSource: {
                 paginate: true,
                 pageSize: 2,
+                pushAggregationTimeout: 0,
                 key: "id",
                 load: (loadOptions) => {
                     if(loadOptions.skip > 0) {
@@ -286,7 +289,8 @@ QUnit.module("live update", {
         var dataSource = this.createList({
             dataSource: {
                 load: () => data,
-                key: "id"
+                key: "id",
+                pushAggregationTimeout: 0
             },
             repaintChangesOnly: true
         }).getDataSource();

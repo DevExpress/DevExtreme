@@ -696,6 +696,7 @@ QUnit.module("Live Update", {
         this.createTabs = (dataSourceOptions, repaintChangesOnly) => {
             var dataSource = new DataSource($.extend({
                 paginate: false,
+                pushAggregationTimeout: 0,
                 load: () => this.data,
                 key: "id"
             }, dataSourceOptions));
