@@ -415,7 +415,8 @@ const Drawer = Widget.inherit({
 
     _refreshPanel() {
         if(this._overlay) {
-            this._overlay && this._overlay._dispose();
+            this._overlay._dispose();
+            this._$panel.remove();
 
             delete this._overlay;
             delete this._$panel;

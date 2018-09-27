@@ -838,34 +838,6 @@ QUnit.test("drawer panel overlay should have right config depending on position 
     assert.equal(overlay.option("position").at, "bottom");
 });
 
-QUnit.test("drawer panel should be rendered correctly in overlap mode after mode changing, expand", assert => {
-    fx.off = true;
-
-    const $element = $("#drawer").dxDrawer({
-        opened: true,
-        revealMode: "expand",
-        openedStateMode: "shrink",
-        template: function($content) {
-            var $div = $("<div/>");
-            $div.css("height", 600);
-            $div.css("width", 200);
-
-            return $div;
-        }
-    });
-
-    const instance = $element.dxDrawer("instance");
-
-    instance.option("openedStateMode", "overlap");
-    instance.toggle();
-
-    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
-
-    assert.equal($panel.width(), 0, "panel should have correct width after option changing");
-
-    fx.off = false;
-});
-
 QUnit.test("minSize should be rendered correctly in overlap mode, expand", assert => {
     fx.off = true;
 
@@ -1324,6 +1296,61 @@ QUnit.test("maxSize should be rendered correctly in overlap mode, bottom menu po
 
     assert.equal($panelContent.height(), 100, "panel content has correct height when maxSize is set");
     assert.equal($panelContent.css("marginTop"), "100px", "panel content has correct height when minSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer panel should be rendered correctly in overlap mode after mode changing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        revealMode: "expand",
+        openedStateMode: "shrink",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "overlap");
+    instance.toggle();
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.width(), 0, "panel should have correct width after option changing");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer should have only one panel after mode changing", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "shrink");
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS);
+
+    assert.equal($panel.length, 1, "one panel is rendered");
 
     fx.off = false;
 });
