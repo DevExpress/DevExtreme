@@ -333,10 +333,6 @@ var Tabs = CollectionWidget.inherit({
         }
     },
 
-    _getWrapperElement: function() {
-        return this.$element().children("." + TABS_WRAPPER_CLASS);
-    },
-
     _renderWrapper: function() {
         this._$wrapper = $("<div>").addClass(TABS_WRAPPER_CLASS);
         this.$element().append(this._$wrapper);

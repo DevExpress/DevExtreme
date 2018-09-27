@@ -799,12 +799,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             switch(change.type) {
                 case "update":
                     if(change.oldItem) {
-                        this._renderItem(change.index, change.data, this._getWrapperElement(), this._findItemElementByKey(change.key));
+                        this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
                     } else {
                         let changedItem = items[arrayUtils.indexByKey(this, items, change.key)];
                         if(changedItem) {
                             arrayUtils.update(this, items, change.key, change.data).done(() => {
-                                this._renderItem(items.indexOf(changedItem), changedItem, this._getWrapperElement(), this._findItemElementByItem(changedItem));
+                                this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByItem(changedItem));
                             });
                         }
                     }
@@ -812,7 +812,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 case "insert":
                     when(change.index || arrayUtils.insert(this, items, change.data)).done(()=>{
                         this._renderedItemsCount++;
-                        this._renderItem(this._renderedItemsCount, change.data, this._getWrapperElement());
+                        this._renderItem(this._renderedItemsCount, change.data);
                     });
                     break;
                 case "remove":
@@ -898,8 +898,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         this._selection.deselect([key]);
     },
-
-    _getWrapperElement: noop,
 
     _deleteItemElement: function($item, deletedActionArgs, index) {
         var changingOption = this._dataSource ? "dataSource" : "items";
