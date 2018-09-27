@@ -106,7 +106,7 @@ var ExcelCreator = Class.inherit({
 
     ///#DEBUG
     _appendFormat: function(format, dataType) {
-        const styleFormat = this._convertToXlsxFormat(format, dataType);
+        const styleFormat = this._tryConvertToXlsxFormatCode(format, dataType);
         if(styleFormat) {
             if(inArray(styleFormat, this._styleFormat) === -1) {
                 this._styleFormat.push(styleFormat);
@@ -115,7 +115,7 @@ var ExcelCreator = Class.inherit({
     },
     ///#ENDDEBUG
 
-    _convertToXlsxFormat: function(format, dataType) {
+    _tryConvertToXlsxFormatCode: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
 
@@ -283,8 +283,8 @@ var ExcelCreator = Class.inherit({
         this._xlsxFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            const format = that._convertToXlsxFormat(style.format, style.dataType);
-            let numberFormat = typeUtils.isDefined(format) ? { formatCode: format } : 0;
+            const formatCode = that._tryConvertToXlsxFormatCode(style.format, style.dataType);
+            let numberFormat = typeUtils.isDefined(formatCode) ? { formatCode } : 0;
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
                 numberFormat,
