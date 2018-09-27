@@ -352,21 +352,6 @@ const Drawer = Widget.inherit({
         return this.option("position") === "left" || this.option("position") === "right";
     },
 
-    _togglePositionClass() {
-        const position = this.option("position");
-
-        this._$panel.removeClass(DRAWER_CLASS + "-left");
-        this._$panel.removeClass(DRAWER_CLASS + "-right");
-        this._$panel.removeClass(DRAWER_CLASS + "-top");
-        this._$panel.removeClass(DRAWER_CLASS + "-bottom");
-
-        this._$panel.addClass(DRAWER_CLASS + "-" + position);
-
-        if(position === "right") {
-            this._reverseElements();
-        }
-    },
-
     _reverseElements() {
         this._$wrapper.prepend(this._$contentWrapper);
     },
