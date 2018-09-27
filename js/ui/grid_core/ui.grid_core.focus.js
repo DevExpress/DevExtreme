@@ -52,7 +52,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return;
             }
 
-            dataController._getPageIndexByKey(key).done(function(pageIndex) {
+            dataController.getPageIndexByKey(key).done(function(pageIndex) {
                 that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                 if(pageIndex === dataController.pageIndex()) {
                     dataController.updateItems({
@@ -240,7 +240,7 @@ module.exports = {
                     this.callBase(e);
                 },
 
-                _getPageIndexByKey: function(key) {
+                getPageIndexByKey: function(key) {
                     var that = this,
                         dataSource = that._dataSource,
                         d = new Deferred();
