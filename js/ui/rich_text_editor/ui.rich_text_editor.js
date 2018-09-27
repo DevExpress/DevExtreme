@@ -229,8 +229,8 @@ const RichTextEditor = Editor.inherit({
                     delete this._isEditorUpdating;
                 } else {
                     const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
+                    const newDelta = this._quillInstance.clipboard.convert(updatedValue);
 
-                    let newDelta = this._quillInstance.clipboard.convert(updatedValue);
                     this._quillInstance.setContents(newDelta);
                 }
                 this.callBase(args);

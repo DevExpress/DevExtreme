@@ -10,25 +10,31 @@ function getIndent(node) {
     return level ? level[1] - 1 : 0;
 }
 
+function removeNewLineChar(operations) {
+    let newLineOperation = operations[operations.length - 1];
+    newLineOperation.insert = newLineOperation.insert.trim();
+}
+
 const getMatcher = (quill) => {
     const Delta = quill.import("delta");
 
     return (node, delta) => {
         let ops = delta.ops.slice();
 
-        let firstOperation = ops[0];
-        firstOperation.insert = firstOperation.insert.replace(/^\s+/, "");
-        const firstMatch = firstOperation.insert.match(/^(\S+)\s+/);
+        let insertOperation = ops[0];
+        insertOperation.insert = insertOperation.insert.replace(/^\s+/, "");
+        const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
 
-        if(!firstMatch) {
+        if(!listDecoratorMatches) {
             return delta;
         }
 
-        firstOperation.insert = firstOperation.insert.substring(firstMatch[0].length, firstOperation.insert.length);
+        insertOperation.insert = insertOperation.insert.substring(listDecoratorMatches[0].length, insertOperation.insert.length);
         const indent = getIndent(node);
 
-        ops.push({ insert: '\n', attributes: { list: getListType(firstMatch), indent } });
+        removeNewLineChar(ops);
 
+        ops.push({ insert: '\n', attributes: { list: getListType(listDecoratorMatches), indent } });
         return new Delta(ops);
     };
 };
