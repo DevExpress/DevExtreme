@@ -430,6 +430,7 @@ const Drawer = Widget.inherit({
 
     _setInitialPosition() {
         $(this.content()).css("left", 0);
+        $(this.content()).css("width", 0);
         $(this.content()).css("marginLeft", 0);
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
