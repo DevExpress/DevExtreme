@@ -186,7 +186,8 @@ QUnit.test("Various fills", function(assert) {
             '<fill><patternFill patternType="1"><fgColor rgb="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><fgColor theme="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><fgColor rgb="1" /><bgColor rgb="1" /></patternFill></fill>',
-        ])
+        ]) +
+        '<fonts count="0" />'
     );
 });
 
@@ -205,7 +206,8 @@ QUnit.test("Fills with empty subitems", function(assert) {
             '<fill><patternFill patternType="1" /></fill>',
             '<fill><patternFill patternType="1"><bgColor rgb="1" /></patternFill></fill>',
             '<fill><patternFill patternType="1"><fgColor rgb="1" /></patternFill></fill>',
-        ])
+        ]) +
+        '<fonts count="0" />'
     );
 });
 
@@ -229,7 +231,8 @@ QUnit.test("Passed fills should be copied", function(assert) {
         '</cellXfs>' +
         getExpectedFillsXml([
             '<fill><patternFill patternType="1"><fgColor rgb="1" theme="1" /><bgColor rgb="1" theme="1" /></patternFill></fill>',
-        ])
+        ]) +
+        '<fonts count="0" />'
     );
 });
 
