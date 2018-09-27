@@ -199,6 +199,7 @@ var Tabs = CollectionWidget.inherit({
         this.setAria("role", "tablist");
 
         this.$element().addClass(TABS_CLASS);
+        this._renderWrapper();
 
         this._renderMultiple();
 
@@ -236,7 +237,6 @@ var Tabs = CollectionWidget.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        this._renderWrapper();
         this.setAria("role", "tab", this.itemElements());
 
         this.option("useInkRipple") && this._renderInkRipple();
@@ -290,8 +290,7 @@ var Tabs = CollectionWidget.inherit({
     _cleanScrolling: function() {
         if(!this._scrollable) return;
 
-        this._scrollable.$content().children("." + TABS_WRAPPER_CLASS)
-            .appendTo(this._itemContainer());
+        this._$wrapper.appendTo(this.$element());
 
         this._scrollable.$element().remove();
         this._scrollable = null;
@@ -329,7 +328,12 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _renderWrapper: function() {
-        this.$element().wrapInner($("<div>").addClass(TABS_WRAPPER_CLASS));
+        this._$wrapper = $("<div>").addClass(TABS_WRAPPER_CLASS);
+        this.$element().append(this._$wrapper);
+    },
+
+    _itemContainer: function() {
+        return this._$wrapper;
     },
 
     _renderScrollable: function() {
@@ -458,7 +462,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _clean: function() {
-        this._scrollable = null;
+        this._cleanScrolling();
         this.callBase();
     },
 
