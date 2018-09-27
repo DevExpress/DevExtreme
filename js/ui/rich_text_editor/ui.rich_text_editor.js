@@ -132,7 +132,7 @@ const RichTextEditor = Editor.inherit({
         let modulesConfig = {
             mention: this._getModuleConfigByOption("mention"),
             toolbar: this._getToolbarConfig(),
-            dataPlaceholders: this._getModuleConfigByOption("dataPlaceholders"),
+            placeholder: this._getModuleConfigByOption("dataPlaceholder"),
             dropImage: this._getBaseModuleConfig()
         };
 
@@ -228,7 +228,7 @@ const RichTextEditor = Editor.inherit({
                 break;
             case "placeholder":
             case "mention":
-            case "dataPlaceholders":
+            case "dataPlaceholder":
             case "allowImageResizing":
             case "resizing":
             case "toolbar":
