@@ -300,12 +300,12 @@ module.exports = gridCore.Controller.inherit((function() {
                         }
                     }
 
-                    new ArrayStore(options.data).load(loadOptions).done(function(data) {
+                    new ArrayStore(options.data).load(loadOptions).done(data => {
                         options.data = data;
                         if(needStoreCache) {
                             this._cachedPagingData = cloneItems(options.data, groupCount);
                         }
-                    }).fail(function(error) {
+                    }).fail(error => {
                         options.data = new Deferred().reject(error);
                     });
                 }
