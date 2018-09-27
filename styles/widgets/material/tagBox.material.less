@@ -17,7 +17,7 @@
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 1px;
 }
 .dx-tagbox {
-    &.dx-editor-filled {
+    &.dx-editor-filled, &.dx-editor-outlined {
         .dx-texteditor-input {
             padding: 0;
         }
@@ -29,7 +29,7 @@
     }
 }
 
-.dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled) {
+.dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
     .dx-texteditor-input {
         padding-left: 0;
 
