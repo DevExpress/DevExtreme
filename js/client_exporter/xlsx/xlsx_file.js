@@ -101,7 +101,9 @@ export default class XlsxFile {
     }
 
     _convertNumberFormatIndexToId(index) {
-        const CUSTOM_FORMAT_ID_START_VALUE = 165; // CUSTOM_FORMAT_START_INDEX: 165,
+        // Number format ids less than 164 (magic const) represent builtin formats.
+        // §18.8.30 numFmt (Number Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        const CUSTOM_FORMAT_ID_START_VALUE = 165;
         return CUSTOM_FORMAT_ID_START_VALUE + index;
     }
 
