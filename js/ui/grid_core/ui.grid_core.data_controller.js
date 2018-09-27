@@ -1216,7 +1216,6 @@ module.exports = {
                 pageIndex: function(value) {
                     return changePaging(this, "pageIndex", value);
                 },
-
                 /**
                 * @name GridBaseMethods.pageSize
                 * @publicName pageSize()

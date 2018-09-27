@@ -1,6 +1,7 @@
 var $ = require("../../core/renderer"),
     core = require("./ui.grid_core.modules"),
     each = require("../../core/utils/iterator").each,
+    commonUtils = require("../../core/utils/common"),
     isDefined = require("../../core/utils/type").isDefined,
     Deferred = require("../../core/utils/deferred").Deferred;
 
@@ -78,8 +79,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        isRowFocused: function(rowKey) {
-            return rowKey === this.option("focusedRowKey");
+        isRowFocused: function(key) {
+            return commonUtils.equalByValue(key, this.option("focusedRowKey"));
         },
 
         updateFocusedRow: function(change) {

@@ -667,3 +667,23 @@ QUnit.testInActiveWindow("Escape should not change focus type from cell to row i
     // assert
     assert.ok(this.getController("keyboardNavigation").isCellFocusType(), "Row focus type");
 });
+
+QUnit.testInActiveWindow("Focused row different key support", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+    this.setupModule();
+
+    this.option("focusedRowKey", { key0: "1", key1: "2" });
+    assert.ok(this.getController("focus").isRowFocused({ key0: "1", key1: "2" }), "Composite key equal");
+    assert.notOk(this.getController("focus").isRowFocused({ key0: "4", key1: "2" }), "Composite key not equal");
+
+    this.option("focusedRowKey", 123);
+    assert.ok(this.getController("focus").isRowFocused(123), "Simple key equal");
+    assert.notOk(this.getController("focus").isRowFocused(11), "Simple key not equal");
+
+    this.option("focusedRowKey", "TestKey");
+    assert.ok(this.getController("focus").isRowFocused("TestKey"), "Simple key equal");
+    assert.notOk(this.getController("focus").isRowFocused("TestKey1"), "Simple key not equal");
+});
