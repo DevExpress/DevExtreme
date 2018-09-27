@@ -18,7 +18,7 @@ function getFullXml(xlsxFile) {
 
 QUnit.test("Empty 1", function(assert) {
     const file = new XlsxFile();
-    assert.equal(getFullXml(file), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Empty 2", function(assert) {
@@ -28,7 +28,7 @@ QUnit.test("Empty 2", function(assert) {
     assert.equal(file.registerCellFormat(undefined), undefined);
     assert.equal(file.registerCellFormat({}), undefined);
     assert.equal(file.registerCellFormat({ notSupported: 'a' }), undefined);
-    assert.equal(getFullXml(file), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Empty numberFormat", function(assert) {
@@ -39,7 +39,7 @@ QUnit.test("Empty numberFormat", function(assert) {
     assert.equal(file.registerCellFormat({ numberFormat: { formatCode: undefined } }), undefined);
     assert.equal(file.registerCellFormat({ numberFormat: { formatCode: null } }), undefined);
     assert.equal(file.registerCellFormat({ numberFormat: { formatCode: '' } }), undefined);
-    assert.equal(getFullXml(file), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Various numberFormat as identifiers of predefined formats", function(assert) {
@@ -56,7 +56,7 @@ QUnit.test("Various numberFormat as identifiers of predefined formats", function
         '<xf xfId="0" applyNumberFormat="1" numFmtId="1" />' +
         '<xf xfId="0" applyNumberFormat="1" numFmtId="2" />' +
         '</cellXfs>' +
-        getExpectedFillsXml());
+        getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Various numberFormat as custom format", function(assert) {
@@ -70,7 +70,8 @@ QUnit.test("Various numberFormat as custom format", function(assert) {
         '<xf xfId="0" applyNumberFormat="1" numFmtId="165" />' +
         '<xf xfId="0" applyNumberFormat="1" numFmtId="166" />' +
         '</cellXfs>' +
-        getExpectedFillsXml() + '<numFmts count="2"><numFmt numFmtId="165" formatCode="a" /><numFmt numFmtId="166" formatCode="b" /></numFmts>');
+        getExpectedFillsXml() + '<fonts count="0" />' +
+        '<numFmts count="2"><numFmt numFmtId="165" formatCode="a" /><numFmt numFmtId="166" formatCode="b" /></numFmts>');
 });
 
 QUnit.test("Empty alignments", function(assert) {
@@ -80,7 +81,7 @@ QUnit.test("Empty alignments", function(assert) {
     assert.equal(file.registerCellFormat({ alignment: { vertical: undefined, wrapText: undefined, horizontal: undefined } }), undefined);
     assert.equal(file.registerCellFormat({ alignment: { vertical: null, wrapText: null, horizontal: null } }), undefined);
     assert.equal(file.registerCellFormat({ alignment: { notSupported: 'a' } }), undefined);
-    assert.equal(getFullXml(file), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Various alignments", function(assert) {
@@ -104,13 +105,11 @@ QUnit.test("Various alignments", function(assert) {
         '<xf xfId="0" applyAlignment="1"><alignment horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1"><alignment horizontal="left" /></xf>' +
         '</cellXfs>' +
-        getExpectedFillsXml());
+        getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Empty fills", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.generateFillsXml(), getExpectedFillsXml());
-
     assert.equal(file.registerCellFormat({ fill: undefined }), undefined);
     assert.equal(file.registerCellFormat({ fill: null }), undefined);
     assert.equal(file.registerCellFormat({ fill: { notSupported: 0 } }), undefined);
@@ -131,7 +130,7 @@ QUnit.test("Empty fills", function(assert) {
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, foregroundColor: { rgb: null } } } }), undefined);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: null, backgroundColor: { rgb: '1' }, foregroundColor: { rgb: '1' } } } }), undefined);
 
-    assert.equal(getFullXml(file), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Various fills", function(assert) {
@@ -248,7 +247,7 @@ QUnit.test("Empty fonts", function(assert) {
     assert.equal(file.registerCellFormat({ font: { color: {} } }), undefined);
     assert.equal(file.registerCellFormat({ font: { color: { notSupported: 'a' } } }), undefined);
 
-    assert.equal(getFullXml(file), getExpectedFillsXml());
+    assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Various fonts", function(assert) {

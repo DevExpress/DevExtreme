@@ -43,13 +43,9 @@ export default class XlsxFile {
     }
 
     generateCellFormatsXml() {
-        if(this._cellFormatTags.length > 0) {
-            // §18.8.10 cellXfs (Cell Formats), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            const cellFormatTagsAsXmlStringsArray = this._cellFormatTags.map(tag => xlsxCellFormatHelper.toXml(tag));
-            return xlsxTagHelper.toXml("cellXfs", { count: cellFormatTagsAsXmlStringsArray.length }, cellFormatTagsAsXmlStringsArray.join(""));
-        } else {
-            return '';
-        }
+        // §18.8.10 cellXfs (Cell Formats), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        const cellFormatTagsAsXmlStringsArray = this._cellFormatTags.map(tag => xlsxCellFormatHelper.toXml(tag));
+        return xlsxTagHelper.toXml("cellXfs", { count: cellFormatTagsAsXmlStringsArray.length }, cellFormatTagsAsXmlStringsArray.join(""));
     }
 
     registerFill(fill) {
@@ -76,13 +72,9 @@ export default class XlsxFile {
     }
 
     generateFillsXml() {
-        if(this._fillTags.length > 0) {
-            // §18.8.21, 'fills (Fills)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            const tagsAsXmlStringsArray = this._fillTags.map(tag => xlsxFillHelper.toXml(tag));
-            return xlsxTagHelper.toXml("fills", { count: tagsAsXmlStringsArray.length }, tagsAsXmlStringsArray.join(""));
-        } else {
-            return '';
-        }
+        // §18.8.21, 'fills (Fills)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        const tagsAsXmlStringsArray = this._fillTags.map(tag => xlsxFillHelper.toXml(tag));
+        return xlsxTagHelper.toXml("fills", { count: tagsAsXmlStringsArray.length }, tagsAsXmlStringsArray.join(""));
     }
 
     registerFont(font) {
@@ -103,13 +95,9 @@ export default class XlsxFile {
     }
 
     generateFontsXml() {
-        if(this._fontTags.length > 0) {
-            // §18.8.23, 'fonts (Fonts)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            const xmlStringsArray = this._fontTags.map(tag => xlsxFontHelper.toXml(tag));
-            return xlsxTagHelper.toXml("fonts", { count: xmlStringsArray.length }, xmlStringsArray.join(""));
-        } else {
-            return '';
-        }
+        // §18.8.23, 'fonts (Fonts)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        const xmlStringsArray = this._fontTags.map(tag => xlsxFontHelper.toXml(tag));
+        return xlsxTagHelper.toXml("fonts", { count: xmlStringsArray.length }, xmlStringsArray.join(""));
     }
 
     _convertNumberFormatIndexToId(index) {
