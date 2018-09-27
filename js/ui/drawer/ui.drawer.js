@@ -415,7 +415,8 @@ const Drawer = Widget.inherit({
 
     _refreshPanel() {
         if(this._overlay) {
-            this._overlay && this._overlay._dispose();
+            this._overlay._dispose();
+            this._$panel.remove();
 
             delete this._overlay;
             delete this._$panel;
@@ -430,6 +431,7 @@ const Drawer = Widget.inherit({
 
     _setInitialPosition() {
         $(this.content()).css("left", 0);
+        $(this.content()).css("width", 0);
         $(this.content()).css("marginLeft", 0);
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
