@@ -90,7 +90,7 @@ var ResizingController = modules.ViewController.inherit({
                     }
                 } else if(changeType === "update" && e.changeTypes) {
                     if((items.length > 1 || e.changeTypes[0] !== "insert") &&
-                        !(items.length === 0 && e.changeTypes[0] === "remove") && !e.isDataChanged) {
+                        !(items.length === 0 && e.changeTypes[0] === "remove")/* && !e.isDataChanged*/) {
                         that._rowsView.resize();
                     } else {
                         resizeDeferred = that.resize();

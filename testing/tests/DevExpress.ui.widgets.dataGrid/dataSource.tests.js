@@ -5528,7 +5528,7 @@ QUnit.module("Cache", {
                         that.loadingCount++;
                     },
                     type: "array",
-                    data: TEN_NUMBERS
+                    data: TEN_NUMBERS.slice()
                 },
                 pageSize: 3,
                 paginate: true,
@@ -5536,6 +5536,11 @@ QUnit.module("Cache", {
                 requireTotalCount: true
             }, options));
         };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        this.clock.restore();
     }
 });
 
@@ -5891,6 +5896,23 @@ QUnit.test("reset cache when remote sorting is not changed and grouping is chang
     // assert
     assert.deepEqual(dataSource.items()[0], { key: 10, items: null }, "first item on page");
     assert.deepEqual(dataSource.totalCount(), 10, "totalCount");
+    assert.deepEqual(this.loadingCount, 1, "one loading");
+});
+
+QUnit.test("update cache on push", function(assert) {
+    var dataSource = this.createDataSource({
+        reshapeOnPush: true
+    });
+    dataSource.load();
+    this.clock.tick();
+
+    // act
+    dataSource.store().push([{ type: "remove", key: 1 }]);
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(dataSource.items()[0], 2, "first item on page");
+    assert.deepEqual(dataSource.totalCount(), 9, "totalCount is refreshed");
     assert.deepEqual(this.loadingCount, 1, "one loading");
 });
 
