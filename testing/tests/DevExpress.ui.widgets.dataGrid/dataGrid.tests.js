@@ -4008,6 +4008,33 @@ QUnit.testInActiveWindow("Focus component with focusedRowEnabled and focusedRowI
     clock.restore();
 });
 
+QUnit.testInActiveWindow("DataGrid - Should change focusedRowKey at runtime", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        focusedRowElement,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            keyExpr: "field1",
+            dataSource: [
+                { field1: "1", field2: "4" },
+                { field1: "2", field2: "5" },
+                { field1: "3", field2: "6" }
+            ],
+            focusedRowEnabled: true,
+            focusedRowIndex: 0
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.option("focusedRowKey", "2");
+    // assert
+    focusedRowElement = dataGrid.getView("rowsView").getRow(1);
+    assert.ok(focusedRowElement.hasClass("dx-row-focused"), "Focused row is row 1");
+    assert.equal(focusedRowElement.attr("tabindex"), 0, "Focused row has tabindex");
+
+    clock.restore();
+});
+
 // T117114
 QUnit.test("columns width when all columns have width and scrolling mode is virtual", function(assert) {
     // arrange, act

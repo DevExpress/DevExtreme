@@ -45,7 +45,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         _focusRowByKey: function(key) {
             var that = this,
-                dataController = this._dataController,
+                dataController = this.getController("data"),
                 rowsView = this.getView("rowsView"),
                 rowIndex = this.option("focusedRowIndex"),
                 key = key !== undefined ? key : this.option("focusedRowKey");
@@ -59,9 +59,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
-                        dataController.reload().done(function() {
-                            that._triggerUpdateFocusedRow(key);
-                        });
+                        dataController.reload();
                     } else {
                         dataController.pageIndex(pageIndex);
                     }
@@ -81,12 +79,13 @@ exports.FocusController = core.ViewController.inherit((function() {
                     this.option("focusedRowKey", focusedRowKey);
                 }
             }
+            this.option("focusedRowIndex", rowIndex);
         },
 
         _triggerUpdateFocusedRow: function(key) {
             var rowIndex = this._dataController.getRowIndexByKey(key);
 
-            this.option("focusedRowIndex", rowIndex);
+            this._keyboardController.setFocusedRowIndex(rowIndex);
             this._dataController.updateItems({
                 changeType: "updateFocusedRow",
                 focusedRowKey: key
@@ -100,7 +99,11 @@ exports.FocusController = core.ViewController.inherit((function() {
 
             if(focusedRowKey !== undefined) {
                 focusedRowIndex = dataController.getRowIndexByKey(focusedRowKey);
-                this.option("focusedRowIndex", focusedRowIndex);
+                if(focusedRowIndex >= 0) {
+                    this._keyboardController.setFocusedRowIndex(focusedRowIndex);
+                } else {
+                    this._focusRowByKey(focusedRowKey);
+                }
             } else {
                 focusedRowKey = dataController.getKeyByRowIndex(focusedRowIndex);
                 this.option("focusedRowKey", focusedRowKey);
@@ -284,7 +287,7 @@ module.exports = {
                         focusController = this.getController("focus");
 
                         if(e.changeType === "refresh") {
-                            if(operationTypes.sorting) {
+                            if(operationTypes.reload) {
                                 focusController._focusRowByKey();
                                 return;
                             }
