@@ -6742,7 +6742,7 @@ QUnit.module('Refresh modes', {
         this.setupModules = function() {
             var that = this;
 
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping', 'editorFactory'], {
                 initViews: true
             });
 
