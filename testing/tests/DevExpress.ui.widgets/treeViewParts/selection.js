@@ -372,3 +372,29 @@ QUnit.test("items should be selectable after the search", function(assert) {
 
     assert.equal(clickHandler.callCount, 1, "click works");
 });
+
+var HAS_SELECTED_CHILD_CLASS = "dx-treeview-node-has-selected-items";
+
+QUnit.test("parent has a special class if node has selected child", function(assert) {
+    var items = [{
+            text: 'item 1', expanded: true, items: [
+                { text: 'item 11', selected: true }
+            ]
+        }],
+        $treeView = initTree({
+            dataSource: items,
+            selectionMode: "single",
+            selectNodesRecursive: true
+        }),
+        treeViewInstance = $treeView.dxTreeView("instance");
+
+    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class if selectNodesRecursive is true");
+
+    treeViewInstance.option("selectNodesRecursive", false);
+
+    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class if selectNodesRecursive is false");
+
+    treeViewInstance.unselectAll();
+
+    assert.notOk($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "the class has been removed after child unselect");
+});

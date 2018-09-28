@@ -69,7 +69,7 @@ var DataAdapter = Class.inherit({
     _updateSelection: function() {
         if(this.options.recursiveSelection) {
             this._setChildrenSelection();
-            this._setParentSelection();
+            this._setParentSelectionProperties();
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);
@@ -132,11 +132,7 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _setParentSelection: function() {
-        this._setParentProperties(true);
-    },
-
-    _setParentProperties: function(setSelected) {
+    _setParentSelectionProperties: function(withoutSelection) {
         var that = this;
 
         each(this._dataStructure, function(_, node) {
@@ -145,11 +141,13 @@ var DataAdapter = Class.inherit({
             if(parent && node.internalFields.parentKey !== that.options.rootValue) {
                 that._iterateParents(node, function(parent) {
                     var newParentState = that._calculateSelectedState(parent);
-                    if(setSelected) {
+                    if(!withoutSelection) {
                         that._setFieldState(parent, SELECTED, newParentState);
                     }
 
-                    that._setFieldState(parent, HASSELECTEDCHILD, newParentState !== false);
+                    if(node.internalFields.hasOwnProperty(HASSELECTEDCHILD)) {
+                        that._setFieldState(parent, HASSELECTEDCHILD, newParentState !== false);
+                    }
                 });
             }
         });
@@ -389,9 +387,9 @@ var DataAdapter = Class.inherit({
 
         if(this.options.recursiveSelection && !selectRecursive) {
             state ? this._setChildrenSelection() : this._toggleChildrenSelection(node, state);
-            this._setParentSelection();
+            this._setParentSelectionProperties();
         } else {
-            this._setParentProperties();
+            this._setParentSelectionProperties(true);
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);

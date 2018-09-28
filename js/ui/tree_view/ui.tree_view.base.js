@@ -39,6 +39,7 @@ var WIDGET_CLASS = "dx-treeview",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
     DISABLED_STATE_CLASS = "dx-state-disabled",
     SELECTED_ITEM_CLASS = "dx-state-selected",
+    NODE_HAS_SELECTED_CHILD_CLASS = "dx-treeview-node-has-selected-items",
 
     DATA_ITEM_ID = "data-item-id";
 
@@ -853,7 +854,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria("selected", nodeData.selected, $node);
-        this._toggleSelectedClass($node, nodeData.selected);
+        this._toggleSelectionClasses($node, nodeData.selected, nodeData.hasSelectedChild);
 
         this.callBase(nodeData.key, nodeData.item, $node);
 
@@ -1229,7 +1230,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             }.bind(this)
         });
 
-        this._toggleSelectedClass(this._$selectAllItem, value);
+        this._toggleSelectionClasses(this._$selectAllItem, value);
 
         $container.before(this._$selectAllItem);
     },
@@ -1251,8 +1252,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _toggleSelectedClass: function($node, value) {
-        $node.toggleClass(SELECTED_ITEM_CLASS, !!value);
+    _toggleSelectionClasses: function($node, selected, hasSelectedChild) {
+        $node.toggleClass(SELECTED_ITEM_CLASS, !!selected);
+        $node.toggleClass(NODE_HAS_SELECTED_CHILD_CLASS, hasSelectedChild);
     },
 
     _toggleNodeDisabledState: function(node, state) {
@@ -1347,9 +1349,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 return;
             }
 
-            that._toggleSelectedClass($node, nodeSelection);
-
-            $node.toggleClass("dx-treeview-item-has-selected-items", node.internalFields.hasSelectedChild);  // TO DO
+            that._toggleSelectionClasses($node, nodeSelection, node.internalFields.hasSelectedChild);
 
             that.setAria("selected", nodeSelection, $node);
 
@@ -1376,7 +1376,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this._showCheckboxes()) {
             var parentValue = parentNode.internalFields.selected;
             this._getCheckBoxInstance($parentNode).option("value", parentValue);
-            this._toggleSelectedClass($parentNode, parentValue);
+            this._toggleSelectionClasses($parentNode, parentValue, parentNode.internalFields.hasSelectedChild);
         }
 
         if(parentNode.internalFields.parentKey !== this.option("rootValue")) {
