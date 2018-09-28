@@ -4332,3 +4332,26 @@ QUnit.test("Update translator business range after adjust axis", function(assert
     assert.strictEqual(minVisible, 120);
     assert.strictEqual(maxVisible, 180);
 });
+
+QUnit.test("Update discrete translator business range after adjust axis", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+
+    this.series[0].getViewport.returns({
+        min: "120",
+        max: "180"
+    });
+
+    this.axis.setBusinessRange({ min: "100", max: "200" });
+
+    this.translator.stub("updateBusinessRange").reset();
+    this.axis.adjust();
+
+    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+
+    assert.strictEqual(min, "100");
+    assert.strictEqual(max, "200");
+    assert.strictEqual(minVisible, "120");
+    assert.strictEqual(maxVisible, "180");
+});

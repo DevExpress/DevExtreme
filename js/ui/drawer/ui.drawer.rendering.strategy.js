@@ -37,11 +37,7 @@ const animation = {
             direction = config.direction || "left",
             toConfig = {};
 
-        if(direction === "left") {
-            toConfig["marginLeft"] = margin;
-        } else {
-            toConfig["marginRight"] = margin;
-        }
+        toConfig["margin" + direction.charAt(0).toUpperCase() + direction.substr(1)] = margin;
 
         fx.animate($element, {
             to: toConfig,

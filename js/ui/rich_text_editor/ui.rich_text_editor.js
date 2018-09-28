@@ -10,6 +10,7 @@ import Errors from "../widget/ui.errors";
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
+import getWordMatcher from "./matchers/wordLists";
 
 const RICH_TEXT_EDITOR_CLASS = "dx-richtexteditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
@@ -129,11 +130,19 @@ const RichTextEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
+        const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
         let modulesConfig = {
             mention: this._getModuleConfigByOption("mention"),
             toolbar: this._getToolbarConfig(),
             dataPlaceholders: this._getModuleConfigByOption("dataPlaceholders"),
-            dropImage: this._getBaseModuleConfig()
+            dropImage: this._getBaseModuleConfig(),
+            clipboard: {
+                matchers: [
+                    ['p.MsoListParagraphCxSpFirst', wordListMatcher],
+                    ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
+                    ['p.MsoListParagraphCxSpLast', wordListMatcher]
+                ]
+            }
         };
 
         if(this.option("allowImageResizing")) {
@@ -220,8 +229,8 @@ const RichTextEditor = Editor.inherit({
                     delete this._isEditorUpdating;
                 } else {
                     const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
+                    const newDelta = this._quillInstance.clipboard.convert(updatedValue);
 
-                    let newDelta = this._quillInstance.clipboard.convert(updatedValue);
                     this._quillInstance.setContents(newDelta);
                 }
                 this.callBase(args);

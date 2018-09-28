@@ -133,6 +133,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 }
             });
         },
+
         clearPreviousFocusedRow: function($tableElement) {
             var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS);
             $prevRowFocusedElement.removeClass(ROW_FOCUSED_CLASS).removeAttr("tabindex");
@@ -199,6 +200,13 @@ module.exports = {
 
     extenders: {
         controllers: {
+            data: {
+                _applyChange: function(change) {
+                    if(change && change.changeType === "updateFocusedRow") return;
+
+                    return this.callBase.apply(this, arguments);
+                }
+            },
             keyboardNavigation: {
                 init: function() {
                     var rowIndex = this.option("focusedRowIndex"),

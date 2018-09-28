@@ -94,8 +94,10 @@ var excelFormatConverter = module.exports = {
                 return dateLocalization.format(value, format);
             });
 
-        result = that._convertDateFormatToOpenXml(result);
-        result = that._getLanguageInfo(formattedValue) + result;
+        if(result) {
+            result = that._convertDateFormatToOpenXml(result);
+            result = that._getLanguageInfo(formattedValue) + result;
+        }
 
         return result;
     },

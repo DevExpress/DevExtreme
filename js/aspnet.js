@@ -9,7 +9,8 @@
                 require("./core/guid"),
                 require("./ui/validation_engine"),
                 require("./core/utils/iterator"),
-                require("./core/utils/dom").extractTemplateMarkup
+                require("./core/utils/dom").extractTemplateMarkup,
+                require("./core/utils/string").encodeHtml
             );
         });
     } else {
@@ -22,10 +23,11 @@
             DevExpress.data.Guid,
             DevExpress.validationEngine,
             DevExpress.utils.iterator,
-            DevExpress.utils.dom.extractTemplateMarkup
+            DevExpress.utils.dom.extractTemplateMarkup,
+            DevExpress.utils.string.encodeHtml
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml) {
     var templateCompiler = createTemplateCompiler();
 
     function createTemplateCompiler() {
@@ -33,14 +35,6 @@
             CLOSE_TAG = "%>",
             ENCODE_QUALIFIER = "-",
             INTERPOLATE_QUALIFIER = "=";
-
-        function encodeHtml(value) {
-            return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;");
-        }
 
         function acceptText(bag, text) {
             if(text) {
@@ -55,7 +49,7 @@
 
             if(encode || interpolate) {
                 bag.push("_.push(");
-                bag.push(encode ? encodeHtml(value) : value);
+                bag.push(encode ? "arguments[1](" + value + ")" : value);
                 bag.push(");");
             } else {
                 bag.push(code + "\n");
@@ -91,7 +85,7 @@
                 return templateCompiler(extractTemplateMarkup(element));
             },
             render: function(template, data) {
-                return template(data);
+                return template(data, encodeHtml);
             }
         };
     }

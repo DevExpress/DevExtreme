@@ -65,6 +65,7 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
+    pointerMock = require("../../helpers/pointerMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
     themes = require("ui/themes"),
 
@@ -1258,6 +1259,27 @@ QUnit.test("Edit cell by click when grid is created in dxForm", function(assert)
 
     // assert
     assert.equal($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR).length, 1, "one editor is shown");
+});
+
+QUnit.test("Edit cell by click if repaintChangesOnly is enabled", function(assert) {
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{ firstName: 1, lastName: 2 }],
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        editing: {
+            allowUpdating: true,
+            mode: "cell"
+        }
+    });
+
+    var $cell = $dataGrid.find(".dx-data-row > td").eq(0);
+
+    // act
+    pointerMock($cell).start().down().up();
+
+    // assert
+    assert.equal($dataGrid.find(TEXTEDITOR_INPUT_SELECTOR).length, 1, "one editor is shown");
 });
 
 QUnit.test("Resize columns", function(assert) {

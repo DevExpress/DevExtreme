@@ -211,9 +211,16 @@ var DataSource = Class.inherit({
         * @type number
         * @default undefined
         */
-        var onPushHandler = options.pushAggregationTimeout
-            ? dataUtils.throttleChanges(this._onPush, options.pushAggregationTimeout)
+        var onPushHandler = options.pushAggregationTimeout !== 0
+            ? dataUtils.throttleChanges(this._onPush, function() {
+                if(options.pushAggregationTimeout === undefined) {
+                    return that._changedTime * 5;
+                }
+                return options.pushAggregationTimeout;
+            })
             : this._onPush;
+
+        this._changedTime = 0;
 
         this._onPushHandler = (changes) => {
             this._aggregationTimeoutId = onPushHandler.call(this, changes);
@@ -728,7 +735,9 @@ var DataSource = Class.inherit({
         var that = this;
 
         deferred.done(function() {
+            var date = new Date();
             that.fireEvent("changed");
+            that._changedTime = new Date() - date;
         });
     },
 
