@@ -475,7 +475,7 @@ const Drawer = Widget.inherit({
                 this._renderPosition(this.option("opened"), false);
                 break;
             case "shading":
-                this._refreshModeClass(args.previousValue);
+                this._toggleShaderVisibility(this.option("opened"));
                 break;
             case "animationEnabled":
             case "animationDuration":

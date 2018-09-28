@@ -358,7 +358,7 @@ QUnit.test("animationDuration option test", function(assert) {
 
 QUnit.module("shader");
 
-QUnit.test("shader should be visible if drawer is opened", assert => {
+QUnit.test("shader should be visible if drawer is opened and shading = true", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         shading: true
@@ -378,6 +378,20 @@ QUnit.test("shader should not be visible if drawer is closed", assert => {
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
     assert.ok($shader.is(":hidden"), "shader is visible");
+});
+
+QUnit.test("shading option", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        shading: true
+    });
+    const instance = $element.dxDrawer("instance");
+    const $shader = $element.find("." + DRAWER_SHADER_CLASS);
+
+    assert.ok($shader.is(":visible"), "shader is visible");
+
+    instance.option("shading", false);
+    assert.ok($shader.is(":hidden"), "shader is hidden");
 });
 
 QUnit.test("click on shader should not close drawer", assert => {
