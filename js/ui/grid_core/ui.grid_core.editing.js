@@ -24,6 +24,7 @@ var $ = require("../../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     commonUtils = require("../../core/utils/common"),
+    iconUtils = require("../../core/utils/icon"),
     Scrollable = require("../scroll_view/ui.scrollable");
 
 var EDIT_FORM_CLASS = "edit-form",
@@ -79,21 +80,35 @@ var EDIT_FORM_CLASS = "edit-form",
     MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
 
 var EDIT_LINK_CLASS = {
-        saveEditData: "dx-link-save",
-        cancelEditData: "dx-link-cancel",
-        editRow: "dx-link-edit",
-        undeleteRow: "dx-link-undelete",
-        deleteRow: "dx-link-delete",
-        addRowByRowIndex: "dx-link-add"
+        save: "dx-link-save",
+        cancel: "dx-link-cancel",
+        edit: "dx-link-edit",
+        undelete: "dx-link-undelete",
+        delete: "dx-link-delete",
+        add: "dx-link-add"
     },
     EDIT_ICON_CLASS = {
-        saveEditData: "dx-icon-save",
-        cancelEditData: "dx-icon-revert",
-        editRow: "dx-icon-edit",
-        undeleteRow: "dx-icon-revert",
-        deleteRow: "dx-icon-trash",
-        addRowByRowIndex: "dx-icon-add"
-    };
+        save: "save",
+        cancel: "revert",
+        edit: "edit",
+        undelete: "revert",
+        delete: "trash",
+        add: "add"
+    },
+    METHOD_NAMES = {
+        edit: "editRow",
+        delete: "deleteRow",
+        undelete: "undeleteRow",
+        save: "saveEditData",
+        cancel: "cancelEditData",
+        add: "addRowByRowIndex"
+    },
+    ACTION_OPTION_NAMES = {
+        add: "allowAdding",
+        edit: "allowUpdating",
+        delete: "allowDeleting"
+    },
+    BUTTON_NAMES = ["edit", "save", "cancel", "delete", "undelete"];
 
 var getEditMode = function(that) {
     var editMode = that.option("editing.mode");
@@ -127,30 +142,33 @@ var EditingController = modules.ViewController.inherit((function() {
         };
     };
 
-    var editCellTemplate = (container, options) => {
-        var editingTexts,
-            editingOptions,
-            $container = $(container),
-            editingController = options.component.getController("editing"),
-            isRowMode = isRowEditMode(editingController);
+    var getEditingTexts = (options) => {
+        var editingTexts = options.component.option("editing.texts") || {};
 
-        if(options.rowType === "data") {
-            $container.css("textAlign", "center");
-            options.rtlEnabled = editingController.option("rtlEnabled");
-
-            editingOptions = editingController.option("editing") || {};
-            editingTexts = editingOptions.texts || {};
-
-            if(options.row && options.row.rowIndex === editingController._getVisibleEditRowIndex() && isRowMode) {
-                editingController._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, editingOptions.useIcons);
-                editingController._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, editingOptions.useIcons);
-            } else {
-                editingController._createEditingLinks($container, options, editingOptions, isRowMode);
-            }
-        } else {
-            gridCoreUtils.setEmptyText($container);
-        }
+        return {
+            save: editingTexts.saveRowChanges,
+            cancel: editingTexts.cancelRowChanges,
+            edit: editingTexts.editRow,
+            undelete: editingTexts.undeleteRow,
+            delete: editingTexts.deleteRow,
+            add: editingTexts.addRowToNode
+        };
     };
+
+    var getButtonIndex = (buttons, name) => {
+        var result = -1;
+
+        buttons.some((button, index) => {
+            if(getButtonName(button) === name) {
+                result = index;
+                return true;
+            }
+        });
+
+        return result;
+    };
+
+    var getButtonName = (button) => typeUtils.isObject(button) ? button.name : button;
 
     return {
         init: function() {
@@ -245,6 +263,121 @@ var EditingController = modules.ViewController.inherit((function() {
             if(args.changeType === "refresh" && getEditMode(that) === EDIT_MODE_POPUP && editForm && editForm.option("visible")) {
                 editForm.repaint();
             }
+        },
+
+        _isDefaultButtonVisible: function(button, options) {
+            var result = true,
+                isRowMode = isRowEditMode(this),
+                editingOptions = this.option("editing"),
+                isEditRow = options.row && options.row.rowIndex === this._getVisibleEditRowIndex() && isRowMode;
+
+            switch(button.name) {
+                case "edit":
+                    result = !isEditRow && editingOptions.allowUpdating && isRowMode;
+                    break;
+                case "save":
+                case "cancel":
+                    result = isEditRow;
+                    break;
+                case "delete":
+                    result = !isEditRow && editingOptions.allowDeleting && !options.row.removed;
+                    break;
+                case "undelete":
+                    result = editingOptions.allowDeleting && options.row.removed;
+                    break;
+            }
+
+            return result;
+        },
+
+        _isButtonVisible: function(button, options) {
+            var visible = button.visible;
+
+            if(!typeUtils.isDefined(visible)) {
+                return this._isDefaultButtonVisible(button, options);
+            }
+
+            return typeUtils.isFunction(visible) ? visible.call(button, { component: options.component, row: options.row, column: options.column }) : visible;
+        },
+
+        _getButtonConfig: function(button, options) {
+            var config = typeUtils.isObject(button) ? button : {},
+                buttonName = getButtonName(button),
+                editingTexts = getEditingTexts(options),
+                methodName = METHOD_NAMES[buttonName],
+                editingOptions = this.option("editing"),
+                actionName = ACTION_OPTION_NAMES[buttonName],
+                allowAction = actionName ? editingOptions[actionName] : true;
+
+            return extend({
+                name: buttonName,
+                text: editingTexts[buttonName],
+                cssClass: EDIT_LINK_CLASS[buttonName],
+                onClick: (e) => {
+                    var event = e.event;
+
+                    event.stopPropagation();
+                    event.preventDefault();
+                    setTimeout(() => {
+                        options.row && allowAction && this[methodName] && this[methodName](options.row.rowIndex);
+                    });
+                }
+            }, config);
+        },
+
+        _getEditingButtons: function(options) {
+            var buttonIndex,
+                haveCustomButtons = !!options.column.buttons,
+                buttons = (options.column.buttons || []).slice();
+
+            if(haveCustomButtons) {
+                buttonIndex = getButtonIndex(buttons, "edit");
+
+                if(buttonIndex >= 0) {
+                    if(getButtonIndex(buttons, "save") < 0) {
+                        buttons.splice(buttonIndex + 1, 0, "save");
+                    }
+
+                    if(getButtonIndex(buttons, "cancel") < 0) {
+                        buttons.splice(getButtonIndex(buttons, "save") + 1, 0, "cancel");
+                    }
+                }
+
+                buttonIndex = getButtonIndex(buttons, "delete");
+
+                if(buttonIndex >= 0 && getButtonIndex(buttons, "undelete") < 0) {
+                    buttons.splice(buttonIndex + 1, 0, "undelete");
+                }
+            } else {
+                buttons = BUTTON_NAMES.slice();
+            }
+
+            return buttons.map((button) => {
+                return this._getButtonConfig(button, options);
+            });
+        },
+
+        _getEditCommandCellTemplate: function() {
+            var that = this;
+
+            return function(container, options) {
+                var $container = $(container),
+                    buttons;
+
+                if(options.rowType === "data") {
+                    $container.css("textAlign", "center");
+                    options.rtlEnabled = that.option("rtlEnabled");
+                    buttons = that._getEditingButtons(options);
+
+                    buttons.forEach((button) => {
+                        if(that._isButtonVisible(button, options)) {
+                            that._createButton($container, button, options);
+                        }
+                    });
+                } else {
+                    gridCoreUtils.setEmptyText($container);
+                }
+            };
         },
 
         correctEditRowIndexAfterExpand: function(key) {
@@ -1269,9 +1402,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _updateEditColumn: function() {
             var that = this,
-                useIcons = that.option("editing.useIcons"),
                 isEditColumnVisible = that._isEditColumnVisible(),
-                cssClass = COMMAND_EDIT_CLASS + (useIcons ? " " + COMMAND_EDIT_WITH_ICONS_CLASS : "");
+                cssClass = COMMAND_EDIT_CLASS;
 
             that._columnsController.addCommandColumn({
                 type: "buttons",
@@ -1279,7 +1411,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 visible: isEditColumnVisible,
                 cssClass: cssClass,
                 width: "auto",
-                cellTemplate: editCellTemplate,
+                cellTemplate: that._getEditCommandCellTemplate(),
                 fixedPosition: "right"
             });
 
@@ -1683,46 +1815,42 @@ var EditingController = modules.ViewController.inherit((function() {
             return template;
         },
 
-        _createLink: function(container, text, methodName, options, useIcon) {
+        _createButton: function($container, button, options) {
             var that = this,
-                $link = $("<a>")
+                iconType,
+                icon = EDIT_ICON_CLASS[button.name],
+                useIcons = that.option("editing.useIcons"),
+                $button = $("<a>")
                     .attr("href", "#")
                     .addClass(LINK_CLASS)
-                    .addClass(EDIT_LINK_CLASS[methodName]);
+                    .addClass(button.cssClass);
 
-            if(useIcon) {
-                $link
-                    .addClass(EDIT_ICON_CLASS[methodName])
-                    .attr("title", text);
+            if(button.template) {
+                that._rowsView.renderTemplate($container, button.template, options, true);
             } else {
-                $link.text(text);
-            }
+                if(useIcons && icon || button.icon) {
+                    icon = icon || button.icon;
+                    iconType = iconUtils.getImageSourceType(icon);
 
-            eventsEngine.on($link, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
-                var e = params.event;
+                    if(iconType === "image") {
+                        $button = iconUtils.getImageContainer(icon);
+                    } else {
+                        $button.addClass("dx-icon" + (iconType === "dxIcon" ? "-" : " ") + icon).attr("title", button.text);
+                    }
 
-                e.stopPropagation();
-                e.preventDefault();
-                setTimeout(function() {
-                    options.row && that[methodName](options.row.rowIndex);
-                });
-            }));
-
-            options.rtlEnabled ? container.prepend($link, "&nbsp;") : container.append($link, "&nbsp;");
-        },
-
-        _createEditingLinks: function(container, options, editingOptions, isRowMode) {
-            var editingTexts = editingOptions.texts || {};
-
-            if(editingOptions.allowUpdating && isRowMode) {
-                this._createLink(container, editingTexts.editRow, "editRow", options, editingOptions.useIcons);
-            }
-            if(editingOptions.allowDeleting) {
-                if(options.row.removed) {
-                    this._createLink(container, editingTexts.undeleteRow, "undeleteRow", options, editingOptions.useIcons);
+                    $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
                 } else {
-                    this._createLink(container, editingTexts.deleteRow, "deleteRow", options, editingOptions.useIcons);
+                    $button.text(button.text);
                 }
+
+                if(typeUtils.isDefined(button.hint)) {
+                    $button.attr("title", button.hint);
+                }
+
+                eventsEngine.on($button, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(args) {
+                    button.onClick.call(button, extend({}, args, { row: options.row, column: options.column }));
+                }));
+                options.rtlEnabled ? $container.prepend($button, "&nbsp;") : $container.append($button, "&nbsp;");
             }
         },
 
