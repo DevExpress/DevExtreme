@@ -612,7 +612,7 @@ QUnit.test("Get page index by simple key", function(assert) {
 
     // act
     this.dataController._refreshDataSource();
-    this.dataController._getPageIndexByKey("Alice").done(function(pageIndex) {
+    this.dataController.getPageIndexByKey("Alice").done(function(pageIndex) {
         assert.equal(pageIndex, 1);
     });
 });
@@ -636,7 +636,7 @@ QUnit.test("Get page index by composite key", function(assert) {
 
     // act
     this.dataController._refreshDataSource();
-    this.dataController._getPageIndexByKey({ name: 'Bob', age: 25 }).done(function(pageIndex) {
+    this.dataController.getPageIndexByKey({ name: 'Bob', age: 25 }).done(function(pageIndex) {
         assert.equal(pageIndex, 1);
     });
 });
@@ -662,7 +662,7 @@ QUnit.test("Get page index by simple key with sorting", function(assert) {
 
     // act
     this.dataController._refreshDataSource();
-    this.dataController._getPageIndexByKey("Alice").done(function(pageIndex) {
+    this.dataController.getPageIndexByKey("Alice").done(function(pageIndex) {
         assert.equal(pageIndex, 2);
     });
 });
@@ -688,7 +688,7 @@ QUnit.test("Get page index by composite key with sorting", function(assert) {
 
     // act
     this.dataController._refreshDataSource();
-    this.dataController._getPageIndexByKey({ name: 'Bob', age: 20 }).done(function(pageIndex) {
+    this.dataController.getPageIndexByKey({ name: 'Bob', age: 20 }).done(function(pageIndex) {
         assert.equal(pageIndex, 1);
     });
 });
@@ -722,7 +722,7 @@ QUnit.test("Get page index by simple key with sorting by unbound column", functi
 
     // act
     this.dataController._refreshDataSource();
-    this.dataController._getPageIndexByKey("Den").done(function(pageIndex) {
+    this.dataController.getPageIndexByKey("Den").done(function(pageIndex) {
         assert.equal(pageIndex, 0);
     });
 });
@@ -756,7 +756,7 @@ QUnit.test("Get page index by composite key with sorting by unbound column", fun
 
     // act
     this.dataController._refreshDataSource();
-    this.dataController._getPageIndexByKey({ name: "Alice", age: 19 }).done(function(pageIndex) {
+    this.dataController.getPageIndexByKey({ name: "Alice", age: 19 }).done(function(pageIndex) {
         assert.equal(pageIndex, 1);
     });
 });

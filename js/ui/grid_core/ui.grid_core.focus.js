@@ -2,7 +2,8 @@ var $ = require("../../core/renderer"),
     core = require("./ui.grid_core.modules"),
     each = require("../../core/utils/iterator").each,
     equalByValue = require("../../core/utils/common").equalByValue,
-    isDefined = require("../../core/utils/type").isDefined;
+    isDefined = require("../../core/utils/type").isDefined,
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
@@ -55,7 +56,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(rowIndex >= 0 && rowIndex === dataController.getRowIndexByKey(key)) {
                 that._triggerUpdateFocusedRow(key);
             } else {
-                dataController._getPageIndexByKey(key).done(function(pageIndex) {
+                dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
@@ -289,10 +290,103 @@ module.exports = {
                     }
 
                     this.callBase(e);
+                },
+
+                getPageIndexByKey: function(key) {
+                    var that = this,
+                        dataSource = that._dataSource,
+                        d = new Deferred();
+
+                    dataSource.load({
+                        filter: that._generateFilterByKey(key),
+                        skip: 0,
+                        take: 1
+                    }).done(function(data) {
+                        if(data.length > 0) {
+                            dataSource.load({
+                                filter: that._generateOperationFilterByKey(key, data[0]),
+                                skip: 0,
+                                take: 1,
+                                requireTotalCount: true
+                            }).done(function(_, extra) {
+                                var pageIndex = Math.floor(extra.totalCount / that.pageSize());
+                                d.resolve(pageIndex);
+                            });
+                        }
+                    });
+
+                    return d.promise();
+                },
+                _generateOperationFilterByKey: function(key, rowData) {
+                    var that = this,
+                        dataSource = that._dataSource,
+                        filter = that._generateFilterByKey(key, "<"),
+                        sort = dataSource.sort();
+
+                    if(sort) {
+                        sort.slice().reverse().forEach(function(sortInfo) {
+                            var fieldName = sortInfo.selector,
+                                value = rowData[fieldName];
+
+                            if(!isDefined(value)) {
+                                filter = that._generateFilterForUnboundColumn(fieldName, rowData, sortInfo.desc);
+                            } else {
+                                filter = [[fieldName, "=", value], "and", filter];
+                                filter = [[fieldName, sortInfo.desc ? ">" : "<", value], "or", filter];
+                            }
+                        });
+                    }
+
+                    return filter;
+                },
+                _generateFilterForUnboundColumn: function(fieldName, rowData, desc) {
+                    var cellValue,
+                        filter = [],
+                        column = this.getController("columns").columnOption(fieldName),
+                        getCurrent = function(data) {
+                            return cellValue === column.calculateCellValue(data);
+                        },
+                        getEnvirons = function(data) {
+                            var val = column.calculateCellValue(data);
+                            return desc ? val > cellValue : val < cellValue;
+                        };
+
+                    if(column && column.calculateCellValue) {
+                        cellValue = column.calculateCellValue(rowData);
+
+                        filter = [[getCurrent, "=", true], "and", filter];
+                        filter = [[getEnvirons, "=", true], "or", filter];
+                    }
+
+                    return filter;
+                },
+                _generateFilterByKey: function(key, operation) {
+                    var dataSourceKey = this._dataSource.key(),
+                        filter = [],
+                        keyPart;
+
+                    if(!operation) {
+                        operation = "=";
+                    }
+
+                    if(Array.isArray(dataSourceKey)) {
+                        for(var i = 0; i < dataSourceKey.length; ++i) {
+                            keyPart = key[dataSourceKey[i]];
+                            if(keyPart) {
+                                if(filter.length > 0) {
+                                    filter.push("and");
+                                }
+                                filter.push([dataSourceKey[i], operation, keyPart]);
+                            }
+                        }
+                    } else {
+                        filter = [dataSourceKey, operation, key];
+                    }
+
+                    return filter;
                 }
             }
         },
-
 
         views: {
             rowsView: {
