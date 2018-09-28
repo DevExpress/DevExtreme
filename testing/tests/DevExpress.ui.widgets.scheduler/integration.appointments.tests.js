@@ -1,4 +1,5 @@
-var $ = require("jquery");
+var $ = require("jquery"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -4582,57 +4583,62 @@ QUnit.test("DropDown appointment should be rendered correctly with expressions o
 });
 
 QUnit.test("DropDown appointment should be rendered correctly when timezone is set", function(assert) {
-    var data = [
-        {
-            schedule: "Appointment 1",
-            startDate: new Date(2018, 8, 17, 1),
-            endDate: new Date(2018, 8, 17, 2)
-        },
-        {
-            schedule: "Appointment 2",
-            startDate: new Date(2018, 8, 17, 1),
-            endDate: new Date(2018, 8, 17, 2)
-        },
-        {
-            schedule: "Appointment 3",
-            startDate: new Date(2018, 8, 17, 1),
-            endDate: new Date(2018, 8, 17, 2)
-        },
-        {
-            schedule: "Appointment 4",
-            startDate: new Date(2018, 8, 17, 1),
-            endDate: new Date(2018, 8, 17, 2)
-        },
-        {
-            schedule: "Appointment 5",
-            startDate: new Date(2018, 8, 17, 1),
-            endDate: new Date(2018, 8, 17, 2)
-        },
-        {
-            schedule: "Appointment 6",
-            startDate: new Date(2018, 8, 17, 1),
-            endDate: new Date(2018, 8, 17, 2)
-        }
-    ];
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        var data = [
+            {
+                schedule: "Appointment 1",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 2",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 3",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 4",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 5",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 6",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            }
+        ];
 
-    this.createInstance({
-        dataSource: data,
-        views: ["month"],
-        currentView: "month",
-        currentDate: new Date(2018, 8, 17),
-        timeZone: 'Etc/UTC',
-        showCurrentTimeIndicator: false,
-        maxAppointmentsPerCell: 1,
-        height: 600,
-        textExpr: "schedule"
-    });
+        this.createInstance({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 8, 17),
+            timeZone: 'Etc/UTC',
+            showCurrentTimeIndicator: false,
+            maxAppointmentsPerCell: 1,
+            height: 600,
+            textExpr: "schedule"
+        });
 
-    $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+        $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
 
-    var $appointment = $(".dx-dropdownmenu-list .dx-item").first(),
-        $dates = $appointment.find(".dx-scheduler-dropdown-appointment-date").first();
+        var $appointment = $(".dx-dropdownmenu-list .dx-item").first(),
+            $dates = $appointment.find(".dx-scheduler-dropdown-appointment-date").first();
 
-    assert.equal($dates.text(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
+        assert.equal($dates.text(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
