@@ -1067,15 +1067,25 @@
         }
         
         .dx-scheduler-date-table {
-            .flex-container(row, nowrap);
+            .flex-container(column, nowrap);
+
+            tbody {
+                .flex-container(column, nowrap);
+                height: 100%;
+            }
 
             .dx-scheduler-date-table-row {
                 .flex-container(row, nowrap);
+
+                flex-grow: 1
             }
 
             .dx-scheduler-date-table-cell {
-                height: 100%;
-                flex-grow: 1;
+                .flex-container(row, nowrap);
+
+                align-items: stretch;
+                flex: 1 1 auto;
+                height: inherit;
             }
         }
 
