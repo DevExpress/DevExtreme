@@ -1,7 +1,6 @@
 import $ from "jquery";
 import fx from "animation/fx";
 import translator from "animation/translator";
-import { hideCallback } from "mobile/hide_top_overlay";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import config from "core/config";
 import typeUtils from "core/utils/type";
@@ -288,14 +287,6 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
-QUnit.test("drawer should not handle hideTopOverlayCallback if it isn't visible", assert => {
-    $("#drawer").dxDrawer({
-        opened: false
-    });
-
-    assert.ok(!hideCallback.hasCallback());
-});
-
 QUnit.module("animation", {
     beforeEach() {
         this.capturedAnimations = animationCapturing.start();
@@ -579,6 +570,47 @@ QUnit.test("Panel should be rendered correctly after openedStateMode changing", 
     instance.toggle();
 
     assert.equal($panel.width(), 300, "content has correct left when maxSize is set");
+
+    fx.off = false;
+});
+
+QUnit.test("Panel and content should be rendered correctly after revealMode changing", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: true,
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 300);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("opened", false);
+    instance.option("revealMode", "expand");
+
+    let $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    let $panelContent = $panel.find(".dx-overlay-content").eq(0);
+
+    assert.equal($panelContent.width(), 50, "panel content has correct size");
+    assert.equal($panel.position().left, 0, "panel has correct position");
+    assert.equal($panelContent.position().left, 0, "panel content has correct position");
+
+    instance.option("opened", true);
+    instance.option("revealMode", "slide");
+
+    $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    $panelContent = $panel.find(".dx-overlay-content").eq(0);
+
+    assert.equal($panelContent.width(), 300, "panel content has correct size");
+    assert.equal($panel.position().left, 0, "panel has correct position");
+    assert.equal($panelContent.position().left, 0, "panel content has correct position");
 
     fx.off = false;
 });

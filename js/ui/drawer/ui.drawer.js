@@ -471,6 +471,9 @@ const Drawer = Widget.inherit({
                 break;
             case "revealMode":
                 this._setInitialPosition();
+                this._refreshPanel();
+                this._strategy.setPanelSize(args.value === "slide");
+
                 this._refreshRevealModeClass(args.previousValue);
                 this._renderPosition(this.option("opened"), false);
                 break;
