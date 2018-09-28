@@ -1431,6 +1431,30 @@ QUnit.test("drawer should have only one panel after mode changing", assert => {
     fx.off = false;
 });
 
+QUnit.test("drawer panel should be repositioned after dimension changed", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelOverlayContent.position().left, 0, "panel overlay content position is OK");
+
+    fx.off = false;
+});
+
 QUnit.module("rtl");
 
 QUnit.test("content should have correct position if panel is visible in rtl mode", assert => {
