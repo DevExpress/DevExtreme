@@ -3,28 +3,35 @@ import { getQuill } from "../quill_importer";
 const quill = getQuill();
 const Embed = quill.import("blots/embed");
 
-import $ from "../../../core/renderer";
-
-const PLACEHOLDER_DATA_KEY = "PLACEHOLDER_DATA";
 const PLACEHOLDER_CLASS = "dx-data-placeholder";
 
 class Placeholder extends Embed {
     static create(data) {
         let node = super.create(),
-            $node = $(node),
             startEscapedChar = data.startEscapedChar || data.escapedChar,
             endEscapedChar = data.endEscapedChar || data.escapedChar,
             text = data.value;
 
-        $node
-            .text(startEscapedChar + text + endEscapedChar)
-            .data(PLACEHOLDER_DATA_KEY, data);
+        node.innerText = startEscapedChar + text + endEscapedChar;
+        if(data.startEscapedChar) {
+            node.dataset.placeholderStartChar = data.startEscapedChar;
+        }
+        if(data.endEscapedChar) {
+            node.dataset.placeholderEndChar = data.endEscapedChar;
+        }
+        node.dataset.placeholderEscChar = data.escapedChar;
+        node.dataset.placeholderValue = data.value;
 
         return node;
     }
 
     static value(node) {
-        return $(node).data(PLACEHOLDER_DATA_KEY);
+        return {
+            value: node.dataset.placeholderValue,
+            escapedChar: node.dataset.placeholderEscChar,
+            startEscapedChar: node.dataset.placeholderStartChar,
+            endEscapedChar: node.dataset.placeholderEndChar
+        };
     }
 }
 
