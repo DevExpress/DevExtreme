@@ -13,7 +13,6 @@ QUnit.module("DataGrid export tests", {
 
 QUnit.test("Empty grid", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="4">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -30,7 +29,6 @@ QUnit.test("Empty grid", function(assert) {
 
 QUnit.test("Columns - number", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -108,7 +106,6 @@ QUnit.test("Columns - number as currency", function(assert) {
 
 QUnit.test("Columns - string", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -225,7 +222,6 @@ QUnit.test("Columns - datetime", function(assert) {
 
 QUnit.test("Columns - boolean", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -265,7 +261,6 @@ QUnit.test("Columns - boolean", function(assert) {
 
 QUnit.test("Columns - lookup", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -412,7 +407,6 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
 
 QUnit.test("Columns - remove the command columns from exporting document", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -449,7 +443,6 @@ QUnit.test("Columns - remove the command columns from exporting document", funct
 
 QUnit.test("Bands", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -500,7 +493,6 @@ QUnit.test("Bands", function(assert) {
 
 QUnit.test("Groupping - 1 level", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -542,7 +534,6 @@ QUnit.test("Groupping - 1 level", function(assert) {
 
 QUnit.test("Groupping - 2 levels", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -589,7 +580,6 @@ QUnit.test("Groupping - 2 levels", function(assert) {
 
 QUnit.test("Group summary", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -631,7 +621,6 @@ QUnit.test("Group summary", function(assert) {
 
 QUnit.test("Group summary - alignByColumn: true", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -682,7 +671,6 @@ QUnit.test("Group summary - alignByColumn: true", function(assert) {
 
 QUnit.test("Group summary - showInGroupFooter: true", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -743,7 +731,6 @@ QUnit.test("Group summary - showInGroupFooter: true", function(assert) {
 
 QUnit.test("Total summary", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -782,7 +769,6 @@ QUnit.test("Total summary", function(assert) {
 
 QUnit.test("showColumnHeaders: false", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -813,7 +799,6 @@ QUnit.test("showColumnHeaders: false", function(assert) {
 
 QUnit.test("excelFilterEnabled: true", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -848,7 +833,6 @@ QUnit.test("excelFilterEnabled: true", function(assert) {
 
 QUnit.test("ignoreExcelErrors: false", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
@@ -883,7 +867,6 @@ QUnit.test("ignoreExcelErrors: false", function(assert) {
 
 QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="0"></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +

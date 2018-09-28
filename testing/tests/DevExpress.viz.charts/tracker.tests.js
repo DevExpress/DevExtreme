@@ -2168,8 +2168,8 @@ QUnit.test("render axes and series each time on zooming/scrollig (via rendering 
 
     assert.equal(this.options.chart._transformArgument.callCount, 0);
     assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-10, 1, { mockWholeRange: true }]);
-    assert.ok(this.axis.visualRange.calledTwice);
-    assert.deepEqual(this.axis.visualRange.firstCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.equal(this.axis.visualRange.callCount, 4);
+    assert.deepEqual(this.axis.visualRange.secondCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
     assert.ok(this.options.eventTrigger.withArgs("zoomStart").calledOnce);
     assert.ok(this.options.eventTrigger.withArgs("zoomEnd").calledOnce);
@@ -2185,8 +2185,8 @@ QUnit.test("run transformArgument if rendering timeout is exceeded", function(as
 
     assert.equal(this.options.chart._transformArgument.callCount, 1);
     assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [10, 1]);
-    assert.ok(this.axis.visualRange.calledTwice);
-    assert.deepEqual(this.axis.visualRange.firstCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.equal(this.axis.visualRange.callCount, 3);
+    assert.deepEqual(this.axis.visualRange.secondCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
     assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
     assert.ok(this.options.eventTrigger.withArgs("zoomStart").calledOnce);
     assert.equal(this.options.eventTrigger.withArgs("zoomEnd").callCount, 0);
@@ -2694,8 +2694,8 @@ QUnit.test("Can cancel zooming on zoomEnd", function(assert) {
     assert.equal(this.options.chart._transformArgument.callCount, 0);
 
     assert.equal(this.options.eventTrigger.withArgs("zoomEnd").callCount, 1);
-    assert.equal(this.axis.visualRange.callCount, 1);
-    assert.deepEqual(this.axis.visualRange.firstCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
+    assert.equal(this.axis.visualRange.callCount, 2);
+    assert.deepEqual(this.axis.visualRange.secondCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
     assert.ok(this.axis._visualRange.calledOnce);
 });
 

@@ -14,3 +14,4 @@ import "./richTextEditorParts/markup.tests.js";
 import "./richTextEditorParts/valueRendering.tests.js";
 import "./richTextEditorParts/toolbarModule.tests.js";
 import "./richTextEditorParts/dropImageModule.tests.js";
+import "./richTextEditorParts/paste.tests.js";

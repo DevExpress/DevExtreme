@@ -6188,6 +6188,41 @@ QUnit.test("load error", function(assert) {
     assert.deepEqual(callbackDataErrors, ['Load error']);
 });
 
+QUnit.test("load error that occurs in array query", function(assert) {
+    var dataErrors = [],
+        callbackDataErrors = [];
+
+    var selectorWithNullRef = function() {
+        var value = null;
+        return value.field;
+    };
+
+    this.options = {
+        loadingTimeout: 0,
+        dataSource: {
+            filter: [selectorWithNullRef, "=", 1],
+            store: [{ field: 1 }]
+        },
+        onDataErrorOccurred: function(e) {
+            dataErrors.push(e.error.message);
+        }
+    };
+
+    setupDataGridModules(this, ['data', 'columns']);
+
+
+    this.dataController.dataErrorOccurred.add(function(error) {
+        callbackDataErrors.push(error.message);
+    });
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataErrors.length, 1);
+    assert.equal(callbackDataErrors.length, 1);
+});
+
 QUnit.test("return false on dataErrorOccurred", function(assert) {
     var callbackDataErrors = [],
         dataErrors = [];
@@ -10505,7 +10540,7 @@ QUnit.test("immutable change dataSource item field", function(assert) {
 });
 
 QUnit.test("update one cell using push", function(assert) {
-    this.setupModules();
+    this.setupModules({ pushAggregationTimeout: 0 });
 
     var oldItems = this.dataController.items().slice(0);
     var changedArgs;
@@ -10533,7 +10568,7 @@ QUnit.test("update one cell using push", function(assert) {
 });
 
 QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
-    this.setupModules({ reshapeOnPush: true, filter: ["age", ">=", 18] });
+    this.setupModules({ reshapeOnPush: true, pushAggregationTimeout: 0, filter: ["age", ">=", 18] });
 
     var changedArgs;
 

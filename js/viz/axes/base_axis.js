@@ -1874,17 +1874,18 @@ Axis.prototype = {
     dataVisualRangeIsReduced() {
         let minDataValue;
         let maxDataValue;
+        const translator = this.getTranslator();
 
-        const seriesData = this._seriesData;
         if(this._options.type === "discrete") {
-            minDataValue = seriesData.categories[0];
-            maxDataValue = seriesData.categories[seriesData.categories.length - 1];
+            const categories = translator.getBusinessRange().categories;
+            minDataValue = categories[0];
+            maxDataValue = categories[categories.length - 1];
         } else {
+            const seriesData = this._seriesData;
             minDataValue = seriesData.min;
             maxDataValue = seriesData.max;
         }
 
-        const translator = this.getTranslator();
         const startPoint = translator.translate(minDataValue);
         const endPoint = translator.translate(maxDataValue);
         const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];

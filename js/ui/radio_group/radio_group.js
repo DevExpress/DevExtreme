@@ -166,6 +166,10 @@ var RadioGroup = Editor.inherit({
         this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
     },
 
+    _focusTarget: function() {
+        return this.$element();
+    },
+
     _initMarkup: function() {
         this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
