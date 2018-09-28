@@ -9162,8 +9162,8 @@ QUnit.module("Summary with Editing", {
         };
 
         this.getTotalValues = function() {
-            return this.dataController.footerItems()[0].summaryCells.map(summaryItems => {
-                return summaryItems.length === 1 ? summaryItems[0].value : summaryItems.map(item => item.value);
+            return this.dataController.footerItems()[0].summaryCells.map(function(summaryItems) {
+                return summaryItems.length === 1 ? summaryItems[0].value : summaryItems.map(function(item) { return item.value; });
             });
         };
 
