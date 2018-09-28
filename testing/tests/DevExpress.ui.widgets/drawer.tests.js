@@ -574,7 +574,7 @@ QUnit.test("Panel should be rendered correctly after openedStateMode changing", 
     fx.off = false;
 });
 
-QUnit.test("Panel and content should be rendered correctly after revealMode changing", assert => {
+QUnit.test("panel and content should be rendered correctly after revealMode changing", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
