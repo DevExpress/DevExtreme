@@ -208,6 +208,30 @@ var EditingController = modules.ViewController.inherit((function() {
             that._updateEditButtons();
         },
 
+        getUpdatedData: function(data) {
+            var key = this._dataController.keyOf(data),
+                editData = this._editData,
+                editIndex = getIndexByKey(key, editData);
+
+            if(editData[editIndex]) {
+                return gridCoreUtils.createObjectWithChanges(data, editData[editIndex].data);
+            }
+
+            return data;
+        },
+
+        getInsertedData: function() {
+            return this._editData
+                .filter(editData => editData.data && editData.type === DATA_EDIT_DATA_INSERT_TYPE)
+                .map(editData => editData.data);
+        },
+
+        getRemovedData: function() {
+            return this._editData
+                .filter(editData => editData.oldData && editData.type === DATA_EDIT_DATA_REMOVE_TYPE)
+                .map(editData => editData.oldData);
+        },
+
         _closeEditItem: function($targetElement) {
             var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
                 $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
@@ -292,7 +316,8 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         getFirstEditableCellInRow: function(rowIndex) {
-            return this.getView("rowsView")._getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
+            var rowsView = this.getView("rowsView");
+            return rowsView && rowsView._getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
         },
 
         getFocusedCellInRow: function(rowIndex) {
@@ -959,7 +984,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         if(that._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
                             that._removeEditDataItem(editIndex);
                         } else {
-                            that._editData[editIndex].type = DATA_EDIT_DATA_REMOVE_TYPE;
+                            that._addEditData({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
                         }
                     } else {
                         that._addEditData({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
@@ -1009,8 +1034,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     if(typeUtils.isEmptyObject(editData.data)) {
                         that._removeEditDataItem(editIndex);
                     } else {
-                        editData.type = DATA_EDIT_DATA_UPDATE_TYPE;
+                        that._addEditData({ key: key, type: DATA_EDIT_DATA_UPDATE_TYPE });
                     }
+
                     dataController.updateItems({
                         changeType: "update",
                         rowIndices: [oldEditRowIndex, rowIndex]
@@ -1527,7 +1553,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(options.data) {
                     that._editData[editDataIndex].data = gridCoreUtils.createObjectWithChanges(that._editData[editDataIndex].data, options.data);
                 }
-                if(!that._editData[editDataIndex].type && options.type) {
+                if((!that._editData[editDataIndex].type || !options.data) && options.type) {
                     that._editData[editDataIndex].type = options.type;
                 }
                 if(row) {
