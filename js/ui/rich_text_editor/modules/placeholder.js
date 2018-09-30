@@ -35,20 +35,41 @@ class PlaceholderModule extends PopoverModule {
         }, this.showPopover.bind(this));
     }
 
-    _getPopoverConfig() {
-        let baseConfig = super._getPopoverConfig();
-
-        return extend(baseConfig, {
-            target: ".dx-placeholder-format"
-        });
-    }
-
-    showPopover() {
-        const position = this.quill.getSelection().index;
+    showPopover(event) {
+        const selection = this.quill.getSelection();
+        const position = selection ? selection.index : this.quill.getLength();
 
         this.savePosition(position);
+
+        if(event && event.element) {
+            this._popover.option("position", {
+                of: event.element,
+                my: "top center",
+                at: "bottom center",
+                collision: "fit"
+            });
+        } else {
+            const mentionBounds = this.quill.getBounds(position);
+            const rootRect = this.quill.root.getBoundingClientRect();
+
+            this._popover.option("position", {
+                of: this.quill.root,
+                offset: {
+                    h: mentionBounds.left,
+                    v: mentionBounds.bottom - rootRect.height
+                },
+                my: "top center",
+                at: "bottom left",
+                collision: {
+                    y: "flip",
+                    x: "fit"
+                }
+            });
+        }
+
         this._popover.show();
     }
+
 
     insertEmbedContent(selectionChangedEvent) {
         const caretPosition = this.getPosition();
