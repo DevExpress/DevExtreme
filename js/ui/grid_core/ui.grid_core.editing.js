@@ -292,22 +292,21 @@ var EditingController = modules.ViewController.inherit((function() {
         _isDefaultButtonVisible: function(button, options) {
             var result = true,
                 isRowMode = isRowEditMode(this),
-                editingOptions = this.option("editing"),
                 isEditRow = options.row && options.row.rowIndex === this._getVisibleEditRowIndex() && isRowMode;
 
             switch(button.name) {
                 case "edit":
-                    result = !isEditRow && editingOptions.allowUpdating && isRowMode;
+                    result = !isEditRow && this.allowUpdating(options) && isRowMode;
                     break;
                 case "save":
                 case "cancel":
                     result = isEditRow;
                     break;
                 case "delete":
-                    result = !isEditRow && editingOptions.allowDeleting && !options.row.removed;
+                    result = !isEditRow && this.allowDeleting(options) && !options.row.removed;
                     break;
                 case "undelete":
-                    result = editingOptions.allowDeleting && options.row.removed;
+                    result = this.allowDeleting(options) && options.row.removed;
                     break;
             }
 
@@ -1816,7 +1815,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if((column.showEditorAlways || column.setCellValue && (isRowEditing && column.allowEditing || isCellEditing)) &&
                 (options.rowType === "data" || options.rowType === "detailAdaptive") && !column.command) {
-                allowUpdating = that.option("editing.allowUpdating");
+                allowUpdating = that.allowUpdating(options);
                 if(((allowUpdating || isRowEditing) && column.allowEditing || isCellEditing) && (isRowMode && isRowEditing || !isRowMode)) {
                     if(column.showEditorAlways && !isRowMode) {
                         editingStartOptions = {
@@ -1967,7 +1966,25 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _afterSaveEditData: function() { },
 
-        _beforeCancelEditData: function() { }
+        _beforeCancelEditData: function() { },
+
+        _allowEditAction: function(actionName, options) {
+            var allowEditAction = this.option("editing." + actionName);
+
+            if(typeUtils.isFunction(allowEditAction)) {
+                allowEditAction = allowEditAction({ component: this.component, row: options.row });
+            }
+
+            return allowEditAction;
+        },
+
+        allowUpdating: function(options) {
+            return this._allowEditAction("allowUpdating", options);
+        },
+
+        allowDeleting: function(options) {
+            return this._allowEditAction("allowDeleting", options);
+        }
     };
 })());
 
@@ -2099,21 +2116,60 @@ module.exports = {
                  */
                 refreshMode: "full",
                 /**
-                 * @name GridBaseOptions.editing.allowAdding
-                 * @type boolean
+                 * @name dxDataGridOptions.editing.allowAdding
+                 * @type boolean|function
                  * @default false
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 component:dxDataGrid
+                 * @type_function_param1_field2 row:dxDataGridRowObject
+                 * @type_function_return Boolean
+                 */
+                /**
+                 * @name dxTreeListOptions.editing.allowAdding
+                 * @type boolean|function
+                 * @default false
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 component:dxTreeList
+                 * @type_function_param1_field2 row:dxTreeListRowObject
+                 * @type_function_return Boolean
                  */
                 allowAdding: false,
                 /**
-                 * @name GridBaseOptions.editing.allowUpdating
-                 * @type boolean
+                 * @name dxDataGridOptions.editing.allowUpdating
+                 * @type boolean|function
                  * @default false
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 component:dxDataGrid
+                 * @type_function_param1_field2 row:dxDataGridRowObject
+                 * @type_function_return Boolean
+                 */
+                /**
+                 * @name dxTreeListOptions.editing.allowUpdating
+                 * @type boolean|function
+                 * @default false
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 component:dxTreeList
+                 * @type_function_param1_field2 row:dxTreeListRowObject
+                 * @type_function_return Boolean
                  */
                 allowUpdating: false,
                 /**
-                 * @name GridBaseOptions.editing.allowDeleting
-                 * @type boolean
+                 * @name dxDataGridOptions.editing.allowDeleting
+                 * @type boolean|function
                  * @default false
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 component:dxDataGrid
+                 * @type_function_param1_field2 row:dxDataGridRowObject
+                 * @type_function_return Boolean
+                 */
+                /**
+                 * @name dxTreeListOptions.editing.allowDeleting
+                 * @type boolean|function
+                 * @default false
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 component:dxTreeList
+                 * @type_function_param1_field2 row:dxTreeListRowObject
+                 * @type_function_return Boolean
                  */
                 allowDeleting: false,
                 /**
@@ -2441,7 +2497,7 @@ module.exports = {
                         $targetElement = $(e.event.target),
                         columnIndex = that._getColumnIndexByElement($targetElement),
                         row = that._dataController.items()[e.rowIndex],
-                        allowUpdating = that.option("editing.allowUpdating") || row && row.inserted,
+                        allowUpdating = editingController.allowUpdating({ row: row }) || row && row.inserted,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
                         allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex));
 

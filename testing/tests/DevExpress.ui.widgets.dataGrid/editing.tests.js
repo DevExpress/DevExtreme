@@ -6911,6 +6911,56 @@ QUnit.test("Clicking on the edit link should not work when the link is set via t
     assert.notOk($testElement.find(".dx-datagrid-rowsview tbody > tr").first().hasClass("dx-edit-row"), "row not editable");
 });
 
+QUnit.test("Set edit button for a specific row", function(assert) {
+    // arrange
+    var that = this,
+        $rowElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: function(options) {
+            return options.row.rowIndex % 2 === 0;
+        }
+    };
+    that.editingController.init();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find(".dx-datagrid-rowsview tbody > .dx-data-row");
+    assert.strictEqual($rowElements.eq(0).find(".dx-link-edit").length, 1, "first row has the edit link");
+    assert.strictEqual($rowElements.eq(1).find(".dx-link-edit").length, 0, "second row hasn't the edit link");
+    assert.strictEqual($rowElements.eq(2).find(".dx-link-edit").length, 1, "third row has the edit link");
+});
+
+QUnit.test("Set delete button for a specific row", function(assert) {
+    // arrange
+    var that = this,
+        $rowElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowDeleting: function(options) {
+            return options.row.rowIndex % 2 === 0;
+        }
+    };
+    that.editingController.init();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find(".dx-datagrid-rowsview tbody > .dx-data-row");
+    assert.strictEqual($rowElements.eq(0).find(".dx-link-delete").length, 1, "first row has the delete link");
+    assert.strictEqual($rowElements.eq(1).find(".dx-link-delete").length, 0, "second row hasn't the delete link");
+    assert.strictEqual($rowElements.eq(2).find(".dx-link-delete").length, 1, "third row has the delete link");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {

@@ -376,7 +376,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
-            editingOptions = this.option("editing"),
             rowIndex = this.getFocusedRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
@@ -402,9 +401,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     eventArgs.originalEvent.preventDefault();
                 }
             } else {
-                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
+                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex],
+                    row = this._dataController.items()[rowIndex];
 
-                if(editingOptions.allowUpdating && column && column.allowEditing) {
+                if(this._editingController.allowUpdating({ row: row }) && column && column.allowEditing) {
                     if(this._isRowEditMode()) {
                         this._editingController.editRow(rowIndex);
                     } else {
@@ -600,7 +600,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 column = this._columnsController.getVisibleColumns()[this.getView("rowsView").getCellIndex($cell)];
                 row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
-                isEditingAllowed = (editingOptions.allowUpdating || row && row.inserted) && column.allowEditing;
+                isEditingAllowed = (this._editingController.allowUpdating({ row: row }) || row && row.inserted) && column.allowEditing;
 
                 if(!isEditingAllowed) {
                     this._editingController.closeEditCell();

@@ -702,3 +702,27 @@ QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as f
     assert.ok($rowElements.first().hasClass("dx-row-inserted"), "insert row");
     assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
 });
+
+QUnit.test("Set add button for a specific row", function(assert) {
+    // arrange
+    var $rowElements,
+        $testElement = $('#treeList');
+
+    this.options.expandedRowKeys = [1];
+    this.options.editing = {
+        mode: "row",
+        allowAdding: function(options) {
+            return options.row.rowIndex % 2 === 0;
+        }
+    };
+    this.setupTreeList();
+
+    // act
+    this.rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find(".dx-treelist-rowsview tbody > .dx-data-row");
+    assert.strictEqual($rowElements.length, 2, "row count");
+    assert.strictEqual($rowElements.eq(0).find(".dx-link-add").length, 1, "first row has the add link");
+    assert.strictEqual($rowElements.eq(1).find(".dx-link-add").length, 0, "second row hasn't the add link");
+});
