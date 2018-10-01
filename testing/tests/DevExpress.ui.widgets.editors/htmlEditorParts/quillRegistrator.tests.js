@@ -1,5 +1,5 @@
-import QuillRegistrator from "ui/rich_text_editor/quill_registrator";
-import Image from "ui/rich_text_editor/formats/image";
+import QuillRegistrator from "ui/html_editor/quill_registrator";
+import Image from "ui/html_editor/formats/image";
 
 const { test } = QUnit;
 
@@ -48,7 +48,7 @@ QUnit.module("Quill registrator", () => {
     });
 
     test("create a quill editor instance", (assert) => {
-        const element = document.getElementById("richTextEditor");
+        const element = document.getElementById("htmlEditor");
         const quillRegistrator = new QuillRegistrator();
 
         quillRegistrator.createEditor(element);

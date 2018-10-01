@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-import DropImage from "ui/rich_text_editor/modules/dropImage";
+import DropImage from "ui/html_editor/modules/dropImage";
 import { createBlobFile } from "../../../helpers/fileHelper.js";
 import browser from "core/utils/browser";
 
@@ -14,7 +14,7 @@ class DropImageMock extends DropImage {
 
 const moduleConfig = {
     beforeEach: () => {
-        this.$element = $("#richTextEditor");
+        this.$element = $("#htmlEditor");
 
         this.insertEmbedStub = sinon.stub();
 
@@ -30,7 +30,7 @@ const moduleConfig = {
 
         this.options = {
             editorInstance: {
-                NAME: "dxRichTextEditor"
+                NAME: "dxHtmlEditor"
             }
         };
     }
