@@ -9,7 +9,7 @@ var $ = require("../core/renderer"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit"),
+    CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
@@ -268,6 +268,15 @@ var Accordion = CollectionWidget.inherit({
         }
 
         this.callBase.apply(this, arguments);
+    },
+
+    _deleteItemElement: function($item, deletedActionArgs, index) {
+        this.callBase.apply(this, arguments);
+
+        this._deferredItems.splice(index, 1);
+        if(this._selection.isItemSelected(this.keyOf(deletedActionArgs.itemData))) {
+            this.option("selectedItemKeys", extend({}, this.option("selectedItemKeys")));
+        }
     },
 
     _renderItemContent: function(args) {

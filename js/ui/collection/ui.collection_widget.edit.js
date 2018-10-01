@@ -806,11 +806,11 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._selection.deselect([key]);
     },
 
-    _deleteItemElement: function($item, deletedActionArgs, index) {
+    _deleteItemElement: function($item, deletedActionArgs, index, skipDeleteItem) {
         var changingOption = this._dataSource ? "dataSource" : "items";
         this._updateSelectionAfterDelete(index);
         this._updateIndicesAfterIndex(index);
-        this._editStrategy.deleteItemAtIndex(index);
+        skipDeleteItem || this._editStrategy.deleteItemAtIndex(index);
         this._simulateOptionChange(changingOption);
         this._fireDeleted($item, deletedActionArgs);
         this._renderEmptyMessage();
