@@ -278,11 +278,6 @@ var SchedulerTableCreator = {
                     row = rows[currentRowIndex];
 
                 row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
-
-                // if(rowspan === 1 && rowCount) {
-                //     var ratio = 100 / rowCount;
-                //     row.css("height", ratio + "%");
-                // }
             }
         }
 

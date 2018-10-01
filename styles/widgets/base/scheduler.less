@@ -2446,32 +2446,22 @@
 
             tbody {
                 height: 100%;
+                .flex-container(column, nowrap);
             }
         }
         
         .dx-scheduler-group-row {
             .flex-container(row, nowrap);
+             flex: 1
          }	
 
         .dx-scheduler-group-row:before {
             display: none;
         }
 
-        &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
-            .dx-scheduler-group-header:last-child {
-                font-weight: normal;
-                text-align: left;
-            }
-
-            .dx-scheduler-group-header:only-child {
-                position: relative;
-                left: 75px;
-                width: 75px;
-            }
-        }
-
         .dx-scheduler-group-header {
             .flex-container(row, nowrap);
+            flex: 1 1 auto;
 
             height: auto;
             text-align: center;
@@ -2502,7 +2492,20 @@
                 line-height: normal;
             }
         }
-    
+        
+        &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
+            .dx-scheduler-group-header:last-child {
+                font-weight: normal;
+                text-align: left;
+            }
+
+            .dx-scheduler-group-header:only-child {
+                position: relative;
+                left: 75px;
+                width: 75px;
+            }
+        }
+
         &.dx-scheduler-work-space-day,
         &.dx-scheduler-work-space-week,
         &.dx-scheduler-work-space-work-week {
