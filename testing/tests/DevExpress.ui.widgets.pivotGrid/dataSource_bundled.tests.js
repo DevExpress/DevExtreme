@@ -3830,7 +3830,7 @@ QUnit.test("header formatting when expanding", function(assert) {
     });
 });
 
-if(window.INTRANET) {
+if(window.INTRANET && (!browser.msie || parseInt(browser.version) < 17)) {
 
     QUnit.test("XMLA store integration", function(assert) {
         var done = assert.async(),
