@@ -6,7 +6,7 @@ SystemJS.config({
 });
 
 define(function(require) {
-    var MarkdownConverter = require("ui/rich_text_editor/converters/markdown").default;
+    var MarkdownConverter = require("ui/html_editor/converters/markdown").default;
 
     QUnit.module("Import 3rd party", function() {
         QUnit.test("it throw an error if the html -> markdown converter script isn't referenced", function(assert) {

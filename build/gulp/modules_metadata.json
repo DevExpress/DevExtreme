@@ -366,9 +366,9 @@
     }
   },
   {
-    "name": "ui/rich_text_editor",
+    "name": "ui/html_editor",
     "exports": {
-      "default": { "path": "ui.dxRichTextEditor", "isWidget": true }
+      "default": { "path": "ui.dxHtmlEditor", "isWidget": true }
     }
   },
   {

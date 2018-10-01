@@ -7,8 +7,8 @@ SystemJS.config({
 });
 
 define(function(require) {
-    var getQuill = require("ui/rich_text_editor/quill_importer").getQuill,
-        DeltaConverter = require("ui/rich_text_editor/converters/delta").default;
+    var getQuill = require("ui/html_editor/quill_importer").getQuill,
+        DeltaConverter = require("ui/html_editor/converters/delta").default;
 
     QUnit.module("Import 3rd party", function() {
         QUnit.test("it throw an error if the quill script isn't referenced", function(assert) {

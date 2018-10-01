@@ -12,23 +12,23 @@ import "./converters/delta";
 import ConverterController from "./converterController";
 import getWordMatcher from "./matchers/wordLists";
 
-const RICH_TEXT_EDITOR_CLASS = "dx-richtexteditor";
+const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 
 const ANONYMOUS_TEMPLATE_NAME = "content";
 
-const RichTextEditor = Editor.inherit({
+const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxRichTextEditorOptions.valueType
-            * @type Enums.RichTextEditorValueType
+            * @name dxHtmlEditorOptions.valueType
+            * @type Enums.HtmlEditorValueType
             * @default "HTML"
             */
             valueType: "HTML",
             /**
-            * @name dxRichTextEditorOptions.placeholder
+            * @name dxHtmlEditorOptions.placeholder
             * @type string
             * @default ""
             */
@@ -84,7 +84,7 @@ const RichTextEditor = Editor.inherit({
         this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
-            .addClass(RICH_TEXT_EDITOR_CLASS)
+            .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
 
         template && template.render({
@@ -110,11 +110,11 @@ const RichTextEditor = Editor.inherit({
     },
 
     _render: function() {
-        this._renderRichTextEditor();
+        this._renderHtmlEditor();
         this.callBase();
     },
 
-    _renderRichTextEditor: function() {
+    _renderHtmlEditor: function() {
         const modulesConfig = this._getModulesConfig();
 
         this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
@@ -266,7 +266,7 @@ const RichTextEditor = Editor.inherit({
     },
 
     /**
-    * @name dxRichTextEditorMethods.registerModules
+    * @name dxHtmlEditorMethods.registerModules
     * @publicName registerModules(modules)
     * @param1 modules:Object
     */
@@ -275,7 +275,7 @@ const RichTextEditor = Editor.inherit({
     },
 
     /**
-    * @name dxRichTextEditorMethods.getSelection
+    * @name dxHtmlEditorMethods.getSelection
     * @publicName getSelection()
     */
     getSelection: function() {
@@ -285,7 +285,7 @@ const RichTextEditor = Editor.inherit({
     },
 
     /**
-    * @name dxRichTextEditorMethods.setSelection
+    * @name dxHtmlEditorMethods.setSelection
     * @publicName setSelection(index, length)
     * @param1 index:number
     * @param2 length:number
@@ -297,7 +297,7 @@ const RichTextEditor = Editor.inherit({
     },
 
     /**
-    * @name dxRichTextEditorMethods.format
+    * @name dxHtmlEditorMethods.format
     * @publicName format(name, value)
     * @param1 name:string
     * @param2 value:any
@@ -309,7 +309,7 @@ const RichTextEditor = Editor.inherit({
     },
 
     /**
-    * @name dxRichTextEditorMethods.setSelection
+    * @name dxHtmlEditorMethods.setSelection
     * @publicName setSelection(index, length)
     * @param1 index:number
     * @param2 length:number
@@ -321,6 +321,6 @@ const RichTextEditor = Editor.inherit({
     }
 });
 
-registerComponent("dxRichTextEditor", RichTextEditor);
+registerComponent("dxHtmlEditor", HtmlEditor);
 
-module.exports = RichTextEditor;
+module.exports = HtmlEditor;
