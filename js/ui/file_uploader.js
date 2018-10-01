@@ -1387,7 +1387,7 @@ var FileBlobReader = Class.inherit({
         return {
             blob: this.sliceFile(file, currentPosition, chunkSize),
             index: index,
-            isCompleted: currentPosition + chunkSize > file.size
+            isCompleted: currentPosition + chunkSize >= file.size
         };
     },
 
