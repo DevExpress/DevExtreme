@@ -10,11 +10,7 @@ class PushStrategy extends DrawerStrategy {
         const $element = $(this._drawer.viewContent());
         const maxSize = this._getPanelSize(true);
 
-        if(this._drawer._isHorizontalDirection()) {
-            $(this._drawer.content()).css("width", maxSize);
-        } else {
-            $(this._drawer.content()).css("height", maxSize);
-        }
+        $(this._drawer.content()).css(this._drawer._isHorizontalDirection() ? "width" : "height", maxSize);
 
         const contentPosition = this._getPanelSize(offset) * this._drawer._getPositionCorrection();
 
