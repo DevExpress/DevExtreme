@@ -149,6 +149,7 @@
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",
+                    "toggleable",
                     "uglify",     // UglifyJS
                     "untils",     // Time-zone term
                     "viapoint",   // Geo term

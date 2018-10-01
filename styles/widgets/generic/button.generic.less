@@ -128,6 +128,14 @@
         .box-shadow(@GENERIC_NORMAL_BUTTON_ACTIVE_STATE_SHADOW);
     }
 
+    &.dx-state-selected {
+        background-color: @button-normal-selected-bg;
+
+        .dx-button-text, .dx-icon {
+            color: darken(@base-text-color, 10%);
+        }
+    }
+
     .dx-state-disabled&,
     .dx-state-disabled & {
         .dx-icon {

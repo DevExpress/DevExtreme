@@ -18,7 +18,7 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
-
+    BUTTON_STATE_SELECTED_CLASS = "dx-state-selected",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
     BUTTON_TEXT_CLASS = "dx-button-text",
@@ -130,6 +130,20 @@ var Button = Widget.inherit({
             */
             useSubmitBehavior: false,
 
+            /**
+             * @name dxButtonOptions.toggleable
+             * @type boolean
+             * @default false
+             */
+            toggleable: false,
+
+            /**
+             * @name dxButtonOptions.selected
+             * @type boolean
+             * @default false
+             */
+            selected: false,
+
             useInkRipple: false
 
             /**
@@ -202,6 +216,8 @@ var Button = Widget.inherit({
 
         this.setAria("role", "button");
         this._updateAriaLabel();
+
+        this._renderToggle();
 
         this.callBase();
 
@@ -314,6 +330,29 @@ var Button = Widget.inherit({
         };
     },
 
+    _isToggleable: function() {
+        return this.option("toggleable");
+    },
+
+    _updateToggle: function() {
+        if(this._isToggleable()) {
+            var toggle = this.option("selected");
+            this.option("selected", !toggle);
+        }
+    },
+
+    _renderToggle: function() {
+        if(this._isToggleable()) {
+            this.$element().toggleClass(BUTTON_STATE_SELECTED_CLASS, !!this.option("selected"));
+        }
+    },
+
+    _attachFeedbackEvents: function() {
+        if(!this._isToggleable()) {
+            this.callBase();
+        }
+    },
+
     _renderClick: function() {
         var that = this,
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
@@ -331,6 +370,7 @@ var Button = Widget.inherit({
 
         eventsEngine.off(this.$element(), eventName);
         eventsEngine.on(this.$element(), eventName, function(e) {
+            that._updateToggle();
             that._executeClickAction(e);
         });
     },
@@ -400,6 +440,16 @@ var Button = Widget.inherit({
             case "useSubmitBehavior":
                 this._invalidate();
                 break;
+            case "selected":
+                this._renderToggle();
+                break;
+            case "toggleable":
+                if(!args.value) {
+                    this._attachFeedbackEvents();
+                    this.option("selected", args.value);
+                    this.$element().removeClass(BUTTON_STATE_SELECTED_CLASS);
+                    break;
+                }
             default:
                 this.callBase(args);
         }

@@ -21,7 +21,9 @@ QUnit.testStart(function() {
 var BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
     BUTTON_BACK_CLASS = "dx-button-back",
-    BUTTON_SUBMIT_INPUT_CLASS = "dx-button-submit-input";
+    BUTTON_SUBMIT_INPUT_CLASS = "dx-button-submit-input",
+    BUTTON_STATE_SELECTED_CLASS = "dx-state-selected",
+    ACTIVE_STATE_CLASS = "dx-state-active";
 
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
@@ -309,4 +311,90 @@ QUnit.test("button onClick event handler should raise once (T443747)", function(
     this.$element.dxButton({ onClick: clickHandlerSpy });
     this.clickButton();
     assert.ok(clickHandlerSpy.calledOnce);
+});
+
+QUnit.module("toggle behavior", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.$element = $("#button").dxButton({ toggleable: true });
+        this.button = this.$element.dxButton("instance");
+        this.clickButton = function() {
+            this.$element.trigger("dxclick");
+            this.clock.tick();
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("default", function(assert) {
+    var $element = $("#widget").dxButton(),
+        button = $element.dxButton("instance");
+
+    assert.equal(button.option("toggleable"), false, "toggleable option");
+    assert.equal(button.option("selected"), false, "selected option");
+});
+
+QUnit.test("set the selected class on click", function(assert) {
+    this.clickButton();
+
+    assert.ok(this.button.option("selected"), "selected option");
+    assert.ok(this.$element.hasClass(BUTTON_STATE_SELECTED_CLASS), "selected class");
+});
+
+QUnit.test("remove the selected class on click", function(assert) {
+    this.clickButton();
+    this.clickButton();
+
+    assert.notOk(this.button.option("selected"), "selected option");
+    assert.notOk(this.$element.hasClass(BUTTON_STATE_SELECTED_CLASS), "selected class");
+});
+
+QUnit.test("change the selected option via API", function(assert) {
+    this.$element.dxButton("instance").option("selected", true);
+    assert.ok(this.$element.hasClass(BUTTON_STATE_SELECTED_CLASS), "selected class when option is true");
+
+    this.$element.dxButton("instance").option("selected", false);
+    assert.notOk(this.$element.hasClass(BUTTON_STATE_SELECTED_CLASS), "selected class when option is false");
+});
+
+QUnit.test("the toggle state by default", function(assert) {
+    var $element = $("#button").dxButton({
+        toggleable: true,
+        selected: true
+    });
+    assert.ok($element.hasClass(BUTTON_STATE_SELECTED_CLASS));
+});
+
+QUnit.test("the toggleable does't work when toggle mode is disabled", function(assert) {
+    this.$element.dxButton("instance").option("toggleable", false);
+    this.clickButton();
+
+    assert.notOk(this.$element.hasClass(BUTTON_STATE_SELECTED_CLASS));
+});
+
+QUnit.test("the selected state is reset when toggle mode is disabled", function(assert) {
+    var $element = $("#button").dxButton({
+            toggleable: true,
+            selected: true
+        }),
+        button = $element.dxButton("instance");
+
+    button.option("toggleable", false);
+
+    assert.notOk(button.option("selected"), "selected option");
+    assert.notOk(this.$element.hasClass(BUTTON_STATE_SELECTED_CLASS), "selected class");
+});
+
+QUnit.test("the active state doesn't apply when toggleable is enabled", function(assert) {
+    this.$element.trigger("dxactive");
+    assert.notOk(this.$element.hasClass(ACTIVE_STATE_CLASS));
+});
+
+QUnit.test("the active state is applied when toggleable is disabled", function(assert) {
+    this.$element.dxButton("instance").option("toggleable", false);
+    this.$element.trigger("dxactive");
+
+    assert.ok(this.$element.hasClass(ACTIVE_STATE_CLASS));
 });
