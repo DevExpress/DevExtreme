@@ -2,7 +2,6 @@ var Class = require("../core/class"),
     window = require("../core/utils/window").getWindow(),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
     errors = require("../ui/widget/ui.errors"),
     stringUtils = require("../core/utils/string"),
     JSZip = require("jszip"),
@@ -103,18 +102,6 @@ var ExcelCreator = Class.inherit({
 
         return result;
     },
-
-    ///#DEBUG
-    _appendFormat: function(format, dataType) {
-        const styleFormat = this._tryConvertToXlsxFormatCode(format, dataType);
-        if(styleFormat) {
-            if(inArray(styleFormat, this._styleFormat) === -1) {
-                this._styleFormat.push(styleFormat);
-            }
-        }
-    },
-    ///#ENDDEBUG
-
     _tryConvertToXlsxFormatCode: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
@@ -283,7 +270,13 @@ var ExcelCreator = Class.inherit({
         this._xlsxFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            const formatCode = that._tryConvertToXlsxFormatCode(style.format, style.dataType);
+            const formatCode = that._tryConvertToXlsxFormatCode(
+                // Pivot: this.getDataSource().getAreaFields("data")[i].format
+                // Grid: column.format
+                style.format,
+                // Pivot: getCellDataType(this.getDataSource().getAreaFields("data")[i])
+                // Grid: getVisibleColumns(i, true).dataType
+                style.dataType);
             let numberFormat = typeUtils.isDefined(formatCode) ? { formatCode } : 0;
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
@@ -583,10 +576,6 @@ var ExcelCreator = Class.inherit({
         } else {
             this._zip = null;
         }
-
-        ///#DEBUG
-        this._styleFormat = [];
-        ///#ENDDEBUG
     },
 
     _checkZipState: function() {
