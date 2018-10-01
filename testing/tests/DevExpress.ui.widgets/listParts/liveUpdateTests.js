@@ -132,6 +132,7 @@ QUnit.module("live update", {
 
     QUnit.test("update item when paging is enabled", function(assert) {
         var list = this.createList({
+                pageLoadMode: "nextButton",
                 dataSource: {
                     paginate: true,
                     pageSize: 2,
