@@ -14,7 +14,7 @@ class DeltaConverter {
 
         this._delta2Html = new converter();
 
-        this._delta2Html.renderCustomWith(this._renderCustomFormat);
+        this._delta2Html.renderCustomWith(this._renderCustomFormat.bind(this));
     }
 
     _renderCustomFormat(operations, contextOperations) {

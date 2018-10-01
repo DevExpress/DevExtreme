@@ -15,7 +15,6 @@ class PlaceholderModule extends PopoverModule {
         return extend(baseConfig, {
             escapedChar: "",
 
-            // More specific than escapedChar
             startEscapedChar: undefined,
             endEscapedChar: undefined
         });
@@ -40,7 +39,12 @@ class PlaceholderModule extends PopoverModule {
         const position = selection ? selection.index : this.quill.getLength();
 
         this.savePosition(position);
+        this._resetPopoverPosition(event, position);
 
+        this._popover.show();
+    }
+
+    _resetPopoverPosition(event, position) {
         if(event && event.element) {
             this._popover.option("position", {
                 of: event.element,
@@ -60,14 +64,9 @@ class PlaceholderModule extends PopoverModule {
                 },
                 my: "top center",
                 at: "bottom left",
-                collision: {
-                    y: "flip",
-                    x: "fit"
-                }
+                collision: "flipfit"
             });
         }
-
-        this._popover.show();
     }
 
 
