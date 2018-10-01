@@ -1,4 +1,4 @@
-import { isPlainObject, isEmptyObject } from "../core/utils/type";
+import { isPlainObject, isEmptyObject, isDefined } from "../core/utils/type";
 import Guid from "../core/guid";
 import { extend } from "../core/utils/extend";
 import { errors } from "./errors";
@@ -50,7 +50,7 @@ function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
         var items = item.type === "insert" ? array : getItems(keyInfo, array, item.key, groupCount);
         switch(item.type) {
             case "update": update(keyInfo, items, item.key, item.data, true); break;
-            case "insert": insert(keyInfo, items, item.data, useInsertIndex ? item.index : -1, true); break;
+            case "insert": insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
             case "remove": remove(keyInfo, items, item.key, true); break;
         }
     });

@@ -7077,9 +7077,9 @@ QUnit.test("Editing with refresh mode repaint with repaintChangesOnly", function
     assert.equal(this.changedArgs.length, 0, "changed is not occured after editing");
     assert.equal(this.dataControllerChangedArgs.length, 1, "dataController changed is occured after editing");
     assert.deepEqual(this.dataControllerChangedArgs[0].changeType, "update", "dataController changed changeType");
-    assert.deepEqual(this.dataControllerChangedArgs[0].changeTypes, ["insert", "remove", "update", "remove"], "dataController changed changeTypes");
+    assert.deepEqual(this.dataControllerChangedArgs[0].changeTypes, ["remove", "insert", "update", "remove"], "dataController changed changeTypes");
     assert.deepEqual(this.dataControllerChangedArgs[0].columnIndices, [undefined, undefined, [1], undefined], "dataController changed columnIndices");
-    assert.deepEqual(this.dataControllerChangedArgs[0].rowIndices, [0, 1, 2, 3], "dataController changed rowIndices");
+    assert.deepEqual(this.dataControllerChangedArgs[0].rowIndices, [0, 0, 2, 3], "dataController changed rowIndices");
 });
 
 QUnit.test("Editing with refresh mode repaint and with grouping", function(assert) {

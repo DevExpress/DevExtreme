@@ -20,7 +20,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
+    CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
     BindableTemplate = require("../widget/bindable_template"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
@@ -678,7 +678,7 @@ var ListBase = CollectionWidget.inherit({
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
-        this.callBase(newItems);
+        this.callBase.apply(this, arguments);
     },
 
     _refreshContent: function() {
@@ -1163,6 +1163,7 @@ var ListBase = CollectionWidget.inherit({
     * @publicName reload()
     */
     reload: function() {
+        this.callBase();
         this.scrollTo(0);
         this._pullDownHandler();
     },
