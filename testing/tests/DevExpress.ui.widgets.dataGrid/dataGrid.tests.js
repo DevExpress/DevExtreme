@@ -3983,13 +3983,12 @@ QUnit.testInActiveWindow("Focus component with focusedRowEnabled and focusedRowI
         focusedRowElement,
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
-            dataSource: {
-                store: [
-                    { field1: "1", field2: "2" },
-                    { field1: "2", field2: "3" },
-                    { field1: "4", field2: "5" }
-                ]
-            },
+            keyExpr: "field1",
+            dataSource: [
+                { field1: "1", field2: "4" },
+                { field1: "2", field2: "5" },
+                { field1: "3", field2: "6" }
+            ],
             focusedRowEnabled: true,
             focusedRowIndex: 1
         });

@@ -113,6 +113,7 @@ var Calendar = Editor.inherit({
             * @name dxCalendarOptions.zoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
+            * @fires dxCalendarOptions.onOptionChanged
             */
             zoomLevel: "month",
 
