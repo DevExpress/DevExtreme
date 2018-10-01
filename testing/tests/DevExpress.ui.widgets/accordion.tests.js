@@ -1148,7 +1148,8 @@ QUnit.module("Live Update", {
             content: "3 content"
         });
 
-        var accordion = this.createAccordion({}, true),
+        var clock = sinon.useFakeTimers(),
+            accordion = this.createAccordion({}, true),
             dataSource = accordion.getDataSource();
 
         accordion.option("selectedIndex", 1);
@@ -1158,5 +1159,6 @@ QUnit.module("Live Update", {
         accordion.isItemSelected(accordion.itemElements()[1]);
 
         assert.equal(accordion.itemElements().find("." + ACCORDION_ITEM_BODY_CLASS).length, 2);
+        clock.restore();
     });
 });
