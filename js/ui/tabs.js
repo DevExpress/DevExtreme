@@ -12,7 +12,7 @@ var $ = require("../core/renderer"),
     themes = require("./themes"),
     holdEvent = require("../events/hold"),
     Scrollable = require("./scroll_view/ui.scrollable"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit"),
+    CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
     iconUtils = require("../core/utils/icon"),
     BindableTemplate = require("./widget/bindable_template");
 
@@ -98,12 +98,6 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsOptions.activeStateEnabled
             * @hidden
             * @inheritdoc
-            */
-
-            /**
-            * @name dxTabsOptions.repaintChangesOnly
-            * @type boolean
-            * @hidden false
             */
 
             /**

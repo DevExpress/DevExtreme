@@ -3,8 +3,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     domAdapter = require("../../core/dom_adapter"),
-    typeUtils = require("../../core/utils/type"),
-    isPlainObject = typeUtils.isPlainObject,
+    isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -603,34 +602,20 @@ var CollectionWidget = Widget.inherit({
         this._startIndexForAppendedItems = null;
     },
 
-    _modifyByChanges: commonUtils.noop,
-
-    _dataSourceChangedHandler: function(newItems, e) {
+    _dataSourceChangedHandler: function(newItems) {
         var items = this.option("items");
-
-        if(this._initialized && items) {
-            let changes = e && e.changes;
-            if(changes) {
-                this._modifyByChanges(changes);
-            } else if(this._shouldAppendItems()) {
-                this._appendNewItems(items, newItems);
-            } else {
-                this.option("items", newItems.slice());
+        if(this._initialized && items && this._shouldAppendItems()) {
+            this._renderedItemsCount = items.length;
+            if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
+                this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
             }
+
+            this._forgetNextPageLoading();
+            this._refreshContent();
+            this._renderFocusTarget();
         } else {
             this.option("items", newItems.slice());
         }
-    },
-
-    _appendNewItems: function(items, newItems) {
-        this._renderedItemsCount = items.length;
-        if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
-            this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
-        }
-
-        this._forgetNextPageLoading();
-        this._refreshContent();
-        this._renderFocusTarget();
     },
 
     _refreshContent: function() {
@@ -952,6 +937,10 @@ var CollectionWidget = Widget.inherit({
         $(args.container).addClass(classes.join(" "));
     },
 
+    _appendItemToContainer: function($container, $itemFrame, index) {
+        $itemFrame.appendTo($container);
+    },
+
     _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
         var $itemFrame = $("<div>");
         new (this.constructor.ItemClass)($itemFrame, this._itemOptions(), itemData || {});
@@ -959,7 +948,7 @@ var CollectionWidget = Widget.inherit({
         if($itemToReplace && $itemToReplace.length) {
             $itemToReplace.replaceWith($itemFrame);
         } else {
-            $itemFrame.appendTo($container);
+            this._appendItemToContainer.call(this, $container, $itemFrame, index);
         }
 
         return $itemFrame;

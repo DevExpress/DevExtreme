@@ -8,6 +8,11 @@ var getKeyWrapper = function(item, getKey) {
     return key;
 };
 
+var getSameNewByOld = function(oldItem, newItems, newIndexByKey, getKey) {
+    var key = getKeyWrapper(oldItem, getKey);
+    return newItems[newIndexByKey[key]];
+};
+
 export const findChanges = function(oldItems, newItems, getKey, isItemEquals) {
     var oldIndexByKey = {},
         newIndexByKey = {},
@@ -28,54 +33,42 @@ export const findChanges = function(oldItems, newItems, getKey, isItemEquals) {
     var itemCount = Math.max(oldItems.length, newItems.length);
     for(var index = 0; index < itemCount + addedCount; index++) {
         var newItem = newItems[index],
-            key = getKeyWrapper(newItem, getKey),
-            oldIndex = oldIndexByKey[key],
-            oldItem = oldItems[oldIndex],
-            newIndex = index - addedCount + removeCount;
+            oldNextIndex = index - addedCount + removeCount,
+            nextOldItem = oldItems[oldNextIndex],
+            isRemoved = !newItem || (nextOldItem && !getSameNewByOld(nextOldItem, newItems, newIndexByKey, getKey));
 
-        if(!newItem) {
-            if(oldItems[newIndex]) {
+        if(isRemoved) {
+            if(nextOldItem) {
                 result.push({
                     type: "remove",
-                    key: getKey(oldItems[newIndex]),
+                    key: getKey(nextOldItem),
                     index: index,
-                    oldItem: oldItems[newIndex]
+                    oldItem: nextOldItem
                 });
                 removeCount++;
                 index--;
-            }
-        } else if(!oldItem) {
-            addedCount++;
-            result.push({
-                type: "insert",
-                data: newItem,
-                index: index
-            });
-        } else if(oldIndex === newIndex) {
-            if(!isItemEquals(oldItem, newItem)) {
-                result.push({
-                    type: "update",
-                    data: newItem,
-                    key: getKey(newItem),
-                    index: index,
-                    oldItem: oldItem
-                });
             }
         } else {
-            oldItem = oldItems[newIndex];
-            key = getKeyWrapper(oldItem, getKey);
-            newItem = newItems[newIndexByKey[key]];
-
-            if(oldItem && !newItem) {
+            var key = getKeyWrapper(newItem, getKey),
+                oldIndex = oldIndexByKey[key],
+                oldItem = oldItems[oldIndex];
+            if(!oldItem) {
+                addedCount++;
                 result.push({
-                    type: "remove",
-                    key: getKey(oldItem),
-                    index: index,
-                    oldItem: oldItem
+                    type: "insert",
+                    data: newItem,
+                    index: index
                 });
-
-                removeCount++;
-                index--;
+            } else if(oldIndex === oldNextIndex) {
+                if(!isItemEquals(oldItem, newItem)) {
+                    result.push({
+                        type: "update",
+                        data: newItem,
+                        key: getKey(newItem),
+                        index: index,
+                        oldItem: oldItem
+                    });
+                }
             } else {
                 return;
             }

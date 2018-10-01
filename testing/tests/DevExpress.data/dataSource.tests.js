@@ -1769,7 +1769,7 @@ QUnit.module("live update", {
         assert.equal(changedSpy.firstCall.args[0].changes.length, 3);
     });
 
-    QUnit.test("skip changes with types 'insert' and 'remove' when reshapeOnPush is disabled and paginate is enabled", function(assert) {
+    QUnit.test("don't skip changes with types 'insert' and 'remove' when reshapeOnPush is disabled and paginate is enabled", function(assert) {
         var dataSource = this.createDataSource({
             paginate: true,
             pushAggregationTimeout: 0
@@ -1777,7 +1777,7 @@ QUnit.module("live update", {
         var changedSpy = sinon.spy();
         dataSource.on("changed", changedSpy);
         dataSource.store().push(this.changes);
-        assert.equal(changedSpy.firstCall.args[0].changes.length, 1);
+        assert.equal(changedSpy.firstCall.args[0].changes.length, 3);
     });
 
     QUnit.test("changed is fired with throttle when pushAggregationTimeout is enabled", function(assert) {
