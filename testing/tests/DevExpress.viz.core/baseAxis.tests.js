@@ -3893,6 +3893,33 @@ QUnit.test("Auto. visualRange shows the end of data - shift", function(assert) {
     assert.equal(businessRange.maxVisible, 300);
 });
 
+QUnit.test("Shift mode takes into account margings", function(assert) {
+    this.updateOptions({
+        visualRange: [115, 120],
+        valueMarginsEnabled: true,
+        maxValueMargin: 0.01
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 303);
+    assert.equal(businessRange.minVisible, 298);
+    assert.equal(businessRange.maxVisible, 303);
+});
+
 QUnit.test("Auto. Discrete axis - reset if categories are changed", function(assert) {
     this.updateOptions({
         type: "discrete"
