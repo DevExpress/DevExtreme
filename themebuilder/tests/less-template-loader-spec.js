@@ -3,27 +3,20 @@ const LessTemplateLoader = require("../modules/less-template-loader");
 const themeName = "generic";
 const colorScheme = "light";
 const lessCompiler = require("less/lib/less-node");
-let metadata = {
-    "base.common": [
-        {
-            "Name": "50. Background color",
-            "Key": "@base-bg",
-            "Group": "base.common"
-        }
-    ],
-    "base.typography": [
-        {
-            "Name": "1. Font family",
-            "Key": "@base-font-family",
-            "Group": "base.typography"
-        },
-        {
-            "Name": "2. Text Color",
-            "Key": "@base-text-color",
-            "Group": "base.typography"
-        }
-    ]
-};
+
+const metadata = [{
+    "Name": "50. Background color",
+    "Key": "@base-bg",
+    "Group": "base.common"
+}, {
+    "Name": "1. Font family",
+    "Key": "@base-font-family",
+    "Group": "base.typography"
+}, {
+    "Name": "2. Text Color",
+    "Key": "@base-text-color",
+    "Group": "base.typography"
+}];
 
 const emptyHeader = () => { return ""; };
 
@@ -131,19 +124,15 @@ describe("LessTemplateLoader", () => {
 
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
-        metadata["base.common"][0].Value = "green";
-        metadata["base.common"][0].isModified = true;
         return lessTemplateLoader.load(
             themeName,
             colorScheme,
-            metadata).then(data => {
+            metadata,
+            [{ key: "@base-bg", value: "green" }]).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
                 assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
                 assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
                 assert.equal(data.css, "div {\n  color: green;\n}\n");
-
-                delete metadata["base.common"][0].Value;
-                delete metadata["base.common"][0].isModified;
             });
     });
 
@@ -163,16 +152,13 @@ describe("LessTemplateLoader", () => {
 
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
-        metadata["base.common"][0].Value = "green";
-        metadata["base.common"][0].isModified = true;
         return lessTemplateLoader.load(
             themeName,
             colorScheme,
-            metadata).then(data => {
+            metadata,
+            [{ key: "@base-bg", value: "green" }]).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
                 assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
-                delete metadata["base.common"][0].Value;
-                delete metadata["base.common"][0].isModified;
             });
     });
 
@@ -236,14 +222,9 @@ describe("LessTemplateLoader", () => {
 
         let metadataVariables = {};
 
-        for(let key in metadata) {
-            if(metadata.hasOwnProperty(key)) {
-                let group = metadata[key];
-                group.forEach(groupItem => {
-                    metadataVariables[groupItem.Key.replace("@", "")] = groupItem.Key;
-                });
-            }
-        }
+        metadata.forEach(metaItem => {
+            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+        });
 
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
@@ -373,14 +354,9 @@ describe("LessTemplateLoader", () => {
 
         let metadataVariables = {};
 
-        for(let key in metadata) {
-            if(metadata.hasOwnProperty(key)) {
-                let group = metadata[key];
-                group.forEach(groupItem => {
-                    metadataVariables[groupItem.Key.replace("@", "")] = groupItem.Key;
-                });
-            }
-        }
+        metadata.forEach(metaItem => {
+            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+        });
 
         let lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
