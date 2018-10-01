@@ -1,7 +1,7 @@
 import $ from "jquery";
-import "ui/rich_text_editor";
+import "ui/html_editor";
 
-import ConverterController from "ui/rich_text_editor/converterController";
+import ConverterController from "ui/html_editor/converterController";
 
 const { test } = QUnit;
 
@@ -25,7 +25,7 @@ QUnit.module("Converter controller", () => {
 QUnit.module("Unknown converter", () => {
     test("Editor throw an error if cannot find a converter", (assert) => {
         assert.throws(
-            function() { $("#richTextEditor").dxRichTextEditor({ valueType: "Markdown" }); },
+            function() { $("#htmlEditor").dxHtmlEditor({ valueType: "Markdown" }); },
             function(e) {
                 return /E1050/.test(e.message);
             },

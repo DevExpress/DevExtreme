@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-import "ui/rich_text_editor";
+import "ui/html_editor";
 
 const MS_BULLET_LIST = "<p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt;mso-list:l1 level1 lfo1'><![if !supportLists]><span" +
 "><span style='mso-list:Ignore'>·<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
@@ -36,14 +36,14 @@ const { test } = QUnit;
 QUnit.module("Paste MS lists", () => {
     test("paste bullet list with indent", (assert) => {
         const done = assert.async();
-        const instance = $("#richTextEditor")
-            .dxRichTextEditor({
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
                 onValueChanged: (e) => {
                     assert.equal(e.value, "<ul><li>1<ul><li>2<ul><li>3</li></ul></li></ul></li></ul>");
                     done();
                 }
             })
-            .dxRichTextEditor("instance");
+            .dxHtmlEditor("instance");
 
         const newDelta = instance._quillInstance.clipboard.convert(MS_BULLET_LIST);
         instance._quillInstance.setContents(newDelta);
@@ -51,14 +51,14 @@ QUnit.module("Paste MS lists", () => {
 
     test("paste ordered list with indent", (assert) => {
         const done = assert.async();
-        const instance = $("#richTextEditor")
-            .dxRichTextEditor({
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
                 onValueChanged: (e) => {
                     assert.equal(e.value, "<ol><li>1<ol><li>2<ol><li>3</li></ol></li></ol></li></ol>");
                     done();
                 }
             })
-            .dxRichTextEditor("instance");
+            .dxHtmlEditor("instance");
 
         const newDelta = instance._quillInstance.clipboard.convert(MS_ORDERED_LIST);
         instance._quillInstance.setContents(newDelta);

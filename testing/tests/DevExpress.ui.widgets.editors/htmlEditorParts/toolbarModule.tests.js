@@ -1,15 +1,15 @@
 import $ from "jquery";
 
 import "ui/select_box";
-import Toolbar from "ui/rich_text_editor/modules/toolbar";
+import Toolbar from "ui/html_editor/modules/toolbar";
 import { noop } from "core/utils/common";
 
-const TOOLBAR_CLASS = "dx-richtexteditor-toolbar";
-const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-richtexteditor-toolbar-format";
+const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
+const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 
 const moduleConfig = {
     beforeEach: () => {
-        this.$element = $("#richTextEditor");
+        this.$element = $("#htmlEditor");
         this.log = [];
         this.quillMock = {
             format: (format, value) => {

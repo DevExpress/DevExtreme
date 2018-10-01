@@ -3,9 +3,9 @@ import $ from "jquery";
 import "common.css!";
 
 QUnit.testStart(() => {
-    var markup = '<div id="richTextEditor"></div>';
+    var markup = '<div id="htmlEditor"></div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-import "./richTextEditorParts/converterController.tests.js";
+import "./htmlEditorParts/converterController.tests.js";
