@@ -2555,6 +2555,7 @@ QUnit.testStart(function() {
             views: ["timelineWeek"],
             currentView: "timelineWeek",
             cellDuration: 60,
+            maxAppointmentsPerCell: null,
             onAppointmentRendered: function(args) {
                 assert.ok(true, "Appointment was rendered");
             },
