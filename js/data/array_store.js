@@ -59,7 +59,7 @@ var ArrayStore = Store.inherit({
     },
 
     _pushImpl: function(changes) {
-        arrayUtils.applyBatch(this, this._array, changes, null, true);
+        arrayUtils.applyBatch(this, this._array, changes);
     },
 
     _updateImpl: function(key, values) {

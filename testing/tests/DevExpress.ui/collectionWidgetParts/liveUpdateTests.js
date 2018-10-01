@@ -5,7 +5,7 @@ import { DataSource } from "data/data_source/data_source";
 function generateData(count) {
     let items = [];
     for(let i = 0; i < count; i++) {
-        items.push({ id: i, text: "text " + i });
+        items.push({ id: i, text: "text " + i, index: i + 10 });
     }
     return items;
 };
@@ -50,7 +50,7 @@ export const run = function() {
             this.onCustomizeStoreLoadOptionsSpy = sinon.spy();
             this.instance = new TestComponent(this.$element, {
                 dataSource: new DataSource({
-                    load: (e) => this.data,
+                    load: (e) => this.data.sort((a, b) => a.index - b.index),
                     loadMode: "raw",
                     pageSize: 2,
                     pushAggregationTimeout: 0,
@@ -69,11 +69,11 @@ export const run = function() {
         });
 
         QUnit.test("correct index after push insert", function(assert) {
-            this.store.push([{ type: "insert", data: { id: 200, text: "text " + 200 }, index: 0 }]);
+            this.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
             this.instance.loadNextPage();
             assert.equal(this.items().length, 5);
             assert.equal(this.items()[0].id, 200);
-            assert.equal(this.items()[4].id, 3);
+            assert.equal(this.items()[4].id, 4);
         });
 
         QUnit.test("correct index after push 'remove'", function(assert) {
@@ -85,13 +85,18 @@ export const run = function() {
         });
 
         QUnit.test("refresh correct index after reload", function(assert) {
-            this.store.push([{ type: "insert", data: { id: 200, text: "text " + 200 }, index: 0 }]);
+            this.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
             assert.equal(this.items().length, 3);
             this.instance.reload();
             assert.equal(this.items()[0].id, 200);
             assert.equal(this.items()[1].id, 0);
             assert.equal(this.items().length, 2);
             assert.equal(this.instance.itemElements().length, 2);
+        });
+
+        QUnit.test("item is pushed to the end of store's array", function(assert) {
+            this.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
+            assert.equal(this.data.pop().id, 200);
         });
     });
 };
