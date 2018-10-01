@@ -1367,8 +1367,6 @@ var FileBlobReader = Class.inherit({
     ctor: function(file, chunkSize) {
         this.file = file;
         this.chunkSize = chunkSize;
-
-        this.blobPosition = 0,
         this.index = 0;
     },
 
@@ -1376,21 +1374,24 @@ var FileBlobReader = Class.inherit({
         if(!this.file) {
             return null;
         }
-        var result = {
-            blob: this._sliceFile(this.file, this.blobPosition, this.chunkSize),
-            index: this.index,
-            isCompleted: this.blobPosition + this.chunkSize > this.file.size
-        };
-
+        var result = this.createBlobResult(this.file, this.index, this.chunkSize);
         if(result.isCompleted) {
             this.file = null;
         }
         this.index++;
-        this.blobPosition += this.chunkSize;
         return result;
     },
 
-    _sliceFile: function(file, startPos, length) {
+    createBlobResult: function(file, index, chunkSize) {
+        var currentPosition = index * chunkSize;
+        return {
+            blob: this.sliceFile(file, currentPosition, chunkSize),
+            index: index,
+            isCompleted: currentPosition + chunkSize > file.size
+        };
+    },
+
+    sliceFile: function(file, startPos, length) {
         if(file.slice) {
             return file.slice(startPos, startPos + length);
         }
