@@ -4,27 +4,14 @@ class MetadataRepository {
         this.metadataLoader = metadataLoader;
     }
 
-    findDataItemInGroupItems(key, items) {
-        let result = null;
-        items.forEach(item => {
-            if(item.Key === key) {
-                result = item;
-                return false;
-            }
-        });
-
-        return result;
-    };
-
     getDataItemByKey(key, theme) {
         let result = null;
-        let themeData = this.repositoryData[theme.name + "-" + theme.colorScheme];
+        const themeData = this.repositoryData[theme.name + "-" + theme.colorScheme];
 
-        for(let theme in themeData) {
-            if(themeData.hasOwnProperty(theme)) {
-                let groups = themeData[theme];
-                result = this.findDataItemInGroupItems(key, groups);
-                if(result) break;
+        for(let i = 0; i < themeData.length; i++) {
+            if(themeData[i].Key === key) {
+                result = themeData[i];
+                break;
             }
         }
 

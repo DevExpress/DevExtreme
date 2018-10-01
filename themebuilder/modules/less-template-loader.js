@@ -98,21 +98,20 @@ class LessTemplateLoader {
         this.version = version;
     }
 
-    load(theme, colorScheme, metadata) {
+    load(theme, colorScheme, metadata, modifiedItems) {
         return this._loadLess(theme, colorScheme).then(less => {
-            let modifyVars = {};
-            let metadataVariables = {};
-            for(let key in metadata) {
-                if(metadata.hasOwnProperty(key)) {
-                    let group = metadata[key];
-                    group.forEach(groupItem => {
-                        if(groupItem.isModified) {
-                            modifyVars[groupItem.Key.replace("@", "")] = groupItem.Value;
-                        }
-                        metadataVariables[groupItem.Key.replace("@", "")] = groupItem.Key;
-                    });
-                }
+            const modifyVars = {};
+            const metadataVariables = {};
+
+            if(Array.isArray(modifiedItems)) {
+                modifiedItems.forEach(item => {
+                    modifyVars[item.key.replace("@", "")] = item.value;
+                });
             }
+
+            metadata.forEach((metaItem => {
+                metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+            }));
 
             return this.compileLess(less, modifyVars, metadataVariables);
         });
@@ -198,14 +197,9 @@ class LessTemplateLoader {
                 this._loadLess(theme, colorScheme).then(less => {
                     let metadataVariables = {};
 
-                    for(let key in metadata) {
-                        if(metadata.hasOwnProperty(key)) {
-                            let group = metadata[key];
-                            group.forEach(groupItem => {
-                                metadataVariables[groupItem.Key.replace("@", "")] = groupItem.Key;
-                            });
-                        }
-                    }
+                    metadata.forEach(metaItem => {
+                        metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+                    });
 
                     this.compileLess(less, modifyVars, metadataVariables).then(data => {
                         resolve({
