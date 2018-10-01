@@ -4613,6 +4613,39 @@ QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetai
     assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr").eq(1).children().eq(1).hasClass("dx-editor-cell"), "second cell of the second row is edited");
 });
 
+QUnit.testInActiveWindow("Edit row after enter key when alloUpdating as function", function(assert) {
+    // arrange
+    setupModules(this);
+
+    // act
+    this.options.editing = {
+        mode: "row",
+        allowUpdating: function(options) {
+            return options.row.rowIndex % 2 === 0;
+        }
+    };
+    this.gridView.render($("#container"));
+
+    this.focusFirstCell();
+
+    // act
+    this.triggerKeyDown("enter");
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "edit row index");
+
+    // arrange
+    this.editingController.cancelEditData();
+    this.triggerKeyDown("downArrow");
+
+    // act
+    this.triggerKeyDown("enter");
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, -1, "edit row index");
+});
+
+
 QUnit.module("Rows view", {
     beforeEach: function() {
         this.items = [

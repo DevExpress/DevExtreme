@@ -51,11 +51,10 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
 
         _isDefaultButtonVisible: function(button, options) {
             var result = this.callBase.apply(this, arguments),
-                row = options.row,
-                editingOptions = this.option("editing");
+                row = options.row;
 
             if(button.name === "add") {
-                return editingOptions.allowAdding && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.inserted);
+                return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.inserted);
             }
 
             return result;
@@ -129,6 +128,10 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             parentIdSetter(options.data, parentKey);
 
             this.callBase.apply(this, arguments);
+        },
+
+        allowAdding: function(options) {
+            return this._allowEditAction("allowAdding", options);
         }
     };
 })());
