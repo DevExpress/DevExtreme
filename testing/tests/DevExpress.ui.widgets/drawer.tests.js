@@ -226,6 +226,27 @@ QUnit.test("toggle() method", assert => {
     assert.equal(instance.option("opened"), opened, "panel was hidden");
 });
 
+QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "shrink"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("position", "right");
+    let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
+    let $content = $wrapper.children();
+
+    assert.ok($content.eq(1).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(0).hasClass("dx-drawer-content"));
+
+    instance.option("position", "left");
+
+    $content = $wrapper.children();
+
+    assert.ok($content.eq(0).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(1).hasClass("dx-drawer-content"));
+});
+
 QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if panel isn't visible", assert => {
