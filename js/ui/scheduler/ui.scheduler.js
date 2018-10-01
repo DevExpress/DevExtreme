@@ -307,13 +307,6 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
-                * @hidden
-                * @name dxSchedulerOptions.views.forceMaxAppointmentPerCell
-                * @type boolean
-                * @default false
-                */
-
-            /**
                 * @name dxSchedulerOptions.currentView
                 * @type Enums.SchedulerViewType
                 * @default "day"
@@ -2065,10 +2058,6 @@ var Scheduler = Widget.inherit({
 
     getMaxAppointmentsPerCell: function() {
         return this._getCurrentViewOption("maxAppointmentsPerCell");
-    },
-
-    forceMaxAppointmentPerCell: function() {
-        return this._getCurrentViewOption("forceMaxAppointmentPerCell");
     },
 
     _createPopup: function(appointmentData, processTimeZone) {
