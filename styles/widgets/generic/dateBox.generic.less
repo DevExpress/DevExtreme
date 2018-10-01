@@ -50,9 +50,6 @@
     }
 }
 
-@GENERIC_DATEBOX_SHADOW_RADIUS: 7px;
-@GENERIC_DATEBOX_SHADOW: 0px 1px @GENERIC_DATEBOX_SHADOW_RADIUS @datebox-dropdowneditor-button-active-shadow-color;
-
 .dx-datebox-calendar {
     .dx-dropdowneditor-icon {
         .dx-icon-event();
@@ -60,8 +57,6 @@
     }
 
     &.dx-dropdowneditor-active {
-        .box-shadow(@GENERIC_DATEBOX_SHADOW);
-
         .dx-texteditor-input {
             background: @texteditor-hover-bg; // TODO: Use active state const instead
         }
