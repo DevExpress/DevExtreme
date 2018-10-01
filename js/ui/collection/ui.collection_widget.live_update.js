@@ -97,7 +97,7 @@ export default CollectionWidget.inherit({
 
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
         when(isPartialRefresh || arrayUtils.insert(keyInfo, items, change.data, change.index)).done(() => {
-            this._renderItem(isDefined(change.index) ? change.index : items.length - 1, change.data);
+            this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
             this._correctionIndex++;
         });
     },
