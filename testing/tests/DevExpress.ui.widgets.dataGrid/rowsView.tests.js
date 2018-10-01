@@ -6395,7 +6395,7 @@ QUnit.module('Scrollbar', {
         this.createRowsView = createRowsView;
     },
     afterEach: function() {
-        this.dataGrid.dispose();
+        this.dataGrid && this.dataGrid.dispose();
     }
 });
 
