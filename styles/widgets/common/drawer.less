@@ -43,8 +43,10 @@
 }
 
 .dx-drawer-push {
-    .dx-drawer-panel-content {
-        z-index: 0;
+    &.dx-drawer-bottom {
+        .dx-drawer-panel-content {
+            top: auto;
+        }
     }
 }
 
@@ -65,7 +67,8 @@
         flex: 1 1 auto;
     }
 
-    &.dx-drawer-top {
+    &.dx-drawer-top,
+    &.dx-drawer-bottom {
         .dx-drawer-wrapper {
             flex-direction: column;
         }
