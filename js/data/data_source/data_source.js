@@ -852,7 +852,7 @@ var DataSource = Class.inherit({
                 groupLevel = Array.isArray(group) ? group.length : 1;
             }
 
-            arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel);
+            arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
             this.fireEvent("changed", [{ changes: changes }]);
         }
     },
