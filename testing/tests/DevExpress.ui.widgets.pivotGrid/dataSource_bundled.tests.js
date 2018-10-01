@@ -10,6 +10,7 @@ var $ = require("jquery"),
     RemoteStore = require("ui/pivot_grid/remote_store"),
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     setFieldProperty = pivotGridUtils.setFieldProperty,
+    browser = require("core/utils/browser"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
 require("../../../testing/content/orders.js");
