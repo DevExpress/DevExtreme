@@ -37,7 +37,8 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _focusRowByIndex: function(index) {
-            var rowKey = this._dataController.getKeyByRowIndex(index);
+            var localIndex = index - this._dataController.getRowIndexOffset(),
+                rowKey = this._dataController.getKeyByRowIndex(localIndex);
             if(isDefined(rowKey) && !this.isRowFocused(rowKey)) {
                 this.option("focusedRowKey", rowKey);
             }
@@ -47,8 +48,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 dataController = this.getController("data"),
                 rowsView = this.getView("rowsView"),
-                rowIndex = this.option("focusedRowIndex"),
-                key = key !== undefined ? key : this.option("focusedRowKey");
+                rowIndex = this.option("focusedRowIndex");
+
+            key = key !== undefined ? key : this.option("focusedRowKey");
 
             if(!this.option("focusedRowEnabled")) {
                 return;
@@ -95,12 +97,13 @@ exports.FocusController = core.ViewController.inherit((function() {
         _handleDataChanged: function(e) {
             var focusedRowKey = this.option("focusedRowKey"),
                 focusedRowIndex = this.option("focusedRowIndex"),
+                keyboardController = this.getController("keyboardNavigation"),
                 dataController = this.getController("data");
 
             if(focusedRowKey !== undefined) {
                 focusedRowIndex = dataController.getRowIndexByKey(focusedRowKey);
                 if(focusedRowIndex >= 0) {
-                    this._keyboardController.setFocusedRowIndex(focusedRowIndex);
+                    keyboardController.setFocusedRowIndex(focusedRowIndex);
                 } else {
                     this._focusRowByKey(focusedRowKey);
                 }
@@ -111,11 +114,14 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         isRowFocused: function(key, index) {
-            var focusedRowKey = this.option("focusedRowKey");
+            var focusedRowKey = this.option("focusedRowKey"),
+                focusedRowIndex;
+
             if(focusedRowKey !== undefined) {
                 return equalByValue(key, this.option("focusedRowKey"));
             }
-            return this.option("focusedRowIndex") === index;
+            focusedRowIndex = this.getController("keyboardNavigation").getFocusedRowIndex();
+            return focusedRowIndex === index;
         },
 
         _resetFocusedRowKey: function() {
@@ -124,7 +130,8 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         updateFocusedRow: function(change) {
             var that = this,
-                focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
+                offset = this._dataController.getRowIndexOffset(),
+                focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey) - offset,
                 rowsView = that.getView("rowsView"),
                 $tableElement;
 
@@ -203,13 +210,6 @@ module.exports = {
 
     extenders: {
         controllers: {
-            data: {
-                _applyChange: function(change) {
-                    if(change && change.changeType === "updateFocusedRow") return;
-
-                    return this.callBase.apply(this, arguments);
-                }
-            },
             keyboardNavigation: {
                 init: function() {
                     var rowIndex = this.option("focusedRowIndex"),
@@ -269,15 +269,39 @@ module.exports = {
             editorFactory: {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),
-                        focusedRowEnabled = this.option("focusedRowEnabled");
+                        focusedRowEnabled = this.option("focusedRowEnabled"),
+                        focusedRowIndex = keyboardController.getFocusedRowIndex();
 
-                    if(!focusedRowEnabled || keyboardController.isCellFocusType()) {
-                        this.callBase($element, hideBorder);
+                    if(focusedRowEnabled && (!isDefined(focusedRowIndex) || focusedRowIndex < 0)) {
+                        this.focusFirstRow($element);
                     }
+                    this.callBase($element, hideBorder);
+                },
+
+                focusFirstRow: function($element) {
+                    var keyboardController = this.getController("keyboardNavigation"),
+                        columnIndex = keyboardController.getFocusedColumnIndex(),
+                        focusedRowKey;
+
+                    if(!isDefined(columnIndex) || columnIndex < 0) {
+                        columnIndex = 0;
+                    }
+                    keyboardController.setFocusedCellPosition(0, columnIndex);
+                    focusedRowKey = this.getController("data").getKeyByRowIndex(0);
+                    this.getController("focus")._triggerUpdateFocusedRow(focusedRowKey);
+                    keyboardController.focus($element);
                 }
             },
 
             data: {
+                data: {
+                    _applyChange: function(change) {
+                        if(change && change.changeType === "updateFocusedRow") return;
+
+                        return this.callBase.apply(this, arguments);
+                    }
+                },
+
                 _fireChanged: function(e) {
                     var operationTypes,
                         focusController;
@@ -306,16 +330,18 @@ module.exports = {
                 getPageIndexByKey: function(key) {
                     var that = this,
                         dataSource = that._dataSource,
-                        d = new Deferred();
+                        d = new Deferred(),
+                        filter = that._generateFilterByKey(key);
 
                     dataSource.load({
-                        filter: that._generateFilterByKey(key),
+                        filter: that._concatWithCombinedFilter(filter),
                         skip: 0,
                         take: 1
                     }).done(function(data) {
                         if(data.length > 0) {
+                            filter = that._generateOperationFilterByKey(key, data[0]);
                             dataSource.load({
-                                filter: that._generateOperationFilterByKey(key, data[0]),
+                                filter: that._concatWithCombinedFilter(filter),
                                 skip: 0,
                                 take: 1,
                                 requireTotalCount: true
@@ -327,6 +353,13 @@ module.exports = {
                     });
 
                     return d.promise();
+                },
+                _concatWithCombinedFilter: function(filter) {
+                    var combinedFilter = this.getCombinedFilter();
+                    if(combinedFilter && combinedFilter.length) {
+                        filter = [[filter], "and", combinedFilter];
+                    }
+                    return filter;
                 },
                 _generateOperationFilterByKey: function(key, rowData) {
                     var that = this,

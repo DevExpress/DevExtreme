@@ -273,6 +273,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     getFocusedRowIndex: function() {
         if(this._focusedCellPosition) {
+            if(!this._focusedCellPosition.rowIndex) {
+                return this._focusedCellPosition.rowIndex;
+            }
             return this._focusedCellPosition.rowIndex - this._dataController.getRowIndexOffset();
         }
         return null;
@@ -1120,7 +1123,7 @@ module.exports = {
                     cellElements = that.getCellElements(rowIndex);
 
                     if(that.option("useKeyboard") && cellElements) {
-                        this._updateFocusElementTabIndex(cellElements);
+                        that._updateFocusElementTabIndex(cellElements);
                     }
                 },
                 _updateFocusElementTabIndex: function(cellElements) {

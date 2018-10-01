@@ -761,6 +761,60 @@ QUnit.test("Get page index by composite key with sorting by unbound column", fun
     });
 });
 
+QUnit.test("Get page index by simple key if combined filter present", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 25 },
+        { team: 'internal', name: 'Den', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true }
+    );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    assert.equal(this.dataController.pageCount(), 2);
+    this.dataController.getPageIndexByKey("Bob").done(function(pageIndex) {
+        assert.equal(pageIndex, 1);
+    });
+});
+
+QUnit.test("Get page index by composite key if combined filter present", function(assert) {
+    // arrange
+    var dataController,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 25 },
+            { team: 'internal', name: 'Bob', age: 24 },
+            { team: 'internal', name: 'Bob', age: 23 },
+            { team: 'internal', name: 'Bob', age: 22 },
+            { team: 'internal', name: 'Den', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+            { key: [ 'name', 'age' ] },
+            { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true, sort: [ "name", "age" ] }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getPageIndexByKey({ name: "Bob", age: 24 }).done(function(pageIndex) {
+        assert.equal(dataController.pageCount(), 5);
+        assert.equal(pageIndex, 3);
+    });
+});
+
 // B254274
 QUnit.test("sortOrder in column options and group parameters in dataSource", function(assert) {
     // arrange
