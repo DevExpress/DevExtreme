@@ -117,7 +117,12 @@ const Drawer = Widget.inherit({
             */
             contentTemplate: "content",
 
+            /**
+            * @name dxDrawerOptions.target
+            * @type string|Node|jQuery
+            */
             target: undefined,
+
             /**
             * @name dxDrawerOptions.onContentReady
             * @hidden true
