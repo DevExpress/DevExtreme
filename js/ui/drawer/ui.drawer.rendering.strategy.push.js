@@ -7,15 +7,22 @@ class PushStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
         super.renderPosition(offset, animate);
 
-        $(this._drawer.viewContent()).css("paddingLeft", 0);
-        $(this._drawer.content()).css("width", this._getPanelSize(true));
+        const $element = $(this._drawer.viewContent());
+        const maxSize = this._getPanelSize(true);
+
+        if(this._drawer._isHorizontalDirection()) {
+            $(this._drawer.content()).css("width", maxSize);
+        } else {
+            $(this._drawer.content()).css("height", maxSize);
+        }
 
         const contentPosition = this._getPanelSize(offset) * this._drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = {
-                $element: $(this._drawer.viewContent()),
+                $element: $element,
                 position: contentPosition,
+                direction: this._drawer.option("position"),
                 duration: this._drawer.option("animationDuration"),
                 complete: () => {
                     this._contentAnimationResolve();
@@ -25,7 +32,11 @@ class PushStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-            translator.move($(this._drawer.viewContent()), { left: contentPosition });
+            if(this._drawer._isHorizontalDirection()) {
+                translator.move($element, { left: contentPosition });
+            } else {
+                translator.move($element, { top: contentPosition });
+            }
         }
     }
 };

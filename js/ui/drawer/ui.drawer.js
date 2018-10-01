@@ -285,11 +285,15 @@ const Drawer = Widget.inherit({
     },
 
     _orderContent(position) {
-        if(position === "right" || position === "bottom") {
+        if(this._needOrderContent() && (position === "right" || position === "bottom")) {
             this._$wrapper.prepend(this._$contentWrapper);
         } else {
             this._$wrapper.prepend(this._$panel);
         }
+    },
+
+    _needOrderContent() {
+        return this.option("openedStateMode") !== "push";
     },
 
     _refreshRevealModeClass(prevClass) {
