@@ -845,14 +845,14 @@ var DataSource = Class.inherit({
         } else {
             let group = this.group(),
                 items = this.items(),
-                groupLevel = 0;
+                groupLevel = 0,
+                dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === "update") : changes;
 
             if(group) {
-                changes = changes.filter(item => item.type === "update");
                 groupLevel = Array.isArray(group) ? group.length : 1;
             }
 
-            arrayUtils.applyBatch(this.store(), items, changes, groupLevel, true);
+            arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel);
             this.fireEvent("changed", [{ changes: changes }]);
         }
     },

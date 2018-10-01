@@ -64,13 +64,13 @@ QUnit.module("live update", {
         store.push(pushData);
 
         assert.equal(this.itemRenderedSpy.firstCall.args[0].itemIndex, 0, "index");
-        assert.equal(this.itemRenderedSpy.firstCall.args[0].itemElement, list.itemElements()[0]);
+        assert.equal($(this.itemRenderedSpy.firstCall.args[0].itemElement).get(0), list.itemElements()[0]);
 
         store.push([{ type: "update", data: { a: "Item 2 Updated", id: 2 }, key: 2 }]);
 
         assert.equal(this.itemRenderedSpy.callCount, 2, "insert & update");
         assert.equal(this.itemRenderedSpy.lastCall.args[0].itemIndex, 0, "index");
-        assert.equal(this.itemRenderedSpy.lastCall.args[0].itemElement, list.itemElements()[0]);
+        assert.equal($(this.itemRenderedSpy.lastCall.args[0].itemElement).get(0), list.itemElements()[0]);
         assert.equal(list.itemElements().length, 3, "check items elements count");
     });
 
