@@ -1,4 +1,5 @@
 import { getQuill } from "../quill_importer";
+import { ensureDefined } from "../../../core/utils/common";
 
 const quill = getQuill();
 const Embed = quill.import("blots/embed");
@@ -8,8 +9,8 @@ const PLACEHOLDER_CLASS = "dx-data-placeholder";
 class Placeholder extends Embed {
     static create(data) {
         let node = super.create(),
-            startEscapedChar = data.startEscapedChar || data.escapedChar,
-            endEscapedChar = data.endEscapedChar || data.escapedChar,
+            startEscapedChar = ensureDefined(data.startEscapedChar, data.escapedChar),
+            endEscapedChar = ensureDefined(data.endEscapedChar, data.escapedChar),
             text = data.value;
 
         node.innerText = startEscapedChar + text + endEscapedChar;

@@ -2,6 +2,7 @@ import * as QuillDeltaConverter from "quill-delta-to-html";
 
 import Errors from "../../widget/ui.errors";
 import ConverterController from "../converterController";
+import { ensureDefined } from "../../../core/utils/common";
 
 
 class DeltaConverter {
@@ -24,8 +25,8 @@ class DeltaConverter {
     }
 
     _parsePlaceholder(data) {
-        const startEscapedChar = data.startEscapedChar || data.escapedChar;
-        const endEscapedChar = data.endEscapedChar || data.escapedChar;
+        const startEscapedChar = ensureDefined(data.startEscapedChar, data.escapedChar);
+        const endEscapedChar = ensureDefined(data.endEscapedChar, data.escapedChar);
         const dataString = this._addDataParam("start-char", data.startEscapedChar) + this._addDataParam("end-char", data.endEscapedChar) +
         this._addDataParam("esc-char", data.escapedChar) + this._addDataParam("value", data.value);
 

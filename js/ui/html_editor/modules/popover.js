@@ -37,20 +37,18 @@ class ListPopoverModule extends BaseModule {
     }
 
     _getPopoverConfig() {
-        let that = this;
-
         return {
-            contentTemplate: function($content) {
-                const listConfig = that._getListConfig(that.options);
-                that.renderList($content, listConfig);
+            contentTemplate: ($content) => {
+                const listConfig = this._getListConfig(this.options);
+                this.renderList($content, listConfig);
             },
             deferRendering: false,
-            onShown: function() {
-                that._list.focus();
+            onShown: () => {
+                this._list.focus();
             },
-            onHidden: function() {
-                that._list.unselectAll();
-                that._list.option("focusedElement", null);
+            onHidden: () => {
+                this._list.unselectAll();
+                this._list.option("focusedElement", null);
             }
         };
     }

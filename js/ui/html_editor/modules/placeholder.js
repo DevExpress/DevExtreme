@@ -39,8 +39,8 @@ class PlaceholderModule extends PopoverModule {
         const position = selection ? selection.index : this.quill.getLength();
 
         this.savePosition(position);
-        this._resetPopoverPosition(event, position);
 
+        this._resetPopoverPosition(event, position);
         this._popover.show();
     }
 
@@ -48,6 +48,10 @@ class PlaceholderModule extends PopoverModule {
         if(event && event.element) {
             this._popover.option("position", {
                 of: event.element,
+                offset: {
+                    h: 0,
+                    v: 0
+                },
                 my: "top center",
                 at: "bottom center",
                 collision: "fit"
@@ -64,7 +68,7 @@ class PlaceholderModule extends PopoverModule {
                 },
                 my: "top center",
                 at: "bottom left",
-                collision: "flipfit"
+                collision: "fit flip"
             });
         }
     }
