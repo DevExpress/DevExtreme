@@ -160,11 +160,15 @@ var baseFixedColumns = {
                 }
             }
 
-            if(isEmptyCell && (that.option("legacyRendering") || column.command === "detail")) {
-                $cell
-                    .html("&nbsp;")
-                    .addClass(column.cssClass);
-                return;
+            if(isEmptyCell) {
+                if((that.option("legacyRendering") || column.command === "detail")) {
+                    $cell
+                        .html("&nbsp;")
+                        .addClass(column.cssClass);
+                    return;
+                } else {
+                    $cell.addClass("dx-hidden-cell");
+                }
             }
         }
 
