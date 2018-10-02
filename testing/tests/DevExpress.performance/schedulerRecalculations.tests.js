@@ -161,6 +161,7 @@ QUnit.performanceTest("dxScheduler timelineDay view should force minimum relayou
         $("#element").dxScheduler({
             views: ["timelineDay"],
             currentView: "timelineDay",
+            maxAppointmentsPerCell: null,
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
             showCurrentTimeIndicator: false
@@ -176,6 +177,7 @@ QUnit.performanceTest("dxScheduler timelineWeek view should force minimum relayo
         $("#element").dxScheduler({
             views: ["timelineWeek"],
             currentView: "timelineWeek",
+            maxAppointmentsPerCell: null,
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
             showCurrentTimeIndicator: false
@@ -191,6 +193,7 @@ QUnit.performanceTest("dxScheduler timelineWorkWeek view should force minimum re
         $("#element").dxScheduler({
             views: ["timelineWorkWeek"],
             currentView: "timelineWorkWeek",
+            maxAppointmentsPerCell: null,
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
             showCurrentTimeIndicator: false
@@ -206,6 +209,7 @@ QUnit.performanceTest("dxScheduler timelineMonth view should force minimum relay
         $("#element").dxScheduler({
             views: ["timelineMonth"],
             currentView: "timelineMonth",
+            maxAppointmentsPerCell: null,
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
             showCurrentTimeIndicator: false
