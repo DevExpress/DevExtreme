@@ -1363,6 +1363,45 @@ FileUploader.__internals = {
 };
 ///#ENDDEBUG
 
+var FileBlobReader = Class.inherit({
+    ctor: function(file, chunkSize) {
+        this.file = file;
+        this.chunkSize = chunkSize;
+        this.index = 0;
+    },
+
+    read: function() {
+        if(!this.file) {
+            return null;
+        }
+        var result = this.createBlobResult(this.file, this.index, this.chunkSize);
+        if(result.isCompleted) {
+            this.file = null;
+        }
+        this.index++;
+        return result;
+    },
+
+    createBlobResult: function(file, index, chunkSize) {
+        var currentPosition = index * chunkSize;
+        return {
+            blob: this.sliceFile(file, currentPosition, chunkSize),
+            index: index,
+            isCompleted: currentPosition + chunkSize >= file.size
+        };
+    },
+
+    sliceFile: function(file, startPos, length) {
+        if(file.slice) {
+            return file.slice(startPos, startPos + length);
+        }
+        if(file.webkitSlice) {
+            return file.webkitSlice(startPos, startPos + length);
+        }
+        return null;
+    }
+});
+
 var FileUploadStrategyBase = Class.inherit({
     ctor: function(fileUploader) {
         this.fileUploader = fileUploader;
@@ -1452,6 +1491,7 @@ var FileUploadStrategyBase = Class.inherit({
         };
     }
 });
+
 var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
     ctor: function(fileUploader) {
         this.callBase(fileUploader);
@@ -1464,7 +1504,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
             name: realFile.name,
             loadedBytes: 0,
             type: realFile.type,
-            chunks: this._createChunkArray(realFile),
+            blobReader: new FileBlobReader(realFile, this.chunkSize),
             guid: new Guid(),
             fileSize: realFile.size,
             count: Math.ceil(realFile.size / this.chunkSize)
@@ -1472,7 +1512,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
     },
 
     _sendChunk: function(file, chunksData) {
-        var chunk = chunksData.chunks.shift();
+        var chunk = chunksData.blobReader.read();
         if(chunk) {
             chunksData.loadedBytes += chunk.blob.size;
             ajax.sendRequest({
@@ -1491,7 +1531,6 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
                     },
                     "onabort": function() {
                         file.onAbort.fire();
-                        chunksData.chunks = [];
                     }
                 },
                 data: this._createFormData({
@@ -1509,7 +1548,8 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
                     loaded: chunksData.loadedBytes,
                     total: file.value.size
                 });
-                if(chunksData.chunks.length === 0) {
+
+                if(chunk.isCompleted) {
                     file.onLoad.fire();
                 }
                 this._sendChunk(file, chunksData);
@@ -1518,7 +1558,6 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
                     file._isError = true;
                     file.onError.fire();
                 }
-                chunksData.chunks = [];
             }.bind(this));
         }
     },
@@ -1535,31 +1574,6 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
             FileGuid: options.guid
         }));
         return formData;
-    },
-
-    _createChunkArray: function(file) {
-        var blobPosition = 0,
-            chunkIndex = 0,
-            result = [];
-        while(blobPosition <= file.size) {
-            result.push({
-                blob: this._sliceFile(file, blobPosition, this.chunkSize),
-                index: chunkIndex
-            });
-            blobPosition += this.chunkSize;
-            chunkIndex++;
-        }
-        return result;
-    },
-
-    _sliceFile: function(file, startPos, length) {
-        if(file.slice) {
-            return file.slice(startPos, startPos + length);
-        }
-        if(file.webkitSlice) {
-            return file.webkitSlice(startPos, startPos + length);
-        }
-        return null;
     },
 
     _getEvent: function(e) {
