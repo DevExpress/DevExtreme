@@ -336,6 +336,8 @@ var DataSource = Class.inherit({
                 /**
                  * @name DataSourceOptions.onChanged
                  * @type function
+                 * @type_function_param1 e:Object
+                 * @type_function_param1_field1 changes::Array<any>
                  * @action
                  */
                 "onChanged",
@@ -736,7 +738,7 @@ var DataSource = Class.inherit({
 
         deferred.done(function() {
             var date = new Date();
-            that.fireEvent("changed");
+            that.fireEvent("changed", [{}]);
             that._changedTime = new Date() - date;
         });
     },
