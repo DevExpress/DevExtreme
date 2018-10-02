@@ -270,13 +270,7 @@ var ExcelCreator = Class.inherit({
         this._xlsxFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            const formatCode = that._tryConvertToXlsxFormatCode(
-                // Pivot: this.getDataSource().getAreaFields("data")[i].format
-                // Grid: column.format
-                style.format,
-                // Pivot: getCellDataType(this.getDataSource().getAreaFields("data")[i])
-                // Grid: getVisibleColumns(i, true).dataType
-                style.dataType);
+            const formatCode = that._tryConvertToXlsxFormatCode(style.format, style.dataType);
             let numberFormat = typeUtils.isDefined(formatCode) ? { formatCode } : 0;
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
