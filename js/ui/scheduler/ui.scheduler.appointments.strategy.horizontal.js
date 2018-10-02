@@ -56,7 +56,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _customizeAppointmentGeometry: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        if(overlappingMode && this.instance.fire("forceMaxAppointmentPerCell")) {
+        if(overlappingMode) {
             var config = this._calculateGeometryConfig(coordinates);
 
             return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
@@ -89,7 +89,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _checkLongCompactAppointment: function(item, result) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        if(overlappingMode && this.instance.fire("forceMaxAppointmentPerCell")) {
+        if(overlappingMode) {
             this._splitLongCompactAppointment(item, result);
 
             return result;

@@ -221,7 +221,7 @@ QUnit.test("Phantom appointment should have correct template", function(assert) 
     var instance = $("#scheduler").dxScheduler({
         editing: true,
         height: 600,
-        views: [{ type: "timelineDay", forceMaxAppointmentPerCell: true, maxAppointmentsPerCell: 1 }],
+        views: [{ type: "timelineDay", maxAppointmentsPerCell: 1 }],
         currentView: "timelineDay",
         dataSource: [{
             text: "Task 1",

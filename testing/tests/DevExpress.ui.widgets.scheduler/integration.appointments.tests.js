@@ -4974,7 +4974,7 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
 QUnit.test("DropDown appointment button should have correct width on timeline view", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
-        views: [{ type: "timelineDay", name: "timelineDay", forceMaxAppointmentPerCell: true }],
+        views: [{ type: "timelineDay", name: "timelineDay" }],
         width: 850,
         maxAppointmentsPerCell: 2,
         currentView: "timelineDay"
@@ -4998,7 +4998,7 @@ QUnit.test("DropDown appointment button should have correct width on timeline vi
 QUnit.test("dropDown appointment should not compact class on vertical view", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
-        views: [{ type: "week", name: "week", forceMaxAppointmentPerCell: true }],
+        views: [{ type: "week", name: "week" }],
         currentView: "week",
         maxAppointmentsPerCell: 'auto'
     });
