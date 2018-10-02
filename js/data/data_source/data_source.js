@@ -738,7 +738,7 @@ var DataSource = Class.inherit({
 
         deferred.done(function() {
             var date = new Date();
-            that.fireEvent("changed", [{}]);
+            that.fireEvent("changed");
             that._changedTime = new Date() - date;
         });
     },
