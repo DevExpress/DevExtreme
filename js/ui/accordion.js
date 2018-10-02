@@ -270,13 +270,9 @@ var Accordion = CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _deleteItemElement: function($item, deletedActionArgs, index) {
+    _afterItemElementDeleted: function($item, deletedActionArgs) {
+        this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
         this.callBase.apply(this, arguments);
-
-        this._deferredItems.splice(index, 1);
-        if(this._selection.isItemSelected(this.keyOf(deletedActionArgs.itemData))) {
-            this.option("selectedItemKeys", extend({}, this.option("selectedItemKeys")));
-        }
     },
 
     _renderItemContent: function(args) {

@@ -806,23 +806,22 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._selection.deselect([key]);
     },
 
-    _deleteItemElement: function($item, deletedActionArgs, index, skipDeleteItem) {
-        var changingOption = this._dataSource ? "dataSource" : "items";
+    _deleteItemElementByIndex: function(index) {
         this._updateSelectionAfterDelete(index);
         this._updateIndicesAfterIndex(index);
-        skipDeleteItem || this._editStrategy.deleteItemAtIndex(index);
-        this._simulateOptionChange(changingOption);
-        this._fireDeleted($item, deletedActionArgs);
-        this._renderEmptyMessage();
+        this._editStrategy.deleteItemAtIndex(index);
     },
 
-    _fireDeleted: function($item, deletedActionArgs) {
+    _afterItemElementDeleted: function($item, deletedActionArgs) {
+        var changingOption = this._dataSource ? "dataSource" : "items";
+        this._simulateOptionChange(changingOption);
         this._itemEventHandler($item, "onItemDeleted", deletedActionArgs, {
             beforeExecute: function() {
                 $item.detach();
             },
             excludeValidators: ["disabled", "readOnly"]
         });
+        this._renderEmptyMessage();
     },
 
     /**
@@ -845,7 +844,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 $item.addClass(itemResponseWaitClass);
                 var deletedActionArgs = that._extendActionArgs($item);
                 that._deleteItemFromDS($item).done(function() {
-                    that._deleteItemElement($item, deletedActionArgs, index);
+                    that._deleteItemElementByIndex(index);
+                    that._afterItemElementDeleted($item, deletedActionArgs);
                     that._tryRefreshLastPage().done(function() {
                         deferred.resolveWith(that);
                     });
