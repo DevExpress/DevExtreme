@@ -337,7 +337,7 @@ var DataSource = Class.inherit({
                  * @name DataSourceOptions.onChanged
                  * @type function
                  * @type_function_param1 e:Object
-                 * @type_function_param1_field1 changes::Array<any>
+                 * @type_function_param1_field1 changes:Array<any>
                  * @action
                  */
                 "onChanged",
