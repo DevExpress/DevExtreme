@@ -6,6 +6,10 @@ define(function(require) {
         return;
     }
 
+    var browser = require("core/utils/browser");
+
+    if(browser.msie && parseInt(browser.version) >= 17) return;
+
     var $ = require("jquery"),
         DATA_SOURCE_URL = "http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll",
         pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
