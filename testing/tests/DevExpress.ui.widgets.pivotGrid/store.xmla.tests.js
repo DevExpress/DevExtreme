@@ -4282,6 +4282,22 @@ define(function(require) {
         assert.ok(query.indexOf("{[Ship Date].[Calendar Bla Bla].&[2002]}") >= 0, "Descendants argument has full key");
     });
 
+    QUnit.test("T675232. Build a correct filter query when a member has empty key", function(assert) {
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Category]",
+                filterValues: ["[Product].[Category]&"],
+                filterType: "include"
+            }],
+            rows: [],
+            values: []
+        });
+
+        var filterExpr = this.getQuery().match(/\(select(.+?)on 0/gi);
+
+        assert.deepEqual(filterExpr, ["(SELECT {[Product].[Category].[Product].[Category]&}on 0"]);
+    });
+
     QUnit.module("getDrillDownItems", stubsEnvironment);
 
     QUnit.test("getDrillDownItems with empty paths", function(assert) {
