@@ -217,6 +217,12 @@ var SelectBox = DropDownList.inherit({
             allowClearing: true,
 
             tooltipEnabled: false,
+
+            /**
+             * @name dxSelectBoxOptions.openOnFieldClick
+             * @type boolean
+             * @default true
+             */
             openOnFieldClick: true,
 
             /**
