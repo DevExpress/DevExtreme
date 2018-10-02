@@ -543,11 +543,7 @@ var Overlay = Widget.inherit({
             isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target),
             outsideClick = isAttachedTarget && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
-        if(!outsideClick) {
-            return false;
-        }
-
-        if(closeOnOutsideClick) {
+        if(outsideClick && closeOnOutsideClick) {
             if(this.option("shading")) {
                 e.preventDefault();
             }
