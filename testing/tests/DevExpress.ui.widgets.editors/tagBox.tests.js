@@ -5063,3 +5063,39 @@ QUnit.test("Items is not selected when values is set on the onSelectAllValueChan
     var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
     assert.equal(selectedItems.length, 4, "selected items");
 });
+
+QUnit.test("Read only TagBox should be able to render the multitag", function(assert) {
+    assert.expect(1);
+
+    try {
+        $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3, 4, 5, 6, 7],
+            placeholder: "test",
+            value: [1, 2, 3, 4],
+            readOnly: true,
+            maxDisplayedTags: 3
+        });
+    } catch(e) {
+        assert.ok(false, "Widget raise the error");
+    }
+
+    assert.ok(true, "Widget rendered");
+});
+
+QUnit.test("Disabled TagBox should be able to render the multitag", function(assert) {
+    assert.expect(1);
+
+    try {
+        $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3, 4, 5, 6, 7],
+            placeholder: "test",
+            value: [1, 2, 3, 4],
+            disabled: true,
+            maxDisplayedTags: 3
+        });
+    } catch(e) {
+        assert.ok(false, "Widget raise the error");
+    }
+
+    assert.ok(true, "Widget rendered");
+});
