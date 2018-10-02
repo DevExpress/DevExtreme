@@ -113,12 +113,13 @@ export default class XlsxFile {
         if(typeUtils.isDefined(tag)) {
             for(let i = 0; i < this._numberFormatTags.length; i++) {
                 if(xlsxNumberFormatHelper.areEqual(this._numberFormatTags[i], tag)) {
-                    result = this._convertNumberFormatIndexToId(i);
+                    result = this._numberFormatTags[i][xlsxNumberFormatHelper.ID_PROPERTY_NAME];
                     break;
                 }
             }
             if(result === undefined) {
-                result = this._convertNumberFormatIndexToId(this._numberFormatTags.length);
+                tag[xlsxNumberFormatHelper.ID_PROPERTY_NAME] = this._convertNumberFormatIndexToId(this._numberFormatTags.length);
+                result = tag[xlsxNumberFormatHelper.ID_PROPERTY_NAME];
                 this._numberFormatTags.push(tag);
             }
         }
