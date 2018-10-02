@@ -1127,7 +1127,6 @@ QUnit.module("Live Update", {
         assert.equal(this.itemRenderedSpy.callCount, 0, "items are not refreshed after remove");
         assert.equal(this.itemDeletedSpy.callCount, 1, "removed items count");
         assert.equal(this.itemDeletedSpy.firstCall.args[0].itemData.text, "1", "check removed item");
-        assert.equal(this.itemDeletedSpy.firstCall.args[0].itemData.text, "1", "check removed item");
     });
 
     QUnit.test("repaintChangesOnly, change selected index after remove", function(assert) {
