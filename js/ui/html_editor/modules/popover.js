@@ -38,9 +38,9 @@ class ListPopoverModule extends BaseModule {
 
     _getPopoverConfig() {
         return {
-            contentTemplate: ($content) => {
+            contentTemplate: (contentElem) => {
                 const listConfig = this._getListConfig(this.options);
-                this.renderList($content, listConfig);
+                this.renderList($(contentElem), listConfig);
             },
             deferRendering: false,
             onShown: () => {
@@ -70,6 +70,10 @@ class ListPopoverModule extends BaseModule {
     }
 
     insertEmbedContent(selectionChangedEvent) { }
+
+    showPopover() {
+        this._popover && this._popover.show();
+    }
 
     savePosition(position) {
         this.caretPosition = position;

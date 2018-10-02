@@ -1,5 +1,6 @@
 import { getQuill } from "../quill_importer";
 import { ensureDefined } from "../../../core/utils/common";
+import { extend } from "../../../core/utils/extend";
 
 const quill = getQuill();
 const Embed = quill.import("blots/embed");
@@ -27,12 +28,12 @@ class Placeholder extends Embed {
     }
 
     static value(node) {
-        return {
+        return extend({}, {
             value: node.dataset.placeholderValue,
             escapedChar: node.dataset.placeholderEscChar,
             startEscapedChar: node.dataset.placeholderStartChar,
             endEscapedChar: node.dataset.placeholderEndChar
-        };
+        });
     }
 }
 

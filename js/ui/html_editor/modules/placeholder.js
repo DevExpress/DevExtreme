@@ -41,7 +41,7 @@ class PlaceholderModule extends PopoverModule {
         this.savePosition(position);
 
         this._resetPopoverPosition(event, position);
-        this._popover.show();
+        super.showPopover();
     }
 
     _resetPopoverPosition(event, position) {
@@ -77,12 +77,12 @@ class PlaceholderModule extends PopoverModule {
     insertEmbedContent(selectionChangedEvent) {
         const caretPosition = this.getPosition();
         const selectedItem = selectionChangedEvent.component.option("selectedItem");
-        const placeholderData = {
+        const placeholderData = extend({}, {
             value: selectedItem,
             escapedChar: this.options.escapedChar,
             startEscapedChar: this.options.startEscapedChar,
             endEscapedChar: this.options.endEscapedChar
-        };
+        });
 
         setTimeout(function() {
             this.quill.insertEmbed(caretPosition, "placeholder", placeholderData);
