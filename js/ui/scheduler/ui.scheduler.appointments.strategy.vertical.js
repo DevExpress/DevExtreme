@@ -111,6 +111,12 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             left = appointmentSettings.left + this._defaultWidth;
 
         if(tailHeight) {
+            var minHeight = this.getAppointmentMinSize();
+
+            if(tailHeight < minHeight) {
+                tailHeight = minHeight;
+            }
+
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
                 left: left,
