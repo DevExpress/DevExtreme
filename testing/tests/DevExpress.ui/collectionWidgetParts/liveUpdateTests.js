@@ -48,6 +48,7 @@ export const run = function() {
             this.data = generateData(10);
             this.items = () => this.instance.option("items");
             this.onCustomizeStoreLoadOptionsSpy = sinon.spy();
+            this.onItemDeletingSpy = sinon.spy();
             this.instance = new TestComponent(this.$element, {
                 dataSource: new DataSource({
                     load: (e) => this.data.sort((a, b) => a.index - b.index),
@@ -56,7 +57,8 @@ export const run = function() {
                     pushAggregationTimeout: 0,
                     onCustomizeStoreLoadOptions: this.onCustomizeStoreLoadOptionsSpy,
                     key: "id"
-                })
+                }),
+                onItemDeleting: this.onItemDeletingSpy
             });
             this.store = this.instance.getDataSource().store();
         }
@@ -82,6 +84,12 @@ export const run = function() {
             assert.equal(this.items().length, 3);
             assert.equal(this.items()[0].id, 1);
             assert.equal(this.items()[2].id, 3);
+        });
+
+        QUnit.test("fire deleting event after push 'remove'", function(assert) {
+            assert.equal(this.onItemDeletingSpy.callCount, 0);
+            this.store.push([{ type: "remove", key: 0 }]);
+            assert.equal(this.onItemDeletingSpy.callCount, 1);
         });
 
         QUnit.test("refresh correct index after reload", function(assert) {

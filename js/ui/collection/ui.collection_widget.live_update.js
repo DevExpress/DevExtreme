@@ -108,7 +108,18 @@ export default CollectionWidget.inherit({
         if(removedItem) {
             let $removedItemElement = this._findItemElementByKey(change.key),
                 deletedActionArgs = this._extendActionArgs($removedItemElement);
-            this._deleteItemElement($removedItemElement, deletedActionArgs, index);
+
+            this._waitDeletingPrepare($removedItemElement).done(()=>{
+                if(isPartialRefresh) {
+                    this._updateIndicesAfterIndex(index - 1);
+                    this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
+                    this._normalizeSelectedItems();
+                } else {
+                    this._deleteItemElementByIndex(index);
+                    this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
+                }
+            });
+
             this._correctionIndex--;
         }
     },
