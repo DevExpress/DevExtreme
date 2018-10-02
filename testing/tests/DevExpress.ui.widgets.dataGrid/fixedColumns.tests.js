@@ -169,10 +169,13 @@ QUnit.test("Draw fixed table for rowsView", function(assert) {
 
     assert.equal($table.find("tbody > tr").first().find("td").length, 5, "count column");
     assert.strictEqual($cells.first().text(), "test4", "fixed a first column");
+    assert.strictEqual($cells.first().hasClass("dx-hidden-cell"), true, "fixed a first cell is hidden"); // T674528
     assert.strictEqual($cells.eq(1).text(), "test1", "second column");
+    assert.strictEqual($cells.eq(1).hasClass("dx-hidden-cell"), false, "second cell is not hidden");
     assert.strictEqual($cells.eq(2).text(), "test3", "third column");
     assert.strictEqual($cells.eq(3).text(), "test5", "fourth column");
     assert.strictEqual($cells.last().text(), "test2", "fixed a fifth column");
+    assert.strictEqual($cells.last().hasClass("dx-hidden-cell"), true, "fixed a fifth cell is hidden");
 
     $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     $fixedCells = $fixTable.find("tbody > tr").first().find("td");
