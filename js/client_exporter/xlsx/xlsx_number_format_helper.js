@@ -31,11 +31,13 @@ const xlsxNumberFormatHelper = {
 
     toXml: function(tag) {
         // §18.8.30 numFmt (Number Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        const attributes = {
-            'numFmtId': tag[xlsxNumberFormatHelper.ID_PROPERTY_NAME],
-            formatCode: tag.formatCode // §21.2.2.71 formatCode (Format Code), §18.8.31 numFmts (Number Formats)
-        };
-        return xlsxTagHelper.toXml("numFmt", attributes);
+        return xlsxTagHelper.toXml(
+            "numFmt",
+            {
+                'numFmtId': tag[xlsxNumberFormatHelper.ID_PROPERTY_NAME],
+                formatCode: tag.formatCode // §21.2.2.71 formatCode (Format Code), §18.8.31 numFmts (Number Formats)
+            }
+        );
     }
 };
 
