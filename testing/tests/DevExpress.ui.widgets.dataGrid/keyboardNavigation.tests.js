@@ -5224,7 +5224,9 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         $cell = that.rowsView.element().find(".dx-row").eq(0).find("td").eq(1);
         assert.equal($cell.text(), "777777");
         assert.strictEqual($cell.attr("tabIndex"), "0");
-        assert.ok($cell.is(":focus"), "focus");
+        if(!browser.msie || browser.version !== "18.17763") {
+            assert.ok($cell.is(":focus"), "focus");
+        }
         assert.ok($cell.hasClass("dx-cell-focus-disabled"));
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
