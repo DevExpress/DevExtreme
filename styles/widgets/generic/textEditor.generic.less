@@ -71,8 +71,8 @@
     &.dx-state-readonly {
         border-color: @texteditor-readonly-border-color;
         &.dx-editor-filled {
-            border-color: fade(@texteditor-filled-bg, 2%);
-            background-color: fade(@texteditor-filled-bg, 2%);
+            border-color: transparent;
+            background-color: fade(@texteditor-filled-bg, 3%);
         }
     }
 
@@ -173,6 +173,9 @@
     &.dx-editor-filled {
         background-color: fade(@texteditor-invalid-faded-border-color, 10%);
         border-color: transparent;
+        &.dx-state-focused {
+            background: transparent;
+        }
     }
 }
 
