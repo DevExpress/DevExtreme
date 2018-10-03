@@ -12,7 +12,8 @@ var $ = require("jquery"),
     Template = require("ui/widget/jquery.template"),
     Overlay = require("ui/overlay"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    selectors = require("ui/widget/selectors");
 
 require("common.css!");
 require("ui/scroll_view/ui.scrollable");
@@ -2943,6 +2944,20 @@ QUnit.test("elements under top overlay with shader have not to get focus by tab"
     $firstTabbable.focus();
     $($firstTabbable).trigger(this.tabEvent);
     assert.equal(this.tabEvent.isDefaultPrevented(), false, "default action is not prevented");
+});
+
+QUnit.test("tabbable selectors should check only bounds", function(assert) {
+    var tabbableSpy = sinon.spy(selectors, "tabbable");
+    var overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+        visible: true,
+        shading: true,
+        contentTemplate: $("#focusableTemplate")
+    });
+    var elementsCount = $(overlay.content()).parent().find("*").length;
+
+    overlay._findTabbableBounds();
+
+    assert.ok(tabbableSpy.callCount < elementsCount, "tabbable don't check all elements");
 });
 
 QUnit.test("focusin event should not be propagated (T342292)", function(assert) {
