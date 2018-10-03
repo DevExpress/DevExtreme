@@ -370,7 +370,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             groups, {
                 groupRowClass: this._getGroupRowClass(),
                 groupHeaderRowClass: this._getGroupRowClass(),
-                groupHeaderClass: this._getGroupHeaderClass(),
+                groupHeaderClass: this._getGroupHeaderClass.bind(this),
                 groupHeaderContentClass: this._getGroupHeaderContentClass()
             },
             this._getCellCount() || 1,
