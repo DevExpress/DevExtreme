@@ -1597,6 +1597,35 @@ QUnit.test("drawer panel should be rendered correctly in overlap mode after mode
     fx.off = false;
 });
 
+QUnit.test("drawer panel and content should be rendered correctly in overlap mode after mode changing, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        revealMode: "slide",
+        minSize: 50,
+        openedStateMode: "shrink",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("openedStateMode", "overlap");
+
+    const $panelContent = $element.find(".dx-overlay-content").eq(0);
+    const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
+
+    assert.equal($panelContent.width(), 200, "panel should have correct width after option changing");
+    assert.equal($content.css("transform"), "none", "content has right css transform");
+
+    fx.off = false;
+});
+
 QUnit.test("drawer should have only one panel after mode changing", assert => {
     fx.off = true;
 

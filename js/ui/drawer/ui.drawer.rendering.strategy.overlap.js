@@ -78,7 +78,7 @@ class OverlapStrategy extends DrawerStrategy {
         const direction = this._drawer.option("position");
         const panelPosition = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
 
-        this._drawer._isHorizontalDirection() && $(this._drawer.viewContent()).css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
+        $(this._drawer.viewContent()).css("transform", "inherit");
 
         if(this._drawer.option("revealMode") === "slide") {
             if(animate) {
