@@ -129,7 +129,7 @@ var DropDownBox = DropDownEditor.inherit({
 
             /**
              * @name dxDropDownBoxOptions.openOnFieldClick
-             * @type boolean
+             * @inheritdoc
              * @default true
              */
             openOnFieldClick: true,

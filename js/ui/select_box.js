@@ -220,7 +220,7 @@ var SelectBox = DropDownList.inherit({
 
             /**
              * @name dxSelectBoxOptions.openOnFieldClick
-             * @type boolean
+             * @inheritdoc
              * @default true
              */
             openOnFieldClick: true,
