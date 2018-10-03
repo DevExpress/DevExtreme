@@ -148,7 +148,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     this._isHiddenFocus = false;
                 } else {
                     var isInteractiveTarget = $(event.target).not($target).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                    this._focus($target, true, isInteractiveTarget);
+                    this._focus($target, !this.isRowFocusType(), isInteractiveTarget);
                 }
             }
         } else if($target.is("td")) {
@@ -271,7 +271,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._focusedCellPosition.columnIndex = columnIndex;
     },
 
-    getFocusedRowIndex: function() {
+    getVisibleRowIndex: function() {
         if(this._focusedCellPosition) {
             if(!this._focusedCellPosition.rowIndex) {
                 return this._focusedCellPosition.rowIndex;
@@ -380,7 +380,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
             editingOptions = this.option("editing"),
-            rowIndex = this.getFocusedRowIndex(),
+            rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
         if((this.option("grouping.allowCollapsing") && isGroupRow($row)) ||
@@ -419,7 +419,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _leftRightKeysHandler: function(eventArgs, isEditing) {
-        var rowIndex = this.getFocusedRowIndex(),
+        var rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             directionCode,
             $cell;
@@ -448,7 +448,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _upDownKeysHandler: function(eventArgs, isEditing) {
-        var rowIndex = this.getFocusedRowIndex(),
+        var rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             $cell;
 
@@ -468,13 +468,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return scrollingMode === "virtual" || scrollingMode === "infinite";
     },
 
-    _scrollBy: function(top) {
+    _scrollBy: function(top, pageUpDown) {
         var that = this,
             scrollable = this.getView("rowsView").getScrollable();
 
         if(that._focusedCellPosition) {
             var scrollHandler = function() {
-                scrollable.off(scrollHandler);
+                scrollable.off("scroll", scrollHandler);
                 setTimeout(function() {
                     that.restoreFocusableElement();
                 });
@@ -512,13 +512,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 eventArgs.originalEvent.preventDefault();
             }
         } else if(scrollable && scrollable._container().height() < scrollable.$content().height()) {
-            this._scrollBy(scrollable._container().height() * pageStep);
+            this._scrollBy(scrollable._container().height() * pageStep, true);
             eventArgs.originalEvent.preventDefault();
         }
     },
 
     _spaceKeyHandler: function(eventArgs, isEditing) {
-        var rowIndex = this.getFocusedRowIndex(),
+        var rowIndex = this.getVisibleRowIndex(),
             $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target),
             isFocusedRowElement;
 
@@ -611,7 +611,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 if(this._focusCell($cell)) {
                     if(!this._isRowEditMode() && isEditingAllowed) {
-                        this._editingController.editCell(this.getFocusedRowIndex(), this._focusedCellPosition.columnIndex);
+                        this._editingController.editCell(this.getVisibleRowIndex(), this._focusedCellPosition.columnIndex);
                     } else {
                         this._focusInteractiveElement($cell, eventArgs.shift);
                     }
@@ -1061,7 +1061,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         switch(args.name) {
             case "useKeyboard":
-                // TODO implement
                 args.handled = true;
                 break;
             default:

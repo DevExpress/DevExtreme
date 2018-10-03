@@ -785,6 +785,31 @@ QUnit.test("Get page index by simple key if combined filter present", function(a
     });
 });
 
+QUnit.test("Get page index by simple key if combined filter present and remote operations", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 19 },
+        { team: 'internal', name: 'Bob', age: 30 },
+        { team: 'internal', name: 'Den', age: 20 },
+        { team: 'public', name: 'Alice', age: 25 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false, sort: "age" }
+    );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        remoteOperations: true,
+        dataSource: dataSource
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    assert.equal(this.dataController.pageCount(), 4);
+    this.dataController.getPageIndexByKey("Bob").done(function(pageIndex) {
+        assert.equal(pageIndex, 3);
+    });
+});
+
 QUnit.test("Get page index by composite key if combined filter present", function(assert) {
     // arrange
     var dataController,
