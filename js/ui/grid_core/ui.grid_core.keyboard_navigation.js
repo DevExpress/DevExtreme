@@ -379,7 +379,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
-            editingOptions = this.option("editing"),
             rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
@@ -405,9 +404,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     eventArgs.originalEvent.preventDefault();
                 }
             } else {
-                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
+                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex],
+                    row = this._dataController.items()[rowIndex];
 
-                if(editingOptions.allowUpdating && column && column.allowEditing) {
+                if(this._editingController.allowUpdating({ row: row }) && column && column.allowEditing) {
                     if(this._isRowEditMode()) {
                         this._editingController.editRow(rowIndex);
                     } else {
@@ -468,7 +468,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return scrollingMode === "virtual" || scrollingMode === "infinite";
     },
 
-    _scrollBy: function(top, pageUpDown) {
+    _scrollBy: function(top) {
         var that = this,
             scrollable = this.getView("rowsView").getScrollable();
 
@@ -512,7 +512,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 eventArgs.originalEvent.preventDefault();
             }
         } else if(scrollable && scrollable._container().height() < scrollable.$content().height()) {
-            this._scrollBy(scrollable._container().height() * pageStep, true);
+            this._scrollBy(scrollable._container().height() * pageStep);
             eventArgs.originalEvent.preventDefault();
         }
     },

@@ -38,8 +38,9 @@ exports.FocusController = core.ViewController.inherit((function() {
         focusRowByIndex: function(index) {
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
-            var localIndex = index >= 0 ? index - this._dataController.getRowIndexOffset() : -1,
-                rowKey = this._dataController.getKeyByRowIndex(localIndex);
+            var dataController = this.getController("data"),
+                localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
+                rowKey = dataController.getKeyByRowIndex(localIndex);
 
             if(isDefined(rowKey) && !this.isRowFocused(rowKey)) {
                 this.option("focusedRowKey", rowKey);
@@ -76,10 +77,11 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _triggerUpdateFocusedRow: function(key) {
-            var rowIndex = this._dataController.getRowIndexByKey(key) + this._dataController.getRowIndexOffset();
+            var dataController = this.getController("data"),
+                rowIndex = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
 
-            this._keyboardController.setFocusedRowIndex(rowIndex);
-            this._dataController.updateItems({
+            this.getController("keyboardNavigation").setFocusedRowIndex(rowIndex);
+            dataController.updateItems({
                 changeType: "updateFocusedRow",
                 focusedRowKey: key
             });
@@ -127,10 +129,6 @@ exports.FocusController = core.ViewController.inherit((function() {
                 focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
                 rowsView = that.getView("rowsView"),
                 $tableElement;
-
-            if(!this._keyboardController._isVirtualScrolling()) {
-                focusedRowIndex -= this._dataController.getRowIndexOffset();
-            }
 
             each(rowsView.getTableElements(), function(_, element) {
                 $tableElement = $(element);
