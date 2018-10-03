@@ -97,7 +97,14 @@ var ToolbarBase = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             renderAs: "topToolbar",
+
+            /**
+             * @name dxToolbarOptions.grouped
+             * @type boolean
+             * @default false
+             */
             grouped: false,
+
             useFlatButtons: false,
             useDefaultButtons: false
         });
