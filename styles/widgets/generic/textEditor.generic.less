@@ -71,7 +71,7 @@
     &.dx-state-readonly {
         border-color: @texteditor-readonly-border-color;
         &.dx-editor-filled {
-            border-color: transparent;
+            border-color: fade(@texteditor-filled-bg, 2%);
             background-color: fade(@texteditor-filled-bg, 2%);
         }
     }
@@ -80,15 +80,17 @@
         border-color: @texteditor-hover-border-color;
         &.dx-editor-filled {
             border-color: transparent;
-            background-color: fade(@texteditor-filled-bg, 7%);
+            background-color: fade(@texteditor-hover-border-color, 10%);
         }
     }
 
     &.dx-state-focused, &.dx-state-active {
-        border-color: @texteditor-focused-border-color;
+        &.dx-editor-filled, &.dx-editor-standard, &.dx-editor-outlined {
+            border-color: @texteditor-focused-border-color;
+        }
+
         &.dx-editor-filled {
-            border-color: transparent;
-            background-color: fade(@texteditor-filled-bg, 10%);
+            background-color: transparent;
         }
     }
 
@@ -156,15 +158,21 @@
 
 .dx-invalid.dx-texteditor {
     border-color: @texteditor-invalid-faded-border-color;
+    &.dx-editor-filled, &.dx-editor-standard, &.dx-editor-outlined {
+        &.dx-state-focused {
+            border-color: @texteditor-invalid-focused-border-color;
+        }
 
-    &.dx-state-focused {
-        border-color: @texteditor-invalid-focused-border-color;
+        .dx-texteditor-container {
+            &:after {
+                .dx-invalid-generic-badge();
+            }
+        }
     }
 
-    .dx-texteditor-container {
-        &:after {
-            .dx-invalid-generic-badge();
-        }
+    &.dx-editor-filled {
+        background-color: fade(@texteditor-invalid-faded-border-color, 10%);
+        border-color: transparent;
     }
 }
 
