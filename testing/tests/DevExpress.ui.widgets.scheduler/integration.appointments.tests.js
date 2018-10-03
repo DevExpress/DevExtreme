@@ -5607,7 +5607,8 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        width: 2000,
+        maxAppointmentsPerCell: "auto"
     });
 
     var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
@@ -5617,10 +5618,10 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
 
     assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 456, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
-    assert.equal($appointments.eq(1).position().left, 314, "correct left position of appointment");
+    assert.equal($appointments.eq(1).position().left, 456, "correct left position of appointment");
 });
 
 QUnit.test("Rival allDay appointments from different groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -5815,6 +5816,7 @@ QUnit.test("Appointment in bottom cell should be rendered cirrectly in vertical 
         currentDate: new Date(2018, 4, 21),
         startDayHour: 9,
         endDayHour: 15,
+        width: 2000,
         cellDuration: 60,
         showAllDayPanel: true,
         maxAppointmentsPerCell: 'auto'
