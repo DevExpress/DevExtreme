@@ -37,9 +37,9 @@ const xlsxCellAlignmentHelper = {
         return xlsxTagHelper.toXml(
             "alignment",
             {
-                vertical: tag.vertical,
+                vertical: tag.vertical, // 18.18.88 ST_VerticalAlignment (Vertical Alignment Types)
                 wrapText: typeUtils.isDefined(tag.wrapText) ? Number(tag.wrapText) : undefined,
-                horizontal: tag.horizontal
+                horizontal: tag.horizontal // 18.18.40 ST_HorizontalAlignment (Horizontal Alignment Type)
             }
         );
     }
