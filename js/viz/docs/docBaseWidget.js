@@ -522,6 +522,7 @@ var BaseWidget = {
        * @name BaseWidgetOptions.loadingIndicator.show
        * @type boolean
        * @default false
+       * @fires BaseWidgetOptions.onOptionChanged
        */
         show: false,
         /**
