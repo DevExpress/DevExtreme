@@ -1306,11 +1306,13 @@ QUnit.testStart(function() {
 
         assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(7).position().top, 1.1, "Top cell coordinates are right");
         assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(7).position().left, 1.1, "Left cell coordinates are right");
+        assert.roughEqual(coords.hMax, 998, 1.1, "hMax is right");
 
         coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 21), 0, false);
 
         assert.roughEqual(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, 1.1, "Top cell coordinates are right");
         assert.roughEqual(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, 1.1, "Left cell coordinates are right");
+        assert.roughEqual(coords.hMax, 998, 1.1, "hMax is right");
     });
 })("Work Space Month with grouping by date");
 

@@ -2045,15 +2045,19 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(true, {}, data);
     },
 
+    _getHorizontalMax: function(groupIndex, date) {
+        var intervalIndex = this.option("groupByDate") ? this.getDateIntervalIndex(date) : 0;
+
+        return this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex);
+    },
+
     getCoordinatesByDate: function(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
-
-        var intervalIndex = this.getDateIntervalIndex(date);
 
         var index = this.getCellIndexByDate(date, inAllDayRow),
             position = this._getCellPositionByIndex(index, groupIndex, inAllDayRow),
             shift = this.getPositionShift(inAllDayRow ? 0 : this.getTimeShift(date)),
-            horizontalHMax = this.option("groupByDate") ? this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex) : this._groupedStrategy.getHorizontalMax(groupIndex);
+            horizontalHMax = this._getHorizontalMax(groupIndex, date);
 
         if(!position) {
             throw errors.Error("E1039");

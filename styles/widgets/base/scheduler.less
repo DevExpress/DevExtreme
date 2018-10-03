@@ -1057,6 +1057,11 @@
             width: 200px;
         }
 
+        &.dx-scheduler-work-space-group-by-date {
+            .dx-scheduler-header-panel-cell {
+                flex: 1;
+            }
+        }
         .dx-scheduler-date-table-cell {
             border-right:none;
         }
@@ -1149,7 +1154,11 @@
             }
         }
 
- 
+        &.dx-scheduler-work-space-group-by-date {
+            .dx-scheduler-group-header {
+                width: 200px;
+            }
+        }
         .dx-scheduler-date-table,
         .dx-scheduler-date-table-scrollable .dx-scrollable-content,
         .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
@@ -1252,6 +1261,16 @@
             }
 
             .dx-scheduler-timeline-group-table-mixin();
+        }
+
+        &.dx-scheduler-work-space-group-by-date {
+            .dx-scheduler-group-row .dx-scheduler-group-header {
+                border-right: @SCHEDULER_BASE_BORDER;
+            }
+
+            .dx-scheduler-last-group-cell {
+                border-right: @SCHEDULER_ACCENT_BORDER;
+            }
         }
 
         .dx-scheduler-appointment-reduced {
@@ -2361,8 +2380,10 @@
                 .flex-container(row, nowrap);
             }
 
-            .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
-                border-right: none;  
+            &:not(.dx-scheduler-work-space-group-by-date) {
+                .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
+                    border-right: none;  
+                }
             }
             
             .dx-scheduler-header-scrollable {
@@ -2370,6 +2391,7 @@
             }
         }
     }
+
     .dx-scheduler-work-space-vertical-grouped {
         .dx-scheduler-vertical-group-table-mixin();
 
