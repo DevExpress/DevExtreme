@@ -78,7 +78,7 @@
     @hover-background-color, @hover-border-color,
     @focused-background-color, @focused-border-color,
     @active-background-color, @active-border-color, @active-text-color,
-    @icon-color
+    @icon-color, @selected-background-color
 ) {
     background-color: @background-color;
     border-color: @border-color;
@@ -102,6 +102,10 @@
         background-color: @active-background-color;
         border-color: @active-border-color;
         color: @active-text-color;
+    }
+
+    &.dx-state-selected {
+        background-color:@selected-background-color;
     }
 }
 
@@ -128,14 +132,6 @@
         .box-shadow(@GENERIC_NORMAL_BUTTON_ACTIVE_STATE_SHADOW);
     }
 
-    &.dx-state-selected {
-        background-color: @button-normal-selected-bg;
-
-        .dx-button-text, .dx-icon {
-            color: darken(@base-text-color, 10%);
-        }
-    }
-
     .dx-state-disabled&,
     .dx-state-disabled & {
         .dx-icon {
@@ -158,7 +154,8 @@
         @button-normal-active-bg,
         @button-normal-active-border-color,
         @button-normal-active-color,
-        @button-normal-icon-color
+        @button-normal-icon-color,
+        @button-normal-selected-bg
     );
 }
 
@@ -184,7 +181,8 @@
         @button-danger-active-bg,
         @button-danger-active-border-color,
         @button-danger-color,
-        @button-danger-icon-color
+        @button-danger-icon-color,
+        @button-danger-selected-bg
     );
 }
 
@@ -200,7 +198,8 @@
         @button-success-active-bg,
         @button-success-active-border-color,
         @button-success-color,
-        @button-success-icon-color
+        @button-success-icon-color,
+        @button-success-selected-bg
     );
 }
 
@@ -216,6 +215,7 @@
         @button-default-active-bg,
         @button-default-active-border-color,
         @button-default-color,
-        @button-default-icon-color
+        @button-default-icon-color,
+        @button-default-selected-bg
     );
 }
