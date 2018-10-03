@@ -49,15 +49,25 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             return result || editingOptions && editingOptions.allowAdding;
         },
 
-        _createEditingLinks: function(container, options, editingOptions) {
-            var callBase = this.callBase,
-                editingTexts = editingOptions.texts || {};
+        _isDefaultButtonVisible: function(button, options) {
+            var result = this.callBase.apply(this, arguments),
+                row = options.row;
 
-            if(editingOptions.allowAdding && !(options.row.removed || options.row.inserted)) {
-                this._createLink(container, editingTexts.addRowToNode, "addRowByRowIndex", options, editingOptions.useIcons);
+            if(button.name === "add") {
+                return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.inserted);
             }
 
-            callBase.apply(this, arguments);
+            return result;
+        },
+
+        _getEditingButtons: function(options) {
+            var buttons = this.callBase.apply(this, arguments);
+
+            if(!options.column.buttons) {
+                buttons.unshift(this._getButtonConfig("add", options));
+            }
+
+            return buttons;
         },
 
         _beforeSaveEditData: function(editData) {
@@ -118,6 +128,10 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             parentIdSetter(options.data, parentKey);
 
             this.callBase.apply(this, arguments);
+        },
+
+        allowAdding: function(options) {
+            return this._allowEditAction("allowAdding", options);
         }
     };
 })());

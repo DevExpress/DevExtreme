@@ -366,9 +366,9 @@
     }
   },
   {
-    "name": "ui/rich_text_editor",
+    "name": "ui/html_editor",
     "exports": {
-      "default": { "path": "ui.dxRichTextEditor", "isWidget": true }
+      "default": { "path": "ui.dxHtmlEditor", "isWidget": true }
     }
   },
   {
@@ -513,6 +513,7 @@
   },
   {
     "name": "ui/recurrence_editor",
+    "isInternal": true,
     "exports": {
       "default": { "path": "ui.dxRecurrenceEditor", "isWidget": true }
     }

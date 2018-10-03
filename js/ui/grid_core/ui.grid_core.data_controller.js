@@ -12,7 +12,8 @@ var $ = require("../../core/renderer"),
     equalKeys = commonUtils.equalByValue,
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+    Deferred = deferredUtils.Deferred,
+    findChanges = require("../../core/utils/array_compare").findChanges;
 
 module.exports = {
     defaultOptions: function() {
@@ -724,24 +725,17 @@ module.exports = {
                     }
                 },
                 _applyChangesOnly: function(change) {
-                    var that = this,
-                        oldItems = that._items.slice(),
-                        newItems = change.items,
-                        newIndexByKey = {},
-                        oldIndexByKey = {},
-                        rowIndices = [],
+                    var rowIndices = [],
                         columnIndices = [],
                         changeTypes = [],
                         items = [],
-                        addedCount = 0,
-                        removeCount = 0;
+                        newIndexByKey = {};
 
                     function getRowKey(row) {
                         if(row) {
                             return row.rowType + "," + JSON.stringify(row.key);
                         }
-                    }
-
+                    };
                     function isItemEquals(item1, item2) {
                         if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
                             return false;
@@ -758,71 +752,50 @@ module.exports = {
                         }
 
                         return true;
-                    }
+                    };
 
-                    oldItems.forEach(function(item, index) {
-                        var key = getRowKey(item);
-                        oldIndexByKey[key] = index;
-                    });
-
-                    newItems.forEach(function(item, index) {
+                    var oldItems = this._items.slice();
+                    change.items.forEach(function(item, index) {
                         var key = getRowKey(item);
                         newIndexByKey[key] = index;
                     });
 
-                    var itemCount = Math.max(oldItems.length, newItems.length);
-                    for(var index = 0; index < itemCount + addedCount; index++) {
-                        var newItem = newItems[index],
-                            key = getRowKey(newItem),
-                            oldIndex = oldIndexByKey[key],
-                            oldItem = oldItems[oldIndex],
-                            newIndex = index - addedCount + removeCount;
+                    var result = findChanges(oldItems, change.items, getRowKey, isItemEquals);
 
-                        if(!newItem) {
-                            if(oldItems[newIndex]) {
-                                rowIndices.push(index);
-                                changeTypes.push("remove");
-                                that._items.splice(index, 1);
-                                items.push(oldItems[newIndex]);
-                                columnIndices.push(undefined);
-                                removeCount++;
-                                index--;
-                            }
-                        } else if(!oldItem) {
-                            addedCount++;
-                            rowIndices.push(index);
-                            changeTypes.push("insert");
-                            items.push(newItem);
-                            columnIndices.push(undefined);
-                            that._items.splice(index, 0, newItem);
-                        } else if(oldIndex === newIndex) {
-                            if(!isItemEquals(oldItem, newItem)) {
+                    if(!result) {
+                        this._applyChangeFull(change);
+                        return;
+                    }
+
+                    result.forEach((change) => {
+                        switch(change.type) {
+                            case "update":
+                                let index = change.index,
+                                    newItem = change.data,
+                                    oldItem = change.oldItem;
                                 rowIndices.push(index);
                                 changeTypes.push("update");
                                 items.push(newItem);
-                                that._items[index] = newItem;
+                                this._items[index] = newItem;
                                 newItem.cells = oldItem.cells;
-                                columnIndices.push(that._getChangedColumnIndices(oldItem, newItem, index, true));
-                            }
-                        } else {
-                            oldItem = oldItems[newIndex];
-                            key = getRowKey(oldItem);
-                            newItem = newItems[newIndexByKey[key]];
-
-                            if(oldItem && !newItem) {
-                                rowIndices.push(index);
-                                changeTypes.push("remove");
-                                items.push(oldItem);
+                                columnIndices.push(this._getChangedColumnIndices(oldItem, newItem, index, true));
+                                break;
+                            case "insert":
+                                rowIndices.push(change.index);
+                                changeTypes.push("insert");
+                                items.push(change.data);
                                 columnIndices.push(undefined);
-                                that._items.splice(index, 1);
-                                removeCount++;
-                                index--;
-                            } else {
-                                that._applyChangeFull(change);
-                                return;
-                            }
+                                this._items.splice(change.index, 0, change.data);
+                                break;
+                            case "remove":
+                                rowIndices.push(change.index);
+                                changeTypes.push("remove");
+                                this._items.splice(change.index, 1);
+                                items.push(change.oldItem);
+                                columnIndices.push(undefined);
+                                break;
                         }
-                    }
+                    });
 
                     change.repaintChangesOnly = true;
                     change.changeType = "update";
@@ -831,7 +804,7 @@ module.exports = {
                     change.changeTypes = changeTypes;
                     change.items = items;
 
-                    that._correctRowIndices(function getRowIndexCorrection(rowIndex) {
+                    this._correctRowIndices(function getRowIndexCorrection(rowIndex) {
                         var oldItem = oldItems[rowIndex],
                             key = getRowKey(oldItem),
                             newRowIndex = newIndexByKey[key];

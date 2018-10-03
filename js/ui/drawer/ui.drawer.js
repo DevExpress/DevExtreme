@@ -117,7 +117,12 @@ const Drawer = Widget.inherit({
             */
             contentTemplate: "content",
 
+            /**
+            * @name dxDrawerOptions.target
+            * @type string|Node|jQuery
+            */
             target: undefined,
+
             /**
             * @name dxDrawerOptions.onContentReady
             * @hidden true
@@ -276,9 +281,19 @@ const Drawer = Widget.inherit({
 
         this.$element().addClass(DRAWER_CLASS + "-" + position);
 
-        if(position === "right") {
-            this._reverseElements();
+        this._orderContent(position);
+    },
+
+    _orderContent(position) {
+        if(this._needOrderContent() && (position === "right" || position === "bottom")) {
+            this._$wrapper.prepend(this._$contentWrapper);
+        } else {
+            this._$wrapper.prepend(this._$panel);
         }
+    },
+
+    _needOrderContent() {
+        return this.option("openedStateMode") !== "push";
     },
 
     _refreshRevealModeClass(prevClass) {
@@ -351,10 +366,6 @@ const Drawer = Widget.inherit({
 
     _isHorizontalDirection() {
         return this.option("position") === "left" || this.option("position") === "right";
-    },
-
-    _reverseElements() {
-        this._$wrapper.prepend(this._$contentWrapper);
     },
 
     _renderPosition(offset, animate) {
@@ -459,7 +470,7 @@ const Drawer = Widget.inherit({
 
                 this._setInitialPosition();
                 this._refreshPanel();
-                this._strategy.setPanelSize();
+                this._strategy.setPanelSize(this.option("revealMode") === "slide");
 
                 this._refreshModeClass(args.previousValue);
                 this._renderPosition(this.option("opened"), false);

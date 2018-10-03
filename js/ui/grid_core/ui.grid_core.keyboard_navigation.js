@@ -603,7 +603,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 column = this._columnsController.getVisibleColumns()[this.getView("rowsView").getCellIndex($cell)];
                 row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
-                isEditingAllowed = (editingOptions.allowUpdating || row && row.inserted) && column.allowEditing;
+                isEditingAllowed = (this._editingController.allowUpdating({ row: row }) || row && row.inserted) && column.allowEditing;
 
                 if(!isEditingAllowed) {
                     this._editingController.closeEditCell();

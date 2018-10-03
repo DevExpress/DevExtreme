@@ -342,7 +342,7 @@ QUnit.test("translator interval if series arg interval < tickInterval", function
     assert.strictEqual(this.getArgRange().interval, 5);
 });
 
-QUnit.test("translator interval if series arg interval > tickInterval", function(assert) {
+QUnit.test("translator interval if series arg interval > tickInterval (axisDivisionFactor is not defined)", function(assert) {
     this.createWidget({
         dataSource: [
             { x: 10, y1: 0 },
@@ -355,6 +355,33 @@ QUnit.test("translator interval if series arg interval > tickInterval", function
         ],
         scale: {
             tickInterval: 1,
+            minorTickInterval: 0
+        },
+        chart: {
+            series: {
+                argumentField: "x",
+                valueField: "y1"
+            }
+        }
+    });
+
+    assert.strictEqual(this.getArgRange().interval, 1);
+});
+
+QUnit.test("translator interval if series arg interval > tickInterval (axisDivisionFactor is defined)", function(assert) {
+    this.createWidget({
+        dataSource: [
+            { x: 10, y1: 0 },
+            { x: 15, y1: 6 },
+            { x: 20, y1: 8 },
+            { x: 30, y1: 10 },
+            { x: 50, y1: 16 },
+            { x: 150, y1: 12 },
+            { x: 180, y1: 8 }
+        ],
+        scale: {
+            tickInterval: 1,
+            axisDivisionFactor: 70,
             minorTickInterval: 0
         },
         chart: {

@@ -6,6 +6,10 @@ define(function(require) {
         return;
     }
 
+    var browser = require("core/utils/browser");
+
+    if(browser.msie && parseInt(browser.version) >= 17) return;
+
     var $ = require("jquery"),
         DATA_SOURCE_URL = "http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll",
         pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
@@ -4276,6 +4280,22 @@ define(function(require) {
         var query = this.getQuery();
 
         assert.ok(query.indexOf("{[Ship Date].[Calendar Bla Bla].&[2002]}") >= 0, "Descendants argument has full key");
+    });
+
+    QUnit.test("T675232. Build a correct filter query when a member has empty key", function(assert) {
+        this.store.load({
+            columns: [{
+                dataField: "[Product].[Category]",
+                filterValues: ["[Product].[Category]&"],
+                filterType: "include"
+            }],
+            rows: [],
+            values: []
+        });
+
+        var filterExpr = this.getQuery().match(/\(select(.+?)on 0/gi);
+
+        assert.deepEqual(filterExpr, ["(SELECT {[Product].[Category].[Product].[Category]&}on 0"]);
     });
 
     QUnit.module("getDrillDownItems", stubsEnvironment);

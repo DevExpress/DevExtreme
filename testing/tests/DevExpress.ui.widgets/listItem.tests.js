@@ -3,7 +3,9 @@ var $ = require("jquery"),
 
 QUnit.module("showChevron builtin");
 
-var LIST_ITEM_CHEVRON_CONTAINER_CLASS = "dx-list-item-chevron-container",
+var LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container",
+    LIST_ITEM_ICON_CLASS = "dx-list-item-icon",
+    LIST_ITEM_CHEVRON_CONTAINER_CLASS = "dx-list-item-chevron-container",
     LIST_ITEM_CHEVRON_CLASS = "dx-list-item-chevron";
 
 QUnit.test("showChevron should be rendered correctly by default", function(assert) {
@@ -42,6 +44,26 @@ QUnit.test("showChevron should be rendered correctly after value changed", funct
 
     var $chevronContainer = $item.children("." + LIST_ITEM_CHEVRON_CONTAINER_CLASS);
     assert.ok(!$chevronContainer.length);
+
+    widget.$element().remove(); // NOTE: strange fix timers
+});
+
+QUnit.module("icon builtin");
+
+QUnit.test("icon rendering", function(assert) {
+    var widget = new List($("<div>"), {
+            items: [{ icon: "box" }]
+        }),
+        $item = widget.itemElements().eq(0);
+
+    assert.equal($item.find("." + LIST_ITEM_ICON_CONTAINER_CLASS).length, 1, "container has been removed");
+    assert.equal($item.find("." + LIST_ITEM_ICON_CLASS).length, 1, "icon has been removed");
+
+    widget.option("items[0].icon", null);
+
+    $item = widget.itemElements().eq(0);
+    assert.equal($item.find("." + LIST_ITEM_ICON_CONTAINER_CLASS).length, 0, "container has been removed");
+    assert.equal($item.find("." + LIST_ITEM_ICON_CLASS).length, 0, "icon has been removed");
 
     widget.$element().remove(); // NOTE: strange fix timers
 });

@@ -21,6 +21,9 @@ const dataGridExportTestsHelper = {
     WORKSHEET_HEADER_XML1: excelCreator.__internals.WORKSHEET_HEADER_XML + '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>',
+    WORKSHEET_HEADER_WITH_PANE_XML: excelCreator.__internals.WORKSHEET_HEADER_XML + '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>',
 
     SHARED_STRINGS_HEADER_XML: excelCreator.__internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
     STYLESHEET_HEADER_XML: excelCreator.__internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
@@ -39,7 +42,7 @@ const dataGridExportTestsHelper = {
         excel_creator.ExcelCreator.JSZip = this.oldJSZip;
     },
 
-    runGeneralTest: function(assert, gridOptions, { styles = undefined, worksheet = "", sharedStrings = "" } = {}) {
+    runGeneralTest: function(assert, gridOptions, { styles = undefined, worksheet = "", sharedStrings = undefined } = {}) {
         const done = assert.async();
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {
@@ -49,7 +52,9 @@ const dataGridExportTestsHelper = {
                 assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.STYLE_FILE_NAME).content, styles, "styles");
             }
             assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).folder(excelCreator.__internals.WORKSHEETS_FOLDER).file(excelCreator.__internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
-            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+            if(sharedStrings !== undefined) {
+                assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+            }
 
             done();
             e.cancel = true;

@@ -2,7 +2,6 @@ var Class = require("../core/class"),
     window = require("../core/utils/window").getWindow(),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
     errors = require("../ui/widget/ui.errors"),
     stringUtils = require("../core/utils/string"),
     JSZip = require("jszip"),
@@ -103,18 +102,6 @@ var ExcelCreator = Class.inherit({
 
         return result;
     },
-
-    ///#DEBUG
-    _appendFormat: function(format, dataType) {
-        const styleFormat = this._tryConvertToXlsxFormatCode(format, dataType);
-        if(styleFormat) {
-            if(inArray(styleFormat, this._styleFormat) === -1) {
-                this._styleFormat.push(styleFormat);
-            }
-        }
-    },
-    ///#ENDDEBUG
-
     _tryConvertToXlsxFormatCode: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
@@ -455,10 +442,10 @@ var ExcelCreator = Class.inherit({
                 rowIndex = Number(rowIndex);
                 cellData = this._cellsArray[rowIndex][colIndex];
 
-                xmlCells.push(this._getXMLTag("c", [
+                xmlCells.push(this._getXMLTag("c", [ // 18.3.1.4 c (Cell)
                     { name: "r", value: this._getCellIndex(rowIndex + 1, colIndex) },
                     { name: "s", value: cellData.style },
-                    { name: "t", value: cellData.type }
+                    { name: "t", value: cellData.type } // 18.18.11 ST_CellType (Cell Type)
                 ], (typeUtils.isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
             }
             xmlRows.push(this._getXMLTag("row", [
@@ -583,10 +570,6 @@ var ExcelCreator = Class.inherit({
         } else {
             this._zip = null;
         }
-
-        ///#DEBUG
-        this._styleFormat = [];
-        ///#ENDDEBUG
     },
 
     _checkZipState: function() {

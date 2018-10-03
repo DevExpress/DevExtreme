@@ -145,11 +145,11 @@ interface JQuery {
     dxGallery(options: DevExpress.ui.dxGalleryOptions): JQuery;
 }
 interface JQuery {
-    dxRichTextEditor(): JQuery;
-    dxRichTextEditor(options: "instance"): DevExpress.ui.dxRichTextEditor;
-    dxRichTextEditor(options: string): any;
-    dxRichTextEditor(options: string, ...params: any[]): any;
-    dxRichTextEditor(options: DevExpress.ui.dxRichTextEditorOptions): JQuery;
+    dxHtmlEditor(): JQuery;
+    dxHtmlEditor(options: "instance"): DevExpress.ui.dxHtmlEditor;
+    dxHtmlEditor(options: string): any;
+    dxHtmlEditor(options: string, ...params: any[]): any;
+    dxHtmlEditor(options: DevExpress.ui.dxHtmlEditorOptions): JQuery;
 }
 interface JQuery {
     dxList(): JQuery;
@@ -276,13 +276,6 @@ interface JQuery {
     dxRangeSlider(options: string): any;
     dxRangeSlider(options: string, ...params: any[]): any;
     dxRangeSlider(options: DevExpress.ui.dxRangeSliderOptions): JQuery;
-}
-interface JQuery {
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: "instance"): DevExpress.ui.dxRecurrenceEditor;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-    dxRecurrenceEditor(options: DevExpress.ui.dxRecurrenceEditorOptions): JQuery;
 }
 interface JQuery {
     dxResizable(): JQuery;
@@ -1007,7 +1000,7 @@ declare module DevExpress.data {
         /** Specifies an item mapping function. */
         map?: ((dataItem: any) => any);
         /** A function that is executed after data is successfully loaded. */
-        onChanged?: Function;
+        onChanged?: ((e: { changes?: Array<any> }) => any);
         /** A function that is executed when data loading fails. */
         onLoadError?: ((error: { message?: string }) => any);
         /** A function that is executed when the data loading status changes. */
@@ -1190,7 +1183,7 @@ declare module DevExpress.data {
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
         /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
-        /** Specifies a URL to an OData service. */
+        /** Specifies the URL of an OData service. */
         url?: string;
         /** Specifies the OData version. */
         version?: number;
@@ -1222,7 +1215,7 @@ declare module DevExpress.data {
         keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
         /** A function that is executed before data is loaded to the store. */
         onLoading?: ((loadOptions: LoadOptions) => any);
-        /** Specifies a URL to an OData entity collection. */
+        /** Specifies the URL of an OData entity collection. */
         url?: string;
         /** Specifies the OData version. */
         version?: number;
@@ -1238,10 +1231,6 @@ declare module DevExpress.data {
         byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
         /** Creates a Query for the OData endpoint. */
         createQuery(loadOptions: any): any;
-        /** Starts loading data. */
-        load(): Promise<any> & JQueryPromise<any>;
-        /** Starts loading data. */
-        load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
     }
     /** The EdmLiteral is an object for working with primitive data types from the OData's Abstract Type System that are not supported in JavaScript. */
     export class EdmLiteral {
@@ -1989,6 +1978,10 @@ declare module DevExpress.ui {
         filterSyncEnabled?: boolean | 'auto';
         /** Specifies a filter expression. */
         filterValue?: string | Array<any> | Function;
+        focusedColumnIndex?: number;
+        focusedRowEnabled?: boolean;
+        focusedRowIndex?: number;
+        focusedRowKey?: any;
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Configures the load panel. */
@@ -2035,6 +2028,7 @@ declare module DevExpress.ui {
         paging?: GridBasePaging;
         /** Specifies whether to render the filter row, command columns, and columns with showEditorAlways set to true after other elements. */
         renderAsync?: boolean;
+        repaintChangesOnly?: boolean;
         /** Specifies whether rows should be shaded differently. */
         rowAlternationEnabled?: boolean;
         /** Overridden. A configuration object specifying scrolling options. */
@@ -2064,18 +2058,13 @@ declare module DevExpress.ui {
     }
     /** Overriden. */
     export interface GridBaseEditing {
-        /** Specifies whether a user can add new rows. */
-        allowAdding?: boolean;
-        /** Specifies whether a user can delete rows. */
-        allowDeleting?: boolean;
-        /** Specifies whether a user can update rows. */
-        allowUpdating?: boolean;
         /** Configures the form. Used only if editing.mode is "form" or "popup". */
         form?: dxFormOptions;
         /** Specifies how a user edits data. */
         mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
         /** Configures the popup. Used only if editing.mode is "popup". */
         popup?: dxPopupOptions;
+        refreshMode?: 'full' | 'reshape' | 'repaint';
         /** Overriden. */
         texts?: GridBaseEditingTexts;
         /** Specifies whether the editing column uses icons instead of links. */
@@ -2149,9 +2138,9 @@ declare module DevExpress.ui {
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /** Discards changes that a user made to data. */
         cancelEditData(): void;
-        /** Gets the value of a cell with a specific row index and a data field. */
+        /** Gets the value of a cell with a specific row index and a data field, column caption or name. */
         cellValue(rowIndex: number, dataField: string): any;
-        /** Sets a new value to a cell with a specific row index and a data field. */
+        /** Sets a new value to a cell with a specific row index and a data field, column caption or name. */
         cellValue(rowIndex: number, dataField: string, value: any): void;
         /** Gets the value of a cell with specific row and column indexes. */
         cellValue(rowIndex: number, visibleColumnIndex: number): any;
@@ -2205,7 +2194,7 @@ declare module DevExpress.ui {
         focus(): void;
         /** Sets focus on a specific cell. */
         focus(element: Element | JQuery): void;
-        /** Gets a cell with a specific row index and a data field. */
+        /** Gets a cell with a specific row index and a data field, column caption or name. */
         getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement & undefined;
         /** Gets a cell with specific row and column indexes. */
         getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement & undefined;
@@ -2245,6 +2234,7 @@ declare module DevExpress.ui {
         pageSize(value: number): void;
         /** Reloads data in the widget. */
         refresh(): Promise<void> & JQueryPromise<void>;
+        refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
         /** Repaints specific rows. */
         repaintRows(rowIndexes: Array<number>): void;
         /** Saves changes that a user made to data. */
@@ -2324,10 +2314,13 @@ declare module DevExpress.ui {
         /** Allows you to sort groups according to the values of group summary items. */
         sortByGroupSummaryInfo?: Array<{ summaryItem?: string | number, groupColumn?: string, sortOrder?: 'asc' | 'desc' }>;
         /** Specifies the options of the grid summary. */
-        summary?: { groupItems?: Array<{ name?: string, column?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), showInGroupFooter?: boolean, alignByColumn?: boolean, showInColumn?: string, skipEmptyValues?: boolean }>, totalItems?: Array<{ name?: string, column?: string, showInColumn?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), alignment?: 'center' | 'left' | 'right', cssClass?: string, skipEmptyValues?: boolean }>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => any), skipEmptyValues?: boolean, texts?: { sum?: string, sumOtherColumn?: string, min?: string, minOtherColumn?: string, max?: string, maxOtherColumn?: string, avg?: string, avgOtherColumn?: string, count?: string } };
+        summary?: { groupItems?: Array<{ name?: string, column?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), showInGroupFooter?: boolean, alignByColumn?: boolean, showInColumn?: string, skipEmptyValues?: boolean }>, totalItems?: Array<{ name?: string, column?: string, showInColumn?: string, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), alignment?: 'center' | 'left' | 'right', cssClass?: string, skipEmptyValues?: boolean }>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => any), skipEmptyValues?: boolean, recalculateWhileEditing?: boolean, texts?: { sum?: string, sumOtherColumn?: string, min?: string, minOtherColumn?: string, max?: string, maxOtherColumn?: string, avg?: string, avgOtherColumn?: string, count?: string } };
     }
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
+        allowAdding?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
+        allowDeleting?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
+        allowUpdating?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
         /** Contains options that specify texts for editing-related UI elements. */
         texts?: any;
     }
@@ -2481,10 +2474,11 @@ declare module DevExpress.ui {
         revealMode?: 'slide' | 'expand';
         /** Specifies whether to shade the view when the drawer is opened. */
         shading?: boolean;
+        target?: string | Element | JQuery;
         /** Specifies the drawer's content. */
         template?: template | ((Element: DevExpress.core.dxElement) => any);
     }
-    /** The base class for widgets. */
+    /** The Drawer is a dismissible or permanently visible panel used for navigation in responsive web application layouts. */
     export class dxDrawer extends Widget {
         constructor(element: Element, options?: dxDrawerOptions)
         constructor(element: JQuery, options?: dxDrawerOptions)
@@ -2506,7 +2500,7 @@ declare module DevExpress.ui {
         dropDownOptions?: dxPopupOptions;
         /** Specifies a custom template for the text field. Must contain the TextBox widget. */
         fieldTemplate?: template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** Specifies after which DOM events the widget updates the value. */
+        /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
     }
     /** The DropDownBox widget consists of a text field, which displays the current value, and a drop-down field, which can contain any UI element. */
@@ -2768,12 +2762,18 @@ declare module DevExpress.ui {
         /** Specifies the URL of the image displayed by the item. */
         imageSrc?: string;
     }
-    export interface dxRichTextEditorOptions extends EditorOptions<dxRichTextEditor> {
-        // TODO: add richTextEditor options
+    export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+        placeholder?: string;
+        valueType?: 'HTML' | 'Markdown';
     }
-    export class dxRichTextEditor extends Editor {
-        constructor(element: Element, options?: dxRichTextEditorOptions)
-        constructor(element: JQuery, options?: dxRichTextEditorOptions)
+    /** A base class for editors. */
+    export class dxHtmlEditor extends Editor {
+        constructor(element: Element, options?: dxHtmlEditorOptions)
+        constructor(element: JQuery, options?: dxHtmlEditorOptions)
+        format(name: string, value: any): void;
+        getSelection(): void;
+        registerModules(modules: any): void;
+        setSelection(index: number, length: number): void;
     }
     export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
         /** Specifies whether or not the widget changes its state when interacting with a user. */
@@ -3680,7 +3680,7 @@ declare module DevExpress.ui {
         indicatorUpdateInterval?: number;
         /** The latest date the widget allows you to select. */
         max?: Date | number | string;
-        /** Specifies the limit of full-sized appointments displayed per cell. In the "day", "week" and "workweek" views, this option applies only to all-day appointments. */
+        /** Specifies the limit of full-sized appointments displayed per cell. Applies to all views except "agenda". */
         maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
         /** The earliest date the widget allows you to select. */
         min?: Date | number | string;
@@ -3747,7 +3747,7 @@ declare module DevExpress.ui {
         /** Specifies whether a user can switch views using tabs or a drop-down menu. */
         useDropDownViewSwitcher?: boolean;
         /** Configures individual views. */
-        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek', name?: string, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', intervalCount?: number, groupByDate?: boolean, startDate?: Date | number | string, startDayHour?: number, endDayHour?: number, groups?: Array<string>, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, cellDuration?: number, appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), agendaDuration?: number, groupOrientation?: 'horizontal' | 'vertical', forceMaxAppointmentPerCell?: boolean }>;
+        views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek', name?: string, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', intervalCount?: number, groupByDate?: boolean, startDate?: Date | number | string, startDayHour?: number, endDayHour?: number, groups?: Array<string>, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, cellDuration?: number, appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((appointmentData: any, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), agendaDuration?: number, groupOrientation?: 'horizontal' | 'vertical' }>;
     }
     /** The Scheduler is a widget that represents scheduled data and allows a user to manage and edit it. */
     export class dxScheduler extends Widget {
@@ -3814,7 +3814,7 @@ declare module DevExpress.ui {
         showDropDownButton?: boolean;
         /** Specifies whether or not to display selection controls. */
         showSelectionControls?: boolean;
-        /** Specifies DOM event names that update a widget's value. */
+        /** Specifies the DOM events after which the widget's value should be updated. Applies only if acceptCustomValue is set to true. */
         valueChangeEvent?: string;
     }
     /** The SelectBox widget is an editor that allows an end user to select an item from a drop-down list. */
@@ -4224,6 +4224,9 @@ declare module DevExpress.ui {
     }
     /** Configures editing. */
     export interface dxTreeListEditing extends GridBaseEditing {
+        allowAdding?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
+        allowDeleting?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
+        allowUpdating?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
         /** Contains options that specify texts for editing-related UI elements. */
         texts?: dxTreeListEditingTexts;
     }
@@ -4568,6 +4571,7 @@ declare module DevExpress.ui {
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
         /** A function that is executed when a collection item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+        repaintChangesOnly?: boolean;
         /** The index of the currently selected widget item. */
         selectedIndex?: number;
         /** The selected item object. */
@@ -4734,7 +4738,7 @@ declare module DevExpress.ui {
         showDataBeforeSearch?: boolean;
         /** Specifies the currently selected value. May be an object if dataSource contains objects and valueExpr is not set. */
         value?: any;
-        /** Specifies DOM event names that update a widget's value. */
+        /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
     }
     /** A base class for drop-down list widgets. */
@@ -5147,6 +5151,7 @@ declare module DevExpress.ui {
     export interface dxListItemTemplate extends CollectionWidgetItemTemplate {
         /** Specifies the text of a badge displayed for the list item. */
         badge?: string;
+        icon?: string;
         /** Specifies the name of the list items group in a grouped list. */
         key?: string;
         /** Specifies whether or not to display a chevron for the list item. */
@@ -5394,7 +5399,7 @@ declare module DevExpress.ui {
         useMaskedValue?: boolean;
         /** Specifies the current value displayed by the widget. */
         value?: any;
-        /** Specifies DOM event names that update a widget's value. */
+        /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
     }
     /** A base class for text editing widgets. */
@@ -5847,6 +5852,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        extendAxis?: boolean;
         /** Configures the constant line label. */
         label?: dxChartArgumentAxisConstantLinesLabel;
         /** Specifies the value indicated by a constant line. Setting this option is necessary. */
@@ -6156,6 +6162,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the value axis. */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        extendAxis?: boolean;
         /** Configures the constant line label. */
         label?: dxChartValueAxisConstantLinesLabel;
         /** Specifies the value indicated by a constant line. Setting this option is necessary. */
@@ -6371,6 +6378,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the argument axis constant lines. */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        extendAxis?: boolean;
         /** An object defining constant line label options. */
         label?: dxPolarChartArgumentAxisConstantLinesLabel;
         /** Specifies a value to be displayed by a constant line. */
@@ -6559,6 +6567,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the value axis constant lines. */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        extendAxis?: boolean;
         /** An object defining constant line label options. */
         label?: dxPolarChartValueAxisConstantLinesLabel;
         /** Specifies a value to be displayed by a constant line. */

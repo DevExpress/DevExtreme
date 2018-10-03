@@ -36,36 +36,170 @@ QUnit.test("Columns - number", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n" /></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>0</v></c></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>1</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>2</v></c></row>' +
-        '<row r="7" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A7" s="3" t="n"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C7" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>Field 1</t></si>' +
-        '</sst>';
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '<c r="B1" s="3" t="n" />' +
+        '<c r="C1" s="3" t="n"><v>0</v></c>' +
+        '<c r="D1" s="3" t="n"><v>1</v></c>' +
+        '<c r="E1" s="3" t="n"><v>2</v></c>' +
+        '<c r="F1" s="3" t="n"><v>2</v></c>' +
+        '</row></sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: "number" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: 0 }, { field1: 1 }, { field1: 2 }, { field1: 2 }],
+            columns: [1, 2, 3, 4, 5, 6].map(i => { return { dataField: 'f' + i.toString(), dataType: "number" }; }),
+            dataSource: [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Columns - number as currency", function(assert) {
+QUnit.test("Columns - number with format as percent", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="0.000%" />' +
+        '<numFmt numFmtId="166" formatCode="0%" />' +
+        '<numFmt numFmtId="167" formatCode="0.0%" />' +
+        '<numFmt numFmtId="168" formatCode="0.000000%" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="4" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "percent", precision: 3 } },
+                { dataField: "f1", dataType: "number", format: { type: "percent", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "percent" } },
+                { dataField: "f1", dataType: "number", format: { type: "percent", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "percent", precision: 6 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as fixedPoint", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="#00" />' +
+        '<numFmt numFmtId="166" formatCode="#" />' +
+        '<numFmt numFmtId="167" formatCode="#0" />' +
+        '<numFmt numFmtId="168" formatCode="#0000000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="4" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "decimal", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "decimal", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "decimal" } },
+                { dataField: "f1", dataType: "number", format: { type: "decimal", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "decimal", precision: 7 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as exponential", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="0.00E+00" />' +
+        '<numFmt numFmtId="166" formatCode="0E+00" />' +
+        '<numFmt numFmtId="167" formatCode="0.0E+00" />' +
+        '<numFmt numFmtId="168" formatCode="0.000E+00" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="5" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "exponential", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "exponential", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "exponential" } },
+                { dataField: "f1", dataType: "number", format: { type: "exponential", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "exponential", precision: 3 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as currency", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
         helper.BASE_STYLE_XML +
@@ -75,32 +209,292 @@ QUnit.test("Columns - number as currency", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n" /></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>0</v></c></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>1</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>2</v></c></row>' +
-        '<row r="7" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A7" s="3" t="n"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C7" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>Field 1</t></si>' +
-        '</sst>';
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '<c r="B1" s="3" t="n" />' +
+        '<c r="C1" s="3" t="n"><v>0</v></c>' +
+        '<c r="D1" s="3" t="n"><v>1</v></c>' +
+        '<c r="E1" s="3" t="n"><v>2</v></c>' +
+        '<c r="F1" s="3" t="n"><v>2</v></c>' +
+        '</row></sheetData></worksheet>';
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: "number", format: "currency" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: 0 }, { field1: 1 }, { field1: 2 }, { field1: 2 }],
+            columns: [1, 2, 3, 4, 5, 6].map(i => { return { dataField: 'f' + i.toString(), dataType: "number", format: "currency" }; }),
+            dataSource: [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
-        { styles, worksheet, sharedStrings }
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as currency format_en local", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="5">' +
+        '<numFmt numFmtId="165" formatCode="$#,##0.00_);\\($#,##0.00\\)" />' +
+        '<numFmt numFmtId="166" formatCode="$#,##0.0000_);\\($#,##0.0000\\)" />' +
+        '<numFmt numFmtId="167" formatCode="$#,##0_);\\($#,##0\\)" />' +
+        '<numFmt numFmtId="168" formatCode="$#,##0.0_);\\($#,##0.0\\)" />' +
+        '<numFmt numFmtId="169" formatCode="$#,##0.00000_);\\($#,##0.00000\\)" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="9">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="169"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="5" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '<c r="F1" s="7" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "currency", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "currency", precision: 4 } },
+                { dataField: "f1", dataType: "number", format: { type: "currency", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "currency" } },
+                { dataField: "f1", dataType: "number", format: { type: "currency", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "currency", precision: 5 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as largeNumber", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML + helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="3" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "largeNumber", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "largeNumber", precision: 0 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as thousands", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="#,##0.00,&quot;K&quot;" />' +
+        '<numFmt numFmtId="166" formatCode="#,##0,&quot;K&quot;" />' +
+        '<numFmt numFmtId="167" formatCode="#,##0.0,&quot;K&quot;" />' +
+        '<numFmt numFmtId="168" formatCode="#,##0.000,&quot;K&quot;" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="4" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "thousands", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "thousands", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "thousands" } },
+                { dataField: "f1", dataType: "number", format: { type: "thousands", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "thousands", precision: 3 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as millions", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="#,##0.00,,&quot;M&quot;" />' +
+        '<numFmt numFmtId="166" formatCode="#,##0,,&quot;M&quot;" />' +
+        '<numFmt numFmtId="167" formatCode="#,##0.0,,&quot;M&quot;" />' +
+        '<numFmt numFmtId="168" formatCode="#,##0.000,,&quot;M&quot;" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="4" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "millions", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "millions", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "millions" } },
+                { dataField: "f1", dataType: "number", format: { type: "millions", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "millions", precision: 3 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as billions", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="#,##0.00,,,&quot;B&quot;" />' +
+        '<numFmt numFmtId="166" formatCode="#,##0,,,&quot;B&quot;" />' +
+        '<numFmt numFmtId="167" formatCode="#,##0.0,,,&quot;B&quot;" />' +
+        '<numFmt numFmtId="168" formatCode="#,##0.000,,,&quot;B&quot;" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="4" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "billions", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "billions", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "billions" } },
+                { dataField: "f1", dataType: "number", format: { type: "billions", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "billions", precision: 3 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("Columns - number with format as trillions", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="4">' +
+        '<numFmt numFmtId="165" formatCode="#,##0.00,,,,&quot;T&quot;" />' +
+        '<numFmt numFmtId="166" formatCode="#,##0,,,,&quot;T&quot;" />' +
+        '<numFmt numFmtId="167" formatCode="#,##0.0,,,,&quot;T&quot;" />' +
+        '<numFmt numFmtId="168" formatCode="#,##0.000,,,,&quot;T&quot;" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="168"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>1</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="4" t="n"><v>1</v></c>' +
+        '<c r="D1" s="5" t="n"><v>1</v></c>' +
+        '<c r="E1" s="6" t="n"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 2 } },
+                { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 0 } },
+                { dataField: "f1", dataType: "number", format: { type: "trillions" } },
+                { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 1 } },
+                { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 3 } },
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: 1 }],
+        },
+        { styles, worksheet }
     );
 });
 
@@ -113,23 +507,18 @@ QUnit.test("Columns - string", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s" /></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>1</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>2</v></c></row>' +
-        '<row r="7" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A7" s="3" t="s"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C7" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>Field 1</t></si>' +
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<sheetData><row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '<c r="B1" s="3" t="s" />' +
+        '<c r="C1" s="3" t="s" />' +
+        '<c r="D1" s="3" t="s"><v>0</v></c>' +
+        '<c r="E1" s="3" t="s"><v>1</v></c>' +
+        '<c r="F1" s="3" t="s"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>str1</t></si>' +
         '<si><t>str2</t></si>' +
         '</sst>';
@@ -137,8 +526,10 @@ QUnit.test("Columns - string", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: "string" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: '' }, { field1: 'str1' }, { field1: 'str2' }, { field1: 'str2' }],
+            columns: [1, 2, 3, 4, 5, 6].map(i => { return { dataField: 'f' + i.toString(), dataType: "string" }; }),
+            dataSource: [{ f1: undefined, f2: null, f3: '', f4: 'str1', f5: 'str2', f6: 'str2' }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -154,31 +545,71 @@ QUnit.test("Columns - date", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>43435</v></c></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>43436</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>43436</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>Field 1</t></si>' +
-        '</sst>';
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '<c r="B1" s="3" t="s" />' +
+        '<c r="C1" s="3" t="n"><v>43435</v></c>' +
+        '<c r="D1" s="3" t="n"><v>43436</v></c>' +
+        '<c r="E1" s="3" t="n"><v>43436</v></c>' +
+        '</row></sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: "date" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: new Date(2018, 11, 1) }, { field1: new Date(2018, 11, 2) }, { field1: new Date(2018, 11, 2) }],
+            columns: [1, 2, 3, 4, 5].map(i => { return { dataField: 'f' + i.toString(), dataType: "date" }; }),
+            dataSource: [{ f1: undefined, f2: null, f3: new Date(2018, 11, 1), f4: new Date(2018, 11, 2), f5: new Date(2018, 11, 2) }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Columns - date with format as function", function(assert) { // T573609
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="2">' +
+        '<numFmt numFmtId="165" formatCode="[$-9]d-M-yyyy" />' +
+        '<numFmt numFmtId="166" formatCode="[$-9]d+M+yyyy" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43435</v></c>' +
+        '<c r="B1" s="4" t="n"><v>43435</v></c>' +
+        '</row></sheetData>' +
+        '</worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "date",
+                    format: (date) => date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+                },
+                { dataField: "f1", dataType: "date",
+                    format: {
+                        type: 'date',
+                        formatter: (date) => date.getDate() + "+" + (date.getMonth() + 1) + "+" + date.getFullYear(),
+                    }
+                }
+            ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            dataSource: [{ f1: new Date(2018, 11, 1) }],
+        },
+        { styles, worksheet }
     );
 });
 
@@ -192,29 +623,25 @@ QUnit.test("Columns - datetime", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="n"><v>43435.67361111111</v></c></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="n"><v>43436.67361111111</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="n"><v>43436.67361111111</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>Field 1</t></si>' +
-        '</sst>';
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '<c r="B1" s="3" t="s" />' +
+        '<c r="C1" s="3" t="n"><v>43435.67361111111</v></c>' +
+        '<c r="D1" s="3" t="n"><v>43436.67361111111</v></c>' +
+        '<c r="E1" s="3" t="n"><v>43436.67361111111</v></c>' +
+        '</row></sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: "datetime" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: new Date(2018, 11, 1, 16, 10) }, { field1: new Date(2018, 11, 2, 16, 10) }, { field1: new Date(2018, 11, 2, 16, 10) }],
+            columns: [1, 2, 3, 4, 5].map(i => { return { dataField: 'f' + i.toString(), dataType: "datetime" }; }),
+            dataSource: [{ f1: undefined, f2: null, f3: new Date(2018, 11, 1, 16, 10), f4: new Date(2018, 11, 2, 16, 10), f5: new Date(2018, 11, 2, 16, 10) }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -229,22 +656,17 @@ QUnit.test("Columns - boolean", function(assert) {
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
-        '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>1</v></c></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>2</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>Field 1</t></si>' +
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<sheetData><row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '<c r="B1" s="3" t="s" />' +
+        '<c r="C1" s="3" t="s"><v>0</v></c>' +
+        '<c r="D1" s="3" t="s"><v>1</v></c>' +
+        '<c r="E1" s="3" t="s"><v>1</v></c>' +
+        '</row></sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>true</t></si>' +
         '<si><t>false</t></si>' +
         '</sst>';
@@ -252,8 +674,10 @@ QUnit.test("Columns - boolean", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", dataType: "boolean" }],
-            dataSource: [{ field1: undefined }, { field1: null }, { field1: true }, { field1: false }, { field1: false }],
+            columns: [1, 2, 3, 4, 5].map(i => { return { dataField: 'f' + i.toString(), dataType: "boolean" }; }),
+            dataSource: [{ f1: undefined, f2: null, f3: true, f4: false, f5: false }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -270,20 +694,17 @@ QUnit.test("Columns - lookup", function(assert) {
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s" /></row>' +
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s" /></row>' +
-        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s" /></row>' +
+        '<row r="3" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>0</v></c></row>' +
         '<row r="4" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="3" t="s"><v>1</v></c></row>' +
-        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>2</v></c></row>' +
-        '<row r="6" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A6" s="3" t="s"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>Field 1</t></si>' +
+        '<row r="5" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="3" t="s"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>name1</t></si>' +
         '<si><t>name2</t></si>' +
         '</sst>';
@@ -306,6 +727,8 @@ QUnit.test("Columns - lookup", function(assert) {
                 }
             }],
             dataSource: [{ field1: undefined }, { field1: null }, { field1: 1 }, { field1: 2 }, { field1: 2 }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -327,7 +750,7 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
         '<col width="13.57" min="1" max="1" />' +
@@ -339,30 +762,15 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="0" t="s"><v>0</v></c>' +
-        '<c r="B1" s="0" t="s"><v>1</v></c>' +
-        '<c r="C1" s="0" t="s"><v>2</v></c>' +
-        '<c r="D1" s="0" t="s"><v>3</v></c>' +
-        '<c r="E1" s="0" t="s"><v>4</v></c>' +
-        '<c r="F1" s="0" t="s"><v>5</v></c>' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '<c r="B1" s="4" t="n"><v>1</v></c>' +
+        '<c r="C1" s="5" t="n"><v>43435</v></c>' +
+        '<c r="D1" s="6" t="s"><v>1</v></c>' +
+        '<c r="E1" s="3" t="s"><v>2</v></c>' +
+        '<c r="F1" s="7" t="n"><v>43435.67361111111</v></c>' +
         '</row>' +
-        '<row r="2" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A2" s="3" t="s"><v>6</v></c>' +
-        '<c r="B2" s="4" t="n"><v>1</v></c>' +
-        '<c r="C2" s="5" t="n"><v>43435</v></c>' +
-        '<c r="D2" s="6" t="s"><v>7</v></c>' +
-        '<c r="E2" s="3" t="s"><v>8</v></c>' +
-        '<c r="F2" s="7" t="n"><v>43435.67361111111</v></c>' +
-        '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:F2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="9" uniqueCount="9">' +
-        "<si><t>String 1</t></si>" +
-        "<si><t>Number 1</t></si>" +
-        "<si><t>Date 1</t></si>" +
-        "<si><t>Bool 1</t></si>" +
-        "<si><t>Lookup 1</t></si>" +
-        "<si><t>Datetime 1</t></si>" +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
         "<si><t>str1</t></si>" +
         "<si><t>true</t></si>" +
         "<si><t>name1</t></si>" +
@@ -400,6 +808,8 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
                 lookup1: 1,
                 datetime1: new Date(2018, 11, 1, 16, 10),
             }],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -416,16 +826,13 @@ QUnit.test("Columns - remove the command columns from exporting document", funct
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>1</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
-        '<si><t>Field 1</t></si>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>0</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
         '<si><t>str1</t></si>' +
         '</sst>';
 
@@ -436,6 +843,8 @@ QUnit.test("Columns - remove the command columns from exporting document", funct
             dataSource: [{ field1: 'str1' }],
             selection: { mode: "multiple" },
             editing: { mode: "row", allowUpdating: true, allowDeleting: true, allowAdding: true },
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
         },
         { styles, worksheet, sharedStrings }
     );

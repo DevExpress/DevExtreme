@@ -479,7 +479,8 @@ var TagBox = SelectBox.inherit({
         this._multiTagPreparingAction = this._createActionByOption("onMultiTagPreparing", {
             beforeExecute: (function(e) {
                 this._multiTagPreparingHandler(e.args[0]);
-            }).bind(this)
+            }).bind(this),
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 

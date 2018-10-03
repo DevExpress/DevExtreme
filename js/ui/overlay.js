@@ -543,11 +543,7 @@ var Overlay = Widget.inherit({
             isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target),
             outsideClick = isAttachedTarget && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
-        if(!outsideClick) {
-            return false;
-        }
-
-        if(closeOnOutsideClick) {
+        if(outsideClick && closeOnOutsideClick) {
             if(this.option("shading")) {
                 e.preventDefault();
             }
@@ -568,9 +564,9 @@ var Overlay = Widget.inherit({
         var overlayStack = this._overlayStack();
 
         for(var i = overlayStack.length - 1; i >= 0; i--) {
-            var $tabbableElements = overlayStack[i]._findTabbableElements();
+            var tabbableElements = overlayStack[i]._findTabbableBounds();
 
-            if($tabbableElements.length) {
+            if(tabbableElements.first || tabbableElements.last) {
                 return overlayStack[i] === this;
             }
         }
@@ -837,9 +833,26 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _findTabbableElements: function() {
-        return this._$wrapper
-            .find("*").filter(selectors.tabbable);
+    _findTabbableBounds: function() {
+        var $elements = this._$wrapper.find("*");
+        var elementsCount = $elements.length - 1;
+        var result = { first: null, last: null };
+
+        for(var i = 0; i <= elementsCount; i++) {
+            if(!result.first && $elements.eq(i).is(selectors.tabbable)) {
+                result.first = $elements.eq(i);
+            }
+
+            if(!result.last && $elements.eq(elementsCount - i).is(selectors.tabbable)) {
+                result.last = $elements.eq(elementsCount - i);
+            }
+
+            if(result.first && result.last) {
+                break;
+            }
+        }
+
+        return result;
     },
 
     _tabKeyHandler: function(e) {
@@ -847,15 +860,15 @@ var Overlay = Widget.inherit({
             return;
         }
 
-        var tabbableElements = this._findTabbableElements(),
+        var tabbableElements = this._findTabbableBounds(),
 
-            $firstTabbable = tabbableElements.first(),
-            $lastTabbable = tabbableElements.last(),
+            $firstTabbable = tabbableElements.first,
+            $lastTabbable = tabbableElements.last,
 
             isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0),
             isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0),
             isEmptyTabList = tabbableElements.length === 0,
-            isOutsideTarget = inArray(e.target, tabbableElements) === -1;
+            isOutsideTarget = !domUtils.contains(this.$content().get(0), e.target);
 
         if(isTabOnLast || isShiftTabOnFirst ||
             isEmptyTabList || isOutsideTarget) {

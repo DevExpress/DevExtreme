@@ -210,7 +210,7 @@ namespace StyleCompiler
                 "recurrenceEditor",
                 "drawer",
                 "card",
-                "richTextEditor"
+                "htmlEditor"
             });
 
             // Non-themeable components that have only common styles

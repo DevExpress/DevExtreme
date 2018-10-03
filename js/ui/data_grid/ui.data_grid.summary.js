@@ -59,6 +59,9 @@ var getGroupAggregates = function(data) {
     return data.summary || data.aggregates || [];
 };
 
+var recalculateWhileEditing = function(that) {
+    return that.option("summary.recalculateWhileEditing");
+};
 
 exports.FooterView = columnsView.ColumnsView.inherit((function() {
     return {
@@ -206,6 +209,21 @@ var SummaryDataSourceAdapterExtender = (function() {
 var SummaryDataSourceAdapterClientExtender = (function() {
     var calculateAggregates = function(that, summary, data, groupLevel) {
         var calculator;
+
+        if(recalculateWhileEditing(that)) {
+            var editingController = that.getController("editing");
+            if(editingController) {
+                var insertedData = editingController.getInsertedData();
+                if(insertedData.length) {
+                    data = data.concat(insertedData);
+                }
+
+                var removedData = editingController.getRemovedData();
+                if(removedData.length) {
+                    data = data.filter(data => removedData.indexOf(data) < 0);
+                }
+            }
+        }
 
         if(summary) {
             calculator = new AggregateCalculator({
@@ -468,6 +486,12 @@ gridCore.registerModule("summary", {
                  */
                 skipEmptyValues: true,
                 /**
+                 * @name dxDataGridOptions.summary.recalculateWhileEditing
+                 * @type boolean
+                 * @default false
+                 */
+                recalculateWhileEditing: false,
+                /**
                  * @name dxDataGridOptions.summary.texts
                  * @type object
                  */
@@ -727,6 +751,35 @@ gridCore.registerModule("summary", {
                         that.callBase(change);
                     },
 
+                    _prepareUnsavedDataSelector: function(selector) {
+                        var that = this;
+
+                        if(recalculateWhileEditing(that)) {
+                            var editingController = that.getController("editing");
+                            if(editingController) {
+                                return function(data) {
+                                    data = editingController.getUpdatedData(data);
+                                    return selector(data);
+                                };
+                            }
+                        }
+
+                        return selector;
+                    },
+
+                    _prepareAggregateSelector: function(selector, aggregator) {
+                        selector = this._prepareUnsavedDataSelector(selector);
+
+                        if(aggregator === "avg" || aggregator === "sum") {
+                            return function(data) {
+                                var value = selector(data);
+                                return typeUtils.isDefined(value) ? Number(value) : value;
+                            };
+                        }
+
+                        return selector;
+                    },
+
                     _getAggregates: function(summaryItems, remoteOperations) {
                         var that = this,
                             columnsController = that.getController("columns"),
@@ -748,14 +801,7 @@ gridCore.registerModule("summary", {
                                     summaryType: aggregator
                                 };
                             } else {
-                                if(aggregator === "avg" || aggregator === "sum") {
-                                    selector = function(data) {
-                                        var value = calculateCellValue(data);
-                                        return typeUtils.isDefined(value) ? Number(value) : value;
-                                    };
-                                } else {
-                                    selector = calculateCellValue;
-                                }
+                                selector = that._prepareAggregateSelector(calculateCellValue, aggregator);
 
                                 if(aggregator === "custom") {
                                     if(!calculateCustomSummary) {
@@ -935,6 +981,41 @@ gridCore.registerModule("summary", {
 
                     footerItems: function() {
                         return this._footerItems;
+                    }
+                };
+            })(),
+            editing: (function() {
+                return {
+                    _refreshSummary: function() {
+                        if(recalculateWhileEditing(this)) {
+                            this._dataController.refresh({
+                                load: true,
+                                changesOnly: true
+                            });
+                        }
+                    },
+                    _addEditData: function(params) {
+                        var result = this.callBase.apply(this, arguments);
+
+                        if(params.type) {
+                            this._refreshSummary();
+                        }
+
+                        return result;
+                    },
+                    _removeEditDataItem: function() {
+                        var result = this.callBase.apply(this, arguments);
+
+                        this._refreshSummary();
+
+                        return result;
+                    },
+                    cancelEditData: function() {
+                        var result = this.callBase.apply(this, arguments);
+
+                        this._refreshSummary();
+
+                        return result;
                     }
                 };
             })()

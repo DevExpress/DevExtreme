@@ -336,6 +336,8 @@ var DataSource = Class.inherit({
                 /**
                  * @name DataSourceOptions.onChanged
                  * @type function
+                 * @type_function_param1 e:Object
+                 * @type_function_param1_field1 changes:Array<any>
                  * @action
                  */
                 "onChanged",
@@ -845,17 +847,14 @@ var DataSource = Class.inherit({
         } else {
             let group = this.group(),
                 items = this.items(),
-                groupLevel = 0;
-
-            if(this.paginate() || group) {
-                changes = changes.filter(item => item.type === "update");
-            }
+                groupLevel = 0,
+                dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === "update") : changes;
 
             if(group) {
                 groupLevel = Array.isArray(group) ? group.length : 1;
             }
 
-            arrayUtils.applyBatch(this.store(), items, changes, groupLevel);
+            arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
             this.fireEvent("changed", [{ changes: changes }]);
         }
     },

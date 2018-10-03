@@ -1,8 +1,11 @@
 var $ = require("../../core/renderer"),
+    iconUtils = require("../../core/utils/icon"),
     CollectionWidgetItem = require("../collection/item");
 
 var LIST_ITEM_BADGE_CONTAINER_CLASS = "dx-list-item-badge-container",
     LIST_ITEM_BADGE_CLASS = "dx-list-item-badge",
+    LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container",
+    LIST_ITEM_ICON_CLASS = "dx-list-item-icon",
     BADGE_CLASS = "dx-badge",
 
     LIST_ITEM_CHEVRON_CONTAINER_CLASS = "dx-list-item-chevron-container",
@@ -15,6 +18,22 @@ var ListItem = CollectionWidgetItem.inherit({
 
         this._startWatcher("badge", this._renderBadge.bind(this));
         this._startWatcher("showChevron", this._renderShowChevron.bind(this));
+        this._startWatcher("icon", this._renderIcon.bind(this));
+    },
+
+    _renderIcon: function(data) {
+        if(!data.icon) {
+            return;
+        }
+
+        var $iconContainer = $("<div>").addClass(LIST_ITEM_ICON_CONTAINER_CLASS),
+            $icon = iconUtils.getImageContainer(data.icon);
+
+        $icon
+            .addClass(LIST_ITEM_ICON_CLASS)
+            .appendTo($iconContainer);
+
+        $iconContainer.prependTo(this._$element);
     },
 
     _renderBadge: function(badge) {
