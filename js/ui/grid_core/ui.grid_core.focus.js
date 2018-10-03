@@ -12,6 +12,8 @@ var ROW_FOCUSED_CLASS = "dx-row-focused",
 exports.FocusController = core.ViewController.inherit((function() {
     return {
         init: function() {
+            this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
+
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
             this._needRestoreFocus = false;
@@ -32,6 +34,20 @@ exports.FocusController = core.ViewController.inherit((function() {
                 args.handled = true;
             } else {
                 that.callBase(args);
+            }
+        },
+
+        _fireFocusedRowChanged: function($rowElement) {
+            var that = this,
+                focusedRowKey = that.option("focusedRowKey"),
+                focusedRowIndex = that.option("focusedRowIndex");
+
+            if(focusedRowKey && that.option("focusedRowEnabled")) {
+                that.executeAction("onFocusedRowChanged", {
+                    rowElement: $rowElement,
+                    rowIndex: focusedRowIndex,
+                    rowData: that.getController("data").getVisibleRows()[focusedRowIndex]
+                });
             }
         },
 
@@ -128,13 +144,15 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
                 rowsView = that.getView("rowsView"),
+                $focusedRow,
                 $tableElement;
 
             each(rowsView.getTableElements(), function(_, element) {
                 $tableElement = $(element);
                 that.clearPreviousFocusedRow($tableElement);
                 if(focusedRowIndex >= 0) {
-                    that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                    $focusedRow = that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                    that._fireFocusedRowChanged($focusedRow);
                 }
             });
         },
@@ -161,6 +179,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                     }
                 }
             }
+
+            return $row;
         }
     };
 })());
@@ -209,6 +229,12 @@ module.exports = {
                     var rowIndex = this.option("focusedRowIndex"),
                         columnIndex = this.option("focusedColumnIndex");
 
+                    if(this.option("focusedRowEnabled")) {
+                        this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
+                        this.createAction("onFocusedCellChanging", { excludeValidators: ["disabled", "readOnly"] });
+                        this.createAction("onFocusedCellChanged", { excludeValidators: ["disabled", "readOnly"] });
+                    }
+
                     this.callBase();
 
                     this.setRowFocusType();
@@ -248,6 +274,81 @@ module.exports = {
                         this.setRowFocusType();
                         this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
                     }
+                },
+
+                _updateFocusedCellPosition: function($cell, direction) {
+                    var prevRowIndex = this.option("focusedRowIndex"),
+                        prevColumnIndex = this.option("focusedColumnIndex");
+
+                    this.callBase($cell, direction);
+
+                    this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                },
+
+                _fireFocusedCellChanged: function($cellElement, prevCellIndex, prevRowIndex) {
+                    var that = this,
+                        columnIndex = that.option("focusedColumnIndex"),
+                        focusedRowIndex = that.option("focusedRowIndex");
+
+                    if(that.option("focusedRowEnabled") && (prevCellIndex !== columnIndex || prevRowIndex !== focusedRowIndex)) {
+                        that.executeAction("onFocusedCellChanged", {
+                            cellElement: $cellElement,
+                            columnIndex: columnIndex,
+                            rowIndex: focusedRowIndex,
+                            rowData: that.getController("data").getVisibleRows()[focusedRowIndex]
+                        });
+                    }
+                },
+
+                _fireFocusedCellChanging: function(eventArgs, $cellElement) {
+                    var that = this,
+                        prevCellIndex = that.option("focusedColumnIndex"),
+                        prevRowIndex = that.option("focusedRowIndex"),
+                        cellPosition = that._getCellPosition($cellElement),
+                        args = {
+                            cellElement: $cellElement,
+                            prevColumnIndex: prevCellIndex,
+                            prevRowIndex: prevRowIndex,
+                            newColumnIndex: cellPosition.columnIndex,
+                            newRowIndex: cellPosition.rowIndex,
+                            eventArgs: eventArgs,
+                            cancel: false
+                        };
+
+                    if(that.option("focusedRowEnabled")) {
+                        args.newRowData = that.getController("data").getVisibleRows()[cellPosition.rowIndex];
+
+                        that.executeAction("onFocusedCellChanging", args);
+
+                        if(args.newColumnIndex !== cellPosition.columnIndex || args.newRowIndex !== cellPosition.rowIndex) {
+                            args.$newCellElement = this._getCell({ columnIndex: args.newColumnIndex, rowIndex: args.newRowIndex });
+                        }
+                    }
+
+                    return args;
+                },
+
+                _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
+                    var newRowIndex = this._getRowIndex($newFocusedRow),
+                        prevFocusedRowIndex = this.getVisibleRowIndex(),
+                        args = {
+                            rowElement: $newFocusedRow,
+                            prevRowIndex: prevFocusedRowIndex,
+                            newRowIndex: newRowIndex,
+                            eventArgs: eventArgs,
+                            cancel: false
+                        };
+
+                    if(this.option("focusedRowEnabled")) {
+                        args.newRowData = this.getController("data").getVisibleRows()[newRowIndex];
+                        this.executeAction("onFocusedRowChanging", args);
+                        if(!args.cancel && args.newRowIndex !== newRowIndex) {
+                            this.setFocusedRowIndex(args.newRowIndex);
+                            args.rowIndexChanged = true;
+                        }
+                    }
+
+                    return args;
                 }
             },
 
@@ -404,6 +505,7 @@ module.exports = {
                     if(this.option("focusedRowEnabled") && row) {
                         if(this.getController("focus").isRowFocused(row.key, row.rowIndex)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
+                            this.getController("focus")._fireFocusedRowChanged($row);
                         }
                     }
 
