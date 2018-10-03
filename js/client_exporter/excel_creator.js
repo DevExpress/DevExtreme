@@ -442,10 +442,10 @@ var ExcelCreator = Class.inherit({
                 rowIndex = Number(rowIndex);
                 cellData = this._cellsArray[rowIndex][colIndex];
 
-                xmlCells.push(this._getXMLTag("c", [
+                xmlCells.push(this._getXMLTag("c", [ // 18.3.1.4 c (Cell)
                     { name: "r", value: this._getCellIndex(rowIndex + 1, colIndex) },
                     { name: "s", value: cellData.style },
-                    { name: "t", value: cellData.type }
+                    { name: "t", value: cellData.type } // 18.18.11 ST_CellType (Cell Type)
                 ], (typeUtils.isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
             }
             xmlRows.push(this._getXMLTag("row", [
