@@ -452,7 +452,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     let rangeLength = visualRange.length;
     const categories = dataRange.categories;
 
-    if(isDefined(visualRange.length)) {
+    if(isDefined(rangeLength)) {
         if(!isDiscrete) {
             if(options.dataType === "datetime" && !isNumber(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
@@ -484,11 +484,11 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     }
 
     if(!isDiscrete) {
-        if(isDefined(wholeRange.max)) {
-            max = max > wholeRange.max ? wholeRange.max : max;
+        if(isDefined(wholeRange.max) && max > wholeRange.max) {
+            max = wholeRange.max;
         }
-        if(isDefined(wholeRange.min)) {
-            min = min < wholeRange.min ? wholeRange.min : min;
+        if(isDefined(wholeRange.min) && min < wholeRange.min) {
+            min = wholeRange.min;
         }
     }
 

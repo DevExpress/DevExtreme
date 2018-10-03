@@ -3209,6 +3209,54 @@ QUnit.test("visualRange can't go out from whole range (numeric)", function(asser
     assert.equal(businessRange.maxVisible, 100);
 });
 
+QUnit.test("visualRange can't go out from whole range (visualRange.endValue < wholeRange.startValue)", function(assert) {
+    this.updateOptions({ wholeRange: [-100, 100], visualRange: [-200, -150] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 10
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, 100);
+    assert.equal(businessRange.minVisible, -100);
+    assert.equal(businessRange.maxVisible, 10);
+});
+
+QUnit.test("visualRange can't go out from whole range (visualRange.endValue < wholeRange.startValue and businessRange.max > wholeRange.endValue)", function(assert) {
+    this.updateOptions({ wholeRange: [-100, 100], visualRange: [-200, -150] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 150
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, 100);
+    assert.equal(businessRange.minVisible, -100);
+    assert.equal(businessRange.maxVisible, 100);
+});
+
+QUnit.test("visualRange can't go out from whole range (visualRange.startValue > wholeRange.endValue and wholeRange.startValue === null)", function(assert) {
+    this.updateOptions({ wholeRange: [null, 100], visualRange: [150, 200] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 10,
+        max: 50
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, 10);
+    assert.equal(businessRange.max, 100);
+    assert.equal(businessRange.minVisible, 10);
+    assert.equal(businessRange.maxVisible, 100);
+});
+
 QUnit.test("visualRange can't go out from whole range (datetime)", function(assert) {
     this.updateOptions({ argumentType: "datetime", wholeRange: [new Date(2008, 0, 1), null], visualRange: [new Date(2007, 0, 1), new Date(2019, 0, 1)] });
     this.axis.validate();
