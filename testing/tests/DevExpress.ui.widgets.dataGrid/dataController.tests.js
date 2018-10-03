@@ -2504,9 +2504,6 @@ QUnit.test("scroll to far", function(assert) {
         items: this.dataController.items()
     }, {
         changeType: "append",
-        items: this.dataController.items().slice(5, 10)
-    }, {
-        changeType: "append",
         items: this.dataController.items().slice(10, 15)
     }]);
 });
@@ -2743,20 +2740,18 @@ QUnit.test("load pages after change viewport item index to far", function(assert
     this.dataController.setViewportItemIndex(7);
     // act
     this.clock.callTimer(this.clock.firstTimerInRange());
-    // assert
-    assert.equal(changedArgs.length, 1);
-    assert.equal(changedArgs[0].changeType, 'refresh');
-    assert.deepEqual(this.getDataItems(changedArgs[0].items), [7, 8]);
-    assert.deepEqual(this.getDataItems(), [7, 8]);
-    assert.ok(this.dataController.isLoaded());
 
+    // assert
+    assert.equal(changedArgs.length, 0);
 
     // act
     this.clock.callTimer(this.clock.firstTimerInRange());
 
     // assert
     assert.equal(changedArgs.length, 2);
+    assert.equal(changedArgs[0].changeType, 'refresh');
     assert.deepEqual(changedArgs[1].changeType, 'append');
+    assert.deepEqual(this.getDataItems(changedArgs[0].items), [7, 8]);
     assert.deepEqual(this.getDataItems(changedArgs[1].items), [9, 10]);
     assert.deepEqual(this.getDataItems(), [7, 8, 9, 10]);
     assert.ok(this.dataController.isLoaded());
