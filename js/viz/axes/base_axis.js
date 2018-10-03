@@ -948,8 +948,14 @@ Axis.prototype = {
         const result = new rangeModule.Range(businessRange);
         that._addConstantLinesToRange(result, "minVisible", "maxVisible");
 
-        const minDefined = isDefined(visualRange.startValue);
-        const maxDefined = isDefined(visualRange.endValue);
+        let minDefined = isDefined(visualRange.startValue);
+        let maxDefined = isDefined(visualRange.endValue);
+
+        if(!isDiscrete) {
+            minDefined = minDefined && (!isDefined(wholeRange.endValue) || visualRange.startValue < wholeRange.endValue);
+            maxDefined = maxDefined && (!isDefined(wholeRange.startValue) || visualRange.endValue > wholeRange.startValue);
+        }
+
         let minVisible = minDefined ? visualRange.startValue : result.minVisible;
         let maxVisible = maxDefined ? visualRange.endValue : result.maxVisible;
 
@@ -967,7 +973,11 @@ Axis.prototype = {
             axisType: options.type,
             dataType: options.dataType,
             base: options.logarithmBase
-        }, visualRange, {
+        }, {
+            startValue: minDefined ? visualRange.startValue : undefined,
+            endValue: maxDefined ? visualRange.endValue : undefined,
+            length: visualRange.length
+        }, {
             categories,
             min: wholeRange.startValue,
             max: wholeRange.endValue
