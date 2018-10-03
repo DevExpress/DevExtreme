@@ -513,6 +513,7 @@
   },
   {
     "name": "ui/recurrence_editor",
+    "isInternal": true,
     "exports": {
       "default": { "path": "ui.dxRecurrenceEditor", "isWidget": true }
     }
