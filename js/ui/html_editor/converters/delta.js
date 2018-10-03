@@ -27,14 +27,18 @@ class DeltaConverter {
     _parsePlaceholder(data) {
         const startEscapedChar = ensureDefined(data.startEscapedChar, data.escapedChar);
         const endEscapedChar = ensureDefined(data.endEscapedChar, data.escapedChar);
-        const dataString = this._addDataParam("start-char", data.startEscapedChar) + this._addDataParam("end-char", data.endEscapedChar) +
-        this._addDataParam("esc-char", data.escapedChar) + this._addDataParam("value", data.value);
+        const dataString = [
+            this._addDataParam("start-char", data.startEscapedChar),
+            this._addDataParam("end-char", data.endEscapedChar),
+            this._addDataParam("esc-char", data.escapedChar),
+            this._addDataParam("value", data.value)
+        ].join(" ");
 
         return "<span class='dx-data-placeholder'" + dataString + "><span>" + startEscapedChar + data.value + endEscapedChar + "</span></span>";
     }
 
     _addDataParam(paramName, value) {
-        return value ? " data-placeholder-" + paramName + "=" + value : "";
+        return value ? " data-placeholder-${paramName}=${value}" : "";
     }
 
     toHtml(deltaOps) {
