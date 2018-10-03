@@ -1506,7 +1506,8 @@ QUnit.test("outside click should close several overlays if propagateOutsideClick
     assert.equal(overlay2.option("visible"), true, "Second overlay is visible");
 });
 
-QUnit.test("outside click should not close several overlays if other overlay content clicked", function(assert) {
+QUnit.test("customer should control closing of other overlays when some overlay content clicked", function(assert) {
+    // note: T668816, T655391 and click menu item when menu is inside of dxPopup with closeOnOutsideClick true
     var overlay1 = $("#overlay").dxOverlay({
             closeOnOutsideClick: true,
             visible: true
@@ -1519,8 +1520,17 @@ QUnit.test("outside click should not close several overlays if other overlay con
 
     $(overlay2.content()).trigger("dxpointerdown");
 
-    assert.equal(overlay1.option("visible"), true, "First overlay is visible");
+    assert.equal(overlay1.option("visible"), false, "Bottom overlay should get outside click when other overlay clicked");
     assert.equal(overlay2.option("visible"), true, "Second overlay is visible");
+
+    overlay1.show();
+    overlay2.option("closeOnOutsideClick", function(e) {
+        return !e.target.closest(".dx-overlay-content");
+    });
+    $(overlay1.content()).trigger("dxpointerdown");
+
+    assert.equal(overlay1.option("visible"), true, "First overlay is visible");
+    assert.equal(overlay2.option("visible"), true, "Closing should be prevented by a user-defined function");
 });
 
 QUnit.test("overlays' priority", function(assert) {
