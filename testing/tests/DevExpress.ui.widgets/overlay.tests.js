@@ -2953,11 +2953,19 @@ QUnit.test("tabbable selectors should check only bounds", function(assert) {
         shading: true,
         contentTemplate: $("#focusableTemplate")
     });
-    var elementsCount = $(overlay.content()).parent().find("*").length;
+    var $content = $(overlay.content());
 
-    overlay._findTabbableBounds();
+    $content
+        .find(".firstTabbable")
+        .focus()
+        .trigger(this.tabEvent);
 
-    assert.ok(tabbableSpy.callCount < elementsCount, "tabbable don't check all elements");
+    var $elements = $content.find("*");
+    var middleElement = $elements.get(Math.floor($elements.length / 2));
+
+    assert.ok(tabbableSpy.withArgs(0, $elements.get(0)).called, "first element has been checked");
+    assert.ok(tabbableSpy.withArgs(0, $elements.last().get(0)).called, "last element has been checked");
+    assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
 });
 
 QUnit.test("focusin event should not be propagated (T342292)", function(assert) {
