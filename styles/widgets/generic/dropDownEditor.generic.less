@@ -95,6 +95,11 @@
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
             padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
         }
+
+        .dx-rtl.dx-editor-standard&,
+        .dx-rtl .dx-editor-standard&, {
+            padding-right: 0;
+        }
     }
 }
 
@@ -107,6 +112,12 @@
         &.dx-rtl .dx-texteditor-input {
             padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
             padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+        }
+
+        &.dx-rtl.dx-editor-standard {
+            .dx-texteditor-input {
+                padding-right: 0;
+            } 
         }
 
         &.dx-show-clear-button {
