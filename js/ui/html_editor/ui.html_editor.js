@@ -33,29 +33,46 @@ const HtmlEditor = Editor.inherit({
             * @default ""
             */
             placeholder: "",
-            /**
-            * @name dxHtmlEditorOptions.toolbar
-            * @type Array<dxHtmlEditorToolbarItem>|dxToolbarModule
-            * @default null
-            */
-            toolbar: null, // container, items
-            /**
-            * @name dxHtmlEditorOptions.dataPlaceholder
-            * @type dxDataPlaceholderModule
-            * @default null
-            */
-            dataPlaceholder: null
 
             /**
-            * @name dxToolbarModule
+            * @name dxHtmlEditorOptions.dataPlaceholder
             * @type object
+            * @default null
+            */
+            dataPlaceholder: null,
+            /**
+            * @name dxHtmlEditorOptions.dataPlaceholder.dataSource
+            * @type string|Array<string>|DataSource|DataSourceOptions
+            * @default null
             */
             /**
-            * @name dxToolbarModule.container
+            * @name dxHtmlEditorOptions.dataPlaceholder.escapedChar
+            * @type string
+            * @default ""
+            */
+            /**
+            * @name dxHtmlEditorOptions.dataPlaceholder.startEscapedChar
+            * @type string
+            * @default undefined
+            */
+            /**
+            * @name dxHtmlEditorOptions.dataPlaceholder.endEscapedChar
+            * @type string
+            * @default undefined
+            */
+
+            /**
+            * @name dxHtmlEditorOptions.toolbar
+            * @type Array<dxHtmlEditorToolbarItem>|object
+            * @default null
+            */
+            toolbar: null
+            /**
+            * @name dxHtmlEditorOptions.toolbar.container
             * @type string|Node|jQuery
             */
             /**
-            * @name dxToolbarModule.items
+            * @name dxHtmlEditorOptions.toolbar.items
             * @type Array<dxHtmlEditorToolbarItem>
             */
 
@@ -70,31 +87,6 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.values
             * @type Array<string,number,boolean>
-            */
-
-            /**
-            * @name dxDataPlaceholderModule
-            * @type object
-            */
-            /**
-            * @name dxDataPlaceholderModule.dataSource
-            * @type string|Array<string>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxDataPlaceholderModule.escapedChar
-            * @type string
-            * @default ""
-            */
-            /**
-            * @name dxDataPlaceholderModule.startEscapedChar
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxDataPlaceholderModule.endEscapedChar
-            * @type string
-            * @default undefined
             */
         });
     },
