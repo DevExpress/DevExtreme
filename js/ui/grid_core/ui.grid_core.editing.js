@@ -1863,6 +1863,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     } else {
                         $button.addClass("dx-icon" + (iconType === "dxIcon" ? "-" : " ") + icon).attr("title", button.text);
                     }
+
+                    $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
                 } else {
                     $button.text(button.text);
                 }
