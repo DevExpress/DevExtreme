@@ -116,6 +116,8 @@
 * @group editors.texteditors
 */
 @texteditor-bg: @base-bg;
+@texteditor-standard-bg: transparent;
+@texteditor-filled-bg: fade(@texteditor-color, 5%);
 
 /**
 * @name 30. Focused border color
@@ -581,7 +583,11 @@
 @dropdowneditor-button-active-border-color: transparent;
 
 @dropdowneditor-button-hover-bg: @base-bg;
+@dropdowneditor-filled-button-hover-bg: fade(@base-accent, 20%);
 @dropdowneditor-button-active-bg: @base-inverted-bg;
+@dropdowneditor-filled-button-active-bg: fade(@base-accent, 30%);
+@dropdowneditor-filled-button-invalid-hover-bg: fade(@texteditor-invalid-focused-border-color, 20%);
+@dropdowneditor-filled-button-invalid-active-bg: fade(@texteditor-invalid-focused-border-color, 30%);
 
 @dropdowneditor-icon-color: @base-icon-color;
 @dropdowneditor-icon-active-color: @base-inverted-icon-color;
@@ -1512,9 +1518,6 @@
 * @group editors.calendar
 */
 @calendar-shevron-icon-color: @base-icon-color;
-
-// Calendar picker
-@datebox-dropdowneditor-button-active-shadow-color: @base-shadow-color;
 
 // Tooltip
 /**

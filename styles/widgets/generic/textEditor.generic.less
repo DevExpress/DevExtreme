@@ -49,20 +49,49 @@
 }
 
 .dx-texteditor {
-    background: @texteditor-bg;
-    border: @GENERIC_TEXTEDITOR_BORDER_WIDTH solid @texteditor-border-color;
-    border-radius: @texteditor-border-radius;
+
+    &.dx-editor-outlined {
+        background: @texteditor-bg;
+        border: @GENERIC_TEXTEDITOR_BORDER_WIDTH solid @texteditor-border-color;
+        border-radius: @texteditor-border-radius;
+    }
+
+    &.dx-editor-standard {
+        background: @texteditor-standard-bg;
+        border-bottom: @GENERIC_TEXTEDITOR_BORDER_WIDTH solid @texteditor-border-color;
+        border-radius: 0;
+    }
+
+    &.dx-editor-filled {
+        background: @texteditor-filled-bg;
+        border: @GENERIC_TEXTEDITOR_BORDER_WIDTH solid transparent;
+        border-radius: @texteditor-border-radius;
+    }
 
     &.dx-state-readonly {
         border-color: @texteditor-readonly-border-color;
+        &.dx-editor-filled {
+            border-color: transparent;
+            background-color: fade(@texteditor-filled-bg, 3%);
+        }
     }
 
     &.dx-state-hover {
         border-color: @texteditor-hover-border-color;
+        &.dx-editor-filled {
+            border-color: transparent;
+            background-color: fade(@texteditor-hover-border-color, 10%);
+        }
     }
 
     &.dx-state-focused, &.dx-state-active {
-        border-color: @texteditor-focused-border-color;
+        &.dx-editor-filled, &.dx-editor-standard, &.dx-editor-outlined {
+            border-color: @texteditor-focused-border-color;
+        }
+
+        &.dx-editor-filled {
+            background-color: transparent;
+        }
     }
 
     .validation-icon-position();
@@ -100,6 +129,10 @@
 
     &:before {
         padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
+
+        .dx-editor-standard & {
+            padding-left: 0;
+        }
     }
 }
 
@@ -110,19 +143,38 @@
     color: @texteditor-color;
     font-size: 1em;
     border-radius: @texteditor-input-border-radius;
-    min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + @GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + @GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING
+    min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + @GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + @GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING;
+
+    .dx-editor-standard & {
+        background: @texteditor-standard-bg;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .dx-editor-filled & {
+        background: transparent;
+    }
 }
 
 .dx-invalid.dx-texteditor {
     border-color: @texteditor-invalid-faded-border-color;
+    &.dx-editor-filled, &.dx-editor-standard, &.dx-editor-outlined {
+        &.dx-state-focused {
+            border-color: @texteditor-invalid-focused-border-color;
+        }
 
-    &.dx-state-focused {
-        border-color: @texteditor-invalid-focused-border-color;
+        .dx-texteditor-container {
+            &:after {
+                .dx-invalid-generic-badge();
+            }
+        }
     }
 
-    .dx-texteditor-container {
-        &:after {
-            .dx-invalid-generic-badge();
+    &.dx-editor-filled {
+        background-color: fade(@texteditor-invalid-faded-border-color, 10%);
+        border-color: transparent;
+        &.dx-state-focused {
+            background: transparent;
         }
     }
 }
@@ -132,5 +184,8 @@
     .dx-placeholder:before {
         right: 0;
         left: auto;
+        .dx-editor-standard& {
+            padding-right: 0;
+        }
     }
 }
