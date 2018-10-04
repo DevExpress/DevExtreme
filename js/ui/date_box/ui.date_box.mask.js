@@ -98,10 +98,10 @@ let DateBoxMask = DateBoxBase.inherit({
         this._searchValue += char;
 
         let limits = this._getActivePartLimits(),
-            setter = this._getActivePartProp("setter"),
+            getter = this._getActivePartProp("getter"),
             newValue = parseInt(this._searchValue);
 
-        if(setter === "setMonth") {
+        if(getter === "getMonth") {
             newValue--;
         }
 
