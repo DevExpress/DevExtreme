@@ -1729,7 +1729,8 @@ QUnit.module("closeOnOutsideClick");
 QUnit.test("drawer should be hidden after click on content", (assert) => {
     var drawer = $("#drawer").dxDrawer({
             closeOnOutsideClick: false,
-            opened: true
+            opened: true,
+            shading: true
         })
         .dxDrawer("instance"),
         $content = drawer.viewContent();
@@ -1738,8 +1739,11 @@ QUnit.test("drawer should be hidden after click on content", (assert) => {
     assert.equal(drawer.option("opened"), true, "drawer is not hidden");
     drawer.option("closeOnOutsideClick", true);
 
+    const $shader = drawer.$element().find("." + DRAWER_SHADER_CLASS);
     $($content).trigger("dxclick");
+
     assert.equal(drawer.option("opened"), false, "drawer is hidden");
+    assert.ok($shader.is(":hidden"), "shader is hidden");
 });
 
 QUnit.test("closeOnOutsideClick as function should be processed correctly", (assert) => {
