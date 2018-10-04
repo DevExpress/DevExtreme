@@ -129,10 +129,15 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
     let origFxStop = fx.stop,
         panelStopCalls = 0,
         contentStopCalls = 0,
+        overlayContentStopCalls = 0,
+        shaderStopCalls = 0,
         isJumpedToEnd = false;
 
     const $element = $("#drawer").dxDrawer({
-        opened: false
+        opened: false,
+        openedStateMode: "overlap",
+        revealMode: "expand",
+        shading: true
     });
 
     const instance = $element.dxDrawer("instance");
@@ -146,6 +151,12 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
         if($element.hasClass(DRAWER_CONTENT_CLASS)) {
             contentStopCalls++;
         }
+        if($element.hasClass("dx-overlay-content")) {
+            overlayContentStopCalls++;
+        }
+        if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            shaderStopCalls++;
+        }
     };
 
     try {
@@ -156,6 +167,8 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
 
         assert.equal(panelStopCalls, 2, "animation should stops before toggling visibility");
         assert.equal(contentStopCalls, 2, "animation should stops before toggling visibility");
+        assert.equal(overlayContentStopCalls, 2, "animation should stops before toggling visibility");
+        assert.equal(shaderStopCalls, 2, "animation should stops before toggling visibility");
         assert.notOk(isJumpedToEnd, "elements aren't returned to the end position after animation stopping");
     } finally {
         fx.off = true;

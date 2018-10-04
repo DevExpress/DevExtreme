@@ -105,7 +105,7 @@ class OverlapStrategy extends DrawerStrategy {
         }
 
         if(this._drawer.option("revealMode") === "expand") {
-            const $element = this._drawer._overlay.$content();
+            const $element = this._drawer.getOverlay().$content();
             const size = this._getPanelSize(offset);
             const direction = this._drawer.option("position");
             const marginTop = this._drawer.getRealPanelHeight() - size;
