@@ -66,7 +66,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
-                        dataController.reload();
+                        dataController.reload().done(function() {
+                            that._triggerUpdateFocusedRow(key);
+                        });
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
                             that._triggerUpdateFocusedRow(key);
@@ -128,22 +130,24 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
                 rowsView = that.getView("rowsView"),
+                $focusedRow,
                 $tableElement;
 
             each(rowsView.getTableElements(), function(_, element) {
                 $tableElement = $(element);
-                that.clearPreviousFocusedRow($tableElement);
+                that._clearPreviousFocusedRow($tableElement);
                 if(focusedRowIndex >= 0) {
-                    that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                    $focusedRow = that._prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                    that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
                 }
             });
         },
-        clearPreviousFocusedRow: function($tableElement) {
+        _clearPreviousFocusedRow: function($tableElement) {
             var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS);
             $prevRowFocusedElement.removeClass(ROW_FOCUSED_CLASS).removeAttr("tabindex");
             $prevRowFocusedElement.children("td").removeAttr("tabindex");
         },
-        prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
+        _prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
             var that = this,
                 $row,
                 keyboardController,
@@ -161,6 +165,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                     }
                 }
             }
+
+            return $row;
         }
     };
 })());
@@ -168,6 +174,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
+
              /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
@@ -209,6 +216,14 @@ module.exports = {
                     var rowIndex = this.option("focusedRowIndex"),
                         columnIndex = this.option("focusedColumnIndex");
 
+                    if(this.option("focusedRowEnabled")) {
+                        this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
+                        this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
+                    }
+
+                    this.createAction("onFocusedCellChanging", { excludeValidators: ["disabled", "readOnly"] });
+                    this.createAction("onFocusedCellChanged", { excludeValidators: ["disabled", "readOnly"] });
+
                     this.callBase();
 
                     this.setRowFocusType();
@@ -248,7 +263,16 @@ module.exports = {
                         this.setRowFocusType();
                         this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
                     }
-                }
+                },
+
+                _updateFocusedCellPosition: function($cell, direction) {
+                    var prevRowIndex = this.option("focusedRowIndex"),
+                        prevColumnIndex = this.option("focusedColumnIndex");
+
+                    this.callBase($cell, direction);
+
+                    this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                },
             },
 
             selection: {
