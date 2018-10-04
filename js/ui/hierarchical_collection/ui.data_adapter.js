@@ -51,7 +51,6 @@ var DataAdapter = Class.inherit({
             searchMode: "contains",
             dataConverter: new HierarchicalDataConverter(),
             onNodeChanged: commonUtils.noop,
-            hasSelectedChild: false,
             sort: null
         };
     },
@@ -68,7 +67,7 @@ var DataAdapter = Class.inherit({
     _updateSelection: function() {
         if(this.options.recursiveSelection) {
             this._setChildrenSelection();
-            this._setParentSelectionProperties();
+            this._setParentSelection();
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);
@@ -131,7 +130,7 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _setParentSelectionProperties: function() {
+    _setParentSelection: function() {
         var that = this;
 
         each(this._dataStructure, function(_, node) {
@@ -410,7 +409,7 @@ var DataAdapter = Class.inherit({
 
         if(this.options.recursiveSelection && !selectRecursive) {
             state ? this._setChildrenSelection() : this._toggleChildrenSelection(node, state);
-            this._setParentSelectionProperties();
+            this._setParentSelection();
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);
