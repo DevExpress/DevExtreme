@@ -1392,3 +1392,25 @@ QUnit.test("expand should work with createChildren", function(assert) {
 
     assert.notOk($expander.hasClass("dx-treeview-toggle-item-visibility-opened"), "node is collapsed");
 });
+
+var HAS_SELECTED_CHILD_CLASS = "dx-treeview-node-has-selected-items";
+
+QUnit.test("new items support a special class if the node has selected child", function(assert) {
+    var $treeView = $("#treeView").dxTreeView({
+            createChildren: function(parent) {
+                parent = (parent && parent.key) || 0;
+
+                var id = parent + 1,
+                    text = "Item " + id;
+
+                return [{ id: id, parentId: parent, text: text, selected: !!parent }];
+            },
+            parentIdExpr: "parentId",
+            dataStructure: "plain"
+        }),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.expandItem(1);
+
+    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class");
+});

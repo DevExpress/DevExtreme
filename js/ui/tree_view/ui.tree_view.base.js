@@ -842,6 +842,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._renderItem(nodes[i], $nodeContainer);
         }
 
+        this._toggleHasSelectedChildClasses();
+
         this._renderFocusTarget();
     },
 
@@ -854,7 +856,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria("selected", nodeData.selected, $node);
-        this._toggleSelectionClasses($node, nodeData.selected, nodeData.hasSelectedChild);
+
+        this._toggleSelectedClass($node, nodeData.selected);
 
         this.callBase(nodeData.key, nodeData.item, $node);
 
@@ -1230,7 +1233,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             }.bind(this)
         });
 
-        this._toggleSelectionClasses(this._$selectAllItem, value);
+        this._toggleSelectedClass(this._$selectAllItem, value);
 
         $container.before(this._$selectAllItem);
     },
@@ -1252,9 +1255,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _toggleSelectionClasses: function($node, selected, hasSelectedChild) {
+    _toggleSelectedClass: function($node, selected) {
         $node.toggleClass(SELECTED_ITEM_CLASS, !!selected);
-        $node.toggleClass(NODE_HAS_SELECTED_CHILD_CLASS, hasSelectedChild);
+    },
+
+    _toggleHasSelectedChildClass: function($node, hasSelectedChild) {
+        $node.toggleClass(NODE_HAS_SELECTED_CHILD_CLASS, !!hasSelectedChild);
     },
 
     _toggleNodeDisabledState: function(node, state) {
@@ -1349,7 +1355,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 return;
             }
 
-            that._toggleSelectionClasses($node, nodeSelection, node.internalFields.hasSelectedChild);
+            that._toggleSelectedClass($node, nodeSelection);
 
             that.setAria("selected", nodeSelection, $node);
 
@@ -1358,6 +1364,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 checkbox.option("value", nodeSelection);
             }
         });
+
+        this._toggleHasSelectedChildClasses();
 
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox("instance").option("value", this._dataAdapter.isAllSelected());
@@ -1376,7 +1384,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(this._showCheckboxes()) {
             var parentValue = parentNode.internalFields.selected;
             this._getCheckBoxInstance($parentNode).option("value", parentValue);
-            this._toggleSelectionClasses($parentNode, parentValue, parentNode.internalFields.hasSelectedChild);
+            this._toggleSelectedClass($parentNode, parentValue);
         }
 
         if(parentNode.internalFields.parentKey !== this.option("rootValue")) {
@@ -1610,6 +1618,50 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         } while($node.children(".dx-treeview-item.dx-state-disabled").length);
 
         return $node;
+    },
+
+    _hasSelectedChildNodes: [],
+
+    _getHasSelectedChildNodes: function(forceCalculation, nodes) {
+        var result;
+
+        if(forceCalculation) {
+            result = this._dataAdapter.getHasSelectedChildNodes(nodes);
+        }
+
+        if(forceCalculation && !nodes) {
+            this._hasSelectedChildNodes = result;
+        }
+
+        return result || this._hasSelectedChildNodes;
+    },
+
+    _toggleHasSelectedChildClasses: function(nodes) {
+        var oldHasSelectedChildNodeKeys,
+            node,
+            $node;
+
+        if(!nodes || !nodes.length) {
+            oldHasSelectedChildNodeKeys = this._getHasSelectedChildNodes();
+        }
+
+        var newHasSelectedChildNodeKeys = this._getHasSelectedChildNodes(true, nodes),
+            that = this;
+
+
+        each(oldHasSelectedChildNodeKeys, function(_, key) {
+            node = that._dataAdapter.getNodeByKey(key);
+            if(node) {
+                $node = that._getNodeElement(node);
+                that._toggleHasSelectedChildClass($node, false);
+            }
+        });
+
+
+        each(newHasSelectedChildNodeKeys, function(_, key) {
+            var $node = that._getNodeElement(that._dataAdapter.getNodeByKey(key));
+            that._toggleHasSelectedChildClass($node, true);
+        });
     },
 
     _collapseFocusedContainer: function() {

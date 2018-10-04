@@ -13,8 +13,7 @@ var Class = require("../../core/class"),
 
 var EXPANDED = "expanded",
     SELECTED = "selected",
-    DISABLED = "disabled",
-    HASSELECTEDCHILD = "hasSelectedChild";
+    DISABLED = "disabled";
 
 var DataAdapter = Class.inherit({
 
@@ -132,7 +131,7 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    _setParentSelectionProperties: function(withoutSelection) {
+    _setParentSelectionProperties: function() {
         var that = this;
 
         each(this._dataStructure, function(_, node) {
@@ -141,16 +140,37 @@ var DataAdapter = Class.inherit({
             if(parent && node.internalFields.parentKey !== that.options.rootValue) {
                 that._iterateParents(node, function(parent) {
                     var newParentState = that._calculateSelectedState(parent);
-                    if(!withoutSelection) {
-                        that._setFieldState(parent, SELECTED, newParentState);
-                    }
-
-                    if(node.internalFields.hasOwnProperty(HASSELECTEDCHILD)) {
-                        that._setFieldState(parent, HASSELECTEDCHILD, newParentState !== false);
-                    }
+                    that._setFieldState(parent, SELECTED, newParentState);
                 });
             }
         });
+    },
+
+    checkHasSelectedChildNodes: function(node) {
+        var result;
+
+        this._iterateChildren(node, true, function(child) {
+            if(child.internalFields.selected) {
+                result = true;
+                return true;
+            }
+        });
+
+        return result;
+    },
+
+    getHasSelectedChildNodes: function(nodes) {
+        var that = this;
+        var result = [];
+
+        each(nodes || this.getData(), function(_, node) {
+            if(that.checkHasSelectedChildNodes(node)) {
+                result.push(node.internalFields.key);
+            }
+
+        });
+
+        return result;
     },
 
     _setParentExpansion: function() {
@@ -178,10 +198,13 @@ var DataAdapter = Class.inherit({
         var that = this;
 
         each(node.internalFields.childrenKeys, function(_, key) {
-            var child = that.getNodeByKey(key);
-            typeUtils.isFunction(callback) && callback(child);
+            var child = that.getNodeByKey(key),
+                needToStop;
+            if(typeUtils.isFunction(callback)) {
+                needToStop = callback(child);
+            }
             if(child.internalFields.childrenKeys.length && recursive) {
-                that._iterateChildren(child, recursive, callback);
+                that._iterateChildren(child, !needToStop && recursive, callback);
             }
         });
     },
@@ -388,8 +411,6 @@ var DataAdapter = Class.inherit({
         if(this.options.recursiveSelection && !selectRecursive) {
             state ? this._setChildrenSelection() : this._toggleChildrenSelection(node, state);
             this._setParentSelectionProperties();
-        } else {
-            this._setParentSelectionProperties(true);
         }
 
         this._selectedNodesKeys = this._updateNodesKeysArray(SELECTED);

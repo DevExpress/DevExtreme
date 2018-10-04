@@ -373,28 +373,147 @@ QUnit.test("items should be selectable after the search", function(assert) {
     assert.equal(clickHandler.callCount, 1, "click works");
 });
 
+
+QUnit.module("has selected child class");
+
 var HAS_SELECTED_CHILD_CLASS = "dx-treeview-node-has-selected-items";
 
 QUnit.test("parent has a special class if node has selected child", function(assert) {
     var items = [{
-            text: 'item 1', expanded: true, items: [
-                { text: 'item 11', selected: true }
-            ]
+            text: 'item 1',
+            expanded: true,
+            items: [{
+                text: 'item 11',
+                expanded: true,
+                items: [{
+                    text: 'item 111',
+                    selected: true
+                }]
+            }, {
+                text: 'item 12',
+                expanded: true,
+                items: [{
+                    text: 'item 121',
+                    selected: false
+                }]
+            }]
         }],
         $treeView = initTree({
             dataSource: items,
             selectionMode: "single",
             selectNodesRecursive: true
         }),
-        treeViewInstance = $treeView.dxTreeView("instance");
+        treeViewInstance = $treeView.dxTreeView("instance"),
+        getNode = function(index) {
+            return $treeView.find(".dx-treeview-node").eq(index);
+        };
 
-    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class if selectNodesRecursive is true");
-
-    treeViewInstance.option("selectNodesRecursive", false);
-
-    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class if selectNodesRecursive is false");
+    assert.ok(getNode(0).hasClass(HAS_SELECTED_CHILD_CLASS), "the first level parent has a special class if selectNodesRecursive is true");
+    assert.ok(getNode(1).hasClass(HAS_SELECTED_CHILD_CLASS), "the second level parent has a special class if selectNodesRecursive is true");
+    assert.notOk(getNode(2).hasClass(HAS_SELECTED_CHILD_CLASS), "selected child has not a special class");
+    assert.notOk(getNode(3).hasClass(HAS_SELECTED_CHILD_CLASS), "other second level item has not a special class");
 
     treeViewInstance.unselectAll();
+    assert.notOk(getNode(0).hasClass(HAS_SELECTED_CHILD_CLASS), "the first level parent class has been removed after unselectAll()");
+    assert.notOk(getNode(1).hasClass(HAS_SELECTED_CHILD_CLASS), "the second level parent class has been removed after unselectAll()");
 
-    assert.notOk($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "the class has been removed after child unselect");
+    treeViewInstance.selectItem($treeView.find(".dx-treeview-node").eq(1));
+    assert.ok(getNode(0).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class if selectNodesRecursive is true");
+    assert.notOk(getNode(1).hasClass(HAS_SELECTED_CHILD_CLASS), "item has not a special class");
+    assert.notOk(getNode(2).hasClass(HAS_SELECTED_CHILD_CLASS), "child has not a special class if selectNodesRecursive is true");
+
+    treeViewInstance.unselectAll();
+    treeViewInstance.option("selectNodesRecursive", false);
+    treeViewInstance.selectItem($treeView.find(".dx-treeview-node").eq(2));
+    assert.ok(getNode(0).hasClass(HAS_SELECTED_CHILD_CLASS), "first level parent has a special class if selectNodesRecursive is false");
+    assert.ok(getNode(1).hasClass(HAS_SELECTED_CHILD_CLASS), "second level parent has a special class if selectNodesRecursive is false");
+
+    treeViewInstance.unselectItem($treeView.find(".dx-treeview-node").eq(2));
+    assert.notOk(getNode(0).hasClass(HAS_SELECTED_CHILD_CLASS), "first level parent has not a special class after child unselect if selectNodesRecursive is false");
+    assert.notOk(getNode(1).hasClass(HAS_SELECTED_CHILD_CLASS), "second level parent has not a special class after child unselect if selectNodesRecursive is false");
+});
+
+
+QUnit.test("all parents has a special class after selectAll", function(assert) {
+    var items = [{
+            text: 'item 1',
+            expanded: true,
+            items: [{
+                text: 'item 11',
+                expanded: true,
+                items: [{
+                    text: 'item 111'
+                }]
+            }, {
+                text: 'item 12',
+                expanded: true,
+                items: [{
+                    text: 'item 121'
+                }]
+            }]
+        }],
+        $treeView = initTree({
+            dataSource: items,
+            selectionMode: "multiple",
+            selectNodesRecursive: true,
+            showCheckBoxesMode: "selectAll"
+        }),
+        treeViewInstance = $treeView.dxTreeView("instance");
+
+    treeViewInstance.selectAll();
+    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "first level parent has a special class after selectAll()");
+    assert.ok($treeView.find(".dx-treeview-node").eq(1).hasClass(HAS_SELECTED_CHILD_CLASS) && $treeView.find(".dx-treeview-node").eq(3).hasClass(HAS_SELECTED_CHILD_CLASS), "all second level parents have a special class after selectAll()");
+});
+
+
+QUnit.test("parent has a special class if node has invisible selected child", function(assert) {
+    var items = [{
+            text: 'item 1',
+            items: [{
+                text: 'item 11',
+                items: [{
+                    text: 'item 111',
+                    selected: true
+                }]
+            }]
+        }],
+        $treeView = initTree({
+            dataSource: items,
+            selectionMode: "single",
+            selectNodesRecursive: true
+        }),
+        treeViewInstance = $treeView.dxTreeView("instance"),
+        $item = $treeView.find(".dx-treeview-node").eq(0);
+
+    assert.ok($item.hasClass(HAS_SELECTED_CHILD_CLASS), "first level parent has a special class");
+
+    treeViewInstance.expandItem($item);
+
+    assert.ok($treeView.find(".dx-treeview-node").eq(1).hasClass(HAS_SELECTED_CHILD_CLASS), "parent has a special class");
+
+    treeViewInstance.unselectAll();
+    assert.notOk($item.hasClass(HAS_SELECTED_CHILD_CLASS), "first level parent has not a special class after unselectAll()");
+});
+
+QUnit.test("disabled parent has a special class if node has selected child", function(assert) {
+    var items = [{
+            text: 'item 1',
+            expanded: true,
+            items: [{
+                text: 'item 11',
+                disabled: true,
+                items: [{
+                    text: 'item 111',
+                    selected: true
+                }]
+            }]
+        }],
+        $treeView = initTree({
+            dataSource: items,
+            selectionMode: "single",
+            selectNodesRecursive: true
+        });
+
+    assert.ok($treeView.find(".dx-treeview-node").eq(0).hasClass(HAS_SELECTED_CHILD_CLASS), "first level parent has a special class");
+    assert.ok($treeView.find(".dx-treeview-node").eq(1).hasClass(HAS_SELECTED_CHILD_CLASS), "disabled parent has a special class");
 });
