@@ -88,7 +88,7 @@
     @background-color, @text-color, @shadow-color,
     @hover-background-color, @hover-shadow-color, @focused-background-color,
     @focused-shadow-color, @active-background-color, @active-shadow-color,
-    @disabled-background-color, @icon-color
+    @disabled-background-color, @icon-color, @selected-background-color
 ) {
     background-color: @background-color;
     color: @text-color;
@@ -113,6 +113,11 @@
         .box-shadow(@active-shadow-color);
     }
 
+    &.dx-state-selected {
+        background-color: @selected-background-color;
+        .box-shadow(none);
+    }
+
     &.dx-state-disabled {
         background: @disabled-background-color;
         .box-shadow(none);
@@ -133,7 +138,7 @@
 
 .dx-button-styling(
     @button-bg, @button-color, @button-hover-bg,
-    @button-focused-bg, @button-active-bg, @button-icon-color
+    @button-focused-bg, @button-active-bg, @button-icon-color, @button-selected-bg
 ) {
     .border-radius(@button-border-radius);
 
@@ -148,7 +153,8 @@
         @button-active-bg,
         @MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW,
         @button-disabled-background,
-        @button-icon-color
+        @button-icon-color,
+        @button-selected-bg
     );
 }
 
@@ -164,7 +170,8 @@
         fade(@button-color, 20%),
         none,
         transparent,
-        @button-color
+        @button-color,
+        none
     );
 }
 
@@ -200,7 +207,8 @@
         @button-normal-hover-bg,
         @button-normal-focused-bg,
         @button-normal-active-bg,
-        @button-normal-icon-color
+        @button-normal-icon-color,
+        @button-normal-selected-bg
     );
 
     &.dx-button-default {
@@ -210,7 +218,8 @@
             @button-default-hover-bg,
             @button-default-focused-bg,
             @button-default-active-bg,
-            @button-default-icon-color
+            @button-default-icon-color,
+            @button-default-selected-bg
         );
     }
 
@@ -221,7 +230,8 @@
             @button-danger-hover-bg,
             @button-danger-focused-bg,
             @button-danger-active-bg,
-            @button-danger-icon-color
+            @button-danger-icon-color,
+            @button-danger-selected-bg
         );
     }
 
@@ -232,7 +242,8 @@
             @button-success-hover-bg,
             @button-success-focused-bg,
             @button-success-active-bg,
-            @button-success-icon-color
+            @button-success-icon-color,
+            @button-success-selected-bg
         );
     }
 
