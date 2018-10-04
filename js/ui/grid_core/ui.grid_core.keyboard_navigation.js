@@ -416,6 +416,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
             rowIndex = this.getVisibleRowIndex(),
+            editingOptions = this.option("editing"),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
         if((this.option("grouping.allowCollapsing") && isGroupRow($row)) ||
@@ -440,10 +441,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     eventArgs.originalEvent.preventDefault();
                 }
             } else {
-                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex],
-                    row = this._dataController.items()[rowIndex];
+                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
 
-                if(this._editingController.allowUpdating({ row: row }) && column && column.allowEditing) {
+                if(editingOptions.allowUpdating && column && column.allowEditing) {
                     if(this._isRowEditMode()) {
                         this._editingController.editRow(rowIndex);
                     } else {
@@ -1182,6 +1182,86 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._focusedViews = null;
         this._keyDownProcessor && this._keyDownProcessor.dispose();
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
+    },
+
+    _fireFocusedCellChanging: function(eventArgs, $cellElement) {
+        var that = this,
+            prevCellIndex = that.option("focusedColumnIndex"),
+            prevRowIndex = that.option("focusedRowIndex"),
+            cellPosition = that._getCellPosition($cellElement),
+            args = {
+                cellElement: $cellElement,
+                prevColumnIndex: prevCellIndex,
+                prevRowIndex: prevRowIndex,
+                newColumnIndex: cellPosition.columnIndex,
+                newRowIndex: cellPosition.rowIndex,
+                eventArgs: eventArgs,
+                cancel: false
+            };
+
+        if(that.option("focusedRowEnabled")) {
+            args.newRowData = that.getController("data").getVisibleRows()[cellPosition.rowIndex];
+
+            that.executeAction("onFocusedCellChanging", args);
+
+            if(args.newColumnIndex !== cellPosition.columnIndex || args.newRowIndex !== cellPosition.rowIndex) {
+                args.$newCellElement = this._getCell({ columnIndex: args.newColumnIndex, rowIndex: args.newRowIndex });
+            }
+        }
+
+        return args;
+    },
+
+    _fireFocusedCellChanged: function($cellElement, prevCellIndex, prevRowIndex) {
+        var that = this,
+            columnIndex = that.option("focusedColumnIndex"),
+            focusedRowIndex = that.option("focusedRowIndex");
+
+        if(that.option("focusedRowEnabled") && (prevCellIndex !== columnIndex || prevRowIndex !== focusedRowIndex)) {
+            that.executeAction("onFocusedCellChanged", {
+                cellElement: $cellElement,
+                columnIndex: columnIndex,
+                rowIndex: focusedRowIndex,
+                rowData: that.getController("data").getVisibleRows()[focusedRowIndex]
+            });
+        }
+    },
+
+    _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
+        var newRowIndex = this._getRowIndex($newFocusedRow),
+            prevFocusedRowIndex = this.getVisibleRowIndex(),
+            args = {
+                rowElement: $newFocusedRow,
+                prevRowIndex: prevFocusedRowIndex,
+                newRowIndex: newRowIndex,
+                eventArgs: eventArgs,
+                cancel: false
+            };
+
+        if(this.option("focusedRowEnabled")) {
+            args.newRowData = this.getController("data").getVisibleRows()[newRowIndex];
+            this.executeAction("onFocusedRowChanging", args);
+            if(!args.cancel && args.newRowIndex !== newRowIndex) {
+                this.setFocusedRowIndex(args.newRowIndex);
+                args.rowIndexChanged = true;
+            }
+        }
+
+        return args;
+    },
+
+    _fireFocusedRowChanged: function($rowElement) {
+        var that = this,
+            focusedRowKey = that.option("focusedRowKey"),
+            focusedRowIndex = that.option("focusedRowIndex");
+
+        if(focusedRowKey && that.option("focusedRowEnabled")) {
+            that.executeAction("onFocusedRowChanged", {
+                rowElement: $rowElement,
+                rowIndex: focusedRowIndex,
+                rowData: that.getController("data").getVisibleRows()[focusedRowIndex]
+            });
+        }
     }
 });
 
@@ -1203,6 +1283,59 @@ module.exports = {
              * @type_function_param1_field3 jQueryEvent:jQuery.Event:deprecated(event)
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 handled:boolean
+             * @extends Action
+             * @action
+             */
+
+            /**
+             * @name GridBaseOptions._onFocusedCellChanging
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field1 cellElement:object
+             * @type_function_param1_field2 prevColumnIndex:number
+             * @type_function_param1_field3 prevRowIndex:number
+             * @type_function_param1_field4 newColumnIndex:number
+             * @type_function_param1_field5 newRowIndex:number
+             * @type_function_param1_field6 newRowData:object
+             * @type_function_param1_field7 eventArgs:object
+             * @type_function_param1_field8 cancel:boolean
+             * @extends Action
+             * @action
+             */
+
+            /**
+             * @name GridBaseOptions._onFocusedCellChanged
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field1 cellElement:object
+             * @type_function_param1_field2 columnIndex:number
+             * @type_function_param1_field3 rowIndex:number
+             * @type_function_param1_field4 rowData:object
+             * @extends Action
+             * @action
+             */
+
+            /**
+             * @name GridBaseOptions._onFocusedRowChanging
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field1 rowElement:object
+             * @type_function_param1_field2 prevRowIndex:number
+             * @type_function_param1_field3 newRowIndex:number
+             * @type_function_param1_field4 newRowData:object
+             * @type_function_param1_field5 eventArgs:object
+             * @type_function_param1_field6 cancel:boolean
+             * @extends Action
+             * @action
+             */
+
+            /**
+             * @name GridBaseOptions._onFocusedRowChanged
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field1 rowElement:object
+             * @type_function_param1_field2 rowIndex:number
+             * @type_function_param1_field4 rowData:object
              * @extends Action
              * @action
              */
