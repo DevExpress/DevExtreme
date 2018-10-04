@@ -34,11 +34,11 @@ class DeltaConverter {
             this._addDataParam("value", data.value)
         ].join(" ");
 
-        return "<span class='dx-data-placeholder'" + dataString + "><span>" + startEscapedChar + data.value + endEscapedChar + "</span></span>";
+        return `<span class='dx-data-placeholder'${dataString}><span>${startEscapedChar + data.value + endEscapedChar}</span></span>`;
     }
 
     _addDataParam(paramName, value) {
-        return value ? " data-placeholder-${paramName}=${value}" : "";
+        return value ? ` data-placeholder-${paramName}=${value}` : "";
     }
 
     toHtml(deltaOps) {
