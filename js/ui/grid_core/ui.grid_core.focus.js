@@ -67,7 +67,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
-                            that._scrollToFocusedRow();
+                            that._triggerUpdateFocusedRow(key);
                         });
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
@@ -162,9 +162,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                     var $cell = keyboardController._getFocusedCell();
                     if($cell) {
                         keyboardController.focus($cell);
-                    } else {
-                        that._scrollToFocusedRow($row);
                     }
+                } else {
+                    that._scrollToFocusedRow($row);
                 }
             }
 

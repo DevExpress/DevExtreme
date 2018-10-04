@@ -1655,3 +1655,241 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key in back order (s
     assert.equal(focusedCellChangingCounter, 2, "focusedCelChanging count");
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
 });
+
+QUnit.testInActiveWindow("Focused row should be visible if page size has height more than scrollable container", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        height: 100,
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    this.clock.tick();
+
+    this.getController("focus").focusRowByKey("Smith");
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+});
+
+QUnit.testInActiveWindow("Focused row should be visible in virtual scrolling mode", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        height: 100,
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        },
+        scrolling: {
+            mode: "virtual"
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    this.clock.tick();
+
+    this.getController("focus").focusRowByKey("Smith");
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+});
+
+QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mode", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        height: 100,
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        },
+        scrolling: {
+            mode: "infinite"
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    this.clock.tick();
+
+    this.getController("focus").focusRowByKey("Smith");
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+});
+
+QUnit.testInActiveWindow("Focused row should be visible in virual scrolling mode if page not loaded", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        height: 100,
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    this.clock.tick();
+
+    this.getController("focus").focusRowByKey("Smith");
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
+});
+
+QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mode if page not loaded", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        height: 100,
+        focusedRowEnabled: true,
+        editing: {
+            allowEditing: false
+        },
+        scrolling: {
+            mode: "infinite"
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    this.clock.tick();
+
+    this.getController("focus").focusRowByKey("Smith");
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(2).hasClass("dx-row-focused"), "Focused row");
+    var rect = rowsView.getRow(2)[0].getBoundingClientRect();
+    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
+});
