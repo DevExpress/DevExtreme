@@ -80,10 +80,8 @@ const dataGridExportTestsHelper = {
         const done = assert.async();
         const actualGridCells = [];
 
-        gridOptions.export = {
-            onXlsxCellPrepared: e => {
-                actualGridCells.push(e.gridCell);
-            },
+        gridOptions.onXlsxCellPrepared = e => {
+            actualGridCells.push(e.gridCell);
         };
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {
