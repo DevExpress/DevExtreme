@@ -128,13 +128,15 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
                 rowsView = that.getView("rowsView"),
+                $focusedRow,
                 $tableElement;
 
             each(rowsView.getTableElements(), function(_, element) {
                 $tableElement = $(element);
                 that.clearPreviousFocusedRow($tableElement);
                 if(focusedRowIndex >= 0) {
-                    that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                    $focusedRow = that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                    that._fireFocusedRowChanged($focusedRow);
                 }
             });
         },
@@ -161,6 +163,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                     }
                 }
             }
+
+            return $row;
         }
     };
 })());
@@ -168,6 +172,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
+
              /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
@@ -209,6 +214,13 @@ module.exports = {
                     var rowIndex = this.option("focusedRowIndex"),
                         columnIndex = this.option("focusedColumnIndex");
 
+                    if(this.option("focusedRowEnabled")) {
+                        this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
+                        this.createAction("onFocusedCellChanging", { excludeValidators: ["disabled", "readOnly"] });
+                        this.createAction("onFocusedCellChanged", { excludeValidators: ["disabled", "readOnly"] });
+                        this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
+                    }
+
                     this.callBase();
 
                     this.setRowFocusType();
@@ -248,7 +260,16 @@ module.exports = {
                         this.setRowFocusType();
                         this._focus(this._getCellElementFromTarget(eventArgs.originalEvent.target), true);
                     }
-                }
+                },
+
+                _updateFocusedCellPosition: function($cell, direction) {
+                    var prevRowIndex = this.option("focusedRowIndex"),
+                        prevColumnIndex = this.option("focusedColumnIndex");
+
+                    this.callBase($cell, direction);
+
+                    this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                },
             },
 
             selection: {
@@ -404,6 +425,7 @@ module.exports = {
                     if(this.option("focusedRowEnabled") && row) {
                         if(this.getController("focus").isRowFocused(row.key, row.rowIndex)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
+                            this.getController("focus")._fireFocusedRowChanged($row);
                         }
                     }
 
