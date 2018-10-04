@@ -111,6 +111,12 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             left = appointmentSettings.left + this._defaultWidth;
 
         if(tailHeight) {
+            var minHeight = this.getAppointmentMinSize();
+
+            if(tailHeight < minHeight) {
+                tailHeight = minHeight;
+            }
+
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
                 left: left,
@@ -151,7 +157,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _getVerticalAppointmentGeometry: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        if(overlappingMode && this.instance.fire("forceMaxAppointmentPerCell")) {
+        if(overlappingMode) {
             var config = this._calculateVerticalGeometryConfig(coordinates);
 
             return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
@@ -305,7 +311,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         } else {
             return {
                 allDay: this.instance.option("_appointmentCountPerCell"),
-                simple: this.instance.fire("forceMaxAppointmentPerCell") ? this._calculateDynamicAppointmentCountPerCell() : undefined
+                simple: this._calculateDynamicAppointmentCountPerCell()
             };
         }
     },

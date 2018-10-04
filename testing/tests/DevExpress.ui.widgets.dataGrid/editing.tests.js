@@ -6712,6 +6712,256 @@ QUnit.test("Get first editable column index when there is custom select column",
     assert.equal(editableIndex, 1, "editable index");
 });
 
+QUnit.test("Add a custom link for the 'buttons' command column", function(assert) {
+    // arrange
+    var that = this,
+        $linkElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: "buttons",
+        buttons: ["edit", "delete", { name: "cancel", visible: false }, {
+            text: "My link",
+            cssClass: "mylink"
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.strictEqual($linkElements.length, 3, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-edit"), "the edit link");
+    assert.ok($linkElements.eq(1).hasClass("dx-link-delete"), "the delete link");
+    assert.ok($linkElements.eq(2).hasClass("mylink"), "custom link");
+    assert.strictEqual($linkElements.eq(2).text(), "My link", "text of the custom link");
+
+    // act
+    that.editRow(0);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.strictEqual($linkElements.length, 2, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-save"), "the save link");
+    assert.ok($linkElements.eq(1).hasClass("mylink"), "custom link");
+    assert.strictEqual($linkElements.eq(1).text(), "My link", "text of the custom link");
+});
+
+QUnit.test("Add a custom icon for the 'buttons' command column", function(assert) {
+    // arrange
+    var that = this,
+        $linkElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: "buttons",
+        buttons: ["edit", "delete", {
+            text: "My icon",
+            cssClass: "myicon",
+            icon: "doc"
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.ok($testElement.find(".dx-command-edit").first().hasClass("dx-command-edit-with-icons"), "command edit cell has icons");
+    assert.strictEqual($linkElements.length, 3, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-edit"), "the edit link");
+    assert.ok($linkElements.eq(1).hasClass("dx-link-delete"), "the delete link");
+    assert.ok($linkElements.eq(2).hasClass("dx-icon-doc"), "custom icon");
+    assert.ok($linkElements.eq(2).hasClass("myicon"), "icon has the myicon class");
+    assert.strictEqual($linkElements.eq(2).text(), "", "text of the custom link");
+    assert.strictEqual($linkElements.eq(2).attr("title"), "My icon", "title of the custom link");
+});
+
+QUnit.test("Add a custom command column", function(assert) {
+    // arrange
+    var that = this,
+        $linkElements,
+        $customCommandCell,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({ type: "buttons" }, {
+        type: "buttons",
+        cssClass: "mybuttons",
+        buttons: [
+            {
+                text: "My link",
+                cssClass: "mylink"
+            },
+            {
+                template: function($cellElement, options) {
+                    return $("<div/>").addClass("mybutton").text("My button");
+                }
+            }
+        ]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.strictEqual($linkElements.length, 2, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-edit"), "the edit link");
+    assert.ok($linkElements.eq(1).hasClass("dx-link-delete"), "the delete link");
+
+    $customCommandCell = $testElement.find(".mybuttons").first();
+    assert.strictEqual($customCommandCell.length, 1, "has custom command cell");
+    assert.strictEqual($customCommandCell.children(".mylink").length, 1, "has custom link");
+    assert.strictEqual($customCommandCell.children(".mylink").text(), "My link", "text of the custom link");
+    assert.strictEqual($customCommandCell.children(".mybutton").length, 1, "has custom button");
+    assert.strictEqual($customCommandCell.children(".mybutton").text(), "My button", "text of the custom button");
+});
+
+QUnit.test("The custom link of the 'buttons' command column should only be visible when the row is not editable", function(assert) {
+    // arrange
+    var that = this,
+        $linkElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: "buttons",
+        buttons: ["edit", {
+            text: "My link",
+            cssClass: "mylink",
+            visible: function(options) {
+                return !options.row.isEditing;
+            }
+        }]
+    });
+    that.columnsController.reset();
+    rowsView.render($testElement);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.strictEqual($linkElements.length, 2, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-edit"), "the edit link");
+    assert.ok($linkElements.eq(1).hasClass("mylink"), "custom link");
+
+    // act
+    that.editRow(0);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.strictEqual($linkElements.length, 2, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-save"), "the save link");
+    assert.ok($linkElements.eq(1).hasClass("dx-link-cancel"), "the cancel link");
+});
+
+QUnit.test("Clicking on the edit link should not work when the link is set via the 'buttons' option and allowUpdating is false", function(assert) {
+    // arrange
+    var that = this,
+        $linkElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: false,
+    };
+    that.options.columns.push({
+        type: "buttons",
+        buttons: [{ name: "edit", visible: true }]
+    });
+    that.columnsController.reset();
+    rowsView.render($testElement);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.strictEqual($linkElements.length, 1, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-edit"), "the edit link");
+
+    // act
+    $linkElements.first().trigger("dxclick");
+    that.clock.tick();
+
+    // assert
+    assert.notOk($testElement.find(".dx-datagrid-rowsview tbody > tr").first().hasClass("dx-edit-row"), "row not editable");
+});
+
+QUnit.test("Set edit button for a specific row", function(assert) {
+    // arrange
+    var that = this,
+        $rowElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: function(options) {
+            return options.row.rowIndex % 2 === 0;
+        }
+    };
+    that.editingController.init();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find(".dx-datagrid-rowsview tbody > .dx-data-row");
+    assert.strictEqual($rowElements.eq(0).find(".dx-link-edit").length, 1, "first row has the edit link");
+    assert.strictEqual($rowElements.eq(1).find(".dx-link-edit").length, 0, "second row hasn't the edit link");
+    assert.strictEqual($rowElements.eq(2).find(".dx-link-edit").length, 1, "third row has the edit link");
+});
+
+QUnit.test("Set delete button for a specific row", function(assert) {
+    // arrange
+    var that = this,
+        $rowElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowDeleting: function(options) {
+            return options.row.rowIndex % 2 === 0;
+        }
+    };
+    that.editingController.init();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find(".dx-datagrid-rowsview tbody > .dx-data-row");
+    assert.strictEqual($rowElements.eq(0).find(".dx-link-delete").length, 1, "first row has the delete link");
+    assert.strictEqual($rowElements.eq(1).find(".dx-link-delete").length, 0, "second row hasn't the delete link");
+    assert.strictEqual($rowElements.eq(2).find(".dx-link-delete").length, 1, "third row has the delete link");
+});
+
+
 QUnit.module('Refresh modes', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -6742,7 +6992,7 @@ QUnit.module('Refresh modes', {
         this.setupModules = function() {
             var that = this;
 
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping', 'editorFactory'], {
                 initViews: true
             });
 
@@ -6877,9 +7127,9 @@ QUnit.test("Editing with refresh mode repaint with repaintChangesOnly", function
     assert.equal(this.changedArgs.length, 0, "changed is not occured after editing");
     assert.equal(this.dataControllerChangedArgs.length, 1, "dataController changed is occured after editing");
     assert.deepEqual(this.dataControllerChangedArgs[0].changeType, "update", "dataController changed changeType");
-    assert.deepEqual(this.dataControllerChangedArgs[0].changeTypes, ["insert", "remove", "update", "remove"], "dataController changed changeTypes");
+    assert.deepEqual(this.dataControllerChangedArgs[0].changeTypes, ["remove", "insert", "update", "remove"], "dataController changed changeTypes");
     assert.deepEqual(this.dataControllerChangedArgs[0].columnIndices, [undefined, undefined, [1], undefined], "dataController changed columnIndices");
-    assert.deepEqual(this.dataControllerChangedArgs[0].rowIndices, [0, 1, 2, 3], "dataController changed rowIndices");
+    assert.deepEqual(this.dataControllerChangedArgs[0].rowIndices, [0, 0, 2, 3], "dataController changed rowIndices");
 });
 
 QUnit.test("Editing with refresh mode repaint and with grouping", function(assert) {

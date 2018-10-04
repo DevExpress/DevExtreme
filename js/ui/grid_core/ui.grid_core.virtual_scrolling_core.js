@@ -569,6 +569,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 beginPageIndex = getBeginPageIndex(that);
                 if(beginPageIndex >= 0) {
                     if(isVirtualMode(that) && beginPageIndex + that._cache.length !== dataSource.pageIndex() && beginPageIndex - 1 !== dataSource.pageIndex()) {
+                        lastCacheLength = 0;
                         that._cache = [];
                     }
                     if(isAppendMode(that)) {

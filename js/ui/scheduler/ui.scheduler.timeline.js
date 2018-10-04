@@ -363,15 +363,20 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return minHeight;
     },
 
-    _makeGroupRows: function(groups) {
+    _makeGroupRows: function(groups, groupByDate) {
         var tableCreatorStrategy = this.option("groupOrientation") === "vertical" ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
-        return tableCreator.makeGroupedTable(tableCreatorStrategy, groups, {
-            groupRowClass: this._getGroupRowClass(),
-            groupHeaderRowClass: this._getGroupRowClass(),
-            groupHeaderClass: this._getGroupHeaderClass(),
-            groupHeaderContentClass: this._getGroupHeaderContentClass()
-        }, undefined, this.option("resourceCellTemplate"), this._getTotalRowCount(this._getGroupCount()));
+        return tableCreator.makeGroupedTable(tableCreatorStrategy,
+            groups, {
+                groupRowClass: this._getGroupRowClass(),
+                groupHeaderRowClass: this._getGroupRowClass(),
+                groupHeaderClass: this._getGroupHeaderClass.bind(this),
+                groupHeaderContentClass: this._getGroupHeaderContentClass()
+            },
+            this._getCellCount() || 1,
+            this.option("resourceCellTemplate"),
+            this._getTotalRowCount(this._getGroupCount()),
+            groupByDate);
     },
 
     _ensureGroupHeaderCellsHeight: function(cellHeight) {
@@ -454,11 +459,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWeekendsCount: function() {
         return 0;
-    },
-
-    _renderTableBody: function(options) {
-        options.recalculateHeight = true;
-        this.callBase(options);
     },
 
     getAllDayContainer: function() {

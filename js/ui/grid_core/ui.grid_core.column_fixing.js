@@ -63,6 +63,29 @@ var baseFixedColumns = {
         return this.callBase(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== "transparent")));
     },
 
+    _correctColumnIndicesForFixedColumns: function(fixedColumns, change) {
+        var transparentColumnIndex = getTransparentColumnIndex(fixedColumns),
+            transparentColspan = fixedColumns[transparentColumnIndex].colspan,
+            columnIndices = change && change.columnIndices;
+
+        if(columnIndices) {
+            change.columnIndices = columnIndices.map(function(columnIndices) {
+                if(columnIndices) {
+                    return columnIndices.map(function(columnIndex) {
+                        if(columnIndex < transparentColumnIndex) {
+                            return columnIndex;
+                        } else if(columnIndex >= transparentColumnIndex + transparentColspan) {
+                            return columnIndex - transparentColspan + 1;
+                        }
+                        return -1;
+                    }).filter(function(columnIndex) {
+                        return columnIndex >= 0;
+                    });
+                }
+            });
+        }
+    },
+
     _renderTable: function(options) {
         var that = this,
             $fixedTable,
@@ -75,9 +98,18 @@ var baseFixedColumns = {
         if(that._isFixedColumns) {
             that._isFixedTableRendering = true;
 
+            var change = options && options.change,
+                columnIndices = change && change.columnIndices;
+
+            that._correctColumnIndicesForFixedColumns(fixedColumns, change);
+
             $fixedTable = that._createTable(fixedColumns);
             that._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
-            that._updateContent($fixedTable, options && options.change);
+            that._updateContent($fixedTable, change);
+
+            if(columnIndices) {
+                change.columnIndices = columnIndices;
+            }
 
             that._isFixedTableRendering = false;
         } else {
@@ -160,11 +192,15 @@ var baseFixedColumns = {
                 }
             }
 
-            if(isEmptyCell && (that.option("legacyRendering") || column.command === "detail")) {
-                $cell
-                    .html("&nbsp;")
-                    .addClass(column.cssClass);
-                return;
+            if(isEmptyCell) {
+                if((that.option("legacyRendering") || column.command === "detail")) {
+                    $cell
+                        .html("&nbsp;")
+                        .addClass(column.cssClass);
+                    return;
+                } else {
+                    $cell.addClass("dx-hidden-cell");
+                }
             }
         }
 

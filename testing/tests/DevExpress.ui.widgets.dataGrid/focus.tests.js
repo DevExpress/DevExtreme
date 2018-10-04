@@ -797,7 +797,6 @@ QUnit.testInActiveWindow("DataGrid - Should paginate to the defined focusedRowKe
     assert.ok(this.gridView.getView("rowsView").getRow(0).hasClass("dx-row-focused"), "Row 0 is the focused row");
 });
 
-
 QUnit.testInActiveWindow("Fire onFocusedRowChanging by click", function(assert) {
     // arrange
     var focusedRowChangingCount = 0;

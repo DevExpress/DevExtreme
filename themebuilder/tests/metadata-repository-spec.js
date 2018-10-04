@@ -5,40 +5,26 @@ const MetadataRepository = require("../modules/metadata-repository");
 const themes = require("./test-themes");
 const metadata = require("./test-metadata");
 
-let expectedLightMetadata = {
-    "base.common": [
-        {
-            "Name": "50. Background color",
-            "Key": "@base-bg",
-            "Group": "base.common",
-        }
-    ],
-    "base.typography": [
-        {
-            "Name": "1. Font family",
-            "Key": "@base-font-family",
-            "Group": "base.typography",
-        }
-    ]
-};
+const expectedLightMetadata = [{
+    "Name": "1. Font family",
+    "Key": "@base-font-family",
+    "Group": "base.typography"
+}, {
+    "Name": "50. Background color",
+    "Key": "@base-bg",
+    "Group": "base.common"
+}];
 
-let expectedLightMetadataAfterUpdate = {
-    "base.common": [
-        {
-            "Name": "50. Background color",
-            "Key": "@base-bg",
-            "Group": "base.common",
-            "Value": "#fff"
-        }
-    ],
-    "base.typography": [
-        {
-            "Name": "1. Font family",
-            "Key": "@base-font-family",
-            "Group": "base.typography",
-        }
-    ]
-};
+const expectedLightMetadataAfterUpdate = [{
+    "Name": "1. Font family",
+    "Key": "@base-font-family",
+    "Group": "base.typography"
+}, {
+    "Name": "50. Background color",
+    "Key": "@base-bg",
+    "Group": "base.common",
+    "Value": "#fff"
+}];
 
 describe("MetadataRepository", () => {
     beforeEach(() => {
@@ -66,7 +52,7 @@ describe("MetadataRepository", () => {
                 colorScheme: "light"
             });
 
-            assert.deepEqual(genericLightMetadata, expectedLightMetadataAfterUpdate, "right metadata for theme");
+            assert.deepEqual(genericLightMetadata, expectedLightMetadataAfterUpdate, "right metadata for theme after update");
         });
     });
 

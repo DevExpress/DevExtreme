@@ -4201,11 +4201,11 @@ QUnit.test("Do not re-render continuously when virtual scrolling enabled", funct
         var contentReadyCount = 0;
 
         e.component.on("contentReady", function() {
+            contentReadyCount++;
             if(contentReadyCount > 0) {
                 assert.equal(contentReadyCount, 1);
                 done();
             }
-            contentReadyCount++;
 
             if(contentReadyCount > 2) {
                 pivotGrid.element().remove();

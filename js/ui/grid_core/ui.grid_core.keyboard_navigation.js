@@ -416,7 +416,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
             rowIndex = this.getVisibleRowIndex(),
-            editingOptions = this.option("editing"),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
         if((this.option("grouping.allowCollapsing") && isGroupRow($row)) ||
@@ -441,9 +440,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     eventArgs.originalEvent.preventDefault();
                 }
             } else {
-                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
+                var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex],
+                    row = this._dataController.items()[rowIndex];
 
-                if(editingOptions.allowUpdating && column && column.allowEditing) {
+                if(this._editingController.allowUpdating({ row: row }) && column && column.allowEditing) {
                     if(this._isRowEditMode()) {
                         this._editingController.editRow(rowIndex);
                     } else {

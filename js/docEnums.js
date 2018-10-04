@@ -876,6 +876,6 @@
  */
 
  /**
- * @typedef {string} Enums.RichTextEditorValueType
+ * @typedef {string} Enums.HtmlEditorValueType
  * @enum {'HTML'|'Markdown'}
  */

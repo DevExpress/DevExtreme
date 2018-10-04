@@ -57,8 +57,13 @@
 }
 
 .dx-dropdowneditor-input-wrapper {
-    .dx-texteditor.dx-state-focused {
-        border: none;
+    .dx-texteditor {
+        &.dx-editor-outlined,
+        &.dx-editor-filled,
+        &.dx-editor-standard {
+            border: none;
+            background: transparent;
+        }
     }
 }
 
@@ -90,6 +95,11 @@
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
             padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
         }
+
+        .dx-rtl.dx-editor-standard&,
+        .dx-rtl .dx-editor-standard&, {
+            padding-right: 0;
+        }
     }
 }
 
@@ -102,6 +112,12 @@
         &.dx-rtl .dx-texteditor-input {
             padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
             padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+        }
+
+        &.dx-rtl.dx-editor-standard {
+            .dx-texteditor-input {
+                padding-right: 0;
+            } 
         }
 
         &.dx-show-clear-button {
@@ -127,6 +143,10 @@
         .dx-dropdowneditor-icon {
             background-color: @dropdowneditor-button-hover-bg;
             border-color: @dropdowneditor-button-hover-border-color;
+
+            .dx-editor-filled& {
+                background-color: @dropdowneditor-filled-button-hover-bg;
+            }
         }
     }
 }
@@ -138,6 +158,10 @@
         border-color: @dropdowneditor-button-active-border-color;
         color: @dropdowneditor-icon-active-color;
         opacity: 1;
+
+        .dx-editor-filled&, .dx-editor-filled & {
+            background-color: @dropdowneditor-filled-button-active-bg;
+        }
     }
 }
 
@@ -164,6 +188,20 @@
                     right: auto;
                     left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
                 }
+            }
+        }
+    }
+
+    &.dx-editor-filled {
+        .dx-dropdowneditor-icon {
+            .dx-state-hover& {
+                background-color: @dropdowneditor-filled-button-invalid-hover-bg;
+            }
+            .dx-dropdowneditor-active& {
+                background-color: @dropdowneditor-filled-button-invalid-active-bg;
+            }
+            .dx-state-active& {
+                background-color: @dropdowneditor-filled-button-invalid-active-bg;
             }
         }
     }

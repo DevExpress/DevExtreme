@@ -42,6 +42,19 @@ describe("Builder - testing exported function", () => {
             assert.notEqual(result.css, "", "Has css in result");
         });
     });
+
+    it("Build theme with changed color constants", () => {
+        const config = {
+            command: commands.BUILD_THEME,
+            reader: fileReader,
+            lessCompiler: lessCompiler,
+            items: [{ key: "@base-bg", value: "red" }]
+        };
+
+        return buildTheme(config).then((result) => {
+            assert.notEqual(result.css, "", "Has css in result");
+        });
+    });
 });
 
 

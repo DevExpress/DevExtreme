@@ -1,10 +1,11 @@
-var getNumberFormatter = require("localization/ldml/number").getFormatter;
-var getNumberFormat = require("localization/ldml/number").getFormat;
-var getDateParser = require("localization/ldml/date.parser").getParser;
-var getDateFormatter = require("localization/ldml/date.formatter").getFormatter;
-var getDateFormat = require("localization/ldml/date.format").getFormat;
-var dateParts = require("localization/default_date_names");
-var numberLocalization = require("localization/number");
+var getNumberFormatter = require("localization/ldml/number").getFormatter,
+    getNumberFormat = require("localization/ldml/number").getFormat,
+    getDateParser = require("localization/ldml/date.parser").getParser,
+    getDateFormatter = require("localization/ldml/date.formatter").getFormatter,
+    getDateFormat = require("localization/ldml/date.format").getFormat,
+    dateParts = require("localization/default_date_names"),
+    numberLocalization = require("localization/number"),
+    extend = require("core/utils/extend").extend;
 
 require("localization/currency");
 
@@ -37,6 +38,17 @@ QUnit.test("case insensitive date parsing for days of week", function(assert) {
     assert.deepEqual(parser("mon").getDay(), 1, "small register");
     assert.deepEqual(parser("Mon").getDay(), 1, "normal register");
     assert.deepEqual(parser("mOn").getDay(), 1, "random register");
+});
+
+QUnit.test("case insensitive date parsing for part of day", function(assert) {
+    var _dateParts = extend({}, dateParts, {
+            getPeriodNames: function() {
+                return ["am", "pm"];
+            }
+        }),
+        parser = getDateParser("aaaa", _dateParts);
+
+    assert.equal(parser("am").getHours(), 0);
 });
 
 QUnit.test("getFormat", function(assert) {

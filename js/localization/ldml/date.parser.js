@@ -98,7 +98,8 @@ var PATTERN_PARSERS = {
         return caseInsensitiveIndexOf(dayNames, text);
     },
     a: function(text, count, dateParts) {
-        return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text.toUpperCase());
+        var periodNames = dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format");
+        return caseInsensitiveIndexOf(periodNames, text);
     },
     d: parseNumber,
     H: parseNumber,

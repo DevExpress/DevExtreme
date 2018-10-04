@@ -13,20 +13,7 @@ const processTheme = (config, metadata, version) => {
 
         return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, config.data, config.bootstrapVersion);
     } else {
-        if(config.items) {
-            config.items.forEach(item => {
-                for(let group in metadata) {
-                    metadata[group].forEach(metadataItem => {
-                        if(metadataItem.Key === item.key) {
-                            metadataItem.Value = item.value;
-                            metadataItem.isModified = true;
-                            return false;
-                        }
-                    });
-                }
-            });
-        }
-        return lessTemplateLoader.load(config.themeName, config.colorScheme, metadata);
+        return lessTemplateLoader.load(config.themeName, config.colorScheme, metadata, config.items);
     }
 };
 

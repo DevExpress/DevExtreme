@@ -1,5 +1,3 @@
-@DRAWER_ZINDEX: 1000;
-
 .dx-drawer {
     height: 100%;
     width: 100%;
@@ -14,10 +12,10 @@
 }
 
 .dx-drawer-panel-content {
-    z-index: @DRAWER_ZINDEX;
     position: absolute;
     top: 0px;
     bottom: 0px;
+    z-index: 1;
 }
 
 .dx-drawer-right .dx-drawer-panel-content {
@@ -33,7 +31,6 @@
     width: 100%;
     height: 100%;
     top: 0;
-    z-index: 100;
 }
 
 .dx-drawer-shader {
@@ -41,14 +38,13 @@
     top: 0;
     height: 100%;
     width: 100%;
-    z-index: 1;
-
-    background-color: #111;
 }
 
 .dx-drawer-push {
-    .dx-drawer-panel-content {
-        z-index: 0;
+    &.dx-drawer-bottom {
+        .dx-drawer-panel-content {
+            top: auto;
+        }
     }
 }
 
@@ -69,7 +65,8 @@
         flex: 1 1 auto;
     }
 
-    &.dx-drawer-top {
+    &.dx-drawer-top,
+    &.dx-drawer-bottom {
         .dx-drawer-wrapper {
             flex-direction: column;
         }

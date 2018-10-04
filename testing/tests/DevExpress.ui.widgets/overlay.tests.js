@@ -12,7 +12,8 @@ var $ = require("jquery"),
     Template = require("ui/widget/jquery.template"),
     Overlay = require("ui/overlay"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    selectors = require("ui/widget/selectors");
 
 require("common.css!");
 require("ui/scroll_view/ui.scrollable");
@@ -1506,7 +1507,8 @@ QUnit.test("outside click should close several overlays if propagateOutsideClick
     assert.equal(overlay2.option("visible"), true, "Second overlay is visible");
 });
 
-QUnit.test("outside click should not close several overlays if other overlay content clicked", function(assert) {
+QUnit.test("customer should control closing of other overlays when some overlay content clicked", function(assert) {
+    // note: T668816, T655391 and click menu item when menu is inside of dxPopup with closeOnOutsideClick true
     var overlay1 = $("#overlay").dxOverlay({
             closeOnOutsideClick: true,
             visible: true
@@ -1519,8 +1521,17 @@ QUnit.test("outside click should not close several overlays if other overlay con
 
     $(overlay2.content()).trigger("dxpointerdown");
 
-    assert.equal(overlay1.option("visible"), true, "First overlay is visible");
+    assert.equal(overlay1.option("visible"), false, "Bottom overlay should get outside click when other overlay clicked");
     assert.equal(overlay2.option("visible"), true, "Second overlay is visible");
+
+    overlay1.show();
+    overlay2.option("closeOnOutsideClick", function(e) {
+        return !e.target.closest(".dx-overlay-content");
+    });
+    $(overlay1.content()).trigger("dxpointerdown");
+
+    assert.equal(overlay1.option("visible"), true, "First overlay is visible");
+    assert.equal(overlay2.option("visible"), true, "Closing should be prevented by a user-defined function");
 });
 
 QUnit.test("overlays' priority", function(assert) {
@@ -2943,6 +2954,28 @@ QUnit.test("elements under top overlay with shader have not to get focus by tab"
     $firstTabbable.focus();
     $($firstTabbable).trigger(this.tabEvent);
     assert.equal(this.tabEvent.isDefaultPrevented(), false, "default action is not prevented");
+});
+
+QUnit.test("tabbable selectors should check only bounds", function(assert) {
+    var tabbableSpy = sinon.spy(selectors, "tabbable");
+    var overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+        visible: true,
+        shading: true,
+        contentTemplate: $("#focusableTemplate")
+    });
+    var $content = $(overlay.content());
+
+    $content
+        .find(".firstTabbable")
+        .focus()
+        .trigger(this.tabEvent);
+
+    var $elements = $content.find("*");
+    var middleElement = $elements.get(Math.floor($elements.length / 2));
+
+    assert.ok(tabbableSpy.withArgs(0, $elements.get(0)).called, "first element has been checked");
+    assert.ok(tabbableSpy.withArgs(0, $elements.last().get(0)).called, "last element has been checked");
+    assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
 });
 
 QUnit.test("focusin event should not be propagated (T342292)", function(assert) {

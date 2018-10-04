@@ -1,4 +1,5 @@
-var $ = require("jquery");
+var $ = require("jquery"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -4582,57 +4583,62 @@ QUnit.test("DropDown appointment should be rendered correctly with expressions o
 });
 
 QUnit.test("DropDown appointment should be rendered correctly when timezone is set", function(assert) {
-    var data = [
-        {
-            schedule: "Increase Price - North Region",
-            startDate: "2018-09-17 06:00:00.000000+00:00",
-            endDate: "2018-09-17 6:15:00.000000+00:00"
-        },
-        {
-            schedule: "Increase Price - South Region",
-            startDate: "2018-09-17 06:00:00.000+00:00",
-            endDate: "2018-09-17 06:15:00.000+00:00"
-        },
-        {
-            schedule: "Increase Price - West Region",
-            startDate: "2018-09-17 06:00:00.000+00:00",
-            endDate: "2018-09-17 06:15:00.000+00:00"
-        },
-        {
-            schedule: "Increase Price - East Region",
-            startDate: "2018-09-17 06:00:00.000+00:00",
-            endDate: "2018-09-17 06:15:00.000+00:00"
-        },
-        {
-            schedule: "Decrease Price - North Region",
-            startDate: "2018-09-17 23:00:00.000+00:00",
-            endDate: "2018-09-17 23:15:00.000+00:00"
-        },
-        {
-            schedule: "Decrease Price - North Region",
-            startDate: "2018-09-17 23:00:00.000+00:00",
-            endDate: "2018-09-17 23:15:00.000+00:00"
-        }
-    ];
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        var data = [
+            {
+                schedule: "Appointment 1",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 2",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 3",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 4",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 5",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 6",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            }
+        ];
 
-    this.createInstance({
-        dataSource: data,
-        views: ["month"],
-        currentView: "month",
-        currentDate: new Date(2018, 8, 17),
-        timeZone: 'Etc/UTC',
-        showCurrentTimeIndicator: false,
-        maxAppointmentsPerCell: "auto",
-        height: 600,
-        textExpr: "schedule"
-    });
+        this.createInstance({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 8, 17),
+            timeZone: 'Etc/UTC',
+            showCurrentTimeIndicator: false,
+            maxAppointmentsPerCell: 1,
+            height: 600,
+            textExpr: "schedule"
+        });
 
-    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+        $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
 
-    var $appointment = $(".dx-dropdownmenu-list .dx-item").first(),
-        $dates = $appointment.find(".dx-scheduler-dropdown-appointment-date").first();
+        var $appointment = $(".dx-dropdownmenu-list .dx-item").first(),
+            $dates = $appointment.find(".dx-scheduler-dropdown-appointment-date").first();
 
-    assert.equal($dates.text(), "September 17, 6:00 AM - 6:15 AM", "Dates is correct");
+        assert.equal($dates.text(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
@@ -4968,7 +4974,7 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
 QUnit.test("DropDown appointment button should have correct width on timeline view", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
-        views: [{ type: "timelineDay", name: "timelineDay", forceMaxAppointmentPerCell: true }],
+        views: [{ type: "timelineDay", name: "timelineDay" }],
         width: 850,
         maxAppointmentsPerCell: 2,
         currentView: "timelineDay"
@@ -4992,7 +4998,7 @@ QUnit.test("DropDown appointment button should have correct width on timeline vi
 QUnit.test("dropDown appointment should not compact class on vertical view", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
-        views: [{ type: "week", name: "week", forceMaxAppointmentPerCell: true }],
+        views: [{ type: "week", name: "week" }],
         currentView: "week",
         maxAppointmentsPerCell: 'auto'
     });
@@ -5601,7 +5607,8 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        width: 2000,
+        maxAppointmentsPerCell: "auto"
     });
 
     var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
@@ -5611,10 +5618,10 @@ QUnit.test("Appointments should be rendered correctly in vertical grouped worksp
 
     assert.roughEqual($appointments.eq(0).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.equal($appointments.eq(0).position().left, 456, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 8.5 * cellHeight, 1.5, "correct top position of appointment");
-    assert.equal($appointments.eq(1).position().left, 314, "correct left position of appointment");
+    assert.equal($appointments.eq(1).position().left, 456, "correct left position of appointment");
 });
 
 QUnit.test("Rival allDay appointments from different groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -5809,6 +5816,7 @@ QUnit.test("Appointment in bottom cell should be rendered cirrectly in vertical 
         currentDate: new Date(2018, 4, 21),
         startDayHour: 9,
         endDayHour: 15,
+        width: 2000,
         cellDuration: 60,
         showAllDayPanel: true,
         maxAppointmentsPerCell: 'auto'

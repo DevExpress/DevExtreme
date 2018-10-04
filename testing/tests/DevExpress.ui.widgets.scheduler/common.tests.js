@@ -2555,6 +2555,7 @@ QUnit.testStart(function() {
             views: ["timelineWeek"],
             currentView: "timelineWeek",
             cellDuration: 60,
+            maxAppointmentsPerCell: null,
             onAppointmentRendered: function(args) {
                 assert.ok(true, "Appointment was rendered");
             },
@@ -3001,6 +3002,7 @@ QUnit.testStart(function() {
             currentView: "week",
             width: 800,
             dataSource: dataSource,
+            maxAppointmentsPerCell: null,
             onContentReady: function(e) {
                 var element = e.component,
                     $element = $(e.component.$element()),
@@ -3024,6 +3026,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2016, 2, 15),
             views: ["week"],
             currentView: "week",
+            maxAppointmentsPerCell: null,
             width: 800,
             dataSource: []
         });
@@ -3054,6 +3057,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2016, 2, 15),
             views: ["week"],
             currentView: "week",
+            maxAppointmentsPerCell: null,
             width: 800,
             dataSource: [appointment]
         });

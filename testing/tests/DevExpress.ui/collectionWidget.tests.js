@@ -16,7 +16,8 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
 
-    editingTests = require("./collectionWidgetParts/editingTests.js");
+    editingTests = require("./collectionWidgetParts/editingTests.js"),
+    liveUpdateTests = require("./collectionWidgetParts/liveUpdateTests.js");
 
 var ITEM_CLASS = "dx-item",
     ITEM_CONTENT_CLASS = "dx-item-content",
@@ -94,6 +95,7 @@ QUnit.testStart(function() {
 });
 
 editingTests.run();
+liveUpdateTests.run();
 
 QUnit.module("render", {
     beforeEach: function() {

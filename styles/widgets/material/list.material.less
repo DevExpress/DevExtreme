@@ -53,6 +53,15 @@
     color: @list-item-chevron-icon-color;
 }
 
+.dx-list-item-icon-container {
+    width: @MATERIAL_BASE_ICON_SIZE + @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+}
+
+.dx-list-item-icon {
+    .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+    margin-left: @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING;
+}
+
 .dx-list-search {
     padding-top: @MATERIAL_LIST_SEARCHBOX_VERTICAL_PADDING - 2px;
 
@@ -171,7 +180,7 @@
 
     .dx-list-group {
         &:not(.dx-list-group-collapsed) {
-            &:not(:last-child) { 
+            &:not(:last-child) {
                 padding-bottom: @MATERIAL_LIST_VERTICAL_PADDING;
                 border-bottom: @MATERIAL_LIST_ITEM_BORDER;
             }
@@ -423,8 +432,8 @@
         vertical-align: middle;
         padding: 0 @item_horizontal_padding;
         width: @item_horizontal_padding * 2 + @MATERIAL_BASE_ICON_SIZE;
-        box-shadow: inset 3px 0px 5px -3px @list-button-delete-shadow-color, 
-            inset 0px 3px 5px -3px @list-button-delete-shadow-color, 
+        box-shadow: inset 3px 0px 5px -3px @list-button-delete-shadow-color,
+        inset 0px 3px 5px -3px @list-button-delete-shadow-color,
             inset 0px -3px 5px -3px @list-button-delete-shadow-color;
     }
 

@@ -75,6 +75,7 @@ QUnit.test("Appointment wich started in STD and ended in DST time should have co
     this.createInstance({
         currentDate: new Date(2018, 2, 11),
         views: ["timelineDay"],
+        maxAppointmentsPerCell: null,
         currentView: "timelineDay",
         dataSource: [{
             text: "DST",
@@ -107,6 +108,7 @@ QUnit.test("Second recurring appointment wich started in STD and ended in DST ti
         currentDate: new Date(2018, 2, 12),
         views: ["timelineDay"],
         currentView: "timelineDay",
+        maxAppointmentsPerCell: null,
         dataSource: [{
             text: "DST",
             startDate: startDate,
@@ -140,6 +142,7 @@ QUnit.test("Appointment wich started in STD and ended in DST time should have ri
         views: ["timelineDay"],
         currentView: "timelineDay",
         cellDuration: 60,
+        maxAppointmentsPerCell: null,
         dataSource: [{
             text: "DST",
             startDate: startDate,
@@ -166,6 +169,7 @@ QUnit.test("Second recurring appointment should have right width if previous app
         currentDate: currentDate,
         views: ["timelineDay"],
         currentView: "timelineDay",
+        maxAppointmentsPerCell: null,
         dataSource: [{
             text: "DST",
             startDate: startDate,

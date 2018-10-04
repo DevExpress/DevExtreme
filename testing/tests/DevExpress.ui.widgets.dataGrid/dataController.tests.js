@@ -2651,9 +2651,6 @@ QUnit.test("scroll to far", function(assert) {
         items: this.dataController.items()
     }, {
         changeType: "append",
-        items: this.dataController.items().slice(5, 10)
-    }, {
-        changeType: "append",
         items: this.dataController.items().slice(10, 15)
     }]);
 });
@@ -2890,20 +2887,18 @@ QUnit.test("load pages after change viewport item index to far", function(assert
     this.dataController.setViewportItemIndex(7);
     // act
     this.clock.callTimer(this.clock.firstTimerInRange());
-    // assert
-    assert.equal(changedArgs.length, 1);
-    assert.equal(changedArgs[0].changeType, 'refresh');
-    assert.deepEqual(this.getDataItems(changedArgs[0].items), [7, 8]);
-    assert.deepEqual(this.getDataItems(), [7, 8]);
-    assert.ok(this.dataController.isLoaded());
 
+    // assert
+    assert.equal(changedArgs.length, 0);
 
     // act
     this.clock.callTimer(this.clock.firstTimerInRange());
 
     // assert
     assert.equal(changedArgs.length, 2);
+    assert.equal(changedArgs[0].changeType, 'refresh');
     assert.deepEqual(changedArgs[1].changeType, 'append');
+    assert.deepEqual(this.getDataItems(changedArgs[0].items), [7, 8]);
     assert.deepEqual(this.getDataItems(changedArgs[1].items), [9, 10]);
     assert.deepEqual(this.getDataItems(), [7, 8, 9, 10]);
     assert.ok(this.dataController.isLoaded());
@@ -9274,6 +9269,188 @@ QUnit.test("not show groupFooter item for grouped column", function(assert) {
     assert.strictEqual(this.dataController.items()[4].rowType, 'group');
     assert.strictEqual(this.dataController.items()[5].rowType, 'data');
     assert.strictEqual(this.dataController.items()[6].rowType, 'groupFooter');
+});
+
+QUnit.module("Summary with Editing", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.options = {
+            dataSource: [
+                { id: 1, value: 2 },
+                { id: 2, value: 3 },
+                { id: 3, value: 4 },
+                { id: 4, value: 5 },
+                { id: 5, value: 6 }
+            ],
+            keyExpr: "id",
+            editing: {
+                mode: "batch"
+            },
+            summary: {
+                recalculateWhileEditing: true,
+                skipEmptyValues: true,
+                totalItems: [{
+                    column: "id",
+                    summaryType: "count"
+                }, {
+                    column: "value",
+                    summaryType: "sum"
+                }]
+            }
+        };
+
+        this.setupDataGridModules = function(options) {
+            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing'], options);
+        };
+
+        this.getTotalValues = function() {
+            return this.dataController.footerItems()[0].summaryCells.map(function(summaryItems) {
+                return summaryItems.length === 1 ? summaryItems[0].value : summaryItems.map(function(item) { return item.value; });
+            });
+        };
+
+        this.setValue = function(rowIndex, value) {
+            var row = this.getVisibleRows()[rowIndex];
+            this.editingController.updateFieldValue({
+                key: row.key,
+                data: row.data,
+                column: this.columnOption("value")
+            }, value);
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.dispose();
+    }
+});
+
+QUnit.test("Total summary items without editing", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [5, 20]);
+});
+
+QUnit.test("modify cell", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.setValue(0, 3);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [5, 21]);
+});
+
+QUnit.test("modify cell and cancelEditData", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.setValue(0, 3);
+    this.cancelEditData();
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [5, 20]);
+});
+
+QUnit.test("add row", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.addRow();
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [6, 20]);
+});
+
+QUnit.test("add row and modify cell", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.addRow();
+    this.setValue(0, 1);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [6, 21]);
+});
+
+QUnit.test("add row and delete row", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.addRow();
+    this.deleteRow(0);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [5, 20]);
+});
+
+QUnit.test("delete row", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.deleteRow(3);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [4, 15]);
+});
+
+QUnit.test("modify cell and delete row", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.setValue(3, 100);
+    this.deleteRow(3);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [4, 15]);
+});
+
+QUnit.test("delete row and undelete row", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.deleteRow(3);
+    this.undeleteRow(3);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [5, 20]);
+});
+
+QUnit.test("modify cell, delete row and undelete row", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.setValue(3, 100);
+    this.deleteRow(3);
+    this.undeleteRow(3);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [5, 115]);
+});
+
+QUnit.test("partial update after editing", function(assert) {
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    this.addRow();
+
+    var changedSpy = sinon.spy();
+    this.dataController.changed.add(changedSpy);
+
+    // act
+    this.setValue(1, 100);
+
+    // assert
+    var changedArgs = changedSpy.getCall(0).args[0];
+
+    assert.deepEqual(this.getTotalValues(), [6, 118]);
+
+    assert.equal(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.rowIndices, [1]);
+    assert.deepEqual(changedArgs.columnIndices, [[1]]);
+    assert.deepEqual(changedArgs.totalColumnIndices, [1]);
 });
 
 QUnit.module("Master Detail", {

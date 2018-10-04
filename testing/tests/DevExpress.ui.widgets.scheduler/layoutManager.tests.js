@@ -202,6 +202,26 @@ QUnit.test("Appointment should have a correct min height", function(assert) {
     assert.equal($appointment.outerHeight(), 2, "Appointment has a right height");
 });
 
+QUnit.test("Long appointment tail should have a correct min height", function(assert) {
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 9, 8),
+            views: ["week"],
+            currentView: "week",
+            dataSource: [
+                {
+                    startDate: new Date(2015, 1, 9, 23, 0),
+                    endDate: new Date(2015, 1, 10, 0, 0, 53)
+                }
+            ]
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(1);
+
+    assert.equal($appointment.outerHeight(), 2, "Appointment-tail has a right height");
+});
+
 QUnit.test("Appointment has right sortedIndex", function(assert) {
     this.createInstance(
         {
@@ -2135,7 +2155,6 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
-                forceMaxAppointmentPerCell: true,
                 maxAppointmentsPerCell: 2
             }],
             height: 500,
@@ -2178,8 +2197,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
-                maxAppointmentsPerCell: 'auto',
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 'auto'
             }],
             height: 400,
             dataSource: items
@@ -2220,8 +2238,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
-                maxAppointmentsPerCell: 'unlimited',
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 'unlimited'
             }],
             height: 600,
             dataSource: [items[0]]
@@ -2286,8 +2303,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'auto',
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 'auto'
             }],
             width: 300,
             dataSource: items
@@ -2318,8 +2334,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 3,
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 3
             }],
             height: 500,
             dataSource: items
@@ -2359,8 +2374,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'auto',
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 'auto'
             }],
             height: 600,
             width: 1500,
@@ -2418,8 +2432,7 @@ QUnit.test("DropDown appointments button should have correct width on week view"
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'auto',
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 'auto'
             }],
             height: 600,
             width: 1500,
@@ -2445,8 +2458,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'unlimited',
-                forceMaxAppointmentPerCell: true
+                maxAppointmentsPerCell: 'unlimited'
             }],
             height: 600,
             dataSource: items
@@ -2467,7 +2479,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal($dropDownMenu.length, 0, "ddAppointment isn't rendered");
 });
 
-QUnit.test("Appointments should not have specific class if forceMaxAppointmentPerCell=false", function(assert) {
+QUnit.test("Appointments should not have specific class if maxAppointmentsPerCell=null", function(assert) {
     var items = [
         { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) }];
 
@@ -2478,8 +2490,7 @@ QUnit.test("Appointments should not have specific class if forceMaxAppointmentPe
             width: 800,
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'auto',
-                forceMaxAppointmentPerCell: false
+                maxAppointmentsPerCell: null
             }],
             height: 600,
             dataSource: items

@@ -30,7 +30,7 @@ ui.dxDropDownMenu = require("../../../ui/drop_down_menu");
 ui.dxFileUploader = require("../../../ui/file_uploader");
 ui.dxForm = require("../../../ui/form");
 ui.dxGallery = require("../../../ui/gallery");
-ui.dxRichTextEditor = require("../../../ui/rich_text_editor");
+ui.dxHtmlEditor = require("../../../ui/html_editor");
 ui.dxList = require("../../../ui/list");
 ui.dxLoadIndicator = require("../../../ui/load_indicator");
 ui.dxLoadPanel = require("../../../ui/load_panel");
@@ -70,7 +70,7 @@ ui.dxValidationGroup = require("../../../ui/validation_group");
 ui.dxValidator = require("../../../ui/validator");
 
 /* Widget parts */
-require("../../../ui/rich_text_editor/converters/markdown");
+require("../../../ui/html_editor/converters/markdown");
 /// BUNDLER_PARTS_END
 
 // Dashboards
