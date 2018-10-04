@@ -15,7 +15,6 @@
     position: absolute;
     top: 0px;
     bottom: 0px;
-    z-index: 1;
 }
 
 .dx-drawer-right .dx-drawer-panel-content {
@@ -76,6 +75,9 @@
 .dx-drawer-overlap {
     .dx-drawer-wrapper {
         overflow: visible;
+    }
+    .dx-drawer-panel-content {
+        z-index: 1;
     }
 }
 
