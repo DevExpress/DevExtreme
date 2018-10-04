@@ -78,7 +78,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxDataPlaceholderModule.dataSource
-            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
+            * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
