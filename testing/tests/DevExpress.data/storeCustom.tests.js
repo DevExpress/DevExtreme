@@ -411,6 +411,23 @@ QUnit.test("insert, promise result", function(assert) {
     });
 });
 
+QUnit.test("insert, promise result as data", function(assert) {
+    var done = assert.async();
+
+    var store = new CustomStore({
+        key: "id",
+        insert: function(values) {
+            return $.Deferred().resolve({ id: 123, a: 1, b: 2 });
+        }
+    });
+
+    store.insert({ a: 1 }).done(function(values, key) {
+        assert.deepEqual(values, { id: 123, a: 1, b: 2 });
+        assert.equal(key, 123);
+        done();
+    });
+});
+
 QUnit.test("insert, non-promise result", function(assert) {
     var done = assert.async();
 
@@ -422,6 +439,23 @@ QUnit.test("insert, non-promise result", function(assert) {
 
     store.insert({ a: 1 }).done(function(values, key) {
         assert.deepEqual(values, { a: 1 });
+        assert.equal(key, 123);
+        done();
+    });
+});
+
+QUnit.test("insert, non-promise result as data", function(assert) {
+    var done = assert.async();
+
+    var store = new CustomStore({
+        key: "id",
+        insert: function(values) {
+            return { id: 123, a: 1, b: 2 };
+        }
+    });
+
+    store.insert({ a: 1 }).done(function(values, key) {
+        assert.deepEqual(values, { id: 123, a: 1, b: 2 });
         assert.equal(key, 123);
         done();
     });
@@ -462,6 +496,24 @@ QUnit.test("update, promise result", function(assert) {
     });
 });
 
+QUnit.test("update, promise result as data", function(assert) {
+    var done = assert.async();
+
+    var store = new CustomStore({
+        update: function(key, values) {
+            assert.strictEqual(key, 123);
+            assert.deepEqual(values, { a: 1 });
+            return $.Deferred().resolve({ a: 1, b: 2 });
+        }
+    });
+
+    store.update(123, { a: 1 }).done(function(key, values) {
+        assert.strictEqual(key, 123);
+        assert.deepEqual(values, { a: 1, b: 2 });
+        done();
+    });
+});
+
 QUnit.test("update, non-promise result", function(assert) {
     var done = assert.async(),
         updateCalled;
@@ -477,6 +529,27 @@ QUnit.test("update, non-promise result", function(assert) {
     store.update(123, { a: 1 }).done(function(key, values) {
         assert.strictEqual(key, 123);
         assert.deepEqual(values, { a: 1 });
+        assert.ok(updateCalled);
+        done();
+    });
+});
+
+QUnit.test("update, non-promise result as data", function(assert) {
+    var done = assert.async(),
+        updateCalled;
+
+    var store = new CustomStore({
+        update: function(key, values) {
+            assert.strictEqual(key, 123);
+            assert.deepEqual(values, { a: 1 });
+            updateCalled = true;
+            return { a: 1, b: 2 };
+        }
+    });
+
+    store.update(123, { a: 1 }).done(function(key, values) {
+        assert.strictEqual(key, 123);
+        assert.deepEqual(values, { a: 1, b: 2 });
         assert.ok(updateCalled);
         done();
     });

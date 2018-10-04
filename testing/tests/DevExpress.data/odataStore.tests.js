@@ -1030,7 +1030,7 @@ QUnit.test("with 201 status", function(assert) {
 QUnit.module("update", moduleConfig);
 
 QUnit.test("works", function(assert) {
-    assert.expect(13);
+    assert.expect(17);
 
     var done = assert.async();
 
@@ -1044,7 +1044,13 @@ QUnit.test("works", function(assert) {
     ajaxMock.setup({
         url: "odata.org/DataSet*",
         status: 204,
-        responseText: {}
+        responseText: "OK"
+    });
+
+    ajaxMock.setup({
+        url: "odata2.org/DataSet*",
+        status: 204,
+        responseText: { foo: "barbar" }
     });
 
     var promises = [
@@ -1105,6 +1111,26 @@ QUnit.test("works", function(assert) {
         }).on("updating", compileLoggerFor("updating"))
             .on("updated", compileLoggerFor("updated"))
             .update(1, { foo: "bar" })
+            .done(compileLoggerFor("done")),
+
+        new ODataStore({
+            version: 4,
+            url: "odata2.org/DataSet",
+
+            beforeSend: function(request) {
+                assert.equal(request.url, "odata2.org/DataSet(1)");
+                assert.equal(request.method.toLowerCase(), "patch");
+
+                assert.deepEqual(request.params, {});
+                assert.deepEqual(request.payload, { foo: "bar" });
+            },
+
+            onUpdating: compileLoggerFor("onUpdating"),
+            onUpdated: compileLoggerFor("onUpdated")
+
+        }).on("updating", compileLoggerFor("updating"))
+            .on("updated", compileLoggerFor("updated"))
+            .update(1, { foo: "bar" })
             .done(compileLoggerFor("done"))
     ];
 
@@ -1121,6 +1147,13 @@ QUnit.test("works", function(assert) {
                 ["onUpdating", 1, { foo: "bar" }],
                 ["updating", 1, { foo: "bar" }],
 
+                ["onUpdating", 1, { foo: "bar" }],
+                ["updating", 1, { foo: "bar" }],
+
+                ["onUpdated", 1, { foo: "bar" }],
+                ["updated", 1, { foo: "bar" }],
+                ["done", 1, { foo: "bar" }],
+
                 ["onUpdated", 1, { foo: "bar" }],
                 ["updated", 1, { foo: "bar" }],
                 ["done", 1, { foo: "bar" }],
@@ -1129,9 +1162,10 @@ QUnit.test("works", function(assert) {
                 ["updated", 1, { foo: "bar" }],
                 ["done", 1, { foo: "bar" }],
 
-                ["onUpdated", 1, { foo: "bar" }],
-                ["updated", 1, { foo: "bar" }],
-                ["done", 1, { foo: "bar" }]
+                ["onUpdated", 1, { foo: "barbar" }],
+                ["updated", 1, { foo: "barbar" }],
+                ["done", 1, { foo: "barbar" }]
+
             ]);
         })
         .always(done);

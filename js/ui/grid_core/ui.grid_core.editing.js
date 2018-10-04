@@ -1239,8 +1239,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         params = { newData: data, oldData: oldData, key: editData.key, cancel: false };
                         deferred = executeEditingAction("onRowUpdating", params, function() {
-                            return store.update(editData.key, params.newData).done(function() {
-                                changes.push({ type: "update", key: editData.key, data: params.newData });
+                            return store.update(editData.key, params.newData).done(function(key, data) {
+                                changes.push({ type: "update", key: key, data: data });
                             });
                         });
                         break;
