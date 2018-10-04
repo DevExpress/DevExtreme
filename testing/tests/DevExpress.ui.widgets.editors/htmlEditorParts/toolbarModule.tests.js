@@ -99,7 +99,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
     });
 
     test("Render toolbar with enum format", (assert) => {
-        this.options.items = [{ format: "header", items: [1, 2, 3, false] }];
+        this.options.items = [{ format: "header", values: [1, 2, 3, false] }];
 
         new Toolbar(this.quillMock, this.options);
         const $formatWidget = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
