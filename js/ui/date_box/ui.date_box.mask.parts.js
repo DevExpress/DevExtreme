@@ -1,6 +1,7 @@
 import { getPatternSetters, getRegExpInfo } from "../../localization/ldml/date.parser";
 import dateLocalization from "../../localization/date";
 import { extend } from "../../core/utils/extend";
+import { fitIntoRange } from "../../core/utils/math";
 import { noop } from "../../core/utils/common";
 import { escapeRegExp } from "../../core/utils/common";
 
@@ -29,6 +30,16 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
 
         date.setHours((hours + 12) % 24);
     },
+    M: (date, value) => {
+        let day = date.getDate();
+
+        date.setMonth(value, 1);
+
+        let dayLimits = getLimits("getDate", date),
+            newDay = fitIntoRange(day, dayLimits.min, dayLimits.max);
+
+        date.setDate(newDay);
+    },
     E: (date, value) => {
         if(value < 0) {
             return;
@@ -36,7 +47,7 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         date.setDate(date.getDate() - date.getDay() + value);
     },
     y: (date, value) => {
-        var currentYear = date.getFullYear();
+        let currentYear = date.getFullYear();
 
         if(value < 100) {
             date.setFullYear(currentYear - currentYear % 100 + value);
