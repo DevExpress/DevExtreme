@@ -145,9 +145,11 @@ class DrawerStrategy {
 
         if(animate) {
             animation.fade($(this._drawer._$shader), fadeConfig, duration, () => {
+                this._drawer._toggleShaderVisibility(offset);
                 this._shaderAnimationResolve();
             });
         } else {
+            this._drawer._toggleShaderVisibility(offset);
             this._drawer._$shader.css("opacity", fadeConfig.to);
         }
     }
