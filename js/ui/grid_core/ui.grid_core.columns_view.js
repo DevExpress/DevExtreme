@@ -27,6 +27,7 @@ var SCROLL_CONTAINER_CLASS = "scroll-container",
     GROUP_ROW_CLASS = "dx-group-row",
     DETAIL_ROW_CLASS = "dx-master-detail-row",
     FILTER_ROW_CLASS = "filter-row",
+    CELL_UPDATED_ANIMATION_CLASS = "cell-updated-animation",
 
     HIDDEN_COLUMNS_WIDTH = "0.0001px",
 
@@ -496,7 +497,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         for(i = 0; i < columns.length; i++) {
             if(!options.columnIndices || options.columnIndices.indexOf(i) >= 0) {
-                that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex] }, options));
+                that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex], oldValue: row.oldValues && row.oldValues[columnIndex] }, options));
             }
 
             if(columns[i].colspan > 1) {
@@ -509,7 +510,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _updateCells: function($rowElement, $newRowElement, columnIndices) {
         var $cells = $rowElement.children(),
-            $newCells = $newRowElement.children();
+            $newCells = $newRowElement.children(),
+            highlightChanges = this.option("highlightChanges"),
+            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
 
         columnIndices.forEach(function(columnIndex, index) {
             var $cell = $cells.eq(columnIndex),
@@ -517,14 +520,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 $newContent = $newCell.contents();
 
             if($newContent.length) {
+                let hasClass = $cell.hasClass(cellUpdatedClass);
                 $cell.contents().remove();
                 $cell.append($newContent);
 
                 $cell.get(0).className = $newCell.get(0).className;
                 $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
+                hasClass && $cell.width(); // forse animation stop
             } else {
                 $cell.replaceWith($newCell);
+                $cell = $newCell;
             }
+            if(highlightChanges) {
+                $cell.addClass(cellUpdatedClass);
+            }
+
         });
     },
 
