@@ -18,6 +18,12 @@ class ToolbarModule extends BaseModule {
 
         this.editorInstance = options.editorInstance;
         this._formats = {};
+        this._formatHandlers = {
+            clear: (e) => {
+                this.quill.removeFormat(this.quill.getSelection());
+                this.updateFormatWidgets();
+            }
+        };
 
         if(isDefined(options.items)) {
             this._renderToolbar();
@@ -25,6 +31,24 @@ class ToolbarModule extends BaseModule {
             this.quill.on('editor-change', (eventName) => {
                 this.updateFormatWidgets();
             });
+        }
+    }
+
+    _getDefaultClickHandler(formatName) {
+        return (e) => {
+            const format = this.quill.getFormat(this.quill.getSelection());
+            const value = !format[formatName];
+
+            this.quill.format(formatName, value, "user");
+            this.updateFormatWidgets();
+        };
+    }
+
+    addClickHandler(formatName, handler) {
+        this._formatHandlers[formatName] = handler;
+        const formatWidget = this._formats[formatName];
+        if(formatWidget && formatWidget.NAME === "dxButton") {
+            formatWidget.option("onClick", handler);
         }
     }
 
@@ -75,17 +99,7 @@ class ToolbarModule extends BaseModule {
             format: formatName,
             options: {
                 text: formatName,
-                onClick: (e) => {
-                    if(formatName === "clear") {
-                        this.quill.removeFormat(this.quill.getSelection());
-                    } else {
-                        const format = this.quill.getFormat(this.quill.getSelection());
-                        const value = !format[formatName];
-
-                        this.quill.format(formatName, value, "user");
-                    }
-                    this.updateFormatWidgets();
-                }
+                onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName)
             }
         };
     }
@@ -124,6 +138,7 @@ class ToolbarModule extends BaseModule {
             options: {
                 onInitialized: (e) => {
                     e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
+                    e.component.$element().addClass("dx-" + item.format + "-format");
                     this._formats[item.format] = e.component;
                 }
             }

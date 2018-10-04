@@ -34,9 +34,37 @@ const HtmlEditor = Editor.inherit({
             */
             placeholder: "",
             toolbar: null, // container, items
-            mention: null,
-            allowImageResizing: false,
-            resizing: null
+            /**
+            * @name dxHtmlEditorOptions.dataPlaceholder
+            * @type dxDataPlaceholderModule
+            * @default null
+            */
+            dataPlaceholder: null
+
+            /**
+            * @name dxDataPlaceholderModule
+            * @type object
+            */
+            /**
+            * @name dxDataPlaceholderModule.dataSource
+            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
+            * @default null
+            */
+            /**
+            * @name dxDataPlaceholderModule.escapedChar
+            * @type string
+            * @default ""
+            */
+            /**
+            * @name dxDataPlaceholderModule.startEscapedChar
+            * @type string
+            * @default undefined
+            */
+            /**
+            * @name dxDataPlaceholderModule.endEscapedChar
+            * @type string
+            * @default undefined
+            */
         });
     },
 
@@ -132,9 +160,8 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
         let modulesConfig = {
-            mention: this._getModuleConfigByOption("mention"),
             toolbar: this._getToolbarConfig(),
-            dataPlaceholders: this._getModuleConfigByOption("dataPlaceholders"),
+            placeholder: this._getModuleConfigByOption("dataPlaceholder"),
             dropImage: this._getBaseModuleConfig(),
             clipboard: {
                 matchers: [
@@ -144,10 +171,6 @@ const HtmlEditor = Editor.inherit({
                 ]
             }
         };
-
-        if(this.option("allowImageResizing")) {
-            modulesConfig.resizing = this._getBaseModuleConfig();
-        }
 
         return modulesConfig;
     },
@@ -236,10 +259,7 @@ const HtmlEditor = Editor.inherit({
                 this.callBase(args);
                 break;
             case "placeholder":
-            case "mention":
-            case "dataPlaceholders":
-            case "allowImageResizing":
-            case "resizing":
+            case "dataPlaceholder":
             case "toolbar":
                 this._invalidate();
                 break;

@@ -27,7 +27,7 @@ const moduleConfig = {
                     return this.$element;
                 },
                 _createComponent: ($element, widget, options) => {
-                    new widget($element, options);
+                    return new widget($element, options);
                 }
             }
         };
