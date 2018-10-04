@@ -122,7 +122,8 @@ class DrawerStrategy {
         fx.stop($(this._drawer.content()));
         fx.stop($(this._drawer.viewContent()));
 
-        this._drawer.getOverlay() && fx.stop($(this._drawer.getOverlay().$content()));
+        const overlay = this._drawer.getOverlay();
+        overlay && fx.stop($(overlay.$content()));
     }
 
     _getPanelOffset(offset) {
