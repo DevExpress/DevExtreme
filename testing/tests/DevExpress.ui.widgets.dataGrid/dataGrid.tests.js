@@ -10650,14 +10650,19 @@ QUnit.test("Refresh with changesOnly for fixed columns", function(assert) {
             ]
         });
 
+    var $firstCell = $(dataGrid.getCellElement(0, 0));
+    var $lastCell = $(dataGrid.getCellElement(0, 3));
+
     dataSource.store().update(1, { field1: 8, field4: 9 });
 
     // act
     dataGrid.refresh(true);
 
     // assert
-    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "8", "cell 1 value is updated");
-    assert.strictEqual($(dataGrid.getCellElement(0, 3)).text(), "9", "cell 4 value is updated");
+    assert.ok($(dataGrid.getCellElement(0, 0)).is($firstCell), "first cell isn't changed");
+    assert.ok($(dataGrid.getCellElement(0, 3)).is($lastCell), "last cell isn't changed");
+    assert.strictEqual($firstCell.text(), "8", "first cell value is updated");
+    assert.strictEqual($lastCell.text(), "9", "last cell value is updated");
 });
 
 QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtual", function(assert) {
