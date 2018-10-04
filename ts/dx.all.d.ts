@@ -2763,7 +2763,9 @@ declare module DevExpress.ui {
         imageSrc?: string;
     }
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+        dataPlaceholder?: dxDataPlaceholderModule;
         placeholder?: string;
+        toolbar?: Array<dxHtmlEditorToolbarItem> | dxToolbarModule;
         valueType?: 'HTML' | 'Markdown';
     }
     /** A base class for editors. */
@@ -5053,7 +5055,7 @@ declare module DevExpress.ui {
         name?: string;
         /** Specifies the band column that owns the current column. Accepts the index of the band column in the columns array. */
         ownerBand?: number;
-        /** Specifies whether to render the column after other columns and elements. Use with complex templates. */
+        /** Specifies whether to render the column after other columns and elements. Use if column cells have a complex template. Requires the width option specified. */
         renderAsync?: boolean;
         /** Specifies the column's filter operation displayed in the filter row. */
         selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
@@ -5146,6 +5148,21 @@ declare module DevExpress.ui {
     export class HierarchicalCollectionWidget extends CollectionWidget {
         constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
+    }
+    export interface dxToolbarModule {
+        container?: string | Element | JQuery;
+        items?: Array<dxHtmlEditorToolbarItem>;
+    }
+    /** This section lists the data source fields that are used in a default template for toolbar items. */
+    export interface dxHtmlEditorToolbarItem extends dxToolbarItemTemplate {
+        format?: string;
+        values?: Array<string | number | boolean>;
+    }
+    export interface dxDataPlaceholderModule {
+        dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        endEscapedChar?: string;
+        escapedChar?: string;
+        startEscapedChar?: string;
     }
     /** This section lists the data source fields that are used in a default template for list items. */
     export interface dxListItemTemplate extends CollectionWidgetItemTemplate {
