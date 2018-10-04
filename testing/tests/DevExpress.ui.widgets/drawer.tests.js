@@ -1144,12 +1144,14 @@ QUnit.test("minSize should be rendered correctly in overlap mode, expand", asser
     const $overlayContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
+    assert.equal($content.css("paddingLeft"), "50px", "content has correct padding when minSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 50, "panel content has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
+    assert.equal($content.css("paddingLeft"), "50px", "content has correct padding when minSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 200, "panel content has correct width when minSize is set");
 
