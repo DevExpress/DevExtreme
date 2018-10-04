@@ -543,32 +543,6 @@ QUnit.testInActiveWindow("Set of the focusedRowIndex, focusedColumnIndex should 
     assert.equal(rowsView.getRow(1).children("td:nth-child(3)").attr("tabindex"), 0, "Cell[2;1] has tabindex=0");
 });
 
-QUnit.testInActiveWindow("Change focusedRowKey at runtime", function(assert) {
-    // arrange
-    this.$element = function() {
-        return $("#container");
-    };
-
-    this.options = {
-        keyExpr: "name",
-        focusedRowEnabled: true,
-        focusedRowIndex: 0,
-        editing: {
-            allowEditing: false
-        }
-    };
-
-    this.setupModule();
-
-    this.gridView.render($("#container"));
-    this.clock.tick();
-    // act
-    this.getController("focus").optionChanged({ name: "focusedRowKey", value: "Dan" });
-    this.clock.tick();
-    // assert
-    assert.ok(this.gridView.getView("rowsView").getRow(1).hasClass("dx-row-focused"), "Row 1 has focus");
-});
-
 QUnit.test("Focus types test", function(assert) {
     // arrange
     this.$element = function() {
@@ -686,4 +660,139 @@ QUnit.testInActiveWindow("Focused row different key support", function(assert) {
     this.option("focusedRowKey", "TestKey");
     assert.ok(this.getController("focus").isRowFocused("TestKey"), "Simple key equal");
     assert.notOk(this.getController("focus").isRowFocused("TestKey1"), "Simple key not equal");
+});
+
+QUnit.testInActiveWindow("Focused row index should preserve after paging operation", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1,
+        paging: {
+            pageSize: 2
+        },
+        editing: {
+            allowEditing: false
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.pageIndex(), 0, "PageIndex is 0");
+    assert.strictEqual(this.dataController.getVisibleRows()[1].data, this.data[1], "Row 0, Data 1");
+    assert.ok(this.gridView.getView("rowsView").getRow(1).hasClass("dx-row-focused"), "Row 1 is the focused row");
+    // act
+    this.dataController.pageIndex(1);
+    // assert
+    assert.strictEqual(this.dataController.getVisibleRows()[1].data, this.data[3], "Row 1, Data 3");
+    assert.equal(this.pageIndex(), 1, "PageIndex is 1");
+    assert.ok(this.gridView.getView("rowsView").getRow(1).hasClass("dx-row-focused"), "Row 1 is the focused row");
+});
+
+QUnit.testInActiveWindow("Page with focused row should loads after sorting", function(assert) {
+    var $rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1,
+        paging: {
+            pageSize: 2
+        },
+        sorting: {
+            mode: "single"
+        },
+        editing: {
+            allowEditing: false
+        },
+        columns: [{ dataField: "name", allowSorting: true }, "phone", "room"]
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    $rowsView = $(this.gridView.getView("rowsView").element());
+
+    // assert
+    assert.equal(this.pageIndex(), 0, "PageIndex is 0");
+    assert.strictEqual(this.dataController.getVisibleRows()[1].data, this.data[1], "Focused row data is on the page");
+    assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Dan", "Focused row key column text");
+
+    // act
+    this.getController("columns").changeSortOrder(0, "asc");
+    // assert
+    assert.equal(this.pageIndex(), 1, "PageIndex is 1");
+    assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[1], "Focused row data is on the page");
+    assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Dan", "Focused row key column text");
+});
+
+QUnit.testInActiveWindow("DataGrid - Should paginate to the defined focusedRowKey", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Smith",
+        paging: {
+            pageSize: 2
+        },
+        editing: {
+            allowEditing: false
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.pageIndex(), 2, "PageIndex is 0");
+    assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[4], "Row 0, Data 4");
+    assert.ok(this.gridView.getView("rowsView").getRow(0).hasClass("dx-row-focused"), "Row 0 is the focused row");
 });

@@ -148,7 +148,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     this._isHiddenFocus = false;
                 } else {
                     var isInteractiveTarget = $(event.target).not($target).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                    this._focus($target, true, isInteractiveTarget);
+                    this._focus($target, !this.isRowFocusType(), isInteractiveTarget);
                 }
             }
         } else if($target.is("td")) {
@@ -271,8 +271,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._focusedCellPosition.columnIndex = columnIndex;
     },
 
-    getFocusedRowIndex: function() {
+    getVisibleRowIndex: function() {
         if(this._focusedCellPosition) {
+            if(!this._focusedCellPosition.rowIndex) {
+                return this._focusedCellPosition.rowIndex;
+            }
             return this._focusedCellPosition.rowIndex - this._dataController.getRowIndexOffset();
         }
         return null;
@@ -376,7 +379,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _enterKeyHandler: function(eventArgs, isEditing) {
         var $cell = this._getFocusedCell(),
-            rowIndex = this.getFocusedRowIndex(),
+            rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
         if((this.option("grouping.allowCollapsing") && isGroupRow($row)) ||
@@ -416,7 +419,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _leftRightKeysHandler: function(eventArgs, isEditing) {
-        var rowIndex = this.getFocusedRowIndex(),
+        var rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             directionCode,
             $cell;
@@ -445,7 +448,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _upDownKeysHandler: function(eventArgs, isEditing) {
-        var rowIndex = this.getFocusedRowIndex(),
+        var rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             $cell;
 
@@ -471,7 +474,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if(that._focusedCellPosition) {
             var scrollHandler = function() {
-                scrollable.off(scrollHandler);
+                scrollable.off("scroll", scrollHandler);
                 setTimeout(function() {
                     that.restoreFocusableElement();
                 });
@@ -515,7 +518,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _spaceKeyHandler: function(eventArgs, isEditing) {
-        var rowIndex = this.getFocusedRowIndex(),
+        var rowIndex = this.getVisibleRowIndex(),
             $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target),
             isFocusedRowElement;
 
@@ -608,7 +611,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 if(this._focusCell($cell)) {
                     if(!this._isRowEditMode() && isEditingAllowed) {
-                        this._editingController.editCell(this.getFocusedRowIndex(), this._focusedCellPosition.columnIndex);
+                        this._editingController.editCell(this.getVisibleRowIndex(), this._focusedCellPosition.columnIndex);
                     } else {
                         this._focusInteractiveElement($cell, eventArgs.shift);
                     }
@@ -1058,7 +1061,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         switch(args.name) {
             case "useKeyboard":
-                // TODO implement
                 args.handled = true;
                 break;
             default:
@@ -1120,7 +1122,7 @@ module.exports = {
                     cellElements = that.getCellElements(rowIndex);
 
                     if(that.option("useKeyboard") && cellElements) {
-                        this._updateFocusElementTabIndex(cellElements);
+                        that._updateFocusElementTabIndex(cellElements);
                     }
                 },
                 _updateFocusElementTabIndex: function(cellElements) {

@@ -7,7 +7,7 @@ core.registerModule("keyboardNavigation", extend(true, {}, keyboardNavigationMod
         controllers: {
             keyboardNavigation: {
                 _leftRightKeysHandler: function(eventArgs, isEditing) {
-                    var rowIndex = this.getFocusedRowIndex(),
+                    var rowIndex = this.getVisibleRowIndex(),
                         dataController = this._dataController,
                         key,
                         directionCode;
