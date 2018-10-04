@@ -544,7 +544,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
                     nextGroupFirstIndex = isVisibleNode ? index : index + 1;
                 }
 
-                if(index === nextGroupFirstIndex) {
+                if(index === nextGroupFirstIndex && firstVisibleIndex < index) {
                     that._renderSeparator($nodeContainer);
                 }
 
