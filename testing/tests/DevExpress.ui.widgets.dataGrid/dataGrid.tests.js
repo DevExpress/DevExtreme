@@ -10655,6 +10655,89 @@ QUnit.test("Refresh with changesOnly and summary", function(assert) {
     assert.strictEqual($updatedCellElements.eq(1).text(), "Sum: 500", "cell value is updated");
 });
 
+QUnit.test("Refresh with changesOnly for fixed columns", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: 1, field2: 2, field3: 3, field4: 4 }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: [
+                { dataField: "field1", fixed: true },
+                { dataField: "field2" },
+                { dataField: "field3" },
+                { dataField: "field4", fixed: true, fixedPosition: "right" }
+            ]
+        });
+
+    var $firstCell = $(dataGrid.getCellElement(0, 0));
+    var $lastCell = $(dataGrid.getCellElement(0, 3));
+
+    dataSource.store().update(1, { field1: 8, field4: 9 });
+
+    // act
+    dataGrid.refresh(true);
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 0)).is($firstCell), "first cell isn't changed");
+    assert.ok($(dataGrid.getCellElement(0, 3)).is($lastCell), "last cell isn't changed");
+    assert.strictEqual($firstCell.text(), "8", "first cell value is updated");
+    assert.strictEqual($lastCell.text(), "9", "last cell value is updated");
+});
+
+QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtual", function(assert) {
+    // arrange
+    var data = [
+        { id: 1, name: "test 1" },
+        { id: 2, name: "test 2" },
+        { id: 3, name: "test 3" },
+        { id: 4, name: "test 4" },
+        { id: 5, name: "test 5" }
+    ];
+
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: data
+            },
+            reshapeOnPush: true,
+            pushAggregationTimeout: 0
+        }),
+        dataGrid = createDataGrid({
+            height: 100,
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            scrolling: {
+                mode: "virtual",
+                updateTimeout: 0
+            },
+            paging: {
+                pageSize: 2
+            },
+            dataSource: dataSource,
+            columns: ["id", "name"]
+        });
+
+    var $cell = $(dataGrid.getCellElement(1, 1));
+
+
+    // act
+    dataSource.store().push([{ type: "update", key: 2, data: { name: "updated" } }]);
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 4, "visible rows");
+    assert.ok($(dataGrid.getCellElement(1, 1)).is($cell), "cell is not recreated");
+    assert.strictEqual($cell.text(), "updated", "cell value is updated");
+});
+
 // T443177
 QUnit.test("Show searchPanel via option method", function(assert) {
     // arrange
