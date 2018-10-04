@@ -98,11 +98,6 @@ var ToolbarBase = CollectionWidget.inherit({
         return extend(this.callBase(), {
             renderAs: "topToolbar",
 
-            /**
-             * @name dxToolbarOptions.grouped
-             * @type boolean
-             * @default false
-             */
             grouped: false,
 
             useFlatButtons: false,
