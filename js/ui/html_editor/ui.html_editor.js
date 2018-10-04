@@ -33,6 +33,11 @@ const HtmlEditor = Editor.inherit({
             * @default ""
             */
             placeholder: "",
+            /**
+            * @name dxHtmlEditorOptions.toolbar
+            * @type Array<dxHtmlEditorToolbarItem>|dxToolbarModule
+            * @default null
+            */
             toolbar: null, // container, items
             /**
             * @name dxHtmlEditorOptions.dataPlaceholder
@@ -42,12 +47,38 @@ const HtmlEditor = Editor.inherit({
             dataPlaceholder: null
 
             /**
+            * @name dxToolbarModule
+            * @type object
+            */
+            /**
+            * @name dxToolbarModule.container
+            * @type string|Node|jQuery
+            */
+            /**
+            * @name dxToolbarModule.items
+            * @type Array<dxHtmlEditorToolbarItem>
+            */
+
+            /**
+            * @name dxHtmlEditorToolbarItem
+            * @inherits dxToolbarItemTemplate
+            */
+            /**
+            * @name dxHtmlEditorToolbarItem.format
+            * @type string
+            */
+            /**
+            * @name dxHtmlEditorToolbarItem.values
+            * @type Array<string,number,boolean>
+            */
+
+            /**
             * @name dxDataPlaceholderModule
             * @type object
             */
             /**
             * @name dxDataPlaceholderModule.dataSource
-            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
+            * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**

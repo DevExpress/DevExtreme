@@ -75,7 +75,7 @@ class ToolbarModule extends BaseModule {
         each(this.options.items, (index, item) => {
             let newItem;
             if(isObject(item)) {
-                if(item.items && !item.widget) {
+                if(item.values && !item.widget) {
                     const selectItemConfig = this._prepareSelectItemConfig(item);
                     newItem = this._getToolbarItem(selectItemConfig);
                 } else {
@@ -109,7 +109,7 @@ class ToolbarModule extends BaseModule {
             widget: "dxSelectBox",
             format: item.format,
             options: {
-                dataSource: item.items,
+                dataSource: item.values,
                 onValueChanged: (e) => {
                     if(!this._isReset) {
                         this.quill.format(item.format, e.value, "user");
