@@ -66,7 +66,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
-                        dataController.reload();
+                        dataController.reload().done(function() {
+                            that._scrollToFocusedRow();
+                        });
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
                             that._triggerUpdateFocusedRow(key);
@@ -136,7 +138,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 that.clearPreviousFocusedRow($tableElement);
                 if(focusedRowIndex >= 0) {
                     $focusedRow = that.prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
-                    that._fireFocusedRowChanged($focusedRow);
+                    that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
                 }
             });
         },
@@ -160,11 +162,40 @@ exports.FocusController = core.ViewController.inherit((function() {
                     var $cell = keyboardController._getFocusedCell();
                     if($cell) {
                         keyboardController.focus($cell);
+                    } else {
+                        that._scrollToFocusedRow($row);
                     }
                 }
             }
 
             return $row;
+        },
+
+        _scrollToFocusedRow: function($row) {
+            var that = this,
+                rowsView = that.getView("rowsView"),
+                $rowsViewElement = rowsView.element(),
+                $focusedRow;
+
+            if(!$rowsViewElement) {
+                return;
+            }
+
+            $focusedRow = $row || $rowsViewElement.find("." + ROW_FOCUSED_CLASS);
+
+            if($focusedRow.length > 0) {
+                var focusedRowRect = $focusedRow[0].getBoundingClientRect(),
+                    rowsViewRect = rowsView.element()[0].getBoundingClientRect(),
+                    diff;
+
+                if(focusedRowRect.bottom > rowsViewRect.bottom) {
+                    diff = focusedRowRect.bottom - rowsViewRect.bottom;
+                } else if(focusedRowRect.top < rowsViewRect.top) {
+                    diff = focusedRowRect.top - rowsViewRect.top;
+                }
+
+                rowsView.scrollTo(rowsView._scrollTop + diff);
+            }
         }
     };
 })());
@@ -425,7 +456,7 @@ module.exports = {
                     if(this.option("focusedRowEnabled") && row) {
                         if(this.getController("focus").isRowFocused(row.key, row.rowIndex)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
-                            this.getController("focus")._fireFocusedRowChanged($row);
+                            this.getController("keyboardNavigation")._fireFocusedRowChanged($row);
                         }
                     }
 
@@ -439,6 +470,13 @@ module.exports = {
                         }
                     } else {
                         this.callBase(change);
+                    }
+                },
+
+                scrollToPage: function(pageIndex) {
+                    this.callBase(pageIndex);
+                    if(this.option("focusedRowEnabled")) {
+                        this.getController("focus")._scrollToFocusedRow();
                     }
                 },
 
