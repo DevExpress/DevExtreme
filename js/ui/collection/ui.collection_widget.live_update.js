@@ -14,6 +14,7 @@ export default CollectionWidget.inherit({
             /**
             * @name CollectionWidgetOptions.repaintChangesOnly
             * @type boolean
+            * @default false
             */
             repaintChangesOnly: false
         });
