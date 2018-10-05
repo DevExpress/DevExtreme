@@ -875,6 +875,31 @@
  * @enum {'GIF'|'JPEG'|'PDF'|'PNG'|'SVG'}
  */
 
+/**
+ * @typedef {string} Enums.XlsxUnderlineType
+ * @enum {'double'|'doubleAccounting'|'none'|'single'|'singleAccounting'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxCellDataType
+ * @enum {'n'|'s'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxHorizontalAlignment
+ * @enum {'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxVerticalAlignment
+ * @enum {'bottom'|'center'|'distributed'|'justify'|'top'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxPatternType
+ * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
+ */
+
  /**
  * @typedef {string} Enums.HtmlEditorValueType
  * @enum {'HTML'|'Markdown'}
