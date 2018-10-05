@@ -3,6 +3,16 @@
 * @type object
 */
 /**
+* @name XlsxCell.value
+* @type string|number|date|boolean
+*/
+/**
+* @name XlsxCell.dataType
+* @type string
+* @acceptValues 'n'|'s'
+*/
+
+/**
 * @name XlsxCell.style
 * @type object
 */
