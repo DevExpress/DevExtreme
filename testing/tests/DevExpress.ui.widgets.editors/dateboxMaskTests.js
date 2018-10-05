@@ -422,7 +422,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Pointer events", setupModule, () => {
+    QUnit.module("Events", setupModule, () => {
         QUnit.test("Select date part on click", (assert) => {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
@@ -447,6 +447,15 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 6, end: 8 }, "caret is good");
         });
 
+        QUnit.test("paste should be possible when pasting data matches the format", (assert) => {
+            this.instance.option("value", null);
+
+            this.keyboard.paste("123456");
+            assert.equal(this.$input.val(), "", "pasting incorrect value is not allowed");
+
+            this.keyboard.paste("November 10 2018");
+            assert.equal(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
+        });
     });
 
 
