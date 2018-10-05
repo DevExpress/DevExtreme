@@ -1,4 +1,25 @@
 /**
+ * @typedef {string} Enums.XlsxUnderlineType
+ * @enum {'double'|'doubleAccounting'|'none'|'single'|'singleAccounting'}
+ */
+/**
+ * @typedef {string} Enums.XlsxCellDataType
+ * @enum {'n'|'s'}
+ */
+/**
+ * @typedef {string} Enums.XlsxHorizontalAlignment
+ * @enum {'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'}
+ */
+/**
+ * @typedef {string} Enums.XlsxVerticalAlignment
+ * @enum {'bottom'|'center'|'distributed'|'justify'|'top'}
+ */
+/**
+ * @typedef {string} Enums.XlsxPatternType
+ * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
+ */
+
+/**
 * @name XlsxCell
 * @type object
 */
@@ -8,8 +29,7 @@
 */
 /**
 * @name XlsxCell.dataType
-* @type string
-* @acceptValues 'n'|'s'
+* @type Enums.XlsxCellDataType
 */
 
 /**
@@ -32,13 +52,11 @@
 */
 /**
 * @name XlsxCell.style.alignment.horizontal
-* @type string
-* @acceptValues 'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'
+* @type Enums.XlsxHorizontalAlignment
 */
 /**
 * @name XlsxCell.style.alignment.vertical
-* @type string
-* @acceptValues 'bottom'|'center'|'distributed'|'justify'|'top'
+* @type Enums.XlsxVerticalAlignment
 */
 /**
 * @name XlsxCell.style.alignment.wrapText
@@ -55,8 +73,7 @@
 */
 /**
 * @name XlsxCell.style.fill.patternFill.patternType
-* @type string
-* @acceptValues 'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'
+* @type Enums.XlsxPatternType
 */
 /**
 * @name XlsxCell.style.fill.patternFill.backgroundColor
@@ -89,8 +106,7 @@
 */
 /**
 * @name XlsxCell.style.font.underline
-* @type string
-* @acceptValues 'double'|'doubleAccounting'|'none'|'single'|'singleAccounting'
+* @type Enums.XlsxUnderlineType
 */
 /**
 * @name XlsxCell.style.font.color
