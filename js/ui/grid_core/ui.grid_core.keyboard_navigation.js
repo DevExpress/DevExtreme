@@ -1198,8 +1198,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 prevRowIndex: prevRowIndex,
                 newColumnIndex: cellPosition.columnIndex,
                 newRowIndex: cellPosition.rowIndex,
-                rows: this.component.getVisibleRows(),
-                columns: this.component.getVisibleColumns(),
+                rows: that.getController("data").getVisibleRows(),
+                columns: that.getController("columns").getVisibleColumns(),
                 event: $event,
                 cancel: false
             };
@@ -1223,7 +1223,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 columnIndex: columnIndex,
                 rowIndex: focusedRowIndex,
                 row: that.getController("data").getVisibleRows()[focusedRowIndex],
-                column: that.component.getVisibleColumns()[columnIndex]
+                column: that.getController("columns").getVisibleColumns()[columnIndex]
             });
         }
     },
@@ -1236,7 +1236,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 prevRowIndex: prevFocusedRowIndex,
                 newRowIndex: newRowIndex,
                 event: eventArgs,
-                rows: this.component.getVisibleRows(),
+                rows: this.getController("data").getVisibleRows(),
                 cancel: false
             };
 
