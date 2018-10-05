@@ -94,6 +94,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.items;
             },
 
+            getVisibleRows: function() {
+                return options.items;
+            },
+
             isEmpty: function() {
                 return !options.items || !options.items.length;
             },
