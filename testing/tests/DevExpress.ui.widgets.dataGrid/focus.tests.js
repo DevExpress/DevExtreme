@@ -1633,3 +1633,95 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key in back order (s
     assert.equal(focusedCellChangingCounter, 2, "focusedCelChanging count");
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
 });
+
+QUnit.testInActiveWindow("Test navigateToRow method if paging", function(assert) {
+    var keyboardController;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        editing: {
+            allowEditing: false
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+
+    assert.equal(this.pageIndex(), 0, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), undefined, "Focused row index");
+
+    this.navigateToRow("Zeb");
+    this.clock.tick();
+
+    assert.equal(this.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
+});
+
+QUnit.testInActiveWindow("Test navigateToRow method if virtualScrolling", function(assert) {
+    var keyboardController;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        editing: {
+            allowEditing: false
+        },
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            mode: "virtual"
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+
+    assert.equal(this.pageIndex(), 0, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), undefined, "Focused row index");
+
+    this.navigateToRow("Zeb");
+    this.clock.tick();
+
+    assert.equal(this.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 5, "Focused row index");
+});
+

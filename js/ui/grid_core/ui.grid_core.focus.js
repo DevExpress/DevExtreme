@@ -21,10 +21,10 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this;
 
             if(args.name === "focusedRowIndex") {
-                that.focusRowByIndex(args.value);
+                that._focusRowByIndex(args.value);
                 args.handled = true;
             } else if(args.name === "focusedRowKey") {
-                that.focusRowByKey(args.value);
+                that.navigateToRow(args.value);
                 args.handled = true;
             } else if(args.name === "focusedColumnIndex") {
                 args.handled = true;
@@ -35,7 +35,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        focusRowByIndex: function(index) {
+        _focusRowByIndex: function(index) {
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
             var dataController = this.getController("data"),
@@ -47,7 +47,16 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        focusRowByKey: function(key) {
+        publicMethods: function() {
+            return ["navigateToRow"];
+        },
+
+        /**
+         * @name dxDataGridMethods.navigateToRow
+         * @publicName navigateToRow(key)
+         * @param1 key:any
+         */
+        navigateToRow: function(key) {
             var that = this,
                 dataController = this.getController("data"),
                 rowsView = this.getView("rowsView"),
@@ -55,9 +64,6 @@ exports.FocusController = core.ViewController.inherit((function() {
 
             key = key !== undefined ? key : this.option("focusedRowKey");
 
-            if(!this.option("focusedRowEnabled")) {
-                return;
-            }
             var rowIndexByKey = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
 
             if(rowIndex >= 0 && rowIndex === rowIndexByKey) {
@@ -83,6 +89,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 rowIndex = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
 
             this.getController("keyboardNavigation").setFocusedRowIndex(rowIndex);
+
             dataController.updateItems({
                 changeType: "updateFocusedRow",
                 focusedRowKey: key
@@ -103,7 +110,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     }
                     keyboardController.setFocusedRowIndex(focusedRowIndex);
                 } else {
-                    this.focusRowByKey(focusedRowKey);
+                    this.navigateToRow(focusedRowKey);
                 }
             } else {
                 focusedRowKey = dataController.getKeyByRowIndex(focusedRowIndex);
@@ -202,6 +209,12 @@ module.exports = {
              * @default -1
              */
             focusedColumnIndex: -1
+
+            /**
+             * @name GridBaseMethods.navigateToRow
+             * @publicName navigateToRow(key)
+             * @param1 key:any
+             */
         };
     },
 
@@ -317,13 +330,13 @@ module.exports = {
                             this._prevPageIndex = this.pageIndex();
 
                             if(operationTypes.reload) {
-                                focusController.focusRowByKey();
+                                focusController.navigateToRow();
                                 return;
                             }
 
                             if(paging) {
                                 if(!this.getController("keyboardNavigation")._isVirtualScrolling()) {
-                                    focusController.focusRowByIndex();
+                                    focusController._focusRowByIndex();
                                 }
                             } else {
                                 focusController._handleDataChanged(e);
