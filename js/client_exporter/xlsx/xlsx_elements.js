@@ -9,7 +9,7 @@
 
 /**
 * @name XlsxCell.style.numberFormat
-* @type Enums.XlsxNumberFormat|object
+* @type object
 */
 /**
 * @name XlsxCell.style.numberFormat.formatCode
