@@ -64,7 +64,7 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            onXlsxCellPrepared: exportController.option("export.onXlsxCellPrepared"),
+            onXlsxCellPrepared: exportController.getAction("onXlsxCellPrepared"),
         };
     },
 
@@ -539,6 +539,8 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         this.createAction("onExporting", { excludeValidators: ["disabled", "readOnly"] });
         this.createAction("onExported", { excludeValidators: ["disabled", "readOnly"] });
         this.createAction("onFileSaving", { excludeValidators: ["disabled", "readOnly"] });
+
+        this.createAction("onXlsxCellPrepared", { excludeValidators: ["disabled", "readOnly"] });
     },
 
     callbackNames: function() {
