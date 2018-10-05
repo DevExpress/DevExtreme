@@ -828,6 +828,7 @@ QUnit.testInActiveWindow("Fire onFocusedRowChanging by click", function(assert) 
             assert.equal(e.event.type, "dxpointerdown");
             assert.equal(e.newRowIndex, 1);
             assert.equal(e.prevRowIndex, 4);
+            assert.equal(e.rows.length, 6);
         }
     };
 
@@ -1163,6 +1164,9 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
         },
         onFocusedRowChanged: function(e) {
             ++focusedRowChangedCount;
+            assert.equal(e.row.key, "Dan", "Row");
+            assert.equal(e.rowIndex, 1, "Row index");
+            assert.ok(e.rowElement, "Row element");
         }
     };
 
@@ -1206,8 +1210,9 @@ QUnit.testInActiveWindow("onFocusedCellChanged event", function(assert) {
             ++focusedCellChangedCount;
             assert.deepEqual(e.cellElement.text(), rowsView.getRow(1).find("td").eq(1).text(), "Cell element");
             assert.equal(e.columnIndex, 1, "Column index");
-            assert.deepEqual(e.rowData.data, { name: "Dan", phone: "2222222", room: 5 }, "Row data");
+            assert.deepEqual(e.row.data, { name: "Dan", phone: "2222222", room: 5 }, "Row data");
             assert.deepEqual(e.rowIndex, 1, "Row index");
+            assert.equal(e.column.dataField, "phone", "Column");
         }
     };
 
@@ -1252,7 +1257,7 @@ QUnit.testInActiveWindow("onFocusedCellChanged event should fire if row index ch
             ++focusedCellChangedCount;
             assert.deepEqual(e.cellElement.text(), rowsView.getRow(3).find("td").eq(1).text(), "Cell element");
             assert.equal(e.columnIndex, 1, "Column index");
-            assert.deepEqual(e.rowData.data, { name: "Sean", phone: "4545454", room: 3 }, "Row data");
+            assert.deepEqual(e.row.data, { name: "Sean", phone: "4545454", room: 3 }, "Row data");
             assert.deepEqual(e.rowIndex, 3, "Row index");
         }
     };
@@ -1365,6 +1370,8 @@ QUnit.testInActiveWindow("Setting cancel in onFocusedCellChanging event should p
             assert.equal(e.prevColumnIndex, 1);
             assert.equal(e.newRowIndex, 4);
             assert.equal(e.prevRowIndex, 4);
+            assert.equal(e.rows.length, 6);
+            assert.equal(e.columns.length, 3);
 
             e.cancel = true;
         }
