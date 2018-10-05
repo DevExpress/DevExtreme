@@ -179,6 +179,11 @@ var DropDownEditor = TextBox.inherit({
             fieldTemplate: null,
             contentTemplate: null,
 
+            /**
+             * @name dxDropDownEditorOptions.openOnFieldClick
+             * @type boolean
+             * @default false
+             */
             openOnFieldClick: false,
 
             /**

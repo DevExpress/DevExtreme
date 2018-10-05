@@ -98,10 +98,10 @@ let DateBoxMask = DateBoxBase.inherit({
         this._searchValue += char;
 
         let limits = this._getActivePartLimits(),
-            setter = this._getActivePartProp("setter"),
+            getter = this._getActivePartProp("getter"),
             newValue = parseInt(this._searchValue);
 
-        if(setter === "setMonth") {
+        if(getter === "getMonth") {
             newValue--;
         }
 
@@ -198,7 +198,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _attachMaskEvents() {
         eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("dragend", MASK_EVENT_NAMESPACE), (e) => {
+        eventsEngine.on(this._input(), eventsUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), (e) => {
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart(0, e);
         });

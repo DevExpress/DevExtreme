@@ -74,11 +74,16 @@ class OverlapStrategy extends DrawerStrategy {
         super.renderPosition(offset, animate);
 
         const $element = $(this._drawer.content());
+        const $content = $(this._drawer.viewContent());
 
         const direction = this._drawer.option("position");
         const panelPosition = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
 
-        $(this._drawer.viewContent()).css("transform", "inherit");
+        if(this._drawer._isHorizontalDirection()) {
+            $content.css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
+        }
+
+        $content.css("transform", "inherit");
 
         if(this._drawer.option("revealMode") === "slide") {
             if(animate) {

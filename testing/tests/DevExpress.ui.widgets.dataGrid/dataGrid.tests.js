@@ -10608,6 +10608,74 @@ QUnit.test("Refresh with changesOnly", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
 });
 
+QUnit.test("Refresh with highlighting and check oldValue", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", {
+                dataField: "field1",
+                name: "field1"
+            }, {
+                dataField: "field1",
+                name: "field1WithTemplate",
+                cellTemplate: function(container, options) {
+                    $(container).text(options.text + (options.oldValue ? " old:" + options.oldValue : ""));
+                }
+            }]
+        });
+
+    var CELL_UPDATED_CLASS = "dx-datagrid-cell-updated-animation",
+        ROW_INSERTED_CLASS = "dx-datagrid-row-inserted-animation",
+        store = dataSource.store();
+
+    this.clock.tick();
+
+    store.update(1, { field1: "test11" });
+    store.insert({ id: 5, field1: "test5" });
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.notOk($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
+
+    // act
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.notOk($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
+    assert.notOk($(dataGrid.getRowElement(4)).hasClass(ROW_INSERTED_CLASS));
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).text(), "test11 old:test1", "cell value is updated");
+
+    // act
+    dataGrid.option("highlightChanges", true);
+
+    store.update(1, { field1: "test111" });
+    store.insert({ id: 6, field1: "test6" });
+
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.ok($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
+    assert.ok($(dataGrid.getRowElement(5)).hasClass(ROW_INSERTED_CLASS));
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).text(), "test111 old:test11", "cell value is updated");
+});
+
 QUnit.test("Refresh with changesOnly and cellTemplate", function(assert) {
     // arrange
     var $cellElements,

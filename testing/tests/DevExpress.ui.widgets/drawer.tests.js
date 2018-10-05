@@ -402,7 +402,23 @@ QUnit.test("shader should not be visible if drawer is closed", assert => {
 
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    assert.ok($shader.is(":hidden"), "shader is visible");
+    assert.ok($shader.is(":hidden"), "shader is hidden");
+    assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
+});
+
+QUnit.test("shader should have correct visibility after toggling state", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        shading: true,
+        animationEnabled: false
+    });
+    const instance = $element.dxDrawer("instance");
+    const $shader = $element.find("." + DRAWER_SHADER_CLASS);
+
+    instance.toggle();
+
+    assert.ok($shader.is(":hidden"), "shader is hidden");
+    assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
 });
 
 QUnit.test("shading option", assert => {
@@ -1144,12 +1160,14 @@ QUnit.test("minSize should be rendered correctly in overlap mode, expand", asser
     const $overlayContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
+    assert.equal($content.css("paddingLeft"), "50px", "content has correct padding when minSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 50, "panel content has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
+    assert.equal($content.css("paddingLeft"), "50px", "content has correct padding when minSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 200, "panel content has correct width when minSize is set");
 
@@ -1711,17 +1729,21 @@ QUnit.module("closeOnOutsideClick");
 QUnit.test("drawer should be hidden after click on content", (assert) => {
     var drawer = $("#drawer").dxDrawer({
             closeOnOutsideClick: false,
-            opened: true
+            opened: true,
+            shading: true
         })
         .dxDrawer("instance"),
         $content = drawer.viewContent();
 
-    $($content).trigger("dxpointerdown");
+    $($content).trigger("dxclick");
     assert.equal(drawer.option("opened"), true, "drawer is not hidden");
     drawer.option("closeOnOutsideClick", true);
 
-    $($content).trigger("dxpointerdown");
+    const $shader = drawer.$element().find("." + DRAWER_SHADER_CLASS);
+    $($content).trigger("dxclick");
+
     assert.equal(drawer.option("opened"), false, "drawer is hidden");
+    assert.ok($shader.is(":hidden"), "shader is hidden");
 });
 
 QUnit.test("closeOnOutsideClick as function should be processed correctly", (assert) => {
@@ -1734,12 +1756,12 @@ QUnit.test("closeOnOutsideClick as function should be processed correctly", (ass
         .dxDrawer("instance"),
         $content = drawer.viewContent();
 
-    $($content).trigger("dxpointerdown");
+    $($content).trigger("dxclick");
     assert.equal(drawer.option("opened"), true, "drawer is not hidden");
     drawer.option("closeOnOutsideClick", () => {
         return true;
     });
 
-    $($content).trigger("dxpointerdown");
+    $($content).trigger("dxclick");
     assert.equal(drawer.option("opened"), false, "drawer is hidden");
 });

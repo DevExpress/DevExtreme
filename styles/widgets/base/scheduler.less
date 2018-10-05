@@ -1056,12 +1056,7 @@
         .dx-scheduler-date-table-cell {
             width: 200px;
         }
-
-        &.dx-scheduler-work-space-group-by-date {
-            .dx-scheduler-header-panel-cell {
-                flex: 1;
-            }
-        }
+        
         .dx-scheduler-date-table-cell {
             border-right:none;
         }
@@ -2378,6 +2373,10 @@
                 flex-basis: 0;
 
                 .flex-container(row, nowrap);
+            }
+
+            &.dx-scheduler-work-space-group-by-date .dx-scheduler-group-header {
+                flex-basis: auto;
             }
 
             &:not(.dx-scheduler-work-space-group-by-date) {

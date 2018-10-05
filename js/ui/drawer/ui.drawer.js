@@ -11,7 +11,7 @@ import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
-import pointerEvents from "../../events/pointer";
+import clickEvent from "../../events/click";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -199,11 +199,11 @@ const Drawer = Widget.inherit({
     },
 
     _initCloseOnOutsideClickHandler() {
-        eventsEngine.off(this._$contentWrapper, pointerEvents.down);
-        eventsEngine.on(this._$contentWrapper, pointerEvents.down, this._pointerDownHandler.bind(this));
+        eventsEngine.off(this._$contentWrapper, clickEvent.name);
+        eventsEngine.on(this._$contentWrapper, clickEvent.name, this._outsideClickHandler.bind(this));
     },
 
-    _pointerDownHandler(e) {
+    _outsideClickHandler(e) {
         this._strategy._stopAnimations();
 
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
@@ -218,6 +218,7 @@ const Drawer = Widget.inherit({
             }
 
             this.hide();
+            this._toggleShaderVisibility(false);
         }
     },
 
@@ -413,6 +414,7 @@ const Drawer = Widget.inherit({
     _toggleShaderVisibility(visible) {
         if(this.option("shading")) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+            this._$shader.css("visibility", visible ? "visible" : "hidden");
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
         }
