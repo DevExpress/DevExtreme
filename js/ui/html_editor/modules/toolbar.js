@@ -1,7 +1,9 @@
 import { getQuill } from "../quill_importer";
 
 import $ from "../../../core/renderer";
+
 import Toolbar from "../../toolbar";
+
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
@@ -16,12 +18,23 @@ class ToolbarModule extends BaseModule {
     constructor(quill, options) {
         super(quill, options);
 
-        this.editorInstance = options.editorInstance;
+        this._editorInstance = options.editorInstance;
         this._formats = {};
         this._formatHandlers = {
             clear: (e) => {
                 this.quill.removeFormat(this.quill.getSelection());
                 this.updateFormatWidgets();
+            },
+            link: () => {
+                const formData = this.quill.getFormat() || {};
+                const promise = this._editorInstance.showFormDialog({
+                    formData: formData,
+                    items: ["link"]
+                });
+
+                promise.done((formData) => {
+                    this.quill.format("link", formData.link);
+                });
             }
         };
 
@@ -58,13 +71,13 @@ class ToolbarModule extends BaseModule {
 
         $(container).addClass(TOOLBAR_CLASS);
 
-        this.toolbarInstance = this.editorInstance._createComponent(container, Toolbar, { dataSource: toolbarItems });
+        this.toolbarInstance = this._editorInstance._createComponent(container, Toolbar, { dataSource: toolbarItems });
     }
 
     getContainer() {
         const $container = $("<div>");
 
-        this.editorInstance.$element().prepend($container);
+        this._editorInstance.$element().prepend($container);
 
         return $container;
     }

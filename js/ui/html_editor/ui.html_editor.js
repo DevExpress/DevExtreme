@@ -11,6 +11,7 @@ import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
 import getWordMatcher from "./matchers/wordLists";
+import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
@@ -170,6 +171,8 @@ const HtmlEditor = Editor.inherit({
 
     _render: function() {
         this._renderHtmlEditor();
+        this._renderFormDialog();
+
         this.callBase();
     },
 
@@ -271,6 +274,10 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _renderFormDialog: function() {
+        this._formDialog = new FormDialog(this);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
@@ -369,6 +376,10 @@ const HtmlEditor = Editor.inherit({
         if(this._quillInstance) {
             return this._quillInstance.removeFormat(index, length);
         }
+    },
+
+    showFormDialog: function(formConfig) {
+        return this._formDialog.show(formConfig);
     }
 });
 
