@@ -145,27 +145,18 @@ var DataAdapter = Class.inherit({
         });
     },
 
-    checkHasSelectedChildNodes: function(node) {
-        var result;
-
-        this._iterateChildren(node, true, function(child) {
-            if(child.internalFields.selected) {
-                result = true;
-                return true;
-            }
-        });
-
-        return result;
-    },
-
-    getHasSelectedChildNodes: function(nodes) {
+    getHasSelectedChildNodes: function() {
         var that = this;
         var result = [];
 
-        each(nodes || this.getData(), function(_, node) {
-            if(that.checkHasSelectedChildNodes(node)) {
-                result.push(node.internalFields.key);
-            }
+        each(this.getSelectedNodesKeys(), function(_, key) {
+            var node = that.getNodeByKey(key);
+            that._iterateParents(node, function(parent) {
+                if(result.indexOf(parent.internalFields.key) === -1) {
+                    result.push(parent.internalFields.key);
+                    return true;
+                }
+            });
         });
 
         return result;
@@ -212,10 +203,15 @@ var DataAdapter = Class.inherit({
             return;
         }
 
-        var parent = this.options.dataConverter.getParentNode(node);
+        var parent = this.options.dataConverter.getParentNode(node),
+            needToStop;
         if(parent) {
             typeUtils.isFunction(callback) && callback(parent);
-            if(parent.internalFields.parentKey !== this.options.rootValue) {
+
+            if(typeUtils.isFunction(callback)) {
+                needToStop = callback(parent);
+            }
+            if(!needToStop && parent.internalFields.parentKey !== this.options.rootValue) {
                 this._iterateParents(parent, callback);
             }
         }
