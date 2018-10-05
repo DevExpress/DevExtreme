@@ -2408,10 +2408,10 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
         tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
         appointmentWidth;
 
-    for(var i = 0; i < 1; i++) {
+    for(var i = 0; i < 2; i++) {
         appointmentWidth = $appointment.eq(i).outerWidth();
 
-        assert.roughEqual(appointmentWidth, (tableCellWidth - 26) / 2, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentWidth, (tableCellWidth - 26) / 3, 1.5, "appointment is full-size");
     }
 
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
@@ -2420,8 +2420,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
         dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
-    assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 
     this.instance.option("width", 1000);
 
