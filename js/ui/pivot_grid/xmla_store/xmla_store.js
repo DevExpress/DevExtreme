@@ -543,7 +543,7 @@ exports.XmlaStore = Class.inherit((function() {
             hash[name] = item;
         }
 
-        if(!item.value && member) {
+        if(!typeUtils.isDefined(item.value) && member) {
             item.text = member.caption;
             item.value = member.value;
             item.key = name ? name : '';

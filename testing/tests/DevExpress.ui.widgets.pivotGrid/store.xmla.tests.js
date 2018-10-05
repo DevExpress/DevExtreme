@@ -822,6 +822,42 @@ define(function(require) {
             .always(done);
     });
 
+    QUnit.test("T677334. Correct parse result with empty member value", function(assert) {
+        var send = pivotGridUtils.sendRequest;
+        sinon.stub(pivotGridUtils, "sendRequest", function() {
+            var deferred = $.Deferred();
+            send.apply(this, arguments)
+                .then(function() {
+                    arguments[0] = arguments[0].replace(/\<MEMBER_VALUE xsi\:type=\"xsd\:short\"\>2001\<\/MEMBER_VALUE\>/g, "<MEMBER_VALUE/>");
+                    deferred.resolve.apply(deferred, arguments);
+                })
+                .fail(deferred.reject);
+
+            return deferred.promise();
+        });
+
+        var done = assert.async();
+
+        this.store
+            .load({
+                columns: [],
+                rows: [{ dataField: "[Ship Date].[Calendar Year]", filterValues: [CALENDAR_YEAR_DATA[0].key] }, { dataField: "[Ship Date].[Month Of Year]" }],
+                values: [{ dataField: "[Measures].[Customer Count]" }],
+                headerName: "columns",
+                rowExpandedPaths: [[CALENDAR_YEAR_DATA[0].key]]
+            })
+            .done(function(data) {
+                assert.strictEqual(data.rows.length, 1);
+                assert.strictEqual(data.rows[0].value, "");
+                assert.strictEqual(getValue(data, data.rows[0], data.columns[0]), 962);
+            })
+            .fail(getFailCallBack(assert))
+            .always(function() {
+                pivotGridUtils.sendRequest.restore();
+                done();
+            });
+    });
+
     QUnit.module("Hierarchies", testEnvironment);
 
     QUnit.test("Load from hierachy", function(assert) {
