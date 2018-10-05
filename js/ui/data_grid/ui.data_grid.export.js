@@ -695,6 +695,15 @@ dataGridCore.registerModule("export", {
              * @type_function_param1 columns:Array<dxDataGridColumn>
              * @type_function_param2 rows:Array<dxDataGridRowObject>
              */
+            /**
+             * @name dxDataGridOptions.onXlsxCellPrepared
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 xlsxCell:XlsxCell
+             * @type_function_param1_field5 gridCell:XlsxGridCell
+             * @extends Action
+             * @action
+             */
         };
     },
     controllers: {
