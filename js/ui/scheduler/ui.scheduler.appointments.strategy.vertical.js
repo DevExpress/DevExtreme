@@ -177,7 +177,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _customizeVerticalCoordinates: function(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
         var index = coordinates.index,
-            appointmentWidth = width / appointmentCountPerCell,
+            appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count),
             height = coordinates.height,
             appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth),
             top = coordinates.top,
