@@ -229,7 +229,8 @@ QUnit.module("item groups", {
 }, () => {
     test("toolbar should show item groups", (assert) => {
         let $element = this.$element.dxToolbar({
-                items: this.groups
+                items: this.groups,
+                grouped: true,
             }),
             $groups = $element.find("." + TOOLBAR_GROUP_CLASS);
 
@@ -240,7 +241,8 @@ QUnit.module("item groups", {
 
     test("toolbar groups should be placed inside toolbar blocks", (assert) => {
         let $element = this.$element.dxToolbar({
-                items: this.groups
+                items: this.groups,
+                grouped: true
             }),
             $before = $element.find("." + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0),
             $center = $element.find("." + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0),
