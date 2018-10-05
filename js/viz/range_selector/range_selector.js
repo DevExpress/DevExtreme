@@ -740,8 +740,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         scale: "SCALE",
         selectedRange: "SELECTED_RANGE",
         value: "VALUE",
-        dataSource: "DATA_SOURCE",
-        disabled: "DISABLED"
+        dataSource: "DATA_SOURCE"
     },
 
     _optionChangesOrder: ["SCALE", "DATA_SOURCE"],
@@ -786,22 +785,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         if(option) {
             that._options[VALUE] = option;
             that.setValue(option);
-        }
-    },
-
-    _change_DISABLED: function() {
-        var renderer = this._renderer,
-            root = renderer.root;
-        if(this.option("disabled")) {
-            root.attr({
-                "pointer-events": "none",
-                filter: renderer.getGrayScaleFilter().id
-            });
-        } else {
-            root.attr({
-                "pointer-events": null,
-                filter: null
-            });
         }
     },
 

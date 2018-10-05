@@ -42,7 +42,7 @@
                 if(attrs.indexOf("scale") !== -1) {
                     return this._stored_settings[attrs] || 1;
                 }
-                return this._stored_settings[attrs] || 0;
+                return this._stored_settings[attrs] === undefined ? 0 : this._stored_settings[attrs];
             }
             for(var key in attrs) {
                 this._stored_settings[key] = attrs[key];
