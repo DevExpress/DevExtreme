@@ -22,11 +22,13 @@
 */
 /**
 * @name XlsxCell.style.alignment.horizontal
-* @type Enums.XlsxAlignmentHorizontal
+* @type string
+* @acceptValues 'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'
 */
 /**
 * @name XlsxCell.style.alignment.vertical
-* @type Enums.XlsxAlignmentVertical
+* @type string
+* @acceptValues 'bottom'|'center'|'distributed'|'justify'|'top'
 */
 /**
 * @name XlsxCell.style.alignment.wrapText
@@ -76,7 +78,8 @@
 */
 /**
 * @name XlsxCell.style.font.underline
-* @type Enums.XlsxFontUnderline
+* @type string
+* @acceptValues 'double'|'doubleAccounting'|'none'|'single'|'singleAccounting'
 */
 /**
 * @name XlsxCell.style.font.color
