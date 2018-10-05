@@ -166,7 +166,6 @@ var DataAdapter = Class.inherit({
             if(that.checkHasSelectedChildNodes(node)) {
                 result.push(node.internalFields.key);
             }
-
         });
 
         return result;

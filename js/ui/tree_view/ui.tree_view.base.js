@@ -727,7 +727,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems", "hasSelectedChild"];
+        return ["key", "display", "selected", "expanded", "items", "parentId", "disabled", "hasItems"];
     },
 
     _getDataAdapterOptions: function() {
@@ -1622,32 +1622,20 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _hasSelectedChildNodes: [],
 
-    _getHasSelectedChildNodes: function(forceCalculation, nodes) {
-        var result;
-
+    _getHasSelectedChildNodes: function(forceCalculation) {
         if(forceCalculation) {
-            result = this._dataAdapter.getHasSelectedChildNodes(nodes);
+            this._hasSelectedChildNodes = this._dataAdapter.getHasSelectedChildNodes();
         }
 
-        if(forceCalculation && !nodes) {
-            this._hasSelectedChildNodes = result;
-        }
-
-        return result || this._hasSelectedChildNodes;
+        return this._hasSelectedChildNodes;
     },
 
-    _toggleHasSelectedChildClasses: function(nodes) {
-        var oldHasSelectedChildNodeKeys,
+    _toggleHasSelectedChildClasses: function() {
+        var oldHasSelectedChildNodeKeys = this._getHasSelectedChildNodes(),
+            newHasSelectedChildNodeKeys = this._getHasSelectedChildNodes(true),
+            that = this,
             node,
             $node;
-
-        if(!nodes || !nodes.length) {
-            oldHasSelectedChildNodeKeys = this._getHasSelectedChildNodes();
-        }
-
-        var newHasSelectedChildNodeKeys = this._getHasSelectedChildNodes(true, nodes),
-            that = this;
-
 
         each(oldHasSelectedChildNodeKeys, function(_, key) {
             node = that._dataAdapter.getNodeByKey(key);
