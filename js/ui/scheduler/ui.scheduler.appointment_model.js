@@ -260,11 +260,11 @@ var AppointmentModel = Class.inherit({
         }]];
     },
 
-    ctor: function(dataSource, dataExpressions, dataAccessors) {
-        this._dataExpressions = dataExpressions;
-        this.setDataSource(dataSource);
-        this._filterMaker = new FilterMaker(dataExpressions, dataAccessors);
+    ctor: function(dataSource, dataAccessors) {
         this.setDataAccessors(dataAccessors);
+        this.setDataSource(dataSource);
+
+        this._filterMaker = new FilterMaker(this._dataExpressions, dataAccessors);
     },
 
     setDataSource: function(dataSource) {
@@ -275,6 +275,9 @@ var AppointmentModel = Class.inherit({
 
     setDataAccessors: function(dataAccessors) {
         this._dataAccessors = dataAccessors;
+        this._dataExpressions = dataAccessors.expr;
+
+        this._filterMaker = new FilterMaker(this._dataExpressions, dataAccessors);
     },
 
     filterByDate: function(min, max, remoteFiltering, dateSerializationFormat) {

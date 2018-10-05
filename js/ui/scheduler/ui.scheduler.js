@@ -1287,6 +1287,8 @@ var Scheduler = Widget.inherit({
             case "recurrenceRuleExpr":
             case "recurrenceExceptionExpr":
                 this._updateExpression(name, value);
+                this._appointmentModel.setDataAccessors(this._combineDataAccessors());
+
                 this._initAppointmentTemplate();
                 this.repaint();
                 break;
@@ -1510,6 +1512,8 @@ var Scheduler = Widget.inherit({
             recurrenceExceptionExpr: this.option("recurrenceExceptionExpr")
         }, combinedDataAccessors);
 
+        this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, combinedDataAccessors);
+
         this._initActions();
 
         this._dropDownAppointments = new DropDownAppointments();
@@ -1600,7 +1604,8 @@ var Scheduler = Widget.inherit({
         if(!this._dataAccessors) {
             this._dataAccessors = {
                 getter: {},
-                setter: {}
+                setter: {},
+                expr: {}
             };
         }
 
@@ -1638,12 +1643,12 @@ var Scheduler = Widget.inherit({
 
                 this._dataAccessors.getter[name] = dateGetter || getter;
                 this._dataAccessors.setter[name] = dateSetter || setter;
+                this._dataAccessors.expr[name + "Expr"] = expr;
             } else {
                 delete this._dataAccessors.getter[name];
                 delete this._dataAccessors.setter[name];
             }
         }).bind(this));
-
     },
 
     _updateExpression: function(name, value) {
