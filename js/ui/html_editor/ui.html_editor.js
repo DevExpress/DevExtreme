@@ -56,19 +56,19 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItemTemplate>
+            * @type Array<dxHtmlEditorToolbarItem>
             */
 
             /**
-            * @name dxHtmlEditorToolbarItemTemplate
+            * @name dxHtmlEditorToolbarItem
             * @inherits dxToolbarItemTemplate
             */
             /**
-            * @name dxHtmlEditorToolbarItemTemplate.format
+            * @name dxHtmlEditorToolbarItem.format
             * @type string
             */
             /**
-            * @name dxHtmlEditorToolbarItemTemplate.values
+            * @name dxHtmlEditorToolbarItem.values
             * @type Array<string,number,boolean>
             */
 
