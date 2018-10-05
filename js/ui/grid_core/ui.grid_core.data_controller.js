@@ -683,7 +683,7 @@ module.exports = {
                             that._items[rowIndex] = newItem;
                             if(oldItem.visible !== newItem.visible) {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
-                            } else if(repaintChangesOnly) {
+                            } else if(repaintChangesOnly && !change.isFullUpdate) {
                                 newItem.cells = oldItem.cells;
                                 columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex);
                             }
@@ -726,6 +726,9 @@ module.exports = {
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
                             if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
                                 columnIndices.push(columnIndex);
+                            } else {
+                                var cell = oldItem.cells && oldItem.cells[columnIndex];
+                                cell && cell.update && cell.update();
                             }
                         }
                         return columnIndices;
@@ -756,6 +759,12 @@ module.exports = {
                             if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
                                 return false;
                             }
+                        }
+
+                        if(item1 && item1.cells) {
+                            item1.cells.forEach(function(cell) {
+                                cell && cell.update && cell.update();
+                            });
                         }
 
                         return true;
@@ -1302,7 +1311,7 @@ module.exports = {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
-                        this.updateItems({ changeType: "update", rowIndices: rowIndexes });
+                        this.updateItems({ changeType: "update", rowIndices: rowIndexes, isFullUpdate: true });
                     }
                 },
 

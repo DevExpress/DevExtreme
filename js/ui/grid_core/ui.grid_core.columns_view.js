@@ -585,10 +585,52 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _getCellOptions: function(options) {
-        return {
+        var cellOptions = {
             column: options.column,
             columnIndex: options.columnIndex,
             rowType: options.row.rowType
+        };
+
+        if(this.option("repaintChangesOnly")) {
+            this._addWatchMethod(cellOptions);
+        }
+
+        return cellOptions;
+    },
+
+    _addWatchMethod: function(cellOptions) {
+        var watchers = [];
+
+        cellOptions.watch = function(getter, updateFunc) {
+            var oldValue = getter(cellOptions.data);
+
+            var watcher = function() {
+                var newValue = getter(cellOptions.data);
+
+                if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+                    updateFunc(newValue, oldValue);
+                    oldValue = newValue;
+                }
+            };
+
+            watchers.push(watcher);
+
+            var stopWatch = function() {
+                var index = watchers.indexOf(watcher);
+                if(index >= 0) {
+                    watchers.splice(index, 1);
+                }
+            };
+
+            return stopWatch;
+        };
+
+        cellOptions.update = function() {
+            watchers.forEach(function(watcher) {
+                watcher();
+            });
+
+            return watchers.length > 0;
         };
     },
 
