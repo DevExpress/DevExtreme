@@ -62,7 +62,7 @@ class LessMetadataPostCompilerPlugin {
 
         if(this.swatchSelector) {
             const escapedSelector = this.swatchSelector.replace(".", "\\.");
-            const customStylesRegex = new RegExp("(" + escapedSelector + "\\s+)(\\.dx-viewport\\.dx-theme-(?:.*?)\\s)", "g");
+            const customStylesRegex = new RegExp("(" + escapedSelector + "\\s+)(body\\s)", "g");
             const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
             css = css
                 .replace(/\s\.dx-theme-(?:.*?)-typography/g, "")

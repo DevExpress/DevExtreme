@@ -174,7 +174,7 @@ describe("LessTemplateLoader", () => {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     div { color: @base-bg; }
                     .dx-theme-generic-typography { color: @base-bg; }
-                    .dx-viewport.dx-theme-generic {
+                    body {
                         .dx-theme-accent-as-text-color {
                             color: @base-bg;
                         }
@@ -195,7 +195,7 @@ describe("LessTemplateLoader", () => {
 .dx-swatch-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .dx-swatch-my-custom .dx-theme-accent-as-text-color {
+body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 
@@ -214,7 +214,7 @@ describe("LessTemplateLoader", () => {
         let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
         div { color: @base-bg; }
         .dx-theme-generic-typography { color: @base-bg; }
-        .dx-viewport.dx-theme-generic {
+        body {
             .dx-theme-accent-as-text-color {
                 color: @base-bg;
             }
@@ -235,7 +235,7 @@ describe("LessTemplateLoader", () => {
 .dx-swatch-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .dx-swatch-my-custom .dx-theme-accent-as-text-color {
+body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 
@@ -251,7 +251,7 @@ describe("LessTemplateLoader", () => {
         let scss = `$body-bg: #fff; $body-color:#0f0;
         div { color: $body-bg; }
         .dx-theme-generic-typography { color: $body-color; }
-        .dx-viewport.dx-theme-generic {
+        body {
             .dx-theme-accent-as-text-color {
                 color: $body-bg;
             }
@@ -270,7 +270,7 @@ describe("LessTemplateLoader", () => {
 .dx-theme-generic-typography {
   color: #0f0; }
 
-.dx-viewport.dx-theme-generic .dx-theme-accent-as-text-color {
+body .dx-theme-accent-as-text-color {
   color: #fff; }
 
 #devexpress-metadata-compiler {
@@ -299,7 +299,7 @@ describe("LessTemplateLoader", () => {
                     .dx-theme-marker { font-family: 'dx.generic.light'; }
                     div { color: @base-bg; }
                     .dx-theme-generic-typography { color: @base-bg; }
-                    .dx-viewport.dx-theme-generic {
+                    body {
                         .dx-theme-accent-as-text-color {
                             color: @base-bg;
                         }
@@ -323,7 +323,7 @@ describe("LessTemplateLoader", () => {
 .dx-swatch-my-custom {
   color: #fff;
 }
-.dx-viewport.dx-theme-generic .dx-swatch-my-custom .dx-theme-accent-as-text-color {
+body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
 
