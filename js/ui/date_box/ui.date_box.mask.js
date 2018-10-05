@@ -1,5 +1,6 @@
 import eventsUtils from "../../events/utils";
 import { isFunction } from "../../core/utils/type";
+import { clipboardText } from "../../core/utils/dom";
 import { extend } from "../../core/utils/extend";
 import { fitIntoRange } from "../../core/utils/math";
 import { inRange } from "../../core/utils/math";
@@ -75,7 +76,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _getFormatPattern() {
-        var format = this.option("displayFormat"),
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
 
         if(isLDMLPattern) {
@@ -162,7 +163,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior() {
-        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
+        return this.option("useMaskBehavior") && this.option("mode") === "text";
     },
 
     _renderMask() {
@@ -198,6 +199,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _attachMaskEvents() {
         eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+        eventsEngine.on(this._input(), eventsUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
         eventsEngine.on(this._input(), eventsUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), (e) => {
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart(0, e);
@@ -230,8 +232,13 @@ let DateBoxMask = DateBoxBase.inherit({
 
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);
-            return;
+            let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
+            if(!isBoundaryIndex) {
+                this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);
+                return;
+            } else {
+                index = this._activePartIndex;
+            }
         }
 
         this._activePartIndex = index;
@@ -314,6 +321,20 @@ let DateBoxMask = DateBoxBase.inherit({
         if(this.option("text")) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
             this._caret(this._getActivePartProp("caret"));
+        }
+    },
+
+    _maskPasteHandler(e) {
+        let newText = this._replaceSelectedText(this.option("text"), this._caret(), clipboardText(e));
+        let date = dateLocalization.parse(newText, this._getFormatPattern());
+
+        if(date) {
+            this._renderDateParts();
+            this._maskValue = date;
+            this._renderDisplayText(this._getDisplayedText(this._maskValue));
+            this._selectNextPart(0, e);
+        } else {
+            e.preventDefault();
         }
     },
 

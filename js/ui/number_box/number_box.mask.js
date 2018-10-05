@@ -218,7 +218,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
 
         if(end - start < text.length) {
-            var editedText = this._getEditedText(text, { start: start, end: end }, ""),
+            var editedText = this._replaceSelectedText(text, { start: start, end: end }, ""),
                 noDigits = editedText.search(/[0-9]/) < 0;
 
             if(noDigits && this._isValueInRange(0)) {
@@ -289,18 +289,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return text.replace(regExp, "");
     },
 
-    _getEditedText: function(text, selection, char) {
-        if(char === undefined) {
-            return text;
-        }
-
-        var textBefore = text.slice(0, selection.start),
-            textAfter = text.slice(selection.end),
-            edited = textBefore + char + textAfter;
-
-        return edited;
-    },
-
     _truncateToPrecision: function(value, decimalSeparator, maxPrecision) {
         if(typeUtils.isDefined(value)) {
             var strValue = value.toString(),
@@ -315,7 +303,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _tryParse: function(text, selection, char) {
-        var editedText = this._getEditedText(text, selection, char),
+        var editedText = this._replaceSelectedText(text, selection, char),
             format = this._getFormatPattern(),
             isTextSelected = selection.start !== selection.end,
             parsed = this._parse(editedText, format),
@@ -548,7 +536,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _removeMinusFromText: function(text, caret) {
         var isMinusPressed = this._lastKey === MINUS && text.charAt(caret.start - 1) === MINUS;
 
-        return isMinusPressed ? this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "") : text;
+        return isMinusPressed ? this._replaceSelectedText(text, {
+            start: caret.start - 1,
+            end: caret.start
+        }, "") : text;
     },
 
     _setTextByParsedValue: function() {
