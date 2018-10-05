@@ -2361,6 +2361,28 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 });
 
+QUnit.test("Full-size appointment should have correct size, 'auto' mode", function(assert) {
+    var items = [
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 0, 0), endDate: new Date(2015, 2, 4, 2, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "day",
+            views: ["day"],
+            height: 600,
+            width: 1500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0),
+        tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
+        appointmentWidth = $appointment.outerWidth();
+
+    assert.roughEqual(appointmentWidth, tableCellWidth - 26, 1.5, "appointment is full-size");
+});
+
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and width option, 'auto' mode", function(assert) {
     var items = [
         { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
