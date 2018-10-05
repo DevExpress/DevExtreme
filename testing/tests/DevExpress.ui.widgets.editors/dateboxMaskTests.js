@@ -39,10 +39,10 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
         });
 
-        QUnit.test("Masks should not be enabled when displayFormat is not specified", (assert) => {
+        QUnit.test("Masks should be enabled when displayFormat is not specified", (assert) => {
             this.instance.option("displayFormat", undefined);
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "10/10/2012", "mask behavior does not work");
+            assert.equal(this.instance.option("text"), "11/10/2012", "mask behavior works");
         });
 
         QUnit.test("Masks should not be enabled when mode is not text", (assert) => {

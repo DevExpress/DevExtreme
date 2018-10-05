@@ -76,7 +76,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _getFormatPattern() {
-        var format = this.option("displayFormat"),
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
 
         if(isLDMLPattern) {
@@ -163,7 +163,7 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior() {
-        return this.option("useMaskBehavior") && this.option("mode") === "text" && this.option("displayFormat");
+        return this.option("useMaskBehavior") && this.option("mode") === "text";
     },
 
     _renderMask() {
