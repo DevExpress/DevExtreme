@@ -20,7 +20,9 @@ class FormDialog {
 
     _renderPopup() {
         const editorInstance = this._editorInstance;
-        const $container = $(`<div class='${DIALOG_CLASS}'>`).appendTo(editorInstance.$element());
+        const $container = $("<div>")
+            .addClass(DIALOG_CLASS)
+            .appendTo(editorInstance.$element());
         const popupConfig = this._getPopupConfig();
 
         return editorInstance._createComponent($container, Popup, popupConfig);

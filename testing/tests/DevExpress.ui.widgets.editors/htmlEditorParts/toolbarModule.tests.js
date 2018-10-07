@@ -42,7 +42,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
 
         assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
         assert.notOk(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar isn't render inside the root element (no items)");
-        assert.equal(this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS).length, 0, "There are no format widgets");
+        assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, "There are no format widgets");
     });
 
     test("Render toolbar with items", (assert) => {
@@ -51,7 +51,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
 
         assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
         assert.ok(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar render inside the root element");
-        assert.equal(this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS).length, 1, "There is one format widget");
+        assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 1, "There is one format widget");
     });
 
     test("Render toolbar on custom container", (assert) => {
@@ -66,7 +66,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
         this.options.items = ["bold", "strike"];
 
         new Toolbar(this.quillMock, this.options);
-        const $formatWidgets = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         assert.equal($formatWidgets.length, 2, "There are 2 format widgets");
         assert.ok($formatWidgets.first().hasClass("dx-button"), "Change simple format via Button");
@@ -89,7 +89,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
 
         new Toolbar(this.quillMock, this.options);
 
-        const $formatWidgets = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         $formatWidgets.eq(0).trigger("dxclick");
         $formatWidgets.eq(1).trigger("dxclick");
@@ -102,7 +102,7 @@ QUnit.module("Toolbar module", moduleConfig, () => {
         this.options.items = [{ format: "header", values: [1, 2, 3, false] }];
 
         new Toolbar(this.quillMock, this.options);
-        const $formatWidget = this.$element.find("." + TOOLBAR_FORMAT_WIDGET_CLASS);
+        const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         assert.ok($formatWidget.first().hasClass("dx-selectbox"), "Change enum format via SelectBox");
     });
