@@ -45,7 +45,9 @@ const HtmlEditor = Editor.inherit({
             * @type dxDataPlaceholderModule
             * @default null
             */
-            dataPlaceholder: null
+            dataPlaceholder: null,
+
+            formDialogOptions: null
 
             /**
             * @name dxToolbarModule
@@ -275,7 +277,9 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderFormDialog: function() {
-        this._formDialog = new FormDialog(this);
+        const userOptions = this.option("formDialogOptions");
+
+        this._formDialog = new FormDialog(this, userOptions);
     },
 
     _optionChanged: function(args) {
@@ -309,6 +313,9 @@ const HtmlEditor = Editor.inherit({
             case "disabled":
                 this.callBase(args);
                 this._resetEnabledState();
+                break;
+            case "formDialogOptions":
+                this._renderFormDialog();
                 break;
             default:
                 this.callBase(args);

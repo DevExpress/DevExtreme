@@ -3,6 +3,8 @@ import { getQuill } from "../quill_importer";
 import $ from "../../../core/renderer";
 
 import Toolbar from "../../toolbar";
+import "../../select_box";
+import "../../color_box/color_view";
 
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject } from "../../../core/utils/type";
@@ -13,6 +15,8 @@ const BaseModule = getQuill().import("core/module");
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
+
+const USER_ACTION = "user";
 
 class ToolbarModule extends BaseModule {
     constructor(quill, options) {
@@ -29,12 +33,31 @@ class ToolbarModule extends BaseModule {
                 const formData = this.quill.getFormat() || {};
                 const promise = this._editorInstance.showFormDialog({
                     formData: formData,
-                    items: ["link"]
+                    items: ["url", "text", "tooltip", "target"] // TODO l18n
                 });
 
                 promise.done((formData) => {
-                    this.quill.format("link", formData.link);
+                    this.quill.format("link", formData.url, USER_ACTION); // TODO extend base format
                 });
+            },
+            image: () => {
+                const formData = this.quill.getFormat() || {};
+                const promise = this._editorInstance.showFormDialog({
+                    formData: formData,
+                    items: ["src", "width", "height", "alt"]
+                });
+
+                promise.done((formData) => {
+                    this.quill.format("image", formData.src, USER_ACTION); // TODO extend base format
+                });
+            },
+            color: this._prepareColorClickHandler("color"),
+            background: this._prepareColorClickHandler("background"),
+            orderedList: () => {
+                this.quill.format("list", "ordered", USER_ACTION);
+            },
+            bulletList: () => {
+                this.quill.format("list", "bullet", USER_ACTION);
             }
         };
 
@@ -52,29 +75,21 @@ class ToolbarModule extends BaseModule {
             const format = this.quill.getFormat(this.quill.getSelection());
             const value = !format[formatName];
 
-            this.quill.format(formatName, value, "user");
+            this.quill.format(formatName, value, USER_ACTION);
             this.updateFormatWidgets();
         };
     }
 
-    addClickHandler(formatName, handler) {
-        this._formatHandlers[formatName] = handler;
-        const formatWidget = this._formats[formatName];
-        if(formatWidget && formatWidget.NAME === "dxButton") {
-            formatWidget.option("onClick", handler);
-        }
-    }
-
     _renderToolbar() {
-        const container = this.options.container || this.getContainer();
-        const toolbarItems = this.prepareToolbarItems();
+        const container = this.options.container || this._getContainer();
+        const toolbarItems = this._prepareToolbarItems();
 
         $(container).addClass(TOOLBAR_CLASS);
 
         this.toolbarInstance = this._editorInstance._createComponent(container, Toolbar, { dataSource: toolbarItems });
     }
 
-    getContainer() {
+    _getContainer() {
         const $container = $("<div>");
 
         this._editorInstance.$element().prepend($container);
@@ -82,7 +97,7 @@ class ToolbarModule extends BaseModule {
         return $container;
     }
 
-    prepareToolbarItems() {
+    _prepareToolbarItems() {
         let resultItems = [];
 
         each(this.options.items, (index, item) => {
@@ -125,24 +140,24 @@ class ToolbarModule extends BaseModule {
                 dataSource: item.values,
                 onValueChanged: (e) => {
                     if(!this._isReset) {
-                        this.quill.format(item.format, e.value, "user");
+                        this.quill.format(item.format, e.value, USER_ACTION);
                     }
                 }
             }
         };
     }
 
-    _prepareColorItemConfig(format) {
-        return {
-            widget: "dxColorBox",
-            format: format,
-            options: {
-                onValueChanged: (e) => {
-                    if(!this._isReset) {
-                        this.quill.format(format, e.value, "user");
-                    }
-                }
-            }
+    _prepareColorClickHandler(formatName) {
+        return () => {
+            const formData = this.quill.getFormat() || {};
+            const promise = this._editorInstance.showFormDialog({
+                formData: formData,
+                items: [{ dataField: formatName, editorType: "dxColorView" }]
+            });
+
+            promise.done((formData) => {
+                this.quill.format(formatName, formData[formatName], USER_ACTION);
+            });
         };
     }
 
@@ -151,27 +166,17 @@ class ToolbarModule extends BaseModule {
             options: {
                 onInitialized: (e) => {
                     e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                    e.component.$element().addClass("dx-" + item.format + "-format");
+                    e.component.$element().toggleClass(`dx-${item.format}-format`, !!item.format);
                     this._formats[item.format] = e.component;
                 }
             }
         };
 
-        return extend(true, { location: "before" }, item, this.getDefaultConfig(item.format), baseItem);
+        return extend(true, { location: "before" }, this._getDefaultConfig(item.format), item, baseItem);
     }
 
-    getDefaultItemsConfig() {
+    _getDefaultItemsConfig() {
         return {
-            orderedList: {
-                onClick: () => {
-                    this.quill.format("list", "ordered", "user");
-                }
-            },
-            bulletList: {
-                onClick: () => {
-                    this.quill.format("list", "bullet", "user");
-                }
-            },
             header: {
                 options: {
                     displayExpr: (item) => {
@@ -179,14 +184,12 @@ class ToolbarModule extends BaseModule {
                         return isHeaderValue ? "H" + item : "Normal";
                     }
                 }
-            },
-            color: this._prepareColorItemConfig("color"),
-            background: this._prepareColorItemConfig("background")
+            }
         };
     }
 
-    getDefaultConfig(format) {
-        return this.getDefaultItemsConfig()[format];
+    _getDefaultConfig(format) {
+        return this._getDefaultItemsConfig()[format];
     }
 
     updateFormatWidgets() {
@@ -226,11 +229,19 @@ class ToolbarModule extends BaseModule {
     _resetFormatWidgets() {
         each(this._formats, (name, widget) => {
             widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
-            if(widget.NAME === "dxSelectBox" || widget.NAME === "dxColorBox") {
+            if(widget.NAME === "dxSelectBox") {
                 this._setValueSilent(widget, null);
 
             }
         });
+    }
+
+    addClickHandler(formatName, handler) {
+        this._formatHandlers[formatName] = handler;
+        const formatWidget = this._formats[formatName];
+        if(formatWidget && formatWidget.NAME === "dxButton") {
+            formatWidget.option("onClick", handler);
+        }
     }
 }
 
