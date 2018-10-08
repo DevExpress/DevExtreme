@@ -2378,9 +2378,10 @@ QUnit.test("Full-size appointment should have correct size, 'auto' mode", functi
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0),
         tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
-        appointmentWidth = $appointment.outerWidth();
+        appointmentWidth = $appointment.outerWidth(),
+        offset = getOffset();
 
-    assert.roughEqual(appointmentWidth, tableCellWidth - 26, 1.5, "appointment is full-size");
+    assert.roughEqual(appointmentWidth, tableCellWidth - offset, 1.5, "appointment is full-size");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and width option, 'auto' mode", function(assert) {
@@ -2399,7 +2400,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
                 maxAppointmentsPerCell: 'auto'
             }],
             height: 600,
-            width: 1500,
+            width: 1800,
             dataSource: items
         }
     );
