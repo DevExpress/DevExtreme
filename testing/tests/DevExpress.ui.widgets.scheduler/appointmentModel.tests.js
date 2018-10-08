@@ -39,8 +39,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             ]
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
@@ -68,8 +70,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             filter: ["text", "=", "Appointment 2"]
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate"
+            }
         });
         var dateFilter = [
             [
@@ -122,8 +126,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         });
 
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
@@ -156,8 +162,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 ]
             });
             var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-                startDateExpr: "startDate",
-                endDateExpr: "endDate"
+                expr: {
+                    startDateExpr: "startDate",
+                    endDateExpr: "endDate"
+                }
             });
 
             appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, "yyyy-MM-ddTHH:mm:ss");
@@ -199,8 +207,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 ]
             });
             var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-                startDateExpr: "startDate",
-                endDateExpr: "endDate"
+                expr: {
+                    startDateExpr: "startDate",
+                    endDateExpr: "endDate"
+                }
             });
 
             appointmentModel.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, "yyyy-MM-ddTHH:mm:ss");
@@ -238,8 +248,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             }]
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
@@ -258,8 +270,10 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         });
 
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "Start",
-            endDateExpr: "End"
+            expr: {
+                startDateExpr: "Start",
+                endDateExpr: "End"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
@@ -281,9 +295,11 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             });
 
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate",
-            allDayExpr: "AllDay"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate",
+                allDayExpr: "AllDay"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
@@ -304,9 +320,11 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             });
 
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate",
-            allDayExpr: "allDay"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate",
+                allDayExpr: "AllDay"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
@@ -333,10 +351,12 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             store: recurrentAppts
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate",
-            allDayExpr: "allDay",
-            recurrenceRuleExpr: "_recurrenceRule"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "_recurrenceRule"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -363,10 +383,12 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             store: appts
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate",
-            allDayExpr: "allDay",
-            recurrenceRuleExpr: null
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate",
+                allDayExpr: "allDay",
+                recurrenceRuleExpr: null
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -394,10 +416,12 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             store: appts
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate",
-            allDayExpr: "allDay",
-            recurrenceRuleExpr: ""
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate",
+                allDayExpr: "allDay",
+                recurrenceRuleExpr: ""
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -418,9 +442,11 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             store: appts
         });
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "startDate",
-            endDateExpr: "endDate",
-            allDayExpr: "allDay"
+            expr: {
+                startDateExpr: "startDate",
+                endDateExpr: "endDate",
+                allDayExpr: "allDay"
+            }
         });
 
         appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
@@ -441,12 +467,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         });
 
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -462,6 +482,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 recurrenceRule: compileSetter("RecurrenceRule"),
                 recurrenceException: compileSetter("Exception"),
                 allDay: compileSetter("AllDay")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -493,18 +520,19 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         });
 
         var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
                 recurrenceRule: compileGetter("RecurrenceRule"),
                 recurrenceException: compileGetter("Exception"),
                 allDay: compileGetter("AllDay")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -531,12 +559,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should be filtered by start & end day hours", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -549,6 +571,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -566,12 +595,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should be filtered by recurrence rule", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecRule",
-            recurrenceExceptionExpr: "RecException"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -584,6 +607,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecRule",
+                recurrenceExceptionExpr: "RecException"
             }
         });
 
@@ -608,12 +638,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecRule",
-            recurrenceExceptionExpr: "RecException"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -626,6 +650,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecRule",
+                recurrenceExceptionExpr: "RecException"
             }
         });
 
@@ -647,12 +678,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should be filtered by recurrence rule correctly for day interval", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecRule",
-            recurrenceExceptionExpr: "RecException"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -665,6 +690,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecRule",
+                recurrenceExceptionExpr: "RecException"
             }
         });
 
@@ -686,11 +718,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: null
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -701,6 +728,12 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: null
             }
         });
 
@@ -726,11 +759,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ''", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: ''
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -741,6 +769,12 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: ''
             }
         });
 
@@ -766,12 +800,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should be filtered by resources", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecRule",
-            recurrenceExceptionExpr: "RecException"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -784,6 +812,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                     ownerId: compileGetter("ownerId"),
                     roomId: compileGetter("roomId")
                 }
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecRule",
+                recurrenceExceptionExpr: "RecException"
             }
         });
 
@@ -817,12 +852,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded appointments should be filtered by allDay field", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -831,6 +860,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 allDay: compileGetter("AllDay"),
                 startDateTimeZone: compileGetter("StartDateTimeZone"),
                 endDateTimeZone: compileGetter("EndDateTimeZone")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -850,12 +886,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Loaded recurrent allDay appointments should not be filtered by start/endDayHour", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -868,6 +898,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             setter: {
                 startDate: compileSetter("StartDate"),
                 endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -885,12 +922,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -899,6 +930,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 allDay: compileGetter("AllDay"),
                 startDateTimeZone: compileGetter("StartDateTimeZone"),
                 endDateTimeZone: compileGetter("EndDateTimeZone")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -920,12 +958,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -934,6 +966,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 allDay: compileGetter("AllDay"),
                 startDateTimeZone: compileGetter("StartDateTimeZone"),
                 endDateTimeZone: compileGetter("EndDateTimeZone")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
@@ -955,12 +994,6 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
 
     QUnit.test("Appointment between days should be filtered by start/endDayHour (T339519)", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
-            startDateExpr: "StartDate",
-            endDateExpr: "EndDate",
-            allDayExpr: "AllDay",
-            recurrenceRuleExpr: "RecurrenceRule",
-            recurrenceExceptionExpr: "Exception"
-        }, {
             getter: {
                 startDate: compileGetter("StartDate"),
                 endDate: compileGetter("EndDate"),
@@ -969,6 +1002,13 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
                 allDay: compileGetter("AllDay"),
                 startDateTimeZone: compileGetter("StartDateTimeZone"),
                 endDateTimeZone: compileGetter("EndDateTimeZone")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
             }
         });
 
