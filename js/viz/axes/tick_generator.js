@@ -742,9 +742,13 @@ function logarithmicGenerator(options) {
 
 function dateGenerator(options) {
     function floor(value, interval) {
-        var floorNumber = correctValueByInterval(getValue, mathFloor, getValue),
-            intervalObject = typeUtils.isString(interval) ? dateUtils.getDateIntervalByString(interval.toLowerCase()) : interval,
-            divider = dateToMilliseconds(interval);
+        const floorNumber = correctValueByInterval(getValue, mathFloor, getValue);
+        let intervalObject = typeUtils.isString(interval) ? dateUtils.getDateIntervalByString(interval.toLowerCase()) : interval;
+        const divider = dateToMilliseconds(interval);
+
+        if(intervalObject.days % 7 === 0 || interval.quarters) {
+            intervalObject = adjustIntervalDateTime(divider);
+        }
 
         const correctDateWithUnitBeginning = v => dateUtils.correctDateWithUnitBeginning(v, intervalObject, null, options.firstDayOfWeek);
         const floorAtStartDate = v => new Date(mathFloor((v.getTime() - v.getTimezoneOffset() * MINUTE) / divider) * divider + v.getTimezoneOffset() * MINUTE);

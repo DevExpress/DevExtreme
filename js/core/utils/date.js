@@ -158,6 +158,7 @@ var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, 
     date = new Date(date.getTime());
     var oldDate = new Date(date.getTime()),
         firstQuarterMonth,
+        month,
         dateUnitInterval = getDateUnitInterval(dateInterval);
 
     switch(dateUnitInterval) {
@@ -185,11 +186,13 @@ var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, 
             break;
         case 'quarter':
             firstQuarterMonth = getFirstQuarterMonth(date.getMonth());
-            if(date.getMonth() !== firstQuarterMonth) {
-                date.setMonth(firstQuarterMonth);
-            }
+            month = date.getMonth();
+
             date.setDate(1);
             date.setHours(0, 0, 0, 0);
+            if(month !== firstQuarterMonth) {
+                date.setMonth(firstQuarterMonth);
+            }
             break;
     }
 
