@@ -376,6 +376,12 @@ var VirtualScrollingRowsViewExtender = (function() {
                         rowElements = rowElements.slice(-change.removeCount);
                     }
                     rowElements.map(rowElement => $(rowElement).remove());
+
+                    let errorHandlingController = that.getController("errorHandling");
+                    if(errorHandlingController) {
+                        let $errorRowElement = errorHandlingController.getErrorRowElement(contentTable);
+                        errorHandlingController.removeErrorRow($errorRowElement);
+                    }
                 }
             } else {
                 that.callBase.apply(that, arguments);
