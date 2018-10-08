@@ -171,7 +171,6 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
             for(var i = 0; i < n; i++) {
                 var sum = 0;
-                rowsT[i] = [];
 
                 for(var j = 0; j < m; j++) {
                     sum += rows[j][i];
@@ -184,17 +183,6 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         return rowsT;
     },
 
-    _cutRows: function(rows) {
-        var rowsC = [];
-
-        for(var i = 0; i < rows.length; i++) {
-            if(rows[i] > 0) {
-                rowsC.push(rows[i]);
-            }
-        }
-
-        return rowsC;
-    },
     _renderNoData: function() {
         this._$noDataContainer = $("<div>").addClass(NODATA_CONTAINER_CLASS)
             .html(this.option("noDataText"));
@@ -413,7 +401,9 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
         this._$rows = [];
 
-        var fillTableBody = (function(rowIndex, rowSize) {
+        var fillTableBody = (function(globalIndex, rowIndex, rowSize) {
+            rowIndex = this.option("groupByDate") ? globalIndex : rowIndex;
+
             if(rowSize) {
                 var date,
                     cellDateNumber,
@@ -451,7 +441,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         }).bind(this);
 
         for(var i = 0; i < rows.length; i++) {
-            each(rows[i], fillTableBody);
+            each(rows[i], fillTableBody.bind(this, i));
             this._setLastRowClass();
         }
 
