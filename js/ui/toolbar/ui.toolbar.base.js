@@ -23,7 +23,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
     TOOLBAR_COMPACT_CLASS = "dx-toolbar-compact",
     TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS,
-    BUTTON_FLAT_CLASS = "dx-button-flat",
+    BUTTON_FLAT_CLASS = "dx-button-mode-text",
     DEFAULT_BUTTON_TYPE = "default",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";

@@ -130,7 +130,14 @@ var Button = Widget.inherit({
             */
             useSubmitBehavior: false,
 
-            useInkRipple: false
+            useInkRipple: false,
+
+            /**
+            * @name dxButtonOptions.stylingMode
+            * @type Enums.ButtonStylingMode
+            * @default 'contained'
+            */
+            stylingMode: "contained"
 
             /**
             * @name dxButtonDefaultTemplate
@@ -196,6 +203,7 @@ var Button = Widget.inherit({
     _initMarkup: function() {
         this.$element().addClass(BUTTON_CLASS);
         this._renderType();
+        this._renderStylingMode();
 
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
@@ -361,6 +369,13 @@ var Button = Widget.inherit({
         var type = this.option("type");
         if(type) {
             this.$element().addClass("dx-button-" + type);
+        }
+    },
+
+    _renderStylingMode: function() {
+        var mode = this.option("stylingMode");
+        if(mode) {
+            this.$element().addClass("dx-button-mode-" + mode);
         }
     },
 

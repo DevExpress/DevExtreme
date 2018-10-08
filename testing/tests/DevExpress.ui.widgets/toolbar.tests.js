@@ -132,7 +132,7 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
     assert.equal(margin, "0px auto", "aligned by center");
 });
 
-QUnit.test("useFlatButtons change dx-button-flat class in runtime in Material", function(assert) {
+QUnit.test("useFlatButtons change dx-button-mode-text class in runtime in Material", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
     var element = this.element.dxToolbar({
@@ -147,12 +147,12 @@ QUnit.test("useFlatButtons change dx-button-flat class in runtime in Material", 
         }),
         button = element.find(".dx-button").first();
 
-    assert.ok(button.hasClass("dx-button-flat"));
+    assert.ok(button.hasClass("dx-button-mode-text"));
 
     element.dxToolbar("instance").option("useFlatButtons", false);
     button = element.find(".dx-button").first();
 
-    assert.notOk(button.hasClass("dx-button-flat"));
+    assert.notOk(button.hasClass("dx-button-mode-text"));
 
     themes.isMaterial = origIsMaterial;
 });
@@ -201,7 +201,7 @@ QUnit.test("Button save elementAttr.class class on container in Material", funct
         }),
         button = element.find(".dx-button").first();
 
-    assert.ok(button.hasClass("dx-button-flat"));
+    assert.ok(button.hasClass("dx-button-mode-text"));
     assert.ok(button.hasClass("custom-class1"));
     assert.ok(button.hasClass("custom-class2"));
 
@@ -221,7 +221,7 @@ QUnit.test("Buttons has default style in generic theme", function(assert) {
         }),
         button = element.find(".dx-button");
 
-    assert.notOk(button.hasClass("dx-button-flat"));
+    assert.notOk(button.hasClass("dx-button-mode-text"));
 });
 
 

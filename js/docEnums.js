@@ -10,6 +10,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ButtonStylingMode
+ * @enum {'text'|'outlined'|'contained'}
+ */
+
+/**
  * @typedef {number} Enums.FirstDayOfWeek
  * @enum {0|1|2|3|4|5|6}
  */

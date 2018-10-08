@@ -40,7 +40,7 @@ var POPUP_CLASS = "dx-popup",
 
     BUTTON_DEFAULT_TYPE = "default",
     BUTTON_NORMAL_TYPE = "normal",
-    BUTTON_FLAT_CLASS = "dx-button-flat";
+    BUTTON_FLAT_CLASS = "dx-button-mode-text";
 
 var getButtonPlace = function(name) {
 
