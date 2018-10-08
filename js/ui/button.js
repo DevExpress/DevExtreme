@@ -410,8 +410,7 @@ var Button = Widget.inherit({
                 this._updateContent();
                 break;
             case "useInkRipple":
-                this._invalidate();
-                break;
+            case "stylingMode":
             case "useSubmitBehavior":
                 this._invalidate();
                 break;
