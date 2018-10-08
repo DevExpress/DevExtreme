@@ -274,7 +274,12 @@ var AppointmentModel = Class.inherit({
     },
 
     setDataAccessors: function(dataAccessors) {
-        this._dataAccessors = dataAccessors;
+        this._dataAccessors = {};
+        this._dataExpressions = {};
+
+        this._dataAccessors.getter = dataAccessors.getter;
+        this._dataAccessors.setter = dataAccessors.setter;
+
         this._dataExpressions = dataAccessors.expr;
 
         this._filterMaker = new FilterMaker(this._dataExpressions, dataAccessors);

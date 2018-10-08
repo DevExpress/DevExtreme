@@ -2046,6 +2046,10 @@ var Scheduler = Widget.inherit({
         return this._workSpace;
     },
 
+    getAppointmentModel: function() {
+        return this._appointmentModel;
+    },
+
     getHeader: function() {
         return this._header;
     },
