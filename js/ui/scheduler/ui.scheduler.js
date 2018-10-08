@@ -1647,6 +1647,7 @@ var Scheduler = Widget.inherit({
             } else {
                 delete this._dataAccessors.getter[name];
                 delete this._dataAccessors.setter[name];
+                delete this._dataAccessors.expr[name + "Expr"];
             }
         }).bind(this));
     },
