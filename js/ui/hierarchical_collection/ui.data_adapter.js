@@ -145,6 +145,23 @@ var DataAdapter = Class.inherit({
         });
     },
 
+    getHasSelectedChildNodes: function() {
+        var that = this;
+        var result = [];
+
+        each(this.getSelectedNodesKeys(), function(_, key) {
+            var node = that.getNodeByKey(key);
+            that._iterateParents(node, function(parent) {
+                if(result.indexOf(parent.internalFields.key) === -1) {
+                    result.push(parent.internalFields.key);
+                    return true;
+                }
+            });
+        });
+
+        return result;
+    },
+
     _setParentExpansion: function() {
         var that = this;
 
@@ -170,10 +187,13 @@ var DataAdapter = Class.inherit({
         var that = this;
 
         each(node.internalFields.childrenKeys, function(_, key) {
-            var child = that.getNodeByKey(key);
-            typeUtils.isFunction(callback) && callback(child);
+            var child = that.getNodeByKey(key),
+                needToStop;
+            if(typeUtils.isFunction(callback)) {
+                needToStop = callback(child);
+            }
             if(child.internalFields.childrenKeys.length && recursive) {
-                that._iterateChildren(child, recursive, callback);
+                that._iterateChildren(child, !needToStop && recursive, callback);
             }
         });
     },
@@ -183,10 +203,15 @@ var DataAdapter = Class.inherit({
             return;
         }
 
-        var parent = this.options.dataConverter.getParentNode(node);
+        var parent = this.options.dataConverter.getParentNode(node),
+            needToStop;
         if(parent) {
             typeUtils.isFunction(callback) && callback(parent);
-            if(parent.internalFields.parentKey !== this.options.rootValue) {
+
+            if(typeUtils.isFunction(callback)) {
+                needToStop = callback(parent);
+            }
+            if(!needToStop && parent.internalFields.parentKey !== this.options.rootValue) {
                 this._iterateParents(parent, callback);
             }
         }

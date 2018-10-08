@@ -500,3 +500,19 @@ QUnit.test("On initialization 'selectAll' item should have intermediate state if
 
     assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"));
 });
+
+var HAS_SELECTED_CHILD_CLASS = "dx-treeview-node-has-selected-items";
+
+QUnit.test("parent has a special class if node has selected child", function(assert) {
+    var data = [{
+            id: '1', expanded: true, items: [
+                { id: '1_1', selected: true }
+            ]
+        }],
+        $treeView = initTree({
+            dataSource: data,
+            selectNodesRecursive: true
+        });
+
+    assert.ok($treeView.find("." + HAS_SELECTED_CHILD_CLASS).eq(0).length, 1, "parent has a special has-selected-items class");
+});

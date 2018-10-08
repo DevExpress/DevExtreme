@@ -39,6 +39,7 @@ var WIDGET_CLASS = "dx-treeview",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
     DISABLED_STATE_CLASS = "dx-state-disabled",
     SELECTED_ITEM_CLASS = "dx-state-selected",
+    NODE_HAS_SELECTED_CHILD_CLASS = "dx-treeview-node-has-selected-items",
 
     DATA_ITEM_ID = "data-item-id";
 
@@ -841,6 +842,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._renderItem(nodes[i], $nodeContainer);
         }
 
+        this._toggleHasSelectedChildClasses();
+
         this._renderFocusTarget();
     },
 
@@ -853,6 +856,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         showCheckBox && this._renderCheckBox($node, node);
 
         this.setAria("selected", nodeData.selected, $node);
+
         this._toggleSelectedClass($node, nodeData.selected);
 
         this.callBase(nodeData.key, nodeData.item, $node);
@@ -1251,8 +1255,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _toggleSelectedClass: function($node, value) {
-        $node.toggleClass(SELECTED_ITEM_CLASS, !!value);
+    _toggleSelectedClass: function($node, selected) {
+        $node.toggleClass(SELECTED_ITEM_CLASS, !!selected);
+    },
+
+    _toggleHasSelectedChildClass: function($node, hasSelectedChild) {
+        $node.toggleClass(NODE_HAS_SELECTED_CHILD_CLASS, !!hasSelectedChild);
     },
 
     _toggleNodeDisabledState: function(node, state) {
@@ -1348,6 +1356,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             that._toggleSelectedClass($node, nodeSelection);
+
             that.setAria("selected", nodeSelection, $node);
 
             if(that._showCheckboxes()) {
@@ -1355,6 +1364,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 checkbox.option("value", nodeSelection);
             }
         });
+
+        this._toggleHasSelectedChildClasses();
 
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox("instance").option("value", this._dataAdapter.isAllSelected());
@@ -1607,6 +1618,38 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         } while($node.children(".dx-treeview-item.dx-state-disabled").length);
 
         return $node;
+    },
+
+    _hasSelectedChildNodes: [],
+
+    _getHasSelectedChildNodes: function(forceCalculation) {
+        if(forceCalculation) {
+            this._hasSelectedChildNodes = this._dataAdapter.getHasSelectedChildNodes();
+        }
+
+        return this._hasSelectedChildNodes;
+    },
+
+    _toggleHasSelectedChildClasses: function() {
+        var oldHasSelectedChildNodeKeys = this._getHasSelectedChildNodes(),
+            newHasSelectedChildNodeKeys = this._getHasSelectedChildNodes(true),
+            that = this,
+            node,
+            $node;
+
+        each(oldHasSelectedChildNodeKeys, function(_, key) {
+            node = that._dataAdapter.getNodeByKey(key);
+            if(node) {
+                $node = that._getNodeElement(node);
+                that._toggleHasSelectedChildClass($node, false);
+            }
+        });
+
+
+        each(newHasSelectedChildNodeKeys, function(_, key) {
+            var $node = that._getNodeElement(that._dataAdapter.getNodeByKey(key));
+            that._toggleHasSelectedChildClass($node, true);
+        });
     },
 
     _collapseFocusedContainer: function() {
