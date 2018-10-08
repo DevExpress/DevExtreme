@@ -62,7 +62,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                 rowsView = this.getView("rowsView"),
                 rowIndex = this.option("focusedRowIndex");
 
-            key = key !== undefined ? key : this.option("focusedRowKey");
+            if(key === undefined) {
+                return;
+            }
 
             var rowIndexByKey = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
 
@@ -339,6 +341,26 @@ module.exports = {
                 }
             },
 
+            columns: {
+                getSortDataSourceParameters: function() {
+                    var result = this.callBase.apply(this, arguments),
+                        store = this.getController("data").store(),
+                        key = store && store.key();
+
+                    if(this.option("focusedRowEnabled") && key) {
+                        key = Array.isArray(key) ? key : [key];
+                        var notSortedKeys = key.filter(key => !this.columnOption(key, "sortOrder"));
+
+                        notSortedKeys.forEach(notSortedKey => {
+                            result = result || [];
+                            result.push({ selector: notSortedKey, desc: false });
+                        });
+                    }
+
+                    return result;
+                }
+            },
+
             data: {
                 _applyChange: function(change) {
                     if(change && change.changeType === "updateFocusedRow") return;
@@ -361,10 +383,11 @@ module.exports = {
                             this._prevPageIndex = this.pageIndex();
 
                             if(operationTypes.reload) {
-                                focusController.navigateToRow();
-                                return;
+                                var key = this.option("focusedRowKey");
+                                if(key !== undefined) {
+                                    focusController.navigateToRow();
+                                }
                             }
-
                             if(paging) {
                                 if(!this.getController("keyboardNavigation")._isVirtualScrolling()) {
                                     focusController._focusRowByIndex();

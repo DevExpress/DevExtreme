@@ -685,7 +685,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         return data;
                     },
                     on: commonUtils.noop,
-                    off: commonUtils.noop
+                    off: commonUtils.noop,
+                    key: commonUtils.noop
                 };
             },
             dispose: function() {
