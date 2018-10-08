@@ -679,9 +679,18 @@ var Overlay = Widget.inherit({
                 type: "slide"
             }, animation);
 
+            var position = this._position;
+
+            if(position.of && this.option("fullScreen")) {
+                var scrollTop = $(position.of).scrollTop();
+
+                extend(position, {
+                    offset: { h: 0, v: scrollTop }
+                });
+            }
             if(animation[prop] && typeof animation[prop] === "object") {
                 extend(animation[prop], {
-                    position: this._position
+                    position: position
                 });
             }
         }
