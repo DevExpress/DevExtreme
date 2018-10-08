@@ -35,27 +35,27 @@ const HtmlEditor = Editor.inherit({
             placeholder: "",
             /**
             * @name dxHtmlEditorOptions.toolbar
-            * @type Array<dxHtmlEditorToolbarItem>|dxToolbarModule
+            * @type dxHtmlEditorToolbar
             * @default null
             */
-            toolbar: null, // container, items
+            toolbar: null,
             /**
             * @name dxHtmlEditorOptions.dataPlaceholder
-            * @type dxDataPlaceholderModule
+            * @type dxHtmlEditorDataPlaceholder
             * @default null
             */
             dataPlaceholder: null
 
             /**
-            * @name dxToolbarModule
+            * @name dxHtmlEditorToolbar
             * @type object
             */
             /**
-            * @name dxToolbarModule.container
+            * @name dxHtmlEditorToolbar.container
             * @type string|Node|jQuery
             */
             /**
-            * @name dxToolbarModule.items
+            * @name dxHtmlEditorToolbar.items
             * @type Array<dxHtmlEditorToolbarItem>
             */
 
@@ -73,26 +73,26 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxDataPlaceholderModule
+            * @name dxHtmlEditorDataPlaceholder
             * @type object
             */
             /**
-            * @name dxDataPlaceholderModule.dataSource
+            * @name dxHtmlEditorDataPlaceholder.dataSource
             * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
-            * @name dxDataPlaceholderModule.escapedChar
+            * @name dxHtmlEditorDataPlaceholder.escapedChar
             * @type string
             * @default ""
             */
             /**
-            * @name dxDataPlaceholderModule.startEscapedChar
+            * @name dxHtmlEditorDataPlaceholder.startEscapedChar
             * @type string
             * @default undefined
             */
             /**
-            * @name dxDataPlaceholderModule.endEscapedChar
+            * @name dxHtmlEditorDataPlaceholder.endEscapedChar
             * @type string
             * @default undefined
             */
