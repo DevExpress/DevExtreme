@@ -2762,7 +2762,7 @@ QUnit.test("DateBox renders the right stylingMode for editors in time view overl
     var dateBox = $("#dateBox").dxDateBox({
         type: "datetime",
         value: new Date("2015/1/25"),
-        stylingMode: "standard"
+        stylingMode: "underlined"
     }).dxDateBox("instance");
 
     dateBox.open();

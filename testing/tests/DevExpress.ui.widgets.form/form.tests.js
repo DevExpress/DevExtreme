@@ -410,7 +410,7 @@ QUnit.test("From renders the right types of editors according to stylingMode opt
     // arrange
     var $testContainer = $("#form").dxForm({
         formData: { id: 1, name: "Name" },
-        stylingMode: "standard"
+        stylingMode: "underlined"
     });
 
     // assert
