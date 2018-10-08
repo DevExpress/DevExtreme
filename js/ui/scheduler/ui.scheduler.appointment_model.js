@@ -281,8 +281,6 @@ var AppointmentModel = Class.inherit({
         this._dataAccessors.setter = dataAccessors.setter;
 
         this._dataExpressions = dataAccessors.expr;
-
-        this._filterMaker = new FilterMaker(this._dataExpressions, dataAccessors);
     },
 
     filterByDate: function(min, max, remoteFiltering, dateSerializationFormat) {
