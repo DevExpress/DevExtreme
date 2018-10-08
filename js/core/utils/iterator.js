@@ -19,7 +19,7 @@ var map = function(values, callback) {
         }
     }
 
-    return [].concat.apply([], result);
+    return result.slice(0);
 };
 
 var each = function(values, callback) {
