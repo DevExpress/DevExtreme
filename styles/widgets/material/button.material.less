@@ -168,6 +168,23 @@
     );
 }
 
+.dx-button-outlined-color-styling(@button-color, @border-color) {
+    .dx-button-styling-variant(
+        transparent,
+        @button-color,
+        none,
+        fade(@button-color, 8%),
+        none,
+        fade(@button-color, 15%),
+        none,
+        fade(@button-color, 20%),
+        none,
+        transparent,
+        @button-color
+    );
+    border: 1px solid @border-color;
+}
+
 .dx-button-flat-styling(@button-color) {
     &.dx-button-has-icon:not(.dx-button-has-text) {
         .border-radius(50%);
@@ -260,6 +277,24 @@
 
     &.dx-button-success {
         .dx-button-flat-styling(@button-success-bg);
+    }
+}
+
+.dx-button-mode-outlined {
+    &.dx-button-normal {
+        .dx-button-outlined-color-styling(@button-normal-color, fade(@button-normal-color, 24%));
+    }
+
+    &.dx-button-default {
+        .dx-button-outlined-color-styling(@button-default-bg, @button-default-bg);
+    }
+
+    &.dx-button-danger {
+        .dx-button-outlined-color-styling(@button-danger-bg, @button-danger-bg);
+    }
+
+    &.dx-button-success {
+        .dx-button-outlined-color-styling(@button-success-bg, @button-success-bg);
     }
 }
 
