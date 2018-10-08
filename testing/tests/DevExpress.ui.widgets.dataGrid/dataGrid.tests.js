@@ -10981,7 +10981,7 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
             pushAggregationTimeout: 0
         }),
         dataGrid = createDataGrid({
-            height: 100,
+            height: 50,
             loadingTimeout: undefined,
             repaintChangesOnly: true,
             scrolling: {
