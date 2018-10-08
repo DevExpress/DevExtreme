@@ -2100,8 +2100,8 @@ var Scheduler = Widget.inherit({
         }
 
         if(this._appointmentForm) {
-            var startDateExpr = this.option("startDateExpr"),
-                endDateExpr = this.option("endDateExpr");
+            var startDateExpr = this._dataAccessors.expr.startDateExpr,
+                endDateExpr = this._dataAccessors.expr.endDateExpr;
 
             this._appointmentForm.option("formData", formData);
             this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
@@ -2109,14 +2109,14 @@ var Scheduler = Widget.inherit({
             AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
         } else {
             AppointmentForm.prepareAppointmentFormEditors(allDay, {
-                textExpr: this.option("textExpr"),
-                allDayExpr: this.option("allDayExpr"),
-                startDateExpr: this.option("startDateExpr"),
-                endDateExpr: this.option("endDateExpr"),
-                descriptionExpr: this.option("descriptionExpr"),
-                recurrenceRuleExpr: this.option("recurrenceRuleExpr"),
-                startDateTimeZoneExpr: this.option("startDateTimeZoneExpr"),
-                endDateTimeZoneExpr: this.option("endDateTimeZoneExpr")
+                textExpr: this._dataAccessors.expr.textExpr,
+                allDayExpr: this._dataAccessors.expr.allDayExpr,
+                startDateExpr: this._dataAccessors.expr.startDateExpr,
+                endDateExpr: this._dataAccessors.expr.endDateExpr,
+                descriptionExpr: this._dataAccessors.expr.descriptionExpr,
+                recurrenceRuleExpr: this._dataAccessors.expr.recurrenceRuleExpr,
+                startDateTimeZoneExpr: this._dataAccessors.expr.startDateTimeZoneExpr,
+                endDateTimeZoneExpr: this._dataAccessors.expr.endDateTimeZoneExpr
             }, this);
 
             if(resources && resources.length) {
@@ -2133,7 +2133,7 @@ var Scheduler = Widget.inherit({
 
         }
 
-        var recurrenceRuleExpr = this.option("recurrenceRuleExpr"),
+        var recurrenceRuleExpr = this._dataAccessors.expr.recurrenceRuleExpr,
             recurrentEditorItem = recurrenceRuleExpr ? this._appointmentForm.itemOption(recurrenceRuleExpr) : null;
 
         if(recurrentEditorItem) {
