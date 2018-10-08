@@ -141,6 +141,7 @@ var SchedulerTableCreator = {
 
         var cellTag = config.cellTag || "td",
             childrenField = config.childrenField || "children",
+            repeatCount = config.repeatCount,
             titleField = config.titleField || "title",
             groupTableClass = config.groupTableClass,
             groupRowClass = config.groupRowClass,
@@ -183,19 +184,21 @@ var SchedulerTableCreator = {
         }
 
         function generateCells(data) {
-            for(var i = 0; i < data.length; i++) {
-                var childCount = getChildCount(data[i]),
-                    cell = createCell(data[i][titleField], childCount, i, data[i]);
+            for(var r = 0; r < repeatCount; r++) {
+                for(var i = 0; i < data.length; i++) {
+                    var childCount = getChildCount(data[i]),
+                        cell = createCell(data[i][titleField], childCount, i, data[i]);
 
-                if(!cellStorage[rowIndex]) {
-                    cellStorage[rowIndex] = [];
-                }
-                cellStorage[rowIndex].push(cell);
+                    if(!cellStorage[rowIndex]) {
+                        cellStorage[rowIndex] = [];
+                    }
+                    cellStorage[rowIndex].push(cell);
 
-                if(childCount) {
-                    generateCells(data[i][childrenField]);
-                } else {
-                    rowIndex++;
+                    if(childCount) {
+                        generateCells(data[i][childrenField]);
+                    } else {
+                        rowIndex++;
+                    }
                 }
             }
         }
