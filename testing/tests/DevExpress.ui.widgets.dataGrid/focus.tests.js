@@ -1772,7 +1772,7 @@ QUnit.testInActiveWindow("Focused row should be visible if page size has height 
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
     var rect = rowsView.getRow(4)[0].getBoundingClientRect();
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
 });
 
@@ -1819,7 +1819,7 @@ QUnit.testInActiveWindow("Focused row should be visible in virtual scrolling mod
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
     var rect = rowsView.getRow(4)[0].getBoundingClientRect();
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
 });
 
@@ -1866,7 +1866,7 @@ QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mo
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
     var rect = rowsView.getRow(4)[0].getBoundingClientRect();
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
 });
 
@@ -1916,7 +1916,7 @@ QUnit.testInActiveWindow("Focused row should be visible in virual scrolling mode
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
     var rect = rowsView.getRow(4)[0].getBoundingClientRect();
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
 });
 
@@ -1966,6 +1966,6 @@ QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mo
     assert.ok(rowsView.getRow(2).hasClass("dx-row-focused"), "Focused row");
     var rect = rowsView.getRow(2)[0].getBoundingClientRect();
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.y > rowsViewRect.y, "focusedRow.Y > rowsView.Y");
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
 });
