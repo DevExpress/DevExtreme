@@ -277,6 +277,11 @@ var TextEditorBase = Editor.inherit({
             * @inheritdoc
             */
 
+            /**
+            * @name dxTextEditorOptions.stylingMode
+            * @type Enums.EditorStylingMode
+            * @default 'outlined'
+            */
             stylingMode: "outlined"
         });
     },
@@ -298,7 +303,12 @@ var TextEditorBase = Editor.inherit({
                     return themes.isMaterial(themeName);
                 },
                 options: {
-                    stylingMode: "standard"
+                    /**
+                    * @name dxButtonOptions.stylingMode
+                    * @type Enums.EditorStylingMode
+                    * @default 'underlined' @for Material
+                    */
+                    stylingMode: "underlined"
                 }
             }
         ]);

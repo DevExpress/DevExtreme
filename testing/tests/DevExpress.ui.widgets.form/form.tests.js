@@ -414,8 +414,8 @@ QUnit.test("From renders the right types of editors according to stylingMode opt
     });
 
     // assert
-    assert.ok($testContainer.find(".dx-field-item .dx-numberbox").hasClass("dx-editor-standard"), "right class rendered");
-    assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-standard"), "right class rendered");
+    assert.ok($testContainer.find(".dx-field-item .dx-numberbox").hasClass("dx-editor-underlined"), "right class rendered");
+    assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-underlined"), "right class rendered");
 });
 
 

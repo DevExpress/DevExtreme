@@ -2771,9 +2771,9 @@ QUnit.test("DateBox renders the right stylingMode for editors in time view overl
     var minuteEditor = $(".dx-timeview-field .dx-numberbox").eq(1);
     var amPmEditor = $(".dx-timeview-field .dx-selectbox").eq(0);
 
-    assert.ok(hourEditor.hasClass("dx-editor-standard"));
-    assert.ok(minuteEditor.hasClass("dx-editor-standard"));
-    assert.ok(amPmEditor.hasClass("dx-editor-standard"));
+    assert.ok(hourEditor.hasClass("dx-editor-underlined"));
+    assert.ok(minuteEditor.hasClass("dx-editor-underlined"));
+    assert.ok(amPmEditor.hasClass("dx-editor-underlined"));
 });
 
 QUnit.module("datebox w/ time list", {

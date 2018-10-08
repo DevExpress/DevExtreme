@@ -747,7 +747,7 @@ QUnit.test("Color view renders the editors with default stylingMode", function(a
 
 QUnit.test("Color view renders the editors according to stylingMode option", function(assert) {
     this.$element = $("#color-view").dxColorView({ stylingMode: "standard" });
-    var $editors = this.$element.find(".dx-editor-standard");
+    var $editors = this.$element.find(".dx-editor-underlined");
     var $outlinedEditors = this.$element.find(".dx-editor-outlined");
 
     assert.equal($editors.length, 4, "the number of standard editors is correct");
