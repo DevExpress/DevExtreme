@@ -526,6 +526,105 @@ module.exports = {
              * @name GridBaseColumn.formItem
              * @type dxFormSimpleItem
              */
+            /**
+             * @name dxDataGridColumn.type
+             * @publicName type
+             * @type Enums.GridCommandColumnType
+             */
+            /**
+             * @name dxTreeListColumn.type
+             * @publicName type
+             * @type Enums.TreeListCommandColumnType
+             */
+            /**
+             * @name dxDataGridColumn.buttons
+             * @type Array<Enums.GridColumnButtonName,dxDataGridColumnButton>
+             */
+            /**
+             * @name dxTreeListColumn.buttons
+             * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
+             */
+            /**
+             * @name GridBaseColumnButton
+             * @type Object
+             */
+            /**
+             * @name GridBaseColumnButton.name
+             * @type string
+             */
+            /**
+             * @name GridBaseColumnButton.text
+             * @type string
+             */
+            /**
+             * @name GridBaseColumnButton.icon
+             * @type string
+             */
+            /**
+             * @name GridBaseColumnButton.hint
+             * @type string
+             */
+            /**
+             * @name GridBaseColumnButton.cssClass
+             * @type string
+             */
+            /**
+             * @name GridBaseColumnButton.template
+             * @type template|function
+             * @type_function_param1 cellElement:dxElement
+             * @type_function_param2 cellInfo:object
+             * @type_function_return string|Node|jQuery
+             */
+            /**
+             * @name dxDataGridColumnButton
+             * @inherits GridBaseColumnButton
+             * @type Object
+             */
+            /**
+             * @name dxTreeListColumnButton
+             * @inherits GridBaseColumnButton
+             * @type Object
+             */
+            /**
+             * @name dxDataGridColumnButton.onClick
+             * @type function(e)|string
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 row:dxDataGridRowObject
+             * @type_function_param1_field6 column:dxDataGridColumn
+             * @action
+             */
+            /**
+             * @name dxTreeListColumnButton.onClick
+             * @type function(e)|string
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 row:dxTreeListRowObject
+             * @type_function_param1_field6 column:dxTreeListColumn
+             * @action
+             */
+            /**
+             * @name dxDataGridColumnButton.visible
+             * @type boolean|function
+             * @default true
+             * @type_function_param1 options:object
+             * @type_function_param1_field1 component:dxDataGrid
+             * @type_function_param1_field2 row:dxDataGridRowObject
+             * @type_function_param1_field3 column:dxDataGridColumn
+             * @type_function_return Boolean
+             */
+            /**
+             * @name dxTreeListColumnButton.visible
+             * @type boolean|function
+             * @default true
+             * @type_function_param1 options:object
+             * @type_function_param1_field1 component:dxTreeList
+             * @type_function_param1_field2 row:dxTreeListRowObject
+             * @type_function_param1_field3 column:dxTreeListColumn
+             * @type_function_return Boolean
+             */
             regenerateColumnsByVisibleItems: false,
             /**
              * @name dxDataGridOptions.customizeColumns
