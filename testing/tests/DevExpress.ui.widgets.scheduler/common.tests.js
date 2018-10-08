@@ -201,7 +201,7 @@ QUnit.testStart(function() {
 
             assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentModel._dataAccessors.getter, "dataAccessors getters were passed to appointmentModel");
             assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentModel._dataAccessors.setter, "dataAccessors setters were passed to appointmentModel");
-            assert.deepEqual(dataAccessors.expr, appointmentModel._dataExpressions, "dataExpressions were passed to appointmentModel");
+            assert.deepEqual(dataAccessors.expr, appointmentModel._dataAccessors.expr, "dataExpressions were passed to appointmentModel");
         } finally {
             repaintStub.restore();
         }
