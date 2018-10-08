@@ -1,4 +1,6 @@
-const LESS_DIR_PATH = "data/less/";
+const BOOTSTRAP_SCSS_PATH = "bootstrap/scss/";
+const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
+
 const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 
 const createModifyVars = modifyVars => {
@@ -93,6 +95,8 @@ class LessTemplateLoader {
         this.readFile = config.reader;
         this.lessCompiler = config.lessCompiler;
         this.sassCompiler = config.sassCompiler;
+        this.themeBuilderLessPath = config.lessPath ? config.lessPath : THEMEBUILDER_LESS_PATH;
+        this.bootstrapScssPath = config.scssPath ? config.scssPath : BOOTSTRAP_SCSS_PATH;
         this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : "";
         this.outColorScheme = config.outColorScheme;
         this.version = version;
@@ -214,8 +218,8 @@ class LessTemplateLoader {
             if(version === 3) {
                 this.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
             } else if(version === 4) {
-                let defaultBootstrapVariablesUrl = "bootstrap/scss/_variables.scss",
-                    defaultBootstrapFunctionsUrl = "bootstrap/scss/_functions.scss";
+                let defaultBootstrapVariablesUrl = this.bootstrapScssPath + "_variables.scss",
+                    defaultBootstrapFunctionsUrl = this.bootstrapScssPath + "_functions.scss";
 
                 Promise.all([this.readFile(defaultBootstrapFunctionsUrl), this.readFile(defaultBootstrapVariablesUrl)])
                     .then(files => {
@@ -229,11 +233,11 @@ class LessTemplateLoader {
 
     _loadLess(theme, colorScheme) {
         let themeName = (theme ? theme + "-" : "");
-        return this._loadLessByFileName(LESS_DIR_PATH + "theme-builder-" + themeName + colorScheme + ".less");
+        return this._loadLessByFileName("theme-builder-" + themeName + colorScheme + ".less");
     };
 
     _loadLessByFileName(fileName) {
-        return this.readFile("devextreme-themebuilder/" + fileName);
+        return this.readFile(this.themeBuilderLessPath + fileName);
     };
 
     _makeInfoHeader() {

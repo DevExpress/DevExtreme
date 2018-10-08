@@ -96,6 +96,8 @@ const getThemeAndColorScheme = config => {
     };
 };
 
+const normalizePath = path => path + (path[path.length - 1] !== "/" ? "/" : "");
+
 const parseConfig = config => {
     const command = config.command;
     const metadataFilePath = config.inputFile || "";
@@ -110,6 +112,14 @@ const parseConfig = config => {
     delete config.inputFile;
     delete config.themeId;
 
+    if(config.lessPath) {
+        config.lessPath = normalizePath(config.lessPath);
+    }
+
+    if(config.scssPath) {
+        config.scssPath = normalizePath(config.scssPath);
+    }
+
     Object.assign(config, {
         data: config.data !== undefined ? config.data : {},
         fileFormat: output.fileFormat,
@@ -120,7 +130,7 @@ const parseConfig = config => {
         bootstrapVersion: bootstrapConfig.bootstrapVersion,
         out: output.outputFile,
         makeSwatch: output.makeSwatch,
-        base: output.base,
+        base: output.base
     });
 };
 
