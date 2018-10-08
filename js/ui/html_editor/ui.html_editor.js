@@ -191,7 +191,7 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
         let modulesConfig = {
-            toolbar: this._getToolbarConfig(),
+            toolbar: this._getModuleConfigByOption("toolbar"),
             placeholder: this._getModuleConfigByOption("dataPlaceholder"),
             dropImage: this._getBaseModuleConfig(),
             clipboard: {
@@ -204,22 +204,6 @@ const HtmlEditor = Editor.inherit({
         };
 
         return modulesConfig;
-    },
-
-    _getToolbarConfig: function() {
-        const toolbarConfig = this.option("toolbar");
-        let resultConfig;
-
-        if(Array.isArray(toolbarConfig)) {
-            resultConfig = {
-                editorInstance: this,
-                items: toolbarConfig
-            };
-        } else {
-            resultConfig = this._getModuleConfigByOption("toolbar");
-        }
-
-        return resultConfig;
     },
 
     _getModuleConfigByOption: function(userOptionName) {
@@ -326,8 +310,28 @@ const HtmlEditor = Editor.inherit({
     },
 
     /**
+    * @name dxHtmlEditorMethods.getModule
+    * @publicName getModule(modulePath)
+    * @param1 modulePath:string
+    * @return Object
+    */
+    getModule: function(modulePath) {
+        return this._quillRegistrator.getQuill().import(modulePath);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.getQuillInstance
+    * @publicName getQuillInstance()
+    * @return Object
+    */
+    getQuillInstance: function() {
+        return this._quillInstance;
+    },
+
+    /**
     * @name dxHtmlEditorMethods.getSelection
     * @publicName getSelection()
+    * @return Object
     */
     getSelection: function() {
         if(this._quillInstance) {
@@ -343,7 +347,7 @@ const HtmlEditor = Editor.inherit({
     */
     setSelection: function(index, length) {
         if(this._quillInstance) {
-            return this._quillInstance.setSelection(index, length);
+            this._quillInstance.setSelection(index, length);
         }
     },
 
@@ -355,19 +359,139 @@ const HtmlEditor = Editor.inherit({
     */
     format: function(name, value) {
         if(this._quillInstance) {
-            return this._quillInstance.format(name, value);
+            this._quillInstance.format(name, value);
         }
     },
 
     /**
-    * @name dxHtmlEditorMethods.setSelection
-    * @publicName setSelection(index, length)
+    * @name dxHtmlEditorMethods.formatText
+    * @publicName formatText(index, length, name, value)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 name:string
+    * @param4 value:any
+    */
+    formatText: function(index, length, name, value) {
+        if(this._quillInstance) {
+            this._quillInstance.formatText(index, length, name, value);
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.formatLine
+    * @publicName formatLine(index, length, name, value)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 name:string
+    * @param4 value:any
+    */
+    formatLine: function(index, length, name, value) {
+        if(this._quillInstance) {
+            this._quillInstance.formatLine(index, length, name, value);
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.getFormat
+    * @publicName getFormat(index, length)
+    * @param1 index:number
+    * @param2 length:number
+    * @return Object
+    */
+    getFormat: function(index, length) {
+        if(this._quillInstance) {
+            return this._quillInstance.getFormat(index, length);
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.removeFormat
+    * @publicName removeFormat(index, length)
     * @param1 index:number
     * @param2 length:number
     */
     removeFormat: function(index, length) {
         if(this._quillInstance) {
-            return this._quillInstance.removeFormat(index, length);
+            this._quillInstance.removeFormat(index, length);
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.clearHistory
+    * @publicName clearHistory()
+    */
+    clearHistory: function() {
+        if(this._quillInstance && this._quillInstance.history) {
+            this._quillInstance.history.clear();
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.undo
+    * @publicName undo()
+    */
+    undo: function() {
+        if(this._quillInstance && this._quillInstance.history) {
+            this._quillInstance.history.undo();
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.redo
+    * @publicName redo()
+    */
+    redo: function() {
+        if(this._quillInstance && this._quillInstance.history) {
+            this._quillInstance.history.redo();
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.getLength
+    * @publicName getLength()
+    * @return number
+    */
+    getLength: function() {
+        if(this._quillInstance) {
+            return this._quillInstance.getLength();
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.deleteContent
+    * @publicName deleteContent(index, length)
+    * @param1 index:number
+    * @param2 length:number
+    */
+    deleteContent: function(index, length) {
+        if(this._quillInstance) {
+            this._quillInstance.deleteText(index, length);
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.insertText
+    * @publicName insertText(index, text, formats)
+    * @param1 index:number
+    * @param2 text:string
+    * @param3 formats:object
+    */
+    insertText: function(index, text, formats) {
+        if(this._quillInstance) {
+            this._quillInstance.insertText(index, text, formats);
+        }
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.insertEmbed
+    * @publicName insertEmbed(index, type, value)
+    * @param1 index:number
+    * @param2 type:string
+    * @param3 value:any
+    */
+    insertEmbed: function(index, type, value) {
+        if(this._quillInstance) {
+            this._quillInstance.insertEmbed(index, type, value);
         }
     }
 });
