@@ -583,14 +583,17 @@ var FieldChooser = BaseFieldChooser.inherit({
                             treeView.unselectItem(data);
                             return;
                         }
-                        fields = getDimensionFields(data, dataSource.fields());
 
-                        for(var i = 0; i < fields.length; i++) {
-                            if(fields[i].area) {
-                                needSelectDefaultItem = false;
-                                break;
+                        that._processDemandState(() => {
+                            fields = getDimensionFields(data, dataSource.fields());
+
+                            for(var i = 0; i < fields.length; i++) {
+                                if(fields[i].area) {
+                                    needSelectDefaultItem = false;
+                                    break;
+                                }
                             }
-                        }
+                        });
 
                         if(needSelectDefaultItem) {
                             var item = getFirstItem(data, function(item) { return item.isDefault; }) || getFirstItem(data, function(item) { return isDefined(item.index); });
