@@ -265,33 +265,38 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         }, that._getSortableOptions()));
     },
 
-    _applyChanges(fields, props) {
-        const dataSource = this._dataSource;
-        if(this.option("applyChangesMode") === "instantly") {
-            fields.forEach(({ index })=>{
-                dataSource.field(index, props);
-            });
-            dataSource.load();
+    _processDemandState: function(func) {
+        var that = this,
+            isInstantlyMode = that.option("applyChangesMode") === "instantly",
+            dataSource = that._dataSource;
+
+        if(isInstantlyMode) {
+            func(dataSource, isInstantlyMode);
         } else {
-            fields.forEach(({ index })=>{
-                this._changeState(index, props);
-            });
+            var currentState = dataSource.state();
+
+            dataSource.state(that.option("state"), true);
+
+            func(dataSource, isInstantlyMode);
+
+            dataSource.state(currentState, true);
         }
     },
 
-    _changeState(fieldIndex, props) {
-        var that = this,
-            dataSource = that._dataSource,
-            startState = dataSource.state(),
-            state = that.option("state") || startState;
+    _applyChanges(fields, props) {
+        var that = this;
 
-        dataSource.state(state, true);
-        dataSource.field(fieldIndex, props);
+        that._processDemandState(function(dataSource, isInstantlyMode) {
+            fields.forEach(({ index }) => {
+                dataSource.field(index, props);
+            });
 
-        that.option("state", dataSource.state());
-        that._clean(true);
-        that._renderComponent();
-        dataSource.state(startState, true);
+            if(isInstantlyMode) {
+                dataSource.load();
+            } else {
+                that._changedHandler();
+            }
+        });
     },
 
     _adjustSortableOnChangedArgs: function(e) {
