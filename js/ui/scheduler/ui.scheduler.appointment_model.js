@@ -15,10 +15,9 @@ var DATE_FILTER_POSITION = 0,
     USER_FILTER_POSITION = 1;
 
 var FilterMaker = Class.inherit({
-    ctor: function(dataExpressions, dataAccessors) {
+    ctor: function(dataAccessors) {
         this._filterRegistry = null;
         this._dataAccessors = dataAccessors;
-        this._dataExpressions = dataExpressions;
     },
 
     isRegistered: function() {
@@ -40,9 +39,9 @@ var FilterMaker = Class.inherit({
 
     _make: {
         "date": function(min, max, useAccessors) {
-            var startDate = useAccessors ? this._dataAccessors.getter.startDate : this._dataExpressions.startDateExpr,
-                endDate = useAccessors ? this._dataAccessors.getter.endDate : this._dataExpressions.endDateExpr,
-                recurrenceRule = this._dataExpressions.recurrenceRuleExpr;
+            var startDate = useAccessors ? this._dataAccessors.getter.startDate : this._dataAccessors.expr.startDateExpr,
+                endDate = useAccessors ? this._dataAccessors.getter.endDate : this._dataAccessors.expr.endDateExpr,
+                recurrenceRule = this._dataAccessors.expr.recurrenceRuleExpr;
 
             this._filterRegistry.date = [
                 [
@@ -264,7 +263,7 @@ var AppointmentModel = Class.inherit({
         this.setDataAccessors(dataAccessors);
         this.setDataSource(dataSource);
 
-        this._filterMaker = new FilterMaker(this._dataExpressions, dataAccessors);
+        this._filterMaker = new FilterMaker(dataAccessors);
     },
 
     setDataSource: function(dataSource) {
@@ -274,13 +273,7 @@ var AppointmentModel = Class.inherit({
     },
 
     setDataAccessors: function(dataAccessors) {
-        this._dataAccessors = {};
-        this._dataExpressions = {};
-
-        this._dataAccessors.getter = dataAccessors.getter;
-        this._dataAccessors.setter = dataAccessors.setter;
-
-        this._dataExpressions = dataAccessors.expr;
+        this._dataAccessors = dataAccessors;
     },
 
     filterByDate: function(min, max, remoteFiltering, dateSerializationFormat) {
@@ -316,8 +309,8 @@ var AppointmentModel = Class.inherit({
 
         filter = extend([], filter);
 
-        var startDate = that._dataExpressions.startDateExpr,
-            endDate = that._dataExpressions.endDateExpr;
+        var startDate = that._dataAccessors.expr.startDateExpr,
+            endDate = that._dataAccessors.expr.endDateExpr;
 
         if(typeUtils.isString(filter[0])) {
             if(config().forceIsoDateParsing && filter.length > 1) {
