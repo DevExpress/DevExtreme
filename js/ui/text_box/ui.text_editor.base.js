@@ -24,7 +24,12 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear",
     TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
     TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty",
-    TEXTEDITOR_DISPLAY_MODE_PREFIX = "dx-editor-",
+    TEXTEDITOR_STYLING_MODE_PREFIX = "dx-editor-",
+    ALLOWED_STYLE_CLASSES = [
+        TEXTEDITOR_STYLING_MODE_PREFIX + "outlined",
+        TEXTEDITOR_STYLING_MODE_PREFIX + "filled",
+        TEXTEDITOR_STYLING_MODE_PREFIX + "underlined"
+    ],
 
     STATE_INVISIBLE_CLASS = "dx-state-invisible";
 
@@ -330,10 +335,25 @@ var TextEditorBase = Editor.inherit({
         return CONTROL_KEYS.indexOf(key) !== -1;
     },
 
+    _renderStylingMode: function() {
+        const optionName = "stylingMode";
+        ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
+
+        let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + this.option(optionName);
+
+        if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + (platformOptionValue || defaultOptionValue);
+        }
+
+        this.$element().addClass(stylingModeClass);
+    },
+
     _initMarkup: function() {
         this.$element()
-            .addClass(TEXTEDITOR_CLASS)
-            .addClass(TEXTEDITOR_DISPLAY_MODE_PREFIX + this.option("stylingMode"));
+            .addClass(TEXTEDITOR_CLASS);
+        this._renderStylingMode();
 
         this._renderInput();
         this._renderInputType();
@@ -746,8 +766,9 @@ var TextEditorBase = Editor.inherit({
             case "inputAttr":
                 this._applyInputAttributes(this._input(), args.value);
                 break;
-            case "valueFormat":
             case "stylingMode":
+                this._renderStylingMode();
+            case "valueFormat":
                 this._invalidate();
                 break;
             default:
