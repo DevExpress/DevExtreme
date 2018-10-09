@@ -181,6 +181,8 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var groupedAppointments = this.instance.fire("groupAppointmentsByResources", appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
+        var dayIndex = 0;
+
         each(groupedAppointments, function(groupIndex, currentAppointments) {
 
             var groupResult = [];
@@ -223,7 +225,8 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
                     if(this.instance.fire("dayHasAppointment", day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire("dayHasAppointment", day, currentAppointments[j], true))) {
                         groupResult[i] += 1;
-                        this._days[i] = day;
+                        this._days[dayIndex] = day;
+                        dayIndex++;
                     }
                 }
             }

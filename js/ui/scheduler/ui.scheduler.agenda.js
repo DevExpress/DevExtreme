@@ -7,7 +7,8 @@ var $ = require("../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     extend = require("../../core/utils/extend").extend,
     dateLocalization = require("../../localization/date"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    tableCreator = require("./ui.scheduler.table_creator"),
+    typeUtils = require("../../core/utils/type");
 
 var AGENDA_CLASS = "dx-scheduler-agenda",
     AGENDA_DATE_CLASS = "dx-scheduler-agenda-date",
@@ -173,7 +174,9 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                 var sum = 0;
 
                 for(var j = 0; j < m; j++) {
-                    sum += rows[j][i];
+                    if(typeUtils.isDefined(rows[j][i])) {
+                        sum += rows[j][i];
+                    }
                 }
 
                 rowsT[i] = [sum];
@@ -205,7 +208,8 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         }
 
         if(this.option("groupByDate")) {
-            var dayRows = this._removeEmptyRows(this._dayRows),
+            var dayRows = this._dayRows,
+                // dayRows = this._removeEmptyRows(this._dayRows),
                 cellIndex = 0;
 
             for(var j = 0; j < dayRows.length; j++) {
