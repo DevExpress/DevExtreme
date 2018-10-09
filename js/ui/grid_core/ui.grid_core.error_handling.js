@@ -97,9 +97,10 @@ var ErrorHandlingController = modules.ViewController.inherit({
     },
 
     removeErrorRow: function($row) {
-        var $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
-
-        $row = $row || $columnHeaders && $columnHeaders.find("." + ERROR_ROW_CLASS);
+        if(!$row) {
+            let $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
+            $row = $columnHeaders && $columnHeaders.find("." + ERROR_ROW_CLASS);
+        }
         $row && $row.hasClass(ERROR_ROW_CLASS) && $row.remove();
     },
 

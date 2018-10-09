@@ -10658,6 +10658,62 @@ QUnit.test("Validation show only one message for editing cell in virtual mode", 
     assert.equal(testElement.find(".dx-error-row").length, 1);
 });
 
+// T676492
+QUnit.test("Validation is hiding when some data rows are removing from DOM in virtual mode", function(assert) {
+    // arrange
+    var testElement = $("#container");
+
+    this.options.scrolling = {
+        mode: "virtual",
+        useNative: false
+    };
+
+    this.options.errorRowEnabled = true;
+
+    this.options.onRowValidating = function(e) {
+        e.isValid = false;
+        e.errorText = "Test";
+    };
+
+    this.options.dataSource = generateDataSource(10, 2);
+    this.options.paging.pageSize = 2;
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+    };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(10);
+    this.rowsView.resize();
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
+
+    // act
+    this.editCell(1, 0);
+    testElement.find("input").val("test");
+    testElement.find("input").trigger("change");
+    this.saveEditData();
+
+    // assert
+    assert.equal(testElement.find(".dx-error-row").length, 1);
+
+    // arrange
+    this.rowsView.scrollTo({ y: 550 });
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 4, "page index");
+    assert.equal(testElement.find(".dx-error-row").length, 0);
+
+    // arrange
+    this.rowsView.scrollTo({ y: 0 });
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
+    assert.equal(testElement.find(".dx-error-row").length, 1);
+});
+
 // T635322
 QUnit.test("Error row should be visible after editing", function(assert) {
     // arrange
