@@ -368,6 +368,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 for(var i = 0; i < $rowElements.length - 1; i++) {
                     $rowElements.eq(i).remove();
                 }
+                let errorHandlingController = that.getController("errorHandling");
                 if(change.removeCount) {
                     var rowElements = that._getRowElements(contentTable).toArray();
                     if(changeType === "append") {
@@ -375,14 +376,14 @@ var VirtualScrollingRowsViewExtender = (function() {
                     } else {
                         rowElements = rowElements.slice(-change.removeCount);
                     }
-                    rowElements.map(rowElement => $(rowElement).remove());
 
-                    let errorHandlingController = that.getController("errorHandling");
-                    if(errorHandlingController) {
-                        let $errorRowElement = errorHandlingController.getErrorRowElement(contentTable);
-                        errorHandlingController.removeErrorRow($errorRowElement);
-                    }
+                    rowElements.map(rowElement => {
+                        var $rowElement = $(rowElement);
+                        errorHandlingController.removeErrorRow($rowElement.next());
+                        $rowElement.remove();
+                    });
                 }
+                errorHandlingController.refreshErrorRows(contentTable);
             } else {
                 that.callBase.apply(that, arguments);
             }

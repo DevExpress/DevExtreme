@@ -10704,9 +10704,14 @@ QUnit.test("Validation is hiding when some data rows are removing from DOM in vi
 
     // assert
     assert.equal(this.dataController.pageIndex(), 4, "page index");
+    assert.equal(testElement.find(".dx-error-row").length, 0);
+
+    // arrange
+    this.rowsView.scrollTo({ y: 0 });
 
     // assert
-    assert.equal(testElement.find(".dx-error-row").length, 0);
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
+    assert.equal(testElement.find(".dx-error-row").length, 1);
 });
 
 // T635322
