@@ -47,7 +47,7 @@ var CommandManager = Class.inherit({
         return result;
     },
     findCommandContainers: function($markup) {
-        var result = iteratorUtils.map($markup.find(".dx-command-container"), function(element) {
+        var result = Array.from($markup.find(".dx-command-container")).map(function(element) {
             return $(element).dxCommandContainer("instance");
         });
         return result;
