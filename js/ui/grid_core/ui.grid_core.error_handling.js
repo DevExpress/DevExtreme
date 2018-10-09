@@ -21,15 +21,6 @@ var ErrorHandlingController = modules.ViewController.inherit({
         return tableElement.find("> tbody > " + "." + ERROR_ROW_CLASS);
     },
 
-    refreshErrorRows: function(contentTable) {
-        let editingController = this.getController("editing");
-        this._rowsView._getRowElements(contentTable).each((_, item)=>{
-            let rowOptions = $(item).data("options"),
-                editData = editingController.getEditDataByKey(rowOptions.key);
-            editData && editingController._showErrorRow(editData);
-        });
-    },
-
     _createErrorRow: function(message, $tableElements) {
         var that = this,
             $errorRow,

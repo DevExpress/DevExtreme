@@ -349,6 +349,31 @@ var VirtualScrollingRowsViewExtender = (function() {
             return that.callBase.apply(that, arguments);
         },
 
+        _removeRowsElements: function(contentTable, removeCount, changeType) {
+            var rowElements = this._getRowElements(contentTable).toArray();
+            if(changeType === "append") {
+                rowElements = rowElements.slice(0, removeCount);
+            } else {
+                rowElements = rowElements.slice(-removeCount);
+            }
+
+            let errorHandlingController = this.getController("errorHandling");
+            rowElements.map(rowElement => {
+                var $rowElement = $(rowElement);
+                errorHandlingController && errorHandlingController.removeErrorRow($rowElement.next());
+                $rowElement.remove();
+            });
+        },
+
+        _restoreErrorRow: function(contentTable) {
+            let editingController = this.getController("editing");
+            editingController && this._getRowElements(contentTable).each((_, item)=>{
+                let rowOptions = $(item).data("options"),
+                    editData = editingController.getEditDataByKey(rowOptions.key);
+                editData && editingController._showErrorRow(editData);
+            });
+        },
+
         _updateContent: function(tableElement, change) {
             var that = this,
                 contentTable,
@@ -368,22 +393,11 @@ var VirtualScrollingRowsViewExtender = (function() {
                 for(var i = 0; i < $rowElements.length - 1; i++) {
                     $rowElements.eq(i).remove();
                 }
-                let errorHandlingController = that.getController("errorHandling");
                 if(change.removeCount) {
-                    var rowElements = that._getRowElements(contentTable).toArray();
-                    if(changeType === "append") {
-                        rowElements = rowElements.slice(0, change.removeCount);
-                    } else {
-                        rowElements = rowElements.slice(-change.removeCount);
-                    }
-
-                    rowElements.map(rowElement => {
-                        var $rowElement = $(rowElement);
-                        errorHandlingController.removeErrorRow($rowElement.next());
-                        $rowElement.remove();
-                    });
+                    that._removeRowsElements(contentTable, change.removeCount, changeType);
                 }
-                errorHandlingController.refreshErrorRows(contentTable);
+
+                that._restoreErrorRow(contentTable);
             } else {
                 that.callBase.apply(that, arguments);
             }
