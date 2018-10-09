@@ -4771,6 +4771,26 @@ QUnit.test("Appointment should have right position on timeline month view", func
     assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, "appointment left is correct");
 });
 
+QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 25, 8, 0),
+        endDate: new Date(2016, 2, 1, 8, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 2, 1),
+        currentView: "timelineMonth",
+        startDayHour: 8,
+        firstDayOfWeek: 0,
+        dataSource: [appointment]
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).get(0),
+        $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0);
+
+    assert.roughEqual($appointment.getBoundingClientRect().width, $cell.getBoundingClientRect().width, 1.1, "appointment-part width is correct");
+});
+
 QUnit.test("Appointment should have right width on timeline week view", function(assert) {
     var appointment = {
         startDate: new Date(2015, 2, 3, 9, 30),
