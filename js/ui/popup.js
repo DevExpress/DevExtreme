@@ -40,7 +40,8 @@ var POPUP_CLASS = "dx-popup",
 
     BUTTON_DEFAULT_TYPE = "default",
     BUTTON_NORMAL_TYPE = "normal",
-    BUTTON_FLAT_CLASS = "dx-button-mode-text";
+    BUTTON_TEXT_MODE = "text",
+    BUTTON_CONTAINED_MODE = "contained";
 
 var getButtonPlace = function(name) {
 
@@ -573,13 +574,11 @@ var Popup = Overlay.inherit({
             text: messageLocalization.format(camelize(itemType, true)),
             onClick: this._createToolbarItemAction(data.onClick),
             integrationOptions: {},
-            type: that.option("useDefaultToolbarButtons") ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE
+            type: that.option("useDefaultToolbarButtons") ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE,
+            stylingMode: that.option("useFlatToolbarButtons") ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE
         }, data.options || {});
 
         var itemClass = POPUP_CLASS + "-" + itemType;
-        if(that.option("useFlatToolbarButtons")) {
-            itemClass += " " + BUTTON_FLAT_CLASS;
-        }
 
         this._toolbarItemClasses.push(itemClass);
 
