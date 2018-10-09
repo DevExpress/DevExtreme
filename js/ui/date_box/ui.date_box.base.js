@@ -571,6 +571,7 @@ var DateBox = DropDownEditor.inherit({
 
         this._strategy.renderValue();
         this.callBase();
+        this._validateValue(value);
     },
 
     _getDisplayedText: function(value) {
@@ -793,10 +794,6 @@ var DateBox = DropDownEditor.inherit({
             case "isValid":
                 this.callBase.apply(this, arguments);
                 this._updateSize();
-                break;
-            case "value":
-                this._validateValue(this.dateOption("value"));
-                this.callBase.apply(this, arguments);
                 break;
             case "showDropDownButton":
             case "invalidDateMessage":
