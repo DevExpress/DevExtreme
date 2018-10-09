@@ -388,8 +388,8 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
 
     var toolbarButtons = popupInstance.$content().parent().find(".dx-popup-bottom .dx-button");
 
-    assert.ok(toolbarButtons.eq(0).hasClass("dx-button-flat"), "shortcut has dx-button-flat class");
-    assert.ok(toolbarButtons.eq(1).hasClass("dx-button-flat"), "button has dx-button-flat class");
+    assert.ok(toolbarButtons.eq(0).hasClass("dx-button-mode-text"), "shortcut has dx-button-mode-text class");
+    assert.ok(toolbarButtons.eq(1).hasClass("dx-button-mode-text"), "button has dx-button-mode-text class");
 });
 
 

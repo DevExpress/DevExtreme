@@ -18,6 +18,12 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
+    BUTTON_STYLING_MODE_CLASS_PREFIX = "dx-button-mode-",
+    ALLOWED_STYLE_CLASSES = [
+        BUTTON_STYLING_MODE_CLASS_PREFIX + "contained",
+        BUTTON_STYLING_MODE_CLASS_PREFIX + "text",
+        BUTTON_STYLING_MODE_CLASS_PREFIX + "outlined"
+    ],
 
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
@@ -130,7 +136,14 @@ var Button = Widget.inherit({
             */
             useSubmitBehavior: false,
 
-            useInkRipple: false
+            useInkRipple: false,
+
+            /**
+            * @name dxButtonOptions.stylingMode
+            * @type Enums.ButtonStylingMode
+            * @default 'contained'
+            */
+            stylingMode: "contained"
 
             /**
             * @name dxButtonDefaultTemplate
@@ -196,6 +209,7 @@ var Button = Widget.inherit({
     _initMarkup: function() {
         this.$element().addClass(BUTTON_CLASS);
         this._renderType();
+        this._renderStylingMode();
 
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
@@ -364,6 +378,17 @@ var Button = Widget.inherit({
         }
     },
 
+    _renderStylingMode: function() {
+        const optionName = "stylingMode";
+        ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
+        let stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + this.option(optionName);
+        if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + defaultOptionValue;
+        }
+        this.$element().addClass(stylingModeClass);
+    },
+
     _refreshType: function(prevType) {
         var type = this.option("type");
 
@@ -394,9 +419,10 @@ var Button = Widget.inherit({
             case "template":
                 this._updateContent();
                 break;
-            case "useInkRipple":
-                this._invalidate();
+            case "stylingMode":
+                this._renderStylingMode();
                 break;
+            case "useInkRipple":
             case "useSubmitBehavior":
                 this._invalidate();
                 break;
