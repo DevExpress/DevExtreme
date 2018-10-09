@@ -909,3 +909,9 @@
  * @typedef {string} Enums.HtmlEditorValueType
  * @enum {'HTML'|'Markdown'}
  */
+
+ /**
+ * @typedef {string} Enums.EditorStylingMode
+ * @enum {'outlined'|'underlined'|'filled'}
+ */
+

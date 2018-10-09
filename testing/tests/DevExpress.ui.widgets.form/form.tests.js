@@ -410,12 +410,12 @@ QUnit.test("From renders the right types of editors according to stylingMode opt
     // arrange
     var $testContainer = $("#form").dxForm({
         formData: { id: 1, name: "Name" },
-        stylingMode: "standard"
+        stylingMode: "underlined"
     });
 
     // assert
-    assert.ok($testContainer.find(".dx-field-item .dx-numberbox").hasClass("dx-editor-standard"), "right class rendered");
-    assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-standard"), "right class rendered");
+    assert.ok($testContainer.find(".dx-field-item .dx-numberbox").hasClass("dx-editor-underlined"), "right class rendered");
+    assert.ok($testContainer.find(".dx-field-item .dx-textbox").hasClass("dx-editor-underlined"), "right class rendered");
 });
 
 

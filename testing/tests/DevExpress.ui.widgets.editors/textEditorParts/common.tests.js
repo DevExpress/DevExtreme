@@ -4,7 +4,8 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
-    caretWorkaround = require("./caretWorkaround.js");
+    caretWorkaround = require("./caretWorkaround.js"),
+    themes = require("ui/themes");
 
 require("ui/text_box/ui.text_editor");
 
@@ -307,6 +308,26 @@ QUnit.test("dxTextEditor with height option should have min-height auto style on
     assert.equal($input.get(0).style.minHeight, "0px", "min-height inline style is defined");
 });
 
+QUnit.test("dxTextEditor with wrong stylingMode option should set the class according to default option value", function(assert) {
+    let $textEditor = $("#texteditor").dxTextEditor({
+        stylingMode: "someWrongOptionValue"
+    });
+
+    assert.ok($textEditor.hasClass("dx-editor-outlined"));
+});
+
+QUnit.test("dxTextEditor with wrong stylingMode option should set the class according to default option value (platform specific)", function(assert) {
+    const realIsMaterial = themes.isMaterial;
+    themes.isMaterial = () => true;
+
+    const $textEditor = $("#texteditor").dxTextEditor({
+        stylingMode: "someWrongOptionValue"
+    });
+
+    assert.ok($textEditor.hasClass("dx-editor-underlined"));
+
+    themes.isMaterial = realIsMaterial;
+});
 
 QUnit.module("text option", moduleConfig);
 
