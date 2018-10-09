@@ -270,6 +270,7 @@ QUnit.test("it shouild be impossible to set out of range time to dxDateBox using
     var $dateBox = $("#widthRootStyle").dxDateBox({
             opened: true,
             type: "datetime",
+            pickerType: "calendarWithTime",
             value: new Date(2015, 3, 20, 15, 0, 0),
             min: new Date(2015, 3, 20, 15, 0, 0),
         }),
@@ -286,6 +287,7 @@ QUnit.test("it shouild be impossible to set out of range time to dxDateBox using
 QUnit.test("clear button should change validation state to valid", function(assert) {
     var $dateBox = $("#widthRootStyle").dxDateBox({
             type: "datetime",
+            pickerType: "calendar",
             showClearButton: true,
             value: null
         }),
