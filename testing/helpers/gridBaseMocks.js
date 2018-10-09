@@ -188,6 +188,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 });
             },
 
+            reset: function() {},
+
             footerItems: function() {
                 var result = [];
                 options.totalItem && result.push(options.totalItem);

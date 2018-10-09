@@ -170,6 +170,7 @@ module.exports = {
                         selectionFilter = state.selectionFilter,
                         exportController = that.getController("export"),
                         columnsController = that.getController("columns"),
+                        dataController = that.getController("data"),
                         filterSyncController = that.getController("filterSync"),
                         scrollingMode = that.option("scrolling.mode");
 
@@ -201,6 +202,8 @@ module.exports = {
 
                     that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
                     that.option("paging.pageIndex", state.pageIndex || 0);
+
+                    dataController && dataController.reset();
                 }
             },
             columns: {
