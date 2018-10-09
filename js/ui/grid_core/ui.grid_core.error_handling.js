@@ -17,10 +17,6 @@ var ErrorHandlingController = modules.ViewController.inherit({
         that._rowsView = that.getView("rowsView");
     },
 
-    getErrorRowElement: function(tableElement) {
-        return tableElement.find("> tbody > " + "." + ERROR_ROW_CLASS);
-    },
-
     _createErrorRow: function(message, $tableElements) {
         var that = this,
             $errorRow,
