@@ -671,8 +671,8 @@ QUnit.testInActiveWindow("Focused row index should preserve after paging operati
 
     this.data = [
         { name: "Alex", phone: "111111", room: 6 },
-        { name: "Dan", phone: "2222222", room: 5 },
-        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Ben", phone: "333333", room: 5 },
+        { name: "Dan", phone: "2222222", room: 4 },
         { name: "Sean", phone: "4545454", room: 3 },
         { name: "Smith", phone: "555555", room: 2 },
         { name: "Zeb", phone: "6666666", room: 1 }
@@ -737,7 +737,11 @@ QUnit.testInActiveWindow("Page with focused row should loads after sorting", fun
         editing: {
             allowEditing: false
         },
-        columns: [{ dataField: "name", allowSorting: true }, "phone", "room"]
+        columns: [
+            { dataField: "name" },
+            "phone",
+            { dataField: "room", allowSorting: true }
+        ]
     };
 
     this.setupModule();
@@ -749,15 +753,18 @@ QUnit.testInActiveWindow("Page with focused row should loads after sorting", fun
 
     // assert
     assert.equal(this.pageIndex(), 0, "PageIndex is 0");
-    assert.strictEqual(this.dataController.getVisibleRows()[1].data, this.data[1], "Focused row data is on the page");
-    assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Dan", "Focused row key column text");
+    assert.strictEqual(this.dataController.getVisibleRows()[1].data, this.data[2], "Focused row data is on the page");
+    assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Ben", "Focused row key column text");
 
     // act
-    this.getController("columns").changeSortOrder(0, "asc");
+    this.getController("columns").changeSortOrder(2, "asc");
+    this.clock.tick();
     // assert
+    $rowsView = $(this.gridView.getView("rowsView").element());
+    var focusedRowIndex = this.option("focusedRowIndex");
     assert.equal(this.pageIndex(), 1, "PageIndex is 1");
-    assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[1], "Focused row data is on the page");
-    assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Dan", "Focused row key column text");
+    assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[2], "Focused row data is on the page");
+    assert.equal($rowsView.find(".dx-row-focused > td:nth-child(1)").text(), "Ben", "Focused row key column text");
 });
 
 QUnit.testInActiveWindow("DataGrid - Should paginate to the defined focusedRowKey", function(assert) {
@@ -1166,7 +1173,7 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
         onFocusedRowChanged: function(e) {
             ++focusedRowChangedCount;
             assert.equal(e.row.key, "Dan", "Row");
-            assert.equal(e.rowIndex, 1, "Row index");
+            assert.equal(e.rowIndex, 2, "Row index");
             assert.ok(e.rowElement, "Row element");
         }
     };
@@ -1211,7 +1218,7 @@ QUnit.testInActiveWindow("onFocusedCellChanged event", function(assert) {
             ++focusedCellChangedCount;
             assert.deepEqual(e.cellElement.text(), rowsView.getRow(1).find("td").eq(1).text(), "Cell element");
             assert.equal(e.columnIndex, 1, "Column index");
-            assert.deepEqual(e.row.data, { name: "Dan", phone: "2222222", room: 5 }, "Row data");
+            assert.deepEqual(e.row.data, { name: "Ben", phone: "333333", room: 4 }, "Row data");
             assert.deepEqual(e.rowIndex, 1, "Row index");
             assert.equal(e.column.dataField, "phone", "Column");
         }
