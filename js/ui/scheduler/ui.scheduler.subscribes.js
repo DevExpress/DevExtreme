@@ -553,6 +553,30 @@ var subscribes = {
         return result;
     },
 
+    groupAppointmentsByDays: function(appointments, days) {
+        var result = [],
+            totalDaysCount = days.length,
+            totalAppointmentsCount = appointments.length;
+
+        for(var j = 0; j < totalDaysCount; j++) {
+            var day = days[j],
+                appointmentIndex = 0;
+
+            result[j] = [];
+
+            for(var i = 0; i < totalAppointmentsCount; i++) {
+                var appointment = appointments[i];
+
+                if(this.dayHasAppointment(day, appointment, true)) {
+                    result[j][appointmentIndex] = appointment;
+                    appointmentIndex++;
+                }
+            }
+        }
+
+        return result;
+    },
+
     getAgendaRows: function(options) {
         var renderingStrategy = this._layoutManager.getRenderingStrategyInstance(),
             calculateRows = renderingStrategy.calculateRows.bind(renderingStrategy),
@@ -576,6 +600,10 @@ var subscribes = {
 
     getAgendaDuration: function() {
         return this._getCurrentViewOption("agendaDuration");
+    },
+
+    isGroupedByDate: function() {
+        return this._getCurrentViewOption("groupByDate");
     },
 
     getStartViewDate: function() {

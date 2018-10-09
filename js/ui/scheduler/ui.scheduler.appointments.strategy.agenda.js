@@ -22,13 +22,13 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     createTaskPositionMap: function(appointments) {
-
         if(appointments.length) {
-            var height = this.instance.fire("getAgendaVerticalStepHeight"),
-                appointmentsByResources = this.instance.fire("groupAppointmentsByResources", appointments),
+            var groupByDate = this.instance.fire("isGroupedByDate"),
+                height = this.instance.fire("getAgendaVerticalStepHeight"),
+                sortedAppointments = groupByDate ? this.instance.fire("groupAppointmentsByDays", appointments, this._days) : this.instance.fire("groupAppointmentsByResources", appointments),
                 groupedAppts = [];
 
-            each(appointmentsByResources, function(i, appts) {
+            each(sortedAppointments, function(i, appts) {
 
                 var additionalAppointments = [],
                     recurrentIndexes = [];
@@ -60,32 +60,55 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
         var result = [],
             sortedIndex = 0;
-
         appointments.forEach(function(appt, index) {
             result.push([{
                 height: height,
                 width: "100%",
                 sortedIndex: sortedIndex++,
-                groupIndex: this._calculateGroupIndex(index, appointmentsByResources)
+                groupIndex: this._calculateGroupIndex(index, sortedAppointments, groupByDate)
             }]);
         }.bind(this));
 
         return result;
     },
 
-    _calculateGroupIndex: function(apptIndex, appointmentsByResources) {
+    _calculateGroupIndex: function(apptIndex, sortedAppointments, groupByDate) {
         var resultInd,
             counter = 0;
 
-        for(var i in appointmentsByResources) {
-            var countApptInGroup = appointmentsByResources[i].length;
+        if(groupByDate) {
+            var resultIndexProcessed = false;
+            for(var i in sortedAppointments) {
+                var appointmentsInDay = sortedAppointments[i];
+                var groupedAppointments = this.instance.fire("groupAppointmentsByResources", appointmentsInDay);
 
-            if(apptIndex >= counter && apptIndex < counter + countApptInGroup) {
-                resultInd = Number(i);
-                break;
+                for(var j in groupedAppointments) {
+                    var countApptInGroup = groupedAppointments[j].length;
+
+                    if(apptIndex >= counter && apptIndex < counter + countApptInGroup) {
+                        resultInd = Number(j);
+                        resultIndexProcessed = true;
+                        break;
+                    }
+
+                    counter += countApptInGroup;
+                }
+
+                if(resultIndexProcessed) {
+                    break;
+                }
             }
+        } else {
+            for(var i in sortedAppointments) {
+                var countApptInGroup = sortedAppointments[i].length;
 
-            counter += countApptInGroup;
+                if(apptIndex >= counter && apptIndex < counter + countApptInGroup) {
+                    resultInd = Number(i);
+                    break;
+                }
+
+                counter += countApptInGroup;
+            }
         }
 
         return resultInd;
@@ -149,6 +172,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
+        this._days = [];
 
         var appts = {
             indexes: [],
@@ -199,6 +223,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
                     if(this.instance.fire("dayHasAppointment", day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire("dayHasAppointment", day, currentAppointments[j], true))) {
                         groupResult[i] += 1;
+                        this._days[i] = day;
                     }
                 }
             }
