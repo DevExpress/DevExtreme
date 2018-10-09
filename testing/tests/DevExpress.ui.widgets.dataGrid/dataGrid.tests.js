@@ -8056,6 +8056,35 @@ QUnit.test("add row if dataSource is not defined", function(assert) {
     assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
 });
 
+QUnit.test("add row without return key", function(assert) {
+    // arrange, act
+    var array = [{ id: 1, name: "Test 1" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "batch"
+        },
+        dataSource: {
+            key: "id",
+            load: function() {
+                return array;
+            },
+            insert: function(values) {
+                array.push(values);
+            }
+        }
+    });
+
+    // act
+    dataGrid.addRow();
+    dataGrid.saveEditData();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 2, "visible rows");
+    assert.strictEqual(dataGrid.hasEditData(), false, "no edit data");
+});
+
 QUnit.test("Disable editing buttons after insert a row", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
