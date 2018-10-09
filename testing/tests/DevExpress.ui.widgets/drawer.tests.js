@@ -215,10 +215,10 @@ QUnit.test("incomplete animation should be stopped after closing on outside clic
 
         $(instance.viewContent()).trigger("dxclick");
 
-        assert.equal(panelStopCalls, 1, "animation should stops before toggling visibility");
-        assert.equal(contentStopCalls, 1, "animation should stops before toggling visibility");
-        assert.equal(overlayContentStopCalls, 1, "animation should stops before toggling visibility");
-        assert.equal(shaderStopCalls, 1, "animation should stops before toggling visibility");
+        assert.equal(panelStopCalls, 1, "animation should stops before closing");
+        assert.equal(contentStopCalls, 1, "animation should stops before closing");
+        assert.equal(overlayContentStopCalls, 1, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 1, "animation should stops before closing");
         assert.ok(isJumpedToEnd, "elements are returned to the end position after animation stopping");
     } finally {
         fx.off = true;
