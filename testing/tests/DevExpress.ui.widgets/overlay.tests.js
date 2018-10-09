@@ -757,6 +757,35 @@ QUnit.test("position as function", function(assert) {
     assert.equal(instance._position.of, "body");
 });
 
+QUnit.test("overlay should have animation with right offset after long container scrolling", function(assert) {
+    var $outerContainer = $("<div>").css({ height: 100, overflow: "scroll" }).appendTo("#qunit-fixture");
+    $("<div>")
+        .css("height", 1000)
+        .appendTo($outerContainer);
+
+    $outerContainer.scrollTop(100);
+
+    var overlay = $("#overlay").dxOverlay({
+        fullScreen: true,
+        target: $outerContainer,
+        animation: {
+            show: {
+                to: {
+                    position: {
+                        of: $outerContainer
+                    }
+                }
+            }
+        }
+    }).dxOverlay("instance");
+
+    overlay.show();
+
+    var animation = overlay.option("animation").show.to,
+        offset = animation.position.offset;
+
+    assert.equal(offset.v, $outerContainer.scrollTop());
+});
 
 QUnit.module("shading", moduleConfig);
 
