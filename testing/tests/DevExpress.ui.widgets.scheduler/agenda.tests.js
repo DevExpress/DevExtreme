@@ -482,3 +482,73 @@ QUnit.test("Agenda should not have tabIndex", function(assert) {
 
     assert.equal(this.instance.$element().attr("tabindex"), null, "tabindex is not set");
 });
+
+QUnit.test("Grouped agenda time panel should be rendered befor group table, groupByDate = true", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2016, 1, 17).toString(),
+        groupByDate: true,
+        groups: [
+            { name: "roomId", items: [{ id: 1, text: "r1" }, { id: 2, text: "r2" }] },
+            { name: "ownerId", items: [{ id: 1, text: "o1" }, { id: 2, text: "o2" }, { id: 2, text: "o3" }] }
+        ]
+    }, 2);
+
+    var $scrollable = this.instance.$element().find(".dx-scrollable-content").eq(0);
+
+    assert.ok($($scrollable.children()[0]).hasClass("dx-scheduler-time-panel"), "Time panel is rendered before groupTable");
+    assert.ok($($scrollable.children()[1]).hasClass("dx-scheduler-group-table"), "Group table is rendered after time panel");
+});
+
+QUnit.test("Grouped agenda time panel should contain rows & cells, groupByDate = true", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2016, 1, 17).toString(),
+        groupByDate: true,
+        groups: [
+            { name: "roomId", items: [{ id: 1, text: "r1" }, { id: 2, text: "r2" }] },
+            { name: "ownerId", items: [{ id: 1, text: "o1" }, { id: 2, text: "o2" }, { id: 2, text: "o3" }] }
+        ]
+    }, 2);
+
+    var $timePanel = this.instance.$element().find(".dx-scheduler-time-panel"),
+        $rows = $timePanel.find(".dx-scheduler-time-panel-row");
+
+    assert.equal($rows.length, 4, "Row count is OK");
+    assert.equal($rows.eq(0).find(".dx-scheduler-time-panel-cell").length, 1, "Cell count is OK");
+});
+
+QUnit.test("Grouped agenda should contain group rows, groupByDate = true", function(assert) {
+    this.createInstance({
+        groupByDate: true,
+        groups: [
+            { name: "roomId", items: [{ id: 1, text: "r1" }, { id: 2, text: "r2" }] }
+        ]
+    }, 6);
+
+    assert.equal(this.instance.$element().find(".dx-scheduler-group-table .dx-scheduler-group-row").length, 8, "Group rows are rendered");
+});
+
+QUnit.test("Group table rows should have a right height, groupByDate = true", function(assert) {
+    var currentDate = new Date(2016, 1, 17).toString(),
+        rowHeight = 117;
+
+    this.createInstance({
+        currentDate: currentDate,
+        rowHeight: rowHeight,
+        groupByDate: true,
+        groups: [
+            { name: "roomId", items: [{ id: 1, text: "r1" }, { id: 2, text: "r2" }] }
+        ]
+    }, 4);
+
+    var $groupTableRows = this.instance.$element().find(".dx-scheduler-group-header-content");
+
+    assert.roughEqual($groupTableRows.eq(0).outerHeight(), 137, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(1).outerHeight(), 137, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(2).outerHeight(), 137, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(3).outerHeight(), 137, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(4).outerHeight(), 0, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(5).outerHeight(), 0, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(6).outerHeight(), 0, 3.001, "Row height is OK");
+    assert.roughEqual($groupTableRows.eq(7).outerHeight(), 0, 3.001, "Row height is OK");
+});
+
