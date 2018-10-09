@@ -179,13 +179,16 @@ QUnit.testInActiveWindow("TabIndex should set for the [focusedRowIndex; focusedC
 
     // act
     this.gridView.render($("#container"));
-
-    this.clock.tick();
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Alex"
+    });
 
     rowsView = this.gridView.getView("rowsView");
 
     // assert
-    assert.ok(rowsView.getRow(1).find("td").eq(2).attr("tabindex"), 0, "TabIndex set for the cell(1,2)");
+    assert.equal(rowsView.getRow(0).attr("tabindex"), undefined, "Row 0 tabIndex");
+    assert.equal(rowsView.getRow(1).find("td").eq(2).attr("tabindex"), 0, "TabIndex set for the cell(1,2)");
 });
 
 QUnit.testInActiveWindow("Arrow Up key should decrease focusedRowIndex", function(assert) {
@@ -197,6 +200,7 @@ QUnit.testInActiveWindow("Arrow Up key should decrease focusedRowIndex", functio
         return $("#container");
     };
     this.options = {
+        keyExpr: "name",
         focusedRowIndex: 1,
         focusedColumnIndex: 2
     };
@@ -254,6 +258,7 @@ QUnit.testInActiveWindow("Click by cell should focus the row", function(assert) 
         return $("#container");
     };
     this.options = {
+        keyExpr: "name",
         focusedRowEnabled: true
     };
     this.setupModule();
@@ -265,13 +270,36 @@ QUnit.testInActiveWindow("Click by cell should focus the row", function(assert) 
 
     // assert
     assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
+    assert.equal(rowsView.getRow(0).attr("tabindex"), 0, "Tabindex row 0");
+    assert.notOk(rowsView.getRow(0).hasClass("dx-cell-focus-disabled"), "Row 0 has no .dx-cell-focus-disabled");
     // act
     $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Dan"
+    });
     // assert
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
-    assert.equal(rowsView.getRow(0).attr("tabindex"), undefined);
-    assert.equal(rowsView.getRow(1).attr("tabindex"), 0);
+    assert.equal(rowsView.getRow(0).attr("tabindex"), undefined, "Row 0 tabindex");
+    assert.notOk(rowsView.getRow(0).hasClass("dx-cell-focus-disabled"), "Row 0 has no .dx-cell-focus-disabled");
+    assert.equal(rowsView.getRow(1).attr("tabindex"), 0, "Row 1 tabindex");
+    assert.ok(rowsView.getRow(1).hasClass("dx-cell-focus-disabled"), "Row 1 has .dx-cell-focus-disabled");
     assert.equal(rowsView.getRow(1).find("td").eq(0).attr("tabindex"), undefined);
+    // act
+    $(rowsView.getRow(0).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Alex"
+    });
+    rowsView = this.gridView.getView("rowsView");
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex = 0");
+    assert.equal(rowsView.getRow(0).attr("tabindex"), 0, "Row 0 tabindex");
+    assert.ok(rowsView.getRow(0).hasClass("dx-cell-focus-disabled"), "Row 0 has .dx-cell-focus-disabled");
+
+    assert.equal(rowsView.getRow(0).find("td").eq(0).attr("tabindex"), undefined);
+    assert.equal(rowsView.getRow(1).attr("tabindex"), undefined, "Row 1 tabindex");
+    assert.notOk(rowsView.getRow(1).hasClass("dx-cell-focus-disabled"), "Row 1 has no .dx-cell-focus-disabled");
 });
 
 QUnit.testInActiveWindow("Tab key should focus the cell", function(assert) {
@@ -282,6 +310,7 @@ QUnit.testInActiveWindow("Tab key should focus the cell", function(assert) {
         return $("#container");
     };
     this.options = {
+        keyExpr: "name",
         focusedRowEnabled: true,
         editing: {
             allowEditing: false
@@ -299,14 +328,18 @@ QUnit.testInActiveWindow("Tab key should focus the cell", function(assert) {
     this.clock.tick();
     // act
     $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
-    this.clock.tick();
     this.triggerKeyDown("tab", false, false, rowsView.element().find(":focus").get(0));
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Dan"
+    });
     // assert
-    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
-    assert.equal(rowsView.getRow(0).attr("tabindex"), undefined);
-    assert.equal(rowsView.getRow(1).attr("tabindex"), 0);
-    assert.equal(rowsView.getRow(1).find("td").eq(0).attr("tabindex"), undefined);
-    assert.equal(rowsView.getRow(1).find("td").eq(1).attr("tabindex"), 0);
+    assert.equal(this.option("focusedRowIndex"), 1, "focusedRowIndex");
+    assert.equal(this.option("focusedColumnIndex"), 1, "focusedColumnIndex");
+    assert.equal(rowsView.getRow(0).attr("tabindex"), undefined, "Row 0 tabindex");
+    assert.equal(rowsView.getRow(1).attr("tabindex"), 0, "Row 1 tabindex");
+    assert.equal(rowsView.getRow(1).find("td").eq(0).attr("tabindex"), undefined, "Cell 0 tabindex");
+    assert.equal(rowsView.getRow(1).find("td").eq(1).attr("tabindex"), 0, "Cell 1 tabindex");
 });
 
 QUnit.testInActiveWindow("LeftArrow key should focus the cell", function(assert) {
@@ -334,8 +367,11 @@ QUnit.testInActiveWindow("LeftArrow key should focus the cell", function(assert)
     this.clock.tick();
     // act
     $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
-    this.clock.tick();
     this.triggerKeyDown("leftArrow", false, false, rowsView.element().find(":focus").get(0));
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Dan"
+    });
     // assert
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
     assert.equal(this.option("focusedColumnIndex"), 0, "FocusedColumnIndex = 0");
@@ -370,8 +406,11 @@ QUnit.testInActiveWindow("RightArrow key should focus the cell", function(assert
     this.clock.tick();
     // act
     $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
-    this.clock.tick();
     this.triggerKeyDown("rightArrow", false, false, rowsView.element().find(":focus").get(0));
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Dan"
+    });
     // assert
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
     assert.equal(this.option("focusedColumnIndex"), 1, "FocusedColumnIndex = 1");
@@ -422,10 +461,12 @@ QUnit.testInActiveWindow("Focus row by click if virtual scrolling mode", functio
 
     // assert
     assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
-    assert.ok(this.keyboardNavigationController.isCellFocusType(), "Cell focus type");
     // act
     $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
-    this.clock.tick();
+    this.dataController.updateItems({
+        changeType: "updateFocusedRow",
+        focusedRowKey: "Dan"
+    });
     // assert
     assert.equal(this.option("focusedRowIndex"), 3, "FocusedRowIndex = 3");
     assert.ok(this.keyboardNavigationController.isRowFocusType(), "Row focus type");
