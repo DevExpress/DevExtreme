@@ -300,6 +300,18 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
     },
 
+    _applyQuillMethod(methodName, args) {
+        if(this._quillInstance) {
+            return this._quillInstance[methodName].apply(this._quillInstance, args);
+        }
+    },
+
+    _applyQuillHistoryMethod(methodName) {
+        if(this._quillInstance && this._quillInstance.history) {
+            this._quillInstance.history[methodName]();
+        }
+    },
+
     /**
     * @name dxHtmlEditorMethods.registerModules
     * @publicName registerModules(modules)
@@ -334,9 +346,7 @@ const HtmlEditor = Editor.inherit({
     * @return Object
     */
     getSelection: function() {
-        if(this._quillInstance) {
-            return this._quillInstance.getSelection();
-        }
+        return this._applyQuillMethod("getSelection");
     },
 
     /**
@@ -346,9 +356,7 @@ const HtmlEditor = Editor.inherit({
     * @param2 length:number
     */
     setSelection: function(index, length) {
-        if(this._quillInstance) {
-            this._quillInstance.setSelection(index, length);
-        }
+        this._applyQuillMethod("setSelection", arguments);
     },
 
     /**
@@ -358,37 +366,45 @@ const HtmlEditor = Editor.inherit({
     * @param2 value:any
     */
     format: function(name, value) {
-        if(this._quillInstance) {
-            this._quillInstance.format(name, value);
-        }
+        this._applyQuillMethod("format", arguments);
     },
 
     /**
     * @name dxHtmlEditorMethods.formatText
-    * @publicName formatText(index, length, name, value)
+    * @publicName formatText(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 name:string
-    * @param4 value:any
+    * @param3 formatName:string
+    * @param4 formatValue:any
     */
-    formatText: function(index, length, name, value) {
-        if(this._quillInstance) {
-            this._quillInstance.formatText(index, length, name, value);
-        }
+    /**
+    * @name dxHtmlEditorMethods.formatText
+    * @publicName formatText(index, length, formats)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 formats:object
+    */
+    formatText: function(index, length, formatName, formatValue) {
+        this._applyQuillMethod("formatText", arguments);
     },
 
     /**
     * @name dxHtmlEditorMethods.formatLine
-    * @publicName formatLine(index, length, name, value)
+    * @publicName formatLine(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 name:string
-    * @param4 value:any
+    * @param3 formatName:string
+    * @param4 formatValue:any
     */
-    formatLine: function(index, length, name, value) {
-        if(this._quillInstance) {
-            this._quillInstance.formatLine(index, length, name, value);
-        }
+    /**
+    * @name dxHtmlEditorMethods.formatLine
+    * @publicName formatLine(index, length, formats)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 formats:object
+    */
+    formatLine: function(index, length, formatName, formatValue) {
+        this._applyQuillMethod("formatLine", arguments);
     },
 
     /**
@@ -399,9 +415,7 @@ const HtmlEditor = Editor.inherit({
     * @return Object
     */
     getFormat: function(index, length) {
-        if(this._quillInstance) {
-            return this._quillInstance.getFormat(index, length);
-        }
+        return this._applyQuillMethod("getFormat", arguments);
     },
 
     /**
@@ -411,9 +425,7 @@ const HtmlEditor = Editor.inherit({
     * @param2 length:number
     */
     removeFormat: function(index, length) {
-        if(this._quillInstance) {
-            this._quillInstance.removeFormat(index, length);
-        }
+        return this._applyQuillMethod("removeFormat", arguments);
     },
 
     /**
@@ -421,9 +433,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName clearHistory()
     */
     clearHistory: function() {
-        if(this._quillInstance && this._quillInstance.history) {
-            this._quillInstance.history.clear();
-        }
+        this._applyQuillHistoryMethod("clear");
     },
 
     /**
@@ -431,9 +441,8 @@ const HtmlEditor = Editor.inherit({
     * @publicName undo()
     */
     undo: function() {
-        if(this._quillInstance && this._quillInstance.history) {
-            this._quillInstance.history.undo();
-        }
+        this._applyQuillHistoryMethod("undo");
+
     },
 
     /**
@@ -441,9 +450,8 @@ const HtmlEditor = Editor.inherit({
     * @publicName redo()
     */
     redo: function() {
-        if(this._quillInstance && this._quillInstance.history) {
-            this._quillInstance.history.redo();
-        }
+        this._applyQuillHistoryMethod("redo");
+
     },
 
     /**
@@ -452,9 +460,7 @@ const HtmlEditor = Editor.inherit({
     * @return number
     */
     getLength: function() {
-        if(this._quillInstance) {
-            return this._quillInstance.getLength();
-        }
+        return this._applyQuillMethod("getLength");
     },
 
     /**
@@ -464,9 +470,7 @@ const HtmlEditor = Editor.inherit({
     * @param2 length:number
     */
     deleteContent: function(index, length) {
-        if(this._quillInstance) {
-            this._quillInstance.deleteText(index, length);
-        }
+        this._applyQuillMethod("deleteText", arguments);
     },
 
     /**
@@ -477,22 +481,18 @@ const HtmlEditor = Editor.inherit({
     * @param3 formats:object
     */
     insertText: function(index, text, formats) {
-        if(this._quillInstance) {
-            this._quillInstance.insertText(index, text, formats);
-        }
+        this._applyQuillMethod("insertText", arguments);
     },
 
     /**
     * @name dxHtmlEditorMethods.insertEmbed
-    * @publicName insertEmbed(index, type, value)
+    * @publicName insertEmbed(index, type, config)
     * @param1 index:number
     * @param2 type:string
-    * @param3 value:any
+    * @param3 config:any
     */
-    insertEmbed: function(index, type, value) {
-        if(this._quillInstance) {
-            this._quillInstance.insertEmbed(index, type, value);
-        }
+    insertEmbed: function(index, type, config) {
+        this._applyQuillMethod("insertEmbed", arguments);
     }
 });
 
