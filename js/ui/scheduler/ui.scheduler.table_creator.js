@@ -141,7 +141,7 @@ var SchedulerTableCreator = {
 
         var cellTag = config.cellTag || "td",
             childrenField = config.childrenField || "children",
-            repeatCount = config.repeatCount,
+            repeatCount = config.repeatCount || 1,
             titleField = config.titleField || "title",
             groupTableClass = config.groupTableClass,
             groupRowClass = config.groupRowClass,
