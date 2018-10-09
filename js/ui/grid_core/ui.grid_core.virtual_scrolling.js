@@ -368,9 +368,11 @@ var VirtualScrollingRowsViewExtender = (function() {
         _restoreErrorRow: function(contentTable) {
             let editingController = this.getController("editing");
             editingController && this._getRowElements(contentTable).each((_, item)=>{
-                let rowOptions = $(item).data("options"),
-                    editData = editingController.getEditDataByKey(rowOptions.key);
-                editData && editingController._showErrorRow(editData);
+                let rowOptions = $(item).data("options");
+                if(rowOptions) {
+                    let editData = editingController.getEditDataByKey(rowOptions.key);
+                    editData && editingController._showErrorRow(editData);
+                }
             });
         },
 
