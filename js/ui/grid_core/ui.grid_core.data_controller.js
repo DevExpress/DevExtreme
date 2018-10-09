@@ -254,17 +254,16 @@ module.exports = {
                         "repaintRows"
                     ];
                 },
+                reset: function() {
+                    this._columnsController.reset();
+                    this._items = [];
+                    this._refreshDataSource();
+                },
                 optionChanged: function(args) {
                     var that = this;
 
                     function handled() {
                         args.handled = true;
-                    }
-
-                    function reload() {
-                        that._columnsController.reset();
-                        that._items = [];
-                        that._refreshDataSource();
                     }
 
                     if(args.name === "dataSource" && args.name === args.fullName && (args.value === args.previousValue || (that.option("columns") && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
@@ -288,14 +287,20 @@ module.exports = {
                         case "keyExpr":
                         case "dataSource":
                         case "scrolling":
-                        case "paging":
                             handled();
                             if(!that.skipProcessingPagingChange(args.fullName)) {
-                                reload();
+                                that.reset();
                             }
                             break;
+                        case "paging":
+                            var dataSource = that.dataSource();
+                            if(dataSource && that._setPagingOptions(dataSource)) {
+                                dataSource.load();
+                            }
+                            handled();
+                            break;
                         case "rtlEnabled":
-                            reload();
+                            that.reset();
                             break;
                         default:
                             that.callBase(args);
@@ -487,18 +492,25 @@ module.exports = {
                         pagingEnabled = this.option("paging.enabled"),
                         scrollingMode = this.option("scrolling.mode"),
                         appendMode = scrollingMode === "infinite",
-                        virtualMode = scrollingMode === "virtual";
+                        virtualMode = scrollingMode === "virtual",
+                        paginate = pagingEnabled || virtualMode || appendMode,
+                        isChanged = false;
 
                     dataSource.requireTotalCount(!appendMode);
-                    if(pagingEnabled !== undefined) {
-                        dataSource.paginate(pagingEnabled || virtualMode || appendMode);
+                    if(pagingEnabled !== undefined && dataSource.paginate() !== paginate) {
+                        dataSource.paginate(paginate);
+                        isChanged = true;
                     }
-                    if(pageSize !== undefined) {
+                    if(pageSize !== undefined && dataSource.pageSize() !== pageSize) {
                         dataSource.pageSize(pageSize);
+                        isChanged = true;
                     }
-                    if(pageIndex !== undefined) {
+                    if(pageIndex !== undefined && dataSource.pageIndex() !== pageIndex) {
                         dataSource.pageIndex(pageIndex);
+                        isChanged = true;
                     }
+
+                    return isChanged;
                 },
                 _getSpecificDataSourceOption: function() {
                     var dataSource = this.option("dataSource");
