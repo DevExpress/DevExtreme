@@ -7006,6 +7006,64 @@ QUnit.test("paging change", function(assert) {
     assert.ok(!dataGrid.getView("pagerView").isVisible(), "pager visibility when paging disabled");
 });
 
+QUnit.test("paging change", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        pageIndex: 1,
+        pageSize: 2
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 1, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+    assert.deepEqual(dataGrid.getVisibleRows().length, 2, "row count");
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { value: 3 }, "first row data");
+});
+
+// T677650
+QUnit.test("paging change if nested options are not changed", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        enabled: true,
+        pageIndex: 0,
+        pageSize: 3
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 0, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+});
+
 // T121445
 QUnit.test("pager.allowedPageSizes change", function(assert) {
     // arrange, act
