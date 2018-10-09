@@ -309,7 +309,7 @@ var TextEditorBase = Editor.inherit({
                 },
                 options: {
                     /**
-                    * @name dxButtonOptions.stylingMode
+                    * @name dxTextEditorOptions.stylingMode
                     * @default 'underlined' @for Material
                     */
                     stylingMode: "underlined"
