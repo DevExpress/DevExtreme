@@ -915,3 +915,22 @@
  * @enum {'outlined'|'underlined'|'filled'}
  */
 
+/**
+ * @typedef {string} Enums.GridCommandColumnType
+ * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListCommandColumnType
+ * @enum {'adaptive'|'buttons'}
+ */
+
+/**
+ * @typedef {string} Enums.GridColumnButtonName
+ * @enum {'cancel'|'delete'|'edit'|'save'|'undelete'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListColumnButtonName
+ * @enum {'add'|'cancel'|'delete'|'edit'|'save'|'undelete'}
+ */
