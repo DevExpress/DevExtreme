@@ -703,7 +703,6 @@ dataGridCore.registerModule("export", {
              * @type_function_param1_field5 gridCell:XlsxGridCell
              * @extends Action
              * @action
-             * @hidden
              */
         };
     },
