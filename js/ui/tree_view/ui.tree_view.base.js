@@ -152,11 +152,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
             dataStructure: "tree",
 
-            /**
-             * @name dxTreeViewOptions.deferRendering
-             * @type boolean
-             * @default true
-             */
             deferRendering: true,
 
             /**
@@ -511,6 +506,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case "expandEvent":
                 this._initExpandEvent();
                 break;
+            case "deferRendering":
             case "dataStructure":
             case "rootValue":
             case "createChildren":
