@@ -512,7 +512,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cells = $rowElement.children(),
             $newCells = $newRowElement.children(),
             highlightChanges = this.option("highlightChanges"),
-            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
+            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS),
+            highlightedCells = [],
+            needToRefreshAnimation = false;
 
         columnIndices.forEach(function(columnIndex, index) {
             var $cell = $cells.eq(columnIndex),
@@ -520,21 +522,23 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 $newContent = $newCell.contents();
 
             if($newContent.length) {
-                let hasClass = $cell.hasClass(cellUpdatedClass);
+                needToRefreshAnimation = needToRefreshAnimation || $cell.hasClass(cellUpdatedClass);
+
                 $cell.contents().remove();
                 $cell.append($newContent);
 
                 $cell.get(0).className = $newCell.get(0).className;
                 $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
-                hasClass && $cell.width(); // forse animation stop
             } else {
                 $cell.replaceWith($newCell);
                 $cell = $newCell;
             }
-            if(highlightChanges) {
-                $cell.addClass(cellUpdatedClass);
-            }
+            highlightChanges && highlightedCells.push($cell);
+        });
 
+        needToRefreshAnimation && $rowElement.width();
+        highlightedCells.forEach(cell => {
+            cell.addClass(cellUpdatedClass);
         });
     },
 
