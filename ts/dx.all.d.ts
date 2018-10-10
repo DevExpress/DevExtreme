@@ -1818,6 +1818,7 @@ declare module DevExpress.ui {
         icon?: string;
         /** A function that is executed when the Button is clicked or tapped. */
         onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
+        stylingMode?: 'text' | 'outlined' | 'contained';
         /** Specifies a custom template for the Button widget. */
         template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** The text displayed on the button. */
@@ -2805,10 +2806,25 @@ declare module DevExpress.ui {
     export class dxHtmlEditor extends Editor {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
+        clearHistory(): void;
+        deleteContent(index: number, length: number): void;
         format(name: string, value: any): void;
-        getSelection(): void;
+        formatLine(index: number, length: number, formatName: string, formatValue: any): void;
+        formatLine(index: number, length: number, formats: any): void;
+        formatText(index: number, length: number, formatName: string, formatValue: any): void;
+        formatText(index: number, length: number, formats: any): void;
+        getFormat(index: number, length: number): any;
+        getLength(): number;
+        getModule(modulePath: string): any;
+        getQuillInstance(): any;
+        getSelection(): any;
+        insertEmbed(index: number, type: string, config: any): void;
+        insertText(index: number, text: string, formats: any): void;
+        redo(): void;
         registerModules(modules: any): void;
+        removeFormat(index: number, length: number): void;
         setSelection(index: number, length: number): void;
+        undo(): void;
     }
     export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
         /** Specifies whether or not the widget changes its state when interacting with a user. */
@@ -5451,6 +5467,7 @@ declare module DevExpress.ui {
         showMaskMode?: 'always' | 'onFocus';
         /** Specifies whether or not the widget checks the inner text for spelling mistakes. */
         spellcheck?: boolean;
+        stylingMode?: 'outlined' | 'underlined' | 'filled';
         /** The read-only option that holds the text displayed by the widget input element. */
         text?: string;
         /** Specifies whether the value should contain mask characters or not. */
