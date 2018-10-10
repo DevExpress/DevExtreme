@@ -241,6 +241,7 @@ var ResourceManager = Class.inherit({
         });
 
         if(!deferreds.length) {
+            that._resourcesData = [];
             return result.resolve([]);
         }
 
