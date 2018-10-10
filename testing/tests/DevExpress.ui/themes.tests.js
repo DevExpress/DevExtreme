@@ -45,15 +45,33 @@ require("style-compiler-test-server/known-css-files");
     }
 
     function isGoodSelector(selectorText) {
-        var parts = selectorText.split(/(?=[#.\s])/g);
+        var parts = selectorText.split(/(?=[#.\s])/g),
+            i,
+            part;
 
-        for(var i = 0; i < parts.length; i++) {
-            if(/^[#.](dx|ql)-/.test($.trim(parts[i]))) {
-                return true;
+        function isTag(text) {
+            return text === "*" || /^\w+$/.test(text);
+        }
+
+        for(i = 0; i < parts.length; i++) {
+            part = $.trim(parts[i]);
+
+            if(part === "") {
+                continue;
+            }
+
+            if(isTag(part)) {
+                if(i === 0) {
+                    return false;
+                }
+            } else {
+                if(!/^[#.](dx|ql)-/.test(part)) {
+                    return false;
+                }
             }
         }
 
-        return false;
+        return true;
     }
 
     function findBadCssSelectors(doc) {
