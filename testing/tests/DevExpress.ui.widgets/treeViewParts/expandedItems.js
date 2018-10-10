@@ -70,6 +70,15 @@ QUnit.test("onItemExpanded callback", function(assert) {
     });
 });
 
+QUnit.test("hidden items should be rendered when deferRendering is false", function(assert) {
+    var $treeView = initTree({
+        items: [{ text: "Item 1", items: [{ text: "Item 11", items: [{ text: "Item 111" }] }] }],
+        deferRendering: false
+    });
+
+    assert.equal($treeView.find(".dx-treeview-node").length, 3, "all items have been rendered");
+});
+
 QUnit.test("onContentReady rises after first expand", function(assert) {
     var data = $.extend(true, [], DATA[5]),
         onContentReadyHandler = sinon.spy(noop),
