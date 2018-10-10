@@ -255,7 +255,7 @@ QUnit.test("clear button press should save value change event", function(assert)
     assert.ok(onValueChanged.getCall(1).args[0].event, "event was saved");
 });
 
-QUnit.test("out of range value should not be marked as invalid on init", function(assert) {
+QUnit.test("out of range value should be marked as invalid on init", function(assert) {
     var $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
             min: new Date(2014, 3, 20),
@@ -263,6 +263,43 @@ QUnit.test("out of range value should not be marked as invalid on init", functio
         }),
         dateBox = $dateBox.dxDateBox("instance");
 
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+});
+
+QUnit.test("it shouild be impossible to set out of range time to dxDateBox using ui (T394206)", function(assert) {
+    var $dateBox = $("#widthRootStyle").dxDateBox({
+            opened: true,
+            type: "datetime",
+            pickerType: "calendarWithTime",
+            value: new Date(2015, 3, 20, 15, 0, 0),
+            min: new Date(2015, 3, 20, 15, 0, 0),
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button"),
+        $hourDown = $(dateBox.content()).parent().find(".dx-numberbox-spin-down").eq(0);
+
+    $hourDown.trigger("dxpointerdown");
+    $done.trigger("dxclick");
+
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+});
+
+QUnit.test("clear button should change validation state to valid", function(assert) {
+    var $dateBox = $("#widthRootStyle").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            showClearButton: true,
+            value: null
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input),
+        $clearButton = $dateBox.find(".dx-clear-button-area");
+
+    keyboard.type("123").press("enter");
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+
+    $clearButton.trigger("dxclick");
     assert.ok(dateBox.option("isValid"), "widget is valid");
 });
 
@@ -2762,7 +2799,7 @@ QUnit.test("DateBox renders the right stylingMode for editors in time view overl
     var dateBox = $("#dateBox").dxDateBox({
         type: "datetime",
         value: new Date("2015/1/25"),
-        stylingMode: "standard"
+        stylingMode: "underlined"
     }).dxDateBox("instance");
 
     dateBox.open();
@@ -2771,9 +2808,9 @@ QUnit.test("DateBox renders the right stylingMode for editors in time view overl
     var minuteEditor = $(".dx-timeview-field .dx-numberbox").eq(1);
     var amPmEditor = $(".dx-timeview-field .dx-selectbox").eq(0);
 
-    assert.ok(hourEditor.hasClass("dx-editor-standard"));
-    assert.ok(minuteEditor.hasClass("dx-editor-standard"));
-    assert.ok(amPmEditor.hasClass("dx-editor-standard"));
+    assert.ok(hourEditor.hasClass("dx-editor-underlined"));
+    assert.ok(minuteEditor.hasClass("dx-editor-underlined"));
+    assert.ok(amPmEditor.hasClass("dx-editor-underlined"));
 });
 
 QUnit.module("datebox w/ time list", {

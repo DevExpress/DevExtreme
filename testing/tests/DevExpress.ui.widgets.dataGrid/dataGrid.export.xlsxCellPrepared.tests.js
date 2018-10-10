@@ -1,13 +1,12 @@
 import $ from "jquery";
 import helper from '../../helpers/dataGridExportTestsHelper.js';
-import { extend } from "core/utils/extend";
 
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("DataGrid export.onXlsxCellPrepared tests", {
+QUnit.module("DataGrid onXlsxCellPrepared tests", {
     beforeEach: helper.beforeEachTest,
     afterEach: helper.afterEachTest,
 });
@@ -45,8 +44,8 @@ QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
-            }
+            },
+            onXlsxCellPrepared: e => e.xlsxCell.style.alignment = null,
         },
         { styles, worksheet, sharedStrings }
     );
@@ -82,12 +81,14 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
-                        extend(e.xlsxCell.style, { alignment: { horizontal: e.gridCell.row.data.alignment } });
-                    }
-                },
-            }
+            },
+            onXlsxCellPrepared: e => {
+                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
+                    e.xlsxCell.style.alignment = {
+                        horizontal: e.gridCell.row.data.alignment
+                    };
+                }
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -127,20 +128,17 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e =>
-                    extend(true, e.xlsxCell, {
-                        style: {
-                            fill: {
-                                patternFill: {
-                                    patternType: 'darkVertical',
-                                    foregroundColor: {
-                                        rgb: 'FF20FF60'
-                                    }
-                                }
-                            }
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style.fill = {
+                    patternFill: {
+                        patternType: 'darkVertical',
+                        foregroundColor: {
+                            rgb: 'FF20FF60'
                         }
-                    }),
-            }
+                    }
+                };
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -182,21 +180,19 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
-                        extend(e.xlsxCell.style, {
-                            fill: {
-                                patternFill: {
-                                    patternType: e.gridCell.row.data.fillPattern,
-                                    foregroundColor: {
-                                        rgb: e.gridCell.row.data.fillColor
-                                    }
-                                }
+            },
+            onXlsxCellPrepared: e => {
+                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
+                    e.xlsxCell.style.fill = {
+                        patternFill: {
+                            patternType: e.gridCell.row.data.fillPattern,
+                            foregroundColor: {
+                                rgb: e.gridCell.row.data.fillColor
                             }
-                        });
-                    }
+                        }
+                    };
                 }
-            }
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -238,8 +234,8 @@ QUnit.test("Change font in all xlsx cells", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => e.xlsxCell.style.font.size = 22
-            }
+            },
+            onXlsxCellPrepared: e => e.xlsxCell.style.font.size = 22,
         },
         { styles, worksheet, sharedStrings }
     );
@@ -303,11 +299,11 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    e.xlsxCell.style.numberFormat = formats[0];
-                    formats.shift();
-                }
-            }
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style.numberFormat = formats[0];
+                formats.shift();
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -346,10 +342,10 @@ QUnit.test("Change number format for Number column when column.format is functio
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    e.xlsxCell.style.numberFormat = { formatCode: '0000' };
-                }
-            }
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -388,10 +384,10 @@ QUnit.test("Change number format for Date column cell when column.format is func
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    e.xlsxCell.style.numberFormat = { formatCode: 'dd/mmm/yyyy hh:mm' };
-                }
-            }
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style.numberFormat = { formatCode: 'dd/mmm/yyyy hh:mm' };
+            },
         },
         { styles, worksheet, sharedStrings }
     );
@@ -675,11 +671,9 @@ QUnit.test("Changes in 'e.xlsxCell.style' shouldn't modify a shared style object
         dataSource: [{ f1: 1 }, { f1: 2 }, { f1: 3 }],
         showColumnHeaders: false,
         loadingTimeout: undefined,
-        export: {
-            onXlsxCellPrepared: e => {
-                assert.step(e.xlsxCell.style.alignment.horizontal);
-                e.xlsxCell.style.alignment.horizontal = counter++;
-            },
+        onXlsxCellPrepared: e => {
+            assert.step(e.xlsxCell.style.alignment.horizontal);
+            e.xlsxCell.style.alignment.horizontal = counter++;
         },
         onFileSaving: e => {
             assert.verifySteps(['right', 'right', 'right']);
@@ -713,11 +707,11 @@ QUnit.test("Change string value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    assert.strictEqual(e.xlsxCell.value, 'a');
-                    e.xlsxCell.value = 'b';
-                }
-            }
+            },
+            onXlsxCellPrepared: e => {
+                assert.strictEqual(e.xlsxCell.value, 'a');
+                e.xlsxCell.value = 'b';
+            },
         },
         { worksheet, sharedStrings }
     );
@@ -742,11 +736,11 @@ QUnit.test("Change number value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    assert.strictEqual(e.xlsxCell.value, 42);
-                    e.xlsxCell.value = 43;
-                }
-            }
+            },
+            onXlsxCellPrepared: e => {
+                assert.strictEqual(e.xlsxCell.value, 42);
+                e.xlsxCell.value = 43;
+            },
         },
         { worksheet, sharedStrings }
     );
@@ -777,16 +771,16 @@ QUnit.test("Change date value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
-                        assert.deepEqual(e.xlsxCell.value, new Date(2018, 0, 21, 16, 55));
-                        e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
-                    } else {
-                        assert.deepEqual(e.xlsxCell.value, new Date(2019, 0, 21, 16, 55));
-                        e.xlsxCell.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
-                    }
+            },
+            onXlsxCellPrepared: e => {
+                if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
+                    assert.deepEqual(e.xlsxCell.value, new Date(2018, 0, 21, 16, 55));
+                    e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
+                } else {
+                    assert.deepEqual(e.xlsxCell.value, new Date(2019, 0, 21, 16, 55));
+                    e.xlsxCell.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
                 }
-            }
+            },
         },
         { worksheet, sharedStrings }
     );
@@ -816,18 +810,18 @@ QUnit.test("Change boolean value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    if(e.gridCell.value) {
-                        assert.strictEqual(e.xlsxCell.value, 'true');
-                        e.xlsxCell.value = 'false';
-                        // assert.strictEqual(e.xlsxCell.value, true); - DataProvider.getCellData(rowIndex, cellIndex) returns string
-                        // e.xlsxCell.value = false; - DataProvider doesn't provide a way to convert true/false to 'true'/'false'
-                    } else {
-                        assert.strictEqual(e.xlsxCell.value, 'false');
-                        e.xlsxCell.value = true;
-                    }
+            },
+            onXlsxCellPrepared: e => {
+                if(e.gridCell.value) {
+                    assert.strictEqual(e.xlsxCell.value, 'true');
+                    e.xlsxCell.value = 'false';
+                    // assert.strictEqual(e.xlsxCell.value, true); - DataProvider.getCellData(rowIndex, cellIndex) returns string
+                    // e.xlsxCell.value = false; - DataProvider doesn't provide a way to convert true/false to 'true'/'false'
+                } else {
+                    assert.strictEqual(e.xlsxCell.value, 'false');
+                    e.xlsxCell.value = true;
                 }
-            }
+            },
         },
         { worksheet, sharedStrings }
     );
@@ -862,26 +856,26 @@ QUnit.test("Change cell value data type", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                onXlsxCellPrepared: e => {
-                    if(e.gridCell.column.dataField === 'stringToNumber') {
-                        e.xlsxCell.value = 1;
-                        e.xlsxCell.dataType = 'n';
-                        e.xlsxCell.style = null;
-                    } else if(e.gridCell.column.dataField === 'numberToString') {
-                        e.xlsxCell.value = 'one';
-                        e.xlsxCell.dataType = 's';
-                        e.xlsxCell.style = null;
-                    } else if(e.gridCell.column.dataField === 'dateToString') {
-                        e.xlsxCell.value = 'my date';
-                        e.xlsxCell.dataType = 's';
-                        e.xlsxCell.style = null;
-                    } else if(e.gridCell.column.dataField === 'boolToNumber') {
-                        e.xlsxCell.value = 1;
-                        e.xlsxCell.dataType = 'n';
-                        e.xlsxCell.style = null;
-                    }
+            },
+            onXlsxCellPrepared: e => {
+                if(e.gridCell.column.dataField === 'stringToNumber') {
+                    e.xlsxCell.value = 1;
+                    e.xlsxCell.dataType = 'n';
+                    e.xlsxCell.style = null;
+                } else if(e.gridCell.column.dataField === 'numberToString') {
+                    e.xlsxCell.value = 'one';
+                    e.xlsxCell.dataType = 's';
+                    e.xlsxCell.style = null;
+                } else if(e.gridCell.column.dataField === 'dateToString') {
+                    e.xlsxCell.value = 'my date';
+                    e.xlsxCell.dataType = 's';
+                    e.xlsxCell.style = null;
+                } else if(e.gridCell.column.dataField === 'boolToNumber') {
+                    e.xlsxCell.value = 1;
+                    e.xlsxCell.dataType = 'n';
+                    e.xlsxCell.style = null;
                 }
-            }
+            },
         },
         { worksheet, sharedStrings }
     );

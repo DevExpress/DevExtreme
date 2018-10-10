@@ -25,7 +25,9 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
     BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_BACK_CLASS = "dx-button-back",
-    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
+    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
+    BUTTON_TEXT_STYLE_CLASS = "dx-button-mode-text",
+    BUTTON_CONTAINED_STYLE_CLASS = "dx-button-mode-contained";
 
 QUnit.module("Button markup");
 
@@ -68,6 +70,22 @@ QUnit.test("class added from type (back)", function(assert) {
 
     assert.ok(element.hasClass(BUTTON_BACK_CLASS), "class was added");
     assert.ok(buttonContent.find(".dx-icon").length, "icon class was added");
+});
+
+QUnit.test("class added from stylingMode", function(assert) {
+    var element = $("#button").dxButton({
+        stylingMode: "text"
+    });
+
+    assert.ok(element.hasClass(BUTTON_TEXT_STYLE_CLASS), "class was added");
+});
+
+QUnit.test("Default value should be used if stylingMode has wrong value", function(assert) {
+    var element = $("#button").dxButton({
+        stylingMode: "someWrongValue"
+    });
+
+    assert.ok(element.hasClass(BUTTON_CONTAINED_STYLE_CLASS), "class was added");
 });
 
 QUnit.test("icon must rendered after change type of button on 'back'", function(assert) {

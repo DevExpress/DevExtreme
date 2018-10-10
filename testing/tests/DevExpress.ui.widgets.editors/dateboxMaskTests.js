@@ -39,10 +39,10 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
         });
 
-        QUnit.test("Masks should not be enabled when displayFormat is not specified", (assert) => {
+        QUnit.test("Masks should be enabled when displayFormat is not specified", (assert) => {
             this.instance.option("displayFormat", undefined);
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "10/10/2012", "mask behavior does not work");
+            assert.equal(this.instance.option("text"), "11/10/2012", "mask behavior works");
         });
 
         QUnit.test("Masks should not be enabled when mode is not text", (assert) => {
@@ -422,7 +422,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Pointer events", setupModule, () => {
+    QUnit.module("Events", setupModule, () => {
         QUnit.test("Select date part on click", (assert) => {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
@@ -447,6 +447,15 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 6, end: 8 }, "caret is good");
         });
 
+        QUnit.test("paste should be possible when pasting data matches the format", (assert) => {
+            this.instance.option("value", null);
+
+            this.keyboard.paste("123456");
+            assert.equal(this.$input.val(), "", "pasting incorrect value is not allowed");
+
+            this.keyboard.paste("November 10 2018");
+            assert.equal(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
+        });
     });
 
 

@@ -203,6 +203,51 @@ describe("LessTemplateLoader", () => {
             });
     });
 
+    it("load - default less path", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            reader: path => {
+                assert.equal(path, "devextreme-themebuilder/data/less/theme-builder-generic-light.less");
+                return new Promise(resolve => {
+                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata,
+            [{ key: "@base-bg", value: "green" }]
+        );
+    });
+
+    it("load - custom less path", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            lessPath: "my/custom/path/",
+            reader: path => {
+                assert.equal(path, "my/custom/path/theme-builder-generic-light.less");
+                return new Promise(resolve => {
+                    resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata,
+            [{ key: "@base-bg", value: "green" }]
+        );
+    });
+
     it("compileLess", () => {
         let config = {
             isBootstrap: false,

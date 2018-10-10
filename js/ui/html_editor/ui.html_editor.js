@@ -36,13 +36,13 @@ const HtmlEditor = Editor.inherit({
             placeholder: "",
             /**
             * @name dxHtmlEditorOptions.toolbar
-            * @type Array<dxHtmlEditorToolbarItem>|dxToolbarModule
+            * @type dxHtmlEditorToolbar
             * @default null
             */
-            toolbar: null, // container, items
+            toolbar: null,
             /**
             * @name dxHtmlEditorOptions.dataPlaceholder
-            * @type dxDataPlaceholderModule
+            * @type dxHtmlEditorDataPlaceholder
             * @default null
             */
             dataPlaceholder: null,
@@ -50,15 +50,15 @@ const HtmlEditor = Editor.inherit({
             formDialogOptions: null
 
             /**
-            * @name dxToolbarModule
+            * @name dxHtmlEditorToolbar
             * @type object
             */
             /**
-            * @name dxToolbarModule.container
+            * @name dxHtmlEditorToolbar.container
             * @type string|Node|jQuery
             */
             /**
-            * @name dxToolbarModule.items
+            * @name dxHtmlEditorToolbar.items
             * @type Array<dxHtmlEditorToolbarItem>
             */
 
@@ -76,26 +76,26 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxDataPlaceholderModule
+            * @name dxHtmlEditorDataPlaceholder
             * @type object
             */
             /**
-            * @name dxDataPlaceholderModule.dataSource
+            * @name dxHtmlEditorDataPlaceholder.dataSource
             * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
-            * @name dxDataPlaceholderModule.escapedChar
+            * @name dxHtmlEditorDataPlaceholder.escapedChar
             * @type string
             * @default ""
             */
             /**
-            * @name dxDataPlaceholderModule.startEscapedChar
+            * @name dxHtmlEditorDataPlaceholder.startEscapedChar
             * @type string
             * @default undefined
             */
             /**
-            * @name dxDataPlaceholderModule.endEscapedChar
+            * @name dxHtmlEditorDataPlaceholder.endEscapedChar
             * @type string
             * @default undefined
             */
@@ -196,7 +196,7 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
         let modulesConfig = {
-            toolbar: this._getToolbarConfig(),
+            toolbar: this._getModuleConfigByOption("toolbar"),
             placeholder: this._getModuleConfigByOption("dataPlaceholder"),
             dropImage: this._getBaseModuleConfig(),
             clipboard: {
@@ -209,22 +209,6 @@ const HtmlEditor = Editor.inherit({
         };
 
         return modulesConfig;
-    },
-
-    _getToolbarConfig: function() {
-        const toolbarConfig = this.option("toolbar");
-        let resultConfig;
-
-        if(Array.isArray(toolbarConfig)) {
-            resultConfig = {
-                editorInstance: this,
-                items: toolbarConfig
-            };
-        } else {
-            resultConfig = this._getModuleConfigByOption("toolbar");
-        }
-
-        return resultConfig;
     },
 
     _getModuleConfigByOption: function(userOptionName) {
@@ -330,6 +314,18 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
     },
 
+    _applyQuillMethod(methodName, args) {
+        if(this._quillInstance) {
+            return this._quillInstance[methodName].apply(this._quillInstance, args);
+        }
+    },
+
+    _applyQuillHistoryMethod(methodName) {
+        if(this._quillInstance && this._quillInstance.history) {
+            this._quillInstance.history[methodName]();
+        }
+    },
+
     /**
     * @name dxHtmlEditorMethods.registerModules
     * @publicName registerModules(modules)
@@ -340,13 +336,31 @@ const HtmlEditor = Editor.inherit({
     },
 
     /**
+    * @name dxHtmlEditorMethods.getModule
+    * @publicName getModule(modulePath)
+    * @param1 modulePath:string
+    * @return Object
+    */
+    getModule: function(modulePath) {
+        return this._quillRegistrator.getQuill().import(modulePath);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.getQuillInstance
+    * @publicName getQuillInstance()
+    * @return Object
+    */
+    getQuillInstance: function() {
+        return this._quillInstance;
+    },
+
+    /**
     * @name dxHtmlEditorMethods.getSelection
     * @publicName getSelection()
+    * @return Object
     */
     getSelection: function() {
-        if(this._quillInstance) {
-            return this._quillInstance.getSelection();
-        }
+        return this._applyQuillMethod("getSelection");
     },
 
     /**
@@ -356,9 +370,7 @@ const HtmlEditor = Editor.inherit({
     * @param2 length:number
     */
     setSelection: function(index, length) {
-        if(this._quillInstance) {
-            return this._quillInstance.setSelection(index, length);
-        }
+        this._applyQuillMethod("setSelection", arguments);
     },
 
     /**
@@ -368,21 +380,133 @@ const HtmlEditor = Editor.inherit({
     * @param2 value:any
     */
     format: function(name, value) {
-        if(this._quillInstance) {
-            return this._quillInstance.format(name, value);
-        }
+        this._applyQuillMethod("format", arguments);
     },
 
     /**
-    * @name dxHtmlEditorMethods.setSelection
-    * @publicName setSelection(index, length)
+    * @name dxHtmlEditorMethods.formatText
+    * @publicName formatText(index, length, formatName, formatValue)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 formatName:string
+    * @param4 formatValue:any
+    */
+    /**
+    * @name dxHtmlEditorMethods.formatText
+    * @publicName formatText(index, length, formats)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 formats:object
+    */
+    formatText: function(index, length, formatName, formatValue) {
+        this._applyQuillMethod("formatText", arguments);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.formatLine
+    * @publicName formatLine(index, length, formatName, formatValue)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 formatName:string
+    * @param4 formatValue:any
+    */
+    /**
+    * @name dxHtmlEditorMethods.formatLine
+    * @publicName formatLine(index, length, formats)
+    * @param1 index:number
+    * @param2 length:number
+    * @param3 formats:object
+    */
+    formatLine: function(index, length, formatName, formatValue) {
+        this._applyQuillMethod("formatLine", arguments);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.getFormat
+    * @publicName getFormat(index, length)
+    * @param1 index:number
+    * @param2 length:number
+    * @return Object
+    */
+    getFormat: function(index, length) {
+        return this._applyQuillMethod("getFormat", arguments);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.removeFormat
+    * @publicName removeFormat(index, length)
     * @param1 index:number
     * @param2 length:number
     */
     removeFormat: function(index, length) {
-        if(this._quillInstance) {
-            return this._quillInstance.removeFormat(index, length);
-        }
+        return this._applyQuillMethod("removeFormat", arguments);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.clearHistory
+    * @publicName clearHistory()
+    */
+    clearHistory: function() {
+        this._applyQuillHistoryMethod("clear");
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.undo
+    * @publicName undo()
+    */
+    undo: function() {
+        this._applyQuillHistoryMethod("undo");
+
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.redo
+    * @publicName redo()
+    */
+    redo: function() {
+        this._applyQuillHistoryMethod("redo");
+
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.getLength
+    * @publicName getLength()
+    * @return number
+    */
+    getLength: function() {
+        return this._applyQuillMethod("getLength");
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.deleteContent
+    * @publicName deleteContent(index, length)
+    * @param1 index:number
+    * @param2 length:number
+    */
+    deleteContent: function(index, length) {
+        this._applyQuillMethod("deleteText", arguments);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.insertText
+    * @publicName insertText(index, text, formats)
+    * @param1 index:number
+    * @param2 text:string
+    * @param3 formats:object
+    */
+    insertText: function(index, text, formats) {
+        this._applyQuillMethod("insertText", arguments);
+    },
+
+    /**
+    * @name dxHtmlEditorMethods.insertEmbed
+    * @publicName insertEmbed(index, type, config)
+    * @param1 index:number
+    * @param2 type:string
+    * @param3 config:any
+    */
+    insertEmbed: function(index, type, config) {
+        this._applyQuillMethod("insertEmbed", arguments);
     },
 
     showFormDialog: function(formConfig) {

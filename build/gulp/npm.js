@@ -14,6 +14,7 @@ var context = require('./context.js');
 var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var version = require('../../package.json').version;
+var packagePath = context.RESULT_NPM_PATH + '/devextreme';
 
 var TRANSPILED_GLOBS = [
     context.TRANSPILED_PATH + '/**/*.js',
@@ -76,27 +77,27 @@ gulp.task('npm-sources', ['npm-dts-generator'], function() {
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())
-            .pipe(gulp.dest(context.RESULT_NPM_PATH)),
+            .pipe(gulp.dest(packagePath)),
 
         gulp.src(JSON_GLOBS)
-            .pipe(gulp.dest(context.RESULT_NPM_PATH)),
+            .pipe(gulp.dest(packagePath)),
 
         gulp.src('build/npm-bin/*.js')
             .pipe(eol('\n'))
-            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/bin')),
+            .pipe(gulp.dest(packagePath + '/bin')),
 
         gulp.src('webpack.config.js')
-            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/bin')),
+            .pipe(gulp.dest(packagePath + '/bin')),
 
         gulp.src('package.json')
             .pipe(replace(version, context.version.package))
-            .pipe(gulp.dest(context.RESULT_NPM_PATH)),
+            .pipe(gulp.dest(packagePath)),
 
         gulp.src(DIST_GLOBS)
-            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/dist')),
+            .pipe(gulp.dest(packagePath + '/dist')),
 
         gulp.src('README.md')
-            .pipe(gulp.dest(context.RESULT_NPM_PATH))
+            .pipe(gulp.dest(packagePath))
     );
 });
 
@@ -165,11 +166,11 @@ gulp.task('npm-dts-generator', function() {
             .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
             .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
             .pipe(footer('\nexport default DevExpress;'))
-            .pipe(gulp.dest(path.join(context.RESULT_NPM_PATH, 'bundles'))),
+            .pipe(gulp.dest(path.join(packagePath, 'bundles'))),
 
         merge.apply(merge, tsModules)
             .pipe(headerPipes.starLicense())
-            .pipe(gulp.dest(context.RESULT_NPM_PATH))
+            .pipe(gulp.dest(packagePath))
     );
 });
 
@@ -177,7 +178,7 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
     var content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
-        var modulePath = '\'./npm/' + moduleMeta.name + '\'';
+        var modulePath = '\'./npm/devextreme/' + moduleMeta.name + '\'';
         if(!moduleMeta.exports) {
             return 'import ' + modulePath + ';';
         }

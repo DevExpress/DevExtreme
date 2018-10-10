@@ -105,28 +105,10 @@
     }
 }
 
-@GENERIC_NORMAL_BUTTON_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-shadow-color;
-@GENERIC_NORMAL_BUTTON_ACTIVE_STATE_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-active-shadow-color;
-@GENERIC_NORMAL_BUTTON_HOVERED_STATE_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-hover-shadow-color;
-@GENERIC_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-focused-shadow-color;
-
 .dx-button-styling() {
     .border-radius(@button-border-radius);
-    .box-shadow(@GENERIC_NORMAL_BUTTON_SHADOW);
     border-width: @GENERIC_BUTTON_BORDER_WEIGHT;
     border-style: solid;
-
-    &.dx-state-hover {
-        .box-shadow(@GENERIC_NORMAL_BUTTON_HOVERED_STATE_SHADOW);
-    }
-
-    &.dx-state-focused {
-        .box-shadow(@GENERIC_NORMAL_BUTTON_FOCUSED_STATE_SHADOW);
-    }
-
-    &.dx-state-active {
-        .box-shadow(@GENERIC_NORMAL_BUTTON_ACTIVE_STATE_SHADOW);
-    }
 
     .dx-state-disabled&,
     .dx-state-disabled & {
@@ -138,24 +120,54 @@
             opacity: @button-disabled-text-opacity;
         }
     }
+}
 
-    .dx-button-styling-variant(
-        @button-normal-bg,
-        @button-normal-border-color,
-        @button-normal-color,
-        @button-normal-hover-bg,
-        @button-normal-hover-border-color,
-        @button-normal-focused-bg,
-        @button-normal-focused-border-color,
-        @button-normal-active-bg,
-        @button-normal-active-border-color,
-        @button-normal-active-color,
-        @button-normal-icon-color
-    );
+.dx-button-styling-mode-contained(@background-color, @border-color, @text-color) {
+    &.dx-button-mode-contained {
+        .dx-button-styling-variant(
+            @background-color, @border-color, @text-color,
+            darken(@background-color, 10%), @border-color,
+            darken(@background-color, 15%), @border-color,
+            darken(@background-color, 20%), @border-color, @text-color,
+            @text-color
+        );
+    }
+}
+
+.dx-button-styling-mode-outlined(@background-color, @border-color, @text-color) {
+    &.dx-button-mode-outlined {
+        .dx-button-styling-variant(
+            transparent, @border-color, @text-color,
+            fade(@border-color, 10%), @border-color,
+            fade(@border-color, 20%), @border-color,
+            fade(@border-color, 30%), @border-color, @text-color,
+            @text-color
+        );
+    }
+}
+
+.dx-button-styling-mode-text(@background-color, @border-color, @text-color) {
+    &.dx-button-mode-text {
+        .dx-button-styling-variant(
+            transparent, transparent, @text-color,
+            fade(@text-color, 10%), transparent,
+            fade(@text-color, 20%), transparent,
+            fade(@text-color, 30%), transparent, @text-color,
+            @text-color
+        );
+    }
+}
+
+.dx-button-special-hover(@hover: transparent) {
+    &.dx-state-hover {
+        .dx-button-content {
+            background-color: @hover;
+            border-radius: @button-border-radius;
+        }
+    }
 }
 
 .dx-button-styling-clear() {
-    .box-shadow(none);
     background: transparent;
     border-color: transparent;
 }
@@ -164,50 +176,27 @@
     .dx-button-styling();
 }
 
+.dx-button-normal, .dx-button-back {
+    .dx-button-styling-mode-contained(@button-normal-bg, @button-normal-border-color, @button-normal-color);
+    .dx-button-styling-mode-outlined(@button-normal-bg, @button-normal-border-color, @button-normal-color);
+    .dx-button-styling-mode-text(@button-normal-bg, transparent, @button-normal-color);
+    .dx-button-special-hover(@button-special-hover);
+}
+
 .dx-button-danger {
-    .dx-button-styling-variant(
-        @button-danger-bg,
-        @button-danger-border-color,
-        @button-danger-color,
-        @button-danger-hover-bg,
-        @button-danger-hover-border-color,
-        @button-danger-focused-bg,
-        @button-danger-focused-border-color,
-        @button-danger-active-bg,
-        @button-danger-active-border-color,
-        @button-danger-color,
-        @button-danger-icon-color
-    );
+    .dx-button-styling-mode-contained(@button-danger-bg, transparent, @button-danger-color);
+    .dx-button-styling-mode-outlined(@button-danger-bg, @button-danger-border-color, @button-danger-border-color);
+    .dx-button-styling-mode-text(@button-danger-bg, transparent, @button-danger-border-color);
 }
 
 .dx-button-success {
-    .dx-button-styling-variant(
-        @button-success-bg,
-        @button-success-border-color,
-        @button-success-color,
-        @button-success-hover-bg,
-        @button-success-hover-border-color,
-        @button-success-focused-bg,
-        @button-success-focused-border-color,
-        @button-success-active-bg,
-        @button-success-active-border-color,
-        @button-success-color,
-        @button-success-icon-color
-    );
+    .dx-button-styling-mode-contained(@button-success-bg, transparent, @button-success-color);
+    .dx-button-styling-mode-outlined(@button-success-bg, @button-success-border-color, @button-success-border-color);
+    .dx-button-styling-mode-text(@button-success-bg, transparent, @button-success-border-color);
 }
 
 .dx-button-default {
-    .dx-button-styling-variant(
-        @button-default-bg,
-        @button-default-border-color,
-        @button-default-color,
-        @button-default-hover-bg,
-        @button-default-hover-border-color,
-        @button-default-focused-bg,
-        @button-default-focused-border-color,
-        @button-default-active-bg,
-        @button-default-active-border-color,
-        @button-default-color,
-        @button-default-icon-color
-    );
+    .dx-button-styling-mode-contained(@button-default-bg, transparent, @button-default-color);
+    .dx-button-styling-mode-outlined(@button-default-bg, @button-default-border-color, @button-default-border-color);
+    .dx-button-styling-mode-text(@button-default-bg, transparent, @button-default-border-color);
 }

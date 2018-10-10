@@ -284,6 +284,18 @@ var TextEditorMask = TextEditorBase.inherit({
         this._displayMask();
     },
 
+    _replaceSelectedText: function(text, selection, char) {
+        if(char === undefined) {
+            return text;
+        }
+
+        var textBefore = text.slice(0, selection.start),
+            textAfter = text.slice(selection.end),
+            edited = textBefore + char + textAfter;
+
+        return edited;
+    },
+
     _isMaskedValueMode: function() {
         return this.option("useMaskedValue");
     },

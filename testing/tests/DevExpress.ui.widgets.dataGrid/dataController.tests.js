@@ -593,6 +593,68 @@ QUnit.test("the number of visible items should be identical after expandAll/coll
     assert.equal(this.dataController.items().length, itemsCount, "There are no excess items");
 });
 
+QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple key column", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: "name" },
+        {
+            pageSize: 2,
+            asyncLoadEnabled: false
+        });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+});
+
+QUnit.test("Using focusedRowEnabled should set sorting for the not sorted composite key columns", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: [ "name", "age" ] },
+        {
+            pageSize: 2,
+            asyncLoadEnabled: false
+        });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ selector: "name", desc: false }, { selector: "age", desc: false }], "Sort parameters");
+    // assert
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+});
+
 QUnit.test("Get page index by simple key", function(assert) {
     // arrange
     var dataSource = createDataSource([

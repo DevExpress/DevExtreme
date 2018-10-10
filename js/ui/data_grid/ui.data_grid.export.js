@@ -64,7 +64,7 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            onXlsxCellPrepared: exportController.option("export.onXlsxCellPrepared"),
+            onXlsxCellPrepared: exportController.getAction("onXlsxCellPrepared"),
         };
     },
 
@@ -539,6 +539,8 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         this.createAction("onExporting", { excludeValidators: ["disabled", "readOnly"] });
         this.createAction("onExported", { excludeValidators: ["disabled", "readOnly"] });
         this.createAction("onFileSaving", { excludeValidators: ["disabled", "readOnly"] });
+
+        this.createAction("onXlsxCellPrepared", { excludeValidators: ["disabled", "readOnly"] });
     },
 
     callbackNames: function() {
@@ -692,6 +694,15 @@ dataGridCore.registerModule("export", {
              * @type function(columns, rows)
              * @type_function_param1 columns:Array<dxDataGridColumn>
              * @type_function_param2 rows:Array<dxDataGridRowObject>
+             */
+            /**
+             * @name dxDataGridOptions.onXlsxCellPrepared
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 xlsxCell:XlsxCell
+             * @type_function_param1_field5 gridCell:XlsxGridCell
+             * @extends Action
+             * @action
              */
         };
     },

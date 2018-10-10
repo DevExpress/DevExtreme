@@ -342,7 +342,7 @@ function adjustBubbleSeriesDimensions() {
         maxBubbleArea = _pow(min * options.maxBubbleSize, 2),
         equalBubbleSize = (min * options.maxBubbleSize + options.minBubbleSize) / 2,
         minPointSize = Infinity,
-        maxPointSize = 0,
+        maxPointSize = -Infinity,
         pointSize,
         bubbleArea,
         sizeProportion,
@@ -358,7 +358,6 @@ function adjustBubbleSeriesDimensions() {
     sizeDispersion = maxPointSize - minPointSize;
     areaDispersion = _abs(maxBubbleArea - minBubbleArea);
 
-    minPointSize = minPointSize < 0 ? 0 : minPointSize;
     _each(series, function(_, seriesItem) {
         _each(seriesItem.getPoints(), function(_, point) {
             if(maxPointSize === minPointSize) {
