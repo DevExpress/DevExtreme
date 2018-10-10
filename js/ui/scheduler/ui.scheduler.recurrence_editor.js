@@ -136,6 +136,7 @@ var RecurrenceEditor = Editor.inherit({
             * @name dxRecurrenceEditorOptions.startDate
             * @type Date
             * @default new Date()
+            * @hidden
             */
             startDate: new Date(),
 
@@ -143,6 +144,7 @@ var RecurrenceEditor = Editor.inherit({
             * @name dxRecurrenceEditorOptions.firstDayOfWeek
             * @type Enums.FirstDayOfWeek
             * @default undefined
+            * @hidden
             */
             firstDayOfWeek: undefined
         });
