@@ -593,7 +593,6 @@ module.exports = {
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 row:dxDataGridRowObject
              * @type_function_param1_field6 column:dxDataGridColumn
-             * @action
              */
             /**
              * @name dxTreeListColumnButton.onClick
@@ -603,7 +602,6 @@ module.exports = {
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 row:dxTreeListRowObject
              * @type_function_param1_field6 column:dxTreeListColumn
-             * @action
              */
             /**
              * @name dxDataGridColumnButton.visible
