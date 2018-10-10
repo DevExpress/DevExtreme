@@ -292,7 +292,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var items = Array.from($items).map((item) => {
+        var items = [].slice.call($items).map((item) => {
             var $item = $(item);
             var result = domUtils.getElementOptions(item).dxItem;
             var isTemplateRequired = $item.html().trim() && !result.template;

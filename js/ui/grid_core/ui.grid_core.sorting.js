@@ -23,7 +23,7 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                     event = e.event,
                     $cellElementFromEvent = $(event.currentTarget),
                     rowIndex = $cellElementFromEvent.parent().index(),
-                    columnIndex = Array.from(that.getCellElements(rowIndex)).findIndex($cellElement => {
+                    columnIndex = [].slice.call(that.getCellElements(rowIndex)).findIndex($cellElement => {
                         return $cellElement === $cellElementFromEvent.get(0);
                     }),
                     visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
