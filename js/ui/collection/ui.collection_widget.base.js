@@ -292,7 +292,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var items = Array.from($items).map((item) => {
+        var items = iteratorUtils.map($items, (function(item) {
             var $item = $(item);
             var result = domUtils.getElementOptions(item).dxItem;
             var isTemplateRequired = $item.html().trim() && !result.template;
@@ -304,7 +304,7 @@ var CollectionWidget = Widget.inherit({
             }
 
             return result;
-        });
+        }).bind(this));
 
         this.option("items", items);
     },

@@ -10,6 +10,7 @@ var Config = require("./config"),
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
+    map = require("../core/utils/iterator").map,
     Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
@@ -74,8 +75,8 @@ var Component = Class.inherit({
     },
 
     _getOptionAliasesByName: function(optionName) {
-        return Object.keys(this._deprecatedOptions).filter(aliasName => {
-            return optionName === this._deprecatedOptions[aliasName].alias;
+        return map(this._deprecatedOptions, function(deprecate, aliasName) {
+            return optionName === deprecate.alias ? aliasName : undefined;
         });
     },
 

@@ -1,28 +1,38 @@
-const map = (values, callback) => {
-    if(Array.isArray(values)) {
-        return values.map(callback);
+var applyCallback = function(index, values, callback, result) {
+    var value = callback(values[index], index);
+
+    if(value != null) {
+        result.push(value);
     }
-
-    let result = [];
-
-    for(let key in values) {
-        result.push(callback(values[key], key));
-    }
-
-    return result;
 };
 
-const each = (values, callback) => {
+var map = function(values, callback) {
+    var result = [];
+
+    if("length" in values) {
+        for(var index = 0; index < values.length; index++) {
+            applyCallback(index, values, callback, result);
+        }
+    } else {
+        for(var key in values) {
+            applyCallback(key, values, callback, result);
+        }
+    }
+
+    return [].concat.apply([], result);
+};
+
+var each = function(values, callback) {
     if(!values) return;
 
     if("length" in values) {
-        for(let i = 0; i < values.length; i++) {
+        for(var i = 0; i < values.length; i++) {
             if(callback.call(values[i], i, values[i]) === false) {
                 break;
             }
      	}
     } else {
-        for(const key in values) {
+        for(var key in values) {
             if(callback.call(values[key], key, values[key]) === false) {
                 break;
             }
@@ -32,7 +42,7 @@ const each = (values, callback) => {
     return values;
 };
 
-const reverseEach = (array, callback) => {
+var reverseEach = function(array, callback) {
     if(!array || !("length" in array) || array.length === 0) return;
 
     for(let i = array.length - 1; i >= 0; i--) {

@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     isDefined = require("../../core/utils/type").isDefined,
+    map = require("../../core/utils/iterator").map,
     extend = require("../../core/utils/extend").extend,
     sortingMixin = require("../grid_core/ui.grid_core.sorting_mixin"),
     messageLocalization = require("../../localization/message"),
@@ -23,9 +24,9 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                     event = e.event,
                     $cellElementFromEvent = $(event.currentTarget),
                     rowIndex = $cellElementFromEvent.parent().index(),
-                    columnIndex = Array.from(that.getCellElements(rowIndex)).findIndex($cellElement => {
-                        return $cellElement === $cellElementFromEvent.get(0);
-                    }),
+                    columnIndex = map(that.getCellElements(rowIndex), function($cellElement, index) {
+                        if($cellElement === $cellElementFromEvent.get(0)) return index;
+                    })[0],
                     visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
                     column = visibleColumns[columnIndex],
                     editingController = that.getController("editing"),

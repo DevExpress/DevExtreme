@@ -41,13 +41,13 @@ var CommandManager = Class.inherit({
     },
     findCommands: function($items) {
         var items = $items.find(".dx-command").add($items.filter(".dx-command"));
-        var result = Array.from(items).map(function(element) {
+        var result = iteratorUtils.map(items, function(element) {
             return $(element).dxCommand("instance");
         });
         return result;
     },
     findCommandContainers: function($markup) {
-        var result = Array.from($markup.find(".dx-command-container")).map(function(element) {
+        var result = iteratorUtils.map($markup.find(".dx-command-container"), function(element) {
             return $(element).dxCommandContainer("instance");
         });
         return result;
