@@ -94,6 +94,10 @@ class FormDialog {
         this.deferred.resolve(formData);
         this._popup.hide();
     }
+
+    popupOption(optionName, optionValue) {
+        this._popup.option.apply(this._popup, arguments);
+    }
 }
 
 export default FormDialog;

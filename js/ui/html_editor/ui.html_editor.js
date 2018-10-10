@@ -261,7 +261,11 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderFormDialog: function() {
-        const userOptions = this.option("formDialogOptions");
+        const userOptions = extend(true, {
+            width: "auto",
+            height: "auto",
+            closeOnOutsideClick: true
+        }, this.option("formDialogOptions"));
 
         this._formDialog = new FormDialog(this, userOptions);
     },
@@ -511,6 +515,10 @@ const HtmlEditor = Editor.inherit({
 
     showFormDialog: function(formConfig) {
         return this._formDialog.show(formConfig);
+    },
+
+    formDialogOption: function(optionName, optionValue) {
+        return this._formDialog.popupOption.apply(this._formDialog, arguments);
     }
 });
 
