@@ -4700,6 +4700,7 @@ declare module DevExpress.ui {
         allowGrouping?: boolean;
         /** Specifies whether groups appear expanded or not when records are grouped by a specific column. Setting this option makes sense only when grouping is allowed for this column. */
         autoExpandGroup?: boolean;
+        buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxDataGridColumnButton>;
         /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
         calculateGroupValue?: string | ((rowData: any) => any);
         /** An array of grid columns. */
@@ -4710,6 +4711,7 @@ declare module DevExpress.ui {
         groupIndex?: number;
         /** Specifies whether or not to display the column when grid records are grouped by it. */
         showWhenGrouped?: boolean;
+        type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
     }
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
         /** Specifies whether or not the widget allows an end-user to enter a custom value. */
@@ -5123,8 +5125,26 @@ declare module DevExpress.ui {
         width?: number | string;
     }
     export interface dxTreeListColumn extends GridBaseColumn {
+        buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
         /** Configures columns. */
         columns?: Array<dxTreeListColumn>;
+        type?: 'adaptive' | 'buttons';
+    }
+    export interface GridBaseColumnButton {
+        cssClass?: string;
+        hint?: string;
+        icon?: string;
+        name?: string;
+        template?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => string | Element | JQuery);
+        text?: string;
+    }
+    export interface dxDataGridColumnButton extends GridBaseColumnButton {
+        onClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
+        visible?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => boolean);
+    }
+    export interface dxTreeListColumnButton extends GridBaseColumnButton {
+        onClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+        visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
     }
     /** This section describes the properties of a grid row. An object containing these properties comes to certain event-handling functions. */
     export interface dxDataGridRowObject {
