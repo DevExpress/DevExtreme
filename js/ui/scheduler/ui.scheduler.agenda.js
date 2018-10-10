@@ -146,6 +146,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
             return;
         }
         this._rows = rows;
+        this._dayRows = [];
 
         if(this.option("groupByDate")) {
             this._dayRows = this._transposeRows(this._rows);
