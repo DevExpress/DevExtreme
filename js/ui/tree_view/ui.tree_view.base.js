@@ -151,6 +151,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
             dataStructure: "tree",
 
+            deferRendering: true,
+
             /**
             * @name dxTreeViewOptions.expandAllEnabled
             * @type boolean
@@ -498,6 +500,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case "expandEvent":
                 this._initExpandEvent();
                 break;
+            case "deferRendering":
             case "dataStructure":
             case "rootValue":
             case "createChildren":
@@ -862,7 +865,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._renderToggleItemVisibilityIcon($node, node);
 
-        if(!node.internalFields.expanded) {
+        if(this.option("deferRendering") && !node.internalFields.expanded) {
             return;
         }
 
@@ -911,7 +914,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._normalizeIconState($node, childNodes.length);
-        $nestedNodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
+
+        if(node.internalFields.expanded) {
+            $nestedNodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
+        }
     },
 
     _executeItemRenderAction: function(key, itemData, itemElement) {
