@@ -2,7 +2,7 @@
     font-family: "dx.material@{MATERIAL_COLOR_POSTFIX}@{MATERIAL_SIZE_POSTFIX}";
 }
 
-body {
+.dx-theme-styles() {
     .dx-theme-accent-as-text-color {
         color: @base-accent;
     }
@@ -54,6 +54,14 @@ body {
     .dx-theme-border-color {
         border-color: @base-border-color;
     }
+}
+
+/* for those who don't use dx typography styles in their apps */
+.dx-theme-styles();
+
+/* once again because typography selectors could be stronger than just one class */
+.dx-theme-material-typography {
+    .dx-theme-styles();
 }
 
 .dx-base-typography() {
