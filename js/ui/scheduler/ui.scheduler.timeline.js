@@ -208,11 +208,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._applyCellTemplates(groupCellTemplates);
     },
 
-    _setHorizontalGroupHeaderCellsHeight: function() {
-        var height = this._$dateTable.get(0).getBoundingClientRect().height;
-
-        this._$sidebarTable.outerHeight(height);
-    },
+    _setHorizontalGroupHeaderCellsHeight: noop,
 
     getIndicationWidth: function() {
         var today = this._getToday(),
