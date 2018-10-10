@@ -6,7 +6,7 @@ const xlsxNumberFormatHelper = {
 
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj) && typeof sourceObj === 'string') {
+        if(typeof sourceObj === 'string') {
             result = { formatCode: sourceObj };
 
             if(xlsxNumberFormatHelper.isEmpty(result)) {
