@@ -407,8 +407,8 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
         this._$rows = [];
 
-        var fillTableBody = (function(globalIndex, rowIndex, rowSize) {
-            rowIndex = this.option("groupByDate") ? globalIndex : rowIndex;
+        var fillTableBody = (function(cellIndex, rowIndex, rowSize) {
+            rowIndex = this.option("groupByDate") ? cellIndex : rowIndex;
 
             if(rowSize) {
                 var date,
@@ -474,8 +474,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
             cellClass: TIME_PANEL_CELL_CLASS,
             cellTemplate: this.option("dateCellTemplate"),
             getStartDate: this._getTimePanelStartDate.bind(this),
-            groupCount: groupCount,
-            groupByDate: this.option("groupByDate")
+            groupCount: groupCount
         });
     },
 
