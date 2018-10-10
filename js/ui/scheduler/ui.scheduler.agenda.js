@@ -202,7 +202,8 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         var $cells = this._getGroupHeaderCells().filter(function(_, element) {
                 return !element.getAttribute("rowSpan");
             }),
-            rows = this._removeEmptyRows(this._rows);
+            rows = this._removeEmptyRows(this._rows),
+            i, j;
 
         if(!rows.length) {
             return;
@@ -210,24 +211,24 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
         if(this.option("groupByDate")) {
             var dayRows = this._dayRows,
-                // dayRows = this._removeEmptyRows(this._dayRows),
                 cellIndex = 0;
 
-            for(var j = 0; j < dayRows.length; j++) {
-                for(var i = 0; i < rows.length; i++) {
-                    var $cellContent = $cells.eq(cellIndex).find(".dx-scheduler-group-header-content");
-
-                    $cellContent.outerHeight(this._getGroupRowHeight([rows[i][j]]));
-
+            for(j = 0; j < dayRows.length; j++) {
+                for(i = 0; i < rows.length; i++) {
+                    this._setCellContentHeight($cells, cellIndex, [rows[i][j]]);
                     cellIndex++;
                 }
             }
         } else {
-            for(var i = 0; i < $cells.length; i++) {
-                var $cellContent = $cells.eq(i).find(".dx-scheduler-group-header-content");
-                $cellContent.outerHeight(this._getGroupRowHeight(rows[i]));
+            for(i = 0; i < $cells.length; i++) {
+                this._setCellContentHeight($cells, i, rows[i]);
             }
         }
+    },
+
+    _setCellContentHeight: function($cells, index, cellSize) {
+        var $cellContent = $cells.eq(index).find(".dx-scheduler-group-header-content");
+        $cellContent.outerHeight(this._getGroupRowHeight(cellSize));
     },
 
     _rowsIsEmpty: function(rows) {
