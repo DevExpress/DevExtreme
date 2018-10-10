@@ -262,32 +262,34 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /><col width="13.57" min="7" max="7" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<row r="1" spans="1:7" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>43483.6875</v></c>' +
         '<c r="B1" s="6" t="n"><v>43484.6875</v></c>' +
         '<c r="C1" s="7" t="n"><v>43485.6875</v></c>' +
         '<c r="D1" s="8" t="n"><v>43486.6875</v></c>' +
         '<c r="E1" s="9" t="n"><v>43487.6875</v></c>' +
         '<c r="F1" s="10" t="n"><v>43488.6875</v></c>' +
+        '<c r="G1" s="5" t="n"><v>43488.6875</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:F1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
     const formats = [
         null, // General
         0, // General
         4, // #,##0.00
         22, // m/d/yy h:mm
-        { formatCode: 'dd/mmm/yyyy hh:mm' },
-        { formatCode: '#,##0.0000' }
+        'dd/mmm/yyyy hh:mm',
+        '#,##0.0000',
+        { formatCode: 'not supported, assign string instead of object' }
     ];
 
     helper.runGeneralTest(
         assert,
         {
-            columns: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
+            columns: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7'],
             dataSource: [{
                 f1: new Date(2019, 0, 18, 16, 30), // serialized as '43483.6875'
                 f2: new Date(2019, 0, 19, 16, 30),
@@ -295,14 +297,15 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
                 f4: new Date(2019, 0, 21, 16, 30),
                 f5: new Date(2019, 0, 22, 16, 30),
                 f6: new Date(2019, 0, 23, 16, 30),
+                f7: new Date(2019, 0, 23, 16, 30),
             }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = formats[0];
-                formats.shift();
+                e.xlsxCell.style.numberFormat = formats.shift();
             },
         },
         { styles, worksheet, sharedStrings }
@@ -342,7 +345,7 @@ QUnit.test("Change number format to '0000'", function(assert) {
                 ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+                e.xlsxCell.style.numberFormat = '0000';
             },
         },
         { styles, worksheet, sharedStrings }
@@ -368,8 +371,7 @@ QUnit.test("Change number format for Number column when column.format is functio
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>42</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
@@ -382,9 +384,10 @@ QUnit.test("Change number format for Number column when column.format is functio
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+                e.xlsxCell.style.numberFormat = '0000';
             },
         },
         { styles, worksheet, sharedStrings }
@@ -410,8 +413,7 @@ QUnit.test("Change number format for Date column cell when column.format is func
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>43483</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
 
     helper.runGeneralTest(
@@ -424,9 +426,10 @@ QUnit.test("Change number format for Date column cell when column.format is func
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = { formatCode: 'dd/mmm/yyyy hh:mm' };
+                e.xlsxCell.style.numberFormat = 'dd/mmm/yyyy hh:mm';
             },
         },
         { styles, worksheet, sharedStrings }

@@ -6,10 +6,9 @@ const xlsxNumberFormatHelper = {
 
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj)) {
-            result = {
-                formatCode: sourceObj.formatCode,
-            };
+        if(typeUtils.isDefined(sourceObj) && typeof sourceObj === 'string') {
+            result = { formatCode: sourceObj };
+
             if(xlsxNumberFormatHelper.isEmpty(result)) {
                 result = null;
             }
@@ -30,7 +29,7 @@ const xlsxNumberFormatHelper = {
     },
 
     toXml: function(tag) {
-        // §18.8.30 numFmt (Number Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        // §18.8.30 numFmt (Number Format)
         return xlsxTagHelper.toXml(
             "numFmt",
             {

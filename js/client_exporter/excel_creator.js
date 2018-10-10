@@ -102,7 +102,7 @@ var ExcelCreator = Class.inherit({
 
         return result;
     },
-    _tryConvertToXlsxFormatCode: function(format, dataType) {
+    _tryConvertToXlsxNumberFormat: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
 
@@ -270,8 +270,10 @@ var ExcelCreator = Class.inherit({
         this._xlsxFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            const formatCode = that._tryConvertToXlsxFormatCode(style.format, style.dataType);
-            let numberFormat = typeUtils.isDefined(formatCode) ? { formatCode } : 0;
+            let numberFormat = that._tryConvertToXlsxNumberFormat(style.format, style.dataType);
+            if(!typeUtils.isDefined(numberFormat)) {
+                numberFormat = 0;
+            }
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
                 numberFormat,
