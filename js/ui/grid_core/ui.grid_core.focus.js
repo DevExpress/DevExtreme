@@ -52,7 +52,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         /**
-         * @name dxDataGridMethods.navigateToRow
+         * @name GridBaseOptions.navigateToRow
          * @publicName navigateToRow(key)
          * @param1 key:any
          */
@@ -214,7 +214,6 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-
              /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
@@ -224,7 +223,7 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.focusedRowKey
-             * @type object
+             * @type any
              * @default undefined
              */
             focusedRowKey: undefined,
@@ -242,12 +241,6 @@ module.exports = {
              * @default -1
              */
             focusedColumnIndex: -1
-
-            /**
-             * @name GridBaseMethods.navigateToRow
-             * @publicName navigateToRow(key)
-             * @param1 key:any
-             */
         };
     },
 
