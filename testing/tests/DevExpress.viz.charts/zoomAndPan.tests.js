@@ -1,31 +1,27 @@
-var $ = require("jquery"),
-    pointerMock = require("../../helpers/pointerMock.js");
-    // vizMocks = require("../../helpers/vizMocks.js"),
-    // translator2DModule = require("viz/translators/translator2d"),
-    // eventsConsts = require("viz/components/consts").events;
-    // StubTranslator = vizMocks.stubClass($.extend(translator2DModule.Translator2D.prototype, {
-    //     zoom: function() { },
-    //     getMinScale: function() { }
-    // })),
-    // axisModule = require("viz/axes/base_axis"),
-    // Crosshair = require("viz/chart_components/crosshair").Crosshair,
-    // trackers = require("viz/chart_components/tracker"),
-    // MockAxis = require("../../helpers/chartMocks.js").MockAxis;
+import $ from "jquery";
+import pointerMock from "../../helpers/pointerMock.js";
 
-require("viz/chart");
+import "viz/chart";
 
-var environment = {
+const dataSource = (() => {
+    let arr = [];
+    for(let i = 0; i < 11; i++) {
+        arr.push({ arg: i, val: Math.abs(5 - i) });
+    }
+    return arr;
+})();
+const environment = {
     beforeEach: function() {
         this.tooltipHiddenSpy = sinon.spy();
     },
     createChart: function(options) {
-        var chart = $("#chart").dxChart($.extend(true, {
+        const chart = $("#chart").dxChart($.extend(true, {
             size: {
                 width: 800,
                 height: 600
             },
             animation: { enabled: false },
-            dataSource: new Array(11).fill(0).map(function(_, i) { return { arg: i, val: Math.abs(5 - i) }; }),
+            dataSource: dataSource,
             commonAxisSettings: {
                 grid: { visible: false },
                 label: { visible: false },
@@ -52,14 +48,13 @@ QUnit.testStart(function() {
     $("#qunit-fixture").addClass("qunit-fixture-visible").html("<div id='chart'></div>");
 });
 
-// TODO animation enabled/disabled
-// TODO chart rendering time > threshold
+// TODO fallback
 // TODO cancel events
 
 QUnit.module("Panning", environment);
 
 QUnit.test("Argument pan right by 1", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -75,7 +70,7 @@ QUnit.test("Argument pan right by 1", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
@@ -91,7 +86,7 @@ QUnit.test("Argument pan right by 1", function(assert) {
 });
 
 QUnit.test("Argument pan right out of the data", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -107,7 +102,7 @@ QUnit.test("Argument pan right out of the data", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 100, y: 250 }).dragStart().drag(1000, 50).dragEnd();
@@ -123,7 +118,7 @@ QUnit.test("Argument pan right out of the data", function(assert) {
 });
 
 QUnit.test("Value pan bottom by 1", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             valueAxis: {
@@ -139,7 +134,7 @@ QUnit.test("Value pan bottom by 1", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 200, y: 100 }).dragStart().drag(200, 200).dragEnd();
@@ -155,7 +150,7 @@ QUnit.test("Value pan bottom by 1", function(assert) {
 });
 
 QUnit.test("Argument and value", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -178,8 +173,8 @@ QUnit.test("Argument and value", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis = chart.getValueAxis();
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 200).dragEnd();
@@ -202,7 +197,7 @@ QUnit.test("Argument and value", function(assert) {
 });
 
 QUnit.test("Argument and value. Rotated", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             rotated: true,
@@ -226,8 +221,8 @@ QUnit.test("Argument and value. Rotated", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis = chart.getValueAxis();
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 200).dragEnd();
@@ -250,7 +245,7 @@ QUnit.test("Argument and value. Rotated", function(assert) {
 });
 
 QUnit.test("Argument and value. Multiple panes", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             size: {
@@ -284,9 +279,9 @@ QUnit.test("Argument and value. Multiple panes", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis1 = chart.getValueAxis("v1");
-    var valueAxis2 = chart.getValueAxis("v2");
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
 
     // act
     this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 50).dragEnd();
@@ -316,7 +311,7 @@ QUnit.test("Argument and value. Multiple panes", function(assert) {
 });
 
 QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             size: {
@@ -357,7 +352,7 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
 QUnit.module("Wheel zooming", environment);
 
 QUnit.test("Zoom-in argument axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -375,7 +370,7 @@ QUnit.test("Zoom-in argument axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 200, y: 250 }).wheel(10);
@@ -391,7 +386,7 @@ QUnit.test("Zoom-in argument axis", function(assert) {
 });
 
 QUnit.test("Zoom-out argument axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -409,7 +404,7 @@ QUnit.test("Zoom-out argument axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 200, y: 250 }).wheel(-10);
@@ -425,7 +420,7 @@ QUnit.test("Zoom-out argument axis", function(assert) {
 });
 
 QUnit.test("With shift pressed - zoom value axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             valueAxis: {
@@ -443,7 +438,7 @@ QUnit.test("With shift pressed - zoom value axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 200, y: 400 }).wheel(10, true);
@@ -461,7 +456,7 @@ QUnit.test("With shift pressed - zoom value axis", function(assert) {
 QUnit.module("Wheel zooming. Multiple panes", environment);
 
 QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             size: {
@@ -490,8 +485,8 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var valueAxis1 = chart.getValueAxis("v1");
-    var valueAxis2 = chart.getValueAxis("v2");
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
 
     // act
     this.pointer.start({ x: 300, y: 200 }).wheel(10, true);
@@ -514,7 +509,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
 });
 
 QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             rotated: true,
@@ -545,7 +540,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var valueAxis3 = chart.getValueAxis("v3");
+    const valueAxis3 = chart.getValueAxis("v3");
 
     // act
     this.pointer.start({ x: 100, y: 200 }).wheel(10, true);
@@ -561,7 +556,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
 });
 
 QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -600,7 +595,7 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
 QUnit.module("Shutter zoom. Test zooming", environment);
 
 QUnit.test("Zoom argument axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -617,7 +612,7 @@ QUnit.test("Zoom argument axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 200, y: 250 }).dragStart().drag(400, 50).dragEnd();
@@ -633,7 +628,7 @@ QUnit.test("Zoom argument axis", function(assert) {
 });
 
 QUnit.test("Zoom value axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             valueAxis: {
@@ -650,7 +645,7 @@ QUnit.test("Zoom value axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var valueAxis = chart.getValueAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240).dragEnd();
@@ -666,7 +661,7 @@ QUnit.test("Zoom value axis", function(assert) {
 });
 
 QUnit.test("Zoom argument and value axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -690,8 +685,8 @@ QUnit.test("Zoom argument and value axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis = chart.getValueAxis();
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240).dragEnd();
@@ -714,7 +709,7 @@ QUnit.test("Zoom argument and value axis", function(assert) {
 });
 
 QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             rotated: true,
@@ -748,9 +743,9 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis1 = chart.getValueAxis("v1");
-    var valueAxis2 = chart.getValueAxis("v2");
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
 
     // act
     this.pointer.start({ x: 510, y: 200 }).dragStart().drag(200, 200).dragEnd();
@@ -780,7 +775,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
 });
 
 QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             size: {
@@ -822,17 +817,16 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
 QUnit.module("Shutter zoom. Test shutter rendering", environment);
 
 QUnit.test("Zoom argument axis", function(assert) {
-    var rect,
-        chart = this.createChart({
-            zoomAndPan: {
-                argumentAxis: "zoom",
-                dragToZoom: true,
-                dragBoxStyle: {
-                    color: "#121212",
-                    opacity: 0.32
-                }
+    const chart = this.createChart({
+        zoomAndPan: {
+            argumentAxis: "zoom",
+            dragToZoom: true,
+            dragBoxStyle: {
+                color: "#121212",
+                opacity: 0.32
             }
-        });
+        }
+    });
 
     assert.equal(chart._renderer.root.element.getElementsByClassName("dxc-shutter").length, 0);
     // act
@@ -840,7 +834,7 @@ QUnit.test("Zoom argument axis", function(assert) {
     // assert
     assert.equal(chart._renderer.root.element.getElementsByClassName("dxc-shutter").length, 1);
 
-    rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    let rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
     assert.equal(rect.getAttribute("x"), "0");
     assert.equal(rect.getAttribute("y"), "0");
     assert.equal(rect.getAttribute("width"), "0");
@@ -864,7 +858,7 @@ QUnit.test("Zoom argument axis", function(assert) {
 });
 
 QUnit.test("Zoom value axis", function(assert) {
-    var chart = this.createChart({
+    const chart = this.createChart({
         zoomAndPan: {
             valueAxis: "zoom",
             dragToZoom: true
@@ -874,7 +868,7 @@ QUnit.test("Zoom value axis", function(assert) {
     // act
     this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240);
     // assert
-    var rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    const rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
     assert.equal(rect.getAttribute("x"), "0");
     assert.equal(rect.getAttribute("y"), "120");
     assert.equal(rect.getAttribute("width"), "800");
@@ -882,7 +876,7 @@ QUnit.test("Zoom value axis", function(assert) {
 });
 
 QUnit.test("Zoom argument and value axis", function(assert) {
-    var chart = this.createChart({
+    const chart = this.createChart({
         zoomAndPan: {
             valueAxis: "zoom",
             argumentAxis: "zoom",
@@ -894,7 +888,7 @@ QUnit.test("Zoom argument and value axis", function(assert) {
     this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240);
 
     // assert
-    var rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    const rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
     assert.equal(rect.getAttribute("x"), "200");
     assert.equal(rect.getAttribute("y"), "120");
     assert.equal(rect.getAttribute("width"), "400");
@@ -902,7 +896,7 @@ QUnit.test("Zoom argument and value axis", function(assert) {
 });
 
 QUnit.test("Zoom value axis, multiple panes, rotated", function(assert) {
-    var chart = this.createChart({
+    const chart = this.createChart({
         rotated: true,
         zoomAndPan: {
             valueAxis: "zoom",
@@ -921,7 +915,7 @@ QUnit.test("Zoom value axis, multiple panes, rotated", function(assert) {
     // act
     this.pointer.start({ x: 100, y: 120 }).dragStart().drag(200, 240);
     // assert
-    var rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    const rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
     assert.equal(rect.getAttribute("x"), "100");
     assert.equal(rect.getAttribute("y"), "0");
     assert.equal(rect.getAttribute("width"), "200");
@@ -931,7 +925,7 @@ QUnit.test("Zoom value axis, multiple panes, rotated", function(assert) {
 QUnit.module("Shutter zoom and drag combination", environment);
 
 QUnit.test("Without panKey pressed drag action zooms chart", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -949,7 +943,7 @@ QUnit.test("Without panKey pressed drag action zooms chart", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 200, y: 250 }).dragStart().drag(400, 50).dragEnd();
@@ -965,7 +959,7 @@ QUnit.test("Without panKey pressed drag action zooms chart", function(assert) {
 });
 
 QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -983,7 +977,7 @@ QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
     this.pointer.start({ x: 200, y: 250, shiftKey: true }).dragStart().drag(200, 50).dragEnd();
@@ -1001,7 +995,7 @@ QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
 QUnit.module("Touch devices", environment);
 
 QUnit.test("Drag by touch pans chart, even if dragToZoom = true", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1026,8 +1020,8 @@ QUnit.test("Drag by touch pans chart, even if dragToZoom = true", function(asser
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis = chart.getValueAxis();
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
     this.pointer.start({ x: 150, y: 100, pointerType: "touch" }).dragStart().drag(50, 200).dragEnd();
@@ -1050,7 +1044,7 @@ QUnit.test("Drag by touch pans chart, even if dragToZoom = true", function(asser
 });
 
 QUnit.test("Pinch zoom-in both axes", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             zoomAndPan: {
@@ -1062,11 +1056,11 @@ QUnit.test("Pinch zoom-in both axes", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis = chart.getValueAxis();
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
     $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
@@ -1089,7 +1083,7 @@ QUnit.test("Pinch zoom-in both axes", function(assert) {
 });
 
 QUnit.test("Pinch zoom-out both axes", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1107,11 +1101,11 @@ QUnit.test("Pinch zoom-out both axes", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
-    var valueAxis = chart.getValueAxis();
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
@@ -1134,7 +1128,7 @@ QUnit.test("Pinch zoom-out both axes", function(assert) {
 });
 
 QUnit.test("Pinch zoom-in argument axis from some point", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1149,10 +1143,10 @@ QUnit.test("Pinch zoom-in argument axis from some point", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
     $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
@@ -1170,7 +1164,7 @@ QUnit.test("Pinch zoom-in argument axis from some point", function(assert) {
 QUnit.module("ScrollBar", environment);
 
 QUnit.test("Scrollbar pans only argument axis", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1187,10 +1181,10 @@ QUnit.test("Scrollbar pans only argument axis", function(assert) {
             onZoomEnd: onZoomEnd
         });
 
-    var argumentAxis = chart.getArgumentAxis();
+    const argumentAxis = chart.getArgumentAxis();
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger(new $.Event("dxc-scroll-start", { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }] }));
     $root.trigger(new $.Event("dxc-scroll-move", { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }] }));
     $root.trigger(new $.Event("dxc-scroll-end"));
@@ -1206,7 +1200,7 @@ QUnit.test("Scrollbar pans only argument axis", function(assert) {
 });
 
 QUnit.test("Scrollbar does not pan argument axis if it can not be panned", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1224,7 +1218,7 @@ QUnit.test("Scrollbar does not pan argument axis if it can not be panned", funct
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger(new $.Event("dxc-scroll-start", { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }] }));
     $root.trigger(new $.Event("dxc-scroll-move", { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }] }));
     $root.trigger(new $.Event("dxc-scroll-end"));
@@ -1233,21 +1227,493 @@ QUnit.test("Scrollbar does not pan argument axis if it can not be panned", funct
     assert.equal(onZoomEnd.callCount, 0);
 });
 
+QUnit.module("Check visualRange changing strategy choosing", environment);
+
+QUnit.test("Drag. Small chart rendering time on start and big time in the middle", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            size: {
+                height: 610
+            },
+            argumentAxis: {
+                visualRange: {
+                    startValue: 3,
+                    endValue: 7
+                }
+            },
+            valueAxis: [
+                { name: "v1", visualRange: { startValue: 2, endValue: 4 } },
+                { name: "v2", visualRange: { startValue: 1, endValue: 3 } },
+                { name: "v3", visualRange: { startValue: 2, endValue: 4 } }
+            ],
+            panes: [
+                { name: "p1" },
+                { name: "p2" }
+            ],
+            series: [
+                { pane: "p1", axis: "v1" },
+                { pane: "p1", axis: "v2" },
+                { pane: "p2", axis: "v3" }
+            ],
+            zoomAndPan: {
+                valueAxis: "pan",
+                argumentAxis: "pan"
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
+
+    // act
+    // drag start
+    this.pointer.start({ x: 150, y: 100 }).dragStart();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 3);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 }, "Arg axis zoomStart");
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 4 }, "Val1 axis zoomStart");
+
+    assert.equal(onZoomStart.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomStart.getCall(2).args[0].range, { startValue: 1, endValue: 3 }, "Val2 axis zoomStart");
+
+    assert.equal(onZoomEnd.callCount, 0);
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after dragStart");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 2, endValue: 4 }, "Val1 axis visualRange after dragStart");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 1, endValue: 3 }, "Val2 axis visualRange after dragStart");
+
+    // act
+    // drag1
+    onZoomStart.reset();
+    this.pointer.drag(50, 50);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 2, endValue: 6 }, "Arg axis visualRange after drag1");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 3, endValue: 5 }, "Val1 axis visualRange after drag1");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 2, endValue: 4 }, "Val2 axis visualRange after drag1");
+
+    // act
+    // drag2
+    chart._lastRenderingTime = 1000;
+    this.pointer.drag(200, -300);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 5 }, "Arg axis visualRange after drag2");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 1, endValue: 3 }, "Val1 axis visualRange after drag2");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 0, endValue: 2 }, "Val2 axis visualRange after drag2");
+
+
+    // act
+    // drag end
+    this.pointer.dragEnd();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 3);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 }, "Arg axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 5 });
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 4 }, "Val1 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 1, endValue: 3 });
+
+    assert.equal(onZoomEnd.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].previousRange, { startValue: 1, endValue: 3 }, "Val2 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].range, { startValue: 0, endValue: 2 });
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 5 }, "Arg axis visualRange after dragEnd");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 1, endValue: 3 }, "Val1 axis visualRange after dragEnd");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 0, endValue: 2 }, "Val2 axis visualRange after dragEnd");
+});
+
+QUnit.test("Drag. Big chart rendering time on start and small time in the middle", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            size: {
+                height: 610
+            },
+            argumentAxis: {
+                visualRange: {
+                    startValue: 3,
+                    endValue: 7
+                }
+            },
+            valueAxis: [
+                { name: "v1", visualRange: { startValue: 2, endValue: 4 } },
+                { name: "v2", visualRange: { startValue: 1, endValue: 3 } },
+                { name: "v3", visualRange: { startValue: 2, endValue: 4 } }
+            ],
+            panes: [
+                { name: "p1" },
+                { name: "p2" }
+            ],
+            series: [
+                { pane: "p1", axis: "v1" },
+                { pane: "p1", axis: "v2" },
+                { pane: "p2", axis: "v3" }
+            ],
+            zoomAndPan: {
+                valueAxis: "pan",
+                argumentAxis: "pan"
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
+    chart._lastRenderingTime = 1000;
+
+    // act
+    // drag start
+    this.pointer.start({ x: 150, y: 100 }).dragStart();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 3);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 }, "Arg axis zoomStart");
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 4 }, "Val1 axis zoomStart");
+
+    assert.equal(onZoomStart.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomStart.getCall(2).args[0].range, { startValue: 1, endValue: 3 }, "Val2 axis zoomStart");
+
+    assert.equal(onZoomEnd.callCount, 0);
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after dragStart");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 2, endValue: 4 }, "Val1 axis visualRange after dragStart");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 1, endValue: 3 }, "Val2 axis visualRange after dragStart");
+
+    // act
+    // drag1
+    onZoomStart.reset();
+    this.pointer.drag(50, 50);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after drag1");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 2, endValue: 4 }, "Val1 axis visualRange after drag1");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 1, endValue: 3 }, "Val2 axis visualRange after drag1");
+
+    // act
+    // drag2
+    chart._lastRenderingTime = 10;
+    this.pointer.drag(200, -300);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after drag2");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 2, endValue: 4 }, "Val1 axis visualRange after drag2");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 1, endValue: 3 }, "Val2 axis visualRange after drag2");
+
+
+    // act
+    // drag end
+    this.pointer.dragEnd();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 3);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 }, "Arg axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 5 });
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 4 }, "Val1 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 1, endValue: 3 });
+
+    assert.equal(onZoomEnd.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].previousRange, { startValue: 1, endValue: 3 }, "Val2 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].range, { startValue: 0, endValue: 2 });
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 5 }, "Arg axis visualRange after dragEnd");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 1, endValue: 3 }, "Val1 axis visualRange after dragEnd");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 0, endValue: 2 }, "Val2 axis visualRange after dragEnd");
+});
+
+QUnit.test("Pinch zoom. Small chart rendering time on start and big time in the middle", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            size: {
+                height: 610
+            },
+            argumentAxis: {
+                visualRange: { startValue: 1, endValue: 9 }
+            },
+            valueAxis: [
+                { name: "v1", visualRange: { startValue: 0, endValue: 6 } },
+                { name: "v2", visualRange: { startValue: 10, endValue: 16 }, wholeRange: { startValue: 0, endValue: 20 } },
+                { name: "v3", visualRange: { startValue: 2, endValue: 4 } }
+            ],
+            panes: [
+                { name: "p1" },
+                { name: "p2" }
+            ],
+            series: [
+                { pane: "p1", axis: "v1" },
+                { pane: "p1", axis: "v2" },
+                { pane: "p2", axis: "v3" }
+            ],
+            zoomAndPan: {
+                valueAxis: "zoom",
+                argumentAxis: "zoom",
+                allowGestures: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
+    const $root = $(chart._renderer.root.element);
+
+    // act
+    // pinch start
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 300, pageY: 150 }, { pointerId: 2, pageX: 500, pageY: 150 }] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 3);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 1, endValue: 9 }, "Arg axis zoomStart");
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 0, endValue: 6 }, "Val1 axis zoomStart");
+    assert.equal(onZoomStart.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomStart.getCall(2).args[0].range, { startValue: 10, endValue: 16 }, "Val2 axis zoomStart");
+
+    assert.equal(onZoomEnd.callCount, 0);
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 9 }, "Arg axis visualRange after pinchStart");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 0, endValue: 6 }, "Val1 axis visualRange after pinchStart");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 10, endValue: 16 }, "Val2 axis visualRange after pinchStart");
+
+    // act
+    // pinch1
+    onZoomStart.reset();
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 150 }, { pointerId: 2, pageX: 800, pageY: 150 }] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 4, endValue: 6 }, "Arg axis visualRange after pinch1");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 3 - 0.75, endValue: 3 + 0.75 }, "Val1 axis visualRange after pinch1");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 13 - 0.75, endValue: 13 + 0.75 }, "Val2 axis visualRange after pinch1");
+
+    // act
+    // pinch2
+    chart._lastRenderingTime = 1000;
+    onZoomStart.reset();
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 150 }, { pointerId: 2, pageX: 600, pageY: 150 }] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after pinch2");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 1.5, endValue: 4.5 }, "Val1 axis visualRange after pinch2");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 11.5, endValue: 14.5 }, "Val2 axis visualRange after pinch2");
+
+    // act
+    // pinch end
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 3);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 1, endValue: 9 }, "Arg axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 0, endValue: 6 }, "Val1 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 1.5, endValue: 4.5 });
+
+    assert.equal(onZoomEnd.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].previousRange, { startValue: 10, endValue: 16 }, "Val2 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].range, { startValue: 11.5, endValue: 14.5 });
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after pinchEnd");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 1.5, endValue: 4.5 }, "Val1 axis visualRange after pinchEnd");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 11.5, endValue: 14.5 }, "Val2 axis visualRange after pinchEnd");
+});
+
+QUnit.test("Pinch zoom. Big chart rendering time on start and small time in the middle", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            size: {
+                height: 610
+            },
+            argumentAxis: {
+                visualRange: { startValue: 1, endValue: 9 }
+            },
+            valueAxis: [
+                { name: "v1", visualRange: { startValue: 0, endValue: 6 } },
+                { name: "v2", visualRange: { startValue: 10, endValue: 16 } },
+                { name: "v3", visualRange: { startValue: 2, endValue: 4 } }
+            ],
+            panes: [
+                { name: "p1" },
+                { name: "p2" }
+            ],
+            series: [
+                { pane: "p1", axis: "v1" },
+                { pane: "p1", axis: "v2" },
+                { pane: "p2", axis: "v3" }
+            ],
+            zoomAndPan: {
+                valueAxis: "zoom",
+                argumentAxis: "zoom",
+                allowGestures: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
+    const $root = $(chart._renderer.root.element);
+
+    chart._lastRenderingTime = 1000;
+    // act
+    // pinch start
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 300, pageY: 150 }, { pointerId: 2, pageX: 500, pageY: 150 }] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 3);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 1, endValue: 9 }, "Arg axis zoomStart");
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 0, endValue: 6 }, "Val1 axis zoomStart");
+    assert.equal(onZoomStart.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomStart.getCall(2).args[0].range, { startValue: 10, endValue: 16 }, "Val2 axis zoomStart");
+
+    assert.equal(onZoomEnd.callCount, 0);
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 9 }, "Arg axis visualRange after pinchStart");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 0, endValue: 6 }, "Val1 axis visualRange after pinchStart");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 10, endValue: 16 }, "Val2 axis visualRange after pinchStart");
+
+    // act
+    // pinch1
+    onZoomStart.reset();
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 150 }, { pointerId: 2, pageX: 800, pageY: 150 }] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 9 }, "Arg axis visualRange after pinch1");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 0, endValue: 6 }, "Val1 axis visualRange after pinch1");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 10, endValue: 16 }, "Val2 axis visualRange after pinch1");
+
+    // act
+    // pinch2
+    chart._lastRenderingTime = 10;
+    onZoomStart.reset();
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 150 }, { pointerId: 2, pageX: 600, pageY: 150 }] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 1, endValue: 9 }, "Arg axis visualRange after pinch2");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 0, endValue: 6 }, "Val1 axis visualRange after pinch2");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 10, endValue: 16 }, "Val2 axis visualRange after pinch2");
+
+    // act
+    // pinch end
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 3);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 1, endValue: 9 }, "Arg axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 0, endValue: 6 }, "Val1 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 1.5, endValue: 4.5 });
+
+    assert.equal(onZoomEnd.getCall(2).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].previousRange, { startValue: 10, endValue: 16 }, "Val2 axis zoomEnd");
+    assert.deepEqual(onZoomEnd.getCall(2).args[0].range, { startValue: 11.5, endValue: 14.5 });
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 }, "Arg axis visualRange after pinchEnd");
+    });
+    assert.deepEqual(valueAxis1.visualRange(), { startValue: 1.5, endValue: 4.5 }, "Val1 axis visualRange after pinchEnd");
+    assert.deepEqual(valueAxis2.visualRange(), { startValue: 11.5, endValue: 14.5 }, "Val2 axis visualRange after pinchEnd");
+});
+
 QUnit.module("Misc", environment);
 
 QUnit.test("Check css touch-action rule combinations", function(assert) {
-    var chart = this.createChart();
-    var checkRule = (function(val, arg, expected) {
+    const chart = this.createChart();
+    const checkRule = (function(val, arg, expected) {
         chart.option({
             zoomAndPan: {
                 argumentAxis: val,
                 valueAxis: arg
             }
         });
-        var $root = $(chart._renderer.root.element);
+        const $root = $(chart._renderer.root.element);
 
-        var ta = $root.css("touch-action");
-        var msTa = $root.css("-ms-touch-action");
+        const ta = $root.css("touch-action");
+        const msTa = $root.css("-ms-touch-action");
 
         assert.equal(ta || msTa, expected);
     }).bind(this);
@@ -1267,7 +1733,7 @@ QUnit.test("Check css touch-action rule combinations", function(assert) {
 });
 
 QUnit.test("Do nothing if no actions allowed", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1287,7 +1753,7 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     // drag
     this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
     // wheel
@@ -1307,7 +1773,7 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
 });
 
 QUnit.test("allowGestures = false, do nothing on touch drag and pinch zoom", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy();
     this.createChart({
         argumentAxis: {
@@ -1332,7 +1798,7 @@ QUnit.test("allowGestures = false, do nothing on touch drag and pinch zoom", fun
 });
 
 QUnit.test("allowGestures = true, only zoom allowed, touch drag - do nothing", function(assert) {
-    var onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy();
     this.createChart({
         argumentAxis: {
@@ -1359,7 +1825,7 @@ QUnit.test("allowGestures = true, only zoom allowed, touch drag - do nothing", f
 QUnit.module("Prevent default behavior", environment);
 
 QUnit.test("On pan", function(assert) {
-    var preventDefault = sinon.spy(),
+    const preventDefault = sinon.spy(),
         stopPropagation = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1375,7 +1841,7 @@ QUnit.test("On pan", function(assert) {
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger(new $.Event("dxdragstart", { pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxdrag", { offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxdragend", { preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -1387,7 +1853,7 @@ QUnit.test("On pan", function(assert) {
 
 // T249548
 QUnit.test("On mouse wheel", function(assert) {
-    var preventDefault = sinon.spy(),
+    const preventDefault = sinon.spy(),
         stopPropagation = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1403,7 +1869,7 @@ QUnit.test("On mouse wheel", function(assert) {
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger(new $.Event("dxmousewheel", { d: 10, preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
     assert.equal(preventDefault.callCount, 1);
@@ -1412,7 +1878,7 @@ QUnit.test("On mouse wheel", function(assert) {
 });
 
 QUnit.test("On pinch zoom", function(assert) {
-    var preventDefault = sinon.spy(),
+    const preventDefault = sinon.spy(),
         stopPropagation = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1429,7 +1895,7 @@ QUnit.test("On pinch zoom", function(assert) {
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -1440,7 +1906,7 @@ QUnit.test("On pinch zoom", function(assert) {
 });
 
 QUnit.test("On ScrollBar", function(assert) {
-    var preventDefault = sinon.spy(),
+    const preventDefault = sinon.spy(),
         stopPropagation = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1456,7 +1922,7 @@ QUnit.test("On ScrollBar", function(assert) {
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     $root.trigger(new $.Event("dxc-scroll-start", { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxc-scroll-move", { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxc-scroll-end", { preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -1467,7 +1933,7 @@ QUnit.test("On ScrollBar", function(assert) {
 });
 
 QUnit.test("Do not prevent and stop if no actions allowed", function(assert) {
-    var preventDefault = sinon.spy(),
+    const preventDefault = sinon.spy(),
         stopPropagation = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -1485,7 +1951,7 @@ QUnit.test("Do not prevent and stop if no actions allowed", function(assert) {
         });
 
     // act
-    var $root = $(chart._renderer.root.element);
+    const $root = $(chart._renderer.root.element);
     // drag
     $root.trigger(new $.Event("dxdragstart", { pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxdrag", { offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
@@ -1506,358 +1972,3 @@ QUnit.test("Do not prevent and stop if no actions allowed", function(assert) {
     assert.equal(stopPropagation.callCount, 0);
     assert.equal(this.trackerStopHandling.callCount, 0);
 });
-
-QUnit.module("Deprecated options", environment);
-
-QUnit.test("Ignore deprecated options if new options are used", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: "none",
-                valueAxis: "none",
-                allowGestures: true,
-                allowMouseWheel: true
-            },
-            zoomingMode: "all",
-            scrollingMode: "all",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    // act
-    var $root = $(chart._renderer.root.element);
-    // drag
-    this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
-    // wheel
-    this.pointer.start({ x: 200, y: 250 }).wheel(10);
-    // pinch
-    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
-    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }] }));
-    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
-    // scroll bar
-    $root.trigger(new $.Event("dxc-scroll-start", { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }] }));
-    $root.trigger(new $.Event("dxc-scroll-move", { offset: { x: 200, y: 100 }, pointers: [{ pageX: 200, pageY: 300 }] }));
-    $root.trigger(new $.Event("dxc-scroll-end"));
-
-    // assert
-    assert.equal(onZoomStart.callCount, 0);
-    assert.equal(onZoomEnd.callCount, 0);
-});
-
-QUnit.test("scrollingMode=all allows argument axis panning by mouse and touch", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            scrollingMode: "all",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    var argumentAxis = chart.getArgumentAxis();
-
-    // act
-    this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
-    // act
-    this.pointer.start({ x: 100, y: 100, pointerType: "touch" }).dragStart().drag(300, 200).dragEnd();
-
-    assert.equal(onZoomStart.callCount, 2);
-    assert.equal(onZoomEnd.callCount, 2);
-
-    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
-
-    assert.equal(onZoomStart.getCall(1).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 6 });
-    assert.equal(onZoomEnd.getCall(1).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 6 });
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 0, endValue: 4 });
-});
-
-QUnit.test("scrollingMode=mouse allows argument axis panning by mouse only", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            scrollingMode: "mouse",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    var argumentAxis = chart.getArgumentAxis();
-
-    // act
-    this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
-    // act
-    this.pointer.start({ x: 100, y: 100, pointerType: "touch" }).dragStart().drag(300, 200).dragEnd();
-
-    assert.equal(onZoomStart.callCount, 1);
-    assert.equal(onZoomEnd.callCount, 1);
-
-    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
-});
-
-QUnit.test("scrollingMode=touch allows argument axis panning by mouse and touch", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            scrollingMode: "touch",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    var argumentAxis = chart.getArgumentAxis();
-
-    // act
-    this.pointer.start({ x: 100, y: 250, pointerType: "mouse" }).dragStart().drag(100, 50).dragEnd();
-    // act
-    this.pointer.start({ x: 100, y: 100, pointerType: "touch" }).dragStart().drag(300, 200).dragEnd();
-
-    assert.equal(onZoomStart.callCount, 2);
-    assert.equal(onZoomEnd.callCount, 2);
-
-    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
-
-    assert.equal(onZoomStart.getCall(1).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 6 });
-    assert.equal(onZoomEnd.getCall(1).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 6 });
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 0, endValue: 4 });
-});
-
-QUnit.test("scrollingMode does not allow argument axis zooming", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
-    this.createChart({
-        argumentAxis: {
-            visualRange: {
-                startValue: 3,
-                endValue: 7
-            }
-        },
-        scrollingMode: "all",
-        onZoomStart: onZoomStart,
-        onZoomEnd: onZoomEnd
-    });
-
-    // act
-    this.pointer.start({ x: 200, y: 250 }).wheel(10);
-
-    assert.equal(onZoomStart.callCount, 0);
-    assert.equal(onZoomEnd.callCount, 0);
-});
-
-QUnit.test("zoomingMode=all allows argument axis zooming by mousewheel and touch", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2.9,
-                    endValue: 7.3
-                }
-            },
-            zoomingMode: "all",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    var argumentAxis = chart.getArgumentAxis();
-
-    // act
-    this.pointer.start({ x: 200, y: 250 }).wheel(10);
-    // act
-    var $root = $(chart._renderer.root.element);
-    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 300, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
-    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 600, pageY: 200 }] }));
-    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
-
-    // assert
-    assert.equal(onZoomStart.callCount, 2);
-    assert.equal(onZoomEnd.callCount, 2);
-
-    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 2.9, endValue: 7.3 });
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2.9, endValue: 7.3 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
-
-    assert.equal(onZoomStart.getCall(1).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 3, endValue: 7 });
-    assert.equal(onZoomEnd.getCall(1).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 3, endValue: 7 });
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 4, endValue: 6 });
-});
-
-QUnit.test("zoomingMode=mouse allows argument axis zooming by mousewheel only", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2.9,
-                    endValue: 7.3
-                }
-            },
-            zoomingMode: "mouse",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    var argumentAxis = chart.getArgumentAxis();
-
-    // act
-    this.pointer.start({ x: 200, y: 250 }).wheel(10);
-    // act
-    var $root = $(chart._renderer.root.element);
-    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 300, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
-    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 600, pageY: 200 }] }));
-    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
-
-    // assert
-    assert.equal(onZoomStart.callCount, 1);
-    assert.equal(onZoomEnd.callCount, 1);
-
-    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 2.9, endValue: 7.3 });
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2.9, endValue: 7.3 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
-});
-
-QUnit.test("zoomingMode=touch allows argument axis zooming by touch only", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomingMode: "touch",
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
-
-    var argumentAxis = chart.getArgumentAxis();
-
-    // act
-    this.pointer.start({ x: 200, y: 250 }).wheel(10);
-    // act
-    var $root = $(chart._renderer.root.element);
-    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 300, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
-    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 600, pageY: 200 }] }));
-    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
-
-    // assert
-    assert.equal(onZoomStart.callCount, 1);
-    assert.equal(onZoomEnd.callCount, 1);
-
-    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 4, endValue: 6 });
-});
-
-QUnit.test("zoomingMode does not allow argument axis panning", function(assert) {
-    var onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
-    this.createChart({
-        argumentAxis: {
-            visualRange: {
-                startValue: 3,
-                endValue: 7
-            }
-        },
-        zoomingMode: "all",
-        onZoomStart: onZoomStart,
-        onZoomEnd: onZoomEnd
-    });
-
-    // act
-    this.pointer.start({ x: 100, y: 250 }).dragStart().drag(100, 50).dragEnd();
-
-    assert.equal(onZoomStart.callCount, 0);
-    assert.equal(onZoomEnd.callCount, 0);
-});
-
-/*
-* ==============
-*
-* ==============
-*/
-
-if(0) {
-
-    function getEvent() {}
-    QUnit.test("render axes and series each time on zooming/scrollig (via rendering timeout)", function(assert) {
-        this.options.chart._lastRenderingTime = 200;
-        $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
-        $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
-        $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 60, pointers: [{ pageX: 60, pageY: 40 }] }));
-        $(document).trigger(getEvent("dxpointerup", {}));
-
-        assert.equal(this.options.chart._transformArgument.callCount, 0);
-        assert.deepEqual(this.translator.stub("zoom").lastCall.args, [-10, 1, { mockWholeRange: true }]);
-        assert.equal(this.axis.visualRange.callCount, 4);
-        assert.deepEqual(this.axis.visualRange.secondCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
-        assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
-        assert.ok(this.options.eventTrigger.withArgs("zoomStart").calledOnce);
-        assert.ok(this.options.eventTrigger.withArgs("zoomEnd").calledOnce);
-    });
-
-    QUnit.test("run transformArgument if rendering timeout is exceeded", function(assert) {
-        this.options.chart._lastRenderingTime = 200;
-        $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
-        $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
-        this.options.chart._lastRenderingTime = 500;
-        $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 60, pointers: [{ pageX: 60, pageY: 40 }] }));
-        $(document).trigger(getEvent("dxpointerup", {}));
-
-        assert.equal(this.options.chart._transformArgument.callCount, 1);
-        assert.deepEqual(this.options.chart._transformArgument.lastCall.args, [10, 1]);
-        assert.equal(this.axis.visualRange.callCount, 3);
-        assert.deepEqual(this.axis.visualRange.secondCall.args, [["minArg", "maxArg"], { start: true, end: true }]);
-        assert.deepEqual(this.axis.visualRange.lastCall.args, [["minArg", "maxArg"], { start: true, startRange: undefined }]);
-        assert.ok(this.options.eventTrigger.withArgs("zoomStart").calledOnce);
-        assert.equal(this.options.eventTrigger.withArgs("zoomEnd").callCount, 0);
-    });
-
-
-}

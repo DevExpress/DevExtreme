@@ -198,9 +198,12 @@
                 return this;
             },
 
-            dragEnd: function(targetOffset) {
+            dragEnd: function() {
                 triggerEvent("dxdragend", {
-                    targetOffset: targetOffset
+                    offset: {
+                        x: _x,
+                        y: _y
+                    }
                 });
 
                 return this;

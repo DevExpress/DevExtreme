@@ -51,7 +51,9 @@ ScrollBar.prototype = {
             startPosY = 0,
             scrollChangeHandler = function(e) {
                 var dX = (startPosX - e.pageX) * that._scale,
-                    dY = (startPosY - e.pageY) * that._scale;
+                    dY = (startPosY - e.pageY) * that._scale,
+                    lx = that._offset - (that._layoutOptions.vertical ? dY : dX) / that._scale;
+                that._applyPosition(lx, lx + that._translator.canvasLength / that._scale);
 
                 eventUtils.fireEvent({
                     type: "dxc-scroll-move",
@@ -64,10 +66,17 @@ ScrollBar.prototype = {
                 });
             },
             scrollEndHandler = function(e) {
+                var dX = (startPosX - e.pageX) * that._scale,
+                    dY = (startPosY - e.pageY) * that._scale;
+
                 eventUtils.fireEvent({
                     type: "dxc-scroll-end",
                     originalEvent: e,
-                    target: $scroll.get(0)
+                    target: $scroll.get(0),
+                    offset: {
+                        x: dX,
+                        y: dY
+                    }
                 });
             };
         eventsEngine.on($scroll, pointerEvents.down, function(e) {
@@ -84,11 +93,12 @@ ScrollBar.prototype = {
             eventsEngine.on(document, pointerEvents.up, scrollEndHandler);
         });
 
-        eventsEngine.on(document, pointerEvents.up, function() {
+        that._removeHandlers = function() {
             eventsEngine.off(document, pointerEvents.up, scrollEndHandler);
             eventsEngine.off(document, pointerEvents.move, scrollChangeHandler);
-        });
+        };
 
+        eventsEngine.on(document, pointerEvents.up, that._removeHandlers);
     },
 
     update: function(options) {
@@ -203,16 +213,8 @@ ScrollBar.prototype = {
         that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
     },
 
-    transform: function(translate, scale) {
-        var translator = this._translator,
-            x = translator.getCanvasVisibleArea().min,
-            dx = x - (x * scale - translate),
-            lx = this._offset + dx / (this._scale * scale);
-
-        this._applyPosition(lx, lx + translator.canvasLength / (this._scale * scale));
-    },
-
     dispose: function() {
+        this._removeHandlers && this._removeHandlers();
         this._scroll.dispose();
         this._scroll = this._translator = null;
     },

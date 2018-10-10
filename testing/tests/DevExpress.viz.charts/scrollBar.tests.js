@@ -410,202 +410,6 @@ QUnit.test("setPosition by arguments. minSize", function(assert) {
     });
 });
 
-QUnit.test("Apply transform. Scale>1", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-
-    scrollTranslator.canvasLength = 90;
-
-    scrollTranslator.translate.withArgs("40").returns(10);
-    scrollTranslator.translate.withArgs("70").returns(100);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 100
-    });
-    scrollBar.setPosition("40", "70");
-
-    // act
-    scrollBar.transform(15, 2);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: 10 + (10 - 10 * 2 + 15) / 2,
-        height: 90 / 2
-    });
-});
-
-QUnit.test("Apply transform, Scale<1", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-
-    scrollTranslator.canvasLength = 90;
-
-    scrollTranslator.translate.withArgs("40").returns(10);
-    scrollTranslator.translate.withArgs("70").returns(100);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 100
-    });
-    scrollBar.setPosition("40", "70");
-
-    // act
-    scrollBar.transform(15, 2);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: 10 + (10 - 10 * 2 + 15) / 2,
-        height: 90 / 2
-    });
-});
-
-QUnit.test("apply transform, when offset!=0, scale>1", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-    scrollTranslator.getScale.withArgs("40", "70").returns(2);
-
-    scrollTranslator.canvasLength = 100;
-
-    scrollTranslator.translate.withArgs("40").returns(20);
-    scrollTranslator.translate.withArgs("70").returns(70);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 110
-    });
-    scrollBar.setPosition("40", "70");
-
-    // act
-    scrollBar.transform(15, 2);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: 20 + (10 - 10 * 2 + 15) / (2 * 2),
-        height: 100 / (2 * 2)
-    });
-});
-
-QUnit.test("apply transform, when offset!=0, scale<1", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-
-    scrollTranslator.canvasLength = 100;
-    scrollTranslator.getScale.withArgs("40", "70").returns(0.5);
-
-    scrollTranslator.translate.withArgs("40").returns(20);
-    scrollTranslator.translate.withArgs("70").returns(220);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 110
-    });
-    scrollBar.setPosition("40", "70");
-
-    // act
-    scrollBar.transform(15, 4);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: 20 + (10 - 10 * 4 + 15) / (0.5 * 4),
-        height: 100 / (0.5 * 4)
-    });
-});
-
-QUnit.test("Apply transform, when offset!=0, scale>1. Result scrollBar > canvas", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-
-    scrollTranslator.canvasLength = 100;
-
-    scrollTranslator.translate.withArgs("40").returns(20);
-    scrollTranslator.translate.withArgs("70").returns(70);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 110
-    });
-    scrollBar.setPosition("40", "70");
-
-    // act
-    scrollBar.transform(-40, 0.2);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: 10,
-        height: 100
-    });
-});
-
-QUnit.test("Apply transform. Big positive translate", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-
-    scrollTranslator.canvasLength = 90;
-
-    scrollTranslator.translate.withArgs("40").returns(10);
-    scrollTranslator.translate.withArgs("70").returns(100);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 100
-    });
-    scrollBar.setPosition("40", "70");
-    // act
-    scrollBar.transform(1000, 1);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: scrollTranslator.getCanvasVisibleArea().max,
-        height: 2
-    });
-});
-
-QUnit.test("Apply transform. Big negative translate", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
-
-    scrollTranslator.translate = sinon.stub();
-    scrollTranslator.translate.returns(null);
-
-    scrollTranslator.canvasLength = 90;
-
-    scrollTranslator.translate.withArgs("40").returns(10);
-    scrollTranslator.translate.withArgs("70").returns(100);
-
-    scrollTranslator.getCanvasVisibleArea.returns({
-        min: 10,
-        max: 100
-    });
-    scrollBar.setPosition("40", "70");
-    // act
-    scrollBar.transform(-1000, 1);
-    // Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        y: scrollTranslator.getCanvasVisibleArea().min,
-        height: 2
-    });
-});
-
 QUnit.test("Disposing", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
@@ -632,15 +436,13 @@ QUnit.module("Scroll moving", {
         });
         this.scrollTranslator.canvasLength = 90;
 
-        this.startEventsHandler = sinon.stub();
-        this.moveEventsHandler = sinon.stub();
-        this.endEventsHandler = sinon.stub();
+        this.startEventsHandler = sinon.spy();
+        this.moveEventsHandler = sinon.spy();
+        this.endEventsHandler = sinon.spy();
 
         $(this.group.children[0].element).on("dxc-scroll-start", this.startEventsHandler);
         $(this.group.children[0].element).on("dxc-scroll-move", this.moveEventsHandler);
         $(this.group.children[0].element).on("dxc-scroll-end", this.endEventsHandler);
-
-
     },
     afterEach: function() {
         environment.afterEach.call(this);
@@ -672,7 +474,7 @@ QUnit.test("pointer down on scroll", function(assert) {
 });
 
 QUnit.test("move scroll when scale = 1", function(assert) {
-    var preventDefault = sinon.stub();
+    var preventDefault = sinon.spy();
 
     this.scrollTranslator.translate.withArgs(40).returns(10);
     this.scrollTranslator.translate.withArgs(70).returns(100);
@@ -697,6 +499,9 @@ QUnit.test("move scroll when scale = 1", function(assert) {
     this.moveEventsHandler.lastCall.args[0].preventDefault();
     assert.ok(preventDefault.calledOnce);
     assert.equal(this.moveEventsHandler.callCount, 2);
+
+    assert.equal(this.group.children[0]._stored_settings.height, 70);
+    assert.equal(this.group.children[0]._stored_settings.y, 10);
 });
 
 QUnit.test("move scroll when scale != 1", function(assert) {
@@ -722,6 +527,39 @@ QUnit.test("move scroll when scale != 1", function(assert) {
     });
 
     assert.equal(this.moveEventsHandler.callCount, 2);
+
+    assert.equal(this.group.children[0]._stored_settings.height, 45);
+    assert.equal(this.group.children[0]._stored_settings.y, 10);
+});
+
+QUnit.test("move scroll when scale != 1. Rotated", function(assert) {
+    this.options.rotated = true;
+    this.scrollBar.update(this.options);
+    this.scrollTranslator.translate.withArgs(40).returns(30);
+    this.scrollTranslator.translate.withArgs(70).returns(75);
+    this.scrollTranslator.getScale.withArgs(40, 70).returns(2);
+
+    this.scrollBar.setPosition(40, 70);
+    // act
+    $(this.group.children[0].element).trigger(new $.Event("dxpointerdown", { pageX: 200, pageY: 100 }));
+    $(document).trigger(new $.Event("dxpointermove", { pageX: 270, pageY: 130 }));
+    $(document).trigger(new $.Event("dxpointermove", { pageX: 120, pageY: 80 }));
+    // assert
+    assert.ok(this.startEventsHandler.calledOnce);
+
+    assert.deepEqual(this.moveEventsHandler.firstCall.args[0].offset, {
+        x: -140,
+        y: -60
+    });
+    assert.deepEqual(this.moveEventsHandler.lastCall.args[0].offset, {
+        x: 160,
+        y: 40
+    });
+
+    assert.equal(this.moveEventsHandler.callCount, 2);
+
+    assert.equal(this.group.children[0]._stored_settings.height, 45);
+    assert.equal(this.group.children[0]._stored_settings.y, 10);
 });
 
 QUnit.test("scroll moving after pointerup", function(assert) {
@@ -740,6 +578,11 @@ QUnit.test("scroll moving after pointerup", function(assert) {
     assert.ok(this.endEventsHandler.calledOnce);
 
     assert.deepEqual(this.moveEventsHandler.firstCall.args[0].offset, {
+        x: -30,
+        y: -70
+    });
+
+    assert.deepEqual(this.endEventsHandler.firstCall.args[0].offset, {
         x: -30,
         y: -70
     });
