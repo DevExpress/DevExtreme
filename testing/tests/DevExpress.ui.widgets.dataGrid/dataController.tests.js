@@ -6389,6 +6389,46 @@ QUnit.test("Edit row after detail row", function(assert) {
     assert.strictEqual(this.dataController.items()[2].isEditing, true, "isEditing is correct for row 2");
 });
 
+// T677250
+QUnit.test("Expand detail row before edit form and detail rows", function(assert) {
+    var array = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+    ];
+
+    this.options.editing = {
+        mode: "form"
+    };
+
+    var dataSource = createDataSource(array, { key: 'id' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.expandRow(2);
+    this.editRow(1);
+
+    // act
+    this.expandRow(1);
+
+    // assert
+    assert.ok(this.editingController.isEditing());
+    assert.equal(this.dataController.items().length, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data", "row 0 is data");
+
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail", "row 1 is detail");
+    assert.notOk(this.dataController.items()[1].isEditing, "row 1 is not editing");
+
+    assert.strictEqual(this.dataController.items()[2].rowType, "detail", "row 2 is detail (edit form)");
+    assert.ok(this.dataController.items()[2].isEditing, "isEditing is correct for row 2");
+
+    assert.strictEqual(this.dataController.items()[3].rowType, "detail", "row 3 is data");
+    assert.notOk(this.dataController.items()[3].isEditing, "row 3 is not editing");
+
+    assert.strictEqual(this.dataController.items()[4].rowType, "data", "row 4 is detail");
+});
+
 QUnit.module("Error handling", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

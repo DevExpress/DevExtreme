@@ -2290,12 +2290,10 @@ module.exports = {
                     if(this.getController("editing").isSaving()) return;
                     return this.callBase.apply(this, arguments);
                 },
-                _updateItemsCore: function(change) {
-                    this.callBase(change);
-
+                _updateEditRow: function(items) {
                     var editingController = this._editingController,
                         editRowIndex = editingController.getEditRowIndex(),
-                        editItem = this.items()[editRowIndex];
+                        editItem = items[editRowIndex];
 
                     if(editItem) {
                         editItem.isEditing = true;
@@ -2303,6 +2301,14 @@ module.exports = {
                             editItem.rowType = "detail";
                         }
                     }
+                },
+                _updateItemsCore: function(change) {
+                    this.callBase(change);
+                    this._updateEditRow(this.items());
+                },
+                _applyChangeUpdate: function(change) {
+                    this._updateEditRow(change.items);
+                    this.callBase(change);
                 },
                 _processItems: function(items, changeType) {
                     items = this._editingController.processItems(items, changeType);
