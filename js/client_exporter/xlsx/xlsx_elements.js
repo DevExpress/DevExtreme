@@ -1,6 +1,7 @@
 /**
 * @name XlsxCell
 * @type object
+* @hidden
 */
 /**
 * @name XlsxCell.value
@@ -95,6 +96,7 @@
 /**
 * @name XlsxColor
 * @type object
+* @hidden
 */
 /**
 * @name XlsxColor.rgb
@@ -104,6 +106,7 @@
 /**
 * @name XlsxGridCell
 * @type object
+* @hidden
 */
 /**
 * @name XlsxGridCell.rowType
