@@ -318,7 +318,7 @@ QUnit.test("dxTextEditor with wrong stylingMode option should set the class acco
 
 QUnit.test("dxTextEditor with wrong stylingMode option should set the class according to default option value (platform specific)", function(assert) {
     const realIsMaterial = themes.isMaterial;
-    themes.isMaterial = () => true;
+    themes.isMaterial = function() { return true; };
 
     const $textEditor = $("#texteditor").dxTextEditor({
         stylingMode: "someWrongOptionValue"
