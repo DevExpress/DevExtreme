@@ -1,13 +1,10 @@
 var support = require("../core/utils/support"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
-    domAdapter = require("../core/dom_adapter"),
     registerEvent = require("./core/event_registrator"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
     MouseStrategy = require("./pointer/mouse"),
-    eventsEngine = require("../events/core/events_engine"),
-    useJQuery = require("../core/config")().useJQuery,
     MouseAndTouchStrategy = require("./pointer/mouse_and_touch");
 
 /**
@@ -85,17 +82,7 @@ var EventStrategy = (function() {
 })();
 
 each(EventStrategy.map, function(pointerEvent, originalEvents) {
-    var eventStrategy = new EventStrategy(pointerEvent, originalEvents);
-
-    if(useJQuery && pointerEvent === eventsEngine.passiveListenerEvents.eventName) {
-        eventStrategy.setup = function(element, data, namespaces, handler) {
-            domAdapter.listen(element, eventsEngine.passiveListenerEvents.nativeEventName, handler, { passive: false });
-
-            return true;
-        };
-    }
-
-    registerEvent(pointerEvent, eventStrategy);
+    registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
 });
 
 module.exports = {
