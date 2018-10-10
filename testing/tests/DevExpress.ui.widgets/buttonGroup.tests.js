@@ -59,6 +59,14 @@ QUnit.module("option changed", {
         assert.equal(buttons[1].option("text"), "right", "text of second button");
     });
 
+    QUnit.test("change the button type option", function(assert) {
+        this.buttonGroup.option("buttonType", "success");
+
+        const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
+        assert.equal(buttons[0].option("type"), "success");
+        assert.equal(buttons[1].option("type"), "success");
+    });
+
     QUnit.test("change selection via the selectedIndexes in the single mode", function(assert) {
         this.buttonGroup.option("selectedIndexes", [1]);
 

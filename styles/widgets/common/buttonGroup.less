@@ -5,8 +5,13 @@
         .dx-item {
             .flex-item();
 
-            .dx-button {
-                width: 100%;
+            &.dx-button {
+                border-radius: 0;
+                width: 100%
+            }
+
+            &.dx-button:not(:last-child) {
+                border-right-width: 0;
             }
         }
     }

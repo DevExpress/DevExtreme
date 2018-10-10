@@ -79,6 +79,13 @@ const ButtonGroup = Widget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
+             * @name dxButtonGroupOptions.buttonType
+             * @type Enums.ButtonType
+             * @default 'normal'
+             */
+            buttonType: "normal",
+
+            /**
              * @name dxButtonGroupOptions.focusStateEnabled
              * @type boolean
              * @default true
@@ -140,7 +147,7 @@ const ButtonGroup = Widget.inherit({
              * @type_function_param1_field5 removedItems:array<any>
              * @action
              */
-            onSelectionChanged: null,
+            onSelectionChanged: null
         });
     },
 
@@ -169,6 +176,7 @@ const ButtonGroup = Widget.inherit({
 
     _getBasicButtonOptions() {
         return {
+            type: this.option("buttonType"),
             focusStateEnabled: false,
             hoverStateEnabled: this.option("hoverStateEnabled"),
             activeStateEnabled: this.option("activeStateEnabled")
@@ -217,6 +225,7 @@ const ButtonGroup = Widget.inherit({
         }
 
         switch(args.name) {
+            case "buttonType":
             case "selectionMode":
             case "keyExpr":
             case "itemTemplate":
@@ -224,6 +233,7 @@ const ButtonGroup = Widget.inherit({
             case "activeStateEnabled":
             case "focusStateEnabled":
             case "hoverStateEnabled":
+            case "onSelectionChanged":
             case "tabIndex":
                 this._invalidate();
                 break;

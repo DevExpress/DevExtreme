@@ -1,0 +1,29 @@
+.dx-buttongroup {
+    .dx-buttongroup-wrapper {
+        .dx-button:first-child {
+            .border-radius-top-left(@button-border-radius);
+            .border-radius-bottom-left(@button-border-radius);
+        }
+
+        .dx-button:last-child {
+            .border-radius-top-right(@button-border-radius);
+            .border-radius-bottom-right(@button-border-radius);
+        }
+
+        .dx-item-selected {
+            background-color: @button-group-normal-selected-bg;
+
+            &.dx-button-success {
+                background-color: @button-group-success-selected-bg;
+            }
+
+            &.dx-button-default {
+                background-color: @button-group-default-selected-bg;
+            }
+
+            &.dx-button-danger {
+                background-color: @button-group-danger-selected-bg;
+            }
+        }
+    }
+}

@@ -110,6 +110,17 @@ QUnit.module("default", {
         assert.equal($templates.eq(0).text(), "item 1_0", "text of first template");
         assert.equal($templates.eq(1).text(), "item 2_1", "text of second template");
     });
+
+    QUnit.test("apply the button type option to all buttons", function(assert) {
+        const $buttonGroup = $("#widget").dxButtonGroup({
+            items: ["item 1", "item 2"],
+            buttonType: "danger"
+        });
+
+        const buttons = $buttonGroup.find(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
+        assert.equal(buttons[0].option("type"), "danger");
+        assert.equal(buttons[1].option("type"), "danger");
+    });
 });
 
 QUnit.module("selection", () => {
