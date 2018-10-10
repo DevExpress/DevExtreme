@@ -36,6 +36,13 @@
     padding: @GENERIC_DROPDOWNEDITOR_BUTTON_OFFSET;
     border-radius: @button-border-radius;
 
+    &.dx-button-mode-outlined,
+    &.dx-button-mode-contained,
+    &.dx-button-mode-text {
+        border: none;
+        background: transparent;
+    }
+
     .dx-state-disabled &,
     .dx-state-disabled & {
         .dx-dropdowneditor-icon {
