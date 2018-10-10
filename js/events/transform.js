@@ -308,13 +308,12 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 
-var eventNames = iteratorUtils.map(eventAliases, function(eventAlias) {
-    var eventNames = [];
-    iteratorUtils.each([START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX], function(_, eventPostfix) {
-        eventNames.push(DX_PREFIX + eventAlias.name + eventPostfix);
+let eventNames = eventAliases.reduce((result, eventAlias) => {
+    [START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX].forEach(eventPostfix => {
+        result.push(DX_PREFIX + eventAlias.name + eventPostfix);
     });
-    return eventNames;
-});
+    return result;
+}, []);
 
 registerEmitter({
     emitter: TransformEmitter,
