@@ -527,8 +527,8 @@ var FieldChooser = BaseFieldChooser.inherit({
         var fields = dataSource && dataSource.fields() || [],
             treeItems;
 
-        fields = iteratorUtils.map(fields, function(field) {
-            return field.visible === false || isDefined(field.groupIndex) ? null : field;
+        fields = fields.filter(field => {
+            return field.visible !== false && !isDefined(field.groupIndex);
         });
 
         treeItems = this._createTreeItems(fields, ["dimension", "displayFolder"]);

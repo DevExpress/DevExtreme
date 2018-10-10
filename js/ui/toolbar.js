@@ -266,7 +266,7 @@ var Toolbar = ToolbarBase.inherit({
             .not(".dx-state-invisible");
         this._restoreItems = this._restoreItems || [];
 
-        var overflowItems = iteratorUtils.map($hiddenItems, function(item) {
+        var overflowItems = Array.from($hiddenItems).map((item) => {
             var itemData = that._getItemData(item),
                 $itemContainer = $(item).children(),
                 $itemMarkup = $itemContainer.children();
