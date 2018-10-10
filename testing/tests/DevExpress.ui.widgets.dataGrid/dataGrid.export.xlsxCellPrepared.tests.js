@@ -309,6 +309,46 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
     );
 });
 
+QUnit.test("Change number format to '0000'", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="1">' +
+        '<numFmt numFmtId="165" formatCode="0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
 QUnit.test("Change number format for Number column when column.format is function", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1">' +
