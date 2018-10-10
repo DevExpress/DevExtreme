@@ -3,7 +3,7 @@ require("events/pointer");
 require("events/core/event_registrator");
 
 var $ = require("jquery"),
-
+    useJQuery = require("core/config")().useJQuery,
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
     noop = require("core/utils/common").noop;
 
@@ -31,14 +31,23 @@ QUnit.test("touchmove should not have a passive event listener", function(assert
     };
 
     $element.on("dxpointermove", { isNative: true }, noop);
-
     nativePointerMock($element)
         .start()
         .touchStart()
         .touchMove(0, 50)
         .touchEnd();
+    assert.equal(nonPassiveEvent, !!useJQuery, "event listener for touchmove is not passive with jquery");
 
-    assert.ok(nonPassiveEvent, "event listener for touchmove is not passive");
+    nonPassiveEvent = false;
+
+    $element.on("touchmove", { isNative: true }, noop);
+    nativePointerMock($element)
+        .start()
+        .touchStart()
+        .touchMove(0, 50)
+        .touchEnd();
+    assert.equal(nonPassiveEvent, !useJQuery, "event listener for touchmove is not passive without jquery");
+
 
     element.addEventListener = origAddEventListener;
 });
