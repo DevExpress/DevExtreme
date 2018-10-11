@@ -129,10 +129,8 @@ export default class XlsxFile {
 
     generateNumberFormatsXml() {
         if(this._numberFormatTags.length > 0) {
-            // §18.8.31 numFmts (Number Formats), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-            const xmlStringsArray = this._numberFormatTags.map((tag, index) => {
-                return xlsxNumberFormatHelper.toXml(tag, attributes => attributes['numFmtId'] = this._convertNumberFormatIndexToId(index));
-            });
+            // §18.8.31 numFmts (Number Formats)
+            const xmlStringsArray = this._numberFormatTags.map((tag) => xlsxNumberFormatHelper.toXml(tag));
             return xlsxTagHelper.toXml("numFmts", { count: xmlStringsArray.length }, xmlStringsArray.join(""));
         } else {
             return '';
