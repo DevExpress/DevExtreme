@@ -219,7 +219,7 @@ var ExcelCreator = Class.inherit({
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
-                if(dataProvider.onXlsxCellPrepared) { // TODO: check action subscribers (component.hasActionSubscription)
+                if(dataProvider.onXlsxCellPrepared) {
                     const value = cellData.sourceValue || cellData.value;
                     const modifiedXlsxCell = this._raiseXlsxCellPrepared({
                         dataProvider: dataProvider,
