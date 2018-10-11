@@ -347,7 +347,9 @@ var dxChart = AdvancedChart.inherit({
             "argumentAxis.min": { since: "18.2", message: "Use the 'argumentAxis.visualRange' option instead" },
             "argumentAxis.max": { since: "18.2", message: "Use the 'argumentAxis.visualRange' option instead" },
             "valueAxis.min": { since: "18.2", message: "Use the 'valueAxis.visualRange' option instead" },
-            "valueAxis.max": { since: "18.2", message: "Use the 'valueAxis.visualRange' option instead" }
+            "valueAxis.max": { since: "18.2", message: "Use the 'valueAxis.visualRange' option instead" },
+            "zoomingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" },
+            "scrollingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" }
         });
     },
 

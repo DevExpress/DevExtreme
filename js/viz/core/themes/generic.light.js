@@ -710,7 +710,7 @@ registerTheme({
         maxBubbleSize: 0.2,
         zoomAndPan: {
             dragBoxStyle: {
-                color: "grey",
+                color: "#2a2a2a",
                 opacity: 0.2
             },
             panKey: "shift",
