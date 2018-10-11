@@ -186,6 +186,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ChartZoomAndPanMode
+ * @enum {'both'|'none'|'pan'|'zoom'}
+ */
+
+/**
  * @typedef {string} Enums.ChartLegendHoverMode
  * @enum {'excludePoints'|'includePoints'|'none'}
  */

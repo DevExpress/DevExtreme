@@ -86,6 +86,11 @@ registerTheme({
             breakStyle: {
                 color: "#818181"
             }
+        },
+        zoomAndPan: {
+            dragBoxStyle: {
+                color: "white"
+            }
         }
     },
     gauge: {
