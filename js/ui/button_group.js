@@ -38,7 +38,6 @@ var ButtonCollection = CollectionWidget.inherit({
 /**
  * @name dxButtonGroup
  * @inherits Widget
- * @hasTranscludedContent
  * @module ui/button_group
  * @export default
  */
