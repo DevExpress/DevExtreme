@@ -388,7 +388,7 @@ QUnit.test("byKey called with unknown id", assert => {
 });
 
 QUnit.test("Big data grouping", (assert) => {
-    const arrayLength = 200000;
+    const arrayLength = 125653;
     const done = assert.async();
 
     let data = [];
