@@ -388,13 +388,22 @@ QUnit.test("byKey called with unknown id", assert => {
 });
 
 QUnit.test("Big data grouping", (assert) => {
-    const arrayLength = 125653;
+    const arrayLength = 25;
     const done = assert.async();
 
     let data = [];
     for(let i = 0; i < arrayLength; i++) {
         data.push({ Id: i, Description: String(i + 1) });
     }
+
+    const originalConcat = Array.prototype.concat;
+    // eslint-disable-next-line no-extend-native
+    Array.prototype.concat = function(a1, a2) {
+        if(arguments.length > 20) {
+            throw new Error("Maximum call stack size exceeded");
+        }
+        return originalConcat.apply(this, arguments);
+    };
 
     const arrayStore = new ArrayStore({
         type: "array",
@@ -408,7 +417,11 @@ QUnit.test("Big data grouping", (assert) => {
         assert.ok(true, "Loading passed");
     }).fail(error => {
         assert.ok(false, `Loading failed wint error "${error}"`);
-    }).always(done);
+    }).always(() => {
+        // eslint-disable-next-line no-extend-native
+        Array.prototype.concat = originalConcat;
+        done();
+    });
 });
 
 
