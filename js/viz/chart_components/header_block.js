@@ -1,15 +1,12 @@
 var LayoutElementModule = require("../core/layout_element"),
-    extend = require("../../core/utils/extend").extend,
-    iteratorUtils = require("../../core/utils/iterator");
+    extend = require("../../core/utils/extend").extend;
 
 function HeaderBlock() { }
 
 extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
 
     update: function(elements, canvas) {
-        this._elements = iteratorUtils.map(elements, function(element) {
-            return element.getLayoutOptions() ? element : null;
-        });
+        this._elements = elements.filter(element => element.getLayoutOptions());
         this._canvas = canvas;
     },
 

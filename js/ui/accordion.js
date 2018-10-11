@@ -355,7 +355,7 @@ var Accordion = CollectionWidget.inherit({
 
         clearTimeout(this._animationTimer);
 
-        return when.apply($, iteratorUtils.map(this._itemElements(), function(item) {
+        return when.apply($, [].slice.call(this._itemElements()).map(function(item) {
             return that._updateItemHeight($(item), itemHeight, skipAnimation);
         })).done(function() {
             if(deferredAnimate) {
