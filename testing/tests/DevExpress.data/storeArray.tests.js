@@ -388,7 +388,8 @@ QUnit.test("byKey called with unknown id", assert => {
 });
 
 QUnit.test("Big data grouping", (assert) => {
-    const arrayLength = 200000;
+    const arrayLength = 125653;
+    const done = assert.async();
 
     let data = [];
     for(let i = 0; i < arrayLength; i++) {
@@ -407,7 +408,7 @@ QUnit.test("Big data grouping", (assert) => {
         assert.ok(true, "Loading passed");
     }).fail(error => {
         assert.ok(false, `Loading failed wint error "${error}"`);
-    });
+    }).always(done);
 });
 
 
