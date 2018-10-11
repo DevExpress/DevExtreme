@@ -6,6 +6,9 @@ import keyboardMock from "../../../helpers/keyboardMock.js";
 
 const DIALOG_CLASS = "dx-formdialog";
 const FORM_CLASS = "dx-formdialog-form";
+const FIELD_ITEM_CLASS = "dx-field-item";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
 
 const moduleConfig = {
     beforeEach: () => {
@@ -43,7 +46,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
     test("show dialog", (assert) => {
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ["name", "age"] });
-        const formItemsCount = this.$element.find(`.${FORM_CLASS} .dx-field-item`).length;
+        const formItemsCount = this.$element.find(`.${FORM_CLASS} .${FIELD_ITEM_CLASS}`).length;
 
         assert.ok(isPromise(promise), "show returns a promise");
         assert.equal(formItemsCount, 2, "2 form items are rendered");
@@ -69,7 +72,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         const EXPECTED_DATA = { name: "Test" };
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ["name"] });
-        const $input = $(`.${FORM_CLASS} .dx-texteditor-input`);
+        const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         promise.done((formData) => {
             assert.deepEqual(formData, EXPECTED_DATA, "new data is correct");
@@ -84,7 +87,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
         const EXPECTED_DATA = { name: "Test" };
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ["name"] });
-        const $input = $(`.${FORM_CLASS} .dx-texteditor-input`);
+        const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         promise.done((formData) => {
             assert.deepEqual(formData, EXPECTED_DATA, "new data is correct");
@@ -92,7 +95,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
 
         keyboardMock($input).type("Test").change();
 
-        $(`.${DIALOG_CLASS} .dx-button-has-text`)
+        $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .first()
             .trigger("dxclick");
     });
@@ -102,7 +105,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
 
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ["name"] });
-        const $input = $(`.${FORM_CLASS} .dx-texteditor-input`);
+        const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         promise.fail((formData) => {
             assert.notOk(formData, "There is no data");
@@ -110,7 +113,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
 
         keyboardMock($input).type("Test").change();
 
-        $(`.${DIALOG_CLASS} .dx-button-has-text`)
+        $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
             .last()
             .trigger("dxclick");
     });
@@ -120,7 +123,7 @@ QUnit.module("FormDialog", moduleConfig, () => {
 
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         const promise = formDialog.show({ items: ["name"] });
-        const $input = $(`.${FORM_CLASS} .dx-texteditor-input`);
+        const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         promise.fail((formData) => {
             assert.notOk(formData, "There is no data");
