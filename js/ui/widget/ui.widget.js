@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
     Template = require("./jquery.template"),
+    TemplateBase = require("./ui.template_base"),
     FunctionTemplate = require("./function_template"),
     EmptyTemplate = require("./empty_template"),
     ChildDefaultTemplate = require("./child_default_template"),
@@ -372,15 +373,18 @@ var Widget = DOMComponent.inherit({
 
     _renderIntegrationTemplate: function(templateSource) {
         var integrationTemplate = this.option("integrationOptions.templates")[templateSource],
-            that = this;
+            isAsyncTemplate = this.option("templatesRenderAsynchronously");
 
-        return integrationTemplate && {
-            render(options) {
-                var templateResult = integrationTemplate.render(options);
-                options.onRendered && !that._options.templatesRenderAsynchronously && options.onRendered();
+        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
+            var render = integrationTemplate.render;
+            integrationTemplate.render = function(options) {
+                var templateResult = render(options);
+                options.onRendered && !isAsyncTemplate && options.onRendered();
                 return templateResult;
-            }
-        };
+            };
+        }
+
+        return integrationTemplate;
     },
 
     _createTemplateIfNeeded: function(templateSource) {
