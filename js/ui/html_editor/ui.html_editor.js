@@ -23,6 +23,31 @@ const HtmlEditor = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+             * @name dxHtmlEditorOptions.focusStateEnabled
+             * @type boolean
+             * @default true
+             * @inheritdoc
+             */
+            focusStateEnabled: true,
+
+            /**
+            * @name dxHtmlEditorOptions.onFocusIn
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @action
+            */
+            /**
+            * @name dxHtmlEditorOptions.onFocusOut
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @action
+            */
+
+            /**
             * @name dxHtmlEditorOptions.valueType
             * @type Enums.HtmlEditorValueType
             * @default "HTML"

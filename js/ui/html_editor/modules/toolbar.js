@@ -9,12 +9,27 @@ import "../../color_box/color_view";
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
+import { format } from "../../../localization/message";
 
 const BaseModule = getQuill().import("core/module");
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
+
+const DIALOG_COLOR_CAPTION = "dxHtmlEditor-dialogColorCaption";
+const DIALOG_BACKGROUND_CAPTION = "dxHtmlEditor-dialogBackgroundCaption";
+const DIALOG_LINK_CAPTION = "dxHtmlEditor-dialogLinkCaption";
+const DIALOG_LINK_FIELD_URL = "dxHtmlEditor-dialogLinkUrlField";
+const DIALOG_LINK_FIELD_TEXT = "dxHtmlEditor-dialogLinkTextField";
+const DIALOG_LINK_FIELD_HINT = "dxHtmlEditor-dialogLinkHintField";
+const DIALOG_LINK_FIELD_TARGET = "dxHtmlEditor-dialogLinkTargetField";
+const DIALOG_LINK_FIELD_TARGET_CLASS = "dx-formdialog-field-target";
+const DIALOG_IMAGE_CAPTION = "dxHtmlEditor-dialogImageCaption";
+const DIALOG_IMAGE_FIELD_URL = "dxHtmlEditor-dialogImageUrlField";
+const DIALOG_IMAGE_FIELD_ALT = "dxHtmlEditor-dialogImageAltField";
+const DIALOG_IMAGE_FIELD_WIDTH = "dxHtmlEditor-dialogImageWidthField";
+const DIALOG_IMAGE_FIELD_HEIGHT = "dxHtmlEditor-dialogImageHeightField";
 
 const USER_ACTION = "user";
 
@@ -29,6 +44,7 @@ class ToolbarModule extends BaseModule {
         if(isDefined(options.items)) {
             this._renderToolbar();
 
+            this._editorInstance.on("focusOut", this._resetFormatWidgets.bind(this));
             this.quill.on('editor-change', (eventName) => {
                 this.updateFormatWidgets();
             });
@@ -46,7 +62,6 @@ class ToolbarModule extends BaseModule {
     }
 
     _getFormatHandlers() {
-
         return {
             clear: (e) => {
                 this.quill.removeFormat(this.quill.getSelection());
@@ -73,15 +88,11 @@ class ToolbarModule extends BaseModule {
                 text: selection ? this.quill.getText(selection) : "",
                 target: true
             };
-            this._editorInstance.formDialogOption("title", "Add a link");
-
-            const formItems = [
-                "href", "text", "title", { dataField: "target", editorType: "dxCheckBox" }
-            ];
+            this._editorInstance.formDialogOption("title", format(DIALOG_LINK_CAPTION));
 
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: formItems // TODO l18n
+                items: this._getLinkFormItems()
             });
 
             promise.done((formData) => {
@@ -100,6 +111,20 @@ class ToolbarModule extends BaseModule {
         };
     }
 
+    _getLinkFormItems() {
+        return [
+            { dataField: "href", label: { text: format(DIALOG_LINK_FIELD_URL) } },
+            { dataField: "text", label: { text: format(DIALOG_LINK_FIELD_TEXT) } },
+            { dataField: "title", label: { text: format(DIALOG_LINK_FIELD_HINT) } },
+            {
+                dataField: "target",
+                editorType: "dxCheckBox",
+                cssClass: DIALOG_LINK_FIELD_TARGET_CLASS,
+                label: { text: format(DIALOG_LINK_FIELD_TARGET) }
+            }
+        ];
+    }
+
     _prepareImageHandler() {
         return () => {
             const formData = this.quill.getFormat();
@@ -107,9 +132,14 @@ class ToolbarModule extends BaseModule {
             const selection = this.quill.getSelection();
             const pasteIndex = selection && selection.index || this.quill.getLength();
 
-            this._editorInstance.formDialogOption("title", "Add an image");
+            this._editorInstance.formDialogOption("title", format(DIALOG_IMAGE_CAPTION));
 
-            let formItems = ["src", "width", "height", "alt"];
+            const formItems = [
+                { dataField: "src", label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
+                { dataField: "width", label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
+                { dataField: "height", label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
+                { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } },
+            ];
 
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
@@ -200,7 +230,9 @@ class ToolbarModule extends BaseModule {
 
     _prepareColorClickHandler(formatName) {
         return () => {
-            const formData = this.quill.getFormat() || {};
+            const formData = this.quill.getFormat();
+            const caption = formatName === "color" ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
+            this._editorInstance.formDialogOption("title", format(caption));
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
                 items: [{ dataField: formatName, editorType: "dxColorView", label: { visible: false } }]
@@ -244,12 +276,12 @@ class ToolbarModule extends BaseModule {
     }
 
     updateFormatWidgets() {
-        this._resetFormatWidgets();
-
         const selection = this.quill.getSelection();
         if(!selection) {
             return;
         }
+
+        this._resetFormatWidgets();
 
         const formats = this.quill.getFormat(selection);
         for(const format in formats) {

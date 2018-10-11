@@ -237,6 +237,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Не пусто",
         "dxFilterBuilder-filterOperationBetween": "В диапазоне",
         "dxFilterBuilder-filterOperationAnyOf": "Любой из",
-        "dxFilterBuilder-filterOperationNoneOf": "Ни один из"
+        "dxFilterBuilder-filterOperationNoneOf": "Ни один из",
+        "dxHtmlEditor-dialogColorCaption": "Изменить цвет текста",
+        "dxHtmlEditor-dialogBackgroundCaption": "Изменить цвет фона",
+        "dxHtmlEditor-dialogLinkCaption": "Добавить ссылку",
+        "dxHtmlEditor-dialogLinkUrlField": "URL",
+        "dxHtmlEditor-dialogLinkTextField": "Текст",
+        "dxHtmlEditor-dialogLinkHintField": "Подсказка",
+        "dxHtmlEditor-dialogLinkTargetField": "Открыть в новом окне",
+        "dxHtmlEditor-dialogImageCaption": "Добавить изображение",
+        "dxHtmlEditor-dialogImageUrlField": "URL",
+        "dxHtmlEditor-dialogImageAltField": "Альтернативный текст",
+        "dxHtmlEditor-dialogImageWidthField": "Ширина (px)",
+        "dxHtmlEditor-dialogImageHeightField": "Высота (px)"
     }
 }
