@@ -95,7 +95,7 @@ class FormDialog {
     }
 
     popupOption(optionName, optionValue) {
-        this._popup.option.apply(this._popup, arguments);
+        return this._popup.option.apply(this._popup, arguments);
     }
 }
 

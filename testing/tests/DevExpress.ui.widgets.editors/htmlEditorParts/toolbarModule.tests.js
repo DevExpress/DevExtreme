@@ -28,7 +28,8 @@ const moduleConfig = {
                 },
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
-                }
+                },
+                on: noop
             }
         };
     }

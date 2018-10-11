@@ -18,3 +18,4 @@ import "./htmlEditorParts/paste.tests.js";
 import "./htmlEditorParts/popoverModule.tests.js";
 import "./htmlEditorParts/placeholderModule.tests.js";
 import "./htmlEditorParts/api.tests.js";
+import "./htmlEditorParts/formDialog.tests.js";
