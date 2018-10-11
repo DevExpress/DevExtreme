@@ -24,7 +24,6 @@ class OverlapStrategy extends DrawerStrategy {
                 }
             },
             onPositioned: (function(e) {
-                debugger;
                 if(typeUtils.isDefined(this._initialPosition)) {
                     translator.move(e.component.$content(), { left: this._initialPosition.left });
                 }
