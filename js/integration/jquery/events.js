@@ -7,7 +7,10 @@ var domAdapter = require("../../core/dom_adapter");
 if(useJQuery) {
     registerEventCallbacks.add(function(name, eventObject) {
         if(name === eventsEngine.passiveListenerEvents.eventName) {
+            var originalSetup = eventObject.setup;
+
             eventObject.setup = function(data, namespaces, handler) {
+                originalSetup && originalSetup.apply(this, arguments);
                 domAdapter.listen(this, eventsEngine.passiveListenerEvents.nativeEventName, handler, { passive: false });
                 return true;
             };
