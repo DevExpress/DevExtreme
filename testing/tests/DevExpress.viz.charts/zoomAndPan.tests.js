@@ -1713,15 +1713,18 @@ QUnit.test("Check css touch-action rule combinations", function(assert) {
                 valueAxis: arg
             }
         });
-        const $root = $(chart._renderer.root.element);
+        const style = chart._renderer.root.element.getAttribute("style").replace(/:\s/g, ":");
+        const taExpected = `touch-action:${expected};`;
+        const msTaExpected = `-ms-touch-action:${expected};`;
 
-        const ta = $root.css("touch-action");
-        const msTa = $root.css("-ms-touch-action");
-
-        assert.equal(ta || msTa, expected);
+        if(!expected) {
+            assert.ok(style.indexOf("touch-action") === -1);
+        } else {
+            assert.ok(style.indexOf(taExpected) !== -1 || style.indexOf(msTaExpected) !== -1, expected);
+        }
     }).bind(this);
 
-    checkRule("none", "none", "auto");
+    checkRule("none", "none", "");
 
     checkRule("zoom", "pan", "none");
     checkRule("pan", "zoom", "none");
@@ -1732,7 +1735,7 @@ QUnit.test("Check css touch-action rule combinations", function(assert) {
     checkRule("pan", "none", "pinch-zoom");
     checkRule("none", "pan", "pinch-zoom");
 
-    checkRule("none", "none", "auto");
+    checkRule("none", "none", "");
 });
 
 QUnit.test("Do nothing if no actions allowed", function(assert) {

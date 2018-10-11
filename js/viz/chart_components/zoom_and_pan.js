@@ -2,8 +2,8 @@
 import { isDefined } from "../../core/utils/type";
 import { normalizeEnum } from "../core/utils";
 import { name as wheelEvent } from "../../events/core/wheel";
-import * as transformEvents from "../../events/transform";
-import * as dragEvents from "../../events/drag";
+import transformEvents from "../../events/transform";
+import dragEvents from "../../events/drag";
 
 const EVENTS_NS = ".zoomAndPanNS";
 
