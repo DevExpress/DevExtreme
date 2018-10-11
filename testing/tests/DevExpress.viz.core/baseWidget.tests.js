@@ -1473,3 +1473,80 @@ QUnit.test('get widget markup', function(assert) {
     // act
     assert.equal(this.widget.svg(), 'some markup', 'markup, returned from element');
 });
+
+QUnit.module("Disabled", environment);
+
+QUnit.test("Create without disabled state", function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(this.renderer.root.stub("attr").callCount, 1);
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, ["pointer-events"]);
+});
+
+QUnit.test("Create with disabled state", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    this.createWidget({
+        disabled: true
+    });
+
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
+        "pointer-events": "none",
+        filter: "grayScaleFilterRef"
+    }]);
+});
+
+QUnit.test("Set disabled state, initially not disabled", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    var rs = this.createWidget();
+
+    rs.option({
+        disabled: true
+    });
+
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
+        "pointer-events": "none",
+        filter: "grayScaleFilterRef"
+    }]);
+});
+
+QUnit.test("Reset disabled state, initially disabled", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    var rs = this.createWidget({
+        disabled: true
+    });
+
+    rs.option({
+        disabled: false
+    });
+
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
+        "pointer-events": 0,
+        filter: null
+    }]);
+});
+
+QUnit.test("Change disabled option if root has pointer-events attr", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    this.renderer.root.attr({ "pointer-events": "some-value" });
+
+    var widget = this.createWidget({
+        disabled: true
+    });
+
+    widget.option("disabled", false);
+
+    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "some-value", filter: null }]);
+});
+
+QUnit.test("Change disabled option if root has empty pointer-events attr", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    this.renderer.root.attr({ "pointer-events": "" });
+
+    var widget = this.createWidget({
+        disabled: true
+    });
+
+    widget.option("disabled", false);
+
+    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "", filter: null }]);
+});

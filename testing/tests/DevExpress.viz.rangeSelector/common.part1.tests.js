@@ -216,60 +216,6 @@ QUnit.test("Tracker options", function(assert) {
     }]);
 });
 
-QUnit.module("Disabled", commons.environment);
-
-QUnit.test("Create without disabled state", function(assert) {
-    this.createWidget();
-
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": null,
-        filter: null
-    }]);
-});
-
-QUnit.test("Create with disabled state", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
-    this.createWidget({
-        disabled: true
-    });
-
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": "none",
-        filter: "grayScaleFilterRef"
-    }]);
-});
-
-QUnit.test("Set disabled state, initially not disabled", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
-    var rs = this.createWidget();
-
-    rs.option({
-        disabled: true
-    });
-
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": "none",
-        filter: "grayScaleFilterRef"
-    }]);
-});
-
-QUnit.test("Reset disabled state, initially disabled", function(assert) {
-    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
-    var rs = this.createWidget({
-        disabled: true
-    });
-
-    rs.option({
-        disabled: false
-    });
-
-    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
-        "pointer-events": null,
-        filter: null
-    }]);
-});
-
-
 QUnit.module("DataSource", commons.environment);
 
 QUnit.test("Creation", function(assert) {
