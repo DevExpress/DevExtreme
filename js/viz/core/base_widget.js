@@ -187,7 +187,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._change(that._initialChanges);
     },
 
-    _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME"],
+    _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME", "DISABLED"],
 
     _initPlugins: function() {
         var that = this;
@@ -263,7 +263,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _layoutChangesOrder: ["ELEMENT_ATTR", "CONTAINER_SIZE", "LAYOUT"],
 
-    _customChangesOrder: [],
+    _customChangesOrder: ["DISABLED"],
 
     _change_EVENTS: function() {
         this._eventTrigger.applyChanges();
@@ -292,6 +292,26 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _change_LAYOUT: function() {
         this._setContentSize();
+    },
+
+    _change_DISABLED: function() {
+        var renderer = this._renderer,
+            root = renderer.root;
+
+        if(this.option("disabled")) {
+            this._initDisabledState = root.attr("pointer-events");
+            root.attr({
+                "pointer-events": "none",
+                filter: renderer.getGrayScaleFilter().id
+            });
+        } else {
+            if(root.attr("pointer-events") === "none") {
+                root.attr({
+                    "pointer-events": typeUtils.isDefined(this._initDisabledState) ? this._initDisabledState : null,
+                    "filter": null
+                });
+            }
+        }
     },
 
     _themeDependentChanges: ["RENDERER"],
@@ -507,7 +527,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         theme: "THEME",
         rtlEnabled: "THEME",
         encodeHtml: "THEME",
-        elementAttr: "ELEMENT_ATTR"
+        elementAttr: "ELEMENT_ATTR",
+        disabled: "DISABLED"
     },
 
     _visibilityChanged: function() {

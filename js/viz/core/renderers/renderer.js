@@ -71,7 +71,8 @@ var objectCreate = (function() {
 
 var DEFAULTS = {
     scaleX: 1,
-    scaleY: 1
+    scaleY: 1,
+    "pointer-events": ""
 };
 
 var getBackup = callOnce(function() {

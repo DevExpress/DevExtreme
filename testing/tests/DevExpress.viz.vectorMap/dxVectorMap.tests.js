@@ -29,7 +29,8 @@ QUnit.test("Renderer", function(assert) {
 QUnit.test("Root", function(assert) {
     this.createMap();
 
-    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ align: "center", cursor: "default" }], "root settings");
+    assert.strictEqual(this.renderer.root.attr.callCount, 2);
+    assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ align: "center", cursor: "default" }], "root settings");
 });
 
 QUnit.test('Background', function(assert) {
