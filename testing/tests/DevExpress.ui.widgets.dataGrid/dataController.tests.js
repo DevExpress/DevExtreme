@@ -11001,6 +11001,37 @@ QUnit.test("edit row should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.columnIndices, [[], [2]], "only second row cell is updated");
 });
 
+QUnit.test("edit form row should not be updated on data change", function(assert) {
+    this.setupModules();
+
+    var changedArgs;
+
+    this.options.editing = {
+        mode: "form"
+    };
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.editRow(0);
+    this.array[0].age = 99;
+    this.array[1].age = 99;
+
+    this.dataController.refresh(true);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items[0].values, [1, "Alex", 99]);
+    assert.deepEqual(items[1].values, [2, "Dan", 99]);
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update", "update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0, 1]);
+    assert.deepEqual(changedArgs.items, [items[0], items[1]]);
+    assert.deepEqual(changedArgs.columnIndices, [[], [2]], "only second row cell is updated");
+});
+
 QUnit.test("edit cell should not be updated on data change", function(assert) {
     this.setupModules();
 

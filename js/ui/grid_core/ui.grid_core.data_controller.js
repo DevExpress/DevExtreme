@@ -879,8 +879,12 @@ module.exports = {
                         change.repaintChangesOnly = that.option("repaintChangesOnly");
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
+
                         change.repaintChangesOnly = operationTypes && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
+                        if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
+                            change.needUpdateDimensions = true;
+                        }
                     }
 
                     if(that._updateLockCount) {

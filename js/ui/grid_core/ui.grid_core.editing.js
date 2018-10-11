@@ -2312,6 +2312,10 @@ module.exports = {
                     this._updateEditRow(change.items);
                     this.callBase(change);
                 },
+                _applyChangesOnly: function(change) {
+                    this._updateEditRow(change.items);
+                    this.callBase(change);
+                },
                 _processItems: function(items, changeType) {
                     items = this._editingController.processItems(items, changeType);
                     return this.callBase(items, changeType);
