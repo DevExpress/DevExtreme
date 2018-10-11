@@ -338,21 +338,14 @@ module.exports = {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),
                         focusedRowEnabled = this.option("focusedRowEnabled"),
-                        isRowElement = keyboardController._getElementType($element) === "row";
+                        isRowElement = keyboardController._getElementType($element) === "row",
+                        $cell;
 
                     if(!focusedRowEnabled || !keyboardController.isRowFocusType()) {
-                        if(keyboardController._getElementType($element) === "cell") {
-                            this.callBase($element, hideBorder);
-                        }
+                        this.callBase($element, hideBorder);
                     } else if(focusedRowEnabled) {
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
-                            var columnIndex = this.option("focusedColumnIndex");
-                            if(columnIndex >= 0) {
-                                keyboardController.setCellFocusType();
-                            } else {
-                                columnIndex = 0;
-                            }
-                            var $cell = keyboardController.getFirstValidCellInRow($element, columnIndex);
+                            $cell = keyboardController.getFirstValidCellInRow($element);
                             keyboardController.focus($cell);
                         }
                     }

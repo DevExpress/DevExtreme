@@ -400,9 +400,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
 
         if(disableFocus) {
-            if(this.isCellFocusType() && $focusViewElement) {
-                $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
-            }
+            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
             $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
         } else {
             $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + ":not(." + MASTER_DETAIL_CELL_CLASS + ")").removeClass(CELL_FOCUS_DISABLED_CLASS);
@@ -767,23 +765,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return $cell;
     },
 
-    getFirstValidCellInRow: function($row, offset) {
+    getFirstValidCellInRow: function($row) {
         var that = this,
             $result,
             $cell,
             $cells = $row.find("> td");
 
-        if(!offset || offset <= 0) {
-            offset = 1;
-        }
-
         for(var i = 0; i < $cells.length; ++i) {
             $cell = $cells.eq(i);
-            if(that._isCellValid($cell) && offset === 0) {
+            if(that._isCellValid($cell)) {
                 $result = $cell;
                 break;
             }
-            offset--;
         }
 
         return $result;
