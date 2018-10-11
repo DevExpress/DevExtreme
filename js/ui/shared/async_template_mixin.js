@@ -24,7 +24,7 @@ module.exports = {
             container: renderArgs.container,
             index: renderArgs.index,
             onRendered: () => {
-                this._deferredItems && this._deferredItems[renderArgs.index].resolve();
+                this._deferredItems && this._deferredItems[renderArgs.index] && this._deferredItems[renderArgs.index].resolve();
             }
         });
     },

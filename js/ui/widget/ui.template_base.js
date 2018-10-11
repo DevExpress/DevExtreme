@@ -25,11 +25,11 @@ var TemplateBase = Class.inherit({
         options = options || {};
 
         var $result = this._renderCore(options);
-        options.onRendered && options.onRendered();
 
         this._ensureResultInContainer($result, options.container);
         renderedCallbacks.fire($result, options.container);
 
+        options.onRendered && options.onRendered();
         return $result;
     },
 
