@@ -22,6 +22,7 @@ var $ = require("../../core/renderer"),
     holdEvent = require("../../events/hold"),
     clickEvent = require("../../events/click"),
     contextMenuEvent = require("../../events/contextmenu"),
+    AsyncTemplateMixin = require("../shared/async_template_mixin"),
     BindableTemplate = require("../widget/bindable_template");
 
 var COLLECTION_CLASS = "dx-collection",
@@ -1006,14 +1007,6 @@ var CollectionWidget = Widget.inherit({
         return template || args.defaultTemplateName;
     },
 
-    _createItemByTemplate: function(itemTemplate, renderArgs) {
-        return itemTemplate.render({
-            model: renderArgs.itemData,
-            container: renderArgs.container,
-            index: renderArgs.index
-        });
-    },
-
     _emptyMessageContainer: function() {
         return this._itemContainer();
     },
@@ -1128,7 +1121,7 @@ var CollectionWidget = Widget.inherit({
         return this._itemContainer();
     }
 
-}).include(DataHelperMixin);
+}).include(DataHelperMixin, AsyncTemplateMixin);
 
 CollectionWidget.ItemClass = CollectionWidgetItem;
 

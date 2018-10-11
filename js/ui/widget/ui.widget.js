@@ -358,25 +358,29 @@ var Widget = DOMComponent.inherit({
         }
 
         if(templateSource.nodeType || typeUtils.isRenderer(templateSource)) {
-            templateSource = $(templateSource);
-
-            return createTemplate(templateSource);
+            return createTemplate($(templateSource));
         }
 
         if(typeof templateSource === "string") {
-            var userTemplate = this.option("integrationOptions.templates")[templateSource];
-            if(userTemplate) {
-                return userTemplate;
-            }
-
-            var dynamicTemplate = this._defaultTemplates[templateSource];
-            if(dynamicTemplate) {
-                return dynamicTemplate;
-            }
-            return createTemplate(templateSource);
+            return this._renderIntegrationTemplate(templateSource)
+                || this._defaultTemplates[templateSource]
+                || createTemplate(templateSource);
         }
 
         return this._acquireTemplate(templateSource.toString(), createTemplate);
+    },
+
+    _renderIntegrationTemplate: function(templateSource) {
+        var integrationTemplate = this.option("integrationOptions.templates")[templateSource],
+            that = this;
+
+        return integrationTemplate && {
+            render(options) {
+                var templateResult = integrationTemplate.render(options);
+                options.onRendered && !that._options.templatesRenderAsynchronously && options.onRendered();
+                return templateResult;
+            }
+        };
     },
 
     _createTemplateIfNeeded: function(templateSource) {

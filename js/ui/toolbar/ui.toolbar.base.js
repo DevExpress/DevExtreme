@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    AsyncTemplateMixin = require("../shared/async_template_mixin"),
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     BindableTemplate = require("../widget/bindable_template");
 
@@ -134,6 +133,7 @@ var ToolbarBase = CollectionWidget.inherit({
     _initMarkup: function() {
         this._renderToolbar();
         this._renderSections();
+        this._initItemContentDeferred();
 
         this.callBase();
 
@@ -142,7 +142,7 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
-        this._waitAsyncTemplates(this._renderAsync);
+        this._renderItemsAsync().done(this._renderAsync.bind(this));
     },
 
     _renderAsync: function() {
@@ -307,7 +307,7 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderItem: function(index, item, itemContainer, $after) {
         var location = item.location || "center",
             container = itemContainer || this._$toolbarItemsContainer.find(".dx-toolbar-" + location),
-            itemHasText = Boolean(item.text) || Boolean(item.html),
+            itemHasText = !!(item.text || item.html),
             itemElement = this.callBase(index, item, container, $after);
 
         itemElement
@@ -315,6 +315,10 @@ var ToolbarBase = CollectionWidget.inherit({
             .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText);
 
         return itemElement;
+    },
+
+    _renderItemContent: function(args) {
+        return this._getItemContentPromise(args, this.callBase);
     },
 
     _renderGroupedItems: function() {
@@ -366,6 +370,7 @@ var ToolbarBase = CollectionWidget.inherit({
         this._cleanAsyncTemplatesTimer();
         this._$toolbarItemsContainer.children().empty();
         this.$element().empty();
+        this._initItemContentDeferred();
     },
 
     _visibilityChanged: function(visible) {
@@ -423,7 +428,7 @@ var ToolbarBase = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-}).include(AsyncTemplateMixin);
+});
 
 registerComponent("dxToolbarBase", ToolbarBase);
 
