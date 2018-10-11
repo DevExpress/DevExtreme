@@ -2946,6 +2946,37 @@ QUnit.test('Cancel Editing Row should not update all rows when form mode', funct
     assert.strictEqual($oldRowElements.get(2), $rowElements.get(2), "row 2 is not changed");
 });
 
+// T677605
+QUnit.test('The "Cancel" button of the Editing form should be clicked once to close it when rowTemplate is used', function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+
+    that.options.rowTemplate = function(container) {
+        var markup = $("<tbody class='dx-row'></tbody>");
+        markup.appendTo(container);
+    };
+
+    rowsView.render(testElement);
+
+    that.editRow(0);
+
+    // act
+    var $editElement = testElement.find('.dx-edit-row');
+    assert.equal($editElement.length, 1);
+    that.cancelEditData();
+
+    // assert
+    $editElement = testElement.find('.dx-edit-row');
+    assert.equal($editElement.length, 0);
+});
+
 QUnit.test('Edit number cell via keyboard arrows (arrow up key)', function(assert) {
     // arrange
     var $testElement = $('#container'),
