@@ -436,7 +436,7 @@ const Drawer = Widget.inherit({
         }
 
         this._$panel.empty();
-
+        this._orderContent(this.option("position"));
         this._strategy.renderPanel(this._getTemplate(this.option("template")));
     },
 

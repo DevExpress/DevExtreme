@@ -310,6 +310,28 @@ QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'
     assert.ok($content.eq(1).hasClass("dx-drawer-content"));
 });
 
+QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "push",
+        position: "right"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "shrink");
+    let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
+    let $content = $wrapper.children();
+
+    assert.ok($content.eq(1).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(0).hasClass("dx-drawer-content"));
+
+    instance.option("position", "left");
+
+    $content = $wrapper.children();
+
+    assert.ok($content.eq(0).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(1).hasClass("dx-drawer-content"));
+});
+
 QUnit.module("navigation");
 
 QUnit.test("content container should have correct position if panel isn't visible", assert => {
