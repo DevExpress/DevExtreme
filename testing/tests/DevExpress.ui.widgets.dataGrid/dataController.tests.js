@@ -11065,6 +11065,22 @@ QUnit.test("immutable change dataSource item field", function(assert) {
     assert.equal(items[1].data, changedArray[1], "second item data is changed");
 });
 
+QUnit.test("change dataSource to another type", function(assert) {
+    this.setupModules();
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.options.dataSource = createDataSource(this.array.slice(1), { key: 'id' });
+
+    this.dataController.optionChanged({ name: "dataSource", fullName: "dataSource", previousValue: this.array, value: this.options.dataSource });
+
+    // assert
+    var items = this.dataController.items();
+    assert.equal(items.length, this.array.length - 1, "item count");
+});
+
+
 QUnit.test("update one cell using push", function(assert) {
     this.setupModules({ pushAggregationTimeout: 0 });
 

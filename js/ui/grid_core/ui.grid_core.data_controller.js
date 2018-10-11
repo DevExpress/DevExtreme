@@ -625,7 +625,7 @@ module.exports = {
 
                     if(change.changeType === "update") {
                         that._applyChangeUpdate(change);
-                    } else if(change.repaintChangesOnly && change.changeType === "refresh") {
+                    } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
                         that._applyChangesOnly(change);
                     } else {
                         that._applyChangeFull(change);
