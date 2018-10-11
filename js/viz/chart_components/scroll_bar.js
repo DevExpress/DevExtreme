@@ -214,7 +214,7 @@ ScrollBar.prototype = {
     },
 
     dispose: function() {
-        this._removeHandlers && this._removeHandlers();
+        this._removeHandlers();
         this._scroll.dispose();
         this._scroll = this._translator = null;
     },

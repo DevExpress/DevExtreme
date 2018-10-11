@@ -827,14 +827,14 @@ QUnit.test("Zoom argument axis", function(assert) {
             }
         }
     });
-
-    assert.equal(chart._renderer.root.element.getElementsByClassName("dxc-shutter").length, 0);
+    let rects = chart._renderer.root.element.getElementsByTagName("rect");
+    assert.equal(rects.length, 4);
     // act
     this.pointer.start({ x: 200, y: 250 }).dragStart();
     // assert
-    assert.equal(chart._renderer.root.element.getElementsByClassName("dxc-shutter").length, 1);
+    assert.equal(rects.length, 5);
 
-    let rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    let rect = rects[rects.length - 1];
     assert.equal(rect.getAttribute("x"), "0");
     assert.equal(rect.getAttribute("y"), "0");
     assert.equal(rect.getAttribute("width"), "0");
@@ -845,7 +845,7 @@ QUnit.test("Zoom argument axis", function(assert) {
     // act
     this.pointer.drag(400, 50);
     // assert
-    rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    rect = rects[rects.length - 1];
     assert.equal(rect.getAttribute("x"), "200");
     assert.equal(rect.getAttribute("y"), "0");
     assert.equal(rect.getAttribute("width"), "400");
@@ -854,7 +854,7 @@ QUnit.test("Zoom argument axis", function(assert) {
     // act
     this.pointer.dragEnd();
     // assert
-    assert.equal(chart._renderer.root.element.getElementsByClassName("dxc-shutter").length, 0);
+    assert.equal(chart._renderer.root.element.getElementsByTagName("rect").length, 4);
 });
 
 QUnit.test("Zoom value axis", function(assert) {
@@ -868,7 +868,8 @@ QUnit.test("Zoom value axis", function(assert) {
     // act
     this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240);
     // assert
-    const rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    const rects = chart._renderer.root.element.getElementsByTagName("rect");
+    const rect = rects[rects.length - 1];
     assert.equal(rect.getAttribute("x"), "0");
     assert.equal(rect.getAttribute("y"), "120");
     assert.equal(rect.getAttribute("width"), "800");
@@ -888,7 +889,8 @@ QUnit.test("Zoom argument and value axis", function(assert) {
     this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240);
 
     // assert
-    const rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    const rects = chart._renderer.root.element.getElementsByTagName("rect");
+    const rect = rects[rects.length - 1];
     assert.equal(rect.getAttribute("x"), "200");
     assert.equal(rect.getAttribute("y"), "120");
     assert.equal(rect.getAttribute("width"), "400");
@@ -915,7 +917,8 @@ QUnit.test("Zoom value axis, multiple panes, rotated", function(assert) {
     // act
     this.pointer.start({ x: 100, y: 120 }).dragStart().drag(200, 240);
     // assert
-    const rect = chart._renderer.root.element.getElementsByClassName("dxc-shutter")[0];
+    const rects = chart._renderer.root.element.getElementsByTagName("rect");
+    const rect = rects[rects.length - 1];
     assert.equal(rect.getAttribute("x"), "100");
     assert.equal(rect.getAttribute("y"), "0");
     assert.equal(rect.getAttribute("width"), "200");

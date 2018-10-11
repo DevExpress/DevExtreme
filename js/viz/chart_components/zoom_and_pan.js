@@ -1,9 +1,10 @@
 
-const isDefined = require("../../core/utils/type").isDefined;
-const normalizeEnum = require("../core/utils").normalizeEnum;
-const wheelEvent = require("../../events/core/wheel");
-const transformEvents = require("../../events/transform");
-const dragEvents = require("../../events/drag");
+import { isDefined } from "../../core/utils/type";
+import { normalizeEnum } from "../core/utils";
+import { name as wheelEvent } from "../../events/core/wheel";
+import * as transformEvents from "../../events/transform";
+import * as dragEvents from "../../events/drag";
+
 const EVENTS_NS = ".zoomAndPanNS";
 
 const DRAG_START_EVENT_NAME = dragEvents.start + EVENTS_NS;
@@ -193,10 +194,6 @@ module.exports = {
             return e.offset[coordField] - actionData.offset[coordField];
         }
 
-        function calcOffsetForPinch(e, actionData, coordField, scale) {
-            return calcCenterForPinch(e)[coordField] - actionData.center[coordField] + (actionData.center[coordField] - actionData.center[coordField] * scale);
-        }
-
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -329,7 +326,9 @@ module.exports = {
             },
             pinchHandler: function(e) {
                 preventDefaults(e);
-                axesViewportChanging(zoomAndPan, "zoom", e, calcOffsetForPinch, calcCenterForPinch);
+                axesViewportChanging(zoomAndPan, "zoom", e,
+                    (e, actionData, coordField, scale) => calcCenterForPinch(e)[coordField] - actionData.center[coordField] + (actionData.center[coordField] - actionData.center[coordField] * scale),
+                    calcCenterForPinch);
             },
             pinchEndHandler: function(e) {
                 preventDefaults(e);
@@ -353,7 +352,7 @@ module.exports = {
                 const rotated = chart.option("rotated");
 
                 if((options.argumentAxis.zoom || options.valueAxis.zoom) && options.allowMouseWheel) {
-                    renderer.root.on(wheelEvent.name + EVENTS_NS, function(e) {
+                    renderer.root.on(wheelEvent + EVENTS_NS, function(e) {
                         preventDefaults(e); // T249548
 
                         function zoomAxes(axes, coord, delta, onlyAxisToNotify) {
