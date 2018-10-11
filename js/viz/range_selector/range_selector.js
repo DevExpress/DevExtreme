@@ -642,7 +642,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         return this._dataIsLoaded();
     },
 
-    _initialChanges: ["DATA_SOURCE", "SELECTED_RANGE", "VALUE", "DISABLED"],
+    _initialChanges: ["DATA_SOURCE", "SELECTED_RANGE", "VALUE"],
 
     _themeDependentChanges: ["MOSTLY_TOTAL"],
 
@@ -756,7 +756,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         }
     },
 
-    _customChangesOrder: ["MOSTLY_TOTAL", "SELECTED_RANGE", "VALUE", "SLIDER_SELECTION", "DISABLED"],
+    _customChangesOrder: ["MOSTLY_TOTAL", "SELECTED_RANGE", "VALUE", "SLIDER_SELECTION"],
 
     _change_MOSTLY_TOTAL: function() {
         this._applyMostlyTotalChange();
