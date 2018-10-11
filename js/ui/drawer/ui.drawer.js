@@ -204,8 +204,6 @@ const Drawer = Widget.inherit({
     },
 
     _outsideClickHandler(e) {
-        this._strategy._stopAnimations(true);
-
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
 
         if(typeUtils.isFunction(closeOnOutsideClick)) {
@@ -213,6 +211,8 @@ const Drawer = Widget.inherit({
         }
 
         if(closeOnOutsideClick && this.option("opened")) {
+            this._strategy._stopAnimations();
+
             if(this.option("shading")) {
                 e.preventDefault();
             }

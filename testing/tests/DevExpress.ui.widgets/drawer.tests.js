@@ -177,19 +177,20 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
 });
 
 QUnit.test("incomplete animation should be stopped after closing on outside click", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "overlap",
+        closeOnOutsideClick: true,
+        revealMode: "expand",
+        shading: true
+    });
+
     let origFxStop = fx.stop,
         panelStopCalls = 0,
         contentStopCalls = 0,
         overlayContentStopCalls = 0,
         shaderStopCalls = 0,
         isJumpedToEnd = false;
-
-    const $element = $("#drawer").dxDrawer({
-        opened: true,
-        openedStateMode: "overlap",
-        revealMode: "expand",
-        shading: true
-    });
 
     const instance = $element.dxDrawer("instance");
     fx.stop = function($element, jumpToEnd) {
@@ -215,11 +216,11 @@ QUnit.test("incomplete animation should be stopped after closing on outside clic
 
         $(instance.viewContent()).trigger("dxclick");
 
-        assert.equal(panelStopCalls, 1, "animation should stops before closing");
-        assert.equal(contentStopCalls, 1, "animation should stops before closing");
-        assert.equal(overlayContentStopCalls, 1, "animation should stops before closing");
-        assert.equal(shaderStopCalls, 1, "animation should stops before closing");
-        assert.ok(isJumpedToEnd, "elements are returned to the end position after animation stopping");
+        assert.equal(panelStopCalls, 2, "animation should stops before closing");
+        assert.equal(contentStopCalls, 2, "animation should stops before closing");
+        assert.equal(overlayContentStopCalls, 2, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 2, "animation should stops before closing");
+        assert.notOk(isJumpedToEnd, "elements aren't returned to the end position after animation stopping");
     } finally {
         fx.off = true;
         fx.stop = origFxStop;
