@@ -342,8 +342,14 @@ QUnit.test("Change number format to '0000', '0.00', '0.00E+00'", function(assert
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }, { dataField: 'f2', dataType: 'number' }, { dataField: 'f3', dataType: 'number' }],
-            dataSource: [{ f1: 42, f2: 43, f3: 44 }],
+            columns: [
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' }
+            ],
+            dataSource: [
+                { f1: 42, f2: 43, f3: 44 }
+            ],
             showColumnHeaders: false,
             export: {
                 enabled: true,
