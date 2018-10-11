@@ -305,14 +305,14 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
                 ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = formats.shift();
+                e.xlsxCell.numberFormat = formats.shift();
             },
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Change number format to '0000', '0.00', '0.00E+00'", function(assert) {
+QUnit.test("Change number format for Number column to '0000', '0.00', '0.00E+00'", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="3">' +
         '<numFmt numFmtId="165" formatCode="0000" />' +
@@ -356,7 +356,7 @@ QUnit.test("Change number format to '0000', '0.00', '0.00E+00'", function(assert
                 ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = columnFormats[e.gridCell.column.dataField];
+                e.xlsxCell.numberFormat = columnFormats[e.gridCell.column.dataField];
             },
         },
         { styles, worksheet, sharedStrings }
@@ -398,7 +398,48 @@ QUnit.test("Change number format for Number column when column.format is functio
                 ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = '0000';
+                e.xlsxCell.numberFormat = '0000';
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number format for Number column cell", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="2">' +
+        '<numFmt numFmtId="165" formatCode="#" />' +
+        '<numFmt numFmtId="166" formatCode="0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "f1", dataType: "number", format: "decimal" }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.numberFormat = '0000';
             },
         },
         { styles, worksheet, sharedStrings }
@@ -440,7 +481,7 @@ QUnit.test("Change number format for Date column cell when column.format is func
                 ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = 'dd/mmm/yyyy hh:mm';
+                e.xlsxCell.numberFormat = 'dd/mmm/yyyy hh:mm';
             },
         },
         { styles, worksheet, sharedStrings }
@@ -916,18 +957,22 @@ QUnit.test("Change cell value data type", function(assert) {
                     e.xlsxCell.value = 1;
                     e.xlsxCell.dataType = 'n';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 } else if(e.gridCell.column.dataField === 'numberToString') {
                     e.xlsxCell.value = 'one';
                     e.xlsxCell.dataType = 's';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 } else if(e.gridCell.column.dataField === 'dateToString') {
                     e.xlsxCell.value = 'my date';
                     e.xlsxCell.dataType = 's';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 } else if(e.gridCell.column.dataField === 'boolToNumber') {
                     e.xlsxCell.value = 1;
                     e.xlsxCell.dataType = 'n';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 }
             },
         },
@@ -966,6 +1011,7 @@ QUnit.test("Clear reference to xlsx style record for header cell", function(asse
             },
             onXlsxCellPrepared: e => {
                 e.xlsxCell.style = null;
+                e.xlsxCell.numberFormat = null;
             },
         },
         { styles, worksheet, sharedStrings }
@@ -1002,6 +1048,48 @@ QUnit.test("Clear reference to xlsx style record for number value cell", functio
             },
             onXlsxCellPrepared: e => {
                 e.xlsxCell.style = null;
+                e.xlsxCell.numberFormat = null;
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Clear reference to xlsx style record and change number format for Number column", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="1">' +
+        '<numFmt numFmtId="165" formatCode="0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyNumberFormat="1" numFmtId="165" />' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style = null;
+                e.xlsxCell.numberFormat = '0000';
             },
         },
         { styles, worksheet, sharedStrings }
