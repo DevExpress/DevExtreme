@@ -95,6 +95,9 @@ var GroupingDataSourceAdapterExtender = (function() {
 
             if(dataSource.group()) {
                 dataSource.beginLoading();
+                if(that._lastLoadOptions) {
+                    that._lastLoadOptions.groupExpand = true;
+                }
                 return that._changeRowExpandCore(path).always(function() {
                     dataSource.endLoading();
                 });
