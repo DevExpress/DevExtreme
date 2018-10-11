@@ -221,7 +221,7 @@ var ExcelCreator = Class.inherit({
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
                 if(dataProvider.onXlsxCellPrepared) { // TODO: check action subscribers (component.hasActionSubscription)
                     const value = cellData.sourceValue || cellData.value;
-                    const cellPreparedResult = this._raiseXlsxCellPrepared({
+                    const modifiedXlsxCell = this._raiseXlsxCellPrepared({
                         dataProvider: dataProvider,
                         value: value,
                         dataType: cellData.type,
@@ -229,18 +229,18 @@ var ExcelCreator = Class.inherit({
                         sourceData: cellData.cellSourceData,
                     });
 
-                    cellData.type = cellPreparedResult.dataType;
-                    if(cellPreparedResult.value !== value) {
+                    cellData.type = modifiedXlsxCell.dataType;
+                    if(modifiedXlsxCell.value !== value) {
                         // 18.18.11 ST_CellType (Cell Type)
                         switch(cellData.type) {
                             case 's':
-                                cellData.value = this._appendString(cellPreparedResult.value);
+                                cellData.value = this._appendString(modifiedXlsxCell.value);
                                 break;
                             case 'd':
-                                cellData.value = cellPreparedResult.value;
+                                cellData.value = modifiedXlsxCell.value;
                                 break;
                             case 'n':
-                                let newValue = cellPreparedResult.value;
+                                let newValue = modifiedXlsxCell.value;
                                 if(typeUtils.isDate(newValue)) {
                                     const xlsxDataValue = this._getExcelDateValue(newValue);
                                     if(typeUtils.isDefined(xlsxDataValue)) {
@@ -250,10 +250,10 @@ var ExcelCreator = Class.inherit({
                                 cellData.value = newValue;
                                 break;
                             default:
-                                cellData.value = cellPreparedResult.value;
+                                cellData.value = modifiedXlsxCell.value;
                         }
                     }
-                    cellStyleId = this._xlsxFile.registerCellFormat(cellPreparedResult.style);
+                    cellStyleId = this._xlsxFile.registerCellFormat(modifiedXlsxCell.style);
                 }
                 cellsArray.push({
                     style: cellStyleId,
