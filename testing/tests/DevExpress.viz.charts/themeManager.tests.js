@@ -2186,3 +2186,258 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(valueOptions.valueAxisTheme, true);
     });
 })();
+
+(function zoomAndPan() {
+    QUnit.module("Get options - zoomAndPan");
+
+    QUnit.test("Ignore deprecated options if new options are used", function(assert) {
+        var themeManager = createThemeManager({
+            zoomAndPan: {
+                argumentAxis: "none",
+                valueAxis: "none"
+            },
+            zoomingMode: "all",
+            scrollingMode: "all"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                dragToZoom: "dragToZoomValue",
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: true, pan: false, zoom: false },
+            dragToZoom: true,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: true,
+            allowGestures: true
+        });
+    });
+
+    QUnit.test("No user options. scrollingMode=all allows argument axis panning by mouse and touch", function(assert) {
+        var themeManager = createThemeManager({
+            scrollingMode: "all"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: false, pan: true, zoom: false },
+            dragToZoom: false,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: false,
+            allowGestures: true
+        });
+    });
+
+    QUnit.test("No user options. scrollingMode=mouse allows argument axis panning by mouse only", function(assert) {
+        var themeManager = createThemeManager({
+            scrollingMode: "mouse"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: false, pan: true, zoom: false },
+            dragToZoom: false,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: false,
+            allowGestures: false
+        });
+    });
+
+    QUnit.test("No user options. scrollingMode=touch allows argument axis panning by mouse and touch", function(assert) {
+        var themeManager = createThemeManager({
+            scrollingMode: "touch"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: false, pan: true, zoom: false },
+            dragToZoom: false,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: false,
+            allowGestures: true
+        });
+    });
+
+    QUnit.test("No user options. zoomingMode=all allows argument axis zooming by mousewheel and touch", function(assert) {
+        var themeManager = createThemeManager({
+            zoomingMode: "all"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: false, pan: false, zoom: true },
+            dragToZoom: false,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: true,
+            allowGestures: true
+        });
+    });
+
+    QUnit.test("No user options. zoomingMode=mouse allows argument axis zooming by mousewheel only", function(assert) {
+        var themeManager = createThemeManager({
+            zoomingMode: "mouse"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: false, pan: false, zoom: true },
+            dragToZoom: false,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: true,
+            allowGestures: false
+        });
+    });
+
+    QUnit.test("No user options. zoomingMode=touch allows argument axis zooming by touch only", function(assert) {
+        var themeManager = createThemeManager({
+            zoomingMode: "touch"
+        });
+        themeManager.setTheme({
+            zoomAndPan: {
+                allowGestures: "allowGesturesValue",
+                allowMouseWheel: "allowMouseWheelValue",
+                dragBoxStyle: {
+                    color: "dragBoxColor",
+                    opacity: "dragBoxOpacity"
+                },
+                panKey: "panKeyValue"
+            }
+        });
+
+        // act
+        var theme = themeManager.getOptions("zoomAndPan");
+
+        // assert
+        assert.deepEqual(theme, {
+            valueAxis: { none: true, pan: false, zoom: false },
+            argumentAxis: { none: false, pan: false, zoom: true },
+            dragToZoom: false,
+            dragBoxStyle: {
+                class: "dxc-shutter",
+                fill: "dragBoxColor",
+                opacity: "dragBoxOpacity"
+            },
+            panKey: "panKeyValue",
+            allowMouseWheel: false,
+            allowGestures: true
+        });
+    });
+})();
