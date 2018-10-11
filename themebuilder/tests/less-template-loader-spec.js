@@ -173,8 +173,9 @@ describe("LessTemplateLoader", () => {
                 return new Promise(resolve => {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     div { color: @base-bg; }
-                    .dx-theme-generic-typography { color: @base-bg; }
-                    body {
+                    .dx-theme-accent-as-text-color { color: @base-bg; }
+                    .dx-theme-generic-typography {
+                        color: @base-bg;
                         .dx-theme-accent-as-text-color {
                             color: @base-bg;
                         }
@@ -192,10 +193,10 @@ describe("LessTemplateLoader", () => {
                 assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;
 }
-.dx-swatch-my-custom {
+.dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
-body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
+.dx-swatch-my-custom {
   color: #fff;
 }
 
@@ -213,8 +214,9 @@ body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
 
         let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
         div { color: @base-bg; }
-        .dx-theme-generic-typography { color: @base-bg; }
-        body {
+        .dx-theme-accent-as-text-color { color: @base-bg; }
+        .dx-theme-generic-typography {
+            color: @base-bg;
             .dx-theme-accent-as-text-color {
                 color: @base-bg;
             }
@@ -232,10 +234,10 @@ body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
             assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;
 }
-.dx-swatch-my-custom {
+.dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
-body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
+.dx-swatch-my-custom {
   color: #fff;
 }
 
@@ -250,8 +252,9 @@ body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
 
         let scss = `$body-bg: #fff; $body-color:#0f0;
         div { color: $body-bg; }
-        .dx-theme-generic-typography { color: $body-color; }
-        body {
+        .dx-theme-accent-as-text-color { color: $body-bg; }
+        .dx-theme-generic-typography {
+            color: $body-color;
             .dx-theme-accent-as-text-color {
                 color: $body-bg;
             }
@@ -267,11 +270,13 @@ body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
             assert.equal(data.css, `div {
   color: #fff; }
 
+.dx-theme-accent-as-text-color {
+  color: #fff; }
+
 .dx-theme-generic-typography {
   color: #0f0; }
-
-body .dx-theme-accent-as-text-color {
-  color: #fff; }
+  .dx-theme-generic-typography .dx-theme-accent-as-text-color {
+    color: #fff; }
 
 #devexpress-metadata-compiler {
   base-bg: #fff;
@@ -298,8 +303,9 @@ body .dx-theme-accent-as-text-color {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     .dx-theme-marker { font-family: 'dx.generic.light'; }
                     div { color: @base-bg; }
-                    .dx-theme-generic-typography { color: @base-bg; }
-                    body {
+                    .dx-theme-accent-as-text-color { color: @base-bg; }
+                    .dx-theme-generic-typography {
+                        color: @base-bg;
                         .dx-theme-accent-as-text-color {
                             color: @base-bg;
                         }
@@ -320,10 +326,10 @@ body .dx-theme-accent-as-text-color {
 .dx-swatch-my-custom div {
   color: #fff;
 }
-.dx-swatch-my-custom {
+.dx-swatch-my-custom .dx-theme-accent-as-text-color {
   color: #fff;
 }
-body .dx-swatch-my-custom .dx-theme-accent-as-text-color {
+.dx-swatch-my-custom {
   color: #fff;
 }
 
