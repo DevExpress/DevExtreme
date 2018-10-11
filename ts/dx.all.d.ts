@@ -278,6 +278,13 @@ interface JQuery {
     dxRangeSlider(options: DevExpress.ui.dxRangeSliderOptions): JQuery;
 }
 interface JQuery {
+    dxRecurrenceEditor(): JQuery;
+    dxRecurrenceEditor(options: "instance"): DevExpress.ui.dxRecurrenceEditor;
+    dxRecurrenceEditor(options: string): any;
+    dxRecurrenceEditor(options: string, ...params: any[]): any;
+    dxRecurrenceEditor(options: DevExpress.ui.dxRecurrenceEditorOptions): JQuery;
+}
+interface JQuery {
     dxResizable(): JQuery;
     dxResizable(options: "instance"): DevExpress.ui.dxResizable;
     dxResizable(options: string): any;
@@ -3623,8 +3630,6 @@ declare module DevExpress.ui {
         reset(): void;
     }
     export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
-        firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-        startDate?: Date;
         /** Specifies the currently selected value. */
         value?: string;
     }
@@ -5155,11 +5160,11 @@ declare module DevExpress.ui {
         text?: string;
     }
     export interface dxDataGridColumnButton extends GridBaseColumnButton {
-        onClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
+        onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
         visible?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => boolean);
     }
     export interface dxTreeListColumnButton extends GridBaseColumnButton {
-        onClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+        onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
         visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
     }
     /** This section describes the properties of a grid row. An object containing these properties comes to certain event-handling functions. */

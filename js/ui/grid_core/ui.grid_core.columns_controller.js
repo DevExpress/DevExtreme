@@ -588,8 +588,10 @@ module.exports = {
             /**
              * @name dxDataGridColumnButton.onClick
              * @type function(e)|string
-             * @extends Action
              * @type_function_param1 e:object
+             * @type_function_param1_field1 component:dxDataGrid
+             * @type_function_param1_field2 element:dxElement
+             * @type_function_param1_field3 model:object
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 row:dxDataGridRowObject
              * @type_function_param1_field6 column:dxDataGridColumn
@@ -597,8 +599,10 @@ module.exports = {
             /**
              * @name dxTreeListColumnButton.onClick
              * @type function(e)|string
-             * @extends Action
              * @type_function_param1 e:object
+             * @type_function_param1_field1 component:dxTreeList
+             * @type_function_param1_field2 element:dxElement
+             * @type_function_param1_field3 model:object
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 row:dxTreeListRowObject
              * @type_function_param1_field6 column:dxTreeListColumn
