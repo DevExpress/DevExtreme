@@ -1,18 +1,17 @@
-.dx-buttongroup {
-    .dx-buttongroup-wrapper {
-        .flex-container(row, nowrap);
+.dx-buttongroup-wrapper {
+    .flex-container(row, nowrap);
+}
 
-        .dx-item {
-            .flex-item();
+.dx-buttongroup-item {
+    .flex-item();
 
-            &.dx-button {
-                border-radius: 0;
-                width: 100%
-            }
+    &.dx-button {
+        border-radius: 0;
+        width: 100%
+    }
 
-            &.dx-button:not(:last-child) {
-                border-right-width: 0;
-            }
-        }
+    &.dx-button:not(:last-child) {
+        border-right-width: 0;
     }
 }
+

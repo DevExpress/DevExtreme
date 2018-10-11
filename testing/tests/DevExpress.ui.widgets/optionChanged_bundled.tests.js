@@ -40,7 +40,7 @@ define(function(require) {
                     name === "_checkParentVisibility") {
                     return;
                 }
-                this.QUnitAssert && this.QUnitAssert.ok(false, "Option '" + name + "' is not processed after runtime change");
+                this.QUnitAssert.ok(false, "Option '" + name + "' is not processed after runtime change");
             };
 
             executeAsyncMock.setup();

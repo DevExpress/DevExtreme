@@ -3,26 +3,15 @@ import Widget from "./widget/ui.widget";
 import Button from "./button";
 import CollectionWidget from "./collection/ui.collection_widget.edit";
 import registerComponent from "../core/component_registrator";
-import DataExpressionMixin from "./editor/ui.data_expression";
 import { extend } from "../core/utils/extend";
 import BindableTemplate from "./widget/bindable_template";
 import { isPlainObject } from "../core/utils/type";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
-    BUTTON_GROUP_WRAPPER_CLASS = "dx-buttongroup-wrapper";
+    BUTTON_GROUP_WRAPPER_CLASS = "dx-buttongroup-wrapper",
+    BUTTON_GROUP_ITEM_CLASS = "dx-buttongroup-item";
 
 var ButtonCollection = CollectionWidget.inherit({
-    _initMarkup() {
-        this._updateSelectedItemKeysByIndexes(this.option("selectedIndexes"));
-        this.callBase();
-    },
-
-    _getDefaultOptions() {
-        return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
-            selectedIndexes: []
-        });
-    },
-
     _renderItemContent(options) {
         options.container = $(options.container).parent();
         this.callBase(options);
@@ -41,30 +30,8 @@ var ButtonCollection = CollectionWidget.inherit({
         this._renderContent();
     },
 
-    _updateSelectedItemKeysByIndexes(indexes) {
-        if(!indexes.length) {
-            return;
-        }
-
-        const selectedItemKeys = indexes.map((index) => this._getKeyByIndex(index));
-        this.option("selectedItemKeys", selectedItemKeys);
-    },
-
-    _optionChanged(args) {
-        this.callBase(args);
-
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
-        switch(args.name) {
-            case "selectedIndexes":
-                this._updateSelectedItemKeysByIndexes(args.value);
-                break;
-            case "selectedItemKeys":
-                this._setOptionSilent("selectedIndexes", this._getSelectedItemIndices(args.value));
-                break;
-        }
+    _itemClass() {
+        return BUTTON_GROUP_ITEM_CLASS;
     }
 });
 
@@ -86,6 +53,13 @@ const ButtonGroup = Widget.inherit({
             buttonType: "normal",
 
             /**
+             * @name dxButtonGroupOptions.hoverStateEnabled
+             * @type boolean
+             * @default false
+             */
+            hoverStateEnabled: true,
+
+            /**
              * @name dxButtonGroupOptions.focusStateEnabled
              * @type boolean
              * @default true
@@ -101,11 +75,11 @@ const ButtonGroup = Widget.inherit({
             selectionMode: "single",
 
             /**
-             * @name dxButtonGroupOptions.selectedIndexes
+             * @name dxButtonGroupOptions.selectedItems
              * @type Array<any>
              * @fires dxButtonGroupOptions.onSelectionChanged
              */
-            selectedIndexes: [],
+            selectedItems: [],
 
             /**
              * @name dxButtonGroupOptions.selectedItemKeys
@@ -117,9 +91,9 @@ const ButtonGroup = Widget.inherit({
             /**
              * @name dxButtonGroupOptions.keyExpr
              * @type string|function
-             * @default null
+             * @default 'text'
              */
-            keyExpr: null,
+            keyExpr: "text",
 
             /**
              * @name dxButtonGroupOptions.items
@@ -188,14 +162,14 @@ const ButtonGroup = Widget.inherit({
             .addClass(BUTTON_GROUP_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        this._buttonsCollection = this._createComponent($buttons, ButtonCollection, {
+        const selectedItems = this.option("selectedItems");
+        const options = {
             selectionMode: this.option("selectionMode"),
             items: this.option("items"),
             keyExpr: this.option("keyExpr"),
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             scrollingEnabled: false,
             selectedItemKeys: this.option("selectedItemKeys"),
-            selectedIndexes: this.option("selectedIndexes"),
             focusStateEnabled: this.option("focusStateEnabled"),
             accessKey: this.option("accessKey"),
             tabIndex: this.option("tabIndex"),
@@ -205,11 +179,16 @@ const ButtonGroup = Widget.inherit({
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             }
-        });
+        };
+
+        if(selectedItems.length) {
+            options.selectedItems = selectedItems;
+        }
+        this._buttonsCollection = this._createComponent($buttons, ButtonCollection, options);
     },
 
     _syncSelectionOptions() {
-        this._setOptionSilent("selectedIndexes", this._buttonsCollection._getSelectedItemIndices());
+        this._setOptionSilent("selectedItems", this._buttonsCollection.option("selectedItems"));
         this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
@@ -237,8 +216,8 @@ const ButtonGroup = Widget.inherit({
             case "tabIndex":
                 this._invalidate();
                 break;
-            case "selectedIndexes":
             case "selectedItemKeys":
+            case "selectedItems":
                 this._buttonsCollection.option(args.name, args.value);
                 break;
             default:

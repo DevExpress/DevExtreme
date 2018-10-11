@@ -7,7 +7,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = "dx-buttongroup-wrapper",
     BUTTON_CLASS = "dx-button",
     DX_ITEM_SELECTED_CLASS = "dx-item-selected",
-    DX_ITEM_CLASS = "dx-item";
+    DX_BUTTON_GROUP_ITEM_CLASS = "dx-buttongroup-item";
 
 QUnit.testStart(() => {
     const markup = `
@@ -34,6 +34,22 @@ QUnit.module("default", {
         this.buttonGroup = this.$buttonGroup.dxButtonGroup("instance");
     }
 }, () => {
+    QUnit.test("default options", function(assert) {
+        const buttonGroup = $("#widget").dxButtonGroup().dxButtonGroup("instance");
+        const getOptionValue = (name) => buttonGroup.option(name);
+
+        assert.strictEqual(getOptionValue("buttonType"), "normal", "buttonType");
+        assert.strictEqual(getOptionValue("hoverStateEnabled"), true, "hoverStateEnabled");
+        assert.strictEqual(getOptionValue("focusStateEnabled"), true, "focusStateEnabled");
+        assert.strictEqual(getOptionValue("selectionMode"), "single", "selectionMode");
+        assert.deepEqual(getOptionValue("selectedItems"), [], "selectedItems");
+        assert.deepEqual(getOptionValue("selectedItemKeys"), [], "selectedItemKeys");
+        assert.strictEqual(getOptionValue("keyExpr"), "text", "keyExpr");
+        assert.deepEqual(getOptionValue("items"), [], "items");
+        assert.strictEqual(getOptionValue("itemTemplate"), "item", "itemTemplate");
+        assert.strictEqual(getOptionValue("onSelectionChanged"), null, "onSelectionChanged");
+    });
+
     QUnit.test("render markup", function(assert) {
         assert.equal(this.$buttonGroup.attr("role"), "buttongroup", "aria role");
         assert.ok(this.$buttonGroup.hasClass(BUTTON_GROUP_CLASS), "button group class");
@@ -42,13 +58,13 @@ QUnit.module("default", {
         assert.equal($wrapper.length, 1, "button group wrapper elements count");
         assert.ok($wrapper.eq(0).hasClass(BUTTON_GROUP_WRAPPER_CLASS), "css class for button collection");
 
-        const $buttons = $(`.${BUTTON_GROUP_WRAPPER_CLASS} .${DX_ITEM_CLASS}.${BUTTON_CLASS}`);
+        const $buttons = $(`.${BUTTON_GROUP_WRAPPER_CLASS} .${DX_BUTTON_GROUP_ITEM_CLASS}.${BUTTON_CLASS}`);
         assert.equal($buttons.length, 2, "buttons count");
     });
 
     QUnit.test("render with default key", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
-            items: ["item 1", "item 2"],
+            items: [{ text: "item 1" }, { text: "item 2" }],
         });
 
         const buttons = $buttonGroup.find(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
@@ -79,7 +95,7 @@ QUnit.module("default", {
 
     QUnit.test("default options of buttons collection", function(assert) {
         const buttonGroup = $("#widget").dxButtonGroup({
-            items: ["item 1", "item 2"],
+            items: [{ text: "item 1" }, { text: "item 2" }],
             accessKey: "test key",
             selectedItemKeys: ["item 1"],
             tabIndex: 25
@@ -91,7 +107,7 @@ QUnit.module("default", {
         assert.equal(buttonCollection.option("accessKey"), "test key", "accessKey option");
         assert.equal(buttonCollection.option("tabIndex"), 25, "tabIndex option");
         assert.equal(buttonCollection.option("selectedItemKeys"), "item 1", "selectedItemKeys option");
-        assert.equal(buttonCollection.option("keyExpr"), null, "keyExpr option");
+        assert.equal(buttonCollection.option("keyExpr"), "text", "keyExpr option");
         assert.ok(buttonCollection.option("itemTemplate"), "itemTemplate option");
         assert.ok(buttonCollection.option("focusStateEnabled"), "focusStateEnabled option");
         assert.notOk(buttonCollection.option("scrollingEnabled"), "scrollingEnabled option");
@@ -100,20 +116,20 @@ QUnit.module("default", {
 
     QUnit.test("use item template", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
-            items: ["item 1", "item 2"],
+            items: [{ text: "item 1" }, { text: "item 2" }],
             itemTemplate: (itemData, itemIndex, itemElement) => {
-                itemElement.append($(`<span class="custom-template">${itemData + "_" + itemIndex}</span>`));
+                itemElement.append($(`<span class="custom-template">${itemData.text + "_" + itemIndex}</span>`));
             }
         });
 
-        const $templates = $buttonGroup.find(`.${DX_ITEM_CLASS} .custom-template`);
+        const $templates = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS} .custom-template`);
         assert.equal($templates.eq(0).text(), "item 1_0", "text of first template");
         assert.equal($templates.eq(1).text(), "item 2_1", "text of second template");
     });
 
     QUnit.test("apply the button type option to all buttons", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
-            items: ["item 1", "item 2"],
+            items: [{ text: "item 1" }, { text: "item 2" }],
             buttonType: "danger"
         });
 
@@ -124,39 +140,39 @@ QUnit.module("default", {
 });
 
 QUnit.module("selection", () => {
-    QUnit.test("single selection with selectedIndexes", function(assert) {
+    QUnit.test("single selection with selectedItems", function(assert) {
         $("#buttonGroup").dxButtonGroup({
-            items: ["button 1", "button 2"],
-            selectedIndexes: [1]
+            items: [{ text: "item 1" }, { text: "item 2" }],
+            selectedItems: [{ text: "item 2" }]
         });
 
-        const $items = $(`.${DX_ITEM_CLASS}`);
+        const $items = $(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
     });
 
-    QUnit.test("multiple selection with selectedIndexes", function(assert) {
+    QUnit.test("multiple selection with selectedItems", function(assert) {
         $("#buttonGroup").dxButtonGroup({
             selectionMode: "multiple",
-            items: ["button 1", "button 2"],
-            selectedIndexes: [0, 1]
+            items: [{ text: "item 1" }, { text: "item 2" }],
+            selectedItems: [{ text: "item 1" }, { text: "item 2" }]
         });
 
-        const $items = $(`.${DX_ITEM_CLASS}`);
+        const $items = $(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.ok($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
     });
 
     QUnit.test("single selection with selectedItemKeys", function(assert) {
-        $("#buttonGroup").dxButtonGroup({
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            keyExpr: "text",
-            selectedItemKeys: ["button 2"]
+        const $buttonGroup = $("#buttonGroup").dxButtonGroup({
+            items: [{ alignment: "left" }, { alignment: "right" }],
+            keyExpr: "alignment",
+            selectedItemKeys: ["right"]
         });
 
-        const $items = $(`.${DX_ITEM_CLASS}`);
+        const $items = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
@@ -165,36 +181,14 @@ QUnit.module("selection", () => {
     QUnit.test("multiple selection with selectedItemKeys", function(assert) {
         $("#buttonGroup").dxButtonGroup({
             selectionMode: "multiple",
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            keyExpr: "text",
-            selectedItemKeys: ["button 2", "button 1"]
+            items: [{ alignment: "left" }, { alignment: "right" }],
+            keyExpr: "alignment",
+            selectedItemKeys: ["left", "right"]
         });
 
-        const $items = $(`.${DX_ITEM_CLASS}`);
+        const $items = $(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.ok($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
-    });
-
-    QUnit.test("Prepare the selecteItemKeys from the selectedIndexes", function(assert) {
-        const buttonGroup = $("#buttonGroup").dxButtonGroup({
-            selectionMode: "multiple",
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            keyExpr: "text",
-            selectedIndexes: [0, 1]
-        }).dxButtonGroup("instance");
-
-        assert.deepEqual(buttonGroup.option("selectedItemKeys"), ["button 1", "button 2"]);
-    });
-
-    QUnit.test("Prepare the selectedIndexes from the selectedItemKeys", function(assert) {
-        const buttonGroup = $("#buttonGroup").dxButtonGroup({
-            selectionMode: "multiple",
-            items: [{ text: "button 1" }, { text: "button 2" }],
-            keyExpr: "text",
-            selectedItemKeys: ["button 2"]
-        }).dxButtonGroup("instance");
-
-        assert.deepEqual(buttonGroup.option("selectedIndexes"), [1]);
     });
 });
