@@ -176,11 +176,13 @@ class DrawerStrategy {
         return this._drawer.$element().get(0).getBoundingClientRect().width;
     }
 
-    setPanelSize() {
+    setPanelSize(keepMaxSize) {
+        const panelSize = this._getPanelSize(this._drawer.option("opened"));
+
         if(this._drawer._isHorizontalDirection()) {
-            $(this._drawer.content()).css("width", this._drawer.getRealPanelWidth());
+            $(this._drawer.content()).css("width", keepMaxSize ? this._drawer.getRealPanelWidth() : panelSize);
         } else {
-            $(this._drawer.content()).css("height", this._drawer.getRealPanelHeight());
+            $(this._drawer.content()).css("height", keepMaxSize ? this._drawer.getRealPanelHeight() : panelSize);
         }
     }
 

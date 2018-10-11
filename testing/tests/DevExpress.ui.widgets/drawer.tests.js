@@ -826,6 +826,36 @@ QUnit.test("panel and content should be rendered correctly after revealMode chan
 
 QUnit.module("shrink mode");
 
+QUnit.test("panel should have correct width in shrink mode after drawer resizing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        width: 800,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 2000);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
+
+    resizeCallbacks.fire();
+    assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
+
+    fx.off = false;
+});
+
 QUnit.test("minSize should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
@@ -974,6 +1004,37 @@ QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bot
     assert.equal($content.position().top, 0, "content has correct top");
     assert.equal($panel.position().top, 900, "panel has correct top");
     assert.equal($panel.height(), 100, "panel has correct height");
+
+    fx.off = false;
+});
+
+QUnit.test("panel should have correct height in shrink mode after drawer resizing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        width: 800,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 2000);
+
+            return $div;
+        }
+    });
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.height(), 50, "panel has correct height when minSize is set");
+
+    resizeCallbacks.fire();
+    assert.equal($panel.height(), 50, "panel has correct height when minSize is set");
 
     fx.off = false;
 });
