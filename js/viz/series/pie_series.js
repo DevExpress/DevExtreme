@@ -92,8 +92,8 @@ exports.pie = _extend({}, barSeries, {
         this.innerRadius = this.type === "pie" ? 0 : options.innerRadius;
     },
 
-    _checkData: function(data) {
-        var base = barSeries._checkData(data);
+    _checkData: function(data, skippedFields) {
+        var base = barSeries._checkData.call(this, data, skippedFields, { value: this.getValueFields()[0] });
         return this._options.paintNullPoints ? base : base && data.value !== null;
     },
 

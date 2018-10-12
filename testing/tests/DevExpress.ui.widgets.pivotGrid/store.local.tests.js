@@ -1261,6 +1261,30 @@ QUnit.test("getFields", function(assert) {
     });
 });
 
+// T666145
+QUnit.test("getFields should skip fields with '__' prefix", function(assert) {
+    var dataSource = [{
+        "__metadata": {
+            "id": 1,
+            "uri": "uri",
+            "type": "Product"
+        },
+        "OrderID": 1
+    }];
+
+    new LocalStore(dataSource).getFields().done(function(fields) {
+        assert.deepEqual(fields, [
+            {
+                "dataField": "OrderID",
+                "dataType": "number",
+                "groupInterval": undefined,
+                "groupName": undefined,
+                "displayFolder": ""
+            }
+        ]);
+    });
+});
+
 QUnit.test("getFields doesn't modify fields", function(assert) {
     var dataSource = [{ OrderDate: "1996/12/12" }],
         field = {

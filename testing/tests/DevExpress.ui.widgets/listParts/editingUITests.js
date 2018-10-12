@@ -11,6 +11,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     contextMenuEvent = require("events/contextmenu"),
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
     decoratorRegistry = require("ui/list/ui.list.edit.decorator_registry"),
     SwitchableEditDecorator = require("ui/list/ui.list.edit.decorator.switchable"),
     SwitchableButtonEditDecorator = require("ui/list/ui.list.edit.decorator.switchable.button"),
@@ -2505,6 +2506,23 @@ QUnit.test("item click changes radio button state only to true in single selecti
     var radioButton = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_RADIO_BUTTON_CLASS)).dxRadioButton("instance");
 
     assert.equal(radioButton.option("value"), true, "item selected");
+});
+
+QUnit.test("keyboard navigation should work with without selectAll checkbox", function(assert) {
+    var $list = $($("#templated-list").dxList({
+            focusStateEnabled: true,
+            items: ["0", "1"],
+            showSelectionControls: true,
+            selectionMode: 'single'
+        })),
+        instance = $list.dxList("instance"),
+        keyboard = keyboardMock($list);
+
+    keyboard
+        .press("down")
+        .press("enter");
+
+    assert.deepEqual(instance.option("selectedItems"), ["1"], "selection is correct");
 });
 
 

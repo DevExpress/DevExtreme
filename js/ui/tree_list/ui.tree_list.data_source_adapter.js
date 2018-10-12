@@ -394,7 +394,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _handleDataLoaded: function(options) {
             var data = options.data = this._convertDataToPlainStructure(options.data);
-            if(!options.remoteOperations.filtering) {
+            if(!options.remoteOperations.filtering && options.loadOptions.filter) {
                 options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
             }
             this._updateHasItemsMap(options);
@@ -429,7 +429,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             var data = options.data,
                 expandedRowKeys = [];
 
-            if(!options.fullData || this._isReload) {
+            if(options.remoteOperations.filtering || this._isReload) {
                 if(options.fullData && options.fullData.length > options.data.length) {
                     data = options.fullData;
                     visibleItems = visibleItems || options.data;

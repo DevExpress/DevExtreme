@@ -19,6 +19,8 @@ QUnit.testDone(function() {
 
 var processColumnsForCompare = function(columns, parameterNames, ignoreParameterNames) {
     var processedColumns = $.extend(true, [], columns);
+    ignoreParameterNames = ignoreParameterNames || [];
+    ignoreParameterNames.push("id");
     $.each(processedColumns, function() {
         var propertyName;
         for(propertyName in this) {
@@ -94,7 +96,7 @@ QUnit.test("Initialize from options with field names", function(assert) {
     assert.ok(this.columnsController.isInitialized());
     var visibleColumns = this.columnsController.getVisibleColumns();
 
-    assert.deepEqual(processColumnsForCompare(visibleColumns), [
+    assert.deepEqual(processColumnsForCompare(visibleColumns, null, ["id"]), [
         { index: 0, visible: true, allowFiltering: true, dataField: 'TestField1', caption: 'Test Field 1' },
         { index: 1, visible: true, allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2' },
         { index: 2, visible: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3' }
@@ -4723,6 +4725,40 @@ QUnit.test("update column dataField", function(assert) {
     assert.strictEqual(columnsChangedArgs[0].optionNames.length, 1);
 });
 
+// T667936
+QUnit.test("change column dataType", function(assert) {
+    this.applyOptions({ columns: ["id", "orderDate"] });
+
+    var columnsChangedArgs = [];
+
+    var items = [
+        { id: 1, orderDate: "2018/08/30" },
+        { id: 2, orderDate: "2018/08/31" }
+    ];
+
+    var dataSource = new DataSource(items);
+
+    dataSource.load();
+
+    this.columnsController.applyDataSource(dataSource);
+
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedArgs.push(e);
+    });
+
+    // act
+    this.columnsController.columnOption('orderDate', "dataType", "date");
+
+    // assert
+    assert.strictEqual(this.columnsController.getColumns()[1].dataField, "orderDate");
+    assert.strictEqual(this.columnsController.getColumns()[1].dataType, "date");
+    assert.deepEqual(this.columnsController.getColumns()[1].filterOperations, ["=", "<>", "<", ">", "<=", ">=", "between"]);
+    assert.deepEqual(this.columnsController.getColumns()[1].calculateCellValue(items[0]), new Date(2018, 7, 30), "calculateCellValue for field with changed dataType");
+    assert.strictEqual(columnsChangedArgs.length, 1);
+    assert.strictEqual(columnsChangedArgs[0].optionNames.all, true);
+    assert.strictEqual(columnsChangedArgs[0].optionNames.length, 1);
+});
+
 // T346972
 QUnit.test("change column option validationRules at runtime", function(assert) {
     this.applyOptions({ columns: ["field1", "field2"] });
@@ -5917,6 +5953,7 @@ QUnit.test("parseValue for column with number dataField", function(assert) {
     assert.strictEqual(column.parseValue(undefined), undefined);
     assert.strictEqual(column.parseValue(''), undefined);
     assert.strictEqual(column.parseValue('a'), undefined);
+    assert.strictEqual(column.parseValue('a1'), undefined, "Number should parse for numeric data (T669808)");
     assert.strictEqual(column.parseValue('201'), 201);
     assert.strictEqual(column.parseValue('1.2'), 1.2);
     assert.strictEqual(column.parseValue('12'), 12);
@@ -8130,6 +8167,39 @@ QUnit.test("Expand column must have the right rowspan", function(assert) {
     assert.strictEqual(visibleColumns.length, 4, "column count");
     assert.strictEqual(visibleColumns[0].command, "expand", "expand column");
     assert.ok(!visibleColumns[0].rowspan, "rowspan of the expand column");
+});
+
+// T670211
+QUnit.test("Delete band column via API", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        columns: [
+            { dataField: "TestField1", caption: "Column 1" },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField2", caption: "Column 2" },
+                    { dataField: "TestField3", caption: "Column 3" },
+                    {
+                        caption: "Band Column 2", columns: [
+                            { dataField: "TestField4", caption: "Column 4" },
+                            { dataField: "TestField5", caption: "Column 5" }
+                        ]
+                    }
+                ]
+            }
+        ]
+    });
+
+    // act
+    this.columnsController.deleteColumn(1);
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns(0);
+    assert.strictEqual(visibleColumns.length, 1, "column count");
+    assert.strictEqual(visibleColumns[0].dataField, "TestField1", "dataField of the column");
+    assert.strictEqual(this.columnsController.getRowCount(), 1, "header row count");
 });
 
 

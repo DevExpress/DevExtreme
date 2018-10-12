@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    EdmLiteral = require("data/odata/utils").EdmLiteral,
-    ODataStore = require("data/odata/store"),
-    ODataContext = require("data/odata/context"),
-    Guid = require("core/guid"),
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { EdmLiteral } from "data/odata/utils";
+import ODataStore from "data/odata/store";
+import ODataContext from "data/odata/context";
+import Guid from "core/guid";
+import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
 var MUST_NOT_REACH_MESSAGE = "Shouldn't reach this point";
 
@@ -493,7 +493,9 @@ QUnit.test("with expand", function(assert) {
 
         new ODataStore({ version: 4, url: "odata4.org" })
             .byKey(42, { expand: ["prop1.subprop", "prop2"] })
-            .done(assertFunc)
+            .done((value) => {
+                assert.deepEqual(value, { expandClause: "prop1($expand=subprop),prop2" });
+            })
     ];
 
     $.when.apply($, promises)

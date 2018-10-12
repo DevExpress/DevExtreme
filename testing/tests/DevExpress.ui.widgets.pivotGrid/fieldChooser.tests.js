@@ -378,6 +378,65 @@ QUnit.test("Select Items in all fields area", function(assert) {
     assert.ok(this.dataSource.load.getCall(3).calledAfter(this.dataSource.field.getCall(3)));
 });
 
+QUnit.test("T676235. Select Items in all fields area if applyChangesMode is onDemand", function(assert) {
+    var fields = [
+            { dataField: "field1", dimension: "Dimension 1" },
+            { dataField: "field2", dimension: "Dimension 1" },
+            { dataField: "field3", dimension: "Dimension 2" },
+            { dataField: "field4", dimension: "Dimension 2", displayFolder: "Folder2_1" },
+            { dataField: "field5" },
+            { dataField: "field6", dimension: "Dimension3" },
+            { dataField: "field7", dimension: "Dimension 2" },
+            { dataField: "field8", isMeasure: true },
+            { dataField: "field9", dimension: "Dimension 1", displayFolder: "Folder1_1" },
+            { dataField: "field11", dimension: "Dimension 1", displayFolder: "Folder1_2" },
+            { dataField: "field12", dimension: "Dimension 1", displayFolder: "Folder1_2", isDefault: true }
+    ];
+    this.setup({
+        fields: fields
+    }, {
+        applyChangesMode: "onDemand"
+    });
+
+    sinon.spy(this.fieldChooser, "_changedHandler");
+
+    var treeView = this.$container.find(".dx-treeview").dxTreeView("instance");
+    // acts
+    treeView.selectItem(treeView.option("dataSource")[4]);  // act1 - select field5
+    treeView.selectItem(treeView.option("dataSource")[2]);  // act2 - select Dimension2
+    treeView.selectItem(treeView.option("dataSource")[0]);  // act3 - select field8
+    treeView.selectItem(treeView.option("dataSource")[1]);  // act4 - select Dimension1
+
+    // assert
+    assert.strictEqual(this.dataSource.load.callCount, 0);
+    assert.strictEqual(this.fieldChooser._changedHandler.callCount, 4);
+    assert.strictEqual(this.dataSource.field.callCount, 4);
+
+    assert.deepEqual(this.dataSource.field.getCall(0).args, [4, {
+        area: "column",
+        areaIndex: undefined
+    }], "field5 should be added to column on act1");
+    assert.ok(this.fieldChooser._changedHandler.getCall(0).calledAfter(this.dataSource.field.getCall(0)));
+
+    assert.deepEqual(this.dataSource.field.getCall(1).args, [3, {
+        area: "column",
+        areaIndex: undefined
+    }], "field4 should be added to column on act2");
+    assert.ok(this.fieldChooser._changedHandler.getCall(1).calledAfter(this.dataSource.field.getCall(1)));
+
+    assert.deepEqual(this.dataSource.field.getCall(2).args, [7, {
+        area: "data",
+        areaIndex: undefined
+    }], "field8 should be added to data on act3");
+    assert.ok(this.fieldChooser._changedHandler.getCall(2).calledAfter(this.dataSource.field.getCall(2)));
+
+    assert.deepEqual(this.dataSource.field.getCall(3).args, [10, {
+        area: "column",
+        areaIndex: undefined
+    }], "field12 should be added to data on act4");
+    assert.ok(this.fieldChooser._changedHandler.getCall(3).calledAfter(this.dataSource.field.getCall(3)));
+});
+
 QUnit.test("Unselect Items in all fields area", function(assert) {
     var fields = [
             { dataField: "field1", dimension: "Dimension 1", area: "row" },
@@ -730,6 +789,45 @@ QUnit.test("T247590. Save tree view scroll position on dataSource changed", func
     scrollable.scrollTo({ y: 30 });
 
     dataSource.on.withArgs("changed").lastCall.args[1]();
+    // assert
+    var newTreeScrollable = $(".dx-treeview-border-visible").find(".dx-scrollable").dxScrollable("instance");
+
+    assert.strictEqual(newTreeScrollable.scrollTop(), 30);
+});
+
+QUnit.test("T676231. Save tree view scroll position on checkbox click if applyChangesMode is onDemand", function(assert) {
+    var dataSourceOptions = {
+        columnFields: [
+            { index: 0, caption: "Field 2", area: 'column', allowFiltering: true },
+            { index: 1, caption: "Field 3", area: 'column', filterValues: [8], allowFiltering: true }
+        ],
+        fieldValues: [
+            [{ value: 1 }, { value: 2 }, { value: 4 }, { value: 5 }],
+            [{ value: 6 }, { value: 7 }, { value: 8 }, { value: 9 }, { value: 10 }]
+        ],
+        fields: [
+        { dataField: "Field1", isMeasure: true, displayFolder: "Folder" },
+        { dataField: "Field2", isMeasure: false },
+        { dataField: "Field3" },
+        { dataField: "Field4", isMeasure: true },
+        { dataField: "Field5", isMeasure: false },
+        { dataField: "Field6" },
+        { dataField: "Field7", isMeasure: true },
+        { dataField: "Field8", isMeasure: false },
+        { dataField: "Field9" }
+        ]
+    };
+
+    this.setup(dataSourceOptions, { height: 90, applyChangesMode: "onDemand" });
+    this.clock.tick(500);
+
+    var scrollable = $(".dx-treeview-border-visible").find(".dx-scrollable").dxScrollable("instance");
+
+    // act
+    scrollable.scrollTo({ y: 30 });
+
+    $(".dx-treeview-border-visible .dx-checkbox").eq(0).trigger("dxclick");
+
     // assert
     var newTreeScrollable = $(".dx-treeview-border-visible").find(".dx-scrollable").dxScrollable("instance");
 
@@ -2050,6 +2148,18 @@ QUnit.test("select in treeview", function(assert) {
     var fields = this.fieldChooser.option("state").fields;
     assert.equal(fields[0].area, "column");
     assert.equal(fields[0].areaIndex, 0);
+});
+
+QUnit.test("select and unselect in treeview", function(assert) {
+    this.setup({ fields: [{ dataField: "Field1", index: 0, displayFolder: "Folder1" }, { dataField: "Field2", index: 1, displayFolder: "Folder1" }] });
+
+    // act
+    this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
+    this.$container.find(".dx-checkbox").eq(0).trigger("dxclick");
+
+    var fields = this.fieldChooser.option("state").fields;
+    assert.equal(fields[0].area, undefined);
+    assert.equal(fields[0].areaIndex, undefined);
 });
 
 QUnit.test("unselect in treeview", function(assert) {

@@ -135,6 +135,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         var $cell = $(cell);
 
+        if(options.rowType === "data") {
+            column.id && this.setAria("describedby", column.id, $cell);
+        }
+
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
         }
@@ -180,7 +184,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             that.setAria("hidden", true, $table);
         }
 
-        $table.append($("<tbody>"));
+        this.setAria("role", "presentation", $("<tbody>").appendTo($table));
 
         if(isAppend) {
             return $table;
@@ -311,16 +315,45 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     renderDelayedTemplates: function() {
+        var delayedTemplates = this._delayedTemplates,
+            syncTemplates = delayedTemplates.filter(template => !template.async),
+            asyncTemplates = delayedTemplates.filter(template => template.async);
+
+        this._delayedTemplates = [];
+
+        this._renderDelayedTemplatesCore(syncTemplates);
+        this._renderDelayedTemplatesCoreAsync(asyncTemplates);
+    },
+
+    _renderDelayedTemplatesCoreAsync: function(templates) {
+        var that = this;
+        if(templates.length) {
+            (window.requestIdleCallback || window.setTimeout)(function() {
+                that._renderDelayedTemplatesCore(templates, true);
+            });
+        }
+    },
+
+    _renderDelayedTemplatesCore: function(templates, isAsync) {
         var templateParameters,
-            delayedTemplates = this._delayedTemplates;
+            date = new Date();
 
-        while(delayedTemplates.length) {
-            templateParameters = delayedTemplates.shift();
+        while(templates.length) {
+            templateParameters = templates.shift();
 
-            templateParameters.template.render(templateParameters.options);
+            var options = templateParameters.options,
+                model = options.model;
 
-            if(templateParameters.options.model && templateParameters.options.model.column) {
-                this._updateCell(templateParameters.options.container, templateParameters.options.model);
+            if(!isAsync || $(options.container).closest(document).length) {
+                templateParameters.template.render(options);
+
+                if(model && model.column) {
+                    this._updateCell(options.container, model);
+                }
+            }
+            if(isAsync && (new Date() - date) > 30) {
+                this._renderDelayedTemplatesCoreAsync(templates);
+                break;
             }
         }
     },
@@ -365,16 +398,25 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     renderTemplate: function(container, template, options, allowRenderToDetachedContainer) {
         var that = this,
-            renderingTemplate = that._processTemplate(template, options);
+            renderingTemplate = that._processTemplate(template, options),
+            column = options.column,
+            isDataRow = options.rowType === "data",
+            async;
 
         if(renderingTemplate) {
             options.component = that.component;
 
-            if(renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) {
+            async = column && (
+                (column.renderAsync && isDataRow) ||
+                that.option("renderAsync") &&
+                    (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === "filter")
+            );
+
+            if((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
                 renderingTemplate.render({ container: container, model: options });
                 return true;
             } else {
-                that._delayedTemplates.push({ template: renderingTemplate, options: { container: container, model: options } });
+                that._delayedTemplates.push({ template: renderingTemplate, options: { container: container, model: options }, async: async });
             }
         }
 
@@ -525,7 +567,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth"])) {
             var visibleColumns = this._columnsController.getVisibleColumns();
-            var widths = iteratorUtils.map(visibleColumns, function(column) { return column.visibleWidth || column.width || "auto"; });
+            var widths = iteratorUtils.map(visibleColumns, function(column) {
+                var width = column.visibleWidth || column.width;
+                return typeUtils.isDefined(width) ? width : "auto";
+            });
 
             this.setColumnWidths(widths);
             return;
@@ -737,7 +782,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 if(typeof width === "number") {
                     width = width.toFixed(3) + "px";
                 }
-                styleUtils.setWidth($cols.eq(columnIndex), width || "auto");
+                styleUtils.setWidth($cols.eq(columnIndex), typeUtils.isDefined(width) ? width : "auto");
 
                 columnIndex++;
             }

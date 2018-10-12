@@ -108,8 +108,16 @@ var getCaretInBoundaries = function(caret, text, format) {
     return adjustedCaret;
 };
 
+var getCaretOffset = function(previousText, newText, format) {
+    var previousBoundaries = getCaretBoundaries(previousText, format),
+        newBoundaries = getCaretBoundaries(newText, format);
+
+    return newBoundaries.start - previousBoundaries.start;
+};
+
 exports.getCaretBoundaries = getCaretBoundaries;
 exports.isCaretInBoundaries = isCaretInBoundaries;
 exports.getCaretWithOffset = getCaretWithOffset;
 exports.getCaretInBoundaries = getCaretInBoundaries;
 exports.getCaretAfterFormat = getCaretAfterFormat;
+exports.getCaretOffset = getCaretOffset;

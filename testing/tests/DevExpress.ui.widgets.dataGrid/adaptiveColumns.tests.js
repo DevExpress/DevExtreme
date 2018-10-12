@@ -1651,11 +1651,9 @@ QUnit.test("Form has 2 columns in material theme", function(assert) {
 
     var form = $("#container").find(".dx-form").dxForm("instance");
     var colWidth = form.option("colCount");
-    var screenByWidth = form.option("screenByWidth");
 
     // assert
     assert.equal(colWidth, 2);
-    assert.ok(screenByWidth);
 
     themes.isMaterial = origIsMaterial;
 });

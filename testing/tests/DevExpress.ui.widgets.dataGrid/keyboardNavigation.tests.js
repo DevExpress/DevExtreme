@@ -339,6 +339,37 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
     assert.ok(navigationController._keyDownProcessor, "keyDownProcessor");
 });
 
+// T667278
+QUnit.testInActiveWindow("Cell is focused when clicked on input in cell", function(assert) {
+    // arrange
+    var navigationController,
+        $input,
+        $cell,
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td><input/></td></tr>")).appendTo("#container");
+
+    this.getView("rowsView").element = function() {
+        return $rowsElement;
+    };
+
+    // act
+    navigationController = new KeyboardNavigationController(this.component);
+    navigationController.init();
+
+    callViewsRenderCompleted(this.component._views);
+
+    $input = $rowsElement.find("input");
+
+    $input.focus().trigger(CLICK_EVENT);
+
+    // assert
+    $cell = $input.parent();
+    assert.ok($input.is(":focus"), "input is focused");
+    assert.equal($cell.attr("tabIndex"), undefined, "cell does not have tabindex");
+    assert.ok($cell.hasClass("dx-cell-focus-disabled"), "cell has class dx-cell-focus-disabled");
+    assert.equal(navigationController._focusedViews.viewIndex, 0, "view index");
+    assert.equal(navigationController._focusedView.name, "rowsView", "focused view");
+});
+
 // T579521
 QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self", function(assert) {
     // arrange
@@ -1160,6 +1191,31 @@ QUnit.testInActiveWindow("Up arrow", function(assert) {
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, "rowIndex");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
+});
+
+// T670539
+QUnit.testInActiveWindow("Up arrow if scrolling mode is virtual", function(assert) {
+    // arrange
+    setupModules(this);
+
+    // act
+    this.gridView.render($("#container"));
+
+    var oldGetRowIndexOffset = this.dataController.getRowIndexOffset;
+
+    this.dataController.getRowIndexOffset = function() {
+        return 100000;
+    };
+
+    this.focusCell(1, 0);
+
+    this.triggerKeyDown("upArrow");
+
+    // assert
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 100000, "rowIndex");
+
+    this.dataController.getRowIndexOffset = oldGetRowIndexOffset;
 });
 
 QUnit.testInActiveWindow("StopPropagation is called", function(assert) {
@@ -5083,6 +5139,8 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.is(":focus"), "focus", "freespace cell has no focus");
         assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "freespace cell has no .dx-cell-focus-disabled");
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
+        // T672133
+        assert.ok(that.rowsView.element().is(":focus"), "rowsView has focus to work pageUp/pageDown");
     });
 
     QUnit.testInActiveWindow("virtual row cells should not have focus", function(assert) {
@@ -5166,7 +5224,9 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         $cell = that.rowsView.element().find(".dx-row").eq(0).find("td").eq(1);
         assert.equal($cell.text(), "777777");
         assert.strictEqual($cell.attr("tabIndex"), "0");
-        assert.ok($cell.is(":focus"), "focus");
+        if(!browser.msie || browser.version !== "18.17763") {
+            assert.ok($cell.is(":focus"), "focus");
+        }
         assert.ok($cell.hasClass("dx-cell-focus-disabled"));
         assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
@@ -5218,6 +5278,11 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
     });
 
     QUnit.test("Editor's input should be focused after mouse click (T650581)", function(assert) {
+        if(browser.msie && browser.version === "18.17763") {
+            assert.ok(true);
+            return;
+        }
+
         // arrange
         var that = this,
             $testElement;

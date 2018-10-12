@@ -4853,6 +4853,36 @@ QUnit.test("column filter for column with calculateFilterExpression using functi
     assert.equal(this.dataController.items()[0].data.name, 'Alex');
 });
 
+QUnit.test("column filter for column with calculateFilterExpression using function selector as filter function", function(assert) {
+    this.setupFilterableData();
+
+    var loadingCount = 0;
+    this.dataSource.store().on("loading", function() {
+        loadingCount++;
+    });
+
+    // act
+    this.columnsController.columnOption(3, 'calculateFilterExpression', function(text, operation) {
+        return [function(data) {
+            return !!(data.name + " " + data.age).match(text);
+        }, '=', true];
+    });
+    this.columnsController.columnOption(3, 'filterValue', '9');
+
+    // assert
+    assert.equal(loadingCount, 0, "no loading because cache enabled");
+    assert.equal(this.dataController.items().length, 1);
+    assert.equal(this.dataController.items()[0].data.age, 19);
+
+    // act
+    this.columnsController.columnOption(3, 'filterValue', 'Ale');
+
+    // assert
+    assert.equal(loadingCount, 0, "no loading because cache enabled");
+    assert.equal(this.dataController.items().length, 1);
+    assert.equal(this.dataController.items()[0].data.name, 'Alex');
+});
+
 QUnit.test("column filter for column with calculateFilterExpression returns filter function when cache enabled", function(assert) {
     this.setupFilterableData();
 
@@ -6071,6 +6101,46 @@ QUnit.test("Edit row after detail row", function(assert) {
     assert.strictEqual(this.dataController.items()[2].isEditing, true, "isEditing is correct for row 2");
 });
 
+// T677250
+QUnit.test("Expand detail row before edit form and detail rows", function(assert) {
+    var array = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+    ];
+
+    this.options.editing = {
+        mode: "form"
+    };
+
+    var dataSource = createDataSource(array, { key: 'id' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.expandRow(2);
+    this.editRow(1);
+
+    // act
+    this.expandRow(1);
+
+    // assert
+    assert.ok(this.editingController.isEditing());
+    assert.equal(this.dataController.items().length, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data", "row 0 is data");
+
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail", "row 1 is detail");
+    assert.notOk(this.dataController.items()[1].isEditing, "row 1 is not editing");
+
+    assert.strictEqual(this.dataController.items()[2].rowType, "detail", "row 2 is detail (edit form)");
+    assert.ok(this.dataController.items()[2].isEditing, "isEditing is correct for row 2");
+
+    assert.strictEqual(this.dataController.items()[3].rowType, "detail", "row 3 is data");
+    assert.notOk(this.dataController.items()[3].isEditing, "row 3 is not editing");
+
+    assert.strictEqual(this.dataController.items()[4].rowType, "data", "row 4 is detail");
+});
+
 QUnit.module("Error handling", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -6110,6 +6180,41 @@ QUnit.test("load error", function(assert) {
     // assert
     assert.deepEqual(dataErrors, ['Load error']);
     assert.deepEqual(callbackDataErrors, ['Load error']);
+});
+
+QUnit.test("load error that occurs in array query", function(assert) {
+    var dataErrors = [],
+        callbackDataErrors = [];
+
+    var selectorWithNullRef = function() {
+        var value = null;
+        return value.field;
+    };
+
+    this.options = {
+        loadingTimeout: 0,
+        dataSource: {
+            filter: [selectorWithNullRef, "=", 1],
+            store: [{ field: 1 }]
+        },
+        onDataErrorOccurred: function(e) {
+            dataErrors.push(e.error.message);
+        }
+    };
+
+    setupDataGridModules(this, ['data', 'columns']);
+
+
+    this.dataController.dataErrorOccurred.add(function(error) {
+        callbackDataErrors.push(error.message);
+    });
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataErrors.length, 1);
+    assert.equal(callbackDataErrors.length, 1);
 });
 
 QUnit.test("return false on dataErrorOccurred", function(assert) {

@@ -58,6 +58,7 @@
                         visibility: hidden;
                         background-color: transparent;
                         pointer-events: none;
+                        border-bottom-color: transparent; // T672281
                     }
                 }
 
@@ -164,15 +165,6 @@
 
         .dx-error-row {
             .user-select(initial);
-        }
-
-        .dx-column-lines > td {
-            &:first-child {
-                border-left: none;
-            }
-            &:last-child {
-                border-right: none;
-            }
         }
     }
 
@@ -308,6 +300,10 @@
     input.dx-hidden {
         display: inline-block !important;
         width: 0 !important;
+    }
+
+    .dx-hidden-cell {
+        visibility: hidden;
     }
 
     .dx-row {
@@ -713,7 +709,6 @@
 
     .dx-@{widgetName}-header-panel {
         text-align: left;
-        overflow: hidden;
 
         .dx-toolbar-menu-container {
             .dx-button {
@@ -736,9 +731,10 @@
 
     .dx-gridbase-container > .dx-@{widgetName}-rowsview {
         flex: auto;
+        height: auto; // T671939
 
         &.dx-scrollable {
-            display: flex;  
+            display: flex;
 
             .dx-scrollable-wrapper {
                 flex: 1;
@@ -971,16 +967,6 @@
     }
 
     .dx-rtl {
-        .dx-@{widgetName} .dx-column-lines > td {
-            &:first-child {
-                border-right: none;
-            }
-
-            &:last-child {
-                border-left: none;
-            }
-        }
-
         .dx-@{widgetName}-content .dx-@{widgetName}-table {
             direction: rtl;
 

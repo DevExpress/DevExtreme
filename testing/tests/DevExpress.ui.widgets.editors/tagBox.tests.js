@@ -45,7 +45,8 @@ var LIST_CLASS = "dx-list",
 var KEY_TAB = 9,
     KEY_ENTER = 13,
     KEY_ESC = 27,
-    KEY_DOWN = 40;
+    KEY_DOWN = 40,
+    KEY_SPACE = 32;
 
 var TIME_TO_WAIT = 500;
 
@@ -1690,6 +1691,71 @@ QUnit.test("tagBox selects item on enter key", function(assert) {
     assert.equal($tags.text(), "1", "rendered first item");
 });
 
+QUnit.test("tagBox selects item on space key", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    this.reinit({
+        items: [1, 2, 3],
+        focusStateEnabled: true,
+        opened: true
+    });
+
+    this.keyboard
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal($tags.text(), "1", "rendered first item");
+});
+
+QUnit.test("tagBox didn't selects item on space key if it acceptCustomValue", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    this.reinit({
+        items: [1, 2, 3],
+        focusStateEnabled: true,
+        acceptCustomValue: true,
+        opened: true
+    });
+
+    this.keyboard
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal($tags.length, 0, "there are no tags");
+});
+
+QUnit.test("tagBox didn't selects item on space key if search is enabled", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    this.reinit({
+        items: [1, 2, 3],
+        focusStateEnabled: true,
+        searchEnabled: true,
+        opened: true
+    });
+
+    this.keyboard
+        .keyDown(KEY_SPACE)
+        .keyDown(KEY_DOWN)
+        .keyDown(KEY_SPACE);
+
+    var $tags = this.$element.find("." + TAGBOX_TAG_CONTENT_CLASS);
+    assert.equal($tags.length, 0, "there are no tags");
+});
+
 QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (T378292)", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "test does not actual for mobile devices");
@@ -2927,6 +2993,32 @@ QUnit.test("filter should not be cleared when no focusout and no item selection 
 
     assert.equal($(".dx-item").length, 1, "items count of list");
     assert.equal($.trim($(".dx-item").first().text()), "111", "value of first item");
+});
+
+QUnit.test("TagBox with selection controls shouldn't clear search after click on item", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["test1", "custom", "test2"],
+            searchEnabled: true,
+            searchTimeout: 0,
+            showSelectionControls: true,
+            selectAllMode: "allPages"
+        }),
+        instance = $tagBox.dxTagBox("instance");
+
+    this.clock.tick(TIME_TO_WAIT);
+
+    keyboardMock(instance._input()).type("te");
+    this.clock.tick(TIME_TO_WAIT);
+
+    var $listItems = $("." + LIST_ITEM_CLASS);
+
+    $listItems.first().trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    $listItems.last().trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.deepEqual(instance.option("value"), ["test1", "test2"], "Correct value");
 });
 
 QUnit.module("popup position and size", moduleSetup);
@@ -4619,6 +4711,25 @@ QUnit.test("initial items value should be loaded when filter is not implemented 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2item 3");
 });
 
+QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key is used (T662546)", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }, { id: 3, text: "item 3" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load,
+                key: "id"
+            },
+            value: [{ id: 2, text: "item 2" }],
+            valueExpr: "this",
+            displayExpr: "text",
+            opened: true
+        });
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 2");
+
+    var list = $tagBox.dxTagBox("instance")._$list.dxList("instance");
+    assert.deepEqual(list.option("selectedItems"), [{ id: 2, text: "item 2" }]);
+});
+
 QUnit.test("useSubmitBehavior option", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2],
@@ -4951,4 +5062,40 @@ QUnit.test("Items is not selected when values is set on the onSelectAllValueChan
 
     var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
     assert.equal(selectedItems.length, 4, "selected items");
+});
+
+QUnit.test("Read only TagBox should be able to render the multitag", function(assert) {
+    assert.expect(1);
+
+    try {
+        $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3, 4, 5, 6, 7],
+            placeholder: "test",
+            value: [1, 2, 3, 4],
+            readOnly: true,
+            maxDisplayedTags: 3
+        });
+    } catch(e) {
+        assert.ok(false, "Widget raise the error");
+    }
+
+    assert.ok(true, "Widget rendered");
+});
+
+QUnit.test("Disabled TagBox should be able to render the multitag", function(assert) {
+    assert.expect(1);
+
+    try {
+        $("#tagBox").dxTagBox({
+            dataSource: [1, 2, 3, 4, 5, 6, 7],
+            placeholder: "test",
+            value: [1, 2, 3, 4],
+            disabled: true,
+            maxDisplayedTags: 3
+        });
+    } catch(e) {
+        assert.ok(false, "Widget raise the error");
+    }
+
+    assert.ok(true, "Widget rendered");
 });

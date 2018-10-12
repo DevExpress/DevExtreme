@@ -9,16 +9,24 @@ module.exports = {
 
     _waitAsyncTemplates(callback) {
         if(this._options.templatesRenderAsynchronously) {
-            this._asyncTemplatesTimer = setTimeout(function() {
+            this._asyncTemplatesTimers = this._asyncTemplatesTimers || [];
+            const timer = setTimeout(function() {
                 callback.call(this);
-                this._cleanAsyncTemplatesTimer();
+                clearTimeout(timer);
             }.bind(this));
+            this._asyncTemplatesTimers.push(timer);
         } else {
             callback.call(this);
         }
     },
 
     _cleanAsyncTemplatesTimer() {
-        clearTimeout(this._asyncTemplatesTimer);
+        const timers = this._asyncTemplatesTimers || [];
+
+        for(let i = 0; i < timers.length; i++) {
+            clearTimeout(timers[i]);
+        }
+
+        delete this._asyncTemplatesTimers;
     }
 };

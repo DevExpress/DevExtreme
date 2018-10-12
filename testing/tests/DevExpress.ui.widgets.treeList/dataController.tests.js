@@ -179,6 +179,43 @@ QUnit.test("nodes should not be recreated after expand", function(assert) {
     assert.strictEqual(this.getRootNode(), rootNode, "root node is not changed");
 });
 
+// T635433
+QUnit.test("sorting should not be reapplied after expand", function(assert) {
+    // arrange
+    var array = [
+            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+            { name: 'Category2', phone: '55-55-55', id: 1, parentId: 0 },
+            { name: 'Category1', phone: '98-75-21', id: 2, parentId: 0 }
+        ],
+        dataSource = createDataSource(array);
+
+    this.dataController.setDataSource(dataSource);
+
+    dataSource.load();
+
+    var calculateSortValueCalled = false;
+
+    this.columnOption("name", "calculateSortValue", function(data) {
+        calculateSortValueCalled = true;
+        return data.name;
+    });
+
+    // act
+    this.columnOption("name", "sortOrder", "asc");
+
+    // assert
+    assert.ok(calculateSortValueCalled, "sorting is applied");
+
+
+    // act
+    calculateSortValueCalled = false;
+    this.expandRow(2);
+
+    // assert
+    assert.notOk(calculateSortValueCalled, "sorting is not reapplied");
+    assert.equal(this.getVisibleRows()[0].data.name, "Category1", "rows are sorted");
+});
+
 QUnit.test("nodes should be recreated after change sorting", function(assert) {
     // arrange
     var array = [

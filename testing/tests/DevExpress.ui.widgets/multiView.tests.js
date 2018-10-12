@@ -127,6 +127,22 @@ QUnit.test("height should be correctly updated on dxshown event", function(asser
     }
 });
 
+QUnit.test("multiView should trigger resize event for item content after item visibility changed", function(assert) {
+    var resizeHandler = sinon.spy();
+
+    $("#customMultiView").dxMultiView({
+        items: [{
+            template: function() {
+                return $("<div>", { class: "dx-visibility-change-handler" }).on("dxresize", resizeHandler);
+            }
+        }, { template: 'template2' }],
+        selectedIndex: 0,
+        height: 'auto'
+    });
+
+    assert.ok(resizeHandler.called, "event has been triggered");
+});
+
 QUnit.test("item content should be rendered correctly when template was changed (T585645)", function(assert) {
     var $multiView = $("#customMultiViewWithTemplate").dxMultiView({
             items: [{ template: $("#template1") }, { template: $("#template1") }],

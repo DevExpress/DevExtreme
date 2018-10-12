@@ -2,6 +2,7 @@ var commonUtils = require("../../core/utils/common"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     stateStoringCore = require("./ui.grid_core.state_storing_core"),
+    Deferred = require("../../core/utils/deferred").Deferred,
     equalByValue = commonUtils.equalByValue;
 
 
@@ -169,6 +170,7 @@ module.exports = {
                         selectionFilter = state.selectionFilter,
                         exportController = that.getController("export"),
                         columnsController = that.getController("columns"),
+                        dataController = that.getController("data"),
                         filterSyncController = that.getController("filterSync"),
                         scrollingMode = that.option("scrolling.mode");
 
@@ -200,6 +202,8 @@ module.exports = {
 
                     that.option("paging.pageSize", scrollingMode !== "virtual" && scrollingMode !== "infinite" && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
                     that.option("paging.pageIndex", state.pageIndex || 0);
+
+                    dataController && dataController.reset();
                 }
             },
             columns: {
@@ -222,13 +226,16 @@ module.exports = {
                     if(stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
                         clearTimeout(that._restoreStateTimeoutID);
 
+                        var deferred = new Deferred();
                         that._restoreStateTimeoutID = setTimeout(function() {
                             stateStoringController.load().always(function() {
                                 that._restoreStateTimeoutID = null;
                                 callBase.call(that);
                                 that.stateLoaded.fire();
+                                deferred.resolve();
                             });
                         });
+                        return deferred.promise();
                     } else if(!that.isStateLoading()) {
                         callBase.call(that);
                     }

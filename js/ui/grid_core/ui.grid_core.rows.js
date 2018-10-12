@@ -379,6 +379,20 @@ module.exports = {
                 }
             };
 
+            var defaultCellTemplate = function($container, options) {
+                var isDataTextEmpty = stringUtils.isEmpty(options.text) && options.rowType === "data",
+                    text = options.text,
+                    container = $container.get(0);
+
+                if(isDataTextEmpty) {
+                    gridCoreUtils.setEmptyText($container);
+                } else if(options.column.encodeHtml) {
+                    container.textContent = text;
+                } else {
+                    container.innerHTML = text;
+                }
+            };
+
             return {
                 _getDefaultTemplate: function(column) {
                     switch(column.command) {
@@ -387,17 +401,7 @@ module.exports = {
                                 container.html("&nbsp;");
                             };
                         default:
-                            return function($container, options) {
-                                var isDataTextEmpty = stringUtils.isEmpty(options.text) && options.rowType === "data",
-                                    text = isDataTextEmpty ? "&nbsp;" : options.text,
-                                    container = $container.get(0);
-
-                                if(column.encodeHtml && !isDataTextEmpty) {
-                                    container.textContent = text;
-                                } else {
-                                    container.innerHTML = text;
-                                }
-                            };
+                            return defaultCellTemplate;
                     }
                 },
 
@@ -574,8 +578,6 @@ module.exports = {
                         .addClass(this.addWidgetPrefix(CONTENT_CLASS))
                         .append(tableElement));
 
-                    this.setAria("role", "presentation", contentElement);
-
                     return this._findContentElement();
                 },
 
@@ -647,6 +649,8 @@ module.exports = {
                     for(i = 0; i < columns.length; i++) {
                         $row.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
                     }
+
+                    that.setAria("role", "presentation", $row);
 
                     return $row;
                 },

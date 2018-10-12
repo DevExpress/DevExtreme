@@ -1064,11 +1064,11 @@ QUnit.testStart(function() {
 
     QUnit.test("Get cell count to last view date", function(assert) {
         this.instance.option({
-            currentDate: new Date(2015, 2, 16),
+            currentDate: new Date(2015, 1, 16),
             firstDayOfWeek: 1
         });
 
-        assert.equal(this.instance.getCellCountToLastViewDate(new Date(2015, 2, 17)), 20, "Cell count is OK");
+        assert.equal(this.instance.getCellCountToLastViewDate(new Date(2015, 1, 17)), 20, "Cell count is OK");
     });
 
     QUnit.test("Get cell count to last view date", function(assert) {
@@ -1831,6 +1831,32 @@ QUnit.testStart(function() {
         assert.equal(cells.filter(".dx-state-focused").length, 1, "right quantity of focused cells");
     });
 
+    QUnit.test("It should not be possible to select cells via mouse if scrollable 'scrollByContent' is true", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                currentDate: new Date(2015, 3, 1),
+                height: 400,
+                allowMultipleCellSelection: true,
+                onContentReady: function(e) {
+                    var scrollable = e.component._dateTableScrollable;
+                    scrollable.option("scrollByContent", true);
+                },
+            }),
+            workspace = $element.dxSchedulerWorkSpaceMonth("instance");
+
+        var stub = sinon.stub(workspace, "notifyObserver");
+
+        var cells = $element.find("." + CELL_CLASS),
+            cell = cells.eq(23).get(0),
+            $table = $element.find(".dx-scheduler-date-table");
+
+        pointerMock(cells.eq(2)).start().click();
+        $($table).trigger($.Event("dxpointermove", { target: cell, toElement: cell, which: 1 }));
+
+        assert.notOk(stub.calledOnce, "Cells weren't selected");
+    });
+
 })("Workspace Keyboard Navigation");
 
 
@@ -1844,7 +1870,11 @@ QUnit.testStart(function() {
             startDayHour: 3,
             endDayHour: 7,
             hoursInterval: 0.5,
-            currentDate: new Date(2015, 3, 1)
+            currentDate: new Date(2015, 3, 1),
+            onContentReady: function(e) {
+                var scrollable = e.component.getScrollable();
+                scrollable.option("scrollByContent", false);
+            }
         });
 
         var cells = $element.find("." + CELL_CLASS),
@@ -1893,7 +1923,11 @@ QUnit.testStart(function() {
             startDayHour: 3,
             endDayHour: 7,
             hoursInterval: 0.5,
-            currentDate: new Date(2015, 3, 1)
+            currentDate: new Date(2015, 3, 1),
+            onContentReady: function(e) {
+                var scrollable = e.component.getScrollable();
+                scrollable.option("scrollByContent", false);
+            }
         });
 
         var cells = $element.find("." + CELL_CLASS),
@@ -1934,7 +1968,11 @@ QUnit.testStart(function() {
                 focusStateEnabled: true,
                 currentDate: new Date(2018, 4, 21),
                 groupOrientation: "vertical",
-                endDayHour: 2
+                endDayHour: 2,
+                onContentReady: function(e) {
+                    var scrollable = e.component.getScrollable();
+                    scrollable.option("scrollByContent", false);
+                }
             }),
             instance = $element.dxSchedulerWorkSpaceWeek("instance");
 
@@ -1978,7 +2016,11 @@ QUnit.testStart(function() {
                 endDayHour: 7,
                 hoursInterval: 0.5,
                 currentDate: new Date(2015, 3, 1),
-                height: 400
+                height: 400,
+                onContentReady: function(e) {
+                    var scrollable = e.component.getScrollable();
+                    scrollable.option("scrollByContent", false);
+                }
             }),
             instance = $element.dxSchedulerWorkSpaceMonth("instance");
 

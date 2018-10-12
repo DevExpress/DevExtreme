@@ -604,6 +604,27 @@ QUnit.test('no options and container has no sizes', function(assert) {
     }
 });
 
+// T665179
+QUnit.test('Do not get size from container if size option is set', function(assert) {
+    try {
+        var width = sinon.stub(renderer.fn, 'width').returns(0);
+        var height = sinon.stub(renderer.fn, 'height').returns(0);
+
+        this.createWidget({
+            size: {
+                width: 200,
+                height: 200
+            }
+        });
+
+        assert.ok(!width.called);
+        assert.ok(!height.called);
+    } finally {
+        renderer.fn.width.restore();
+        renderer.fn.height.restore();
+    }
+});
+
 QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
     try {
         sinon.stub(renderer.fn, 'width').returns(-2);
@@ -1451,4 +1472,81 @@ QUnit.test('get widget markup', function(assert) {
     };
     // act
     assert.equal(this.widget.svg(), 'some markup', 'markup, returned from element');
+});
+
+QUnit.module("Disabled", environment);
+
+QUnit.test("Create without disabled state", function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(this.renderer.root.stub("attr").callCount, 1);
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, ["pointer-events"]);
+});
+
+QUnit.test("Create with disabled state", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    this.createWidget({
+        disabled: true
+    });
+
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
+        "pointer-events": "none",
+        filter: "grayScaleFilterRef"
+    }]);
+});
+
+QUnit.test("Set disabled state, initially not disabled", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    var rs = this.createWidget();
+
+    rs.option({
+        disabled: true
+    });
+
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
+        "pointer-events": "none",
+        filter: "grayScaleFilterRef"
+    }]);
+});
+
+QUnit.test("Reset disabled state, initially disabled", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    var rs = this.createWidget({
+        disabled: true
+    });
+
+    rs.option({
+        disabled: false
+    });
+
+    assert.deepEqual(this.renderer.root.stub("attr").lastCall.args, [{
+        "pointer-events": 0,
+        filter: null
+    }]);
+});
+
+QUnit.test("Change disabled option if root has pointer-events attr", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    this.renderer.root.attr({ "pointer-events": "some-value" });
+
+    var widget = this.createWidget({
+        disabled: true
+    });
+
+    widget.option("disabled", false);
+
+    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "some-value", filter: null }]);
+});
+
+QUnit.test("Change disabled option if root has empty pointer-events attr", function(assert) {
+    sinon.stub(this.renderer, "getGrayScaleFilter").returns({ id: "grayScaleFilterRef" });
+    this.renderer.root.attr({ "pointer-events": "" });
+
+    var widget = this.createWidget({
+        disabled: true
+    });
+
+    widget.option("disabled", false);
+
+    assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "", filter: null }]);
 });

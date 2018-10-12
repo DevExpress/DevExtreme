@@ -216,6 +216,32 @@ QUnit.test("Separator should be shown if there are visible items after it (T2893
     assert.equal(menuBase.element.find(".dx-menu-separator").length, 1, "separator is visible");
 });
 
+QUnit.test("Separator should not be shown if there are no visible items before if", function(assert) {
+    var menuBase = createMenu({
+        items: [
+            { text: "000000", visible: false },
+            { text: "1111111", beginGroup: true },
+            { text: "2222222" }
+        ]
+    });
+
+    assert.equal(menuBase.element.find(".dx-menu-separator").length, 0, "there is no separators");
+});
+
+QUnit.test("Separator should not be shown if there is an invisible item between two groups", function(assert) {
+    var menuBase = createMenu({
+        items: [
+            { text: "item 1", beginGroup: true, visible: false },
+            { text: "item 2", visible: false },
+            { text: "item 3", beginGroup: true },
+            { text: "item 4" }
+        ]
+    });
+
+    assert.equal(menuBase.element.find(".dx-menu-separator").length, 0, "there is no separators");
+});
+
+
 QUnit.test("Render menu with hidden items (T310028)", function(assert) {
     createMenu({ items: [{ text: "item 1" }, { text: "item 2", visible: false }, { text: "item 3" }] });
 

@@ -73,6 +73,7 @@ var createSeries = function(options, renderSettings) {
     renderSettings = $.extend({
         labelsGroup: renderer.g(),
         seriesGroup: renderer.g(),
+        incidentOccurred: $.noop
     }, renderSettings);
 
     renderer.stub("g").reset();
@@ -190,6 +191,29 @@ var checkGroups = function(assert, series) {
             percentStick: false,
             sizePointNormalState: 10
         });
+    });
+
+    QUnit.test("IncidentOccurred. Data without value fields", function(assert) {
+        const data = [{ arg: 1 }, { arg: 2 }];
+        const incidentOccurred = sinon.spy();
+        const options = {
+            type: "stock",
+            argumentField: "arg",
+            openValueField: "o",
+            highValueField: "h",
+            lowValueField: "l",
+            closeValueField: "c",
+            label: { visible: false }
+        };
+        const series = createSeries(options, {
+            incidentOccurred: incidentOccurred
+        });
+
+        series.updateData(data);
+        series.createPoints();
+
+        assert.strictEqual(incidentOccurred.callCount, 4);
+        assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
     });
 
     QUnit.module("StockSeries series. Draw", {

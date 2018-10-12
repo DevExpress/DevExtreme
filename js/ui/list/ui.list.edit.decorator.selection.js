@@ -101,7 +101,7 @@ registerDecorator(
                 this._selectAllCheckBox.$element().addClass(FOCUSED_STATE_CLASS);
                 return true;
             } else {
-                this._selectAllCheckBox.$element().removeClass(FOCUSED_STATE_CLASS);
+                this._$selectAll && this._selectAllCheckBox.$element().removeClass(FOCUSED_STATE_CLASS);
                 this._list.focusListItem(itemIndex);
                 return false;
             }
@@ -112,7 +112,7 @@ registerDecorator(
         },
 
         handleEnterPressing: function() {
-            if(this._selectAllCheckBox.$element().hasClass(FOCUSED_STATE_CLASS)) {
+            if(this._$selectAll && this._selectAllCheckBox.$element().hasClass(FOCUSED_STATE_CLASS)) {
                 this._selectAllCheckBox.option("value", !this._selectAllCheckBox.option("value"));
                 return true;
             }

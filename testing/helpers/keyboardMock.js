@@ -138,7 +138,9 @@ var browser, focused;
             40: "ArrowDown",
             45: "Insert",
             46: "Delete",
-            109: "-"
+            109: "-",
+            173: "-",
+            189: "-"
         },
 
         CHAR_CODE_EXCEPTIONS: {

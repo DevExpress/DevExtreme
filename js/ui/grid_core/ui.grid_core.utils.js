@@ -74,6 +74,10 @@ module.exports = (function() {
         return dataType === "date" || dataType === "datetime";
     };
 
+    var setEmptyText = function($container) {
+        $container.get(0).textContent = "\u00A0";
+    };
+
     return {
         renderNoDataText: function($element) {
             var that = this;
@@ -202,7 +206,7 @@ module.exports = (function() {
                 }
                 return true;
             } else if(typeUtils.isFunction(filter1) && filter1.columnIndex >= 0 && typeUtils.isFunction(filter2) && filter2.columnIndex >= 0) {
-                return filter1.columnIndex === filter2.columnIndex;
+                return filter1.columnIndex === filter2.columnIndex && toComparable(filter1.filterValue) === toComparable(filter2.filterValue);
             } else {
                 return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
             }
@@ -431,27 +435,45 @@ module.exports = (function() {
 
                         rowsView.setAria("label", options.value ? rowsView.localize("dxDataGrid-ariaCollapse") : rowsView.localize("dxDataGrid-ariaExpand"), $container);
                     } else {
-                        $container.get(0).innerHTML = "&nbsp;";
+                        setEmptyText($container);
                     }
                 }
             };
         },
 
+        setEmptyText: setEmptyText,
+
         isDateType: isDateType,
 
         getSelectionRange: function(focusedElement) {
-            return focusedElement ? {
-                selectionStart: focusedElement.selectionStart,
-                selectionEnd: focusedElement.selectionEnd
-            } : {};
+            try {
+                if(focusedElement) {
+                    return {
+                        selectionStart: focusedElement.selectionStart,
+                        selectionEnd: focusedElement.selectionEnd
+                    };
+                }
+            } catch(e) {}
+
+            return {};
         },
 
         setSelectionRange: function(focusedElement, selectionRange) {
-            if(focusedElement && focusedElement.setSelectionRange) {
-                try {
+            try {
+                if(focusedElement && focusedElement.setSelectionRange) {
                     focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
-                } catch(e) {}
+                }
+            } catch(e) {}
+        },
+
+        getLastResizableColumnIndex: function(columns) {
+            var lastColumnIndex = columns.length - 1;
+            var hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
+            while(lastColumnIndex >= 0 && columns[lastColumnIndex] && (columns[lastColumnIndex].command || columns[lastColumnIndex] === "adaptiveHidden" || columns[lastColumnIndex].fixed || (hasResizableColumns && columns[lastColumnIndex].allowResizing === false))) {
+                lastColumnIndex--;
             }
+
+            return lastColumnIndex;
         }
     };
 })();

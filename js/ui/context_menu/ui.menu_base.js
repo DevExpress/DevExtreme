@@ -528,7 +528,26 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
 
+            var firstVisibleIndex = -1,
+                nextGroupFirstIndex = -1;
+
             each(nodes, function(index, node) {
+                var isVisibleNode = node.visible !== false;
+
+                if(isVisibleNode && firstVisibleIndex < 0) {
+                    firstVisibleIndex = index;
+                }
+
+                var isBeginGroup = firstVisibleIndex < index && (node.beginGroup || index === nextGroupFirstIndex);
+
+                if(isBeginGroup) {
+                    nextGroupFirstIndex = isVisibleNode ? index : index + 1;
+                }
+
+                if(index === nextGroupFirstIndex && firstVisibleIndex < index) {
+                    that._renderSeparator($nodeContainer);
+                }
+
                 that._renderItem(index, node, $nodeContainer);
             });
 
@@ -554,8 +573,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     _renderItem: function(index, node, $nodeContainer, $nodeElement) {
         var items = this.option("items"),
             $itemFrame;
-
-        this._renderSeparator(node, index, $nodeContainer);
 
         if(node.internalFields.item.visible === false) return;
         var $node = $nodeElement || this._createDOMElement($nodeContainer);
@@ -636,20 +653,10 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return item.selectable !== false;
     },
 
-    _renderSeparator: function(node, index, $itemsContainer) {
-        if(node.beginGroup && index > 0) {
-            this._needSeparate = true;
-        }
-
-        if(node.visible !== false && this._needSeparate) {
-            if(index > 0) {
-                $("<li>")
-                    .appendTo($itemsContainer)
-                    .addClass(DX_MENU_SEPARATOR_CLASS);
-            }
-
-            this._needSeparate = false;
-        }
+    _renderSeparator: function($itemsContainer) {
+        $("<li>")
+            .appendTo($itemsContainer)
+            .addClass(DX_MENU_SEPARATOR_CLASS);
     },
 
     _itemClickHandler: function(e) {

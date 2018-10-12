@@ -171,7 +171,7 @@ var ResizingController = modules.ViewController.inherit({
         var $element = this.component.$element(),
             that = this;
 
-        if(!this.option("legacyRendering")) {
+        if(!that.option("legacyRendering")) {
             var $rowsTable = that._rowsView._getTableElement(),
                 $rowsFixedTable = that._rowsView.getTableElements().eq(1);
 
@@ -181,6 +181,10 @@ var ResizingController = modules.ViewController.inherit({
 
             that._toggleBestFitModeForView(that._columnHeadersView, "dx-header", isBestFit);
             that._toggleBestFitModeForView(that._footerView, "dx-footer", isBestFit);
+
+            if(that._needStretch()) {
+                $rowsTable.get(0).style.width = isBestFit ? "auto" : "";
+            }
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
@@ -257,7 +261,7 @@ var ResizingController = modules.ViewController.inherit({
 
             each(visibleColumns, function(index) {
                 if(this.width !== "auto") {
-                    if(this.width) {
+                    if(typeUtils.isDefined(this.width)) {
                         resultWidths[index] = this.width;
                     } else if(!columnAutoWidth) {
                         resultWidths[index] = undefined;
@@ -299,7 +303,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _needStretch: function() {
-        return this.option("legacyRendering");
+        return this.option("legacyRendering") || this._columnsController.getVisibleColumns().some(c => c.width === "auto" && !c.command);
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
@@ -344,7 +348,7 @@ var ResizingController = modules.ViewController.inherit({
                 isColumnWidthsCorrected = true;
                 i = -1;
             }
-            if(!column.width) {
+            if(!typeUtils.isDefined(column.width)) {
                 hasAutoWidth = true;
             }
             if(isPercentWidth(column.width)) {
@@ -363,11 +367,8 @@ var ResizingController = modules.ViewController.inherit({
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth < contentWidth) {
-                lastColumnIndex = resultWidths.length - 1;
-                var hasResizableColumns = visibleColumns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
-                while(lastColumnIndex >= 0 && visibleColumns[lastColumnIndex] && (visibleColumns[lastColumnIndex].command || resultWidths[lastColumnIndex] === HIDDEN_COLUMNS_WIDTH || visibleColumns[lastColumnIndex].fixed || (hasResizableColumns && visibleColumns[lastColumnIndex].allowResizing === false))) {
-                    lastColumnIndex--;
-                }
+                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
+
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = "auto";
                     isColumnWidthsCorrected = true;
@@ -578,6 +579,7 @@ var ResizingController = modules.ViewController.inherit({
                 this.resize();
                 /* falls through */
             case "legacyRendering":
+            case "renderAsync":
                 args.handled = true;
                 return;
             default:
@@ -721,7 +723,13 @@ module.exports = {
              * @default false
              */
             showBorders: false,
-            legacyRendering: false
+            /**
+             * @name GridBaseOptions.renderAsync
+             * @type boolean
+             * @default false
+             */
+            renderAsync: false,
+            legacyRendering: false,
         };
     },
     controllers: {

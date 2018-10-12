@@ -124,9 +124,10 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         var that = this,
             $element = that.element().addClass(that.addWidgetPrefix(COLUMN_CHOOSER_CLASS)),
             columnChooserOptions = that.option("columnChooser"),
-            isGenericTheme = themes.isGeneric(),
-            isAndroid5Theme = themes.isAndroid5(),
-            isMaterial = themes.isMaterial(),
+            themeName = themes.current(),
+            isGenericTheme = themes.isGeneric(themeName),
+            isAndroid5Theme = themes.isAndroid5(themeName),
+            isMaterial = themes.isMaterial(themeName),
             dxPopupOptions = {
                 visible: false,
                 shading: false,

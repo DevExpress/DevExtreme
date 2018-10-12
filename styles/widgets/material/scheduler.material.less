@@ -86,6 +86,10 @@
 
     padding-right: 8px;
 
+    .dx-scheduler-small & {
+        padding-right: 2px;
+    }
+
     .dx-rtl & {
         padding-left: 8px;
         padding-right: 0;
@@ -106,6 +110,10 @@
     font-size: @MATERIAL_SCHEDULER_ALL_DAY_TITLE_FONT_SIZE;
     top: @MATERIAL_SCHEDULER_HEADER_HEIGHT;
     border-bottom:  @SCHEDULER_BASE_BORDER;
+
+    .dx-scheduler-small & {
+        font-size: @MATERIAL_SCHEDULER_ALL_DAY_TITLE_FONT_SIZE * 0.8;
+    }
 
     .dx-scheduler-work-space-all-day-collapsed & {
         height: @MATERIAL_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT;
@@ -146,6 +154,10 @@
     }
 }
 
+// T657800
+.dx-scheduler-work-space-vertical-grouped {
+    .dx-scheduler-vertical-group-table-mixin(1px);
+}
 
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week,
@@ -218,6 +230,10 @@
     .dx-scheduler-header-panel-cell-date {
         display: block;
         margin: 0 @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN;
+
+        .dx-scheduler-small & {
+            margin: 0 @MATERIAL_SCHEDULER_HEADER_PANEL_MARGIN * @SCHEDULER_SMALL_SIZE_FACTOR;
+        }
 
         &:first-child {
             font-size: @MATERIAL_SCHEDULER_HEADER_PANEL_WEEK_FONT_SIZE;

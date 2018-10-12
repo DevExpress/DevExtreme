@@ -291,12 +291,13 @@ _Translator2d.prototype = {
         extend(that, script);
         that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
 
-        that._calculateSpecialValues();
+        that.sc = {};
         that._checkingMethodsAboutBreaks = [
             getCheckingMethodsAboutBreaks(false),
             getCheckingMethodsAboutBreaks(that.isInverted())
         ];
         that._translateBreaks();
+        that._calculateSpecialValues();
     },
 
     _translateBreaks: function() {
@@ -436,8 +437,7 @@ _Translator2d.prototype = {
             canvas_position_center_middle;
 
         if(minVisible <= 0 && maxVisible >= 0) {
-            that.sc = {};// we can not call translate method without sc object
-            canvas_position_default = that.translate(0);
+            canvas_position_default = that.translate(0, 1);
         } else {
             invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);
             if(that._options.isHorizontal) {

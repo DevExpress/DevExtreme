@@ -8,7 +8,8 @@
                 require("./ui/widget/ui.template_base").renderedCallbacks,
                 require("./core/guid"),
                 require("./ui/validation_engine"),
-                require("./core/utils/iterator")
+                require("./core/utils/iterator"),
+                require("./core/utils/string").encodeHtml
             );
         });
     } else {
@@ -20,10 +21,11 @@
             ui && ui.templateRendered,
             DevExpress.data.Guid,
             DevExpress.validationEngine,
-            DevExpress.utils.iterator
+            DevExpress.utils.iterator,
+            DevExpress.utils.string.encodeHtml
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, encodeHtml) {
     var templateCompiler = createTemplateCompiler();
 
     function createTemplateCompiler() {
@@ -31,14 +33,6 @@
             CLOSE_TAG = "%>",
             ENCODE_QUALIFIER = "-",
             INTERPOLATE_QUALIFIER = "=";
-
-        function encodeHtml(value) {
-            return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;");
-        }
 
         function acceptText(bag, text) {
             if(text) {
@@ -53,7 +47,7 @@
 
             if(encode || interpolate) {
                 bag.push("_.push(");
-                bag.push(encode ? encodeHtml(value) : value);
+                bag.push(encode ? "arguments[1](" + value + ")" : value);
                 bag.push(");");
             } else {
                 bag.push(code + "\n");
@@ -101,7 +95,7 @@
                 return templateCompiler(outerHtml(element));
             },
             render: function(template, data) {
-                return template(data);
+                return template(data, encodeHtml);
             }
         };
     }

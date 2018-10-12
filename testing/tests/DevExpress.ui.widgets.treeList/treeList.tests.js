@@ -483,6 +483,27 @@ QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection
     assert.notOk($("#treeList").find(".dx-texteditor").length, "Editing textEditor wasn't rendered");
 });
 
+QUnit.test("Filter row should not contains selection checkboxes", function(assert) {
+    createTreeList({
+        columns: ["name", "age"],
+        selection: { mode: 'multiple' },
+        filterRow: {
+            visible: true
+        },
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 3", age: 19 }
+        ]
+    });
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal($("#treeList").find(".dx-treelist-filter-row").length, 1, "filter row is rendered");
+    assert.equal($("#treeList").find(".dx-checkbox").length, 2, "selection chebkboxes are rendered");
+    assert.equal($("#treeList").find(".dx-treelist-filter-row .dx-checkbox").length, 0, "no selection chebkboxes in filter row");
+});
+
 QUnit.test("Aria accessibility", function(assert) {
     // arrange, act
     var $dataRows,
@@ -786,6 +807,24 @@ QUnit.test("Call getSelectedRowKeys with 'leavesOnly' parameter and wrong select
     assert.deepEqual(treeList.getSelectedRowKeys("leavesOnly"), [2], "dataSource is reloaded");
 });
 
+// T664886
+QUnit.test("Highlight searchText in expandable column", function(assert) {
+    var treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0, name: "Name 1", age: 16 },
+                { id: 2, parentId: 1, name: "Name 2", age: 17 },
+                { id: 3, parentId: 2, name: "Name", age: 18 }
+            ],
+            searchPanel: {
+                text: "3"
+            }
+        }),
+        searchTextSelector = ".dx-treelist-search-text";
+
+    this.clock.tick(30);
+
+    assert.equal(treeList.$element().find(searchTextSelector).length, 1);
+});
 
 QUnit.module("Expand/Collapse rows");
 

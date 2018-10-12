@@ -150,11 +150,12 @@ var dropDownAppointments = Class.inherit({
                 buttonTemplate: this._createButtonTemplate(items.data.length, isCompact),
                 buttonWidth: config.buttonWidth,
                 closeOnClick: false,
-                onItemClick: function(args) {
-                    var mappedData = that.instance.fire("mapAppointmentFields", args);
+                onItemClick: (function(args) {
+                    var mappedData = this.instance.fire("mapAppointmentFields", args),
+                        result = extendFromObject(mappedData, args, false);
 
-                    that._appointmentClickAction(extendFromObject(mappedData, args, false));
-                },
+                    that._appointmentClickAction(this._clearExcessFields(result));
+                }).bind(this),
                 activeStateEnabled: false,
                 focusStateEnabled: this.instance.option("focusStateEnabled"),
                 itemTemplate: new FunctionTemplate(function(options) {
@@ -188,6 +189,14 @@ var dropDownAppointments = Class.inherit({
                 }
             });
         }
+    },
+
+    _clearExcessFields: function(data) {
+        delete data.itemData;
+        delete data.itemIndex;
+        delete data.itemElement;
+
+        return data;
     },
 
     _dragStartHandler: function($item, itemData, settings, $menu, e) {
@@ -285,7 +294,12 @@ var dropDownAppointments = Class.inherit({
         }).bind(this));
 
         var startDate = this.instance.fire("getField", "startDate", appointmentData),
-            endDate = this.instance.fire("getField", "endDate", appointmentData);
+            endDate = this.instance.fire("getField", "endDate", appointmentData),
+            startDateTimeZone = this.instance.fire("getField", "startDateTimeZone", appointmentData),
+            endDateTimeZone = this.instance.fire("getField", "endDateTimeZone", appointmentData);
+
+        startDate = this.instance.fire("convertDateByTimezone", startDate, startDateTimeZone);
+        endDate = this.instance.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
         this.instance.fire("formatDates", {
             startDate: startDate,

@@ -1209,6 +1209,7 @@ var BaseChart = BaseWidget.inherit({
             if(!that._checkPaneName(seriesTheme)) {
                 continue;
             }
+            const incidentOccurred = that._incidentOccurred;
 
             particularSeries = new seriesModule.Series({
                 renderer: that._renderer,
@@ -1217,12 +1218,13 @@ var BaseChart = BaseWidget.inherit({
                 eventTrigger: that._eventTrigger,
                 commonSeriesModes: that._getSelectionModes(),
                 eventPipe: eventPipe,
+                incidentOccurred: incidentOccurred,
                 argumentAxis: that._getArgumentAxis(),
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             }, seriesTheme);
 
             if(!particularSeries.isUpdated) {
-                that._incidentOccurred("E2101", [seriesTheme.type]);
+                incidentOccurred("E2101", [seriesTheme.type]);
             } else {
                 particularSeries.index = that.series.length;
                 that.series.push(particularSeries);

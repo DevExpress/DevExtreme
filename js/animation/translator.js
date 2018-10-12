@@ -87,13 +87,27 @@ var clearCache = function($element) {
     }
 };
 
-var resetPosition = function($element) {
-    $element.css({
-        left: 0,
-        top: 0,
-        transform: "none"
-    });
+var resetPosition = function($element, finishTransition) {
+    var originalTransition,
+        stylesConfig = {
+            left: 0,
+            top: 0,
+            transform: "none",
+        };
+
+    if(finishTransition) {
+        originalTransition = $element.css("transition");
+        stylesConfig.transition = "none";
+    }
+
+    $element.css(stylesConfig);
+
     clearCache($element);
+
+    if(finishTransition) {
+        $element.get(0).offsetHeight;
+        $element.css("transition", originalTransition);
+    }
 };
 
 var parseTranslate = function(translateString) {

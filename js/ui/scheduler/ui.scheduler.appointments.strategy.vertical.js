@@ -6,6 +6,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
+    APPOINTMENT_MIN_WIDTH = 5,
     APPOINTMENT_DEFAULT_WIDTH = 65,
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -110,6 +111,12 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             left = appointmentSettings.left + this._defaultWidth;
 
         if(tailHeight) {
+            var minHeight = this.getAppointmentMinSize();
+
+            if(tailHeight < minHeight) {
+                tailHeight = minHeight;
+            }
+
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
                 left: left,
@@ -159,6 +166,10 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 height = coordinates.height,
                 top = coordinates.top,
                 left = coordinates.left + (coordinates.index * width);
+
+            if(width < APPOINTMENT_MIN_WIDTH) {
+                width = APPOINTMENT_MIN_WIDTH;
+            }
 
             return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
         }

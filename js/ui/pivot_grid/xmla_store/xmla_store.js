@@ -526,7 +526,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function preparePathValue(pathValue, dataField) {
         if(pathValue) {
-            pathValue = typeUtils.isString(pathValue) && pathValue.indexOf("&[") !== -1 ? pathValue : "[" + pathValue + "]";
+            pathValue = typeUtils.isString(pathValue) && pathValue.indexOf("&") !== -1 ? pathValue : "[" + pathValue + "]";
 
             if(dataField && pathValue.indexOf(dataField + ".") === 0) {
                 pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
@@ -543,7 +543,7 @@ exports.XmlaStore = Class.inherit((function() {
             hash[name] = item;
         }
 
-        if(!item.value && member) {
+        if(!typeUtils.isDefined(item.value) && member) {
             item.text = member.caption;
             item.value = member.value;
             item.key = name ? name : '';

@@ -1,4 +1,5 @@
-var $ = require("jquery");
+var $ = require("jquery"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -3885,9 +3886,9 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
             assert.equal($(args.appointmentElement).get(0), dropDown._list.$element().find(".dx-list-item").eq(2).get(0), "Appointment element is OK");
             assert.ok(args.event instanceof $.Event, "Event is OK");
 
-            assert.strictEqual(args.itemData, undefined);
-            assert.strictEqual(args.itemElement, undefined);
-            assert.strictEqual(args.itemIndex, undefined);
+            assert.notOk(args.hasOwnProperty('itemData'));
+            assert.notOk(args.hasOwnProperty('itemIndex'));
+            assert.notOk(args.hasOwnProperty('itemElement'));
         }
     });
 
@@ -4583,6 +4584,65 @@ QUnit.test("DropDown appointment should be rendered correctly with expressions o
     assert.equal($appointment.find(".custom-title").text(), "Item 2", "Text is correct on init");
 });
 
+QUnit.test("DropDown appointment should be rendered correctly when timezone is set", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        var data = [
+            {
+                schedule: "Appointment 1",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 2",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 3",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 4",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 5",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: "Appointment 6",
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            }
+        ];
+
+        this.createInstance({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2018, 8, 17),
+            timeZone: 'Etc/UTC',
+            showCurrentTimeIndicator: false,
+            maxAppointmentsPerCell: 1,
+            height: 600,
+            textExpr: "schedule"
+        });
+
+        $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+
+        var $appointment = $(".dx-dropdownmenu-list .dx-item").first(),
+            $dates = $appointment.find(".dx-scheduler-dropdown-appointment-date").first();
+
+        assert.equal($dates.text(), "September 16, 10:00 PM - 11:00 PM", "Dates is correct");
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
 
     var startDate = new Date(2015, 1, 4, 1),
@@ -4709,6 +4769,26 @@ QUnit.test("Appointment should have right position on timeline month view", func
 
     assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, "appointment top is correct");
     assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, "appointment left is correct");
+});
+
+QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 25, 8, 0),
+        endDate: new Date(2016, 2, 1, 8, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 2, 1),
+        currentView: "timelineMonth",
+        startDayHour: 8,
+        firstDayOfWeek: 0,
+        dataSource: [appointment]
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).get(0),
+        $cell = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0);
+
+    assert.roughEqual($appointment.getBoundingClientRect().width, $cell.getBoundingClientRect().width, 1.1, "appointment-part width is correct");
 });
 
 QUnit.test("Appointment should have right width on timeline week view", function(assert) {

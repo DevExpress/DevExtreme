@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     columnsView = require("./ui.grid_core.columns_view"),
     isDefined = require("../../core/utils/type").isDefined,
     each = require("../../core/utils/iterator").each,
+    messageLocalization = require("../../localization/message"),
     extend = require("../../core/utils/extend").extend;
 
 var CELL_CONTENT_CLASS = "text-content",
@@ -42,6 +43,8 @@ module.exports = {
             var createCellContent = function(that, $cell, options) {
                 var showColumnLines,
                     $cellContent = $("<div>").addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
+
+                that.setAria("role", "presentation", $cellContent);
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
                 showColumnLines = that.option("showColumnLines");
@@ -146,6 +149,12 @@ module.exports = {
                     this.callBase($cell, cellOptions);
                     if(cellOptions.rowType === "header") {
                         this.setAria("role", "columnheader", $cell);
+                        if(cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand) {
+                            $cell.attr("id", cellOptions.column.id);
+                            this.setAria("label",
+                                messageLocalization.format("dxDataGrid-ariaColumn") + " " + cellOptions.column.caption,
+                                $cell);
+                        }
                     }
                 },
 
@@ -205,7 +214,7 @@ module.exports = {
                     var column = options.column,
                         $cellElement = this.callBase.apply(this, arguments);
 
-                    column.rowspan > 1 && $cellElement.attr("rowSpan", column.rowspan);
+                    column.rowspan > 1 && options.rowType === "header" && $cellElement.attr("rowSpan", column.rowspan);
 
                     return $cellElement;
                 },

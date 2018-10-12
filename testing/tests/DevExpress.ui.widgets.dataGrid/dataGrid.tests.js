@@ -178,8 +178,13 @@ QUnit.test("Correct start scroll position when RTL", function(assert) {
     clock.restore();
 });
 
-QUnit.test("Base accessibility structure", function(assert) {
-    var clock = sinon.useFakeTimers();
+QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        firstColumnIndex,
+        $headers,
+        getGlobalColumnIdSelector = function(index) {
+            return "[id=dx-col-" + index + "]";
+        };
 
     createDataGrid({
         columns: ["field1", "field2"],
@@ -190,12 +195,82 @@ QUnit.test("Base accessibility structure", function(assert) {
 
     clock.tick();
 
+    $headers = $(".dx-datagrid-headers");
+
+    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+
     assert.equal($(".dx-widget").attr("role"), "presentation");
+
     assert.equal($(".dx-datagrid").attr("role"), "grid");
-    assert.equal($(".dx-datagrid-headers").attr("role"), "presentation");
+
+    assert.equal($headers.attr("role"), "presentation");
+    assert.equal($headers.find(".dx-column-indicators").attr("role"), "presentation");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
+
     assert.equal($(".dx-datagrid-scroll-container").attr("role"), "presentation");
+
     assert.equal($(".dx-datagrid-table").eq(0).attr("role"), "presentation");
     assert.equal($(".dx-datagrid-table").eq(1).attr("role"), "presentation");
+
+    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(1)").attr("aria-describedby"), "dx-col-" + firstColumnIndex);
+    assert.equal($(".dx-datagrid-rowsview .dx-row").eq(0).children("td:nth-child(2)").attr("aria-describedby"), "dx-col-" + (firstColumnIndex + 1));
+
+    assert.equal($(".dx-datagrid-rowsview .dx-freespace-row").attr("role"), "presentation");
+
+    assert.equal($(".dx-context-menu").attr("role"), "presentation");
+
+    clock.restore();
+});
+
+QUnit.testInActiveWindow("Global column index should be unique for the different grids", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $headers,
+        $detailGridHeaders,
+        firstColumnIndex,
+        getGlobalColumnIdSelector = function(index) {
+            return "[id=dx-col-" + index + "]";
+        },
+        dataGrid = createDataGrid({
+            columns: ["field1", "field2"],
+            dataSource: [{ field1: "1", field2: "2" }],
+            keyExpr: "field1",
+            masterDetail: {
+                enabled: true,
+                template: function(container, e) {
+                    $("<div>").addClass("detail-grid").appendTo(container).dxDataGrid({
+                        loadingTimeout: undefined,
+                        columns: ["field3", "field4"],
+                        dataSource: [{ field1: "3", field2: "4" }]
+                    });
+                }
+            },
+        });
+
+    clock.tick();
+
+    $headers = $(".dx-datagrid-headers");
+
+    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+
+    dataGrid.expandRow("1");
+
+    clock.tick();
+
+    $headers = dataGrid.$element().find(".dx-datagrid-headers").eq(0);
+    $detailGridHeaders = dataGrid.$element().find(".dx-datagrid-headers").eq(1);
+
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).attr("aria-label"), "Column Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex)).text(), "Field 1");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).attr("aria-label"), "Column Field 2");
+    assert.equal($headers.find(getGlobalColumnIdSelector(firstColumnIndex + 1)).text(), "Field 2");
+
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).attr("aria-label"), "Column Field 3");
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 2)).text(), "Field 3");
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).attr("aria-label"), "Column Field 4");
+    assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).text(), "Field 4");
 
     clock.restore();
 });
@@ -208,6 +283,7 @@ QUnit.test("Command column accessibility structure", function(assert) {
     });
 
     // assert
+    assert.equal($(".dx-row.dx-header-row").eq(0).attr("role"), "row");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("role"), "columnheader");
     assert.equal($(".dx-header-row .dx-command-edit").eq(0).attr("aria-colindex"), 3);
 });
@@ -1291,8 +1367,6 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             });
 
             // assert
-            assert.strictEqual(instance.pageIndex(), 10, "current page index");
-
             setTimeout(function() {
                 assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
                 assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
@@ -2168,6 +2242,118 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     }
 });
 
+// T649906
+QUnit.test("Last column width should be reseted during column resizing to left when columnResizingMode is widget", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            columnResizingMode: "widget",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: ["id", "firstName", "lastName", { dataField: "age", allowResizing: false }]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition - 20,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    // assert
+    assert.strictEqual(instance.columnOption(0, "width"), 80);
+    assert.strictEqual(instance.columnOption(0, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(1, "width"), 100);
+    assert.strictEqual(instance.columnOption(1, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(2, "width"), 100);
+    assert.strictEqual(instance.columnOption(2, "visibleWidth"), "auto");
+    assert.strictEqual(instance.columnOption(3, "width"), 100);
+    assert.strictEqual(instance.columnOption(3, "visibleWidth"), undefined);
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
+        assert.strictEqual(headersCols[0].style.width, "80px");
+        assert.strictEqual(headersCols[1].style.width, "100px");
+        assert.strictEqual(headersCols[2].style.width, "auto");
+        assert.strictEqual(headersCols[3].style.width, "100px");
+    }
+});
+
+// T649906
+QUnit.test("Last column width should not be reseted during column resizing to right when columnResizingMode is widget", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            width: 400,
+            loadingTimeout: undefined,
+            columnResizingMode: "widget",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: ["id", "firstName", "lastName", { dataField: "age", allowResizing: false }]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition + 20,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    // assert
+    assert.strictEqual(instance.columnOption(0, "width"), 120);
+    assert.strictEqual(instance.columnOption(0, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(1, "width"), 100);
+    assert.strictEqual(instance.columnOption(1, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(2, "width"), 100);
+    assert.strictEqual(instance.columnOption(2, "visibleWidth"), undefined);
+    assert.strictEqual(instance.columnOption(3, "width"), 100);
+    assert.strictEqual(instance.columnOption(3, "visibleWidth"), undefined);
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
+        assert.strictEqual(headersCols[0].style.width, "120px");
+        assert.strictEqual(headersCols[1].style.width, "100px");
+        assert.strictEqual(headersCols[2].style.width, "100px");
+        assert.strictEqual(headersCols[3].style.width, "100px");
+    }
+});
+
 QUnit.test("Resize grid after column resizing to left when columnResizingMode is widget and minWidth is assigned", function(assert) {
     $("#container").width(300);
     // arrange
@@ -2284,6 +2470,62 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         headersCols = colGroups.eq(i).find("col");
 
         assert.strictEqual(headersCols.length, 2);
+        assert.strictEqual(headersCols[0].style.width, "75%");
+        assert.strictEqual(headersCols[1].style.width, "25%");
+    }
+});
+
+// T670844
+QUnit.test("Resize column if all columns have percent widths and columnResizingMode is nextColumn", function(assert) {
+    $("#container").width(200);
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columnResizingMode: "nextColumn",
+            allowColumnResizing: true,
+            dataSource: [{}],
+            columns: [
+                { dataField: "field1", width: "50%" },
+                { dataField: "field2", width: "50%" },
+                { dataField: "field3", width: "50%" },
+                { dataField: "field4", width: "50%" }
+            ]
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        colGroups,
+        headersCols,
+        resizeController;
+
+    // act
+    resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+
+    var startPosition = -9900;
+    resizeController._setupResizingInfo(startPosition);
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: startPosition + 25,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    instance.updateDimensions();
+
+    // assert
+    assert.strictEqual(instance.$element().children().width(), 200);
+    assert.strictEqual(instance.columnOption(0, "width"), "75.000%");
+    assert.strictEqual(instance.columnOption(1, "width"), "25.000%");
+
+    colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual(colGroups.length, 2);
+
+    for(var i = 0; i < colGroups.length; i++) {
+        headersCols = colGroups.eq(i).find("col");
+
+        assert.strictEqual(headersCols.length, 4);
         assert.strictEqual(headersCols[0].style.width, "75%");
         assert.strictEqual(headersCols[1].style.width, "25%");
     }
@@ -3250,6 +3492,44 @@ QUnit.test("scroll position should not be reseted if virtual scrolling and cell 
     assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row key");
 });
 
+QUnit.test("scroll position should not be reseted after refresh if virtual scrolling with legacyRendering", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 100; i++) {
+        array.push({ id: i });
+    }
+
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        dataSource: array,
+        keyExpr: "id",
+        paging: { pageSize: 10 },
+        legacyRendering: true,
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        },
+        columns: [{
+            dataField: "id"
+        }]
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 2000 });
+    clock.tick();
+    dataGrid.refresh();
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), 2000, "scrollTop is not reseted");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, "first visible row key");
+    clock.restore();
+});
+
 // T662900
 QUnit.test("scroll position should not be changed after partial update via repaintRows", function(assert) {
     // arrange
@@ -3279,6 +3559,37 @@ QUnit.test("scroll position should not be changed after partial update via repai
 
     // assert
     assert.equal(dataGrid.getScrollable().scrollTop(), 200, "scrollTop is not reseted");
+});
+
+// T671942
+QUnit.test("scroll position should not be changed after scrolling to end if scrolling mode is infinite", function(assert) {
+    // arrange
+    var array = [];
+
+    for(var i = 1; i <= 100; i++) {
+        array.push({ id: i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        dataSource: array,
+        keyExpr: "id",
+        scrolling: {
+            mode: "infinite"
+        },
+        loadingTimeout: undefined
+    }).dxDataGrid("instance");
+
+
+    var clock = sinon.useFakeTimers();
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    dataGrid.getScrollable().scrollTo({ y: 10000 });
+    clock.tick();
+    clock.restore();
+
+    // assert
+    assert.ok(dataGrid.getScrollable().scrollTop() > 0, "scrollTop is not reseted");
 });
 
 QUnit.test("height from extern styles", function(assert) {
@@ -5517,10 +5828,138 @@ QUnit.test("ungrouping after grouping should works correctly if row rendering mo
 
         // assert
         visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 15, "visible row count");
         assert.deepEqual(visibleRows[0].key, 1, "first visible row key");
         done();
     });
+});
+
+// T644981
+QUnit.test("ungrouping after grouping and scrolling should works correctly with large amount of data if row rendering mode is virtual", function(assert) {
+    var done = assert.async();
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            group: "group",
+            load: function(options) {
+                var result = { data: [], totalCount: 1000000, groupCount: 1000 };
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    if(options.group) {
+                        result.data.push({ key: i + 1, items: null, count: 1000 });
+                    } else {
+                        result.data.push({ id: i + 1, group: (i % 1000 + 1) });
+                    }
+                }
+
+                return $.Deferred().resolve(result);
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            updateTimeout: 0,
+            useNative: false
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        groupPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 100
+        },
+        columns: ["id", "group"]
+    }).dxDataGrid("instance");
+
+    dataGrid.getScrollable().scrollTo({ top: 1000000 });
+
+    realSetTimeout(function() {
+        // act
+        dataGrid.clearGrouping();
+        // assert
+        assert.ok(dataGrid.getTopVisibleRowData().id < 1000, "top visible row is correct");
+        assert.ok($(dataGrid.element()).find(".dx-virtual-row").first().height() <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+        assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
+        done();
+    });
+});
+
+QUnit.test("scrolling after ungrouping should works correctly with large amount of data if row rendering mode is virtual", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var result = { data: [], totalCount: 1000000, groupCount: options.requireGroupCount ? 1000 : undefined };
+
+                for(var i = options.skip || 0; i < (options.skip || 0) + options.take; i++) {
+                    if(options.group) {
+                        result.data.push({ key: i + 1, items: null, count: 1000 });
+                    } else {
+                        result.data.push({ id: i + 1, group: (i % 1000 + 1) });
+                    }
+                }
+
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(result);
+                }, 500);
+
+                return d;
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            updateTimeout: 0,
+            useNative: false
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        groupPanel: {
+            visible: true
+        },
+        paging: {
+            pageSize: 100
+        },
+        columns: ["id", { dataField: "group",
+            cellTemplate: function($container, options) {
+                $($container)
+                    .css("height", 100)
+                    .text(options.text);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+    clock.tick(2000);
+
+    dataGrid.columnOption("group", "groupIndex", 0);
+
+    clock.tick(2000);
+
+    dataGrid.getScrollable().scrollTo(9000);
+
+    clock.tick(200);
+
+    dataGrid.getScrollable().scrollTo(11000);
+
+    // assert
+    assert.ok(dataGrid.getTopVisibleRowData().key > 110, "top visible row is correct");
+    assert.ok($(dataGrid.element()).find(".dx-virtual-row").first().height() <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
+    assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
+
+    clock.restore();
 });
 
 // T641931
@@ -5558,7 +5997,39 @@ QUnit.test("Infinite scrolling should works correctly", function(assert) {
     dataGrid.getScrollable().scrollTo(10000);
 
     // assert
+    assert.equal(dataGrid.getVisibleRows().length, 20, "visible rows");
+    assert.equal(dataGrid.getVisibleRows()[0].data.id, 11, "top visible row");
     assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
+});
+
+QUnit.test("scroll position should not be changed after refresh", function(assert) {
+    // arrange, act
+    var data = [];
+
+    for(var i = 0; i < 50; i++) {
+        data.push({ id: i + 1 });
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        dataSource: data,
+        loadingTimeout: undefined,
+        scrolling: {
+            updateTimeout: 0,
+            useNative: false,
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            pageSize: 10
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo(100);
+    dataGrid.refresh();
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), browser.mozilla ? 101 : 100, "scroll top is not changed");
 });
 
 QUnit.module("Rendered on server", {
@@ -5712,6 +6183,122 @@ QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
     }
 });
 
+
+QUnit.module("Async render", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        if(window.requestIdleCallback) {
+            this.originalRequestIdleCallback = window.requestIdleCallback;
+            window.requestIdleCallback = window.setTimeout;
+        }
+    },
+    afterEach: function() {
+        this.clock.restore();
+        if(this.originalRequestIdleCallback) {
+            window.requestIdleCallback = this.originalRequestIdleCallback;
+        }
+    }
+});
+
+QUnit.test("filterRow, command column and showEditorAlways column should render asynchronously if renderAsync is true", function(assert) {
+    var cellPreparedCells = [];
+
+    // act
+    createDataGrid({
+        dataSource: [{ id: 1, boolean: true }],
+        loadingTimeout: undefined,
+        renderAsync: true,
+        filterRow: {
+            visible: true
+        },
+        selection: {
+            mode: "multiple"
+        },
+        onCellPrepared: function(e) {
+            cellPreparedCells.push(e.rowType + "-" + (e.column.command || e.column.dataField));
+        }
+    });
+
+
+    // assert
+    assert.deepEqual(cellPreparedCells, [
+        "header-id", "header-boolean",
+        "filter-select", "header-select",
+        "data-id"
+    ], "synchronous cellPrepared calls");
+
+    // act
+    cellPreparedCells = [];
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(cellPreparedCells, [
+        "filter-id", "filter-boolean", // filter row is async
+        "data-select", // command column is async
+        "data-boolean" // showEditorAlways column is async
+    ], "asynchronous cellPrepared calls");
+});
+
+QUnit.test("showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false", function(assert) {
+    var cellPreparedCells = [];
+
+    // act
+    createDataGrid({
+        dataSource: [{ boolean: true }],
+        loadingTimeout: undefined,
+        renderAsync: true,
+        columns: [{
+            dataField: "boolean",
+            renderAsync: false
+        }],
+        onCellPrepared: function(e) {
+            cellPreparedCells.push(e.rowType + "-" + (e.column.command || e.column.dataField));
+        }
+    });
+
+    // assert
+    assert.deepEqual(cellPreparedCells, [
+        "header-boolean",
+        "data-boolean"
+    ], "header and data is synchronous");
+});
+
+QUnit.test("cellTemplate should be rendered, asynchronously if column renderAsync is true", function(assert) {
+    var cellPreparedCells = [];
+    var cellTemplateArgs = [];
+
+    // act
+    createDataGrid({
+        dataSource: [{ id: 1, template: "Test" }],
+        loadingTimeout: undefined,
+        filterRow: {
+            visible: true
+        },
+        columns: ["id", {
+            dataField: "template",
+            renderAsync: true,
+            cellTemplate: function(container, options) {
+                cellTemplateArgs.push(options);
+            }
+        }],
+        onCellPrepared: function(e) {
+            cellPreparedCells.push(e.rowType + "-" + (e.column.command || e.column.dataField));
+        }
+    });
+
+    // assert
+    assert.deepEqual(cellTemplateArgs, [], "cell template are not called");
+
+    // act
+    cellPreparedCells = [];
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(cellPreparedCells, ["data-template"], "asynchronous cellPrepared calls");
+    assert.equal(cellTemplateArgs.length, 1, "cell template is called");
+    assert.equal(cellTemplateArgs[0].rowType, "data", "cell template rowType");
+    assert.equal(cellTemplateArgs[0].column.dataField, "template", "cell template column");
+});
 
 QUnit.module("Assign options", {
     beforeEach: function() {
@@ -6417,6 +7004,64 @@ QUnit.test("paging change", function(assert) {
     assert.deepEqual(dataGrid.getController("data").pageCount(), 1, "pages count when paging disabled");
     assert.deepEqual(dataGrid.getController("data").items().length, 5, "items count when paging disabled");
     assert.ok(!dataGrid.getView("pagerView").isVisible(), "pager visibility when paging disabled");
+});
+
+QUnit.test("paging change", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        pageIndex: 1,
+        pageSize: 2
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 1, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+    assert.deepEqual(dataGrid.getVisibleRows().length, 2, "row count");
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { value: 3 }, "first row data");
+});
+
+// T677650
+QUnit.test("paging change if nested options are not changed", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        enabled: true,
+        pageIndex: 0,
+        pageSize: 3
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 0, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
 });
 
 // T121445
@@ -7353,6 +7998,35 @@ QUnit.test("add row if dataSource is not defined", function(assert) {
     assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
 });
 
+QUnit.test("add row without return key", function(assert) {
+    // arrange, act
+    var array = [{ id: 1, name: "Test 1" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "batch"
+        },
+        dataSource: {
+            key: "id",
+            load: function() {
+                return array;
+            },
+            insert: function(values) {
+                array.push(values);
+            }
+        }
+    });
+
+    // act
+    dataGrid.addRow();
+    dataGrid.saveEditData();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 2, "visible rows");
+    assert.strictEqual(dataGrid.hasEditData(), false, "no edit data");
+});
+
 QUnit.test("Disable editing buttons after insert a row", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -7442,6 +8116,54 @@ QUnit.test("onRowInserted should be called if dataSource is reassigned in loadin
     assert.deepEqual(rowInsertedArgs[0].data, { id: 3 }, "rowInserted data arg");
 });
 
+QUnit.test("The row should be added after the 'addRow' method was called in the 'onRowInserted' event (T650889)", function(assert) {
+    // arrange
+    var $inputElement,
+        needAddRow = true,
+        visibleRows,
+        dataGrid = createDataGrid({
+            editing: {
+                mode: "popup",
+                allowAdding: true,
+                allowUpdating: true
+            },
+            keyExpr: "name",
+            dataSource: [{ name: 'Alex' }],
+            onRowInserted: function(e) {
+                if(needAddRow) {
+                    needAddRow = !needAddRow;
+                    e.component.addRow();
+                }
+            }
+        });
+
+    this.clock.tick();
+
+    fx.off = false;
+
+    // act
+    dataGrid.addRow();
+    $inputElement = $(".dx-popup-content").find("input").first();
+    $inputElement.val("name1").trigger("change");
+    dataGrid.saveEditData();
+
+    this.clock.tick();
+
+    $inputElement = $(".dx-popup-content").find("input").first();
+    $inputElement.val("name2").trigger("change");
+    dataGrid.saveEditData();
+
+    this.clock.tick();
+
+    // assert
+    visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 3, "rows count");
+    assert.equal(visibleRows[1].data.name, "name1", "added cell value");
+    assert.equal(visibleRows[2].data.name, "name2", "added cell value");
+
+    fx.off = true;
+});
+
 QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers();
@@ -7479,6 +8201,8 @@ QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) 
     // assert
     assert.equal($(".dx-loadpanel").length, 2, "We have two loadpanels");
     assert.equal($(".dx-loadpanel.dx-state-invisible").length, 2, "two load panels are invisible");
+
+    clock.restore();
 });
 
 QUnit.test("add column", function(assert) {
@@ -8135,6 +8859,36 @@ QUnit.test("scroll position should not be changed after change sorting if row co
     // assert
     assert.equal(dataGrid.getVisibleRows()[0].data.id, 20 * 1000 + 1, "first visible row is correct");
     assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, "scroll top is not changed");
+});
+
+QUnit.test("top visible row should not be changed after refresh virtual scrolling is enabled without rowRenderingMode", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: createLargeDataSource(1000000),
+        remoteOperations: true,
+        height: 500,
+        onRowPrepared: function(e) {
+            $(e.rowElement).css("height", 50);
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.clock.tick(300);
+
+    dataGrid.pageIndex(1000);
+    this.clock.tick(300);
+    var topVisibleRowData = dataGrid.getTopVisibleRowData();
+
+    // act
+    dataGrid.refresh();
+    this.clock.tick(300);
+
+    // assert
+    assert.deepEqual(dataGrid.getTopVisibleRowData(), topVisibleRowData, "top visible row is not changed");
+    assert.ok(dataGrid.getScrollable().scrollTop() > 0, "content is scrolled");
 });
 
 QUnit.test("scroll to next page several times should works correctly if virtual scrolling is enabled", function(assert) {
@@ -10428,6 +11182,76 @@ QUnit.test("column with width auto should have minimum size by content", functio
     assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
 });
 
+// T672282
+QUnit.test("column with width auto should have minimum size by content if columnAutoWidth is disabled", function(assert) {
+    var CONTENT_WIDTH = 50;
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1000,
+        loadingTimeout: undefined,
+        dataSource: [{ field1: 1, field2: 2 }],
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            width: "auto",
+            cellTemplate: function(container) {
+                $(container).css("padding", 0);
+                $("<div>").css("width", CONTENT_WIDTH).appendTo(container);
+            }
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
+});
+
+QUnit.test("column with width 0 should be applied", function(assert) {
+    if(browser.safari || (browser.msie && parseInt(browser.version) <= 11)) {
+        assert.ok(true, "IE 11 and Safari works wrong with width 0");
+        return;
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1"
+        }, {
+            dataField: "field2"
+        }, {
+            dataField: "field3",
+            width: 0
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0).offsetWidth, 100, "first column width");
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).get(0).offsetWidth, 0, "last column width");
+});
+
+QUnit.test("column with width 0 should be ignored if all column widths are defined", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{
+            dataField: "field1",
+            width: 50
+        }, {
+            dataField: "field2",
+            width: 50
+        }, {
+            dataField: "field3",
+            width: 0
+        }]
+    }).dxDataGrid("instance");
+
+
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0).offsetWidth, 50, "first column width");
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).get(0).offsetWidth, 100, "last column width");
+});
+
 QUnit.test("SelectAll when allowSelectAll is default", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -10951,6 +11775,19 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
 
     // assert
     assert.notOk(preventDefaultCalled, "preventDefault is not called");
+});
+
+// T671532
+QUnit.testInActiveWindow("Change options do not throw an exception when an element outside the grid is focused", function(assert) {
+    // arange
+    var $inputElement = $("<input type='button' />").prependTo($("#container"));
+
+    // act
+    $inputElement.focus();
+    this.dataGrid.option("columnAutoWidth", true);
+
+    // assert
+    assert.ok(true, "no exceptions");
 });
 
 

@@ -183,6 +183,20 @@ var TestPointerElement = TestElement.inherit({
         assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 15, "indent");
     });
 
+    // T677202
+    QUnit.test("Default ticks indent when they are invisible", function(assert) {
+        new dxCircularGauge(this.container, {
+            scale: {
+                tick: {
+                    length: 50,
+                    visible: false
+                }
+            }
+        });
+
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, 10, "indent");
+    });
+
     QUnit.test("Ticks indent with positive value. Inside orientation of ticks", function(assert) {
         new dxCircularGauge(this.container, {
             scale: {

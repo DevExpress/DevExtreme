@@ -3806,17 +3806,17 @@ QUnit.test("Set series", function(assert) {
 
     createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
 
-    assert.equal(series1.getPoints()[0].coordinatesCorrection, 8);
-    assert.equal(series1.getPoints()[1].coordinatesCorrection, 7);
-    assert.equal(series1.getPoints()[2].coordinatesCorrection, 8);
+    assert.equal(series1.getPoints()[0].coordinatesCorrection, 10);
+    assert.equal(series1.getPoints()[1].coordinatesCorrection, 9);
+    assert.equal(series1.getPoints()[2].coordinatesCorrection, 10);
 
-    assert.equal(series2.getPoints()[0].coordinatesCorrection, 4);
-    assert.equal(series2.getPoints()[1].coordinatesCorrection, 6);
-    assert.equal(series2.getPoints()[2].coordinatesCorrection, 6);
+    assert.equal(series2.getPoints()[0].coordinatesCorrection, 7);
+    assert.equal(series2.getPoints()[1].coordinatesCorrection, 2);
+    assert.equal(series2.getPoints()[2].coordinatesCorrection, 8);
 
-    assert.equal(series3.getPoints()[0].coordinatesCorrection, 2);
-    assert.equal(series3.getPoints()[1].coordinatesCorrection, 8);
-    assert.equal(series3.getPoints()[2].coordinatesCorrection, 7);
+    assert.equal(series3.getPoints()[0].coordinatesCorrection, 6);
+    assert.equal(series3.getPoints()[1].coordinatesCorrection, 10);
+    assert.equal(series3.getPoints()[2].coordinatesCorrection, 9);
 });
 
 QUnit.test("Set series, points size are not much different", function(assert) {

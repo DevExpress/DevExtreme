@@ -134,6 +134,10 @@ var getEmptyComponent = function() {
 
 var isServerSide = !windowUtils.hasWindow();
 
+function sizeIsValid(value) {
+    return typeUtils.isDefined(value) && value > 0;
+}
+
 module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
         "onIncidentOccurred": { name: "incidentOccurred" },
@@ -183,7 +187,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._change(that._initialChanges);
     },
 
-    _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME"],
+    _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME", "DISABLED"],
 
     _initPlugins: function() {
         var that = this;
@@ -259,7 +263,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _layoutChangesOrder: ["ELEMENT_ATTR", "CONTAINER_SIZE", "LAYOUT"],
 
-    _customChangesOrder: [],
+    _customChangesOrder: ["DISABLED"],
 
     _change_EVENTS: function() {
         this._eventTrigger.applyChanges();
@@ -288,6 +292,26 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _change_LAYOUT: function() {
         this._setContentSize();
+    },
+
+    _change_DISABLED: function() {
+        var renderer = this._renderer,
+            root = renderer.root;
+
+        if(this.option("disabled")) {
+            this._initDisabledState = root.attr("pointer-events");
+            root.attr({
+                "pointer-events": "none",
+                filter: renderer.getGrayScaleFilter().id
+            });
+        } else {
+            if(root.attr("pointer-events") === "none") {
+                root.attr({
+                    "pointer-events": typeUtils.isDefined(this._initDisabledState) ? this._initDisabledState : null,
+                    "filter": null
+                });
+            }
+        }
     },
 
     _themeDependentChanges: ["RENDERER"],
@@ -341,8 +365,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             size = that.option("size") || {},
             margin = that.option("margin") || {},
             defaultCanvas = that._getDefaultSize() || {},
-            elementWidth = windowUtils.hasWindow() ? that._$element.width() : 0,
-            elementHeight = windowUtils.hasWindow() ? that._$element.height() : 0,
+            elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0,
+            elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0,
             canvas = {
                 width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
                 height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
@@ -503,7 +527,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         theme: "THEME",
         rtlEnabled: "THEME",
         encodeHtml: "THEME",
-        elementAttr: "ELEMENT_ATTR"
+        elementAttr: "ELEMENT_ATTR",
+        disabled: "DISABLED"
     },
 
     _visibilityChanged: function() {

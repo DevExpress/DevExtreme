@@ -5248,9 +5248,11 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
             rowsView._dataController.getContentOffset = x.getContentOffset;
             rowsView._dataController.getItemSize = x.getItemSize;
+            rowsView._dataController.getItemSizes = x.getItemSizes;
             rowsView._dataController.viewportItemSize = x.viewportItemSize;
             rowsView._dataController.setContentSize = x.setContentSize;
             rowsView._dataController.setViewportPosition = x.setViewportPosition;
+            rowsView._dataController.getItemIndexByPosition = x.getItemIndexByPosition;
             rowsView._dataController._setViewportPositionCore = x._setViewportPositionCore;
             rowsView._dataController.option = rowsView.option.bind(rowsView);
             rowsView._dataController._dataSource = {
@@ -5565,12 +5567,14 @@ QUnit.test('setViewportItemIndex to far for virtual scrolling when rowsView heig
 
     dataController.setViewportItemIndex = function(itemIndex) {
         assert.ok(heightRatio > 0 && heightRatio < 1, "heightRatio is defined and in (0, 1)");
-        assert.roughEqual(itemIndex, 9000000, 1);
+        assert.roughEqual(itemIndex, 9000000, 2.1);
         done();
     };
 
     // act
-    rowsView.scrollTo({ y: rowHeight * heightRatio * 9000000 });
+    var itemSizes = dataController.getItemSizes();
+    var definedItemSizes = Object.keys(itemSizes).map(function(key) { return itemSizes[key]; });
+    rowsView.scrollTo({ y: rowHeight * heightRatio * (9000000 - definedItemSizes.length) + definedItemSizes[0] * definedItemSizes.length });
 });
 
 // T154003
@@ -6391,7 +6395,7 @@ QUnit.module('Scrollbar', {
         this.createRowsView = createRowsView;
     },
     afterEach: function() {
-        this.dataGrid.dispose();
+        this.dataGrid && this.dataGrid.dispose();
     }
 });
 
@@ -6581,6 +6585,11 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
+    if(browser.msie && browser.version === "18.17763") {
+        assert.ok(true);
+        return;
+    }
+
     // arrange
     var rows = [{ values: ["test1", "test2", "test3", "test4"] }],
         columns = [{ dataField: "field1", width: 300 }, { dataField: "field2", width: 300 }, { dataField: "field3", width: 300 }, { dataField: "field4", width: 300 } ],

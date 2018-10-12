@@ -37,6 +37,8 @@ var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixed
 
 var regExp = /columns\[(\d+)\]\.?/gi;
 
+var globalColumnId = 1;
+
 module.exports = {
     defaultOptions: function() {
         return {
@@ -126,7 +128,7 @@ module.exports = {
              * @name GridBaseColumn.visible
              * @type boolean
              * @default true
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.hidingPriority
@@ -167,7 +169,7 @@ module.exports = {
              * @name GridBaseColumn.visibleIndex
              * @type number
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.showInColumnChooser
@@ -270,13 +272,13 @@ module.exports = {
              * @type Enums.SortOrder
              * @default undefined
              * @acceptValues undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.sortIndex
              * @type number
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.showEditorAlways
@@ -320,19 +322,19 @@ module.exports = {
              * @name GridBaseColumn.selectedFilterOperation
              * @type Enums.FilterOperations
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.filterValue
              * @type any
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
              */
             /**
              * @name GridBaseColumn.filterValues
              * @type Array<any>
              * @default undefined
-             * @fires GridBase.onOptionChanged
+             * @fires GridBaseOptions.onOptionChanged
             */
             /**
              * @name GridBaseColumn.filterType
@@ -367,7 +369,7 @@ module.exports = {
              * @name dxDataGridColumn.groupIndex
              * @type number
              * @default undefined
-             * @fires dxDataGrid.onOptionChanged
+             * @fires dxDataGridOptions.onOptionChanged
              */
             /**
              * @name dxDataGridColumn.grouped
@@ -434,6 +436,11 @@ module.exports = {
              * @name GridBaseColumn.encodeHtml
              * @type boolean
              * @default true
+             */
+            /**
+             * @name GridBaseColumn.renderAsync
+             * @type boolean
+             * @default false
              */
             /**
              * @name dxDataGridColumn.resized
@@ -591,7 +598,7 @@ module.exports = {
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
 
-                        return extend(true, {}, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
+                        return extend(true, { id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
                     }
                 }
             };
@@ -1081,7 +1088,7 @@ module.exports = {
                         that._updateLockCount--;
                     }
                     that._columnChanges = undefined;
-                    if(columnChanges.optionNames && (columnChanges.optionNames.dataField || columnChanges.optionNames.lookup)) {
+                    if(columnChanges.optionNames && (columnChanges.optionNames.dataField || columnChanges.optionNames.lookup || columnChanges.optionNames.dataType)) {
                         that.reinit();
                     } else {
                         that.columnsChanged.fire(columnChanges);
@@ -2336,7 +2343,7 @@ module.exports = {
                     }
                 },
 
-                updateFilter: function(filter, remoteFiltering, columnIndex) {
+                updateFilter: function(filter, remoteFiltering, columnIndex, filterValue) {
                     var that = this;
 
                     if(!Array.isArray(filter)) return filter;
@@ -2347,6 +2354,7 @@ module.exports = {
                     filter = extend([], filter);
 
                     columnIndex = filter.columnIndex || columnIndex;
+                    filterValue = filter.filterValue || filterValue;
 
                     if(typeUtils.isString(filter[0])) {
                         column = that.columnOption(filter[0]);
@@ -2363,10 +2371,11 @@ module.exports = {
                         }
                     } else if(typeUtils.isFunction(filter[0])) {
                         filter[0].columnIndex = columnIndex;
+                        filter[0].filterValue = filterValue;
                     }
 
                     for(i = 0; i < filter.length; i++) {
-                        filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex);
+                        filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex, filterValue);
                     }
 
                     return filter;
@@ -2534,10 +2543,17 @@ module.exports = {
                  */
                 deleteColumn: function(id) {
                     var that = this,
-                        columnIndex = that.columnOption(id, "index");
+                        childIndexes,
+                        column = that.columnOption(id);
 
-                    if(columnIndex >= 0) {
-                        that._columns.splice(columnIndex, 1);
+                    if(column && column.index >= 0) {
+                        that._columns.splice(column.index, 1);
+
+                        if(column.isBand) {
+                            childIndexes = that.getChildrenByBandColumn(column.index).map((column) => column.index);
+                            that._columns = that._columns.filter((column) => childIndexes.indexOf(column.index) < 0);
+                        }
+
                         updateIndexes(that);
                         that.updateColumns(that._dataSource);
                     }
@@ -2621,13 +2637,13 @@ module.exports = {
                                         parsedValue;
 
                                     if(column.dataType === "number") {
-                                        if(typeUtils.isString(text)) {
+                                        if(typeUtils.isString(text) && column.format) {
                                             parsedValue = numberLocalization.parse(text);
 
                                             if(typeUtils.isNumeric(parsedValue)) {
                                                 result = parsedValue;
                                             }
-                                        } else if(isDefined(text)) {
+                                        } else if(isDefined(text) && typeUtils.isNumeric(text)) {
                                             result = Number(text);
                                         }
                                     } else if(column.dataType === "boolean") {
@@ -2657,7 +2673,7 @@ module.exports = {
                         return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
                     };
 
-                    calculatedColumnOptions.createFilterExpression = function() {
+                    calculatedColumnOptions.createFilterExpression = function(filterValue) {
                         var result;
                         if(this.calculateFilterExpression) {
                             result = this.calculateFilterExpression.apply(this, arguments);
@@ -2666,6 +2682,7 @@ module.exports = {
                             result = [result, "=", true];
                         } else if(result) {
                             result.columnIndex = this.index;
+                            result.filterValue = filterValue;
                         }
                         return result;
                     };

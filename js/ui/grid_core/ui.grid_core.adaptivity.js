@@ -62,7 +62,7 @@ function adaptiveCellTemplate(container, options) {
         }));
         $adaptiveColumnButton.appendTo($container);
     } else {
-        $container.get(0).innerHTML = "&nbsp;";
+        gridCoreUtils.setEmptyText($container);
     }
 }
 
@@ -515,12 +515,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
             },
-            defaultFormOptions = themes.isMaterial()
-                ? {
-                    colCount: 2,
-                    screenByWidth: function() { return "lg"; }
-                }
-                : {};
+            defaultFormOptions = themes.isMaterial() ? { colCount: 2 } : {};
 
         this.executeAction("onAdaptiveDetailRowPreparing", { formOptions: userFormOptions });
 
@@ -989,10 +984,6 @@ module.exports = {
                 _toggleBestFitMode: function(isBestFit) {
                     isBestFit && this._adaptiveColumnsController._removeCssClassesFromColumns();
                     this.callBase(isBestFit);
-                    if(!this.option("legacyRendering") && this._adaptiveColumnsController.getHidingColumnsQueue().length) {
-                        var $rowsTable = this._rowsView._getTableElement();
-                        $rowsTable.get(0).style.width = isBestFit ? "auto" : "";
-                    }
                 },
 
                 _needStretch: function() {

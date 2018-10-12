@@ -105,6 +105,8 @@ var Switch = Editor.inherit({
     },
 
     _defaultOptionsRules: function() {
+        var themeName = themes.current();
+
         return this.callBase().concat([
             {
                 device: function() {
@@ -122,7 +124,7 @@ var Switch = Editor.inherit({
             },
             {
                 device: function() {
-                    return themes.isAndroid5();
+                    return themes.isAndroid5(themeName);
                 },
                 options: {
                     useInkRipple: true
@@ -130,7 +132,7 @@ var Switch = Editor.inherit({
             },
             {
                 device: function(device) {
-                    return themes.isIos7();
+                    return themes.isIos7(themeName);
                 },
                 options: {
                     _animateHandle: false
@@ -461,6 +463,11 @@ var Switch = Editor.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _clean: function() {
+        delete this._inkRipple;
+        this.callBase();
     }
 });
 

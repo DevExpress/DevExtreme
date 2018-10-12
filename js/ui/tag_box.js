@@ -56,6 +56,7 @@ var TagBox = SelectBox.inherit({
 
     _supportedKeys: function() {
         var parent = this.callBase();
+
         return extend(parent, {
             backspace: function(e) {
                 if(!this._isCaretAtTheStart()) {
@@ -108,6 +109,17 @@ var TagBox = SelectBox.inherit({
                 }
 
                 if(!this.option("opened")) {
+                    return;
+                }
+
+                e.preventDefault();
+                this._keyboardProcessor._childProcessors[0].process(e);
+            },
+            space: function(e) {
+                var isOpened = this.option("opened"),
+                    isInputActive = this._shouldRenderSearchEvent();
+
+                if(!isOpened || isInputActive) {
                     return;
                 }
 
@@ -467,7 +479,8 @@ var TagBox = SelectBox.inherit({
         this._multiTagPreparingAction = this._createActionByOption("onMultiTagPreparing", {
             beforeExecute: (function(e) {
                 this._multiTagPreparingHandler(e.args[0]);
-            }).bind(this)
+            }).bind(this),
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
@@ -732,6 +745,13 @@ var TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
+    _shouldClearFilter: function() {
+        var shouldClearFilter = this.callBase(),
+            showSelectionControls = this.option("showSelectionControls");
+
+        return !showSelectionControls && shouldClearFilter;
+    },
+
     _renderInputSize: function() {
         var $input = this._input();
         $input.prop("size", $input.val() ? $input.val().length + 2 : 1);
@@ -806,24 +826,35 @@ var TagBox = SelectBox.inherit({
 
     },
 
-    _createTagData: function(values, filteredItems) {
-        var items = [];
+    _createTagsData: function(values, filteredItems) {
+        var items = [],
+            cache = {};
 
         each(values, function(valueIndex, value) {
             var item = filteredItems[valueIndex];
 
-            if(isDefined(item)) {
-                this._selectedItems.push(item);
-                items.splice(valueIndex, 0, item);
+            if(this._valueGetterExpr() === "this" && !isDefined(item)) {
+                this._loadItem(value, cache).always((function(item) {
+                    this._createTagData(items, item, value, valueIndex);
+                }).bind(this));
             } else {
-                var selectedItem = this.option("selectedItem"),
-                    customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
-
-                items.splice(valueIndex, 0, customItem);
+                this._createTagData(items, item, value, valueIndex);
             }
         }.bind(this));
 
         return items;
+    },
+
+    _createTagData: function(items, item, value, valueIndex) {
+        if(isDefined(item)) {
+            this._selectedItems.push(item);
+            items.splice(valueIndex, 0, item);
+        } else {
+            var selectedItem = this.option("selectedItem"),
+                customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
+
+            items.splice(valueIndex, 0, customItem);
+        }
     },
 
     _loadTagData: function() {
@@ -834,7 +865,7 @@ var TagBox = SelectBox.inherit({
 
         this._getFilteredItems(values)
             .done(function(filteredItems) {
-                var items = this._createTagData(values, filteredItems);
+                var items = this._createTagsData(values, filteredItems);
                 tagData.resolve(items);
             }.bind(this))
             .fail(tagData.reject.bind(this));

@@ -179,6 +179,75 @@ QUnit.testStart(function() {
         }
     });
 
+    QUnit.test("Data expressions should be recompiled on optionChanged and passed to appointmentModel", function(assert) {
+        var repaintStub = sinon.stub(this.instance, "repaint");
+
+        try {
+            var appointmentModel = this.instance.getAppointmentModel();
+
+            this.instance.option({
+                "startDateExpr": "_startDate",
+                "endDateExpr": "_endDate",
+                "startDateTimeZoneExpr": "_startDateTimeZone",
+                "endDateTimeZoneExpr": "_endDateTimeZone",
+                "textExpr": "_text",
+                "descriptionExpr": "_description",
+                "allDayExpr": "_allDay",
+                "recurrenceRuleExpr": "_recurrenceRule",
+                "recurrenceExceptionExpr": "_recurrenceException"
+            });
+
+            var dataAccessors = this.instance._dataAccessors;
+
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.getter), appointmentModel._dataAccessors.getter, "dataAccessors getters were passed to appointmentModel");
+            assert.deepEqual($.extend({ resources: {} }, dataAccessors.setter), appointmentModel._dataAccessors.setter, "dataAccessors setters were passed to appointmentModel");
+            assert.deepEqual(dataAccessors.expr, appointmentModel._dataAccessors.expr, "dataExpressions were passed to appointmentModel");
+        } finally {
+            repaintStub.restore();
+        }
+    });
+
+    QUnit.test("Sheduler should be repainted after data expression option changing", function(assert) {
+        var repaintStub = sinon.stub(this.instance, "repaint");
+
+        try {
+            this.instance.option({
+                "startDateExpr": "_startDate",
+                "endDateExpr": "_endDate",
+                "startDateTimeZoneExpr": "_startDateTimeZone",
+                "endDateTimeZoneExpr": "_endDateTimeZone",
+                "textExpr": "_text",
+                "descriptionExpr": "_description",
+                "allDayExpr": "_allDay",
+                "recurrenceRuleExpr": "_recurrenceRule",
+                "recurrenceExceptionExpr": "_recurrenceException"
+            });
+
+            assert.equal(repaintStub.callCount, 9, "Scheduler was repainted");
+        } finally {
+            repaintStub.restore();
+        }
+    });
+
+    QUnit.test("Sheduler should have correct default template after data expression option changing", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                text: "a",
+                TEXT: "New Text",
+                startDate: new Date(2015, 6, 8, 8, 0),
+                endDate: new Date(2015, 6, 8, 17, 0),
+                allDay: true
+            }],
+            currentDate: new Date(2015, 6, 8)
+        });
+
+        this.instance.option({
+            textExpr: "TEXT"
+        });
+
+        assert.equal(this.instance.$element().find(".dx-scheduler-appointment-title").eq(0).text(), "New Text", "Appointment template is correct");
+    });
+
     QUnit.test("RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null", function(assert) {
         this.instance.option({
             "startDateExpr": "_startDate",
@@ -2926,6 +2995,14 @@ QUnit.testStart(function() {
 
         $.each(this.instance.getActions(), function(name, action) {
             assert.ok(action(), "'" + name + "' option is changed");
+        });
+    });
+
+    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
+        this.createInstance({
+            onContentReady: function(e) {
+                assert.ok(true, 1, "contentReady is fired");
+            }
         });
     });
 
