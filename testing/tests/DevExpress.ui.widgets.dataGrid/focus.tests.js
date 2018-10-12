@@ -344,8 +344,7 @@ QUnit.testInActiveWindow("Tab key should focus the cell", function(assert) {
 });
 
 QUnit.testInActiveWindow("Tab key before grid should focus the first row", function(assert) {
-    var done = assert.async(),
-        that = this,
+    var that = this,
         rowsView;
 
     // arrange
@@ -371,21 +370,13 @@ QUnit.testInActiveWindow("Tab key before grid should focus the first row", funct
 
     // assert
     assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
-
-    this.clock.tick();
-    this.clock.restore();
-
     // act
     $('#container [tabindex="0"]').first().trigger("focus").trigger("focusin");
+    this.clock.tick();
     // assert
-    setTimeout(function() {
-        setTimeout(function() {
-            assert.equal(that.option("focusedRowIndex"), 0, "focusedRowIndex");
-            assert.equal(rowsView.getRow(0).attr("tabindex"), 0, "Row 0 tabindex");
-            assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Row 0 has row focused class");
-            done();
-        });
-    });
+    assert.equal(that.option("focusedRowIndex"), 0, "focusedRowIndex");
+    assert.equal(rowsView.getRow(0).attr("tabindex"), 0, "Row 0 tabindex");
+    assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Row 0 has row focused class");
 });
 
 QUnit.testInActiveWindow("LeftArrow key should focus the cell", function(assert) {
