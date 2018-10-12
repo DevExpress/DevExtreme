@@ -609,7 +609,7 @@ var Overlay = Widget.inherit({
     _getAnimationConfig: function() {
         var animation = this.option("animation");
         if(typeUtils.isFunction(animation)) animation = animation.call(this);
-        return animation;
+        return extend(true, {}, animation);
     },
 
     _show: function() {
@@ -675,9 +675,23 @@ var Overlay = Widget.inherit({
                 type: "slide"
             }, animation);
 
+            var positionCopy = extend({}, this._position);
+
+            if(this.option("fullScreen")) {
+                var scrollTop = positionCopy.of ? $(positionCopy.of).scrollTop() : $(window).scrollTop();
+
+                extend(positionCopy, {
+                    offset: { h: 0, v: scrollTop }
+                });
+
+                if(animation[prop].position && "offset" in animation[prop].position) {
+                    positionCopy.offset.v += animation[prop].position.offset.v;
+                }
+            }
+
             if(animation[prop] && typeof animation[prop] === "object") {
                 extend(animation[prop], {
-                    position: this._position
+                    position: positionCopy
                 });
             }
         }

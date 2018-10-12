@@ -2165,6 +2165,7 @@ var Scheduler = Widget.inherit({
 
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
+            target: $(window),
             onHiding: (function() {
                 this.focus();
             }).bind(this),
