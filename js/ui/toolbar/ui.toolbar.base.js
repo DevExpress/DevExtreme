@@ -321,6 +321,10 @@ var ToolbarBase = CollectionWidget.inherit({
         return this._getItemContentPromise(args, this.callBase);
     },
 
+    _itemContentRendered: function(args) {
+        this._deferredItems[args.index].resolve();
+    },
+
     _renderGroupedItems: function() {
         var that = this;
 
