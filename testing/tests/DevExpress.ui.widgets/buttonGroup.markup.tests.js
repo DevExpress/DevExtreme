@@ -51,7 +51,7 @@ QUnit.module("default", {
     });
 
     QUnit.test("render markup", function(assert) {
-        assert.equal(this.$buttonGroup.attr("role"), "buttongroup", "aria role");
+        assert.equal(this.$buttonGroup.attr("role"), "group", "aria role");
         assert.ok(this.$buttonGroup.hasClass(BUTTON_GROUP_CLASS), "button group class");
 
         const $wrapper = $(this.$buttonGroup).children();

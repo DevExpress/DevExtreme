@@ -90,7 +90,6 @@ const ButtonGroup = Widget.inherit({
             /**
              * @name dxButtonGroupOptions.items
              * @type Array<ButtonGroupItem>
-             * @inherits CollectionWidgetItemTemplate
              */
             items: [],
 
@@ -151,7 +150,7 @@ const ButtonGroup = Widget.inherit({
     },
 
     _initMarkup() {
-        this.setAria("role", "buttongroup");
+        this.setAria("role", "group");
         this.$element().addClass(BUTTON_GROUP_CLASS);
         this._renderButtons();
         this._syncSelectionOptions();
