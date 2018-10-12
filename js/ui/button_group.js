@@ -127,7 +127,7 @@ const ButtonGroup = Widget.inherit({
          * @type object
          */
         /**
-         * @name dxButtonGroupItem.text
+         * @name dxButtonGroupItem.hint
          * @type String
          */
         /**
@@ -139,11 +139,15 @@ const ButtonGroup = Widget.inherit({
          * @name dxButtonGroupItem.icon
          * @type String
          */
+        /**
+         * @name dxButtonGroupItem.html
+         * @hidden
+         */
         this._defaultTemplates["item"] = new BindableTemplate((($container, data) => {
             const itemIndex = $container.data("dxItemIndex");
             itemIndex === 0 && $container.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
             this._createComponent($container, Button, extend({}, data, this._getBasicButtonOptions()));
-        }), ["text", "type", "icon"], this.option("integrationOptions.watchMethod"));
+        }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
     },
 
     _initMarkup() {
@@ -230,6 +234,7 @@ const ButtonGroup = Widget.inherit({
                 this._buttonsCollection.option(args.name, args.value);
                 break;
             case "onSelectionChanged":
+                break;
             default:
                 this.callBase(args);
         }

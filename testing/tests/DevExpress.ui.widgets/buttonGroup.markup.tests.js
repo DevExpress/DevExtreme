@@ -115,6 +115,29 @@ QUnit.module("default", {
         assert.equal(buttonCollection.option("noDataText"), "", "noDataText option");
     });
 
+    QUnit.test("default item template", function(assert) {
+        const $buttonGroup = $("#widget").dxButtonGroup({
+            items: [{
+                text: "item 1",
+                type: "normal",
+                icon: "plus",
+                disabled: true,
+                visible: false,
+                hint: "Custom hint"
+            }]
+        });
+
+        const $button = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS}`).first();
+        const button = $button.dxButton("instance");
+
+        assert.equal(button.option("text"), "item 1", "text");
+        assert.equal(button.option("type"), "normal", "type");
+        assert.equal(button.option("icon"), "plus", "icon");
+        assert.equal(button.option("disabled"), true, "disabled");
+        assert.equal(button.option("visible"), false, "visible");
+        assert.equal(button.option("hint"), "Custom hint", "hint");
+    });
+
     QUnit.test("use item template", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
             items: [{ text: "item 1" }, { text: "item 2" }],
