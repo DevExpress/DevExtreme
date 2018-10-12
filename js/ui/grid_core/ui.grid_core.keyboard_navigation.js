@@ -92,16 +92,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _updateFocus: function() {
-        var that = this,
-            $cell = that._getFocusedCell(),
-            $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
+        var that = this;
+        setTimeout(function() {
+            var $cell = that._getFocusedCell(),
+                $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
 
-        if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
-            if(that._hasSkipRow($cell.parent())) {
-                $cell = that._getNextCell(this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0 ? "upArrow" : "downArrow");
-            }
-            if($cell && $cell.length > 0) {
-                setTimeout(function() {
+            if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
+                if(that._hasSkipRow($cell.parent())) {
+                    $cell = that._getNextCell(that._focusedCellPosition && that._focusedCellPosition.rowIndex > 0 ? "upArrow" : "downArrow");
+                }
+                if($cell && $cell.length > 0) {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         if(that.getController("editorFactory").focus() || $cellEditingCell) {
                             that._focus($cell);
@@ -114,9 +114,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     } else {
                         eventsEngine.trigger($cell, "focus");
                     }
-                });
+                }
             }
-        }
+        });
     },
 
     _applyTabIndexToElement: function($element) {
@@ -765,13 +765,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return $cell;
     },
 
-    getFirstValidCellInRow: function($row) {
+    getFirstValidCellInRow: function($row, columnIndex) {
         var that = this,
-            $result,
+            $cells = $row.find("> td"),
             $cell,
-            $cells = $row.find("> td");
+            $result;
 
-        for(var i = 0; i < $cells.length; ++i) {
+        columnIndex = columnIndex || 0;
+
+        for(var i = columnIndex; i < $cells.length; ++i) {
             $cell = $cells.eq(i);
             if(that._isCellValid($cell)) {
                 $result = $cell;
@@ -912,7 +914,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $cell = this._getCell(newFocusedCellPosition);
 
             if($cell && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
-                $cell = this._getNextCell(keyCode, "cell", newFocusedCellPosition);
+                if(this.isRowFocusType()) {
+                    $cell = this.getFirstValidCellInRow($cell.parent(), newFocusedCellPosition.columnIndex);
+                } else {
+                    $cell = this._getNextCell(keyCode, "cell", newFocusedCellPosition);
+                }
             }
 
             $row = $cell && $cell.parent();
