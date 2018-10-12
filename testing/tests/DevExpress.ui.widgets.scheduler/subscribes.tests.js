@@ -1601,3 +1601,38 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
 
     assert.equal(countPerCell, "unlimited", "overlappingMode is OK");
 });
+
+QUnit.test("'isGroupedByDate' should be true only for horizontal grouped workspace with groups", function(assert) {
+    this.createInstance({
+        views: [{
+            name: "DAY",
+            type: "day",
+            groupOrientation: "horizontal"
+        }, {
+            name: "WEEK",
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "DAY",
+        dataSource: [],
+        groups: ["priorityId"],
+        resources: [{
+            field: "typeId",
+            dataSource: [{ id: 1, color: "red" }]
+        },
+        {
+            field: "priorityId",
+            dataSource: [{ id: 1, color: "black" }]
+        }
+        ]
+    });
+
+    assert.equal(this.instance.fire("isGroupedByDate"), true, "Workspace is grouped by date");
+
+    this.instance.option("currentView", "WEEK");
+    assert.equal(this.instance.fire("isGroupedByDate"), false, "Workspace isn't grouped by date");
+
+    this.instance.option("groups", []);
+    this.instance.option("currentView", "DAY");
+    assert.equal(this.instance.fire("isGroupedByDate"), false, "Workspace isn't grouped by date");
+});

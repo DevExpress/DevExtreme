@@ -72,7 +72,7 @@ var subscribes = {
     },
 
     isGroupedByDate: function() {
-        return this._getCurrentViewOption("groupByDate");
+        this.getWorkSpace().isGroupedByDate();
     },
 
     showAppointmentTooltip: function(options) {

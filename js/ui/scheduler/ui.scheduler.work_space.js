@@ -534,6 +534,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return !!this.option("groups").length && this.option("groupOrientation") === "vertical";
     },
 
+    _isHorizontalGroupedWorkSpace: function() {
+        return !!this.option("groups").length && this.option("groupOrientation") === "horizontal";
+    },
+
     _toggleHorizontalScrollClass: function() {
         this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
     },
@@ -2075,6 +2079,10 @@ var SchedulerWorkSpace = Widget.inherit({
         };
 
         return coordinates;
+    },
+
+    isGroupedByDate: function() {
+        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace();
     },
 
     getCellIndexByDate: function(date, inAllDayRow) {

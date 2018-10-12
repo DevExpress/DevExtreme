@@ -178,10 +178,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
-    _isHorizontalGroupedWorkSpace: function() {
-        return !!this.option("groups").length && this.option("groupOrientation") === "horizontal";
-    },
-
     _getGroupHeaderContainer: function() {
         if(this._isHorizontalGroupedWorkSpace()) {
             return this._$thead;
