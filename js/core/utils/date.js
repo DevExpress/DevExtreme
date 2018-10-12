@@ -581,7 +581,7 @@ var getDatesBetween = function(startDate, endDate, interval) {
     var currentDate = new Date(startDate.getTime()),
         result = [];
 
-    while(currentDate <= endDate) {
+    while(currentDate < endDate) {
         result.push(new Date(currentDate.getTime()));
 
         currentDate = this.addInterval(currentDate, interval);
