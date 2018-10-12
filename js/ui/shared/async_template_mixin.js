@@ -9,9 +9,9 @@ module.exports = {
             that = this;
 
         this._deferredItems[args.index] = itemDeferred;
+        let $itemContent = renderItemContent.call(that, args);
 
         itemDeferred.done(function() {
-            let $itemContent = renderItemContent.call(that, args);
             renderContentDeferred.resolve($itemContent);
         });
 

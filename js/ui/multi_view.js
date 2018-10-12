@@ -10,7 +10,8 @@ var $ = require("../core/renderer"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     registerComponent = require("../core/component_registrator"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
-    Swipeable = require("../events/gesture/swipeable");
+    Swipeable = require("../events/gesture/swipeable"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 
 var MULTIVIEW_CLASS = "dx-multiview",
@@ -219,12 +220,27 @@ var MultiView = CollectionWidget.inherit({
     },
 
     _initMarkup: function() {
-        this._initItemContentDeferred();
+        this._deferredItems = [];
+
         this.callBase();
     },
 
     _renderItemContent: function(args) {
-        return this._getItemContentPromise(args, this.callBase);
+        var renderContentDeferred = new Deferred();
+
+        var that = this,
+            callBase = this.callBase;
+
+        var deferred = new Deferred();
+        deferred.done(function() {
+            var $itemContent = callBase.call(that, args);
+            renderContentDeferred.resolve($itemContent);
+        });
+
+        this._deferredItems[args.index] = deferred;
+        this.option("deferRendering") || deferred.resolve();
+
+        return renderContentDeferred.promise();
     },
 
     _render: function() {
@@ -388,10 +404,6 @@ var MultiView = CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._itemFocusLooped = false;
-    },
-
-    _clean: function() {
-        this._initItemContentDeferred();
     },
 
     _prevItem: function($items) {
