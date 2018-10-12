@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    AsyncTemplateMixin = require("../shared/async_template_mixin"),
+    AsyncCollectionWidget = require("../collection/ui.collection_widget.async"),
     BindableTemplate = require("../widget/bindable_template");
 
 var TOOLBAR_CLASS = "dx-toolbar",
@@ -28,7 +27,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
-var ToolbarBase = CollectionWidget.inherit({
+var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
     /**
     * @name dxToolbarItemTemplate
@@ -134,7 +133,6 @@ var ToolbarBase = CollectionWidget.inherit({
     _initMarkup: function() {
         this._renderToolbar();
         this._renderSections();
-        this._initItemContentDeferred();
 
         this.callBase();
 
@@ -318,10 +316,6 @@ var ToolbarBase = CollectionWidget.inherit({
         return itemElement;
     },
 
-    _renderItemContent: function(args) {
-        return this._getItemContentPromise(args, this.callBase);
-    },
-
     _renderGroupedItems: function() {
         var that = this;
 
@@ -368,10 +362,8 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderEmptyMessage: commonUtils.noop,
 
     _clean: function() {
-        this._cleanAsyncTemplatesTimer();
         this._$toolbarItemsContainer.children().empty();
         this.$element().empty();
-        this._initItemContentDeferred();
     },
 
     _visibilityChanged: function(visible) {
@@ -429,7 +421,7 @@ var ToolbarBase = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-}).include(AsyncTemplateMixin);
+});
 
 registerComponent("dxToolbarBase", ToolbarBase);
 
