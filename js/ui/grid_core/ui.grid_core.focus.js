@@ -230,6 +230,7 @@ module.exports = {
              * @name GridBaseOptions.focusedRowKey
              * @type object
              * @default undefined
+             * @fires GridBaseOptions.onFocusedRowChanged
              */
             focusedRowKey: undefined,
 
@@ -237,6 +238,7 @@ module.exports = {
              * @name GridBaseOptions.focusedRowIndex
              * @type number
              * @default -1
+             * @fires GridBaseOptions.onFocusedRowChanged
              */
             focusedRowIndex: -1,
 
@@ -244,6 +246,7 @@ module.exports = {
              * @name GridBaseOptions.focusedColumnIndex
              * @type number
              * @default -1
+             * @fires GridBaseOptions.onFocusedCellChanged
              */
             focusedColumnIndex: -1
 
