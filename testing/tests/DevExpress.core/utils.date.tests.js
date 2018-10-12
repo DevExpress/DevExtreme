@@ -581,7 +581,7 @@ QUnit.test("the getDatesBetween method should return array of dates", function(a
     var startDate = new Date(2018, 7, 31, 12, 13, 0),
         endDate = new Date(2018, 8, 5, 12, 13, 0);
 
-    var dates = dateUtils.getDatesBetween(startDate, endDate, "day");
+    var dates = dateUtils.getDatesOfInterval(startDate, endDate, "day");
 
     assert.equal(dates.length, 5);
     assert.deepEqual(dates[0], new Date(2018, 7, 31, 12, 13, 0), "Date in interval is correct");
