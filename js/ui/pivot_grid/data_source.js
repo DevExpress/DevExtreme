@@ -363,24 +363,23 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldsByGroup(fields, groupingField) {
-        return iteratorUtils.map(fields, function(field) {
-            if(field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false) {
-                return extend(field, {
-                    areaIndex: groupingField.areaIndex,
-                    area: groupingField.area,
-                    expanded: isDefined(field.expanded) ? field.expanded : groupingField.expanded,
-                    dataField: field.dataField || groupingField.dataField,
-                    dataType: field.dataType || groupingField.dataType,
-                    sortBy: field.sortBy || groupingField.sortBy,
-                    sortOrder: field.sortOrder || groupingField.sortOrder,
-                    sortBySummaryField: field.sortBySummaryField || groupingField.sortBySummaryField,
-                    sortBySummaryPath: field.sortBySummaryPath || groupingField.sortBySummaryPath,
-                    visible: field.visible || groupingField.visible,
-                    showTotals: isDefined(field.showTotals) ? field.showTotals : groupingField.showTotals,
-                    showGrandTotals: isDefined(field.showGrandTotals) ? field.showGrandTotals : groupingField.showGrandTotals
-                });
-            }
-            return null;
+        return fields.filter(field => {
+            return field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false;
+        }).map(function(field) {
+            return extend(field, {
+                areaIndex: groupingField.areaIndex,
+                area: groupingField.area,
+                expanded: isDefined(field.expanded) ? field.expanded : groupingField.expanded,
+                dataField: field.dataField || groupingField.dataField,
+                dataType: field.dataType || groupingField.dataType,
+                sortBy: field.sortBy || groupingField.sortBy,
+                sortOrder: field.sortOrder || groupingField.sortOrder,
+                sortBySummaryField: field.sortBySummaryField || groupingField.sortBySummaryField,
+                sortBySummaryPath: field.sortBySummaryPath || groupingField.sortBySummaryPath,
+                visible: field.visible || groupingField.visible,
+                showTotals: isDefined(field.showTotals) ? field.showTotals : groupingField.showTotals,
+                showGrandTotals: isDefined(field.showGrandTotals) ? field.showGrandTotals : groupingField.showGrandTotals
+            });
         }).sort(function(a, b) { return a.groupIndex - b.groupIndex; });
     }
 
