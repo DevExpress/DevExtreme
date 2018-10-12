@@ -437,6 +437,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._createAllDayPanelElements();
                 this._removeAllDayElements();
                 this._cleanWorkSpace();
+                this._toggleGroupByDateClass();
                 break;
             case "showAllDayPanel":
                 if(this._isVerticalGroupedWorkSpace()) {
@@ -516,6 +517,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _initGrouping: function() {
         this._initGroupedStrategy();
         this._toggleGroupingDirectionClass();
+        this._toggleGroupByDateClass();
     },
 
     _initGroupedStrategy: function() {
@@ -543,7 +545,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleGroupByDateClass: function() {
-        this.$element().toggleClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS, this.option("groupByDate"));
+        this.$element().toggleClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS, this.isGroupedByDate());
     },
 
     _toggleWorkSpaceCountClass: function() {
