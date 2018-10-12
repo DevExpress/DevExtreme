@@ -327,11 +327,9 @@ var Widget = DOMComponent.inherit({
                 var dispose = false;
                 var template = this._acquireTemplate(templateSourceResult, function(templateSource) {
                     if(templateSource.nodeType || typeUtils.isRenderer(templateSource) && !$(templateSource).is("script")) {
-                        return {
-                            render: function() {
-                                return templateSource;
-                            }
-                        };
+                        return new FunctionTemplate(function() {
+                            return templateSource;
+                        });
                     }
                     dispose = true;
                     return this._createTemplate(templateSource);

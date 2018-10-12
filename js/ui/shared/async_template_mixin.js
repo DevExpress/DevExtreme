@@ -28,7 +28,9 @@ module.exports = {
     },
 
     _itemTemplateRendered(renderArgs) {
-        this._deferredItems && this._deferredItems[renderArgs.index] && this._deferredItems[renderArgs.index].resolve();
+        if(!this.option("deferRendering") && this._deferredItems && this._deferredItems[renderArgs.index]) {
+            this._deferredItems[renderArgs.index].resolve();
+        }
     },
 
     _renderItemsAsync() {
@@ -46,7 +48,7 @@ module.exports = {
     _renderAsyncTemplate(template, args) {
         const result = template && template.render(args);
         if(!this._options.templatesRenderAsynchronously) {
-            args.onRendered.call(this);
+            args.onRendered && args.onRendered.call(this);
         }
         return result;
     },
