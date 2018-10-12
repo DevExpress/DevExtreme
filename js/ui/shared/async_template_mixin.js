@@ -10,8 +10,8 @@ module.exports = {
 
         this._deferredItems[args.index] = itemDeferred;
 
-        let $itemContent = renderItemContent.call(that, args);
         itemDeferred.done(function() {
+            let $itemContent = renderItemContent.call(that, args);
             renderContentDeferred.resolve($itemContent);
         });
 
@@ -23,10 +23,12 @@ module.exports = {
             model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index,
-            onRendered: () => {
-                this._deferredItems && this._deferredItems[renderArgs.index] && this._deferredItems[renderArgs.index].resolve();
-            }
+            onRendered: this._itemTemplateRendered.bind(this, renderArgs)
         });
+    },
+
+    _itemTemplateRendered(renderArgs) {
+        this._deferredItems && this._deferredItems[renderArgs.index] && this._deferredItems[renderArgs.index].resolve();
     },
 
     _renderItemsAsync() {
