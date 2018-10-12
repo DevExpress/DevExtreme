@@ -575,7 +575,13 @@
         }
 
         .dx-apply-button {
-            .dx-button-styling-variant( @button-success-bg, @button-success-border-color, @button-success-color, @button-success-hover-bg, @button-success-hover-border-color, @button-success-focused-bg, @button-success-focused-border-color, @button-success-active-bg, @button-success-active-border-color, @button-success-color, @button-success-icon-color );
+            .dx-button-styling-variant(
+                @button-success-bg, @button-success-border-color, @button-success-color,
+                darken(@button-success-bg, 10%), @button-success-border-color,
+                darken(@button-success-bg, 15%), @button-success-border-color,
+                darken(@button-success-bg, 20%), @button-success-border-color, @button-success-color,
+                @button-success-color
+            );
         }
     }
 
@@ -845,7 +851,13 @@
         .dx-revert-button {
             margin: 0px 1px;
             margin-left: 1px;
-            .dx-button-styling-variant( @button-danger-bg, @button-danger-border-color, @button-danger-color, @button-danger-hover-bg, @button-danger-hover-border-color, @button-danger-focused-bg, @button-danger-focused-border-color, @button-danger-active-bg, @button-danger-active-border-color, @button-danger-color, @button-danger-icon-color );
+            .dx-button-styling-variant(
+                @button-danger-bg, @button-danger-border-color, @button-danger-color,
+                darken(@button-danger-bg, 10%), @button-danger-border-color,
+                darken(@button-danger-bg, 15%), @button-danger-border-color,
+                darken(@button-danger-bg, 20%), @button-danger-border-color, @button-danger-color,
+                @button-danger-color
+            );
             > .dx-button-content {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }

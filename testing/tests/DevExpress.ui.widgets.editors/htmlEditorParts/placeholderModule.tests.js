@@ -140,7 +140,7 @@ QUnit.module("Placeholder module", moduleConfig, () => {
         const dataPlaceholder = new DataPlaceholder(this.quillMock, this.options);
 
         dataPlaceholder.showPopover();
-        $("." + SUGGESTION_LIST_CLASS + " .dx-item").first().trigger("dxclick");
+        $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
 
         this.clock.tick();
 

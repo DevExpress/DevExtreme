@@ -7,7 +7,7 @@ const xlsxCellFormatHelper = {
         let result = null;
         if(typeUtils.isDefined(sourceObj)) {
             let numberFormatId;
-            if(typeUtils.isDefined(sourceObj.numberFormat) && typeUtils.isNumeric(sourceObj.numberFormat)) {
+            if(typeof sourceObj.numberFormat === 'number') {
                 numberFormatId = sourceObj.numberFormat;
             } else {
                 numberFormatId = sharedItemsContainer.registerNumberFormat(sourceObj.numberFormat);

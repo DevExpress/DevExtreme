@@ -102,7 +102,7 @@ var ExcelCreator = Class.inherit({
 
         return result;
     },
-    _tryConvertToXlsxFormatCode: function(format, dataType) {
+    _tryConvertToXlsxNumberFormat: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
 
@@ -127,7 +127,7 @@ var ExcelCreator = Class.inherit({
         }
     },
 
-    _getExcelDateValue: function(date) {
+    _tryGetExcelDateValue: function(date) {
         var days,
             totalTime;
 
@@ -160,7 +160,7 @@ var ExcelCreator = Class.inherit({
 
             case "d":
                 sourceValue = value;
-                value = this._getExcelDateValue(value);
+                value = this._tryGetExcelDateValue(value);
                 type = "n";
                 break;
         }
@@ -170,6 +170,33 @@ var ExcelCreator = Class.inherit({
             type: type,
             sourceValue,
             cellSourceData: cellSourceData
+        };
+    },
+
+    _raiseXlsxCellPrepared: function({ dataProvider, value, dataType, style, sourceData }) {
+        const style_args = extend(true, {}, style);
+        const numberFormat = style_args.numberFormat;
+        delete style_args.numberFormat;
+
+        const args = {
+            xlsxCell: {
+                style: style_args,
+                value: value,
+                dataType: dataType,
+                numberFormat: numberFormat,
+            },
+            cellSourceData: sourceData
+        };
+
+        dataProvider.onXlsxCellPrepared(args);
+
+        const newStyle = args.xlsxCell.style || {};
+        newStyle.numberFormat = args.xlsxCell.numberFormat;
+
+        return {
+            value: args.xlsxCell.value,
+            dataType: args.xlsxCell.dataType,
+            style: newStyle,
         };
     },
 
@@ -193,43 +220,38 @@ var ExcelCreator = Class.inherit({
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
                 if(dataProvider.onXlsxCellPrepared) {
-                    const xlsxCellValue = cellData.sourceValue || cellData.value;
-                    const xlsxCell = {
-                        style: extend(true, {}, that._styleArray[cellStyleId]),
-                        value: xlsxCellValue,
+                    const value = cellData.sourceValue || cellData.value;
+                    const modifiedXlsxCell = this._raiseXlsxCellPrepared({
+                        dataProvider: dataProvider,
+                        value: value,
                         dataType: cellData.type,
-                        // xlsxFile
-                    };
-                    dataProvider.onXlsxCellPrepared({
-                        xlsxCell,
-                        cellSourceData: cellData.cellSourceData
+                        style: that._styleArray[cellStyleId],
+                        sourceData: cellData.cellSourceData,
                     });
 
-                    cellData.type = xlsxCell.dataType;
-                    if(xlsxCell.value !== xlsxCellValue) {
+                    cellData.type = modifiedXlsxCell.dataType;
+                    if(modifiedXlsxCell.value !== value) {
                         // 18.18.11 ST_CellType (Cell Type)
                         switch(cellData.type) {
                             case 's':
-                                cellData.value = this._appendString(xlsxCell.value);
+                                cellData.value = this._appendString(modifiedXlsxCell.value);
                                 break;
                             case 'd':
-                                cellData.value = xlsxCell.value;
+                                cellData.value = modifiedXlsxCell.value;
                                 break;
                             case 'n':
-                                let newValue = xlsxCell.value;
-                                if(typeUtils.isDate(newValue)) {
-                                    newValue = this._getExcelDateValue(newValue);
-                                    if(!typeUtils.isDefined(newValue)) {
-                                        newValue = xlsxCell.value;
-                                    }
+                                let newValue = modifiedXlsxCell.value;
+                                const xlsxDataValue = this._tryGetExcelDateValue(newValue);
+                                if(typeUtils.isDefined(xlsxDataValue)) {
+                                    newValue = xlsxDataValue;
                                 }
                                 cellData.value = newValue;
                                 break;
                             default:
-                                cellData.value = xlsxCell.value;
+                                cellData.value = modifiedXlsxCell.value;
                         }
                     }
-                    cellStyleId = this._xlsxFile.registerCellFormat(xlsxCell.style);
+                    cellStyleId = this._xlsxFile.registerCellFormat(modifiedXlsxCell.style);
                 }
                 cellsArray.push({
                     style: cellStyleId,
@@ -270,8 +292,10 @@ var ExcelCreator = Class.inherit({
         this._xlsxFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            const formatCode = that._tryConvertToXlsxFormatCode(style.format, style.dataType);
-            let numberFormat = typeUtils.isDefined(formatCode) ? { formatCode } : 0;
+            let numberFormat = that._tryConvertToXlsxNumberFormat(style.format, style.dataType);
+            if(!typeUtils.isDefined(numberFormat)) {
+                numberFormat = 0;
+            }
             that._styleArray.push({
                 font: fonts[Number(!!style.bold)],
                 numberFormat,

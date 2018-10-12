@@ -184,7 +184,7 @@ QUnit.test("Get excel date value", function(assert) {
     // act, assert
     var that = this,
         getExcelDateValue = function(strDate) {
-            return String(that.excelCreator._getExcelDateValue(new Date(strDate), "dd/MM/yyyy H:MM:s"));
+            return String(that.excelCreator._tryGetExcelDateValue(new Date(strDate), "dd/MM/yyyy H:MM:s"));
         };
 
     assert.strictEqual(getExcelDateValue("08/15/1900 12:52:03"), "228.53614583333334");
@@ -202,12 +202,12 @@ QUnit.test("Get excel date value", function(assert) {
     // T267460 UTC -06:00 USA
     assert.strictEqual(getExcelDateValue("08/15/2015"), "42231");
     assert.strictEqual(getExcelDateValue("08/15/2015 0:30:00"), "42231.020833333336");
-    assert.strictEqual(this.excelCreator._getExcelDateValue(""), undefined);
+    assert.strictEqual(this.excelCreator._tryGetExcelDateValue(""), undefined);
 });
 
 QUnit.test("Get excel date value when value is null", function(assert) {
     // act, assert
-    assert.ok(!this.excelCreator._getExcelDateValue(null, "dd/MM/yyyy H:MM:s"));
+    assert.ok(!this.excelCreator._tryGetExcelDateValue(null, "dd/MM/yyyy H:MM:s"));
 });
 
 QUnit.test("stringArray unique appending", function(assert) {

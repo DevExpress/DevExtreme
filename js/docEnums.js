@@ -10,6 +10,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ButtonStylingMode
+ * @enum {'text'|'outlined'|'contained'}
+ */
+
+/**
  * @typedef {number} Enums.FirstDayOfWeek
  * @enum {0|1|2|3|4|5|6}
  */
@@ -178,6 +183,11 @@
 /**
  * @typedef {string} Enums.ChartPointerType
  * @enum {'all'|'mouse'|'none'|'touch'}
+ */
+
+/**
+ * @typedef {string} Enums.ChartZoomAndPanMode
+ * @enum {'both'|'none'|'pan'|'zoom'}
  */
 
 /**
@@ -903,4 +913,29 @@
  /**
  * @typedef {string} Enums.HtmlEditorValueType
  * @enum {'HTML'|'Markdown'}
+ */
+
+ /**
+ * @typedef {string} Enums.EditorStylingMode
+ * @enum {'outlined'|'underlined'|'filled'}
+ */
+
+/**
+ * @typedef {string} Enums.GridCommandColumnType
+ * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListCommandColumnType
+ * @enum {'adaptive'|'buttons'}
+ */
+
+/**
+ * @typedef {string} Enums.GridColumnButtonName
+ * @enum {'cancel'|'delete'|'edit'|'save'|'undelete'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListColumnButtonName
+ * @enum {'add'|'cancel'|'delete'|'edit'|'save'|'undelete'}
  */

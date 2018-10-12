@@ -4,7 +4,9 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
-    caretWorkaround = require("./caretWorkaround.js");
+    caretWorkaround = require("./caretWorkaround.js"),
+    themes = require("ui/themes"),
+    config = require("core/config");
 
 require("ui/text_box/ui.text_editor");
 
@@ -307,6 +309,26 @@ QUnit.test("dxTextEditor with height option should have min-height auto style on
     assert.equal($input.get(0).style.minHeight, "0px", "min-height inline style is defined");
 });
 
+QUnit.test("dxTextEditor with wrong stylingMode option should set the class according to default option value", function(assert) {
+    let $textEditor = $("#texteditor").dxTextEditor({
+        stylingMode: "someWrongOptionValue"
+    });
+
+    assert.ok($textEditor.hasClass("dx-editor-outlined"));
+});
+
+QUnit.test("dxTextEditor with wrong stylingMode option should set the class according to default option value (platform specific)", function(assert) {
+    const realIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    const $textEditor = $("#texteditor").dxTextEditor({
+        stylingMode: "someWrongOptionValue"
+    });
+
+    assert.ok($textEditor.hasClass("dx-editor-underlined"));
+
+    themes.isMaterial = realIsMaterial;
+});
 
 QUnit.module("text option", moduleConfig);
 
@@ -746,6 +768,25 @@ QUnit.testInActiveWindow("Remove .dx-state-focused class after disabled of the e
     assert.ok(!$textEditor.hasClass("dx-state-focused"), "dx-state-focused was removed");
 });
 
+QUnit.test("texteditor get 'stylingMode' option from global config", function(assert) {
+    config({ editorStylingMode: "underlined" });
+    const container = $("<div>");
+    const instance = container.dxTextEditor().dxTextEditor("instance");
+
+    const stylingMode = instance.option("stylingMode");
+    assert.equal(stylingMode, "underlined", "default changed by global config");
+    container.remove();
+    config({ editorStylingMode: null });
+});
+
+QUnit.test("texteditor 'stylingMode' option: runtime change", function(assert) {
+    this.element = $("#texteditor");
+    assert.equal(this.element.hasClass("dx-editor-outlined"), true, "initial value is right");
+
+    this.instance.option("stylingMode", "underlined");
+    assert.equal(this.element.hasClass("dx-editor-underlined"), true, "right class after option change present");
+    assert.equal(this.element.hasClass("dx-editor-outlined"), false, "old class after option change was removed");
+});
 
 QUnit.module("api", moduleConfig);
 

@@ -23,6 +23,7 @@
             _scrollTop,
             _scrollLeft,
             _clock,
+            _shiftKey,
             _pointerType = "mouse",
             _lastEvent;
 
@@ -34,6 +35,7 @@
                     pageX: _x,
                     pageY: _y,
                     which: 1,
+                    shiftKey: _shiftKey,
                     target: $element.get(0),
                     pointerType: _pointerType,
                     pointers: []
@@ -55,6 +57,7 @@
                     _scrollTop = params.scrollTop || 0;
                     _scrollLeft = params.scrollLeft || 0;
                     _clock = params.clock || $.now();
+                    _shiftKey = params.shiftKey || false;
                     _pointerType = params.pointerType || _pointerType;
                 } else {
                     _x = 0;
@@ -62,6 +65,7 @@
                     _scrollTop = 0;
                     _scrollLeft = 0;
                     _clock = $.now();
+                    _shiftKey = false;
                     _pointerType = params || _pointerType;
                 }
 
@@ -194,9 +198,12 @@
                 return this;
             },
 
-            dragEnd: function(targetOffset) {
+            dragEnd: function() {
                 triggerEvent("dxdragend", {
-                    targetOffset: targetOffset
+                    offset: {
+                        x: _x,
+                        y: _y
+                    }
                 });
 
                 return this;

@@ -2400,7 +2400,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
                 maxAppointmentsPerCell: 'auto'
             }],
             height: 600,
-            width: 1800,
+            width: 1600,
             dataSource: items
         }
     );
@@ -2424,7 +2424,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 
-    this.instance.option("width", 1000);
+    this.instance.option("width", 900);
 
     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();

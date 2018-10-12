@@ -459,7 +459,7 @@ var BaseRenderingStrategy = Class.inherit({
 
         endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
 
-        if(viewStartDate.getTime() >= endDate.getTime() || isRecurring) {
+        if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
 
@@ -646,6 +646,10 @@ var BaseRenderingStrategy = Class.inherit({
     _getMaxHeight: noop,
 
     _needVerifyItemSize: function() {
+        return false;
+    },
+
+    needSeparateAppointment: function() {
         return false;
     },
 

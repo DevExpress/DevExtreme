@@ -1,6 +1,7 @@
 /**
 * @name XlsxCell
 * @type object
+* @hidden
 */
 /**
 * @name XlsxCell.value
@@ -18,10 +19,6 @@
 
 /**
 * @name XlsxCell.style.numberFormat
-* @type object
-*/
-/**
-* @name XlsxCell.style.numberFormat.formatCode
 * @type string
 */
 
@@ -95,6 +92,7 @@
 /**
 * @name XlsxColor
 * @type object
+* @hidden
 */
 /**
 * @name XlsxColor.rgb
@@ -104,6 +102,7 @@
 /**
 * @name XlsxGridCell
 * @type object
+* @hidden
 */
 /**
 * @name XlsxGridCell.rowType

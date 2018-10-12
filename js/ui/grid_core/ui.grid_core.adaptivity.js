@@ -80,14 +80,14 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return row && row.modifiedValues && typeUtils.isDefined(row.modifiedValues[columnIndex]);
     },
 
-    _renderFormViewTemplate: function(item, cellOptions, container) {
+    _renderFormViewTemplate: function(item, cellOptions, $container) {
         var that = this,
-            $container = $(container),
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
             focusAction = that.createAction(function() {
                 eventsEngine.trigger($container, clickEvent.name);
             }),
+            container,
             cellText;
 
         cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
@@ -121,6 +121,8 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 }
             }
         }
+
+        that.getView("rowsView")._cellPrepared($container, cellOptions);
     },
 
     _getTemplate: function(item, cellOptions) {
@@ -142,8 +144,15 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 templateOptions.column = column;
                 templateOptions.columnIndex = columnIndex;
 
+                templateOptions.watch && templateOptions.watch(function() {
+                    return templateOptions.column.selector(templateOptions.data);
+                }, function(newValue) {
+                    templateOptions.value = newValue;
+                    $container.contents().remove();
+                    that._renderFormViewTemplate(item, templateOptions, $container);
+                });
+
                 that._renderFormViewTemplate(item, templateOptions, $container);
-                that.getView("rowsView")._cellPrepared($container, templateOptions);
             }
         };
     },

@@ -176,6 +176,57 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
     }
 });
 
+QUnit.test("incomplete animation should be stopped after closing on outside click", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "overlap",
+        closeOnOutsideClick: true,
+        revealMode: "expand",
+        shading: true
+    });
+
+    let origFxStop = fx.stop,
+        panelStopCalls = 0,
+        contentStopCalls = 0,
+        overlayContentStopCalls = 0,
+        shaderStopCalls = 0,
+        isJumpedToEnd = false;
+
+    const instance = $element.dxDrawer("instance");
+    fx.stop = function($element, jumpToEnd) {
+        if(jumpToEnd) {
+            isJumpedToEnd = true;
+        }
+        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            panelStopCalls++;
+        }
+        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            contentStopCalls++;
+        }
+        if($element.hasClass("dx-overlay-content")) {
+            overlayContentStopCalls++;
+        }
+        if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            shaderStopCalls++;
+        }
+    };
+
+    try {
+        fx.off = false;
+
+        $(instance.viewContent()).trigger("dxclick");
+
+        assert.equal(panelStopCalls, 2, "animation should stops before closing");
+        assert.equal(contentStopCalls, 2, "animation should stops before closing");
+        assert.equal(overlayContentStopCalls, 2, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 2, "animation should stops before closing");
+        assert.notOk(isJumpedToEnd, "elements aren't returned to the end position after animation stopping");
+    } finally {
+        fx.off = true;
+        fx.stop = origFxStop;
+    }
+});
+
 QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "push"
@@ -246,6 +297,28 @@ QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'
     const instance = $element.dxDrawer("instance");
 
     instance.option("position", "right");
+    let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
+    let $content = $wrapper.children();
+
+    assert.ok($content.eq(1).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(0).hasClass("dx-drawer-content"));
+
+    instance.option("position", "left");
+
+    $content = $wrapper.children();
+
+    assert.ok($content.eq(0).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(1).hasClass("dx-drawer-content"));
+});
+
+QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "push",
+        position: "right"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "shrink");
     let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
     let $content = $wrapper.children();
 
@@ -754,6 +827,36 @@ QUnit.test("panel and content should be rendered correctly after revealMode chan
 
 QUnit.module("shrink mode");
 
+QUnit.test("panel should have correct width in shrink mode after drawer resizing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        width: 800,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 2000);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
+
+    resizeCallbacks.fire();
+    assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
+
+    fx.off = false;
+});
+
 QUnit.test("minSize should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
 
@@ -902,6 +1005,37 @@ QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bot
     assert.equal($content.position().top, 0, "content has correct top");
     assert.equal($panel.position().top, 900, "panel has correct top");
     assert.equal($panel.height(), 100, "panel has correct height");
+
+    fx.off = false;
+});
+
+QUnit.test("panel should have correct height in shrink mode after drawer resizing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        width: 800,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 2000);
+
+            return $div;
+        }
+    });
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.height(), 50, "panel has correct height when minSize is set");
+
+    resizeCallbacks.fire();
+    assert.equal($panel.height(), 50, "panel has correct height when minSize is set");
 
     fx.off = false;
 });
@@ -1690,6 +1824,31 @@ QUnit.test("drawer panel should be repositioned after dimension changed", assert
     const $element = $("#drawer").dxDrawer({
         opened: false,
         revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelOverlayContent.position().left, 0, "panel overlay content position is OK");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer panel should be repositioned after dimension changed, right position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        revealMode: "slide",
+        position: "right",
         openedStateMode: "overlap",
         template: function($content) {
             var $div = $("<div/>");

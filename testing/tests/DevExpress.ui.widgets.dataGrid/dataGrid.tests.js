@@ -7122,6 +7122,64 @@ QUnit.test("paging change", function(assert) {
     assert.ok(!dataGrid.getView("pagerView").isVisible(), "pager visibility when paging disabled");
 });
 
+QUnit.test("paging change", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        pageIndex: 1,
+        pageSize: 2
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 1, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+    assert.deepEqual(dataGrid.getVisibleRows().length, 2, "row count");
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { value: 3 }, "first row data");
+});
+
+// T677650
+QUnit.test("paging change if nested options are not changed", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        enabled: true,
+        pageIndex: 0,
+        pageSize: 3
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 0, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+});
+
 // T121445
 QUnit.test("pager.allowedPageSizes change", function(assert) {
     // arrange, act
@@ -8054,6 +8112,35 @@ QUnit.test("add row if dataSource is not defined", function(assert) {
 
     // assert
     assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
+});
+
+QUnit.test("add row without return key", function(assert) {
+    // arrange, act
+    var array = [{ id: 1, name: "Test 1" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "batch"
+        },
+        dataSource: {
+            key: "id",
+            load: function() {
+                return array;
+            },
+            insert: function(values) {
+                array.push(values);
+            }
+        }
+    });
+
+    // act
+    dataGrid.addRow();
+    dataGrid.saveEditData();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 2, "visible rows");
+    assert.strictEqual(dataGrid.hasEditData(), false, "no edit data");
 });
 
 QUnit.test("Disable editing buttons after insert a row", function(assert) {
@@ -10776,6 +10863,33 @@ QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly",
     assert.equal($(dataGrid.element()).find(".changed").length, 1, "class changed is added to one cell only");
 });
 
+QUnit.test("Column widths should be updated after expand group row if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        dataSource: [
+            { id: 1, group: "group1" },
+            { id: 2, group: "group1" },
+            { id: 3, group: "group2" },
+            { id: 4, group: "group2" }
+        ],
+        grouping: {
+            autoExpandAll: false
+        },
+        columns: ["id", {
+            dataField: "group",
+            groupIndex: 0
+        }],
+        repaintChangesOnly: true
+    });
+
+    dataGrid.expandRow(["group1"]);
+
+    // assert
+    assert.equal(dataGrid.getVisibleColumns()[0].visibleWidth, 30, "visibleWidth for first groupExpand column");
+});
+
 QUnit.test("Stop watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
     // arrange
     var dataSource = new DataSource({
@@ -10878,6 +10992,43 @@ QUnit.test("Using watch in masterDetail template if repaintChangesOnly", functio
     // assert
     assert.ok($(dataGrid.element()).find(".detail").is($detail), "detail element isn't updated");
     assert.ok($detail.text(), "changed", "detail text is changed");
+});
+
+QUnit.test("push changes for adaptive row", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            pushAggregationTimeout: 0,
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            width: 100,
+            columnWidth: 100,
+            columnHidingEnabled: true,
+            repaintChangesOnly: true,
+            loadingTimeout: undefined,
+            keyExpr: "id",
+            dataSource: dataSource
+        });
+
+
+    dataGrid.expandAdaptiveDetailRow(2);
+
+    var $cell = $(dataGrid.getCellElement(2, 1));
+
+    // act
+    dataGrid.getDataSource().store().push([{ type: "update", key: 2, data: { field1: "test updated" } }]);
+
+    // assert
+    assert.strictEqual($cell.text(), "test updated", "field1 text is updated");
 });
 
 QUnit.test("Refresh with changesOnly and summary", function(assert) {

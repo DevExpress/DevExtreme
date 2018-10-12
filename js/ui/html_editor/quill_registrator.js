@@ -10,6 +10,7 @@ class QuillRegistrator {
 
         const BaseTheme = require("./themes/base");
         const Image = require("./formats/image");
+        const Link = require("./formats/link");
         const Toolbar = require("./modules/toolbar");
         const DropImage = require("./modules/dropImage");
         const Placeholder = require("./modules/placeholder");
@@ -27,6 +28,7 @@ class QuillRegistrator {
             "formats/size": SizeStyle,
 
             "formats/image": Image,
+            "formats/link": Link,
 
             "modules/toolbar": Toolbar,
             "modules/dropImage": DropImage,

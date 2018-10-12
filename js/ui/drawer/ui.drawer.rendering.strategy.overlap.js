@@ -3,11 +3,14 @@ import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 import Overlay from "../overlay";
+import typeUtils from "../../core/utils/type";
 
 
 class OverlapStrategy extends DrawerStrategy {
 
     renderPanel(template) {
+        delete this._initialPosition;
+
         let position = this.getOverlayPosition();
 
         this._drawer._overlay = this._drawer._createComponent(this._drawer.content(), Overlay, {
@@ -20,9 +23,11 @@ class OverlapStrategy extends DrawerStrategy {
                     duration: 0
                 }
             },
-            onPositioned: function(e) {
-                translator.move(e.component.$content(), { left: 0 });
-            },
+            onPositioned: (function(e) {
+                if(typeUtils.isDefined(this._initialPosition)) {
+                    translator.move(e.component.$content(), { left: this._initialPosition.left });
+                }
+            }).bind(this),
             contentTemplate: template,
             visible: true,
             propagateOutsideClick: true
@@ -72,6 +77,8 @@ class OverlapStrategy extends DrawerStrategy {
 
     renderPosition(offset, animate) {
         super.renderPosition(offset, animate);
+
+        this._initialPosition = this._drawer.getOverlay().$content().position();
 
         const $element = $(this._drawer.content());
         const $content = $(this._drawer.viewContent());

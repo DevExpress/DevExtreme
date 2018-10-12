@@ -559,15 +559,13 @@ exports.XmlaStore = Class.inherit((function() {
 
     function getVisibleChildren(item, visibleLevels) {
         var result = [],
-            children = item.children && (item.children.length ? item.children : iteratorUtils.map(item.children.grandTotalHash || [], function(e) {
-                return e.children;
-            })),
+            children = item.children && (item.children.length ? item.children : Object.keys(item.children.grandTotalHash || {}).reduce((result, name) => {
+                return result.concat(item.children.grandTotalHash[name].children);
+            }, [])),
             firstChild = children && children[0];
 
         if(firstChild && (visibleLevels[firstChild.hierarchyName] && (inArray(firstChild.levelName, visibleLevels[firstChild.hierarchyName]) !== -1) || !visibleLevels[firstChild.hierarchyName] || firstChild.level === 0)) {
-            var newChildren = iteratorUtils.map(children, function(child) {
-                return child.hierarchyName === firstChild.hierarchyName ? child : null;
-            });
+            var newChildren = children.filter(child => child.hierarchyName === firstChild.hierarchyName);
             newChildren.grandTotalHash = children.grandTotalHash;
             return newChildren;
         } else if(firstChild) {
