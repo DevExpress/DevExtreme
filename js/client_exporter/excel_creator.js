@@ -127,7 +127,7 @@ var ExcelCreator = Class.inherit({
         }
     },
 
-    _getExcelDateValue: function(date) {
+    _tryGetExcelDateValue: function(date) {
         var days,
             totalTime;
 
@@ -160,7 +160,7 @@ var ExcelCreator = Class.inherit({
 
             case "d":
                 sourceValue = value;
-                value = this._getExcelDateValue(value);
+                value = this._tryGetExcelDateValue(value);
                 type = "n";
                 break;
         }
@@ -241,11 +241,9 @@ var ExcelCreator = Class.inherit({
                                 break;
                             case 'n':
                                 let newValue = modifiedXlsxCell.value;
-                                if(typeUtils.isDate(newValue)) {
-                                    const xlsxDataValue = this._getExcelDateValue(newValue);
-                                    if(typeUtils.isDefined(xlsxDataValue)) {
-                                        newValue = xlsxDataValue;
-                                    }
+                                const xlsxDataValue = this._tryGetExcelDateValue(newValue);
+                                if(typeUtils.isDefined(xlsxDataValue)) {
+                                    newValue = xlsxDataValue;
                                 }
                                 cellData.value = newValue;
                                 break;
