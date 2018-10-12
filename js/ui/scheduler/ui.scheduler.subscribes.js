@@ -57,7 +57,7 @@ var subscribes = {
                 longParts = [];
 
             for(var i = 0; i < datesLength; i++) {
-                longParts = dateUtils.getDatesBetween(dates[i], endDate, 1);
+                longParts = dateUtils.getDatesBetween(dates[i], endDate, "day");
             }
 
             dates = longParts;
