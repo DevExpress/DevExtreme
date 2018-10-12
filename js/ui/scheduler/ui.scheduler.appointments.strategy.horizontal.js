@@ -34,6 +34,12 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             width = minWidth;
         }
 
+        width = this.cropAppointmentWidth(width, cellWidth);
+
+        return width;
+    },
+
+    cropAppointmentWidth: function(width, cellWidth) {
         if(this.instance.fire("isGroupedByDate")) {
             width = cellWidth;
         }
