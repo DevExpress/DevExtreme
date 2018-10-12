@@ -23,10 +23,14 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                     event = e.event,
                     $cellElementFromEvent = $(event.currentTarget),
                     rowIndex = $cellElementFromEvent.parent().index(),
-                    columnIndex = [].slice.call(that.getCellElements(rowIndex)).findIndex($cellElement => {
-                        return $cellElement === $cellElementFromEvent.get(0);
-                    }),
-                    visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
+                    columnIndex = -1;
+                [].slice.call(that.getCellElements(rowIndex)).some(($cellElement, index) => {
+                    if($cellElement === $cellElementFromEvent.get(0)) {
+                        columnIndex = index;
+                        return true;
+                    }
+                });
+                var visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
                     column = visibleColumns[columnIndex],
                     editingController = that.getController("editing"),
                     editingMode = that.option("editing.mode"),
