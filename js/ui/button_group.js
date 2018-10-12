@@ -5,11 +5,11 @@ import CollectionWidget from "./collection/ui.collection_widget.edit";
 import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
 import BindableTemplate from "./widget/bindable_template";
-import { isPlainObject } from "../core/utils/type";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
-    BUTTON_GROUP_WRAPPER_CLASS = "dx-buttongroup-wrapper",
-    BUTTON_GROUP_ITEM_CLASS = "dx-buttongroup-item";
+    BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
+    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
+    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item";
 
 var ButtonCollection = CollectionWidget.inherit({
     _renderItemContent(options) {
@@ -45,16 +45,9 @@ const ButtonGroup = Widget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
-             * @name dxButtonGroupOptions.buttonType
-             * @type Enums.ButtonType
-             * @default 'normal'
-             */
-            buttonType: "normal",
-
-            /**
              * @name dxButtonGroupOptions.hoverStateEnabled
              * @type boolean
-             * @default false
+             * @default true
              */
             hoverStateEnabled: true,
 
@@ -96,7 +89,8 @@ const ButtonGroup = Widget.inherit({
 
             /**
              * @name dxButtonGroupOptions.items
-             * @type Array<any>
+             * @type Array<ButtonGroupItem>
+             * @inherits CollectionWidgetItemTemplate
              */
             items: [],
 
@@ -127,9 +121,28 @@ const ButtonGroup = Widget.inherit({
     _initTemplates() {
         this.callBase();
 
+        /**
+         * @name dxButtonGroupItem
+         * @inherits CollectionWidgetItemTemplate
+         * @type object
+         */
+        /**
+         * @name dxButtonGroupItem.text
+         * @type String
+         */
+        /**
+         * @name dxButtonGroupItem.type
+         * @type Enums.ButtonType
+         * @default 'normal'
+         */
+        /**
+         * @name dxButtonGroupItem.icon
+         * @type String
+         */
         this._defaultTemplates["item"] = new BindableTemplate((($container, data) => {
-            const buttonOptions = !isPlainObject(data) ? { text: String(data) } : data;
-            this._createComponent($container, Button, extend({}, buttonOptions, this._getBasicButtonOptions()));
+            const itemIndex = $container.data("dxItemIndex");
+            itemIndex === 0 && $container.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
+            this._createComponent($container, Button, extend({}, data, this._getBasicButtonOptions()));
         }), ["text", "type", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
@@ -149,7 +162,6 @@ const ButtonGroup = Widget.inherit({
 
     _getBasicButtonOptions() {
         return {
-            type: this.option("buttonType"),
             focusStateEnabled: false,
             hoverStateEnabled: this.option("hoverStateEnabled"),
             activeStateEnabled: this.option("activeStateEnabled")
@@ -203,7 +215,6 @@ const ButtonGroup = Widget.inherit({
         }
 
         switch(args.name) {
-            case "buttonType":
             case "selectionMode":
             case "keyExpr":
             case "itemTemplate":
@@ -211,7 +222,6 @@ const ButtonGroup = Widget.inherit({
             case "activeStateEnabled":
             case "focusStateEnabled":
             case "hoverStateEnabled":
-            case "onSelectionChanged":
             case "tabIndex":
                 this._invalidate();
                 break;
@@ -219,6 +229,7 @@ const ButtonGroup = Widget.inherit({
             case "selectedItems":
                 this._buttonsCollection.option(args.name, args.value);
                 break;
+            case "onSelectionChanged":
             default:
                 this.callBase(args);
         }

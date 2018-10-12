@@ -4,10 +4,11 @@ import "ui/button_group";
 import "common.css!";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
-    BUTTON_GROUP_WRAPPER_CLASS = "dx-buttongroup-wrapper",
+    BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
     BUTTON_CLASS = "dx-button",
     DX_ITEM_SELECTED_CLASS = "dx-item-selected",
-    DX_BUTTON_GROUP_ITEM_CLASS = "dx-buttongroup-item";
+    DX_BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
+    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item";
 
 QUnit.testStart(() => {
     const markup = `
@@ -38,7 +39,6 @@ QUnit.module("default", {
         const buttonGroup = $("#widget").dxButtonGroup().dxButtonGroup("instance");
         const getOptionValue = (name) => buttonGroup.option(name);
 
-        assert.strictEqual(getOptionValue("buttonType"), "normal", "buttonType");
         assert.strictEqual(getOptionValue("hoverStateEnabled"), true, "hoverStateEnabled");
         assert.strictEqual(getOptionValue("focusStateEnabled"), true, "focusStateEnabled");
         assert.strictEqual(getOptionValue("selectionMode"), "single", "selectionMode");
@@ -59,6 +59,7 @@ QUnit.module("default", {
         assert.ok($wrapper.eq(0).hasClass(BUTTON_GROUP_WRAPPER_CLASS), "css class for button collection");
 
         const $buttons = $(`.${BUTTON_GROUP_WRAPPER_CLASS} .${DX_BUTTON_GROUP_ITEM_CLASS}.${BUTTON_CLASS}`);
+        assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_FIRST_ITEM_CLASS), "first item has css class");
         assert.equal($buttons.length, 2, "buttons count");
     });
 
@@ -125,17 +126,6 @@ QUnit.module("default", {
         const $templates = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS} .custom-template`);
         assert.equal($templates.eq(0).text(), "item 1_0", "text of first template");
         assert.equal($templates.eq(1).text(), "item 2_1", "text of second template");
-    });
-
-    QUnit.test("apply the button type option to all buttons", function(assert) {
-        const $buttonGroup = $("#widget").dxButtonGroup({
-            items: [{ text: "item 1" }, { text: "item 2" }],
-            buttonType: "danger"
-        });
-
-        const buttons = $buttonGroup.find(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
-        assert.equal(buttons[0].option("type"), "danger");
-        assert.equal(buttons[1].option("type"), "danger");
     });
 });
 

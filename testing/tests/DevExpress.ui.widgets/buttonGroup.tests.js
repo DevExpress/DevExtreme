@@ -59,14 +59,6 @@ QUnit.module("option changed", {
         assert.equal(buttons[1].option("text"), "right", "text of second button");
     });
 
-    QUnit.test("change the button type option", function(assert) {
-        this.buttonGroup.option("buttonType", "success");
-
-        const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
-        assert.equal(buttons[0].option("type"), "success");
-        assert.equal(buttons[1].option("type"), "success");
-    });
-
     QUnit.test("change selection via the selectedItems in the single mode", function(assert) {
         this.buttonGroup.option("selectedItems", [{ text: "button 2" }]);
 
@@ -108,6 +100,14 @@ QUnit.module("option changed", {
         assert.ok($buttons.eq(0).hasClass(DX_ITEM_SELECTED_CLASS), "first item is selected");
         assert.ok($buttons.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), "second item is selected");
         assert.deepEqual(this.buttonGroup.option("selectedItems"), [{ text: "button 1" }, { text: "button 2" }], "selectedItems");
+    });
+
+    QUnit.test("change the onSelectionChanged event", function(assert) {
+        const stub = sinon.stub();
+        this.buttonGroup.option("onSelectionChanged", stub);
+        this.buttonGroup.option("selectedItemKeys", ["button 2"]);
+
+        assert.equal(stub.callCount, 1);
     });
 });
 
