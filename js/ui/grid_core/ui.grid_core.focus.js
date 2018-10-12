@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
+    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
 
 exports.FocusController = core.ViewController.inherit((function() {
@@ -51,11 +52,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             return ["navigateToRow"];
         },
 
-        /**
-         * @name dxDataGridMethods.navigateToRow
-         * @publicName navigateToRow(key)
-         * @param1 key:any
-         */
         navigateToRow: function(key) {
             var that = this,
                 dataController = this.getController("data"),
@@ -144,17 +140,25 @@ exports.FocusController = core.ViewController.inherit((function() {
 
             each(rowsView.getTableElements(), function(_, element) {
                 $tableElement = $(element);
-                that._clearPreviousFocusedRow($tableElement);
+                that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
                 if(focusedRowIndex >= 0) {
                     $focusedRow = that._prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
                     that.getController("keyboardNavigation")._fireFocusedRowChanged($focusedRow);
                 }
             });
         },
-        _clearPreviousFocusedRow: function($tableElement) {
-            var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS);
-            $prevRowFocusedElement.removeClass(ROW_FOCUSED_CLASS).removeAttr("tabindex");
+        _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
+            var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS),
+                $firstRow;
+            $prevRowFocusedElement
+                .removeClass(ROW_FOCUSED_CLASS)
+                .removeClass(CELL_FOCUS_DISABLED_CLASS)
+                .removeAttr("tabindex");
             $prevRowFocusedElement.children("td").removeAttr("tabindex");
+            if(focusedRowIndex !== 0) {
+                $firstRow = $(this.getView("rowsView").getRowElement(0));
+                $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
+            }
         },
         _prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
             var that = this,
@@ -333,10 +337,17 @@ module.exports = {
             editorFactory: {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),
-                        focusedRowEnabled = this.option("focusedRowEnabled");
+                        focusedRowEnabled = this.option("focusedRowEnabled"),
+                        isRowElement = keyboardController._getElementType($element) === "row",
+                        $cell;
 
                     if(!focusedRowEnabled || !keyboardController.isRowFocusType()) {
                         this.callBase($element, hideBorder);
+                    } else if(focusedRowEnabled) {
+                        if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
+                            $cell = keyboardController.getFirstValidCellInRow($element);
+                            keyboardController.focus($cell);
+                        }
                     }
                 }
             },
@@ -518,23 +529,28 @@ module.exports = {
                     }
                 },
 
-                _updateFocusElementTabIndex: function(cellElements) {
+                _updateFocusElementTabIndex: function($cellElements) {
                     var that = this,
-                        $row = cellElements.eq(0).parent(),
-                        columnIndex = that.option("focusedColumnIndex") || 0,
-                        rowIndex = that.option("focusedRowIndex"),
+                        $row,
+                        columnIndex = that.option("focusedColumnIndex"),
+                        focusedRowKey = that.option("focusedRowKey"),
+                        rowIndex = that._dataController.getRowIndexByKey(focusedRowKey),
                         tabIndex = that.option("tabIndex");
 
-                    if(that.option("focusedRowEnabled") && rowIndex >= 0) {
+                    if(that.option("focusedRowEnabled")) {
+                        $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
+                        $row = $cellElements.eq(0).parent();
                         if($row.length) {
                             $row.attr("tabIndex", tabIndex);
-                            if(columnIndex < 0) {
-                                columnIndex = 0;
+                            if(rowIndex >= 0) {
+                                if(columnIndex < 0) {
+                                    columnIndex = 0;
+                                }
+                                this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
                             }
-                            this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
                         }
                     } else {
-                        that.callBase(cellElements);
+                        that.callBase($cellElements);
                     }
                 }
             }
