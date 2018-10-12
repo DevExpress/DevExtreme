@@ -765,17 +765,25 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return $cell;
     },
 
-    getFirstValidCellInRow: function($row) {
+    getFirstValidCellInRow: function($row, columnIndex) {
         var that = this,
-            $result,
+            $cells = $row.find("> td"),
             $cell,
-            $cells = $row.find("> td");
+            $result;
+
+        if(!columnIndex) {
+            columnIndex = 0;
+        }
 
         for(var i = 0; i < $cells.length; ++i) {
             $cell = $cells.eq(i);
             if(that._isCellValid($cell)) {
-                $result = $cell;
-                break;
+                if(columnIndex === 0) {
+                    $result = $cell;
+                    break;
+                } else {
+                    --columnIndex;
+                }
             }
         }
 
@@ -911,8 +919,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
             newFocusedCellPosition = this._getNewPositionByCode(focusedCellPosition, elementType, keyCode);
             $cell = this._getCell(newFocusedCellPosition);
 
-            if($cell && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
-                $cell = this._getNextCell(keyCode, "cell", newFocusedCellPosition);
+            if(!this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
+                if(this.isRowFocusType()) {
+                    $cell = this.getFirstValidCellInRow($cell.parent(), newFocusedCellPosition.columnIndex);
+                } else {
+                    $cell = this._getNextCell(keyCode, "cell", newFocusedCellPosition);
+                }
             }
 
             $row = $cell && $cell.parent();
