@@ -272,7 +272,7 @@ module.exports = _extend({}, symbolPoint, {
 
         that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + "Correction"] || 0);
 
-        val = valTranslator.translate(that.value);
+        val = valTranslator.translate(that.value, 1);
         minVal = valTranslator.translate(that.minValue);
 
         that["v" + valAxis] = val;
