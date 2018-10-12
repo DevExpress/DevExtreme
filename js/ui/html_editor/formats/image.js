@@ -10,17 +10,13 @@ class ExtImage extends Image {
         let node = super.create(SRC);
 
         if(isObject(data)) {
-            if(data.alt) {
-                node.setAttribute("alt", data.alt);
+            function setAttribute(attr, value) {
+                data[attr] && node.setAttribute(attr, value);
             }
 
-            if(data.width) {
-                node.setAttribute("width", `${data.width}px`);
-            }
-
-            if(data.height) {
-                node.setAttribute("height", `${data.height}px`);
-            }
+            setAttribute("alt", data.alt);
+            setAttribute("width", `${data.width}px`);
+            setAttribute("height", `${data.height}px`);
         }
 
         return node;
@@ -30,11 +26,12 @@ class ExtImage extends Image {
         let formats = super.formats(domNode);
         const src = domNode.getAttribute("src");
 
-        if(domNode.style["float"]) {
-            formats["float"] = domNode.style["float"];
-        }
         if(src) {
             formats["src"] = src;
+        }
+
+        if(domNode.style["float"]) {
+            formats["float"] = domNode.style["float"];
         }
 
         return formats;

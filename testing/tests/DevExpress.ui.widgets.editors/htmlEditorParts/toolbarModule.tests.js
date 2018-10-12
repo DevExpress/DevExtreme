@@ -30,7 +30,7 @@ const simpleModuleConfig = {
             on: noop,
             off: noop,
             getSelection: noop,
-            getFormat: () => { return {}; }
+            getFormat: () => {}
         };
 
         this.options = {
