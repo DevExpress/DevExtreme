@@ -161,7 +161,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     needSeparateAppointment: function() {
-        return true;
+        return this.instance.fire("isGroupedByDate");
     },
 });
 
