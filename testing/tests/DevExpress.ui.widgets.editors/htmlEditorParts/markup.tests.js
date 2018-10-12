@@ -16,7 +16,7 @@ QUnit.module("Base markup", () => {
 
         assert.ok($element.hasClass(HTML_EDITOR_CLASS), "Widget has a specific class on the root level");
         assert.ok($element.children().hasClass(QUILL_CONTAINER_CLASS), "Widget has a child marked as quill container");
-        assert.equal($element.text(), "Hi!Test");
+        assert.equal($element.find(`.${QUILL_CONTAINER_CLASS}`).text(), "Hi!Test");
     });
 
     test("change value", (assert) => {
@@ -26,6 +26,6 @@ QUnit.module("Base markup", () => {
             $element = instance.$element();
 
         instance.option("value", "<p>New value</p>");
-        assert.equal($element.text(), "New value");
+        assert.equal($element.find(`.${QUILL_CONTAINER_CLASS}`).text(), "New value");
     });
 });

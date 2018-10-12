@@ -6,7 +6,7 @@ import "ui/html_editor/converters/markdown";
 const CONTENT_CLASS = "dx-htmleditor-content";
 
 function getSelector(className) {
-    return "." + className;
+    return `.${className}`;
 }
 
 const { test } = QUnit;
