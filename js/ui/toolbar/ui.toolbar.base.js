@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
+    AsyncTemplateMixin = require("../shared/async_template_mixin"),
     BindableTemplate = require("../widget/bindable_template");
 
 var TOOLBAR_CLASS = "dx-toolbar",
@@ -321,10 +322,6 @@ var ToolbarBase = CollectionWidget.inherit({
         return this._getItemContentPromise(args, this.callBase);
     },
 
-    _itemContentRendered: function(args) {
-        this._deferredItems[args.index].resolve();
-    },
-
     _renderGroupedItems: function() {
         var that = this;
 
@@ -432,7 +429,7 @@ var ToolbarBase = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-});
+}).include(AsyncTemplateMixin);
 
 registerComponent("dxToolbarBase", ToolbarBase);
 

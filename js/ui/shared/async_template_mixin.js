@@ -1,5 +1,4 @@
 var deferredUtils = require("../../core/utils/deferred"),
-    noop = require("../../core/utils/common").noop,
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when;
 
@@ -19,16 +18,20 @@ module.exports = {
         return renderContentDeferred.promise();
     },
 
-    _createItemByTemplate(itemTemplate, renderArgs) {
-        return this._renderAsyncTemplate(itemTemplate, {
+    _getItemTemplateArgs(renderArgs) {
+        return {
             model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index,
             onRendered: this._itemTemplateRendered.bind(this, renderArgs)
-        });
+        };
     },
 
-    _itemTemplateRendered: noop,
+    _itemTemplateRendered(renderArgs) {
+        if(!this.option("deferRendering") && this._deferredItems && this._deferredItems[renderArgs.index]) {
+            this._deferredItems[renderArgs.index].resolve();
+        }
+    },
 
     _renderItemsAsync() {
         let d = new Deferred();
