@@ -94,7 +94,7 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
     );
 });
 
-QUnit.test("Change fill", function(assert) {
+QUnit.test("Change fill (simple format)", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
