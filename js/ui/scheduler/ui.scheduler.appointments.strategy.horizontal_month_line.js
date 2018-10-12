@@ -11,9 +11,14 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
 
         startDate = dateUtils.trimTime(startDate);
 
-        var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000;
+        var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000,
+            width = Math.ceil(durationInHours / 24) * cellWidth;
 
-        return Math.ceil(durationInHours / 24) * cellWidth;
+        if(this.instance.fire("isGroupedByDate")) {
+            width = cellWidth;
+        }
+
+        return width;
     },
 
     getDeltaTime: function(args, initialSize) {

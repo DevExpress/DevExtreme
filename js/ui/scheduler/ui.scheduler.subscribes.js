@@ -52,10 +52,25 @@ var subscribes = {
             dates.push(startDate);
         }
 
+        if(this.option("groupByDate")) {
+            var datesLength = dates.length,
+                longParts = [];
+
+            for(var i = 0; i < datesLength; i++) {
+                longParts = dateUtils.getDatesBetween(dates[i], endDate, 1);
+            }
+
+            dates = longParts;
+        }
+
         var itemResources = this._resourcesManager.getResourcesFromItem(appointmentData),
             allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
         options.callback(this._getCoordinates(dates, itemResources, allDay));
+    },
+
+    isGroupedByDate: function() {
+        return this._getCurrentViewOption("groupByDate");
     },
 
     showAppointmentTooltip: function(options) {

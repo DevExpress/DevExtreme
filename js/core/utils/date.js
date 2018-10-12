@@ -577,6 +577,19 @@ var makeDate = function(date) {
     return new Date(date);
 };
 
+var getDatesBetween = function(startDate, endDate, interval) {
+    var currentDate = new Date(startDate.getTime()),
+        result = [];
+
+    while(currentDate < endDate) {
+        result.push(new Date(currentDate.getTime()));
+
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return result;
+};
+
 var dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -628,7 +641,9 @@ var dateUtils = {
 
     makeDate: makeDate,
 
-    getDatesInterval: getDatesInterval
+    getDatesInterval: getDatesInterval,
+
+    getDatesBetween: getDatesBetween
 };
 
 module.exports = dateUtils;
