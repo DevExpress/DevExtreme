@@ -14,9 +14,7 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
         var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000,
             width = Math.ceil(durationInHours / 24) * cellWidth;
 
-        if(this.instance.fire("isGroupedByDate")) {
-            width = cellWidth;
-        }
+        width = this.cropAppointmentWidth(width, cellWidth);
 
         return width;
     },
