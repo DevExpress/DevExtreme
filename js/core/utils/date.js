@@ -577,14 +577,14 @@ var makeDate = function(date) {
     return new Date(date);
 };
 
-var getDatesBetween = function(startDate, endDate, interval) {
+var getDatesOfInterval = function(startDate, endDate, step) {
     var currentDate = new Date(startDate.getTime()),
         result = [];
 
     while(currentDate < endDate) {
         result.push(new Date(currentDate.getTime()));
 
-        currentDate = this.addInterval(currentDate, interval);
+        currentDate = this.addInterval(currentDate, step);
     }
 
     return result;
@@ -643,7 +643,7 @@ var dateUtils = {
 
     getDatesInterval: getDatesInterval,
 
-    getDatesBetween: getDatesBetween
+    getDatesOfInterval: getDatesOfInterval
 };
 
 module.exports = dateUtils;

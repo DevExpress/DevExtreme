@@ -57,7 +57,7 @@ var subscribes = {
                 longParts = [];
 
             for(var i = 0; i < datesLength; i++) {
-                longParts = dateUtils.getDatesBetween(dates[i], endDate, {
+                longParts = dateUtils.getDatesOfInterval(dates[i], endDate, {
                     milliseconds: this.getWorkSpace().getIntervalDuration()
                 });
             }
