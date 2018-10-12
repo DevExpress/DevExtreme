@@ -13,6 +13,30 @@ const xlsxFillHelper = {
         }
         return result;
     },
+    tryCreateFillFromSimpleFormat: function({ backgroundColor, patternStyle, patternColor } = {}) {
+        if(typeUtils.isDefined(backgroundColor) && !(typeUtils.isDefined(patternStyle) && typeUtils.isDefined(patternColor))) {
+            return {
+                patternFill: {
+                    patternType: 'solid',
+                    foregroundColor: {
+                        rgb: backgroundColor
+                    }
+                }
+            };
+        } else if(typeUtils.isDefined(patternStyle) && typeUtils.isDefined(patternColor)) {
+            return {
+                patternFill: {
+                    patternType: patternStyle,
+                    foregroundColor: {
+                        rgb: patternColor
+                    },
+                    backgroundColor: {
+                        rgb: backgroundColor
+                    },
+                }
+            };
+        }
+    },
 
     areEqual: function(leftTag, rightTag) {
         return xlsxFillHelper.isEmpty(leftTag) && xlsxFillHelper.isEmpty(rightTag) ||

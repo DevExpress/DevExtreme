@@ -906,7 +906,7 @@
  */
 
 /**
- * @typedef {string} Enums.XlsxPatternType
+ * @typedef {string} Enums.XlsxPatternStyle
  * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
  */
 

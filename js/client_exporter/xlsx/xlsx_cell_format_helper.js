@@ -1,6 +1,7 @@
 import typeUtils from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
+import xlsxFillHelper from './xlsx_fill_helper';
 
 const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
@@ -13,11 +14,16 @@ const xlsxCellFormatHelper = {
                 numberFormatId = sharedItemsContainer.registerNumberFormat(sourceObj.numberFormat);
             }
 
+            let fill = sourceObj.fill;
+            if(!typeUtils.isDefined(fill)) {
+                fill = xlsxFillHelper.tryCreateFillFromSimpleFormat(sourceObj);
+            }
+
             result = {
                 numberFormatId,
                 alignment: xlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
                 fontId: sharedItemsContainer.registerFont(sourceObj.font),
-                fillId: sharedItemsContainer.registerFill(sourceObj.fill),
+                fillId: sharedItemsContainer.registerFill(fill),
             };
             if(xlsxCellFormatHelper.isEmpty(result)) {
                 result = null;

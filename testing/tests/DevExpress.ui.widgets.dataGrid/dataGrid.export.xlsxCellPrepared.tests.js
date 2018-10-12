@@ -11,7 +11,7 @@ QUnit.module("DataGrid onXlsxCellPrepared tests", {
     afterEach: helper.afterEachTest,
 });
 
-QUnit.test("Change horizontal alignment in all xlsx cells", function(assert) {
+QUnit.test("Change horizontal alignment", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="7">' +
@@ -94,7 +94,50 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
     );
 });
 
-QUnit.test("Change fill in all xlsx cells", function(assert) {
+QUnit.test("Change fill", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML1 +
+        '<fills count="3">' +
+        '<fill><patternFill patternType="none" /></fill>' +
+        '<fill><patternFill patternType="Gray125" /></fill>' +
+        '<fill><patternFill patternType="lightGrid"><fgColor rgb="FF00FF00" /><bgColor rgb="FFFFFF00" /></patternFill></fill>' +
+        '</fills>' +
+        helper.BASE_STYLE_XML2 +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: ['field1'],
+            dataSource: [{ field1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style.backgroundColor = 'FFFFFF00';
+                e.xlsxCell.style.patternColor = 'FF00FF00';
+                e.xlsxCell.style.patternStyle = 'lightGrid';
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change fill (OOXML format)", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML1 +
         '<fills count="3">' +
@@ -105,29 +148,27 @@ QUnit.test("Change fill in all xlsx cells", function(assert) {
         helper.BASE_STYLE_XML2 +
         '<cellXfs count="6">' +
         helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="s"><v>0</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>str1_1</t></si>' +
-        '</sst>';
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
         {
             columns: [{ dataField: "field1" }],
-            dataSource: [{ field1: 'str1_1' }],
+            dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
                 e.xlsxCell.style.fill = {
@@ -198,7 +239,7 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
     );
 });
 
-QUnit.test("Change font in all xlsx cells", function(assert) {
+QUnit.test("Change font", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -241,7 +282,7 @@ QUnit.test("Change font in all xlsx cells", function(assert) {
     );
 });
 
-QUnit.test("Change number format in all xlsx cells", function(assert) {
+QUnit.test("Change number format", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="3">' +
         '<numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" />' +
