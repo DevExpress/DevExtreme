@@ -130,7 +130,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
         }, this.options);
 
         setupDataGridModules(this, [
-            "data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus",
+            "data", "columns", "columnHeaders", "rows", "editorFactory", "grouping", "gridView", "editing", "focus", "selection",
             "keyboardNavigation", "validating", "masterDetail", "virtualScrolling"
         ], {
             initViews: true
@@ -2061,4 +2061,112 @@ QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mo
     } else {
         assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
     }
+});
+
+QUnit.testInActiveWindow("Keyboard navigation controller should find next cell if column index is wrong when jump from the group row", function(assert) {
+    var rowsView,
+        keyboardController,
+        $cell;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 6 },
+        { name: "Ben", phone: "333333", room: 6 },
+        { name: "Sean", phone: "4545454", room: 5 },
+        { name: "Smith", phone: "555555", room: 5 },
+        { name: "Zeb", phone: "6666666", room: 5 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        focusedColumnIndex: 1,
+        columns: [
+            { type: "selection" },
+            "name",
+            "phone",
+            {
+                dataField: "room",
+                groupIndex: 0,
+                autoExpandGroup: true
+            }
+        ]
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex is 0");
+    // act
+    $cell = keyboardController._getNextCell("downArrow");
+    // assert
+    assert.ok(keyboardController._isCellValid($cell), "Found valid cell");
+});
+
+QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key if grid focused and if selection multiple", function(assert) {
+    var rowsView,
+        keyboardController;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 6 },
+        { name: "Ben", phone: "333333", room: 6 },
+        { name: "Sean", phone: "4545454", room: 5 },
+        { name: "Smith", phone: "555555", room: 5 },
+        { name: "Zeb", phone: "6666666", room: 5 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        columns: [
+            { type: "selection" },
+            "name",
+            "phone",
+            "room"
+        ],
+        onContentReady: function(e) {
+            e.component.focus();
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex is 0");
+    assert.notOk(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is not focused");
+    // act
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+    // assert
+    assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is focused");
 });
