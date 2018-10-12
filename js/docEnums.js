@@ -141,6 +141,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ButtonGroupSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+/**
  * @typedef {string} Enums.Mode
  * @enum {'auto'}
  */

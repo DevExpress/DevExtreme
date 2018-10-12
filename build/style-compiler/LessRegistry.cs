@@ -141,6 +141,7 @@ namespace StyleCompiler
                 "box",
                 "responsiveBox",
                 "button",
+                "buttonGroup",
                 "scrollable",
                 "scrollView",
                 "checkBox",
