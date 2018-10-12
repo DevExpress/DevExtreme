@@ -132,6 +132,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return false;
     },
 
+    needSeparateAppointment: function() {
+        return true;
+    },
+
     _needVerticalGroupBounds: function() {
         return false;
     },

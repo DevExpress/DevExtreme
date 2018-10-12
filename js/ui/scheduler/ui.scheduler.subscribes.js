@@ -52,7 +52,7 @@ var subscribes = {
             dates.push(startDate);
         }
 
-        if(this.option("groupByDate")) {
+        if(this.option("groupByDate") && this.getLayoutManager().getRenderingStrategyInstance().needSeparateAppointment()) {
             var datesLength = dates.length,
                 longParts = [];
 
