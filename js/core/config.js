@@ -59,7 +59,8 @@ var config = {
     * @type Enums.EditorStylingMode
     * @default undefined
     */
-    editorStylingMode: undefined
+    editorStylingMode: undefined,
+    useLegacyVisibleIndex: false
 };
 
 var configMethod = function() {

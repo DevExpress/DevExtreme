@@ -1,6 +1,7 @@
 var isDefined = require("./type").isDefined,
     each = require("./iterator").each,
-    objectUtils = require("./object");
+    objectUtils = require("./object"),
+    config = require("../config");
 
 var isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
@@ -53,7 +54,8 @@ var removeDuplicates = function(from, what) {
 
 var normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
     var indexedItems = {},
-        parameterIndex = 0;
+        parameterIndex = 0,
+        useLegacyVisibleIndex = config().useLegacyVisibleIndex;
 
     each(items, function(index, item) {
         index = item[indexParameterName];
@@ -70,15 +72,17 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
         }
     });
 
-    each(items, function() {
-        if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
-            while(indexedItems[parameterIndex]) {
+    if(!useLegacyVisibleIndex) {
+        each(items, function() {
+            if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
+                while(indexedItems[parameterIndex]) {
+                    parameterIndex++;
+                }
+                indexedItems[parameterIndex] = [this];
                 parameterIndex++;
             }
-            indexedItems[parameterIndex] = [this];
-            parameterIndex++;
-        }
-    });
+        });
+    }
 
     parameterIndex = 0;
 
@@ -89,6 +93,14 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
             }
         });
     });
+
+    if(useLegacyVisibleIndex) {
+        each(items, function() {
+            if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
+                this[indexParameterName] = parameterIndex++;
+            }
+        });
+    }
 
     return parameterIndex;
 };
