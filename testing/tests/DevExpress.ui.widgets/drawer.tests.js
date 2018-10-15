@@ -1259,6 +1259,11 @@ QUnit.test("drawer panel overlay should have right config depending on position 
     assert.equal(overlay.option("position").my, "top left");
     assert.equal(overlay.option("position").at, "top left");
 
+    drawer.option("position", "right");
+    overlay = drawer.getOverlay();
+    assert.equal(overlay.option("position").my, "top right");
+    assert.equal(overlay.option("position").at, "top right");
+
     drawer.option("position", "top");
     overlay = drawer.getOverlay();
     assert.equal(overlay.option("position").my, "top");
@@ -1881,6 +1886,17 @@ QUnit.test("content should have correct position if panel is visible in rtl mode
     const $panel = $(instance.content());
 
     assert.equal(position($content), -$panel.width(), "container rendered at correct position");
+});
+
+QUnit.test("drawer panel overlay should have right position config", assert => {
+    let drawer = $("#drawer").dxDrawer({
+            openedStateMode: "overlap",
+            rtlEnabled: true
+        }).dxDrawer("instance"),
+        overlay = drawer.getOverlay();
+
+    assert.equal(overlay.option("position").my, "top right");
+    assert.equal(overlay.option("position").at, "top right");
 });
 
 QUnit.module("closeOnOutsideClick");

@@ -36,6 +36,7 @@ class OverlapStrategy extends DrawerStrategy {
 
     getOverlayPosition() {
         let position = this._drawer.option("position"),
+            rtl = this._drawer.option("rtlEnabled"),
             result = {};
 
         if(position === "left") {
@@ -44,7 +45,7 @@ class OverlapStrategy extends DrawerStrategy {
                 at: "top left",
             };
         }
-        if(position === "right") {
+        if(position === "right" || rtl) {
             result = {
                 my: "top right",
                 at: "top right",
