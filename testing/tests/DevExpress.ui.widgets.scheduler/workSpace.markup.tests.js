@@ -125,13 +125,23 @@ QUnit.module("Workspace markup", moduleConfig, () => {
     });
 
     QUnit.test("Scheduler workspace with groupByDate should have a right css class", (assert) => {
-        this.instance.option("groupByDate", true);
-        let $element = this.instance.$element();
-        assert.ok($element.hasClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS), "dxSchedulerWorkSpace has right css class");
+        this.instance.option("groupOrientation", "vertical");
 
-        this.instance.option("groupByDate", false);
+        let $element = this.instance.$element();
+
+        assert.notOk($element.hasClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS), "dxSchedulerWorkSpace hasn't right css class");
+
+        this.instance.option("groups", [{
+            name: "one",
+            items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+        }]);
+        this.instance.option("groupByDate", true);
         $element = this.instance.$element();
         assert.notOk($element.hasClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS), "dxSchedulerWorkSpace hasn't right css class");
+
+        this.instance.option("groupOrientation", "horizontal");
+        $element = this.instance.$element();
+        assert.ok($element.hasClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS), "dxSchedulerWorkSpace right css class");
     });
 
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", (assert) => {

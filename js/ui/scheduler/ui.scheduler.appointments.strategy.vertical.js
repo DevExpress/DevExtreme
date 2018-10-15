@@ -257,8 +257,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             return 0;
         }
 
-        var startDate = new Date(this._startDate(appointment, false, position)),
-            endDate = this._endDate(appointment, position, isRecurring),
+        var startDate = new Date(this.startDate(appointment, false, position)),
+            endDate = this.endDate(appointment, position, isRecurring),
             cellWidth = this._defaultWidth || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);
@@ -269,8 +269,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     calculateAppointmentHeight: function(appointment, position) {
-        var endDate = this._endDate(appointment, position),
-            startDate = this._startDate(appointment, false, position),
+        var endDate = this.endDate(appointment, position),
+            startDate = this.startDate(appointment, false, position),
             allDay = this.instance.fire("getField", "allDay", appointment);
 
         if(this.isAllDay(appointment)) {
