@@ -19,8 +19,8 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             minWidth = this.getAppointmentMinSize(),
             width;
 
-        var startDate = this._startDate(appointment, false, position),
-            endDate = this._endDate(appointment, position),
+        var startDate = this.startDate(appointment, false, position),
+            endDate = this.endDate(appointment, position),
             appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
         appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);

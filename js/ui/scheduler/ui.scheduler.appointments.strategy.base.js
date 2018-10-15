@@ -179,8 +179,8 @@ var BaseRenderingStrategy = Class.inherit({
             left: 0
         }];
         this.instance.fire("needCoordinates", {
-            startDate: this._startDate(itemData),
-            originalStartDate: this._startDate(itemData, true),
+            startDate: this.startDate(itemData),
+            originalStartDate: this.startDate(itemData, true),
             appointmentData: itemData,
             callback: function(value) {
                 coordinates = value;
@@ -437,7 +437,7 @@ var BaseRenderingStrategy = Class.inherit({
         return result;
     },
 
-    _startDate: function(appointment, skipNormalize, position) {
+    startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
             viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
@@ -452,10 +452,10 @@ var BaseRenderingStrategy = Class.inherit({
         return startDate;
     },
 
-    _endDate: function(appointment, position, isRecurring) {
+    endDate: function(appointment, position, isRecurring) {
         var endDate = this.instance._getEndDate(appointment),
-            realStartDate = this._startDate(appointment, true),
-            viewStartDate = this._startDate(appointment, false, position);
+            realStartDate = this.startDate(appointment, true),
+            viewStartDate = this.startDate(appointment, false, position);
 
         endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
 

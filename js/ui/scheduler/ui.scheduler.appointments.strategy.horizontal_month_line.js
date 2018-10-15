@@ -5,8 +5,8 @@ var HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strate
 var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inherit({
 
     calculateAppointmentWidth: function(appointment, position, isRecurring) {
-        var startDate = new Date(this._startDate(appointment, false, position)),
-            endDate = new Date(this._endDate(appointment, position, isRecurring)),
+        var startDate = new Date(this.startDate(appointment, false, position)),
+            endDate = new Date(this.endDate(appointment, position, isRecurring)),
             cellWidth = this._defaultWidth || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);

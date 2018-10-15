@@ -59,7 +59,7 @@ var subscribes = {
                 resultDates = [];
 
             for(var i = 0; i < datesLength; i++) {
-                var endDateOfPart = renderingStrategy._endDate(appointmentData, {
+                var endDateOfPart = renderingStrategy.endDate(appointmentData, {
                     startDate: dates[i]
                 }, !!recurrenceRule);
 
