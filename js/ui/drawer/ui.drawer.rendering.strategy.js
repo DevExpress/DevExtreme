@@ -91,9 +91,13 @@ class DrawerStrategy {
         this._drawer = drawer;
     }
 
+    getDrawerInstance() {
+        return this._drawer;
+    }
+
     renderPanel(template) {
         template && template.render({
-            container: this._drawer.content()
+            container: this.getDrawerInstance().content()
         });
     }
 
@@ -127,30 +131,32 @@ class DrawerStrategy {
     }
 
     _getPanelOffset(offset) {
-        var size = this._drawer.isHorizontalDirection() ? this._drawer.getRealPanelWidth() : this._drawer.getRealPanelHeight();
+        const drawer = this.getDrawerInstance();
+        const size = drawer.isHorizontalDirection() ? drawer.getRealPanelWidth() : drawer.getRealPanelHeight();
 
         if(offset) {
-            return -(size - this._drawer.getMaxSize());
+            return -(size - drawer.getMaxSize());
         } else {
-            return -(size - this._drawer.getMinSize());
+            return -(size - drawer.getMinSize());
         }
     }
 
     _getPanelSize(offset) {
-        return offset ? this._drawer.getMaxSize() : this._drawer.getMinSize();
+        return offset ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
     }
 
     renderShaderVisibility(offset, animate, duration) {
         const fadeConfig = this._getFadeConfig(offset);
+        const drawer = this.getDrawerInstance();
 
         if(animate) {
-            animation.fade($(this._drawer._$shader), fadeConfig, duration, () => {
+            animation.fade($(drawer._$shader), fadeConfig, duration, () => {
                 this._drawer._toggleShaderVisibility(offset);
                 this._shaderAnimationResolve();
             });
         } else {
-            this._drawer._toggleShaderVisibility(offset);
-            this._drawer._$shader.css("opacity", fadeConfig.to);
+            drawer._toggleShaderVisibility(offset);
+            drawer._$shader.css("opacity", fadeConfig.to);
         }
     }
 
@@ -169,20 +175,22 @@ class DrawerStrategy {
     }
 
     getPanelContent() {
-        return this._drawer._$panel;
+        return this.getDrawerInstance().content();
     }
 
     getWidth() {
-        return this._drawer.$element().get(0).getBoundingClientRect().width;
+        return this.getDrawerInstance().$element().get(0).getBoundingClientRect().width;
     }
 
     setPanelSize(keepMaxSize) {
-        const panelSize = this._getPanelSize(this._drawer.option("opened"));
+        const drawer = this.getDrawerInstance();
+        const panelSize = this._getPanelSize(drawer.option("opened"));
 
-        if(this._drawer.isHorizontalDirection()) {
-            $(this._drawer.content()).css("width", keepMaxSize ? this._drawer.getRealPanelWidth() : panelSize);
+
+        if(drawer.isHorizontalDirection()) {
+            $(drawer.content()).css("width", keepMaxSize ? drawer.getRealPanelWidth() : panelSize);
         } else {
-            $(this._drawer.content()).css("height", keepMaxSize ? this._drawer.getRealPanelHeight() : panelSize);
+            $(drawer.content()).css("height", keepMaxSize ? drawer.getRealPanelHeight() : panelSize);
         }
     }
 
