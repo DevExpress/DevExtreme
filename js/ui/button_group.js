@@ -89,7 +89,7 @@ const ButtonGroup = Widget.inherit({
 
             /**
              * @name dxButtonGroupOptions.items
-             * @type Array<ButtonGroupItem>
+             * @type Array<dxButtonGroupItem>
              */
             items: [],
 
