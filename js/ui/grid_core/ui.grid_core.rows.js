@@ -47,7 +47,7 @@ module.exports = {
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
             * @type_function_param1_field8 text:string
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
             * @type_function_param1_field12 column:dxDataGridColumn
@@ -66,7 +66,7 @@ module.exports = {
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
             * @type_function_param1_field8 text:string
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
             * @type_function_param1_field12 column:dxTreeListColumn
@@ -209,7 +209,7 @@ module.exports = {
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
             * @type_function_param1_field8 value:any
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 text:string
             * @type_function_param1_field11 columnIndex:number
             * @type_function_param1_field12 column:object
@@ -229,7 +229,7 @@ module.exports = {
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
             * @type_function_param1_field8 value:any
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 text:string
             * @type_function_param1_field11 columnIndex:number
             * @type_function_param1_field12 column:object
@@ -290,7 +290,7 @@ module.exports = {
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
              * @type_function_param1_field6 value:any
-             * @type_function_param1_field7 displayValue:string
+             * @type_function_param1_field7 displayValue:any
              * @type_function_param1_field8 text:string
              * @type_function_param1_field9 columnIndex:number
              * @type_function_param1_field10 column:dxDataGridColumn
@@ -310,7 +310,7 @@ module.exports = {
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
              * @type_function_param1_field6 value:any
-             * @type_function_param1_field7 displayValue:string
+             * @type_function_param1_field7 displayValue:any
              * @type_function_param1_field8 text:string
              * @type_function_param1_field9 columnIndex:number
              * @type_function_param1_field10 column:dxTreeListColumn
