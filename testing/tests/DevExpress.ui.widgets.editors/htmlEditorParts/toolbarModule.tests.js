@@ -133,7 +133,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             return { bold: false };
         };
         this.options.items = ["bold", {
-            format: "strike",
+            formatName: "strike",
             widget: "dxButton",
             options: {
                 onClick: () => {
@@ -154,7 +154,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
     });
 
     test("Render toolbar with enum format", (assert) => {
-        this.options.items = [{ format: "header", values: [1, 2, 3, false] }];
+        this.options.items = [{ formatName: "header", formatValues: [1, 2, 3, false] }];
 
         new Toolbar(this.quillMock, this.options);
         const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);

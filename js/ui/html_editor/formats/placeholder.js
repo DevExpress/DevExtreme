@@ -10,18 +10,20 @@ const PLACEHOLDER_CLASS = "dx-data-placeholder";
 class Placeholder extends Embed {
     static create(data) {
         let node = super.create(),
-            startEscapedChar = ensureDefined(data.startEscapedChar, data.escapedChar),
-            endEscapedChar = ensureDefined(data.endEscapedChar, data.escapedChar),
+            startEscapeChar,
+            endEscapeChar,
             text = data.value;
 
-        node.innerText = startEscapedChar + text + endEscapedChar;
-        if(data.startEscapedChar) {
-            node.dataset.placeholderStartChar = data.startEscapedChar;
+        if(Array.isArray(data.escapeChar)) {
+            startEscapeChar = ensureDefined(data.escapeChar[0], "");
+            endEscapeChar = ensureDefined(data.escapeChar[1], "");
+        } else {
+            startEscapeChar = endEscapeChar = data.escapeChar;
         }
-        if(data.endEscapedChar) {
-            node.dataset.placeholderEndChar = data.endEscapedChar;
-        }
-        node.dataset.placeholderEscChar = data.escapedChar;
+
+        node.innerText = startEscapeChar + text + endEscapeChar;
+        node.dataset.placeholderStartEscChar = startEscapeChar;
+        node.dataset.placeholderEndEscChar = endEscapeChar;
         node.dataset.placeholderValue = data.value;
 
         return node;
@@ -30,9 +32,10 @@ class Placeholder extends Embed {
     static value(node) {
         return extend({}, {
             value: node.dataset.placeholderValue,
-            escapedChar: node.dataset.placeholderEscChar,
-            startEscapedChar: node.dataset.placeholderStartChar,
-            endEscapedChar: node.dataset.placeholderEndChar
+            escapeChar: [
+                node.dataset.placeholderStartEscChar || "",
+                node.dataset.placeholderEndEscChar || ""
+            ]
         });
     }
 }

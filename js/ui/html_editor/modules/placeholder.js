@@ -13,10 +13,7 @@ class PlaceholderModule extends PopoverModule {
         let baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
-            escapedChar: "",
-
-            startEscapedChar: undefined,
-            endEscapedChar: undefined
+            escapeChar: ""
         });
     }
 
@@ -79,9 +76,7 @@ class PlaceholderModule extends PopoverModule {
         const selectedItem = selectionChangedEvent.component.option("selectedItem");
         const placeholderData = extend({}, {
             value: selectedItem,
-            escapedChar: this.options.escapedChar,
-            startEscapedChar: this.options.startEscapedChar,
-            endEscapedChar: this.options.endEscapedChar
+            escapeChar: this.options.escapeChar
         });
 
         setTimeout(function() {

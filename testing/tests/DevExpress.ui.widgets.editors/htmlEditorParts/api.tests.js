@@ -89,8 +89,8 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(length, LINE_WIDTH * 3, "correct format");
     });
 
-    test("deleteContent", (assert) => {
-        this.instance.deleteContent(1, 7);
+    test("delete", (assert) => {
+        this.instance.delete(1, 7);
 
         assert.equal(this.instance.option("value"), "<p>Test 2<br/>Test 3</p>", "custom range removed");
     });
@@ -103,9 +103,9 @@ QUnit.module("API", moduleConfig, () => {
     });
 
     test("insertEmbed", (assert) => {
-        const expected = "<p>T<span class='dx-data-placeholder'   data-placeholder-esc-char=#  data-placeholder-value=template><span>#template#</span>" +
-            "</span>est 1<br/>Test 2<br/>Test 3</p>";
-        this.instance.insertEmbed(1, "placeholder", { value: "template", escapedChar: "#" });
+        const expected = "<p>T<span class='dx-data-placeholder' data-placeholder-start-esc-char=# data-placeholder-end-esc-char=#" +
+            " data-placeholder-value=template><span>#template#</span></span>est 1<br/>Test 2<br/>Test 3</p>";
+        this.instance.insertEmbed(1, "placeholder", { value: "template", escapeChar: "#" });
 
         assert.equal(this.instance.option("value"), expected, "insert embed");
     });

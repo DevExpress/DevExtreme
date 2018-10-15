@@ -54,89 +54,80 @@ QUnit.module("Placeholder format", () => {
     test("Create an element by data", (assert) => {
         const data = {
             value: "TEST_NAME",
-            escapedChar: "@"
+            escapeChar: "@"
         };
         const element = PlaceholderFormat.create(data);
 
-        assert.equal(element.dataset.placeholderEscChar, "@", "correct escaped char");
+        assert.equal(element.dataset.placeholderStartEscChar, "@", "correct start escape char");
+        assert.equal(element.dataset.placeholderEndEscChar, "@", "correct end escape char");
         assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.notOk(element.dataset.placeholderStartChar, "There is no start char");
-        assert.notOk(element.dataset.placeholderEndChar, "There is no end char");
         assert.equal(element.innerText, "@TEST_NAME@", "correct inner text");
     });
 
-    test("Create an element with default escaped char", (assert) => {
+    test("Create an element with default escape char", (assert) => {
         const data = {
             value: "TEST_NAME",
-            escapedChar: ""
+            escapeChar: ""
         };
         const element = PlaceholderFormat.create(data);
 
-        assert.equal(element.dataset.placeholderEscChar, "", "correct escaped char");
+        assert.equal(element.dataset.placeholderStartEscChar, "", "correct start escape char");
+        assert.equal(element.dataset.placeholderEndEscChar, "", "correct end escape char");
         assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.notOk(element.dataset.placeholderStartChar, "There is no start char");
-        assert.notOk(element.dataset.placeholderEndChar, "There is no end char");
         assert.equal(element.innerText, "TEST_NAME", "correct inner text");
     });
 
     test("Create an element with start escaping char", (assert) => {
         const data = {
             value: "TEST_NAME",
-            escapedChar: "",
-            startEscapedChar: "{"
+            escapeChar: ["{", ""],
         };
         const element = PlaceholderFormat.create(data);
 
-        assert.equal(element.dataset.placeholderEscChar, "", "correct escaped char");
         assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.equal(element.dataset.placeholderStartChar, "{", "There is no start char");
-        assert.notOk(element.dataset.placeholderEndChar, "There is no end char");
+        assert.equal(element.dataset.placeholderStartEscChar, "{", "There is no start char");
+        assert.notOk(element.dataset.placeholderEndEscChar, "There is no end char");
         assert.equal(element.innerText, "{TEST_NAME", "correct inner text");
     });
 
     test("Create an element with end escaping char", (assert) => {
         const data = {
             value: "TEST_NAME",
-            escapedChar: "",
-            endEscapedChar: "}"
+            escapeChar: ["", "}"],
         };
         const element = PlaceholderFormat.create(data);
 
-        assert.equal(element.dataset.placeholderEscChar, "", "correct escaped char");
         assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.notOk(element.dataset.placeholderStartChar, "There is no start char");
-        assert.equal(element.dataset.placeholderEndChar, "}", "There is no end char");
+        assert.notOk(element.dataset.placeholderStartEscChar, "There is no start char");
+        assert.equal(element.dataset.placeholderEndEscChar, "}", "There is no end char");
         assert.equal(element.innerText, "TEST_NAME}", "correct inner text");
     });
 
     test("Create an element with start, end and default escaping char", (assert) => {
         const data = {
             value: "TEST_NAME",
-            startEscapedChar: "{",
-            endEscapedChar: "}",
-            escapedChar: "@"
+            escapeChar: ["{", "}"]
         };
         const element = PlaceholderFormat.create(data);
 
-        assert.equal(element.dataset.placeholderEscChar, "@", "correct escaped char");
         assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.equal(element.dataset.placeholderStartChar, "{", "There is no start char");
-        assert.equal(element.dataset.placeholderEndChar, "}", "There is no end char");
+        assert.equal(element.dataset.placeholderStartEscChar, "{", "There is no start char");
+        assert.equal(element.dataset.placeholderEndEscChar, "}", "There is no end char");
         assert.equal(element.innerText, "{TEST_NAME}", "correct inner text");
     });
 
     test("Get data from element", (assert) => {
-        const markup = "<span class='dx-data-placeholder' data-placeholder-esc-char=## data-placeholder-value=TEST_NAME><span>##TEST_NAME##</span></span>";
+        const markup = "<span class='dx-data-placeholder' data-placeholder-start-esc-char=## data-placeholder-value=TEST_NAME><span>##TEST_NAME##</span></span>";
         const element = $(markup).get(0);
         const data = PlaceholderFormat.value(element);
 
-        assert.deepEqual(data, { value: "TEST_NAME", escapedChar: "##" }, "Correct data");
+        assert.deepEqual(data, { value: "TEST_NAME", escapeChar: ["##", ""] }, "Correct data");
     });
 });
 
 QUnit.module("Placeholder module", moduleConfig, () => {
     test("Render toolbar without any options", (assert) => {
-        this.options.escapedChar = "#";
+        this.options.escapeChar = "#";
         const dataPlaceholder = new DataPlaceholder(this.quillMock, this.options);
 
         dataPlaceholder.showPopover();
@@ -148,7 +139,7 @@ QUnit.module("Placeholder module", moduleConfig, () => {
             format: "placeholder",
             position: 0,
             value: {
-                escapedChar: "#",
+                escapeChar: "#",
                 value: "TEST_NAME"
             }
         }], "Correct formatting");
