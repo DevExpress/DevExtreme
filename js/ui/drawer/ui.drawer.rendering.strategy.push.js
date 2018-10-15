@@ -7,19 +7,20 @@ class PushStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
         super.renderPosition(offset, animate);
 
-        const $element = $(this._drawer.viewContent());
+        const drawer = this.getDrawerInstance();
+        const $content = $(drawer.viewContent());
         const maxSize = this._getPanelSize(true);
 
-        $(this._drawer.content()).css(this._drawer.isHorizontalDirection() ? "width" : "height", maxSize);
+        $(drawer.content()).css(drawer.isHorizontalDirection() ? "width" : "height", maxSize);
 
-        const contentPosition = this._getPanelSize(offset) * this._drawer._getPositionCorrection();
+        const contentPosition = this._getPanelSize(offset) * drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = {
-                $element: $element,
+                $element: $content,
                 position: contentPosition,
-                direction: this._drawer.getDrawerPosition(),
-                duration: this._drawer.option("animationDuration"),
+                direction: drawer.getDrawerPosition(),
+                duration: drawer.option("animationDuration"),
                 complete: () => {
                     this._contentAnimationResolve();
                     this._panelAnimationResolve();
@@ -28,10 +29,10 @@ class PushStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-            if(this._drawer.isHorizontalDirection()) {
-                translator.move($element, { left: contentPosition });
+            if(drawer.isHorizontalDirection()) {
+                translator.move($content, { left: contentPosition });
             } else {
-                translator.move($element, { top: contentPosition });
+                translator.move($content, { top: contentPosition });
             }
         }
     }
