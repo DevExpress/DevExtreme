@@ -2,6 +2,7 @@ var $ = require("jquery"),
     Accordion = require("ui/accordion"),
     domUtils = require("core/utils/dom"),
     isRenderer = require("core/utils/type").isRenderer,
+    noop = require("core/utils/common").noop,
     config = require("core/config"),
     fx = require("animation/fx"),
     holdEvent = require("events/hold"),
@@ -231,6 +232,46 @@ QUnit.test("nested widget rendering", function(assert) {
 
     $(nested.itemElements()).eq(1).trigger("dxclick");
     assert.equal(nested.isItemSelected(1), true, "item selected by click");
+});
+
+QUnit.test("nested widget with onItemTitleClick", function(assert) {
+    var that = this,
+        isFired = false,
+        nested;
+
+    var handleFire = function() {
+        isFired = true;
+    };
+
+    var parent = this.$element.dxAccordion({
+        items: this.items,
+        onItemTitleClick: handleFire,
+        itemTemplate: function(itemData, itemIndex, itemElement) {
+            nested = $("<div>").dxAccordion({
+                items: that.items,
+            }).dxAccordion("instance");
+
+            nested.$element().appendTo(itemElement);
+        }
+    }).dxAccordion("instance");
+
+    $(nested.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(1).trigger("dxclick");
+    assert.notOk(isFired, "parent item title click action has not been fired after click on nested widget title");
+
+    isFired = false;
+    $(parent.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(4).trigger("dxclick");
+    assert.ok(isFired, "parent item title click action has been fired after click");
+
+    parent.option("onItemTitleClick", noop);
+    nested.option("onItemTitleClick", handleFire);
+
+    isFired = false;
+    $(parent.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(4).trigger("dxclick");
+    assert.notOk(isFired, "nested item title click action has not been fired after click on parent widget title");
+
+    isFired = false;
+    $(nested.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(0).trigger("dxclick");
+    assert.ok(isFired, "nested item title click action has been fired after click");
 });
 
 
