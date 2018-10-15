@@ -108,6 +108,14 @@
 * @name XlsxGridCell.value
 * @type any
 */
+/**
+* @name XlsxGridCell.displayValue
+* @type string
+*/
+/**
+* @name XlsxGridCell.text
+* @type string
+*/
 
 /**
 * @name XlsxGridCell.row
