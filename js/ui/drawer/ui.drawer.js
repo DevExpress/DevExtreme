@@ -358,15 +358,32 @@ const Drawer = Widget.inherit({
         return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
+    getDrawerPosition() {
+        let resultPosition = this.option("position");
+
+        if(this.isHorizontalDirection()) {
+            const rtl = this.option("rtlEnabled");
+
+            if(this.option("position") === "right" && rtl) {
+                resultPosition = "left";
+            }
+
+            if(this.option("position") === "left" && rtl) {
+                resultPosition = "right";
+            }
+        }
+
+        return resultPosition;
+    },
+
     isHorizontalDirection() {
         return this.option("position") === "left" || this.option("position") === "right";
     },
 
     _isInvertedPosition() {
-        const invertedPosition = this.option("position") === "right" || this.option("position") === "bottom";
-        const rtl = this.option("rtlEnabled");
+        const position = this.getDrawerPosition();
 
-        return (rtl && !invertedPosition) || (!rtl && invertedPosition);
+        return position === "right" || position === "bottom";
     },
 
     _renderPosition(offset, animate) {

@@ -6,15 +6,15 @@ class ShrinkStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
         super.renderPosition(offset, animate);
 
-        const direction = this._drawer.option("position");
+        const direction = this._drawer.getDrawerPosition();
 
         if(this._drawer.option("revealMode") === "slide") {
-            const panelPos = this._getPanelOffset(offset);
+            const panelOffset = this._getPanelOffset(offset);
             if(animate) {
 
                 let animationConfig = {
                     $element: $(this._drawer._$panel),
-                    margin: panelPos,
+                    margin: panelOffset,
                     duration: this._drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
@@ -24,7 +24,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 };
                 animation.margin(animationConfig);
             } else {
-                $(this._drawer._$panel).css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelPos);
+                $(this._drawer._$panel).css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelOffset);
             }
         }
 
@@ -36,7 +36,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 $element: $element,
                 size: size,
                 duration: this._drawer.option("animationDuration"),
-                direction: this._drawer.option("position"),
+                direction: direction,
                 complete: () => {
                     this._panelAnimationResolve();
                 }

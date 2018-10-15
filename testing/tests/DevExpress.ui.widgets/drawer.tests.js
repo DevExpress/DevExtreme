@@ -1897,6 +1897,12 @@ QUnit.test("drawer panel overlay should have right position config", assert => {
 
     assert.equal(overlay.option("position").my, "top right");
     assert.equal(overlay.option("position").at, "top right");
+
+    drawer.option("position", "right");
+    overlay = drawer.getOverlay();
+
+    assert.equal(overlay.option("position").my, "top left");
+    assert.equal(overlay.option("position").at, "top left");
 });
 
 QUnit.module("closeOnOutsideClick");

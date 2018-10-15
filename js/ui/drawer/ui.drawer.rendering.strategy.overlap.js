@@ -35,27 +35,27 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     getOverlayPosition() {
-        let position = this._drawer.option("position"),
-            rtl = this._drawer.option("rtlEnabled"),
+        debugger;
+        let panelPosition = this._drawer.getDrawerPosition(),
             result = {};
 
-        if(position === "left") {
+        if(panelPosition === "left") {
             result = {
                 my: "top left",
                 at: "top left",
             };
         }
-        if(position === "right" || rtl) {
+        if(panelPosition === "right") {
             result = {
                 my: "top right",
                 at: "top right",
             };
         }
 
-        if(position === "top" || position === "bottom") {
+        if(panelPosition === "top" || panelPosition === "bottom") {
             result = {
-                my: position,
-                at: position,
+                my: panelPosition,
+                at: panelPosition,
             };
         }
 
@@ -81,11 +81,8 @@ class OverlapStrategy extends DrawerStrategy {
 
         this._initialPosition = this._drawer.getOverlay().$content().position();
 
-        const $element = $(this._drawer.content());
         const $content = $(this._drawer.viewContent());
-
-        const direction = this._drawer.option("position");
-        const panelPosition = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
+        const position = this._drawer.getDrawerPosition();
 
         if(this._drawer.isHorizontalDirection()) {
             $content.css("paddingLeft", this._drawer.option("minSize") * this._drawer._getPositionCorrection());
@@ -94,12 +91,15 @@ class OverlapStrategy extends DrawerStrategy {
         $content.css("transform", "inherit");
 
         if(this._drawer.option("revealMode") === "slide") {
+            const $element = $(this._drawer.content());
+            const panelOffset = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
+
             if(animate) {
                 let animationConfig = {
                     $element: $element,
-                    position: panelPosition,
+                    position: panelOffset,
                     duration: this._drawer.option("animationDuration"),
-                    direction: direction,
+                    direction: position,
                     complete: () => {
                         this._contentAnimationResolve();
                         this._panelAnimationResolve();
@@ -110,9 +110,9 @@ class OverlapStrategy extends DrawerStrategy {
             } else {
 
                 if(this._drawer.isHorizontalDirection()) {
-                    translator.move($element, { left: panelPosition });
+                    translator.move($element, { left: panelOffset });
                 } else {
-                    translator.move($element, { top: panelPosition });
+                    translator.move($element, { top: panelOffset });
                 }
             }
         }
@@ -120,14 +120,13 @@ class OverlapStrategy extends DrawerStrategy {
         if(this._drawer.option("revealMode") === "expand") {
             const $element = this._drawer.getOverlay().$content();
             const size = this._getPanelSize(offset);
-            const direction = this._drawer.option("position");
             const marginTop = this._drawer.getRealPanelHeight() - size;
 
             let animationConfig = {
                 $element: $element,
                 size: size,
                 duration: this._drawer.option("animationDuration"),
-                direction: direction,
+                direction: position,
                 marginTop: marginTop,
                 complete: () => {
                     this._contentAnimationResolve();
@@ -143,7 +142,7 @@ class OverlapStrategy extends DrawerStrategy {
                 } else {
                     $($element).css("height", size);
 
-                    if(direction === "bottom") {
+                    if(position === "bottom") {
                         $($element).css("marginTop", marginTop);
                     }
                 }
