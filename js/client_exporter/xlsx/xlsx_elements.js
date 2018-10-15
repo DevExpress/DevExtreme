@@ -13,13 +13,13 @@
 */
 
 /**
-* @name XlsxCell.style
-* @type object
+* @name XlsxCell.numberFormat
+* @type string
 */
 
 /**
-* @name XlsxCell.style.numberFormat
-* @type string
+* @name XlsxCell.style
+* @type object
 */
 
 /**
@@ -40,24 +40,16 @@
 */
 
 /**
-* @name XlsxCell.style.fill
-* @type object
+* @name XlsxCell.style.backgroundColor
+* @type string
 */
 /**
-* @name XlsxCell.style.fill.patternFill
-* @type object
+* @name XlsxCell.style.patternStyle
+* @type Enums.XlsxPatternStyle
 */
 /**
-* @name XlsxCell.style.fill.patternFill.patternType
-* @type Enums.XlsxPatternType
-*/
-/**
-* @name XlsxCell.style.fill.patternFill.backgroundColor
-* @type XlsxColor
-*/
-/**
-* @name XlsxCell.style.fill.patternFill.foregroundColor
-* @type XlsxColor
+* @name XlsxCell.style.patternColor
+* @type string
 */
 
 /**

@@ -1,4 +1,4 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellFormatHelper from './xlsx_cell_format_helper';
 import xlsxFillHelper from "./xlsx_fill_helper";
@@ -28,7 +28,7 @@ export default class XlsxFile {
                 registerFont: this.registerFont.bind(this),
                 registerNumberFormat: this.registerNumberFormat.bind(this)
             });
-        if(typeUtils.isDefined(cellFormatTag)) {
+        if(isDefined(cellFormatTag)) {
             for(let i = 0; i < this._cellFormatTags.length; i++) {
                 if(xlsxCellFormatHelper.areEqual(this._cellFormatTags[i], cellFormatTag)) {
                     result = i;
@@ -51,7 +51,7 @@ export default class XlsxFile {
     registerFill(fill) {
         let result;
         const fillTag = xlsxFillHelper.tryCreateTag(fill);
-        if(typeUtils.isDefined(fillTag)) {
+        if(isDefined(fillTag)) {
             for(let i = 0; i < this._fillTags.length; i++) {
                 if(xlsxFillHelper.areEqual(this._fillTags[i], fillTag)) {
                     result = i;
@@ -80,7 +80,7 @@ export default class XlsxFile {
     registerFont(font) {
         let result;
         const fontTag = xlsxFontHelper.tryCreateTag(font);
-        if(typeUtils.isDefined(fontTag)) {
+        if(isDefined(fontTag)) {
             for(let i = 0; i < this._fontTags.length; i++) {
                 if(xlsxFontHelper.areEqual(this._fontTags[i], fontTag)) {
                     result = i;
@@ -110,7 +110,7 @@ export default class XlsxFile {
     registerNumberFormat(numberFormat) {
         let result;
         const tag = xlsxNumberFormatHelper.tryCreateTag(numberFormat);
-        if(typeUtils.isDefined(tag)) {
+        if(isDefined(tag)) {
             for(let i = 0; i < this._numberFormatTags.length; i++) {
                 if(xlsxNumberFormatHelper.areEqual(this._numberFormatTags[i], tag)) {
                     result = this._numberFormatTags[i][xlsxNumberFormatHelper.ID_PROPERTY_NAME];

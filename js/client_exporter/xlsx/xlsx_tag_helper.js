@@ -1,4 +1,4 @@
-import typeUtils from '../../core/utils/type';
+import { isDefined } from '../../core/utils/type';
 
 const xlsxTagHelper = {
     toXml: function(tagName, attributes, content) {
@@ -6,12 +6,12 @@ const xlsxTagHelper = {
 
         for(const attributeName in attributes) {
             const attributeValue = attributes[attributeName];
-            if(typeUtils.isDefined(attributeValue)) {
+            if(isDefined(attributeValue)) {
                 result.push(' ', attributeName, '="', attributeValue, '"');
             }
         }
 
-        if(typeUtils.isDefined(content) && content !== "") {
+        if(isDefined(content) && content !== "") {
             result.push('>', content, '</', tagName, '>');
         } else {
             result.push(' />');
