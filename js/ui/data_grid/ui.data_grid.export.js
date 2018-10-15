@@ -253,12 +253,7 @@ exports.DataProvider = Class.inherit({
                             value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
                             result.value = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // similar to 'ui.grid_core.rows.js: _getCellOptions'
                         }
-                        result.cellSourceData.row = {
-                            data: item.data,
-                            key: item.data,
-                            // rowIndex: rowIndex,
-                            rowType: item.rowType,
-                        };
+                        result.cellSourceData.rowData = item.data;
                         result.cellSourceData.value = itemValues[correctedCellIndex];
                 }
             }
