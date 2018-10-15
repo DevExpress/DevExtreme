@@ -1,44 +1,36 @@
-var CollectionWidgetEdit = require("./ui.collection_widget.edit"),
-    deferredUtils = require("../../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when;
+import CollectionWidgetEdit from "./ui.collection_widget.edit";
+import { Deferred, when } from "../../core/utils/deferred";
 
-var AsyncCollectionWidget = CollectionWidgetEdit.inherit({
-    _initMarkup: function() {
-        this._initItemContentDeferred();
+let AsyncCollectionWidget = CollectionWidgetEdit.inherit({
+    _initMarkup() {
+        this._deferredItems = [];
         this.callBase();
     },
 
-    _getItemContentPromise(args, renderItemContent) {
+    _renderItemContent(args) {
         let renderContentDeferred = new Deferred(),
             itemDeferred = new Deferred(),
             that = this;
 
         this._deferredItems[args.index] = itemDeferred;
-        let $itemContent = renderItemContent.call(that, args);
+        let $itemContent = this.callBase.call(that, args);
 
-        itemDeferred.done(function() {
+        itemDeferred.done(() => {
             renderContentDeferred.resolve($itemContent);
         });
 
         return renderContentDeferred.promise();
     },
 
-    _renderItemContent: function(args) {
-        return this._getItemContentPromise(args, this.callBase);
-    },
-
-    _createItemByTemplate: function(itemTemplate, renderArgs) {
+    _createItemByTemplate(itemTemplate, renderArgs) {
         return itemTemplate.render({
             model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index,
-            onRendered: this._itemTemplateRendered.bind(this, renderArgs)
+            onRendered: () => {
+                this._deferredItems[renderArgs.index].resolve();
+            }
         });
-    },
-
-    _itemTemplateRendered(renderArgs) {
-        this._deferredItems[renderArgs.index].resolve();
     },
 
     _renderItemsAsync() {
@@ -49,13 +41,9 @@ var AsyncCollectionWidget = CollectionWidgetEdit.inherit({
         return d.promise();
     },
 
-    _initItemContentDeferred() {
-        this._deferredItems = [];
-    },
-
-    _clean: function() {
+    _clean() {
         this.callBase();
-        this._initItemContentDeferred();
+        this._deferredItems = [];
     }
 });
 
