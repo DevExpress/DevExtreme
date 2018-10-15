@@ -86,7 +86,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItem>
+            * @type Array<dxHtmlEditorToolbarItem,string>
             */
 
             /**
