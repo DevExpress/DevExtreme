@@ -4,7 +4,8 @@ import "ui/button_group";
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
-    DX_ITEM_SELECTED_CLASS = "dx-item-selected";
+    DX_ITEM_SELECTED_CLASS = "dx-item-selected",
+    BUTTON_GROUP_ITEM_HAS_WIDTH = "dx-buttongroup-item-has-width";
 
 QUnit.testStart(() => {
     const markup = `
@@ -108,6 +109,25 @@ QUnit.module("option changed", {
         this.buttonGroup.option("selectedItemKeys", ["button 2"]);
 
         assert.equal(stub.callCount, 1);
+    });
+
+    QUnit.test("change the width option", function(assert) {
+        const defaultWidth = this.$buttonGroup.width();
+        this.buttonGroup.option("width", 500);
+
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        let buttons = $(buttonsSelector);
+
+        assert.equal(this.$buttonGroup.width(), 500, "button group width");
+        assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has width");
+        assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
+
+        this.buttonGroup.option("width", null);
+        buttons = $(buttonsSelector);
+
+        assert.equal(this.$buttonGroup.width(), defaultWidth, "button group width");
+        assert.notOk(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has no width");
+        assert.notOk(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has no width");
     });
 });
 
