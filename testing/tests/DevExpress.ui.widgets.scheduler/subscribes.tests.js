@@ -524,6 +524,119 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true, Week 
     });
 });
 
+
+QUnit.test("'needCoordinates' should work correct when groupByDate = true, Month view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "month",
+        views: ["month"],
+        currentDate: new Date(2018, 4, 21, 9, 0),
+        groupByDate: true,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).get(0).getBoundingClientRect().width;
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 22, 10, 0),
+            endDate: new Date(2018, 4, 24),
+            priorityId: 2
+        },
+        startDate: new Date(2018, 4, 22, 10, 0),
+        callback: function(results) {
+            var result = results[0];
+            assert.equal(result.cellIndex, 2, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 5, 1.5, "Coordinates are OK");
+
+            result = results[1];
+            assert.equal(result.cellIndex, 3, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 7, 1.5, "Coordinates are OK");
+        }
+    });
+});
+
+
+QUnit.test("'needCoordinates' should work correct when groupByDate = true, Timeline view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "timelineWeek",
+        views: [{
+            type: "timelineWeek",
+            name: "timelineWeek",
+            groupOrientation: "horizontal"
+        }],
+        currentDate: new Date(2018, 4, 21),
+        cellDuration: 60,
+        groupByDate: true,
+        startDayHour: 10,
+        endDayHour: 12,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).get(0).getBoundingClientRect().width;
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 21, 10, 0),
+            endDate: new Date(2018, 4, 21, 12, 0),
+            priorityId: 2
+        },
+        startDate: new Date(2018, 4, 21, 10, 0),
+        callback: function(results) {
+            var result = results[0];
+            assert.equal(result.cellIndex, 2, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 5, 1.5, "Coordinates are OK");
+
+            result = results[1];
+            assert.equal(result.cellIndex, 3, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 7, 1.5, "Coordinates are OK");
+        }
+    });
+});
+
 QUnit.test("'updateAppointmentStartDate' should work correct with custom data fields", function(assert) {
     this.createInstance({
         startDateExpr: "Start"

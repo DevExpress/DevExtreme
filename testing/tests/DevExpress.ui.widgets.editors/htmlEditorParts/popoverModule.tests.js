@@ -30,7 +30,7 @@ QUnit.module("Popover module", moduleConfig, () => {
         new PopoverModule({}, this.options);
 
         const $popover = this.$element.children();
-        const $suggestionList = $popover.find("." + SUGGESTION_LIST_CLASS);
+        const $suggestionList = $popover.find(`.${SUGGESTION_LIST_CLASS}`);
         const listDataSource = $suggestionList.dxList("option", "dataSource");
 
         assert.ok($popover.hasClass(POPOVER_CLASS), "Popover rendered");

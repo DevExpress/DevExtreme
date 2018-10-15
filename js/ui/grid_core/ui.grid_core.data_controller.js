@@ -625,7 +625,7 @@ module.exports = {
 
                     if(change.changeType === "update") {
                         that._applyChangeUpdate(change);
-                    } else if(change.repaintChangesOnly && change.changeType === "refresh") {
+                    } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
                         that._applyChangesOnly(change);
                     } else {
                         that._applyChangeFull(change);
@@ -879,8 +879,12 @@ module.exports = {
                         change.repaintChangesOnly = that.option("repaintChangesOnly");
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
+
                         change.repaintChangesOnly = operationTypes && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
+                        if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
+                            change.needUpdateDimensions = true;
+                        }
                     }
 
                     if(that._updateLockCount) {

@@ -19,10 +19,6 @@
 
 /**
 * @name XlsxCell.style.numberFormat
-* @type object
-*/
-/**
-* @name XlsxCell.style.numberFormat.formatCode
 * @type string
 */
 

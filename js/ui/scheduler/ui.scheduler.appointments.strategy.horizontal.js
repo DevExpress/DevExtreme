@@ -34,6 +34,16 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             width = minWidth;
         }
 
+        width = this.cropAppointmentWidth(width, cellWidth);
+
+        return width;
+    },
+
+    cropAppointmentWidth: function(width, cellWidth) {
+        if(this.instance.fire("isGroupedByDate")) {
+            width = cellWidth;
+        }
+
         return width;
     },
 
@@ -154,7 +164,11 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     isAllDay: function(appointmentData) {
         return this.instance.fire("getField", "allDay", appointmentData);
-    }
+    },
+
+    needSeparateAppointment: function() {
+        return this.instance.fire("isGroupedByDate");
+    },
 });
 
 module.exports = HorizontalRenderingStrategy;

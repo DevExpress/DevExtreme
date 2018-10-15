@@ -2,7 +2,7 @@
     font-family: "dx.generic@{GENERIC_COLOR_POSTFIX}@{GENERIC_SIZE_POSTFIX}";
 }
 
-.dx-viewport.dx-theme-generic {
+.dx-theme-styles() {
     .dx-theme-accent-as-text-color {
         color: @base-accent;
     }
@@ -54,6 +54,14 @@
     .dx-theme-border-color {
         border-color: @base-border-color;
     }
+}
+
+/* for those who don't use dx typography styles in their apps */
+.dx-theme-styles();
+
+/* once again because typography selectors could be stronger than just one class */
+.dx-theme-generic-typography {
+    .dx-theme-styles();
 }
 
 .dx-base-typography() {

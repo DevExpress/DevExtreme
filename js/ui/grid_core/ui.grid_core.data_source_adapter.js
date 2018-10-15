@@ -31,13 +31,14 @@ module.exports = gridCore.Controller.inherit((function() {
             operationTypes = {
                 sorting: !gridCore.equalSortParameters(loadOptions.sort, lastLoadOptions.sort),
                 grouping: !gridCore.equalSortParameters(loadOptions.group, lastLoadOptions.group, true),
-                groupExpanding: !gridCore.equalSortParameters(loadOptions.group, lastLoadOptions.group),
+                groupExpanding: !gridCore.equalSortParameters(loadOptions.group, lastLoadOptions.group) || lastLoadOptions.groupExpand,
                 filtering: !gridCore.equalFilterParameters(loadOptions.filter, lastLoadOptions.filter),
+                pageIndex: loadOptions.pageIndex !== lastLoadOptions.pageIndex,
                 skip: loadOptions.skip !== lastLoadOptions.skip,
                 take: loadOptions.take !== lastLoadOptions.take
             };
             operationTypes.reload = operationTypes.sorting || operationTypes.grouping || operationTypes.filtering;
-            operationTypes.paging = operationTypes.skip || operationTypes.take;
+            operationTypes.paging = operationTypes.pageIndex || operationTypes.take;
         }
 
         return operationTypes;
@@ -224,7 +225,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 options.delay = undefined;
             }
 
-            loadOptions = extend({}, options.storeLoadOptions);
+            loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
 
             operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
 

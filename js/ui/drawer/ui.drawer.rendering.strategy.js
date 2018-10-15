@@ -117,13 +117,13 @@ class DrawerStrategy {
         }
     }
 
-    _stopAnimations(jumpToEnd) {
-        fx.stop(this._drawer._$shader, jumpToEnd);
-        fx.stop($(this._drawer.content()), jumpToEnd);
-        fx.stop($(this._drawer.viewContent()), jumpToEnd);
+    _stopAnimations() {
+        fx.stop(this._drawer._$shader);
+        fx.stop($(this._drawer.content()));
+        fx.stop($(this._drawer.viewContent()));
 
         const overlay = this._drawer.getOverlay();
-        overlay && fx.stop($(overlay.$content()), jumpToEnd);
+        overlay && fx.stop($(overlay.$content()));
     }
 
     _getPanelOffset(offset) {
@@ -176,11 +176,13 @@ class DrawerStrategy {
         return this._drawer.$element().get(0).getBoundingClientRect().width;
     }
 
-    setPanelSize() {
+    setPanelSize(keepMaxSize) {
+        const panelSize = this._getPanelSize(this._drawer.option("opened"));
+
         if(this._drawer._isHorizontalDirection()) {
-            $(this._drawer.content()).css("width", this._drawer.getRealPanelWidth());
+            $(this._drawer.content()).css("width", keepMaxSize ? this._drawer.getRealPanelWidth() : panelSize);
         } else {
-            $(this._drawer.content()).css("height", this._drawer.getRealPanelHeight());
+            $(this._drawer.content()).css("height", keepMaxSize ? this._drawer.getRealPanelHeight() : panelSize);
         }
     }
 

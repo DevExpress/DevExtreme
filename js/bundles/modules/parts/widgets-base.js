@@ -19,6 +19,7 @@ ui.dxActionSheet = require("../../../ui/action_sheet");
 ui.dxAutocomplete = require("../../../ui/autocomplete");
 ui.dxBox = require("../../../ui/box");
 ui.dxButton = require("../../../ui/button");
+ui.dxButtonGroup = require("../../../ui/button_group");
 ui.dxCalendar = require("../../../ui/calendar");
 ui.dxCheckBox = require("../../../ui/check_box");
 ui.dxColorBox = require("../../../ui/color_box");

@@ -899,6 +899,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             that.options.legacyRendering = false;
         }
 
+        that.optionCalled = $.Callbacks();
+
         that.option = function(options, value) {
             var result = that.options,
                 path;
@@ -912,6 +914,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     result = result[path[0]];
                     path.shift();
                 }
+                that.optionCalled.fire(options, value);
                 return result;
             }
 

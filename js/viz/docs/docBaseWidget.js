@@ -99,6 +99,13 @@ var BaseWidget = {
     */
     redrawOnResize: true,
     /**
+    * @name BaseWidgetOptions.disabled
+    * @type boolean
+    * @default false
+    * @notUsedInTheme
+    */
+    disabled: false,
+    /**
     * @name BaseWidgetOptions.onIncidentOccurred
     * @extends Action
     * @type function(e)

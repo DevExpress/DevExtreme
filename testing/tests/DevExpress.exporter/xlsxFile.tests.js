@@ -35,10 +35,8 @@ QUnit.test("Empty numberFormat", function(assert) {
     const file = new XlsxFile();
     assert.equal(file.registerCellFormat({ numberFormat: undefined }), undefined);
     assert.equal(file.registerCellFormat({ numberFormat: null }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormat: { notSupported: 'a' } }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: undefined } }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: null } }), undefined);
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: '' } }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: { objectIsNotSupported: 'a' } }), undefined);
+    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'not supported, assign string instead of object' } }), undefined);
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
@@ -61,17 +59,22 @@ QUnit.test("Various numberFormat as identifiers of predefined formats", function
 
 QUnit.test("Various numberFormat as custom format", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'a' } }), 0);
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'a' } }), 0);
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'b' } }), 1);
-    assert.equal(file.registerCellFormat({ numberFormat: { formatCode: 'b' } }), 1);
+    assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
+    assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
+    assert.equal(file.registerCellFormat({ numberFormat: 81 }), 1);
+    assert.equal(file.registerCellFormat({ numberFormat: '0' }), 2);
+    assert.equal(file.registerCellFormat({ numberFormat: '0' }), 2);
+    assert.equal(file.registerCellFormat({ numberFormat: 'a' }), 3);
+    assert.equal(file.registerCellFormat({ numberFormat: 'a' }), 3);
     assert.equal(getFullXml(file),
-        '<cellXfs count="2">' +
+        '<cellXfs count="4">' +
+        '<xf xfId="0" applyNumberFormat="0" numFmtId="0" />' +
+        '<xf xfId="0" applyNumberFormat="1" numFmtId="81" />' +
         '<xf xfId="0" applyNumberFormat="1" numFmtId="165" />' +
         '<xf xfId="0" applyNumberFormat="1" numFmtId="166" />' +
         '</cellXfs>' +
         getExpectedFillsXml() + '<fonts count="0" />' +
-        '<numFmts count="2"><numFmt numFmtId="165" formatCode="a" /><numFmt numFmtId="166" formatCode="b" /></numFmts>');
+        '<numFmts count="2"><numFmt numFmtId="165" formatCode="0" /><numFmt numFmtId="166" formatCode="a" /></numFmts>');
 });
 
 QUnit.test("Empty alignments", function(assert) {

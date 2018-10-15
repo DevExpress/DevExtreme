@@ -141,6 +141,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ButtonGroupSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+/**
  * @typedef {string} Enums.Mode
  * @enum {'auto'}
  */
@@ -183,6 +188,11 @@
 /**
  * @typedef {string} Enums.ChartPointerType
  * @enum {'all'|'mouse'|'none'|'touch'}
+ */
+
+/**
+ * @typedef {string} Enums.ChartZoomAndPanMode
+ * @enum {'both'|'none'|'pan'|'zoom'}
  */
 
 /**

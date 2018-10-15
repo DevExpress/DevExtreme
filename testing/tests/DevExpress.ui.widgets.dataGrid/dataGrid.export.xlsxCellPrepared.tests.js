@@ -68,7 +68,7 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
@@ -167,7 +167,7 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
@@ -262,32 +262,34 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
+        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /><col width="13.57" min="7" max="7" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:6" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<row r="1" spans="1:7" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>43483.6875</v></c>' +
         '<c r="B1" s="6" t="n"><v>43484.6875</v></c>' +
         '<c r="C1" s="7" t="n"><v>43485.6875</v></c>' +
         '<c r="D1" s="8" t="n"><v>43486.6875</v></c>' +
         '<c r="E1" s="9" t="n"><v>43487.6875</v></c>' +
         '<c r="F1" s="10" t="n"><v>43488.6875</v></c>' +
+        '<c r="G1" s="5" t="n"><v>43488.6875</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:F1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
     const formats = [
         null, // General
         0, // General
         4, // #,##0.00
         22, // m/d/yy h:mm
-        { formatCode: 'dd/mmm/yyyy hh:mm' },
-        { formatCode: '#,##0.0000' }
+        'dd/mmm/yyyy hh:mm',
+        '#,##0.0000',
+        { formatCode: 'not supported, assign string instead of object' }
     ];
 
     helper.runGeneralTest(
         assert,
         {
-            columns: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
+            columns: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7'],
             dataSource: [{
                 f1: new Date(2019, 0, 18, 16, 30), // serialized as '43483.6875'
                 f2: new Date(2019, 0, 19, 16, 30),
@@ -295,54 +297,66 @@ QUnit.test("Change number format in all xlsx cells", function(assert) {
                 f4: new Date(2019, 0, 21, 16, 30),
                 f5: new Date(2019, 0, 22, 16, 30),
                 f6: new Date(2019, 0, 23, 16, 30),
+                f7: new Date(2019, 0, 23, 16, 30),
             }],
-            showColumnHeaders: false,
-            export: {
-                enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = formats[0];
-                formats.shift();
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change number format to '0000'", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="1">' +
-        '<numFmt numFmtId="165" formatCode="0000" />' +
-        '</numFmts>' +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="5" t="n"><v>42</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
-            dataSource: [{ f1: 42 }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+                e.xlsxCell.numberFormat = formats.shift();
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number format for Number column to '0000', '0.00', '0.00E+00'", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="3">' +
+        '<numFmt numFmtId="165" formatCode="0000" />' +
+        '<numFmt numFmtId="166" formatCode="0.00" />' +
+        '<numFmt numFmtId="167" formatCode="0.00E+00" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="8">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c><c r="B1" s="6" t="n"><v>43</v></c><c r="C1" s="7" t="n"><v>44</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    const columnFormats = { f1: '0000', f2: '0.00', f3: '0.00E+00' };
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'number' }
+            ],
+            dataSource: [
+                { f1: 42, f2: 43, f3: 44 }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.numberFormat = columnFormats[e.gridCell.column.dataField];
             },
         },
         { styles, worksheet, sharedStrings }
@@ -368,9 +382,8 @@ QUnit.test("Change number format for Number column when column.format is functio
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>42</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
@@ -382,9 +395,51 @@ QUnit.test("Change number format for Number column when column.format is functio
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = { formatCode: '0000' };
+                e.xlsxCell.numberFormat = '0000';
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number format for Number column cell", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="2">' +
+        '<numFmt numFmtId="165" formatCode="#" />' +
+        '<numFmt numFmtId="166" formatCode="0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "f1", dataType: "number", format: "decimal" }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.numberFormat = '0000';
             },
         },
         { styles, worksheet, sharedStrings }
@@ -410,9 +465,8 @@ QUnit.test("Change number format for Date column cell when column.format is func
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="5" t="n"><v>43483</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
@@ -424,9 +478,10 @@ QUnit.test("Change number format for Date column cell when column.format is func
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
             },
             onXlsxCellPrepared: e => {
-                e.xlsxCell.style.numberFormat = { formatCode: 'dd/mmm/yyyy hh:mm' };
+                e.xlsxCell.numberFormat = 'dd/mmm/yyyy hh:mm';
             },
         },
         { styles, worksheet, sharedStrings }
@@ -766,7 +821,7 @@ QUnit.test("Change number value", function(assert) {
         '</row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
@@ -798,7 +853,7 @@ QUnit.test("Change date value", function(assert) {
         '</row>' +
         '</sheetData>' +
         '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
@@ -902,21 +957,141 @@ QUnit.test("Change cell value data type", function(assert) {
                     e.xlsxCell.value = 1;
                     e.xlsxCell.dataType = 'n';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 } else if(e.gridCell.column.dataField === 'numberToString') {
                     e.xlsxCell.value = 'one';
                     e.xlsxCell.dataType = 's';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 } else if(e.gridCell.column.dataField === 'dateToString') {
                     e.xlsxCell.value = 'my date';
                     e.xlsxCell.dataType = 's';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 } else if(e.gridCell.column.dataField === 'boolToNumber') {
                     e.xlsxCell.value = 1;
                     e.xlsxCell.dataType = 'n';
                     e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
                 }
             },
         },
         { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Clear reference to xlsx style record for header cell", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML + helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1"><si><t>F1</t></si></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: ['f1'],
+            showColumnHeaders: true,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style = null;
+                e.xlsxCell.numberFormat = null;
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Clear reference to xlsx style record for number value cell", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: ['f1'],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style = null;
+                e.xlsxCell.numberFormat = null;
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Clear reference to xlsx style record and change number format for Number column", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count="1">' +
+        '<numFmt numFmtId="165" formatCode="0000" />' +
+        '</numFmts>' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyNumberFormat="1" numFmtId="165" />' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+            onXlsxCellPrepared: e => {
+                e.xlsxCell.style = null;
+                e.xlsxCell.numberFormat = '0000';
+            },
+        },
+        { styles, worksheet, sharedStrings }
     );
 });

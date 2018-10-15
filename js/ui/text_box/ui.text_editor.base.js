@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
-    clickEvent = require("../../events/click");
+    clickEvent = require("../../events/click"),
+    config = require("../../core/config");
 
 var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
@@ -287,7 +288,7 @@ var TextEditorBase = Editor.inherit({
             * @type Enums.EditorStylingMode
             * @default 'outlined'
             */
-            stylingMode: "outlined"
+            stylingMode: config().editorStylingMode || "outlined"
         });
     },
 
@@ -312,7 +313,7 @@ var TextEditorBase = Editor.inherit({
                     * @name dxTextEditorOptions.stylingMode
                     * @default 'underlined' @for Material
                     */
-                    stylingMode: "underlined"
+                    stylingMode: config().editorStylingMode || "underlined"
                 }
             }
         ]);

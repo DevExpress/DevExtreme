@@ -10,7 +10,6 @@ var $ = require("../../core/renderer"),
 
     vizUtils = require("../core/utils"),
     pointerEvents = require("../../events/pointer"),
-    wheelEvent = require("../../events/core/wheel"),
     holdEvent = require("../../events/hold"),
     addNamespace = require("../../events/utils").addNamespace,
     devices = require("../../core/devices"),
@@ -29,15 +28,10 @@ var $ = require("../../core/renderer"),
     LEGEND_CLICK = "legendClick",
     SERIES_CLICK = "seriesClick",
     POINT_CLICK = "pointClick",
-    ZOOM_START = "zoomStart",
-    ZOOM_END = "zoomEnd",
     POINT_DATA = "chart-data-point",
     SERIES_DATA = "chart-data-series",
     ARG_DATA = "chart-data-argument",
     DELAY = 100,
-    TOUCHSTART_TIMEOUT = 500,
-    GESTURE_TIMEOUT = 300,
-    SCROLL_THRESHOLD = 10,
 
     NONE_MODE = "none",
     ALL_ARGUMENT_POINTS_MODE = "allargumentpoints",
@@ -282,6 +276,10 @@ var baseTrackerPrototype = {
         this._outHandler = null;
     },
 
+    stopCurrentHandling: function() {
+        this._pointerOut();
+    },
+
     _pointerOut: function() {
         this._clearHover();
         this._tooltip.isEnabled() && this._hideTooltip(this.pointAtShownTooltip);
@@ -376,9 +374,6 @@ var baseTrackerPrototype = {
             point = undefined;
         }
         that._enableOutHandler();
-        if(that._checkGestureEvents(e, canvas, rootOffset)) {
-            return;
-        }
 
         if(that._legend.coordsIn(x, y)) {
             that._hoverLegendItem(x, y);
@@ -534,189 +529,6 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         }
     },
 
-    _prepare: function() {
-        var that = this,
-            root = that._renderer.root,
-            touchScrollingEnabled = that._scrollingMode === "all" || that._scrollingMode === "touch",
-            touchZoomingEnabled = that._zoomingMode === "all" || that._zoomingMode === "touch",
-            cssValue = ((!touchScrollingEnabled ? "pan-x pan-y " : "") + (!touchZoomingEnabled ? "pinch-zoom" : "")) || "none",
-            rootStyles = { "touch-action": cssValue, "-ms-touch-action": cssValue },
-            wheelZoomingEnabled = that._zoomingMode === "all" || that._zoomingMode === "mouse";
-
-        root.off(addNamespace([wheelEvent.name, "dxc-scroll-start", "dxc-scroll-move"], EVENT_NS));
-
-        baseTrackerPrototype._prepare.call(that);
-
-        if(!that._gestureEndHandler) {
-            that._gestureEndHandler = function() {
-                // Check is added because callback can be triggered after unsubscribing which is done during tracker disposing
-                // That occurs for example when container is removed on swipe end (T235643)
-                that._gestureEnd && that._gestureEnd(); // T235643
-            };
-
-            eventsEngine.on(domAdapter.getDocument(), addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
-        }
-        wheelZoomingEnabled && root.on(addNamespace(wheelEvent.name, EVENT_NS), function(e) {
-            var rootOffset = that._renderer.getRootOffset(),
-                x = that._rotated ? e.pageY - rootOffset.top : e.pageX - rootOffset.left,
-                translator = that._argumentAxis.getTranslator(),
-                scale = translator.getMinScale(e.delta > 0),
-                translate = x - x * scale,
-                zoom = translator.zoom(-translate, scale, that._chart.getArgumentAxis().getZoomBounds());
-            that._pointerOut();
-
-            that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max]);
-
-            e.preventDefault();
-            e.stopPropagation(); // T249548
-        });
-
-        root.on(addNamespace("dxc-scroll-start", EVENT_NS), function(e) {
-            that._startScroll = true;
-            that._gestureStart(that._getGestureParams(e, { left: 0, top: 0 }));
-        }).on(addNamespace("dxc-scroll-move", EVENT_NS), function(e) {
-            that._gestureChange(that._getGestureParams(e, { left: 0, top: 0 })) && e.preventDefault();
-        });
-
-        root.css(rootStyles);
-    },
-
-    _getGestureParams: function(e, offset) {
-        var that = this,
-            x1, x2,
-            touches = e.pointers.length,
-            left, right,
-            eventCoordField = that._rotated ? "pageY" : "pageX";
-
-        offset = that._rotated ? offset.top : offset.left;
-        if(touches === 2) {
-            x1 = e.pointers[0][eventCoordField] - offset;
-            x2 = e.pointers[1][eventCoordField] - offset;
-        } else if(touches === 1) {
-            x1 = x2 = e.pointers[0][eventCoordField] - offset;
-        }
-        left = Math.min(x1, x2);
-        right = Math.max(x1, x2);
-
-        return {
-            center: left + (right - left) / 2,
-            distance: right - left,
-            touches: touches,
-            scale: 1,
-            pointerType: e.pointerType
-        };
-
-    },
-
-    _gestureStart: function(gestureParams) {
-        var that = this;
-        that._startGesture = that._startGesture || gestureParams;
-
-        if(that._startGesture.touches !== gestureParams.touches) {
-            that._startGesture = gestureParams;
-        }
-    },
-
-    _gestureChange: function(gestureParams) {
-        var that = this,
-            startGesture = that._startGesture,
-            gestureChanged = false,
-            scrollingEnabled = that._scrollingMode === "all" || (that._scrollingMode !== "none" && that._scrollingMode === gestureParams.pointerType),
-            zoomingEnabled = that._zoomingMode === "all" || that._zoomingMode === "touch";
-
-        if(!startGesture) {
-            return gestureChanged;
-        }
-        if(startGesture.touches === 1 && Math.abs(startGesture.center - gestureParams.center) < SCROLL_THRESHOLD) {
-            that._gestureStart(gestureParams);
-            return gestureChanged;
-        }
-
-        if(startGesture.touches === 2 && zoomingEnabled) {
-            gestureChanged = true;
-            startGesture.scale = gestureParams.distance / startGesture.distance;
-            startGesture.scroll = gestureParams.center - startGesture.center + (startGesture.center - startGesture.center * startGesture.scale);
-        } else if(startGesture.touches === 1 && scrollingEnabled) {
-            gestureChanged = true;
-            startGesture.scroll = (gestureParams.center - startGesture.center);
-        }
-
-        if(gestureChanged && !startGesture.cancel) {
-            if(that._startScroll) {
-                const eventArg = that._chart.getArgumentAxis().getZoomStartEventArg();
-                that._eventTrigger(ZOOM_START, eventArg);
-                that._startScroll = false;
-                if(eventArg.cancel) {
-                    startGesture.cancel = true;
-                    return false;
-                } else {
-                    startGesture.range = eventArg.range;
-                }
-            }
-
-            startGesture.changed = gestureChanged;
-            if(that._chart._lastRenderingTime < GESTURE_TIMEOUT) {
-                const viewport = that._argumentAxis.visualRange();
-                var zoom = that._argumentAxis._translator.zoom(-startGesture.scroll, startGesture.scale, that._argumentAxis.getZoomBounds());
-                if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
-                    that._chart.getArgumentAxis().visualRange([zoom.min, zoom.max], { start: true, end: true });
-                    startGesture.distance = gestureParams.distance;
-                    startGesture.center = gestureParams.center;
-                }
-            } else {
-                that._chart._transformArgument(startGesture.scroll, startGesture.scale);
-            }
-        }
-        return gestureChanged;
-    },
-
-    _gestureEnd: function() {
-        var that = this,
-            startGesture = that._startGesture,
-            zoom,
-            renderer = that._renderer;
-        that._startGesture = null;
-        that._startScroll = false;
-
-        const argumentAxis = that._argumentAxis;
-
-        function complete() {
-            argumentAxis.visualRange([zoom.min, zoom.max], { start: true, startRange: startGesture.range });
-        }
-
-        if(startGesture && startGesture.changed) {
-            if(!isDefined(that._chart._lastRenderingTime) || that._chart._lastRenderingTime >= GESTURE_TIMEOUT) {
-                zoom = argumentAxis.getTranslator().zoom(-startGesture.scroll, startGesture.scale, argumentAxis.getZoomBounds());
-                if(renderer.animationEnabled() && (-startGesture.scroll !== zoom.translate || startGesture.scale !== zoom.scale)) {
-                    var translateDelta = -(startGesture.scroll + zoom.translate),
-                        scaleDelta = startGesture.scale - zoom.scale;
-
-                    renderer.root.animate({ _: 0 }, {
-                        step: function(pos) {
-                            var translateValue = -(startGesture.scroll) - translateDelta * pos,
-                                scaleValue = startGesture.scale - scaleDelta * pos;
-
-                            that._chart._transformArgument(-translateValue, scaleValue);
-                        }, complete: complete,
-                        duration: 250
-                    });
-                } else {
-                    complete();
-                }
-            } else {
-                const currentRange = startGesture.range;
-                const zoomEndEvent = argumentAxis.getZoomEndEventArg(currentRange);
-
-                that._eventTrigger(ZOOM_END, zoomEndEvent);
-
-                if(zoomEndEvent.cancel) {
-                    argumentAxis._applyZooming(currentRange);
-                    argumentAxis._visualRange(argumentAxis, currentRange);
-                }
-            }
-        }
-    },
-
     _clean: function() {
         var that = this;
         baseTrackerPrototype._clean.call(that);
@@ -762,34 +574,6 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     _resetTimer: function() {
         clearTimeout(this._hoverTimeout);
         this._timeoutKeeper = this._hoverTimeout = null;
-    },
-
-    _checkGestureEvents: function(e, canvas, rootOffset) {
-        var that = this;
-
-        if(e.type === pointerEvents.down) {
-            if(canvas) {
-                that._startScroll = true;
-                that._gestureStart(that._getGestureParams(e, rootOffset));
-            }
-        } else if(that._startGesture && canvas) {
-            if(that._gestureChange(that._getGestureParams(e, rootOffset))) {
-                that._pointerOut();
-                e.preventDefault();
-                return true;
-            }
-        }
-    },
-
-    _handleStartScrollTimeout(e) {
-        const that = this;
-        if(that._gestureStartTimeStamp && that._startGesture.touches === 1 && e.timeStamp - that._gestureStartTimeStamp < TOUCHSTART_TIMEOUT && that._startGesture.distance >= SCROLL_THRESHOLD) {
-            that._stopEvent(e);
-            that._pointerOut();
-            that._startGesture.changed = false;
-            that._startScroll = false;
-        }
-        that._gestureStartTimeStamp = e.timeStamp;
     },
 
     _stopEvent: function(e) {
@@ -857,7 +641,6 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     dispose: function() {
-        eventsEngine.off(domAdapter.getDocument(), DOT_EVENT_NS, this._gestureEndHandler);
         this._resetTimer();
         baseTrackerPrototype.dispose.call(this);
     }
@@ -902,7 +685,6 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     _hoverArgumentAxis: _noop,
     _setStuckSeries: _noop,
     _getCanvas: _noop,
-    _checkGestureEvents: _noop,
     _notifyLegendOnHoverArgument: true
 });
 

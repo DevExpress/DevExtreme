@@ -204,8 +204,6 @@ const Drawer = Widget.inherit({
     },
 
     _outsideClickHandler(e) {
-        this._strategy._stopAnimations(true);
-
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
 
         if(typeUtils.isFunction(closeOnOutsideClick)) {
@@ -213,6 +211,8 @@ const Drawer = Widget.inherit({
         }
 
         if(closeOnOutsideClick && this.option("opened")) {
+            this._strategy._stopAnimations();
+
             if(this.option("shading")) {
                 e.preventDefault();
             }
@@ -436,7 +436,7 @@ const Drawer = Widget.inherit({
         }
 
         this._$panel.empty();
-
+        this._orderContent(this.option("position"));
         this._strategy.renderPanel(this._getTemplate(this.option("template")));
     },
 

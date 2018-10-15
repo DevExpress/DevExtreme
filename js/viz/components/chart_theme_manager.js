@@ -178,6 +178,50 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 value.nameField = value.nameField || "series";
             }
             return value;
+        },
+        zoomAndPan() {
+            function parseOption(option) {
+                option = _normalizeEnum(option);
+                const pan = option === "pan" || option === "both",
+                    zoom = option === "zoom" || option === "both";
+
+                return {
+                    pan: pan,
+                    zoom: zoom,
+                    none: !pan && !zoom
+                };
+            }
+
+            let userOptions = this._userOptions.zoomAndPan;
+
+            if(!_isDefined(userOptions)) {
+                const zoomingMode = _normalizeEnum(this.getOptions("zoomingMode"));
+                const scrollingMode = _normalizeEnum(this.getOptions("scrollingMode"));
+                const allowZoom = ['all', 'mouse', 'touch'].indexOf(zoomingMode) !== -1;
+                const allowScroll = ['all', 'mouse', 'touch'].indexOf(scrollingMode) !== -1;
+
+                userOptions = {
+                    argumentAxis: (allowZoom && allowScroll) ? "both" : (allowZoom ? "zoom" : (allowScroll ? "pan" : "none")),
+                    allowMouseWheel: zoomingMode === "all" || zoomingMode === "mouse",
+                    allowGestures: zoomingMode === "all" || zoomingMode === "touch" || scrollingMode === "all" || scrollingMode === "touch"
+                };
+            }
+
+            let options = mergeOptions.call(this, "zoomAndPan", userOptions);
+
+            return {
+                valueAxis: parseOption(options.valueAxis),
+                argumentAxis: parseOption(options.argumentAxis),
+                dragToZoom: !!options.dragToZoom,
+                dragBoxStyle: {
+                    class: "dxc-shutter",
+                    fill: options.dragBoxStyle.color,
+                    opacity: options.dragBoxStyle.opacity
+                },
+                panKey: options.panKey,
+                allowMouseWheel: !!options.allowMouseWheel,
+                allowGestures: !!options.allowGestures
+            };
         }
     };
 

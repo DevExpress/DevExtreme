@@ -649,6 +649,10 @@ var BaseRenderingStrategy = Class.inherit({
         return false;
     },
 
+    needSeparateAppointment: function() {
+        return false;
+    },
+
     _getMaxAppointmentCountPerCell: function() {
         if(!this._maxAppointmentCountPerCell) {
             var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),

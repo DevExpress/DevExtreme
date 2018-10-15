@@ -11,6 +11,7 @@ import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
 import getWordMatcher from "./matchers/wordLists";
+import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
@@ -21,6 +22,31 @@ const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+             * @name dxHtmlEditorOptions.focusStateEnabled
+             * @type boolean
+             * @default true
+             * @inheritdoc
+             */
+            focusStateEnabled: true,
+
+            /**
+            * @name dxHtmlEditorOptions.onFocusIn
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @action
+            */
+            /**
+            * @name dxHtmlEditorOptions.onFocusOut
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 event:event
+            * @action
+            */
+
             /**
             * @name dxHtmlEditorOptions.valueType
             * @type Enums.HtmlEditorValueType
@@ -44,7 +70,9 @@ const HtmlEditor = Editor.inherit({
             * @type dxHtmlEditorDataPlaceholder
             * @default null
             */
-            dataPlaceholder: null
+            dataPlaceholder: null,
+
+            formDialogOptions: null
 
             /**
             * @name dxHtmlEditorToolbar
@@ -170,6 +198,8 @@ const HtmlEditor = Editor.inherit({
 
     _render: function() {
         this._renderHtmlEditor();
+        this._renderFormDialog();
+
         this.callBase();
     },
 
@@ -255,6 +285,16 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _renderFormDialog: function() {
+        const userOptions = extend(true, {
+            width: "auto",
+            height: "auto",
+            closeOnOutsideClick: true
+        }, this.option("formDialogOptions"));
+
+        this._formDialog = new FormDialog(this, userOptions);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
@@ -286,6 +326,9 @@ const HtmlEditor = Editor.inherit({
             case "disabled":
                 this.callBase(args);
                 this._resetEnabledState();
+                break;
+            case "formDialogOptions":
+                this._renderFormDialog();
                 break;
             default:
                 this.callBase(args);
@@ -493,6 +536,14 @@ const HtmlEditor = Editor.inherit({
     */
     insertEmbed: function(index, type, config) {
         this._applyQuillMethod("insertEmbed", arguments);
+    },
+
+    showFormDialog: function(formConfig) {
+        return this._formDialog.show(formConfig);
+    },
+
+    formDialogOption: function(optionName, optionValue) {
+        return this._formDialog.popupOption.apply(this._formDialog, arguments);
     }
 });
 
