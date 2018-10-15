@@ -17,6 +17,7 @@ interface Promise<T> {
     ): Promise<TResult1 | TResult2>;
 }
 /* #EndGlobalDeclaration */
+/* #StartJQueryAugmentation */
 interface JQuery {
     dxAccordion(): JQuery;
     dxAccordion(options: "instance"): DevExpress.ui.dxAccordion;
@@ -507,6 +508,7 @@ interface JQuery {
     dxVectorMap(options: string, ...params: any[]): any;
     dxVectorMap(options: DevExpress.viz.map.dxVectorMapOptions): JQuery;
 }
+/* #EndJQueryAugmentation */
 declare module DevExpress {
     export class DataHelperMixin {
         /** Gets the DataSource instance. */
@@ -1156,7 +1158,7 @@ declare module DevExpress.data {
         errorHandler?: Function;
         /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
-        /** Specifies a URL to an OData service. */
+        /** Specifies the URL of an OData service. */
         url?: string;
         /** Specifies the OData version. */
         version?: number;
@@ -1186,7 +1188,7 @@ declare module DevExpress.data {
         keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
         /** A function that is executed before data is loaded to the store. */
         onLoading?: ((loadOptions: LoadOptions) => any);
-        /** Specifies a URL to an OData entity collection. */
+        /** Specifies the URL of an OData entity collection. */
         url?: string;
         /** Specifies the OData version. */
         version?: number;
@@ -1202,10 +1204,6 @@ declare module DevExpress.data {
         byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
         /** Creates a Query for the OData endpoint. */
         createQuery(loadOptions: any): any;
-        /** Starts loading data. */
-        load(): Promise<any> & JQueryPromise<any>;
-        /** Starts loading data. */
-        load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
     }
     /** The EdmLiteral is an object for working with primitive data types from the OData's Abstract Type System that are not supported in JavaScript. */
     export class EdmLiteral {
@@ -1663,7 +1661,7 @@ declare module DevExpress.ui {
         /** Specifies whether the widget can expand several items or only a single item at once. */
         multiple?: boolean;
         /** A function that is executed when an accordion item's title is clicked or tapped. */
-        onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
+        onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
         /** The index number of the currently selected item. */
         selectedIndex?: number;
     }
@@ -1999,6 +1997,8 @@ declare module DevExpress.ui {
         pager?: { visible?: boolean | 'auto', showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | 'auto', showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
         /** Configures paging. */
         paging?: GridBasePaging;
+        /** Specifies whether to render the filter row, command columns, and columns with showEditorAlways set to true after other elements. */
+        renderAsync?: boolean;
         /** Specifies whether rows should be shaded differently. */
         rowAlternationEnabled?: boolean;
         /** Overridden. A configuration object specifying scrolling options. */
@@ -2081,7 +2081,7 @@ declare module DevExpress.ui {
     }
     /** Overridden. A configuration object specifying scrolling options. */
     export interface GridBaseScrolling {
-        /** Specifies the rendering mode for columns. Applies when columns are left outside the viewport. */
+        /** Specifies the rendering mode for columns. Applies when columns are left outside the viewport. Requires the columnWidth, columnAutoWidth, or width (for all columns) option specified. */
         columnRenderingMode?: 'standard' | 'virtual';
         /** Specifies whether the widget should load pages adjacent to the current page. Applies only if scrolling.mode is "virtual". */
         preloadEnabled?: boolean;
@@ -2113,9 +2113,9 @@ declare module DevExpress.ui {
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /** Discards changes that a user made to data. */
         cancelEditData(): void;
-        /** Gets the value of a cell with a specific row index and a data field. */
+        /** Gets the value of a cell with a specific row index and a data field, column caption or name. */
         cellValue(rowIndex: number, dataField: string): any;
-        /** Sets a new value to a cell with a specific row index and a data field. */
+        /** Sets a new value to a cell with a specific row index and a data field, column caption or name. */
         cellValue(rowIndex: number, dataField: string, value: any): void;
         /** Gets the value of a cell with specific row and column indexes. */
         cellValue(rowIndex: number, visibleColumnIndex: number): any;
@@ -2169,7 +2169,7 @@ declare module DevExpress.ui {
         focus(): void;
         /** Sets focus on a specific cell. */
         focus(element: Element | JQuery): void;
-        /** Gets a cell with a specific row index and a data field. */
+        /** Gets a cell with a specific row index and a data field, column caption or name. */
         getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement & undefined;
         /** Gets a cell with specific row and column indexes. */
         getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement & undefined;
@@ -2431,7 +2431,7 @@ declare module DevExpress.ui {
         dropDownOptions?: dxPopupOptions;
         /** Specifies a custom template for the text field. Must contain the TextBox widget. */
         fieldTemplate?: template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** Specifies after which DOM events the widget updates the value. */
+        /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
     }
     /** The DropDownBox widget consists of a text field, which displays the current value, and a drop-down field, which can contain any UI element. */
@@ -2459,7 +2459,7 @@ declare module DevExpress.ui {
         /** A function that is executed when the button that opens the drop-down menu is clicked or tapped. */
         onButtonClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** A function that is executed when a menu item is clicked or tapped. */
-        onItemClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
+        onItemClick?: ((e: { component?: dxDropDownMenu, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
         /** Specifies whether or not the drop-down menu is displayed. */
         opened?: boolean;
         /** Specifies the popup element's height in pixels. */
@@ -2706,8 +2706,8 @@ declare module DevExpress.ui {
         nextButtonText?: string;
         /** A function that is executed when a group element is rendered. */
         onGroupRendered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, groupData?: any, groupElement?: DevExpress.core.dxElement, groupIndex?: number }) => any);
-        /** A function that is executed when a list item is clicked or tapped. Applies only if the selectionMode is "none". */
-        onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any }) => any) | string;
+        /** A function that is executed when a collection item is clicked or tapped. */
+        onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any) | string;
         /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any);
         /** A function that is executed after a list item is deleted from the data source. */
@@ -3065,7 +3065,7 @@ declare module DevExpress.ui {
         badge?: string;
     }
     export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
-        /** Specifies the value's display format and controls the user input according to it. */
+        /** Specifies the value's display format and controls user input accordingly. */
         format?: format;
         /** Specifies the text of the message displayed if the specified value is not a number. */
         invalidValueMessage?: string;
@@ -3701,7 +3701,7 @@ declare module DevExpress.ui {
         showDropDownButton?: boolean;
         /** Specifies whether or not to display selection controls. */
         showSelectionControls?: boolean;
-        /** Specifies DOM event names that update a widget's value. */
+        /** Specifies the DOM events after which the widget's value should be updated. Applies only if acceptCustomValue is set to true. */
         valueChangeEvent?: string;
     }
     /** The SelectBox widget is an editor that allows an end user to select an item from a drop-down list. */
@@ -3844,9 +3844,9 @@ declare module DevExpress.ui {
         /** Specifies a custom template for item titles. */
         itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** A function that is executed when a tab is clicked or tapped. */
-        onTitleClick?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
+        onTitleClick?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: event }) => any) | string;
         /** A function that is executed when a tab has been held for a specified period. */
-        onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
+        onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: event }) => any);
         /** A function that is executed after a tab is rendered. */
         onTitleRendered?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
         /** A Boolean value specifying if tabs in the title are scrolled by content. */
@@ -4448,7 +4448,7 @@ declare module DevExpress.ui {
         /** A function that is executed when a collection item is right-clicked or pressed. */
         onItemContextMenu?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** A function that is executed when a collection item has been held for a specified period. */
-        onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
+        onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
         /** A function that is executed after a collection item is rendered. */
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
         /** A function that is executed when a collection item is selected or the selection is canceled. */
@@ -4602,7 +4602,7 @@ declare module DevExpress.ui {
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
         /** A function that is executed when a list item is clicked or tapped. */
-        onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any }) => any);
+        onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: event }) => any);
         /** A function that is executed when a list item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
         /** A function that is executed after the widget's value is changed. */
@@ -4621,7 +4621,7 @@ declare module DevExpress.ui {
         showDataBeforeSearch?: boolean;
         /** Specifies the currently selected value. May be an object if dataSource contains objects and valueExpr is not set. */
         value?: any;
-        /** Specifies DOM event names that update a widget's value. */
+        /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
     }
     /** A base class for drop-down list widgets. */
@@ -4878,7 +4878,7 @@ declare module DevExpress.ui {
         allowSorting?: boolean;
         /** Calculates custom values for column cells. */
         calculateCellValue?: ((rowData: any) => any);
-        /** Calculates custom display values for column cells. Used when display values should differ from values for editing. */
+        /** Calculates custom display values for column cells. Requires specifying the dataField or calculateCellValue option. Used in lookup optimization. */
         calculateDisplayValue?: string | ((rowData: any) => any);
         /** Specifies the column's custom filtering rules. */
         calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
@@ -4908,9 +4908,9 @@ declare module DevExpress.ui {
         filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'notcontains' | 'contains' | 'startswith' | 'endswith' | 'between'>;
         /** Specifies whether a user changes the current filter by including (selecting) or excluding (clearing the selection of) values. Applies only if headerFilter.visible and allowHeaderFiltering are true. */
         filterType?: 'exclude' | 'include';
-        /** Specifies a filter value for the column. */
+        /** Specifies the column's filter value displayed in the filter row. */
         filterValue?: any;
-        /** Specifies filter values for the column's header filter. */
+        /** Specifies values selected in the column's header filter. */
         filterValues?: Array<any>;
         /** Fixes the column. */
         fixed?: boolean;
@@ -4918,7 +4918,7 @@ declare module DevExpress.ui {
         fixedPosition?: 'left' | 'right';
         /** Formats a value before it is displayed in a column cell. */
         format?: format;
-        /** Configures the form item produced by this column in the editing state. Used only if editing.mode is "form" or "popup". */
+        /** Configures the form item that the column produces in the editing state. Applies only if editing.mode is "form" or "popup". */
         formItem?: dxFormSimpleItem;
         /** Specifies a custom template for column headers. */
         headerCellTemplate?: template | ((columnHeader: DevExpress.core.dxElement, headerInfo: any) => any);
@@ -4936,7 +4936,9 @@ declare module DevExpress.ui {
         name?: string;
         /** Specifies the band column that owns the current column. Accepts the index of the band column in the columns array. */
         ownerBand?: number;
-        /** Specifies the selected filter operation for the column. */
+        /** Specifies whether to render the column after other columns and elements. Use if column cells have a complex template. Requires the width option specified. */
+        renderAsync?: boolean;
+        /** Specifies the column's filter operation displayed in the filter row. */
         selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
         /** Specifies a function to be invoked after the user has edited a cell value, but before it will be saved in the data source. */
         setCellValue?: ((newData: any, value: any, currentRowData: any) => any);
@@ -4981,7 +4983,7 @@ declare module DevExpress.ui {
         key?: any;
         /** The visible index of the row. */
         rowIndex?: number;
-        /** The type of the row. */
+        /** The row's type. */
         rowType?: string;
         /** Values of the row as they exist in the data source. */
         values?: Array<any>;
@@ -5279,7 +5281,7 @@ declare module DevExpress.ui {
         useMaskedValue?: boolean;
         /** Specifies the current value displayed by the widget. */
         value?: any;
-        /** Specifies DOM event names that update a widget's value. */
+        /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
     }
     /** A base class for text editing widgets. */
@@ -5425,6 +5427,8 @@ declare module DevExpress.ui {
 }
 declare module DevExpress.viz {
     export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
+        /** Specifies whether the widget responds to the user interaction. */
+        disabled?: boolean;
         /** Configures the exporting and printing features. */
         export?: BaseWidgetExport;
         /** Configures the loading indicator. */
