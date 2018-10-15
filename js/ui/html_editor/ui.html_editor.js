@@ -116,16 +116,6 @@ const HtmlEditor = Editor.inherit({
             * @type string|Array<string>
             * @default ""
             */
-            /**
-            * @name dxHtmlEditorVariables.startEscapedChar
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxHtmlEditorVariables.endEscapedChar
-            * @type string
-            * @default undefined
-            */
         });
     },
 
