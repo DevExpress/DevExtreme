@@ -567,6 +567,8 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true, Month
         },
         startDate: new Date(2018, 4, 22, 10, 0),
         callback: function(results) {
+            assert.equal(results.length, 2, "Coordinates count is ok");
+
             var result = results[0];
             assert.equal(result.cellIndex, 2, "Coordinates are OK");
             assert.equal(result.rowIndex, 3, "Coordinates are OK");
@@ -578,6 +580,70 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true, Month
             assert.equal(result.rowIndex, 3, "Coordinates are OK");
             assert.equal(result.top, 72, "Coordinates are OK");
             assert.roughEqual(result.left, cellWidth * 7, 1.5, "Coordinates are OK");
+        }
+    });
+});
+
+QUnit.test("'needCoordinates' should work correct for recurrenceAppointment when groupByDate = true, Month view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "month",
+        views: [{
+            type: "month",
+            name: "month",
+            groupOrientation: "horizontal"
+        }],
+        currentDate: new Date(2018, 4, 21, 9, 0),
+        groupByDate: true,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).get(0).getBoundingClientRect().width;
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 22, 10, 0),
+            endDate: new Date(2018, 4, 22, 12),
+            priorityId: 2,
+            recurrenceRule: "FREQ=DAILY;COUNT=3"
+        },
+        startDate: new Date(2018, 4, 22, 10, 0),
+        callback: function(results) {
+            var result = results[0];
+            assert.equal(result.cellIndex, 2, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 5, 1.5, "Coordinates are OK");
+
+            result = results[1];
+            assert.equal(result.cellIndex, 3, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 7, 1.5, "Coordinates are OK");
+
+            result = results[2];
+            assert.equal(result.cellIndex, 4, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 9, 1.5, "Coordinates are OK");
         }
     });
 });
