@@ -621,12 +621,14 @@ QUnit.test("'needCoordinates' should work correct for recurrenceAppointment when
     this.instance.fire("needCoordinates", {
         appointmentData: {
             startDate: new Date(2018, 4, 22, 10, 0),
-            endDate: new Date(2018, 4, 22, 12),
+            endDate: new Date(2018, 4, 23, 12),
             priorityId: 2,
             recurrenceRule: "FREQ=DAILY;COUNT=3"
         },
         startDate: new Date(2018, 4, 22, 10, 0),
         callback: function(results) {
+            assert.equal(results.length, 6, "Coordinates count is ok");
+
             var result = results[0];
             assert.equal(result.cellIndex, 2, "Coordinates are OK");
             assert.equal(result.rowIndex, 3, "Coordinates are OK");
@@ -640,10 +642,28 @@ QUnit.test("'needCoordinates' should work correct for recurrenceAppointment when
             assert.roughEqual(result.left, cellWidth * 7, 1.5, "Coordinates are OK");
 
             result = results[2];
+            assert.equal(result.cellIndex, 3, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 7, 1.5, "Coordinates are OK");
+
+            result = results[3];
             assert.equal(result.cellIndex, 4, "Coordinates are OK");
             assert.equal(result.rowIndex, 3, "Coordinates are OK");
             assert.equal(result.top, 72, "Coordinates are OK");
             assert.roughEqual(result.left, cellWidth * 9, 1.5, "Coordinates are OK");
+
+            result = results[4];
+            assert.equal(result.cellIndex, 4, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 9, 1.5, "Coordinates are OK");
+
+            result = results[5];
+            assert.equal(result.cellIndex, 5, "Coordinates are OK");
+            assert.equal(result.rowIndex, 3, "Coordinates are OK");
+            assert.equal(result.top, 72, "Coordinates are OK");
+            assert.roughEqual(result.left, cellWidth * 11, 1.5, "Coordinates are OK");
         }
     });
 });
