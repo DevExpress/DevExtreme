@@ -2209,3 +2209,81 @@ QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key 
     // assert
     assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is focused");
 });
+
+QUnit.testInActiveWindow("If editing in row edit mode and focusedRowEnabled - focusOverlay should render for the editing row", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1,
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    // act
+    this.gridView.component.editRow(1);
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+
+    // assert
+    assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is focused");
+    assert.ok(rowsView.getRow(1).find("td").eq(0).hasClass("dx-focused"), "Cell 0 is focused");
+    assert.ok(rowsView.element().find(".dx-datagrid-focus-overlay").is(":visible"), "Focus overlay present");
+});
+
+QUnit.testInActiveWindow("If editing in cell edit mode and focusedRowEnabled - focusOverlay should render for the editing row", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1,
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    // act
+    this.editCell(1, 1);
+    rowsView = this.gridView.getView("rowsView");
+    $(rowsView.getRow(1).find("td").eq(1)).trigger("dxpointerdown").click();
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is focused");
+    assert.ok(rowsView.getRow(1).find("td").eq(1).hasClass("dx-focused"), "Cell 1 is focused");
+    assert.ok(rowsView.element().find(".dx-datagrid-focus-overlay").is(":visible"), "Focus overlay present");
+});

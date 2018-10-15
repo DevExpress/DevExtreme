@@ -127,10 +127,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             return focusedRowIndex === index;
         },
 
-        _resetFocusedRowKey: function() {
-            this.option("focusedRowKey", undefined);
-        },
-
         updateFocusedRow: function(change) {
             var that = this,
                 focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
@@ -334,11 +330,12 @@ module.exports = {
             editorFactory: {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),
+                        editingController = this.getController("editing"),
                         focusedRowEnabled = this.option("focusedRowEnabled"),
                         isRowElement = keyboardController._getElementType($element) === "row",
                         $cell;
 
-                    if(!focusedRowEnabled || !keyboardController.isRowFocusType()) {
+                    if(!focusedRowEnabled || !keyboardController.isRowFocusType() || editingController.isEditing()) {
                         this.callBase($element, hideBorder);
                     } else if(focusedRowEnabled) {
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
@@ -377,11 +374,8 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var operationTypes,
-                        focusController;
-
-                    operationTypes = this._dataSource.operationTypes();
-                    focusController = this.getController("focus");
+                    var operationTypes = this._dataSource && this._dataSource.operationTypes(),
+                        focusController = this.getController("focus");
 
                     if(e.changeType === "refresh") {
                         var prevPageIndex = this._prevPageIndex,
@@ -389,12 +383,13 @@ module.exports = {
 
                         this._prevPageIndex = this.pageIndex();
 
-                        if(operationTypes.reload) {
+                        if(operationTypes && operationTypes.reload) {
                             var key = this.option("focusedRowKey");
                             if(key !== undefined) {
                                 focusController.navigateToRow();
                             }
                         }
+
                         if(paging) {
                             if(!this.getController("keyboardNavigation")._isVirtualScrolling()) {
                                 focusController._focusRowByIndex();
