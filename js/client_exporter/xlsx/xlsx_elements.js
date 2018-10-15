@@ -97,18 +97,31 @@
 * @hidden
 */
 /**
-* @name XlsxGridCell.value
-* @type any
+* @name XlsxGridCell.rowType
+* @type string
 */
 /**
 * @name XlsxGridCell.column
 * @type dxDataGridColumn
 */
 /**
-* @name XlsxGridCell.rowType
-* @type string
+* @name XlsxGridCell.value
+* @type any
+*/
+
+/**
+* @name XlsxGridCell.row
+* @type object
 */
 /**
-* @name XlsxGridCell.rowData
+* @name XlsxGridCell.row.data
+* @type object
+*/
+/**
+* @name XlsxGridCell.row.key
+* @type any
+*/
+/**
+* @name XlsxGridCell.row.rowType
 * @type string
 */
