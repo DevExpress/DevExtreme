@@ -2,6 +2,7 @@ var $ = require("jquery"),
     DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
     Overlay = require("ui/overlay"),
     devices = require("core/devices"),
+    eventsEngine = require("events/core/events_engine"),
     config = require("core/config"),
     support = require("core/utils/support"),
     fx = require("animation/fx"),
@@ -382,6 +383,23 @@ QUnit.testInActiveWindow("input is focused by click on dropDownButton", function
     $dropDownButton.trigger("dxclick");
 
     assert.ok($dropDownEditor.find("input").is(":focus"), "input focused");
+});
+
+QUnit.test("native focus event should not be triggered if dropdown button clicked on mobile device", function(assert) {
+    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+            focusStateEnabled: false,
+            showDropDownButton: true
+        }),
+        instance = $dropDownEditor.dxDropDownEditor("instance"),
+        focusinHandler = sinon.spy(),
+        $input = $dropDownEditor.find(".dx-texteditor-input"),
+        $dropDownButton = $dropDownEditor.find(".dx-dropdowneditor-button");
+
+    eventsEngine.on($input, "focus focusin", focusinHandler);
+    eventsEngine.trigger($dropDownButton, "dxclick");
+
+    assert.ok(instance.option("opened"), "editor was opened");
+    assert.equal(focusinHandler.callCount, 0, "native focus should not be triggered");
 });
 
 QUnit.test("focusout should not be fired after click on the dropDownButton", function(assert) {
