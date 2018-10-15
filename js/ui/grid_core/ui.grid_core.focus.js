@@ -127,10 +127,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             return focusedRowIndex === index;
         },
 
-        _resetFocusedRowKey: function() {
-            this.option("focusedRowKey", undefined);
-        },
-
         updateFocusedRow: function(change) {
             var that = this,
                 focusedRowIndex = that._dataController.getRowIndexByKey(change.focusedRowKey),
@@ -190,7 +186,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 $rowsViewElement = rowsView.element(),
                 $focusedRow;
 
-            if(!$rowsViewElement) {
+            if(!$rowsViewElement || !this.option("focusedRowEnabled")) {
                 return;
             }
 
@@ -269,11 +265,8 @@ module.exports = {
                     var rowIndex = this.option("focusedRowIndex"),
                         columnIndex = this.option("focusedColumnIndex");
 
-                    if(this.option("focusedRowEnabled")) {
-                        this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
-                        this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
-                    }
-
+                    this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
+                    this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
                     this.createAction("onFocusedCellChanging", { excludeValidators: ["disabled", "readOnly"] });
                     this.createAction("onFocusedCellChanged", { excludeValidators: ["disabled", "readOnly"] });
 
@@ -340,11 +333,12 @@ module.exports = {
             editorFactory: {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),
+                        editingController = this.getController("editing"),
                         focusedRowEnabled = this.option("focusedRowEnabled"),
                         isRowElement = keyboardController._getElementType($element) === "row",
                         $cell;
 
-                    if(!focusedRowEnabled || !keyboardController.isRowFocusType()) {
+                    if(!focusedRowEnabled || !keyboardController.isRowFocusType() || editingController.isEditing()) {
                         this.callBase($element, hideBorder);
                     } else if(focusedRowEnabled) {
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
@@ -383,32 +377,28 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var operationTypes,
-                        focusController;
-
-                    if(this.option("focusedRowEnabled")) {
-                        operationTypes = this._dataSource.operationTypes();
+                    var operationTypes = this._dataSource && this._dataSource.operationTypes(),
                         focusController = this.getController("focus");
 
-                        if(e.changeType === "refresh") {
-                            var prevPageIndex = this._prevPageIndex,
-                                paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
+                    if(e.changeType === "refresh") {
+                        var prevPageIndex = this._prevPageIndex,
+                            paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
 
-                            this._prevPageIndex = this.pageIndex();
+                        this._prevPageIndex = this.pageIndex();
 
-                            if(operationTypes.reload) {
-                                var key = this.option("focusedRowKey");
-                                if(key !== undefined) {
-                                    focusController.navigateToRow();
-                                }
+                        if(operationTypes && operationTypes.reload) {
+                            var key = this.option("focusedRowKey");
+                            if(key !== undefined) {
+                                focusController.navigateToRow();
                             }
-                            if(paging) {
-                                if(!this.getController("keyboardNavigation")._isVirtualScrolling()) {
-                                    focusController._focusRowByIndex();
-                                }
-                            } else {
-                                focusController._handleDataChanged(e);
+                        }
+
+                        if(paging) {
+                            if(!this.getController("keyboardNavigation")._isVirtualScrolling()) {
+                                focusController._focusRowByIndex();
                             }
+                        } else {
+                            focusController._handleDataChanged(e);
                         }
                     }
 
@@ -504,10 +494,12 @@ module.exports = {
         views: {
             rowsView: {
                 _createRow: function(row) {
-                    var $row = this.callBase(row);
+                    var $row = this.callBase(row),
+                        focusController;
 
                     if(this.option("focusedRowEnabled") && row) {
-                        if(this.getController("focus").isRowFocused(row.key, row.rowIndex)) {
+                        focusController = this.getController("focus");
+                        if(focusController.isRowFocused(row.key, row.rowIndex)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
                         }
                     }
@@ -517,9 +509,7 @@ module.exports = {
 
                 _update: function(change) {
                     if(change.changeType === UPDATE_FOCUSED_ROW_CHANGE_TYPE) {
-                        if(this.option("focusedRowEnabled")) {
-                            this.getController("focus").updateFocusedRow(change);
-                        }
+                        this.getController("focus").updateFocusedRow(change);
                     } else {
                         this.callBase(change);
                     }
@@ -527,9 +517,7 @@ module.exports = {
 
                 scrollToPage: function(pageIndex) {
                     this.callBase(pageIndex);
-                    if(this.option("focusedRowEnabled")) {
-                        this.getController("focus")._scrollToFocusedRow();
-                    }
+                    this.getController("focus")._scrollToFocusedRow();
                 },
 
                 _updateFocusElementTabIndex: function($cellElements) {
@@ -551,6 +539,7 @@ module.exports = {
                                 }
                                 this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
                             }
+                            this.getController("focus")._scrollToFocusedRow($row);
                         }
                     } else {
                         that.callBase($cellElements);

@@ -1246,12 +1246,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 cancel: false
             };
 
-        if(this.option("focusedRowEnabled")) {
-            this.executeAction("onFocusedRowChanging", args);
-            if(!args.cancel && args.newRowIndex !== newRowIndex) {
-                this.setFocusedRowIndex(args.newRowIndex);
-                args.rowIndexChanged = true;
-            }
+        this.executeAction("onFocusedRowChanging", args);
+        if(!args.cancel && args.newRowIndex !== newRowIndex) {
+            this.setFocusedRowIndex(args.newRowIndex);
+            args.rowIndexChanged = true;
         }
 
         return args;
@@ -1259,16 +1257,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusedRowChanged: function($rowElement) {
         var that = this,
-            focusedRowKey = that.option("focusedRowKey"),
             focusedRowIndex = that.option("focusedRowIndex");
 
-        if(focusedRowKey && that.option("focusedRowEnabled")) {
-            that.executeAction("onFocusedRowChanged", {
-                rowElement: $rowElement,
-                rowIndex: focusedRowIndex,
-                row: that.getController("data").getVisibleRows()[focusedRowIndex]
-            });
-        }
+        that.executeAction("onFocusedRowChanged", {
+            rowElement: $rowElement,
+            rowIndex: focusedRowIndex,
+            row: that.getController("data").getVisibleRows()[focusedRowIndex]
+        });
     }
 });
 

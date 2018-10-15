@@ -730,8 +730,8 @@
 
         .dx-row-focused.dx-row {
             &.dx-data-row {
-                & > td:not(.dx-focused),
-                & > tr > td:not(.dx-focused),
+                & > td:not(.dx-focused):not(.dx-editor-cell),
+                & > tr > td:not(.dx-focused):not(.dx-editor-cell),
                 & .dx-command-edit .dx-link {
                     background-color: ~"@{@{widgetName}-row-focused-bg}";
                     color: ~"@{@{widgetName}-row-focused-color}";
@@ -741,8 +741,8 @@
                         color: ~"@{@{widgetName}-row-focused-color}";
                     }
                 }
-                & > td,
-                & > tr > td {
+                & > td:not(.dx-editor-cell),
+                & > tr > td:not(.dx-editor-cell) {
                     border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                 }
