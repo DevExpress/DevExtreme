@@ -7,8 +7,9 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
     BUTTON_CLASS = "dx-button",
     DX_ITEM_SELECTED_CLASS = "dx-item-selected",
-    DX_BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
-    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item";
+    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
+    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
 
 QUnit.testStart(() => {
     const markup = `
@@ -58,8 +59,10 @@ QUnit.module("default", {
         assert.equal($wrapper.length, 1, "button group wrapper elements count");
         assert.ok($wrapper.eq(0).hasClass(BUTTON_GROUP_WRAPPER_CLASS), "css class for button collection");
 
-        const $buttons = $(`.${BUTTON_GROUP_WRAPPER_CLASS} .${DX_BUTTON_GROUP_ITEM_CLASS}.${BUTTON_CLASS}`);
-        assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_FIRST_ITEM_CLASS), "first item has css class");
+        const $buttons = $(`.${BUTTON_GROUP_WRAPPER_CLASS} .${BUTTON_GROUP_ITEM_CLASS}.${BUTTON_CLASS}`);
+        assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_FIRST_ITEM_CLASS), "first item has css class when item is first");
+        assert.notOk($buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item has no css class when width of ButtonGroup is undefined");
+        assert.notOk($buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item has no css class when width of ButtonGroup is undefined");
         assert.equal($buttons.length, 2, "buttons count");
     });
 
@@ -127,7 +130,7 @@ QUnit.module("default", {
             }]
         });
 
-        const $button = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS}`).first();
+        const $button = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`).first();
         const button = $button.dxButton("instance");
 
         assert.equal(button.option("text"), "item 1", "text");
@@ -146,9 +149,21 @@ QUnit.module("default", {
             }
         });
 
-        const $templates = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS} .custom-template`);
+        const $templates = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS} .custom-template`);
         assert.equal($templates.eq(0).text(), "item 1_0", "text of first template");
         assert.equal($templates.eq(1).text(), "item 2_1", "text of second template");
+    });
+
+    QUnit.test("add css class when the width is defined", function(assert) {
+        const $buttonGroup = $("#widget").dxButtonGroup({
+            items: [{ text: "item 1" }, { text: "item 2" }],
+            width: 500
+        });
+
+        const $buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+
+        assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
+        assert.ok($buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
     });
 });
 
@@ -159,7 +174,7 @@ QUnit.module("selection", () => {
             selectedItems: [{ text: "item 2" }]
         });
 
-        const $items = $(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
+        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
@@ -172,7 +187,7 @@ QUnit.module("selection", () => {
             selectedItems: [{ text: "item 1" }, { text: "item 2" }]
         });
 
-        const $items = $(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
+        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.ok($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
@@ -185,7 +200,7 @@ QUnit.module("selection", () => {
             selectedItemKeys: ["right"]
         });
 
-        const $items = $buttonGroup.find(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
+        const $items = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));
@@ -199,7 +214,7 @@ QUnit.module("selection", () => {
             selectedItemKeys: ["left", "right"]
         });
 
-        const $items = $(`.${DX_BUTTON_GROUP_ITEM_CLASS}`);
+        const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.ok($items.eq(0).hasClass(DX_ITEM_SELECTED_CLASS));
         assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS));

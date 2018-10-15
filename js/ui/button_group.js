@@ -4,12 +4,14 @@ import Button from "./button";
 import CollectionWidget from "./collection/ui.collection_widget.edit";
 import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
+import { isDefined } from "../core/utils/type";
 import BindableTemplate from "./widget/bindable_template";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
-    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item";
+    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
 
 var ButtonCollection = CollectionWidget.inherit({
     _renderItemContent(options) {
@@ -117,6 +119,14 @@ const ButtonGroup = Widget.inherit({
         });
     },
 
+    _prepareItemStyles($item) {
+        const itemIndex = $item.data("dxItemIndex");
+        itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
+
+        const width = this.option("width");
+        isDefined(width) && $item.addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+    },
+
     _initTemplates() {
         this.callBase();
 
@@ -143,8 +153,7 @@ const ButtonGroup = Widget.inherit({
          * @hidden
          */
         this._defaultTemplates["item"] = new BindableTemplate((($container, data) => {
-            const itemIndex = $container.data("dxItemIndex");
-            itemIndex === 0 && $container.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
+            this._prepareItemStyles($container);
             this._createComponent($container, Button, extend({}, data, this._getBasicButtonOptions()));
         }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
     },
@@ -233,6 +242,11 @@ const ButtonGroup = Widget.inherit({
                 this._buttonsCollection.option(args.name, args.value);
                 break;
             case "onSelectionChanged":
+                break;
+            case "width":
+                this.callBase(args);
+                const $items = this.$element().find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+                $items.toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
                 break;
             default:
                 this.callBase(args);
