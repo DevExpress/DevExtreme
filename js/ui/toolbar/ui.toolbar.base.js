@@ -139,6 +139,15 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         this.setAria("role", "toolbar");
     },
 
+    _render: function() {
+        this.callBase();
+        this._renderItemsAsync();
+    },
+
+    _postProcessRenderItems: function() {
+        this._arrangeItems();
+    },
+
     _renderToolbar: function() {
         this.$element()
             .addClass(TOOLBAR_CLASS)

@@ -1,5 +1,6 @@
 import CollectionWidgetEdit from "./ui.collection_widget.edit";
 import { Deferred, when } from "../../core/utils/deferred";
+import { noop } from "../../core/utils/common";
 
 let AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     _initMarkup() {
@@ -33,9 +34,12 @@ let AsyncCollectionWidget = CollectionWidgetEdit.inherit({
         });
     },
 
+    _postProcessRenderItems: noop,
+
     _renderItemsAsync() {
         let d = new Deferred();
         when.apply(this, this._deferredItems).done(() => {
+            this._postProcessRenderItems();
             d.resolve();
         });
         return d.promise();
