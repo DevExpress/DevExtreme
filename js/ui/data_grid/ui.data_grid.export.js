@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     arrayUtils = require("../../core/utils/array"),
     dataGridCore = require("./ui.data_grid.core"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
     clientExporter = require("../../client_exporter"),
     messageLocalization = require("../../localization/message"),
@@ -261,8 +260,6 @@ exports.DataProvider = Class.inherit({
                             rowType: item.rowType,
                         };
                         result.cellSourceData.value = itemValues[correctedCellIndex];
-                        result.cellSourceData.displayValue = value;
-                        result.cellSourceData.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
                 }
             }
         }
