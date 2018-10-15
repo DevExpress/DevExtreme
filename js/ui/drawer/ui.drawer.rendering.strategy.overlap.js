@@ -35,7 +35,6 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     getOverlayPosition() {
-        debugger;
         let panelPosition = this._drawer.getDrawerPosition(),
             result = {};
 
