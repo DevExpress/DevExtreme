@@ -12,6 +12,7 @@ import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import clickEvent from "../../events/click";
+import fx from "../../animation/fx";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -211,7 +212,7 @@ const Drawer = Widget.inherit({
         }
 
         if(closeOnOutsideClick && this.option("opened")) {
-            this._strategy._stopAnimations();
+            this.stopAnimations();
 
             if(this.option("shading")) {
                 e.preventDefault();
@@ -378,6 +379,15 @@ const Drawer = Widget.inherit({
 
     isHorizontalDirection() {
         return this.option("position") === "left" || this.option("position") === "right";
+    },
+
+    stopAnimations() {
+        fx.stop(this._$shader);
+        fx.stop($(this.content()));
+        fx.stop($(this.viewContent()));
+
+        const overlay = this.getOverlay();
+        overlay && fx.stop($(overlay.$content()));
     },
 
     _isInvertedPosition() {

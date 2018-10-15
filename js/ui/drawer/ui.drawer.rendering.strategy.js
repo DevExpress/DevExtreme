@@ -102,7 +102,7 @@ class DrawerStrategy {
     }
 
     renderPosition(offset, animate) {
-        this._stopAnimations();
+        this.getDrawerInstance().stopAnimations();
 
         this._drawer._animations.push(new Promise((resolve) => {
             this._contentAnimationResolve = resolve;
@@ -119,15 +119,6 @@ class DrawerStrategy {
                 this._drawer._animationCompleteHandler();
             });
         }
-    }
-
-    _stopAnimations() {
-        fx.stop(this._drawer._$shader);
-        fx.stop($(this._drawer.content()));
-        fx.stop($(this._drawer.viewContent()));
-
-        const overlay = this._drawer.getOverlay();
-        overlay && fx.stop($(overlay.$content()));
     }
 
     _getPanelOffset(offset) {
@@ -175,7 +166,7 @@ class DrawerStrategy {
     }
 
     getPanelContent() {
-        return this.getDrawerInstance().content();
+        return $(this.getDrawerInstance().content());
     }
 
     getWidth() {
