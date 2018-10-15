@@ -20,13 +20,5 @@ module.exports = {
         }
 
         delete this._asyncTemplatesTimers;
-    },
-
-    _renderAsyncTemplate(template, args) {
-        const result = template && template.render(args);
-        if(!this._options.templatesRenderAsynchronously) {
-            args.onRendered && args.onRendered.call(this);
-        }
-        return result;
     }
 };

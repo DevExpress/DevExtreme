@@ -210,11 +210,14 @@ var Toolbar = ToolbarBase.inherit({
         this._renderMenu();
     },
 
-    _renderAsync: function() {
-        this._hideOverflowItems();
-        this._menuStrategy._updateMenuVisibility();
+    _render: function() {
         this.callBase();
-        this._menuStrategy.renderMenuItems();
+        this._renderItemsAsync().done(function() {
+            this._hideOverflowItems();
+            this._menuStrategy._updateMenuVisibility();
+            this._arrangeItems();
+            this._menuStrategy.renderMenuItems();
+        }.bind(this));
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
