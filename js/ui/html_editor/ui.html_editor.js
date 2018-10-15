@@ -16,6 +16,8 @@ import FormDialog from "./ui/formDialog";
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 
+const MARKDOWN_VALUE_TYPE = "markdown";
+
 const ANONYMOUS_TEMPLATE_NAME = "content";
 
 const HtmlEditor = Editor.inherit({
@@ -50,9 +52,9 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorOptions.valueType
             * @type Enums.HtmlEditorValueType
-            * @default "HTML"
+            * @default "html"
             */
-            valueType: "HTML",
+            valueType: "html",
             /**
             * @name dxHtmlEditorOptions.placeholder
             * @type string
@@ -66,11 +68,11 @@ const HtmlEditor = Editor.inherit({
             */
             toolbar: null,
             /**
-            * @name dxHtmlEditorOptions.dataPlaceholder
-            * @type dxHtmlEditorDataPlaceholder
+            * @name dxHtmlEditorOptions.variables
+            * @type dxHtmlEditorVariables
             * @default null
             */
-            dataPlaceholder: null,
+            variables: null,
 
             formDialogOptions: null
 
@@ -92,37 +94,27 @@ const HtmlEditor = Editor.inherit({
             * @inherits dxToolbarItemTemplate
             */
             /**
-            * @name dxHtmlEditorToolbarItem.format
+            * @name dxHtmlEditorToolbarItem.formatName
             * @type string
             */
             /**
-            * @name dxHtmlEditorToolbarItem.values
+            * @name dxHtmlEditorToolbarItem.formatValues
             * @type Array<string,number,boolean>
             */
 
             /**
-            * @name dxHtmlEditorDataPlaceholder
+            * @name dxHtmlEditorVariables
             * @type object
             */
             /**
-            * @name dxHtmlEditorDataPlaceholder.dataSource
+            * @name dxHtmlEditorVariables.dataSource
             * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
-            * @name dxHtmlEditorDataPlaceholder.escapedChar
-            * @type string
+            * @name dxHtmlEditorVariables.escapeChar
+            * @type string|Array<string>
             * @default ""
-            */
-            /**
-            * @name dxHtmlEditorDataPlaceholder.startEscapedChar
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxHtmlEditorDataPlaceholder.endEscapedChar
-            * @type string
-            * @default undefined
             */
         });
     },
@@ -145,7 +137,7 @@ const HtmlEditor = Editor.inherit({
             }
         }
 
-        if(this.option("valueType") === "Markdown" && !this._markdownConverter) {
+        if(this.option("valueType") === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
             const MarkdownConverter = ConverterController.getConverter("markdown");
 
             if(MarkdownConverter) {
@@ -222,7 +214,7 @@ const HtmlEditor = Editor.inherit({
         const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
         let modulesConfig = {
             toolbar: this._getModuleConfigByOption("toolbar"),
-            placeholder: this._getModuleConfigByOption("dataPlaceholder"),
+            variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
             clipboard: {
                 matchers: [
@@ -256,7 +248,7 @@ const HtmlEditor = Editor.inherit({
 
         this._isEditorUpdating = true;
 
-        const value = this._isMarkdownValue() ? this._updateValueByType("Markdown", htmlMarkup) : htmlMarkup;
+        const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
         this.option("value", value);
     },
@@ -270,11 +262,11 @@ const HtmlEditor = Editor.inherit({
 
         const currentValue = value || this.option("value");
 
-        return valueType === "Markdown" ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
+        return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
     },
 
     _isMarkdownValue: function() {
-        return this.option("valueType") === "Markdown";
+        return this.option("valueType") === MARKDOWN_VALUE_TYPE;
     },
 
     _resetEnabledState: function() {
@@ -314,7 +306,7 @@ const HtmlEditor = Editor.inherit({
                 this.callBase(args);
                 break;
             case "placeholder":
-            case "dataPlaceholder":
+            case "variables":
             case "toolbar":
                 this._invalidate();
                 break;
@@ -507,12 +499,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     /**
-    * @name dxHtmlEditorMethods.deleteContent
-    * @publicName deleteContent(index, length)
+    * @name dxHtmlEditorMethods.delete
+    * @publicName delete(index, length)
     * @param1 index:number
     * @param2 length:number
     */
-    deleteContent: function(index, length) {
+    delete: function(index, length) {
         this._applyQuillMethod("deleteText", arguments);
     },
 

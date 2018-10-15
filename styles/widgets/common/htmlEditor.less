@@ -81,6 +81,16 @@
     white-space: pre-wrap;
     word-wrap: break-word;
 
+    .dx-variable {
+        background: lightgray;
+        padding: 3px 0;
+        .border-radius(8px);
+    
+        & > span {
+            margin: 0 3px;   
+        }
+    }
+
     > * {
         cursor: text;
     }
@@ -201,16 +211,6 @@
 .dx-suggestion-list {
     .dx-list-item {
         display: block;
-    }
-}
-
-.dx-data-placeholder {
-    background: lightgray;
-    padding: 3px 0;
-    .border-radius(8px);
-
-    & > span {
-        margin: 0 3px;   
     }
 }
 

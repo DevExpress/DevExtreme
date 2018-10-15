@@ -2804,17 +2804,17 @@ declare module DevExpress.ui {
         imageSrc?: string;
     }
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
-        dataPlaceholder?: dxHtmlEditorDataPlaceholder;
+        variables?: dxHtmlEditorVariables;
         placeholder?: string;
         toolbar?: dxHtmlEditorToolbar;
-        valueType?: 'HTML' | 'Markdown';
+        valueType?: 'html' | 'markdown';
     }
     /** A base class for editors. */
     export class dxHtmlEditor extends Editor {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
         clearHistory(): void;
-        deleteContent(index: number, length: number): void;
+        delete(index: number, length: number): void;
         format(name: string, value: any): void;
         formatLine(index: number, length: number, formatName: string, formatValue: any): void;
         formatLine(index: number, length: number, formats: any): void;
@@ -5239,11 +5239,9 @@ declare module DevExpress.ui {
         format?: string;
         values?: Array<string | number | boolean>;
     }
-    export interface dxHtmlEditorDataPlaceholder {
+    export interface dxHtmlEditorVariables {
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        endEscapedChar?: string;
-        escapedChar?: string;
-        startEscapedChar?: string;
+        escapeChar?: string | Array<string>;
     }
     /** This section lists the data source fields that are used in a default template for list items. */
     export interface dxListItemTemplate extends CollectionWidgetItemTemplate {

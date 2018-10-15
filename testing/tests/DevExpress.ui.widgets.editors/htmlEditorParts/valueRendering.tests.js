@@ -54,10 +54,10 @@ QUnit.module("Value as HTML markup", () => {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
-                valueType: "Markdown",
+                valueType: "markdown",
                 value: "Hi! **Test.**",
                 onValueChanged: (e) => {
-                    if(e.component.option("valueType") === "HTML") {
+                    if(e.component.option("valueType") === "html") {
                         assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
                         done();
                     }
@@ -65,7 +65,7 @@ QUnit.module("Value as HTML markup", () => {
             })
             .dxHtmlEditor("instance");
 
-        instance.option("valueType", "HTML");
+        instance.option("valueType", "html");
     });
 });
 
@@ -74,7 +74,7 @@ QUnit.module("Value as Markdown markup", () => {
     test("render default value", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "Hi!\nIt's a **test**!",
-                valueType: "Markdown"
+                valueType: "markdown"
             }).dxHtmlEditor("instance"),
             $element = instance.$element(),
             markup = $element.find(getSelector(CONTENT_CLASS)).html();
@@ -87,7 +87,7 @@ QUnit.module("Value as Markdown markup", () => {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
-                valueType: "Markdown",
+                valueType: "markdown",
                 onValueChanged: (e) => {
                     assert.equal(e.value, "Hi! **Test.**");
                     done();
@@ -107,7 +107,7 @@ QUnit.module("Value as Markdown markup", () => {
             .dxHtmlEditor({
                 value: "<p>Hi! <strong>Test.</strong></p>",
                 onValueChanged: (e) => {
-                    if(e.component.option("valueType") === "Markdown") {
+                    if(e.component.option("valueType") === "markdown") {
                         assert.equal(e.value, "Hi! **Test.**");
                         done();
                     }
@@ -115,6 +115,6 @@ QUnit.module("Value as Markdown markup", () => {
             })
             .dxHtmlEditor("instance");
 
-        instance.option("valueType", "Markdown");
+        instance.option("valueType", "markdown");
     });
 });
