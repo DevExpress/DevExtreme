@@ -76,6 +76,18 @@ class ToolbarModule extends BaseModule {
             },
             bulletList: () => {
                 this.quill.format("list", "bullet", USER_ACTION);
+            },
+            alignLeft: () => {
+                this.quill.format("align", false, USER_ACTION);
+            },
+            alignCenter: () => {
+                this.quill.format("align", "center", USER_ACTION);
+            },
+            alignRight: () => {
+                this.quill.format("align", "right", USER_ACTION);
+            },
+            alignJustify: () => {
+                this.quill.format("align", "justify", USER_ACTION);
             }
         };
     }
@@ -203,11 +215,12 @@ class ToolbarModule extends BaseModule {
     }
 
     _prepareButtonItemConfig(formatName) {
+        const iconName = formatName === "clear" ? "clearformat" : formatName;
         return {
             widget: "dxButton",
             formatName: formatName,
             options: {
-                text: formatName,
+                icon: iconName.toLowerCase(),
                 onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName)
             }
         };
@@ -249,7 +262,7 @@ class ToolbarModule extends BaseModule {
             options: {
                 onInitialized: (e) => {
                     e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                    e.component.$element().toggleClass(`dx-${item.format}-format`, !!item.formatName);
+                    e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
                     this._formats[item.formatName] = e.component;
                 }
             }

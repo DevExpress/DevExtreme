@@ -104,9 +104,13 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         this.options.items = ["bold"];
         new Toolbar(this.quillMock, this.options);
 
+        const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
         assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
         assert.ok(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar render inside the root element");
-        assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 1, "There is one format widget");
+        assert.equal($formatWidget.length, 1, "There is one format widget");
+        assert.ok($formatWidget.hasClass("dx-bold-format"), "It's the bold format");
+        assert.equal($formatWidget.find(".dx-icon-bold").length, 1, "It has a bold icon");
     });
 
     test("Render toolbar on custom container", (assert) => {
@@ -151,6 +155,34 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 
         assert.deepEqual(this.log[0], { format: "bold", value: true });
         assert.ok(isHandlerTriggered, "Custom handler triggered");
+    });
+
+    test("handle align formatting", (assert) => {
+        this.options.items = ["alignLeft", "alignCenter", "alignRight", "alignJustify"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
+        $formatWidgets.each((index, element) => {
+            $(element).trigger("dxclick");
+        });
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "align",
+                value: false
+            }, {
+                format: "align",
+                value: "center"
+            }, {
+                format: "align",
+                value: "right"
+            }, {
+                format: "align",
+                value: "justify"
+            }]);
     });
 
     test("Render toolbar with enum format", (assert) => {
