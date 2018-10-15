@@ -15,7 +15,7 @@ import "./htmlEditorParts/valueRendering.tests.js";
 import "./htmlEditorParts/toolbarModule.tests.js";
 import "./htmlEditorParts/dropImageModule.tests.js";
 import "./htmlEditorParts/popoverModule.tests.js";
-import "./htmlEditorParts/placeholderModule.tests.js";
+import "./htmlEditorParts/variablesModule.tests.js";
 import "./htmlEditorParts/api.tests.js";
 import "./htmlEditorParts/formDialog.tests.js";
 import "./htmlEditorParts/paste.tests.js";

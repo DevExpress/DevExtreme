@@ -184,7 +184,7 @@ class ToolbarModule extends BaseModule {
         each(this.options.items, (index, item) => {
             let newItem;
             if(isObject(item)) {
-                if(item.values && !item.widget) {
+                if(item.formatValues && !item.widget) {
                     const selectItemConfig = this._prepareSelectItemConfig(item);
                     newItem = this._getToolbarItem(selectItemConfig);
                 } else {
@@ -205,7 +205,7 @@ class ToolbarModule extends BaseModule {
     _prepareButtonItemConfig(formatName) {
         return {
             widget: "dxButton",
-            format: formatName,
+            formatName: formatName,
             options: {
                 text: formatName,
                 onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName)
@@ -216,12 +216,12 @@ class ToolbarModule extends BaseModule {
     _prepareSelectItemConfig(item) {
         return {
             widget: "dxSelectBox",
-            format: item.format,
+            formatName: item.formatName,
             options: {
-                dataSource: item.values,
+                dataSource: item.formatValues,
                 onValueChanged: (e) => {
                     if(!this._isReset) {
-                        this.quill.format(item.format, e.value, USER_ACTION);
+                        this.quill.format(item.formatName, e.value, USER_ACTION);
                     }
                 }
             }
@@ -249,13 +249,13 @@ class ToolbarModule extends BaseModule {
             options: {
                 onInitialized: (e) => {
                     e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                    e.component.$element().toggleClass(`dx-${item.format}-format`, !!item.format);
-                    this._formats[item.format] = e.component;
+                    e.component.$element().toggleClass(`dx-${item.format}-format`, !!item.formatName);
+                    this._formats[item.formatName] = e.component;
                 }
             }
         };
 
-        return extend(true, { location: "before" }, this._getDefaultConfig(item.format), item, baseItem);
+        return extend(true, { location: "before" }, this._getDefaultConfig(item.formatName), item, baseItem);
     }
 
     _getDefaultItemsConfig() {
@@ -271,8 +271,8 @@ class ToolbarModule extends BaseModule {
         };
     }
 
-    _getDefaultConfig(format) {
-        return this._getDefaultItemsConfig()[format];
+    _getDefaultConfig(formatName) {
+        return this._getDefaultItemsConfig()[formatName];
     }
 
     updateFormatWidgets() {

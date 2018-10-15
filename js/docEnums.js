@@ -917,7 +917,7 @@
 
  /**
  * @typedef {string} Enums.HtmlEditorValueType
- * @enum {'HTML'|'Markdown'}
+ * @enum {'html'|'markdown'}
  */
 
  /**
