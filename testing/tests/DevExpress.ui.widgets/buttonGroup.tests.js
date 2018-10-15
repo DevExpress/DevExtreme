@@ -117,7 +117,7 @@ QUnit.module("option changed", {
         const buttonsSelector = `.${BUTTON_CLASS}`;
         let buttons = $(buttonsSelector);
 
-        assert.equal(this.$buttonGroup.get(0).style.width, "500px", "button group width");
+        assert.equal(this.$buttonGroup.width(), 500, "button group width");
         assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has width");
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
     });
