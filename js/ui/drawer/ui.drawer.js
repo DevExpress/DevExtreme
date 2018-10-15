@@ -12,6 +12,7 @@ import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import clickEvent from "../../events/click";
+import fx from "../../animation/fx";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -211,7 +212,7 @@ const Drawer = Widget.inherit({
         }
 
         if(closeOnOutsideClick && this.option("opened")) {
-            this._strategy._stopAnimations();
+            this.stopAnimations();
 
             if(this.option("shading")) {
                 e.preventDefault();
@@ -312,7 +313,7 @@ const Drawer = Widget.inherit({
     },
 
     _initSize() {
-        const realPanelSize = this._isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
+        const realPanelSize = this.isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
 
         this._maxSize = this.option("maxSize") || realPanelSize;
         this._minSize = this.option("minSize") || 0;
@@ -358,15 +359,34 @@ const Drawer = Widget.inherit({
         return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
-    _isInvertedPosition() {
-        const invertedPosition = this.option("position") === "right" || this.option("position") === "bottom";
-        const rtl = this.option("rtlEnabled");
+    getDrawerPosition() {
+        let resultPosition = this.option("position");
+        let rtl = this.option("rtlEnabled");
 
-        return (rtl && !invertedPosition) || (!rtl && invertedPosition);
+        if(this.isHorizontalDirection() && rtl) {
+            return resultPosition === "right" ? "left" : "right";
+        }
+
+        return resultPosition;
     },
 
-    _isHorizontalDirection() {
+    isHorizontalDirection() {
         return this.option("position") === "left" || this.option("position") === "right";
+    },
+
+    stopAnimations() {
+        fx.stop(this._$shader);
+        fx.stop($(this.content()));
+        fx.stop($(this.viewContent()));
+
+        const overlay = this.getOverlay();
+        overlay && fx.stop($(overlay.$content()));
+    },
+
+    _isInvertedPosition() {
+        const position = this.getDrawerPosition();
+
+        return position === "right" || position === "bottom";
     },
 
     _renderPosition(offset, animate) {
