@@ -13,13 +13,13 @@
 */
 
 /**
-* @name XlsxCell.style
-* @type object
+* @name XlsxCell.numberFormat
+* @type string
 */
 
 /**
-* @name XlsxCell.style.numberFormat
-* @type string
+* @name XlsxCell.style
+* @type object
 */
 
 /**
