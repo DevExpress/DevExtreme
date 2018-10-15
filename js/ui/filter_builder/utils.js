@@ -395,13 +395,13 @@ function getFilterExpression(value, fields, customOperations, target) {
         return null;
     }
 
-    var criteria = getGroupCriteria(value);
+    var criteria = getGroupCriteria(value),
+        result = [];
 
     if(isCondition(criteria)) {
-        return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
+        result = getConditionFilterExpression(criteria, fields, customOperations, target) || null;
     } else {
-        var result = [],
-            filterExpression,
+        var filterExpression,
             groupValue = getGroupValue(criteria);
         for(var i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
@@ -418,8 +418,9 @@ function getFilterExpression(value, fields, customOperations, target) {
                 }
             }
         }
-        return result.length ? result : null;
+        result = result.length ? result : null;
     }
+    return result && isNegationGroup(value) ? ["!", result] : result;
 }
 
 function getNormalizedFilter(group) {
