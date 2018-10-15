@@ -107,6 +107,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                         focusedRowIndex += dataController.getRowIndexOffset();
                     }
                     keyboardController.setFocusedRowIndex(focusedRowIndex);
+                    this._triggerUpdateFocusedRow(focusedRowKey);
                 } else {
                     this.navigateToRow(focusedRowKey);
                 }
