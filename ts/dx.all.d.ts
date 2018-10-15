@@ -2804,7 +2804,7 @@ declare module DevExpress.ui {
         imageSrc?: string;
     }
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
-        dataPlaceholder?: dxHtmlEditorDataPlaceholder;
+        variables?: dxHtmlEditorVariables;
         placeholder?: string;
         toolbar?: dxHtmlEditorToolbar;
         valueType?: 'html' | 'markdown';
@@ -5239,7 +5239,7 @@ declare module DevExpress.ui {
         format?: string;
         values?: Array<string | number | boolean>;
     }
-    export interface dxHtmlEditorDataPlaceholder {
+    export interface dxHtmlEditorVariables {
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         escapeChar?: string | Array<string>;
     }

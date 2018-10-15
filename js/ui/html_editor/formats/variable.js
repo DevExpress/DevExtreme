@@ -5,9 +5,9 @@ import { extend } from "../../../core/utils/extend";
 const quill = getQuill();
 const Embed = quill.import("blots/embed");
 
-const PLACEHOLDER_CLASS = "dx-data-placeholder";
+const VARIABLE_CLASS = "dx-variable";
 
-class Placeholder extends Embed {
+class Variable extends Embed {
     static create(data) {
         let node = super.create(),
             startEscapeChar,
@@ -22,26 +22,26 @@ class Placeholder extends Embed {
         }
 
         node.innerText = startEscapeChar + text + endEscapeChar;
-        node.dataset.placeholderStartEscChar = startEscapeChar;
-        node.dataset.placeholderEndEscChar = endEscapeChar;
-        node.dataset.placeholderValue = data.value;
+        node.dataset.varStartEscChar = startEscapeChar;
+        node.dataset.varEndEscChar = endEscapeChar;
+        node.dataset.varValue = data.value;
 
         return node;
     }
 
     static value(node) {
         return extend({}, {
-            value: node.dataset.placeholderValue,
+            value: node.dataset.varValue,
             escapeChar: [
-                node.dataset.placeholderStartEscChar || "",
-                node.dataset.placeholderEndEscChar || ""
+                node.dataset.varStartEscChar || "",
+                node.dataset.varEndEscChar || ""
             ]
         });
     }
 }
 
-Placeholder.blotName = "placeholder";
-Placeholder.tagName = "span";
-Placeholder.className = PLACEHOLDER_CLASS;
+Variable.blotName = "variable";
+Variable.tagName = "span";
+Variable.className = VARIABLE_CLASS;
 
-module.exports = Placeholder;
+module.exports = Variable;

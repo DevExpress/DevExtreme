@@ -13,7 +13,7 @@ class QuillRegistrator {
         const Link = require("./formats/link");
         const Toolbar = require("./modules/toolbar");
         const DropImage = require("./modules/dropImage");
-        const Placeholder = require("./modules/placeholder");
+        const Variables = require("./modules/variables");
 
         const DirectionStyle = quill.import("attributors/style/direction");
         const AlignStyle = quill.import("attributors/style/align");
@@ -32,7 +32,7 @@ class QuillRegistrator {
 
             "modules/toolbar": Toolbar,
             "modules/dropImage": DropImage,
-            "modules/placeholder": Placeholder,
+            "modules/variables": Variables,
 
             "themes/basic": BaseTheme
         },

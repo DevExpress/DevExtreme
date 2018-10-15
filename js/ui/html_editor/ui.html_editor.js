@@ -68,11 +68,11 @@ const HtmlEditor = Editor.inherit({
             */
             toolbar: null,
             /**
-            * @name dxHtmlEditorOptions.dataPlaceholder
-            * @type dxHtmlEditorDataPlaceholder
+            * @name dxHtmlEditorOptions.variables
+            * @type dxHtmlEditorVariables
             * @default null
             */
-            dataPlaceholder: null,
+            variables: null,
 
             formDialogOptions: null
 
@@ -103,26 +103,26 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorDataPlaceholder
+            * @name dxHtmlEditorVariables
             * @type object
             */
             /**
-            * @name dxHtmlEditorDataPlaceholder.dataSource
+            * @name dxHtmlEditorVariables.dataSource
             * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
-            * @name dxHtmlEditorDataPlaceholder.escapeChar
+            * @name dxHtmlEditorVariables.escapeChar
             * @type string|Array<string>
             * @default ""
             */
             /**
-            * @name dxHtmlEditorDataPlaceholder.startEscapedChar
+            * @name dxHtmlEditorVariables.startEscapedChar
             * @type string
             * @default undefined
             */
             /**
-            * @name dxHtmlEditorDataPlaceholder.endEscapedChar
+            * @name dxHtmlEditorVariables.endEscapedChar
             * @type string
             * @default undefined
             */
@@ -224,7 +224,7 @@ const HtmlEditor = Editor.inherit({
         const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
         let modulesConfig = {
             toolbar: this._getModuleConfigByOption("toolbar"),
-            placeholder: this._getModuleConfigByOption("dataPlaceholder"),
+            variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
             clipboard: {
                 matchers: [
@@ -316,7 +316,7 @@ const HtmlEditor = Editor.inherit({
                 this.callBase(args);
                 break;
             case "placeholder":
-            case "dataPlaceholder":
+            case "variables":
             case "toolbar":
                 this._invalidate();
                 break;

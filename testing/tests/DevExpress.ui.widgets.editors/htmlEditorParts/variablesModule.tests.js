@@ -1,7 +1,7 @@
 import $ from "jquery";
 
-import PlaceholderFormat from "ui/html_editor/formats/placeholder";
-import DataPlaceholder from "ui/html_editor/modules/placeholder";
+import VariableFormat from "ui/html_editor/formats/variable";
+import Variables from "ui/html_editor/modules/variables";
 import { noop } from "core/utils/common";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
@@ -50,17 +50,17 @@ const moduleConfig = {
 
 const { test } = QUnit;
 
-QUnit.module("Placeholder format", () => {
+QUnit.module("Variable format", () => {
     test("Create an element by data", (assert) => {
         const data = {
             value: "TEST_NAME",
             escapeChar: "@"
         };
-        const element = PlaceholderFormat.create(data);
+        const element = VariableFormat.create(data);
 
-        assert.equal(element.dataset.placeholderStartEscChar, "@", "correct start escape char");
-        assert.equal(element.dataset.placeholderEndEscChar, "@", "correct end escape char");
-        assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
+        assert.equal(element.dataset.varStartEscChar, "@", "correct start escape char");
+        assert.equal(element.dataset.varEndEscChar, "@", "correct end escape char");
+        assert.equal(element.dataset.varValue, "TEST_NAME", "correct inner text");
         assert.equal(element.innerText, "@TEST_NAME@", "correct inner text");
     });
 
@@ -69,11 +69,11 @@ QUnit.module("Placeholder format", () => {
             value: "TEST_NAME",
             escapeChar: ""
         };
-        const element = PlaceholderFormat.create(data);
+        const element = VariableFormat.create(data);
 
-        assert.equal(element.dataset.placeholderStartEscChar, "", "correct start escape char");
-        assert.equal(element.dataset.placeholderEndEscChar, "", "correct end escape char");
-        assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
+        assert.equal(element.dataset.varStartEscChar, "", "correct start escape char");
+        assert.equal(element.dataset.varEndEscChar, "", "correct end escape char");
+        assert.equal(element.dataset.varValue, "TEST_NAME", "correct inner text");
         assert.equal(element.innerText, "TEST_NAME", "correct inner text");
     });
 
@@ -82,11 +82,11 @@ QUnit.module("Placeholder format", () => {
             value: "TEST_NAME",
             escapeChar: ["{", ""],
         };
-        const element = PlaceholderFormat.create(data);
+        const element = VariableFormat.create(data);
 
-        assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.equal(element.dataset.placeholderStartEscChar, "{", "There is no start char");
-        assert.notOk(element.dataset.placeholderEndEscChar, "There is no end char");
+        assert.equal(element.dataset.varValue, "TEST_NAME", "correct inner text");
+        assert.equal(element.dataset.varStartEscChar, "{", "There is no start char");
+        assert.notOk(element.dataset.varEndEscChar, "There is no end char");
         assert.equal(element.innerText, "{TEST_NAME", "correct inner text");
     });
 
@@ -95,11 +95,11 @@ QUnit.module("Placeholder format", () => {
             value: "TEST_NAME",
             escapeChar: ["", "}"],
         };
-        const element = PlaceholderFormat.create(data);
+        const element = VariableFormat.create(data);
 
-        assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.notOk(element.dataset.placeholderStartEscChar, "There is no start char");
-        assert.equal(element.dataset.placeholderEndEscChar, "}", "There is no end char");
+        assert.equal(element.dataset.varValue, "TEST_NAME", "correct inner text");
+        assert.notOk(element.dataset.varStartEscChar, "There is no start char");
+        assert.equal(element.dataset.varEndEscChar, "}", "There is no end char");
         assert.equal(element.innerText, "TEST_NAME}", "correct inner text");
     });
 
@@ -108,35 +108,35 @@ QUnit.module("Placeholder format", () => {
             value: "TEST_NAME",
             escapeChar: ["{", "}"]
         };
-        const element = PlaceholderFormat.create(data);
+        const element = VariableFormat.create(data);
 
-        assert.equal(element.dataset.placeholderValue, "TEST_NAME", "correct inner text");
-        assert.equal(element.dataset.placeholderStartEscChar, "{", "There is no start char");
-        assert.equal(element.dataset.placeholderEndEscChar, "}", "There is no end char");
+        assert.equal(element.dataset.varValue, "TEST_NAME", "correct inner text");
+        assert.equal(element.dataset.varStartEscChar, "{", "There is no start char");
+        assert.equal(element.dataset.varEndEscChar, "}", "There is no end char");
         assert.equal(element.innerText, "{TEST_NAME}", "correct inner text");
     });
 
     test("Get data from element", (assert) => {
-        const markup = "<span class='dx-data-placeholder' data-placeholder-start-esc-char=## data-placeholder-value=TEST_NAME><span>##TEST_NAME##</span></span>";
+        const markup = "<span class='dx-variable' data-var-start-esc-char=## data-var-value=TEST_NAME><span>##TEST_NAME##</span></span>";
         const element = $(markup).get(0);
-        const data = PlaceholderFormat.value(element);
+        const data = VariableFormat.value(element);
 
         assert.deepEqual(data, { value: "TEST_NAME", escapeChar: ["##", ""] }, "Correct data");
     });
 });
 
-QUnit.module("Placeholder module", moduleConfig, () => {
+QUnit.module("Variables module", moduleConfig, () => {
     test("Render toolbar without any options", (assert) => {
         this.options.escapeChar = "#";
-        const dataPlaceholder = new DataPlaceholder(this.quillMock, this.options);
+        const variables = new Variables(this.quillMock, this.options);
 
-        dataPlaceholder.showPopover();
+        variables.showPopover();
         $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
 
         this.clock.tick();
 
         assert.deepEqual(this.log, [{
-            format: "placeholder",
+            format: "variable",
             position: 0,
             value: {
                 escapeChar: "#",

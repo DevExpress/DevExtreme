@@ -1,14 +1,14 @@
 import { getQuill } from "../quill_importer";
 
 import PopoverModule from "./popover";
-import Placeholder from "../formats/placeholder";
+import Variable from "../formats/variable";
 
 import { extend } from "../../../core/utils/extend";
 
 getQuill()
-    .register({ "formats/placeholder": Placeholder }, true);
+    .register({ "formats/variable": Variable }, true);
 
-class PlaceholderModule extends PopoverModule {
+class VariableModule extends PopoverModule {
     _getDefaultOptions() {
         let baseConfig = super._getDefaultOptions();
 
@@ -22,7 +22,7 @@ class PlaceholderModule extends PopoverModule {
 
         const toolbar = quill.getModule('toolbar');
         if(toolbar) {
-            toolbar.addClickHandler('placeholder', this.showPopover.bind(this));
+            toolbar.addClickHandler('variable', this.showPopover.bind(this));
         }
 
         quill.keyboard.addBinding({
@@ -74,16 +74,16 @@ class PlaceholderModule extends PopoverModule {
     insertEmbedContent(selectionChangedEvent) {
         const caretPosition = this.getPosition();
         const selectedItem = selectionChangedEvent.component.option("selectedItem");
-        const placeholderData = extend({}, {
+        const variableData = extend({}, {
             value: selectedItem,
             escapeChar: this.options.escapeChar
         });
 
         setTimeout(function() {
-            this.quill.insertEmbed(caretPosition, "placeholder", placeholderData);
+            this.quill.insertEmbed(caretPosition, "variable", variableData);
             this.quill.setSelection(caretPosition + 1);
         }.bind(this));
     }
 }
 
-module.exports = PlaceholderModule;
+module.exports = VariableModule;

@@ -18,12 +18,12 @@ class DeltaConverter {
     }
 
     _renderCustomFormat(operations, contextOperations) {
-        if(operations.insert.type === 'placeholder') {
-            return this._parsePlaceholder(operations.insert.value);
+        if(operations.insert.type === 'variable') {
+            return this._parseVariable(operations.insert.value);
         }
     }
 
-    _parsePlaceholder(data) {
+    _parseVariable(data) {
         let startEscapeChar, endEscapeChar;
 
         if(Array.isArray(data.escapeChar)) {
@@ -39,11 +39,11 @@ class DeltaConverter {
             this._addDataParam("value", data.value)
         ].join("");
 
-        return `<span class='dx-data-placeholder'${dataString}><span>${startEscapeChar + data.value + endEscapeChar}</span></span>`;
+        return `<span class='dx-variable'${dataString}><span>${startEscapeChar + data.value + endEscapeChar}</span></span>`;
     }
 
     _addDataParam(paramName, value) {
-        return value ? ` data-placeholder-${paramName}=${value}` : "";
+        return value ? ` data-var-${paramName}=${value}` : "";
     }
 
     toHtml(deltaOps) {
