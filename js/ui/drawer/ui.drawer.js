@@ -312,7 +312,7 @@ const Drawer = Widget.inherit({
     },
 
     _initSize() {
-        const realPanelSize = this._isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
+        const realPanelSize = this.isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
 
         this._maxSize = this.option("maxSize") || realPanelSize;
         this._minSize = this.option("minSize") || 0;
@@ -358,15 +358,15 @@ const Drawer = Widget.inherit({
         return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
+    isHorizontalDirection() {
+        return this.option("position") === "left" || this.option("position") === "right";
+    },
+
     _isInvertedPosition() {
         const invertedPosition = this.option("position") === "right" || this.option("position") === "bottom";
         const rtl = this.option("rtlEnabled");
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
-    },
-
-    _isHorizontalDirection() {
-        return this.option("position") === "left" || this.option("position") === "right";
     },
 
     _renderPosition(offset, animate) {

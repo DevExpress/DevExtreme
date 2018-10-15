@@ -10,7 +10,7 @@ class PushStrategy extends DrawerStrategy {
         const $element = $(this._drawer.viewContent());
         const maxSize = this._getPanelSize(true);
 
-        $(this._drawer.content()).css(this._drawer._isHorizontalDirection() ? "width" : "height", maxSize);
+        $(this._drawer.content()).css(this._drawer.isHorizontalDirection() ? "width" : "height", maxSize);
 
         const contentPosition = this._getPanelSize(offset) * this._drawer._getPositionCorrection();
 
@@ -28,7 +28,7 @@ class PushStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-            if(this._drawer._isHorizontalDirection()) {
+            if(this._drawer.isHorizontalDirection()) {
                 translator.move($element, { left: contentPosition });
             } else {
                 translator.move($element, { top: contentPosition });

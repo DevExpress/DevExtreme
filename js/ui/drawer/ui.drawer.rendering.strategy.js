@@ -127,7 +127,7 @@ class DrawerStrategy {
     }
 
     _getPanelOffset(offset) {
-        var size = this._drawer._isHorizontalDirection() ? this._drawer.getRealPanelWidth() : this._drawer.getRealPanelHeight();
+        var size = this._drawer.isHorizontalDirection() ? this._drawer.getRealPanelWidth() : this._drawer.getRealPanelHeight();
 
         if(offset) {
             return -(size - this._drawer.getMaxSize());
@@ -179,7 +179,7 @@ class DrawerStrategy {
     setPanelSize(keepMaxSize) {
         const panelSize = this._getPanelSize(this._drawer.option("opened"));
 
-        if(this._drawer._isHorizontalDirection()) {
+        if(this._drawer.isHorizontalDirection()) {
             $(this._drawer.content()).css("width", keepMaxSize ? this._drawer.getRealPanelWidth() : panelSize);
         } else {
             $(this._drawer.content()).css("height", keepMaxSize ? this._drawer.getRealPanelHeight() : panelSize);

@@ -45,7 +45,7 @@ class ShrinkStrategy extends DrawerStrategy {
             if(animate) {
                 animation.size(animationConfig);
             } else {
-                if(this._drawer._isHorizontalDirection()) {
+                if(this._drawer.isHorizontalDirection()) {
                     $($element).css("width", size);
                 } else {
                     $($element).css("height", size);
