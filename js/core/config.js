@@ -60,7 +60,7 @@ var config = {
     * @default undefined
     */
     editorStylingMode: undefined,
-    useLegacyVisibleIndices: false
+    useLegacyVisibleIndex: false
 };
 
 var configMethod = function() {

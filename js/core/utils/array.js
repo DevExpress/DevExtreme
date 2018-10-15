@@ -55,7 +55,7 @@ var removeDuplicates = function(from, what) {
 var normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
     var indexedItems = {},
         parameterIndex = 0,
-        useLegacyVisibleIndices = config().useLegacyVisibleIndices;
+        useLegacyVisibleIndex = config().useLegacyVisibleIndex;
 
     each(items, function(index, item) {
         index = item[indexParameterName];
@@ -72,7 +72,7 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
         }
     });
 
-    if(!useLegacyVisibleIndices) {
+    if(!useLegacyVisibleIndex) {
         each(items, function() {
             if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
                 while(indexedItems[parameterIndex]) {
@@ -94,7 +94,7 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
         });
     });
 
-    if(useLegacyVisibleIndices) {
+    if(useLegacyVisibleIndex) {
         each(items, function() {
             if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
                 this[indexParameterName] = parameterIndex++;

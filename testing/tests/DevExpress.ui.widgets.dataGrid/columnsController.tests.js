@@ -122,10 +122,10 @@ QUnit.test("Initialize from options with field names and visible indexes", funct
     assert.strictEqual(visibleColumns[3].dataField, "TestField1");
 });
 
-QUnit.test("Initialize from options with field names and visible indexes with useLegacyVisibleIndices", function(assert) {
-    var oldUseLegacyVisibleIndices = config().useLegacyVisibleIndices;
+QUnit.test("Initialize from options with field names and visible indexes with useLegacyVisibleIndex", function(assert) {
+    var oldUseLegacyVisibleIndex = config().useLegacyVisibleIndex;
 
-    config({ useLegacyVisibleIndices: true });
+    config({ useLegacyVisibleIndex: true });
 
     try {
         this.applyOptions({
@@ -142,7 +142,7 @@ QUnit.test("Initialize from options with field names and visible indexes with us
         assert.strictEqual(visibleColumns[3].dataField, "TestField3");
         assert.deepEqual(visibleIndices, [0, 1, 2, 3], "visible indices");
     } finally {
-        config().useLegacyVisibleIndices = oldUseLegacyVisibleIndices;
+        config({ useLegacyVisibleIndex: oldUseLegacyVisibleIndex });
     }
 });
 
