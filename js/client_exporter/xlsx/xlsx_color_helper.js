@@ -1,10 +1,10 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 
 const xlsxColorHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj)) {
+        if(isDefined(sourceObj)) {
             result = {
                 rgb: sourceObj.rgb,
                 theme: sourceObj.theme,
@@ -17,15 +17,15 @@ const xlsxColorHelper = {
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) ||
-            !typeUtils.isDefined(tag.rgb) &&
-            !typeUtils.isDefined(tag.theme);
+        return !isDefined(tag) ||
+            !isDefined(tag.rgb) &&
+            !isDefined(tag.theme);
     },
 
     areEqual: function(leftTag, rightTag) {
         return xlsxColorHelper.isEmpty(leftTag) && xlsxColorHelper.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.rgb === rightTag.rgb &&
                 leftTag.theme === rightTag.theme
             );

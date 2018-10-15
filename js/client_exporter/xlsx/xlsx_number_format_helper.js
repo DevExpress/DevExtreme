@@ -1,4 +1,4 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 
 const xlsxNumberFormatHelper = {
@@ -19,13 +19,13 @@ const xlsxNumberFormatHelper = {
     areEqual: function(leftTag, rightTag) {
         return xlsxNumberFormatHelper.isEmpty(leftTag) && xlsxNumberFormatHelper.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.formatCode === rightTag.formatCode
             );
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) || !typeUtils.isDefined(tag.formatCode) || tag.formatCode === '';
+        return !isDefined(tag) || !isDefined(tag.formatCode) || tag.formatCode === '';
     },
 
     toXml: function(tag) {

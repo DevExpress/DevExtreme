@@ -1,4 +1,4 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
 import xlsxFillHelper from './xlsx_fill_helper';
@@ -6,7 +6,7 @@ import xlsxFillHelper from './xlsx_fill_helper';
 const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj)) {
+        if(isDefined(sourceObj)) {
             let numberFormatId;
             if(typeof sourceObj.numberFormat === 'number') {
                 numberFormatId = sourceObj.numberFormat;
@@ -15,7 +15,7 @@ const xlsxCellFormatHelper = {
             }
 
             let fill = sourceObj.fill;
-            if(!typeUtils.isDefined(fill)) {
+            if(!isDefined(fill)) {
                 fill = xlsxFillHelper.tryCreateFillFromSimpleFormat(sourceObj);
             }
 
@@ -35,7 +35,7 @@ const xlsxCellFormatHelper = {
     areEqual: function(leftTag, rightTag) {
         return xlsxCellFormatHelper.isEmpty(leftTag) && xlsxCellFormatHelper.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.fontId === rightTag.fontId &&
                 leftTag.numberFormatId === rightTag.numberFormatId &&
                 leftTag.fillId === rightTag.fillId &&
@@ -44,17 +44,17 @@ const xlsxCellFormatHelper = {
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) ||
-            !typeUtils.isDefined(tag.fontId) &&
-            !typeUtils.isDefined(tag.numberFormatId) &&
-            !typeUtils.isDefined(tag.fillId) &&
+        return !isDefined(tag) ||
+            !isDefined(tag.fontId) &&
+            !isDefined(tag.numberFormatId) &&
+            !isDefined(tag.fillId) &&
             xlsxCellAlignmentHelper.isEmpty(tag.alignment);
     },
 
     toXml: function(tag) {
         const isAlignmentEmpty = xlsxCellAlignmentHelper.isEmpty(tag.alignment);
         let applyNumberFormat;
-        if(typeUtils.isDefined(tag.numberFormatId)) {
+        if(isDefined(tag.numberFormatId)) {
             applyNumberFormat = tag.numberFormatId > 0 ? 1 : 0;
         }
 

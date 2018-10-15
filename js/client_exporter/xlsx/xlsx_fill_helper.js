@@ -1,11 +1,11 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxPatternFillHelper from './xlsx_pattern_fill_helper';
 
 const xlsxFillHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj)) {
+        if(isDefined(sourceObj)) {
             result = { patternFill: xlsxPatternFillHelper.tryCreateTag(sourceObj.patternFill) };
             if(xlsxFillHelper.isEmpty(result)) {
                 result = null;
@@ -14,7 +14,7 @@ const xlsxFillHelper = {
         return result;
     },
     tryCreateFillFromSimpleFormat: function({ backgroundColor, patternStyle, patternColor } = {}) {
-        if(typeUtils.isDefined(backgroundColor) && !(typeUtils.isDefined(patternStyle) && typeUtils.isDefined(patternColor))) {
+        if(isDefined(backgroundColor) && !(isDefined(patternStyle) && isDefined(patternColor))) {
             return {
                 patternFill: {
                     patternType: 'solid',
@@ -23,7 +23,7 @@ const xlsxFillHelper = {
                     }
                 }
             };
-        } else if(typeUtils.isDefined(patternStyle) && typeUtils.isDefined(patternColor)) {
+        } else if(isDefined(patternStyle) && isDefined(patternColor)) {
             return {
                 patternFill: {
                     patternType: patternStyle,
@@ -41,13 +41,13 @@ const xlsxFillHelper = {
     areEqual: function(leftTag, rightTag) {
         return xlsxFillHelper.isEmpty(leftTag) && xlsxFillHelper.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                isDefined(leftTag) && isDefined(rightTag) &&
                 xlsxPatternFillHelper.areEqual(leftTag.patternFill, rightTag.patternFill)
             );
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) || xlsxPatternFillHelper.isEmpty(tag.patternFill);
+        return !isDefined(tag) || xlsxPatternFillHelper.isEmpty(tag.patternFill);
     },
 
     toXml: function(tag) {
