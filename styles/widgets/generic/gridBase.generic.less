@@ -728,8 +728,8 @@
             }
         }
 
-        .dx-row-focused.dx-row {
-            &.dx-data-row {
+        .dx-row-focused {
+            &.dx-data-row:not(.dx-edit-row) {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
                 & .dx-command-edit .dx-link {

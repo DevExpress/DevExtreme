@@ -341,10 +341,11 @@ module.exports = {
                 renderFocusOverlay: function($element, hideBorder) {
                     var keyboardController = this.getController("keyboardNavigation"),
                         focusedRowEnabled = this.option("focusedRowEnabled"),
+                        editingController = this.getController("editing"),
                         isRowElement = keyboardController._getElementType($element) === "row",
                         $cell;
 
-                    if(!focusedRowEnabled || !keyboardController.isRowFocusType()) {
+                    if(!focusedRowEnabled || !keyboardController.isRowFocusType() || editingController.isEditing()) {
                         this.callBase($element, hideBorder);
                     } else if(focusedRowEnabled) {
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
