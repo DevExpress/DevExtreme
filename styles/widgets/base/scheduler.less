@@ -86,6 +86,8 @@
 @SCHEDULER_TIME_INDICATOR_TEXT_SHADOW: @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR 1px 0px 0px;
 @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE: 2px;
 
+@SCHEDULER_TIMELINE_MIN_HEIGHT: 100px;
+
 .dx-scheduler-group-mixin(@padding) {
     .dx-scrollable {
         &.dx-scheduler-date-table-scrollable,
@@ -1072,6 +1074,7 @@
             tbody {
                 .flex-container(column, nowrap);
                 height: 100%;
+                min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
             }
 
             .dx-scheduler-date-table-row {
@@ -1154,7 +1157,7 @@
         .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
         .dx-scheduler-group-table {
             height: 100%;
-            min-height: 100px;
+            min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
         }
 
         &.dx-scheduler-work-space-both-scrollbar {
