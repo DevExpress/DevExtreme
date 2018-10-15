@@ -1236,12 +1236,10 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
     ];
 
     this.options = {
+        loadingTimeout: 0,
         keyExpr: "name",
         focusedRowEnabled: true,
-        focusedRowKey: "Smith",
-        editing: {
-            allowEditing: false
-        },
+        focusedRowKey: "Dan",
         onFocusedRowChanged: function(e) {
             ++focusedRowChangedCount;
             assert.equal(e.row.key, "Dan", "Row");
@@ -1252,11 +1250,12 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
 
     this.setupModule();
 
+    addOptionChangedHandlers(this);
+
     this.gridView.render($("#container"));
+
     this.clock.tick();
 
-    // act
-    this.gridView.getController("focus").optionChanged({ name: "focusedRowKey", value: "Dan" });
     // assert
     assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
 });
