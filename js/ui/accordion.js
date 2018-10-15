@@ -299,7 +299,7 @@ var Accordion = CollectionWidget.inherit({
             titleContainers = this._itemContainer().children(".dx-item").children(".dx-accordion-item-title");
 
         eventsEngine.off(titleContainers, eventName);
-        eventsEngine.on(titleContainers, eventName, null, this._itemTitleClickHandler.bind(this));
+        eventsEngine.on(titleContainers, eventName, undefined, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {
