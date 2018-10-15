@@ -206,6 +206,9 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._cachedPagesData = cachedPagesData;
             }
         },
+        getOperationTypes: function() {
+            return this._operationTypes;
+        },
         _handleDataLoading: function(options) {
             var that = this,
                 dataSource = that._dataSource,
@@ -227,7 +230,8 @@ module.exports = gridCore.Controller.inherit((function() {
 
             loadOptions = extend({ pageIndex: that.pageIndex() }, options.storeLoadOptions);
 
-            operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
+            that._operationTypes = operationTypes = calculateOperationTypes(loadOptions, lastLoadOptions);
+            that._operationTypes.reload = that._operationTypes.reload || isReload;
 
             that._customizeRemoteOperations(options, isReload, operationTypes);
 
@@ -375,6 +379,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 error: error
             });
             this.loadError.fire(error);
+            this._operationTypes = {};
         },
         _handleDataChanged: function(args) {
             var that = this,
@@ -413,6 +418,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 this.changed.fire(args);
                 this.component._optionCache = undefined;
             }
+            this._operationTypes = {};
         },
         _scheduleCustomLoadCallbacks: function(deferred) {
             var that = this;

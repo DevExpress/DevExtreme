@@ -47,25 +47,6 @@ var getBodies = function($table) {
 };
 
 var VirtualScrollingDataSourceAdapterExtender = (function() {
-    var updateLoading = function(that) {
-        var beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
-
-        if(isVirtualMode(that)) {
-            if(beginPageIndex < 0 || (that.viewportSize() >= 0 && that.getViewportItemIndex() >= 0 && (beginPageIndex * that.pageSize() > that.getViewportItemIndex() ||
-                beginPageIndex * that.pageSize() + that.itemsCount() < that.getViewportItemIndex() + that.viewportSize())) && that._dataSource.isLoading()) {
-                if(!that._isLoading) {
-                    that._isLoading = true;
-                    that.loadingChanged.fire(true);
-                }
-            } else {
-                if(that._isLoading) {
-                    that._isLoading = false;
-                    that.loadingChanged.fire(false);
-                }
-            }
-        }
-    };
-
     var result = {
         init: function(dataSource) {
             var that = this;
@@ -96,9 +77,6 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 load: function() {
                     return dataSource.load();
                 },
-                updateLoading: function() {
-                    updateLoading(that);
-                },
                 itemsCount: function() {
                     return that.itemsCount(true);
                 },
@@ -121,18 +99,12 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
         },
         _handleLoadingChanged: function(isLoading) {
-            var that = this;
+            var that = this,
+                operationTypes = that.getOperationTypes();
 
-            if(!isVirtualMode(that)) {
-                that._isLoading = isLoading;
-                that.callBase.apply(that, arguments);
+            if(operationTypes && !operationTypes.reload && operationTypes.paging && isVirtualMode(that)) {
+                return;
             }
-        },
-        _handleLoadError: function() {
-            var that = this;
-
-            that._isLoading = false;
-            that.loadingChanged.fire(false);
 
             that.callBase.apply(that, arguments);
         },
@@ -165,9 +137,6 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
             }
             return this._virtualScrollController.load();
         },
-        isLoading: function() {
-            return this._isLoading;
-        },
         isLoaded: function() {
             return this._dataSource.isLoaded() && this._isLoaded;
         },
@@ -176,8 +145,6 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
             this._virtualScrollController.reset();
             this.resetPagesCache();
-
-            updateLoading(this);
 
             return result;
         },
@@ -208,10 +175,6 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
             if(isReload || operationTypes.reload) {
                 that._virtualScrollController.reset();
                 dataSource.items().length = 0;
-                that._isLoaded = false;
-
-                updateLoading(that);
-                that._isLoaded = true;
 
                 if(isAppendMode(that)) {
                     that.pageIndex(0);
