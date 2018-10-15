@@ -14,7 +14,7 @@ class OverlapStrategy extends DrawerStrategy {
         const position = this.getOverlayPosition();
         const drawer = this.getDrawerInstance();
 
-        drawer._overlay = this._drawer._createComponent(drawer.content(), Overlay, {
+        drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
             shading: false,
             container: drawer.getOverlayTarget(),
             position: position,
@@ -98,7 +98,7 @@ class OverlapStrategy extends DrawerStrategy {
         if(drawer.option("revealMode") === "slide") {
             const $panel = $(drawer.content());
 
-            const panelOffset = this._getPanelOffset(offset) * this._drawer._getPositionCorrection();
+            const panelOffset = this._getPanelOffset(offset) * drawer._getPositionCorrection();
 
             if(animate) {
                 let animationConfig = {
@@ -157,7 +157,7 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     getPanelContent() {
-        return $(this._drawer._overlay.content());
+        return $(this.getDrawerInstance().getOverlay().content());
     }
 };
 
