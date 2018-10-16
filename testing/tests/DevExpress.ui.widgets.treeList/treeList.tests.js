@@ -44,7 +44,7 @@ var generateData = function(count) {
         result = [];
 
     while(i < count * 2) {
-        result.push({ id: i }, { id: i + 1, parentId: i });
+        result.push({ id: i, parentId: 0 }, { id: i + 1, parentId: i });
         i += 2;
     }
 
@@ -908,4 +908,85 @@ QUnit.test("Scrollbar position must be kept after expanding node when the treeli
             done();
         }, 310);
     });
+});
+
+QUnit.module("Focused Row", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("TreeList with focusedRowEnabled and focusedRowIndex 0", function(assert) {
+    // arrange, act
+    var treeList = createTreeList({
+        dataSource: generateData(5),
+        focusedRowEnabled: true,
+        focusedRowIndex: 0
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.ok($(treeList.getRowElement(0)).hasClass("dx-row-focused"), "first row is focused");
+});
+
+QUnit.test("TreeList with focusedRowKey", function(assert) {
+    // arrange, act
+    var treeList = createTreeList({
+        dataSource: generateData(10),
+        paging: {
+            pageSize: 4
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 12
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(treeList.pageIndex(), 1, "page is changed");
+    assert.deepEqual(treeList.option("expandedRowKeys"), [11], "focus parent is expanded");
+    assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
+});
+
+QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) {
+    // arrange, act
+    var treeList = createTreeList({
+        dataSource: generateData(10),
+        remoteOperations: true,
+        paging: {
+            pageSize: 4
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 12
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(treeList.pageIndex(), 1, "page is changed");
+    assert.deepEqual(treeList.option("expandedRowKeys"), [11], "focus parent is expanded");
+    assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
+});
+
+QUnit.test("TreeList navigateTo", function(assert) {
+    // arrange, act
+    var treeList = createTreeList({
+        dataSource: generateData(10),
+        paging: {
+            pageSize: 4
+        }
+    });
+
+    this.clock.tick();
+
+    treeList.navigateToRow(12);
+    this.clock.tick();
+
+    // assert
+    assert.equal(treeList.pageIndex(), 1, "page is changed");
+    assert.ok(treeList.getRowIndexByKey(12) >= 0, "key is visible");
 });
