@@ -273,7 +273,11 @@ var CollectionWidget = Widget.inherit({
             } else {
                 $container.text(String(data));
             }
-        }).bind(this), ["text", "html"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"));
+    },
+
+    _getBindableFields: function() {
+        return ["text", "html"];
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {
