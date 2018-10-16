@@ -454,7 +454,7 @@ var dxChart = {
         },
         /**
         * @name dxChartOptions.zoomAndPan.panKey
-        * @type string
+        * @type Enums.EventKeyModifier
         * @default 'shift'
         */
         panKey: 'shift',
