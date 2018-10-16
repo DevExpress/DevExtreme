@@ -233,6 +233,7 @@ module.exports = {
                  * @name GridBaseOptions.filterPanel.filterEnabled
                  * @type boolean
                  * @default true
+                 * @fires GridBaseOptions.onOptionChanged
                  */
                 filterEnabled: true,
 
