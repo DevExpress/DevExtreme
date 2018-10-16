@@ -227,7 +227,7 @@ QUnit.test("incomplete animation should be stopped after closing on outside clic
     }
 });
 
-QUnit.test("incomplete animation should be stopped after changing openedStateMode", assert => {
+QUnit.test("incomplete animation should be stopped after changing modes", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true,
         openedStateMode: "push",
@@ -245,9 +245,8 @@ QUnit.test("incomplete animation should be stopped after changing openedStateMod
 
     const instance = $element.dxDrawer("instance");
     fx.stop = function($element, jumpToEnd) {
-        if(jumpToEnd) {
-            isJumpedToEnd = true;
-        }
+        isJumpedToEnd = jumpToEnd;
+
         if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
             panelStopCalls++;
         }
@@ -263,10 +262,11 @@ QUnit.test("incomplete animation should be stopped after changing openedStateMod
         fx.off = false;
 
         instance.option("openedStateMode", "shrink");
+        instance.option("revealMode", "expand");
 
-        assert.equal(panelStopCalls, 1, "animation should stops before closing");
-        assert.equal(contentStopCalls, 1, "animation should stops before closing");
-        assert.equal(shaderStopCalls, 1, "animation should stops before closing");
+        assert.equal(panelStopCalls, 2, "animation should stops before closing");
+        assert.equal(contentStopCalls, 2, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 2, "animation should stops before closing");
         assert.ok(isJumpedToEnd, "elements are returned to the end position after animation stopping");
     } finally {
         fx.off = true;
