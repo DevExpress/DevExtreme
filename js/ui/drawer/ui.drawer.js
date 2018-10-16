@@ -491,13 +491,9 @@ const Drawer = Widget.inherit({
             case "openedStateMode":
             case "target":
                 this._initStrategy();
-
-                this._setInitialPosition();
-                this._refreshPanel();
-                this._strategy.setPanelSize(this.option("revealMode") === "slide");
-
                 this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("opened"), false, true);
+
+                this._cleanPanel();
                 break;
             case "minSize":
             case "maxSize":
@@ -505,12 +501,9 @@ const Drawer = Widget.inherit({
                 this._renderPosition(this.option("opened"), false);
                 break;
             case "revealMode":
-                this._setInitialPosition();
-                this._refreshPanel();
-                this._strategy.setPanelSize(args.value === "slide");
-
                 this._refreshRevealModeClass(args.previousValue);
-                this._renderPosition(this.option("opened"), false, true);
+
+                this._cleanPanel();
                 break;
             case "shading":
                 this._toggleShaderVisibility(this.option("opened"));
@@ -521,6 +514,18 @@ const Drawer = Widget.inherit({
                 break;
             default:
                 this.callBase(args);
+        }
+    },
+
+    _cleanPanel() {
+        if(this.isHorizontalDirection()) {
+            this._setInitialPosition();
+            this._refreshPanel();
+            this._strategy.setPanelSize(this.option("revealMode") === "slide");
+
+            this._renderPosition(this.option("opened"), false, true);
+        } else {
+            this._invalidate();
         }
     },
 
