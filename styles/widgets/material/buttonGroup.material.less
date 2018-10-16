@@ -1,3 +1,15 @@
+.dx-buttongroup-wrapper {
+    .dx-button-mode-outlined {
+        &.dx-buttongroup-item {
+            border-left-width: 0;
+        }
+
+        &.dx-buttongroup-first-item {
+            border-left-width: 1px;
+        }
+    }
+}
+
 .dx-buttongroup-item {
     &.dx-button:first-child {
         .border-radius-top-left(@button-border-radius);
