@@ -27,7 +27,7 @@ class QuillRegistrator {
             "formats/font": FontStyle,
             "formats/size": SizeStyle,
 
-            "formats/image": Image,
+            "formats/extendedImage": Image,
             "formats/link": Link,
 
             "modules/toolbar": Toolbar,

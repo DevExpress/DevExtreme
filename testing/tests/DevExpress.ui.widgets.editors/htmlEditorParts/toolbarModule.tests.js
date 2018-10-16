@@ -369,7 +369,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
 
         assert.deepEqual(this.log, [{
             index: 1,
-            type: "image",
+            type: "extendedImage",
             value: {
                 alt: "Alternate",
                 height: "100",
@@ -390,21 +390,21 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
 
-        assert.equal($fields.length, 4, "Form with 4 fields shown");
-        assert.equal(fieldsText, "URL:Text:Hint:Open text in new window:", "Check labels");
+        assert.equal($fields.length, 3, "Form with 4 fields shown");
+        assert.equal(fieldsText, "URL:Text:Open text in new window:", "Check labels");
     });
 
     test("show link dialog when a link selected", (assert) => {
         this.quillMock.getFormat = () => {
             return {
-                link: {
-                    href: "http://test.com",
-                    target: true,
-                    text: "Test",
-                    title: "Hint text"
-                }
+                link: "http://test.com",
+                target: true,
+                text: "Test"
             };
         };
+        this.quillMock.getSelection = () => true;
+        this.quillMock.getText = () => "Test";
+
         this.options.items = ["link"];
         new Toolbar(this.quillMock, this.options);
         this.$element
@@ -415,7 +415,6 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
 
         assert.equal($fieldInputs.eq(0).val(), "http://test.com", "URL");
         assert.equal($fieldInputs.eq(1).val(), "Test", "Text");
-        assert.equal($fieldInputs.eq(2).val(), "Hint text", "Hint");
     });
 
     test("change an link formatting", (assert) => {
@@ -433,10 +432,6 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
 
         keyboardMock($fieldInputs.eq(1))
             .type("Test")
-            .change();
-
-        keyboardMock($fieldInputs.eq(2))
-            .type("Hint text")
             .change()
             .press("enter");
 
@@ -445,8 +440,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
             value: {
                 href: "http://test.com",
                 target: true,
-                text: "Test",
-                title: "Hint text"
+                text: "Test"
             }
         }], "expected format config");
     });

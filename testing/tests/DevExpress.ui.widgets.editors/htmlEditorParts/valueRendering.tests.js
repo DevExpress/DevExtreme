@@ -118,3 +118,45 @@ QUnit.module("Value as Markdown markup", () => {
         instance.option("valueType", "markdown");
     });
 });
+
+QUnit.module("Custom blots rendering", () => {
+    test("render image", (assert) => {
+        const expected = "<p><img src='http://test.com/test.jpg' width='100px' height='100px' alt='altering'></p>";
+        const instance = $("#htmlEditor")
+        .dxHtmlEditor({
+            onValueChanged: (e) => {
+                assert.equal(e.value, expected, "markup contains an image");
+            }
+        })
+        .dxHtmlEditor("instance");
+
+        instance.insertEmbed(0, "extendedImage", { src: "http://test.com/test.jpg", width: 100, height: 100, alt: "altering" });
+    });
+
+    test("render link", (assert) => {
+        const instance = $("#htmlEditor")
+        .dxHtmlEditor({
+            value: "test",
+            onValueChanged: (e) => {
+                assert.equal(e.value, '<p><a href="http://test.com" target="_blank">test</a>test</p>', "markup contains an image");
+            }
+        })
+        .dxHtmlEditor("instance");
+
+        instance.setSelection(0, 0);
+        instance.insertText(0, "test", "link", { href: "http://test.com", target: true });
+    });
+
+    test("render variable", (assert) => {
+        const expected = "<p><span class='dx-variable' data-var-start-esc-char=# data-var-end-esc-char=# data-var-value=Test><span>#Test#</span></span></p>";
+        const instance = $("#htmlEditor")
+        .dxHtmlEditor({
+            onValueChanged: (e) => {
+                assert.equal(e.value, expected, "markup contains a variable");
+            }
+        })
+        .dxHtmlEditor("instance");
+
+        instance.insertEmbed(0, "variable", { escapeChar: "#", value: "Test" });
+    });
+});
