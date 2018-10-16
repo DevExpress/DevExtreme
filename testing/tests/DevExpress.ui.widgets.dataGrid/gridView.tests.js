@@ -347,7 +347,7 @@ function createGridView(options, userOptions) {
 
         // assert
         assert.notEqual(columnHeadersViewHeight, gridView.getView("columnHeadersView").getHeight());
-        assert.equal(Math.round(columnHeadersViewHeight + rowsViewHeight), Math.round(gridView.getView("columnHeadersView").getHeight() + gridView.getView("rowsView").element().height()));
+        assert.roughEqual(Math.round(columnHeadersViewHeight + rowsViewHeight), Math.round(gridView.getView("columnHeadersView").getHeight() + gridView.getView("rowsView").element().height()), 1.01);
     });
 
     QUnit.test('Show headers', function(assert) {
