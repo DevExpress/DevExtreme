@@ -617,7 +617,7 @@
 
 /**
  * @typedef {string} Enums.DrawerPosition
- * @enum {'left'|'right'}
+ * @enum {'left'|'right'|'top'|'bottom'}
  */
 
 /**
