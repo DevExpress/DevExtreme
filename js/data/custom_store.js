@@ -452,7 +452,7 @@ var CustomStore = Store.inherit({
                 if(config().useLegacyStoreResult) {
                     d.resolve(values, serverResponse);
                 } else {
-                    d.resolve(serverResponse, that.keyOf(serverResponse));
+                    d.resolve((serverResponse || values), that.keyOf(serverResponse));
                 }
             })
             .fail(createUserFuncFailureHandler(d));

@@ -219,7 +219,7 @@ var ODataStore = Store.inherit({
 
         when(this._sendRequest(this._url, "POST", null, values))
             .done(function(serverResponse) {
-                d.resolve(config().useLegacyStoreResult ? values : serverResponse, that.keyOf(serverResponse));
+                d.resolve(config().useLegacyStoreResult ? values : (serverResponse || values), that.keyOf(serverResponse));
             })
             .fail(d.reject);
 
