@@ -374,13 +374,13 @@ const Drawer = Widget.inherit({
         return this.option("position") === "left" || this.option("position") === "right";
     },
 
-    stopAnimations() {
-        fx.stop(this._$shader);
-        fx.stop($(this.content()));
-        fx.stop($(this.viewContent()));
+    stopAnimations(jumpToEnd) {
+        fx.stop(this._$shader, jumpToEnd);
+        fx.stop($(this.content()), jumpToEnd);
+        fx.stop($(this.viewContent()), jumpToEnd);
 
         const overlay = this.getOverlay();
-        overlay && fx.stop($(overlay.$content()));
+        overlay && fx.stop($(overlay.$content()), jumpToEnd);
     },
 
     _isInvertedPosition() {
@@ -389,7 +389,9 @@ const Drawer = Widget.inherit({
         return position === "right" || position === "bottom";
     },
 
-    _renderPosition(offset, animate) {
+    _renderPosition(offset, animate, jumpToEnd) {
+        this.stopAnimations(jumpToEnd);
+
         this._animations = [];
 
         animate = typeUtils.isDefined(animate) ? animate && this.option("animationEnabled") : this.option("animationEnabled");
@@ -495,7 +497,7 @@ const Drawer = Widget.inherit({
                 this._strategy.setPanelSize(this.option("revealMode") === "slide");
 
                 this._refreshModeClass(args.previousValue);
-                this._renderPosition(this.option("opened"), false);
+                this._renderPosition(this.option("opened"), false, true);
                 break;
             case "minSize":
             case "maxSize":
@@ -508,7 +510,7 @@ const Drawer = Widget.inherit({
                 this._strategy.setPanelSize(args.value === "slide");
 
                 this._refreshRevealModeClass(args.previousValue);
-                this._renderPosition(this.option("opened"), false);
+                this._renderPosition(this.option("opened"), false, true);
                 break;
             case "shading":
                 this._toggleShaderVisibility(this.option("opened"));

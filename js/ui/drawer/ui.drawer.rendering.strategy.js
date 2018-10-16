@@ -102,8 +102,6 @@ class DrawerStrategy {
     }
 
     renderPosition(offset, animate) {
-        this.getDrawerInstance().stopAnimations();
-
         this._drawer._animations.push(new Promise((resolve) => {
             this._contentAnimationResolve = resolve;
         }));

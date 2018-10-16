@@ -227,6 +227,53 @@ QUnit.test("incomplete animation should be stopped after closing on outside clic
     }
 });
 
+QUnit.test("incomplete animation should be stopped after changing openedStateMode", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "push",
+        animationDuration: 500,
+        closeOnOutsideClick: true,
+        revealMode: "slide",
+        shading: true
+    });
+
+    let origFxStop = fx.stop,
+        panelStopCalls = 0,
+        contentStopCalls = 0,
+        shaderStopCalls = 0,
+        isJumpedToEnd = false;
+
+    const instance = $element.dxDrawer("instance");
+    fx.stop = function($element, jumpToEnd) {
+        if(jumpToEnd) {
+            isJumpedToEnd = true;
+        }
+        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            panelStopCalls++;
+        }
+        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            contentStopCalls++;
+        }
+        if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            shaderStopCalls++;
+        }
+    };
+
+    try {
+        fx.off = false;
+
+        instance.option("openedStateMode", "shrink");
+
+        assert.equal(panelStopCalls, 1, "animation should stops before closing");
+        assert.equal(contentStopCalls, 1, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 1, "animation should stops before closing");
+        assert.ok(isJumpedToEnd, "elements are returned to the end position after animation stopping");
+    } finally {
+        fx.off = true;
+        fx.stop = origFxStop;
+    }
+});
+
 QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "push"
