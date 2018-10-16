@@ -10,12 +10,9 @@ class ExtLink extends Link {
         let node = super.create(HREF);
 
         if(isObject(data)) {
-            node.innerText = data.text || data.href;
-
-            if(data.title) {
-                node.setAttribute("title", data.title);
+            if(data.text) {
+                node.innerText = data.text;
             }
-
             if(!data.target) {
                 node.removeAttribute("target");
             }
@@ -24,22 +21,17 @@ class ExtLink extends Link {
         return node;
     }
 
-    static formats(domNode) {
-        const href = super.formats(domNode);
+    formats() {
+        const href = ExtLink.formats(this.domNode);
 
         return {
-            href: href,
-            text: domNode.innerText,
-            title: domNode.getAttribute("title"),
-            target: !!domNode.getAttribute("target")
+            link: href,
+            target: this.domNode.getAttribute("target")
         };
     }
 
     format(name, value) {
-        if(name === "link") {
-            if(value.title) {
-                this.domNode.setAttribute("title", value.title);
-            }
+        if(name === "link" && isObject(value)) {
             if(value.text) {
                 this.domNode.innerText = value.text;
             }
@@ -58,11 +50,9 @@ class ExtLink extends Link {
         return {
             href: domNode.getAttribute("href"),
             text: domNode.innerText,
-            title: domNode.getAttribute("title"),
             target: !!domNode.getAttribute("target")
         };
     }
 }
-
 
 module.exports = ExtLink;

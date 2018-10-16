@@ -18,8 +18,13 @@ class DeltaConverter {
     }
 
     _renderCustomFormat(operations, contextOperations) {
-        if(operations.insert.type === 'variable') {
-            return this._parseVariable(operations.insert.value);
+        switch(operations.insert.type) {
+            case "variable":
+                return this._parseVariable(operations.insert.value);
+                break;
+            case "extendedImage":
+                return this._parseImage(operations.insert.value);
+                break;
         }
     }
 
@@ -40,6 +45,21 @@ class DeltaConverter {
         ].join("");
 
         return `<span class='dx-variable'${dataString}><span>${startEscapeChar + data.value + endEscapeChar}</span></span>`;
+    }
+
+    _parseImage(data) {
+        const attributes = [
+            this._prepareAttribute("src", data.src),
+            data.width ? `width='${data.width}px'` : "",
+            data.height ? `height='${data.height}px'` : "",
+            this._prepareAttribute("alt", data.alt)
+        ].join(" ");
+
+        return `<img ${attributes}>`;
+    }
+
+    _prepareAttribute(attr, value) {
+        return value ? `${attr}='${value}'` : "";
     }
 
     _addDataParam(paramName, value) {

@@ -22,7 +22,6 @@ const DIALOG_BACKGROUND_CAPTION = "dxHtmlEditor-dialogBackgroundCaption";
 const DIALOG_LINK_CAPTION = "dxHtmlEditor-dialogLinkCaption";
 const DIALOG_LINK_FIELD_URL = "dxHtmlEditor-dialogLinkUrlField";
 const DIALOG_LINK_FIELD_TEXT = "dxHtmlEditor-dialogLinkTextField";
-const DIALOG_LINK_FIELD_HINT = "dxHtmlEditor-dialogLinkHintField";
 const DIALOG_LINK_FIELD_TARGET = "dxHtmlEditor-dialogLinkTargetField";
 const DIALOG_LINK_FIELD_TARGET_CLASS = "dx-formdialog-field-target";
 const DIALOG_IMAGE_CAPTION = "dxHtmlEditor-dialogImageCaption";
@@ -96,7 +95,8 @@ class ToolbarModule extends BaseModule {
         return () => {
             const selection = this.quill.getSelection();
             const formats = this.quill.getFormat();
-            const formData = formats.link || {
+            const formData = {
+                href: formats.link || "",
                 text: selection ? this.quill.getText(selection) : "",
                 target: true
             };
@@ -112,13 +112,18 @@ class ToolbarModule extends BaseModule {
                 let length;
 
                 if(selection && !formats.link) {
+                    const text = formData.text;
+                    formData.text = "";
+
                     index = selection.index;
                     length = selection.length;
                     length && this.quill.deleteText(index, length);
-                    this.quill.setSelection(index, 0, "silent");
-                }
+                    this.quill.insertText(index, text, "link", formData, USER_ACTION);
+                    this.quill.setSelection(index + text.length, 0);
 
-                this.quill.format("link", formData, USER_ACTION);
+                } else {
+                    this.quill.format("link", formData, USER_ACTION);
+                }
             });
         };
     }
@@ -127,7 +132,6 @@ class ToolbarModule extends BaseModule {
         return [
             { dataField: "href", label: { text: format(DIALOG_LINK_FIELD_URL) } },
             { dataField: "text", label: { text: format(DIALOG_LINK_FIELD_TEXT) } },
-            { dataField: "title", label: { text: format(DIALOG_LINK_FIELD_HINT) } },
             {
                 dataField: "target",
                 editorType: "dxCheckBox",
@@ -167,7 +171,7 @@ class ToolbarModule extends BaseModule {
                         alt: formData.alt
                     }, USER_ACTION);
                 } else {
-                    this.quill.insertEmbed(pasteIndex, "image", formData, USER_ACTION);
+                    this.quill.insertEmbed(pasteIndex, "extendedImage", formData, USER_ACTION);
                 }
             });
         };

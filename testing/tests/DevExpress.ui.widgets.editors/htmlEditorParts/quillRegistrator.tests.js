@@ -18,7 +18,7 @@ QUnit.module("Quill registrator", () => {
         const FontStyle = quill.import("attributors/style/font");
         const SizeStyle = quill.import("attributors/style/size");
 
-        const imageFormat = quill.import("formats/image");
+        const imageFormat = quill.import("formats/extendedImage");
 
         const baseTheme = quill.import("themes/basic");
 
