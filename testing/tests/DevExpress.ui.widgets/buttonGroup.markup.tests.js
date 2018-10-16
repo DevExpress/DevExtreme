@@ -49,6 +49,7 @@ QUnit.module("default", {
         assert.deepEqual(getOptionValue("items"), [], "items");
         assert.strictEqual(getOptionValue("itemTemplate"), "item", "itemTemplate");
         assert.strictEqual(getOptionValue("onSelectionChanged"), null, "onSelectionChanged");
+        assert.strictEqual(getOptionValue("stylingMode"), "contained", "stylingMode");
     });
 
     QUnit.test("render markup", function(assert) {
@@ -164,6 +165,18 @@ QUnit.module("default", {
 
         assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
         assert.ok($buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
+    });
+
+    QUnit.test("stylingMode", function(assert) {
+        const $buttonGroup = $("#widget").dxButtonGroup({
+            items: [{ text: "item 1" }, { text: "item 2" }],
+            stylingMode: "text"
+        });
+
+        const buttons = $buttonGroup.find(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
+
+        assert.equal(buttons[0].option("stylingMode"), "text", "first button");
+        assert.equal(buttons[1].option("stylingMode"), "text", "first button");
     });
 });
 

@@ -13,7 +13,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
 
-var ButtonCollection = CollectionWidget.inherit({
+const ButtonCollection = CollectionWidget.inherit({
     _renderItemContent(options) {
         options.container = $(options.container).parent();
         this.callBase(options);
@@ -81,6 +81,13 @@ const ButtonGroup = Widget.inherit({
              * @fires dxButtonGroupOptions.onSelectionChanged
              */
             selectedItemKeys: [],
+
+            /**
+             * @name dxButtonGroupOptions.stylingMode
+             * @type Enums.ButtonStylingMode
+             * @default 'contained'
+             */
+            stylingMode: "contained",
 
             /**
              * @name dxButtonGroupOptions.keyExpr
@@ -175,6 +182,7 @@ const ButtonGroup = Widget.inherit({
     _getBasicButtonOptions() {
         return {
             focusStateEnabled: false,
+            stylingMode: this.option("stylingMode"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
             activeStateEnabled: this.option("activeStateEnabled")
         };
@@ -227,6 +235,7 @@ const ButtonGroup = Widget.inherit({
         }
 
         switch(args.name) {
+            case "stylingMode":
             case "selectionMode":
             case "keyExpr":
             case "itemTemplate":
