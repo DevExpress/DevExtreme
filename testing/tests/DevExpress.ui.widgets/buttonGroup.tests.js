@@ -129,6 +129,15 @@ QUnit.module("option changed", {
         assert.notOk(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has no width");
         assert.notOk(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has no width");
     });
+
+    QUnit.test("change the stylingMode option", function(assert) {
+        this.buttonGroup.option("stylingMode", "text");
+
+        const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton("instance"));
+
+        assert.equal(buttons[0].option("stylingMode"), "text", "first button");
+        assert.equal(buttons[1].option("stylingMode"), "text", "second button");
+    });
 });
 
 QUnit.module("selection", () => {
