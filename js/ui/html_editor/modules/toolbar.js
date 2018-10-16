@@ -10,6 +10,7 @@ import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 import { format } from "../../../localization/message";
+import { capitalize } from "../../../core/utils/string";
 
 const BaseModule = getQuill().import("core/module");
 
@@ -71,10 +72,16 @@ class ToolbarModule extends BaseModule {
             color: this._prepareColorClickHandler("color"),
             background: this._prepareColorClickHandler("background"),
             orderedList: () => {
-                this.quill.format("list", "ordered", USER_ACTION);
+                const formats = this.quill.getFormat();
+                const value = formats.list === "ordered" ? false : "ordered";
+
+                this.quill.format("list", value, USER_ACTION);
             },
             bulletList: () => {
-                this.quill.format("list", "bullet", USER_ACTION);
+                const formats = this.quill.getFormat();
+                const value = formats.list === "bullet" ? false : "bullet";
+
+                this.quill.format("list", value, USER_ACTION);
             },
             alignLeft: () => {
                 this.quill.format("align", false, USER_ACTION);
@@ -87,7 +94,8 @@ class ToolbarModule extends BaseModule {
             },
             alignJustify: () => {
                 this.quill.format("align", "justify", USER_ACTION);
-            }
+            },
+            codeBlock: this._getDefaultClickHandler("code-block")
         };
     }
 
@@ -302,7 +310,8 @@ class ToolbarModule extends BaseModule {
 
         const formats = this.quill.getFormat(selection);
         for(const format in formats) {
-            const formatWidget = this._formats[format];
+            const widgetName = this._getFormatWidgetName(format, formats);
+            const formatWidget = this._formats[widgetName] || this._formats[format];
 
             if(!formatWidget) {
                 continue;
@@ -318,6 +327,22 @@ class ToolbarModule extends BaseModule {
         if(this._formats.clear && !isEmptyObject(formats)) {
             this._formats.clear.$element().addClass(ACTIVE_FORMAT_CLASS);
         }
+    }
+
+    _getFormatWidgetName(formatName, formats) {
+        let widgetName;
+        switch(formatName) {
+            case "align":
+                widgetName = formatName + capitalize(formats[formatName]);
+                break;
+            case "code-block":
+                widgetName = "codeBlock";
+                break;
+            default:
+                widgetName = formatName;
+        }
+
+        return widgetName;
     }
 
     _setValueSilent(widget, value) {
