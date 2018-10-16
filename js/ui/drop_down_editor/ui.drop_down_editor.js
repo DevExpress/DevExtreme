@@ -486,7 +486,7 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        if(!focused(this._input())) {
+        if(this.option("focusStateEnabled") && !focused(this._input())) {
             eventsEngine.trigger(this._input(), "focus");
         }
 
