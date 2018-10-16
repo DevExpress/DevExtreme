@@ -1222,8 +1222,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         params = { data: oldData, key: editData.key, cancel: false };
                         deferred = executeEditingAction("onRowRemoving", params, function() {
-                            return store.remove(editData.key).done(function() {
-                                changes.push({ type: "remove", key: editData.key });
+                            return store.remove(editData.key).done(function(key) {
+                                changes.push({ type: "remove", key: key });
                             });
                         });
                         break;
@@ -1239,7 +1239,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         params = { newData: data, oldData: oldData, key: editData.key, cancel: false };
                         deferred = executeEditingAction("onRowUpdating", params, function() {
-                            return store.update(editData.key, params.newData).done(function(key, data) {
+                            return store.update(editData.key, params.newData).done(function(data, key) {
                                 changes.push({ type: "update", key: key, data: data });
                             });
                         });

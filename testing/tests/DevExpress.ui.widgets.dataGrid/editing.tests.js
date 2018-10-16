@@ -3304,7 +3304,7 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
         },
         insert: function(values) {
             var d = $.Deferred();
-            return d.resolve("testKey").promise();
+            return d.resolve({ fieldTest: "testKey" }).promise();
         }
     };
 

@@ -1,9 +1,8 @@
 var $ = require("../core/renderer"),
     dataUtils = require("./utils"),
     arrayUtils = require("./array_utils"),
-    typeUtils = require("../core/utils/type"),
-    isFunction = typeUtils.isFunction,
-    isObject = typeUtils.isObject,
+    isFunction = require("../core/utils/type").isFunction,
+    config = require("../core/config"),
     errors = require("./errors").errors,
     Store = require("./abstract_store"),
     arrayQuery = require("./array_query"),
@@ -449,11 +448,11 @@ var CustomStore = Store.inherit({
         }
 
         fromPromise(userResult)
-            .done(function(data) {
-                if(isObject(data)) {
-                    d.resolve(data, that.keyOf(data));
+            .done(function(serverResponse) {
+                if(config().useLegacyStoreResult) {
+                    d.resolve(values, serverResponse);
                 } else {
-                    d.resolve(values, data);
+                    d.resolve(serverResponse, that.keyOf(serverResponse));
                 }
             })
             .fail(createUserFuncFailureHandler(d));
@@ -474,7 +473,13 @@ var CustomStore = Store.inherit({
         }
 
         fromPromise(userResult)
-            .done(function(data) { d.resolve(key, isObject(data) ? data : values); })
+            .done(function(serverResponse) {
+                if(config().useLegacyStoreResult) {
+                    d.resolve(key, values);
+                } else {
+                    d.resolve(serverResponse || values, key);
+                }
+            })
             .fail(createUserFuncFailureHandler(d));
 
         return d.promise();

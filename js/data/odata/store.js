@@ -1,5 +1,5 @@
-var typeUtils = require("../../core/utils/type"),
-    isDefined = typeUtils.isDefined,
+var isDefined = require("../../core/utils/type").isDefined,
+    config = require("../../core/config"),
     odataUtils = require("./utils"),
     proxyUrlFormatter = require("../proxy_url_formatter"),
     errors = require("../errors").errors,
@@ -219,7 +219,7 @@ var ODataStore = Store.inherit({
 
         when(this._sendRequest(this._url, "POST", null, values))
             .done(function(serverResponse) {
-                d.resolve(typeUtils.isObject(serverResponse) ? serverResponse : values, that.keyOf(serverResponse));
+                d.resolve(config().useLegacyStoreResult ? values : serverResponse, that.keyOf(serverResponse));
             })
             .fail(d.reject);
 
@@ -233,7 +233,11 @@ var ODataStore = Store.inherit({
             this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
         ).done(
             function(serverResponse) {
-                d.resolve(key, typeUtils.isObject(serverResponse) ? serverResponse : values);
+                if(config().useLegacyStoreResult) {
+                    d.resolve(key, values);
+                } else {
+                    d.resolve(serverResponse || values, key);
+                }
             }
         ).fail(d.reject);
 
