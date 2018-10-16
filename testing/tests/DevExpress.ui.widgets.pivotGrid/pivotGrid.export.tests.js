@@ -10,7 +10,6 @@ import { excel as excelCreator } from "client_exporter";
 import { __internals as internals } from "client_exporter/excel_creator";
 import excel_creator from "client_exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
-import { extend } from "core/utils/extend";
 
 const BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +
     "<scheme val=\"minor\" /></font><font><b /><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" />" +
@@ -324,9 +323,7 @@ QUnit.test("onXlsxCellPrepared - set alignment: null for all xlsx cells", functi
     runTest(
         assert,
         {
-            export: {
-                onXlsxCellPrepared: e => extend(true, e.xlsxCell, { style: { alignment: null } }),
-            }
+            onXlsxCellPrepared: e => e.xlsxCell.style.alignment = null,
         },
         { styles, worksheet, sharedStrings }
     );

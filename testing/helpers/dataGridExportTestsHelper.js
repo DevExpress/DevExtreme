@@ -26,6 +26,8 @@ const dataGridExportTestsHelper = {
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>',
 
     SHARED_STRINGS_HEADER_XML: excelCreator.__internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',
+    SHARED_STRINGS_EMPTY: excelCreator.__internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="0" uniqueCount="0"></sst>',
+
     STYLESHEET_HEADER_XML: excelCreator.__internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">',
     STYLESHEET_STANDARDSTYLES: '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="left" /></xf>' +
@@ -80,10 +82,8 @@ const dataGridExportTestsHelper = {
         const done = assert.async();
         const actualGridCells = [];
 
-        gridOptions.export = {
-            onXlsxCellPrepared: e => {
-                actualGridCells.push(e.gridCell);
-            },
+        gridOptions.onXlsxCellPrepared = e => {
+            actualGridCells.push(e.gridCell);
         };
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {

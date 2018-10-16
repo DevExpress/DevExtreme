@@ -71,7 +71,8 @@ var objectCreate = (function() {
 
 var DEFAULTS = {
     scaleX: 1,
-    scaleY: 1
+    scaleY: 1,
+    "pointer-events": ""
 };
 
 var getBackup = callOnce(function() {
@@ -1509,7 +1510,6 @@ function Renderer(options) {
     var that = this;
     that.root = that._createElement("svg", {
         xmlns: "http://www.w3.org/2000/svg",
-        "xmlns:xlink": "http://www.w3.org/1999/xlink",
         version: "1.1",
 
         // Backward compatibility

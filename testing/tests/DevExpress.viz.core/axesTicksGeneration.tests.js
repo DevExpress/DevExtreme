@@ -2283,6 +2283,50 @@ QUnit.test("Years tickInterval (25)", function(assert) {
 
 QUnit.module("DateTime. Misc", environment);
 
+QUnit.test("Days tickInterval converts into weeks (7)", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        tickInterval: { days: 7 },
+        forceUserTickInterval: true,
+        endOnTick: false
+    });
+
+    this.axis.setBusinessRange({ min: new Date(2011, 1, 1), max: new Date(2011, 2, 1) });
+
+    // act
+    this.axis.createTicks(canvas(300));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [new Date(2011, 1, 6),
+        new Date(2011, 1, 13),
+        new Date(2011, 1, 20),
+        new Date(2011, 1, 27)].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._tickInterval, { "days": 7 });
+});
+
+QUnit.test("Quarters tickInterval (2)", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        tickInterval: { quarters: 2 },
+        forceUserTickInterval: true,
+        endOnTick: false
+    });
+
+    this.axis.setBusinessRange({ min: new Date(2010, 5, 15), max: new Date(2012, 3, 1) });
+
+    // act
+    this.axis.createTicks(canvas(300));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [new Date(2010, 6, 1),
+        new Date(2011, 0, 1),
+        new Date(2011, 6, 1),
+        new Date(2012, 0, 1)].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._tickInterval, { "quarters": 2 });
+});
+
 QUnit.test("endOnTick === false - calculate ticks inside data bounds", function(assert) {
     this.createAxis();
     this.updateOptions({

@@ -540,11 +540,11 @@ QUnit.test("ColorBox set the right stylingMode option to ColorView (default)", f
 });
 
 QUnit.test("ColorBox set the right stylingMode option to ColorView (custom)", function(assert) {
-    var $colorBox = $("#color-box").dxColorBox({ value: "red", stylingMode: "standard" }),
+    var $colorBox = $("#color-box").dxColorBox({ value: "red", stylingMode: "underlined" }),
         colorBox = $colorBox.dxColorBox("instance");
 
     colorBox.open();
-    assert.equal(colorBox._colorView.option("stylingMode"), "standard");
+    assert.equal(colorBox._colorView.option("stylingMode"), "underlined");
 });
 
 QUnit.module("keyboard navigation", {

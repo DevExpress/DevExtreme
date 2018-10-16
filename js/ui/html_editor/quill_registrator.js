@@ -10,9 +10,10 @@ class QuillRegistrator {
 
         const BaseTheme = require("./themes/base");
         const Image = require("./formats/image");
+        const Link = require("./formats/link");
         const Toolbar = require("./modules/toolbar");
         const DropImage = require("./modules/dropImage");
-        const Placeholder = require("./modules/placeholder");
+        const Variables = require("./modules/variables");
 
         const DirectionStyle = quill.import("attributors/style/direction");
         const AlignStyle = quill.import("attributors/style/align");
@@ -26,11 +27,12 @@ class QuillRegistrator {
             "formats/font": FontStyle,
             "formats/size": SizeStyle,
 
-            "formats/image": Image,
+            "formats/extendedImage": Image,
+            "formats/link": Link,
 
             "modules/toolbar": Toolbar,
             "modules/dropImage": DropImage,
-            "modules/placeholder": Placeholder,
+            "modules/variables": Variables,
 
             "themes/basic": BaseTheme
         },

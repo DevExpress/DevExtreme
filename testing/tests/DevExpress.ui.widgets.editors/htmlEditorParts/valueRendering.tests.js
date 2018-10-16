@@ -6,7 +6,7 @@ import "ui/html_editor/converters/markdown";
 const CONTENT_CLASS = "dx-htmleditor-content";
 
 function getSelector(className) {
-    return "." + className;
+    return `.${className}`;
 }
 
 const { test } = QUnit;
@@ -54,10 +54,10 @@ QUnit.module("Value as HTML markup", () => {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
-                valueType: "Markdown",
+                valueType: "markdown",
                 value: "Hi! **Test.**",
                 onValueChanged: (e) => {
-                    if(e.component.option("valueType") === "HTML") {
+                    if(e.component.option("valueType") === "html") {
                         assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
                         done();
                     }
@@ -65,7 +65,7 @@ QUnit.module("Value as HTML markup", () => {
             })
             .dxHtmlEditor("instance");
 
-        instance.option("valueType", "HTML");
+        instance.option("valueType", "html");
     });
 });
 
@@ -74,7 +74,7 @@ QUnit.module("Value as Markdown markup", () => {
     test("render default value", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "Hi!\nIt's a **test**!",
-                valueType: "Markdown"
+                valueType: "markdown"
             }).dxHtmlEditor("instance"),
             $element = instance.$element(),
             markup = $element.find(getSelector(CONTENT_CLASS)).html();
@@ -87,7 +87,7 @@ QUnit.module("Value as Markdown markup", () => {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
-                valueType: "Markdown",
+                valueType: "markdown",
                 onValueChanged: (e) => {
                     assert.equal(e.value, "Hi! **Test.**");
                     done();
@@ -107,7 +107,7 @@ QUnit.module("Value as Markdown markup", () => {
             .dxHtmlEditor({
                 value: "<p>Hi! <strong>Test.</strong></p>",
                 onValueChanged: (e) => {
-                    if(e.component.option("valueType") === "Markdown") {
+                    if(e.component.option("valueType") === "markdown") {
                         assert.equal(e.value, "Hi! **Test.**");
                         done();
                     }
@@ -115,6 +115,48 @@ QUnit.module("Value as Markdown markup", () => {
             })
             .dxHtmlEditor("instance");
 
-        instance.option("valueType", "Markdown");
+        instance.option("valueType", "markdown");
+    });
+});
+
+QUnit.module("Custom blots rendering", () => {
+    test("render image", (assert) => {
+        const expected = "<p><img src='http://test.com/test.jpg' width='100px' height='100px' alt='altering'></p>";
+        const instance = $("#htmlEditor")
+        .dxHtmlEditor({
+            onValueChanged: (e) => {
+                assert.equal(e.value, expected, "markup contains an image");
+            }
+        })
+        .dxHtmlEditor("instance");
+
+        instance.insertEmbed(0, "extendedImage", { src: "http://test.com/test.jpg", width: 100, height: 100, alt: "altering" });
+    });
+
+    test("render link", (assert) => {
+        const instance = $("#htmlEditor")
+        .dxHtmlEditor({
+            value: "test",
+            onValueChanged: (e) => {
+                assert.equal(e.value, '<p><a href="http://test.com" target="_blank">test</a>test</p>', "markup contains an image");
+            }
+        })
+        .dxHtmlEditor("instance");
+
+        instance.setSelection(0, 0);
+        instance.insertText(0, "test", "link", { href: "http://test.com", target: true });
+    });
+
+    test("render variable", (assert) => {
+        const expected = "<p><span class='dx-variable' data-var-start-esc-char=# data-var-end-esc-char=# data-var-value=Test><span>#Test#</span></span></p>";
+        const instance = $("#htmlEditor")
+        .dxHtmlEditor({
+            onValueChanged: (e) => {
+                assert.equal(e.value, expected, "markup contains a variable");
+            }
+        })
+        .dxHtmlEditor("instance");
+
+        instance.insertEmbed(0, "variable", { escapeChar: "#", value: "Test" });
     });
 });

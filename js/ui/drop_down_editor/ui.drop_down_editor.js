@@ -179,6 +179,11 @@ var DropDownEditor = TextBox.inherit({
             fieldTemplate: null,
             contentTemplate: null,
 
+            /**
+             * @name dxDropDownEditorOptions.openOnFieldClick
+             * @type boolean
+             * @default false
+             */
             openOnFieldClick: false,
 
             /**
@@ -486,7 +491,7 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        if(!focused(this._input())) {
+        if(this.option("focusStateEnabled") && !focused(this._input())) {
             eventsEngine.trigger(this._input(), "focus");
         }
 

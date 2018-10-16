@@ -31,6 +31,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     ROW_ALTERNATION_CLASS = "dx-row-alt",
     LAST_ROW_BORDER = "dx-last-row-border",
     EMPTY_CLASS = "dx-empty",
+    ROW_INSERTED_ANIMATION_CLASS = "row-inserted-animation",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -47,7 +48,7 @@ module.exports = {
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
             * @type_function_param1_field8 text:string
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
             * @type_function_param1_field12 column:dxDataGridColumn
@@ -66,7 +67,7 @@ module.exports = {
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
             * @type_function_param1_field8 text:string
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
             * @type_function_param1_field12 column:dxTreeListColumn
@@ -209,7 +210,7 @@ module.exports = {
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
             * @type_function_param1_field8 value:any
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 text:string
             * @type_function_param1_field11 columnIndex:number
             * @type_function_param1_field12 column:object
@@ -229,7 +230,7 @@ module.exports = {
             * @type_function_param1_field6 data:object
             * @type_function_param1_field7 key:any
             * @type_function_param1_field8 value:any
-            * @type_function_param1_field9 displayValue:string
+            * @type_function_param1_field9 displayValue:any
             * @type_function_param1_field10 text:string
             * @type_function_param1_field11 columnIndex:number
             * @type_function_param1_field12 column:object
@@ -290,7 +291,7 @@ module.exports = {
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
              * @type_function_param1_field6 value:any
-             * @type_function_param1_field7 displayValue:string
+             * @type_function_param1_field7 displayValue:any
              * @type_function_param1_field8 text:string
              * @type_function_param1_field9 columnIndex:number
              * @type_function_param1_field10 column:dxDataGridColumn
@@ -300,6 +301,7 @@ module.exports = {
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
              * @type_function_param1_field16 cellElement:dxElement
+             * @type_function_param1_field17 watch:function
              * @extends Action
              * @action
              */
@@ -310,7 +312,7 @@ module.exports = {
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
              * @type_function_param1_field6 value:any
-             * @type_function_param1_field7 displayValue:string
+             * @type_function_param1_field7 displayValue:any
              * @type_function_param1_field8 text:string
              * @type_function_param1_field9 columnIndex:number
              * @type_function_param1_field10 column:dxTreeListColumn
@@ -320,6 +322,7 @@ module.exports = {
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
              * @type_function_param1_field16 cellElement:dxElement
+             * @type_function_param1_field17 watch:function
              * @extends Action
              * @action
              */
@@ -586,7 +589,9 @@ module.exports = {
                         tableElement = that._getTableElement(),
                         contentElement = that._findContentElement(),
                         changeType = change && change.changeType,
-                        executors = [];
+                        executors = [],
+                        highlightChanges = this.option("highlightChanges"),
+                        rowInsertedClass = this.addWidgetPrefix(ROW_INSERTED_ANIMATION_CLASS);
 
                     switch(changeType) {
                         case "update":
@@ -619,6 +624,9 @@ module.exports = {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
                                                 $newRowElement.insertAfter($rowsElement.last());
+                                            }
+                                            if(highlightChanges && change.isLiveUpdate) {
+                                                $newRowElement.addClass(rowInsertedClass);
                                             }
                                             break;
                                         case "remove":
@@ -921,6 +929,7 @@ module.exports = {
 
                     parameters = this.callBase(options);
                     parameters.value = value;
+                    parameters.oldValue = options.oldValue;
                     parameters.displayValue = displayValue;
                     parameters.row = row;
                     parameters.key = row.key;

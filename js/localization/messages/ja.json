@@ -237,6 +237,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "空白ではない",
         "dxFilterBuilder-filterOperationBetween": "～から～の間",
         "dxFilterBuilder-filterOperationAnyOf": "どちらかを含む",
-        "dxFilterBuilder-filterOperationNoneOf": "すべて含まない"
+        "dxFilterBuilder-filterOperationNoneOf": "すべて含まない",
+
+        "dxHtmlEditor-dialogColorCaption": "!TODO!",
+        "dxHtmlEditor-dialogBackgroundCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkUrlField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTextField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTargetField": "!TODO!",
+        "dxHtmlEditor-dialogImageCaption": "!TODO!",
+        "dxHtmlEditor-dialogImageUrlField": "!TODO!",
+        "dxHtmlEditor-dialogImageAltField": "!TODO!",
+        "dxHtmlEditor-dialogImageWidthField": "!TODO!",
+        "dxHtmlEditor-dialogImageHeightField": "!TODO!"
     }
 }

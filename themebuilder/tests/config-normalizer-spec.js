@@ -494,4 +494,16 @@ describe("Cli arguments normalizer", () => {
             "themeName": "generic"
         });
     });
+
+    it("Paths are always normalized", () => {
+        let config = { lessPath: "my/custom/less", scssPath: "my/custom/scss" };
+        normalizeConfig(config);
+        assert.equal(config.lessPath, "my/custom/less/");
+        assert.equal(config.scssPath, "my/custom/scss/");
+
+        config = { lessPath: "my/custom/less/", scssPath: "my/custom/scss/" };
+        normalizeConfig(config);
+        assert.equal(config.lessPath, "my/custom/less/");
+        assert.equal(config.scssPath, "my/custom/scss/");
+    });
 });

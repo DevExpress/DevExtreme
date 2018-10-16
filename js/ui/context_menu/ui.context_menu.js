@@ -184,10 +184,10 @@ var ContextMenu = MenuBase.inherit((function() {
                 target: undefined,
 
                 /**
-                * @name dxContextMenuOptions.itemHoldAction
-                * @hidden
-                * @inheritdoc
-                */
+                 * @name dxContextMenuOptions.itemHoldAction
+                 * @hidden
+                 * @inheritdoc
+                 */
 
                 /**
                 * @name dxContextMenuOptions.onItemReordered

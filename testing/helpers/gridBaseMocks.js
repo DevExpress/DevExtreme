@@ -94,6 +94,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.items;
             },
 
+            getVisibleRows: function() {
+                return options.items;
+            },
+
             isEmpty: function() {
                 return !options.items || !options.items.length;
             },
@@ -187,6 +191,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     rows: options.rows
                 });
             },
+
+            reset: function() {},
 
             footerItems: function() {
                 var result = [];
@@ -681,7 +687,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         return data;
                     },
                     on: commonUtils.noop,
-                    off: commonUtils.noop
+                    off: commonUtils.noop,
+                    key: commonUtils.noop
                 };
             },
             dispose: function() {
@@ -892,6 +899,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             that.options.legacyRendering = false;
         }
 
+        that.optionCalled = $.Callbacks();
+
         that.option = function(options, value) {
             var result = that.options,
                 path;
@@ -905,6 +914,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     result = result[path[0]];
                     path.shift();
                 }
+                that.optionCalled.fire(options, value);
                 return result;
             }
 

@@ -81,6 +81,16 @@
     white-space: pre-wrap;
     word-wrap: break-word;
 
+    .dx-variable {
+        background: lightgray;
+        padding: 3px 0;
+        .border-radius(8px);
+    
+        & > span {
+            margin: 0 3px;   
+        }
+    }
+
     > * {
         cursor: text;
     }
@@ -204,12 +214,13 @@
     }
 }
 
-.dx-data-placeholder {
-    background: lightgray;
-    padding: 3px 0;
-    .border-radius(8px);
+.dx-formdialog-form {
+    min-width: 360px;
+}
 
-    & > span {
-        margin: 0 3px;   
+.dx-formdialog-field-target .dx-field-item-content{
+    text-align: right;
+    .dx-rtl & {
+        text-align: left;
     }
 }

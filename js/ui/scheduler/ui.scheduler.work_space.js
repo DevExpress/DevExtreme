@@ -437,6 +437,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._createAllDayPanelElements();
                 this._removeAllDayElements();
                 this._cleanWorkSpace();
+                this._toggleGroupByDateClass();
                 break;
             case "showAllDayPanel":
                 if(this._isVerticalGroupedWorkSpace()) {
@@ -516,6 +517,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _initGrouping: function() {
         this._initGroupedStrategy();
         this._toggleGroupingDirectionClass();
+        this._toggleGroupByDateClass();
     },
 
     _initGroupedStrategy: function() {
@@ -534,12 +536,16 @@ var SchedulerWorkSpace = Widget.inherit({
         return !!this.option("groups").length && this.option("groupOrientation") === "vertical";
     },
 
+    _isHorizontalGroupedWorkSpace: function() {
+        return !!this.option("groups").length && this.option("groupOrientation") === "horizontal";
+    },
+
     _toggleHorizontalScrollClass: function() {
         this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
     },
 
     _toggleGroupByDateClass: function() {
-        this.$element().toggleClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS, this.option("groupByDate"));
+        this.$element().toggleClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS, this.isGroupedByDate());
     },
 
     _toggleWorkSpaceCountClass: function() {
@@ -2077,6 +2083,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return coordinates;
     },
 
+    isGroupedByDate: function() {
+        return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace();
+    },
+
     getCellIndexByDate: function(date, inAllDayRow) {
         var timeInterval = inAllDayRow ? 24 * 60 * 60 * 1000 : this._getInterval(),
             dateTimeStamp = this._getIntervalBetween(date, inAllDayRow);
@@ -2312,6 +2322,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getCellDuration: function() {
         return 3600000 * this.option("hoursInterval");
+    },
+
+    getIntervalDuration: function() {
+        return this.getCellDuration();
     },
 
     getVisibleDayDuration: function() {

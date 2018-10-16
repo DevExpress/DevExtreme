@@ -269,6 +269,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Ei ole tyhjä",
         "dxFilterBuilder-filterOperationBetween": "Välillä",
         "dxFilterBuilder-filterOperationAnyOf": "Joku näistä",
-        "dxFilterBuilder-filterOperationNoneOf": "Ei mikään näistä"
+        "dxFilterBuilder-filterOperationNoneOf": "Ei mikään näistä",
+
+        "dxHtmlEditor-dialogColorCaption": "!TODO!",
+        "dxHtmlEditor-dialogBackgroundCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkUrlField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTextField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTargetField": "!TODO!",
+        "dxHtmlEditor-dialogImageCaption": "!TODO!",
+        "dxHtmlEditor-dialogImageUrlField": "!TODO!",
+        "dxHtmlEditor-dialogImageAltField": "!TODO!",
+        "dxHtmlEditor-dialogImageWidthField": "!TODO!",
+        "dxHtmlEditor-dialogImageHeightField": "!TODO!"
     }
 }

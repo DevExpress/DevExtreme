@@ -1,0 +1,26 @@
+.dx-buttongroup {
+    display: inline-block;
+}
+
+.dx-buttongroup-wrapper {
+    .flex-container(row, nowrap);
+}
+
+.dx-buttongroup-item {
+    .flex-item(0, 1, auto);
+
+    &.dx-button {
+        border-radius: 0;
+        border-left-width: 0;
+    }
+
+    &.dx-button-mode-text {
+        margin-left: 1px;
+    }
+}
+
+.dx-buttongroup-item-has-width {
+    .flex-item();
+    width: 100%;
+}
+

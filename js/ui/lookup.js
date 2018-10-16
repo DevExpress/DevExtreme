@@ -336,6 +336,11 @@ var Lookup = DropDownList.inherit({
              */
 
             /**
+             * @name dxLookupOptions.openOnFieldClick
+             * @hidden
+             */
+
+            /**
              * @name dxLookupOptions.showDropDownButton
              * @inheritdoc
              * @hidden

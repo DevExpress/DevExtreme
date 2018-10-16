@@ -269,6 +269,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Är inte tom",
         "dxFilterBuilder-filterOperationBetween": "Mellan",
         "dxFilterBuilder-filterOperationAnyOf": "Någon av",
-        "dxFilterBuilder-filterOperationNoneOf": "Ingen av"
+        "dxFilterBuilder-filterOperationNoneOf": "Ingen av",
+
+        "dxHtmlEditor-dialogColorCaption": "!TODO!",
+        "dxHtmlEditor-dialogBackgroundCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkUrlField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTextField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTargetField": "!TODO!",
+        "dxHtmlEditor-dialogImageCaption": "!TODO!",
+        "dxHtmlEditor-dialogImageUrlField": "!TODO!",
+        "dxHtmlEditor-dialogImageAltField": "!TODO!",
+        "dxHtmlEditor-dialogImageWidthField": "!TODO!",
+        "dxHtmlEditor-dialogImageHeightField": "!TODO!"
     }
 }

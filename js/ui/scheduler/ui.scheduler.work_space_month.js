@@ -15,6 +15,8 @@ var MONTH_CLASS = "dx-scheduler-work-space-month",
 var DAYS_IN_WEEK = 7,
     DAY_IN_MILLISECONDS = 86400000;
 
+var toMs = dateUtils.dateToMilliseconds;
+
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _toggleFixedScrollableClass: function() {
         this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
@@ -225,6 +227,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
     getCellDuration: function() {
         return this._calculateDayDuration() * 3600000;
+    },
+
+    getIntervalDuration: function() {
+        return toMs("day");
     },
 
     getTimePanelWidth: function() {

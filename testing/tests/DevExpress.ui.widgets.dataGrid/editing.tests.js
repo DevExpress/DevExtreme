@@ -2737,6 +2737,37 @@ QUnit.test('Cancel Editing Row should not update all rows when form mode', funct
     assert.strictEqual($oldRowElements.get(2), $rowElements.get(2), "row 2 is not changed");
 });
 
+// T677605
+QUnit.test('The "Cancel" button of the Editing form should be clicked once to close it when rowTemplate is used', function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+
+    that.options.rowTemplate = function(container) {
+        var markup = $("<tbody class='dx-row'></tbody>");
+        markup.appendTo(container);
+    };
+
+    rowsView.render(testElement);
+
+    that.editRow(0);
+
+    // act
+    var $editElement = testElement.find('.dx-edit-row');
+    assert.equal($editElement.length, 1);
+    that.cancelEditData();
+
+    // assert
+    $editElement = testElement.find('.dx-edit-row');
+    assert.equal($editElement.length, 0);
+});
+
 QUnit.test('Edit number cell via keyboard arrows (arrow up key)', function(assert) {
     // arrange
     var $testElement = $('#container'),
@@ -10978,6 +11009,62 @@ QUnit.test("Validation show only one message for editing cell in virtual mode", 
     // act
     this.saveEditData();
     // assert
+    assert.equal(testElement.find(".dx-error-row").length, 1);
+});
+
+// T676492
+QUnit.test("Validation is hiding when some data rows are removing from DOM in virtual mode", function(assert) {
+    // arrange
+    var testElement = $("#container");
+
+    this.options.scrolling = {
+        mode: "virtual",
+        useNative: false
+    };
+
+    this.options.errorRowEnabled = true;
+
+    this.options.onRowValidating = function(e) {
+        e.isValid = false;
+        e.errorText = "Test";
+    };
+
+    this.options.dataSource = generateDataSource(10, 2);
+    this.options.paging.pageSize = 2;
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+    };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(10);
+    this.rowsView.resize();
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
+
+    // act
+    this.editCell(1, 0);
+    testElement.find("input").val("test");
+    testElement.find("input").trigger("change");
+    this.saveEditData();
+
+    // assert
+    assert.equal(testElement.find(".dx-error-row").length, 1);
+
+    // arrange
+    this.rowsView.scrollTo({ y: 550 });
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 4, "page index");
+    assert.equal(testElement.find(".dx-error-row").length, 0);
+
+    // arrange
+    this.rowsView.scrollTo({ y: 0 });
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
     assert.equal(testElement.find(".dx-error-row").length, 1);
 });
 

@@ -1597,7 +1597,9 @@ QUnit.begin(function() {
 
         assert.equal(tooltipModule.Tooltip.callCount, 0);
         assert.ok(!("_tooltip" in sparkline));
-        assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ "pointer-events": "visible" }]);
+        assert.strictEqual(this.renderer.root.attr.callCount, 2);
+        assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ "pointer-events": "visible" }]);
+        assert.deepEqual(this.renderer.root.attr.getCall(1).args, ["pointer-events"]);
     });
 
     QUnit.test('Create html groups', function(assert) {

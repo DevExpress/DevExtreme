@@ -38,6 +38,12 @@ module.exports = {
              */
             repaintChangesOnly: false,
             /**
+             * @name GridBaseOptions.highlightChanges
+             * @type boolean
+             * @default false
+             */
+            highlightChanges: false,
+            /**
              * @name GridBaseOptions.onDataErrorOccurred
              * @extends Action
              * @type function(e)
@@ -248,17 +254,16 @@ module.exports = {
                         "repaintRows"
                     ];
                 },
+                reset: function() {
+                    this._columnsController.reset();
+                    this._items = [];
+                    this._refreshDataSource();
+                },
                 optionChanged: function(args) {
                     var that = this;
 
                     function handled() {
                         args.handled = true;
-                    }
-
-                    function reload() {
-                        that._columnsController.reset();
-                        that._items = [];
-                        that._refreshDataSource();
                     }
 
                     if(args.name === "dataSource" && args.name === args.fullName && (args.value === args.previousValue || (that.option("columns") && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
@@ -274,6 +279,7 @@ module.exports = {
                     switch(args.name) {
                         case "cacheEnabled":
                         case "repaintChangesOnly":
+                        case "highlightChanges":
                         case "loadingTimeout":
                         case "remoteOperations":
                             handled();
@@ -281,14 +287,20 @@ module.exports = {
                         case "keyExpr":
                         case "dataSource":
                         case "scrolling":
-                        case "paging":
                             handled();
                             if(!that.skipProcessingPagingChange(args.fullName)) {
-                                reload();
+                                that.reset();
                             }
                             break;
+                        case "paging":
+                            var dataSource = that.dataSource();
+                            if(dataSource && that._setPagingOptions(dataSource)) {
+                                dataSource.load();
+                            }
+                            handled();
+                            break;
                         case "rtlEnabled":
-                            reload();
+                            that.reset();
                             break;
                         default:
                             that.callBase(args);
@@ -480,18 +492,25 @@ module.exports = {
                         pagingEnabled = this.option("paging.enabled"),
                         scrollingMode = this.option("scrolling.mode"),
                         appendMode = scrollingMode === "infinite",
-                        virtualMode = scrollingMode === "virtual";
+                        virtualMode = scrollingMode === "virtual",
+                        paginate = pagingEnabled || virtualMode || appendMode,
+                        isChanged = false;
 
                     dataSource.requireTotalCount(!appendMode);
-                    if(pagingEnabled !== undefined) {
-                        dataSource.paginate(pagingEnabled || virtualMode || appendMode);
+                    if(pagingEnabled !== undefined && dataSource.paginate() !== paginate) {
+                        dataSource.paginate(paginate);
+                        isChanged = true;
                     }
-                    if(pageSize !== undefined) {
+                    if(pageSize !== undefined && dataSource.pageSize() !== pageSize) {
                         dataSource.pageSize(pageSize);
+                        isChanged = true;
                     }
-                    if(pageIndex !== undefined) {
+                    if(pageIndex !== undefined && dataSource.pageIndex() !== pageIndex) {
                         dataSource.pageIndex(pageIndex);
+                        isChanged = true;
                     }
+
+                    return isChanged;
                 },
                 _getSpecificDataSourceOption: function() {
                     var dataSource = this.option("dataSource");
@@ -606,7 +625,7 @@ module.exports = {
 
                     if(change.changeType === "update") {
                         that._applyChangeUpdate(change);
-                    } else if(change.repaintChangesOnly && change.changeType === "refresh") {
+                    } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
                         that._applyChangesOnly(change);
                     } else {
                         that._applyChangeFull(change);
@@ -676,7 +695,7 @@ module.exports = {
                             that._items[rowIndex] = newItem;
                             if(oldItem.visible !== newItem.visible) {
                                 change.items.splice(-1, 1, { visible: newItem.visible });
-                            } else if(repaintChangesOnly) {
+                            } else if(repaintChangesOnly && !change.isFullUpdate) {
                                 newItem.cells = oldItem.cells;
                                 columnIndices = that._getChangedColumnIndices(oldItem, newItem, rowIndex);
                             }
@@ -719,6 +738,9 @@ module.exports = {
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
                             if(this._isCellChanged(oldItem, newItem, rowIndex, columnIndex, isLiveUpdate)) {
                                 columnIndices.push(columnIndex);
+                            } else {
+                                var cell = oldItem.cells && oldItem.cells[columnIndex];
+                                cell && cell.update && cell.update();
                             }
                         }
                         return columnIndices;
@@ -751,6 +773,12 @@ module.exports = {
                             }
                         }
 
+                        if(item1 && item1.cells) {
+                            item1.cells.forEach(function(cell) {
+                                cell && cell.update && cell.update();
+                            });
+                        }
+
                         return true;
                     };
 
@@ -778,6 +806,7 @@ module.exports = {
                                 items.push(newItem);
                                 this._items[index] = newItem;
                                 newItem.cells = oldItem.cells;
+                                newItem.oldValues = oldItem.values;
                                 columnIndices.push(this._getChangedColumnIndices(oldItem, newItem, index, true));
                                 break;
                             case "insert":
@@ -803,6 +832,9 @@ module.exports = {
                     change.columnIndices = columnIndices;
                     change.changeTypes = changeTypes;
                     change.items = items;
+                    if(oldItems.length) {
+                        change.isLiveUpdate = true;
+                    }
 
                     this._correctRowIndices(function getRowIndexCorrection(rowIndex) {
                         var oldItem = oldItems[rowIndex],
@@ -847,8 +879,12 @@ module.exports = {
                         change.repaintChangesOnly = that.option("repaintChangesOnly");
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
+
                         change.repaintChangesOnly = operationTypes && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
+                        if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
+                            change.needUpdateDimensions = true;
+                        }
                     }
 
                     if(that._updateLockCount) {
@@ -1291,7 +1327,7 @@ module.exports = {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
-                        this.updateItems({ changeType: "update", rowIndices: rowIndexes });
+                        this.updateItems({ changeType: "update", rowIndices: rowIndexes, isFullUpdate: true });
                     }
                 },
 

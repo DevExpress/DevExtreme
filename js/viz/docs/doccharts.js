@@ -412,15 +412,77 @@ var dxChart = {
         position: 'top'
     },
     /**
+    * @name dxChartOptions.zoomAndPan
+    * @type object
+    */
+    zoomAndPan: {
+        /**
+        * @name dxChartOptions.zoomAndPan.valueAxis
+        * @type Enums.ChartZoomAndPanMode
+        * @default 'none'
+        */
+        valueAxis: 'none',
+        /**
+        * @name dxChartOptions.zoomAndPan.argumentAxis
+        * @type Enums.ChartZoomAndPanMode
+        * @default 'none'
+        */
+        argumentAxis: 'none',
+        /**
+        * @name dxChartOptions.zoomAndPan.dragToZoom
+        * @type boolean
+        * @default false
+        */
+        dragToZoom: false,
+        /**
+        * @name dxChartOptions.zoomAndPan.dragBoxStyle
+        * @type object
+        */
+        dragBoxStyle: {
+            /**
+            * @name dxChartOptions.zoomAndPan.dragBoxStyle.color
+            * @type string
+            * @default undefined
+            */
+            color: undefined,
+            /**
+            * @name dxChartOptions.zoomAndPan.dragBoxStyle.opacity
+            * @type number
+            * @default undefined
+            */
+            opacity: undefined
+        },
+        /**
+        * @name dxChartOptions.zoomAndPan.panKey
+        * @type Enums.EventKeyModifier
+        * @default 'shift'
+        */
+        panKey: 'shift',
+        /**
+        * @name dxChartOptions.zoomAndPan.allowMouseWheel
+        * @type boolean
+        * @default true
+        */
+        allowMouseWheel: true,
+        /**
+        * @name dxChartOptions.zoomAndPan.allowGestures
+        * @type boolean
+        * @default true
+        */
+        allowGestures: true
+    },
+    /**
     * @name dxChartOptions.zoomingMode
     * @type Enums.ChartPointerType
     * @default 'none'
+    * @deprecated dxChartOptions.zoomAndPan
     */
     zoomingMode: 'none',
     /**
     * @name dxChartOptions.scrollingMode
     * @type Enums.ChartPointerType
     * @default 'none'
+    * @deprecated dxChartOptions.zoomAndPan
     */
     scrollingMode: 'none',
     /**

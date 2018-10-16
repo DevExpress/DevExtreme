@@ -37,6 +37,7 @@ module.exports = {
                  * @type_function_param2 detailInfo:object
                  * @type_function_param2_field1 key:any
                  * @type_function_param2_field2 data:object
+                 * @type_function_param2_field3 watch:function
                  */
                 template: null
             }

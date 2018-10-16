@@ -122,6 +122,30 @@ QUnit.test("Initialize from options with field names and visible indexes", funct
     assert.strictEqual(visibleColumns[3].dataField, "TestField1");
 });
 
+QUnit.test("Initialize from options with field names and visible indexes with useLegacyVisibleIndex", function(assert) {
+    var oldUseLegacyVisibleIndex = config().useLegacyVisibleIndex;
+
+    config({ useLegacyVisibleIndex: true });
+
+    try {
+        this.applyOptions({
+            columns: [{ dataField: 'TestField1', visibleIndex: 11 }, { dataField: 'TestField2', visibleIndex: 1 }, { dataField: 'TestField3' }, { dataField: 'TestField4', visibleIndex: 3 }]
+        });
+
+        var visibleColumns = this.columnsController.getVisibleColumns(),
+            visibleIndices = visibleColumns.map(function(column) { return column.visibleIndex; });
+
+        assert.strictEqual(visibleColumns.length, 4);
+        assert.strictEqual(visibleColumns[0].dataField, "TestField2");
+        assert.strictEqual(visibleColumns[1].dataField, "TestField4");
+        assert.strictEqual(visibleColumns[2].dataField, "TestField1");
+        assert.strictEqual(visibleColumns[3].dataField, "TestField3");
+        assert.deepEqual(visibleIndices, [0, 1, 2, 3], "visible indices");
+    } finally {
+        config({ useLegacyVisibleIndex: oldUseLegacyVisibleIndex });
+    }
+});
+
 // T637671
 QUnit.test("Initialize from options if visible index is specified for a single column", function(assert) {
     this.applyOptions({

@@ -311,7 +311,7 @@ testComponentDefaults(TextEditor,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: "standard"
+        stylingMode: "underlined"
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

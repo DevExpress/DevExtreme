@@ -7,7 +7,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
     APPOINTMENT_MIN_WIDTH = 5,
-    APPOINTMENT_DEFAULT_WIDTH = 65,
+    APPOINTMENT_DEFAULT_WIDTH = 50,
     ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5,
     ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
@@ -177,7 +177,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _customizeVerticalCoordinates: function(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {
         var index = coordinates.index,
-            appointmentWidth = width / appointmentCountPerCell,
+            appointmentWidth = Math.max(width / appointmentCountPerCell, width / coordinates.count),
             height = coordinates.height,
             appointmentLeft = coordinates.left + (coordinates.index * appointmentWidth),
             top = coordinates.top,
@@ -257,8 +257,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             return 0;
         }
 
-        var startDate = new Date(this._startDate(appointment, false, position)),
-            endDate = this._endDate(appointment, position, isRecurring),
+        var startDate = new Date(this.startDate(appointment, false, position)),
+            endDate = this.endDate(appointment, position, isRecurring),
             cellWidth = this._defaultWidth || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);
@@ -269,8 +269,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     calculateAppointmentHeight: function(appointment, position) {
-        var endDate = this._endDate(appointment, position),
-            startDate = this._startDate(appointment, false, position),
+        var endDate = this.endDate(appointment, position),
+            startDate = this.startDate(appointment, false, position),
             allDay = this.instance.fire("getField", "allDay", appointment);
 
         if(this.isAllDay(appointment)) {

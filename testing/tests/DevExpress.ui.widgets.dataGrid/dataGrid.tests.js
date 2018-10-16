@@ -7122,6 +7122,64 @@ QUnit.test("paging change", function(assert) {
     assert.ok(!dataGrid.getView("pagerView").isVisible(), "pager visibility when paging disabled");
 });
 
+QUnit.test("paging change", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        pageIndex: 1,
+        pageSize: 2
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 1, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+    assert.deepEqual(dataGrid.getVisibleRows().length, 2, "row count");
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { value: 3 }, "first row data");
+});
+
+// T677650
+QUnit.test("paging change if nested options are not changed", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }, { value: 5 }],
+            pageSize: 3
+        }
+    });
+
+    var changedSpy = sinon.spy();
+    var loadingSpy = sinon.spy();
+
+    dataGrid.getDataSource().on("changed", changedSpy);
+    dataGrid.getDataSource().store().on("loading", loadingSpy);
+
+    // act
+    dataGrid.option("paging", {
+        enabled: true,
+        pageIndex: 0,
+        pageSize: 3
+    });
+
+    // assert
+    assert.strictEqual(changedSpy.callCount, 0, "changed is called");
+    assert.strictEqual(loadingSpy.callCount, 0, "loading is not called");
+});
+
 // T121445
 QUnit.test("pager.allowedPageSizes change", function(assert) {
     // arrange, act
@@ -8054,6 +8112,35 @@ QUnit.test("add row if dataSource is not defined", function(assert) {
 
     // assert
     assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
+});
+
+QUnit.test("add row without return key", function(assert) {
+    // arrange, act
+    var array = [{ id: 1, name: "Test 1" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "batch"
+        },
+        dataSource: {
+            key: "id",
+            load: function() {
+                return array;
+            },
+            insert: function(values) {
+                array.push(values);
+            }
+        }
+    });
+
+    // act
+    dataGrid.addRow();
+    dataGrid.saveEditData();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 2, "visible rows");
+    assert.strictEqual(dataGrid.hasEditData(), false, "no edit data");
 });
 
 QUnit.test("Disable editing buttons after insert a row", function(assert) {
@@ -10522,6 +10609,52 @@ QUnit.test("Repaint rows", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
+QUnit.test("Repaint rows with repaintChangesOnly", function(assert) {
+    // arrange
+    var $rowElements,
+        $updatedRowElements,
+        dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            dataSource: dataSource,
+            columns: ["field1"]
+        });
+
+    dataSource.store().update(1, { field1: "test5" });
+    dataSource.store().update(3, { field1: "test6" });
+
+    // assert
+    $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
+    assert.equal($rowElements.length, 4, "count row");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test3", "third row - value of the first cell");
+
+    // act
+    dataGrid.repaintRows([0, 2]);
+
+    // assert
+    $updatedRowElements = $($(dataGrid.$element()).find(".dx-data-row"));
+    assert.equal($updatedRowElements.length, 4, "count row");
+    assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
+    assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
+    assert.ok(!$updatedRowElements.eq(2).is($rowElements.eq(2)), "third row is updated");
+    assert.ok($updatedRowElements.eq(3).is($rowElements.eq(3)), "fourth row isn't updated");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test5", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
+});
+
 QUnit.test("Refresh with changesOnly", function(assert) {
     // arrange
     var $cellElements,
@@ -10560,6 +10693,74 @@ QUnit.test("Refresh with changesOnly", function(assert) {
     assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't updated");
     assert.ok($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell isn't updated");
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
+});
+
+QUnit.test("Refresh with highlighting and check oldValue", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", {
+                dataField: "field1",
+                name: "field1"
+            }, {
+                dataField: "field1",
+                name: "field1WithTemplate",
+                cellTemplate: function(container, options) {
+                    $(container).text(options.text + (options.oldValue ? " old:" + options.oldValue : ""));
+                }
+            }]
+        });
+
+    var CELL_UPDATED_CLASS = "dx-datagrid-cell-updated-animation",
+        ROW_INSERTED_CLASS = "dx-datagrid-row-inserted-animation",
+        store = dataSource.store();
+
+    this.clock.tick();
+
+    store.update(1, { field1: "test11" });
+    store.insert({ id: 5, field1: "test5" });
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.notOk($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
+
+    // act
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.notOk($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
+    assert.notOk($(dataGrid.getRowElement(4)).hasClass(ROW_INSERTED_CLASS));
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).text(), "test11 old:test1", "cell value is updated");
+
+    // act
+    dataGrid.option("highlightChanges", true);
+
+    store.update(1, { field1: "test111" });
+    store.insert({ id: 6, field1: "test6" });
+
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.ok($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
+    assert.ok($(dataGrid.getRowElement(5)).hasClass(ROW_INSERTED_CLASS));
+    assert.strictEqual($(dataGrid.getCellElement(0, 2)).text(), "test111 old:test11", "cell value is updated");
 });
 
 QUnit.test("Refresh with changesOnly and cellTemplate", function(assert) {
@@ -10609,6 +10810,225 @@ QUnit.test("Refresh with changesOnly and cellTemplate", function(assert) {
     assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't updated");
     assert.ok(!$updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is updated");
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
+});
+
+QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", "field1"],
+            editing: {
+                mode: "cell"
+            },
+            repaintChangesOnly: true,
+            onCellPrepared: function(e) {
+                if(e.isEditing) {
+                    e.watch(function() {
+                        return e.column.calculateCellValue(e.data);
+                    }, function() {
+                        $(e.cellElement).addClass("changed");
+                    });
+                }
+            }
+        });
+
+    this.clock.tick();
+    dataGrid.editCell(0, 1);
+
+    dataSource.store().update(1, { field1: "test5" });
+
+    // assert
+    var $cell = $(dataGrid.getCellElement(0, 1));
+
+    // act
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 1)).is($cell), "first cell isn't updated");
+    assert.ok($cell.hasClass("changed"), "class changed is added");
+    assert.equal($(dataGrid.element()).find(".changed").length, 1, "class changed is added to one cell only");
+});
+
+QUnit.test("Column widths should be updated after expand group row if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        dataSource: [
+            { id: 1, group: "group1" },
+            { id: 2, group: "group1" },
+            { id: 3, group: "group2" },
+            { id: 4, group: "group2" }
+        ],
+        grouping: {
+            autoExpandAll: false
+        },
+        columns: ["id", {
+            dataField: "group",
+            groupIndex: 0
+        }],
+        repaintChangesOnly: true
+    });
+
+    dataGrid.expandRow(["group1"]);
+
+    // assert
+    assert.equal(dataGrid.getVisibleColumns()[0].visibleWidth, 30, "visibleWidth for first groupExpand column");
+});
+
+QUnit.test("Stop watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        watchUpdateCount = 0,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", "field1"],
+            editing: {
+                mode: "cell"
+            },
+            repaintChangesOnly: true,
+            onCellPrepared: function(e) {
+                if(e.isEditing) {
+                    var stopWatch = e.watch(function() {
+                        return e.column.calculateCellValue(e.data);
+                    }, function() {
+                        watchUpdateCount++;
+                        if(watchUpdateCount === 2) {
+                            stopWatch();
+                        }
+                    });
+                }
+            }
+        });
+
+    this.clock.tick();
+    dataGrid.editCell(0, 1);
+
+    for(var i = 0; i < 5; i++) {
+        dataSource.store().update(1, { field1: "changed" + i });
+        dataGrid.refresh(true);
+        this.clock.tick();
+    }
+
+    // assert
+    assert.equal(watchUpdateCount, 2, "watch is stopped on second update");
+});
+
+QUnit.test("Using watch in masterDetail template if repaintChangesOnly", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            columns: ["id", "field1"],
+            editing: {
+                mode: "cell"
+            },
+            repaintChangesOnly: true,
+            masterDetail: {
+                template: function(container, options) {
+                    var $detail = $("<div>").addClass("detail").appendTo(container);
+
+                    $detail.text(options.data.field1);
+
+                    options.watch(function(data) {
+                        return data.field1;
+                    }, function(newValue) {
+                        $detail.text(newValue);
+                    });
+                }
+            }
+        });
+
+    this.clock.tick();
+    dataGrid.expandRow(1);
+
+    dataSource.store().update(1, { field1: "changed" });
+
+    // assert
+    var $detail = $(dataGrid.element()).find(".detail");
+
+    // act
+    dataGrid.refresh(true);
+    this.clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.element()).find(".detail").is($detail), "detail element isn't updated");
+    assert.ok($detail.text(), "changed", "detail text is changed");
+});
+
+QUnit.test("push changes for adaptive row", function(assert) {
+    // arrange
+    var dataSource = new DataSource({
+            pushAggregationTimeout: 0,
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            width: 100,
+            columnWidth: 100,
+            columnHidingEnabled: true,
+            repaintChangesOnly: true,
+            loadingTimeout: undefined,
+            keyExpr: "id",
+            dataSource: dataSource
+        });
+
+
+    dataGrid.expandAdaptiveDetailRow(2);
+
+    var $cell = $(dataGrid.getCellElement(2, 1));
+
+    // act
+    dataGrid.getDataSource().store().push([{ type: "update", key: 2, data: { field1: "test updated" } }]);
+
+    // assert
+    assert.strictEqual($cell.text(), "test updated", "field1 text is updated");
 });
 
 QUnit.test("Refresh with changesOnly and summary", function(assert) {
@@ -10712,7 +11132,7 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
             pushAggregationTimeout: 0
         }),
         dataGrid = createDataGrid({
-            height: 100,
+            height: 50,
             loadingTimeout: undefined,
             repaintChangesOnly: true,
             scrolling: {

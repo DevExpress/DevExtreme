@@ -176,6 +176,104 @@ QUnit.test("incomplete animation should be stopped after toggling visibility", a
     }
 });
 
+QUnit.test("incomplete animation should be stopped after closing on outside click", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "overlap",
+        closeOnOutsideClick: true,
+        revealMode: "expand",
+        shading: true
+    });
+
+    let origFxStop = fx.stop,
+        panelStopCalls = 0,
+        contentStopCalls = 0,
+        overlayContentStopCalls = 0,
+        shaderStopCalls = 0,
+        isJumpedToEnd = false;
+
+    const instance = $element.dxDrawer("instance");
+    fx.stop = function($element, jumpToEnd) {
+        if(jumpToEnd) {
+            isJumpedToEnd = true;
+        }
+        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            panelStopCalls++;
+        }
+        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            contentStopCalls++;
+        }
+        if($element.hasClass("dx-overlay-content")) {
+            overlayContentStopCalls++;
+        }
+        if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            shaderStopCalls++;
+        }
+    };
+
+    try {
+        fx.off = false;
+
+        $(instance.viewContent()).trigger("dxclick");
+
+        assert.equal(panelStopCalls, 2, "animation should stops before closing");
+        assert.equal(contentStopCalls, 2, "animation should stops before closing");
+        assert.equal(overlayContentStopCalls, 2, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 2, "animation should stops before closing");
+        assert.notOk(isJumpedToEnd, "elements aren't returned to the end position after animation stopping");
+    } finally {
+        fx.off = true;
+        fx.stop = origFxStop;
+    }
+});
+
+QUnit.test("incomplete animation should be stopped after changing modes", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "push",
+        animationDuration: 500,
+        closeOnOutsideClick: true,
+        revealMode: "slide",
+        shading: true
+    });
+
+    let origFxStop = fx.stop,
+        panelStopCalls = 0,
+        contentStopCalls = 0,
+        shaderStopCalls = 0,
+        isJumpedToEnd = false;
+
+    const instance = $element.dxDrawer("instance");
+    fx.stop = function($element, jumpToEnd) {
+        isJumpedToEnd = jumpToEnd;
+
+        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+            panelStopCalls++;
+        }
+        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+            contentStopCalls++;
+        }
+        if($element.hasClass(DRAWER_SHADER_CLASS)) {
+            shaderStopCalls++;
+        }
+    };
+
+    try {
+        fx.off = false;
+
+        instance.option("openedStateMode", "shrink");
+        instance.option("revealMode", "expand");
+
+        assert.equal(panelStopCalls, 2, "animation should stops before closing");
+        assert.equal(contentStopCalls, 2, "animation should stops before closing");
+        assert.equal(shaderStopCalls, 2, "animation should stops before closing");
+        assert.ok(isJumpedToEnd, "elements are returned to the end position after animation stopping");
+    } finally {
+        fx.off = true;
+        fx.stop = origFxStop;
+    }
+});
+
 QUnit.test("drawer shouldn't fail after changing openedStateMode", assert => {
     const $element = $("#drawer").dxDrawer({
         openedStateMode: "push"
@@ -246,6 +344,28 @@ QUnit.test("wrapper content should be reversed if position = 'bottom' or 'right'
     const instance = $element.dxDrawer("instance");
 
     instance.option("position", "right");
+    let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
+    let $content = $wrapper.children();
+
+    assert.ok($content.eq(1).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(0).hasClass("dx-drawer-content"));
+
+    instance.option("position", "left");
+
+    $content = $wrapper.children();
+
+    assert.ok($content.eq(0).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(1).hasClass("dx-drawer-content"));
+});
+
+QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "push",
+        position: "right"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "shrink");
     let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
     let $content = $wrapper.children();
 
@@ -402,7 +522,23 @@ QUnit.test("shader should not be visible if drawer is closed", assert => {
 
     const $shader = $element.find("." + DRAWER_SHADER_CLASS);
 
-    assert.ok($shader.is(":hidden"), "shader is visible");
+    assert.ok($shader.is(":hidden"), "shader is hidden");
+    assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
+});
+
+QUnit.test("shader should have correct visibility after toggling state", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        shading: true,
+        animationEnabled: false
+    });
+    const instance = $element.dxDrawer("instance");
+    const $shader = $element.find("." + DRAWER_SHADER_CLASS);
+
+    instance.toggle();
+
+    assert.ok($shader.is(":hidden"), "shader is hidden");
+    assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
 });
 
 QUnit.test("shading option", assert => {
@@ -695,7 +831,7 @@ QUnit.test("panel should be rendered correctly after openedStateMode changing, v
     fx.off = false;
 });
 
-QUnit.test("panel and content should be rendered correctly after revealMode changing", assert => {
+QUnit.test("panel and content should be rendered correctly after revealMode changing, horizontal direction", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -736,7 +872,79 @@ QUnit.test("panel and content should be rendered correctly after revealMode chan
     fx.off = false;
 });
 
+QUnit.test("panel and content should be rendered correctly after revealMode changing, vertical direction", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: true,
+        position: "top",
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 2000);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("opened", false);
+    instance.option("revealMode", "expand");
+
+    let $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    let $panelContent = $panel.find(".dx-overlay-content").eq(0);
+
+    assert.equal($panelContent.height(), 50, "panel content has correct size");
+    assert.equal($panel.position().top, 0, "panel has correct position");
+    assert.equal($panelContent.position().top, 0, "panel content has correct position");
+
+    instance.option("opened", true);
+    instance.option("revealMode", "slide");
+
+    $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    $panelContent = $panel.find(".dx-overlay-content").eq(0);
+
+    assert.equal($panelContent.height(), 200, "panel content has correct size");
+    assert.equal($panel.position().top, 0, "panel has correct position");
+    assert.equal($panelContent.position().top, 0, "panel content has correct position");
+
+    fx.off = false;
+});
+
 QUnit.module("shrink mode");
+
+QUnit.test("panel should have correct width in shrink mode after drawer resizing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        width: 800,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 2000);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
+
+    resizeCallbacks.fire();
+    assert.equal($panel.width(), 50, "panel has correct width when minSize is set");
+
+    fx.off = false;
+});
 
 QUnit.test("minSize should be rendered correctly in shrink mode, expand", assert => {
     fx.off = true;
@@ -886,6 +1094,37 @@ QUnit.test("minSize and maxSize should be rendered correctly in shrink mode, bot
     assert.equal($content.position().top, 0, "content has correct top");
     assert.equal($panel.position().top, 900, "panel has correct top");
     assert.equal($panel.height(), 100, "panel has correct height");
+
+    fx.off = false;
+});
+
+QUnit.test("panel should have correct height in shrink mode after drawer resizing, expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        maxSize: 100,
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        contentTemplate: 'contentTemplate',
+        openedStateMode: "shrink",
+        width: 800,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 2000);
+
+            return $div;
+        }
+    });
+
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.height(), 50, "panel has correct height when minSize is set");
+
+    resizeCallbacks.fire();
+    assert.equal($panel.height(), 50, "panel has correct height when minSize is set");
 
     fx.off = false;
 });
@@ -1109,6 +1348,11 @@ QUnit.test("drawer panel overlay should have right config depending on position 
     assert.equal(overlay.option("position").my, "top left");
     assert.equal(overlay.option("position").at, "top left");
 
+    drawer.option("position", "right");
+    overlay = drawer.getOverlay();
+    assert.equal(overlay.option("position").my, "top right");
+    assert.equal(overlay.option("position").at, "top right");
+
     drawer.option("position", "top");
     overlay = drawer.getOverlay();
     assert.equal(overlay.option("position").my, "top");
@@ -1144,12 +1388,14 @@ QUnit.test("minSize should be rendered correctly in overlap mode, expand", asser
     const $overlayContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
+    assert.equal($content.css("paddingLeft"), "50px", "content has correct padding when minSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 50, "panel content has correct width when minSize is set");
 
     instance.toggle();
 
     assert.equal($content.position().left, 0, "content has correct left when minSize is set");
+    assert.equal($content.css("paddingLeft"), "50px", "content has correct padding when minSize is set");
     assert.equal($panel.position().left, 0, "panel has correct left when minSize is set");
     assert.equal($overlayContent.width(), 200, "panel content has correct width when minSize is set");
 
@@ -1690,6 +1936,31 @@ QUnit.test("drawer panel should be repositioned after dimension changed", assert
     fx.off = false;
 });
 
+QUnit.test("drawer panel should be repositioned after dimension changed, right position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        revealMode: "slide",
+        position: "right",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelOverlayContent.position().left, 0, "panel overlay content position is OK");
+
+    fx.off = false;
+});
+
 QUnit.module("rtl");
 
 QUnit.test("content should have correct position if panel is visible in rtl mode", assert => {
@@ -1706,22 +1977,43 @@ QUnit.test("content should have correct position if panel is visible in rtl mode
     assert.equal(position($content), -$panel.width(), "container rendered at correct position");
 });
 
+QUnit.test("drawer panel overlay should have right position config", assert => {
+    let drawer = $("#drawer").dxDrawer({
+            openedStateMode: "overlap",
+            rtlEnabled: true
+        }).dxDrawer("instance"),
+        overlay = drawer.getOverlay();
+
+    assert.equal(overlay.option("position").my, "top right");
+    assert.equal(overlay.option("position").at, "top right");
+
+    drawer.option("position", "right");
+    overlay = drawer.getOverlay();
+
+    assert.equal(overlay.option("position").my, "top left");
+    assert.equal(overlay.option("position").at, "top left");
+});
+
 QUnit.module("closeOnOutsideClick");
 
 QUnit.test("drawer should be hidden after click on content", (assert) => {
     var drawer = $("#drawer").dxDrawer({
             closeOnOutsideClick: false,
-            opened: true
+            opened: true,
+            shading: true
         })
         .dxDrawer("instance"),
         $content = drawer.viewContent();
 
-    $($content).trigger("dxpointerdown");
+    $($content).trigger("dxclick");
     assert.equal(drawer.option("opened"), true, "drawer is not hidden");
     drawer.option("closeOnOutsideClick", true);
 
-    $($content).trigger("dxpointerdown");
+    const $shader = drawer.$element().find("." + DRAWER_SHADER_CLASS);
+    $($content).trigger("dxclick");
+
     assert.equal(drawer.option("opened"), false, "drawer is hidden");
+    assert.ok($shader.is(":hidden"), "shader is hidden");
 });
 
 QUnit.test("closeOnOutsideClick as function should be processed correctly", (assert) => {
@@ -1734,12 +2026,12 @@ QUnit.test("closeOnOutsideClick as function should be processed correctly", (ass
         .dxDrawer("instance"),
         $content = drawer.viewContent();
 
-    $($content).trigger("dxpointerdown");
+    $($content).trigger("dxclick");
     assert.equal(drawer.option("opened"), true, "drawer is not hidden");
     drawer.option("closeOnOutsideClick", () => {
         return true;
     });
 
-    $($content).trigger("dxpointerdown");
+    $($content).trigger("dxclick");
     assert.equal(drawer.option("opened"), false, "drawer is hidden");
 });

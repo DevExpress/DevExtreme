@@ -23,7 +23,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_GROUP_CLASS = "dx-toolbar-group",
     TOOLBAR_COMPACT_CLASS = "dx-toolbar-compact",
     TOOLBAR_LABEL_SELECTOR = "." + TOOLBAR_LABEL_CLASS,
-    BUTTON_FLAT_CLASS = "dx-button-flat",
+    TEXT_BUTTON_MODE = "text",
     DEFAULT_BUTTON_TYPE = "default",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
@@ -58,21 +58,9 @@ var ToolbarBase = CollectionWidget.inherit({
                 }
 
                 if(data.widget === "dxButton") {
-                    if(data.options) {
-                        var buttonContainerClass = this.option("useFlatButtons") ? BUTTON_FLAT_CLASS : "";
-                        if(data.options.elementAttr) {
-                            var customClass = data.options.elementAttr.class;
-                            if(customClass) {
-                                customClass = customClass.replace(BUTTON_FLAT_CLASS, "");
-                                buttonContainerClass += (" " + customClass);
-                            }
-                        }
-
-                        var elementAttr = extend(
-                            data.options.elementAttr || {},
-                            { class: buttonContainerClass }
-                        );
-                        data.options = extend(data.options, { elementAttr: elementAttr });
+                    if(this.option("useFlatButtons")) {
+                        data.options = data.options || {};
+                        data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
                     }
 
                     if(this.option("useDefaultButtons")) {
@@ -97,6 +85,9 @@ var ToolbarBase = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             renderAs: "topToolbar",
+
+            grouped: false,
+
             useFlatButtons: false,
             useDefaultButtons: false
         });
@@ -334,7 +325,9 @@ var ToolbarBase = CollectionWidget.inherit({
                 $container = $("<div>").addClass(TOOLBAR_GROUP_CLASS),
                 location = group.location || "center";
 
-            if(!groupItems.length) return;
+            if(!groupItems || !groupItems.length) {
+                return;
+            }
 
             each(groupItems, function(itemIndex, item) {
                 that._renderItem(itemIndex, item, $container, null);
@@ -345,7 +338,7 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
-        var grouped = items.length && items[0].items;
+        var grouped = this.option("grouped") && items.length && items[0].items;
         grouped ? this._renderGroupedItems() : this.callBase(items);
     },
 
@@ -409,6 +402,8 @@ var ToolbarBase = CollectionWidget.inherit({
                 break;
             case "compactMode":
                 this._applyCompactMode();
+                break;
+            case "grouped":
                 break;
             default:
                 this.callBase.apply(this, arguments);

@@ -364,17 +364,19 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemsByScreen: function() {
-        return iteratorUtils.map(this.option("items"), (function(item) {
-            var locations = item.location || {};
+        return this.option("items").reduce((result, item) => {
+            let locations = item.location || {};
             locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
 
-            return iteratorUtils.map(this._filterByScreen(locations), function(location) {
-                return {
+            this._filterByScreen(locations).forEach(location => {
+                result.push({
                     item: item,
                     location: extend({ rowspan: 1, colspan: 1 }, location)
-                };
+                });
             });
-        }).bind(this));
+
+            return result;
+        }, []);
     },
 
     _occupyCells: function(itemCell, itemInfo) {

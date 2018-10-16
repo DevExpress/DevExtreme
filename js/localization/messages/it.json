@@ -269,6 +269,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Non è vuoto",
         "dxFilterBuilder-filterOperationBetween": "Compreso",
         "dxFilterBuilder-filterOperationAnyOf": "Include",
-        "dxFilterBuilder-filterOperationNoneOf": "Non include"
+        "dxFilterBuilder-filterOperationNoneOf": "Non include",
+
+        "dxHtmlEditor-dialogColorCaption": "!TODO!",
+        "dxHtmlEditor-dialogBackgroundCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkUrlField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTextField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTargetField": "!TODO!",
+        "dxHtmlEditor-dialogImageCaption": "!TODO!",
+        "dxHtmlEditor-dialogImageUrlField": "!TODO!",
+        "dxHtmlEditor-dialogImageAltField": "!TODO!",
+        "dxHtmlEditor-dialogImageWidthField": "!TODO!",
+        "dxHtmlEditor-dialogImageHeightField": "!TODO!"
     }
 }

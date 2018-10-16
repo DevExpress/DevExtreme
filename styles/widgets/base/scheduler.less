@@ -84,6 +84,8 @@
 @SCHEDULER_TIME_INDICATOR_TEXT_SHADOW: @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR 1px 0px 0px;
 @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE: 2px;
 
+@SCHEDULER_TIMELINE_MIN_HEIGHT: 100px;
+
 .dx-scheduler-group-mixin(@padding) {
     .dx-scrollable {
         &.dx-scheduler-date-table-scrollable,
@@ -716,7 +718,8 @@
 
     .dx-scheduler-timeline-week,
     .dx-scheduler-timeline-work-week,
-    .dx-scheduler-timeline-day.dx-scheduler-work-space-count {
+    .dx-scheduler-timeline-day.dx-scheduler-work-space-count,
+    .dx-scheduler-timeline-month {
         .dx-scheduler-header-panel {
             .flex-container(row, nowrap);
 
@@ -732,7 +735,8 @@
         .dx-scheduler-header-panel-cell {
             flex-grow: 1;
             justify-content: center;
-
+            align-items: center;
+        
             .flex-container(row, nowrap);
         }
 
@@ -1056,12 +1060,7 @@
         .dx-scheduler-date-table-cell {
             width: 200px;
         }
-
-        &.dx-scheduler-work-space-group-by-date {
-            .dx-scheduler-header-panel-cell {
-                flex: 1;
-            }
-        }
+        
         .dx-scheduler-date-table-cell {
             border-right:none;
         }
@@ -1076,6 +1075,7 @@
             tbody {
                 .flex-container(column, nowrap);
                 height: 100%;
+                min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
             }
 
             .dx-scheduler-date-table-row {
@@ -1164,7 +1164,7 @@
         .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
         .dx-scheduler-group-table {
             height: 100%;
-            min-height: 100px;
+            min-height: @SCHEDULER_TIMELINE_MIN_HEIGHT;
         }
 
         &.dx-scheduler-work-space-both-scrollbar {
@@ -2378,6 +2378,10 @@
                 flex-basis: 0;
 
                 .flex-container(row, nowrap);
+            }
+
+            &.dx-scheduler-work-space-group-by-date .dx-scheduler-group-header {
+                flex-basis: auto;
             }
 
             &:not(.dx-scheduler-work-space-group-by-date) {

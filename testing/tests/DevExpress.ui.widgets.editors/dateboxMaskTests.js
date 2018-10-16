@@ -39,10 +39,10 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
         });
 
-        QUnit.test("Masks should not be enabled when displayFormat is not specified", (assert) => {
+        QUnit.test("Masks should be enabled when displayFormat is not specified", (assert) => {
             this.instance.option("displayFormat", undefined);
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "10/10/2012", "mask behavior does not work");
+            assert.equal(this.instance.option("text"), "11/10/2012", "mask behavior works");
         });
 
         QUnit.test("Masks should not be enabled when mode is not text", (assert) => {
@@ -99,12 +99,16 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("Month", (assert) => {
             checkAndRemoveLimits(this.parts[3], { min: 0, max: 11 }, assert);
 
+            let date = new Date(2012, 2, 30);
+            this.parts[3].setter(date, 1);
+            assert.equal(date.getMonth(), 1, "setter sets month");
+            delete this.parts[3].setter;
+
             assert.deepEqual(this.parts[3], {
                 index: 3,
                 isStub: false,
                 caret: { start: 9, end: 13 },
                 getter: "getMonth",
-                setter: "setMonth",
                 pattern: "MMMM",
                 text: "July"
             });
@@ -313,6 +317,14 @@ if(devices.real().deviceType === "desktop") {
             }.bind(this));
         });
 
+        QUnit.test("Month changing should adjust days to limits", (assert) => {
+            this.instance.option("value", new Date(2018, 2, 30));
+            assert.equal(this.$input.val(), "March 30 2018", "initial text is correct");
+
+            this.keyboard.press("down");
+            assert.equal(this.$input.val(), "February 28 2018", "text is correct");
+        });
+
         QUnit.test("Esc should restore the value", (assert) => {
             this.keyboard.press("up");
             assert.equal(this.$input.val(), "November 10 2012", "text was changed");
@@ -410,7 +422,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Pointer events", setupModule, () => {
+    QUnit.module("Events", setupModule, () => {
         QUnit.test("Select date part on click", (assert) => {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
@@ -430,9 +442,19 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("3");
             assert.equal(this.$input.val(), "March 10 2012", "text has been changed");
 
-            this.$input.trigger("dragend");
+            this.$input.trigger("drop");
             assert.equal(this.$input.val(), "March 10 2012", "text has not reverted");
             assert.deepEqual(this.keyboard.caret(), { start: 6, end: 8 }, "caret is good");
+        });
+
+        QUnit.test("paste should be possible when pasting data matches the format", (assert) => {
+            this.instance.option("value", null);
+
+            this.keyboard.paste("123456");
+            assert.equal(this.$input.val(), "", "pasting incorrect value is not allowed");
+
+            this.keyboard.paste("November 10 2018");
+            assert.equal(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
         });
     });
 

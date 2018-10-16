@@ -707,7 +707,16 @@ registerTheme({
         equalBarWidth: true,
         barGroupPadding: 0.3,
         minBubbleSize: 12,
-        maxBubbleSize: 0.2
+        maxBubbleSize: 0.2,
+        zoomAndPan: {
+            dragBoxStyle: {
+                color: "#2a2a2a",
+                opacity: 0.2
+            },
+            panKey: "shift",
+            allowMouseWheel: true,
+            allowGestures: true
+        }
     },
     pie: {
         innerRadius: 0.5,

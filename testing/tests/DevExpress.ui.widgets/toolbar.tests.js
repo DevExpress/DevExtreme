@@ -132,7 +132,7 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
     assert.equal(margin, "0px auto", "aligned by center");
 });
 
-QUnit.test("useFlatButtons change dx-button-flat class in runtime in Material", function(assert) {
+QUnit.test("buttons has text style in Material", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
     var element = this.element.dxToolbar({
@@ -147,12 +147,7 @@ QUnit.test("useFlatButtons change dx-button-flat class in runtime in Material", 
         }),
         button = element.find(".dx-button").first();
 
-    assert.ok(button.hasClass("dx-button-flat"));
-
-    element.dxToolbar("instance").option("useFlatButtons", false);
-    button = element.find(".dx-button").first();
-
-    assert.notOk(button.hasClass("dx-button-flat"));
+    assert.ok(button.hasClass("dx-button-mode-text"));
 
     themes.isMaterial = origIsMaterial;
 });
@@ -185,29 +180,6 @@ QUnit.test("Toolbar with compact mode has the compact class", function(assert) {
     assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), "toolbar with compact mode hasn't the compact class if widget has a large width");
 });
 
-QUnit.test("Button save elementAttr.class class on container in Material", function(assert) {
-    var origIsMaterial = themes.isMaterial;
-    themes.isMaterial = function() { return true; };
-    var element = this.element.dxToolbar({
-            items: [{
-                location: 'before',
-                widget: 'dxButton',
-                options: {
-                    type: 'default',
-                    text: 'Back',
-                    elementAttr: { class: 'custom-class1 custom-class2' }
-                }
-            }]
-        }),
-        button = element.find(".dx-button").first();
-
-    assert.ok(button.hasClass("dx-button-flat"));
-    assert.ok(button.hasClass("custom-class1"));
-    assert.ok(button.hasClass("custom-class2"));
-
-    themes.isMaterial = origIsMaterial;
-});
-
 QUnit.test("Buttons has default style in generic theme", function(assert) {
     var element = this.element.dxToolbar({
             items: [{
@@ -221,7 +193,7 @@ QUnit.test("Buttons has default style in generic theme", function(assert) {
         }),
         button = element.find(".dx-button");
 
-    assert.notOk(button.hasClass("dx-button-flat"));
+    assert.notOk(button.hasClass("dx-button-mode-text"));
 });
 
 

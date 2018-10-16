@@ -593,6 +593,68 @@ QUnit.test("the number of visible items should be identical after expandAll/coll
     assert.equal(this.dataController.items().length, itemsCount, "There are no excess items");
 });
 
+QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple key column", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: "name" },
+        {
+            pageSize: 2,
+            asyncLoadEnabled: false
+        });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+});
+
+QUnit.test("Using focusedRowEnabled should set sorting for the not sorted composite key columns", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+        { key: [ "name", "age" ] },
+        {
+            pageSize: 2,
+            asyncLoadEnabled: false
+        });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ selector: "name", desc: false }, { selector: "age", desc: false }], "Sort parameters");
+    // assert
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+});
+
 QUnit.test("Get page index by simple key", function(assert) {
     // arrange
     var dataSource = createDataSource([
@@ -6389,6 +6451,46 @@ QUnit.test("Edit row after detail row", function(assert) {
     assert.strictEqual(this.dataController.items()[2].isEditing, true, "isEditing is correct for row 2");
 });
 
+// T677250
+QUnit.test("Expand detail row before edit form and detail rows", function(assert) {
+    var array = [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+    ];
+
+    this.options.editing = {
+        mode: "form"
+    };
+
+    var dataSource = createDataSource(array, { key: 'id' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    this.expandRow(2);
+    this.editRow(1);
+
+    // act
+    this.expandRow(1);
+
+    // assert
+    assert.ok(this.editingController.isEditing());
+    assert.equal(this.dataController.items().length, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data", "row 0 is data");
+
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail", "row 1 is detail");
+    assert.notOk(this.dataController.items()[1].isEditing, "row 1 is not editing");
+
+    assert.strictEqual(this.dataController.items()[2].rowType, "detail", "row 2 is detail (edit form)");
+    assert.ok(this.dataController.items()[2].isEditing, "isEditing is correct for row 2");
+
+    assert.strictEqual(this.dataController.items()[3].rowType, "detail", "row 3 is data");
+    assert.notOk(this.dataController.items()[3].isEditing, "row 3 is not editing");
+
+    assert.strictEqual(this.dataController.items()[4].rowType, "data", "row 4 is detail");
+});
+
 QUnit.module("Error handling", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -10899,6 +11001,37 @@ QUnit.test("edit row should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.columnIndices, [[], [2]], "only second row cell is updated");
 });
 
+QUnit.test("edit form row should not be updated on data change", function(assert) {
+    this.setupModules();
+
+    var changedArgs;
+
+    this.options.editing = {
+        mode: "form"
+    };
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.editRow(0);
+    this.array[0].age = 99;
+    this.array[1].age = 99;
+
+    this.dataController.refresh(true);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items[0].values, [1, "Alex", 99]);
+    assert.deepEqual(items[1].values, [2, "Dan", 99]);
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update", "update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0, 1]);
+    assert.deepEqual(changedArgs.items, [items[0], items[1]]);
+    assert.deepEqual(changedArgs.columnIndices, [[], [2]], "only second row cell is updated");
+});
+
 QUnit.test("edit cell should not be updated on data change", function(assert) {
     this.setupModules();
 
@@ -10962,6 +11095,22 @@ QUnit.test("immutable change dataSource item field", function(assert) {
     assert.notEqual(oldItems[1], items[1], "second item is changed");
     assert.equal(items[1].data, changedArray[1], "second item data is changed");
 });
+
+QUnit.test("change dataSource to another type", function(assert) {
+    this.setupModules();
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.options.dataSource = createDataSource(this.array.slice(1), { key: 'id' });
+
+    this.dataController.optionChanged({ name: "dataSource", fullName: "dataSource", previousValue: this.array, value: this.options.dataSource });
+
+    // assert
+    var items = this.dataController.items();
+    assert.equal(items.length, this.array.length - 1, "item count");
+});
+
 
 QUnit.test("update one cell using push", function(assert) {
     this.setupModules({ pushAggregationTimeout: 0 });

@@ -524,6 +524,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return this._keyGetter && this._keyGetter(data);
         },
 
+        parentKeyOf: function(data) {
+            return this._parentIdGetter && this._parentIdGetter(data);
+        },
+
         getRootNode: function() {
             return this._rootNode;
         },

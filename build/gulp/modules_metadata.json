@@ -265,6 +265,12 @@
     }
   },
   {
+    "name": "ui/button_group",
+    "exports": {
+      "default": { "path": "ui.dxButtonGroup", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/calendar",
     "exports": {
       "default": { "path": "ui.dxCalendar", "isWidget": true }

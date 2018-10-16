@@ -54,7 +54,14 @@ var config = {
     * @type boolean
     * @hidden
     */
-    useJQuery: undefined
+    useJQuery: undefined,
+    /**
+    * @name globalConfig.editorStylingMode
+    * @type Enums.EditorStylingMode
+    * @default undefined
+    */
+    editorStylingMode: undefined,
+    useLegacyVisibleIndex: false
 };
 
 var configMethod = function() {

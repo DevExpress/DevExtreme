@@ -6,16 +6,18 @@ class ShrinkStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
         super.renderPosition(offset, animate);
 
-        const direction = this._drawer.option("position");
+        const drawer = this.getDrawerInstance();
+        const direction = drawer.getDrawerPosition();
+        const $panel = $(drawer.content());
 
-        if(this._drawer.option("revealMode") === "slide") {
-            const panelPos = this._getPanelOffset(offset);
+        if(drawer.option("revealMode") === "slide") {
+            const panelOffset = this._getPanelOffset(offset);
             if(animate) {
 
                 let animationConfig = {
-                    $element: $(this._drawer._$panel),
-                    margin: panelPos,
-                    duration: this._drawer.option("animationDuration"),
+                    $element: $panel,
+                    margin: panelOffset,
+                    duration: drawer.option("animationDuration"),
                     direction: direction,
                     complete: () => {
                         this._contentAnimationResolve();
@@ -24,19 +26,18 @@ class ShrinkStrategy extends DrawerStrategy {
                 };
                 animation.margin(animationConfig);
             } else {
-                $(this._drawer._$panel).css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelPos);
+                $panel.css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelOffset);
             }
         }
 
-        if(this._drawer.option("revealMode") === "expand") {
-            const $element = $(this._drawer._$panel);
+        if(drawer.option("revealMode") === "expand") {
             const size = this._getPanelSize(offset);
 
             let animationConfig = {
-                $element: $element,
+                $element: $panel,
                 size: size,
-                duration: this._drawer.option("animationDuration"),
-                direction: this._drawer.option("position"),
+                duration: drawer.option("animationDuration"),
+                direction: direction,
                 complete: () => {
                     this._panelAnimationResolve();
                 }
@@ -45,10 +46,10 @@ class ShrinkStrategy extends DrawerStrategy {
             if(animate) {
                 animation.size(animationConfig);
             } else {
-                if(this._drawer._isHorizontalDirection()) {
-                    $($element).css("width", size);
+                if(drawer.isHorizontalDirection()) {
+                    $($panel).css("width", size);
                 } else {
-                    $($element).css("height", size);
+                    $($panel).css("height", size);
                 }
             }
         }

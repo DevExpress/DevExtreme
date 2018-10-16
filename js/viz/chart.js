@@ -117,12 +117,6 @@ function findAxis(paneName, axisName, axes) {
     }
 }
 
-function applyClipSettings(clipRects, settings) {
-    _each(clipRects || [], function(_, c) {
-        c && c.attr(settings);
-    });
-}
-
 function compareAxes(a, b) {
     return a.priority - b.priority;
 }
@@ -353,7 +347,9 @@ var dxChart = AdvancedChart.inherit({
             "argumentAxis.min": { since: "18.2", message: "Use the 'argumentAxis.visualRange' option instead" },
             "argumentAxis.max": { since: "18.2", message: "Use the 'argumentAxis.visualRange' option instead" },
             "valueAxis.min": { since: "18.2", message: "Use the 'valueAxis.visualRange' option instead" },
-            "valueAxis.max": { since: "18.2", message: "Use the 'valueAxis.visualRange' option instead" }
+            "valueAxis.max": { since: "18.2", message: "Use the 'valueAxis.visualRange' option instead" },
+            "zoomingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" },
+            "scrollingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" }
         });
     },
 
@@ -576,8 +572,6 @@ var dxChart = AdvancedChart.inherit({
 
         this._createPanesBackground();
         this._appendAxesGroups();
-
-        this._transformed && this._resetTransform();
 
         this._updatePanesCanvases(drawOptions);
         this._adjustViewport();
@@ -1039,68 +1033,6 @@ var dxChart = AdvancedChart.inherit({
         }
     },
 
-    _transformArgument: function(translate, scale) {
-        var that = this,
-            rotated = that._isRotated(),
-            settings,
-            clipSettings,
-            panesClipRects = that._panesClipRects;
-        if(!that._transformed) {
-            that._transformed = true;
-            that._labelsGroup.remove();
-            that._resetIsReady();
-            _each(that.series || [], function(i, s) {
-                s.applyClip();
-            });
-        }
-
-        if(rotated) {
-            settings = {
-                translateY: translate,
-                scaleY: scale
-            };
-            clipSettings = {
-                translateY: -translate / scale,
-                scaleY: 1 / scale
-            };
-        } else {
-            settings = {
-                translateX: translate,
-                scaleX: scale
-            };
-            clipSettings = {
-                translateX: -translate / scale,
-                scaleX: 1 / scale
-            };
-        }
-
-        applyClipSettings(panesClipRects.base, clipSettings);
-        applyClipSettings(panesClipRects.wide, clipSettings);
-
-        that._seriesGroup.attr(settings);
-        that._scrollBar && that._scrollBar.transform(-translate, scale);
-    },
-
-    _resetTransform: function() {
-        var that = this,
-            settings = {
-                translateX: 0,
-                translateY: 0,
-                scaleX: null,
-                scaleY: null
-            },
-            panesClipRects = that._panesClipRects;
-
-        applyClipSettings(panesClipRects.base, settings);
-        applyClipSettings(panesClipRects.wide, settings);
-
-        that._seriesGroup.attr(settings);
-        _each(that.series || [], function(i, s) {
-            s.resetClip();
-        });
-        that._transformed = false;
-    },
-
     _getTrackerSettings: function() {
         var that = this,
             themeManager = that._themeManager;
@@ -1321,6 +1253,7 @@ var dxChart = AdvancedChart.inherit({
 dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
+dxChart.addPlugin(require("./chart_components/zoom_and_pan"));
 
 registerComponent("dxChart", dxChart);
 module.exports = dxChart;

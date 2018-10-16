@@ -1231,7 +1231,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         params = { data: data, cancel: false };
                         deferred = executeEditingAction("onRowInserting", params, function() {
                             return store.insert(params.data).done(function(data, key) {
-                                editData.key = key;
+                                if(typeUtils.isDefined(key)) {
+                                    editData.key = key;
+                                }
                                 changes.push({ type: "insert", data: data, index: 0 });
                             });
                         });
@@ -1428,7 +1430,8 @@ var EditingController = modules.ViewController.inherit((function() {
         _updateEditColumn: function() {
             var that = this,
                 isEditColumnVisible = that._isEditColumnVisible(),
-                cssClass = COMMAND_EDIT_CLASS;
+                useIcons = that.option("editing.useIcons"),
+                cssClass = COMMAND_EDIT_CLASS + (useIcons ? " " + COMMAND_EDIT_WITH_ICONS_CLASS : "");
 
             that._columnsController.addCommandColumn({
                 type: "buttons",
@@ -2289,12 +2292,10 @@ module.exports = {
                     if(this.getController("editing").isSaving()) return;
                     return this.callBase.apply(this, arguments);
                 },
-                _updateItemsCore: function(change) {
-                    this.callBase(change);
-
+                _updateEditRow: function(items) {
                     var editingController = this._editingController,
                         editRowIndex = editingController.getEditRowIndex(),
-                        editItem = this.items()[editRowIndex];
+                        editItem = items[editRowIndex];
 
                     if(editItem) {
                         editItem.isEditing = true;
@@ -2302,6 +2303,18 @@ module.exports = {
                             editItem.rowType = "detail";
                         }
                     }
+                },
+                _updateItemsCore: function(change) {
+                    this.callBase(change);
+                    this._updateEditRow(this.items());
+                },
+                _applyChangeUpdate: function(change) {
+                    this._updateEditRow(change.items);
+                    this.callBase(change);
+                },
+                _applyChangesOnly: function(change) {
+                    this._updateEditRow(change.items);
+                    this.callBase(change);
                 },
                 _processItems: function(items, changeType) {
                     items = this._editingController.processItems(items, changeType);

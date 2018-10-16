@@ -1,4 +1,4 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 
 const xlsxNumberFormatHelper = {
@@ -6,10 +6,9 @@ const xlsxNumberFormatHelper = {
 
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj)) {
-            result = {
-                formatCode: sourceObj.formatCode,
-            };
+        if(typeof sourceObj === 'string') {
+            result = { formatCode: sourceObj };
+
             if(xlsxNumberFormatHelper.isEmpty(result)) {
                 result = null;
             }
@@ -20,17 +19,17 @@ const xlsxNumberFormatHelper = {
     areEqual: function(leftTag, rightTag) {
         return xlsxNumberFormatHelper.isEmpty(leftTag) && xlsxNumberFormatHelper.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.formatCode === rightTag.formatCode
             );
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) || !typeUtils.isDefined(tag.formatCode) || tag.formatCode === '';
+        return !isDefined(tag) || !isDefined(tag.formatCode) || tag.formatCode === '';
     },
 
     toXml: function(tag) {
-        // §18.8.30 numFmt (Number Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
+        // §18.8.30 numFmt (Number Format)
         return xlsxTagHelper.toXml(
             "numFmt",
             {

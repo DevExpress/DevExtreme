@@ -269,6 +269,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Is niet leeg",
         "dxFilterBuilder-filterOperationBetween": "Is tussen",
         "dxFilterBuilder-filterOperationAnyOf": "Is een van",
-        "dxFilterBuilder-filterOperationNoneOf": "Is geen van"     
+        "dxFilterBuilder-filterOperationNoneOf": "Is geen van",
+
+        "dxHtmlEditor-dialogColorCaption": "!TODO!",
+        "dxHtmlEditor-dialogBackgroundCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkUrlField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTextField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTargetField": "!TODO!",
+        "dxHtmlEditor-dialogImageCaption": "!TODO!",
+        "dxHtmlEditor-dialogImageUrlField": "!TODO!",
+        "dxHtmlEditor-dialogImageAltField": "!TODO!",
+        "dxHtmlEditor-dialogImageWidthField": "!TODO!",
+        "dxHtmlEditor-dialogImageHeightField": "!TODO!"
     }
 }

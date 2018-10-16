@@ -174,7 +174,7 @@
 * @group editors.texteditors
 */
 @texteditor-bg: @base-element-bg;
-@texteditor-standard-bg: transparent;
+@texteditor-underlined-bg: transparent;
 @texteditor-filled-bg: fade(@texteditor-color, 5%);
 
 /**
@@ -348,7 +348,7 @@
 // Button
 
 @button-icon-color: @base-icon-color;
-@button-inverted-icon-color: @base-inverted-icon-color;
+
 
 @button-border-radius: @base-border-radius;
 
@@ -377,62 +377,10 @@
 * @group buttons.normal
 */
 @button-normal-border-color: lighten(@base-label-color, 16.5%);
-@button-normal-shadow-color: transparent;
-
-/**
-* @name 30. Hovered state background color
-* @type color
-* @group buttons.normal
-*/
-@button-normal-hover-bg:  fade(darken(@base-bg, 9%), 40%);
-/**
-* @name 40. Hovered state border color
-* @type color
-* @group buttons.normal
-*/
-@button-normal-hover-border-color: darken(@button-normal-border-color, 12%);
-@button-normal-hover-shadow-color: transparent;
-
-/**
-* @name 50. Focused state background color
-* @type color
-* @group buttons.normal
-*/
-@button-normal-focused-bg: fade(darken(@base-bg, 9%), 40%);
-/**
-* @name 60. Focused state border color
-* @type color
-* @group buttons.normal
-*/
-@button-normal-focused-border-color: darken(@button-normal-border-color, 25%);
-@button-normal-focused-shadow-color: transparent;
-
-/**
-* @name 70. Active state background color
-* @type color
-* @group buttons.normal
-*/
-@button-normal-active-bg: fade(darken(@base-bg, 9%), 80%);
-
-/**
-* @name 70. Active state border color
-* @type color
-* @group buttons.normal
-*/
-@button-normal-active-border-color: darken(@button-normal-border-color, 25%);
-@button-normal-active-shadow-color: transparent;
-
-@button-normal-active-color: @base-text-color;
-@button-normal-icon-color: @button-icon-color;
+@button-special-hover: transparent;
 
 // Default button
 
-/**
-* @name 30. Border color
-* @type color
-* @group buttons.default
-*/
-@button-default-border-color: darken(@base-accent, 5%);
 /**
 * @name 10. Background color
 * @type color
@@ -445,57 +393,15 @@
 * @group buttons.default
 */
 @button-default-color: @base-inverted-text-color;
-
-/**
-* @name 50. Hovered state border color
-* @type color
-* @group buttons.default
-*/
-@button-default-hover-border-color: darken(@button-default-bg, 12%);
-/**
-* @name 40. Hovered state background color
-* @type color
-* @group buttons.default
-*/
-@button-default-hover-bg: darken(@button-default-bg, 10%);
-
-/**
-* @name 70. Focused state border color
-* @type color
-* @group buttons.default
-*/
-@button-default-focused-border-color: darken(@button-default-bg, 25%);
-
-/**
-* @name 60. Focused state background color
-* @type color
-* @group buttons.default
-*/
-@button-default-focused-bg: darken(@button-default-bg, 10%);
-
-/**
-* @name 90. Active state border color
-* @type color
-* @group buttons.default
-*/
-@button-default-active-border-color: darken(@button-default-bg, 25%);
-
-/**
-* @name 80. Active state background color
-* @type color
-* @group buttons.default
-*/
-@button-default-active-bg: darken(@button-default-bg, 17%);
-@button-default-icon-color: @button-inverted-icon-color;
-
-// Danger button
-
 /**
 * @name 30. Border color
 * @type color
-* @group buttons.danger
+* @group buttons.default
 */
-@button-danger-border-color: darken(@base-danger, 5%);
+@button-default-border-color: darken(@base-accent, 5%);
+
+// Danger button
+
 /**
 * @name 10. Background color
 * @type color
@@ -508,56 +414,15 @@
 * @group buttons.danger
 */
 @button-danger-color: @base-inverted-text-color;
-
-/**
-* @name 50. Hovered state border color
-* @type color
-* @group buttons.danger
-*/
-@button-danger-hover-border-color: darken(@button-danger-border-color, 12%);
-/**
-* @name 40. Hovered state background color
-* @type color
-* @group buttons.danger
-*/
-@button-danger-hover-bg: darken(@button-danger-bg, 10%);
-
-/**
-* @name 70. Focused state border color
-* @type color
-* @group buttons.danger
-*/
-@button-danger-focused-border-color:  darken(@button-danger-border-color, 25%);
-/**
-* @name 60. Focused state background color
-* @type color
-* @group buttons.danger
-*/
-@button-danger-focused-bg: darken(@button-danger-bg, 10%);
-
-/**
-* @name 90. Active state border color
-* @type color
-* @group buttons.danger
-*/
-@button-danger-active-border-color: darken(@button-danger-border-color, 25%);
-
-/**
-* @name 80. Active state background color
-* @type color
-* @group buttons.danger
-*/
-@button-danger-active-bg: darken(@button-danger-bg, 25%);
-@button-danger-icon-color: @button-inverted-icon-color;
-
-// Success button
-
 /**
 * @name 30. Border color
 * @type color
-* @group buttons.success
+* @group buttons.danger
 */
-@button-success-border-color: darken(@base-success, 5%);
+@button-danger-border-color: darken(@base-danger, 5%);
+
+// Success button
+
 /**
 * @name 10. Background color
 * @type color
@@ -570,48 +435,42 @@
 * @group buttons.success
 */
 @button-success-color: @base-inverted-text-color;
+/**
+* @name 30. Border color
+* @type color
+* @group buttons.success
+*/
+@button-success-border-color: darken(@base-success, 5%);
+
+// ButtonGroup
 
 /**
-* @name 50. Hovered state border color
+* @name 10. Selected button group background color
 * @type color
-* @group buttons.success
+* @group buttons.normal
 */
-@button-success-hover-border-color: darken(@button-success-border-color, 12%);
+@button-group-normal-selected-bg: lighten(@base-element-bg, 10%);
 
 /**
-* @name 40. Hovered state background color
+* @name 10. Selected button group background color
 * @type color
-* @group buttons.success
+* @group buttons.default
 */
-@button-success-hover-bg: darken(@button-success-bg, 10%);
+@button-group-default-selected-bg: lighten(@base-accent, 10%);
 
 /**
-* @name 70. Focused state border color
+* @name 10. Selected button group background color
 * @type color
-* @group buttons.success
+* @group buttons.danger
 */
-@button-success-focused-border-color: darken(@button-success-border-color, 25%);
-/**
-* @name 60. Focused state background color
-* @type color
-* @group buttons.success
-*/
-@button-success-focused-bg: darken(@button-success-bg, 10%);
+@button-group-danger-selected-bg: lighten(@base-danger, 10%);
 
 /**
-* @name 90. Active state border color
+* @name 10. Selected button group background color
 * @type color
 * @group buttons.success
 */
-@button-success-active-border-color: darken(@button-success-border-color, 25%);
-
-/**
-* @name 80. Active state background color
-* @type color
-* @group buttons.success
-*/
-@button-success-active-bg: darken(@button-success-bg, 17%);
-@button-success-icon-color: @button-inverted-icon-color;
+@button-group-success-selected-bg: lighten(@base-success, 10%);
 
 // Checkbox
 /**
@@ -882,7 +741,7 @@
 * @type color
 * @group editors.selectbox
 */
-@dropdowneditor-button-hover-bg: @button-normal-hover-bg;
+@dropdowneditor-button-hover-bg: darken(@button-normal-bg ,10%);
 @dropdowneditor-filled-button-hover-bg: fade(@base-accent, 20%);
 @dropdowneditor-button-hover-border-color: transparent;
 
@@ -891,7 +750,7 @@
 * @type color
 * @group editors.selectbox
 */
-@dropdowneditor-button-active-bg: @button-normal-active-bg;
+@dropdowneditor-button-active-bg: darken(@button-normal-bg, 30%);
 @dropdowneditor-filled-button-active-bg: fade(@base-accent, 30%);
 @dropdowneditor-filled-button-invalid-hover-bg: fade(@texteditor-invalid-focused-border-color, 20%);
 @dropdowneditor-filled-button-invalid-active-bg: fade(@texteditor-invalid-focused-border-color, 30%);
@@ -2045,7 +1904,7 @@
 * @type color
 * @group editors.calendar
 */
-@calendar-navigator-hover-border-color: @button-normal-hover-border-color;
+@calendar-navigator-hover-border-color: @button-normal-border-color;
 @calendar-cell-contoured-border-color: darken(@base-border-color, 12%);
 @calendar-cell-contoured-border-radius: @base-border-radius;
 
@@ -2054,6 +1913,7 @@
 
 @calendar-button-caption-active-bg: darken(@base-bg, 17%);
 @calendar-button-footer-active-bg: darken(@base-bg, 17%);
+@calendar-button-caption-color: @base-accent;
 
 /**
 * @name 110. Shevron icon color
@@ -2089,7 +1949,7 @@
 * @type color
 * @group editors.numberbox
 */
-@numberbox-spin-active-bg: @button-normal-active-bg;
+@numberbox-spin-active-bg: darken(@button-normal-bg, 30%);
 @numberbox-spin-active-color: @base-text-color;
 /**
 * @name 20. Hovered spin buttons border color
@@ -2097,7 +1957,7 @@
 * @group editors.numberbox
 */
 @numberbox-spin-hover-border-color: transparent;
-@numberbox-spin-hover-bg: @button-normal-hover-bg;
+@numberbox-spin-hover-bg: darken(@button-normal-bg, 10%);
 
 @numberbox-spin-container-border-radius: @base-border-radius;
 @numberbox-spin-icon-border-radius: @base-border-radius-small;

@@ -116,7 +116,7 @@
 * @group editors.texteditors
 */
 @texteditor-bg: @base-bg;
-@texteditor-standard-bg: transparent;
+@texteditor-underlined-bg: transparent;
 @texteditor-filled-bg: fade(@texteditor-color, 5%);
 
 /**
@@ -240,7 +240,7 @@
 // Button
 
 @button-icon-color: @base-icon-color;
-@button-inverted-icon-color: @base-inverted-icon-color;
+
 
 @button-border-radius: @base-border-radius;
 
@@ -248,82 +248,38 @@
 @button-disabled-icon-opacity: .6;
 
 // Normal button
-@button-normal-border-color: @base-border-color;
-@button-normal-bg: @base-bg;
-@button-normal-shadow-color: transparent;
-
-@button-normal-hover-bg: @base-hover-color;
-@button-normal-hover-border-color: @base-border-color;
-@button-normal-hover-shadow-color: transparent;
-
-@button-normal-focused-bg: @base-bg;
-@button-normal-focused-border-color: @base-focus-color;
-@button-normal-focused-shadow-color: transparent;
-
-@button-normal-active-bg: @base-inverted-bg;
-@button-normal-active-border-color: transparent;
-@button-normal-active-shadow-color: transparent;
-
-@button-icon-color: @base-icon-color;
-@button-normal-active-color: @base-inverted-text-color;
-
-@button-normal-icon-color: @button-icon-color;
-
-// Default button
-@button-default-border-color: @base-default;
-@button-default-bg: @base-default;
-@button-default-color: @base-inverted-text-color;
-
-@button-default-hover-border-color: saturate(darken(@base-default, 28.7%), 24.4%);
-@button-default-hover-bg: @base-default;
-
-@button-default-focused-border-color: saturate(darken(@base-default, 28.7%), 24.4%);
-@button-default-focused-bg: @base-default;
-
-@button-default-active-border-color: saturate(darken(@base-default, 28.7%), 24.4%);
-@button-default-active-bg: saturate(darken(@base-default, 28.7%), 24.4%);
-
-@button-default-icon-color: @button-inverted-icon-color;
-
-// Danger button
-@button-danger-border-color: @base-danger;
-@button-danger-bg: @base-danger;
-@button-danger-color: @base-inverted-text-color;
-
-@button-danger-hover-border-color: desaturate(@base-danger, 13.5%);
-@button-danger-hover-bg: @base-danger;
-
-@button-danger-focused-border-color: desaturate(@base-danger, 13.5%);
-@button-danger-focused-bg: @base-danger;
-
-@button-danger-active-border-color: desaturate(@base-danger, 13.5%);
-@button-danger-active-bg: desaturate(@base-danger, 13.5%);
-
-@button-danger-icon-color: @button-inverted-icon-color;
-
-// Success button
-
-@button-success-border-color: @base-success;
-@button-success-bg: @base-success;
-@button-success-color: @base-inverted-text-color;
-
-@button-success-hover-border-color: saturate(darken(@base-success, 30.2%), 52.5%);
-@button-success-hover-bg: @base-success;
-
-@button-success-focused-border-color: saturate(darken(@base-success, 30.2%), 52.5%);
-@button-success-focused-bg: @base-success;
-
-@button-success-active-border-color: saturate(darken(@base-success, 30.2%), 52.5%);
-@button-success-active-bg: saturate(darken(@base-success, 30.2%), 52.5%);
-
-@button-success-icon-color: @button-inverted-icon-color;
-
 /**
 * @name 10. Text color
 * @type color
 * @group buttons.normal
 */
 @button-normal-color: @base-text-color;
+@button-normal-border-color: @base-border-color;
+@button-normal-bg: @base-bg;
+@button-special-hover: @base-accent;
+
+
+// Default button
+@button-default-border-color: @base-default;
+@button-default-bg: @base-default;
+@button-default-color: @base-inverted-text-color;
+
+// Danger button
+@button-danger-border-color: @base-danger;
+@button-danger-bg: @base-danger;
+@button-danger-color: @base-inverted-text-color;
+
+// Success button
+@button-success-border-color: @base-success;
+@button-success-bg: @base-success;
+@button-success-color: @base-inverted-text-color;
+
+// ButtonGroup
+
+@button-group-normal-selected-bg: @base-bg;
+@button-group-default-selected-bg: @base-default;
+@button-group-danger-selected-bg: @base-danger;
+@button-group-success-selected-bg: @base-success;
 
 // Checkbox
 /**
@@ -1511,6 +1467,7 @@
 
 @calendar-button-caption-active-bg: @base-inverted-bg;
 @calendar-button-footer-active-bg: @base-inverted-bg;
+@calendar-button-caption-color: @base-text-color;
 
 /**
 * @name 110. Shevron icon color

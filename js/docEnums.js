@@ -10,6 +10,16 @@
  */
 
 /**
+ * @typedef {string} Enums.ButtonStylingMode
+ * @enum {'text'|'outlined'|'contained'}
+ */
+
+/**
+ * @typedef {string} Enums.EventKeyModifier
+ * @enum {'alt'|'ctrl'|'meta'|'shift'}
+ */
+
+/**
  * @typedef {number} Enums.FirstDayOfWeek
  * @enum {0|1|2|3|4|5|6}
  */
@@ -136,6 +146,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ButtonGroupSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+/**
  * @typedef {string} Enums.Mode
  * @enum {'auto'}
  */
@@ -178,6 +193,11 @@
 /**
  * @typedef {string} Enums.ChartPointerType
  * @enum {'all'|'mouse'|'none'|'touch'}
+ */
+
+/**
+ * @typedef {string} Enums.ChartZoomAndPanMode
+ * @enum {'both'|'none'|'pan'|'zoom'}
  */
 
 /**
@@ -602,7 +622,7 @@
 
 /**
  * @typedef {string} Enums.DrawerPosition
- * @enum {'left'|'right'}
+ * @enum {'left'|'right'|'top'|'bottom'}
  */
 
 /**
@@ -875,7 +895,57 @@
  * @enum {'GIF'|'JPEG'|'PDF'|'PNG'|'SVG'}
  */
 
+/**
+ * @typedef {string} Enums.XlsxUnderlineType
+ * @enum {'double'|'doubleAccounting'|'none'|'single'|'singleAccounting'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxCellDataType
+ * @enum {'n'|'s'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxHorizontalAlignment
+ * @enum {'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxVerticalAlignment
+ * @enum {'bottom'|'center'|'distributed'|'justify'|'top'}
+ */
+
+/**
+ * @typedef {string} Enums.XlsxPatternStyle
+ * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
+ */
+
  /**
  * @typedef {string} Enums.HtmlEditorValueType
- * @enum {'HTML'|'Markdown'}
+ * @enum {'html'|'markdown'}
+ */
+
+ /**
+ * @typedef {string} Enums.EditorStylingMode
+ * @enum {'outlined'|'underlined'|'filled'}
+ */
+
+/**
+ * @typedef {string} Enums.GridCommandColumnType
+ * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListCommandColumnType
+ * @enum {'adaptive'|'buttons'}
+ */
+
+/**
+ * @typedef {string} Enums.GridColumnButtonName
+ * @enum {'cancel'|'delete'|'edit'|'save'|'undelete'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListColumnButtonName
+ * @enum {'add'|'cancel'|'delete'|'edit'|'save'|'undelete'}
  */

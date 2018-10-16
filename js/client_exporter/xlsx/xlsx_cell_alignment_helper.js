@@ -1,10 +1,10 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 
 const xlsxCellAlignmentHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
-        if(typeUtils.isDefined(sourceObj)) {
+        if(isDefined(sourceObj)) {
             result = {
                 vertical: sourceObj.vertical,
                 wrapText: sourceObj.wrapText,
@@ -20,7 +20,7 @@ const xlsxCellAlignmentHelper = {
     areEqual: function(leftTag, rightTag) {
         return xlsxCellAlignmentHelper.isEmpty(leftTag) && xlsxCellAlignmentHelper.isEmpty(rightTag) ||
             (
-                typeUtils.isDefined(leftTag) && typeUtils.isDefined(rightTag) &&
+                isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.vertical === rightTag.vertical &&
                 leftTag.wrapText === rightTag.wrapText &&
                 leftTag.horizontal === rightTag.horizontal
@@ -28,8 +28,8 @@ const xlsxCellAlignmentHelper = {
     },
 
     isEmpty: function(tag) {
-        return !typeUtils.isDefined(tag) ||
-            !typeUtils.isDefined(tag.vertical) && !typeUtils.isDefined(tag.wrapText) && !typeUtils.isDefined(tag.horizontal);
+        return !isDefined(tag) ||
+            !isDefined(tag.vertical) && !isDefined(tag.wrapText) && !isDefined(tag.horizontal);
     },
 
     toXml: function(tag) {
@@ -38,7 +38,7 @@ const xlsxCellAlignmentHelper = {
             "alignment",
             {
                 vertical: tag.vertical, // 18.18.88 ST_VerticalAlignment (Vertical Alignment Types)
-                wrapText: typeUtils.isDefined(tag.wrapText) ? Number(tag.wrapText) : undefined,
+                wrapText: isDefined(tag.wrapText) ? Number(tag.wrapText) : undefined,
                 horizontal: tag.horizontal // 18.18.40 ST_HorizontalAlignment (Horizontal Alignment Type)
             }
         );

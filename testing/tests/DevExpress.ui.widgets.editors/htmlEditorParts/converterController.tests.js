@@ -25,7 +25,7 @@ QUnit.module("Converter controller", () => {
 QUnit.module("Unknown converter", () => {
     test("Editor throw an error if cannot find a converter", (assert) => {
         assert.throws(
-            function() { $("#htmlEditor").dxHtmlEditor({ valueType: "Markdown" }); },
+            function() { $("#htmlEditor").dxHtmlEditor({ valueType: "markdown" }); },
             function(e) {
                 return /E1050/.test(e.message);
             },

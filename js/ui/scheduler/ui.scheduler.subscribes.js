@@ -35,7 +35,8 @@ var subscribes = {
             recurrenceException = this._getRecurrenceException(appointmentData),
             dateRange = this._workSpace.getDateRange(),
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
-            originalStartDate = options.originalStartDate || startDate;
+            originalStartDate = options.originalStartDate || startDate,
+            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
 
         var recurrenceOptions = {
             rule: recurrenceRule,
@@ -52,10 +53,34 @@ var subscribes = {
             dates.push(startDate);
         }
 
+        if(renderingStrategy.needSeparateAppointment()) {
+            var datesLength = dates.length,
+                longParts = [],
+                resultDates = [];
+
+            for(var i = 0; i < datesLength; i++) {
+                var endDateOfPart = renderingStrategy.endDate(appointmentData, {
+                    startDate: dates[i]
+                }, !!recurrenceRule);
+
+                longParts = dateUtils.getDatesOfInterval(dates[i], endDateOfPart, {
+                    milliseconds: this.getWorkSpace().getIntervalDuration()
+                });
+
+                resultDates = resultDates.concat(longParts);
+            }
+
+            dates = resultDates;
+        }
+
         var itemResources = this._resourcesManager.getResourcesFromItem(appointmentData),
             allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
         options.callback(this._getCoordinates(dates, itemResources, allDay));
+    },
+
+    isGroupedByDate: function() {
+        return this.getWorkSpace().isGroupedByDate();
     },
 
     showAppointmentTooltip: function(options) {

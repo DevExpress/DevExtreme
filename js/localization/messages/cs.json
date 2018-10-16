@@ -269,6 +269,18 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Není prázdné",
         "dxFilterBuilder-filterOperationBetween": "Mezi",
         "dxFilterBuilder-filterOperationAnyOf": "Libovolný z",
-        "dxFilterBuilder-filterOperationNoneOf": "Žádný z"
+        "dxFilterBuilder-filterOperationNoneOf": "Žádný z",
+
+        "dxHtmlEditor-dialogColorCaption": "!TODO!",
+        "dxHtmlEditor-dialogBackgroundCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkCaption": "!TODO!",
+        "dxHtmlEditor-dialogLinkUrlField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTextField": "!TODO!",
+        "dxHtmlEditor-dialogLinkTargetField": "!TODO!",
+        "dxHtmlEditor-dialogImageCaption": "!TODO!",
+        "dxHtmlEditor-dialogImageUrlField": "!TODO!",
+        "dxHtmlEditor-dialogImageAltField": "!TODO!",
+        "dxHtmlEditor-dialogImageWidthField": "!TODO!",
+        "dxHtmlEditor-dialogImageHeightField": "!TODO!"
     }
 }

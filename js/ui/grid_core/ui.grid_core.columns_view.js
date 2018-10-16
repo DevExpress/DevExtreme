@@ -27,6 +27,7 @@ var SCROLL_CONTAINER_CLASS = "scroll-container",
     GROUP_ROW_CLASS = "dx-group-row",
     DETAIL_ROW_CLASS = "dx-master-detail-row",
     FILTER_ROW_CLASS = "filter-row",
+    CELL_UPDATED_ANIMATION_CLASS = "cell-updated-animation",
 
     HIDDEN_COLUMNS_WIDTH = "0.0001px",
 
@@ -496,7 +497,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         for(i = 0; i < columns.length; i++) {
             if(!options.columnIndices || options.columnIndices.indexOf(i) >= 0) {
-                that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex] }, options));
+                that._renderCell($row, extend({ column: columns[i], columnIndex: columnIndex, value: row.values && row.values[columnIndex], oldValue: row.oldValues && row.oldValues[columnIndex] }, options));
             }
 
             if(columns[i].colspan > 1) {
@@ -509,7 +510,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _updateCells: function($rowElement, $newRowElement, columnIndices) {
         var $cells = $rowElement.children(),
-            $newCells = $newRowElement.children();
+            $newCells = $newRowElement.children(),
+            highlightChanges = this.option("highlightChanges"),
+            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS),
+            highlightedCells = [],
+            needToRefreshAnimation = false;
 
         columnIndices.forEach(function(columnIndex, index) {
             var $cell = $cells.eq(columnIndex),
@@ -517,6 +522,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 $newContent = $newCell.contents();
 
             if($newContent.length) {
+                needToRefreshAnimation = needToRefreshAnimation || $cell.hasClass(cellUpdatedClass);
+
                 $cell.contents().remove();
                 $cell.append($newContent);
 
@@ -524,7 +531,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
             } else {
                 $cell.replaceWith($newCell);
+                $cell = $newCell;
             }
+            highlightChanges && highlightedCells.push($cell);
+        });
+
+        needToRefreshAnimation && $rowElement.width();
+        highlightedCells.forEach(cell => {
+            cell.addClass(cellUpdatedClass);
         });
     },
 
@@ -575,10 +589,52 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _getCellOptions: function(options) {
-        return {
+        var cellOptions = {
             column: options.column,
             columnIndex: options.columnIndex,
             rowType: options.row.rowType
+        };
+
+        if(this.option("repaintChangesOnly")) {
+            this._addWatchMethod(cellOptions);
+        }
+
+        return cellOptions;
+    },
+
+    _addWatchMethod: function(cellOptions) {
+        var watchers = [];
+
+        cellOptions.watch = function(getter, updateFunc) {
+            var oldValue = getter(cellOptions.data);
+
+            var watcher = function() {
+                var newValue = getter(cellOptions.data);
+
+                if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+                    updateFunc(newValue, oldValue);
+                    oldValue = newValue;
+                }
+            };
+
+            watchers.push(watcher);
+
+            var stopWatch = function() {
+                var index = watchers.indexOf(watcher);
+                if(index >= 0) {
+                    watchers.splice(index, 1);
+                }
+            };
+
+            return stopWatch;
+        };
+
+        cellOptions.update = function() {
+            watchers.forEach(function(watcher) {
+                watcher();
+            });
+
+            return watchers.length > 0;
         };
     },
 
@@ -942,7 +998,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getRowElements: function(tableElement) {
         tableElement = tableElement || this._getTableElement();
-        return tableElement && tableElement.find("> tbody > " + "." + ROW_CLASS + ", > tbody." + ROW_CLASS) || $();
+        return tableElement && tableElement.find("> tbody > " + "." + ROW_CLASS + ", > tbody." + ROW_CLASS + ", > ." + ROW_CLASS) || $();
     },
 
     getRowIndex: function($row) {

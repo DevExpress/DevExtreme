@@ -178,10 +178,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return false;
     },
 
-    _isHorizontalGroupedWorkSpace: function() {
-        return !!this.option("groups").length && this.option("groupOrientation") === "horizontal";
-    },
-
     _getGroupHeaderContainer: function() {
         if(this._isHorizontalGroupedWorkSpace()) {
             return this._$thead;
@@ -263,11 +259,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._applyCellTemplates(groupCellTemplates);
     },
 
-    _setHorizontalGroupHeaderCellsHeight: function() {
-        var height = this._$dateTable.get(0).getBoundingClientRect().height;
-
-        this._$sidebarTable.outerHeight(height);
-    },
+    _setHorizontalGroupHeaderCellsHeight: noop,
 
     getIndicationWidth: function() {
         var today = this._getToday(),

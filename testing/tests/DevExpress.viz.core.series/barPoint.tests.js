@@ -122,6 +122,17 @@ QUnit.module("Point coordinates translation", {
     }
 });
 
+QUnit.test("Value translator's argument on point translating", function(assert) {
+    this.setContinuousTranslators();
+    var point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);
+
+    this.translators.val.translate = sinon.spy(this.translators.arg.translate);
+
+    point.translate();
+
+    assert.deepEqual(this.translators.val.translate.getCall(0).args, [5, 1]);
+});
+
 QUnit.test("Continuous", function(assert) {
     this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);

@@ -1102,6 +1102,12 @@ QUnit.module("Custom filter expressions", {
         assert.deepEqual(utils.getFilterExpression(value, this.fields, []), null);
     });
 
+    QUnit.test("calculateFilterExpression for negative group with one condition", function(assert) {
+        var value = ["!", ["field", "=", 1]],
+            normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["!", ["field", "=", 1]]);
+    });
+
     QUnit.test("calculateFilterExpression for isBlank (string field)", function(assert) {
         var value = ["field", "=", null],
             normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
@@ -1176,6 +1182,46 @@ QUnit.module("Custom filter expressions", {
                 ],
                 "or",
                 ["field2", "=", "30"]
+            ]
+        ]);
+    });
+
+    QUnit.test("calculateFilterExpression for negative group with inner negative group", function(assert) {
+        // arrange
+        var value = [
+            ["!",
+                [
+                    ["field1", 1],
+                    "and",
+                    ["!",
+                        [
+                            ["field1", "=", 20],
+                            "or",
+                            ["field2", "30"]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        // act, assert
+        assert.deepEqual(utils.getFilterExpression(value, this.fields, []), [
+            ["!",
+                [
+                    [
+                        ["field1", "<>", 1], "or", ["field1", "=", 10]
+                    ],
+                    "and",
+                    ["!",
+                        [
+                            [
+                                ["field1", "<>", 20], "or", ["field1", "=", 10]
+                            ],
+                            "or",
+                            ["field2", "=", "30"]
+                        ]
+                    ]
+                ]
             ]
         ]);
     });

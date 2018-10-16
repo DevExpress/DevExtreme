@@ -14,31 +14,56 @@ class DeltaConverter {
         }
 
         this._delta2Html = new converter();
-
         this._delta2Html.renderCustomWith(this._renderCustomFormat.bind(this));
     }
 
     _renderCustomFormat(operations, contextOperations) {
-        if(operations.insert.type === 'placeholder') {
-            return this._parsePlaceholder(operations.insert.value);
+        switch(operations.insert.type) {
+            case "variable":
+                return this._parseVariable(operations.insert.value);
+                break;
+            case "extendedImage":
+                return this._parseImage(operations.insert.value);
+                break;
         }
     }
 
-    _parsePlaceholder(data) {
-        const startEscapedChar = ensureDefined(data.startEscapedChar, data.escapedChar);
-        const endEscapedChar = ensureDefined(data.endEscapedChar, data.escapedChar);
+    _parseVariable(data) {
+        let startEscapeChar, endEscapeChar;
+
+        if(Array.isArray(data.escapeChar)) {
+            startEscapeChar = ensureDefined(data.escapeChar[0], "");
+            endEscapeChar = ensureDefined(data.escapeChar[1], "");
+        } else {
+            startEscapeChar = endEscapeChar = data.escapeChar;
+        }
+
         const dataString = [
-            this._addDataParam("start-char", data.startEscapedChar),
-            this._addDataParam("end-char", data.endEscapedChar),
-            this._addDataParam("esc-char", data.escapedChar),
+            this._addDataParam("start-esc-char", startEscapeChar),
+            this._addDataParam("end-esc-char", endEscapeChar),
             this._addDataParam("value", data.value)
+        ].join("");
+
+        return `<span class='dx-variable'${dataString}><span>${startEscapeChar + data.value + endEscapeChar}</span></span>`;
+    }
+
+    _parseImage(data) {
+        const attributes = [
+            this._prepareAttribute("src", data.src),
+            data.width ? `width='${data.width}px'` : "",
+            data.height ? `height='${data.height}px'` : "",
+            this._prepareAttribute("alt", data.alt)
         ].join(" ");
 
-        return `<span class='dx-data-placeholder'${dataString}><span>${startEscapedChar + data.value + endEscapedChar}</span></span>`;
+        return `<img ${attributes}>`;
+    }
+
+    _prepareAttribute(attr, value) {
+        return value ? `${attr}='${value}'` : "";
     }
 
     _addDataParam(paramName, value) {
-        return value ? ` data-placeholder-${paramName}=${value}` : "";
+        return value ? ` data-var-${paramName}=${value}` : "";
     }
 
     toHtml(deltaOps) {

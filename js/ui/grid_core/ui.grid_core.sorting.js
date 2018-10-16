@@ -1,37 +1,42 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    clickEvent = require("../../events/click"),
-    isDefined = require("../../core/utils/type").isDefined,
-    map = require("../../core/utils/iterator").map,
-    extend = require("../../core/utils/extend").extend,
-    sortingMixin = require("../grid_core/ui.grid_core.sorting_mixin"),
-    messageLocalization = require("../../localization/message"),
-    eventUtils = require("../../events/utils");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import clickEvent from "../../events/click";
+import typeUtils from "../../core/utils/type";
+const isDefined = typeUtils.isDefined;
+import extendUtils from "../../core/utils/extend";
+const extend = extendUtils.extend;
+import sortingMixin from "../grid_core/ui.grid_core.sorting_mixin";
+import messageLocalization from "../../localization/message";
+import eventUtils from "../../events/utils";
 
-var COLUMN_HEADERS_VIEW_NAMESPACE = "dxDataGridColumnHeadersView";
+const COLUMN_HEADERS_VIEW_NAMESPACE = "dxDataGridColumnHeadersView";
 
-var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
-    _createRow: function(row) {
-        var that = this,
-            $row = that.callBase(row);
+const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
+    _createRow(row) {
+        const that = this;
+        const $row = that.callBase(row);
 
         if(row.rowType === "header") {
-            eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", that.createAction(function(e) {
+            eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", that.createAction(e => {
                 if($(e.event.currentTarget).parent().get(0) !== $row.get(0)) {
                     return;
                 }
-                var keyName = null,
-                    event = e.event,
-                    $cellElementFromEvent = $(event.currentTarget),
-                    rowIndex = $cellElementFromEvent.parent().index(),
-                    columnIndex = map(that.getCellElements(rowIndex), function($cellElement, index) {
-                        if($cellElement === $cellElementFromEvent.get(0)) return index;
-                    })[0],
-                    visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
-                    column = visibleColumns[columnIndex],
-                    editingController = that.getController("editing"),
-                    editingMode = that.option("editing.mode"),
-                    isCellEditing = editingController && editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
+                let keyName = null;
+                const event = e.event;
+                const $cellElementFromEvent = $(event.currentTarget);
+                const rowIndex = $cellElementFromEvent.parent().index();
+                let columnIndex = -1;
+                [].slice.call(that.getCellElements(rowIndex)).some(($cellElement, index) => {
+                    if($cellElement === $cellElementFromEvent.get(0)) {
+                        columnIndex = index;
+                        return true;
+                    }
+                });
+                const visibleColumns = that._columnsController.getVisibleColumns(rowIndex);
+                const column = visibleColumns[columnIndex];
+                const editingController = that.getController("editing");
+                const editingMode = that.option("editing.mode");
+                const isCellEditing = editingController && editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
 
                 if(isCellEditing || !that._isSortableElement($(event.target))) {
                     return;
@@ -43,7 +48,7 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                     } else if(event.ctrlKey) {
                         keyName = "ctrl";
                     }
-                    setTimeout(function() {
+                    setTimeout(() => {
                         that._columnsController.changeSortOrder(column.index, keyName);
                     });
                 }
@@ -53,15 +58,15 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         return $row;
     },
 
-    _renderCellContent: function($cell, options) {
-        var that = this,
-            column = options.column;
+    _renderCellContent($cell, options) {
+        const that = this;
+        const column = options.column;
 
         if(!column.command && options.rowType === "header") {
             that._applyColumnState({
                 name: "sort",
                 rootElement: $cell,
-                column: column,
+                column,
                 showColumnLines: that.option("showColumnLines")
             });
         }
@@ -69,8 +74,8 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         that.callBase($cell, options);
     },
 
-    _columnOptionChanged: function(e) {
-        var changeTypes = e.changeTypes;
+    _columnOptionChanged(e) {
+        const changeTypes = e.changeTypes;
 
         if(changeTypes.length === 1 && changeTypes.sorting) {
             this._updateIndicators("sort");
@@ -80,8 +85,8 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         this.callBase(e);
     },
 
-    optionChanged: function(args) {
-        var that = this;
+    optionChanged(args) {
+        const that = this;
 
         switch(args.name) {
             case "sorting":
@@ -94,13 +99,13 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
     }
 });
 
-var HeaderPanelSortingExtender = extend({}, sortingMixin, {
-    _createGroupPanelItem: function($rootElement, groupColumn) {
-        var that = this,
-            $item = that.callBase.apply(that, arguments);
+const HeaderPanelSortingExtender = extend({}, sortingMixin, {
+    _createGroupPanelItem($rootElement, groupColumn) {
+        const that = this;
+        const $item = that.callBase(...arguments);
 
-        eventsEngine.on($item, eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(function() {
-            setTimeout(function() {
+        eventsEngine.on($item, eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(() => {
+            setTimeout(() => {
                 that.getController("columns").changeSortOrder(groupColumn.index);
             });
         }));
@@ -119,8 +124,8 @@ var HeaderPanelSortingExtender = extend({}, sortingMixin, {
         return $item;
     },
 
-    optionChanged: function(args) {
-        var that = this;
+    optionChanged(args) {
+        const that = this;
 
         switch(args.name) {
             case "sorting":
@@ -134,7 +139,7 @@ var HeaderPanelSortingExtender = extend({}, sortingMixin, {
 });
 
 module.exports = {
-    defaultOptions: function() {
+    defaultOptions() {
         return {
             /**
              * @name GridBaseOptions.sorting
