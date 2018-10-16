@@ -13,7 +13,6 @@ require("ui/data_grid/ui.data_grid");
 require("data/odata/store");
 
 var $ = require("jquery"),
-    browser = require("core/utils/browser"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
@@ -2039,18 +2038,13 @@ QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mo
     this.clock.tick();
 
     this.getController("focus").navigateToRow("Smith");
-    this.clock.tick();
 
     // assert
     assert.ok(rowsView.getRow(2).hasClass("dx-row-focused"), "Focused row");
     var rect = rowsView.getRow(2)[0].getBoundingClientRect();
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
     assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
-    if(browser.mozilla) {
-        assert.roughEqual(rowsViewRect.bottom, rect.bottom, 3, "rowsViewRect.bottom >= rect.bottom");
-    } else {
-        assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
-    }
+    assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
 });
 
 QUnit.testInActiveWindow("Keyboard navigation controller should find next cell if column index is wrong when jump from the group row", function(assert) {
